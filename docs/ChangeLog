@@ -1,3 +1,36 @@
+Sun Sep 14 16:24:00 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Make locales like ru_RU.UTF-8 that need the ascii8 device but UTF-8
+	output work. This involves a good deal of restructuring.
+
+	* src/encodings.c (directory_table): Remove a completed TODO
+	  comment.
+	  (directory_table, charset_table, device_table): Name array element
+	  struct types in order to abbreviate code later.
+	  (device_table): Split less_charset members out into a new table,
+	  less_charset_table. They really depend on the locale charset, but
+	  aren't quite appropriate for charset_table. Use "iso8859" rather
+	  than "latin1", and add KOI8-R.
+	  (device_table): Add output_encoding member, which is almost the
+	  inverse of charset_table but slightly different for ascii8.
+	  (compatible_encodings): New function to figure out if a source
+	  encoding and a roff encoding are compatible.
+	  (get_default_device): Take new source_encoding argument so that we
+	  can make ru_RU.UTF-8 use the ascii8 device and an iconv pipe
+	  rather than utf8 directly. Drop through to the fallback default
+	  device if none of the predefined entries in charset_table are
+	  compatible when considering the source encoding.
+	  (get_roff_encoding): Split LESSCHARSET handling out into a new
+	  function ...
+	  (get_less_charset): ... here. The caller is expected to set
+	  environment variables rather than having it done by the library.
+	  (get_output_encoding): New function, returning the output encoding
+	  produced by a device.
+	* src/encodings.h (get_default_device): Update prototype.
+	  (get_output_encoding, get_less_charset): Add prototypes.
+	* src/man.c (make_roff_command): Update calls to encoding library
+	  for these changes.
+
 Sun Sep  7 23:10:01 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	Fix decision about whether a given encoding is safe to save as a cat

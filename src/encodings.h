@@ -23,5 +23,8 @@
 const char *get_source_encoding (const char *lang);
 const char *get_standard_output_encoding (const char *lang);
 const char *get_locale_charset (void);
-const char *get_default_device (const char *locale_charset);
+const char *get_default_device (const char *locale_charset,
+				const char *source_encoding);
 const char *get_roff_encoding (const char *device);
+const char *get_output_encoding (const char *device);
+const char *get_less_charset (const char *locale_charset);

@@ -72,13 +72,15 @@
  * distribution; send me updates for languages I've missed.
  *
  * Explicit encodings in the directory name (e.g. de_DE.UTF-8) override this
- * table. TODO: Implement this.
+ * table.
  */
-static struct {
+struct directory_entry {
 	const char *lang_dir;
 	const char *source_encoding;
 	const char *standard_output_encoding;
-} directory_table[] = {
+};
+
+static struct directory_entry directory_table[] = {
 	{ "C",		"ISO-8859-1",	"ANSI_X3.4-1968"	}, /* English */
 	{ "POSIX",	"ISO-8859-1",	"ANSI_X3.4-1968"	}, /* English */
 	{ "da",		"ISO-8859-1",	"ISO-8859-1"		}, /* Danish */
@@ -107,16 +109,19 @@ static struct {
 	{ "ru",		"KOI8-R",	"KOI8-R"		}, /* Russian */
 #endif /* MULTIBYTE_GROFF */
 
-	{ NULL,		NULL,		"NULL"			} };
+	{ NULL,		NULL,		"NULL"			}
+};
 
 /* The default groff terminal output device to be used is determined based
  * on nl_langinfo(CODESET), which returns the character set used by the
  * current locale.
  */
-static struct {
+struct charset_entry {
 	const char *locale_charset;
 	const char *default_device;
-} charset_table[] = {
+};
+
+static struct charset_entry charset_table[] = {
 	{ "ANSI_X3.4-1968",	"ascii"		},
 	{ "ISO-8859-1",		"latin1"	},
 	{ "UTF-8",		"utf8"		},
@@ -125,7 +130,8 @@ static struct {
 	{ "EUC-JP",		"nippon"	},
 #endif /* MULTIBYTE_GROFF */
 
-	{ NULL,			NULL		} };
+	{ NULL,			NULL		}
+};
 
 static const char *fallback_default_device =
 #ifdef MULTIBYTE_GROFF
@@ -142,29 +148,51 @@ static const char *fallback_default_device =
  * straight through so is (probably ...) encoding-agnostic. If this encoding
  * does not match the source encoding, an iconv pipe is used (if available)
  * to perform recoding.
- *
- * Setting less_charset to latin1 tells the less pager that characters
- * between 0xA0 and 0xFF are displayable, not that its input is encoded in
- * ISO-8859-1. TODO: Perhaps using LESSCHARDEF would be better.
  */
-static struct {
+struct device_entry {
 	const char *roff_device;
 	const char *roff_encoding;
-	const char *less_charset;
-} device_table[] = {
-	{ "ascii",	"ISO-8859-1",	"ascii"		},
-	{ "latin1",	"ISO-8859-1",	"latin1"	},
-	{ "utf8",	"ISO-8859-1",	"utf-8"		},
+	const char *output_encoding;
+};
+
+static struct device_entry device_table[] = {
+	{ "ascii",	"ISO-8859-1",	"ANSI_X3.4-1968"	},
+	{ "latin1",	"ISO-8859-1",	"ISO-8859-1"		},
+	{ "utf8",	"ISO-8859-1",	"UTF-8"			},
 
 #ifdef MULTIBYTE_GROFF
-	{ "ascii8",	NULL,		"latin1"	},
-	{ "nippon",	"EUC-JP",	"ja"		},
+	{ "ascii8",	NULL,		NULL			},
+	{ "nippon",	"EUC-JP",	"EUC-JP"		},
 #endif /* MULTIBYTE_GROFF */
 
-	{ NULL,		NULL,		NULL		} };
+	{ NULL,		NULL,		NULL			}
+};
 
 static const char *fallback_roff_encoding = "ISO-8859-1";
-static const char *fallback_less_charset = "latin1";
+
+/* Setting less_charset to iso8859 tells the less pager that characters
+ * between 0xA0 and 0xFF are displayable, not that its input is encoded in
+ * ISO-8859-*. TODO: Perhaps using LESSCHARDEF would be better.
+ */
+struct less_charset_entry {
+	const char *locale_charset;
+	const char *less_charset;
+};
+
+static struct less_charset_entry less_charset_table[] = {
+	{ "ANSI_X3.4-1968",	"ascii"		},
+	{ "ISO-8859-1",		"iso8859"	},
+	{ "UTF-8",		"utf-8"		},
+
+#ifdef MULTIBYTE_GROFF
+	{ "EUC-JP",		"ja"		},
+	{ "KOI8-R",		"koi8-r"	},
+#endif /* MULTIBYTE_GROFF */
+
+	{ NULL,			NULL		}
+};
+
+static const char *fallback_less_charset = "iso8859";
 
 
 /* Return the assumed encoding of the source man page, based on the
@@ -275,19 +303,68 @@ const char *get_locale_charset (void)
 		return NULL;
 }
 
+/* Can we take this input encoding and produce this output encoding, perhaps
+ * with the help of some iconv pipes? */
+static int compatible_encodings (const char *input, const char *output)
+{
+#ifdef MULTIBYTE_GROFF
+	/* NULL output means that its encoding is passed through from the
+	 * input, so it must be compatible.
+	 */
+	if (!output)
+		return 1;
+#endif /* MULTIBYTE_GROFF */
+
+	if (STREQ (input, output))
+		return 1;
+
+	/* If the input is ASCII, recoding should be easy. Try it. */
+	if (STREQ (input, "ANSI_X3.4-1968"))
+		return 1;
+
+	/* If the input is UTF-8, it's either a simple recoding of whatever
+	 * we want or else it probably won't work at all no matter what we
+	 * do. We might as well try it for now.
+	 */
+	if (STREQ (input, "UTF-8"))
+		return 1;
+
+#ifdef MULTIBYTE_GROFF
+	/* Special case for ja_JP.UTF-8, which takes UTF-8 input recoded
+	 * from EUC-JP and produces UTF-8 output. This is rather filthy.
+	 */
+	if (STREQ (input, "EUC-JP") && STREQ (output, "UTF-8"))
+		return 1;
+#endif /* MULTIBYTE_GROFF */
+
+	return 0;
+}
+
 /* Return the default groff device for the given character set. This may be
- * overridden by the user.
+ * overridden by the user. The page's source encoding is needed to ensure
+ * that the device is compatible: consider ru_RU.UTF-8, which needs ascii8
+ * and a trailing iconv pipe to recode to UTF-8.
+ *
+ * All this encoding compatibility stuff feels like a slightly nasty hack,
+ * but I haven't yet come up with a cleaner way to do it.
  */
-const char *get_default_device (const char *locale_charset)
+const char *get_default_device (const char *locale_charset,
+				const char *source_encoding)
 {
 	int i;
 
-	if (!locale_charset)
+	if (!locale_charset || !source_encoding)
 		return fallback_default_device;
 
 	for (i = 0; charset_table[i].locale_charset; ++i) {
-		if (STREQ (charset_table[i].locale_charset, locale_charset))
-			return charset_table[i].default_device;
+		const struct charset_entry *entry = &charset_table[i];
+		if (STREQ (entry->locale_charset, locale_charset)) {
+			const char *roff_encoding =
+				get_roff_encoding (entry->default_device);
+			if (compatible_encodings (source_encoding,
+						  roff_encoding))
+				return entry->default_device;
+		}
 	}
 
 	return fallback_default_device;
@@ -301,21 +378,18 @@ const char *get_roff_encoding (const char *device)
 {
 	int i;
 	int found = 0;
-	const char *roff_encoding = NULL, *less_charset = NULL;
+	const char *roff_encoding = NULL;
 
 	for (i = 0; device_table[i].roff_device; ++i) {
 		if (STREQ (device_table[i].roff_device, device)) {
 			found = 1;
 			roff_encoding = device_table[i].roff_encoding;
-			less_charset = device_table[i].less_charset;
 			break;
 		}
 	}
 
-	if (!found) {
-		less_charset = fallback_less_charset;
+	if (!found)
 		roff_encoding = fallback_roff_encoding;
-	}
 
 #ifdef MULTIBYTE_GROFF
 	/* An ugly special case is needed here. The utf8 device normally
@@ -331,6 +405,34 @@ const char *get_roff_encoding (const char *device)
 	}
 #endif /* MULTIBYTE_GROFF */
 
-	putenv (strappend (NULL, "LESSCHARSET=", less_charset, NULL));
 	return roff_encoding;
+}
+
+/* Find the output encoding that this device will produce, or NULL if it
+ * will simply pass through the input encoding.
+ */
+const char *get_output_encoding (const char *device)
+{
+	int i;
+
+	for (i = 0; device_table[i].roff_device; ++i)
+		if (STREQ (device_table[i].roff_device, device))
+			return device_table[i].output_encoding;
+
+	return NULL;
+}
+
+/* Return the value of LESSCHARSET appropriate for this locale. */
+const char *get_less_charset (const char *locale_charset)
+{
+	int i;
+
+	for (i = 0; less_charset_table[i].locale_charset; ++i) {
+		const struct less_charset_entry *entry =
+			&less_charset_table[i];
+		if (STREQ (entry->locale_charset, locale_charset))
+			return entry->less_charset;
+	}
+
+	return fallback_less_charset;
 }

@@ -1603,6 +1603,7 @@ static char *make_roff_command (const char *dir, const char *file,
 		/* we don't have an external formatter script */
 		char *dev;	/* either " -T<mumble>" or "" */
 		int using_tbl = 0;
+		const char *output_encoding = NULL, *locale_charset = NULL;
 
 		if (*file) {
 			char *esc_file = escape_shell (file);
@@ -1653,10 +1654,15 @@ static char *make_roff_command (const char *dir, const char *file,
 		 * in the path.
 		 */
 		if (!troff) {
-			const char *cat_charset, *locale_charset;
 			const char *source_encoding, *roff_encoding;
+			const char *cat_charset;
 
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
+
+			source_encoding = get_source_encoding (lang);
+			if (debug)
+				fprintf (stderr, "source_encoding = %s\n",
+					 STRC (source_encoding, "NULL"));
 
 			cat_charset = get_standard_output_encoding (lang);
 			locale_charset = get_locale_charset ();
@@ -1681,28 +1687,46 @@ static char *make_roff_command (const char *dir, const char *file,
 			 */
 			if (!roff_device) {
 				roff_device =
-					get_default_device (locale_charset);
+					get_default_device (locale_charset,
+							    source_encoding);
 				if (debug)
 					fprintf (stderr,
 						 "roff_device (locale) = %s\n",
 						 STRC (roff_device, "NULL"));
 			}
 
-			source_encoding = get_source_encoding (lang);
 			roff_encoding = get_roff_encoding (roff_device);
-			if (debug) {
-				fprintf (stderr, "source_encoding = %s\n",
-					 STRC (source_encoding, "NULL"));
+			if (debug)
 				fprintf (stderr, "roff_encoding = %s\n",
 					 STRC (roff_encoding, "NULL"));
-			}
 
+			/* We may need to recode:
+			 *   from source_encoding to roff_encoding on input;
+			 *   from output_encoding to locale_charset on output.
+			 */
 			if (source_encoding && roff_encoding &&
 			    !STREQ (source_encoding, roff_encoding))
 				command = strappend (command,
 						     " | iconv -c -f ",
 						     source_encoding, " -t ",
 						     roff_encoding, NULL);
+
+			output_encoding = get_output_encoding (roff_device);
+			if (!output_encoding)
+				output_encoding = source_encoding;
+			if (debug)
+				fprintf (stderr, "output_encoding = %s\n",
+					 STRC (output_encoding, "NULL"));
+
+			if (!getenv ("LESSCHARSET")) {
+				const char *less_charset =
+					get_less_charset (locale_charset);
+				if (debug)
+					fprintf (stderr, "less_charset = %s\n",
+						 less_charset);
+				putenv (strappend (NULL, "LESSCHARSET=",
+						   less_charset, NULL));
+			}
 		}
 
 		/* tell grops to guess the page size */
@@ -1784,6 +1808,12 @@ static char *make_roff_command (const char *dir, const char *file,
 				       *pp_string);
 			}
 		} while (*pp_string++);
+
+		if (output_encoding && locale_charset &&
+		    !STREQ (output_encoding, locale_charset))
+			command = strappend (command, " | iconv -c -f ",
+					     output_encoding, " -t ",
+					     locale_charset, NULL);
 
 #ifndef GNU_NROFF
 		/* tbl needs col */
