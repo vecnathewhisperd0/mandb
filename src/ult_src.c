@@ -149,8 +149,7 @@ static __inline__ char *ult_softlink (char *fullpath, const char *mantree)
 	}
 
 	if (debug)
-		fprintf (stderr, "ult_softlink: (%s)\n", 
-			 resolved_path + strlen (mantree) + 1);
+		fprintf (stderr, "ult_softlink: (%s)\n", resolved_path);
 
 	return strcpy (fullpath, resolved_path);
 }
@@ -220,7 +219,8 @@ char *ult_src (char *name, const char *path, struct stat *buf, int flags)
 		relative = basename + strlen (path) + 1;
 
 		if (debug)
-			fprintf (stderr, "\nult_src: File %s\n", name);
+			fprintf (stderr, "\nult_src: File %s in mantree %s\n",
+				 name, path);
 
 		/* If we don't have a buf, allocate and assign one */
 		if (!buf && ((flags & SOFT_LINK) || (flags & HARD_LINK))) {
@@ -307,9 +307,19 @@ char *ult_src (char *name, const char *path, struct stat *buf, int flags)
 
 		fclose(fp);
 
-		if (buffer)
+		if (buffer) {
+			/* Restore the original path from before
+			 * ult_softlink() etc., in case it went outside the
+			 * mantree.
+			 */
+			char *basename_copy = xstrdup (basename);
+			(void) strcpy (basename, path);
+			(void) strcat (basename, "/");
 			val = test_for_include (buffer, relative);
-		else
+			if (!val)
+				(void) strcpy (basename, basename_copy);
+			free (basename_copy);
+		} else
 			val = EOF;
 
 		if (val == 1) {			/* keep on looking... */
