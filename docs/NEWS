@@ -1,3 +1,92 @@
+Major changes since man_db-2.3.11:
+
+	man_db-2.3.18 is an interim release under new maintenance by Colin
+	Watson, merging much of the work done by former maintainers (Graeme
+	Wilford and Fabrizio Polacco). It incorporates several years of
+	changes made in the Debian GNU/Linux distribution's package of
+	man_db.
+
+	Here are a few highlights, with the names of the maintainers
+	responsible for them. As I am documenting after the fact of other
+	people's changes of a few years ago, I have undoubtedly missed a
+	number of fixes and improvements; I promise to keep track of these
+	as I go along in future.
+
+	Fixes:
+	------
+
+	o Multiple security fixes, including better handling of temporary
+	  files, a format string vulnerability fix, and more careful
+	  dropping of privileges when running setuid. [Fabrizio, Colin]
+
+	o Databases no longer disappear temporarily while they are being
+	  regenerated. [Fabrizio]
+
+	o Corrected handling of locale environment variables. Setting
+	  several colon-separated locales in $LANGUAGE also works now.
+	  [Colin]
+
+	o whatis and apropos are more careful about the possibility of a
+	  corrupted database. [Fabrizio, Colin]
+
+	Improvements:
+	-------------
+
+	o If root has private manual hierarchies, cat pages generated from
+	  them are no longer chowned to a less-privileged user. [Wilf]
+
+	o Rewrote configuration file handling, adding DEFINE directives to
+	  set paths to external programs. The configuration file is now
+	  called man_db.conf. [Wilf]
+
+	o Support FHS paths (/usr/share/man and /var/cache/man) in
+	  preference to FSSTND paths (/usr/man and /var/catman). [Fabrizio]
+
+	o Converted from catgets to GNU gettext for national language
+	  support. [Fabrizio, Colin]
+
+	o Several new and improved localized message catalogues and
+	  translated man pages. [Fabrizio, Colin, other contributors]
+
+	o Added accessdb utility, which displays the contents of a manual
+	  page database. [Fabrizio]
+
+	o Added user configuration file ~/.manpath, with the same syntax as
+	  the global configuration file. [Fabrizio]
+
+	o Leading or trailing colons in the MANPATH environment variable
+	  cause the manpath derived from configuration files to be prepended
+	  or appended respectively. A double colon in the middle of the
+	  environment variable causes the configuration file manpath to be
+	  inserted between the colons. [Fabrizio]
+
+	o Added experimental -H and -Thtml options to take advantage of
+	  groff's new HTML driver. [Fabrizio]
+
+	o lexgrog now scans manual pages to guess which preprocessors are
+	  needed. [Fabrizio]
+
+	o Create cat directories on the fly if necessary. [Fabrizio]
+
+	o Supply a wrapper which explicitly drops privileges to uid man if
+	  man or mandb is run as root. In the future, splitting out setuid
+	  functions into a separate helper process may remove the need for
+	  this paranoia. [Fabrizio]
+
+	o Add --test option to mandb, which merely reports errors in manual
+	  page hierarchies rather than actually creating or updating a
+	  database. [Fabrizio, Colin]
+
+	o Manual pages may now be symlinks outside the mantree. This should
+	  pose no significant security concerns, and utilities such as GNU
+	  stow create such symlinks. [Colin]
+
+	o Deprecate whatis references for man, and display a warning if
+	  displaying a page relies on going through a whatis reference. They
+	  often lead to confusingly non-obviously-deterministic behaviour,
+	  and guaranteeing that man will honour them even when the database
+	  is out of date causes performance problems. [Colin]
+
 Major changes since man_db-2.3.10:
 
 	o The man_db manual is bundled in source form.
@@ -30,7 +119,7 @@ Major changes since man_db-2.3.5:
 	Improvements:
 	-------------
 
-	o Man removes it's temporary files upon abnormal termination.
+	o Man removes its temporary files upon abnormal termination.
 
 	o apropos does proper word matching rather than the fuzzy
 	  matching of 2.3.5.  eg. supplying any of the keywords:
@@ -118,7 +207,7 @@ Major changes since man_db-2.2.1:
 	o $MANOPTS environment variable.
 	  The environment variable MANOPTS may be set to any string in
 	  command line option/argument format.  It is parsed by man(1) prior
-	  to it's actual command line.
+	  to its actual command line.
 
 	o Per manual hierarchy cat directory locations.
 	  It is possible to redirect your cat pages to other directories or
@@ -172,7 +261,7 @@ Major changes since man_db-2.2.1:
 	o straycats handled without need for `placeholders'.
 
 	o Friendly less(1) prompt.
-	  If man(1) uses less(1) as it's pager (dependent on both static and
+	  If man(1) uses less(1) as its pager (dependent on both static and
 	  dynamic factors), the prompt is modified to suit the manual page 
 	  being displayed.  The modification performed is also changeable by
 	  the user.
