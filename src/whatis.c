@@ -116,11 +116,12 @@ static int status = OK;
 #  error #define WHATIS or APROPOS, so I know who I am
 #endif
 
-static const char args[] = "drewhVm:M:fkL:";
+static const char args[] = "dvrewhVm:M:fkL:";
 
 static const struct option long_options[] =
 {
 	{"debug",	no_argument,		0, 'd'},
+	{"verbose",	no_argument,		0, 'v'},
 	{"regex",	no_argument,		0, 'r'},
 	{"exact",	no_argument,		0, 'e'},
 	{"wildcard",	no_argument,		0, 'w'},
@@ -140,6 +141,7 @@ static void usage (int status)
 	printf (_("usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
+		"-v, --verbose              print verbose warning messages.\n"
 		"-r, --regex                interpret each keyword as a regex (default).\n"
 		"-e, --exact                search each keyword for exact match.\n"
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
@@ -156,6 +158,7 @@ static void usage (int status)
 	printf (_("usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"), program_name);
 	printf(_(
 		"-d, --debug                produce debugging info.\n"
+		"-v, --verbose              print verbose warning messages.\n"
 		"-r, --regex                interpret each keyword as a regex.\n"
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
@@ -225,7 +228,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 	if (*(info->pointer) == '-' || STREQ (info->pointer, page)) {
 		if (info->whatis != NULL && *(info->whatis))
 			return xstrdup (info->whatis);
-		if (*(info->pointer) != '-')
+		if (!quiet && *(info->pointer) != '-')
 			error (0, 0, _("warning: %s contains a pointer loop"),
 			       page);
 		return xstrdup (_("(unknown subject)"));
@@ -251,7 +254,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 				free_mandata_struct (info);
 				return return_whatis;
 			}
-			if (*(info->pointer) != '-')
+			if (!quiet && *(info->pointer) != '-')
 				error (0, 0,
 				       _("warning: %s contains a pointer loop"),
 				       page);
@@ -264,7 +267,8 @@ static char *get_whatis (struct mandata *info, const char *page)
 		info = newinfo;
 	}
 
-	error (0, 0, _("warning: %s contains a pointer loop"), page);
+	if (!quiet)
+		error (0, 0, _("warning: %s contains a pointer loop"), page);
 	return xstrdup (_("(unknown subject)"));
 }
 
@@ -615,6 +619,9 @@ int main (int argc, char *argv[])
 
 			case 'd':
 				debug = 1;
+				break;
+			case 'v':
+				quiet = 0;
 				break;
 			case 'L':
 				llocale = optarg;
