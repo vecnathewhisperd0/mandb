@@ -94,12 +94,13 @@ name		(N[AaOo][Mm][Nn|Ee]|N[Oo][Mm]|N[Oo][Mm][Bb][Rr][Ee]|B[Ee][Zz][Ee][Ii][Cc][
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?{dbl_quote}?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
- /* no idea of how to detect grap or vgrind */
 tbl_request	\.[Tt][Ss]
 eqn_request	\.[Ee][Qq]
 pic_request	\.[Pp][Ss][ 0-9.<]?
+grap_request	\.G1
 ref1_request	\.[Rr]1
 ref2_request	\.\[
+vgrind_request	\.vS
 
 %%
 
@@ -120,8 +121,10 @@ ref2_request	\.\[
 	{bol}{tbl_request}		filters[TBL_FILTER] = 't';
 	{bol}{eqn_request}		filters[EQN_FILTER] = 'e';
 	{bol}{pic_request}		filters[PIC_FILTER] = 'p';
+	{bol}{grap_request}		filters[GRAP_FILTER] = 'g';
 	{bol}{ref1_request}		|
 	{bol}{ref2_request}		filters[REF_FILTER] = 'r';
+	{bol}{vgrind_request}		filters[VGRIND_FILTER] = 'v';
 }
 <MAN_REST><<EOF>>		{	/* exit */
 					*p_name = '\0'; /* terminate the string */
