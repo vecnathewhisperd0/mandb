@@ -36,6 +36,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <assert.h>
 
 #ifndef STDC_HEADERS
 extern int errno;
@@ -104,31 +105,34 @@ extern char *realpath();
 #include "security.h"
 #include "ult_src.h"
 
-/* Find minimum value hard link filename for given file and inode */
-static __inline__ char *ult_hardlink (char *fullpath, ino_t inode)
+/* Find minimum value hard link filename for given file and inode.
+ * Returns a newly allocated string.
+ */
+static char *ult_hardlink (const char *fullpath, ino_t inode)
 {
 	DIR *mdir;
 	struct dirent *manlist;
-	char link[PATH_MAX];
-	char dir[PATH_MAX];
-	char *t;
+	char *link, *dir, *ret;
+	const char *slash;
 
-	t = strrchr (fullpath, '/');
-	*t = '\0';
-	(void) strcpy (dir, fullpath);
-	*t = '/';
-	(void) strcpy (link, ++t);
+	slash = strrchr (fullpath, '/');
+	assert (slash);
+	dir = xstrndup (fullpath, slash - fullpath);
+	link = xstrdup (++slash);
 
 	mdir = opendir (dir);
 	if (mdir == NULL) {
 		error (0, errno, _("can't search directory %s"), dir);
+		free (dir);
+		free (link);
 		return NULL;
 	}
 
 	while ((manlist = readdir (mdir))) {
 		if (manlist->d_ino == inode &&
 		    strcmp (link, manlist->d_name) > 0) {
-		  	(void) strcpy (link, manlist->d_name);
+			free (link);
+			link = xstrdup (manlist->d_name);
 			if (debug)
 				fprintf (stderr, "ult_hardlink: (%s)\n", link);
 		}
@@ -138,10 +142,16 @@ static __inline__ char *ult_hardlink (char *fullpath, ino_t inode)
 	/* If we already are the link with the smallest name value */
 	/* return NULL */
 
-	if (strcmp (link, t) == 0)
+	if (strcmp (link, slash) == 0) {
+		free (dir);
+		free (link);
 		return NULL;
+	}
 
-	return strcpy (strrchr (fullpath, '/') + 1, link);
+	ret = strappend (NULL, dir, "/", link, NULL);
+	free (dir);
+	free (link);
+	return ret;
 }
 
 #ifdef S_ISLNK
@@ -215,7 +225,8 @@ static char *test_for_include (const char *buffer)
  * name is full pathname, path is the MANPATH directory (/usr/man)
  * flags is a combination of SO_LINK | SOFT_LINK | HARD_LINK
  */
-char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
+const char *ult_src (const char *name, const char *path,
+		     struct stat *buf, int flags)
 {
 	static char *basename;		/* must be static */
 	static short recurse; 		/* must be static */
@@ -263,9 +274,15 @@ char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 
 		/* Only deal with local (inter-dir) HARD links */
 		if (flags & HARD_LINK) {
-			if (buf->st_nlink > 1)
+			if (buf->st_nlink > 1) {
 				/* Has HARD links, find least value */
-				(void) ult_hardlink (basename, buf->st_ino); 
+				char *hardlink = ult_hardlink (basename,
+							       buf->st_ino);
+				if (hardlink) {
+					free (basename);
+					basename = hardlink;
+				}
+			}
 		}
 	}
 
@@ -331,7 +348,7 @@ char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 		if (buffer) {
 			char *include = test_for_include (buffer);
 			if (include) {
-				char *ult;
+				const char *ult;
 
 				/* Restore the original path from before
 				 * ult_softlink() etc., in case it went

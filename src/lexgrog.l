@@ -516,7 +516,7 @@ int main (int argc, char **argv)
 
 	while (optind != argc) {
 		lexgrog lg;
-		char *file;
+		const char *file;
 
 		lg.type = type;
 

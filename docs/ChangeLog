@@ -1,3 +1,17 @@
+Fri Aug 15 00:16:13 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/ult_src.c (ult_hardlink): Return a newly allocated string
+	  rather than messily copying over an existing one (and possibly
+	  corrupting the malloc arena). link and dir are now allocated
+	  rather than being declared as arrays.
+	  (ult_src): Update call to ult_hardlink(). Return 'const char *' to
+	  make sure callers aren't messing about with our memory.
+	* src/ult_src.h (ult_src): Update prototype.
+	* src/check_mandirs.c (test_mandirs): ult is const.
+	* src/lexgrog.l (main): file is const.
+	* src/man.c (try_section): ult is const.
+	  (display_filesystem, display_database): man_file is const.
+
 Sat Aug  9 21:30:16 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* po/POTFILES.in: Add lib/pipeline.c, src/descriptions.c,
