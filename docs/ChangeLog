@@ -1,3 +1,11 @@
+Sun Aug  3 18:00:59 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.h (struct pipeline): The writeto, readfrom, writefd,
+	  and readfd names turn out to be confusing in calling code. Rename
+	  to want_in, want_out, infd, and outfd respectively.
+	* lib/pipeline.c (pipeline_new, pipeline_start, pipeline_wait): Use
+	  new names.
+
 Sun Aug  3 16:35:24 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	Add support in pipeline library for writing input to or reading
