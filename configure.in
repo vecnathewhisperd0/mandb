@@ -292,15 +292,15 @@ AC_ARG_ENABLE(mandirs,
 	 AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$enableval",
 			    [Define to the manual page hierarchy organization(s) in use.])],
 	[case $host in
-		*-gnu)          mandir=GNU;;
-		*-hpux*)        mandir=HPUX;;
-		*-irix*)        mandir=IRIX;;
-		*-solaris*)     mandir=Solaris;;
-		*)              mandir=;;
+		*-gnu)          mandirs=GNU;;
+		*-hpux*)        mandirs=HPUX;;
+		*-irix*)        mandirs=IRIX;;
+		*-solaris*)     mandirs=Solaris;;
+		*)              mandirs=;;
 	 esac
-	 if test -n "$mandir"; then
-		MAN_ECHO("Using hierarchy organization $mandir")
-		AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$mandir")
+	 if test -n "$mandirs"; then
+		MAN_ECHO("Using hierarchy organization $mandirs")
+		AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$mandirs")
 	 else
 		MAN_ECHO("Allowing any hierarchy organization")
 		AC_DEFINE(MANDIR_LAYOUT, "")
