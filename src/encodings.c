@@ -201,7 +201,7 @@ static const char *fallback_less_charset = "iso8859";
  */
 const char *get_source_encoding (const char *lang)
 {
-	int i;
+	const struct directory_entry *entry;
 	const char *dot;
 
 	if (!lang)
@@ -232,11 +232,9 @@ const char *get_source_encoding (const char *lang)
 		/* TODO: I should probably drop any ,<version> components. */
 		return dot + 1;
 
-	for (i = 0; directory_table[i].lang_dir; ++i) {
-		if (STRNEQ (directory_table[i].lang_dir, lang,
-			    strlen (directory_table[i].lang_dir)))
-			return directory_table[i].source_encoding;
-	}
+	for (entry = directory_table; entry->lang_dir; ++entry)
+		if (STRNEQ (entry->lang_dir, lang, strlen (entry->lang_dir)))
+			return entry->source_encoding;
 
 	return NULL;
 }
@@ -247,7 +245,7 @@ const char *get_source_encoding (const char *lang)
  */
 const char *get_standard_output_encoding (const char *lang)
 {
-	int i;
+	const struct directory_entry *entry;
 	const char *dot;
 
 	if (!lang)
@@ -262,11 +260,9 @@ const char *get_standard_output_encoding (const char *lang)
 		/* TODO: I should probably drop any ,<version> components. */
 		return dot + 1;
 
-	for (i = 0; directory_table[i].lang_dir; ++i) {
-		if (STRNEQ (directory_table[i].lang_dir, lang,
-			    strlen (directory_table[i].lang_dir)))
-			return directory_table[i].standard_output_encoding;
-	}
+	for (entry = directory_table; entry->lang_dir; ++entry)
+		if (STRNEQ (entry->lang_dir, lang, strlen (entry->lang_dir)))
+			return entry->standard_output_encoding;
 
 	return NULL;
 }
@@ -351,13 +347,12 @@ static int compatible_encodings (const char *input, const char *output)
 const char *get_default_device (const char *locale_charset,
 				const char *source_encoding)
 {
-	int i;
+	const struct charset_entry *entry;
 
 	if (!locale_charset || !source_encoding)
 		return fallback_default_device;
 
-	for (i = 0; charset_table[i].locale_charset; ++i) {
-		const struct charset_entry *entry = &charset_table[i];
+	for (entry = charset_table; entry->locale_charset; ++entry) {
 		if (STREQ (entry->locale_charset, locale_charset)) {
 			const char *roff_encoding =
 				get_roff_encoding (entry->default_device);
@@ -376,14 +371,14 @@ const char *get_default_device (const char *locale_charset,
  */
 const char *get_roff_encoding (const char *device)
 {
-	int i;
+	const struct device_entry *entry;
 	int found = 0;
 	const char *roff_encoding = NULL;
 
-	for (i = 0; device_table[i].roff_device; ++i) {
-		if (STREQ (device_table[i].roff_device, device)) {
+	for (entry = device_table; entry->roff_device; ++entry) {
+		if (STREQ (entry->roff_device, device)) {
 			found = 1;
-			roff_encoding = device_table[i].roff_encoding;
+			roff_encoding = entry->roff_encoding;
 			break;
 		}
 	}
@@ -413,11 +408,11 @@ const char *get_roff_encoding (const char *device)
  */
 const char *get_output_encoding (const char *device)
 {
-	int i;
+	const struct device_entry *entry;
 
-	for (i = 0; device_table[i].roff_device; ++i)
-		if (STREQ (device_table[i].roff_device, device))
-			return device_table[i].output_encoding;
+	for (entry = device_table; entry->roff_device; ++entry)
+		if (STREQ (entry->roff_device, device))
+			return entry->output_encoding;
 
 	return NULL;
 }
@@ -425,14 +420,11 @@ const char *get_output_encoding (const char *device)
 /* Return the value of LESSCHARSET appropriate for this locale. */
 const char *get_less_charset (const char *locale_charset)
 {
-	int i;
+	const struct less_charset_entry *entry;
 
-	for (i = 0; less_charset_table[i].locale_charset; ++i) {
-		const struct less_charset_entry *entry =
-			&less_charset_table[i];
+	for (entry = less_charset_table; entry->locale_charset; ++entry)
 		if (STREQ (entry->locale_charset, locale_charset))
 			return entry->less_charset;
-	}
 
 	return fallback_less_charset;
 }
