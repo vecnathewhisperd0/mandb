@@ -16,11 +16,6 @@ date_es=`LANG=es_ES date -d $datemark +'%d %B %Y'`
 date_de=`LANG=de_DE date -d $datemark +'%d %B %Y'`
 date_fr=`LANG=fr_FR date -d $datemark +'%d %B %Y'`
 dnl
-curdate=`LANG=en_EN date +'%d %B %Y'`
-curdate_it=`LANG=it_IT date +'%d %B %Y'`
-curdate_es=`LANG=es_ES date +'%d %B %Y'`
-curdate_de=`LANG=de_DE date +'%d %B %Y'`
-curdate_fr=`LANG=fr_FR date +'%d %B %Y'`
 PWD=`pwd`
 changequote(, )
 VERSION=`expr $PWD : '.*-\([0-9.]*\)'`
@@ -45,16 +40,11 @@ define(MAN_AC_VERSION, [builtin(eval, $3 + $2 * 1000 + $1 * 1000000)])dnl
 man_ac_version=MAN_AC_VERSION(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)))
 dnl
 AC_SUBST(date)dnl
-AC_SUBST(curdate)dnl
 dnl AC_SUBST(datemark)dnl
 AC_SUBST(date_it)dnl
-AC_SUBST(curdate_it)dnl
 AC_SUBST(date_es)dnl
-AC_SUBST(curdate_es)dnl
 AC_SUBST(date_de)dnl
-AC_SUBST(curdate_de)dnl
 AC_SUBST(date_fr)dnl
-AC_SUBST(curdate_fr)dnl
 AC_SUBST(man_ac_version)dnl
 dnl
 dnl We have to be a bit naughty here and supply options.
