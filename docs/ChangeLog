@@ -1,3 +1,20 @@
+Sun Nov 16 19:28:38 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	Add an option to apropos and whatis to allow specification of a
+	section to search.
+
+	* src/whatis.c (args, long_options, main): New -s/--section option.
+	  (usage): Document it.
+	  (whatis): Tell dblookup_all() to look in the section named by
+	  --section, if present.
+	  (apropos): If --section was given, check that it matches either
+	  info.sec or info.ext for each page. Use info.whatis rather than
+	  parsing the whatis out manually.
+	* man/man1/apropos.man1 (SYNOPSIS, OPTIONS): Document --section.
+	* man/man1/whatis.man1 (SYNOPSIS, OPTIONS): Likewise.
+
+	* docs/NEWS: Start 2.4.3. Document the above.
+
 Sun Nov 16 18:47:46 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* include/manconfig.h.in (CTYPE): New macro to help get <ctype.h>

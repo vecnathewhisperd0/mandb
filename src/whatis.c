@@ -117,11 +117,13 @@ extern void regfree();
 static int wildcard;
 static int status = OK;
 
+static const char *section;
+
 #if !defined(APROPOS) && !defined(WHATIS)
 #  error #define WHATIS or APROPOS, so I know who I am
 #endif
 
-static const char args[] = "dvrewhVm:M:fkL:C:";
+static const char args[] = "dvrews:hVm:M:fkL:C:";
 
 static const struct option long_options[] =
 {
@@ -130,6 +132,7 @@ static const struct option long_options[] =
 	{"regex",	no_argument,		0, 'r'},
 	{"exact",	no_argument,		0, 'e'},
 	{"wildcard",	no_argument,		0, 'w'},
+	{"section",	required_argument,	0, 's'},
 	{"help",	no_argument,		0, 'h'},
 	{"version",	no_argument,		0, 'V'},
 	{"systems",	required_argument,	0, 'm'},
@@ -144,13 +147,15 @@ static const struct option long_options[] =
 #ifdef APROPOS
 static void usage (int status)
 {
-	printf (_("usage: %s [-dhV] [-r|-w|-e] [-m systems] [-M manpath] [-C file] keyword ...\n"), program_name);
+	printf (_("usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C file]\n"
+		  "               keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
 		"-r, --regex                interpret each keyword as a regex (default).\n"
 		"-e, --exact                search each keyword for exact match.\n"
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
+		"-s, --section              search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
 		"-C, --config-file file     use this user configuration file.\n"
@@ -162,12 +167,14 @@ static void usage (int status)
 #else	
 static void usage (int status)
 {
-	printf (_("usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"), program_name);
+	printf (_("usage: %s [-dhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
+		  "              keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
 		"-r, --regex                interpret each keyword as a regex.\n"
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
+		"-s, --section              search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
 		"-C, --config-file file     use this user configuration file.\n"
@@ -339,7 +346,7 @@ static __inline__ int whatis (char *page)
 	struct mandata *info;
 	int count = 0;
 
-	info = dblookup_all (page, NULL, 0);
+	info = dblookup_all (page, section, 0);
 	while (info) {
 		struct mandata *pinfo;
 			
@@ -483,6 +490,7 @@ static int apropos (char *page, char *lowpage)
 #endif /* !BTREE */
 		char *tab;
 		int match;
+		struct mandata info;
 #ifdef APROPOS
 		char *whatis;
 #endif
@@ -510,24 +518,29 @@ static int apropos (char *page, char *lowpage)
 
 		/* a real page */
 
+		split_content (cont.dptr, &info);
+
+		/* If there's a section given, does it match either the
+		 * section or extension of this page?
+		 */
+		if (section &&
+		    (!STREQ (section, info.sec) && !STREQ (section, info.ext)))
+			goto nextpage;
+
 		tab = strrchr (key.dptr, '\t');
 		if (tab) 
 			 *tab = '\0';
 
 #ifdef APROPOS
 		match = parse_name (lowpage, key.dptr);
-		whatis = strrchr (cont.dptr, '\t');
-		if (!(whatis && *++whatis))
-			whatis = NULL;
-			
+		whatis = xstrdup (info.whatis);
 		if (!match && whatis)
 			match = parse_whatis (page, lowpage, whatis);
+		free (whatis);
 #else /* WHATIS */
 		match = parse_name (page, key.dptr);
 #endif /* APROPOS */
 		if (match) {
-			struct mandata info;
-			split_content (cont.dptr, &info);
 			display (&info, key.dptr);
 			found++;
 			cont.dptr = info.addr;
@@ -665,6 +678,9 @@ int main (int argc, char *argv[])
 				regex = 0;
 #endif
 				wildcard = 1;
+				break;
+			case 's':
+				section = optarg;
 				break;
 			case 'f': /* fall through */
 			case 'k': /* ignore, may be passed by man */

@@ -17,6 +17,8 @@
 .RB [\| \-dhV  \|] 
 .RB [\| \-e \||\| \-w \||\| \-r\c
 \|]
+.RB [\| \-s
+.IR section \|]
 .RB [\| \-m
 .IR system \|[\|,.\|.\|.\|]\|]
 .RB [\| \-M
@@ -77,6 +79,17 @@ description.
 .B \-e, \-\-exact
 Each keyword will be exactly matched against the page names and the
 descriptions.
+.TP
+\fB\-s\fP \fIsection\fP, \fB\-\-section\fP \fIsection\fP
+Search only the given manual section.
+If
+.I section
+is a simple section, for example "3", then the displayed list of
+descriptions will include pages in sections "3", "3perl", "3x", and so on;
+while if
+.I section
+has an extension, for example "3perl", then the list will only include
+pages in that exact part of the manual section.
 .\"
 .\" Due to the rather silly limit of 6 args per request in some `native'
 .\" *roff compilers, we have do the following to get the two-line
