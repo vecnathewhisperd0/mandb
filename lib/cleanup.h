@@ -8,4 +8,4 @@ extern int push_cleanup (cleanup_fun, void *);
 extern void pop_cleanup (void);
 extern void pop_all_cleanups (void);
 
-#endif _CLEANUP_H
+#endif /* _CLEANUP_H */
