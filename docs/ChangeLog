@@ -1,3 +1,11 @@
+Wed Nov 21 00:48:50 GMT 2001  Colin Watson  <cjwatson@debian.org>
+
+	Keeping generated files like the output of gettextize in CVS is bad.
+
+	* intl/*, po/ChangeLog, po/Makefile.in.in: Remove.
+	* autogen.sh: Run gettextize.
+	* release.sh: When releasing, pass --copy to gettextize.
+
 Wed Nov 21 00:29:26 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/compression.c (decompress): Free esc_file and esc_filename

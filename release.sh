@@ -1,7 +1,7 @@
 #! /bin/sh -e
 
 # Build automatically generated files
-./autogen.sh
+./autogen.sh --copy
 
 # Basic configure to get 'make dist'
 ./configure
