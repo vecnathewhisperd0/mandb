@@ -1,6 +1,6 @@
 /*
  * dbver.c: code to read, write and identify the database version no.
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2001, 2002 Colin Watson.
  *
@@ -18,7 +18,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Mon Aug 18 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Mon Aug 18 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifdef HAVE_CONFIG_H
@@ -45,25 +45,25 @@
 
 static datum content;
 
-static int dbver(MYDBM_FILE dbf)
+static int dbver (MYDBM_FILE dbf)
 {
 	datum key;
 
 	key.dptr = VER_KEY;
 	key.dsize = sizeof VER_KEY;
 
-	content = MYDBM_FETCH(dbf, key);
+	content = MYDBM_FETCH (dbf, key);
 
 	if (content.dptr == NULL)
 		return -1;
-	else if (strcmp(content.dptr, VER_ID) != 0)
+	else if (!STREQ (content.dptr, VER_ID))
 		return 1;
 	else
 		return 0;
 
 }
 
-void dbver_wr(MYDBM_FILE dbf)
+void dbver_wr (MYDBM_FILE dbf)
 {
 	datum key, content;
 
@@ -71,19 +71,19 @@ void dbver_wr(MYDBM_FILE dbf)
 	key.dsize = sizeof VER_KEY;
 	content.dptr = VER_ID;
 	content.dsize = sizeof VER_ID;
-	
-	if (MYDBM_INSERT(dbf, key, content) != 0)
+
+	if (MYDBM_INSERT (dbf, key, content) != 0)
 		error (FATAL, 0,
 		       _("fatal: unable to insert version identifier into %s"),
 		       database);
 }
 
-int dbver_rd(MYDBM_FILE dbf)
+int dbver_rd (MYDBM_FILE dbf)
 {
 	int status;
 
-	status = dbver(dbf);
-	
+	status = dbver (dbf);
+
 	if (status == -1) {
 		if (debug)
 			fprintf (stderr,
@@ -95,7 +95,7 @@ int dbver_rd(MYDBM_FILE dbf)
 				 _("warning: %s is version %s, expecting %s\n"),
 				 database, content.dptr, VER_ID);
 	} else {
-		MYDBM_FREE(content.dptr);
+		MYDBM_FREE (content.dptr);
 		return 0;
 	}
 

@@ -1,6 +1,6 @@
 /*
  * db_ndbm.c: low level ndbm interface routines for man.
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  *
  * This library is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifdef HAVE_CONFIG_H
@@ -53,15 +53,15 @@
 #include "db_storage.h"
 
 /* release the lock and close the database */
-int ndbm_flclose(DBM *dbf)
+int ndbm_flclose (DBM *dbf)
 {
-	flock(dbm_dirfno(dbf), LOCK_UN);
-	dbm_close(dbf);
+	flock (dbm_dirfno (dbf), LOCK_UN);
+	dbm_close (dbf);
 	return 0;
 }
 
 /* open a ndbm type database, with file locking. */
-DBM* ndbm_flopen(char *filename, int flags, int mode)
+DBM* ndbm_flopen (char *filename, int flags, int mode)
 {
 	DBM *dbf;
 	int lock_op;
@@ -81,27 +81,27 @@ DBM* ndbm_flopen(char *filename, int flags, int mode)
 
 		dbf = NULL;
 		lock_failed = 1;
-		dir_fname = xmalloc (strlen(filename) + 5);
+		dir_fname = xmalloc (strlen (filename) + 5);
 		sprintf (dir_fname, "%s.dir", filename);
 		dir_fd = open (dir_fname, flags & ~O_TRUNC, mode);
-		free(dir_fname);
+		free (dir_fname);
 		if (dir_fd != -1) {
 			if (!(lock_failed = flock (dir_fd, lock_op)))
-				dbf = dbm_open(filename, flags, mode);
+				dbf = dbm_open (filename, flags, mode);
 			close (dir_fd);
 		}
 	} else {
-		dbf = dbm_open(filename, flags, mode);
+		dbf = dbm_open (filename, flags, mode);
 		if (dbf)
-			lock_failed = flock(dbm_dirfno(dbf), lock_op);
+			lock_failed = flock (dbm_dirfno (dbf), lock_op);
 	}
 
 	if (!dbf)
 		return NULL;
 
 	if (lock_failed) {
-		gripe_lock(filename);
-		dbm_close(dbf);
+		gripe_lock (filename);
+		dbm_close (dbf);
 		return NULL;
 	}
 

@@ -70,32 +70,32 @@ struct mandata {
 }; 
 
 /* used by the world */
-extern __inline__ struct mandata *dblookup_all(const char *page,
-					       const char *section,
-					       int match_case);
-extern __inline__ struct mandata *dblookup_exact(const char *page,
-						 const char *section,
-						 int match_case);
-extern int dbstore(struct mandata *in, const char *basename);
-extern int dbdelete(const char *name, struct mandata *in);
-extern void dbprintf(const struct mandata *info);
-extern void free_mandata_elements(struct mandata *pinfo);
-extern void free_mandata_struct(struct mandata *pinfo);
-extern void split_content(char *cont_ptr, struct mandata *pinfo);
-extern int compare_ids(char a, char b);
+extern __inline__ struct mandata *dblookup_all (const char *page,
+						const char *section,
+						int match_case);
+extern __inline__ struct mandata *dblookup_exact (const char *page,
+						  const char *section,
+						  int match_case);
+extern int dbstore (struct mandata *in, const char *basename);
+extern int dbdelete (const char *name, struct mandata *in);
+extern void dbprintf (const struct mandata *info);
+extern void free_mandata_elements (struct mandata *pinfo);
+extern void free_mandata_struct (struct mandata *pinfo);
+extern void split_content (char *cont_ptr, struct mandata *pinfo);
+extern int compare_ids (char a, char b);
 
 /* local to db routines */
-extern __inline__ void gripe_lock(char *filename);
-extern __inline__ void gripe_corrupt_data(void);
-extern datum make_multi_key(const char *page, const char *ext);
-extern __inline__ struct mandata *infoalloc(void);
-extern char *name_to_key(const char *name);
-extern char **split_data(char *content, char *start[]);
-extern datum make_content(struct mandata *in);
-extern int list_extensions(char *data, char ***names, char ***ext);
-extern void gripe_replace_key(const char *data);
-extern void gripe_bad_multi_key(const char *data);
-extern char *copy_if_set(const char *str);
-extern const char *dash_if_unset(const char *str);
+extern __inline__ void gripe_lock (char *filename);
+extern __inline__ void gripe_corrupt_data (void);
+extern datum make_multi_key (const char *page, const char *ext);
+extern __inline__ struct mandata *infoalloc (void);
+extern char *name_to_key (const char *name);
+extern char **split_data (char *content, char *start[]);
+extern datum make_content (struct mandata *in);
+extern int list_extensions (char *data, char ***names, char ***ext);
+extern void gripe_replace_key (const char *data);
+extern void gripe_bad_multi_key (const char *data);
+extern char *copy_if_set (const char *str);
+extern const char *dash_if_unset (const char *str);
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * db_gdbm.c: low level gdbm interface routines for man.
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  *
  * This library is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifdef HAVE_CONFIG_H
@@ -33,13 +33,13 @@
 #include "manconfig.h"
 #include "mydbm.h"
 
-int gdbm_exists(GDBM_FILE dbf, datum key)
+int gdbm_exists (GDBM_FILE dbf, datum key)
 {
 	char *memory;
 
-	memory = gdbm_fetch(dbf, key).dptr;
+	memory = gdbm_fetch (dbf, key).dptr;
 	if (memory) {
-		free(memory);
+		free (memory);
 		return 1;
 	}
 
