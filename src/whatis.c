@@ -119,7 +119,6 @@ static const struct option long_options[] =
 	{"whatis",	no_argument,		0, 'f'},
 	{"apropos",	no_argument,		0, 'k'},
 	{"locale",	required_argument,	0, 'L'},
-	{"exact",	no_argument,		0, 'e'},
 	{0, 0, 0, 0}
 };
 
@@ -371,6 +370,32 @@ static int match (char *lowpage, char *whatis)
 	return 0;
 }
 
+/* TODO: How on earth do we allow multiple-word matches without
+ * reimplementing fnmatch()?
+ */
+static int word_fnmatch (char *lowpage, char *whatis)
+{
+	char *lowwhatis = lower (whatis);
+	char *begin = lowwhatis, *p;
+
+	for (p = lowwhatis; *p; p++) {
+		if (islower (*p) || *p == '_')
+			continue;
+
+		/* Check for multiple non-word characters in a row. */
+		if (p <= begin + 1)
+			begin++;
+		else {
+			*p = '\0';
+			if (fnmatch (lowpage, begin, 0) == 0)
+				return 1;
+			begin = p + 1;
+		}
+	}
+
+	return 0;
+}
+
 /* return 1 if page matches whatis, else 0 */
 static int parse_whatis (char *page, char *lowpage, char *whatis)
 { 
@@ -383,8 +408,12 @@ static int parse_whatis (char *page, char *lowpage, char *whatis)
 #  endif
 #endif /* REGEX */
 
-	if (wildcard)
-		return (fnmatch (page, whatis, 0) == 0);
+	if (wildcard) {
+		if (exact)
+			return (fnmatch (page, whatis, 0) == 0);
+		else
+			return word_fnmatch (page, whatis);
+	}
 
 	return match (lowpage, whatis);
 }

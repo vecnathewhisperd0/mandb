@@ -33,9 +33,9 @@ is usually a regular expression, as if
 .RB ( \-r )
 was used, or
 may contain wildcards
-.RB ( \-w ) \ ,
+.RB ( \-w ),
 or match the exact keyword
-.RB ( \-e ) \ .
+.RB ( \-e ).
 Using these options, it may be necessary to quote the
 .I keyword
 or escape (\\) the special characters to stop the shell from interpreting
@@ -60,8 +60,13 @@ The match is not limited to word boundaries.
 Interpret each keyword as a pattern containing shell style wildcards.
 Each keyword will be matched against the page names and the descriptions
 independently.
-A match will only be found if an expanded keyword matches an entire
+If
+.B \-\-exact
+is also used,
+a match will only be found if an expanded keyword matches an entire
 description or page name.
+Otherwise the keyword is also allowed to match on word boundaries in the
+description.
 .TP
 .B \-e, \-\-exact
 Each keyword will be exactly matched against the page names and the

@@ -1,3 +1,12 @@
+Mon Dec 17 03:20:15 GMT 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/whatis.c (long_options): Remove duplicate for --exact.
+	  (word_fnmatch): New function.
+	  (parse_whatis): Match using word_fnmatch() if --wildcard but not
+	  --exact was given.
+	* man/man1/apropos.man1 (OPTIONS): Document this.
+	  (DESCRIPTION): Fix typographical glitch.
+
 Mon Dec 17 00:53:20 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (OPTIONS): Mention groff 1.17 and the ps and
