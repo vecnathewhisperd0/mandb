@@ -100,7 +100,7 @@ extern int ndbm_flclose(DBM *dbf);
 
 typedef struct {
 	char *dptr;
-	int dsize;
+	size_t dsize;
 } datum;
 
 extern __inline__ datum copy_datum (datum dat);
