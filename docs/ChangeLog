@@ -1,3 +1,13 @@
+Tue Apr 22 19:48:46 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/globbing.c (parse_layout, look_for_file): Add a BSD layout in
+	  which cat pages have the extension .0 (Jeremy C. Reed). More work
+	  is needed elsewhere so that man can write such cat pages, though.
+	* configure.in (--enable-mandirs): Add BSD layout.
+	* manual/intro.me (Arguments to configure): Document
+	  --enable-mandirs=BSD.
+	* README: Sync with manual/intro.me.
+
 Tue Apr 22 19:38:03 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/COPYING.LIB: Remove (obsoleted in favour of

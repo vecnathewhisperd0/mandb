@@ -2,7 +2,7 @@
  * globbing.c: interface to the POSIX glob routines
  *  
  * Copyright (C) 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -105,11 +105,13 @@ static __inline__ char *end_pattern (char *pattern, const char *sec)
 #define LAYOUT_HPUX	2
 #define LAYOUT_IRIX	4
 #define LAYOUT_SOLARIS	8
+#define LAYOUT_BSD	16
 
 static int parse_layout (const char *layout)
 {
 	if (!*layout)
-		return LAYOUT_GNU | LAYOUT_HPUX | LAYOUT_SOLARIS | LAYOUT_IRIX;
+		return LAYOUT_GNU | LAYOUT_HPUX | LAYOUT_IRIX |
+		       LAYOUT_SOLARIS | LAYOUT_BSD;
 	else {
 		int flags = 0;
 
@@ -126,6 +128,8 @@ static int parse_layout (const char *layout)
 			flags |= LAYOUT_IRIX;
 		if (strstr (layout, "SOLARIS"))
 			flags |= LAYOUT_SOLARIS;
+		if (strstr (layout, "BSD"))
+			flags |= LAYOUT_BSD;
 
 		return flags;
 	}
@@ -282,6 +286,24 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 				  NULL);
 		pattern = end_pattern (strappend (pattern, name, NULL), sec);
 
+		status = match_in_directory (path, pattern, !match_case,
+					     &gbuf);
+	}
+
+	/* BSD cat pages take the extension .0 */
+	if ((layout & LAYOUT_BSD) && (status != 0 || gbuf.gl_pathc == 0)) {
+		if (path)
+			*path = '\0';
+		if (pattern)
+			*pattern = '\0';
+		if (cat) {
+			path = strappend (path, hier, "/cat", sec, NULL);
+			pattern = strappend (pattern, name, ".0*", NULL);
+		} else {
+			path = strappend (path, hier, "/man", sec, NULL);
+			pattern = end_pattern (strappend (pattern, name, NULL),
+					       sec);
+		}
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
 	}
