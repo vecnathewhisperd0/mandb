@@ -384,10 +384,13 @@ void test_manfile(char *file, const char *path)
 		info.id = WHATIS_MAN;
 		while ((sep = strrchr(lg.whatis, 0x11))) {
 			char *othername, *end_othername;
+			/* Get the next name, with leading spaces and the
+			 * description removed.
+			 */
 			*(sep++) = '\0';
 			sep += strspn(sep, " ");
 			othername = xstrdup(sep);
-			end_othername = strpbrk(othername, " -");
+			end_othername = strstr(othername, " - ");
 			if (end_othername)
 				*end_othername = '\0';
 			if ( ! opt_test )
@@ -409,8 +412,17 @@ void test_manfile(char *file, const char *path)
 	}
 
 	if (!opt_test && lg.whatis) {
+		/* Say we have foo.1 and bar.1 as links to the same page. We
+		 * don't want to add just one of them, as they might have
+		 * phantom whatis refs that it's nice to pick up, so we add
+		 * everything in the whatis line. However, if we do this for
+		 * foo.1, we'll run into problems when we get to bar.1 if
+		 * the base name is different. Thus we use the first whatis
+		 * name as the base name rather than whatever the filesystem
+		 * says.
+		 */
 		char *whatis_name = xstrdup(lg.whatis);
-		char *end_whatis_name = strpbrk(whatis_name, " -");
+		char *end_whatis_name = strpbrk(whatis_name, " ,-");
 		if (end_whatis_name)
 			*end_whatis_name = '\0';
 		if (splitline(lg.whatis, &info, whatis_name) == 1)

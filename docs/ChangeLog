@@ -1,3 +1,17 @@
+Sun May 27 18:32:41 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* acinclude.m4 (MAN_CHECK_BDB): New macro to check for Berkeley DB.
+	* configure.in: Use it.
+
+	* src/check_mandirs.c (test_manfile): Be more accurate about finding
+	  the " - " at the end of a series of whatis names, and make sure to
+	  skip commas between them. Add more commentary.
+
+	* src/man.c (open_cat_stream): Return NULL if the cat page is
+	  unwriteable, rather than wasting time compressing to /dev/null.
+	  (format_display_and_save): Give up if both outing and saving
+	  become false.
+
 Sun May 27 18:00:00 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Preliminary entries for 2.3.19. Add current version

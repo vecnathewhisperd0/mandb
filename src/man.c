@@ -1695,17 +1695,12 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 	else {
 		if (!debug && errno == EACCES) {
 			/* No permission to write to the cat file. Oh well,
-			 * not the end of the world - open it onto /dev/null
-			 * instead. (In debug mode we were already doing
-			 * this.)
+			 * return NULL and let the caller sort it out.
 			 */
 			if (debug)
 				fprintf (stderr, "can't write to %s\n",
 					 tmp_cat_file);
-			cat_fd = open ("/dev/null", O_WRONLY, 0);
-			if (cat_fd == -1)
-				error (FATAL, errno,
-				       _("can't write to /dev/null"));
+			return NULL;
 		} else
 			error (FATAL, errno, _("can't create %s"),
 			       tmp_cat_file);
@@ -1828,7 +1823,8 @@ static int format_display_and_save (char *roff_cmd, char *disp_cmd, char *cat_fi
 		int outing = 1;
 		int saving = sav != NULL;
 
-		while ((inned = fread (buf, 1, PIPE_BUF, in))) {
+		while ((outing || saving) &&
+		       (inned = fread (buf, 1, PIPE_BUF, in))) {
 			int outed = 0; /* #bytes already written to out */
 			int saved = 0; /* dto. to sav  */
 
