@@ -91,13 +91,6 @@ void gripe_replace_key (const char *data)
 	gripe_corrupt_data ();
 }
 
-void gripe_bad_multi_key (const char *data)
-{
-	error (0, 0,
-	       _("key %s is missing name component - is this an old db?"),
-	       data);
-}
-
 char *copy_if_set (const char *str)
 {
 	if (STREQ (str, "-"))
