@@ -845,7 +845,7 @@ static __inline__ short purge_whatis (const char *manpath, char *name,
 		int save_debug = debug;
 		debug = 0;
 		real_found = look_for_file (manpath, info->ext,
-					    info->pointer, 0);
+					    info->pointer, 0, 1);
 		debug = save_debug;
 
 		if (real_found)
@@ -929,7 +929,7 @@ short purge_missing (const char *manpath)
 
 		save_debug = debug;
 		debug = 0;	/* look_for_file() is quite noisy */
-		found = look_for_file (manpath, entry.ext, nicekey, 0);
+		found = look_for_file (manpath, entry.ext, nicekey, 0, 1);
 		debug = save_debug;
 
 		/* Now actually decide whether to purge, depending on the

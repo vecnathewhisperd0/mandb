@@ -1,3 +1,24 @@
+Mon Apr 22 00:00:08 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/globbing.c (match_in_directory): New function, implementing a
+	  limited glob() with optional case-insensitivity.
+	  (look_for_file): Use match_in_directory() rather than glob().
+	  Accept new match_case argument.
+	* src/globbing.h: Update prototype.
+	* src/check_mandirs.c (purge_whatis, purge_missing): Update calls to
+	  look_for_file().
+	* src/man.c (usage, man_getopt): Add --ignore-case and --match-case
+	  arguments.
+	  (try_section): Update calls to look_for_file().
+	  (try_section, display_filesystem, display_database,
+	  display_database_check, display_pages, man): Make sure to use the
+	  candidate name rather than the requested name, so that
+	  case-insensitive lookups work.
+	* man/man1/man.man1 (OPTIONS): Document --ignore-case and
+	  --match-case.
+
+	* po/.cvsignore: Ignore man-db.pot rather than man_db.pot.
+
 Thu Apr 18 11:15:11 BST 2002  Matej Vela  <vela@debian.org>
 
 	* docs/manpage.example: Use .BR for links to other man pages.

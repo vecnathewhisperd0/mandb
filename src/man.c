@@ -340,6 +340,7 @@ static int catman;
 static int local_man_file;
 static int findall;
 static int update;
+static int match_case;
 
 #ifdef MAN_DB_UPDATES
 static int update_required = 1;	/* we haven't performed update */
@@ -382,6 +383,8 @@ static const struct option long_options[] =
     {"ascii", no_argument,		0, '7'},
     {"catman", no_argument, 		0, 'c'},
     {"encoding", required_argument,	0, 'E'},
+    {"ignore-case", no_argument,	0, 'i'},
+    {"match-case", no_argument,		0, 'I'},
 
 #ifdef HAS_TROFF
     {"troff", no_argument, 		0, 't'},
@@ -394,7 +397,7 @@ static const struct option long_options[] =
     {0, 0, 0, 0}
 };
 
-static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::we:L:Zcr:X::E:";
+static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::we:L:Zcr:X::E:iI";
 
 # ifdef TROFF_IS_GROFF
 static int ditroff;
@@ -408,7 +411,7 @@ static char *html_pager;
     {0, 0, 0, 0}
 };
 
-static const char args[] = "7DlM:P:S:adfhkVum:p:we:L:cr:E:";
+static const char args[] = "7DlM:P:S:adfhkVum:p:we:L:cr:E:iI";
 
 #endif /* HAS_TROFF */
 
@@ -444,6 +447,8 @@ static void usage (int status)
 		"-w, --where, --location     print physical location of man page(s).\n"
 		"-l, --local-file            interpret `page' argument(s) as local filename(s).\n"
 		"-u, --update                force a cache consistency check.\n"
+		"-i, --ignore-case           look for pages case-insensitively (default).\n"
+		"-I, --match-case            look for pages case-sensitively.\n"
 		"-r, --prompt string         provide the `less' pager with a prompt\n"
 		"-c, --catman                used by catman to reformat out of date cat pages.\n"
 		"-7, --ascii                 display ASCII translation of certain latin1 chars.\n"
@@ -1088,6 +1093,12 @@ static void man_getopt (int argc, char *argv[])
 			case 'u':
 				update = 1;
 				break;
+			case 'i':
+				match_case = 0;
+				break;
+			case 'I':
+				match_case = 1;
+				break;
 			case 'c':
 				catman = 1;
 				break;
@@ -1163,7 +1174,8 @@ static void man_getopt (int argc, char *argv[])
 		    		/* discard all preset options */
 		    		local_man_file = findall = update = catman =
 					debug = troff = print_where =
-					ascii = different_encoding = 0;
+					ascii = different_encoding =
+					match_case = 0;
 #ifdef TROFF_IS_GROFF
 				ditroff = 0;
 				gxditview = NULL;
@@ -2584,7 +2596,7 @@ static int try_section (char *path, char *sec, char *name,
   	 * Look for man page source files.
   	 */
 
-	names = look_for_file (path, sec, name, 0);
+	names = look_for_file (path, sec, name, 0, match_case);
 	if (!names)
 		/*
     		 * No files match.  
@@ -2597,7 +2609,7 @@ static int try_section (char *path, char *sec, char *name,
 			return 1;
 
 		if (!troff && !different_encoding) {
-			names = look_for_file (path, sec, name, 1);
+			names = look_for_file (path, sec, name, 1, match_case);
 			cat = 1;
 		}
 	}
@@ -2606,23 +2618,29 @@ static int try_section (char *path, char *sec, char *name,
 		struct mandata *info =
 			(struct mandata *) malloc (sizeof (struct mandata));
 		char *info_buffer = filename_info (*np, info);
+		char *real_name;
 		if (!info_buffer)
 			continue;
 		info->addr = info_buffer;
+		/* info_buffer is, for example:
+		 *   /usr/share/man/man1\0man\01\0gz
+		 */
+		real_name = info_buffer + strlen (info_buffer) + 1;
 		found += add_candidate (cand_head, CANDIDATE_FILESYSTEM,
-					cat, name, path, info);
+					cat, real_name, path, info);
 		/* Don't free info and info_buffer here. */
 	}
 
 	return found;
 }
 
-static int display_filesystem (char *name, struct candidate *candp)
+static int display_filesystem (struct candidate *candp)
 {
-	char *filename = make_filename (candp->path, name, candp->source,
+	char *filename = make_filename (candp->path, candp->name,
+					candp->source,
 					candp->cat ? "cat" : "man");
-	char *title = strappend (NULL, name, "(", candp->source->ext, ")",
-				 NULL);
+	char *title = strappend (NULL, candp->name,
+				 "(", candp->source->ext, ")", NULL);
 	if (candp->cat) {
 		if (troff || different_encoding)
 			return 0;
@@ -2682,7 +2700,7 @@ static void dbdelete_wrapper (char *page, struct mandata *info)
 
 /* This started out life as try_section, but a lot of that routine is 
    redundant wrt the db cache. */
-static int display_database (char *orig_name, struct candidate *candp)
+static int display_database (struct candidate *candp)
 {
 	int found = 0;
 	char *file, *name;
@@ -2702,7 +2720,7 @@ static int display_database (char *orig_name, struct candidate *candp)
 	if (*in->pointer != '-')
 		name = in->pointer;
 	else
-		name = orig_name;
+		name = candp->name;
 
 	dbfilters = in->filter;
 
@@ -2721,16 +2739,16 @@ static int display_database (char *orig_name, struct candidate *candp)
 				 (long)buf.st_mtime);
 		dbf = MYDBM_RWOPEN (database);
 		if (dbf) {
-			dbdelete (orig_name, in);
+			dbdelete (candp->name, in);
 			test_manfile (file, candp->path);
-			in = dblookup_exact (orig_name, in->ext);
+			in = dblookup_exact (candp->name, in->ext);
 			MYDBM_CLOSE (dbf);
 			if (!in)
 				return 0;
 			if (*in->pointer != '-')
 				name = in->pointer;
 			else
-				name = orig_name;
+				name = candp->name;
 		} else {
 			if (errno == EACCES || errno == EROFS) {
 				if (debug)
@@ -2859,16 +2877,16 @@ static int display_database (char *orig_name, struct candidate *candp)
 }
 
 /* test for existence, if fail: call dbdelete_wrapper, else return amount */
-static int display_database_check (char *name, struct candidate *candp)
+static int display_database_check (struct candidate *candp)
 {
-	int exists = display_database (name, candp);
+	int exists = display_database (candp);
 
 #ifdef MAN_DB_UPDATES
 	if (!exists && !skip) {
 		if (debug)
 			fprintf (stderr, "dbdelete_wrapper (%s, %p)\n",
-				 name, candp->source);
-		dbdelete_wrapper (name, candp->source);
+				 candp->name, candp->source);
+		dbdelete_wrapper (candp->name, candp->source);
 	}
 #endif /* MAN_DB_UPDATES */
 
@@ -3007,16 +3025,16 @@ static int locate_page (char *manpath, char *sec, char *name,
 	return found;
 }
 
-static int display_pages (char *name, struct candidate *candidates)
+static int display_pages (struct candidate *candidates)
 {
 	struct candidate *candp;
 	int found = 0;
 
 	for (candp = candidates; candp; candp = candp->next) {
 		if (candp->from_db)
-			found += display_database_check (name, candp);
+			found += display_database_check (candp);
 		else
-			found += display_filesystem (name, candp);
+			found += display_filesystem (candp);
 		if (found && !findall)
 			return found;
 	}
@@ -3071,7 +3089,7 @@ static int man (char *name)
 	}
 
 	if (found)
-		display_pages (name, candidates);
+		display_pages (candidates);
 
 #ifdef MAN_DB_UPDATES
 	/* check to see if any of the databases need updating */

@@ -14,6 +14,9 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+/* Need _GNU_SOURCE for FNM_CASEFOLD. */
+#define _GNU_SOURCE
+
 #include <stdio.h>
 
 #if defined(STDC_HEADERS)
@@ -34,6 +37,14 @@ extern char *strrchr();
 #else 
 #  include "lib/glob.h"
 #endif
+
+#ifdef HAVE_FNMATCH_H
+#  include <fnmatch.h>
+#else
+#  include "lib/fnmatch.h"
+#endif
+
+#include <dirent.h>
 
 #include "manconfig.h"
 #include "lib/error.h"
@@ -86,10 +97,61 @@ static int parse_layout (const char *layout)
 	}
 }
 
-char **look_for_file (const char *path, const char *sec,
-		      const char *name, int cat)
+int match_in_directory (const char *path, const char *pattern, int ignore_case,
+			glob_t *pglob)
 {
-	char *pattern = NULL;
+	DIR *dir;
+	struct dirent *entry;
+	int allocated = 4;
+	int flags;
+
+	pglob->gl_pathc = 0;
+	pglob->gl_pathv = NULL;
+	pglob->gl_offs = 0;
+
+	dir = opendir (path);
+	if (!dir) {
+		if (debug)
+			fprintf (stderr, "can't open directory %s: %s\n",
+				 path, strerror (errno));
+		return -1;
+	}
+
+	pglob->gl_pathv = xmalloc (allocated * sizeof (char *));
+	flags = FNM_NOESCAPE | (ignore_case ? FNM_CASEFOLD : 0);
+
+	for (entry = readdir (dir); entry; entry = readdir (dir)) {
+		int fnm = fnmatch (pattern, entry->d_name, flags);
+		if (fnm)
+			continue;
+
+		if (debug)
+			fprintf (stderr, "matched: %s/%s\n",
+				 path, entry->d_name);
+
+		if (pglob->gl_pathc >= allocated) {
+			allocated *= 2;
+			pglob->gl_pathv = xrealloc (
+				pglob->gl_pathv, allocated * sizeof (char *));
+		}
+		pglob->gl_pathv[pglob->gl_pathc++] =
+			strappend (NULL, path, "/", entry->d_name, NULL);
+	}
+
+	if (pglob->gl_pathc >= allocated) {
+		allocated *= 2;
+		pglob->gl_pathv = xrealloc (pglob->gl_pathv,
+					    allocated * sizeof (char *));
+	}
+	pglob->gl_pathv[pglob->gl_pathc] = NULL;
+
+	return 0;
+}
+
+char **look_for_file (const char *hier, const char *sec,
+		      const char *name, int cat, int match_case)
+{
+	char *pattern = NULL, *path = NULL;
 	static glob_t gbuf;
 	int status = 1;
 	static int layout = -1;
@@ -112,14 +174,16 @@ char **look_for_file (const char *path, const char *sec,
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
 
 	if ((layout & LAYOUT_GNU) && isdigit (*sec) && sec[1] != '\0') {
-		pattern = strappend (pattern, path, cat ? "/cat" : "/man", 
-				     "\t/", name, NULL);
+		path = strappend (path, hier, cat ? "/cat" : "/man", "\t",
+				  NULL);
+		*strrchr (path, '\t') = *sec;
+		pattern = end_pattern (strappend (pattern, name, NULL), sec);
 
-		*strrchr (pattern, '\t') = *sec; 
-		pattern = end_pattern (pattern, sec);
 		if (debug)
-			fprintf (stderr, "globbing pattern: %s\n", pattern);
-		status = glob (pattern, 0, NULL, &gbuf);
+			fprintf (stderr, "globbing pattern in %s: %s\n",
+				 path, pattern);
+		status = match_in_directory (path, pattern, !match_case,
+					     &gbuf);
 	}
 
 	/* AIX glob.h doesn't define GLOB_NOMATCH and the manpage is vague
@@ -127,50 +191,74 @@ char **look_for_file (const char *path, const char *sec,
 	   path count member also */
 	   
 	if ((layout & LAYOUT_GNU) && (status != 0 || gbuf.gl_pathc == 0)) {
+		if (path)
+			*path = '\0';
 		if (pattern)
 			*pattern = '\0';
-		pattern = strappend (pattern, path, cat ? "/cat" : "/man", 
-				     sec, "/", name, NULL);
+		path = strappend (path, hier, cat ? "/cat" : "/man", sec,
+				  NULL);
+		pattern = end_pattern (strappend (pattern, name, NULL), sec);
 
-		pattern = end_pattern (pattern, sec);
 		if (debug)
-			fprintf (stderr, "globbing pattern: %s\n", pattern);
-		status = glob (pattern, 0, NULL, &gbuf);
+			fprintf (stderr, "globbing pattern in %s: %s\n",
+				 path, pattern);
+		status = match_in_directory (path, pattern, !match_case,
+					     &gbuf);
 	}
 
 	/* Try HPUX style compressed man pages */
 	if ((layout & LAYOUT_HPUX) && (status != 0 || gbuf.gl_pathc == 0)) {
-		*pattern = '\0';
-		pattern = strappend (pattern, path, cat ? "/cat" : "/man",
-				     sec, ".Z/", name, NULL);
+		if (path)
+			*path = '\0';
+		if (pattern)
+			*pattern = '\0';
+		path = strappend (path, hier, cat ? "/cat" : "/man",
+				  sec, ".Z", NULL);
+		pattern = end_pattern (strappend (pattern, name, NULL), sec);
 
-		pattern = end_pattern (pattern, sec);
 		if (debug)
-			fprintf (stderr, "globbing pattern: %s\n", pattern);
-		status = glob (pattern, 0, NULL, &gbuf);
+			fprintf (stderr, "globbing pattern in %s: %s\n",
+				 path, pattern);
+		status = match_in_directory (path, pattern, !match_case,
+					     &gbuf);
 	}
 
 	/* Try man pages without the section extension --- IRIX man pages */
 	if ((layout & LAYOUT_IRIX) && (status != 0 || gbuf.gl_pathc == 0)) {
-		*pattern = '\0';
-		pattern = strappend (pattern, path, cat ? "/cat" : "/man",
-				     sec, "/", name, ".*", NULL);
+		if (path)
+			*path = '\0';
+		if (pattern)
+			*pattern = '\0';
+		path = strappend (path, hier, cat ? "/cat" : "/man", sec,
+				  NULL);
+		pattern = strappend (pattern, name, ".*", NULL);
+
 		if (debug)
-			fprintf (stderr, "globbing pattern: %s\n", pattern);
-		status = glob (pattern, 0, NULL, &gbuf);
+			fprintf (stderr, "globbing pattern in %s: %s\n",
+				 path, pattern);
+		status = match_in_directory (path, pattern, !match_case,
+					     &gbuf);
 	}
 
 	/* Try Solaris style man page directories */
 	if ((layout & LAYOUT_SOLARIS) && (status != 0 || gbuf.gl_pathc == 0)) {
-		*pattern = '\0';
-		pattern = strappend (pattern, path, cat ? "/cat" : "/man",
-				     sec, "*/", name, NULL);
-		pattern = end_pattern (pattern, sec);
+		if (path)
+			*path = '\0';
+		if (pattern)
+			*pattern = '\0';
+		/* TODO: This needs to be man/sec*, not just man/sec. */
+		path = strappend (path, hier, cat ? "/cat" : "/man", sec,
+				  NULL);
+		pattern = end_pattern (strappend (pattern, name, NULL), sec);
+
 		if (debug)
-			fprintf (stderr, "globbing pattern: %s\n", pattern);
-		status = glob (pattern, 0, NULL, &gbuf);
+			fprintf (stderr, "globbing pattern in %s: %s\n",
+				 path, pattern);
+		status = match_in_directory (path, pattern, !match_case,
+					     &gbuf);
 	}
 
+	free (path);
 	free (pattern);
 
 	if (status != 0 || gbuf.gl_pathc == 0)
