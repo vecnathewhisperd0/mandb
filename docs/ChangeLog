@@ -1,3 +1,27 @@
+Sun Nov 16 21:29:35 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/convert_name.c (convert_name): Reorganize and clarify. The
+	  alternate argument was confusing and is now gone. Add a new fsstnd
+	  argument which controls whether the "man1" to "cat1" etc.
+	  conversion is performed. That conversion now makes sure that the
+	  directory name starts with "man" before blithely overwriting it.
+	  Treat comp->file as const, since it will be soon.
+	* src/convert_name.h (convert_name): Update prototype.
+	* src/man.c (find_cat_file): New logic. First, check for existing
+	  FSSTND cat files; then check for a cat dir based on the ultimate
+	  source, if different from the original (Debian bug #129575); then
+	  check for a cat dir based on the original man page path.
+	  (display): Drop the !local_man_file case which tries to work out
+	  whether to save a cat, as it's not a problem to try regardless of
+	  whether there's already one in a FSSTND location.
+	  (display_filesystem, display_database): Add extra argument to
+	  find_cat_file() so that it knows the original man page path as
+	  distinct from the ultimate source.
+	  (display_filesystem): Remove debugging output, now in
+	  find_cat_file().
+
+	* docs/ToDo: Remove entry about cleaning up cat file code, now done.
+
 Sun Nov 16 19:28:38 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	Add an option to apropos and whatis to allow specification of a

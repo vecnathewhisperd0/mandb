@@ -2493,51 +2493,26 @@ static int display (const char *dir, const char *man_file,
 			checked_system (format_cmd);
 		}
 	} else {
-		int format;
+		int format = 1;
 		int status;
-		char *catpath;
 
-		/* cat_file is the alternate cat_file.. */
-		/* If !man_file, we have a straycat
-		   If !cat_file, we can't produce a cat_file, but we
-		   may still have one tucked away under /usr... 
-		   Check there first ala the FSSTND, and display if newer
-		   than man_file, if older, ignore it altogether */
+		/* The caller should already have checked for any
+		 * FSSTND-style (same hierarchy) cat page that may be
+		 * present, and we don't expect to have to update the cat
+		 * page in that case. If by some chance we do have to update
+		 * it, then there's no harm trying; open_cat_stream() will
+		 * refuse gracefully if the file isn't writeable.
+		 */
 
 		if (different_encoding
 #ifdef TROFF_IS_GROFF
 		    || htmlout
 #endif
-			    ) {
-			format = 1;
+		    || local_man_file)
 			save_cat = 0;
-		} else if (!local_man_file) {
-			catpath = get_catpath
-				(dir, global_manpath ? SYSTEM_CAT : USER_CAT);
-
-			assert (dir);
-
-			if (man_file && catpath) {
-				/* we may have a FSSTND cat != cat_file */
-				char *std_cat_file =
-					convert_name (man_file, NULL);
-				status = is_changed (man_file, std_cat_file);
-	
-				if (status != -2 && !(status & 1) == 1) {
-					cat_file = std_cat_file;
-					save_cat = format = 0;
-				} else
-					format = 1;
-				/* @@@ memory leak of std_cat_file */
-			} else
-				format = 1;
-
-			if (catpath)
-				free (catpath);
-		} else
-			format = 1;
 
 		if (!man_file) {
+			/* Stray cat. */
 			assert (cat_file);
 			format = 0;
 		} else if (!cat_file) {
@@ -2703,19 +2678,88 @@ static int display (const char *dir, const char *man_file,
 }
 
 
-static char *find_cat_file (const char *path, const char *man_file)
+static char *find_cat_file (const char *path, const char *original,
+			    const char *man_file)
 {
+	size_t path_len = strlen (path);
 	char *cat_file, *cat_path;
+	int status;
 
-	/* could do this with `global' */
+	/* Try the FSSTND way first, namely a cat page in the same hierarchy
+	 * as the original path to the man page. We don't create these
+	 * unless no alternate cat hierarchy is available, but will use them
+	 * if they happen to exist already and have the same timestamp as
+	 * the corresponding man page. (In practice I'm betting that this
+	 * means we'll hardly ever use them at all except for user
+	 * hierarchies; but compatibility, eh?)
+	 */
+	cat_file = convert_name (original, 1);
+	if (cat_file) {
+		status = is_changed (original, cat_file);
+		if (status != -2 && !(status & 1) == 1) {
+			if (debug)
+				fprintf (stderr,
+					 "found valid FSSTND cat file %s\n",
+					 cat_file);
+			return cat_file;
+		}
+		free (cat_file);
+	}
 
-	global_manpath = is_global_mandir (path);
+	/* Otherwise, find the cat page we actually want to use or create,
+	 * taking any alternate cat hierarchy into account. If the original
+	 * path and man_file differ (i.e. original was a symlink or .so
+	 * link), try the link target and then the source.
+	 */
+	if (!STREQ (man_file, original)) {
+		global_manpath = is_global_mandir (man_file);
+		cat_path = get_catpath
+			(man_file, global_manpath ? SYSTEM_CAT : USER_CAT);
+
+		if (cat_path) {
+			cat_file = convert_name (cat_path, 0);
+			free (cat_path);
+		} else if (STRNEQ (man_file, path, path_len) &&
+			   man_file[path_len] == '/')
+			cat_file = convert_name (man_file, 1);
+		else
+			cat_file = NULL;
+
+		if (cat_file) {
+			char *cat_dir = xstrdup (cat_file);
+			char *tmp = strrchr (cat_dir, '/');
+			if (tmp)
+				*tmp = 0;
+			if (is_directory (cat_dir)) {
+				if (debug)
+					fprintf (stderr,
+						 "will try cat file %s\n",
+						 cat_file);
+				return cat_file;
+			} else if (debug)
+				fprintf (stderr, "cat dir %s does not exist\n",
+					 cat_dir);
+			free (cat_dir);
+		} else if (debug)
+			fprintf (stderr, "no cat path for %s\n", man_file);
+	}
+
+	global_manpath = is_global_mandir (original);
 	cat_path = get_catpath
-		(man_file, global_manpath ? SYSTEM_CAT : USER_CAT);
-	cat_file = convert_name (man_file, cat_path);
+		(original, global_manpath ? SYSTEM_CAT : USER_CAT);
 
-	if (cat_path)
+	if (cat_path) {
+		cat_file = convert_name (cat_path, 0);
 		free (cat_path);
+	} else
+		cat_file = convert_name (original, 1);
+
+	if (debug) {
+		if (cat_file)
+			fprintf (stderr, "will try cat file %s\n", cat_file);
+		else
+			fprintf (stderr, "no cat path for %s\n", original);
+	}
 
 	return cat_file;
 }
@@ -2938,11 +2982,10 @@ static int display_filesystem (struct candidate *candp)
 				 man_file);
 		lang = lang_dir (man_file);
 
-		cat_file = find_cat_file (candp->path, man_file);
-		if (debug)
-			fprintf (stderr, "will try cat file %s\n", cat_file);
+		cat_file = find_cat_file (candp->path, filename, man_file);
 		found = display (candp->path, man_file, cat_file, title, NULL);
-		free (cat_file);
+		if (cat_file)
+			free (cat_file);
 		free (title);
 
 #ifdef COMP_SRC
@@ -3032,10 +3075,11 @@ static int display_database (struct candidate *candp)
 					 man_file);
 			lang = lang_dir (man_file);
 
-			cat_file = find_cat_file (candp->path, man_file);
+			cat_file = find_cat_file (candp->path, file, man_file);
 			found += display (candp->path, man_file, cat_file,
 					  title, in->filter);
-			free (cat_file);
+			if (cat_file)
+				free (cat_file);
 #ifdef COMP_SRC
 			/* if ult_src() produced a ztemp file, we need to 
 			   remove it (and unexist it) before proceeding */

@@ -57,58 +57,71 @@ static __inline__ void gripe_converting_name (const char *name)
 	error (FATAL, 0, _("Can't convert %s to cat name"), name);
 }
 
-/* derive the catpage path for manpage 'name'. If alternate is not NULL, use
-   its value as the catpath dir. */
-char *convert_name (const char *name, const char *alternate)
+/* Convert the trailing part of 'name' to be a cat page path by altering its
+ * extension appropriately. If fsstnd is set, also try converting the
+ * containing directory name from "man1" to "cat1" etc., returning NULL if
+ * that doesn't work.
+ *
+ * fsstnd should only be set if name is the original path of a man page
+ * found in a man hierarchy, not something like a symlink target or a file
+ * named with 'man -l'. Otherwise, a symlink to "/home/manuel/foo.1.gz"
+ * would be converted to "/home/catuel/foo.1.gz", which would be bad.
+ */
+char *convert_name (const char *name, int fsstnd)
 {
 	char *to_name, *t1 = NULL;
 	char *t2 = NULL;
 #ifdef COMP_SRC
 	struct compression *comp;
 #endif /* COMP_SRC */
-
-	/* we already checked that there is an alternate catdir */
-	if (alternate)
-		name = alternate;
+	char *namestem;
 
 #ifdef COMP_SRC
 	comp = comp_info (name);
 	if (comp)
-		*comp->file = '\0';
+		namestem = xstrndup (name, comp->file - name);
+	else
 #endif /* COMP_SRC */
+		namestem = xstrdup (name);
 
 #ifdef COMP_CAT
 	/* TODO: BSD layout requires .0. */
-	to_name = strappend (NULL, name, "." COMPRESS_EXT, NULL);
+	to_name = strappend (NULL, namestem, "." COMPRESS_EXT, NULL);
 #else /* !COMP_CAT */
-	to_name = xstrdup (name);
+	to_name = xstrdup (namestem);
 #endif /* COMP_CAT */
+	free (namestem);
 
-	t1 = strrchr (to_name, '/');
-	if (t1) {
+	if (fsstnd) {
+		t1 = strrchr (to_name, '/');
+		if (!t1)
+			gripe_converting_name (name);
 		*t1 = '\0';
 
 		t2 = strrchr (to_name, '/');
-		if (t2 == NULL)
+		if (!t2)
 			gripe_converting_name (name);
-
+		++t2;
 		*t1 = '/';
-		/* TODO: This is broken beyond repair. Rewrite this whole
-		 * function, after understanding what on earth it's trying
-		 * to achieve!
-		 */
-		*(t2 + 1) = 'c';
-		*(t2 + 3) = 't';
-	} else
-		gripe_converting_name (name);
+
+		if (STRNEQ (t2, "man", 3)) {
+			/* If the second-last component starts with "man",
+			 * replace "man" with "cat".
+			 */
+			*t2 = 'c';
+			*(t2 + 2) = 't';
+		} else {
+			free (to_name);
+			if (debug)
+				fprintf (stderr, "couldn't convert %s to "
+						 "FSSTND cat file\n", name);
+			return NULL;
+		}
+	}
 
 	if (debug)
-		fprintf (stderr, "to_name in convert_name () is %s\n", to_name);
+		fprintf (stderr, "converted %s to %s\n", name, to_name);
 
-#ifdef COMP_SRC
-	if (comp)
-		*comp->file = '.';
-#endif /* COMP_SRC */
 	return to_name;
 }
 

@@ -22,4 +22,4 @@
  * Mon May  2 11:14:28 BST 1994 Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
-extern char *convert_name (const char *name, const char *alternate);
+extern char *convert_name (const char *name, int fsstnd);
