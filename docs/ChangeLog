@@ -1,3 +1,22 @@
+Fri Aug  1 22:06:33 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Fix vulnerability due to over-permissiveness of DEFINE directive.
+
+	* src/manp.c (DEFINE_USER): New list flag.
+	  (get_def): Note that this must not return DEFINEs set in
+	  ~/.manpath.
+	  (get_def_user): New function, which may return DEFINEs set in
+	  ~/.manpath.
+	  (add_def): Use DEFINE or DEFINE_USER depending on context.
+	  (add_to_dirlist): Update call to add_def().
+	* src/manp.h (get_def_user): Add prototype.
+
+	* src/man.c (main): pager and cat are safe for the user to define.
+	  (make_display_command): cat, tr, and decompressor are safe.
+	* src/straycats.c (check_for_stray): col and decompressor are safe.
+	* src/whatis.c (use_grep): whatis_grep_flags,
+	  apropos_regex_grep_flags, apropos_grep_flags, and grep are safe.
+
 Fri Aug  1 01:32:37 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (main): Minor whitespace cleanups.

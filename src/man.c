@@ -992,10 +992,10 @@ int main (int argc, char *argv[])
 	if (pager == NULL) {
 		pager = getenv ("PAGER");
 		if (pager == NULL)
-			pager = get_def ("pager", PAGER);
+			pager = get_def_user ("pager", PAGER);
 	}
 	if (*pager == '\0')
-		pager = get_def ("cat", CAT);
+		pager = get_def_user ("cat", CAT);
 
 	if (prompt_string == NULL)
 #ifdef LESS_PROMPT
@@ -1897,9 +1897,10 @@ static char *make_display_command (const char *file, const char *title)
 
 	if (file) {
 		if (ascii)
-			command = strappend (NULL, get_def ("cat", CAT), 
+			command = strappend (NULL, get_def_user ("cat", CAT), 
 					     " ", esc_file, " |",
-					     get_def ("tr", TR TR_SET1 TR_SET2),
+					     get_def_user ("tr",
+							   TR TR_SET1 TR_SET2),
 					     " |", pager, NULL);
 #ifdef TROFF_IS_GROFF
 		else if (htmlout)
@@ -1911,7 +1912,8 @@ static char *make_display_command (const char *file, const char *title)
 	} else {
 		if (ascii)
 			command = strappend (NULL,
-					     get_def ("tr", TR TR_SET1 TR_SET2),
+					     get_def_user ("tr",
+							   TR TR_SET1 TR_SET2),
 					     " |", pager, NULL);
 #ifdef TROFF_IS_GROFF
 		else if (htmlout)
@@ -2612,8 +2614,8 @@ static int display (const char *dir, const char *man_file,
 
 			esc_cat_file = escape_shell (cat_file);
 			format_cmd = strappend (NULL,
-						get_def ("decompressor",
-							 DECOMPRESSOR),
+						get_def_user ("decompressor",
+							      DECOMPRESSOR),
 						" ", esc_cat_file, NULL);
 			free (esc_cat_file);
 			disp_cmd = make_display_command (NULL, title);

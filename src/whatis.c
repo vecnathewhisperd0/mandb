@@ -186,21 +186,22 @@ static __inline__ int use_grep (char *page, char *manpath)
 		const char *flags, *anchor;
 		char *command;
 #if defined(WHATIS)
-		flags = get_def ("whatis_grep_flags", WHATIS_GREP_FLAGS);
+		flags = get_def_user ("whatis_grep_flags", WHATIS_GREP_FLAGS);
 		anchor = "^";
 #elif defined(APROPOS)
 #ifdef REGEX
 		if (regex)
-			flags = get_def ("apropos_regex_grep_flags",
-					 APROPOS_REGEX_GREP_FLAGS);
+			flags = get_def_user ("apropos_regex_grep_flags",
+					      APROPOS_REGEX_GREP_FLAGS);
 		else
 #endif
-			flags = get_def ("apropos_grep_flags",
-					 APROPOS_GREP_FLAGS);
+			flags = get_def_user ("apropos_grep_flags",
+					      APROPOS_GREP_FLAGS);
 		anchor = "";
 #endif 	
 
-		command = strappend (NULL, get_def ("grep", GREP), " ", flags,
+		command = strappend (NULL, get_def_user ("grep", GREP),
+				     " ", flags,
 				     " ", anchor, esc_page, " ", esc_file,
 				     NULL);
 		status = (system (command) == 0);

@@ -232,22 +232,24 @@ static int check_for_stray (void)
 				filter = strappend (NULL, 
 						    comp_info(catdir)->prog,
 						    " ", catdir, " | ",
-						    get_def("col", COL),
+						    get_def_user("col", COL),
 						    " -bx > ", temp_name,
 						    NULL);
 			else
 #elif defined (COMP_CAT)
 			if (info.comp)
 				filter = strappend (NULL,
-						    get_def("decompressor",
-							    DECOMPRESSOR),
+						    get_def_user(
+							"decompressor",
+							DECOMPRESSOR),
 						    " ", catdir, " | ",
-						    get_def("col", COL),
+						    get_def_user("col", COL),
 						    " -bx > ", temp_name,
 						    NULL);
 			else
 #endif /* COMP_* */
-				filter = strappend (NULL, get_def("col", COL), 
+				filter = strappend (NULL,
+						    get_def_user("col", COL), 
 						    " -bx < ", catdir, " > ",
 						    temp_name, NULL);
 
