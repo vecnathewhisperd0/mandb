@@ -3282,14 +3282,6 @@ static int man (const char *name)
 	if (found)
 		found = display_pages (candidates);
 
-#ifdef MAN_DB_UPDATES
-	/* check to see if any of the databases need updating */
-	if ((!found || found_a_stray) && update && update_required) {
-		if (need_to_rerun ())
-			return man (name);
-	}
-#endif /* MAN_DB_UPDATES */
-
 	return found;
 }
 
