@@ -873,6 +873,20 @@ it is expected that they will become obsolete.
 N.B. All spaces that should be interpreted as part of an option's argument 
 must be escaped.
 .TP
+.B MANWIDTH
+If
+.RB $ MANWIDTH
+is set, its value is used as the line length for which manual pages should
+be formatted.
+If it is not set, manual pages will be formatted with a line length
+appropriate to the current terminal (using an
+.BR ioctl (2)
+if available, the value of
+.RB $ COLUMNS ,
+or falling back to 80 characters if neither is available).
+Cat pages will only be saved when the default formatting can be used, that
+is when the terminal line length is between 66 and 80 characters.
+.TP
 .BR LANG , " LC_MESSAGES"
 Depending on system and implementation, either or both of
 .RB $ LANG
