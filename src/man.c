@@ -1003,8 +1003,8 @@ int main (int argc, char *argv[])
 	}
 
 #ifdef MAN_DB_UPDATES
-	/* If `-a' or consistency check forced `-u', do it now. */
-	if (update || findall)
+	/* If `-u', do it now. */
+	if (update)
 		(void) need_to_rerun ();
 #endif /* MAN_DB_UPDATES */
 
@@ -2721,7 +2721,7 @@ static int man (char *name)
 
 #ifdef MAN_DB_UPDATES
 	/* check to see if any of the databases need updating */
-	if ((!found || found_a_stray) && update_required) {
+	if ((!found || found_a_stray) && update && update_required) {
 		/* must free_hashtab() here in case testmandirs() 
 		   wants to use it */
 		free_hashtab ();

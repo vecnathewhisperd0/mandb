@@ -1,3 +1,19 @@
+Thu Jun 28 00:35:09 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	The caching cleanup I've been promising for weeks. Here be dragons.
+
+	* src/man.c (man): Only update database caches if --update is given.
+	  (main): --all no longer implies a database update (you can always
+	  use --all --update if you need that).
+
+	* man/man1/man.man1 (OVERVIEW): It's no longer necessarily man's job
+	  to keep the caches up to date; use --update to get that.
+	  (DEFAULTS): Likewise. Some rationale. Mention globbing fallback.
+	  (OPTIONS/--local-file): Fix typo.
+	  (OPTIONS/--update): New description. Only useful with setuid man.
+	* manual/misc.me (Modes of operation): man will only update database
+	  entries if the --update flag is used.
+
 Tue Jun 26 22:10:07 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l: More cleanup. No substantive changes.

@@ -245,16 +245,18 @@ make extensive use of
 database caches. These caches contain information such
 as where each manual page can be found on the filesystem and what its 
 .I whatis
-(short one line description of the man page) contains. One of 
-.B %man%'s
-jobs is to ensure that the caches remain consistent.
-These database caches obviate the need for having to manually run software 
-to update traditional 
-.I whatis
-text databases, and also allow 
+(short one line description of the man page) contains, and allow
 .B %man% 
 to run faster than if it had to
 search the filesystem each time to find the appropriate manual page.
+If requested using the
+.B \-u
+option,
+.B man
+will ensure that the caches remain consistent, which can obviate the
+need to manually run software to update traditional
+.I whatis
+text databases.
 
 If 
 .B %man%
@@ -341,11 +343,22 @@ manual pager, please read the documents supplied with the package.
 .B %man%
 will search for the desired manual pages within the
 .I index
-database caches. If the `lookup' is unsuccessful, a cache consistency check
-is performed to ensure the databases accurately reflect the filesystem. It
-is not generally necessary to run 
+database caches. If the
+.B \-u
+option is given, a cache consistency check is performed to ensure the
+databases accurately reflect the filesystem.
+If this option is always given, it is not generally necessary to run 
 .B %mandb%
 after the caches are initially created, unless a cache becomes corrupt.
+However, the cache consistency check can be slow on systems with many
+manual pages installed, so it is not performed by default, and system
+administrators may wish to run
+.B %mandb%
+every week or so to keep the database caches fresh.
+To forestall problems caused by outdated caches,
+.B %man%
+will fall back to file globbing if a cache lookup fails, just as it would
+if no cache was present.
 
 Once a manual page has been located, a check is performed to find out if a
 relative preformatted `cat' file already exists and is newer than the nroff 
@@ -424,7 +437,7 @@ file is produced. If '\-' is listed as one of the arguments, input will be
 taken from stdin.
 When this option is not used, and man fails to find the page required,
 before displaying the error message, it attempts to act as if this
-option was supplyed, using the name as a filename and looking for an
+option was supplied, using the name as a filename and looking for an
 exact match.
 .TP
 .BI \-L\  locale ,\ \-\-locale= locale
@@ -734,20 +747,13 @@ environment variable.
 is always run as the very first preprocessor.
 .TP
 .B \-u, \-\-update
-The 
-.B index
-database caches are updated `on the fly', that is, they do not require 
-.B %mandb%
-to be run periodically to be kept consistent. If your chosen manual page is
-not located within the cache or the 
-.B \-a
-option is used, 
+This option causes
 .B %man%
-will do a `directory level' consistency check to ensure that its caches 
-are an accurate representation of the filesystem. 
-To force an `inode level' consistency check prior to
-finding any manual pages, use option
-.BR \-u .
+to perform an `inode level' consistency check on its database caches to
+ensure that they are an accurate representation of the filesystem.
+It will only have a useful effect if
+.B %man%
+is installed with the setuid bit set.
 .TP
 .B \-t, \-\-troff
 Use
