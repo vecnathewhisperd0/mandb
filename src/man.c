@@ -1733,16 +1733,20 @@ static char *make_browser (const char *command, const char *file)
 	return browser;
 }
 
-/* Return command (malloced string) to display file, NULL means stdin */
-static char *make_display_command (const char *file, const char *title)
+static void setenv_less (const char *title)
 {
-	char *command;
-	char *esc_file = escape_shell (file);
-	const char *esc_title = escape_less (title);
-	char *less_opts = xmalloc (strlen (LESS_OPTS) +
-				   strlen (prompt_string) * 2 + 1);
-	char *man_pn;
+	const char *esc_title;
+	char *less_opts, *man_pn;
+	const char *force = getenv ("MANLESS");
 
+	if (force) {
+		setenv ("LESS", force, 1);
+		return;
+	}
+
+	esc_title = escape_less (title);
+	less_opts = xmalloc (strlen (LESS_OPTS) +
+			     strlen (prompt_string) * 2 + 1);
 	sprintf (less_opts, LESS_OPTS, prompt_string, prompt_string);
 	less_opts = strappend (less_opts, less, NULL);
 	man_pn = strstr (less_opts, MAN_PN);
@@ -1763,6 +1767,17 @@ static char *make_display_command (const char *file, const char *title)
 		fprintf (stderr, "Setting LESS to %s\n", less_opts);
 	/* If there isn't enough space in the environment, ignore it. */
 	setenv ("LESS", less_opts, 1);
+
+	free (less_opts);
+}
+
+/* Return command (malloced string) to display file, NULL means stdin */
+static char *make_display_command (const char *file, const char *title)
+{
+	char *command;
+	char *esc_file = escape_shell (file);
+
+	setenv_less (title);
 
 	if (file) {
 		if (ascii)
@@ -1790,7 +1805,6 @@ static char *make_display_command (const char *file, const char *title)
 			command = xstrdup (pager);
 	}
 
-	free (less_opts);
 	free (esc_file);
 
 	return command;

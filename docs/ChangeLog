@@ -1,3 +1,13 @@
+Mon May 20 03:07:24 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (setenv_less): New function to set up $LESS. This
+	  honours the new environment variable $MANLESS, which overrides the
+	  usual processing and is copied directly into $LESS.
+	  (make_display_command): Use it.
+	* man/man1/man.man1 (OPTIONS): Mention $MANLESS alongside the
+	  --prompt option.
+	  (ENVIRONMENT): Document $MANLESS.
+
 Mon May 20 02:16:43 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (compare_candidates): Compare id fields as a last

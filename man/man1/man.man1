@@ -561,6 +561,12 @@ By default
 sets the
 .B \-ix8
 options.
+
+If you want to override
+.BR %man% 's
+prompt string processing completely, use the
+.RB $ MANLESS
+environment variable described below.
 .TP
 .B \-7, \-\-ascii
 When viewing a pure
@@ -883,6 +889,25 @@ the manual page.
 By default,
 .B %pager%
 is used.
+.TP
+.B MANLESS
+If
+.RB $ MANLESS
+is set,
+.B %man%
+will not perform any of its usual processing to set up a prompt string for
+the
+.B less
+pager.
+Instead, the value of
+.RB $ MANLESS
+will be copied verbatim into
+.RB $ LESS .
+For example, if you want to set the prompt string unconditionally to
+\(lqmy prompt string\(rq, set
+.RB $ MANLESS
+to
+.RB \(oq -Psmy\ prompt\ string \(cq.
 .TP
 .B BROWSER
 If
