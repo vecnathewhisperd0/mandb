@@ -2458,9 +2458,33 @@ static char *find_cat_file (char *path, char *man_file, char *sec)
 static int compare_candidates (const struct mandata *left,
 			       const struct mandata *right)
 {
-	int cmp = strcmp (left->ext, right->ext);
-	if (cmp)
-		return cmp;
+	char **sp;
+	int sec_left = 0, sec_right = 0, cmp;
+
+	cmp = strcmp (left->ext, right->ext);
+	if (cmp) {
+		/* Find out whether left->ext is ahead of right->ext in
+		 * section_list.
+		 */
+		for (sp = section_list; *sp; sp++) {
+			if (!*(*sp + 1)) {
+				/* No extension */
+				if (!sec_left  && **sp == *(left->ext))
+					sec_left  = sp - section_list + 1;
+				if (!sec_right && **sp == *(right->ext))
+					sec_right = sp - section_list + 1;
+			} else if (!sec_left  && STREQ (*sp, left->ext)) {
+				sec_left  = sp - section_list + 1;
+			} else if (!sec_right && STREQ (*sp, right->ext)) {
+				sec_right = sp - section_list + 1;
+			}
+		}
+		if (sec_left != sec_right)
+			return sec_left - sec_right;
+		else
+			return cmp;
+	}
+
 	/* Default to left sorting before right, so that insertion order is
 	 * stable.
 	 */
@@ -2471,17 +2495,20 @@ static int compare_candidates (const struct mandata *left,
 static int add_candidate (struct candidate **head, char from_db, char cat,
 			  char *name, char *path, struct mandata *source)
 {
-	struct candidate *search, *tail, *candp;
+	struct candidate *search, *insert, *candp;
+	int insert_found = 0;
 
 	if (debug)
 		fprintf (stderr, "candidate: %d %d %s %s %s %s\n",
 				 from_db, cat, name, path,
 				 source->sec, source->ext);
 
-	/* tail will be NULL (insert at start) or a pointer to the element
+	/* insert will be NULL (insert at start) or a pointer to the element
 	 * after which this element should be inserted.
 	 */
-	tail = NULL;
+	insert = NULL;
+	if (*head && compare_candidates (source, (*head)->source) < 0)
+		insert_found = 1;
 	search = *head;
 	while (search) {
 		/* Check for duplicates. */
@@ -2492,16 +2519,18 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 				fprintf (stderr, "duplicate candidate\n");
 			return 0;
 		}
-		if (compare_candidates (source, search->source) > 0)
-			tail = search;
+		if (!insert_found &&
+		    (!search->next ||
+		     compare_candidates (source, search->next->source) < 0)) {
+			insert = search;
+			insert_found = 1;
+		}
 
 		if (search->next)
 			search = search->next;
 		else
 			break;
 	}
-	if (!tail)
-		tail = search;
 
 	candp = (struct candidate *) malloc (sizeof (struct candidate));
 	candp->name = xstrdup (name);
@@ -2509,9 +2538,9 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	candp->cat = cat;
 	candp->path = path;
 	candp->source = source;
-	candp->next = tail ? tail->next : *head;
-	if (tail)
-		tail->next = candp;
+	candp->next = insert ? insert->next : *head;
+	if (insert)
+		insert->next = candp;
 	else
 		*head = candp;
 
