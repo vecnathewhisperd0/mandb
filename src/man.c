@@ -299,6 +299,7 @@ char *database;
 MYDBM_FILE dbf; 
 extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
+extern int optind;
 
 /* locals */
 static const char *alt_system_name;
@@ -656,13 +657,30 @@ static __inline__ void gripe_no_man (const char *name, const char *sec)
 }
 
 /* fire up the appropriate external program */
-static void do_extern (char *argv[])
+static void do_extern (int argc, char *argv[])
 {
+	pipeline *p;
+	command *cmd;
+
+	cmd = command_new (external);
+	/* Please keep these in the same order as they are in whatis.c. */
+	if (debug)
+		command_arg (cmd, "-d");
+	if (alt_system_name)
+		command_args (cmd, "-s", alt_system_name, NULL);
+	if (manp)
+		command_args (cmd, "-M", manp, NULL);
+	if (locale)
+		command_args (cmd, "-L", locale, NULL);
+	if (user_config_file)
+		command_args (cmd, "-C", user_config_file, NULL);
+	while (optind < argc)
+		command_arg (cmd, argv[optind++]);
+	p = pipeline_new_commands (cmd, NULL);
+
 	/* privs are already dropped */
-	char *external_copy = xstrdup (external);
-	argv[0] = basename (external_copy);
-	execv (external, argv);
-	exit (FATAL);
+	pipeline_start (p);
+	exit (pipeline_wait (p));
 }
 
 /* lookup $MANOPT and if available, put in *argv[] format for getopt() */
@@ -857,7 +875,6 @@ int main (int argc, char *argv[])
 	char **argv_env;
 	const char *tmp;
 	char *multiple_locale = NULL;
-	extern int optind;
 
 	program_name = xstrdup (basename (argv[0]));
 
@@ -920,6 +937,10 @@ int main (int argc, char *argv[])
 	init_security ();
 #endif /* SECURE_MAN_UID */
 
+	signal (SIGINT, int_handler);
+
+	pipeline_install_sigchld ();
+
 	if (!catman)
 		store_line_length();
 
@@ -927,7 +948,7 @@ int main (int argc, char *argv[])
 
 	/* if the user wants whatis or apropos, give it to them... */
 	if (external)
-		do_extern (argv);
+		do_extern (argc, argv);
 
 	get_term (); /* stores terminal settings */
 #ifdef SECURE_MAN_UID
@@ -1000,10 +1021,6 @@ int main (int argc, char *argv[])
 
 	if (optind == argc)
 		gripe_no_name (NULL);
-
-	signal (SIGINT, int_handler);
-
-	pipeline_install_sigchld ();
 
 	/* man issued with `-l' option */
 	if (local_man_file) {

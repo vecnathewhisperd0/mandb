@@ -1,3 +1,11 @@
+Thu Apr  1 00:18:55 BST 2004  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (do_extern): Pass only options understood by
+	  apropos/whatis, using the pipeline library (Debian bug #207436).
+	  (main): Make optind global. Install SIGINT and SIGCHLD handlers
+	  earlier. Update do_extern call.
+	* docs/NEWS: Document this.
+
 Wed Mar 31 23:40:15 BST 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (make_roff_command): If stdout isn't a terminal, get rid
