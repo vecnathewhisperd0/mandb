@@ -40,7 +40,7 @@
 # include <stdlib.h>
 # include <string.h>
 #else
-void exit ();
+extern void exit ();
 #endif
 
 /* If NULL, error will flush stdout, then print on stderr the program
@@ -53,7 +53,7 @@ void (*error_print_progname) () = NULL;
 extern char *program_name;
 
 #if HAVE_STRERROR
-char *strerror ();
+extern char *strerror ();
 #else
 static char *
 private_strerror (errnum)

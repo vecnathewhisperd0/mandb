@@ -57,7 +57,7 @@ extern char *strchr(), *strcat();
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>
-#else 
+#else
 extern pid_t vfork();
 #  define R_OK		4
 #  define STDOUT_FILENO	1
@@ -82,8 +82,8 @@ extern pid_t vfork();
 #  endif /* _POSIX_VERSION */
 #endif /* !PATH_MAX */
 
-char wd[PATH_MAX];
-char *cwd = wd;
+static char wd[PATH_MAX];
+static char *cwd = wd;
 
 #ifndef PIPE_BUF
 #  if defined(_POSIX_VERSION) && defined(_POSIX_PIPE_MAX)
@@ -771,7 +771,7 @@ static int need_to_rerun (void)
 
 
 /* man issued with `-l' option */
-int local_man_loop (const char *argv)
+static int local_man_loop (const char *argv)
 {
 	int exit_status = OK;
 	int local_mf = local_man_file;

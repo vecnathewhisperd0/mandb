@@ -31,14 +31,15 @@
 #define VOID char
 #endif
 
-VOID *xmalloc ();
+#include "manconfig.h"
 
 /* Return a newly allocated copy of STRING.  */
 
 char *
 xstrdup (string)
-     char *string;
+     const char *string;
 {
-  if ( ! string ) return 0;
+  if (!string)
+    return NULL;
   return strcpy (xmalloc (strlen (string) + 1), string);
 }

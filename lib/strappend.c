@@ -40,7 +40,7 @@ extern char *strcpy();
 #  define VA_START	va_start (ap)
 #endif
 
-extern VOID *xrealloc(void *p, size_t n);
+#include "manconfig.h"
 
 /* append strings to first argument, which is realloced to the correct size 
    first arg may be NULL */

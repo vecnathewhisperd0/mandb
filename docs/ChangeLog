@@ -1,3 +1,17 @@
+Mon Dec 16 05:28:34 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	From SuSE's diff:
+
+	* lib/error.c: Add 'extern' to prototypes.
+	* lib/strappend.c, lib/xstrdup.c, lib/xstrndup.c: #include
+	  "manconfig.h" rather than using an explicit prototype.
+	* lib/xstrdup.c (xstrdup): 'string' should be const.
+
+	* po/cs.po: Fix a format string.
+
+	* src/lexgrog.l: Add Japanese translation of NAME.
+	* src/man.c: 'wd', 'cwd', and local_man_loop() are static.
+
 Mon Dec 16 04:30:39 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in: 'test "$foo"' => 'test -n "$foo"' throughout. Taken

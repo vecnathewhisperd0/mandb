@@ -147,11 +147,12 @@ fr_name		N[Oo][Mm]
 hu_name		N[…ÈEe][Vv]
  /* NOME also works for gl, pt */
 it_name		N[Oo][Mm][Ee]
+ja_name		\314\276\301\260
 latin_name	N[Oo][Mm][Ee][Nn]
 nl_name		N[Aa][Aa][Mm]
 pl_name		N[Aa][Zz][Ww][Aa]
 sv_name		N[Aa][Mm][Nn]
-name		({cs_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it_name}|{latin_name}|{nl_name}|{pl_name}|{sv_name})
+name		({cs_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it_name}|{ja_name}|{latin_name}|{nl_name}|{pl_name}|{sv_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
