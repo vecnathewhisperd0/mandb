@@ -68,6 +68,10 @@ extern char *strrchr();
 #  endif /* HAVE_NDIR_H */
 #endif /* HAVE_DIRENT_H  */
 
+#ifdef HAVE_FCNTL_H
+#  include <fcntl.h>
+#endif /* HAVE_FCNTL_H */
+
 #ifdef HAVE_LIBGEN_H
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
@@ -83,6 +87,7 @@ extern char *canonicalize_file_name __P ((__const char *__name));
 #include "libdb/mydbm.h"
 #include "libdb/db_storage.h"
 #include "lib/error.h"
+#include "lib/pipeline.h"
 #include "descriptions.h"
 #include "manp.h"
 #include "security.h"
@@ -193,11 +198,12 @@ static int check_for_stray (void)
 			found = 0;
 
 		if (!found) { 
-			char *filter = NULL;
+			pipeline *filter;
 			struct mandata *exists;
 			lexgrog lg;
 			char *mandir_copy;
 			const char *mandir_base;
+			command *col_cmd;
 
 			/* we have a straycat. Need to filter it and get
 			   its whatis (if necessary)  */
@@ -235,31 +241,43 @@ static int check_for_stray (void)
 			info._st_mtime = 0L;
 
 			/* Check to see how to filter the cat file */
+			filter = pipeline_new ();
 #if defined(COMP_SRC)
-			if (info.comp)
-				filter = strappend (NULL, 
-						    comp_info(catdir, 0)->prog,
-						    " ", catdir, " | ",
-						    get_def_user("col", COL),
-						    " -bx > ", temp_name,
-						    NULL);
-			else
+			if (info.comp) {
+				comp = comp_info (catdir, 0);
+				command *cmd = command_new_argstr (comp->prog);
+				command_arg (cmd, catdir);
+				pipeline_command (filter, cmd);
+			} else
 #elif defined (COMP_CAT)
-			if (info.comp)
-				filter = strappend (NULL,
-						    get_def_user(
-							"decompressor",
-							DECOMPRESSOR),
-						    " ", catdir, " | ",
-						    get_def_user("col", COL),
-						    " -bx > ", temp_name,
-						    NULL);
-			else
+			if (info.comp) {
+				command *cmd = command_new_argstr
+					(get_def_user ("decompressor",
+						       DECOMPRESSOR));
+				command_arg (cmd, catdir);
+				pipeline_command (filter, cmd);
+			} else
 #endif /* COMP_* */
-				filter = strappend (NULL,
-						    get_def_user("col", COL), 
-						    " -bx < ", catdir, " > ",
-						    temp_name, NULL);
+			{
+				filter->want_in = open (catdir, O_RDONLY);
+				if (filter->want_in == -1) {
+					error (0, errno, _("can't open %s"),
+					       catdir);
+					continue;
+				}
+			}
+
+			col_cmd = command_new_argstr
+				(get_def_user ("col", COL));
+			command_arg (col_cmd, "-bx");
+			pipeline_command (filter, col_cmd);
+
+			filter->want_out = open (temp_name, O_WRONLY);
+			if (filter->want_out == -1) {
+				error (0, errno,
+				       _("can't open %s for writing"),
+				       temp_name);
+			}
 
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 			fullpath = canonicalize_file_name (catdir);
@@ -285,8 +303,11 @@ static int check_for_stray (void)
 				free (fullpath);
 #endif
 				if (do_system_drop_privs (filter) != 0) {
+					char *filter_str =
+						pipeline_tostring (filter);
 					remove_with_dropped_privs (temp_name);
-					perror (filter);
+					perror (filter_str);
+					free (filter_str);
 				} else {
 					struct page_description *descs;
 					char *catdir_copy;
@@ -317,7 +338,7 @@ static int check_for_stray (void)
 				}
 			}
 
-			free (filter);
+			pipeline_free (filter);
 			free (mandir_copy);
 
 			if (lg.whatis)

@@ -29,6 +29,4 @@ static int man (const char *name, int *found);
 static int display (const char *dir, const char *man_file,
 		    const char *cat_file, const char *title,
 		    const char *dbfilters);
-static __inline__ char *make_roff_command (const char *dir, const char *file,
-					   const char *dbfilters);
 static __inline__ int do_prompt (const char *name);

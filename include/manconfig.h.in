@@ -317,10 +317,11 @@ extern int find_name (const char *file, const char *filename,
 		      struct lexgrog *p_lg);
 
 /* util.c */
+struct pipeline;
 extern char *mkdbname (const char *path);
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);
-extern __inline__ int do_system (const char *command);
+extern int do_system (struct pipeline *pl);
 extern char *escape_shell (const char *unesc);
 extern int remove_directory (const char *directory);
 extern char *trim_spaces (const char *s);

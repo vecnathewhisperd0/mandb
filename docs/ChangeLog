@@ -1,3 +1,58 @@
+Tue Mar  9 00:37:23 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	Roll out the new pipeline library in most programs.
+
+	* src/compression.c (decompress): Use pipeline library.
+	* src/fake_security.c (do_system_drop_privs): Likewise.
+	* src/lexgrog.l (main): Initialize pipeline library.
+	* src/man.c (checked_popen, gripe_system, checked_system, run_mandb,
+	  format_display_and_save, format_display, display_catman, display):
+	  Use pipeline library.
+	  (add_roff_line_length): Append to a command structure rather than
+	  using strappend.
+	  (main): Initialize pipeline library.
+	  (make_roff_command): Return a constructed pipeline instead of a
+	  malloced string. This plugs various hitherto difficult leaks. Drop
+	  support for changing the line length with groff < 1.18, as the
+	  pipeline library can't handle compound commands in pipelines yet.
+	  (make_browser): Return a constructed pipeline instead of a
+	  statically allocated string. The pipeline construction is very
+	  crude for now.
+	  (make_display_command): Return a constructed pipeline instead of a
+	  malloced string. The htmlout case is strange for now (return NULL
+	  and let format_display sort it out).
+	  (tmp_cat_filename): Handle debug > /dev/null here rather than in
+	  open_cat_stream. Construct the temporary cat filename more
+	  sensibly. Open the temporary file and record its file descriptor.
+	  (open_cat_stream): Return a constructed (and started, if COMP_CAT
+	  is defined) pipeline instead of a stream. This gets rid of a
+	  fixed-size buffer associated with security problems in the past,
+	  although it wasn't a vulnerability in itself.
+	  (close_cat_stream): Clean up pipeline rather than stream.
+	  (format_display): The htmlout case ignores disp_cmd and puts the
+	  display pipeline together itself.
+	  (display): When calling format_display_and_save, assert (disp_cmd)
+	  to make sure we aren't in the htmlout case.
+	* src/man.h (make_roff_command): Drop unnecessary prototype.
+	* src/mandb.c (main): Initialize pipeline library.
+	* src/security.c (do_system_drop_privs): Take a pipeline rather than
+	  a string.
+	* src/security.h (do_system_drop_privs): Update prototype.
+	* src/straycats.c (check_for_stray): Use pipeline library.
+	* src/util.c (do_system): Take a pipeline rather than a string. This
+	  becomes a simple synchronous wrapper around pipeline_start and
+	  pipeline_wait.
+	* src/whatis.c (use_grep): Use pipeline library.
+	  (main): Initialize pipeline library.
+
+	* include/manconfig.h.in (struct pipeline): Declare opaquely.
+	  (do_system): Update prototype.
+
+	* configure.in: Drop 'exec' from default pager; no longer needed
+	  since the pipeline library obviates the use of /bin/sh -c.
+
+	* docs/NEWS: Document all this.
+
 Mon Mar  8 16:45:27 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/compression.c (comp_info): If the new want_stem argument is

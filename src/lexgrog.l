@@ -60,6 +60,7 @@ extern int errno;
 
 #include "manconfig.h"
 #include "lib/error.h"
+#include "lib/pipeline.h"
 #include "security.h"
 #include "ult_src.h"
 
@@ -558,6 +559,8 @@ int main (int argc, char **argv)
 	}
 	if (!show_whatis && !show_filters)
 		show_whatis = 1;
+
+	pipeline_install_sigchld ();
 
 	while (optind != argc) {
 		lexgrog lg;

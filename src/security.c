@@ -56,6 +56,7 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/cleanup.h"
+#include "lib/pipeline.h"
 #include "security.h"
 
 #ifdef SECURE_MAN_UID
@@ -245,17 +246,17 @@ int remove_with_dropped_privs (const char *filename)
  * system()'d processes will not have suid=MAN_OWNER and will be unable 
  * to gain any man derived priveledges.
  */
-int do_system_drop_privs (const char *command)
+int do_system_drop_privs (pipeline *p)
 {
 #ifdef SECURE_MAN_UID
 	
 #  ifdef POSIX_SAVED_IDS
 	if (uid == ruid)
-		return do_system (command);
+		return do_system (p);
 	else {
 		int status;
 		drop_effective_privs ();
-		status = do_system (command);
+		status = do_system (p);
 		regain_effective_privs ();
 		return status;
 	}
@@ -275,7 +276,7 @@ int do_system_drop_privs (const char *command)
 		pop_all_cleanups ();
 		if (SWAP_UIDS (ruid, ruid))
 			gripe_set_euid ();
-		exit (do_system (command));
+		exit (do_system (p));
 	} else {
 		pid_t res;
 		int save = errno;
@@ -292,6 +293,6 @@ int do_system_drop_privs (const char *command)
 #  endif /* all ways to do a sys command after dropping privs */
 
 #else  /* !SECURE_MAN_UID */
-	return do_system (command);
+	return do_system (p);
 #endif /* SECURE_MAN_UID */
 }

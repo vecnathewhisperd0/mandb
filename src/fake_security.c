@@ -41,6 +41,7 @@ extern int errno;
 
 #include "manconfig.h"
 #include "lib/error.h"
+#include "lib/pipeline.h"
 #include "security.h"
 
 uid_t ruid, euid, uid;
@@ -75,7 +76,7 @@ int remove_with_dropped_privs (const char *filename)
 	return remove (filename);
 }
 
-int do_system_drop_privs (const char *command)
+int do_system_drop_privs (pipeline *pl)
 {
-	return do_system (command);
+	return do_system (pl);
 }

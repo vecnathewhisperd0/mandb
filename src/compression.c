@@ -60,6 +60,7 @@ extern int errno;
 #ifdef COMP_SRC /* must come after manconfig.h */
 
 #include "lib/error.h"
+#include "lib/pipeline.h"
 #include "security.h"
 #include "comp_src.h"
 
@@ -157,10 +158,10 @@ struct compression *comp_file (const char *filename)
  */
 char *decompress (const char *filename, const struct compression *comp)
 {
-	char *command;
+	pipeline *pl = pipeline_new ();
+	command *cmd;
 	int status;
 	int save_debug = debug;
-	char *esc_filename, *esc_file;
 
 	if (!comp->prog || !*comp->prog) {
 		/* TODO: Temporary workaround for poor decompression program
@@ -174,34 +175,33 @@ char *decompress (const char *filename, const struct compression *comp)
 	if (!file)
 		create_ztemp();
 
-	esc_filename = escape_shell (filename);
-	esc_file = escape_shell (file);
-	/* temporarily drop the debug flag, so that we can continue */
-	command = strappend (NULL, comp->prog, " ", esc_filename,
-			     " > ", esc_file, NULL);
-	free (esc_file);
-	free (esc_filename);
+	cmd = command_new_argstr (comp->prog);
+	command_arg (cmd, filename);
+	pipeline_command (pl, cmd);
+	pl->want_out = file_fd;
 
 	if (debug) {
 #ifdef SECURE_MAN_UID
 		fputs ("The following command done with dropped privs\n",
 		       stderr);
 #endif /* SECURE_MAN_UID */
-		fprintf (stderr, "%s\n", command);
+		pipeline_dump (pl, stderr);
 	}
 
+	/* temporarily drop the debug flag, so that we can continue */
 	debug = 0;
-	status = do_system_drop_privs (command);
+	status = do_system_drop_privs (pl);
 	debug = save_debug;
+	close (file_fd);
 
 	if (status) {
+		char *pl_str = pipeline_tostring (pl);
 		remove_ztemp ();
 		error (0, 0, _("command '%s' failed with exit status %d"),
-		       command, status);
-		free (command);
-		return NULL;
+		       pl_str, status);
+		free (pl_str);
 	}
-	free (command);
+	pipeline_free (pl);
 	return file;
 }
 

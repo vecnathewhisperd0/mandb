@@ -85,6 +85,7 @@ extern char *strrchr();
 #include "libdb/mydbm.h"
 #include "libdb/db_storage.h"
 #include "lib/error.h"
+#include "lib/pipeline.h"
 #include "manp.h"
 
 extern char *manpathlist[];
@@ -192,13 +193,14 @@ static __inline__ int use_grep (char *page, char *manpath)
 	int status;
 
 	if (access (whatis_file, R_OK) == 0) {
-		char *esc_page = escape_shell (page);
-		char *esc_file = escape_shell (whatis_file);
-		const char *flags, *anchor;
-		char *command;
+		pipeline *grep_pl = pipeline_new ();
+		command *grep_cmd;
+		const char *flags;
+		char *anchored_page = NULL;
+
 #if defined(WHATIS)
 		flags = get_def_user ("whatis_grep_flags", WHATIS_GREP_FLAGS);
-		anchor = "^";
+		anchored_page = strappend (NULL, "^", page, NULL);
 #elif defined(APROPOS)
 #ifdef REGEX
 		if (regex)
@@ -208,17 +210,18 @@ static __inline__ int use_grep (char *page, char *manpath)
 #endif
 			flags = get_def_user ("apropos_grep_flags",
 					      APROPOS_GREP_FLAGS);
-		anchor = "";
+		anchored_page = xstrdup (page);
 #endif 	
 
-		command = strappend (NULL, get_def_user ("grep", GREP),
-				     " ", flags,
-				     " ", anchor, esc_page, " ", esc_file,
-				     NULL);
-		status = (system (command) == 0);
-		free (command);
-		free (esc_file);
-		free (esc_page);
+		grep_cmd = command_new_argstr (get_def_user ("grep", GREP));
+		command_argstr (grep_cmd, flags);
+		command_args (grep_cmd, anchored_page, whatis_file, NULL);
+		pipeline_command (grep_pl, grep_cmd);
+
+		status = (do_system (grep_pl) == 0);
+
+		free (anchored_page);
+		pipeline_free (grep_pl);
 	} else {
 		if (debug) {
 			error (0, 0, _("warning: can't read the fallback whatis text database."));
@@ -718,6 +721,8 @@ int main (int argc, char *argv[])
 			++_nl_msg_cat_cntr;
 		}
 	}
+
+	pipeline_install_sigchld ();
 
 #if defined(REGEX) && defined(APROPOS)
 	/* Become it even if it's null - GNU standards */

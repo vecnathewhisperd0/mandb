@@ -60,6 +60,7 @@ extern char *strcpy();
 
 #include "manconfig.h"
 #include "libdb/mydbm.h" /* for full definition of MAN_DB */
+#include "lib/pipeline.h"
 
 #undef MAX
 #define MAX(a,b)	((a)>(b)?a:b)
@@ -146,20 +147,11 @@ int is_directory (const char *path)
 	return ((sb.st_mode & S_IFDIR) != 0);
 }
 
-/* wrapper for system() */
-int do_system (const char *command)
+/* wrapper for pipeline library */
+int do_system (pipeline *pl)
 {
-  	/*
-  	 * If we're debugging, don't really execute the command -- you never
-  	 * know what might be in that mangled string :-O.
-  	 */
-  	 
-	if (debug) {
-		fprintf (stderr, "\ntrying command: %s\n", command);
-		return 0;
-	} else {
-		return system (command);
-	}
+	pipeline_start (pl);
+	return pipeline_wait (pl);
 }
 
 /* Escape dangerous metacharacters before dumping into a shell command. */

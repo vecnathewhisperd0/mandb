@@ -101,6 +101,7 @@ extern char *getwd();
 #include "libdb/mydbm.h"
 #include "lib/error.h"
 #include "lib/cleanup.h"
+#include "lib/pipeline.h"
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "manp.h"
@@ -500,6 +501,7 @@ int main (int argc, char *argv[])
 		cwd[0] = '\0';
 #endif /* __profile__ */
 
+	pipeline_install_sigchld ();
 
 #ifdef SECURE_MAN_UID
 	/* record who we are and drop effective privs for later use */
