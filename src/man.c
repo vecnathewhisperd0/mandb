@@ -895,6 +895,8 @@ int main (int argc, char *argv[])
 	extern int optind;
 	void (int_handler) (int);
 
+	program_name = xstrdup (basename (argv[0]));
+
 	umask (022);
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, ""))
@@ -921,8 +923,6 @@ int main (int argc, char *argv[])
 #if defined _AIX || defined __sgi
 	global_argv = argv;
 #endif
-
-	program_name = xstrdup (basename (argv[0]));
 
 	{ /* opens base streams in case someone like "info" closed them */
 		struct stat buf;
