@@ -1,3 +1,17 @@
+Wed Jul 30 22:28:13 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Fix vulnerability 4 posted by Vade 79 <v9@fakehalo.deadpig.org> on
+	BugTraq, Message-ID:
+	<20030729210308.15518.qmail@www.securityfocus.com>. This fix is just
+	a stopgap measure for now; proper list handling will be added later.
+
+	* src/manp.c (gripe_overlong_list): New function.
+	  (add_dir_to_list): Die gracefully if too many list entries are
+	  added.
+	  (add_dir_to_path_list): Likewise. Take an extra argument for the
+	  head of the list so that we can spot this efficiently.
+	  (create_pathlist): Update calls to add_dir_to_path_list().
+
 Wed Jul 30 22:15:16 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c (gripe_reading_mp_config): This is a fatal error, so
