@@ -28,11 +28,11 @@ test_only=
 
 # sort out the command line options
 
-if test "$1" = "-t" -o "$1" = "--test"
+if test "$1" = "-t" || test "$1" = "--test"
 then
 	test_only=yes
 else 
-	if test "$1" -a "$2" -a "$3"
+	if test "$1" && test "$2" && test "$3"
 	then
 		test_only=no
 		owner=$1
@@ -41,9 +41,9 @@ else
 	fi
 fi
 
-test "$1" = "-h" -o "$1" = "--help" && help=yes || help=
+( test "$1" = "-h" || test "$1" = "--help" ) && help=yes || help=
 
-if test "$help" -o -z "$test_only" 
+if test "$help" || test -z "$test_only" 
 then
 	cat << EOF
 usage: $progname -h | -t | owner group mode
@@ -104,7 +104,7 @@ do
 	fi
  
 	cd $here
-	if test "$test_only" = "no" -a "$catdirs"
+	if test "$test_only" = "no" && test "$catdirs"
 	then
 		echo " "
 		echo "mkinstalldirs $catdirs" &&
