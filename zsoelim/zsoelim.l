@@ -91,11 +91,11 @@ extern int errno;
 static char* so_delete[MAX_SO_DEPTH];
 #endif /* COMP_SRC */
 
-static int open_file(char *filename);
+static int open_file (char *filename);
 
 #ifdef ACCEPT_QUOTES
-#  define ZAP_QUOTES	zap_quotes()
-static void zap_quotes(void);
+#  define ZAP_QUOTES	zap_quotes ()
+static void zap_quotes (void);
 #else
 #  define ZAP_QUOTES
 #endif
@@ -138,18 +138,18 @@ W	[ \t]
 ^\.de{W}*.+	{	
 			no_newline = 1;
 			ECHO;
-			BEGIN(de);	/* Now we're inside of a macro definition: ends with a comment */
+			BEGIN (de);	/* Now we're inside of a macro definition: ends with a comment */
 		}
 
 ^\.so{W}*	{	
 			no_newline = 1;
-			BEGIN(so);	/* Now we're in the .so environment */
+			BEGIN (so);	/* Now we're in the .so environment */
 		}
 
 ^\.lf{W}*	{
 			no_newline = 1;
 			ECHO;		/* Now we're in the .lf environment */
-			BEGIN(lfnumber);
+			BEGIN (lfnumber);
 		}
 
 ^[^\.\n].*		|	/* fallback */
@@ -165,7 +165,7 @@ W	[ \t]
 
 \n		{
 			no_newline = 0;
-			putchar('\n');
+			putchar ('\n');
 			LINE++;
 		}
 		
@@ -173,7 +173,8 @@ W	[ \t]
 <so>\"?[^ \t\n\"]+\"?	{ 	/* file names including whitespace ?  */
 			if (so_stack_ptr == MAX_SO_DEPTH - 1) 
 				error (FATAL, 0, 
-				       _("%s:%d: .so requests nested too deeply or are recursive"),
+				       _("%s:%d: .so requests nested too "
+				         "deeply or are recursive"),
 				       NAME, LINE);
 
 			ZAP_QUOTES;
@@ -182,42 +183,45 @@ W	[ \t]
 
 			no_newline = 0;
 
-			sprintf( temp_name, "%s.gz", yytext);
-			if (open_file(xstrdup(yytext)) && open_file(temp_name)) {
+			sprintf (temp_name, "%s.gz", yytext);
+			if (open_file (xstrdup (yytext)) &&
+			    open_file (temp_name)) {
 #ifndef __alpha
-				error(OK, 0, 
-				      _("%s:%d: warning: failed .so request"), NAME, LINE);
-				printf(".so %s\n", yytext);
+				error (OK, 0, 
+				       _("%s:%d: warning: failed .so request"),
+				       NAME, LINE);
+				printf (".so %s\n", yytext);
 #endif
-				BEGIN(end_request);
+				BEGIN (end_request);
 			} else {
-				printf(".lf 1 %s\n", yytext);
-				yy_switch_to_buffer( yy_create_buffer(yyin, 
-							      YY_BUF_SIZE) );
-				BEGIN(INITIAL);
+				printf (".lf 1 %s\n", yytext);
+				yy_switch_to_buffer
+					(yy_create_buffer (yyin, YY_BUF_SIZE));
+				BEGIN (INITIAL);
 			}
 
 		}
 
 <end_request>{W}*\n	{
 			no_newline = 0;
-			BEGIN(INITIAL);
+			BEGIN (INITIAL);
 		}
 		
 <so>\n		{
 			no_newline = 0;
-			error(OK, 0,
-			      _("%s:%d: warning: newline in .so request, ignoring"),
-			      NAME, LINE);
-			putchar('\n');
+			error (OK, 0,
+			       _("%s:%d: warning: newline in .so request, "
+			         "ignoring"),
+			       NAME, LINE);
+			putchar ('\n');
 			LINE++;
-			BEGIN(INITIAL);
+			BEGIN (INITIAL);
 		}
 
 <de>^\.\..*	{
 			no_newline = 1;
 			ECHO;
-			BEGIN(INITIAL);
+			BEGIN (INITIAL);
 		}
 
 <de>.*		{
@@ -227,7 +231,7 @@ W	[ \t]
 
 <de>\n		{
 			no_newline = 0;
-			putchar('\n');
+			putchar ('\n');
 			LINE++;
 		}
 
@@ -236,17 +240,17 @@ W	[ \t]
 			no_newline = 1;
 			ECHO;
 			ZAP_QUOTES;
-			LINE = atoi(yytext);
-			BEGIN(lfname);
+			LINE = atoi (yytext);
+			BEGIN (lfname);
 		}
 
 <lfname>\"?[^ \t\n\"]+\"?	{	/* file names including whitespace ?? */
 			no_newline = 1;
 			ECHO;
-			putchar('\n');
+			putchar ('\n');
 			ZAP_QUOTES;
-			NAME = xstrdup(yytext);
-			BEGIN(end_request); 
+			NAME = xstrdup (yytext);
+			BEGIN (end_request); 
 		}
 
 <lfname>{W}+	{
@@ -256,56 +260,59 @@ W	[ \t]
 
 <lfnumber,lfname>.	{
 			no_newline = 1;
-			error(OK, 0,
-			      _("%s:%d: warning: malformed .lf request, ignoring"),
-			      NAME, LINE);
-			putchar(*yytext);
-			BEGIN(INITIAL);
+			error (OK, 0,
+			       _("%s:%d: warning: malformed .lf request, "
+			         "ignoring"),
+			       NAME, LINE);
+			putchar (*yytext);
+			BEGIN (INITIAL);
 		}
 		
 <lfnumber,lfname>\n	{
 			no_newline = 0;
-			error(OK, 0,
-			      _("%s:%d: warning: newline in .lf request, ignoring"),
-			      NAME, LINE);
-			putchar('\n');
+			error (OK, 0,
+			       _("%s:%d: warning: newline in .lf request, "
+			         "ignoring"),
+			       NAME, LINE);
+			putchar ('\n');
 			LINE++;
-			BEGIN(INITIAL);
+			BEGIN (INITIAL);
 			}
 
 <<EOF>>	{
-		fclose(yyin);
+		fclose (yyin);
 
 #ifdef COMP_SRC
 		if (so_delete[so_stack_ptr])
-			remove(so_delete[so_stack_ptr]);
+			remove (so_delete[so_stack_ptr]);
 #endif
 		if (no_newline)
-			putchar('\n');
+			putchar ('\n');
 
-		if ( --so_stack_ptr < 0 ) {
-			yyterminate();
+		if (--so_stack_ptr < 0) {
+			yyterminate ();
 		} else {
-			yy_delete_buffer( YY_CURRENT_BUFFER );
-			yy_switch_to_buffer( so_stack[so_stack_ptr] );
-			printf(".lf %d %s\n", LINE += 1, NAME);
+			yy_delete_buffer (YY_CURRENT_BUFFER);
+			yy_switch_to_buffer (so_stack[so_stack_ptr]);
+			printf (".lf %d %s\n", LINE += 1, NAME);
 		}
 		no_newline = 0;
-		BEGIN(end_request);
+		BEGIN (end_request);
 	}
 %%
 
 #ifdef ACCEPT_QUOTES
 /* remove leading and trailing quotes in requests */
-static void zap_quotes(void)
+static void zap_quotes (void)
 {
 	if (*yytext == '"') {
 		if (yytext[yyleng - 1] == '"') {
 			yytext[yyleng - 1] = '\0';
 			yytext++;
 		} else
-			error(OK, 0, _("%s:%d: unterminated quote in roff request"),
-			      NAME, LINE);
+			error (OK, 0,
+			       _("%s:%d: unterminated quote in roff request"),
+			       NAME, LINE);
 	}
 }
 #endif
@@ -322,40 +329,40 @@ static void usage (int status)
 }
 
 /* print the version, then exit */
-static __inline__ void ver(void)
+static __inline__ void ver (void)
 {
-	printf(_("%s, version %s, %s\n"), program_name, VERSION, DATE);
-	exit(OK);
+	printf (_("%s, version %s, %s\n"), program_name, VERSION, DATE);
+	exit (OK);
 }
 
 /* initialise the stack and call the parser */
-static void parse_file(void)
+static void parse_file (void)
 {
 	so_stack_ptr = 0;
-	printf(".lf 1 %s\n", NAME);
+	printf (".lf 1 %s\n", NAME);
 	LINE = 1;
-	yylex();
+	yylex ();
 }
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	int c, option_index;
 
-	program_name = xstrdup(basename(argv[0]));
+	program_name = xstrdup (basename (argv[0]));
 
-	while ( (c = getopt_long(argc, argv, args,
-				 long_options, &option_index)) != EOF ) {
+	while ((c = getopt_long (argc, argv, args,
+				 long_options, &option_index)) != EOF) {
 		switch (c) {
 			case 'V':
-				ver();
+				ver ();
 				break;
 			case 'C': 
 				break; /* compatibility with GNU soelim */
 			case 'h':
-				usage(OK);
+				usage (OK);
 				break;
 			default:
-				usage(FAIL);
+				usage (FAIL);
 				break;
 		}
 	}
@@ -363,13 +370,13 @@ int main(int argc, char *argv[])
 	/* if we have any arguments, parse them in command line order, else
 	   open stdin */
 	if (optind == argc) {
-		so_name[0] = xstrdup("-");
-		parse_file();
+		so_name[0] = xstrdup ("-");
+		parse_file ();
 	} else {
 		while (optind < argc) {
-			if (open_file(argv[optind++]))
+			if (open_file (argv[optind++]))
 				continue;
-			parse_file();
+			parse_file ();
 		}
 	}
 
@@ -378,7 +385,7 @@ int main(int argc, char *argv[])
 
 /* This routine is used to open the specified file or uncompress a compressed
    version and open that instead */
-static int open_file(char *filename)
+static int open_file (char *filename)
 {
 	FILE *oldyyin;
 	char *ext;
@@ -394,15 +401,15 @@ static int open_file(char *filename)
 	 */
 
 /* #ifdef __hpux */
-	ext = strrchr(filename, '.');
-	if (strstr(filename, ".Z/")) { /* The file is in an HPUX directory */
+	ext = strrchr (filename, '.');
+	if (strstr (filename, ".Z/")) { /* The file is in an HPUX directory */
 		is_hpux = 1;
 		is_compr = 0;
 	} else if (ext) {
 		ext++;
 		for (comp = comp_list; comp->ext && !is_compr; comp++) {
-			if (strcmp(comp->ext, ext) == 0) {
-				if (stat(filename, &buf) == 0) {
+			if (strcmp (comp->ext, ext) == 0) {
+				if (stat (filename, &buf) == 0) {
 					is_compr = 1;
 					break;
 				}
@@ -412,7 +419,7 @@ static int open_file(char *filename)
 	}
 /* #endif __hpux */
 
-	if( is_hpux || is_compr || !(yyin = fopen( filename, "r" ))) {
+	if (is_hpux || is_compr || !(yyin = fopen (filename, "r"))) {
 
 #ifdef COMP_SRC
 		char *compfile;
@@ -423,13 +430,13 @@ static int open_file(char *filename)
 							"", NULL};
 			comp = &hpux_comp;
 			compfile = filename;
-		} else if ( ! is_compr) {
-			compfile = strappend(NULL, filename, ".", NULL);
-			len = strlen(compfile);
+		} else if (!is_compr) {
+			compfile = strappend (NULL, filename, ".", NULL);
+			len = strlen (compfile);
   		
 			for (comp = comp_list; comp->ext; comp++) {
-				compfile = strappend(compfile, comp->ext, NULL);
-				if (stat(compfile, &buf) == 0)
+				compfile = strappend (compfile, comp->ext, NULL);
+				if (stat (compfile, &buf) == 0)
 					break;
 				*(compfile + len) = '\0';
 			}
@@ -444,21 +451,21 @@ static int open_file(char *filename)
 			file_fd = create_tempfile ("zsman", &filename);
 			if (file_fd < 0)
 				error (FATAL, errno, _("can't create a temporary filename"));
-			command = strappend(NULL, comp->prog, " ", compfile, " > ", filename, NULL);
-			exit_status = system(command);
-			close( file_fd);
+			command = strappend (NULL, comp->prog, " ", compfile, " > ", filename, NULL);
+			exit_status = system (command);
+			close (file_fd);
 
 			if (exit_status != 0) {
 				error (OK, 0, _("%s exited with status %d"),
 				       command, exit_status);
-				free(command);
+				free (command);
 				yyin = oldyyin;
 				return 1;
 			}
 
-			free(command);
+			free (command);
 
-			if( !(yyin = fopen( filename, "r" )) )  {
+			if (!(yyin = fopen (filename, "r")))  {
 				error (OK, errno,
 				       _("open decompressed file: %s"),
 				       filename);
@@ -488,7 +495,7 @@ static int open_file(char *filename)
 }
 
 /* for compatibility with systems not having libfl, can't be static */
-int yywrap(void)
+int yywrap (void)
 {
 	return 1;
 }
