@@ -1694,7 +1694,7 @@ static char *make_display_command (char *file, char *title)
 	command = strappend (NULL, "{ export MAN_PN LESS; MAN_PN=\'",
 			     escape_special (title),
 			     "\'; LESS=\"" LESS_OPTS, prompt_string,
-			     "\"; ", NULL);
+			     "\\$$LESS\"; ", NULL);
 	if (file) {
 		if (ascii)
 			command = strappend (command, get_def ("cat", CAT), 

@@ -211,11 +211,13 @@ static char *get_whatis (struct mandata *info, char *page)
 	char *pointer, *ext;
 
 	/* See if we need to fill in the whatis here. */
-	if (*(info->pointer) == '-') {
+	if (*(info->pointer) == '-' || STREQ (info->pointer, page)) {
 		if (info->whatis != NULL && *(info->whatis))
 			return xstrdup (info->whatis);
-		else
-			return xstrdup (_("(unknown)"));
+		if (*(info->pointer) != '-')
+			error (0, 0, _("warning: %s contains a pointer loop"),
+			       page);
+		return xstrdup (_("(unknown)"));
 	}
 
 	/* Now we have to work through pointers. The limit of 10 is fairly
@@ -249,7 +251,7 @@ static char *get_whatis (struct mandata *info, char *page)
 	}
 
 	error (0, 0, _("warning: %s contains a pointer loop"), page);
-	return NULL;
+	return xstrdup (_("(unknown)"));
 }
 
 /* print out any matches found */
@@ -262,7 +264,7 @@ static void display (struct mandata *info, char *page)
 	if (debug)
 		dbprintf (info);
 
-	if (*(info->pointer) == '-')
+	if (*(info->pointer) == '-' || STREQ (info->pointer, page))
 		string = strappend (NULL, page, " (", info->ext, ")", NULL);
 	else
 		string = strappend (NULL, page, " (", info->ext, ") [",

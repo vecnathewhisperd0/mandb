@@ -1,3 +1,22 @@
+Sun Jul  8 16:06:43 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/whatis.c (get_whatis): Allow an entry to point to itself if it
+	  contains a non-empty whatis field. This occasionally happens when
+	  multiple names and descriptions are present, and it's easier to
+	  tolerate this.
+	  (display): If an entry points to itself, don't display the pointer
+	  in square brackets.
+
+	* include/sections.list: Remove; it's no longer needed.
+	* GNUmakefile.in (dist): Don't install it.
+	* include/Defines.in: Don't reference it. Also remove definition of
+	  message_catalogue (obsoleted by gettext).
+
+	* include/manconfig.h.in (LESS_OPTS): Don't include $LESS.
+	* src/man.c (make_display_command): Include $LESS here instead. Put
+	  it after prompt_string rather than before, so that long options in
+	  $LESS work.
+
 Sat Jul  7 16:32:24 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (determine_lang_table): Fix silly bracketing typo that
