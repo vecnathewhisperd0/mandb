@@ -124,11 +124,9 @@ do
                       [AS_VAR_SET(man_tr_bdb, no)])
          ])
       AS_IF([test AS_VAR_GET(man_tr_bdb) = yes],
-            [AC_MSG_RESULT(yes)
-             $3
+            [$3
              db=yes],
-            [AC_MSG_RESULT(no)
-             LIBS="$man_saved_LIBS"
+            [LIBS="$man_saved_LIBS"
              db=no])
       AS_VAR_POPDEF([man_tr_bdb])dnl
       test "$db" = "yes" && break
