@@ -224,7 +224,7 @@ int dbstore(struct mandata *in, const char *basename)
 		/* Check against identical multi keys before inserting
 		   into db */
 
-		if (strcmp(lastkey.dptr, newkey.dptr) == 0) {
+		if (STREQ(old.ext, in->ext)) {
 			int ret;
 
 			ret = replace_if_necessary(in, &old, oldkey, newcont);

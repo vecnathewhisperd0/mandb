@@ -39,7 +39,7 @@
 #include "lib/error.h"
 #include "manp.h"
 
-static __inline__ void gripe_converting_name (char *name)
+static __inline__ void gripe_converting_name (const char *name)
 {
 	error (FATAL, 0, _("Can't convert %s to cat name"), name);
 }

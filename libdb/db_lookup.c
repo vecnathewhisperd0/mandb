@@ -93,7 +93,7 @@ void gripe_bad_multi_key(const char *data)
 	       data);
 }
 
-char *copy_if_set(char *str)
+char *copy_if_set(const char *str)
 {
 	if (STREQ(str, "-"))
 		return NULL;
@@ -101,7 +101,7 @@ char *copy_if_set(char *str)
 		return xstrdup(str);
 }
 
-const char *dash_if_unset(char *str)
+const char *dash_if_unset(const char *str)
 {
 	if (str)
 		return str;

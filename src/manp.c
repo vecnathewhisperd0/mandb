@@ -1059,7 +1059,7 @@ char *get_catpath (const char *name, int cattype)
 		    ((cattype & USER_CAT)   && list->flag == MANDB_MAP_USER)) {
 			size_t manlen = strlen (list->key);
 			if (STRNEQ (name, list->key, manlen)) {
-				char *suffix = name + manlen;
+				const char *suffix = name + manlen;
 				char *catpath;
 
 				catpath = xmalloc (strlen (list->cont) +
