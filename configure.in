@@ -131,7 +131,7 @@ AC_PATH_PROG(lynx, lynx)
 AC_PATH_PROG(tr, tr)
 AC_PATH_PROG(grep, grep)
 AC_PATH_PROGS(pager, pager less more)
-test "$pager" && pager="exec $pager -s"
+test -n "$pager" && pager="exec $pager -s"
 dnl
 dnl define below (in list of preference) *roff macros to check for.
 dnl
@@ -141,11 +141,11 @@ dnl We have problems here, as different systems have different *roff
 dnl formatters and they accept different options and do different things :(
 dnl
 AC_PATH_PROGS(nroff, nroff gnroff groff)
-if test "$nroff"
+if test -n "$nroff"
 then
 	dnl define GNU_NROFF if necessary
 	MAN_PROG_GNU_NROFF($nroff)
-	if test "$nroff_device" 
+	if test -n "$nroff_device" 
 	then
 		AC_MSG_CHECKING(that nroff works with argument$nroff_device)
 dnl
@@ -171,7 +171,7 @@ dnl
 		fi
 	done])
 	
-	if test "$man_cv_prog_nroff_macro"
+	if test -n "$man_cv_prog_nroff_macro"
 	then
 		nroff="$nroff ${man_cv_prog_nroff_macro}"
 dnl		nroff="$nroff ${man_cv_prog_nroff_macro}${nroff_device}"
@@ -186,7 +186,7 @@ else
 	AC_DEFINE(NROFF_MISSING, 1, [Define if you don't have nroff.])
 fi
 AC_PATH_PROGS(troff, groff)
-if test "$troff"
+if test -n "$troff"
 then
 	AC_DEFINE(TROFF_IS_GROFF, 1, [Define if you are using groff as troff.])
 	TROFF=groff
@@ -194,7 +194,7 @@ else
 	AC_PATH_PROGS(troff, troff gtroff)
 	TROFF=troff
 fi
-if test "$troff"
+if test -n "$troff"
 then
 	AC_DEFINE(HAS_TROFF, 1, [Define if you have troff.])
 	AC_MSG_CHECKING(for appropriate $TROFF options)
@@ -213,7 +213,7 @@ dnl
 			break
 		fi
 	done])
-	if test "$man_cv_prog_troff_options"
+	if test -n "$man_cv_prog_troff_options"
 	then
 		troff="$troff $man_cv_prog_troff_options"
 		AC_MSG_RESULT($man_cv_prog_troff_options)
@@ -234,8 +234,8 @@ dnl using latin1 should be acceptable. -Tlatin1 is ignored by some eqn.
 dnl
 if test -z "$neqn"
 then
-	test "$eqn" && 
-	(test "$nroff_device" && neqn="$eqn -T$nroff_device" || neqn="$eqn -Tascii")
+	test -n "$eqn" && 
+	(test -n "$nroff_device" && neqn="$eqn -T$nroff_device" || neqn="$eqn -Tascii")
 fi
 AC_PATH_PROGS(tbl, tbl gtbl)
 AC_PATH_PROGS(col, col gcol)
@@ -243,9 +243,9 @@ AC_PATH_PROGS(vgrind, vgrind gvgrind)
 AC_PATH_PROGS(refer, refer grefer)
 AC_PATH_PROGS(grap, grap)
 AC_PATH_PROGS(pic, pic gpic)
-test "$pic" && pic="$pic -S"
+test -n "$pic" && pic="$pic -S"
 AC_PATH_PROG(gzip, gzip)
-if test "$gzip"
+if test -n "$gzip"
 then
 	gunzip="$gzip -dc"
 	compressor="$gzip -c7"
@@ -253,7 +253,7 @@ then
 	decompressor="$gunzip"
 fi
 AC_PATH_PROG(compress, compress)
-if test "$compress"
+if test -n "$compress"
 then
 	uncompress="$compress -dc"
 	if test -z "$gzip"
@@ -264,11 +264,11 @@ then
 	fi
 fi
 AC_PATH_PROG(bzip2, bzip2)
-if test "$bzip2"
+if test -n "$bzip2"
 then
 	bunzip2="$bzip2 -dc"
 fi
-if test "$gzip" || test "$compress" || test "$bzip2"
+if test -n "$gzip" || test -n "$compress" || test -n "$bzip2"
 then
 	AC_DEFINE(COMP_CAT, 1, [Define if you have compressors and want to support compressed cat files.])
 	AC_DEFINE(COMP_SRC, 1, [Define if you have compressors and want to support compressed manual source.])
