@@ -118,7 +118,9 @@ static int check_for_stray (void)
 #ifdef COMP_SRC
 		struct compression *comp;
 #endif
-		
+
+		memset (&info, 0, sizeof (struct mandata));
+
 		if (*catlist->d_name == '.' && 
 		    strlen (catlist->d_name) < (size_t) 3)
 			continue;

@@ -382,7 +382,8 @@ void test_manfile (char *file, const char *path)
 	struct stat buf;
 	size_t len;
 
-	memset (&lg, '\0', sizeof (struct lexgrog));
+	memset (&lg, 0, sizeof (struct lexgrog));
+	memset (&info, 0, sizeof (struct mandata));
 
 	manpage = filename_info (file, &info, NULL);
 	if (!manpage)
@@ -837,6 +838,8 @@ static int count_glob_matches (const char *name, const char *ext,
 		struct stat statbuf;
 		char *buf;
 
+		memset (&info, 0, sizeof (struct mandata));
+
 		if (stat (*walk, &statbuf) == -1) {
 			if (debug)
 				fprintf (stderr,
@@ -894,7 +897,7 @@ static short purge_whatis (const char *manpath, const char *name,
 				 name, info->ext);
 		force_rescan = 1;
 		return 0;
-	} else if (*info->pointer == '-') {
+	} else if (STREQ (info->pointer, "-")) {
 		/* This is broken; a WHATIS_MAN should never have an empty
 		 * pointer field. This might have happened due to the first
 		 * name in a page being different from what the file name

@@ -1,3 +1,16 @@
+Sun Dec 22 23:30:12 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (test_manfile): Initialize the mandata struct
+	  on the stack to zero.
+	  (count_glob_matches): Likewise.
+	* src/straycats.c (check_for_stray): Likewise.
+	* src/man.c (try_section): Use infoalloc() (which initializes the
+	  mandata struct to zero) rather than malloc(). This had caused
+	  several uses of uninitialized memory (Debian bug #168584).
+
+	* src/check_mandirs (purge_whatis): Compare info->pointer against
+	  "-", not just its first character.
+
 Sun Dec 22 19:29:38 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.4.1.

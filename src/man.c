@@ -2786,8 +2786,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 	}
 
 	for (np = names; np && *np; np++) {
-		struct mandata *info =
-			(struct mandata *) malloc (sizeof (struct mandata));
+		struct mandata *info = infoalloc ();
 		char *info_buffer = filename_info (*np, info, name);
 		char *ult;
 		if (!info_buffer)
