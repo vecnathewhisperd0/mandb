@@ -623,5 +623,7 @@ int main (int argc, char *argv[])
 		chdir (cwd);
 #endif /* __profile__ */
 
+	if (!amount)
+		error (FAIL, 0, _("No databases updated."));
 	exit (OK);
 }
