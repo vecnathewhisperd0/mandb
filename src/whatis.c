@@ -363,8 +363,9 @@ static int parse_name (char *page, char *dbname)
 #ifdef APROPOS
 	if (!wildcard) {
 		char *lowdbname = lower (dbname);
-		return STREQ (lowdbname, page);
+		int ret = STREQ (lowdbname, page);
 		free (lowdbname);
+		return ret;
 	}
 #endif
 
