@@ -1,3 +1,9 @@
+Mon Aug  4 01:05:12 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_wait): The return value was a bit
+	  groff-specific. Now just return the status of the last command in
+	  the pipeline, as reported by wait().
+
 Mon Aug  4 00:31:44 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	Add support for getting stdio streams for input and output. Needs
