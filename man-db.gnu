@@ -16,13 +16,13 @@
 
 %%maintainer: Colin Watson <cjwatson@debian.org>
 
-%%updated: 2001-07-05
+%%updated: 2001-09-07
 
 %%keywords: manpage, man, browser, database, groff
 
 %%interface: command line
 
-%%programs: man, mandb, manpath, whatis, apropos, catman, zsoelim, accessdb.
+%%programs: man, mandb, manpath, whatis, apropos, catman, zsoelim, lexgrog, accessdb.
 
 %%GNU: no
 
@@ -60,7 +60,7 @@
 
 %%source-prerequisites:
 
-%%version: 2.3.19 released on 2001-07-05
+%%version: 2.3.20 released on 2001-09-07
 
 %%announce-list: man-db-announce@lists.sourceforge.net man-db-announce-request@lists.sourceforge.net http://lists.sourceforge.net/mailman/listinfo/man-db-announce
 
