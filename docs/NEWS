@@ -6,9 +6,18 @@ Major changes since man-db 2.4.1:
 	Fixes:
 	------
 
+	o SECURITY: Fix a number of buffer overruns in configuration file
+	  handling, ultimate source location, and MANPATH processing. This
+	  is CVE CAN-2003-0620.
+
+	o SECURITY: Restrict the use of the DEFINE directive in ~/.manpath
+	  to code running with dropped privilege. Previously, the
+	  'compressor' variable could be used to run arbitrary code with
+	  raised privilege. This is CVE CAN-2003-0645.
+
 	o Make sure to initialize mandata structures to zero. The uses of
-	  uninitialized memory resulting from this had been leading to random
-	  segfaults.
+	  uninitialized memory resulting from this had been leading to
+	  random segfaults.
 
 	o Drop privileges in order to be able to read pages in
 	  non-world-readable user manpaths while setuid.
