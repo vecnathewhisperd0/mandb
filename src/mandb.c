@@ -213,7 +213,6 @@ static int xcopy (const char *from, const char *to)
 		ret = -errno;
 		if (errno != ENOENT)
 			perror ("fopen");
-		fclose (ifp);
 		return ret;
 	}
 
@@ -222,7 +221,6 @@ static int xcopy (const char *from, const char *to)
 		ret = -errno;
 		perror ("fopen");
 		fclose (ifp);
-		fclose (ofp);
 		return ret;
 	}
 
