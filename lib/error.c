@@ -53,7 +53,7 @@ extern void exit ();
 /* If NULL, error will flush stdout, then print on stderr the program
    name, a colon and a space.  Otherwise, error will call this
    function without parameters instead.  */
-void (*error_print_progname) () = NULL;
+void (*error_print_progname) (void) = NULL;
 
 /* The calling program should define program_name and set it to the
    name of the executing program.  */
