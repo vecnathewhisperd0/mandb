@@ -1019,7 +1019,7 @@ int main (int argc, char *argv[])
 		prompt_string = _(
 				" Manual page " MAN_PN
 				" ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):"
-				"?pB %pB\\\\%..");
+				"?pB %pB\\%..");
 #endif
 
 	less = getenv ("LESS");
