@@ -647,7 +647,7 @@ static short testmandirs (const char *path, time_t last)
 			fprintf (stderr, "\r");
 			fprintf (stderr,
 				 _("Updating index cache for path "
-				   "`%s'. Wait..."), path);
+				   "`%s/%s'. Wait..."), path, mandir->d_name);
 		}
 		add_dir_entries (path, mandir->d_name);
 		MYDBM_CLOSE (dbf);
