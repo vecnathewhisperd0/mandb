@@ -10,7 +10,8 @@
  *
  * Mon May  2 17:36:33 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  *
- * CJW: Many changes to whatis parsing. See docs/ChangeLog for details.
+ * CJW: Many changes to whatis parsing. Added database purging.
+ * See docs/ChangeLog for details.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -72,6 +73,7 @@ extern int errno;
 
 int opt_test;		/* don't update db */
 int pages;
+int force_rescan = 0;
 
 static void gripe_bogus_manpage (char *manpage)
 {
@@ -140,15 +142,14 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 			space = strchr (info->whatis, '\0') - 1;
 			while (*space == ' ')
 				*space = '\0';
-		} else {
+		} else
 			raw_whatis = NULL; /* kill entire whatis line */
-		}
 	}
-	info->pointer = NULL;	/* direct page, so far */
-	
+
 	/* Here we store the direct reference */
 	if (debug)
-		fprintf (stderr, "base_name = `%s'\n", base_name);
+		fprintf (stderr, "base_name = `%s', id = %c\n",
+			 base_name, info->id);
 
 	pointer_name = xstrdup (base_name);
 	comma = strchr (pointer_name, ',');
@@ -441,19 +442,15 @@ void test_manfile (char *file, const char *path)
 		fprintf (stderr, "\"%s\"\n", lg.whatis);
 
 	/* split up the raw whatis data and store references */
+	info.pointer = NULL;	/* direct page, so far */
 	info.filter = lg.filters;
 	if (lg.whatis) {
 		int last_name;
-		char save_id = info.id;
-		info.id = WHATIS_MAN;
-		/* If there's only one entry, don't bother inserting a
-		 * WHATIS_MAN for it. Really we should compare against
-		 * lg.whatis, but that's awkward here ...
-		 */
-		if (strchr (lg.whatis, 0x11))
-			last_name = 0;
-		else
-			last_name = 1;
+		char save_id;
+
+		last_name = 0;
+		save_id = info.id;
+
 		/* It's easier to run through the names in reverse order. */
 		while (!last_name) {
 			char *sep, *othername, *end_othername;
@@ -467,6 +464,9 @@ void test_manfile (char *file, const char *path)
 				sep = lg.whatis;
 				last_name = 1;
 			}
+			if (!*sep)
+				/* Probably a double line break or something */
+				continue;
 			sep += strspn (sep, " ");
 			othername = xstrdup (sep);
 			end_othername = strstr (othername, " - ");
@@ -475,11 +475,30 @@ void test_manfile (char *file, const char *path)
 					--end_othername;
 				*end_othername = '\0';
 			}
-			if (!opt_test)
-				splitline (sep, &info, othername);
+			if (STREQ (base_name, othername))
+				info.id = save_id;
+			else {
+				info.id = WHATIS_MAN;
+				info.pointer = base_name;
+			}
+			if (!opt_test) {
+				char *dup_whatis = xstrdup (sep);
+				if (splitline (dup_whatis, &info,
+					       othername) == 1)
+					gripe_multi_extensions (path, info.sec,
+								base_name,
+								info.ext);
+				free (dup_whatis);
+			}
 			free (othername);
 		}
+
 		info.id = save_id;
+		info.pointer = NULL;
+		if (!opt_test)
+			if (splitline (lg.whatis, &info, base_name) == 1)
+				gripe_multi_extensions (path, info.sec,
+							base_name, info.ext);
 	} else {
 		(void) stat (ult, &buf);
 		if (buf.st_size == 0) {
@@ -495,11 +514,6 @@ void test_manfile (char *file, const char *path)
 			       _("warning: %s: whatis parse for %s(%s) failed"),
 			       ult, base_name, info.ext);
 	}
-
-	if (!opt_test)
-		if (splitline (lg.whatis, &info, base_name) == 1)
-			gripe_multi_extensions (path, info.sec,
-						base_name, info.ext);
 
 	free (manpage);
 	if (lg.whatis)
@@ -568,32 +582,36 @@ static short testmandirs (const char *path, time_t last)
 	while( (mandir = readdir (dir)) ) {
 		if (strncmp (mandir->d_name, "man", 3) != 0)
 			continue;
-			
-		if (stat (mandir->d_name, &stbuf) == 0
-		    && (stbuf.st_mode & S_IFDIR) && stbuf.st_mtime > last) {
 
-			if (debug)
-				fprintf (stderr,
-				  "\tsubdirectory %s has been 'modified'\n",
-				  mandir->d_name);
+		if (stat (mandir->d_name, &stbuf) != 0)	/* stat failed */
+			continue;
+		if (!S_ISDIR(stbuf.st_mode))		/* not a directory */
+			continue;
+		if (!force_rescan && stbuf.st_mtime <= last)
+			/* scanned already */
+			continue;
 
-			dbf = MYDBM_RWOPEN(database);
+		if (debug)
+			fprintf (stderr,
+			  "\tsubdirectory %s has been 'modified'\n",
+			  mandir->d_name);
 
-			if (!dbf) {
-				gripe_rwopen_failed (database);
-				return 0;
-			}
+		dbf = MYDBM_RWOPEN(database);
 
-			if (! quiet) {
-			        fprintf (stderr, "\r");
-			        fprintf (stderr,
-					 _("Updating index cache for path "
-					   "`%s'. Wait..."), path);
-			}
-		  	add_dir_entries (path, mandir->d_name);
-			MYDBM_CLOSE (dbf);
-		  	amount++;
+		if (!dbf) {
+			gripe_rwopen_failed (database);
+			return 0;
 		}
+
+		if (!quiet) {
+			fprintf (stderr, "\r");
+			fprintf (stderr,
+				 _("Updating index cache for path "
+				   "`%s'. Wait..."), path);
+		}
+		add_dir_entries (path, mandir->d_name);
+		MYDBM_CLOSE (dbf);
+		amount++;
 	}
 	closedir (dir);
 
@@ -753,6 +771,86 @@ short update_db (const char *manpath)
 	return EOF;
 }
 
+/* Decide whether to purge a reference to a "normal" (ULT_MAN or SO_MAN)
+ * page.
+ */
+static __inline__ short purge_normal (char *name, struct mandata *info,
+				      char **found)
+{
+	if (found)
+		return 0;
+
+	if (!opt_test)
+		dbdelete (name, info);
+	else if (debug)
+		fprintf (stderr, "%s(%s): missing page, would delete\n",
+			 name, info->ext);
+
+	return 1;
+}
+
+/* Decide whether to purge a reference to a WHATIS_MAN page. */
+static __inline__ short purge_whatis (const char *manpath, char *name,
+				      struct mandata *info, char **found)
+{
+	if (found) {
+		/* If the page exists and didn't beforehand, then presumably
+		 * we're about to rescan, which will replace the WHATIS_MAN
+		 * entry with something better. However, there have been
+		 * bugs that created false WHATIS_MAN entries, so force the
+		 * rescan just to be sure; since in the absence of a bug we
+		 * would rescan anyway, this isn't a problem.
+		 */
+		if (debug && !force_rescan)
+			fprintf (stderr,
+				 "%s(%s): whatis replaced by real page; "
+				 "forcing a rescan just in case\n",
+				 name, info->ext);
+		force_rescan = 1;
+		return 0;
+	} else if (*info->pointer == '-') {
+		/* This is broken; a WHATIS_MAN should never have an empty
+		 * pointer field. This might have happened due to the first
+		 * name in a page being different from what the file name
+		 * says; that's fixed now, so delete and force a rescan.
+		 */
+		if (!opt_test)
+			dbdelete (name, info);
+		else if (debug)
+			fprintf (stderr,
+				 "%s(%s): whatis with empty pointer, "
+				 "would delete\n",
+				 name, info->ext);
+
+		if (debug && !force_rescan)
+			fprintf (stderr,
+				 "%s(%s): whatis had empty pointer; "
+				 "forcing a rescan just in case\n",
+				 name, info->ext);
+		force_rescan = 1;
+		return 1;
+	} else {
+		/* Does the real page still exist? */
+		char **real_found;
+		int save_debug = debug;
+		debug = 0;
+		real_found = look_for_file (manpath, info->ext,
+					    info->pointer, 0);
+		debug = save_debug;
+
+		if (real_found)
+			return 0;
+
+		if (!opt_test)
+			dbdelete (name, info);
+		else if (debug)
+			fprintf (stderr,
+				 "%s(%s): whatis target was deleted, "
+				 "would delete\n",
+				 name, info->ext);
+	}
+}
+
 /* Go through the database and purge references to man pages that no longer
  * exist.
  */
@@ -775,10 +873,13 @@ short purge_missing (const char *manpath)
 	while (key.dptr != NULL) {
 		datum content, nextkey;
 		struct mandata entry;
+		char *nicekey, *tab;
+		int save_debug;
+		char **found;
 
 		/* Ignore db identifier keys. */
 		if (*key.dptr == '$') {
-			datum nextkey = MYDBM_NEXTKEY (dbf, key);
+			nextkey = MYDBM_NEXTKEY (dbf, key);
 			MYDBM_FREE (key.dptr);
 			key = nextkey;
 			continue;
@@ -790,7 +891,6 @@ short purge_missing (const char *manpath)
 
 		/* Ignore overflow entries. */
 		if (*content.dptr == '\t') {
-			datum nextkey;
 			MYDBM_FREE (content.dptr);
 			nextkey = MYDBM_NEXTKEY (dbf, key);
 			MYDBM_FREE (key.dptr);
@@ -801,28 +901,36 @@ short purge_missing (const char *manpath)
 		split_content (content.dptr, &entry);
 		content.dptr = entry.addr;
 
-		if (entry.id == ULT_MAN || entry.id == SO_MAN) {
-			char *nicekey = xstrdup (key.dptr);
-			char *tab = strchr (nicekey, '\t');
-			int save_debug = debug;
-			char **found;
-
-			if (tab)
-				*tab = '\0';
-			debug = 0;	/* look_for_file() is quite noisy */
-			found = look_for_file (manpath, entry.ext, nicekey, 0);
-			debug = save_debug;
-			if (!found) {
-				if (!opt_test)
-					dbdelete (nicekey, &entry);
-				else if (debug)
-					fprintf (stderr,
-						 "Would delete %s(%s)\n",
-						 nicekey, entry.ext);
-				++count;
-			}
-			free (nicekey);
+		/* We only handle ULT_MAN, SO_MAN, and WHATIS_MAN for now. */
+		if (entry.id > WHATIS_MAN) {
+			MYDBM_FREE (content.dptr);
+			nextkey = MYDBM_NEXTKEY (dbf, key);
+			MYDBM_FREE (key.dptr);
+			key = nextkey;
+			continue;
 		}
+
+		/* Get just the name. */
+		nicekey = xstrdup (key.dptr);
+		tab = strchr (nicekey, '\t');
+		if (tab)
+			*tab = '\0';
+
+		save_debug = debug;
+		debug = 0;	/* look_for_file() is quite noisy */
+		found = look_for_file (manpath, entry.ext, nicekey, 0);
+		debug = save_debug;
+
+		/* Now actually decide whether to purge, depending on the
+		 * type of entry.
+		 */
+		if (entry.id == ULT_MAN || entry.id == SO_MAN)
+			count += purge_normal (nicekey, &entry, found);
+		else		/* entry.id == WHATIS_MAN */
+			count += purge_whatis (manpath, nicekey,
+					       &entry, found);
+
+		free (nicekey);
 
 		MYDBM_FREE (content.dptr);
 		nextkey = MYDBM_NEXTKEY (dbf, key);

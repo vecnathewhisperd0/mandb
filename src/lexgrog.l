@@ -171,6 +171,7 @@ vgrind_request	\.vS
 
  /* No-op requests */
 <MAN_NAME>{bol}\.{blank}*$		newline_found ();
+<MAN_NAME>{bol}\.\.$			newline_found ();
 
  /* Toggle fill mode */
 <MAN_NAME>{bol}\.nf.*			fill_mode = 0;

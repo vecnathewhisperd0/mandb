@@ -1,3 +1,27 @@
+Sun Jul  1 01:58:33 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (splitline): Don't initialize the pointer
+	  field here; instead, control it from ...
+	  (test_manfile): ... here.
+	  Change the logic for multiple name/description blocks again.
+	  Remove misguided special-casing of the first name in a block. Set
+	  the id field more carefully, depending on string equality instead
+	  of ordering. Avoid scribbling over lg.whatis when a later
+	  splitline() needs it. Don't call splitline() if whatis parsing
+	  failed.
+
+	* src/check_mandirs.c (purge_normal): New function, factored out
+	  from purge_missing().
+	  (purge_whatis): New function to decide whether to purge a
+	  WHATIS_MAN entry.
+	  (purge_missing): Use both of these.
+	  (testmandirs): purge_whatis() sometimes needs to ensure a
+	  hierarchy is rescanned. Honour this.
+	  Improve indentation levels.
+	* src/mandb.c (main): Reset force_rescan before each purge.
+
+	* src/lexgrog.l: Treat '..' as a no-op request.
+
 Sun Jul  1 01:38:13 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* manual/misc.me (Modes of operation): Mention new requirement to

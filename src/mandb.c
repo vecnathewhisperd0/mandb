@@ -10,7 +10,7 @@
  *
  * Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
  *
- * CJW: Security fixes. Make --test work.
+ * CJW: Security fixes. Make --test work. Purge old database entries.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -95,6 +95,7 @@ MYDBM_FILE dbf;
 char *manp;
 char *database;
 extern char *extension;		/* for globbing.c */
+extern int force_rescan;	/* for check_mandirs.c */
 
 /* default options */
 static const struct option long_options[] =
@@ -475,6 +476,7 @@ int main(int argc, char *argv[])
 		if (catpath) { 	/* system db */
 		/*	if (access (catpath, W_OK) == 0 && !user) { */
 			if (!user) {
+				force_rescan = 0;
 				if (purge) {
 					database = mkdbname (catpath);
 					purged += purge_missing (*mp);
@@ -504,6 +506,7 @@ int main(int argc, char *argv[])
 		} else {	/* user db */
 			drop_effective_privs ();
 
+			force_rescan = 0;
 			if (purge) {
 				database = mkdbname (*mp);
 				purged += purge_missing (*mp);
