@@ -1,3 +1,16 @@
+Tue Jan 27 23:37:58 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l: Attempt to fix problems with groff requests
+	  immediately following .SH NAME. All patterns in the MAN_FILE and
+	  MAN_NAME states need to avoid matching trailing newlines, since
+	  they're needed by other patterns to detect beginning-of-line.
+
+	  In order to ignore any excess whitespace following .SH NAME, which
+	  is how this problem got created, introduce a MAN_PRENAME start
+	  condition, which just skips over spacing. Some evil use of yyless
+	  is needed to transition properly to the MAN_NAME start condition
+	  from this without eating trailing newlines.
+
 Tue Jan 27 21:19:41 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/Makefile.in (LFLAGS): Add -d if LEXGROG_DEBUG=yes.

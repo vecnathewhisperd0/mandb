@@ -117,6 +117,7 @@ static const char args[] = "mcwfhV";
 %option warn
 %option noyywrap nounput
 
+%x MAN_PRENAME
 %x MAN_NAME
 %x CAT_NAME
 %x CAT_FILE
@@ -173,13 +174,13 @@ vgrind_request	\.vS
 %%
 
  /* begin NAME section processing */
-<MAN_FILE>{sec_request}{blank_eol}+{name_sec}{blank_eol}*	BEGIN (MAN_NAME);
+<MAN_FILE>{sec_request}{blank_eol}+{name_sec}{blank}*		BEGIN (MAN_PRENAME);
 <CAT_FILE>{empty}{2,}{name}{blank}*{indent}			BEGIN (CAT_NAME);
 
  /* general text matching */
-<MAN_FILE>\.[^Ss\r\n].*{next}				|
+<MAN_FILE>\.[^Ss\r\n].*					|
 <MAN_FILE>\..{0,3}{dbl_quote}?.{0,4}{dbl_quote}? 	|
-<MAN_FILE>{comment}.*{next}				|
+<MAN_FILE>{comment}.*					|
 <CAT_FILE>.{1,9}					|
 <CAT_FILE>[ ]*						|
 <CAT_FILE>{eol}{2,}					|
@@ -204,6 +205,20 @@ vgrind_request	\.vS
 <FORCE_EXIT>.|{eol}		{	/* forced exit */
 					*p_name = '\0'; /* terminate the string */
 					yyterminate ();
+				}
+
+ /* Skip over initial spacing in NAME section. This is evil. */
+<MAN_PRENAME>{bol}\.sp{blank}*		|
+<MAN_PRENAME>{bol}\.br{blank}*		|
+<MAN_PRENAME>{bol}\.LP{blank}*		|
+<MAN_PRENAME>{bol}\.P[Pp]{blank}*	|
+<MAN_PRENAME>{bol}\.P{blank}*
+
+<MAN_PRENAME>{empty}{eol}		yyless (1);
+
+<MAN_PRENAME>.|{eol}		{
+					yyless (0);
+					BEGIN (MAN_NAME);
 				}
 
 <MAN_NAME>{bol}{sec_request}{blank}*	| 	/* Another section */
