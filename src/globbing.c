@@ -144,6 +144,7 @@ int match_in_directory (const char *path, const char *pattern, int ignore_case,
 					    allocated * sizeof (char *));
 	}
 	pglob->gl_pathv[pglob->gl_pathc] = NULL;
+	closedir (dir);
 
 	return 0;
 }
