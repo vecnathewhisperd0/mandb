@@ -38,7 +38,7 @@ will print \(lqparse failed\(rq; this may be useful for external
 programs that need to check man pages for correctness.
 If one of
 .BR lexgrog 's
-input files is \(lq-\(rq, it will read from standard input; if any input
+input files is \(lq\-\(rq, it will read from standard input; if any input
 file is compressed, a decompressed version will be read automatically.
 .SH OPTIONS
 .TP
@@ -94,11 +94,11 @@ failed to parse one or more of its input files.
 .SH EXAMPLES
 .nf
   $ lexgrog man.1
-  man.1: "man - an interface to the on-line reference manuals"
-  $ lexgrog -fw man.1
-  man.1 (t): "man - an interface to the on-line reference manuals"
-  $ lexgrog -c whatis.cat1 
-  whatis.cat1: "whatis - display manual page descriptions"
+  man.1: "man \- an interface to the on-line reference manuals"
+  $ lexgrog \-fw man.1
+  man.1 (t): "man \- an interface to the on-line reference manuals"
+  $ lexgrog \-c whatis.cat1 
+  whatis.cat1: "whatis \- display manual page descriptions"
   $ lexgrog broken.1
   broken.1: parse failed
 .fi
@@ -124,12 +124,12 @@ section looks something like this:
 .ft CW
 .nf
 \&.SH NAME
-foo \e- program to do something
+foo \e\- program to do something
 .fi
 .ft P
 .RE
 .PP
-Some manual pagers require the `\e-' to be exactly as shown;
+Some manual pagers require the \(oq\e\-\(cq to be exactly as shown;
 .B %mandb%
 is more tolerant, but for compatibility with other systems it is
 nevertheless a good idea to retain the backslash.
@@ -144,9 +144,9 @@ same manual page, the following form is therefore used:
 .ft CW
 .nf
 \&.SH NAME
-foo, bar \e- programs to do something
+foo, bar \e\- programs to do something
 \&.br
-baz \e- program to do nothing
+baz \e\- program to do nothing
 .fi
 .ft P
 .RE
@@ -171,12 +171,12 @@ section looks something like this:
 .RE
 
 There are several common reasons why whatis parsing fails.
-Sometimes authors of manual pages replace `.SH NAME' with `.SH MYPROGRAM',
-and then
+Sometimes authors of manual pages replace \(oq.SH NAME\(cq with
+\(oq.SH MYPROGRAM\(cq, and then
 .B %mandb%
 cannot find the section from which to extract the information it needs.
 Sometimes authors include a NAME section, but place free-form text there
-rather than `name \e- description'.
+rather than \(oqname \e\- description\(cq.
 However, any syntax resembling the above should be accepted.
 .SH "SEE ALSO"
 .IR man (1),
@@ -185,10 +185,9 @@ However, any syntax resembling the above should be accepted.
 .IR whatis (1).
 .SH NOTES
 .B lexgrog
-cannot parse files containing .so requests.
-These are probably best checked by other programs, as
-.B lexgrog
-often does not have enough context to know what to do with them.
+attempts to parse files containing .so requests, but will only be able
+to do so correctly if the files are properly installed in a manual page
+hierarchy.
 .SH AUTHOR
 The code used by
 .B lexgrog
