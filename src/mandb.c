@@ -2,12 +2,15 @@
  * mandb.c: used to create and initialise global man database.
  *  
  * Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
+ * Copyright (c) 2001 Colin Watson.
  *
  * You may distribute under the terms of the GNU General Public
  * License as specified in the file COPYING that comes with this
  * distribution.
  *
  * Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ *
+ * CJW: Security fixes. Make --test work.
  */
 
 #ifdef HAVE_CONFIG_H

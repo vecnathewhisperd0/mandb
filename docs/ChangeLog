@@ -1,3 +1,33 @@
+Mon Jun 18 18:55:39 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (add_sections, get_sections): New functions.
+	  (add_to_dirlist): Recognize new SECTIONS directive.
+	* src/manp.h (iterate_catlist, start_iterator): Remove (not used).
+	  (get_sections): New prototype.
+	* src/man.c (get_section_list): Use get_sections() instead of
+	  std_sections if it returns a non-empty list.
+	* src/man_db.conf.in: Add documentation of SECTIONS, and a default
+	  line. The documentation is still inaccurate (extensions don't work
+	  well yet).
+	* include/manconfig.h.in (STD_SECTIONS): Reduce to only
+	  single-character sections; the rest will be set in the
+	  configuration file.
+
+	* src/manp.c (add_to_list): Add to the tail rather than the head
+	  (needed for SECTIONS, probably makes other things more intuitive).
+	  (read_config_file): Restore print_list() in debug mode.
+
+	* src/check_mandirs.c: Add copyright notice and change information.
+	* src/lexgrog.l: Likewise.
+	* src/man.c: Likewise.
+	* src/mandb.c: Likewise.
+
+	* src/compression.c (get_ztemp): Remove redundant test.
+
+	* src/man.c (get_preprocessors_from_file): Change an = to ==.
+
+	* src/wrapper.c (main): Cosmetic improvements.
+
 Sat Jun 16 19:22:51 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/straycats.c (check_for_stray): Check that
@@ -68,7 +98,7 @@ Mon May 28 14:56:35 BST 2001  Colin Watson  <cjwatson@debian.org>
 	  definition.
 	* include/manconfig.h.in, src/catman.c, src/check_mandirs.c,
 	  src/compression.c, src/man.c, src/mandb.c, src/manpath.c,
-	  src/whatis.c: Remove instances of '#ifndef debug'
+	  src/whatis.c: Remove instances of '#ifndef debug'.
 	* src/util.c: debug is already declared extern in manconfig.h.
 
 Mon May 28 14:30:38 BST 2001  Colin Watson  <cjwatson@debian.org>

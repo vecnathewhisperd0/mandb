@@ -184,7 +184,7 @@ void remove_ztemp (void)
 
 /* return temporary filename */
 char *get_ztemp (void)
-{	
-	return (file ? file : NULL);
+{
+	return file;
 }
 #endif /* COMP_SRC */

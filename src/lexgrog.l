@@ -4,12 +4,15 @@
  * lexgrog.l: extract 'whatis' info from nroff man / formatted cat pages.
  *  
  * Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
+ * Copyright (c) 2001 Colin Watson.
  *
  * You may distribute under the terms of the GNU General Public
  * License as specified in the file COPYING that comes with this
  * distribution.
  *
  * Wed Oct 12 18:46:11 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * 
+ * CJW: Detect grap and vgrind. Other improvements in the syntax accepted.
  */
 
 #undef PROFILE

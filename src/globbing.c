@@ -66,9 +66,8 @@ char **look_for_file (char *path, char *sec, char *name, int cat)
 
 	globfree (&gbuf);
 
-	/* globbing is obsolete. This routine only does a minumum amount
-	   of matching. It does not find cat files in the alternate cat
-	   directory. */
+	/* This routine only does a minumum amount of matching. It does not
+	   find cat files in the alternate cat directory. */
 
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
 

@@ -110,26 +110,22 @@ int main (int argc, char **argv)
 			return -EACCES;
 		}
 		*/
-		if (!pwd)
-		{
+		if (!pwd) {
 			fprintf (stderr, _("%s: Failed su to user %s\n"),
 				 wlp->prog, wlp->user);
 			return -EACCES;
 		}
-		if (setgid (pwd->pw_gid) )
-		{
+		if (setgid (pwd->pw_gid)) {
 			fprintf (stderr, _("%s: Failed su to user %s\n"),
 				 wlp->prog, wlp->user);
 			return -EACCES;
 		}
-		if (initgroups (wlp->user, pwd->pw_gid))
-		{
+		if (initgroups (wlp->user, pwd->pw_gid)) {
 			fprintf (stderr, _("%s: Failed su to user %s\n"),
 				 wlp->prog, wlp->user);
 			return -EACCES;
 		}
-		if (setuid (pwd->pw_uid))
-		{
+		if (setuid (pwd->pw_uid)) {
 			fprintf (stderr, _("%s: Failed su to user %s\n"),
 				 wlp->prog, wlp->user);
 			return -EACCES;

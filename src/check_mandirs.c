@@ -2,12 +2,15 @@
  * check_mandirs.c: used to auto-update the database caches
  *
  * Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
+ * Copyright (c) 2001 Colin Watson.
  *
  * You may distribute under the terms of the GNU General Public
  * License as specified in the file COPYING that comes with this
  * distribution.
  *
  * Mon May  2 17:36:33 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
+ *
+ * CJW: Many changes to whatis parsing. See docs/ChangeLog for details.
  */
 
 #ifdef HAVE_CONFIG_H

@@ -92,8 +92,9 @@ struct list {
 	struct list *next;
 };
 
-static struct list *namestore;
+static struct list *namestore, *tailstore;
 
+#define SECTION		-3
 #define DEFINE		-2
 #define MANDB_MAP       -1
 #define MANPATH_MAP      0
@@ -131,8 +132,12 @@ static void add_to_list (char *key, char *cont, int flag)
 	list->key = key;
 	list->cont = cont;
 	list->flag = flag;
-	list->next = namestore;
-	namestore = list;
+	list->next = NULL;
+	if (tailstore)
+		tailstore->next = list;
+	tailstore = list;
+	if (!namestore)
+		namestore = list;
 }
 
 static char *get_from_list (char *key, int flag)
@@ -159,6 +164,40 @@ static void print_list (void)
 	for (list = namestore; list; list = list->next)
 		fprintf (stderr, "`%s'\t`%s'\t`%d'\n", list->key, 
 			 list->cont, list->flag);
+}
+
+static void add_sections (char *sections)
+{
+	/* No need to free section_list; it's tokenized and each element is
+	 * put into a linked list, which is kept around for later.
+	 */
+	char *section_list = xstrdup (sections);
+	char *sect;
+
+	for (sect = strtok (section_list, " "); sect;
+	     sect = strtok (NULL, " ")) {
+		add_to_list (sect, "", SECTION);
+		if (debug)
+			fprintf (stderr, "Added section `%s'.\n", sect);
+	}
+}
+
+char **get_sections (void)
+{
+	struct list *list;
+	int length = 0;
+	char **sections, **sectionp;
+
+	for (list = namestore; list; list = list->next)
+		if (list->flag == SECTION)
+			length++;
+	sections = xmalloc ((length + 1) * sizeof *sections);
+	sectionp = sections;
+	for (list = namestore; list; list = list->next)
+		if (list->flag == SECTION)
+			*sectionp++ = list->key;
+	*sectionp = NULL;
+	return sections;
 }
 
 static void add_def (char *thing, char *config_def, int flag)
@@ -679,6 +718,8 @@ void add_to_dirlist (FILE *config)
 		else if ((c = sscanf (bp, "DEFINE %50s %511[^\n]",
 				      key, cont)) > 0)
 			add_def (key, cont, c);
+		else if (sscanf (bp, "SECTION %511[^\n]", cont) == 1)
+			add_sections (cont);
 	 	else {
 			error (0, 0, _("can't parse directory list `%s'"), bp);
 			gripe_reading_mp_config (CONFIG_FILE);
@@ -712,10 +753,8 @@ void read_config_file(void)
 		}
 	}
 
-#if 0
 	if (debug)
 		print_list ();
-#endif
 }
 
 

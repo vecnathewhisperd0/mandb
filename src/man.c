@@ -3,6 +3,7 @@
  *
  * Copyright (c) 1990, 1991, John W. Eaton.
  * Copyright (C), 1994, 1995 Graeme W. Wilford. (Wilf.)
+ * Copyright (c) 2001 Colin Watson.
  *
  * You may distribute under the terms of the GNU General Public
  * License as specified in the file COPYING that comes with this
@@ -15,6 +16,8 @@
  * Austin, Texas  78712
  *
  * Mostly written/re-written by Wilf, some routines by Markus Armbruster.
+ *
+ * CJW: Various robustness and security fixes.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -1237,7 +1240,7 @@ static char *get_preprocessors_from_file (char *file)
 				directive = line + 4;
 				/* strip trailing newline */
 				len = strlen (directive);
-				if (len && (directive[len - 1] = '\n'))
+				if (len && (directive[len - 1] == '\n'))
 					directive[len - 1] = 0;
 			}
 		}
@@ -2700,13 +2703,21 @@ static int man (char *name)
 static __inline__ char **get_section_list (void)
 {
 	int i = 0;
+	char **config_sections;
 	char **sections = NULL;
 	char *sec;
+
+	/* Section list from configuration file, or STD_SECTIONS if it's
+	 * empty.
+	 */
+	config_sections = get_sections ();
+	if (!*config_sections)
+		config_sections = std_sections;
 
 	if (colon_sep_section_list == NULL)
 		colon_sep_section_list = getenv ("MANSECT");
 	if (colon_sep_section_list == NULL || *colon_sep_section_list == '\0')
-		return std_sections;
+		return config_sections;
 
 	for (sec = strtok(colon_sep_section_list, ":"); sec; 
 	     sec = strtok(NULL, ":")) {
@@ -2721,7 +2732,7 @@ static __inline__ char **get_section_list (void)
 	} else {
 		if (sections)
 			free (sections);
-		return std_sections;
+		return config_sections;
 	}
 }
 

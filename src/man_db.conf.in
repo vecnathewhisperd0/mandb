@@ -96,3 +96,12 @@ MANDB_MAP	/opt/man		/var/cache/man/opt
 #DEFINE		apropos_grep_flags		-iEw
 #DEFINE		apropos_regex_grep_flags	-iE
 #---------------------------------------------------------
+# Section names. Manual sections will be searched in the order listed
+# here; the default is 1, n, l, 8, 3, 2, 5, 4, 9, 6, 7. Multiple SECTION
+# directives may be given for clarity, and will be concatenated
+# together in the expected way.
+# If a particular extension is not in this list (say, 1mh), it will be
+# displayed with the rest of the section it belongs to. Ties are broken
+# in lexical order. The effect of this is that you only need to
+# explicitly list extensions if you want to force a particular order.
+SECTIONS	1 n l 8 3 2 5 4 9 6 7
