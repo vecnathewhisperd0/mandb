@@ -12,3 +12,17 @@ In need of attention:
   of programs/paths/extensions etc.
 * use zlib for gzipped pages rather than forking gzip.
 * look at work done by SuSE and Andries.
+
+Case-insensitive lookup transition:
+
+* Solaris layout is broken.
+* Finish off db version transition, and test heavily.
+* Need to make sure pointers trigger an exact-case lookup [done for whatis].
+
+Apparently db3's compatibility API is, er, less than compatible.
+(Specifically, it isn't possible to write correct error-handling code that
+works in the compatibility API, nor that works in both db2 and db3.) I
+suppose I have to write a db_newbdb.c now.
+
+Need to clean up the code that decides where cat files go (see display*()).
+Debian bug #129575 is difficult to fix otherwise.
