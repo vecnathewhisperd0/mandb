@@ -303,17 +303,30 @@ datum make_content(struct mandata *in)
 
 /* Extract all of the names/extensions associated with this key. Each case
  * variant of a name will be returned separately.
+ *
+ * names and ext should be pointers to valid memory which will be filled in
+ * with the address of the allocated arrays of names and extensions. The
+ * caller is expected to free these arrays.
  */
-int list_extensions(char *data, char *names[], char *ext[])
+int list_extensions(char *data, char ***names, char ***ext)
 {  
 	int count = 0;
+	int bound = 4;	/* most multi keys will have fewer than this */
 
-	while ((names[count] = strsep(&data, "\t")) != NULL) {
-		ext[count] = strsep(&data, "\t");
-		if (ext[count])
+	*names = xmalloc(bound * sizeof **names);
+	*ext   = xmalloc(bound * sizeof **ext);
+	while (((*names)[count] = strsep(&data, "\t")) != NULL) {
+		(*ext)[count] = strsep(&data, "\t");
+		if ((*ext)[count])
 			++count;
 		else
 			break;
+
+		if (count >= bound) {
+			bound *= 2;
+			*names = xrealloc(*names, bound * sizeof **names);
+			*ext   = xrealloc(*ext,   bound * sizeof **ext);
+		}
 	}
 
 	if (debug)
@@ -363,7 +376,7 @@ static struct mandata *dblookup(const char *page, const char *section,
 		free_mandata_struct(info);
 		return NULL;
 	} else {				/* multiple entries */
-		char *names[ENTRIES], *ext[ENTRIES];
+		char **names, **ext;
 		struct mandata *ret = NULL;
 		int refs, i;
 
@@ -371,7 +384,7 @@ static struct mandata *dblookup(const char *page, const char *section,
 		 * associated with this key.
 		 */
 
-		refs = list_extensions(cont.dptr + 1, names, ext);
+		refs = list_extensions(cont.dptr + 1, &names, &ext);
 
 		/* Make the multi keys and look them up */
 
@@ -414,6 +427,9 @@ static struct mandata *dblookup(const char *page, const char *section,
 			if (!info->name)
 				info->name = xstrdup(names[i]);
 		}
+
+		free(names);
+		free(ext);
 		MYDBM_FREE(cont.dptr);
 		return ret;
 	}

@@ -79,7 +79,7 @@ int dbdelete(const char *name, struct mandata *info)
 		MYDBM_DELETE(dbf, key);
 		MYDBM_FREE(cont.dptr);
 	} else {				/* 2+ entries */
-		char *names[ENTRIES], *ext[ENTRIES];
+		char **names, **ext;
 		char *multi_content = NULL;
 		datum multi_key;
 		int refs, i, j;
@@ -87,13 +87,15 @@ int dbdelete(const char *name, struct mandata *info)
 		/* Extract all of the extensions associated with 
 		   this key */
 
-		refs = list_extensions(cont.dptr + 1, names, ext);
+		refs = list_extensions(cont.dptr + 1, &names, &ext);
 
 		for (i = 0; i < refs; ++i)
 			if (STREQ(names[i], name) && STREQ(ext[i], info->ext))
 				break;
 
 		if (i >= refs) {
+			free(names);
+			free(ext);
 			MYDBM_FREE(cont.dptr);
 			free(key.dptr);
 			return NO_ENTRY;
@@ -114,6 +116,8 @@ int dbdelete(const char *name, struct mandata *info)
 		   the key too */
 		   
 		if (refs == 1) {
+			free(names);
+			free(ext);
 			MYDBM_FREE(cont.dptr);
 			MYDBM_DELETE(dbf, key);
 			free(key.dptr);
@@ -138,6 +142,9 @@ int dbdelete(const char *name, struct mandata *info)
 
 		if (MYDBM_REPLACE(dbf, key, cont))
 			gripe_replace_key(key.dptr);
+
+		free(names);
+		free(ext);
 	}
 
 	free(key.dptr);

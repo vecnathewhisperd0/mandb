@@ -1,3 +1,13 @@
+Tue Sep  3 21:53:56 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_lookup.c (list_extensions): Prevent a theoretical buffer
+	  overflow by allocating names and ext as necessary rather than
+	  using a fixed-length array.
+	  (dblookup): Update callers.
+	* libdb/db_delete.c (dbdelete): Likewise.
+	* libdb/db_storage.h: Update prototypes. ENTRIES definition is now
+	  redundant.
+
 Tue Sep  3 20:26:22 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_delete.c (dbdelete): Construct new multi_content
