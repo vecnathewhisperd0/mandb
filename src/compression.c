@@ -160,6 +160,15 @@ char *decompress (const char *filename, const struct compression *comp)
 	int save_debug = debug;
 	char *esc_filename, *esc_file;
 
+	if (!comp->prog || !*comp->prog) {
+		/* TODO: Temporary workaround for poor decompression program
+		 * detection, so deliberately left untranslated for now. See
+		 * Debian bug #196097.
+		 */
+		error (0, 0, "missing decompression program for %s", filename);
+		return NULL;
+	}
+
 	if (!file)
 		create_ztemp();
 
