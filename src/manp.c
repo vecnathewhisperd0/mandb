@@ -330,11 +330,9 @@ static char *pathappend (char *oldpath, const char *appendage)
 
 static __inline__ void gripe_reading_mp_config (const char *file)
 {
-	if (!quiet)
-		error (FAIL, 0,
-		       _("can't make sense of the manpath configuration file "
-			 "%s"),
-		       file);
+	error (FAIL, 0,
+	       _("can't make sense of the manpath configuration file %s"),
+	       file);
 }
 
 static __inline__ void gripe_stat_file (const char *file)
