@@ -1,3 +1,16 @@
+Sun Aug  3 16:35:24 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Add support in pipeline library for writing input to or reading
+	output from the whole pipeline.
+
+	* lib/pipeline.c (pipeline_new): Initialize writeto, readfrom,
+	  writefd, and readfd.
+	  (pipeline_start): Create extra pipes as necessary.
+	  (pipeline_wait): Expand TODO comment. Close file descriptors from
+	  extra pipes if necessary.
+	* lib/pipeline.h (struct pipeline): Add writeto, readfrom, writefd,
+	  and readfd.
+
 Sun Aug  3 11:15:17 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c: New pipeline library, adapted from that in groff.
