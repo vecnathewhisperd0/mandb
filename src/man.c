@@ -612,6 +612,8 @@ static int find_in_path (const char *name)
 			ret = 1;
 			break;
 		}
+
+		free (filename);
 	}
 
 	free (path);
