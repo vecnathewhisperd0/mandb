@@ -1,3 +1,11 @@
+Fri Aug 30 03:11:42 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (make_roff_command): Restore the fix from 13 July 2001
+	  that got lost while implementing -E. We need to look up the
+	  correct character set each time a page is displayed, but still
+	  honour any device explicitly set by -E, so test different_encoding
+	  rather than roff_device.
+
 Thu Aug 29 01:14:19 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (setenv_less): Export the value of $MAN_PN for the
