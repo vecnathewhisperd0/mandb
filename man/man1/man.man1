@@ -597,14 +597,23 @@ device.
 It will not translate any
 .I latin1
 text.
-The following table shows the translations performed.
+The following table shows the translations performed: some parts of it may
+only be displayed properly when using
+.B GNU
+.BR nroff 's
+.IR latin1 (7)
+device.
 
+.ie c \[shc] \
+.  ds soft-hyphen \[shc]
+.el \
+.  ds soft-hyphen \(hy
 .TS
 tab (@);
 l c c c.
 Description@Octal@latin1@ascii
 _
-continuation hyphen@255@\[shc]@-
+continuation hyphen@255@\*[soft-hyphen]@-
 bullet (middle dot)@267@\(bu@o
 acute accent@264@\(aa@'
 multiplication sign@327@\(mu@x

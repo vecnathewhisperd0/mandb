@@ -1,3 +1,9 @@
+Mon Feb 24 17:05:25 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* man/man1/man.man1 (OPTIONS): Only use the \[shc] character if it's
+	  available, which is the case on groff's latin1 and utf8 devices
+	  but not on others. Otherwise, use \(hy.
+
 Mon Feb 24 00:17:39 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* docs/manpage.example (OPTIONS): Move the note about '\-' versus
