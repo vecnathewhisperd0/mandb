@@ -471,9 +471,10 @@ static char *add_system_manpath (const char *systems, const char *manpathlist)
 				char *element;
 
 				next = strchr (path, ':');
-				if (next)
+				if (next) {
 					element = xstrndup (path, next - path);
-				else
+					++next;
+				} else
 					element = xstrdup (path);
 				newdir = strappend (newdir, element, "/",
 						    system, NULL);
