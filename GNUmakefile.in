@@ -132,10 +132,9 @@ __clean: __mostlyclean
 __distclean: __clean
 	rm -f $(INCLUDES) include/Defines GNUmakefile makefile
 	rm -f include/Defines.old config.status config.cache config.log stamp-h
-	rm -f src/lexgrog.c configure zsoelim/zsoelim.c
 
 __realclean: __distclean
-	rm -f tags ID
+	rm -f configure tags ID
 
 __TAGS:
 	$(MKTAGS) $(srcdir)/*.h include/*.h
@@ -167,18 +166,18 @@ ifeq ($(srcdir),.)
 # The files in the distribution
 _subdirs = $(EVERYTHING) tools docs include manual
 
-_all = */README */Makefile.in
+_all = */README
 _root = ABOUT-NLS README configure *.h *.m4 *.in man-db.*
 _docs = INSTALL.* COPYING ChangeLog NEWS ToDo manpage.example
 _include = *.in sections.list
-_lib = *.[ch]
-_libdb = *.[ch] stamp-h COPYING.LIB
-_man = man?/*.man? */man?/*.man? THANKS
+_lib = Makefile.in *.[ch]
+_libdb = Makefile.in *.[ch] stamp-h COPYING.LIB
+_man = Makefile.in man?/*.man? */man?/*.man? THANKS
 _manual = Makefile *.me
-_src = README.lexgrog *.[chl] *.l-* lexgrog.l.new man_db.conf.in stamp-h
+_src = Makefile.in README.lexgrog *.[chl] *.l-* lexgrog.l.new man_db.conf.in
 _tools = chconfig checkman config.* install-manpage install-sh \
 	 mandb_\[nt\]fmt-script mkcatdirs mkinstalldirs nroff-script
-_zsoelim = *.[cl]
+_zsoelim = Makefile.in *.[cl]
 
 FILES = $(_root) $(_all) \
 	$(foreach _subdir, $(_subdirs), \
