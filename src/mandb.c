@@ -191,7 +191,8 @@ static __inline__ void xcopy (const char *from, const char *to)
 	if (!ifp || !ofp) {
 		if (ifp) fclose (ifp);
 		if (ofp) fclose (ofp);
-		perror ("fopen");
+		if (errno != ENOENT)
+			perror ("fopen");
 		return;
 	}
 
