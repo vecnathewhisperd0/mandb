@@ -1,3 +1,10 @@
+Wed Mar 31 23:40:15 BST 2004  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (make_roff_command): If stdout isn't a terminal, get rid
+	  of formatting characters using GROFF_NO_SGR=1 and 'col -b'
+	  (thanks, Adam Heath).
+	* docs/NEWS: Document this.
+
 Thu Mar 25 19:31:02 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/whatis.c (apropos): Move warning-silencing code to the bottom

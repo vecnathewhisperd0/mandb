@@ -1781,11 +1781,21 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 					       "-f", output_encoding,
 					       "-t", locale_charset, NULL);
 
+		if (!troff && *COL) {
+			/* get rid of special characters if not writing to a
+			 * terminal
+			 */
+			if (!isatty (fileno (stdout))) {
+				save_cat = 0;
+				setenv ("GROFF_NO_SGR", "1", 1);
+				pipeline_command_args (p, COL, "-b", NULL);
+			}
 #ifndef GNU_NROFF
-		/* tbl needs col */
-		if (using_tbl && !troff && *COL)
-			pipeline_command_args (p, COL, NULL);
+			/* tbl needs col */
+			else if (using_tbl && !troff && *COL)
+				pipeline_command_args (p, COL, NULL);
 #endif /* GNU_NROFF */
+		}
 	} else {
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
