@@ -1,3 +1,26 @@
+Wed Sep 17 07:17:22 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Fix case where a page explicitly encoded in UTF-8 has to be recoded
+	down to a non-ISO-8859-1 legacy encoding for processing by groff and
+	then back up to UTF-8 for display.
+
+	* src/encodings.c (get_page_encoding): New function, renamed from
+	  get_source_encoding.
+	  (get_source_encoding): Return only the canonical source encoding,
+	  not any explicit encoding in the directory name. This allows us to
+	  take account of differing explicit encoding and canonical encoding
+	  of pages for the purposes of working out which device to use.
+	  (get_roff_encoding): New source_encoding argument, now returned
+	  instead of NULL.
+	  (get_default_device): Pass source_encoding to get_roff_encoding().
+	  (compatible_encodings): The roff encoding can no longer be NULL.
+	* src/encodings.h (get_page_encoding): Add prototype.
+	  (get_roff_encoding): Update prototype.
+	* src/man.c (make_roff_command): Call get_page_encoding(), and
+	  recode from that to roff_encoding, not from source_encoding to
+	  roff_encoding. Pass source_encoding to get_roff_encoding().
+	  roff_encoding can no longer be NULL.
+
 Tue Sep 16 22:53:36 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	Purge database entries corresponding to removed stray cat pages.

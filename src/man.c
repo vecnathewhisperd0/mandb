@@ -1654,15 +1654,20 @@ static char *make_roff_command (const char *dir, const char *file,
 		 * in the path.
 		 */
 		if (!troff) {
-			const char *source_encoding, *roff_encoding;
+			const char *page_encoding, *source_encoding,
+				   *roff_encoding;
 			const char *cat_charset;
 
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
 
+			page_encoding = get_page_encoding (lang);
 			source_encoding = get_source_encoding (lang);
-			if (debug)
+			if (debug) {
+				fprintf (stderr, "page_encoding = %s\n",
+					 page_encoding);
 				fprintf (stderr, "source_encoding = %s\n",
 					 source_encoding);
+			}
 
 			cat_charset = get_standard_output_encoding (lang);
 			locale_charset = get_locale_charset ();
@@ -1695,20 +1700,21 @@ static char *make_roff_command (const char *dir, const char *file,
 						 STRC (roff_device, "NULL"));
 			}
 
-			roff_encoding = get_roff_encoding (roff_device);
+			roff_encoding = get_roff_encoding (roff_device,
+							   source_encoding);
 			if (debug)
 				fprintf (stderr, "roff_encoding = %s\n",
-					 STRC (roff_encoding, "NULL"));
+					 roff_encoding);
 
 			/* We may need to recode:
-			 *   from source_encoding to roff_encoding on input;
+			 *   from page_encoding to roff_encoding on input;
 			 *   from output_encoding to locale_charset on output.
 			 */
 			if (roff_encoding &&
-			    !STREQ (source_encoding, roff_encoding))
+			    !STREQ (page_encoding, roff_encoding))
 				command = strappend (command,
 						     " | iconv -c -f ",
-						     source_encoding, " -t ",
+						     page_encoding, " -t ",
 						     roff_encoding, NULL);
 
 			output_encoding = get_output_encoding (roff_device);

@@ -201,7 +201,7 @@ static const char *fallback_less_charset = "iso8859";
  * directory in which it was found. The caller should attempt to recode from
  * this to whatever encoding is expected by groff.
  */
-const char *get_source_encoding (const char *lang)
+const char *get_page_encoding (const char *lang)
 {
 	const struct directory_entry *entry;
 	const char *dot;
@@ -237,6 +237,56 @@ const char *get_source_encoding (const char *lang)
 		 */
 		/* TODO: I should probably drop any ,<version> components. */
 		return dot + 1;
+
+	for (entry = directory_table; entry->lang_dir; ++entry)
+		if (STRNEQ (entry->lang_dir, lang, strlen (entry->lang_dir)))
+			return entry->source_encoding;
+
+	return fallback_source_encoding;
+}
+
+/* Return the canonical encoding for source man pages in the specified
+ * language. This ignores any encoding specification in the language
+ * directory name. The source encoding should be used as a basis for
+ * determining the correct roff device to use: that is, the caller should
+ * behave as if it is recoding from the page encoding to the source encoding
+ * first, although in practice it should recode directly from the page
+ * encoding to the roff encoding.
+ *
+ * Here are a few concrete examples of why these distinctions are important:
+ *
+ *   /usr/share/man/en_GB.UTF-8, locale C
+ *     page encoding = UTF-8
+ *     source encoding = ISO-8859-1
+ *     roff encoding = ISO-8859-1
+ *     output encoding = UTF-8
+ *     UTF-8 -> iconv -> ISO-8859-1 -> groff -Tascii -> ANSI_X3.4-1968
+ *
+ *   /usr/share/man/pl_PL.UTF-8, locale pl_PL.UTF-8
+ *     page encoding = UTF-8
+ *     source encoding = ISO-8859-2
+ *     roff encoding = ISO-8859-2
+ *     output encoding = ISO-8859-2
+ *     UTF-8 -> iconv -> ISO-8859-2 -> groff -Tascii8
+ *                    -> ISO-8859-2 -> iconv -> UTF-8
+ *
+ *   /usr/share/man/ja_JP.EUC-JP, locale ja_JP.UTF-8
+ *     page encoding = EUC-JP
+ *     source encoding = EUC-JP
+ *     roff encoding = UTF-8
+ *     output encoding = UTF-8
+ *     EUC-JP -> iconv -> UTF-8 -> groff -Tutf8 -> UTF-8
+ */
+const char *get_source_encoding (const char *lang)
+{
+	const struct directory_entry *entry;
+
+	if (!lang || !*lang) {
+		/* Guess based on the locale. */
+		lang = setlocale (LC_MESSAGES, NULL);
+		if (!lang)
+			return fallback_source_encoding;
+	}
 
 	for (entry = directory_table; entry->lang_dir; ++entry)
 		if (STRNEQ (entry->lang_dir, lang, strlen (entry->lang_dir)))
@@ -313,14 +363,6 @@ const char *get_locale_charset (void)
  * with the help of some iconv pipes? */
 static int compatible_encodings (const char *input, const char *output)
 {
-#ifdef MULTIBYTE_GROFF
-	/* NULL output means that its encoding is passed through from the
-	 * input, so it must be compatible.
-	 */
-	if (!output)
-		return 1;
-#endif /* MULTIBYTE_GROFF */
-
 	if (STREQ (input, output))
 		return 1;
 
@@ -365,7 +407,8 @@ const char *get_default_device (const char *locale_charset,
 	for (entry = charset_table; entry->locale_charset; ++entry) {
 		if (STREQ (entry->locale_charset, locale_charset)) {
 			const char *roff_encoding =
-				get_roff_encoding (entry->default_device);
+				get_roff_encoding (entry->default_device,
+						   source_encoding);
 			if (compatible_encodings (source_encoding,
 						  roff_encoding))
 				return entry->default_device;
@@ -376,10 +419,9 @@ const char *get_default_device (const char *locale_charset,
 }
 
 /* Find the input encoding expected by groff, and set the LESSCHARSET
- * environment variable appropriately. If this returns NULL, then the device
- * claims to be encoding-agnostic and no recoding should take place.
+ * environment variable appropriately.
  */
-const char *get_roff_encoding (const char *device)
+const char *get_roff_encoding (const char *device, const char *source_encoding)
 {
 	const struct device_entry *entry;
 	int found = 0;
@@ -410,7 +452,7 @@ const char *get_roff_encoding (const char *device)
 	}
 #endif /* MULTIBYTE_GROFF */
 
-	return roff_encoding;
+	return roff_encoding ? roff_encoding : source_encoding;
 }
 
 /* Find the output encoding that this device will produce, or NULL if it
