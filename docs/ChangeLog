@@ -1,3 +1,14 @@
+Thu Aug 28 00:40:09 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_start): Change "couldn't exec %s" to
+	  "can't execute %s" in line with src/man.c, to make translators'
+	  lives easier.
+	  (pipeline_wait): Separate "%s: %s%s" into two translatable
+	  strings: the "(core dumped)" portion should definitely be
+	  translated.
+	* src/accessdb.c (usage): Clarify "man_database" to "(The) man
+	  database".
+
 Thu Aug 28 00:18:46 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/globbing.c (usage): Expand "sec" to "section".

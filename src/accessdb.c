@@ -81,12 +81,12 @@ MYDBM_FILE dbf;
 
 static void usage (int status)
 {
-	printf (_("usage: %s [-hV] [man_database]\n"), program_name);
+	printf (_("usage: %s [-hV] [man database]\n"), program_name);
 	printf (_(
 		"-V, --version               show version.\n"
 		"-h, --help                  show this usage message.\n"
 		"\n"
-		"man_database defaults to %s%s.\n"), cat_root, MAN_DB);
+		"The man database defaults to %s%s.\n"), cat_root, MAN_DB);
 
 	exit (status);
 }
