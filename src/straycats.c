@@ -270,7 +270,7 @@ static int check_for_stray (void)
 			} else
 #else
 			if (realpath (catdir, fullpath) == NULL) {
-				if (quiet < 2)
+				if (quiet < 2) {
 					if (errno == ENOENT)
 						error (0, 0, _("warning: %s is a dangling symlink"), fullpath);
 					else
