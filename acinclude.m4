@@ -113,7 +113,7 @@ do
     for lib in $2
     do
       AS_VAR_PUSHDEF([man_tr_bdb], [man_cv_bdb_header_${head}_lib_${lib}])dnl
-      man_saved_LIBS=LIBS
+      man_saved_LIBS="$LIBS"
       LIBS="$LIBS -l$lib"
       AC_CACHE_CHECK([for dbopen from <${head}> in -l${lib}], man_tr_bdb,
          [AC_TRY_LINK([#include <$head>], [dbopen("foo", 0, 0, 0, (void *) 0)],

@@ -1,3 +1,16 @@
+Fri Nov 16 04:28:31 GMT 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (add_nls_manpath): Concatenate strings more safely.
+
+	Changes adapted from a patch by OGAWA Hirofumi
+	<hirofumi@mail.parknet.co.jp>:
+
+	* acinclude.m4 (MAN_CHECK_BDB): $LIBS, not LIBS, and quote it while
+	  we're here.
+	* src/manp.c (pathappend): Use strsep() rather than strtok().
+	  (cat_manpath): Likewise.
+	  (add_nls_manpath): Likewise.
+
 Thu Nov  8 11:27:32 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (get_preprocessors_from_file): Drop privileges to access
