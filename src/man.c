@@ -1396,8 +1396,8 @@ static void determine_lang_table (char *lang)
 	if (!lang || !*lang) {
 		/* English manpages */
 		for (j = 0; lang_table[j].lang; j++) {
-			if (strncmp (lang_table[j].lang, internal_locale,
-				     strlen (lang_table[j].lang) == 0)
+			if (STRNEQ (lang_table[j].lang, internal_locale,
+				    strlen (lang_table[j].lang))
 			    || lang_table[j].lang[0] == '*') {
 				if (!strcmp (lang_table[j].device, "latin1")) {
 					roff_device = "latin1";
@@ -1412,8 +1412,8 @@ static void determine_lang_table (char *lang)
 	} else {
 		int j;
 		for (j = 0; lang_table[j].lang; j++) {
-			if (strncmp (lang_table[j].lang, lang,
-				     strlen (lang_table[j].lang) == 0)
+			if (STRNEQ (lang_table[j].lang, lang,
+				    strlen (lang_table[j].lang))
 			    || lang_table[j].lang[0] == '*') {
 				roff_device = lang_table[j].device;
 				putenv (strappend (NULL, "LESSCHARSET=",
