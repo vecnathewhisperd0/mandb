@@ -236,7 +236,7 @@ static __inline__ int check_for_stray (void)
 
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 			fullpath = canonicalize_file_name (catdir);
-			if (fullpath) {
+			if (!fullpath) {
 				if (quiet < 2)
 					error (0, errno,
 					       _("can't resolve %s"), catdir);
