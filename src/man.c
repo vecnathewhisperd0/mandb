@@ -325,7 +325,6 @@ static char **section_list;
 static const char *section;
 static char *colon_sep_section_list;
 static char *preprocessors;
-static const char *dbfilters;
 static char *pager;
 static char *locale;
 static char *internal_locale;
@@ -762,7 +761,7 @@ int local_man_loop (const char *argv)
 	drop_effective_privs ();
 	local_man_file = 1;
 	if (strcmp (argv, "-") == 0)
-		display (NULL, "", NULL, "(stdin)");
+		display (NULL, "", NULL, "(stdin)", NULL);
 	else {
 		struct stat st;
 #ifdef COMP_SRC
@@ -797,7 +796,7 @@ int local_man_loop (const char *argv)
 			(void) decompress(argv, comp);
 #endif /* COMP_SRC */
 		lang = lang_dir (argv);
-		if (!display (NULL, argv, NULL, basename (argv))) {
+		if (!display (NULL, argv, NULL, basename (argv), NULL)) {
 			if (local_mf)
 				error (0, errno, "%s", argv);
 			exit_status = NOT_FOUND;
@@ -1341,7 +1340,7 @@ static const char *get_preprocessors_from_file (const char *file)
 
 /* Determine pre-processors, set save_cat and return
    (static) string */
-static const char *get_preprocessors (const char *file)
+static const char *get_preprocessors (const char *file, const char *dbfilters)
 {
 	const char *pp_string;
 	const char *pp_source;
@@ -1466,7 +1465,8 @@ static void determine_lang_table (const char *lang)
 }
 
 /* Return command (malloced string) to format file to stdout */
-static __inline__ char *make_roff_command (const char *dir, const char *file)
+static __inline__ char *make_roff_command (const char *dir, const char *file,
+					   const char *dbfilters)
 {
 	const char *pp_string;
 	char *fmt_prog;
@@ -1533,10 +1533,10 @@ static __inline__ char *make_roff_command (const char *dir, const char *file)
 		stdin_tmpfile_fd = -1;
 		signal (SIGPIPE, old_handler);
 
-		pp_string = get_preprocessors (stdin_tmpfile);
+		pp_string = get_preprocessors (stdin_tmpfile, dbfilters);
 		regain_effective_privs ();
 	} else
-		pp_string = get_preprocessors (file);
+		pp_string = get_preprocessors (file, dbfilters);
 
 #ifdef ALT_EXT_FORMAT
 	/* Check both external formatter locations */
@@ -2307,7 +2307,8 @@ static void display_catman (const char *cat_file, const char *format_cmd)
  * on standard input.
  */
 static int display (const char *dir, const char *man_file,
-		    const char *cat_file, const char *title)
+		    const char *cat_file, const char *title,
+		    const char *dbfilters)
 {
 	int found;
 	static int pause;
@@ -2339,7 +2340,8 @@ static int display (const char *dir, const char *man_file,
 #endif /* COMP_SRC */
 
 		if (source_file)
-			format_cmd = make_roff_command (dir, source_file);
+			format_cmd = make_roff_command (dir, source_file,
+							dbfilters);
 		else
 			format_cmd = NULL;
 	}
@@ -2795,7 +2797,7 @@ static int display_filesystem (struct candidate *candp)
 	if (candp->cat) {
 		if (troff || different_encoding)
 			return 0;
-		return display (candp->path, NULL, filename, title);
+		return display (candp->path, NULL, filename, title, NULL);
 	} else {
 		char *man_file, *cat_file;
 		int found;
@@ -2815,7 +2817,7 @@ static int display_filesystem (struct candidate *candp)
 		cat_file = find_cat_file (candp->path, man_file);
 		if (debug)
 			fprintf (stderr, "will try cat file %s\n", cat_file);
-		found = display (candp->path, man_file, cat_file, title);
+		found = display (candp->path, man_file, cat_file, title, NULL);
 		free (cat_file);
 		/* Be careful not to free man_file, as it's static. */
 		free (title);
@@ -2874,8 +2876,6 @@ static int display_database (struct candidate *candp)
 		name = in->name;
 	else
 		name = candp->req_name;
-
-	dbfilters = in->filter;
 
 	/* make sure the file we want is the same as the one in the 
 	   filesystem */
@@ -2956,7 +2956,7 @@ static int display_database (struct candidate *candp)
 
 			cat_file = find_cat_file (candp->path, man_file);
 			found += display (candp->path, man_file, cat_file,
-					  title);
+					  title, in->filter);
 			free (cat_file);
 #ifdef COMP_SRC
 			/* if ult_src() produced a ztemp file, we need to 
@@ -3025,7 +3025,7 @@ static int display_database (struct candidate *candp)
 			}
 		}
 
-		found += display (candp->path, NULL, file, title);
+		found += display (candp->path, NULL, file, title, in->filter);
 	}
 	free (title);
 	return found;

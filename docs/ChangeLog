@@ -1,3 +1,15 @@
+  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c: dbfilters is no longer a global variable.
+	  (get_preprocessors, make_roff_command, display): Take an extra
+	  dbfilters argument.
+	  (local_man_loop, make_roff_command, display, display_filesystem):
+	  Adjust callers.
+	  (display_database): Likewise. Pass in->filter as the dbfilters
+	  argument to display() rather than setting it globally (and
+	  forgetting to set it back to NULL later).
+	* src/man.h: Update prototypes.
+
 Sat Aug 17 21:53:38 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/straycats.c (check_for_stray): Initialize info.name and
