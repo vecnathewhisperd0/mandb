@@ -1,3 +1,40 @@
+  Colin Watson  <cjwatson@debian.org>
+
+	* include/manconfig.h.in: Bump database version from 2.3.1 to 2.3.2.
+	* libdb/db_ver.c (dbver_wr): Reformat.
+	  (dbver_rd): Downgrade warnings about wrong version numbers to
+	  debugging messages.
+	* libdb/db_lookup.c (split_data): Fix fencepost error that would
+	  overlook a missing whatis field.
+
+	* src/man.c (try_db_section): Display warning if whatis refs are
+	  relied upon to find a page.
+	* libdb/db_storage.h: Note that WHATIS_MAN and WHATIS_CAT are
+	  deprecated.
+
+	* src/accessdb.c (main): Give FHS_CAT_ROOT priority over CAT_ROOT.
+	* man/man8/accessdb.man8 (DESCRIPTION): Document this.
+	* man/de_DE.85591/man8/accessdb.man8 (DESCRIPTION): Likewise.
+	* man/de_DE.ascii/man8/accessdb.man8 (DESCRIPTION): Likewise.
+	* man/es_ES.88591/man8/accessdb.man8 (DESCRIPTION): Likewise.
+	* man/it_IT.88591/man8/accessdb.man8 (DESCRIZIONE): Likewise.
+
+	* src/check_mandirs.c (testmandirs): Tidy up database opening code.
+
+	* src/mandb.c (mandb): Don't create a new database if opt_test is
+	  set.
+	  (main): If opt_test is set, just delete the temporary database
+	  rather than moving it into place.
+	* man/man8/mandb.man8 (OPTIONS): Document --test.
+	  (FILES): Document FHS compliant database locations.
+	  (AUTHOR): Add myself.
+
+	* src/ult_src.c (ult_softlink): Remove overly-cautious check for
+	  non-local symlinks in mantrees.
+
+	* src/whatis.c (apropos): Remove a now redundant test that cont.dptr
+	  is non-NULL.
+
 Sun May 13 01:00:47 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/whatis.c (apropos): Complain and exit if a data pointer is

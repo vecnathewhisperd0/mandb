@@ -150,15 +150,7 @@ static __inline__ char *ult_softlink(char *fullpath, const char *mantree)
 	if (debug)
 		fprintf(stderr, "ult_softlink: (%s)\n", 
 		  resolved_path + strlen(mantree) + 1);
-		
-	/* if symlink is not within this mantree, forget it */
 
-	if (strncmp(mantree, resolved_path, strlen(mantree)) != 0) {
-		if (debug)
-			fprintf(stderr, "ult_softlink: non-local link\n");
-		return NULL;
-	}
-	
 	return strcpy(fullpath, resolved_path);
 }
 #endif /* S_ISLNK */

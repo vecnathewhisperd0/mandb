@@ -58,9 +58,8 @@ void dbver_wr(MYDBM_FILE dbf)
 	
 	if (MYDBM_INSERT(dbf, key, content) != 0)
 		error (FATAL, 0,
-		       _( 
-		       	       "fatal: unable to insert version identifier into %s"),
-		       	       database);
+		       _("fatal: unable to insert version identifier into %s"),
+		       database);
 }
 
 int dbver_rd(MYDBM_FILE dbf)
@@ -69,14 +68,17 @@ int dbver_rd(MYDBM_FILE dbf)
 
 	status = dbver(dbf);
 	
-	if (status == -1)
-		error (0, 0, _( "warning: %s has no version identifier"),
-		       database);
-	else if (status == 1)
-		error (0, 0,
-		       _( "warning: %s is version %s, expecting %s"),
-		       database, content.dptr, VER_ID);
-	else {
+	if (status == -1) {
+		if (debug)
+			fprintf (stderr,
+				 _("warning: %s has no version identifier\n"),
+				 database);
+	} else if (status == 1) {
+		if (debug)
+			fprintf (stderr,
+				 _("warning: %s is version %s, expecting %s\n"),
+				 database, content.dptr, VER_ID);
+	} else {
 		MYDBM_FREE(content.dptr);
 		return 0;
 	}

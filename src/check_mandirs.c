@@ -481,7 +481,9 @@ static short testmandirs(const char *path, time_t last)
 				  "\tsubdirectory %s has been 'modified'\n",
 				  mandir->d_name);
 
-			if ( (dbf = MYDBM_RWOPEN(database)) == NULL) {
+			dbf = MYDBM_RWOPEN(database);
+
+			if (! dbf) {
 				/* rwopen(database); */
 #ifdef MAN_DB_UPDATES
 				if (!quiet)
@@ -495,7 +497,7 @@ static short testmandirs(const char *path, time_t last)
 			        fprintf(stderr, _( "Updating index cache for path `%s'. Wait..."), path);
 			}
 		  	add_dir_entries(path, mandir->d_name);
-		  	MYDBM_CLOSE(dbf);
+			MYDBM_CLOSE(dbf);
 		  	amount++;
 		}
 	}

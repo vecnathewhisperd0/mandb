@@ -22,6 +22,8 @@
    STRAY_CAT:	pre-formatted manual page with no source.
    WHATIS_CAT:  virtual `whatis referenced' page pointing to a STRAY_CAT. */
 
+/* WHATIS_MAN and WHATIS_CAT are deprecated. */
+
 #define ULT_MAN		'A'
 #define SO_MAN		'B'
 #define WHATIS_MAN	'C'

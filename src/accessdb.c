@@ -62,10 +62,10 @@ int main(int argc, char *argv[])
 	datum key,content;
 
 	program_name = basename(argv[0]);
-	if ( is_directory (CAT_ROOT) == 1 )
-		cat_root = CAT_ROOT;
-	else if ( is_directory (FHS_CAT_ROOT) == 1 )
+	if ( is_directory (FHS_CAT_ROOT) == 1 )
 		cat_root = FHS_CAT_ROOT;
+	else if ( is_directory (CAT_ROOT) == 1 )
+		cat_root = CAT_ROOT;
 
 	if (argc > 2)
 		usage(FAIL);

@@ -2264,6 +2264,11 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 	}
 #endif /* MAN_DB_UPDATES */
 
+	if (in->id == WHATIS_MAN || in->id == WHATIS_CAT)
+		error (OK, 0,
+		       _("warning: %s: relying on whatis refs is deprecated"),
+		       name);
+
 #ifndef NROFF_MISSING /* #ifdef NROFF */
 	/*
   	 * Look for man page source files.

@@ -88,6 +88,12 @@ is introduced in the future.
 Create user databases only, even with write permissions necessary to create
 `global' databases.
 .TP
+.B \-t, \-\-test
+Perform correctness checks on manual pages in the hierarchy search path.
+With this option,
+.B %mandb%
+will not alter existing databases.
+.TP
 .B \-h, \-\-help
 Show the usage message, then exit.
 .TP
@@ -136,6 +142,11 @@ An alternate or FSSTND
 compliant global
 .I index
 database cache.
+.TP
+.I /var/cache/man/index.(bt|db|dir|pag)
+An FHS compliant global
+.I index
+database cache.
 .SH "SEE ALSO"
 .BR %man% (1), 
 .BR manpath (5),
@@ -143,3 +154,4 @@ database cache.
 .SH AUTHOR
 Wilf. (G.Wilford@ee.surrey.ac.uk).
 Fabrizio Polacco (fpolacco@debian.org).
+Colin Watson (cjwatson@debian.org).

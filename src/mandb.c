@@ -289,7 +289,7 @@ static short mandb(const char *catpath, const char *manpath)
 #  ifdef BERKELEY_DB
 	dbfile = strappend(NULL, dbname, ".db", NULL);
 	tmpdbfile = strappend(NULL, database, ".db", NULL);
-	if (create) {
+	if (create || opt_test) {
 		xremove (tmpdbfile);
 		amount = create_db(manpath);
 	} else {
@@ -301,7 +301,7 @@ static short mandb(const char *catpath, const char *manpath)
 	pagfile = strappend(NULL, dbname, ".pag", NULL);
 	tmpdirfile = strappend(NULL, database, ".dir", NULL);
 	tmppagfile = strappend(NULL, database, ".pag", NULL);
-	if (create) {
+	if (create || opt_test) {
 		xremove (tmpdirfile);
 		xremove (tmppagfile);
 		amount = create_db(manpath);
@@ -314,7 +314,7 @@ static short mandb(const char *catpath, const char *manpath)
 #else /* !NDBM */
 	xfile = dbname;
 	xtmpfile = database;
-	if (create) {
+	if (create || opt_test) {
 		xremove (xtmpfile);
 		amount = create_db(manpath);
 	} else {
@@ -462,11 +462,14 @@ int main(int argc, char *argv[])
 				amount += mandb (catpath, *mp);
 				if (check_for_strays)
 					strays += straycats(*mp);
-				finish_up();
+				if (!opt_test) {
+					finish_up();
 #ifdef DO_CHOWN
-				if (euid == 0)
-					do_chown (man_owner->pw_uid);
+					if (euid == 0)
+						do_chown (man_owner->pw_uid);
 #endif
+				} else
+					cleanup(NULL);
 				pop_cleanup();
 			}
 			free(catpath);
@@ -476,7 +479,10 @@ int main(int argc, char *argv[])
 			amount += mandb (*mp, *mp);
 			if (check_for_strays)
 				strays += straycats(*mp);
-			finish_up();
+			if (!opt_test)
+				finish_up();
+			else
+				cleanup(NULL);
 			regain_effective_privs();
 			pop_cleanup();
 		}

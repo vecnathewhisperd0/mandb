@@ -150,6 +150,12 @@ char **split_data(char *content, char *start[])
 
 	/* initialise pointer to Nth field (whatis) */
 	start[FIELDS - 1] = content;
+	if (!start[FIELDS - 1]) {
+		error (0, 0,
+		       _( "only %d fields in content"),
+		       FIELDS - 1);
+		gripe_corrupt_data();
+	}
 	
 	return start;
 }
