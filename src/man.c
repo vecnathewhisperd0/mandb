@@ -2556,6 +2556,11 @@ static int compare_candidates (const struct mandata *left,
 			return cmp;
 	}
 
+	/* ULT_MAN comes first, etc. */
+	cmp = compare_ids (left->id, right->id);
+	if (cmp)
+		return cmp;
+
 	/* Default to left sorting before right, so that insertion order is
 	 * stable.
 	 */
@@ -2571,9 +2576,9 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	int insert_found = 0;
 
 	if (debug)
-		fprintf (stderr, "candidate: %d %d %s %s %s %s %s\n",
+		fprintf (stderr, "candidate: %d %d %s %s %c %s %s %s\n",
 				 from_db, cat, req_name, path,
-				 source->name ? source->name : "-",
+				 source->id, source->name ? source->name : "-",
 				 source->sec, source->ext);
 
 	if (!source->name)
@@ -2667,9 +2672,22 @@ static int try_section (const char *path, const char *sec, const char *name,
 		struct mandata *info =
 			(struct mandata *) malloc (sizeof (struct mandata));
 		char *info_buffer = filename_info (*np, info, name);
+		char *ult;
 		if (!info_buffer)
 			continue;
 		info->addr = info_buffer;
+
+		/* What kind of page is this? Since it's a real file, it
+		 * must be either ULT_MAN or SO_MAN. ult_src() can tell us
+		 * which.
+		 */
+		ult = ult_src (*np, path, NULL,
+			       SO_LINK | SOFT_LINK | HARD_LINK);
+		if (STREQ (ult, *np))
+			info->id = ULT_MAN;
+		else
+			info->id = SO_MAN;
+
 		found += add_candidate (cand_head, CANDIDATE_FILESYSTEM,
 					cat, name, path, info);
 		/* Don't free info and info_buffer here. */
@@ -3114,25 +3132,17 @@ static int man (const char *name)
 	if (section) {
 		char **mp;
 
-		for (mp = manpathlist; *mp; mp++) {
+		for (mp = manpathlist; *mp; mp++)
 			found += locate_page (*mp, section, name, &candidates);
-			if (found && !findall)
-				/* i.e. only do this section... */
-				break;
-		}
 	} else {
 		char **sp;
 
 		for (sp = section_list; *sp; sp++) {
 			char **mp;
 
-			for (mp = manpathlist; *mp; mp++) {
+			for (mp = manpathlist; *mp; mp++)
 				found += locate_page (*mp, *sp, name,
 						      &candidates);
-				if (found && !findall)
-					/* i.e. only do this section... */
-					break;
-			}
 		}
 	}
 

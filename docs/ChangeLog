@@ -1,3 +1,14 @@
+Mon May 20 02:16:43 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (compare_candidates): Compare id fields as a last
+	  resort, so that, for example, real pages sort ahead of whatis-only
+	  names.
+	  (try_section): Set the id field based on the output of ult_src().
+
+	* src/man.c (man): When locating pages, don't stop when one is found
+	  in a particular directory and -a wasn't given. That's now the job
+	  of the display code.
+
 Mon May 20 01:16:02 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_lookup.c (free_mandata_elements): New function, to be
