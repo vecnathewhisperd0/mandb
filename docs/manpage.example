@@ -8,6 +8,22 @@
 foo, bar \- programs to do something
 .SH SYNOPSIS
 A short usage summary.
+.PP
+.B foo
+{
+.BR this | that
+}
+[
+.B -flags
+]
+[
+.B \-o
+.I option
+]
+.I argument
+[
+.I more...
+]
 .SH DESCRIPTION
 .\" Putting a newline after each sentence can generate better output.
 Long drawn-out discussion of the program.
@@ -15,8 +31,44 @@ It's a good idea to break this up into subsections using the .SS macros,
 like these:
 .SS "A Sample Subsection"
 .SS "Yet Another Sample Subsection"
+References to the
+.BR foo (SECTION)
+(or other) manual page should use the .BR macro as here.
+.PP
+Use the .PP macro to start a new paragraph within a section.
 .SH OPTIONS
 Some people make this separate from the description.
+The following style is typically used to document options:
+.TP
+.BR this | that
+The user MUST specify either
+.B this
+or
+.B that
+to run the program.
+The { and } braces mean one of the enclosed is required.
+The bar (|) separates exclusive options (i.e. you cannot have both at once).
+.TP
+.B \-o
+Pass the user-supplied
+.I option
+to
+.B foo
+to change its behaviour.
+The fact that
+.I option
+is underlined or in italics means that the user replaces it with a valid
+value for this option.
+The [ and ] brackets mean it isn't required.
+.TP
+.I argument
+The last
+.I argument
+is required, because it is not in brackets.
+.TP
+.I more
+means that the user can optionally specify additional arguments at the end.
+The ellipses (...) indicate one or more of this parameter is allowed.
 .SH "RETURN VALUE"
 What the program or function returns if successful.
 .SH ERRORS
@@ -32,15 +84,8 @@ Typical usage is like this:
 .nf
 .\" set tabstop to longest possible filename, plus a wee bit
 .ta \w'/usr/lib/perl/getopts.pl   'u
-\fI/usr/man\fR  default man tree
-\fI/usr/man/man*/*.*\fR unformatted (nroff source) man pages
-.SH "SEE ALSO"
-.\" Always quote multiple words for .SH
-Other man pages to check out, like
-.IR man (1),
-.IR man (7),
-.IR mandb (8),
-.IR catman (8).
+\fI/usr/man\fR	default man tree
+\fI/usr/man/man*/*.*\fR	unformatted (nroff source) man pages
 .SH NOTES
 Miscellaneous commentary.
 .SH CAVEATS
@@ -56,3 +101,10 @@ Bugs you don't plan to fix. :-)
 Who wrote it (or AUTHORS if multiple).
 .SH HISTORY
 Programs derived from other sources sometimes have this.
+.SH "SEE ALSO"
+.\" Always quote multiple words for .SH
+Other man pages to check out, like
+.IR man (1),
+.IR man (7),
+.IR mandb (8),
+.IR catman (8).

@@ -6,6 +6,8 @@ foo, bar - programs to do something
 
 A short usage summary.
 
+B<foo> { B<this>|B<that> } [ B<-flags> ] [ B<-o> I<option> ] I<argument> [ I<more...> ]
+
 =head1 DESCRIPTION
 
 Long drawn-out discussion of the program. It's a good idea to break this
@@ -15,13 +17,41 @@ up into subsections using "=head2" directives, like these:
 
 =head2 Yet Another Sample Subsection
 
+References to the foo(1) (or other) manual page should be written normally
+as here; B<pod2man> will usually guess the correct formatting. Use S<L><>
+(e.g. L<foo(SECTION)>) if you need to force this.
+
+Paragraphs are separated by blank lines.
+
 =head1 OPTIONS
 
 Some people make this separate from the description.
 
-=over 4
+The following style is typically used to document options:
 
-=item B<-e>, B<--example-option>=I<value>
+=over 8
+
+=item B<this>|B<that>
+
+The user MUST specify either B<this> or B<that> to run the program. The {
+and } braces mean one of the enclosed is required. The bar (|) separates
+exclusive options (i.e. you cannot have both at once).
+
+=item B<-o>
+
+Pass the user-supplied I<option> to B<foo> to change its behaviour. The
+fact that I<option> is underlined or in italics means that the user replaces
+it with a valid value for this option. The [ and ] brackets mean it isn't
+required.
+
+=item I<argument>
+
+The last I<argument> is required, because it is not in brackets.
+
+=item I<more>
+
+means that the user can optionally specify additional arguments at the end.
+The ellipses (...) indicate one or more of this parameter is allowed.
 
 =back
 
@@ -45,7 +75,7 @@ Environment variables this program might care about.
 
 All files used by the program. Typical usage is like this:
 
-=over 4
+=over 8
 
 =item F</usr/man>
 
@@ -56,12 +86,6 @@ default man tree
 unformatted (nroff source) man pages
 
 =back
-
-=head1 SEE ALSO
-
-Other man pages to check out, like man(1), man(7), mandb(8), catman(8).
-
-For this example, see pod2man(1) for more details.
 
 =head1 NOTES
 
@@ -94,3 +118,9 @@ from a template provided by Tom Christiansen <S<tchrist@jhereg.perl.com>>.
 =head1 HISTORY
 
 Programs derived from other sources sometimes have this.
+
+=head1 SEE ALSO
+
+Other man pages to check out, like man(1), man(7), mandb(8), catman(8).
+
+For this example, see pod2man(1) for more details.

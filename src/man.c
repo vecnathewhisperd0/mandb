@@ -834,6 +834,7 @@ int local_man_loop (char *argv)
 	int exit_status = OK;
 	int local_mf = local_man_file;
 
+	drop_effective_privs ();
 	local_man_file = 1;
 	if (strcmp (argv, "-") == 0)
 		display (NULL, "", NULL, "(stdin)");
@@ -847,6 +848,7 @@ int local_man_loop (char *argv)
 				fprintf (stderr, "chdir %s\n", cwd);
 			if (chdir (cwd)) {
 				error (0, errno, _("can't chdir to %s"), cwd);
+				regain_effective_privs ();
 				return 0;
 			}
 		}
@@ -867,6 +869,7 @@ int local_man_loop (char *argv)
 #endif /* COMP_SRC */
 	}
 	local_man_file = local_mf;
+	regain_effective_privs ();
 	return exit_status;
 }
 
