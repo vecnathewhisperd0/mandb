@@ -127,14 +127,14 @@ static void usage (int status)
 {
 	printf (_("usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"), program_name);
 	printf (_(
-		"-d --debug		produce debugging info.\n"
-		"-r --regex 		interpret each keyword as a regex (default).\n"
-		"-e --exact 		search each keyword for exact match.\n"
-		"-w --wildcard		the keyword(s) contain wildcards.\n"
-		"-m --systems system	include alternate systems man pages.\n"
-		"-M --manpath path	set search path for manual pages to `path'.\n"
-		"-V --version		show version.\n"
-		"-h --help		show this usage message.\n"));
+		"-d, --debug                produce debugging info.\n"
+		"-r, --regex                interpret each keyword as a regex (default).\n"
+		"-e, --exact                search each keyword for exact match.\n"
+		"-w, --wildcard             the keyword(s) contain wildcards.\n"
+		"-m, --systems system       include alternate systems' man pages.\n"
+		"-M, --manpath path         set search path for manual pages to `path'.\n"
+		"-V, --version              show version.\n"
+		"-h, --help                 show this usage message.\n"));
 
 	exit (status);
 }
@@ -143,13 +143,13 @@ static void usage (int status)
 {
 	printf (_("usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"), program_name);
 	printf(_(
-	       "-d --debug		produce debugging info.\n"
-	       "-r --regex 		interpret each keyword as a regex.\n"
-	       "-w --wildcard		the keyword(s) contain wildcards.\n"
-	       "-m --systems system	include alternate systems man pages.\n"
-	       "-M --manpath path	set search path for manual pages to `path'.\n"
-	       "-V --version		show version.\n"
-	       "-h --help		show this usage message.\n"));
+		"-d, --debug                produce debugging info.\n"
+		"-r, --regex                interpret each keyword as a regex.\n"
+		"-w, --wildcard             the keyword(s) contain wildcards.\n"
+		"-m, --systems system       include alternate systems' man pages.\n"
+		"-M, --manpath path         set search path for manual pages to `path'.\n"
+		"-V, --version              show version.\n"
+		"-h, --help                 show this usage message.\n"));
 
 	exit (status);
 }

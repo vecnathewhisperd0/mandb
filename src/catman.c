@@ -119,11 +119,11 @@ static void usage (int status)
 	printf (_("usage: %s [-dhV] [-M manpath] [section] ...\n"),
 		program_name);
 	printf (_(
-		"-d --debug                  produce debugging info.\n"
-		"-M --manpath path           set search path for manual pages "
+		"-d, --debug                 produce debugging info.\n"
+		"-M, --manpath path          set search path for manual pages "
 					    "to `path'.\n"
-		"-V --version                show version.\n"
-		"-h --help                   show this usage message.\n"));
+		"-V, --version               show version.\n"
+		"-h, --help                  show this usage message.\n"));
 
 	exit (status);
 }

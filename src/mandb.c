@@ -152,14 +152,14 @@ static void usage (int status)
 {
 	printf (_("usage: %s [-dqspuc|-h|-V] [manpath]\n"), program_name);
 	printf (_(
-		"-d --debug                  produce debugging info.\n"
-		"-q --quiet                  work quietly, except for 'bogus' warning.\n"
-		"-s --no-straycats           don't look for or add stray cats to the dbs.\n"
-		"-p --no-purge               don't purge obsolete entries from the dbs.\n"
-		"-u --user-db                produce user databases only.\n"
-		"-c --create                 create dbs from scratch, rather than updating.\n"
-		"-V --version                show version.\n"
-		"-h --help                   show this usage message.\n")
+		"-d, --debug                 produce debugging info.\n"
+		"-q, --quiet                 work quietly, except for 'bogus' warning.\n"
+		"-s, --no-straycats          don't look for or add stray cats to the dbs.\n"
+		"-p, --no-purge              don't purge obsolete entries from the dbs.\n"
+		"-u, --user-db               produce user databases only.\n"
+		"-c, --create                create dbs from scratch, rather than updating.\n"
+		"-V, --version               show version.\n"
+		"-h, --help                  show this usage message.\n")
 	);
 
 	exit (status);

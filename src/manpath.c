@@ -84,13 +84,13 @@ static void usage (int status)
 		"usage: %s [[-gcdq] [-m system]] | [-V] | [-h]\n"),
 		program_name);
 	printf (_(
-		"-c --catpath                show relative catpaths.\n"
-		"-g --global                 show the entire global manpath.\n"
-	        "-d --debug                  produce debugging info.\n"
-	        "-q --quiet                  produce fewer warnings.\n"
-	        "-m --systems system         express which `systems' to use.\n"
-	        "-V --version                show version.\n"
-	        "-h --help                   show this usage message.\n"));
+		"-c, --catpath               show relative catpaths.\n"
+		"-g, --global                show the entire global manpath.\n"
+	        "-d, --debug                 produce debugging info.\n"
+	        "-q, --quiet                 produce fewer warnings.\n"
+	        "-m, --systems system        express which `systems' to use.\n"
+	        "-V, --version               show version.\n"
+	        "-h, --help                  show this usage message.\n"));
 
 	exit (status);
 }

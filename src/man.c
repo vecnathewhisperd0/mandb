@@ -461,10 +461,10 @@ static void usage (int status)
 		"-T, --troff-device device   use %s with selected device.\n"),
 		formatter, formatter);
 # ifdef TROFF_IS_GROFF
-	puts (_("-H, --html                  use lynx or argument to display html output.\n"));
-	puts (_("-Z, --ditroff               use groff and force it to produce ditroff."));
-	puts (_("-X, --gxditview             use groff and display through gditview (X11):"));
-	puts (_("                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."));
+	puts (_("-H, --html                  use lynx or argument to display html output.\n"
+		"-Z, --ditroff               use groff and force it to produce ditroff.\n"
+		"-X, --gxditview             use groff and display through gditview (X11):\n"
+		"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."));
 # endif /* TROFF_IS_GROFF */
 #endif /* HAS_TROFF */
 
@@ -475,10 +475,9 @@ static void usage (int status)
 		"-S, --sections list         use colon separated section list.\n"
 		"-m, --systems system        search for man pages from other unix system(s).\n"
 		"-L, --locale locale         define the locale for this particular man search.\n"
-		"-p, --preprocessor string   string indicates which preprocessors to run."));
-	puts ("                             e - [n]eqn   p - pic    t - tbl\n"
-              "                             g - grap     r - refer  v - vgrind");
-        puts (_(
+		"-p, --preprocessor string   string indicates which preprocessors to run.\n"
+		"                             e - [n]eqn   p - pic    t - tbl\n"
+		"                             g - grap     r - refer  v - vgrind\n"
 		"-V, --version               show version.\n"
 		"-h, --help                  show this usage message."));
 
