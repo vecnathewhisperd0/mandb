@@ -727,19 +727,24 @@ static void add_to_dirlist (FILE *config, int user)
 		while (isspace (*bp))
 			bp++;
 
+		/* TODO: would like a (limited) replacement for sscanf()
+		 * here that allocates its own memory. At that point check
+		 * everything that sprintf()s manpath et al!
+		 */
 		if (*bp == '#' || *bp == '\0')
 			continue;
 		else if (strncmp (bp, "NO", 2) == 0)
 			continue;	/* match any word starting with NO */
 		else if (sscanf (bp, "MANBIN %*s") == 1)
 			continue;
-		else if (sscanf (bp, "MANDATORY_MANPATH %s", key) == 1)
+		else if (sscanf (bp, "MANDATORY_MANPATH %49s", key) == 1)
 			add_mandatory (key);	
-		else if (sscanf (bp, "MANPATH_MAP %s %s", key, cont) == 2) 
+		else if (sscanf (bp, "MANPATH_MAP %49s %511s", key, cont) == 2) 
 			add_manpath_map (key, cont);
-		else if ((c = sscanf (bp, "MANDB_MAP %s %s", key, cont)) > 0) 
+		else if ((c = sscanf (bp, "MANDB_MAP %49s %511s",
+				      key, cont)) > 0) 
 			add_mandb_map (key, cont, c, user);
-		else if ((c = sscanf (bp, "DEFINE %50s %511[^\n]",
+		else if ((c = sscanf (bp, "DEFINE %49s %511[^\n]",
 				      key, cont)) > 0)
 			add_def (key, cont, c);
 		else if (sscanf (bp, "SECTION %511[^\n]", cont) == 1)

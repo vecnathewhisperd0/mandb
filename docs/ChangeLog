@@ -1,3 +1,13 @@
+Wed Jul 30 20:48:57 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Fix vulnerability 1 posted by Vade 79 <v9@fakehalo.deadpig.org> on
+	BugTraq, Message-ID:
+	<20030729210308.15518.qmail@www.securityfocus.com>.
+
+	* src/manp.c (add_to_dirlist): Limit all sscanf() calls to the
+	  appropriate buffer size. Leave a TODO to say that a replacement
+	  that allocates its own memory would be welcome.
+
 Wed Jul 30 20:38:40 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	Fix vulnerabilities 2 and 3 posted by Vade 79
