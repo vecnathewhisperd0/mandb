@@ -112,6 +112,7 @@ char *database;
 extern char *extension;		/* for globbing.c */
 extern int force_rescan;	/* for check_mandirs.c */
 static char *single_filename = NULL;
+extern char *user_config_file;	/* for manp.c */
 
 /* default options */
 static const struct option long_options[] =
@@ -125,11 +126,12 @@ static const struct option long_options[] =
     {"user-db",		no_argument,		0, 'u'},
     {"no-straycats",    no_argument,		0, 's'},
     {"test",		no_argument,		0, 't'},
+    {"config-file",	required_argument,	0, 'C'},
     {"version",		no_argument,		0, 'V'},
     {0, 0, 0, 0}
 };
 
-static const char args[] = "cdf:hpqstuV";
+static const char args[] = "cdf:hpqstuC:V";
 static int check_for_strays = 1;
 static int purge = 1;
 static int user;
@@ -165,7 +167,7 @@ extern int pages;
 
 static void usage (int status)
 {
-	printf (_("usage: %s [-dqspuct|-h|-V] [-f filename] [manpath]\n"),
+	printf (_("usage: %s [-dqspuct|-h|-V] [-C file] [-f filename] [manpath]\n"),
 		program_name);
 	printf (_(
 		"-d, --debug                 produce debugging info.\n"
@@ -176,6 +178,7 @@ static void usage (int status)
 		"-c, --create                create dbs from scratch, rather than updating.\n"
 		"-t, --test                  check manual pages for correctness.\n"
 		"-f, --filename              update just the entry for this filename.\n"
+		"-C, --config-file           use this user configuration file.\n"
 		"-V, --version               show version.\n"
 		"-h, --help                  show this usage message.\n")
 	);
@@ -449,7 +452,6 @@ int main (int argc, char *argv[])
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, &option_index)) != EOF) {
 		switch (c) {
-
 			case 'd':
 				debug = 1;
 				break;
@@ -477,6 +479,9 @@ int main (int argc, char *argv[])
 				create = 0;
 				purge = 0;
 				check_for_strays = 0;
+				break;
+			case 'C':
+				user_config_file = optarg;
 				break;
 			case 'V':
 				ver ();

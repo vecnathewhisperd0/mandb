@@ -84,6 +84,7 @@ extern char *strrchr();
 #include "manp.h"
 
 extern char *manpathlist[];
+extern char *user_config_file;
 extern char *optarg;
 extern int optind, opterr, optopt;
 
@@ -116,7 +117,7 @@ static int status = OK;
 #  error #define WHATIS or APROPOS, so I know who I am
 #endif
 
-static const char args[] = "dvrewhVm:M:fkL:";
+static const char args[] = "dvrewhVm:M:fkL:C:";
 
 static const struct option long_options[] =
 {
@@ -132,13 +133,14 @@ static const struct option long_options[] =
 	{"whatis",	no_argument,		0, 'f'},
 	{"apropos",	no_argument,		0, 'k'},
 	{"locale",	required_argument,	0, 'L'},
+	{"config-file",	required_argument,	0, 'C'},
 	{0, 0, 0, 0}
 };
 
 #ifdef APROPOS
 static void usage (int status)
 {
-	printf (_("usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"), program_name);
+	printf (_("usage: %s [-dhV] [-r|-w|-e] [-m systems] [-M manpath] [-C file] keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
@@ -147,6 +149,7 @@ static void usage (int status)
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
+		"-C, --config-file file     use this user configuration file.\n"
 		"-V, --version              show version.\n"
 		"-h, --help                 show this usage message.\n"));
 
@@ -155,7 +158,7 @@ static void usage (int status)
 #else	
 static void usage (int status)
 {
-	printf (_("usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"), program_name);
+	printf (_("usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"), program_name);
 	printf(_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
@@ -163,6 +166,7 @@ static void usage (int status)
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
+		"-C, --config-file file     use this user configuration file.\n"
 		"-V, --version              show version.\n"
 		"-h, --help                 show this usage message.\n"));
 
@@ -651,6 +655,9 @@ int main (int argc, char *argv[])
 				break;
 			case 'f': /* fall through */
 			case 'k': /* ignore, may be passed by man */
+				break;
+			case 'C':
+				user_config_file = optarg;
 				break;
 			case 'V':
 				ver ();

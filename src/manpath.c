@@ -72,30 +72,34 @@ int debug = 0;
 char *program_name;
 int quiet = 0;
 
+extern char *user_config_file;
+
 static const struct option long_options[] =
 {
-    {"catpath", no_argument, 		0, 'c'},
-    {"global",  no_argument,		0, 'g'},
-    {"debug",   no_argument, 		0, 'd'},
-    {"help",    no_argument, 		0, 'h'},
-    {"quiet",   no_argument, 		0, 'q'},
-    {"version", no_argument, 		0, 'V'},
-    {"systems",  required_argument, 	0, 'm'},
+    {"catpath",	    no_argument, 	0, 'c'},
+    {"global",	    no_argument,	0, 'g'},
+    {"debug",	    no_argument, 	0, 'd'},
+    {"help",	    no_argument, 	0, 'h'},
+    {"quiet",	    no_argument, 	0, 'q'},
+    {"version",	    no_argument, 	0, 'V'},
+    {"config-file", required_argument,	0, 'C'},
+    {"systems",	    required_argument, 	0, 'm'},
     {0, 0, 0, 0}
 };
 
-static const char args[] = "cgdhqVm:";
+static const char args[] = "cgdhqVC:m:";
 
 static void usage (int status)
 {
 	printf (_( 
-		"usage: %s [[-gcdq] [-m system]] | [-V] | [-h]\n"),
+		"usage: %s [[-gcdq] [-C file] [-m system]] | [-V] | [-h]\n"),
 		program_name);
 	printf (_(
 		"-c, --catpath               show relative catpaths.\n"
 		"-g, --global                show the entire global manpath.\n"
 	        "-d, --debug                 produce debugging info.\n"
 	        "-q, --quiet                 produce fewer warnings.\n"
+		"-C, --config-file file      use this user configuration file.\n"
 	        "-m, --systems system        express which `systems' to use.\n"
 	        "-V, --version               show version.\n"
 	        "-h, --help                  show this usage message.\n"));
@@ -141,6 +145,9 @@ int main (int argc, char *argv[])
 		    	case 'q':
 			    	quiet = 1;
 			    	break;
+			case 'C':
+				user_config_file = optarg;
+				break;
 			case 'm':
 				alt_system = optarg;
 				break;

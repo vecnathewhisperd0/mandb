@@ -16,10 +16,14 @@
 .SH SYNOPSIS
 .B %mandb%  
 .RB [\| \-dqsucp \||\| \-h \||\| \-V \|]
+.RB [\| \-C
+.IR file \|]
 .RI [\| manpath \|]
 .br
 .B %mandb%
 .RB [\| \-dqsu \|]
+.RB [\| \-C
+.IR file \|]
 .B \-f
 .IR filename \ .\|.\|.
 .SH DESCRIPTION
@@ -119,6 +123,10 @@ and the absence of
 .B \-c
 and
 .BR \-s .
+.TP
+.BI \-C\  file ,\ \-\-config\-file= file
+Use this user configuration file rather than the default of
+.IR ~/.manpath .
 .TP
 .B \-h, \-\-help
 Show the usage message, then exit.

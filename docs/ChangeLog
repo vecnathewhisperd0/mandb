@@ -1,3 +1,23 @@
+Sat Feb 22 17:41:07 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (read_config_file): If user_config_file is non-NULL,
+	  use it instead of ~/.manpath. Programs can now set the user
+	  configuration file to be used.
+
+	* src/catman.c, src/mandb.c, src/manpath.c, src/whatis.c
+	  (long_options): Add -C/--config-file option.
+	  (usage): Document it.
+	  (main): Handle it.
+	* src/man.c (long_options): Add -C/--config-file option.
+	  (usage): Document it, along with adding -i and -I to the synopsis.
+	  (man_getopt): Handle it.
+	* man/man1/apropos.man1, man/man1/man.man1, man/man1/manpath.man1,
+	  man/man1/whatis.man1, man/man8/catman.man8, man/man8/mandb.man8
+	  (SYNOPSIS): Add -C.
+	  (OPTIONS): Describe -C/--config-file.
+
+	* docs/NEWS: Document this addition.
+
 Fri Feb 21 18:32:21 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/Makefile.in (man): lexgrog.o is no longer needed. Removing it

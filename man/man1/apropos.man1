@@ -19,8 +19,10 @@
 \|]
 .RB [\| \-m
 .IR system \|[\|,.\|.\|.\|]\|]
-.RB [ \-M
+.RB [\| \-M
 .IR path \|]
+.RB [\| \-C
+.IR file \|]
 .I keyword
 \&.\|.\|.
 .SH DESCRIPTION
@@ -121,6 +123,10 @@ determine an appropriate manpath based on your
 environment variable.
 This option overrides the contents of
 .RB $ MANPATH .
+.TP
+.BI \-C\  file ,\ \-\-config\-file= file
+Use this user configuration file rather than the default of
+.IR ~/.manpath .
 .TP
 .B \-h, \-\-help
 Print a help message and exit.

@@ -119,6 +119,8 @@ static struct list *namestore, *tailstore;
 char *tmplist[MAXDIRS];
 char *manpathlist[MAXDIRS];
 
+char *user_config_file = NULL;
+
 static void mkcatdirs (const char *mandir, const char *catdir);
 static __inline__ char *get_manpath (char *path);
 static __inline__ char *has_mandir (const char *p);
@@ -758,7 +760,11 @@ void read_config_file(void)
 
 	home = xstrdup (getenv ("HOME"));
 	if (home) {
-		char *dotmanpath = strappend (home, "/.manpath", NULL);
+		char *dotmanpath;
+		if (!user_config_file)
+			dotmanpath = strappend (home, "/.manpath", NULL);
+		else
+			dotmanpath = xstrdup (user_config_file);
 		config = fopen (dotmanpath, "r");
 		if (config != NULL) {
 			if (debug)

@@ -27,6 +27,8 @@
 .IR locale \|]
 .RB [\| \-p
 .IR string \|]
+.RB [\| \-C
+.IR file \|]
 .RB [\| \-M
 .IR path \|]
 .RB [\| \-P
@@ -473,6 +475,10 @@ Its use is to reset those options that may have been set in
 Any options that follow
 .B \-D
 will have their usual effect.
+.TP
+.BI \-C\  file ,\ \-\-config\-file= file
+Use this user configuration file rather than the default of
+.IR ~/.manpath .
 .TP
 .BI \-M\  path ,\ \-\-manpath= path
 Specify an alternate manpath to use.

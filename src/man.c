@@ -331,6 +331,7 @@ char *program_name;
 char *database;
 MYDBM_FILE dbf; 
 extern char *extension; /* for globbing.c */
+extern char *user_config_file;	/* defined in manp.c */
 
 /* locals */
 static char *alt_system_name;
@@ -398,6 +399,7 @@ static const struct option long_options[] =
     {"encoding", required_argument,	0, 'E'},
     {"ignore-case", no_argument,	0, 'i'},
     {"match-case", no_argument,		0, 'I'},
+    {"config-file", required_argument,	0, 'C'},
 
 #ifdef HAS_TROFF
     {"troff", no_argument, 		0, 't'},
@@ -410,7 +412,7 @@ static const struct option long_options[] =
     {0, 0, 0, 0}
 };
 
-static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::wWe:L:Zcr:X::E:iI";
+static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::wWe:L:Zcr:X::E:iIC:";
 
 # ifdef TROFF_IS_GROFF
 static int ditroff;
@@ -424,7 +426,7 @@ static char *html_pager;
     {0, 0, 0, 0}
 };
 
-static const char args[] = "7DlM:P:S:adfhkVum:p:wWe:L:cr:E:iI";
+static const char args[] = "7DlM:P:S:adfhkVum:p:wWe:L:cr:E:iIC:";
 
 #endif /* HAS_TROFF */
 
@@ -441,13 +443,15 @@ static void usage (int status)
 	
 #ifdef HAS_TROFF
 	printf (_(
-		"usage: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-Slist]\n"
-		"           [-msystem] [-pstring] [-Llocale] [-eextension] [section] page ...\n"),
+		"usage: %s [-c|-f|-k|-w|-tZT device] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
+		"           [-Cfile] [-Slist] [-msystem] [-pstring] [-Llocale] [-eextension]\n"
+		"           [section] page ...\n"),
 		program_name);
 #else
 	printf (_(
-		"usage: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-msystem]\n"
-		"           [-pstring] [-Llocale] [-eextension] [section] page ...\n"),
+		"usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
+		"           [-Cfile] [-Slist] [-msystem] [-pstring] [-Llocale] [-eextension]\n"
+		"           [section] page ...\n"),
 		program_name);
 #endif
 
@@ -483,6 +487,7 @@ static void usage (int status)
 
 	puts (_(
 		"-D, --default               reset all options to their default values.\n"
+		"-C, --config-file file      use this user configuration file.\n"
 		"-M, --manpath path          set search path for manual pages to `path'.\n"
 		"-P, --pager pager           use program `pager' to display output.\n"
 		"-S, --sections list         use colon separated section list.\n"
@@ -1322,6 +1327,9 @@ static void man_getopt (int argc, char *argv[])
 				break;
 			case 'r':
 				prompt_string = optarg;
+				break;
+			case 'C':
+				user_config_file = optarg;
 				break;
 			case 'D':
 		    		/* discard all preset options */

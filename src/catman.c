@@ -109,14 +109,15 @@ char *database;
 
 static const struct option long_options[] =
 {
-    {"debug",		no_argument, 	0, 'd'},
-    {"manpath",      required_argument, 0, 'M'},
-    {"help",		no_argument,	0, 'h'},
-    {"version",		no_argument, 	0, 'V'},
+    {"debug",		no_argument,	    0, 'd'},
+    {"manpath",		required_argument,  0, 'M'},
+    {"config-file",	required_argument,  0, 'C'},
+    {"help",		no_argument,	    0, 'h'},
+    {"version",		no_argument,	    0, 'V'},
     {0, 0, 0, 0}
 };
 
-static const char args[] = "dM:hV";
+static const char args[] = "dM:C:hV";
 
 #ifdef HAVE_SETLOCALE
 static char *locale;
@@ -125,15 +126,17 @@ static char *locale;
 extern char *optarg;
 extern int optind, opterr, optopt;
 extern char *manpathlist[];
+extern char *user_config_file;
 
 static void usage (int status)
 {
-	printf (_("usage: %s [-dhV] [-M manpath] [section] ...\n"),
+	printf (_("usage: %s [-dhV] [-C file] [-M manpath] [section] ...\n"),
 		program_name);
 	printf (_(
 		"-d, --debug                 produce debugging info.\n"
 		"-M, --manpath path          set search path for manual pages "
 					    "to `path'.\n"
+		"-C, --config-file file      use this user configuration file.\n"
 		"-V, --version               show version.\n"
 		"-h, --help                  show this usage message.\n"));
 
@@ -407,6 +410,9 @@ int main (int argc, char *argv[])
 				break;
 			case 'M':
 				manp = optarg;
+				break;
+			case 'C':
+				user_config_file = optarg;
 				break;
 			case 'V':
 				ver ();
