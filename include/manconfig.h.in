@@ -237,25 +237,10 @@
 #define DATE	"@date@"
 
 #ifdef inline
-/* autoconf treats inline differently between 2.1 and 2.2+ */
-#  define AC_VERSION @man_ac_version@
-
-#  if (AC_VERSION >= 1116000) && (AC_VERSION < 2002000)
-     /* autoconf #defines inline to be __inline if the compiler doesn't 
-        like it. */
-#    undef inline
-#    define __inline__
-#    define __inline
-
-#  elif (AC_VERSION >= 2002000)
-     /* autoconf #defines inline to be either "__inline", "__inline__" 
-        or "" if the compiler doesn't like inline */
-#    define __inline__	inline
-#    define __inline	inline
-
-#  else
-warning unknown autoconf version, __inline__ may cause problems.
-#  endif /* AC_VERSION */
+/* autoconf #defines inline to be either "__inline", "__inline__" 
+   or "" if the compiler doesn't like inline */
+#  define __inline__	inline
+#  define __inline	inline
 #endif /* inline */
 
 /* my gcc specs file is hacked to define __profile__ if I compile with

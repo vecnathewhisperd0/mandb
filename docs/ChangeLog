@@ -1,3 +1,19 @@
+Wed May 23 15:51:06 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in: Updates for autoconf 2.50.
+	  (AC_PREREQ): Require version 2.1.2.
+	  (AC_INIT): Avoid deprecated use with one argument.
+	  (man_ac_version): Don't work out the autoconf version any more;
+	  inline syntax is all that needed it, and any autoconf since 2.1.2
+	  will do.
+	  (AC_STDC_HEADERS): Now AC_HEADER_STDC.
+	  (AC_LINK_FILES): No longer needed with newer gettext.
+	  (AC_OUTPUT): Avoid deprecated use with arguments.
+	  Fix instances of underquoting throughout, as the new autoconf is
+	  less tolerant of this.
+	* include/manconfig.h.in: Remove compatibility code for pre-1995
+	  autoconf versions.
+
 Thu May 17 19:11:37 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man_db.conf.in: Improve documentation of MANDB_MAP.
