@@ -861,7 +861,7 @@ static int local_man_loop (const char *argv)
 
 int main (int argc, char *argv[])
 {
-	int argc_env, status = 0, exit_status = OK;
+	int argc_env, exit_status = OK;
 	char **argv_env;
 	const char *tmp;
 	char *multiple_locale = NULL;
@@ -1073,6 +1073,8 @@ int main (int argc, char *argv[])
 #endif /* MAN_DB_UPDATES */
 
 	while (optind < argc) {
+		int status = OK;
+		int found = 0;
 		static int maybe_section = 0;
 		const char *nextarg = argv[optind++];
 
@@ -1102,14 +1104,14 @@ int main (int argc, char *argv[])
 
 		/* this is where we actually start looking for the man page */
 		skip = 0;
-		status = man (nextarg);
+		status = man (nextarg, &found);
 
 		/* clean out the cache of database lookups for each man page */
 		hash_free (db_hash);
 		db_hash = NULL;
 
 		if (section && maybe_section) {
-			if (!status && !catman) {
+			if (status != OK && !catman) {
 				/* Maybe the section wasn't a section after
 				 * all? e.g. 'man 9wm fvwm'.
 				 */
@@ -1119,13 +1121,13 @@ int main (int argc, char *argv[])
 						 "name\n", section);
 				tmp = section;
 				section = NULL;
-				status = man (tmp);
+				status = man (tmp, &found);
 				hash_free (db_hash);
 				db_hash = NULL;
 				/* ... but don't gripe about it if it doesn't
 				 * work!
 				 */
-				if (status) {
+				if (status == OK) {
 					/* It was a name after all, so arrange
 					 * to try the next page again with a
 					 * null section.
@@ -1138,12 +1140,9 @@ int main (int argc, char *argv[])
 			}
 		}
 
-		if (!status && !catman) {
+		if (status != OK && !catman) {
 			if (!skip) {
-				if (strchr (nextarg, '/'))
-					exit_status = local_man_loop (nextarg);
-				else
-					exit_status = NOT_FOUND;
+				exit_status = status;
 				if (exit_status == NOT_FOUND) {
 					if (!section && maybe_section &&
 					    isdigit (nextarg[0]))
@@ -1154,8 +1153,8 @@ int main (int argc, char *argv[])
 			}
 		} else {
 			if (debug)
-				fprintf(stderr,
-					"\nFound %d man pages\n", status);
+				fprintf (stderr,
+					 "\nFound %d man pages\n", found);
 			if (catman) {
 				printf ("%s", nextarg);
 				if (section)
@@ -3325,18 +3324,25 @@ static int display_pages (struct candidate *candidates)
  * being used, only look for the man page source file.
  *
  */
-static int man (const char *name)
+static int man (const char *name, int *found)
 {
 	struct candidate *candidates = NULL;
-	int found = 0;
 
+	*found = 0;
 	fflush (stdout);
+
+	if (strchr (name, '/')) {
+		int status = local_man_loop (name);
+		if (status == OK)
+			*found = 1;
+		return status;
+	}
 
 	if (section) {
 		char **mp;
 
 		for (mp = manpathlist; *mp; mp++)
-			found += locate_page (*mp, section, name, &candidates);
+			*found += locate_page (*mp, section, name, &candidates);
 	} else {
 		char **sp;
 
@@ -3344,15 +3350,15 @@ static int man (const char *name)
 			char **mp;
 
 			for (mp = manpathlist; *mp; mp++)
-				found += locate_page (*mp, *sp, name,
-						      &candidates);
+				*found += locate_page (*mp, *sp, name,
+						       &candidates);
 		}
 	}
 
-	if (found)
-		found = display_pages (candidates);
+	if (*found)
+		*found = display_pages (candidates);
 
-	return found;
+	return *found ? OK : NOT_FOUND;
 }
 
 
