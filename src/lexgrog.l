@@ -215,12 +215,12 @@ vgrind_request	\.vS
 <MAN_NAME>{bol}\.nf.*			fill_mode = 0;
 <MAN_NAME>{bol}\.fi.*			fill_mode = 1;
 
-<CAT_NAME>-\n[blank_eol]*		/* strip continuations */
+<CAT_NAME>-\n{blank_eol}*		/* strip continuations */
 
  /* convert to DASH */
 <MAN_NAME>{next}{blank}*\\\((mi|hy|em){blank}*	|
-<MAN_NAME>{next}[blank_eol]+[-\\]-{blank}*	|
-<MAN_NAME>{next}[blank_eol]*[-\\]-{blank}+	|
+<MAN_NAME>{next}{blank_eol}+[-\\]-{blank}*	|
+<MAN_NAME>{next}{blank_eol}*[-\\]-{blank}+	|
 <CAT_NAME>{next}{blank}+-{1,2}[blank_eol]+	|
 <MAN_NAME>{bol}\.Nd{blank}*			add_separator_to_whatis ();
 
@@ -258,7 +258,7 @@ vgrind_request	\.vS
 	{next}\(\\\|\){blank}*		/* function() in hpux */
 }
 
- /* collapse spaces, escpaed spaces, tabs, newlines to a single space */
+ /* collapse spaces, escaped spaces, tabs, newlines to a single space */
 <CAT_NAME>{next}((\\[ ])|{blank})*	add_char_to_whatis (' ');
 
  /* a ROFF break request (.br) or a paragraph request (.LP, .PP, .P)
