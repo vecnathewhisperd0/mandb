@@ -347,6 +347,7 @@ static int update_required = 1;	/* we haven't performed update */
 
 static int ascii;		/* insert tr in the output pipe */
 static int save_cat; 		/* security breach? Can we save the cat? */
+static int different_encoding;	/* was an explicit encoding specified? */
 
 static int found_a_stray;		/* found a straycat */
 
@@ -380,6 +381,7 @@ static const struct option long_options[] =
     {"default", no_argument,		0, 'D'},
     {"ascii", no_argument,		0, '7'},
     {"catman", no_argument, 		0, 'c'},
+    {"encoding", required_argument,	0, 'E'},
 
 #ifdef HAS_TROFF
     {"troff", no_argument, 		0, 't'},
@@ -392,7 +394,7 @@ static const struct option long_options[] =
     {0, 0, 0, 0}
 };
 
-static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::we:L:Zcr:X::";
+static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::we:L:Zcr:X::E:";
 
 # ifdef TROFF_IS_GROFF
 static int ditroff;
@@ -406,7 +408,7 @@ static char *html_pager;
     {0, 0, 0, 0}
 };
 
-static const char args[] = "7DlM:P:S:adfhkVum:p:we:L:cr:";
+static const char args[] = "7DlM:P:S:adfhkVum:p:we:L:cr:E:";
 
 #endif /* HAS_TROFF */
 
@@ -444,7 +446,8 @@ static void usage (int status)
 		"-u, --update                force a cache consistency check.\n"
 		"-r, --prompt string         provide the `less' pager with a prompt\n"
 		"-c, --catman                used by catman to reformat out of date cat pages.\n"
-		"-7, --ascii                 display ASCII translation of certain latin1 chars."));
+		"-7, --ascii                 display ASCII translation of certain latin1 chars.\n"
+		"-E, --encoding encoding     use the selected nroff device and display in pager."));
 #ifdef HAS_TROFF
 	printf (_(
 		"-t, --troff                 use %s to format pages.\n"
@@ -1105,6 +1108,10 @@ static void man_getopt (int argc, char *argv[])
 			case '7':
 				ascii = 1;
 				break;
+			case 'E':
+				roff_device = optarg;
+				different_encoding = 1;
+				break;
 #ifdef HAS_TROFF
 		    	case 't':
 				troff = 1;
@@ -1150,7 +1157,7 @@ static void man_getopt (int argc, char *argv[])
 		    		/* discard all preset options */
 		    		local_man_file = findall = update = catman =
 					debug = troff = print_where =
-					ascii = 0;
+					ascii = different_encoding = 0;
 #ifdef TROFF_IS_GROFF
 				ditroff = 0;
 				gxditview = NULL;
@@ -1483,7 +1490,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		/* Load the roff_device value dependent on the language dir
 		 * in the path.
 		 */
-		if (!troff)
+		if (!troff && !roff_device)
 			determine_lang_table (lang);
 
 		/* tell grops to guess the page size */
@@ -2246,13 +2253,14 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 		   Check there first ala the FSSTND, and display if newer
 		   than man_file, if older, ignore it altogether */
 
+		if (different_encoding
 #ifdef TROFF_IS_GROFF
-		if (htmlout) {
+		    || htmlout
+#endif
+			    ) {
 			format = 1;
 			save_cat = 0;
-		} else
-#endif
-		    if (!local_man_file) {
+		} else if (!local_man_file) {
 			catpath = get_catpath
 				(dir, global_manpath ? SYSTEM_CAT : USER_CAT);
 
@@ -2578,7 +2586,7 @@ static int try_section (char *path, char *sec, char *name,
 		if (catman)
 			return 1;
 
-		if (!troff) {
+		if (!troff && !different_encoding) {
 			names = look_for_file (path, sec, name, 1);
 			cat = 1;
 		}
@@ -2606,7 +2614,7 @@ static int display_filesystem (char *name, struct candidate *candp)
 	char *title = strappend (NULL, name, "(", candp->source->ext, ")",
 				 NULL);
 	if (candp->cat) {
-		if (troff)
+		if (troff || different_encoding)
 			return 0;
 		return display (candp->path, NULL, filename, title);
 	} else {
@@ -2790,8 +2798,10 @@ static int display_database (char *orig_name, struct candidate *candp)
 		   we haven't just added the new page */
 		found_a_stray = 1;
 
-		/* If explicitly asked for troff, don't show a stray cat. */
-		if (troff) {
+		/* If explicitly asked for troff or a different encoding,
+		 * don't show a stray cat.
+		 */
+		if (troff || different_encoding) {
 			free (title);
 			return found;
 		}

@@ -416,7 +416,7 @@ with
 exists in the man tree root, it is executed instead.
 It gets passed the manual source file, the preprocessor string, and
 optionally the device specified with
-.B \-T
+.BR \-T " or " \-E
 as arguments.
 .\" ********************************************************************
 .SH OPTIONS
@@ -813,6 +813,15 @@ This option implies
 and will only work with
 .B GNU
 .BR troff .
+.TP
+.BI \-E\  device\fR,\ \fI \-\-encoding\fR=\fIdevice
+Generate output for a character encoding other than the default.
+Due to the way
+.B nroff
+is currently designed, the argument to this function must be an
+.B nroff
+device such as
+.BR ascii ", " latin1 ", or " utf8 .
 .TP
 .B \-w, \-\-where, \-\-location
 Don't actually display the manual pages, but do print the location(s) of

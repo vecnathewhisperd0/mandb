@@ -1,3 +1,14 @@
+Sun Dec 23 06:17:47 GMT 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (long_options, usage, man_getopt): Add a new
+	  -E/--encoding option. It behaves a little like -T, except that it
+	  uses nroff instead of troff and outputs to a pager.
+	  (make_roff_command): Only call determine_lang_table() if
+	  roff_device isn't already set.
+	  (display, try_section, display_filesystem, display_database):
+	  Check for different_encoding.
+	* man/man1/man.man1 (DEFAULTS, OPTIONS): Document -E.
+
 Sun Dec 23 05:23:05 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (compare_candidates): Compare sections according to
