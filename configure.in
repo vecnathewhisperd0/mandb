@@ -16,11 +16,8 @@ date_es=`LANG=es_ES date -d $datemark +'%d %B %Y'`
 date_de=`LANG=de_DE date -d $datemark +'%d %B %Y'`
 date_fr=`LANG=fr_FR date -d $datemark +'%d %B %Y'`
 dnl
-PWD=`pwd`
-changequote(, )
-VERSION=`expr $PWD : '.*-\([0-9.]*\)'`
-PACKAGE=`expr $PWD : '.*/\(.*\)-[0-9.]*'`
-changequote([, ])
+PACKAGE=man-db
+VERSION=2.3.18
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
 AC_SUBST(PACKAGE)dnl

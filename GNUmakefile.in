@@ -47,13 +47,13 @@ include include/Defines
 	check deroff
         
 ifeq ($(nls),on)
-languages = $(notdir $(wildcard $(top_srcdir)/po/*.po))
+languages = $(basename $(notdir $(wildcard $(top_srcdir)/po/*.po)))
 
 default: $(INCLUDES) $(CONF)
 	@echo " "
 	@echo "./configure has determined that your system understands native language"
 	@echo "support (nls) message catalogues.  This package is able to exploit this"
-	@echo "feature by displaying it's text messages in different languages on a per"
+	@echo "feature by displaying its text messages in different languages on a per"
 	@echo "user basis.  British English is the default (built in) language."
 	@echo " "
 	@echo "Please issue make command with NLS language options (as shown below) or"
