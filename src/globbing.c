@@ -393,7 +393,7 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 
 static void usage (int status)
 {
-	printf (_("usage: %s [-deiIhV] path sec name\n"), program_name);
+	printf (_("usage: %s [-deiIhV] path section name\n"), program_name);
 	printf (_(
 		"-d, --debug                 emit debugging messages.\n"
 		"-e, --extension             limit search to extension type `extension'.\n"
