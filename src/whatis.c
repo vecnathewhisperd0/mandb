@@ -180,8 +180,9 @@ static __inline__ int use_grep (char *page, char *manpath)
 		anchor = "";
 #endif 	
 
-		command = strappend (NULL, get_def ("grep", GREP), flags, " ",
-				     anchor, esc_page, " ", esc_file, NULL);
+		command = strappend (NULL, get_def ("grep", GREP), " ", flags,
+				     " ", anchor, esc_page, " ", esc_file,
+				     NULL);
 		status = (system (command) == 0);
 		free (command);
 		free (esc_file);
