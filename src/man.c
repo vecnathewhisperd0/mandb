@@ -3429,7 +3429,7 @@ static int display_pages (struct candidate *candidates)
  */
 static int man (const char *name, int *found)
 {
-	struct candidate *candidates = NULL;
+	struct candidate *candidates = NULL, *cand, *candnext;
 
 	*found = 0;
 	fflush (stdout);
@@ -3460,6 +3460,11 @@ static int man (const char *name, int *found)
 
 	if (*found)
 		*found = display_pages (candidates);
+
+	for (cand = candidates; cand; cand = candnext) {
+		candnext = cand->next;
+		free (cand);
+	}
 
 	return *found ? OK : NOT_FOUND;
 }
