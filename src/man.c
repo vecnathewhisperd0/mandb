@@ -2498,6 +2498,7 @@ static int compare_candidates (const struct mandata *left,
 	/* If one candidate matches the requested name exactly, sort it
 	 * first. This makes --ignore-case behave more sensibly.
 	 */
+	/* name is never NULL here, see add_candidate() */
 	if (STREQ (left->name, req_name)) {
 		if (!STREQ (right->name, req_name))
 			return -1;
@@ -2547,10 +2548,11 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	if (debug)
 		fprintf (stderr, "candidate: %d %d %s %s %s %s %s\n",
 				 from_db, cat, req_name, path,
-				 source->name, source->sec, source->ext);
+				 source->name ? source->name : "-",
+				 source->sec, source->ext);
 
-	if (STREQ (source->name, "-"))
-		source->name = req_name;
+	if (!source->name)
+		source->name = xstrdup (req_name);
 
 	/* insert will be NULL (insert at start) or a pointer to the element
 	 * after which this element should be inserted.
@@ -2655,6 +2657,7 @@ static int display_filesystem (struct candidate *candp)
 {
 	char *filename = make_filename (candp->path, NULL, candp->source,
 					candp->cat ? "cat" : "man");
+	/* source->name is never NULL thanks to add_candidate() */
 	char *title = strappend (NULL, candp->source->name,
 				 "(", candp->source->ext, ")", NULL);
 	if (candp->cat) {
@@ -2735,7 +2738,7 @@ static int display_database (struct candidate *candp)
 	   real page, use that instead. */
 	if (*in->pointer != '-')
 		name = in->pointer;
-	else if (*in->name != '-')
+	else if (in->name)
 		name = in->name;
 	else
 		name = candp->req_name;
@@ -2759,13 +2762,14 @@ static int display_database (struct candidate *candp)
 		if (dbf) {
 			dbdelete (candp->req_name, in);
 			test_manfile (file, candp->path);
-			in = dblookup_exact (candp->req_name, in->ext);
+			in = dblookup_exact (candp->req_name, in->ext,
+					     match_case);
 			MYDBM_CLOSE (dbf);
 			if (!in)
 				return 0;
 			if (*in->pointer != '-')
 				name = in->pointer;
-			else if (*in->name != '-')
+			else if (in->name)
 				name = in->name;
 			else
 				name = candp->req_name;
@@ -2947,7 +2951,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 
 			/* if section is set, only return those that match,
 			   otherwise NULL retrieves all available */
-			data = dblookup_all (name, section);
+			data = dblookup_all (name, section, match_case);
 			(void) install_db_ptr (manpath, data); 
 			MYDBM_CLOSE (dbf);
 #ifdef MAN_DB_CREATES

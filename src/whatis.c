@@ -223,7 +223,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 	 * arbitrary: it's just there to avoid an infinite loop.
 	 */
 	newpage = info->pointer;
-	info = dblookup_exact (newpage, info->ext);
+	info = dblookup_exact (newpage, info->ext, 1);
 	for (rounds = 0; rounds < 10; rounds++) {
 		struct mandata *newinfo;
 
@@ -247,7 +247,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 			return xstrdup (_("(unknown)"));
 		}
 
-		newinfo = dblookup_exact (info->pointer, info->ext);
+		newinfo = dblookup_exact (info->pointer, info->ext, 1);
 		free_mandata_struct (info);
 		info = newinfo;
 	}
@@ -267,10 +267,10 @@ static void display (struct mandata *info, char *page)
 	if (debug)
 		dbprintf (info);
 
-	if (STREQ (info->name, "-"))
-		page_name = page;
-	else
+	if (info->name)
 		page_name = info->name;
+	else
+		page_name = page;
 
 	if (STREQ (info->pointer, "-") || STREQ (info->pointer, page))
 		string = strappend (NULL, page_name, " (", info->ext, ")",
@@ -313,7 +313,7 @@ static __inline__ int whatis (char *page)
 	struct mandata *info;
 	int count = 0;
 
-	info = dblookup_all (page, NULL);
+	info = dblookup_all (page, NULL, 0);
 	while (info) {
 		struct mandata *pinfo;
 			

@@ -114,7 +114,7 @@ char *make_filename (const char *path, const char *name,
 	static char *file;
 
 	if (!name)
-		name = in->name;
+		name = in->name;    /* comes from dblookup(), so non-NULL */
 
 	file = (char *) xrealloc (file, sizeof "//." + strlen (path) + 
 				  strlen (type) + strlen (in->sec) +
@@ -279,10 +279,10 @@ char *filename_info (char *file, struct mandata *info, const char *req_name)
 		return NULL;
 	}
 
-	info->name = "-";
+	info->name = NULL;
 	if (req_name) {
 		if (!STREQ (base_name, req_name))
-			info->name = base_name;
+			info->name = xstrdup (base_name);
 	} else {
 		char *p;
 		for (p = base_name; *p; ++p) {
@@ -291,7 +291,7 @@ char *filename_info (char *file, struct mandata *info, const char *req_name)
 				 * key will differ from the name, so we'd
 				 * better remember the real name here.
 				 */
-				info->name = base_name;
+				info->name = xstrdup (base_name);
 				break;
 			}
 		}
@@ -339,7 +339,7 @@ void test_manfile (char *file, const char *path)
 
 	/* see if we already have it, before going any further, this will
 	   save both an ult_src() a find_name(), amongst other time wastes */
-	exists = dblookup_exact (base_name, info.ext);
+	exists = dblookup_exact (base_name, info.ext, 1);
 
 	/* Ensure we really have the actual page. Gzip keeps the mtime
 	   the same when it compresses, so we have to compare comp 

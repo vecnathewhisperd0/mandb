@@ -189,7 +189,8 @@ static __inline__ int check_for_stray (void)
 
 			/* see if we already have it, before going any 
 			   further */
-			exists = dblookup_exact (basename (mandir), info.ext);
+			exists = dblookup_exact (basename (mandir), info.ext,
+						 1);
 #ifndef FAVOUR_STRAYCATS
 			if (exists && exists->id != WHATIS_CAT) {
 #else /* FAVOUR_STRAYCATS */

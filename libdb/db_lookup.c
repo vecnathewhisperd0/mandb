@@ -86,6 +86,29 @@ void gripe_replace_key(const char *data)
 	gripe_corrupt_data();
 }
 
+void gripe_bad_multi_key(const char *data)
+{
+	error (0, 0,
+	       _("key %s is missing name component - is this an old db?"),
+	       data);
+}
+
+char *copy_if_set(char *str)
+{
+	if (STREQ(str, "-"))
+		return NULL;
+	else
+		return xstrdup(str);
+}
+
+const char *dash_if_unset(char *str)
+{
+	if (str)
+		return str;
+	else
+		return "-";
+}
+
 /* Just print out what would be stored in the db */
 void dbprintf(const struct mandata *info)
 {
@@ -99,28 +122,31 @@ void dbprintf(const struct mandata *info)
 		"pointer:   %s\n"
 		"filter:    %s\n"
 		"whatis:    %s\n\n",
-		info->name, info->ext, info->sec, info->comp,
+		dash_if_unset(info->name),
+		info->ext, info->sec, info->comp,
 		info->id, (long)info->_st_mtime, 
 		info->pointer, info->filter, info->whatis);
 }
 
-/* Form a multi-style key from page and extension info */
+/* Form a multi-style key from page and extension info. The page should
+ * *not* be name_to_key()'d - that should only happen to the parent.
+ */
 datum make_multi_key(const char *page, const char *ext)
 {
 	datum key;
-	char *page_key = name_to_key (page);
 
-	key.dsize = strlen(page_key) + strlen(ext) + 2;
+	key.dsize = strlen(page) + strlen(ext) + 2;
 	key.dptr = (char *) xmalloc (key.dsize);
-	sprintf(key.dptr, "%s\t%s", page_key, ext);
-	free(page_key);
+	sprintf(key.dptr, "%s\t%s", page, ext);
 	return key;
 }
 
 /* allocate a mandata structure */
 struct mandata *infoalloc(void)
 {
-	return (struct mandata *) xmalloc (sizeof(struct mandata));
+	struct mandata *info = xmalloc (sizeof(struct mandata));
+	memset (info, 0, sizeof *info);
+	return info;
 }
 
 /* go through the linked list of structures, free()ing the `content' and the
@@ -133,6 +159,8 @@ void free_mandata_struct(struct mandata *pinfo)
 		next = pinfo->next;
 		if (pinfo->addr)
 			free(pinfo->addr); 	/* free the `content' */
+		if (pinfo->name)
+			free(pinfo->name);	/* free the real name */
 		free(pinfo);			/* free the structure */
 		pinfo = next;
 	}
@@ -186,7 +214,7 @@ void split_content(char *cont_ptr, struct mandata *pinfo)
 
 	data = split_data(cont_ptr, start);
 
-	pinfo->name = *(data++);
+	pinfo->name = copy_if_set(*(data++));
 	pinfo->ext = *(data++);
 	pinfo->sec = *(data++);
 	pinfo->_st_mtime = (time_t) atol(*(data++));	/* time_t format */
@@ -199,15 +227,13 @@ void split_content(char *cont_ptr, struct mandata *pinfo)
 	pinfo->addr = cont_ptr;
 	pinfo->next = (struct mandata *) NULL;
 }
-	
+
 /* The complement of split_content */
 datum make_content(struct mandata *in)
 {
 	datum cont;
 	static const char dash[] = "-";
 
-	if (!in->name)
-		in->name = dash;
 	if (!in->pointer)
 		in->pointer = dash;
 	if (!in->filter)
@@ -217,7 +243,7 @@ datum make_content(struct mandata *in)
 	if (!in->whatis)
 		in->whatis = dash + 1;
 
-	cont.dsize = strlen(in->name) +
+	cont.dsize = strlen(dash_if_unset(in->name)) +
 		     strlen(in->ext) + 
 		     strlen(in->sec) + 
 		  /* strlen(in->_st_mtime) */ + 11 +
@@ -230,7 +256,7 @@ datum make_content(struct mandata *in)
 #ifdef ANSI_SPRINTF
 	cont.dsize = 1 + sprintf(cont.dptr,
 		"%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
-		in->name,
+		dash_if_unset(in->name),
 		in->ext,
 		in->sec,
 		in->_st_mtime,
@@ -243,7 +269,7 @@ datum make_content(struct mandata *in)
 	assert(strlen(cont.dptr) + 1 == cont.dsize);
 #else /* !ANSI_SPRINTF */
 	sprintf(cont.dptr, "%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
-		in->name,
+		dash_if_unset(in->name),
 		in->ext,
 		in->sec,
 		(long)in->_st_mtime,
@@ -266,7 +292,9 @@ datum make_content(struct mandata *in)
 	return cont;
 }
 
-/* Extract all of the extensions associated with this key */
+/* Extract all of the names/extensions associated with this key. Each case
+ * variant of a name will be returned separately.
+ */
 int list_extensions(char *data, char *ext[])
 {  
 	int count = 0;
@@ -275,12 +303,14 @@ int list_extensions(char *data, char *ext[])
 		count++;
 
 	if (debug)
-		fprintf(stderr, "found %d extensions\n", count);
+		fprintf(stderr, "found %d names/extensions\n", count);
 	return count;
 }
 
-#define	EXACT	1
-#define ALL	0
+/* These should be bitwise-ored together. */
+#define ALL	    0
+#define	EXACT	    1
+#define MATCH_CASE  2
 
 /*
  There are three possibilities on lookup:
@@ -306,12 +336,12 @@ static struct mandata *dblookup(const char *page, const char *section,
 	} else if (*cont.dptr != '\t') {	/* Just one entry */
 		info = infoalloc();
 		split_content(cont.dptr, info);
-		if (STREQ (info->name, "-"))
-			info->name = page;
+		if (!info->name)
+			info->name = xstrdup(page);
 		if (section == NULL || 
-		      strncmp(section, info->ext, 
-		              flags & EXACT ? strlen(info->ext) : 
-		                              strlen(section)) == 0) {
+		    STRNEQ(section, info->ext, 
+		           flags & EXACT ? strlen(info->ext) : 
+		                           strlen(section))) {
 		      	return info;
 		}
 		free_mandata_struct(info);
@@ -320,44 +350,69 @@ static struct mandata *dblookup(const char *page, const char *section,
 		char *ext[ENTRIES], **e;
 		struct mandata *ret = NULL;
 
-		/* Extract all of the extensions associated with this key */
+		/* Extract all of the case-variant-names/extensions
+		 * associated with this key.
+		 */
 
 		(void) list_extensions(cont.dptr + 1, e = ext);
 
 		/* Make the multi keys and look them up */
 		
 		while (*e) {
-			if (section == NULL || 
-			    strncmp(section, *e, 
-			            flags & EXACT ? strlen(*e)
-			                          : strlen(section)) == 0) {
-		                datum multi_cont;
-			                
-			  	key = make_multi_key(page, *e);
-			  	if (debug)
-			  		fprintf(stderr, 
-			  			"multi key lookup (%s)\n", 
-			  		        key.dptr);
-				multi_cont = MYDBM_FETCH(dbf, key);
-				if (multi_cont.dptr == NULL) {
-					error (0, 0,
-					       _("bad fetch on multi key %s"),
-					       key.dptr);
-					gripe_corrupt_data();
-				}
-				free(key.dptr);
-					
-				/* allocate info struct, fill it in and
-				   point info to the next in the list */
-				if (!ret)
-					ret = info = infoalloc();
-				else
-					info = info->next = infoalloc();
-				split_content(multi_cont.dptr, info);
-				if (STREQ (info->name, "-"))
-					info->name = page;
+			datum multi_cont;
+			char *dot;
+			const char *casevar;
+
+			/* Decide whether this part of a multi key is
+			 * suitable.
+			 */
+			dot = strrchr(*e, '.');
+			if (!dot) {
+				gripe_bad_multi_key(*e);
+				++e;
+				continue;
 			}
-			e++;
+			*dot = '\0';
+			casevar = *e;
+			*e = dot + 1;
+
+			if ((flags & MATCH_CASE) && !STREQ(casevar, page)) {
+				++e;
+				continue;
+			}
+
+			if (section != NULL &&
+			    !STRNEQ(section, *e, 
+			            flags & EXACT ? strlen(*e)
+			                          : strlen(section))) {
+				++e;
+				continue;
+			}
+
+			/* So the key is suitable ... */
+			key = make_multi_key(casevar, *e);
+			if (debug)
+				fprintf(stderr, "multi key lookup (%s)\n", 
+					key.dptr);
+			multi_cont = MYDBM_FETCH(dbf, key);
+			if (multi_cont.dptr == NULL) {
+				error (0, 0, _("bad fetch on multi key %s"),
+				       key.dptr);
+				gripe_corrupt_data();
+			}
+			free(key.dptr);
+				
+			/* allocate info struct, fill it in and
+			   point info to the next in the list */
+			if (!ret)
+				ret = info = infoalloc();
+			else
+				info = info->next = infoalloc();
+			split_content(multi_cont.dptr, info);
+			if (!info->name)
+				info->name = xstrdup(casevar);
+
+			++e;
 		}
 		MYDBM_FREE(cont.dptr);
 		return ret;
@@ -365,12 +420,14 @@ static struct mandata *dblookup(const char *page, const char *section,
 }
 #endif /* !FAST_BTREE */
 
-struct mandata *dblookup_all(const char *page, const char *section)
+struct mandata *dblookup_all(const char *page, const char *section,
+			     int match_case)
 {
-	return dblookup(page, section, ALL);
+	return dblookup(page, section, ALL | (match_case ? MATCH_CASE : 0));
 }
 
-struct mandata *dblookup_exact(const char *page, const char *section)
+struct mandata *dblookup_exact(const char *page, const char *section,
+			       int match_case)
 {
-	return dblookup(page, section, EXACT);
+	return dblookup(page, section, EXACT | (match_case ? MATCH_CASE : 0));
 }

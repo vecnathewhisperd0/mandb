@@ -1,3 +1,46 @@
+  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_lookup.c (gripe_bad_multi_key): New function.
+	  (make_multi_key): Don't lowercase page any more - that happens
+	  elsewhere.
+	  (list_extensions): We now return names/extensions, not just
+	  extensions.
+	  (dblookup): Multi keys are now formed as "RealCase.1" rather than
+	  just "1". Add a new MATCH_CASE flag which, if set, makes sure the
+	  RealCase part matches. Otherwise the database lookup is
+	  case-insensitive.
+	  (dblookup_exact, dblookup_all): Pass through a match_case flag for
+	  the above.
+	* libdb/db_delete.c (dbdelete): Cope with new multi key format.
+	* libdb/db_store.c (dbstore): Construct the multi key from the
+	  original case of the name rather than the lowercased version. Add
+	  the basename to the multi keys created here, as above.
+	* src/man.c (display_database): Pass match_case flag through to the
+	  database lookup.
+	  (try_db): Likewise.
+	* src/check_mandirs.c (test_manfile): Make sure lookups are
+	  case-sensitive.
+	* src/straycats.c (check_for_stray): Likewise.
+	* src/whatis.c (get_whatis): Likewise.
+	  (whatis): Use a case-insensitive lookup.
+
+	* libdb/db_storage.h (struct mandata): name is no longer const; it
+	  should always be freeable if non-NULL. We no longer use "-" to
+	  indicate it being the same as the requested name, except in the
+	  database itself.
+	* libdb/db_lookup.c (copy_if_set, dash_if_unset): New functions.
+	  (infoalloc): Zero the newly allocated structure.
+	  (free_mandata_struct): Free name if it's set.
+	  (dbprintf, split_content, make_content, dblookup): Cope with the
+	  new convention for info->name.
+	* libdb/db_store.c (replace_if_necessary): Likewise.
+	* src/check_mandirs.c (filename_info): Likewise.
+	* src/man.c (compare_candidates, add_candidate, display_database):
+	  Likewise.
+	* src/whatis.c (display): Likewise.
+
+	* libdb/db_storage.h: Update prototypes.
+
 Mon Apr 29 00:13:58 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/whatis.c (display): Display page names in the correct case

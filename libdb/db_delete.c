@@ -89,8 +89,25 @@ int dbdelete(const char *name, struct mandata *info)
 
 		refs = list_extensions(cont.dptr + 1, e = ext);
 		
-		while (*e && strcmp(*e, info->ext) != 0)
-			e++;
+		while (*e) {
+			char *dot;
+			const char *casevar;
+
+			dot = strrchr(*e, '.');
+			if (!dot) {
+				gripe_bad_multi_key(dot);
+				++e;
+				continue;
+			}
+			*dot = '\0';
+			casevar = *e;
+			*e = dot + 1;
+
+			if (!STREQ(casevar, name) || !STREQ(*e, info->ext))
+				++e;
+			else
+				break;
+		}
 
 		if (!*e) {
 			MYDBM_FREE(cont.dptr);

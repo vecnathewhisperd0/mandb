@@ -39,11 +39,12 @@ struct mandata {
 	struct mandata *next;		/* ptr to next structure, if any */
 	char *addr;			/* ptr to memory containing the fields */
 
+	char *name;			/* Name of page, if != key */
+
 	/* The following are all const because they should be pointers to
 	 * parts of strings allocated elsewhere (often the addr field above)
 	 * and should not be written through or freed themselves.
 	 */
-	const char *name;		/* Name of page, if != key */
 	const char *ext;		/* Filename ext w/o comp ext */
 	const char *sec;		/* Section name/number */
 	char id;			/* id for this entry */
@@ -56,9 +57,11 @@ struct mandata {
 
 /* used by the world */
 extern __inline__ struct mandata *dblookup_all(const char *page,
-					       const char *section);
+					       const char *section,
+					       int match_case);
 extern __inline__ struct mandata *dblookup_exact(const char *page,
-						 const char *section);
+						 const char *section,
+						 int match_case);
 extern int dbstore(struct mandata *in, const char *basename);
 extern int dbdelete(const char *name, struct mandata *in);
 extern void dbprintf(const struct mandata *info);
@@ -75,5 +78,8 @@ extern char **split_data(char *content, char *start[]);
 extern datum make_content(struct mandata *in);
 extern int list_extensions(char *data, char *ext[]);
 extern void gripe_replace_key(const char *data);
+extern void gripe_bad_multi_key(const char *data);
+extern char *copy_if_set(char *str);
+extern const char *dash_if_unset(char *str);
 
 #endif

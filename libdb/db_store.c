@@ -80,7 +80,9 @@ static int replace_if_necessary(struct mandata *in, struct mandata *info,
 			
 	if (in->id == info->id &&
 	    in->id == ULT_MAN) {
-		if (strcmp(in->comp ? in->comp : "-", info->comp) == 0) {
+		if (STREQ(dash_if_unset(in->comp), info->comp) &&
+		    STREQ(dash_if_unset(in->name),
+			  dash_if_unset(info->name))) {
 			if (in->_st_mtime != info->_st_mtime) {
 				if (debug)
 					fprintf(stderr, "replace_if_necessary(): replace\n");
@@ -89,7 +91,7 @@ static int replace_if_necessary(struct mandata *in, struct mandata *info,
 			}
 			return 0; /* same file */
 		} else
-			return 1; /* differing ext's */
+			return 1; /* differing names/exts */
 	}
 
 	return 0; /* not physical file anyway */
@@ -153,7 +155,7 @@ int dbstore(struct mandata *in, const char *basename)
 	} else if (*oldcont.dptr == '\t') { 	/* situation (2) */
 		datum newkey, newcont;
 
-		newkey = make_multi_key(oldkey.dptr, in->ext);
+		newkey = make_multi_key(basename, in->ext);
 		newcont = make_content(in);
 
 		/* Try to insert the new multi data */
@@ -183,11 +185,13 @@ int dbstore(struct mandata *in, const char *basename)
 
 		free(newkey.dptr);
 		free(newcont.dptr);
-		
-		newcont.dsize = oldcont.dsize + strlen(in->ext) + 1;
+
+		newcont.dsize = oldcont.dsize + strlen(basename) +
+				strlen(in->ext) + 2;
 		newcont.dptr = (char *) xmalloc(newcont.dsize);
 
-		sprintf(newcont.dptr, "%s\t%s", oldcont.dptr, in->ext);
+		sprintf(newcont.dptr, "%s\t%s.%s",
+			oldcont.dptr, basename, in->ext);
 		MYDBM_FREE(oldcont.dptr);
 
 		/* Try to replace the old simple data with the new stuff */
@@ -199,6 +203,7 @@ int dbstore(struct mandata *in, const char *basename)
 	} else { 				/* situation (3) */
 		datum newkey, newcont, lastkey, lastcont; 
 		struct mandata old;
+		const char *old_name;
 
 		/* Extract the old singular reference */
 
@@ -207,8 +212,13 @@ int dbstore(struct mandata *in, const char *basename)
 		/* Create multi keys for both 
 		   and new items, create new content */
 
-		lastkey = make_multi_key(oldkey.dptr, old.ext);
-		newkey = make_multi_key(oldkey.dptr, in->ext);
+		if (old.name)
+			old_name = old.name;
+		else
+			old_name = basename;
+
+		lastkey = make_multi_key(old_name, old.ext);
+		newkey = make_multi_key(basename, in->ext);
 		newcont = make_content(in);
 
 		/* Check against identical multi keys before inserting
@@ -244,9 +254,11 @@ int dbstore(struct mandata *in, const char *basename)
 
 		/* Now build a simple reference to the above two items */
 
-		newcont.dsize = strlen(old.ext) + strlen(in->ext) + 3;
+		newcont.dsize = strlen(old_name) + strlen(old.ext) +
+				strlen(basename) + strlen(in->ext) + 5;
 		newcont.dptr = (char *) xmalloc (newcont.dsize);
-		sprintf(newcont.dptr, "\t%s\t%s", old.ext, in->ext);
+		sprintf(newcont.dptr, "\t%s.%s\t%s.%s",
+			old_name, old.ext, basename, in->ext);
 
 		if (MYDBM_REPLACE(dbf, oldkey, newcont))
 			gripe_replace_key(oldkey.dptr);
