@@ -2119,6 +2119,7 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 		char *htmldir;
 		char *man_file_copy, *man_base, *man_ext;
 		char *htmlfile, *esc_htmlfile;
+		char *browser_list, *candidate;
 
 #  ifdef HAVE_GETCWD
 		if (!getcwd (old_cwd, PATH_MAX - 1))
@@ -2161,8 +2162,22 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 			gripe_system (command, status);
 		}
 
-		command = make_browser (disp_cmd, htmlfile);
-		status = do_system_drop_privs (command);
+		browser_list = xstrdup (disp_cmd);
+		for (candidate = strtok (browser_list, ":"); candidate;
+		     candidate = strtok (NULL, ":")) {
+			if (debug)
+				fprintf (stderr, "Trying browser: %s\n",
+					 candidate);
+			command = make_browser (candidate, htmlfile);
+			status = do_system_drop_privs (command);
+			if (!status || status == (SIGPIPE + 0x80) * 256)
+				break;
+		}
+		if (!candidate)
+			error (CHILD_FAIL, 0,
+			       "couldn't execute any browser from %s",
+			       disp_cmd);
+		free (browser_list);
 		if (chdir (old_cwd) == -1) {
 			error (0, errno, _("can't change to directory %s"),
 			       old_cwd);
@@ -2173,8 +2188,6 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 			       htmldir);
 		free (htmlfile);
 		free (htmldir);
-		if (status && status != (SIGPIPE + 0x80) * 256)
-			gripe_system (command, status);
 	} else
 #endif /* TROFF_IS_GROFF */
 	    if (format_cmd) {
