@@ -273,7 +273,7 @@ datum make_content (struct mandata *in)
 		in->comp,
 		in->whatis);
 
-	assert (strlen (cont.dptr) + 1 == cont.dsize);
+	assert (strlen (cont.dptr) + 1 == (size_t) cont.dsize);
 #else /* !ANSI_SPRINTF */
 	sprintf (cont.dptr, "%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
 		 dash_if_unset (in->name),

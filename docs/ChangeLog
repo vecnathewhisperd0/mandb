@@ -1,3 +1,9 @@
+Sat Sep  6 00:15:37 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_lookup.c (make_content): Cast cont.dsize to size_t when
+	  comparing it with the return value of strlen(). Avoids warning
+	  when building with gdbm.
+
 Thu Sep  4 20:22:21 BST 2003  Christian Rose  <menthos@menthos.com>
 
 	* po/sv.po: Update from Translation Project.
