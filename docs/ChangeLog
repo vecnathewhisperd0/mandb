@@ -1,6 +1,15 @@
+Thu Jul 12 01:11:41 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l: Split out NAME-matching regex into one regex per
+	  language. Add support for cs, fi, hu, nl, and pl, not forgetting
+	  Latin (for Lingua::Romana::Perligata(3pm), of course).
+	  (add_separator_to_whatis): New function, to allow trimming the
+	  first space from the " - " separator.
+	  (main): Rewrite; find_name()'s prototype changed long ago.
+
 Tue Jul 10 14:37:51 BST 2001  Colin Watson  <cjwatson@debian.org>
 
-	* src/util.c (is_newer): Renamed to ...
+	* src/util.c (is_newer): Rename to ...
 	  (is_changed): ... this. We now check whether the cat page has a
 	  different timestamp from the man page, rather than simply whether
 	  it is newer.

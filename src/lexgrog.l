@@ -54,6 +54,7 @@ static int ctr[YY_NUM_RULES];
 
 static void add_str_to_whatis (const char *string, size_t length);
 static void add_char_to_whatis (unsigned char c);
+static void add_separator_to_whatis (void);
 static void newline_found (void);
 
 static char newname[MAX_NAME];
@@ -96,7 +97,21 @@ typeface	\.(B[IR]?|I[BR]?|R[BI])
 sec_request	\.[Ss][HhYySs]
 comment		['.]\\{dbl_quote}
 
-name		(N[AaOo][Mm][Nn|Ee]|N[Oo][Mm]|N[Oo][Mm][Bb][Rr][Ee]|B[Ee][Zz][Ee][Ii][Cc][Hh][Nn][Uu][Nn][Gg])
+ /* Please add to this list if you know how. */
+cs_name		J[Mm][…ÈEe][Nn][Oo]
+de_name		B[Ee][Zz][Ee][Ii][Cc][Hh][Nn][Uu][Nn][Gg]
+en_name		N[Aa][Mm][Ee]
+es_name		N[Oo][Mm][Bb][Rr][Ee]
+fi_name		N[Ii][Mm][Ii]
+fr_name		N[Oo][Mm]
+hu_name		N[…ÈEe][Vv]
+ /* NOME also works for gl, pt */
+it_name		N[Oo][Mm][Ee]
+latin_name	N[Oo][Mm][Ee][Nn]
+nl_name		N[Aa][Aa][Mm]
+pl_name		N[Aa][Zz][Ww][Aa]
+sv_name		N[Aa][Mm][Nn]
+name		({cs_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{hu_name}|{it_name}|{latin_name}|{nl_name}|{pl_name}|{sv_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?{dbl_quote}?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
@@ -184,7 +199,7 @@ vgrind_request	\.vS
 <MAN_NAME>{next}[blank_eol]+[-\\]-{blank}*	|
 <MAN_NAME>{next}[blank_eol]*[-\\]-{blank}+	|
 <CAT_NAME>{next}{blank}+-{1,2}[blank_eol]+	|
-<MAN_NAME>{bol}\.Nd{blank}*			add_str_to_whatis (" - ", 3);
+<MAN_NAME>{bol}\.Nd{blank}*			add_separator_to_whatis ();
 
  /* escape sequences and special characters */
 <MAN_NAME>{
@@ -286,6 +301,16 @@ static void add_char_to_whatis (unsigned char c)
 		*p_name++ = c;
 }
 
+/* append the " - " separator to newname, trimming the first space if one's
+ * already there
+ */
+static void add_separator_to_whatis (void)
+{
+	if (p_name != newname && *(p_name - 1) != ' ')
+		add_char_to_whatis (' ');
+	add_str_to_whatis ("- ", 2);
+}
+
 static void newline_found (void)
 {
 	/* If we are mid p_name and the last added char was not a space,
@@ -346,11 +371,25 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 #ifdef TEST
 int main (int argc, char **argv)
 {
-	if (argc > 1)
-		while (*++argv) {
-			printf ("man: \"%s\"\n", find_name (*argv, "-", 0));
-			printf ("cat: \"%s\"\n", find_name (*argv, "-", 1));
+	if (argc <= 1)
+		return 0;
+	while (*++argv) {
+		int type;
+		for (type = 0; type <= 1; type++) {
+			lexgrog lg;
+			char *name;
+			lg.type = type;
+			if (find_name (*argv, "-", &lg))
+				printf ("%s:\n"
+					"  whatis:  \"%s\"\n"
+					"  filters: \"%s\"\n",
+					type ? "cat" : "man",
+					lg.whatis, lg.filters);
+			else
+				printf ("%s: parse failed\n",
+					type ? "cat" : "man");
 		}
+	}
 	return 0;
 }
 #endif
