@@ -641,7 +641,7 @@ int main (int argc, char *argv[])
 	else
 		free (manpath (NULL));
 
-	create_pathlist (xstrdup (manp), manpathlist);
+	create_pathlist (manp, manpathlist);
 
 	while (optind < argc) {
 #if defined(POSIX_REGEX)		

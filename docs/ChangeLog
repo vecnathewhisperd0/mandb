@@ -1,3 +1,45 @@
+Tue Sep 18 03:46:00 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* lib/xstrndup.c: New file.
+	* lib/Makefile.in: Build it.
+	* include/manconfig.h.in: Prototype xstrndup().
+
+	* src/man.c (compare_names, compare_mandata_ext): New functions.
+	  (try_section): Build title more locally, displaying extensions
+	  correctly. Sort the results of look_for_file().
+	  (try_db_section): Build title even if NROFF_MISSING is defined.
+	  (try_db): Sort data returned from the database.
+	  (locate_page): Look in the filesystem first and then the database,
+	  rather than the other way round.
+
+	* src/manp.c (checkpath): Remove; it used to resolve symlinks, but
+	  it doesn't do that any more and I don't think it should.
+	* src/manp.c: Constify arguments to many functions by either being
+	  more careful not to alter them or by duplicating them.
+	* src/util.c (is_directory): Likewise.
+	* src/catman.c, src/man.c, src/mandb.c, src/whatis.c (main):
+	  Simplify calls.
+	* src/manp.h, include/manconfig.h.in: Update prototypes.
+	* src/manp.h: add_system_manpath() is static now.
+
+	* include/manconfig.h.in: Provide stupid getcwd() emulation with
+	  getwd() if the former isn't available.
+	* src/man.c (main, format_display): Assume getcwd() is available.
+	* src/mandb.c (main): Likewise.
+	* src/manp.c (add_dir_to_path_list): Likewise.
+
+	* src/manp.c (add_dir_to_path_list): The checks that manpaths end in
+	  /man or /MAN were overly anal and never compiled in; remove them.
+
+	* acinclude.m4 (MAN_PROG_GNU_NROFF): More portable shell for ash.
+
+	* src/man.c (lang_table): We use the latin1 alias rather than
+	  iso8859 for all other languages, so do so for Korean too.
+
+	* src/lexgrog.l: Prevent the no-op request '.' from eating text on
+	  the next line.
+	  (find_name): Remove trailing spaces as well as leading ones.
+
 Fri Sep  7 19:28:12 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.3.20.

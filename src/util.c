@@ -121,7 +121,7 @@ int is_changed (char *fa, char *fb)
 /*
  * Is path a directory?
  */
-int is_directory (char *path)
+int is_directory (const char *path)
 {
 	struct stat sb;
 	int status;

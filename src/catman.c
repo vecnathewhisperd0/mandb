@@ -468,7 +468,7 @@ int main (int argc, char *argv[])
 		fprintf (stderr, "manpath=%s\n", manp);
 
 	/* get the manpath as an array of pointers */
-	create_pathlist (xstrdup (manp), manpathlist); 
+	create_pathlist (manp, manpathlist); 
 	
 	for (mp = manpathlist; *mp; mp++) {
 		char *catpath, **sp;

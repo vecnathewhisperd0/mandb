@@ -255,6 +255,7 @@ struct compression {
 extern VOID *xmalloc (size_t n);
 extern VOID *xrealloc (VOID *p, size_t n);
 extern __inline__ char *xstrdup (const char *string);
+extern __inline__ char *xstrndup (const char *string, size_t size);
 extern int create_tempfile (const char *template, char **created_filename);
 extern char *create_tempdir (const char *template);
 
@@ -280,21 +281,26 @@ extern int find_name (char *file, char *filename, struct lexgrog *p_lg);
 /* util.c */
 extern char *mkdbname (const char *path);
 extern int is_changed (char *fa, char *fb);
-extern int is_directory (char *path);
+extern int is_directory (const char *path);
 extern __inline__ int do_system (const char *command);
 extern char *escape_shell (const char *unesc);
 extern int remove_directory (const char *directory);
 
-#if !defined(HAVE_BASENAME)
-extern char *basename ();
-#else /* HAVE_BASENAME */
+#ifdef HAVE_BASENAME
 extern char *basename (const char *path);
-#endif /* !HAVE_BASENAME */
+#else /* !HAVE_BASENAME */
+extern char *basename ();
+#endif /* HAVE_BASENAME */
 
 #ifndef HAVE_STRSEP
 extern char *strsep (char **stringp, const char *delim);
 #endif /* !HAVE_STRSEP */
 
+#ifndef HAVE_GETCWD
+#  define getcwd(buf,size) getwd (buf)
+#endif
+
+#ifdef
 extern char *strappend (char *, ...);
 
 extern int debug; 		/* shows whether -d issued */

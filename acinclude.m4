@@ -31,7 +31,10 @@ AC_DEFUN(MAN_PROG_GNU_NROFF,
 [AC_MSG_CHECKING(whether nroff is GNU nroff)
 
 AC_CACHE_VAL(man_cv_prog_gnu_nroff,
-[if test `echo "\\n(.g" | $1 | tr -d '\n'` -eq 1
+[if test `$1 <<EOF | tr -d '\n'
+\\n(.g
+EOF
+` -eq 1
 then
 	man_cv_prog_gnu_nroff=yes
 else

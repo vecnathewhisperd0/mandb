@@ -417,11 +417,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef __profile__
-#  ifdef HAVE_GETCWD
 	if (!getcwd (cwd, PATH_MAX - 1))
-#  else /* not HAVE_GETCWD */
-	if (!getwd (cwd))
-#  endif
 		cwd[0] = '\0';
 #endif /* __profile__ */
 
@@ -472,7 +468,7 @@ int main(int argc, char *argv[])
 		fprintf (stderr, "manpath=%s\n", manp);
 
 	/* get the manpath as an array of pointers */
-	create_pathlist (xstrdup (manp), manpathlist); 
+	create_pathlist (manp, manpathlist); 
 
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();

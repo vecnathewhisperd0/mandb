@@ -153,7 +153,7 @@ vgrind_request	\.vS
 <CAT_FILE>(\n{blank}*){2,}{name}{blank}*\n{blank}+	BEGIN (CAT_NAME);
 
  /* general text matching */
-<MAN_FILE>\.[^Ss].*{next}				|
+<MAN_FILE>\.[^Ss\n].*{next}				|
 <MAN_FILE>\..{0,3}{dbl_quote}?.{0,4}{dbl_quote}? 	|
 <MAN_FILE>{comment}.*{next}				|
 <CAT_FILE>.{1,9}					|
@@ -401,7 +401,14 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 		char f_tmp[MAX_FILTERS];
 		int j, k;
 
-		/* wipe out any initial spaces */
+		/* wipe out any leading or trailing spaces */
+		if (*newname) {
+			for (p_name = strchr (newname, '\0');
+			     *(p_name - 1) == ' ';
+			     p_name--);
+			if (*p_name == ' ')
+				*p_name = '\0';
+		}
 		for (p_name = newname; *p_name == ' '; p_name++);
 		p_lg->whatis = xstrdup (p_name);
 		memset (f_tmp, '\0', MAX_FILTERS);

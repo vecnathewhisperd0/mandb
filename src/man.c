@@ -17,7 +17,8 @@
  *
  * Mostly written/re-written by Wilf, some routines by Markus Armbruster.
  *
- * CJW: Various robustness and security fixes.
+ * CJW: Various robustness, security, and internationalization fixes.
+ * Improved HTML support (originally written by Fabrizio Polacco).
  */
 
 #ifdef HAVE_CONFIG_H
@@ -187,7 +188,7 @@ struct lt {
 	{ "is"		, "latin1"	, "latin1"	}, /* Icelandic */
 	{ "it"		, "latin1"	, "latin1"	}, /* Italian */
 	{ "ja"		, "nippon"	, "ja"		}, /* Japanese */
-	{ "ko"		, "ascii8"	, "iso8859"	}, /* Korean */
+	{ "ko"		, "ascii8"	, "latin1"	}, /* Korean */
 	{ "nl"		, "latin1"	, "latin1"	}, /* Dutch */
 	{ "no"		, "latin1"	, "latin1"	}, /* Norwegian */
 	{ "pt"		, "latin1"	, "latin1"	}, /* Portuguese */
@@ -921,11 +922,7 @@ int main (int argc, char *argv[])
 
 	/* This will enable us to do some profiling and know
 	where gmon.out will end up. Must chdir(cwd) before we return */
-#  ifdef HAVE_GETCWD
 	if (!getcwd (cwd, PATH_MAX - 1))
-#  else /* not HAVE_GETCWD */
-	if (!getwd (cwd))
-#  endif
 		cwd[0] = '\0';
 
 	/* First of all, find out if $MANOPT is set. If so, put it in 
@@ -1054,7 +1051,7 @@ int main (int argc, char *argv[])
 	} else
 		free (manpath (NULL));
 
-	create_pathlist (xstrdup (manp), manpathlist);
+	create_pathlist (manp, manpathlist);
 
 	if (debug)
 		fprintf (stderr, "*manpath search path* = %s\n", manp);
@@ -1492,9 +1489,9 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 				ct -= r;
 		} while (ct > 0 && (errno == 0 || errno == EINTR));
 		if (errno != 0)
-			error(FATAL, errno,
-			      _("error writing to temporary file %s"),
-			      stdin_tmpfile);
+			error (FATAL, errno,
+			       _("error writing to temporary file %s"),
+			       stdin_tmpfile);
 
 		close (stdin_tmpfile_fd);
 		/* ensure we don't try to close it again */
@@ -2123,11 +2120,7 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 		char *htmlfile, *esc_htmlfile;
 		char *browser_list, *candidate;
 
-#  ifdef HAVE_GETCWD
 		if (!getcwd (old_cwd, PATH_MAX - 1))
-#  else /* !HAVE_GETCWD */
-		if (!getwd (old_cwd))
-#  endif
 			old_cwd[0] = '\0';
 		htmldir = create_tempdir ("hman");
 		if (chdir (htmldir) == -1)
@@ -2524,6 +2517,10 @@ static char *find_cat_file (char *path, char *man_file, char *sec)
 	return cat_file;
 }
 
+static int compare_names (const void *left, const void *right)
+{
+	return strcmp (*(const char **)left, *(const char **)right);
+}
 
 /*
  * See if the preformatted man page or the source exists in the given
@@ -2533,12 +2530,9 @@ static int try_section (char *path, char *sec, char *name)
 {
 	int found = 0;
 	char **names, **np;
-	char *title;
 
-	if (debug) 
+	if (debug)
 		fprintf (stderr, "trying section %s with globbing\n", sec);
-
-	title = strappend (NULL, name, "(", sec, ")", NULL);
 
 #ifndef NROFF_MISSING /* #ifdef NROFF */
 	/*
@@ -2554,28 +2548,43 @@ static int try_section (char *path, char *sec, char *name)
     		 */
 #endif /* NROFF_MISSING */
 	{
-		if (catman) {
-			free (title);
-			return ++found;
-		}
+		if (catman)
+			return 1;
 
 		if (!troff) {
-			names = look_for_file (path, sec, name, 1);
+			char *title;
 
+			names = look_for_file (path, sec, name, 1);
+			if (names) {
+				int name_count = 0;
+				for (np = names; *np; np++)
+					++name_count;
+				qsort (names, name_count, sizeof *names,
+				       compare_names);
+			}
+
+			title = strappend (NULL, name, "(", sec, ")", NULL);
 			for (np = names; np && *np; np++) {
 				found += display (path, NULL, *np, title);
 				if (found && !findall)
 					break;
 			}
+			free (title);
 		}
 	}
 #ifndef NROFF_MISSING
 	else {
+		int name_count = 0;
+		for (np = names; *np; np++)
+			++name_count;
+		qsort (names, name_count, sizeof *names, &compare_names);
+
 		for (np = names; *np; np++) {
 			char *man_file;
 			char *cat_file;
 			struct mandata info;
 			char *info_buffer;
+			char *title;
 
 			info_buffer = filename_info (*np, &info);
 			if (!info_buffer)
@@ -2593,13 +2602,16 @@ static int try_section (char *path, char *sec, char *name)
 				free (info_buffer);
 				continue;
 			}
+			title = strappend (NULL, name, "(", info.ext, ")",
+					   NULL);
 			free (info_buffer);
 
 			man_file = ult_src (*np, path, NULL,
 					    SO_LINK | SOFT_LINK | HARD_LINK);
 			if (man_file == NULL) {
 				free (title);
-				return 0;
+				found = 0;
+				break;
 			}
 
 			if (debug)
@@ -2611,6 +2623,7 @@ static int try_section (char *path, char *sec, char *name)
 			cat_file = find_cat_file (path, man_file, sec);
 			found += display (path, man_file, cat_file, title);
 			free (cat_file);
+			free (title);
 #ifdef COMP_SRC
 			/* if ult_src() produced a ztemp file, we need to 
 			   remove it (and unexist it) before proceeding */
@@ -2624,7 +2637,6 @@ static int try_section (char *path, char *sec, char *name)
 	}
 #endif /* NROFF_MISSING */
 
-	free (title);
 	return found;
 }
 
@@ -2714,12 +2726,12 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 			 _("%s: relying on whatis refs is deprecated\n"),
 			 name);
 
+	title = strappend (NULL, name, "(", in->ext, ")", NULL);
+
 #ifndef NROFF_MISSING /* #ifdef NROFF */
 	/*
   	 * Look for man page source files.
   	 */
-
-	title = strappend (NULL, name, "(", in->ext, ")", NULL);
 
 	if (in->id < STRAY_CAT) {	/* There should be a src page */
 		file = make_filename (path, name, in, "man");
@@ -2757,7 +2769,7 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 	} else 
 
 #endif /* NROFF_MISSING */
-	
+
 	if (in->id <= WHATIS_CAT) {
 		/* The db says we have a stray cat or whatis ref */
 
@@ -2836,7 +2848,14 @@ static int exist_check (char *name, char *manpath, struct mandata *loc)
 	return exists;
 }
 
-/* db wrapper for try_db_section(). If db not accessable, return -1, 
+/* Compare mandata structures by extension. */
+int compare_mandata_ext (const void *left, const void *right)
+{
+	return strcmp (((struct mandata *) left)->ext,
+		       ((struct mandata *) right)->ext);
+}
+
+/* db wrapper for try_db_section(). If db not accessible, return -1,
    otherwise return amount of pages found/displayed */
 static int try_db (char *manpath, char *sec, char *name)
 {
@@ -2845,6 +2864,7 @@ static int try_db (char *manpath, char *sec, char *name)
 	struct mandata *loc, *data, *store[ENTRIES], *exact_ext = NULL;
 	struct mandata **exact_sec = store;
 	char *catpath;
+	int store_count;
 
 	/* find out where our db for this manpath should be */
 
@@ -2928,6 +2948,12 @@ static int try_db (char *manpath, char *sec, char *name)
 	}
 	*exact_sec = NULL;
 
+	/* Sort the returned data by extension. */
+	store_count = 0;
+	for (exact_sec = store; *exact_sec; exact_sec++)
+		++store_count;
+	qsort (store, store_count, sizeof *store, compare_mandata_ext);
+
 	/* ALL free()ing of structures must be done by free_hashtab() only */
 
 	/* first see if we have the right extension */
@@ -2975,17 +3001,19 @@ static int locate_page (char *manpath, char *sec, char *name)
 		fprintf (stderr, "searching in %s, section %s\n", 
 			 manpath, sec);
 
-	db_ok = try_db (manpath, sec, name);
+	found = try_section (manpath, sec, name);
+
+	if (!found || findall) {
+		db_ok = try_db (manpath, sec, name);
 
 #ifdef MAN_DB_CREATES
-	if (db_ok == -2) /* we created a db in the last call */
-		db_ok = try_db (manpath, sec, name);
+		if (db_ok == -2) /* we created a db in the last call */
+			db_ok = try_db (manpath, sec, name);
 #endif /* MAN_DB_CREATES */
 
-	if (db_ok <= 0)  /* we failed to find/open a db, or we found nothing */
-		found = try_section (manpath, sec, name);
-	else
-		found = db_ok;
+		if (db_ok > 0)  /* we found/opened a db and found something */
+			found += db_ok;
+	}
 
 	if (!global_manpath)
 		regain_effective_privs ();
