@@ -15,8 +15,13 @@
 %mandb% \- create or update the manual page index caches
 .SH SYNOPSIS
 .B %mandb%  
-.RB [\| \-dqsuc \||\| \-h \||\| \-V\c
-.RI "\|] [\|" manpath \|] 
+.RB [\| \-dqsucp \||\| \-h \||\| \-V \|]
+.RI [\| manpath \|]
+.br
+.B %mandb%
+.RB [\| \-dqsu \|]
+.B \-f
+.IR filename \ .\|.\|.
 .SH DESCRIPTION
 .B %mandb%
 is used to initialise or manually update
@@ -100,6 +105,20 @@ Perform correctness checks on manual pages in the hierarchy search path.
 With this option,
 .B %mandb%
 will not alter existing databases.
+.TP
+.B \-f, \-\-filename
+Update only the entries for the given filename.
+This option is not for general use; it is used internally by
+.B %man%
+when it has been compiled with the
+.B MAN_DB_UPDATES
+option and finds that a page is out of date.
+It implies
+.B \-p
+and the absence of
+.B \-c
+and
+.BR \-s .
 .TP
 .B \-h, \-\-help
 Show the usage message, then exit.

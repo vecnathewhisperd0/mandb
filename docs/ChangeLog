@@ -1,3 +1,52 @@
+Fri Feb 21 15:46:04 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (gripe_bogus_manpage, make_filename,
+	  filename_info): Move to ...
+	* src/filenames.c: ... here.
+	* src/check_mandirs.h: Move corresponding prototypes to ...
+	* src/filenames.h: ... here.
+
+	* src/check_mandirs.c (purge_pointers): New function to purge any
+	  entries whose pointers refer to a given name.
+	* src/check_mandirs.h (purge_pointers): Add prototype.
+	* src/mandb.c (long_options): Add -f/--filename option.
+	  (usage): Document it, along with -t/--test.
+	  (update_one_file): New function to update a single file in an
+	  existing database.
+	  (update_db_wrapper): Call update_one_file() if using --filename.
+	  (main): Handle --filename option. If using --filename, only call
+	  mandb() if the manpath prefix matches.
+	* man/man8/mandb.man8 (SYNOPSIS): Improve *roff style and document
+	  -p. Add separate call summary for when -f is used.
+	  (OPTIONS): Document -f.
+
+	* lib/hashtable.c (hash_remove): New function to remove an entry
+	  from a hash table.
+	* lib/hashtable.h (hash_remove): Add prototype.
+
+	* libdb/db_store.c (replace_if_necessary): Replace entries with ids
+	  other than ULT_MAN too, so that their timestamps can be updated.
+	  Add more debugging output.
+	* src/man.c (need_to_rerun): Remove.
+	  (display_database): Remove code to check whether pages found in
+	  databases are up to date. This is done elsewhere now.
+	  (run_mandb): New function, used instead of updating databases
+	  directly.
+	  (main): Call run_mandb() instead of need_to_rerun().
+	  (maybe_update_file): New function to check whether a page found in
+	  a database is up to date. If not, use run_mandb() to recache it.
+	  (try_db): Use run_mandb() rather than create_db(). Use #defines
+	  for special return values rather than magic numbers. Check whether
+	  pages are up to date as they're found.
+	  (locate_page): If try_db() returns TRY_DATABASE_UPDATED (i.e.
+	  mandb was called to update some pages), call it again.
+	  (display_pages): Use a switch with named candidate types instead
+	  of an if.
+
+	* src/Makefile.in (DEFS_man.o): Add definition for MANDB.
+	  (man): Database code is no longer needed. Add filenames.o.
+	  (mandb): Add filenames.o.
+
 Mon Feb 17 23:28:55 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/manpath.c: Remove unused prototypes.

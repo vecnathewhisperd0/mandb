@@ -98,6 +98,7 @@ extern char *getwd();
 #include "lib/error.h"
 #include "lib/cleanup.h"
 #include "check_mandirs.h"
+#include "filenames.h"
 #include "manp.h"
 #include "security.h"
 
@@ -110,23 +111,25 @@ char *manp;
 char *database;
 extern char *extension;		/* for globbing.c */
 extern int force_rescan;	/* for check_mandirs.c */
+static char *single_filename = NULL;
 
 /* default options */
 static const struct option long_options[] =
 {
-    {"create", 		no_argument,	0, 'c'},
-    {"debug",		no_argument, 	0, 'd'},
-    {"help",		no_argument,	0, 'h'},
-    {"no-purge",	no_argument,	0, 'p'},
-    {"quiet",		no_argument, 	0, 'q'},
-    {"user-db",		no_argument, 	0, 'u'},
-    {"no-straycats",    no_argument,	0, 's'},
-    {"test",		no_argument, 	0, 't'},
-    {"version",		no_argument, 	0, 'V'},
+    {"create", 		no_argument,		0, 'c'},
+    {"debug",		no_argument,		0, 'd'},
+    {"filename",	required_argument,	0, 'f'},
+    {"help",		no_argument,		0, 'h'},
+    {"no-purge",	no_argument,		0, 'p'},
+    {"quiet",		no_argument,		0, 'q'},
+    {"user-db",		no_argument,		0, 'u'},
+    {"no-straycats",    no_argument,		0, 's'},
+    {"test",		no_argument,		0, 't'},
+    {"version",		no_argument,		0, 'V'},
     {0, 0, 0, 0}
 };
 
-static const char args[] = "cdhpqstuV";
+static const char args[] = "cdf:hpqstuV";
 static int check_for_strays = 1;
 static int purge = 1;
 static int user;
@@ -162,7 +165,8 @@ extern int pages;
 
 static void usage (int status)
 {
-	printf (_("usage: %s [-dqspuc|-h|-V] [manpath]\n"), program_name);
+	printf (_("usage: %s [-dqspuct|-h|-V] [-f filename] [manpath]\n"),
+		program_name);
 	printf (_(
 		"-d, --debug                 produce debugging info.\n"
 		"-q, --quiet                 work quietly, except for 'bogus' warning.\n"
@@ -170,6 +174,8 @@ static void usage (int status)
 		"-p, --no-purge              don't purge obsolete entries from the dbs.\n"
 		"-u, --user-db               produce user databases only.\n"
 		"-c, --create                create dbs from scratch, rather than updating.\n"
+		"-t, --test                  check manual pages for correctness.\n"
+		"-f, --filename              update just the entry for this filename.\n"
 		"-V, --version               show version.\n"
 		"-h, --help                  show this usage message.\n")
 	);
@@ -272,10 +278,35 @@ static __inline__ void do_chown (uid_t uid)
 }
 #endif /* DO_CHOWN */
 
+/* Update a single file in an existing database. */
+static short update_one_file (const char *manpath, char *filename)
+{
+	dbf = MYDBM_RWOPEN (database);
+	if (dbf) {
+		struct mandata info;
+		char *manpage;
+
+		memset (&info, 0, sizeof (struct mandata));
+		manpage = filename_info (filename, &info, "");
+		if (info.name) {
+			dbdelete (info.name, &info);
+			purge_pointers (manpath, info.name);
+		}
+
+		test_manfile (filename, manpath);
+	}
+	MYDBM_CLOSE (dbf);
+
+	return 1;
+}
+
 /* dont actually create any dbs, just do an update */
 static __inline__ short update_db_wrapper (const char *manpath)
 {
 	short amount;
+
+	if (single_filename)
+		return update_one_file (manpath, single_filename);
 
 	amount = update_db (manpath);
 	if (amount != EOF)
@@ -416,6 +447,12 @@ int main (int argc, char *argv[])
 			case 't':
 				opt_test = 1;
 				break;
+			case 'f':
+				single_filename = optarg;
+				create = 0;
+				purge = 0;
+				check_for_strays = 0;
+				break;
 			case 'V':
 				ver ();
 				break;
@@ -510,7 +547,12 @@ int main (int argc, char *argv[])
 		}
 
 		push_cleanup (cleanup, NULL);
-		amount += mandb (catpath, *mp);
+		if (single_filename) {
+			if (STRNEQ (*mp, single_filename, strlen (*mp)))
+				amount += mandb (catpath, *mp);
+			/* otherwise try the next manpath */
+		} else
+			amount += mandb (catpath, *mp);
 
 		if (!opt_test) {
 			finish_up ();

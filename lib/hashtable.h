@@ -51,6 +51,7 @@ extern struct nlist *hash_lookup (const struct hashtable *ht,
 				  const char *s, size_t len);
 extern struct nlist *hash_install (struct hashtable *ht,
 				   const char *name, size_t len, void *defn);
+extern void hash_remove (struct hashtable *ht, const char *s, size_t len);
 extern void hash_free (struct hashtable *ht);
 
 #endif /* _HASHTABLE_H */

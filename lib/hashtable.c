@@ -92,22 +92,20 @@ struct hashtable *hash_create (hash_free_ptr free_defn)
 	return ht;
 }
 
-/* Return pointer to structure containing defn, or NULL if it doesn't
- * exist.
- */
+/* Return pointer to structure containing s, or NULL if it doesn't exist. */
 struct nlist *hash_lookup (const struct hashtable *ht,
 			   const char *s, size_t len)
 {
 	struct nlist *np;
 
-	for (np = ht->hashtab[hash(s, len)]; np; np = np->next) {
+	for (np = ht->hashtab[hash (s, len)]; np; np = np->next) {
 		if (strncmp (s, np->name, len) == 0)
 			return np;
 	}
 	return NULL;
 }
 
-/* Return struct containing defn, or NULL if unable to store. */
+/* Return structure containing defn, or NULL if unable to store. */
 struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
 			    void *defn)
 {
@@ -142,6 +140,28 @@ struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
 	np->defn = defn;
 
 	return np;
+}
+
+/* Remove structure containing name from the hash tree. */
+void hash_remove (struct hashtable *ht, const char *name, size_t len)
+{
+	struct nlist *np, *prev;
+	unsigned int hashval = hash (name, len);
+
+	for (np = ht->hashtab[hashval], prev = NULL; np;
+	     prev = np, np = np->next) {
+		if (strncmp (name, np->name, len) == 0) {
+			if (prev)
+				prev->next = np->next;
+			else
+				ht->hashtab[hashval] = np->next;
+			if (np->defn)
+				ht->free_defn (np->defn);
+			free (np->name);
+			free (np);
+			return;
+		}
+	}
 }
 
 /* Free up the hash tree (garbage collection). Also call the free_defn()

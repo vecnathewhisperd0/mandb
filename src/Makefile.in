@@ -57,7 +57,8 @@ TOOLS = $(PUBTOOLS) $(PRIVTOOLS)
 # Special definitions for some compilations
 DEFS_man.o = -DWHATIS=\"$(bindir)/$(whatis)\" \
 	     -DAPROPOS=\"$(bindir)/$(apropos)\" \
-	     -DSOELIM=\"$(bindir)/$(zsoelim)\"
+	     -DSOELIM=\"$(bindir)/$(zsoelim)\" \
+	     -DMANDB=\"$(bindir)/$(mandb)\"
 DEFS_catman.o = -DMAN=\"$(bindir)/$(man)\"
 DEFS_whatis.o = -DWHATIS
 DEFS_apropos.o = -DAPROPOS
@@ -87,10 +88,10 @@ all: $(PROGS) $(PUBTOOLS) wrapper man_db.conf
 #-------------------------------------------------------------------#
 
 man: security.o convert_name.o manp.o ult_src.o compression.o \
-     check_mandirs.o descriptions.o util.o lexgrog.o globbing.o man.o
+     filenames.o util.o lexgrog.o globbing.o man.o
 
 mandb: security.o manp.o util.o ult_src.o check_mandirs.o descriptions.o \
-       straycats.o compression.o lexgrog.o globbing.o mandb.o
+       filenames.o straycats.o compression.o lexgrog.o globbing.o mandb.o
 
 wrapper:	LDLIBS=-lc
 

@@ -81,6 +81,7 @@ extern int errno;
 #include "lib/error.h"
 #include "lib/hashtable.h"
 #include "descriptions.h"
+#include "filenames.h"
 #include "globbing.h"
 #include "ult_src.h"
 #include "security.h"
@@ -91,13 +92,6 @@ int pages;
 int force_rescan = 0;
 
 static struct hashtable *whatis_hash = NULL;
-
-static void gripe_bogus_manpage (const char *manpage)
-{
-	if (quiet < 2)
-		error (0, 0, _("warning: %s: ignoring bogus filename"),
-		       manpage);
-}	  	  
 
 static void gripe_multi_extensions (const char *path, const char *sec, 
 				    const char *name, const char *ext)
@@ -121,96 +115,6 @@ static void gripe_rwopen_failed (const char *database)
 			error (0, errno, _("can't update index cache %s"),
 			       database);
 	}
-}
-
-char *make_filename (const char *path, const char *name,
-		     struct mandata *in, char *type)
-{
-	static char *file;
-
-	if (!name)
-		name = in->name;    /* comes from dblookup(), so non-NULL */
-
-	file = (char *) xrealloc (file, sizeof "//." + strlen (path) + 
-				  strlen (type) + strlen (in->sec) +
-				  strlen (name) + strlen (in->ext));
-				   
-	(void) sprintf (file, "%s/%s%s/%s.%s",
-			path, type, in->sec, name, in->ext);
-
-	if (in->comp && *in->comp != '-')	/* Is there an extension? */
-		file = strappend (file, ".", in->comp, NULL);
-
-	return file;
-}
-
-/* Fill in a mandata structure with information about a file name.
- * file is the name to examine. info points to the structure to be filled
- * in. req_name is the page name that was requested.
- * 
- * Returns either a pointer to the buffer which the fields in info point
- * into, to be freed by the caller, or NULL on error. The buffer will
- * contain either three or four null-terminated strings: the directory name,
- * the base of the file name in that directory, the section extension, and
- * optionally the compression extension (if COMP_SRC is defined).
- * 
- * Only the fields name, ext, sec, and comp are filled in by this function.
- * name is only set if it differs from req_name; otherwise it remains at
- * NULL.
- */
-char *filename_info (const char *file, struct mandata *info,
-		     const char *req_name)
-{
-	char *manpage = xstrdup (file);
-	char *base_name = basename (manpage);
-#ifdef COMP_SRC
-	struct compression *comp;
-#endif
-
-	/* Bogus files either have (i) no period, ie no extension, (ii)
-	   a compression extension, but no sectional extension, (iii)
-	   a missmatch between the section they are under and the
-	   sectional part of their extension. */
-
-#ifdef COMP_SRC
-	comp = comp_info (base_name);
-	if (comp) {
-		info->comp = comp->ext;
-		*(comp->file) = '\0';		/* to strip the comp ext */
-	} else
-		info->comp = NULL;
-#else /* !COMP_SRC */	
-	info->comp = NULL;
-#endif /* COMP_SRC */
-
-	{
-		char *ext = strrchr (base_name, '.');
-		if (!ext) {
-			/* no section extension */
-			gripe_bogus_manpage (file);
-			free (manpage);
-			return NULL;
-		}
-		*ext++ = '\0';			/* set section ext */
-		info->ext = ext;
-	}
-
-	*(base_name - 1) = '\0';		/* strip '/base_name' */ 
-	info->sec = strrchr (manpage, '/') + 4;	/* set section name */
-
-	if (strncmp (info->sec, info->ext, strlen (info->sec)) != 0) {
-		/* missmatch in extension */
-		gripe_bogus_manpage (file);
-		free (manpage);
-		return NULL;
-	}
-
-	if (req_name && !STREQ (base_name, req_name))
-		info->name = xstrdup (base_name);
-	else
-		info->name = NULL;
-
-	return manpage;
 }
 
 /* take absolute filename and path (for ult_src) and do sanity checks on 
@@ -667,6 +571,65 @@ short update_db (const char *manpath)
 		fprintf (stderr, "failed to open %s O_RDONLY\n", database);
 		
 	return EOF;
+}
+
+/* Purge any entries pointing to name. This currently assumes that pointers
+ * are always shallow, which may not be a good assumption yet; it should be
+ * close, though.
+ *
+ * Assumes that the appropriate database is already open on dbf.
+ */
+void purge_pointers (const char *manpath, const char *name)
+{
+	datum key = MYDBM_FIRSTKEY (dbf);
+
+	if (debug)
+		fprintf (stderr, "Purging pointers to vanished page \"%s\"\n",
+			 name);
+
+	while (key.dptr != NULL) {
+		datum content, nextkey;
+		struct mandata entry;
+		char *nicekey, *tab;
+
+		/* Ignore db identifier keys. */
+		if (*key.dptr == '$')
+			goto pointers_next;
+
+		content = MYDBM_FETCH (dbf, key);
+		if (!content.dptr)
+			return;
+
+		/* Get just the name. */
+		nicekey = xstrdup (key.dptr);
+		tab = strchr (nicekey, '\t');
+		if (tab)
+			*tab = '\0';
+
+		if (*content.dptr == '\t')
+			goto pointers_contentnext;
+
+		split_content (content.dptr, &entry);
+		if (entry.id != SO_MAN && entry.id != WHATIS_MAN)
+			goto pointers_contentnext;
+
+		if (STREQ (entry.pointer, name)) {
+			if (!opt_test)
+				dbdelete (nicekey, &entry);
+			else if (debug)
+				fprintf (stderr,
+					 "%s(%s): pointer vanished, "
+					 "would delete\n", nicekey, entry.ext);
+		}
+
+pointers_contentnext:
+		free (nicekey);
+		MYDBM_FREE (content.dptr);
+pointers_next:
+		nextkey = MYDBM_NEXTKEY (dbf, key);
+		MYDBM_FREE (key.dptr);
+		key = nextkey;
+	}
 }
 
 /* Count the number of exact extension matches returned from look_for_file()

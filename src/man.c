@@ -141,6 +141,7 @@ extern int errno;
 #include "lib/cleanup.h"
 #include "lib/hashtable.h"
 #include "check_mandirs.h"
+#include "filenames.h"
 #include "globbing.h"
 #include "ult_src.h"
 #include "manp.h"
@@ -355,10 +356,6 @@ static int local_man_file;
 static int findall;
 static int update;
 static int match_case;
-
-#ifdef MAN_DB_UPDATES
-static int update_required = 1;	/* we haven't performed update */
-#endif /* MAN_DB_UPDATES */
 
 static int ascii;		/* insert tr in the output pipe */
 static int save_cat; 		/* security breach? Can we save the cat? */
@@ -728,46 +725,66 @@ static __inline__ const char *escape_less (const char *string)
 	return escaped_string;
 }
 
-#ifdef MAN_DB_UPDATES
-/* test for new files. If any found return 1, else 0 */
-static int need_to_rerun (void)
+#if defined(MAN_DB_CREATES) || defined(MAN_DB_UPDATES)
+/* Run mandb to ensure databases are up to date. Only used with -u.
+ * Returns the exit status of mandb.
+ *
+ * If filename is non-NULL, uses mandb's -f option to update a single file.
+ */
+static int run_mandb (int create, const char *manpath, const char *filename)
 {
-	int rerun = 0;
-	char **mp;
+	int status;
+	pid_t child = fork ();
 
-	for (mp = manpathlist; *mp; mp++) {
-		char *catpath;
+	if (child < 0)
+		error (FATAL, errno, _("fork failed"));
+	else if (child == 0) {
+		char *argv[5];
+		int argc = 0;
 
-		global_manpath = is_global_mandir (*mp);
-		if (!global_manpath)
-			drop_effective_privs ();
+		argv[argc++] = xstrdup ("mandb");
+		if (debug)
+			argv[argc++] = xstrdup ("-d");
+		else
+			argv[argc++] = xstrdup ("-q");
 
-		catpath = get_catpath
-			(*mp, global_manpath ? SYSTEM_CAT : USER_CAT);
-		if (catpath) {
-			database = mkdbname (catpath);
-			free (catpath);
-		} else {
-			database = mkdbname (*mp);
+		if (filename) {
+			argv[argc++] = xstrdup ("-f");
+			argv[argc++] = xstrdup (filename);
+		} else if (create)
+			argv[argc++] = xstrdup ("-c");
+		else
+			argv[argc++] = xstrdup ("-p");
+
+		if (manpath)
+			argv[argc++] = xstrdup (manpath);
+		argv[argc++] = NULL;
+
+		if (debug) {
+			char **p;
+			fputs ("running mandb:", stderr);
+			for (p = argv; *p; ++p)
+				fprintf (stderr, " %s", *p);
+			putc ('\n', stderr);
 		}
 
-		if (update)
-			reset_db_time ();
+		execv (MANDB, argv);
 
-		/* if no change or couldn't update (EOF), forget it */
-		if (update_db (*mp) > 0)
-			rerun = 1;
+		error (FATAL, 0, _("can't execute %s"), MANDB);
+	} else {
+		pid_t res;
+		do {
+			res = waitpid (child, &status, 0);
+		} while ((res == -1) && (errno == EINTR));
 
-		if (!global_manpath)
-			regain_effective_privs ();
+		if (res == -1)
+			error (FATAL, 0,
+			       _("can't get mandb command's exit status"));
 	}
 
-	/* only ever need to do this once */
-	update_required = 0;
-	
-	return rerun;
+	return status;
 }
-#endif /* MAN_DB_UPDATES */
+#endif /* MAN_DB_CREATES || MAN_DB_UPDATES */
 
 
 /* man issued with `-l' option */
@@ -1034,8 +1051,13 @@ int main (int argc, char *argv[])
 
 #ifdef MAN_DB_UPDATES
 	/* If `-u', do it now. */
-	if (update)
-		(void) need_to_rerun ();
+	if (update) {
+		int status = run_mandb (0, NULL, NULL);
+		if (status)
+			error (0, 0,
+			       _("mandb command failed with exit status %d"),
+			       status);
+	}
 #endif /* MAN_DB_UPDATES */
 
 	while (optind < argc) {
@@ -2891,9 +2913,6 @@ static int display_database (struct candidate *candp)
 	const char *name;
 	char *title;
 	struct mandata *in = candp->source;
-#ifdef MAN_DB_UPDATES
-	struct stat buf;
-#endif
 
 	if (debug) {
 		fprintf (stderr, "trying a db located file.\n");
@@ -2908,48 +2927,6 @@ static int display_database (struct candidate *candp)
 		name = in->name;
 	else
 		name = candp->req_name;
-
-	/* make sure the file we want is the same as the one in the 
-	   filesystem */
-
-#ifdef MAN_DB_UPDATES
-	/* The next piece of code examines the db found manual page
-	   and checks for consistency */
-	file = make_filename (candp->path, name, in, "man");
-	if (lstat (file, &buf) == 0 && buf.st_mtime != in->_st_mtime) {
-		/* update of this file required */
-		if (debug)
-			fprintf (stderr, "%s needs to be recached: %ld %ld.\n", 
-				 file, (long)in->_st_mtime,
-				 (long)buf.st_mtime);
-		dbf = MYDBM_RWOPEN (database);
-		if (dbf) {
-			dbdelete (candp->req_name, in);
-			test_manfile (file, candp->path);
-			in = dblookup_exact (candp->req_name, in->ext,
-					     match_case);
-			MYDBM_CLOSE (dbf);
-			if (!in)
-				return 0;
-			if (*in->pointer != '-')
-				name = in->pointer;
-			else if (in->name)
-				name = in->name;
-			else
-				name = candp->req_name;
-		} else {
-			if (errno == EACCES || errno == EROFS) {
-				if (debug)
-					fprintf (stderr,
-						 "database %s is read-only\n",
-						 database);
-			} else
-				error (0, errno,
-				       _("can't update index cache %s"),
-				       database);
-		}
-	}
-#endif /* MAN_DB_UPDATES */
 
 	if (debug && (in->id == WHATIS_MAN || in->id == WHATIS_CAT))
 		fprintf (stderr,
@@ -3085,6 +3062,55 @@ static void db_hash_free (void *defn)
 	free_mandata_struct (defn);
 }
 
+#ifdef MAN_DB_UPDATES
+static int maybe_update_file (const char *manpath, const char *name,
+			      struct mandata *info)
+{
+	const char *real_name;
+	char *file;
+	struct stat buf;
+	int status;
+
+	/* If the pointer holds some data, then we need to look at that
+	 * name in the filesystem instead.
+	 */
+	if (!STRNEQ (info->pointer, "-", 1))
+		real_name = info->pointer;
+	else if (info->name)
+		real_name = info->name;
+	else
+		real_name = name;
+
+	file = make_filename (manpath, real_name, info, "man");
+	if (lstat (file, &buf) != 0)
+		return 0;
+	if (buf.st_mtime == info->_st_mtime)
+		return 0;
+
+	if (debug)
+		fprintf (stderr, "%s needs to be recached: %ld %ld\n",
+			 file, (long) info->_st_mtime, (long) buf.st_mtime);
+	status = run_mandb (0, manpath, file);
+	if (status)
+		error (0, 0, _("mandb command failed with exit status %d"),
+		       status);
+
+	return 1;
+}
+#endif /* MAN_DB_UPDATES */
+
+/* Special return values from try_db(). */
+
+#define TRY_DATABASE_OPEN_FAILED  -1
+
+#ifdef MAN_DB_CREATES
+#define TRY_DATABASE_CREATED      -2
+#endif /* MAN_DB_CREATES */
+
+#ifdef MAN_DB_UPDATES
+#define TRY_DATABASE_UPDATED      -3
+#endif /* MAN_DB_UPDATES */
+
 /* Look for a page in the database. If db not accessible, return -1,
    otherwise return number of pages found. */
 static int try_db (const char *manpath, const char *sec, const char *name,
@@ -3094,6 +3120,9 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	struct mandata *loc, *data;
 	char *catpath;
 	int found = 0;
+#ifdef MAN_DB_UPDATES
+	int found_stale = 0;
+#endif /* MAN_DB_UPDATES */
 
 	/* find out where our db for this manpath should be */
 
@@ -3109,7 +3138,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 
 	/* Have we looked here already? */
 	in_cache = hash_lookup (db_hash, manpath, strlen (manpath));
-	
+
 	if (!in_cache) {
 		dbf = MYDBM_RDOPEN (database);
 		if (dbf && dbver_rd (dbf)) {
@@ -3135,17 +3164,16 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 				fprintf (stderr, 
 					 "Failed to open %s O_RDONLY\n",
 					 database);
-			/* create_db should really return EOF on failure. */
-			if (create_db (manpath) == 0) {
+			if (run_mandb (1, manpath, NULL)) {
 				data = infoalloc ();
 				data->next = NULL;
 				data->addr = NULL;
 				hash_install (db_hash,
 					      manpath, strlen (manpath),
 					      data);
-				return -1;
+				return TRY_DATABASE_OPEN_FAILED;
 			}
-			return -2;
+			return TRY_DATABASE_CREATED;
 #endif /* MAN_DB_CREATES */
 		} else {
 			if (debug)
@@ -3157,7 +3185,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			data->addr = NULL;
 			hash_install (db_hash, manpath, strlen (manpath),
 				      data);
-			return -1; /* indicate failure to open db */
+			return TRY_DATABASE_OPEN_FAILED;
 		}
 	} else
 		data = in_cache->defn;
@@ -3168,7 +3196,24 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 
 	/* We already tried (and failed) to open this db before */
 	if (!data->addr)
-		return -1;
+		return TRY_DATABASE_OPEN_FAILED;
+
+#ifdef MAN_DB_UPDATES
+	/* Check that all the entries found are up to date. If not, the
+	 * caller should try again.
+	 */
+	for (loc = data; loc; loc = loc->next)
+		if (STREQ (sec, loc->sec) &&
+		    (!extension || STREQ (extension, loc->ext)
+				|| STREQ (extension, loc->ext + strlen (sec))))
+			if (maybe_update_file (manpath, name, loc))
+				found_stale = 1;
+
+	if (found_stale) {
+		hash_remove (db_hash, manpath, strlen (manpath));
+		return TRY_DATABASE_UPDATED;
+	}
+#endif /* MAN_DB_UPDATES */
 
 	/* cycle through the mandata structures (there's usually only 
 	   1 or 2) and see what we have w.r.t. the current section */
@@ -3210,9 +3255,20 @@ static int locate_page (const char *manpath, const char *sec, const char *name,
 		db_ok = try_db (manpath, sec, name, candidates);
 
 #ifdef MAN_DB_CREATES
-		if (db_ok == -2) /* we created a db in the last call */
+		if (db_ok == TRY_DATABASE_CREATED)
+			/* we created a db in the last call */
 			db_ok = try_db (manpath, sec, name, candidates);
 #endif /* MAN_DB_CREATES */
+
+#ifdef MAN_DB_UPDATES
+		if (db_ok == TRY_DATABASE_UPDATED)
+			/* We found some outdated entries and rebuilt the
+			 * database in the last call. If this keeps
+			 * happening, though, give up and punt to the
+			 * filesystem.
+			 */
+			db_ok = try_db (manpath, sec, name, candidates);
+#endif /* MAN_DB_UPDATES */
 
 		if (db_ok > 0)  /* we found/opened a db and found something */
 			found += db_ok;
@@ -3234,10 +3290,18 @@ static int display_pages (struct candidate *candidates)
 		if (!global_manpath)
 			drop_effective_privs ();
 
-		if (candp->from_db)
-			found += display_database_check (candp);
-		else
-			found += display_filesystem (candp);
+		switch (candp->from_db) {
+			case CANDIDATE_FILESYSTEM:
+				found += display_filesystem (candp);
+				break;
+			case CANDIDATE_DATABASE:
+				found += display_database_check (candp);
+				break;
+			default:
+				error (0, 0,
+				       _("internal error: candidate type %d "
+					 "out of range"), candp->from_db);
+		}
 
 		if (!global_manpath)
 			regain_effective_privs ();

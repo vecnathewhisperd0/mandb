@@ -93,19 +93,13 @@ static int replace_if_necessary(struct mandata *newdata,
 				struct mandata *olddata,
 				datum newkey, datum newcont)
 {
-	if (compare_ids(newdata->id, olddata->id) < 0) {
+	if (compare_ids(newdata->id, olddata->id) < 0)
 		if (MYDBM_REPLACE(dbf, newkey, newcont))
 			gripe_replace_key(newkey.dptr);
-	} else if (newdata->id == olddata->id) 
-		if (debug)
-			fprintf(stderr,
-				"ignoring identical multi key: %s\n",
-				newkey.dptr);
 
 	/* TODO: name fields should be collated with the requested name */
 
-	if (newdata->id == olddata->id &&
-	    newdata->id == ULT_MAN) {
+	if (newdata->id == olddata->id) {
 		if (STREQ(dash_if_unset(newdata->comp), olddata->comp)) {
 			if (newdata->_st_mtime != olddata->_st_mtime) {
 				if (debug)
@@ -114,11 +108,18 @@ static int replace_if_necessary(struct mandata *newdata,
 					gripe_replace_key(newkey.dptr);
 			}
 			return 0; /* same file */
-		} else
-			return 1; /* differing names/exts */
+		} else {
+			if (debug)
+				fprintf (stderr,
+					 "ignoring differing compression "
+					 "extensions: %s\n", newkey.dptr);
+			return 1; /* differing exts */
+		}
 	}
 
-	return 0; /* not physical file anyway */
+	if (debug)
+		fprintf (stderr, "ignoring differing ids: %s\n", newkey.dptr);
+	return 0;
 }
 
 /*
