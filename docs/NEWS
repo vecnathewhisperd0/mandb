@@ -13,6 +13,8 @@ Major changes since man_db-2.3.18:
 
 	o The HUP and TERM signals are now handled better.
 
+	o straycats processing invokes 'col -bx' rather than 'col-bx'.
+
 	Improvements:
 	-------------
 
@@ -24,6 +26,13 @@ Major changes since man_db-2.3.18:
 
 	o The MANDB_MAP configuration file directive is documented more
 	  clearly.
+
+	o Multiple whatis entries separated by commas and/or break requests
+	  are handled more intelligently.
+
+	o Duplicate manpath entries (often generated in the course of
+	  national language support) are removed, so that 'man -a' works
+	  better.
 
 man_db-2.3.18
 =============
