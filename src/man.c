@@ -793,13 +793,17 @@ int local_man_loop (const char *argv)
 #ifdef COMP_SRC
 		comp = comp_info (argv);
 		if (comp)
-			(void) decompress(argv, comp);
+			if (!decompress(argv, comp))
+				exit_status = CHILD_FAIL;
 #endif /* COMP_SRC */
-		lang = lang_dir (argv);
-		if (!display (NULL, argv, NULL, basename (argv), NULL)) {
-			if (local_mf)
-				error (0, errno, "%s", argv);
-			exit_status = NOT_FOUND;
+		if (exit_status == OK) {
+			lang = lang_dir (argv);
+			if (!display (NULL, argv, NULL, basename (argv),
+				      NULL)) {
+				if (local_mf)
+					error (0, errno, "%s", argv);
+				exit_status = NOT_FOUND;
+			}
 		}
 
 #ifdef COMP_SRC

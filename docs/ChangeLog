@@ -1,3 +1,12 @@
+Mon Sep 16 01:07:16 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/compression.c (decompress): If the decompressor fails, print
+	  an error message and return NULL rather than exit()ing
+	  immediately. This allows callers to behave more intelligently.
+	* src/lexgrog.l (find_name): Cope with decompress() returning NULL.
+	* src/man.c (local_man_loop): Likewise.
+	* src/ult_src.c (ult_src): Likewise.
+
 Mon Sep 16 00:25:17 BST 2002  Clint Adams  <schizo@debian.org>
 
 	* configure.in: Detect bzip2.

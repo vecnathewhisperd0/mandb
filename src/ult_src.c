@@ -281,11 +281,13 @@ char *ult_src (char *name, const char *path, struct stat *buf, int flags)
 
 			comp = comp_file (basename);
 			if (comp) {
-				drop_effective_privs ();
 				filename = decompress (comp->file, comp);
 				free (comp->file);
+				if (!filename)
+					return NULL;
 				(void) strcat (basename, ".");
 				(void) strcat (basename, comp->ext);
+				drop_effective_privs ();
 				fp = fopen (filename, "r");
 				regain_effective_privs ();
 			} else

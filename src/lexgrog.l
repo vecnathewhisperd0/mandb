@@ -362,8 +362,11 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 #ifdef COMP_SRC
 		/* See if we need to decompress the file(s) first. */
 		struct compression *comp = comp_info (file);
-		if (comp)
+		if (comp) {
 			file = decompress (file, comp);
+			if (!file)
+				return 0;
+		}
 #endif
 		drop_effective_privs ();
 		yyin = fopen (file, "r");

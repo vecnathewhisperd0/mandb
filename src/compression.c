@@ -136,7 +136,10 @@ struct compression *comp_file (const char *filename)
 	return NULL;
 }
 
-/* set up a pointer to a unique temp filename on first call */
+/* Set up a pointer to a unique temp filename on first call.
+ * If this returns NULL, an error message will have been printed and the
+ * caller should abort the current operation as appropriate.
+ */
 char *decompress (const char *filename, const struct compression *comp)
 {
 	char *command;
@@ -171,7 +174,9 @@ char *decompress (const char *filename, const struct compression *comp)
 
 	if (status) {
 		remove_ztemp ();
-		exit (CHILD_FAIL);
+		error (0, 0, _("command '%s' failed with exit status %d"),
+		       command, status);
+		return NULL;
 	}
 	return file;
 }
