@@ -1,3 +1,25 @@
+Sat Oct 12 20:16:48 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	A much-needed complete rewrite of splitline(). The previous version
+	was extremely difficult to debug (see http://bugs.debian.org/123130)
+	and got info->pointer and info->whatis wrong quite frequently. This
+	version is much simpler and I hope more correct.
+
+	* src/util.c (trim_spaces): New function.
+	* include/manconfig.h.in: Prototype trim_spaces().
+
+	* src/check_mandirs.c (gripe_bad_store): New function.
+	  (splitline): Remove.
+	  (parse_descriptions, store_descriptions, free_descriptions): New
+	  functions, implementing the whatis parsing that used to be in
+	  splitline() and test_manfile().
+	  (test_manfile): Reduce the complicated loop over splitline() to
+	  calls to the above three functions. Adjust the parsing failure
+	  case to require less deeply nested indentation.
+	* src/check_mandirs.h: New page_description struct, used to
+	  implement the above. Prototype new functions.
+	* src/straycats.c: Use the new page_description-based interface.
+
 Wed Sep 25 00:39:16 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (DESCRIPTION): Clarify the purpose of section 7

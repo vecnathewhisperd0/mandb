@@ -95,6 +95,13 @@ static void gripe_multi_extensions (const char *path, const char *sec,
 		       path, sec, name, ext);
 }
 
+static void gripe_bad_store (const char *name, const char *ext)
+{
+	if (quiet < 2)
+		error (0, 0, _("warning: failed to store entry for %s(%s)"),
+		       name, ext);
+}
+
 static void gripe_rwopen_failed (char *database)
 {
 	if (errno == EACCES || errno == EROFS) {
@@ -131,94 +138,152 @@ char *make_filename (const char *path, const char *name,
 	return file;
 }
 
-int splitline (char *raw_whatis, struct mandata *info, char *base_name)
+/* Parse the description in a whatis line returned by find_name() into a
+ * sequence of names and whatis descriptions.
+ */
+struct page_description *parse_descriptions (const char *base_name,
+					     const char *whatis)
 {
-	char *comma;
-	int ret;
+	const char *sep, *nextsep;
+	struct page_description *desc = NULL, *head = NULL;
+	int seen_base_name = 0;
 
-	info->whatis = NULL;	/* default */
-	if (raw_whatis) {
+	if (!whatis)
+		return NULL;
+
+	sep = whatis;
+
+	while (sep) {
+		char *record;
+		size_t length;
+		const char *dash;
+		char *names;
+		const char *token;
+
+		/* Use a while loop so that we skip over things like the
+		 * result of double line breaks.
+		 */
+		while (*sep == 0x11 || *sep == ' ')
+			++sep;
+		nextsep = strchr (sep, 0x11);
+
+		/* Get this record as a null-terminated string. */
+		if (nextsep)
+			length = (size_t) (nextsep - sep);
+		else
+			length = strlen (sep);
+		if (length == 0)
+			break;
+
+		record = xstrndup (sep, length);
 		if (debug)
-			fprintf (stderr, "raw_whatis = %s\n", raw_whatis);
-		info->whatis = strstr (raw_whatis, " - ");
-		if (info->whatis) {
-			/* Deliberate cast in order to modify the whatis.
-			 * Don't change its length!
-			 */
-			char *space = (char *) info->whatis;
-			while (space >= raw_whatis && *space == ' ')
-				*space-- = '\0';    /* separate description */
-			info->whatis += 3;
-			/* Now trim trailing spaces off the description. */
-			space = strchr (info->whatis, '\0') - 1;
-			while (*space == ' ')
-				*space = '\0';
-		} else
-			raw_whatis = NULL; /* kill entire whatis line */
+			fprintf (stderr, "record = '%s'\n", record);
+
+		/* Split the record into name and whatis description. */
+		dash = strstr (record, " - ");
+		if (dash)
+			names = xstrndup (record, dash - record);
+		else
+			names = xstrdup (record);
+
+		for (token = strtok (names, ","); token;
+		     token = strtok (NULL, ",")) {
+			/* Allocate new description node. */
+			if (head) {
+				desc->next = malloc (sizeof *desc);
+				desc = desc->next;
+			} else {
+				desc = malloc (sizeof *desc);
+				head = desc;
+			}
+			desc->name   = trim_spaces (token);
+			desc->whatis = dash ? trim_spaces (dash + 3) : NULL;
+			desc->next   = NULL;
+
+			if (STREQ (base_name, desc->name))
+				seen_base_name = 1;
+		}
+
+		free (names);
+
+		sep = nextsep;
 	}
 
-	/* Here we store the direct reference */
+	/* If it isn't there already, add the base_name onto the returned
+	 * list.
+	 */
+	if (!seen_base_name) {
+		if (head) {
+			desc->next = malloc (sizeof *desc);
+			desc = desc->next;
+			desc->whatis = xstrdup (head->whatis);
+		} else {
+			desc = malloc (sizeof *desc);
+			head = desc;
+			desc->whatis = NULL;
+		}
+		desc->name = xstrdup (base_name);
+		desc->next = NULL;
+	}
+
+	return head;
+}
+
+/* Take a list of descriptions returned by parse_descriptions() and store
+ * it into the database.
+ */
+void store_descriptions (const struct page_description *head,
+			 struct mandata *info, const char *base_name)
+{
+	const struct page_description *desc;
+	char save_id = info->id;
+
 	if (debug)
-		fprintf (stderr, "base_name = `%s', id = %c\n",
-			 base_name, info->id);
+		fprintf (stderr, "base_name = '%s'\n", base_name);
 
-	comma = strchr (base_name, ',');
-	if (comma) {
-		*comma = '\0';
+	for (desc = head; desc; desc = desc->next) {
+		/* Either it's the real thing or merely a reference. Get the
+		 * id and pointer right in either case.
+		 */
+		if (STREQ (base_name, desc->name)) {
+			info->id = save_id;
+			info->pointer = NULL;
+			info->whatis = desc->whatis;
+		} else {
+			if (save_id < STRAY_CAT)
+				info->id = WHATIS_MAN;
+			else
+				info->id = WHATIS_CAT;
+			info->pointer = base_name;
+			/* Don't waste space storing the whatis in the db
+			 * more than once.
+			 */
+			info->whatis = NULL;
+		}
+
 		if (debug)
-			fprintf (stderr, "base_name = `%s'\n",
-				 base_name);
-	}
-
-	ret = dbstore (info, base_name);
-	if (ret > 0)
-		return ret;
-
-	/* if there are no indirect references, just go on to the 
-	   next file */
-
-	if (!raw_whatis || strchr (raw_whatis, ',') == NULL)
-		return 0;
-
-	/* If there are...  */
-		
-	if (info->id < STRAY_CAT)
-		info->id = WHATIS_MAN;
-	else
-		info->id = WHATIS_CAT;
-
-	/* don't waste space storing the whatis in the db */
-	info->whatis = NULL;
-	/* This may be used in the next splitline() call. */
-	info->pointer = base_name; 
-	
-	while ((comma = strrchr (raw_whatis, ',')) != NULL) {
-		*comma = '\0';
-		comma += 2;
-
-		/* If we've already dealt with it, ignore */
-		
-		if (strcmp (comma, base_name) != 0) {
-			if (debug)
-				fprintf (stderr, "comma = `%s'\n", comma);
-			ret = dbstore (info, comma);
-			if (ret > 0)
-				return ret;
+			fprintf (stderr, "name = '%s', id = %c\n",
+				 desc->name, info->id);
+		if (dbstore (info, desc->name) > 0) {
+			gripe_bad_store (base_name, info->ext);
+			break;
 		}
 	}
+}
 
-	/* If we've already dealt with it, ignore */
-		
-	if (strcmp (raw_whatis, base_name) == 0)
-		return 0;
+/* Free a description list and all its contents. */
+void free_descriptions (struct page_description *head)
+{
+	struct page_description *desc = head, *prev;
 
-	if (debug)
-		fprintf (stderr, "raw_w = `%s'\n", raw_whatis);
-	ret = dbstore (info, raw_whatis);
-	if (ret > 0)
-		return ret;
-
-	return 0;
+	while (desc) {
+		free (desc->name);
+		if (desc->whatis)
+			free (desc->whatis);
+		prev = desc;
+		desc = desc->next;
+		free (prev);
+	}
 }
 
 /* Fill in a mandata structure with information about a file name.
@@ -466,77 +531,19 @@ void test_manfile (char *file, const char *path)
 	info.pointer = NULL;	/* direct page, so far */
 	info.filter = lg.filters;
 	if (lg.whatis) {
-		int last_name;
-		char save_id;
-		char *othername = xstrdup (lg.whatis);
-
-		last_name = 0;
-		save_id = info.id;
-
-		/* It's easier to run through the names in reverse order. */
-		while (!last_name) {
-			char *sep, *dup_whatis, *end_othername;
-			/* Get the next name, with leading spaces and the
-			 * description removed.
-			 */
-			sep = strrchr (othername, 0x11);
-			if (sep)
-				*(sep++) = '\0';
-			else {
-				sep = othername;
-				last_name = 1;
-			}
-			if (!*sep)
-				/* Probably a double line break or something */
-				continue;
-			sep += strspn (sep, " ");
-			dup_whatis = xstrdup (sep);
-			end_othername = strstr (sep, " - ");
-			if (end_othername) {
-				while (*(end_othername - 1) == ' ')
-					--end_othername;
-				*end_othername = '\0';
-			}
-			if (STREQ (base_name, sep))
-				info.id = save_id;
-			else {
-				info.id = WHATIS_MAN;
-				info.pointer = base_name;
-			}
-			if (!opt_test) {
-				if (splitline (dup_whatis, &info, sep) == 1)
-					gripe_multi_extensions (path, info.sec,
-								base_name,
-								info.ext);
-			}
-			free (dup_whatis);
+		struct page_description *descs =
+			parse_descriptions (base_name, lg.whatis);
+		if (descs) {
+			if (!opt_test)
+				store_descriptions (descs, &info, base_name);
+			free_descriptions (descs);
 		}
-
-		info.id = save_id;
-		info.pointer = NULL;
-		if (!opt_test) {
-			/* Ugh. This whole thing needs to be rearranged. */
-			char *sep = strchr (lg.whatis, 0x11);
-			if (sep)
-				*sep = '\0';
-			if (splitline (lg.whatis,
-				       &info, base_name) == 1)
-				gripe_multi_extensions (path, info.sec,
-							base_name, info.ext);
-		}
-
-		free (othername);
-	} else {
+	} else if (quiet < 2) {
 		(void) stat (ult, &buf);
-		if (buf.st_size == 0) {
-			if (quiet < 2)
-				error (0, 0,
-				       _("warning: %s: ignoring empty file"),
-				       ult);
-			free (manpage);
-			return;
-		}
-		if (quiet < 2)
+		if (buf.st_size == 0)
+			error (0, 0, _("warning: %s: ignoring empty file"),
+			       ult);
+		else
 			error (0, 0,
 			       _("warning: %s: whatis parse for %s(%s) failed"),
 			       ult, base_name, info.ext);

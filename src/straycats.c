@@ -68,12 +68,10 @@ extern char *canonicalize_file_name __P ((__const char *__name));
 #include "lib/error.h"
 #include "manp.h"
 #include "security.h"
+#include "check_mandirs.h"
 
 static char *temp_name;
 static char *catdir, *mandir;
-
-/* prototype here as it uses struct mandata which is defined in db_storage.h */
-extern int splitline (char *raw_whatis, struct mandata *info, char *base_name);
 
 static int check_for_stray (void)
 {
@@ -265,6 +263,10 @@ static int check_for_stray (void)
 					remove_with_dropped_privs (temp_name);
 					perror (filter);
 				} else {
+					const char *manbase =
+						basename (mandir);
+					struct page_description *descs;
+
 					strays++;
 
 					lg.type = CATPAGE;
@@ -276,8 +278,14 @@ static int check_for_stray (void)
 								basename (mandir),
 								info.sec);
 
-					(void) splitline (lg.whatis, &info,
-							  basename (mandir));
+					descs = parse_descriptions (manbase,
+								    lg.whatis);
+					if (descs) {
+						store_descriptions (descs,
+								    &info,
+								    manbase);
+						free_descriptions (descs);
+					}
 				}
 			}
 

@@ -205,3 +205,17 @@ int remove_directory (const char *directory)
 		return -1;
 	return 0;
 }
+
+/* Returns an allocated copy of s, with leading and trailing spaces
+ * removed.
+ */
+char *trim_spaces (const char *s)
+{
+	int length;
+	while (*s == ' ')
+		++s;
+	length = strlen (s);
+	while (length && s[length - 1] == ' ')
+		--length;
+	return xstrndup (s, length);
+}
