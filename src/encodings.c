@@ -130,6 +130,7 @@ struct charset_entry {
 static struct charset_entry charset_table[] = {
 	{ "ANSI_X3.4-1968",	"ascii"		},
 	{ "ISO-8859-1",		"latin1"	},
+	{ "ISO-8859-15",    	"latin1"	},
 	{ "UTF-8",		"utf8"		},
 
 #ifdef MULTIBYTE_GROFF
