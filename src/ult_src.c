@@ -318,7 +318,7 @@ char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 		/* make sure that we skip over any comments */
 		do {
 			bptr = fgets (buffer, 1024, fp);
-		} while (bptr && strncmp (buffer, ".\\\"", 3) == 0);
+		} while (bptr && STRNEQ (buffer, ".\\\"", 3));
 
 		fclose(fp);
 

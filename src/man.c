@@ -490,15 +490,15 @@ static int tms_set = 0;
 static void set_term (void)
 {
 	if (tms_set)
-		tcsetattr (0, TCSANOW, &tms);
+		tcsetattr (fileno (stdin), TCSANOW, &tms);
 }
 
 static void get_term (void)
 {
-	if (isatty (1)) {
+	if (isatty (fileno (stdout))) {
 		if (debug)
 			fprintf(stderr, "is a tty\n");
-		tcgetattr (0, &tms);
+		tcgetattr (fileno (stdin), &tms);
 		if (!tms_set++)
 			atexit (set_term);
 	}
@@ -533,10 +533,11 @@ static void store_line_length (void)
 	}
 
 #ifdef TIOCGWINSZ
-	if (isatty(0) && isatty(1)) { /* Jon Tombs */
+	/* Jon Tombs */
+	if (isatty (fileno (stdin)) && isatty (fileno (stdout))) {
 		struct winsize wsz;
 
-		if (ioctl (0, TIOCGWINSZ, &wsz))
+		if (ioctl (fileno (stdin), TIOCGWINSZ, &wsz))
 			perror ("TIOCGWINSZ failed\n");
 		else if (wsz.ws_col) {
 			line_length = wsz.ws_col;

@@ -1,3 +1,10 @@
+Mon May  5 19:47:07 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (set_term, get_term, store_line_length): Use the
+	  fileno() of stdin and stdout respectively instead of literal 0 and
+	  1.
+	* src/ult_src.c (ult_src): Use STRNEQ() instead of strncmp().
+
 Mon May  5 18:35:02 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/encodings.c (directory_table): Add Czech -> ISO-8859-2.
