@@ -306,7 +306,7 @@ static __inline__ void do_chown (uid_t uid)
 #endif /* SECURE_MAN_UID */
 
 /* Update a single file in an existing database. */
-static short update_one_file (const char *manpath, char *filename)
+static short update_one_file (const char *manpath, const char *filename)
 {
 	dbf = MYDBM_RWOPEN (database);
 	if (dbf) {

@@ -23,7 +23,7 @@
 #include "libdb/db_storage.h"
 
 /* check_mandirs.c */
-extern void test_manfile (char *file, const char *path);
+extern void test_manfile (const char *file, const char *path);
 extern void update_db_time (void);
 extern void reset_db_time (void);
 extern short create_db (const char *manpath);

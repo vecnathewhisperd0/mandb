@@ -126,7 +126,7 @@ static void gripe_rwopen_failed (const char *database)
    the db. If not, find its ult_src() and see if we have the whatis cached, 
    otherwise cache it in case we trace another manpage back to it. Next,
    store it in the db along with any references found in the whatis. */
-void test_manfile (char *file, const char *path)
+void test_manfile (const char *file, const char *path)
 {
 	char *base_name;
 	const char *ult;
