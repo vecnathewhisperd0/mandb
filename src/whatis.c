@@ -538,6 +538,9 @@ int main(int argc, char *argv[])
 #endif
 				break;
 			case 'w':
+#ifdef REGEX
+				regex = 0;
+#endif
 				wildcard = 1;
 				break;
 			case 'f': /* fall through */
@@ -573,7 +576,7 @@ if (debug) fprintf(stderr, "main(): locale= %s,internal_locale= %s\n", llocale, 
 #if defined(REGEX) && defined(APROPOS)
 	/* Become it even if it's null - GNU standards */
 	/* if (getenv("POSIXLY_CORRECT")) */
-	if ( ! exact )
+	if ( ! exact && ! wildcard)
 		regex = 1;
 #endif
 
