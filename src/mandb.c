@@ -313,7 +313,7 @@ static short update_one_file (const char *manpath, char *filename)
 		manpage = filename_info (filename, &info, "");
 		if (info.name) {
 			dbdelete (info.name, &info);
-			purge_pointers (manpath, info.name);
+			purge_pointers (info.name);
 		}
 
 		test_manfile (filename, manpath);
@@ -341,6 +341,8 @@ static __inline__ short update_db_wrapper (const char *manpath)
 /* remove incomplete databases */
 static void cleanup (void *dummy)
 {
+	dummy = dummy; /* not used */
+
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	unlink (tmpdbfile);

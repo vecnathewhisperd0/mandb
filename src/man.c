@@ -1474,6 +1474,10 @@ static char *make_roff_command (const char *dir, const char *file,
 	char *fmt_prog;
 	char *command = NULL;
 
+#ifndef ALT_EXT_FORMAT
+	dir = dir; /* not used unless looking for formatters in catdir */
+#endif
+
 	if (!*file) {
 		/* file == "": this means we are reading input from stdin.
 		 * Unfortunately we need to read the first line or so to

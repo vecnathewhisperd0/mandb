@@ -579,7 +579,7 @@ short update_db (const char *manpath)
  *
  * Assumes that the appropriate database is already open on dbf.
  */
-void purge_pointers (const char *manpath, const char *name)
+void purge_pointers (const char *name)
 {
 	datum key = MYDBM_FIRSTKEY (dbf);
 

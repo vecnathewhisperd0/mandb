@@ -145,7 +145,7 @@ struct dirent_hashent {
 static void dirent_hash_free (void *defn)
 {
 	struct dirent_hashent *hashent = defn;
-	int i;
+	size_t i;
 
 	for (i = 0; i < hashent->names_len; ++i)
 		free (hashent->names[i]);
@@ -210,9 +210,9 @@ int match_in_directory (const char *path, const char *pattern, int ignore_case,
 			glob_t *pglob)
 {
 	struct dirent_hashent *cache;
-	int allocated = 4;
+	size_t allocated = 4;
 	int flags;
-	int i;
+	size_t i;
 
 	pglob->gl_pathc = 0;
 	pglob->gl_pathv = NULL;

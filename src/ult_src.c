@@ -106,7 +106,7 @@ extern char *strrchr();
 #include "ult_src.h"
 
 /* Find minimum value hard link filename for given file and inode */
-static __inline__ char *ult_hardlink (char *fullpath, long inode)
+static __inline__ char *ult_hardlink (char *fullpath, ino_t inode)
 {
 	DIR *mdir;
 	struct dirent *manlist;
@@ -146,9 +146,8 @@ static __inline__ char *ult_hardlink (char *fullpath, long inode)
 }
 
 #ifdef S_ISLNK
-/* use realpath() to resolve all sym links within 'fullpath'. 'mantree' is 
-   the man hierarchy */
-static __inline__ char *ult_softlink (char *fullpath, const char *mantree)
+/* Use realpath() to resolve all sym links within 'fullpath'. */
+static __inline__ char *ult_softlink (char *fullpath)
 {
 	char resolved_path[PATH_MAX];
 
@@ -251,8 +250,7 @@ char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 		if (flags & SOFT_LINK) {
 			if (S_ISLNK (buf->st_mode))
 				/* Is a symlink, resolve it. */
-			/*	(void) ult_softlink (basename, path); */
-				if (!ult_softlink (basename, path))
+				if (!ult_softlink (basename))
 					return NULL;
 		}
 #endif /* S_ISLNK */

@@ -1,3 +1,26 @@
+Thu May  1 17:39:55 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in (CFLAGS): Add -W for gcc.
+
+	* lib/hashtable.c (hash): Change array index type to size_t.
+	* src/globbing.c (dirent_hash_free, match_in_directory): Likewise.
+
+	* src/check_mandirs.c (purge_pointers): Remove unused manpath
+	  argument.
+	* src/check_mandirs.h (purge_pointers): Update prototype.
+	* src/mandb.c (update_one_file): Update call to purge_pointers().
+
+	* src/catman.c (catman): Remove unused arg_no argument.
+	  (do_catman): Update call to catman().
+	* src/man.c (make_roff_command): dir is unused except #ifdef
+	  ALT_EXT_FORMAT.
+	* src/mandb.c (cleanup): dummy is unused.
+	* src/ult_src.c (ult_hardlink): Change type of inode to ino_t.
+	  (ult_softlink): mantree is unused.
+	  (ult_src): Update call to ult_softlink().
+	* src/whatis.c (apropos): lowpage is unused except #ifdef APROPOS.
+	* src/wrapper.c (main): argc is unused.
+
 Thu May  1 16:52:44 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	Remove all assumptions that string literals have type 'char *'

@@ -74,6 +74,8 @@ int main (int argc, char **argv)
 	char *p;
 	struct passwd *pwd;
 
+	argc = argc; /* not used */
+
 	/* We don't warn about this setlocale() call failing, as the program
 	 * we call will do that.
 	 */

@@ -156,7 +156,7 @@ static int rdopen_db (void)
 
 /* fork() and execve() man with the appropriate catman args. 
    If we __inline__ this function, gcc v2.6.2 gives us `clobber' warnings ?? */
-static void catman (char *argp[], int arg_no)
+static void catman (char *argp[])
 {
 	pid_t child;
 	int status;
@@ -219,7 +219,7 @@ static void do_catman (char *argp[], int arg_no, int first_arg)
 	/* The last argument must be NULL */
 	argp[arg_no] = NULL;
 
-	catman (argp, arg_no);
+	catman (argp);
 
 	/* don't free the last entry, it's NULL */
 	/* don't free the last but one entry, it's our nextkey */

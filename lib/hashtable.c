@@ -60,7 +60,7 @@
 static unsigned int hash (const char *s, size_t len)
 {
 	unsigned int hashval = 0;
-	int i;
+	size_t i;
 
 	for (i = 0; i < len && s[i]; ++i)
 #if defined(KRII)
