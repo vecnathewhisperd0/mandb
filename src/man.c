@@ -839,10 +839,12 @@ int local_man_loop (char *argv)
 	if (strcmp (argv, "-") == 0)
 		display (NULL, "", NULL, "(stdin)");
 	else {
+		struct stat st;
 #ifdef COMP_SRC
-		/* See if we need to decompress the file(s) first */
 		struct compression *comp;
+#endif /* COMP_SRC */
 
+		/* See if we need to decompress the file(s) first */
 		if (cwd[0]) {
 			if (debug)
 				fprintf (stderr, "chdir %s\n", cwd);
@@ -853,6 +855,18 @@ int local_man_loop (char *argv)
 			}
 		}
 
+		/* Check that the file exists and isn't e.g. a directory */
+		if (stat (argv, &st)) {
+			error (0, errno, "%s", argv);
+			return NOT_FOUND;
+		}
+
+		if (S_ISDIR (st.st_mode)) {
+			error (0, EISDIR, "%s", argv);
+			return NOT_FOUND;
+		}
+
+#ifdef COMP_SRC
 		comp = comp_info (argv);
 		if (comp)
 			(void) decompress(argv, comp);

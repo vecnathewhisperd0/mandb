@@ -145,6 +145,8 @@ char *decompress (const char *filename, const struct compression *comp)
 	/* temporarily drop the debug flag, so that we can continue */
 	command = strappend (NULL, comp->prog, " ", esc_filename,
 			     " > ", esc_file, NULL);
+	free (esc_file);
+	free (esc_filename);
 
 	if (debug) {
 #ifdef SECURE_MAN_UID

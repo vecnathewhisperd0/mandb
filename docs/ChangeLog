@@ -1,3 +1,11 @@
+Wed Nov 21 00:29:26 GMT 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/compression.c (decompress): Free esc_file and esc_filename
+	  once we're finished with them.
+
+	* src/man.c (local_man_loop): If argv is a directory, display a
+	  useful error message rather than letting zsoelim get confused.
+
 Mon Nov 19 00:53:03 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_lookup.c (copy_datum): Explicitly null-terminate
