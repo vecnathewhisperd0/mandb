@@ -1,3 +1,10 @@
+Thu Mar 21 16:22:58 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (main): Save the value of $LESS at startup to
+	  $MAN_ORIG_LESS, and use that saved value in preference to $LESS.
+	  This lets recursive invocations of man give less the correct page
+	  titles.
+
 Wed Mar 20 09:37:11 GMT 2002  Eirik Fuller <eirik@hackrat.com>
 
 	* src/check_mandirs.c (splitline): Don't create a copy of base_name

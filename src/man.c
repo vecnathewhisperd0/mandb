@@ -917,7 +917,13 @@ int main (int argc, char *argv[])
 				"?pB %pB\\%..");
 #endif
 
-	less = getenv ("LESS");
+	/* Restore and save $LESS in $MAN_ORIG_LESS so that recursive uses
+	 * of man work as expected.
+	 */
+	less = getenv ("MAN_ORIG_LESS");
+	if (less == NULL)
+		less = getenv ("LESS");
+	setenv ("MAN_ORIG_LESS", less ? less : "", 1);
 
 	if (debug)
 		fprintf (stderr, "\nusing %s as pager\n", pager);
