@@ -98,8 +98,7 @@ catman manpath whatis apropos: fake_security.o manp.o
 catman manpath whatis apropos accessdb: util.o 
 man mandb catman whatis apropos accessdb: ../libdb/libmandb.a
 
-$(PROGS): version.o ../lib/libman.a
-$(TOOLS): ../lib/libman.a
+$(PROGS) $(TOOLS): version.o ../lib/libman.a
 
 apropos: whatis.c
 	$(LINK.c) $^ $(LDLIBS) -o $@

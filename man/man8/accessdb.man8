@@ -15,6 +15,7 @@ accessdb \- dumps the content of a man-db database in a human readable
 format.
 .SH SYNOPSIS
 .B /usr/sbin/accessdb 
+.RB [\| \-hV \|]
 .RI [ <index-file> ]
 .SH DESCRIPTION
 .B accessdb 
@@ -39,9 +40,16 @@ manpath~5 -> "5 5 795981543 A - - format of the /etc/man_db.config file"
 whatis -> "1 1 795981543 A - - search the manual page names"
 zsoelim -> "1 1 795981543 A - - satisfy .so requests in roff input"
 .fi
-
+.SH OPTIONS
+.TP
+.B \-h, \-\-help
+Print a help message and exit.
+.TP
+.B \-v, \-\-version
+Display version information.
 .SH AUTHOR
 .nf
 Wilf. (G.Wilford@ee.surrey.ac.uk).
 Fabrizio Polacco (fpolacco@debian.org).
+Colin Watson (cjwatson@debian.org).
 .fi

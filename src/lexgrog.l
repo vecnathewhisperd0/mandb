@@ -450,13 +450,13 @@ static void usage (int status)
 {
 	printf (_("usage: %s [-mcwfhV] file ...\n"), program_name);
 	printf (_(
-		"-m --man                    parse as man page.\n"
-		"-c --cat                    parse as cat page.\n"
-		"-w --whatis                 show whatis information.\n"
-		"-f --filters                show guessed series of "
+		"-m, --man                   parse as man page.\n"
+		"-c, --cat                   parse as cat page.\n"
+		"-w, --whatis                show whatis information.\n"
+		"-f, --filters               show guessed series of "
 					    "preprocessing filters.\n"
-		"-V --version                show version.\n"
-		"-h --help                   show this usage message.\n"
+		"-V, --version               show version.\n"
+		"-h, --help                  show this usage message.\n"
 		"\n"
 		"The defaults are --man and --whatis.\n"));
 	exit (status);
@@ -569,6 +569,7 @@ int main (int argc, char **argv)
 	else
 		return OK;
 }
+
 #endif /* TEST */
 
 #ifdef PROFILE

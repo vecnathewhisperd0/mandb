@@ -82,10 +82,12 @@ static const struct option long_options[] =
 	{"extension",	required_argument,	0,	'e'},
 	{"ignore-case",	no_argument,		0,	'i'},
 	{"match-case",	no_argument,		0,	'I'},
+	{"help",	no_argument,		0,	'h'},
+	{"version",	no_argument,		0,	'V'},
 	{0, 0, 0, 0}
 };
 
-static const char args[] = "de:iI";
+static const char args[] = "de:iIhV";
 
 #endif /* TEST */
 
@@ -296,6 +298,21 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 }		
 
 #ifdef TEST
+
+static void usage (int status)
+{
+	printf (_("usage: %s [-deiIhV] path sec name\n"), program_name);
+	printf (_(
+		"-d, --debug                 emit debugging messages.\n"
+		"-e, --extension             limit search to extension type `extension'.\n"
+		"-i, --ignore-case           look for pages case-insensitively (default).\n"
+		"-I, --match-case            look for pages case-sensitively.\n"
+		"-V, --version               show version.\n"
+		"-h, --help                  show this usage message.\n"));
+
+	exit (status);
+}
+
 int main (int argc, char **argv)
 {
 	int c, option_index;
@@ -317,12 +334,21 @@ int main (int argc, char **argv)
 			case 'I':
 				match_case = 1;
 				break;
+			case 'V':
+				ver ();
+				break;
+			case 'h':
+				usage (OK);
+				break;
+			default:
+				usage (FAIL);
+				break;
 		}
 	}
 
 	program_name = xstrdup (basename (argv[0]));
 	if (argc - optind != 3)
-		error (FAIL, 0, "usage: %s path sec name", program_name);
+		usage (FAIL);
 
 	for (i = 0; i <= 1; i++) {
 		char **files;
@@ -335,4 +361,5 @@ int main (int argc, char **argv)
 	}
 	return 0;
 }
+
 #endif /* TEST */

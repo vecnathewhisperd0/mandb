@@ -1,3 +1,21 @@
+Sun Dec 29 19:51:11 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l: Add commas between short and long options in usage
+	  output.
+
+	* src/accessdb.c (main): Support -h/--help and -v/--version options.
+	  (usage): Document them. Move MAN_DB outside translatable string.
+	* man/man8/accessdb.man8 (SYNOPSIS, OPTIONS): Document new options.
+	  (AUTHOR): Add myself.
+	* src/globbing.c (long_options, args, main): Support -h/--help and
+	  -v/--version options.
+	  (usage): New function.
+	* zsoelim/zsoelim.l: Support long option forms of -C (--compatible),
+	  -h (--help), and -V (--verbose).
+	* man/man1/zsoelim.man1: Document long options.
+
+	* src/Makefile.in: Link $(TOOLS) as well as $(PROGS) with version.o.
+
 Sun Dec 29 19:40:46 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	Patch partly by Werner Fink <werner@suse.de>.

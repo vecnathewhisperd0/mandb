@@ -73,6 +73,12 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 
+#ifdef HAVE_GETOPT_H
+#  include <getopt.h>
+#else /* !HAVE_GETOPT_H */
+#  include "lib/getopt.h"
+#endif /* HAVE_GETOPT_H */
+
 #ifdef COMP_SRC
 #include "comp_src.h"
 static char* so_delete[MAX_SO_DEPTH];
@@ -88,6 +94,16 @@ static void zap_quotes(void);
 #endif
 
 char *program_name;
+
+static const struct option long_options[] =
+{
+	{"compatible",	no_argument,		0,	'C'},
+	{"help",	no_argument,		0,	'h'},
+	{"version",	no_argument,		0,	'V'},
+	{0, 0, 0, 0}
+};
+
+static const char args[] = "ChV";
 
 static YY_BUFFER_STATE so_stack[MAX_SO_DEPTH];
 static char *so_name[MAX_SO_DEPTH];
@@ -313,11 +329,12 @@ static void parse_file(void)
 
 int main(int argc, char *argv[])
 {
-	int c;
+	int c, option_index;
 
 	program_name = basename(argv[0]);
 
-	while ( (c = getopt(argc, argv, "hVC")) != EOF ) {
+	while ( (c = getopt_long(argc, argv, args,
+				 long_options, &option_index)) != EOF ) {
 		switch (c) {
 			case 'V':
 				ver();
