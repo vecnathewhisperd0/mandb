@@ -1,3 +1,23 @@
+Sun Sep  7 23:10:01 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Fix decision about whether a given encoding is safe to save as a cat
+	page.
+
+	* src/encodings.c (directory_table): Add standard_output_encoding
+	  member, used to set the default encoding for cat pages.
+	  (fallback_locale_charset): Remove.
+	  (get_standard_output_encoding): New function.
+	  (get_locale_charset): New function, split out in modified form
+	  from get_default_device().
+	  (get_default_device): Take a character set as input rather than a
+	  locale.
+	* src/encodings.h (get_standard_output_encoding,
+	  get_locale_charset): Add prototypes.
+	  (get_default_device): Update prototype.
+	* src/man.c (make_roff_command): Instead of comparing devices, test
+	  that the default character set for this manual hierarchy is being
+	  used, and don't save cat pages if it isn't.
+
 Sun Sep  7 11:33:09 +0200 2003 Giuseppe Sacco <eppesuig@debian.org>
 
 	* po/it.po: changed the header of the po file correcting the

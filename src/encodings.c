@@ -61,6 +61,12 @@
  * determined by the selected groff device and sometimes also by the user's
  * locale.
  *
+ * The standard output encoding is the encoding assumed for cat pages for
+ * each language directory. It must *not* be used to discover the actual
+ * output encoding displayed to the user; that is determined by the locale.
+ * TODO: it would be useful to be able to change the standard output
+ * encoding in the configuration file.
+ *
  * This table is expected to change over time, particularly as man pages
  * begin to move towards UTF-8. Feel free to patch this for your
  * distribution; send me updates for languages I've missed.
@@ -71,36 +77,37 @@
 static struct {
 	const char *lang_dir;
 	const char *source_encoding;
+	const char *standard_output_encoding;
 } directory_table[] = {
-	{ "C",		"ISO-8859-1"	}, /* English */
-	{ "POSIX",	"ISO-8859-1"	}, /* English */
-	{ "da",		"ISO-8859-1"	}, /* Danish */
-	{ "de",		"ISO-8859-1"	}, /* German */
-	{ "en",		"ISO-8859-1"	}, /* English */
-	{ "es",		"ISO-8859-1"	}, /* Spanish */
-	{ "fi",		"ISO-8859-1"	}, /* Finnish */
-	{ "fr",		"ISO-8859-1"	}, /* French */
-	{ "ga",		"ISO-8859-1"	}, /* Irish */
-	{ "is",		"ISO-8859-1"	}, /* Icelandic */
-	{ "it",		"ISO-8859-1"	}, /* Italian */
-	{ "nl",		"ISO-8859-1"	}, /* Dutch */
-	{ "no",		"ISO-8859-1"	}, /* Norwegian */
-	{ "pt",		"ISO-8859-1"	}, /* Portuguese */
-	{ "sv",		"ISO-8859-1"	}, /* Swedish */
+	{ "C",		"ISO-8859-1",	"ANSI_X3.4-1968"	}, /* English */
+	{ "POSIX",	"ISO-8859-1",	"ANSI_X3.4-1968"	}, /* English */
+	{ "da",		"ISO-8859-1",	"ISO-8859-1"		}, /* Danish */
+	{ "de",		"ISO-8859-1",	"ISO-8859-1"		}, /* German */
+	{ "en",		"ISO-8859-1",	"ISO-8859-1"		}, /* English */
+	{ "es",		"ISO-8859-1",	"ISO-8859-1"		}, /* Spanish */
+	{ "fi",		"ISO-8859-1",	"ISO-8859-1"		}, /* Finnish */
+	{ "fr",		"ISO-8859-1",	"ISO-8859-1"		}, /* French */
+	{ "ga",		"ISO-8859-1",	"ISO-8859-1"		}, /* Irish */
+	{ "is",		"ISO-8859-1",	"ISO-8859-1"		}, /* Icelandic */
+	{ "it",		"ISO-8859-1",	"ISO-8859-1"		}, /* Italian */
+	{ "nl",		"ISO-8859-1",	"ISO-8859-1"		}, /* Dutch */
+	{ "no",		"ISO-8859-1",	"ISO-8859-1"		}, /* Norwegian */
+	{ "pt",		"ISO-8859-1",	"ISO-8859-1"		}, /* Portuguese */
+	{ "sv",		"ISO-8859-1",	"ISO-8859-1"		}, /* Swedish */
 
 #ifdef MULTIBYTE_GROFF
 	/* These languages require a patched version of groff with the
 	 * ascii8 and nippon devices.
 	 */
-	{ "cs",		"ISO-8859-2"	}, /* Czech */
-	{ "hu",		"ISO-8859-2"	}, /* Hungarian */
-	{ "ja",		"EUC-JP"	}, /* Japanese */
-	{ "ko",		"EUC-KR"	}, /* Korean */
-	{ "pl",		"ISO-8859-2"	}, /* Polish */
-	{ "ru",		"KOI8-R"	}, /* Russian */
+	{ "cs",		"ISO-8859-2",	"ISO-8859-2"		}, /* Czech */
+	{ "hu",		"ISO-8859-2",	"ISO-8859-2"		}, /* Hungarian */
+	{ "ja",		"EUC-JP",	"EUC-JP"		}, /* Japanese */
+	{ "ko",		"EUC-KR",	"EUC-KR"		}, /* Korean */
+	{ "pl",		"ISO-8859-2",	"ISO-8859-2"		}, /* Polish */
+	{ "ru",		"KOI8-R",	"KOI8-R"		}, /* Russian */
 #endif /* MULTIBYTE_GROFF */
 
-	{ NULL,		NULL		} };
+	{ NULL,		NULL,		"NULL"			} };
 
 /* The default groff terminal output device to be used is determined based
  * on nl_langinfo(CODESET), which returns the character set used by the
@@ -120,7 +127,6 @@ static struct {
 
 	{ NULL,			NULL		} };
 
-static const char *fallback_locale_charset = "ANSI_X3.4-1968";
 static const char *fallback_default_device =
 #ifdef MULTIBYTE_GROFF
 	"ascii8"
@@ -207,19 +213,50 @@ const char *get_source_encoding (const char *lang)
 	return NULL;
 }
 
-/* Return the default groff device for the current locale. This may be
- * overridden by the user.
+/* Return the standard output encoding for the source man page, based on the
+ * directory in which it was found. This should only be used to determine
+ * whether a cat page can be saved.
  */
-const char *get_default_device (const char *selected_locale)
+const char *get_standard_output_encoding (const char *lang)
+{
+	int i;
+	const char *dot;
+
+	if (!lang)
+		return NULL;
+
+	dot = strchr (lang, '.');
+	if (dot)
+		/* The cat directory will have a corresponding name to the
+		 * man directory including an explicit character set, so the
+		 * pages it contains should have that encoding.
+		 */
+		/* TODO: I should probably drop any ,<version> components. */
+		return dot + 1;
+
+	for (i = 0; directory_table[i].lang_dir; ++i) {
+		if (STRNEQ (directory_table[i].lang_dir, lang,
+			    strlen (directory_table[i].lang_dir)))
+			return directory_table[i].standard_output_encoding;
+	}
+
+	return NULL;
+}
+
+/* Return the current locale's character set. */
+const char *get_locale_charset (void)
 {
 	const char *ctype;
 	const char *charset;
-	int i;
+	char *saved_locale;
 
-	/* selected_locale may be NULL, in which case we look in the
-	 * environment.
+	/* We need to modify LC_CTYPE temporarily in order to look at the
+	 * codeset, so save it first.
 	 */
-	ctype = setlocale (LC_CTYPE, selected_locale);
+	saved_locale = xstrdup (setlocale (LC_CTYPE, NULL));
+
+	ctype = setlocale (LC_CTYPE, "");
+
 #ifdef HAVE_LANGINFO_CODESET
 	charset = nl_langinfo (CODESET);
 #else
@@ -229,12 +266,27 @@ const char *get_default_device (const char *selected_locale)
 		++charset;
 #endif
 
-	if (!charset || !*charset)
-		/* Oh dear. Make the safest choice we can. */
-		charset = fallback_locale_charset;
+	/* Restore LC_CTYPE to its value on entry to this function. */
+	setlocale (LC_CTYPE, saved_locale);
+
+	if (charset && *charset)
+		return charset;
+	else
+		return NULL;
+}
+
+/* Return the default groff device for the given character set. This may be
+ * overridden by the user.
+ */
+const char *get_default_device (const char *locale_charset)
+{
+	int i;
+
+	if (!locale_charset)
+		return fallback_default_device;
 
 	for (i = 0; charset_table[i].locale_charset; ++i) {
-		if (STREQ (charset_table[i].locale_charset, charset))
+		if (STREQ (charset_table[i].locale_charset, locale_charset))
 			return charset_table[i].default_device;
 	}
 

@@ -1653,33 +1653,49 @@ static char *make_roff_command (const char *dir, const char *file,
 		 * in the path.
 		 */
 		if (!troff) {
+			const char *cat_charset, *locale_charset;
 			const char *source_encoding, *roff_encoding;
-			const char *default_device;
+
+#define STRC(s, otherwise) ((s) ? (s) : (otherwise))
+
+			cat_charset = get_standard_output_encoding (lang);
+			locale_charset = get_locale_charset ();
+			if (debug) {
+				fprintf (stderr, "cat_charset = %s\n",
+					 STRC (cat_charset, "NULL"));
+				fprintf (stderr, "locale_charset = %s\n",
+					 STRC (locale_charset, "NULL"));
+			}
+
+			/* Only save cat pages for this manual hierarchy's
+			 * default character set. If we don't know the cat
+			 * charset, anything goes.
+			 */
+			if (cat_charset &&
+			    (!locale_charset ||
+			     !STREQ (cat_charset, locale_charset)))
+				save_cat = 0;
+
+			/* Pick the default device for this locale if there
+			 * wasn't one selected explicitly.
+			 */
+			if (!roff_device) {
+				roff_device =
+					get_default_device (locale_charset);
+				if (debug)
+					fprintf (stderr,
+						 "roff_device (locale) = %s\n",
+						 STRC (roff_device, "NULL"));
+			}
 
 			source_encoding = get_source_encoding (lang);
-			if (debug)
-				fprintf (stderr, "source_encoding = %s\n",
-					 source_encoding ? source_encoding
-							 : "NULL");
-
-			default_device = get_default_device (internal_locale);
-			if (debug)
-				fprintf (stderr, "default_device = %s\n",
-					 default_device ? default_device
-							: "NULL");
-
-			/* Only save cat pages for the default device. */
-			if (roff_device && default_device &&
-			    !STREQ (roff_device, default_device))
-				save_cat = 0;
-			if (!roff_device)
-				roff_device = default_device;
-
 			roff_encoding = get_roff_encoding (roff_device);
-			if (debug)
+			if (debug) {
+				fprintf (stderr, "source_encoding = %s\n",
+					 STRC (source_encoding, "NULL"));
 				fprintf (stderr, "roff_encoding = %s\n",
-					 roff_encoding ? roff_encoding
-						       : "NULL");
+					 STRC (roff_encoding, "NULL"));
+			}
 
 			if (source_encoding && roff_encoding &&
 			    !STREQ (source_encoding, roff_encoding))
