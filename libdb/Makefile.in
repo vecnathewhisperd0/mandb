@@ -42,19 +42,6 @@ NLS = -DNLS
 MSGS = db_store.m db_delete.m db_lookup.m db_ver.m
 MSG_PATHS = $(addprefix $(MSG_DIR)/, $(MSGS))
 
-local_gencat = ../gencat/gencat
-
-$(srcdir)/man_db-nls.h: $(srcdir)/stamp-h
-$(srcdir)/stamp-h: $(MSG_PATHS)
-	test -f $(gencat) || $(MAKE) -C ../gencat
-	$(gencat) -new /dev/null $^ -h $(srcdir)/man_db-nls.h
-	rm -f $@
-	date > $@
-
-$(MSG_PATHS): $(MSG_DIR)/%.m: $(srcdir)/%.c
-	test -f ../xcat/xcat || $(MAKE) -C ../xcat
-	../xcat/xcat $(top_srcdir)/xcat/Register < $< > $@
-
   endif
 endif
 

@@ -22,7 +22,7 @@
 # Make targets are:							 #
 #									 #
 #  all install uninstall mostlyclean clean distclean realclean TAGS ID	 #
-#  FILES lib src man nls libdb xcat zsoelim gencat update RCS dist	 #
+#  FILES lib src man intl libdb zsoelim update RCS dist                  #
 #------------------------------------------------------------------------#
 
 srcdir = @srcdir@
@@ -47,7 +47,7 @@ include include/Defines
 	check deroff
         
 ifeq ($(nls),on)
-languages = $(notdir $(wildcard $(top_srcdir)/nls/*_*))
+languages = $(notdir $(wildcard $(top_srcdir)/po/*.po))
 
 default: $(INCLUDES) $(CONF)
 	@echo " "
@@ -203,16 +203,14 @@ _subdirs = $(EVERYTHING) tools docs include manual
 _all = */README */Makefile.in
 _root = README configure *.h *.m4 *.in 
 _docs = INSTALL.* COPYING ChangeLog NEWS ToDo
-_gencat = *.[ch1] Copyright
 _include = *.in 
 _lib = *.[ch]
 _libdb = *.[ch] stamp-h COPYING.LIB
 _man = man?/*.man? */man?/*.man? THANKS
-_nls = nls.h *_*/*.m THANKS
+_po = Makefile.in.in POTFILES.in *.po
 _src = README.lexgrog *.[chl] *.l-* man_db.conf.in stamp-h
 _tools = checkman install-sh mandb_\[nt\]fmt-script mkcatdirs \
 	 mkinstalldirs nroff-script
-_xcat = Register xcat.[cl]
 _zsoelim = *.[cl]
 _manual = Makefile *.me
 
@@ -225,15 +223,11 @@ nls_man = de_DE.88591 de_DE.ascii
 nls_cat = en_GB de_DE.88591
 man_db := man_db-$(version)
 
-RCS:
-	ci -l -f$(rev) -m'$(message)' $(FILES)
-
 # Ensure the flex C files and man_db-nls.h's are current
 dist: update
 	$(MAKE) -C src man_db-nls.h lexgrog.c nls=en_GB
 	$(MAKE) -C libdb man_db-nls.h nls=en_GB
 	$(MAKE) -C zsoelim zsoelim.c
-	$(MAKE) -C xcat xcat.c
 	rm -fr $(man_db)
 	rm -f $(man_db).tgz
 	mkdir $(man_db) 
