@@ -189,7 +189,8 @@ vgrind_request	\.vS
 <MAN_NAME>{bol}\.X{upper}{blank}+	|	/* special - hpux */
 <MAN_NAME>{bol}\.sp{blank}*		|	/* vertical spacing */
 <MAN_NAME>{bol}\.ig{blank}*		|	/* block comment */
-<MAN_NAME>{empty}{bol}.+	{	/* terminate the string */
+<MAN_NAME>{empty}{bol}.+		|
+<MAN_NAME><<EOF>>		{	/* terminate the string */
 					*p_name = '\0';
 					BEGIN (MAN_REST);
 				}
