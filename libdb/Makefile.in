@@ -1,6 +1,7 @@
 # Database library Makefile for the man package.
 #
 # Copyright (C) 1994, 1995 Graeme Wilford.
+# Copyright (C) 2001, 2003 Colin Watson.
 #
 # This file is part of man-db.
 #
@@ -26,12 +27,17 @@ srcdir = @srcdir@
 VPATH = @srcdir@
 top_srcdir = @top_srcdir@
 
-include ../include/Defines
+USE_NLS = @USE_NLS@
+
+include $(top_srcdir)/include/Defines
 
 .PHONY: $(DEFAULT_TARGETS)
 
 MANDEFS =
-MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I-
+MANCPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir) -I$(srcdir) -I-
+ifeq ($(USE_NLS),yes)
+MANCPPFLAGS += -I$(top_srcdir)/intl
+endif
 
 # The default programs to build
 ALL = db_store.o db_delete.o db_lookup.o \

@@ -1,3 +1,11 @@
+Mon Mar 10 15:55:34 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* GNUmakefile.in (EVERYTHING, ALL): Move intl ahead of libdb. (Not
+	  'make -j'-clean, though ...)
+	* libdb/Makefile.in: Use '$(top_srcdir)' rather than '..'
+	  throughout. Add $(top_srcdir)/intl to the include path if USE_NLS
+	  is set.
+
 Mon Mar 10 15:24:04 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in (AC_CONFIG_HEADER): Generate config.h rather than
