@@ -2575,10 +2575,11 @@ static int compare_candidates (const struct mandata *left,
 	if (cmp)
 		return cmp;
 
-	/* Default to left sorting before right, so that insertion order is
-	 * stable.
+	/* add_candidate() will keep equal candidates in order of insertion
+	 * so that manpath ordering (e.g. language-specific hierarchies)
+	 * works.
 	 */
-	return -1;
+	return 0;
 }
 
 /* Add an entry to the list of candidates. */

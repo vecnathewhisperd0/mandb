@@ -1,3 +1,9 @@
+  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (compare_candidates): Return 0 when asked to compare two
+	  candidates we can't distinguish, not -1. The latter broke
+	  multilingual support.
+
 Tue Jun  4 01:33:31 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.3.90 (for translators).
