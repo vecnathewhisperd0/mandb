@@ -1,0 +1,22 @@
+This directory contains the man_db manual sources.  They may be compiled into
+four different formats:
+
+	dvi:	device independant
+	ps:	PostScript
+	cat:	vt100-type terminal ie. ASCII with overstrike
+	tps:	PostScript with TeX fonts
+
+All require soelim, tbl and the ROFF macro `e' (your site probably has it).
+cat requires nroff whereas the others require groff.  tps also requires an
+installation of TeX and dvips.  If you are unable to produce any of these
+formats, man_db-0.6.ps.gz should be available at the same location as this
+package.
+
+Issuing `make' or `make all' will produce the dvi, ps and cat versions.  To
+produce a single format simply run
+
+	make <format>
+or
+	make man_db.<format>
+
+where <format> can be any of the above.
