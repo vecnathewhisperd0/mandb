@@ -49,10 +49,11 @@ To replace the functionality lost by disallowing
 .b man
 write access to the databases,
 .b mandb
-must be rerun whenever new manual pages are installed.
-Failure to do so will result in
+should be rerun whenever new manual pages are installed.
+Otherwise,
 .b man
-being unable to find and display the newly added manual pages.
+will not be able to use the database to find and display the newly added
+manual pages, and will have to use the filesystem instead.
 As
 .b mandb
 lacks the ability to delete database entries for manual pages that have been
@@ -66,7 +67,7 @@ Cat files are created in the same way as for mode (1) above.
 To use the man_db utilities in this mode, edit
 .i include/manconfig.h
 and comment out
-`#define MAN_DB_UPDATES'
+`#define MAN_DB_UPDATES'.
 .ip "(3) No man database updates or cat production"
 .b man
 is installed not setuid.
@@ -90,7 +91,9 @@ and edit
 .i include/manconfig.h ,
 commenting out `#define MAN_DB_UPDATES' and `#define MAN_CATS'
 after running
-.b configure .
+.b configure ,
+or build man_db as in mode (1) and install the binaries without the setuid
+bit set.
 .ip "(4) Wide open"
 .b man
 is installed not setuid.
