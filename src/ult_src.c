@@ -145,8 +145,10 @@ static __inline__ char *ult_hardlink (char *fullpath, ino_t inode)
 }
 
 #ifdef S_ISLNK
-/* Use realpath() to resolve all sym links within 'fullpath'. */
-static __inline__ char *ult_softlink (char *fullpath)
+/* Use realpath() to resolve all sym links within 'fullpath'.
+ * Returns a newly allocated string.
+ */
+static char *ult_softlink (const char *fullpath)
 {
 	char resolved_path[PATH_MAX];
 
@@ -163,13 +165,15 @@ static __inline__ char *ult_softlink (char *fullpath)
 	if (debug)
 		fprintf (stderr, "ult_softlink: (%s)\n", resolved_path);
 
-	return strcpy (fullpath, resolved_path);
+	return xstrdup (resolved_path);
 }
 #endif /* S_ISLNK */
 
-/* test `buffer' to see if it contains a .so include, if so and it's not an 
-   absolute filename, copy it into `basename' at `rel' and return 1 */
-static __inline__ int test_for_include (char *buffer, char *rel)
+/* Test 'buffer' to see if it contains a .so include. If so and it's not an 
+ * absolute filename, return newly allocated string whose contents are the
+ * include.
+ */
+static char *test_for_include (const char *buffer)
 {
 	/* strip out any leading whitespace (if any) */
 	while (isspace ((int) *buffer))
@@ -194,15 +198,13 @@ static __inline__ int test_for_include (char *buffer, char *rel)
 		 * follow any absolute inclusions in our quest for the 
 		 * ultimate source file */
 		if (*buffer != '/') {
-			/* copy filename into rel address */
-			while (*buffer && !isspace ((int) *buffer))
-				*(rel++) = *(buffer++);
-
-			*rel = '\0';
-			return 1;
+			const char *end = buffer;
+			while (*end && !isspace (*end))
+				++end;
+			return xstrndup (buffer, end - buffer);
 		}
 	}
-	return 0;
+	return NULL;
 }
 
 /*
@@ -215,20 +217,20 @@ static __inline__ int test_for_include (char *buffer, char *rel)
  */
 char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 {
-	static char basename[2048];	/* must be static */
+	static char *basename;		/* must be static */
 	static short recurse; 		/* must be static */
-	static char *relative; 		/* must be static */
 
 	/* initialise the function */
 
 	/* as ult_softlink() & ult_hardlink() do all of their respective
 	 * resolving in one call, only need to sort them out once
 	 */
-	   
+
 	if (recurse == 0) {
 		struct stat new_buf;
-		(void) strcpy (basename, name);
-		relative = basename + strlen (path) + 1;
+		if (basename)
+			free (basename);
+		basename = xstrdup (name);
 
 		if (debug)
 			fprintf (stderr, "\nult_src: File %s in mantree %s\n",
@@ -247,10 +249,15 @@ char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 #ifdef S_ISLNK
 		/* Permit semi local (inter-tree) soft links */
 		if (flags & SOFT_LINK) {
-			if (S_ISLNK (buf->st_mode))
+			if (S_ISLNK (buf->st_mode)) {
 				/* Is a symlink, resolve it. */
-				if (!ult_softlink (basename))
+				char *softlink = ult_softlink (basename);
+				if (softlink) {
+					free (basename);
+					basename = softlink;
+				} else
 					return NULL;
+			}
 		}
 #endif /* S_ISLNK */
 
@@ -270,7 +277,6 @@ char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 
 	if (flags & SO_LINK) {
 		char buffer[1024], *bptr;
-		int val;
 		FILE *fp;
 #ifdef COMP_SRC
 		struct compression *comp;
@@ -295,8 +301,8 @@ char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 				free (comp->file);
 				if (!filename)
 					return NULL;
-				(void) strcat (basename, ".");
-				(void) strcat (basename, comp->ext);
+				basename = strappend (basename, ".", comp->ext,
+						      NULL);
 				drop_effective_privs ();
 				fp = fopen (filename, "r");
 				regain_effective_privs ();
@@ -323,32 +329,30 @@ char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 		fclose(fp);
 
 		if (buffer) {
-			/* Restore the original path from before
-			 * ult_softlink() etc., in case it went outside the
-			 * mantree.
-			 */
-			char *basename_copy = xstrdup (basename);
-			(void) strcpy (basename, path);
-			(void) strcat (basename, "/");
-			val = test_for_include (buffer, relative);
-			if (!val)
-				(void) strcpy (basename, basename_copy);
-			free (basename_copy);
-		} else
-			val = EOF;
+			char *include = test_for_include (buffer);
+			if (include) {
+				char *ult;
 
-		if (val == 1) {			/* keep on looking... */
-			char *ult;
+				/* Restore the original path from before
+				 * ult_softlink() etc., in case it went
+				 * outside the mantree.
+				 */
+				free (basename);
+				basename = strappend (NULL, path, "/", include,
+						      NULL);
+				free (include);
 
-			if (debug)
-				fprintf (stderr, "ult_src: points to %s\n",
-					 basename);
+				if (debug)
+					fprintf (stderr,
+						 "ult_src: points to %s\n",
+						 basename);
 
-			recurse++;
-			ult = ult_src (basename, path, NULL, flags);
-			recurse--;
+				recurse++;
+				ult = ult_src (basename, path, NULL, flags);
+				recurse--;
 
-			return ult;
+				return ult;
+			}
 		}
 	}
 

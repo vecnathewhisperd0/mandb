@@ -1,3 +1,19 @@
+Wed Jul 30 20:38:40 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Fix vulnerabilities 2 and 3 posted by Vade 79
+	<v9@fakehalo.deadpig.org> on BugTraq, Message-ID:
+	<20030729210308.15518.qmail@www.securityfocus.com>.
+
+	* src/ult_src.c (ult_softlink): Return a newly allocated string
+	  rather than copying into fullpath.
+	  (test_for_include): Return a newly allocated string rather than
+	  copying into rel (which was a pointer into part of basename in
+	  ult_src(), and wasn't reallocated in the event that the .so text
+	  was too large).
+	  (ult_src): Allocate basename dynamically rather than using a
+	  static buffer. relative is no longer needed. Update for changes in
+	  ult_softlink() and test_for_include().
+
 Wed Jul 30 12:33:25 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (close_cat_stream): The unlink(tmp_cat_file) cleanup is
