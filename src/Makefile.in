@@ -49,6 +49,9 @@ MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I- -I../intl
 # You may need to modify these options if you have lex instead of flex
 # or flex < 2.4.7 and you want to play with lexgrog.l (development only)
 LFLAGS = -8 -B -Cem
+ifeq ($(LEXGROG_DEBUG),yes)
+LFLAGS += -d
+endif
 
 PROGS = man manpath mandb apropos whatis catman lexgrog
 PUBTOOLS = accessdb
