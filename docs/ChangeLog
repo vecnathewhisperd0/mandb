@@ -1,3 +1,36 @@
+Fri Aug 31 22:20:08 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	Initial support for ESR's $BROWSER variable. Not complete yet.
+
+	* src/man.c: Remove ENABLE_HTML guards around all the --html code.
+	  Too many #ifdefs clutter the code, and it should at least be
+	  usable to some extent now.
+	  (main): Check $BROWSER before other ways of finding html_pager.
+	  (man_getopt): If -H is given, set roff_device to "html". Reset
+	  htmlout and html_pager with -D.
+	  (make_roff_command): Don't call determine_lang_table() if htmlout
+	  is set.
+	  (make_browser): New function.
+	  (make_display_command): Add case for htmlout being set.
+	  (format_display_and_save): Rename roff_cmd to format_cmd.
+	  (display_catman): Likewise.
+	  (display): Likewise. Add some cases for htmlout being set (always
+	  format, never save a cat page). Split some code out into
+	  format_display().
+	  (format_display): New function.
+
+	* src/man.c (main): Save the value of $LESS for later.
+	  (make_display_command): Use setenv() to change $LESS in the
+	  environment rather than nasty shell code.
+
+	* src/man.c (main): Don't loop if $LANGUAGE is set but empty.
+	  (display_catman): Fix segfaults due to strappend() misuse.
+	* src/manp.c (read_config_file): Print dotmanpath, not home (which
+	  might point to freed memory).
+
+	* src/man.c (main): Tidy up error message.
+	  (store_line_length): Remove duplicate 'int width' declaration.
+
 Wed Aug 29 20:44:27 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* man/man8/mandb.man8 (WHATIS PARSING): Move to ...

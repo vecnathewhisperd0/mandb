@@ -297,7 +297,7 @@ popen (const char *cmd, const char *type)
 		return NULL;
 	}
 
-	fd2pid[fd] = child;		/* save pid for plcose() */
+	fd2pid[fd] = child;		/* save pid for pclose() */
 	return stream;
 }
 
@@ -435,6 +435,7 @@ static char *pager;
 static char *locale;
 static char *internal_locale;
 static char *prompt_string;
+static char *less;
 static char *std_sections[] = STD_SECTIONS;
 static char *manp;
 static char *external;
@@ -493,9 +494,7 @@ static const struct option long_options[] =
 # ifdef TROFF_IS_GROFF
     {"ditroff", no_argument, 		0, 'Z'},
     {"gxditview", optional_argument,	0, 'X'},
-#  ifdef ENABLE_HTML
     {"html", optional_argument,		0, 'H'},
-#  endif
 # endif
     {0, 0, 0, 0}
 };
@@ -505,10 +504,8 @@ static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::we:L:Zcr:X::";
 # ifdef TROFF_IS_GROFF
 static int ditroff;
 static char *gxditview;
-#  ifdef ENABLE_HTML
 static int htmlout;
 static char *html_pager;
-#  endif /* ENABLE_HTML */
 # endif /* TROFF_IS_GROFF */
 
 #else /* !HAS_TROFF */
@@ -561,9 +558,7 @@ static void usage (int status)
 		"-T, --troff-device device   use %s with selected device.\n"),
 		formatter, formatter);
 # ifdef TROFF_IS_GROFF
-#  ifdef ENABLE_HTML
 	puts (_("-H, --html                  use lynx or argument to display html output.\n"));
-#  endif
 	puts (_("-Z, --ditroff               use groff and force it to produce ditroff."));
 	puts (_("-X, --gxditview             use groff and display through gditview (X11):"));
 	puts (_("                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."));
@@ -644,7 +639,7 @@ static void store_line_length (void)
 
 	columns = getenv ("MANWIDTH");
 	if (columns != NULL) {
-		int width = atoi (columns);
+		width = atoi (columns);
 		if (width > 0) {
 			line_length = width;
 			return;
@@ -782,7 +777,7 @@ static __inline__ char *escape_less (const char *string)
 		    *string == '%' ||
 		    *string == '\\')
 			*ptr++ = '\\';
-		    	
+
 		*ptr++ = *string++;
 	}
 
@@ -974,7 +969,7 @@ int main (int argc, char *argv[])
 		internal_locale = xstrdup (internal_locale);
 		if (debug)
 			fprintf(stderr,
-				"main(): locale= %s,internal_locale= %s\n",
+				"main(): locale = %s, internal_locale = %s\n",
 				locale, internal_locale);
 		if (internal_locale) {
 			extern int _nl_msg_cat_cntr;
@@ -985,10 +980,14 @@ int main (int argc, char *argv[])
 
 #endif /* HAVE_SETLOCALE */
 
-#ifdef ENABLE_HTML
-	if (htmlout)
-		pager = (html_pager == NULL ? WEB_BROWSER : html_pager);
-#endif
+	if (htmlout) {
+		if (!html_pager) {
+			html_pager = getenv ("BROWSER");
+			if (!html_pager)
+				html_pager = WEB_BROWSER;
+		}
+		pager = html_pager;
+	}
 	if (pager == NULL) {
 		pager = getenv ("PAGER");
 		if (pager == NULL)
@@ -1006,6 +1005,8 @@ int main (int argc, char *argv[])
 				" ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):"
 				"?pB %pB\\\\%..");
 #endif
+
+	less = getenv ("LESS");
 
 	if (debug)
 		fprintf (stderr, "\nusing %s as pager\n", pager);
@@ -1031,7 +1032,7 @@ int main (int argc, char *argv[])
 		manp = add_nls_manpath (manpath (alt_system_name), 
 					internal_locale);
 		/* Handle multiple :-separated locales in LANGUAGE */
-		idx = strlen (internal_locale) - 1;
+		idx = strlen (internal_locale);
 		while (idx) {
 			while (idx && internal_locale[idx] != ':')
 				idx--;
@@ -1216,14 +1217,13 @@ static void man_getopt (int argc, char *argv[])
 				gxditview = (optarg ? optarg : "75");
 #endif /* TROFF_IS_GROFF */
 				break;
-#ifdef ENABLE_HTML
 			case 'H':
 #ifdef TROFF_IS_GROFF
 				html_pager = (optarg ? optarg : 0);
 				htmlout = 1;
+				roff_device = "html";
 #endif /* TROFF_IS_GROFF */
 				break;
-#endif
 			case 'Z':
 #ifdef TROFF_IS_GROFF
 				ditroff = 1;
@@ -1245,6 +1245,8 @@ static void man_getopt (int argc, char *argv[])
 #ifdef TROFF_IS_GROFF
 				ditroff = 0;
 				gxditview = NULL;
+				htmlout = 0;
+				html_pager = NULL;
 #endif
 		    		roff_device = extension = pager = locale
 		    			     = colon_sep_section_list
@@ -1546,7 +1548,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		/* Load the roff_device value dependent on the language dir
 		 * in the path.
 		 */
-		if (!troff)
+		if (!troff && !htmlout)
 			determine_lang_table (lang);
 
 		/* tell grops to guess the page size */
@@ -1686,16 +1688,74 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 	return command;
 }
 
+/* Return command (statically allocated string) to run a browser on a
+ * given file, observing http://www.tuxedo.org/~esr/BROWSER/.
+ *
+ * (Actually, I really implement
+ * http://www.dwheeler.com/browse/secure_browser.html, but it's
+ * backward-compatible.)
+ */
+static char *make_browser (char *command, char *file)
+{
+	static char *browser;
+	static int browser_len = 0;
+	int command_len = strlen (command) * 2 + strlen (file) + 1;
+	int found_percent_s = 0;
+	char *percent;
+	char *esc_file;
+
+	if (command_len > browser_len) {
+		browser_len = command_len;
+		browser = xrealloc (browser, browser_len + 1);
+	}
+	*browser = '\0';
+
+	percent = strchr (command, '%');
+	while (percent) {
+		strncat (browser, command, percent - command);
+		switch (*(percent + 1)) {
+			case '\0':
+			case '%':
+				strcat (browser, "%");
+				break;
+			case 'c':
+				strcat (browser, ":");
+				break;
+			case 's':
+				esc_file = escape_shell (file);
+				strcat (browser, esc_file);
+				free (esc_file);
+				found_percent_s = 1;
+				break;
+			default:
+				strncat (browser, percent, 2);
+				break;
+		}
+		if (*(percent + 1))
+			command = percent + 2;
+		else
+			command = percent + 1;
+		percent = strchr (command, '%');
+	}
+	strcat (browser, command);
+	if (!found_percent_s) {
+		strcat (browser, " ");
+		esc_file = escape_shell (file);
+		strcat (browser, esc_file);
+		free (esc_file);
+	}
+
+	return browser;
+}
+
 /* Return command (malloced string) to display file, NULL means stdin */
 static char *make_display_command (char *file, char *title)
 {
 	char *command;
 	char *esc_file = escape_shell (file);
-	/* The title needs to be escaped both for less and for the shell. */
-	char *esc_title = escape_shell (escape_less (title));
+	char *esc_title = escape_less (title);
 	char *less_opts = strappend (NULL, LESS_OPTS, prompt_string, "$",
-				     getenv ("LESS"), NULL);
-	char *esc_less_opts;
+				     less, NULL);
 	char *man_pn = strstr (less_opts, MAN_PN);
 	while (man_pn) {
 		char *subst_opts =
@@ -1709,31 +1769,35 @@ static char *make_display_command (char *file, char *title)
 		less_opts = subst_opts;
 		man_pn = strstr (less_opts, MAN_PN);
 	}
-	esc_less_opts = escape_shell (less_opts);
 
-	command = strappend (NULL, "{ LESS=", esc_less_opts, "; export LESS; ",
-			     NULL);
+	if (debug)
+		fprintf (stderr, "Setting LESS to %s\n", less_opts);
+	/* If there isn't enough space in the environment, ignore it. */
+	setenv ("LESS", less_opts, 1);
+
 	if (file) {
 		if (ascii)
-			command = strappend (command, get_def ("cat", CAT), 
+			command = strappend (NULL, get_def ("cat", CAT), 
 					     " ", esc_file, " |",
 					     get_def ("tr", TR TR_SET1 TR_SET2),
-					     " |", pager, "; }", NULL);
+					     " |", pager, NULL);
+		else if (htmlout)
+			/* The filename needs to be substituted in later. */
+			command = xstrdup (html_pager);
 		else
-			command = strappend (command, pager, " ", esc_file, 
-					     "; }", NULL);
+			command = strappend (NULL, pager, " ", esc_file, NULL);
 	} else {
 		if (ascii)
-			command = strappend (command,
+			command = strappend (NULL,
 					     get_def ("tr", TR TR_SET1 TR_SET2),
-					     " |", pager, "; }", NULL);
+					     " |", pager, NULL);
+		else if (htmlout)
+			command = xstrdup (html_pager);
 		else
-			command = strappend (command, pager, "; }", NULL);
+			command = xstrdup (pager);
 	}
 
-	free (esc_less_opts);
 	free (less_opts);
-	free (esc_title);
 	free (esc_file);
 
 	return command;
@@ -1976,13 +2040,13 @@ static __inline__ int close_cat_stream (FILE *cat_stream, char *cat_file,
 }
 
 /*
- * format a manual page with roff_cmd, display it with disp_cmd, and
+ * format a manual page with format_cmd, display it with disp_cmd, and
  * save it to cat_file
  */
-static int format_display_and_save (char *roff_cmd, char *disp_cmd,
+static int format_display_and_save (char *format_cmd, char *disp_cmd,
 				    char *cat_file)
 {
-	FILE *in  = checked_popen (roff_cmd, "r");
+	FILE *in  = checked_popen (format_cmd, "r");
 	FILE *out = checked_popen (disp_cmd, "w");
 	FILE *sav = open_cat_stream (cat_file);
 	int instat = 1, outstat;
@@ -2034,8 +2098,49 @@ static int format_display_and_save (char *roff_cmd, char *disp_cmd,
 }
 #endif /* MAN_CATS */
 
+/* Format a manual page with format_cmd and display it with disp_cmd.
+ * Handle temporary file creation if necessary.
+ */
+static void format_display (char *format_cmd, char *disp_cmd)
+{
+	char *command;
+	int status;
+
+	if (format_cmd && htmlout) {
+		char *esc_stdin;
+		create_stdintmp ();
+		esc_stdin = escape_shell (stdin_tmpfile);
+		command = strappend (NULL, format_cmd, " > ", esc_stdin, NULL);
+		free (esc_stdin);
+		status = do_system_drop_privs (command);
+		free (command);
+		/* Some shells report broken pipe; ignore it. */
+		if (status && status != (SIGPIPE + 0x80) * 256) {
+			remove_stdintmp ();
+			gripe_system (command, status);
+		}
+
+		command = make_browser (disp_cmd, stdin_tmpfile);
+		status = do_system_drop_privs (command);
+		remove_stdintmp ();
+		if (status && status != (SIGPIPE + 0x80) * 256)
+			gripe_system (command, status);
+	} else if (format_cmd) {
+		command = strappend (NULL, format_cmd, " | ", disp_cmd, NULL);
+		status = do_system_drop_privs (command);
+		if (status && status != (SIGPIPE + 0x80) * 256)
+			gripe_system (command, status);
+		free (command);
+	} else {
+		command = disp_cmd;
+		status = do_system_drop_privs (command);
+		if (status && status != (SIGPIPE + 0x80) * 256)
+			gripe_system (command, status);
+	}
+}
+
 /* "Display" a page in catman mode, which amounts to saving it. */
-static void display_catman (const char *cat_file, const char *roff_cmd)
+static void display_catman (const char *cat_file, const char *format_cmd)
 {
 	char *tmpcat = tmp_cat_filename (cat_file);
 	char *esc_tmpcat = escape_shell (tmpcat);
@@ -2043,11 +2148,11 @@ static void display_catman (const char *cat_file, const char *roff_cmd)
 	int status;
 
 #ifdef COMP_CAT
-	cmd = strappend (NULL, roff_cmd, " | ",
+	cmd = strappend (NULL, format_cmd, " | ",
 			 get_def ("compressor", COMPRESSOR),
-			 " > ", esc_tmpcat);
+			 " > ", esc_tmpcat, NULL);
 #else /* !COMP_CAT */
-	cmd = strappend (NULL, roff_cmd, " > ", esc_tmpcat);
+	cmd = strappend (NULL, format_cmd, " > ", esc_tmpcat, NULL);
 #endif /* COMP_CAT */
 	/* save the cat as real user
 	 * (1) required for user man hierarchy
@@ -2077,7 +2182,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 {
 	int found;
 	static int pause;
-	char *roff_cmd;		/* command to format man_file to stdout */
+	char *format_cmd;	/* command to format man_file to stdout */
 
 	/* if dir is set chdir to it */
 	if (dir) {
@@ -2090,7 +2195,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 		}
 	}
 
-	/* define roff_cmd */
+	/* define format_cmd */
 	{
 		char *source_file = NULL;
 #ifdef COMP_SRC
@@ -2104,9 +2209,9 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 #endif /* COMP_SRC */
 
 		if (source_file)
-			roff_cmd = make_roff_command (dir, source_file);
+			format_cmd = make_roff_command (dir, source_file);
 		else
-			roff_cmd = NULL;
+			format_cmd = NULL;
 	}
 
 	/* Get modification time, for commit_tmp_cat(). */
@@ -2123,11 +2228,10 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 		if (found) {
 			if (pause && do_prompt (title))
 				return 0;
-			checked_system (roff_cmd);
+			checked_system (format_cmd);
 		}
 	} else {
 		int format;
-		char *cmd;
 		int status;
 		char *catpath;
 
@@ -2138,7 +2242,10 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 		   Check there first ala the FSSTND, and display if newer
 		   than man_file, if older, ignore it altogether */
 
-		if (!local_man_file) {
+		if (htmlout) {
+			format = 1;
+			save_cat = 0;
+		} else if (!local_man_file) {
 			catpath = get_catpath
 				(dir, global_manpath ? SYSTEM_CAT : USER_CAT);
 
@@ -2192,7 +2299,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 
 		/* if we're trying to read stdin via '-l -' then man_file
 		 * will be "" which access() obviously barfs on, but all is
-		 * well because the roff_cmd will have been created to
+		 * well because the format_cmd will have been created to
 		 * expect input via stdin. So we special-case this to avoid
 		 * the bogus access() check.
 		*/
@@ -2207,8 +2314,8 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 				 format, save_cat, found);
 
 		if (!found) {
-			if (roff_cmd)
-				free (roff_cmd);
+			if (format_cmd)
+				free (format_cmd);
 			return found;
 		}
 
@@ -2226,15 +2333,15 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 						 "%s in catman mode"),
 					       cat_file);
 				else
-					display_catman (cat_file, roff_cmd);
+					display_catman (cat_file, format_cmd);
 			}
 		} else if (format) {
 			/* no cat or out of date */
 			char *disp_cmd;
 
 			if (pause && do_prompt (title)) {
-				if (roff_cmd)
-					free (roff_cmd);
+				if (format_cmd)
+					free (format_cmd);
 				if (local_man_file)
 					return 1;
 				else
@@ -2249,21 +2356,13 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 #ifdef MAN_CATS
 			if (save_cat) {
 				/* save cat */
-				format_display_and_save (roff_cmd,
+				format_display_and_save (format_cmd,
 							 disp_cmd,
 							 cat_file);
 			} else 
 #endif /* MAN_CATS */
-				{
 				/* don't save cat */
-				cmd = strappend (NULL, roff_cmd,
-						 " | ", disp_cmd, NULL);
-				status = do_system_drop_privs (cmd);
-				/* some shells report broken pipe, ignore it */
-				if (status && status != 256 * (SIGPIPE + 0x80))
-					gripe_system (disp_cmd, status);
-				free (cmd);
-			}
+				format_display (format_cmd, disp_cmd);
 
 			free (disp_cmd);
 
@@ -2271,60 +2370,58 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			/* display preformatted cat */
 			char *disp_cmd;
 			char *esc_cat_file;
-#if defined(COMP_SRC)
+#ifdef COMP_SRC
 			struct compression *comp;
+#endif /* COMP_SRC */
 
-			if (pause && do_prompt (title)) {
-				if (roff_cmd)
-					free (roff_cmd);
-				return 0;
+			if (format_cmd) {
+				free (format_cmd);
+				format_cmd = NULL;
 			}
+
+#if defined(COMP_SRC)
+			if (pause && do_prompt (title))
+				return 0;
 
 			comp = comp_info (cat_file);
 			if (comp) {
-				disp_cmd = make_display_command (NULL, title);
 				esc_cat_file = escape_shell (cat_file);
-				cmd = strappend (NULL, comp->prog,
-						 " ", esc_cat_file,
-						 " | ", disp_cmd, NULL);
+				format_cmd = strappend (NULL, comp->prog, " ",
+							esc_cat_file, NULL);
 				free (esc_cat_file);
-				free (disp_cmd);
-			} else 
-				cmd = make_display_command (cat_file, title);
+				disp_cmd = make_display_command (NULL, title);
+			} else
+				disp_cmd = make_display_command (cat_file,
+								 title);
 #elif defined(COMP_CAT)
-			if (pause && do_prompt(title)) {
-				if (roff_cmd)
-					free (roff_cmd);
+			if (pause && do_prompt (title))
 				return 0;
-			}
 
-			disp_cmd = make_display_command (NULL, title);
 			esc_cat_file = escape_shell (cat_file);
-			cmd = strappend (NULL, 
-					 get_def("decompressor", DECOMPRESSOR),
-					 " ", esc_cat_file,
-					 " | ", disp_cmd, NULL);
+			format_cmd = strappend (NULL,
+						get_def ("decompressor",
+							 DECOMPRESSOR),
+						" ", esc_cat_file, NULL);
 			free (esc_cat_file);
-			free (disp_cmd);
+			disp_cmd = make_display_command (NULL, title);
 #else /* !(COMP_SRC || COMP_CAT) */
-			if (pause && do_prompt(title)) {
-				if (roff_cmd)
-					free (roff_cmd);
+			if (pause && do_prompt (title))
 				return 0;
-			}
 
-			cmd = make_display_command (cat_file, title);
+			disp_cmd = make_display_command (cat_file, title);
 #endif /* COMP_SRC */
-			status = do_system_drop_privs (cmd);
-			/* some shells report broken pipe, ignore it */
-			if (status && (status != (SIGPIPE + 0x80) << 8))
-				gripe_system (cmd, status);
-			free (cmd);
+			format_display (format_cmd, disp_cmd);
+			if (format_cmd) {
+				free (format_cmd);
+				format_cmd = NULL;
+			}
+			if (disp_cmd)
+				free (disp_cmd);
 		}
 	}
 
-	if (roff_cmd)
-		free (roff_cmd);
+	if (format_cmd)
+		free (format_cmd);
 		
 	if (!pause)
 		pause = found;

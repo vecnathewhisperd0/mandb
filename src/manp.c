@@ -759,7 +759,8 @@ void read_config_file(void)
 		if (config != NULL) {
 			if (debug)
 				fprintf (stderr,
-					 "From the config file %s:\n\n", home);
+					 "From the config file %s:\n\n",
+					 dotmanpath);
 			add_to_dirlist (config, 1);
 			fclose (config);
 		}
