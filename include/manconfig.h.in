@@ -165,12 +165,14 @@
 #endif
 
 /* GNU less flags (i)gnore case on search 
-		  (x8) set tab stops to 8 spaces
-		  (m)ore display style */
+ *                (x8) set tab stops to 8 spaces
+ *                (m)ore display style
+ * 
+ * If you change this, be sure to match the format with
+ * man.c:make_display_command().
+ */
 
-#ifndef LESS_OPTS
-#  define LESS_OPTS	"-Pm\\:\\$ix8mPm"
-#endif
+#define LESS_OPTS	"-ix8mPm%s$PM%s$"
 
 /* This is a minimal latin1 special characters to ascii translation table */
 #if !defined(TR_SET1) || !defined(TR_SET2)

@@ -1,3 +1,15 @@
+Sat Jan 12 17:55:12 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l: Match a line at a time rather than a character at a
+	  time after the end of the NAME section.
+
+	* src/check_mandirs.c (testmandirs): More --debug information.
+
+	* include/manconfig.h.in (LESS_OPTS): Prune duplicate -Pm option.
+	  Set -PM too so it works even when $LESS contains -M.
+	* src/man.c (make_display_command): Substitute prompt_string into
+	  LESS_OPTS twice to accommodate the above.
+
 Mon Jan  7 16:16:02 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l: Another {blank_eol} fix, thanks to Peter Clay.

@@ -174,7 +174,7 @@ vgrind_request	\.vS
 					*p_name = '\0'; /* terminate the string */
 					yyterminate ();
 				}
-<MAN_REST>.|\n
+<MAN_REST>.+|\n
 
  /* rules to end NAME section processing */
 <FORCE_EXIT>.|\n		{	/* forced exit */

@@ -1696,9 +1696,13 @@ static char *make_display_command (char *file, char *title)
 	char *command;
 	char *esc_file = escape_shell (file);
 	char *esc_title = escape_less (title);
-	char *less_opts = strappend (NULL, LESS_OPTS, prompt_string, "$",
-				     less, NULL);
-	char *man_pn = strstr (less_opts, MAN_PN);
+	char *less_opts = xmalloc (strlen (LESS_OPTS) +
+				   strlen (prompt_string) * 2 + 1);
+	char *man_pn;
+
+	sprintf (less_opts, LESS_OPTS, prompt_string, prompt_string);
+	less_opts = strappend (less_opts, less, NULL);
+	man_pn = strstr (less_opts, MAN_PN);
 	while (man_pn) {
 		char *subst_opts =
 			xmalloc (strlen (less_opts) - strlen (MAN_PN) +

@@ -588,13 +588,21 @@ static short testmandirs (const char *path, time_t last)
 		if (strncmp (mandir->d_name, "man", 3) != 0)
 			continue;
 
+		if (debug)
+			fprintf (stderr, "Examining %s\n", mandir->d_name);
+
 		if (stat (mandir->d_name, &stbuf) != 0)	/* stat failed */
 			continue;
 		if (!S_ISDIR(stbuf.st_mode))		/* not a directory */
 			continue;
-		if (!force_rescan && stbuf.st_mtime <= last)
+		if (!force_rescan && stbuf.st_mtime <= last) {
 			/* scanned already */
+			if (debug)
+				fprintf (stderr,
+					 "%s modified %ld, db modified %ld\n",
+					 mandir->d_name, stbuf.st_mtime, last);
 			continue;
+		}
 
 		if (debug)
 			fprintf (stderr,
