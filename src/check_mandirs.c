@@ -1014,7 +1014,9 @@ short purge_missing (const char *manpath)
 
 		save_debug = debug;
 		debug = 0;	/* look_for_file() is quite noisy */
-		found = look_for_file (manpath, entry.ext, nicekey, 0, 1);
+		found = look_for_file (manpath, entry.ext,
+				       entry.name ? entry.name : nicekey,
+				       0, 1);
 		debug = save_debug;
 
 		/* Now actually decide whether to purge, depending on the
