@@ -381,14 +381,29 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 		yyin = fdopen (dup (0), "r");
 	} else {
 #ifdef COMP_SRC
+		struct compression *comp;
+#endif /* COMP_SRC */
+		struct stat st;
+
+		if (stat (file, &st)) {
+			error (0, errno, "%s", file);
+			return 0;
+		}
+
+		if (S_ISDIR (st.st_mode)) {
+			error (0, EISDIR, "%s", file);
+			return 0;
+		}
+
+#ifdef COMP_SRC
 		/* See if we need to decompress the file(s) first. */
-		struct compression *comp = comp_info (file);
+		comp = comp_info (file);
 		if (comp) {
 			file = decompress (file, comp);
 			if (!file)
 				return 0;
 		}
-#endif
+#endif /* COMP_SRC */
 		drop_effective_privs ();
 		yyin = fopen (file, "r");
 		regain_effective_privs ();
@@ -396,7 +411,7 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 			error (0, errno, _("can't open %s"), file);
 #ifdef COMP_SRC
 			remove_ztemp ();
-#endif
+#endif /* COMP_SRC */
 			return 0;
 		}
 	}
