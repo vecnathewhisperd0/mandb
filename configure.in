@@ -13,11 +13,8 @@ dnl
 dnl Define below date and version information to be put into man pages etc.
 dnl
 datemark=20010907
-date=`LANG=C date -d $datemark +'%d %B %Y'`
-date_it=`LANG=it_IT date -d $datemark +'%d %B %Y'`
-date_es=`LANG=es_ES date -d $datemark +'%d %B %Y'`
-date_de=`LANG=de_DE date -d $datemark +'%d %B %Y'`
-date_fr=`LANG=fr_FR date -d $datemark +'%d %B %Y'`
+date=`LANG=C date -d $datemark +'%Y-%m-%d'`
+AC_SUBST(date)dnl
 dnl
 PACKAGE=AC_PACKAGE_NAME
 VERSION=AC_PACKAGE_VERSION
@@ -27,13 +24,6 @@ AC_DEFINE_UNQUOTED(VERSION, "$VERSION",
 		   [Define to the version of the distribution.])
 AC_SUBST(PACKAGE)dnl
 AC_SUBST(VERSION)dnl
-dnl
-AC_SUBST(date)dnl
-dnl AC_SUBST(datemark)dnl
-AC_SUBST(date_it)dnl
-AC_SUBST(date_es)dnl
-AC_SUBST(date_de)dnl
-AC_SUBST(date_fr)dnl
 dnl
 dnl We have to be a bit naughty here and supply options.
 dnl The autoconf literature states that only features that can be 

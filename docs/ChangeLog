@@ -1,3 +1,22 @@
+Mon Apr  7 00:04:30 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in: Don't generate language-specific date variants for
+	  man pages, as that requires all the relevant locales to be
+	  installed on the build machine. Use the ISO 8601 date format
+	  instead.
+	* include/Defines.in: Remove obsolete substitutions of date_it,
+	  date_es, date_de, and date_fr.
+	* man/Makefile.in: Likewise.
+	* man/de_DE.88591/man1/*.man1, man/de_DE.88591/man5/*.man5,
+	  man/de_DE.88591/man8/*.man8, man/es_ES.88591/man1/*.man1,
+	  man/es_ES.88591/man5/*.man5, man/es_ES.88591/man8/*.man8,
+	  man/it_IT.88591/man1/*.man1, man/it_IT.88591/man5/*.man5,
+	  man/it_IT.88591/man8/*.man8 (.TH): Replace "%date_de%",
+	  "%date_es%", and "%date_it%" substitutions by plain "%date%".
+	* man/man1/man.man1 (HISTORY): "%date%" -> "present day".
+	* man/it_IT.88591/man1/man.man1 (STORIA): Similarly, "%date_it%" ->
+	  "presente" (present day).
+
 Sun Apr  6 21:39:36 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (main): Ignore LANGUAGE if a locale is explicitly
