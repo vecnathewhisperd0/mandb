@@ -130,12 +130,13 @@ struct page_description *parse_descriptions (const char *base_name,
 		if (head) {
 			desc->next = malloc (sizeof *desc);
 			desc = desc->next;
+			desc->whatis = xstrdup (head->whatis);
 		} else {
 			desc = malloc (sizeof *desc);
 			head = desc;
+			desc->whatis = NULL;
 		}
 		desc->name = xstrdup (base_name);
-		desc->whatis = xstrdup (head->whatis);
 		desc->next = NULL;
 	}
 
