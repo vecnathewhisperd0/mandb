@@ -2,6 +2,7 @@
  * whatis.c: search the index or whatis database(s) for words.
  *  
  * Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
+ * Copyright (c) 2001 Colin Watson.
  *
  * You may distribute under the terms of the GNU General Public
  * License as specified in the file COPYING that comes with this
@@ -12,6 +13,8 @@
  * for word matches.
  *
  * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ *
+ * CJW: Add more safety in the face of corrupted databases.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -202,15 +205,12 @@ static __inline__ int use_grep (char *page, char *manpath)
    
 /* Take mandata struct (earlier returned from a dblookup()) and return 
    the relative whatis */
-static char *get_whatis (struct mandata *info)
+static char *get_whatis (struct mandata *info, char *page)
 {
-	struct mandata *newinfo;
+	int rounds;
+	char *pointer, *ext;
 
-	/* In the future we may need to guard against an infinate 
-	 * recursive loop here, but as info->pointer only points to
-	 * whatis refs, we're safe for the time being */
-
-	/* ensure we need to fill in the whatis */
+	/* See if we need to fill in the whatis here. */
 	if (*(info->pointer) == '-') {
 		if (info->whatis != NULL && *(info->whatis))
 			return xstrdup (info->whatis);
@@ -218,16 +218,38 @@ static char *get_whatis (struct mandata *info)
 			return xstrdup (_("(unknown)"));
 	}
 
-	newinfo = dblookup_exact (info->pointer, info->ext);
+	/* Now we have to work through pointers. The limit of 10 is fairly
+	 * arbitrary: it's just there to avoid an infinite loop.
+	 */
+	info = dblookup_exact (info->pointer, info->ext);
+	for (rounds = 0; rounds < 10; rounds++) {
+		struct mandata *newinfo;
+		char *return_whatis = NULL;
 
-	/* If the pointer lookup fails, do nothing */
-	if (newinfo) {
-		char *whatis;
-		whatis = get_whatis (newinfo);
-		free_mandata_struct (newinfo);
-		return whatis;
-	} else
-		return xstrdup (_("(unknown)"));
+		/* If the pointer lookup fails, do nothing. */
+		if (!info)
+			return xstrdup (_("(unknown)"));
+
+		/* See if we need to fill in the whatis here. */
+		if (*(info->pointer) == '-') {
+			if (info->whatis != NULL && *(info->whatis))
+				return_whatis = xstrdup (info->whatis);
+			else
+				return_whatis = xstrdup (_("(unknown)"));
+		}
+
+		if (return_whatis) {
+			free_mandata_struct (info);
+			return return_whatis;
+		}
+
+		newinfo = dblookup_exact (info->pointer, info->ext);
+		free_mandata_struct (info);
+		info = newinfo;
+	}
+
+	error (0, 0, _("warning: %s contains a pointer loop"), page);
+	return NULL;
 }
 
 /* print out any matches found */
@@ -235,7 +257,7 @@ static void display (struct mandata *info, char *page)
 {
 	char *string, *whatis;
 	
-	whatis = get_whatis (info);
+	whatis = get_whatis (info, page);
 	
 	if (debug)
 		dbprintf (info);
@@ -397,7 +419,8 @@ static int apropos (char *page, char *lowpage)
 			if (debug)
 				fprintf (stderr, "key was %s\n", key.dptr);
 			error (FATAL, 0,
-			       _("Database %s corrupted; rebuild with mandb"),
+			       _("Database %s corrupted; rebuild with mandb "
+				 "--create"),
 			       database);
 		}
 

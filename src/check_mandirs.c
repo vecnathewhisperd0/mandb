@@ -108,6 +108,7 @@ char *make_filename (const char *path, const char *name,
 
 int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 {
+	char *pointer_name;
 	char *comma;
 	int ret;
 
@@ -115,8 +116,14 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 	if (raw_whatis) {
 		info->whatis = strstr (raw_whatis, " - ");
 		if (info->whatis) {
-			info->whatis[0] = '\0'; /* separate description */
+			char *space = info->whatis;
+			while (*space == ' ')
+				*space-- = '\0';    /* separate description */
 			info->whatis += 3;
+			/* Now trim trailing spaces off the description. */
+			space = strchr (info->whatis, '\0') - 1;
+			while (*space == ' ')
+				*space = '\0';
 		} else {
 			raw_whatis = NULL; /* kill entire whatis line */
 		}
@@ -127,15 +134,28 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 	if (debug)
 		fprintf (stderr, "base_name = `%s'\n", base_name);
 
-	ret = dbstore (info, base_name);
-	if (ret > 0)
+	pointer_name = xstrdup (base_name);
+	comma = strchr (pointer_name, ',');
+	if (comma) {
+		*comma = '\0';
+		if (debug)
+			fprintf (stderr, "pointer_name = `%s'\n",
+				 pointer_name);
+	}
+
+	ret = dbstore (info, pointer_name);
+	if (ret > 0) {
+		free (pointer_name);
 		return ret;
+	}
 
 	/* if there are no indirect references, just go on to the 
 	   next file */
 
-	if (!raw_whatis || strchr (raw_whatis, ',') == NULL)
+	if (!raw_whatis || strchr (raw_whatis, ',') == NULL) {
+		free (pointer_name);
 		return 0;
+	}
 
 	/* If there are...  */
 		
@@ -146,7 +166,7 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 
 	/* don't waste space storing the whatis in the db */
 	info->whatis = NULL;
-	info->pointer = base_name; 
+	info->pointer = pointer_name; 
 	
 	while ((comma = strrchr (raw_whatis, ',')) != NULL) {
 		*comma = '\0';
@@ -154,25 +174,31 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 
 		/* If we've already dealt with it, ignore */
 		
-		if (strcmp (comma, base_name) != 0) {
+		if (strcmp (comma, pointer_name) != 0) {
 			if (debug)
-				fprintf (stderr, "comma = %s\n", comma);
+				fprintf (stderr, "comma = `%s'\n", comma);
 			ret = dbstore (info, comma);
-			if (ret > 0)
+			if (ret > 0) {
+				free (pointer_name);
 				return ret;
+			}
 		}
 	}
 
 	/* If we've already dealt with it, ignore */
 		
-	if (strcmp (raw_whatis, base_name) == 0)
+	if (strcmp (raw_whatis, pointer_name) == 0) {
+		free (pointer_name);
 		return 0;
+	}
 		
 	if (debug)
-		fprintf (stderr, "raw_w = %s\n", raw_whatis);
+		fprintf (stderr, "raw_w = `%s'\n", raw_whatis);
 	ret = dbstore (info, raw_whatis);
-	if (ret > 0)
+	if (ret > 0) {
+		free (pointer_name);
 		return ret;
+	}
 
 	return 0;
 }

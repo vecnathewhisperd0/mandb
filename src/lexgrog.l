@@ -59,6 +59,8 @@ static char newname[MAX_NAME];
 static char *p_name, *fname;
 static char filters[MAX_FILTERS];
 
+static int fill_mode;
+
 #ifdef TEST
 #include <stdio.h>
 char *program_name = "lexgrog";
@@ -165,6 +167,13 @@ vgrind_request	\.vS
 						newline_found();
 					}
 }
+
+ /* No-op requests */
+<MAN_NAME>{bol}\.{blank}*$		newline_found();
+
+ /* Toggle fill mode */
+<MAN_NAME>{bol}\.nf.*			fill_mode = 0;
+<MAN_NAME>{bol}\.fi.*			fill_mode = 1;
 
 <CAT_NAME>-\n[blank_eol]*		/* strip continuations */
 
@@ -275,9 +284,15 @@ static void add_char_to_whatis(unsigned char c)
 
 static void newline_found(void)
 {
-/* If we are mid p_name and the last added char was not a space, best add one */
-	if (p_name != newname && *(p_name - 1) != ' ')
-		add_char_to_whatis(' ');
+	/* If we are mid p_name and the last added char was not a space,
+	 * best add one.
+	 */
+	if (p_name != newname && *(p_name - 1) != ' ') {
+		if (fill_mode)
+			add_char_to_whatis(' ');
+		else
+			add_char_to_whatis((char) 0x11);
+	}
 }
 
 int find_name( char *file, char *filename, lexgrog *p_lg)
@@ -292,6 +307,8 @@ int find_name( char *file, char *filename, lexgrog *p_lg)
 	fname = filename;
 	*(p_name = newname) = '\0';
 	memset( filters, '_', sizeof(filters));
+
+	fill_mode = 1;
 
 	if (p_lg->type)
 		BEGIN(CAT_FILE);

@@ -703,11 +703,11 @@ void add_to_dirlist (FILE *config)
 		while (isspace (*bp))
 			bp++;
 
-		if (*bp == '#' || *bp == '\0') {
+		if (*bp == '#' || *bp == '\0')
 			continue;
-		} else if (strncmp (bp, "NO", 2) == 0) {
+		else if (strncmp (bp, "NO", 2) == 0)
 			continue;	/* mach any word starting with NO */
-		} else if (sscanf (bp, "MANBIN %*s") == 1)
+		else if (sscanf (bp, "MANBIN %*s") == 1)
 			continue;
 		else if (sscanf (bp, "MANDATORY_MANPATH %s", key) == 1)
 			add_mandatory (key);	
@@ -719,6 +719,9 @@ void add_to_dirlist (FILE *config)
 				      key, cont)) > 0)
 			add_def (key, cont, c);
 		else if (sscanf (bp, "SECTION %511[^\n]", cont) == 1)
+			add_sections (cont);
+		else if (sscanf (bp, "SECTIONS %511[^\n]", cont) == 1)
+			/* Since I keep getting it wrong ... */
 			add_sections (cont);
 	 	else {
 			error (0, 0, _("can't parse directory list `%s'"), bp);

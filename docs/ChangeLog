@@ -1,3 +1,28 @@
+Tue Jun 26 03:45:01 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man_db.conf.in (SECTION): Add a little more advice about where
+	  to list sections with extensions.
+
+	* src/manp.c (add_to_dirlist): Add SECTIONS as an alias for SECTION,
+	  since I keep getting it wrong and I came up with it in the first
+	  place. Both make sense in different situations.
+
+	* src/check_mandirs.c (splitline): Trim trailing spaces off names
+	  and descriptions. If the given base_name contains a comma, only
+	  use the part of the name before it as the target for pointers.
+
+	* src/whatis.c (get_whatis): Unroll recursion into a finite loop to
+	  avoid infinite recursion if the database contains a pointer loop.
+	  Add the page name as an argument so that a warning can be printed.
+	  (display): Pass the new argument to get_whatis().
+	  (apropos): Recommend 'mandb --create' rather than plain 'mandb' if
+	  the database gets corrupted.
+
+	* src/lexgrog.l: Ignore no-op groff requests (e.g. '.').
+	  New variable, fill_mode. Reset it when .nf is encountered, set it
+	  when .fi is encountered.
+	  (newline_found): If fill_mode is set, add 0x11 instead of a space.
+
 Mon Jun 25 02:55:36 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Describe recent changes. Add dates of old releases.
