@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.20\n"
 "POT-Creation-Date: 2002-06-25 01:26+0100\n"
-"PO-Revision-Date: 2001-10-11 19:52+0200\n"
-"Last-Translator: David Martínez <ender@rediris.es>\n"
+"PO-Revision-Date: 2002-07-03 21:52+0200\n"
+"Last-Translator: David Martínez <ender@debian.org>\n"
 "Language-Team: debian-l10n-spanish@lists.debian.org\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -36,7 +36,7 @@ msgstr "no se puede reemplazar la clave %s."
 #: libdb/db_lookup.c:92
 #, c-format
 msgid "key %s is missing name component - is this an old db?"
-msgstr ""
+msgstr "la clave %s no tiene componente de nombre. ¿Esta es una base de datos antigua?"
 
 #: libdb/db_lookup.c:200 libdb/db_lookup.c:210
 #, c-format
@@ -59,14 +59,14 @@ msgid "fatal: unable to insert version identifier into %s"
 msgstr "error grave: no se puede insertar identificador de versión en %s."
 
 #: libdb/db_ver.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "warning: %s has no version identifier\n"
 msgstr "aviso: %s no tiene identificador de versión.\n"
 
 #: libdb/db_ver.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "warning: %s is version %s, expecting %s\n"
-msgstr "aviso: %s tiene la versión %s, se esperaba %s.\n"
+msgstr "aviso: %s tiene la versión %s, aunque se esperaba %s.\n"
 
 #: src/accessdb.c:53
 #, c-format
@@ -84,7 +84,7 @@ msgid "\n"
 msgstr "\n"
 
 #: src/accessdb.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "can't open %s for reading"
 msgstr "no se puede abrir %s para leer."
 
@@ -189,9 +189,9 @@ msgid "can't search directory %s"
 msgstr "no se puede buscar en el directorio %s."
 
 #: src/check_mandirs.c:636
-#, fuzzy, c-format
+#, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
-msgstr "Actualizando el caché de índices para la ruta `%s'. Aguarde..."
+msgstr "Actualizando el caché de índices para la ruta `%s/%s'. Aguarde..."
 
 #: src/check_mandirs.c:738
 #, c-format
@@ -227,12 +227,11 @@ msgid "can't open %s"
 msgstr "no se puede abrir %s."
 
 #: lexgrog.l:432
-#, fuzzy, c-format
+#, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "uso: %s [-mcwfhV] fichero ...\n"
 
 #: lexgrog.l:434
-#, fuzzy
 msgid ""
 "-m --man                    parse as man page.\n"
 "-c --cat                    parse as cat page.\n"
@@ -244,17 +243,16 @@ msgid ""
 "The defaults are --man and --whatis.\n"
 msgstr ""
 "-m --man                    procesa como página de manual.\n"
-"-c --cat                    procesa como página cat.\n"
-"-w --whatis                 muestra información de whatis.\n"
+"-c --cat                    procesa como página «cat».\n"
+"-w --whatis                 muestra información de «whatis».\n"
 "-f --filters                muestra series supuestas de filtros de "
 "preproceso.\n"
 "-V --version                muestra la versión.\n"
 "-h --help                   muestra este mensaje de uso.\n"
 "\n"
-"Las opciones por defecto son --man y --whatis.\n"
+"Las opciones predeterminadas son --man y --whatis.\n"
 
 #: lexgrog.l:480
-#, fuzzy
 msgid "-m -c: incompatible options"
 msgstr "-m -c: opciones incompatibles."
 
@@ -292,7 +290,6 @@ msgstr ""
 # Es `la' y no `las' conversiones, así como uno diría "el lado oscuro de los
 # hombres" y no "los lados oscuros de los hombres".. =) nl
 #: src/man.c:444
-#, fuzzy
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -316,19 +313,25 @@ msgstr ""
 "-a, --all                   encuentra todas las páginas de manual que "
 "concuerden.\n"
 "-d, --debug                 muestra mensajes de depuración.\n"
-"-e, --extension             limita búsqueda a extensiones `extensión'.\n"
-"-f, --whatis                equivalente a whatis.\n"
-"-k, --apropos               equivalente a apropos.\n"
-"-w, --where, --location     muestra la ubicación física de la(s) página(s) "
+"-e, --extension             limita búsqueda a extensiones de tipo `extensión'.\n"
+"-f, --whatis                equivalente a «whatis».\n"
+"-k, --apropos               equivalente a «apropos».\n"
+"-w, --where, --location     muestra la ubicación física de la(s) página(s)\n"
 "man.\n"
 "-l, --local-file            interpreta argumento(s) como fichero(s) local"
 "(es).\n"
 "-u, --update                fuerza un control de consistencia de caché.\n"
+"-i, --ignore-case           busca páginas independientemente de\n"
+"                            mayúsculas/minúsculas (predeterminado).\n"
+"-I, --match-case            busca páginas teniendo en cuenta\n"
+"                            mayúsculas/minúsculas.\n"
 "-r, --prompt cadena         proporciona un prompt en `less'.\n"
 "-c, --catman                usado por catman para dar nuevo formato a "
 "páginas cat desactualizadas.\n"
-"-7, --ascii                 muestra la conversión ASCII de ciertos "
-"caracteres latin1."
+"-7, --ascii                 muestra la conversión ASCII de ciertos caracteres\n"
+"                            latin1.\n"
+"-E, --encoding codificado   usa el dispositivo nroff seleccionado y lo muestra\n"
+"                            en el paginador."
 
 #: src/man.c:460
 #, c-format
@@ -351,7 +354,6 @@ msgid "-Z, --ditroff               use groff and force it to produce ditroff."
 msgstr "-Z, --ditroff               usa groff y lo fuerza a generar ditroff."
 
 #: src/man.c:466
-#, fuzzy
 msgid ""
 "-X, --gxditview             use groff and display through gditview (X11):"
 msgstr ""
@@ -429,9 +431,8 @@ msgid " Manual page "
 msgstr "Página de manual "
 
 #: src/man.c:938
-#, fuzzy
 msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
-msgstr " ?ltlínea %lt?L/%L.:byte %bB?s/%s..?e (FIN):?pB %pB\\\\%.."
+msgstr " ?ltlínea %lt?L/%L.:byte %bB?s/%s..?e (FIN):?pB %pB\\%.."
 
 #: src/man.c:1225
 msgid ": incompatible options"
@@ -467,7 +468,7 @@ msgid "can't rename %s to %s"
 msgstr "no se puede cambiar el nombre %s a %s."
 
 #: src/man.c:1887
-#, fuzzy, c-format
+#, c-format
 msgid "can't set times on %s"
 msgstr "no se puede cambiar la fecha de %s."
 
@@ -508,12 +509,12 @@ msgid "Still saving the page, please wait...\n"
 msgstr "Aún se está grabando la página, aguarde por favor...\n"
 
 #: src/man.c:2134 src/man.c:2153 src/man.c:2184
-#, fuzzy, c-format
+#, c-format
 msgid "can't change to directory %s"
 msgstr "no se puede entrar en el directorio %s."
 
 #: src/man.c:2159 src/man.c:2189
-#, fuzzy, c-format
+#, c-format
 msgid "can't remove directory %s"
 msgstr "no se puede borrar el directorio %s."
 
@@ -530,10 +531,10 @@ msgstr ""
 #: src/man.c:2433
 #, c-format
 msgid "Reformatting %s, please wait...\n"
-msgstr "Dando formato a %s, aguarde por favor...\n"
+msgstr "Dando formato a %s; aguarde, por favor...\n"
 
 #: src/man.c:2852
-#, fuzzy, c-format
+#, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: depender de las referencias de whatis está en desuso.\n"
 
@@ -544,12 +545,11 @@ msgstr ""
 "--Man-- próxima: %s [ ver (return) | siguiente (Ctrl-D) | salir (Ctrl-C) ]\n"
 
 #: src/mandb.c:153
-#, fuzzy, c-format
+#, c-format
 msgid "usage: %s [-dqspuc|-h|-V] [manpath]\n"
 msgstr "uso: %s [-dqspuc|-h|-V] [ruta_man]\n"
 
 #: src/mandb.c:155
-#, fuzzy
 msgid ""
 "-d --debug                  produce debugging info.\n"
 "-q --quiet                  work quietly, except for 'bogus' warning.\n"
@@ -563,7 +563,7 @@ msgstr ""
 "-d --debug                  genera información de depuración.\n"
 "-q --quiet                  trabaja silenciosamente, a excepción de avisos\n"
 "                            inocuos.\n"
-"-s --no-straycats           ni busca ni agrega cats sin fuentes a las\n"
+"-s --no-straycats           ni busca ni agrega «cats» sin fuentes a las\n"
 "                            bases de datos.\n"
 "-u --user-db                sólo genera bases de datos de usuario.\n"
 "-c --create                 crea las bases de datos desde cero, en lugar de\n"
@@ -594,7 +594,7 @@ msgstr ""
 "aviso: no hay directivas MANDB_MAP en %s, se utilizará su ruta man (manpath)"
 
 #: src/mandb.c:530
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
 "%d manual pages were added.\n"
@@ -603,9 +603,9 @@ msgstr ""
 "Se añadieron %d páginas de manual.\n"
 
 #: src/mandb.c:534
-#, fuzzy, c-format
+#, c-format
 msgid "%d stray cats were added.\n"
-msgstr "Se añadieron %d cats sin fuentes.\n"
+msgstr "Se añadieron %d «cats» sin fuentes.\n"
 
 #: src/mandb.c:536
 #, c-format
@@ -615,7 +615,7 @@ msgstr "Se han eliminado %d entradas antiguas en la base de datos.\n"
 #: src/manp.c:320
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
-msgstr "can't make sense of the manpath configuration file %s"
+msgstr "no se puede comprender el fichero de configuración %s de rutas de man"
 
 #: src/manp.c:328
 #, c-format
@@ -629,36 +629,36 @@ msgstr "aviso: %s no es un directorio."
 
 #: src/manp.c:545
 msgid "warning: $PATH not set"
-msgstr "aviso: $PATH no asignada."
+msgstr "aviso: variable $PATH no asignada."
 
 #: src/manp.c:552
 msgid "warning: empty $PATH"
-msgstr "aviso: $PATH está vacía."
+msgstr "aviso: la variable $PATH está vacía."
 
 #: src/manp.c:577
-#, fuzzy, c-format
+#, c-format
 msgid "warning: $MANPATH set, prepending %s"
-msgstr "aviso: $MANPATH asignada, se antepondrá %s."
+msgstr "aviso: la variable $MANPATH está asignada, se antepondrá %s."
 
 #: src/manp.c:588
-#, fuzzy, c-format
+#, c-format
 msgid "warning: $MANPATH set, appending %s"
-msgstr "aviso: $MANPATH asignada, añadiendo %s."
+msgstr "aviso: la variable $MANPATH está asignada, añadiendo %s."
 
 #: src/manp.c:600
-#, fuzzy, c-format
+#, c-format
 msgid "warning: $MANPATH set, inserting %s"
-msgstr "aviso: $MANPATH asignada, insertando %s"
+msgstr "aviso: la variable $MANPATH está asignada, insertando %s."
 
 #: src/manp.c:613
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
-msgstr "aviso: $MANPATH asignada, ignorando %s"
+msgstr "aviso: la variable $MANPATH está asignada, ignorando %s."
 
 #: src/manp.c:647 src/manp.c:679
 #, c-format
 msgid "warning: cannot create catdir %s"
-msgstr "aviso: no se pudo crear catdir %s."
+msgstr "aviso: no se pudo crear directorio para «cat» %s."
 
 #: src/manp.c:734
 #, c-format
@@ -666,9 +666,9 @@ msgid "can't parse directory list `%s'"
 msgstr "no se puede procesar correctamente la lista de directorios `%s'."
 
 #: src/manp.c:763
-#, fuzzy, c-format
+#, c-format
 msgid "can't open the manpath configuration file %s"
-msgstr "no se puede abrir el fichero de configuración de ruta man %s."
+msgstr "no se puede abrir el fichero de configuración de rutas de man %s."
 
 #: src/manp.c:794
 #, c-format
@@ -734,7 +734,7 @@ msgid "Checking for stray cats under %s...\n"
 msgstr "Controlando si hay páginas cat sin fuentes bajo %s...\n"
 
 #: src/straycats.c:346
-#, fuzzy, c-format
+#, c-format
 msgid "warning: can't create temp file %s"
 msgstr "aviso: no se pudo crear el fichero temporal %s."
 
@@ -749,12 +749,12 @@ msgid "%s is self referencing"
 msgstr "%s se referencia a sí mismo."
 
 #: src/version.c:31
-#, fuzzy, c-format
+#, c-format
 msgid "%s, version %s, %s\n"
-msgstr "%s, versión %s, %s\n"
+msgstr "%s, versión %s, %s.\n"
 
 #: src/whatis.c:128
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] "
 "keyword ...\n"
@@ -763,7 +763,6 @@ msgstr ""
 "palabra_clave ...\n"
 
 #: src/whatis.c:130
-#, fuzzy
 msgid ""
 "-d --debug\t\tproduce debugging info.\n"
 "-r --regex \t\tinterpret each keyword as a regex (default).\n"
@@ -817,7 +816,7 @@ msgstr ""
 "general."
 
 #: src/whatis.c:217 src/whatis.c:244 src/whatis.c:255
-#, fuzzy, c-format
+#, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "aviso: %s contiene un bucle de punteros."
 
