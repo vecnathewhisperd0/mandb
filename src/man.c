@@ -965,7 +965,7 @@ int main (int argc, char *argv[])
 #ifdef SECURE_MAN_UID
 	/* record who we are and drop effective privs for later use */
 	init_security ();
-#endif
+#endif /* SECURE_MAN_UID */
 
 	if (!catman)
 		store_line_length();
@@ -977,9 +977,11 @@ int main (int argc, char *argv[])
 		do_extern (argv);
 
 	get_term(); /* stores terminal settings */
+#ifdef SECURE_MAN_UID
 	if (debug)
 		fprintf (stderr, "real user = %d; effective user = %d\n",
 			 ruid, euid);
+#endif /* SECURE_MAN_UID */
 
 #ifdef HAVE_SETLOCALE
 	/* close this locale and reinitialise if a new locale was 
@@ -1988,6 +1990,7 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 {
 	int status = 0;
 
+#ifdef SECURE_MAN_UID
 	if (!delete && global_manpath && euid == 0) {
 		if (debug) {
 			fprintf (stderr, "fixing temporary cat's ownership\n");
@@ -1999,6 +2002,7 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 				error (0, errno, _("can't chown %s"), tmp_cat);
 		}
 	}
+#endif /* SECURE_MAN_UID */
 
 	if (!delete && !status) {
 		if (debug) {

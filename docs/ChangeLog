@@ -1,3 +1,14 @@
+Fri Mar 28 09:23:19 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (main): Protect ruid/euid debugging statement with
+	  #ifdef SECURE_MAN_UID.
+	  (commit_tmp_cat): Likewise for temporary cat ownership code.
+	* src/security.c (drop_effective_privs, regain_effective_privs):
+	  priv_drop_count is only declared #ifdef SECURE_MAN_UID. Move the
+	  corresponding directives so that these functions are no-ops if
+	  that symbol isn't defined.
+	* docs/NEWS: Document this.
+
 Wed Mar 26 15:04:00 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* manual/format.me: Correct location of example external formatter
