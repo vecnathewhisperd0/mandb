@@ -168,9 +168,35 @@ static const char *fallback_less_charset = "latin1";
 const char *get_source_encoding (const char *lang)
 {
 	int i;
+	const char *dot;
 
 	if (!lang)
 		return NULL;
+
+	dot = strchr (lang, '.');
+	if (dot)
+		/* TODO: The FHS has the worst specification of what's
+		 * supposed to go after the dot here that I've ever seen. To
+		 * quote from version 2.1:
+		 *
+		 * "It is recommended that this be a numeric representation
+		 * if possible (ISO standards, especially), not include
+		 * additional punctuation symbols, and that any letters be
+		 * in lowercase."
+		 *
+		 * Any sane standard would use directory names like
+		 * de_DE.ISO-8859-1; the examples in the FHS recommend
+		 * de_DE.88591 instead. Considering that there is no other
+		 * conceivable use for encodings in directory names other
+		 * than to pass them to iconv or similar, this is quite
+		 * startlingly useless.
+		 *
+		 * My plan is to ignore the current FHS specification on the
+		 * grounds that it's obviously wrong, and petition to have
+		 * it changed.
+		 */
+		/* TODO: I should probably drop any ,<version> components. */
+		return dot + 1;
 
 	for (i = 0; directory_table[i].lang_dir; ++i) {
 		if (STRNEQ (directory_table[i].lang_dir, lang,
