@@ -17,8 +17,11 @@
 .SH SYNOPSIS
 .\" The general command line
 .B %man%
-.RB [\| \-c \||\| \-w \||\| \-tZHT
-.IR device \|]
+.RB [\| \-c \||\| \-w \||\| \-tZ \|]
+.RB [\| \-H \|\c
+.RI [\| browser \|]\|]
+.RB [\| \-T \|\c
+.RI [\| device \|]\|]
 .RB [\| \-adhu7V \|]
 .RB [\| \-i \||\| \-I \|]
 .RB [\| \-m
@@ -46,8 +49,11 @@
 .B %man%
 .B \-l
 .RB [\| \-7 \|]
-.RB [\| \-tZHT
-.IR device \|]
+.RB [\| \-tZ \|]
+.RB [\| \-H \|\c
+.RI [\| browser \|]\|]
+.RB [\| \-T \|\c
+.RI [\| device \|]\|]
 .RB [\| \-p
 .IR string \|]
 .RB [\| \-P
@@ -433,7 +439,7 @@ or both, are not harmful.
 For options that require an argument, each duplication will override the
 previous argument value.
 .TP
-.B \-l, \-\-local-file
+.B \-l, \-\-local\-file
 Activate `local' mode.
 Format and display local manual files instead of searching through the
 system's manual collection.
@@ -801,10 +807,8 @@ This option is not required in conjunction with
 .BR \-T ,
 or
 .BR \-Z .
-.PP
-.BI \-T\  device ,\ \-\-troff-device
-.RI [\| =device \|]
-.RS
+.TP
+\fB\-T\fP[\fIdevice\fP], \fB\-\-troff\-device\fP[=\fIdevice\fP]
 This option is used to change
 .B groff
 (or possibly
@@ -815,7 +819,6 @@ It implies
 Examples (provided with Groff-1.17) include
 .BR dvi ", " latin1 ", " ps ", " utf8 ,
 .BR X75 " and " X100 .
-.RE
 .TP
 .B \-Z, \-\-ditroff
 .B groff
@@ -833,11 +836,13 @@ and will suppress the use of a post-processor.
 It implies
 .BR \-t .
 .TP
-.B \-H, \-\-html
+\fB\-H\fP[\fIbrowser\fP], \fB\-\-html\fP[=\fIbrowser\fP]
 This option will cause
 .B groff
 to produce HTML output, and will display that output in a web browser.
-The choice of browser is determined by the
+The choice of browser is determined by the optional
+.I browser
+argument if one is provided, by the
 .RB $ BROWSER
 environment variable, or by a compile-time default if that is unset (usually
 .BR lynx ).
