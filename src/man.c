@@ -127,7 +127,7 @@ extern int errno;
 #include "libdb/db_storage.h"
 #include "lib/error.h"
 #include "lib/cleanup.h"
-#include "hashtable.h"
+#include "lib/hashtable.h"
 #include "check_mandirs.h"
 #include "globbing.h"
 #include "ult_src.h"
@@ -334,6 +334,7 @@ static char *less;
 static char *std_sections[] = STD_SECTIONS;
 static char *manp;
 static char *external;
+static struct hashtable *db_hash = NULL;
 
 static int troff;
 static const char *roff_device = NULL;
@@ -1043,8 +1044,9 @@ int main (int argc, char *argv[])
 		skip = 0;
 		status = man (nextarg);
 
-		/* clean out the memory cache for each man page */
-		free_hashtab ();
+		/* clean out the cache of database lookups for each man page */
+		hash_free (db_hash);
+		db_hash = NULL;
 
 		if (section && maybe_section) {
 			if (!status && !catman) {
@@ -1058,7 +1060,8 @@ int main (int argc, char *argv[])
 				tmp = section;
 				section = NULL;
 				status = man (tmp);
-				free_hashtab ();
+				hash_free (db_hash);
+				db_hash = NULL;
 				/* ... but don't gripe about it if it doesn't
 				 * work!
 				 */
@@ -3029,6 +3032,11 @@ static int display_database_check (struct candidate *candp)
 	return exists;
 }
 
+static void db_hash_free (void *defn)
+{
+	free_mandata_struct (defn);
+}
+
 /* Look for a page in the database. If db not accessible, return -1,
    otherwise return number of pages found. */
 static int try_db (const char *manpath, const char *sec, const char *name,
@@ -3048,7 +3056,11 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	} else
 		database = mkdbname (manpath);
 
-	in_cache = lookup (manpath); /* have we looked here already? */
+	if (!db_hash)
+		db_hash = hash_create (&db_hash_free);
+
+	/* Have we looked here already? */
+	in_cache = hash_lookup (db_hash, manpath, strlen (manpath));
 	
 	if (!in_cache) {
 		dbf = MYDBM_RDOPEN (database);
@@ -3065,12 +3077,12 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			/* if section is set, only return those that match,
 			   otherwise NULL retrieves all available */
 			data = dblookup_all (name, section, match_case);
-			(void) install_db_ptr (manpath, data); 
+			hash_install (db_hash, manpath, strlen (manpath),
+				      data);
 			MYDBM_CLOSE (dbf);
 #ifdef MAN_DB_CREATES
 		} else if (!global_manpath) {
 			/* create one */
-			free_hashtab ();
 			if (debug)
 				fprintf (stderr, 
 					 "Failed to open %s O_RDONLY\n",
@@ -3080,7 +3092,9 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 				data = infoalloc ();
 				data->next = NULL;
 				data->addr = NULL;
-				(void) install_db_ptr (manpath, data);
+				hash_install (db_hash,
+					      manpath, strlen (manpath),
+					      data);
 				return -1;
 			}
 			return -2;
@@ -3093,7 +3107,8 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			data = infoalloc ();
 			data->next = (struct mandata *) NULL;
 			data->addr = NULL;
-			(void) install_db_ptr (manpath, data);
+			hash_install (db_hash, manpath, strlen (manpath),
+				      data);
 			return -1; /* indicate failure to open db */
 		}
 	} else
@@ -3222,10 +3237,6 @@ static int man (const char *name)
 #ifdef MAN_DB_UPDATES
 	/* check to see if any of the databases need updating */
 	if ((!found || found_a_stray) && update && update_required) {
-		/* must free_hashtab() here in case testmandirs() 
-		   wants to use it */
-		free_hashtab ();
-	
 		if (need_to_rerun ())
 			return man (name);
 	}

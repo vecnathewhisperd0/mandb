@@ -17,7 +17,7 @@
 #include "libdb/mydbm.h"
 #include "libdb/db_storage.h" 
 
-typedef void (*hash_free_ptr) (int type, void *defn);
+typedef void (*hash_free_ptr) (void *defn);
 
 struct hashtable {
 	struct nlist **hashtab;		/* the storage array */
@@ -29,18 +29,16 @@ struct hashtable {
 struct nlist {
         struct nlist *next;	/* next in the chain */
         char *name;		/* the _name_ */
-        int type;		/* what did we store here ? */
         void *defn;		/* the _definition_ */
 };
 
-extern void plain_hash_free (int type, void *defn);
+extern void plain_hash_free (void *defn);
 
 extern struct hashtable *hash_create (hash_free_ptr free_defn);
 extern struct nlist *hash_lookup (const struct hashtable *ht,
 				  const char *s, size_t len);
 extern struct nlist *hash_install (struct hashtable *ht,
-				   const char *name, size_t len,
-				   int type, void *defn);
+				   const char *name, size_t len, void *defn);
 extern void hash_free (struct hashtable *ht);
 
 #endif /* _HASHTABLE_H */

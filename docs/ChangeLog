@@ -1,3 +1,29 @@
+Sat Aug 10 13:15:49 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* lib/hashtable.c (plain_hash_free, hash_install, hash_free): Remove
+	  the type argument and nlist element. All current users can just
+	  use separate hashtables instead.
+	* lib/hashtable.h: Update prototypes and nlist declaration.
+	* libdb/db_btree.c: Don't pass dummy type argument to
+	  hash_install().
+
+	* src/check_mandirs.c, src/man.c: Include "lib/hashtable.h" rather
+	  than "hashtable.h".
+	* src/check_mandirs.c (test_manfile): Use hashtable functions on the
+	  new static whatis_hash directly rather than the old functions
+	  which implicitly operated on the global man_hash.
+	  (testmandirs): Since we use full paths as hash keys, there's no
+	  need to clear whatis_hash between hierarchies.
+	* src/man.c (db_hash_free): New function.
+	  (main, try_db): Use hashtable functions on the new static db_hash
+	  directly rather than the old functions which implicitly operated
+	  on the global man_hash.
+	  (try_db, man): Don't clear hashtables before creating a new
+	  database. This used to segfault in some circumstances.
+
+	* src/hashtable.c, src/hashtable.h: Remove.
+	* src/Makefile.in: Remove mentions of hashtable.o.
+
 Thu Aug  8 02:05:34 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* po/sv.po: New from Translation Project.

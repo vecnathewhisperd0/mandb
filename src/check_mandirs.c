@@ -67,15 +67,17 @@ extern int errno;
 #include "libdb/mydbm.h"
 #include "libdb/db_storage.h"
 #include "lib/error.h"
+#include "lib/hashtable.h"
 #include "globbing.h"
 #include "ult_src.h"
-#include "hashtable.h"
 #include "security.h"
 #include "check_mandirs.h"
 
 int opt_test;		/* don't update db */
 int pages;
 int force_rescan = 0;
+
+static struct hashtable *whatis_hash = NULL;
 
 static void gripe_bogus_manpage (char *manpage)
 {
@@ -386,7 +388,10 @@ void test_manfile (char *file, const char *path)
 		return;
 	}
 
-	if (lookup (ult) == NULL) {
+	if (!whatis_hash)
+		whatis_hash = hash_create (&plain_hash_free);
+
+	if (hash_lookup (whatis_hash, ult, strlen (ult)) == NULL) {
 		if (debug && strncmp (ult, file, len) != 0)
 			fprintf (stderr,
 				 "\ntest_manfile(): link not in cache:\n"
@@ -416,12 +421,14 @@ void test_manfile (char *file, const char *path)
 		info.id = SO_MAN;	/* .so, sym or hard linked file */
 
 	/* Ok, here goes: Use a hash tree to store the ult_srcs with
-	   their whatis. Anytime after, check the hash tree, if it's there, 
-	   use it. This saves us a find_name() which is a real hog */
+	 * their whatis. Anytime after, check the hash tree, if it's there, 
+	 * use it. This saves us a find_name() which is a real hog.
+	 *
+	 * Use the full path in ult as the hash key so we don't have to
+	 * clear the hash between calls.
+	 */
 
-	/* could use strrchr(ult, '/') + 1 as hash text, but not worth it */
-
-	in_cache = lookup (ult);
+	in_cache = hash_lookup (whatis_hash, ult, strlen (ult));
 
 	if (in_cache) {		/* cache hit */
 		lg.whatis = in_cache->defn ? xstrdup (in_cache->defn) : NULL;
@@ -447,8 +454,9 @@ void test_manfile (char *file, const char *path)
 #endif /* COMP_SRC */
 			find_name (ult, basename (file), &lg);
 		regain_effective_privs ();
-			
-		install_text (ult, lg.whatis);
+
+		hash_install (whatis_hash, ult, strlen (ult),
+			      lg.whatis ? xstrdup (lg.whatis) : NULL);
 	}
 
 	if (debug)
@@ -641,10 +649,6 @@ static short testmandirs (const char *path, time_t last)
 		amount++;
 	}
 	closedir (dir);
-
-	/* clean out the whatis hashtable for new hierarchy */
-	if (amount > 0)
-		free_hashtab ();
 
 	return amount;
 }

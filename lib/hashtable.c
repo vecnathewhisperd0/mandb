@@ -60,7 +60,7 @@ static unsigned int hash (const char *s, size_t len)
 #endif
 }
 
-void plain_hash_free (int type, void *defn)
+void plain_hash_free (void *defn)
 {
 	if (defn)
 		free (defn);
@@ -97,14 +97,14 @@ struct nlist *hash_lookup (const struct hashtable *ht,
 
 /* Return struct containing defn, or NULL if unable to store. */
 struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
-			    int type, void *defn)
+			    void *defn)
 {
 	struct nlist *np;
 
 	np = hash_lookup (ht, name, len);
 	if (np) {
 		if (np->defn)
-			ht->free_defn (np->type, np->defn);
+			ht->free_defn (np->defn);
 	} else {
 		unsigned int hashval;
 
@@ -127,7 +127,6 @@ struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
 		ht->hashtab[hashval] = np;
 	}
 
-	np->type = type;
 	np->defn = defn;
 
 	return np;
@@ -161,7 +160,7 @@ void hash_free (struct hashtable *ht)
 			struct nlist *next;
 
 			if (np->defn)
-				ht->free_defn (np->type, np->defn);
+				ht->free_defn (np->defn);
 			free (np->name);
 			next = np->next;
 			free (np);

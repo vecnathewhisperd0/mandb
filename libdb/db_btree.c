@@ -214,7 +214,7 @@ static __inline__ datum btree_findkey(DB *dbf, u_int flags)
 		return key;
 	}
 
-	hash_install (loop_check_hash, key.dptr, key.dsize, 0, NULL);
+	hash_install (loop_check_hash, key.dptr, key.dsize, NULL);
 
 	return copy_datum(key);
 }
