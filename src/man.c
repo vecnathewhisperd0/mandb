@@ -2382,7 +2382,13 @@ static int display (const char *dir, const char *man_file,
 #endif
 
 	if (display_to_stdout) {
-		found = !access (man_file, R_OK);
+		/* If we're reading stdin via '-l -', man_file is "". See
+		 * below.
+		 */
+		if (*man_file == '\0')
+			found = 1;
+		else
+			found = !access (man_file, R_OK);
 		if (found) {
 			if (pause && do_prompt (title))
 				return 0;

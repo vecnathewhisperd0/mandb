@@ -1,3 +1,10 @@
+Thu Nov  7 02:18:44 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (display): Don't do access() checks on an empty man_file
+	  in the display_to_stdout branch, to avoid problems when running
+	  'man -X -l -'. Similar code is already in the other branch. Patch
+	  from Peter Muir <iyhi@yahoo.com>.
+
 Thu Nov  7 01:42:52 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Further updates for 2.4.1.
