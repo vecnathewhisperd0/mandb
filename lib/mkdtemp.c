@@ -19,6 +19,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef __GT_DIR
+# define __GT_DIR 2
+#endif
+
 int __gen_tempname ();
 
 /* Generate a unique temporary directory from TEMPLATE.

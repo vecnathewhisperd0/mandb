@@ -38,6 +38,8 @@
 /* Other library functions used in man-db. */
 extern char *strappend (char *str, ...);
 extern char *xstrdup (char *string);
+extern int mkstemp (char *template);
+extern char *mkdtemp (char *template);
 
 static char *path_search ()
 {
