@@ -1367,8 +1367,9 @@ static void remove_stdintmp (void)
 		if (stdin_tmpfile_fd >= 0)
 			close (stdin_tmpfile_fd);
 		(void) remove_with_dropped_privs (stdin_tmpfile);
+		free (stdin_tmpfile);
+		stdin_tmpfile = NULL;
 	}
-	stdin_tmpfile = NULL;
 }
 
 static __inline__ void create_stdintmp (void)
@@ -1378,13 +1379,9 @@ static __inline__ void create_stdintmp (void)
 	 */
 	int oldmask = umask (022);
 	drop_effective_privs ();
-	errno = 0;				/* failing tempname() might fail to set errno */
-	stdin_tmpfile = tempnam (NULL, "sman");
-	if (stdin_tmpfile)
-		stdin_tmpfile_fd = open (stdin_tmpfile,
-					 O_WRONLY | O_CREAT | O_TRUNC | O_EXCL,
-					 0644);
-	if (!stdin_tmpfile || (stdin_tmpfile_fd < 0))
+	stdin_tmpfile_fd = create_tempfile ("sman", &stdin_tmpfile);
+
+	if (stdin_tmpfile_fd < 0)
 		error (FATAL, errno, _("can't create a temporary filename"));
 	regain_effective_privs ();
 	umask (oldmask);

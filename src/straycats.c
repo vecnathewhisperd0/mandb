@@ -336,12 +336,7 @@ int straycats (char *manpath)
 	int strays;
 
 	if (!temp_name) {
-		int fd;
-
-		temp_name = xstrdup ("/tmp/zcatXXXXXX");
-		if (!temp_name)
-			return 0;
-		fd = mkstemp (temp_name);
+		int fd = create_tempfile ("zcat", &temp_name);
 		if (fd == -1) {
 			error (0, errno,
 			       _("warning: can't create temp file %s"),

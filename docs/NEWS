@@ -1,3 +1,41 @@
+man_db-2.3.20
+=============
+
+Major changes since man_db-2.3.19:
+
+	Fixes:
+	------
+
+	o A typo in 2.3.19 caused character sets for many languages to be
+	  detected incorrectly. This especially affected multibyte
+	  languages.
+
+	o Long options in the environment variable LESS are handled
+	  correctly.
+
+	o When checking if cat pages need to be updated, check for different
+	  timestamps rather than whether the cat page is newer, as otherwise
+	  we were confused by tools like tar that preserve timestamps in
+	  their archives. Each cat page is now set to have the same mtime as
+	  its corresponding man page.
+
+	o Look up the correct character set each time a page is displayed
+	  rather than just the first time, in case pages in several
+	  different character sets are viewed in a single session.
+
+	o Use a variant of mkstemp() rather than tempnam(), to avoid classic
+	  race conditions. (I don't believe the races were usefully
+	  exploitable.)
+
+	Improvements:
+	-------------
+
+	o Tolerate whatis entries in a database that point to themselves.
+
+	o Detect more translations of the NAME section.
+
+	o Add examples of man pages written in POD and SGML.
+
 man_db-2.3.19 (5 July 2001)
 ===========================
 

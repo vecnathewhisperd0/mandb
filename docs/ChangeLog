@@ -1,3 +1,31 @@
+Thu Aug  2 00:12:41 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* lib/tempfile.c: New file. create_tempfile() does sane
+	  mkstemp()-like temporary file creation, while searching through
+	  $TMPDIR, P_tmpdir, and /tmp in the style of tempnam().
+	* include/manconfig.h.in: Prototype create_tempfile().
+	* lib/tempnam.c: Remove, as we no longer use it.
+	* lib/Makefile.in, lib/README: Remove mentions of tempnam.c, and use
+	  tempfile.c instead.
+	* configure.in: Don't replace tempnam().
+
+	* src/compression.c (create_ztemp): Use create_tempfile() rather
+	  than tempnam().
+	* src/man.c (create_stdintmp): Likewise.
+	* zsoelim/zsoelim.l (open_file): Likewise.
+	* src/straycats.c (straycats): Use create_tempfile() rather than
+	  mkstemp().
+
+	* src/compression.c (decompress): Call remove_ztemp() rather than
+	  duplicating code.
+	  (remove_ztemp): Only close the fd if it looks valid.
+	* src/man.c (remove_stdintmp): Remember to free stdin_tmpfile.
+
+	* acinclude.m4: Correct AC_VAR_* to AS_VAR_*.
+	* src/util.c (is_changed): Fix comment.
+
+	* docs/NEWS: Preliminary entries for 2.3.20.
+
 Tue Jul 24 02:17:53 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* docs/manpage.example: Some cleanups. Use more conventional

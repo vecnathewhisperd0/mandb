@@ -395,12 +395,8 @@ static int open_file(char *filename)
 			int exit_status;
 			int file_fd;
 
-			filename = tempnam(NULL, "zsman");
-			if (filename) {
-				unlink( filename);	/* remove a malicious dangling symlink */
-				file_fd = open(filename, O_RDONLY|O_NOCTTY|O_CREAT|O_EXCL, 0644);
-			}
-			if (!filename || (file_fd < 0))
+			file_fd = create_tempfile ("zsman", &filename);
+			if (file_fd < 0)
 				error (FATAL, errno, "can't create a temporary filename");
 			command = strappend(NULL, comp->prog, " ", compfile, " > ", filename, NULL);
 			exit_status = system(command);

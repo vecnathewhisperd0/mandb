@@ -109,22 +109,22 @@ do
   then
     for lib in $2
     do
-      AC_VAR_PUSHDEF([man_tr_bdb], [man_cv_bdb_header_${head}_lib_${lib}])dnl
+      AS_VAR_PUSHDEF([man_tr_bdb], [man_cv_bdb_header_${head}_lib_${lib}])dnl
       man_saved_LIBS=LIBS
       LIBS="$LIBS -l$lib"
       AC_CACHE_CHECK([for dbopen from <${head}> in -l${lib}], man_tr_bdb,
          [AC_TRY_LINK([#include <$head>], [dbopen("foo", 0, 0, 0, (void *) 0)],
-                      [AC_VAR_SET(man_tr_bdb, yes)],
-                      [AC_VAR_SET(man_tr_bdb, no)])
+                      [AS_VAR_SET(man_tr_bdb, yes)],
+                      [AS_VAR_SET(man_tr_bdb, no)])
          ])
-      AS_IF([test AC_VAR_GET(man_tr_bdb) = yes],
+      AS_IF([test AS_VAR_GET(man_tr_bdb) = yes],
             [AC_MSG_RESULT(yes)
              $3
              db=yes],
             [AC_MSG_RESULT(no)
              LIBS="$man_saved_LIBS"
              db=no])
-      AC_VAR_POPDEF([man_tr_bdb])dnl
+      AS_VAR_POPDEF([man_tr_bdb])dnl
       test "$db" = "yes" && break
     done
   fi

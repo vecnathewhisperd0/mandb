@@ -57,15 +57,9 @@ static __inline__ void create_ztemp (void)
 {
 	int oldmask = umask (022);
 	drop_effective_privs ();
-	errno = 0;		/* failing tempnam() might fail to set errno */
-	file = tempnam (NULL, "zman");
+	file_fd = create_tempfile ("zman", &file);
 
-	if (file) {
-		unlink (file);	/* remove a malicious dangling symlink */
-		file_fd = open (file, O_WRONLY | O_CREAT | O_EXCL, 0644);
-	}
-
-	if (!file || file_fd < 0)
+	if (file_fd < 0)
 		error (FATAL, errno, _("can't create a temporary filename"));
 	regain_effective_privs ();
 	umask (oldmask);
@@ -147,7 +141,7 @@ char *decompress (char *filename, struct compression *comp)
 	/* temporarily drop the debug flag, so that we can continue */
 	command = strappend (NULL, comp->prog, " ", filename,
 			     " > ", file, NULL);
-	
+
 	if (debug) {
 #ifdef SECURE_MAN_UID
 		fputs ("The following command done with dropped privs\n",
@@ -163,9 +157,7 @@ char *decompress (char *filename, struct compression *comp)
 	free (command);
 
 	if (status) {
-		(void) remove_with_dropped_privs (file);
-		free (file);
-		file = NULL;
+		remove_ztemp ();
 		exit (CHILD_FAIL);
 	}
 	return file;
@@ -175,7 +167,8 @@ char *decompress (char *filename, struct compression *comp)
 void remove_ztemp (void)
 {
 	if (file) {
-		close (file_fd);
+		if (file_fd >= 0)
+			close (file_fd);
 		(void) remove_with_dropped_privs (file);
 		free (file);
 		file = NULL;

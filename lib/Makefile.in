@@ -23,13 +23,13 @@ MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I-
 ALLSRCS = alloca.c basename.c cleanup.c error.c fnmatch.c getopt.c getopt1.c \
 	  glob.c memcmp.c putenv.c realpath.c rename.c \
 	  strappend.c strcspn.c strsep.c strspn.c strstr.c xmalloc.c xstrdup.c \
-	  waitpid.c tempnam.c
+	  waitpid.c tempfile.c
 
 ALLOBJS = $(ALLSRCS:.c=.o)
 
 XOBJS = xstrdup.o xmalloc.o error.o
 
-ALL = @LIBOBJS@ @ALLOCA@ $(libobjects) cleanup.o strappend.o $(XOBJS)
+ALL = @LIBOBJS@ @ALLOCA@ $(libobjects) cleanup.o strappend.o tempfile.o $(XOBJS)
 
 all: $(library)
 

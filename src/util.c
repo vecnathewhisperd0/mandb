@@ -65,7 +65,7 @@ char *mkdbname (const char *path)
 }
 
 /*
- * Does file have a different timestamp to file b?
+ * Does file a have a different timestamp to file b?
  *
  * case:
  *

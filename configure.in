@@ -409,7 +409,7 @@ AC_CHECK_FUNC(regcomp, [AC_DEFINE(POSIX_REGEX)],
 AC_CHECK_FUNC(fnmatch, [AC_DEFINE(HAVE_FNMATCH_H)], LIBOBJS="$LIBOBJS fnmatch.o")
 AC_CHECK_FUNC(globfree, [AC_DEFINE(HAVE_GLOB_H)], LIBOBJS="$LIBOBJS glob.o")
 AC_CHECK_FUNC(getopt_long, [AC_DEFINE(HAVE_GETOPT_H)], LIBOBJS="$LIBOBJS getopt.o getopt1.o")
-AC_REPLACE_FUNCS(flock putenv realpath rename basename tempnam waitpid strstr strsep strcspn strspn)
+AC_REPLACE_FUNCS(flock putenv realpath rename basename waitpid strstr strsep strcspn strspn)
 dnl
 MAN_ECHO_VAR(CC)
 MAN_ECHO_VAR(CPP)
