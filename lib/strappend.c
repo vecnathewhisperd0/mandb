@@ -32,11 +32,9 @@ extern char *strcpy();
 
 #ifdef __STDC__
 #  include <stdarg.h>
-#  define VOID 		void
 #  define VA_START	va_start (ap, str)
 #else
 #  include <varargs.h>
-#  define VOID char
 #  define VA_START	va_start (ap)
 #endif
 

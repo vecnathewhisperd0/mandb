@@ -27,12 +27,6 @@
 #include <strings.h>
 #endif
 
-#if __STDC__
-#define VOID void
-#else
-#define VOID char
-#endif
-
 #include "manconfig.h"
 
 extern size_t strnlen (const char *string, size_t maxlen);

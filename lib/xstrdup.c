@@ -25,12 +25,6 @@
 #include <strings.h>
 #endif
 
-#if __STDC__
-#define VOID void
-#else
-#define VOID char
-#endif
-
 #include "manconfig.h"
 
 /* Return a newly allocated copy of STRING.  */
