@@ -206,8 +206,12 @@ const char *get_source_encoding (const char *lang)
 	const struct directory_entry *entry;
 	const char *dot;
 
-	if (!lang)
-		return fallback_source_encoding;
+	if (!lang || !*lang) {
+		/* Guess based on the locale. */
+		lang = setlocale (LC_MESSAGES, NULL);
+		if (!lang)
+			return fallback_source_encoding;
+	}
 
 	dot = strchr (lang, '.');
 	if (dot)
@@ -250,8 +254,12 @@ const char *get_standard_output_encoding (const char *lang)
 	const struct directory_entry *entry;
 	const char *dot;
 
-	if (!lang)
-		return NULL;
+	if (!lang || !*lang) {
+		/* Guess based on the locale. */
+		lang = setlocale (LC_MESSAGES, NULL);
+		if (!lang)
+			return NULL;
+	}
 
 	dot = strchr (lang, '.');
 	if (dot)

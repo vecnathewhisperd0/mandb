@@ -1,3 +1,10 @@
+Sun Sep 14 17:48:38 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (get_source_encoding): If the language directory
+	  is unknown (e.g. 'man -l'), guess based on the locale before
+	  falling back to a default.
+	  (get_standard_output_encoding): Likewise.
+
 Sun Sep 14 16:58:34 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/encodings.c (get_source_encoding): Assume ISO-8859-1 source
