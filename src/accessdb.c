@@ -137,7 +137,7 @@ int main (int argc, char *argv[])
 	key = MYDBM_FIRSTKEY (dbf);
 
 	while (key.dptr != NULL) {
-		datum content;
+		datum content, nextkey;
 		char *t, *nicekey;
 
 		content = MYDBM_FETCH (dbf, key);
@@ -151,7 +151,9 @@ int main (int argc, char *argv[])
 		printf ("%s -> \"%s\"\n", nicekey, content.dptr);
 		free (nicekey); 
 		MYDBM_FREE (content.dptr);
-		key = MYDBM_NEXTKEY (dbf, key);
+		nextkey = MYDBM_NEXTKEY (dbf, key);
+		MYDBM_FREE (key.dptr);
+		key = nextkey;
 	}
 
 	MYDBM_CLOSE (dbf);
