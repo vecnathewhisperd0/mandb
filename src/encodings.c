@@ -90,6 +90,8 @@ static struct directory_entry directory_table[] = {
 	{ "fi",		"ISO-8859-1",	"ISO-8859-1"		}, /* Finnish */
 	{ "fr",		"ISO-8859-1",	"ISO-8859-1"		}, /* French */
 	{ "ga",		"ISO-8859-1",	"ISO-8859-1"		}, /* Irish */
+	{ "gl",		"ISO-8859-1",	"ISO-8859-1"		}, /* Galician */
+	{ "id",		"ISO-8859-1",	"ISO-8859-1"		}, /* Indonesian */
 	{ "is",		"ISO-8859-1",	"ISO-8859-1"		}, /* Icelandic */
 	{ "it",		"ISO-8859-1",	"ISO-8859-1"		}, /* Italian */
 	{ "nl",		"ISO-8859-1",	"ISO-8859-1"		}, /* Dutch */
@@ -102,11 +104,13 @@ static struct directory_entry directory_table[] = {
 	 * ascii8 and nippon devices.
 	 */
 	{ "cs",		"ISO-8859-2",	"ISO-8859-2"		}, /* Czech */
+	{ "hr",		"ISO-8859-2",	"ISO-8859-2"		}, /* Croatian */
 	{ "hu",		"ISO-8859-2",	"ISO-8859-2"		}, /* Hungarian */
 	{ "ja",		"EUC-JP",	"EUC-JP"		}, /* Japanese */
 	{ "ko",		"EUC-KR",	"EUC-KR"		}, /* Korean */
 	{ "pl",		"ISO-8859-2",	"ISO-8859-2"		}, /* Polish */
 	{ "ru",		"KOI8-R",	"KOI8-R"		}, /* Russian */
+	{ "sk",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovak */
 #endif /* MULTIBYTE_GROFF */
 
 	{ NULL,		NULL,		"NULL"			}
