@@ -1,3 +1,20 @@
+Mon Nov 17 05:04:54 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	Speed up mandb's purging functions further, from about 20 seconds to
+	about 2 seconds on my i386 laptop, by being more intelligent about
+	calling fnmatch().
+
+	* src/globbing.c (cache_compare): New function.
+	  (update_directory_cache): Sort the cache.
+	  (pattern_compare): New function.
+	  (match_in_directory): Rather than scanning the whole cache, start
+	  from a point matching the start of the pattern up to the first
+	  metacharacter, and stop once this no longer matches.
+
+	* src/globbing.c (TEST): Include <libintl.h> and define _() so that
+	  the test code compiles.
+	  (main): Set program_name before any calls to usage().
+
 Sun Nov 16 21:45:24 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* docs/HACKING: Mention the new CTYPE() macro.

@@ -70,6 +70,9 @@ static const char *mandir_layout = MANDIR_LAYOUT;
 
 #ifdef TEST
 
+#  include <libintl.h>
+#  define _(String) gettext (String)
+
 #  ifdef HAVE_GETOPT_H
 #    include <getopt.h>
 #  else /* !HAVE_GETOPT_H */
@@ -156,6 +159,13 @@ static void dirent_hash_free (void *defn)
 
 static struct hashtable *dirent_hash = NULL;
 
+static int cache_compare (const void *a, const void *b)
+{
+	const char *left = *(const char **) a;
+	const char *right = *(const char **) b;
+	return strcasecmp (left, right);
+}
+
 static struct dirent_hashent *update_directory_cache (const char *path)
 {
 	struct dirent_hashent *cache;
@@ -201,10 +211,25 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 		cache->names[cache->names_len++] = xstrdup (entry->d_name);
 	}
 
+	qsort (cache->names, cache->names_len, sizeof *cache->names,
+	       &cache_compare);
+
 	hash_install (dirent_hash, path, strlen (path), cache);
 	closedir (dir);
 
 	return cache;
+}
+
+struct pattern_bsearch {
+	char *pattern;
+	size_t len;
+};
+
+static int pattern_compare (const void *a, const void *b)
+{
+	const struct pattern_bsearch *key = a;
+	const char *memb = *(const char **) b;
+	return strncasecmp (key->pattern, memb, key->len);
 }
 
 static int match_in_directory (const char *path, const char *pattern,
@@ -213,6 +238,8 @@ static int match_in_directory (const char *path, const char *pattern,
 	struct dirent_hashent *cache;
 	size_t allocated = 4;
 	int flags;
+	struct pattern_bsearch pattern_start;
+	char **bsearched;
 	size_t i;
 
 	pglob->gl_pathc = 0;
@@ -233,8 +260,27 @@ static int match_in_directory (const char *path, const char *pattern,
 	pglob->gl_pathv = xmalloc (allocated * sizeof (char *));
 	flags = ignore_case ? FNM_CASEFOLD : 0;
 
-	for (i = 0; i < cache->names_len; ++i) {
-		int fnm = fnmatch (pattern, cache->names[i], flags);
+	pattern_start.pattern = xstrndup (pattern,
+					  strcspn (pattern, "?*{}\\"));
+	pattern_start.len = strlen (pattern_start.pattern);
+	bsearched = bsearch (&pattern_start, cache->names, cache->names_len,
+			     sizeof *cache->names, &pattern_compare);
+	if (!bsearched) {
+		pglob->gl_pathv[0] = NULL;
+		return 0;
+	}
+	while (!strncasecmp (pattern_start.pattern, *(bsearched - 1),
+			     pattern_start.len))
+		--bsearched;
+
+	for (i = bsearched - cache->names; i < cache->names_len; ++i) {
+		int fnm;
+
+		if (strncasecmp (pattern_start.pattern, cache->names[i],
+				 pattern_start.len))
+			break;
+
+		fnm = fnmatch (pattern, cache->names[i], flags);
 		if (fnm)
 			continue;
 
@@ -250,6 +296,8 @@ static int match_in_directory (const char *path, const char *pattern,
 		pglob->gl_pathv[pglob->gl_pathc++] =
 			strappend (NULL, path, "/", cache->names[i], NULL);
 	}
+
+	free (pattern_start.pattern);
 
 	if (pglob->gl_pathc >= allocated) {
 		allocated *= 2;
@@ -411,6 +459,8 @@ int main (int argc, char **argv)
 	int i;
 	int match_case = 0;
 
+	program_name = xstrdup (basename (argv[0]));
+
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, &option_index)) != -1) {
 		switch (c) {
@@ -438,7 +488,6 @@ int main (int argc, char **argv)
 		}
 	}
 
-	program_name = xstrdup (basename (argv[0]));
 	if (argc - optind != 3)
 		usage (FAIL);
 
