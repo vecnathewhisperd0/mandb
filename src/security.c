@@ -97,6 +97,11 @@ uid_t ruid;				/* initial real user id */
 uid_t euid;				/* initial effective user id */
 uid_t uid;				/* current euid */
 
+/* Keep a count of how many times we've dropped privileges, and only regain
+ * them if regain_effective_privs() is called an equal number of times.
+ */
+static int priv_drop_count = 0;
+
 static __inline__ void gripe_set_euid()
 {
 	error (FATAL, errno, _( "can't set effective uid"));
@@ -108,6 +113,7 @@ void init_security(void)
 	uid = euid = geteuid();
 	if (debug)
 		fprintf(stderr, "ruid=%d, euid=%d\n", (int) ruid, (int) euid);
+	priv_drop_count = 0;
 	drop_effective_privs();
 }
 
@@ -124,7 +130,7 @@ void drop_effective_privs (void)
 	if (uid != ruid) {
 		if (debug)
 			fputs("drop_effective_privs()\n", stderr);
-#  if defined (POSIX_SAVED_IDS)
+#  ifdef POSIX_SAVED_IDS
 		if (SET_EUID (ruid))
 #  else
 		if (SWAP_UIDS (euid, ruid))
@@ -134,6 +140,11 @@ void drop_effective_privs (void)
 		uid = ruid;
 	}
 #endif /* SECURE_MAN_UID */
+
+	priv_drop_count++;
+	if (debug)
+		fprintf(stderr, "++priv_drop_count = %d\n", priv_drop_count);
+
 	return;
 }
 
@@ -143,11 +154,20 @@ void drop_effective_privs (void)
  */
 void regain_effective_privs (void)
 {
+	if (priv_drop_count) {
+		priv_drop_count--;
+		if (debug)
+			fprintf(stderr, "--priv_drop_count = %d\n",
+				priv_drop_count);
+		if (priv_drop_count)
+			return;
+	}
+
 #ifdef SECURE_MAN_UID
 	if (uid != euid) {
 		if (debug)
 			fputs("regain_effective_privs()\n", stderr);
-#  if defined (POSIX_SAVED_IDS)
+#  ifdef POSIX_SAVED_IDS
 		if (SET_EUID (euid))
 #  else
 		if (SWAP_UIDS (ruid, euid))
@@ -157,6 +177,7 @@ void regain_effective_privs (void)
 		uid = euid;
 	}
 #endif /* SECURE_MAN_UID */
+
 	return;
 }
 
@@ -199,7 +220,7 @@ int do_system_drop_privs (const char *command)
 {
 #ifdef SECURE_MAN_UID
 	
-#  if defined(POSIX_SAVED_IDS)
+#  ifdef POSIX_SAVED_IDS
 	if (uid == ruid)
 		return do_system (command);
 	else {

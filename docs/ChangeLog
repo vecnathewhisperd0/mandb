@@ -1,3 +1,14 @@
+Mon May 14 22:18:32 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/security.c: Count how many times drop_effective_privs() has
+	  been called, and don't actually regain privileges until
+	  regain_effective_privs() has been called an equal number of times.
+	  This should flush out several subtle bugs.
+
+	* src/mandb.c: Call manpath() rather than read_config_file() (this
+	  was changed while merging 2.3b12). Otherwise 'mandb --user-db'
+	  segfaults as manp never gets set.
+
 Sun May 13 18:34:33 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* GNUmakefile.in (dist): Don't install po/Makefile.in.
