@@ -388,7 +388,11 @@ static int open_file(char *filename)
 	struct stat buf;
 
 	oldyyin = yyin;
-	
+
+	/* WARNING: This is horribly cloned-and-hacked from
+	 * src/compression.c! TODO: Unify this code.
+	 */
+
 /* #ifdef __hpux */
 	ext = strrchr(filename, '.');
 	if (strstr(filename, ".Z/")) { /* The file is in an HPUX directory */
@@ -399,7 +403,6 @@ static int open_file(char *filename)
 		for (comp = comp_list; comp->ext && !is_compr; comp++) {
 			if (strcmp(comp->ext, ext) == 0) {
 				if (stat(filename, &buf) == 0) {
-					comp->file = --ext;
 					is_compr = 1;
 					break;
 				}

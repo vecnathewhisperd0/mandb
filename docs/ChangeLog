@@ -1,3 +1,26 @@
+Mon Mar  8 16:45:27 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	* src/compression.c (comp_info): If the new want_stem argument is
+	  set, put a copy of the filename without extension in comp->stem
+	  rather than a strange thing in comp->file. This is closer to what
+	  most callers actually want, and removes a lot of memory management
+	  confusion.
+	  (comp_file): Use comp->stem instead of comp->file (previous usage
+	  matched this semantically).
+	* include/manconfig.h.in (struct compression): Replace 'file' with
+	  'stem'.
+	  (comp_info): Update prototype.
+
+	* src/convert_name.c (convert_name): Update comp_info call.
+	* src/filenames.c (filename_info): Fix misuse of basename. Update
+	  comp_info call.
+	* src/lexgrog.l (find_name): Update comp_info call.
+	* src/man.c (local_man_loop): Likewise.
+	* src/straycats.c (check_for_stray): Likewise.
+	* src/ult_src.c (ult_src): Likewise.
+	* zsoelim/zsoelim.l (open_file): Don't set comp->file. Add a
+	  clone-and-hack warning.
+
 Mon Mar  8 16:07:11 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/compression.c (decompress): Error out if decompression program

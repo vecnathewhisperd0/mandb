@@ -269,7 +269,10 @@ struct compression {
 	 */
 	const char *prog;
 	const char *ext;
-	char *file;
+	/* The following should be freed when discarding an instance of this
+	 * structure.
+	 */
+	char *stem;
 };
 
 /* depending on the compiler ... */
@@ -299,7 +302,7 @@ extern __inline__ void ver (void);
 #endif /* !STATIC_VER */
 
 /* compression.c */
-extern struct compression *comp_info (const char *filename);
+extern struct compression *comp_info (const char *filename, int want_stem);
 extern struct compression *comp_file (const char *filename);
 extern char *decompress (const char *filename, const struct compression *comp);
 extern __inline__ void remove_ztemp (void);

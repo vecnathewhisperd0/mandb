@@ -303,9 +303,12 @@ const char *ult_src (const char *name, const char *path,
 
 		/* if we are handed the name of a compressed file, remove
 		   the compression extension? */
-		comp = comp_info (basename);
-		if (comp)
-			*comp->file = '\0';
+		comp = comp_info (basename, 1);
+		if (comp) {
+			free (basename);
+			basename = comp->stem;
+			comp->stem = NULL; /* steal memory */
+		}
 
 		/* if the open fails, try looking for compressed */
 		fp = fopen (basename, "r");
@@ -314,8 +317,8 @@ const char *ult_src (const char *name, const char *path,
 
 			comp = comp_file (basename);
 			if (comp) {
-				filename = decompress (comp->file, comp);
-				free (comp->file);
+				filename = decompress (comp->stem, comp);
+				free (comp->stem);
 				if (!filename)
 					return NULL;
 				basename = strappend (basename, ".", comp->ext,

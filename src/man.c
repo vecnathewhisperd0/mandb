@@ -844,7 +844,7 @@ static int local_man_loop (const char *argv)
 		}
 
 #ifdef COMP_SRC
-		comp = comp_info (argv);
+		comp = comp_info (argv, 0);
 		if (comp)
 			if (!decompress(argv, comp))
 				exit_status = CHILD_FAIL;
@@ -2631,7 +2631,7 @@ static int display (const char *dir, const char *man_file,
 			if (pause && do_prompt (title))
 				return 0;
 
-			comp = comp_info (cat_file);
+			comp = comp_info (cat_file, 0);
 			if (comp) {
 				esc_cat_file = escape_shell (cat_file);
 				format_cmd = strappend (NULL, comp->prog, " ",

@@ -82,41 +82,50 @@ static __inline__ void create_ztemp (void)
 
 /* Take filename as arg, return structure containing decompressor 
    and extension, or NULL if no comp extension found. 
-   As an added bonus, return address of comp extension in comp->file
-   as this is otherwise unused.
+   If want_stem, set comp->stem to the filename without extension, which
+   the caller should free.
 
    eg.
    	filename = /usr/man/man1/foo.1.gz 
 
 	comp->prog = "/usr/bin/gzip -dc";
    	comp->ext = "gz";
-   	comp->file = filename + 19;				
+   	comp->stem = "/usr/man/man1/foo.1";
  */
-struct compression *comp_info (const char *filename)
+struct compression *comp_info (const char *filename, int want_stem)
 {
-	char *ext;
-	static char buff[10];
-	static struct compression hpux_comp = {GUNZIP " -S \"\"", "", buff};
+	const char *ext;
+	static struct compression hpux_comp = {GUNZIP " -S \"\"", "", NULL};
 
 	ext = strrchr (filename, '.');
 
 	if (ext) {
 		struct compression *comp;
-		ext++;
 		for (comp = comp_list; comp->ext; comp++) {
-			if (strcmp (comp->ext, ext) == 0) {
-				comp->file = --ext;
+			if (strcmp (comp->ext, ext + 1) == 0) {
+				if (want_stem)
+					comp->stem = xstrndup (filename,
+							       ext - filename);
+				else
+					comp->stem = NULL;
 				return comp;
 			}
 		}
 	}
+
 	ext = strstr (filename, ".Z/");
-	if (ext)
+	if (ext) {
+		if (want_stem)
+			hpux_comp.stem = xstrndup (filename, ext - filename);
+		else
+			hpux_comp.stem = NULL;
 		return &hpux_comp;
+	}
+
 	return NULL;
 }
 
-/* take filename w/o comp ext. as arg, return comp->file as a relative
+/* take filename w/o comp ext. as arg, return comp->stem as a relative
    compressed file or NULL if none found */
 struct compression *comp_file (const char *filename)
 {
@@ -133,14 +142,7 @@ struct compression *comp_file (const char *filename)
 		compfile = strappend (compfile, comp->ext, NULL);
 
 		if (stat (compfile, &buf) == 0) {
-			/* TODO: how to make this const? Calling code seems
-			 * to know that it needs to free comp->file after
-			 * calling this function, but this is messy.
-			 *
-			 * Perhaps it would be better to fix the dodgy reuse
-			 * of comp->file above ...
-			 */
-			comp->file = compfile;
+			comp->stem = compfile;
 			return comp;
 		}
 

@@ -145,7 +145,7 @@ static int check_for_stray (void)
 #if defined(COMP_SRC) || defined(COMP_CAT)
 
 #  if defined(COMP_SRC)
-		} else if (comp_info (ext)) {
+		} else if (comp_info (ext, 0)) {
 #  elif defined(COMP_CAT)
 		} else if (strcmp (ext + 1, COMPRESS_EXT) == 0) {
 #  endif /* COMP_* */
@@ -186,7 +186,7 @@ static int check_for_stray (void)
 #ifdef COMP_SRC 
 		else if ((comp = comp_file (mandir))) {
 			found = 1;
-			free (comp->file);
+			free (comp->stem);
 		}
 #endif
 		else 
@@ -238,7 +238,7 @@ static int check_for_stray (void)
 #if defined(COMP_SRC)
 			if (info.comp)
 				filter = strappend (NULL, 
-						    comp_info(catdir)->prog,
+						    comp_info(catdir, 0)->prog,
 						    " ", catdir, " | ",
 						    get_def_user("col", COL),
 						    " -bx > ", temp_name,

@@ -96,10 +96,18 @@ char *filename_info (const char *file, struct mandata *info,
 		     const char *req_name)
 {
 	char *manpage = xstrdup (file);
-	char *base_name = basename (manpage);
+	char *slash = strrchr (manpage, '/');
+	char *base_name;
+
 #ifdef COMP_SRC
 	struct compression *comp;
 #endif
+
+	if (slash) {
+		*slash = '\0';			/* strip '/base_name' */
+		base_name = slash + 1;
+	} else
+		base_name = manpage;
 
 	/* Bogus files either have (i) no period, ie no extension, (ii)
 	   a compression extension, but no sectional extension, (iii)
@@ -107,10 +115,11 @@ char *filename_info (const char *file, struct mandata *info,
 	   sectional part of their extension. */
 
 #ifdef COMP_SRC
-	comp = comp_info (base_name);
+	comp = comp_info (base_name, 1);
 	if (comp) {
 		info->comp = comp->ext;
-		*(comp->file) = '\0';		/* to strip the comp ext */
+		*(base_name + strlen (comp->stem)) = '\0';
+		free (comp->stem);
 	} else
 		info->comp = NULL;
 #else /* !COMP_SRC */	
@@ -129,11 +138,10 @@ char *filename_info (const char *file, struct mandata *info,
 		info->ext = ext;
 	}
 
-	*(base_name - 1) = '\0';		/* strip '/base_name' */ 
 	info->sec = strrchr (manpage, '/') + 4;	/* set section name */
 
 	if (strncmp (info->sec, info->ext, strlen (info->sec)) != 0) {
-		/* missmatch in extension */
+		/* mismatch in extension */
 		gripe_bogus_manpage (file);
 		free (manpage);
 		return NULL;

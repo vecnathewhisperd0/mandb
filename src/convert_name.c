@@ -77,9 +77,9 @@ char *convert_name (const char *name, int fsstnd)
 	char *namestem;
 
 #ifdef COMP_SRC
-	comp = comp_info (name);
+	comp = comp_info (name, 1);
 	if (comp)
-		namestem = xstrndup (name, comp->file - name);
+		namestem = comp->stem;
 	else
 #endif /* COMP_SRC */
 		namestem = xstrdup (name);

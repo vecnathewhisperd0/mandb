@@ -422,7 +422,7 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 
 #ifdef COMP_SRC
 		/* See if we need to decompress the file(s) first. */
-		comp = comp_info (file);
+		comp = comp_info (file, 0);
 		if (comp) {
 			file = decompress (file, comp);
 			if (!file)
