@@ -144,7 +144,7 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 			 * Don't change its length!
 			 */
 			char *space = (char *) info->whatis;
-			while (*space == ' ')
+			while (space >= raw_whatis && *space == ' ')
 				*space-- = '\0';    /* separate description */
 			info->whatis += 3;
 			/* Now trim trailing spaces off the description. */
