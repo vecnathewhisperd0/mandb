@@ -52,8 +52,11 @@ extern int errno;
 #if defined(NDBM) || defined (BTREE)
 datum copy_datum (datum dat)
 {
-	if (dat.dptr) 
-		dat.dptr = memcpy (xmalloc (dat.dsize), dat.dptr, dat.dsize);
+	if (dat.dptr) {
+		dat.dptr = memcpy (xmalloc (dat.dsize + 1),
+				   dat.dptr, dat.dsize);
+		dat.dptr[dat.dsize] = '\0';
+	}
 	return dat;
 }
 

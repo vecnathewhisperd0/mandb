@@ -1,3 +1,8 @@
+Mon Nov 19 00:53:03 GMT 2001  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_lookup.c (copy_datum): Explicitly null-terminate
+	  dat.dptr, since C string-manipulation functions are used on it.
+
 Fri Nov 16 04:28:31 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c (add_nls_manpath): Concatenate strings more safely.
