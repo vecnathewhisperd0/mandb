@@ -15,6 +15,9 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
+#ifdef STDC_HEADERS
+#include <stdlib.h>
+#endif
 
 #include <libintl.h>
 #define _(String) gettext (String)

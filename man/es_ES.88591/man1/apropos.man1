@@ -14,7 +14,7 @@
 .SH SINOPSIS
 .B %apropos% 
 .RB [\| \-dhV  \|] 
-.RB [\| \-r \||\| \-w\c
+.RB [\| \-e \||\| \-w \||\| \-r\c
 \|]
 .RB [\| \-m
 .IR sistema \|[\|,.\|.\|.\|]\|]
@@ -30,33 +30,41 @@ busca dentro de esas descripciones la presencia de la
 
 La
 .I palabra_clave
-puede contener caracteres comodín
+es normalmente una expresión regular, como si se hubiese usado
+.RB ( \-r )
+, puede contener caracteres comodín
 .RB ( \-w )
-o puede ser una expresión regular
-.RB ( \-r ).
-Cuando se usan estas opciones,
-puede ser necesario entrecomillar la 
+, o ser la palabra clave exacta
+.RB ( \-e )
+\ . Cuando se usan estas opciones, puede ser necesario entrecomillar la 
 .I palabra_clave
 o anteponer (\\) a los caracteres especiales para evitar que la shell los
 interprete.
 
-Las reglas estándar permiten buscar nombres de página y
-palabras completas en la descripción.
+Las reglas estándar permiten buscar en nombres de página y en las
+palabras completas de la descripción de cada página.
 .SH OPCIONES
 .TP
 .B \-d, \-\-debug
-Imprime información de depurado.
+Imprime información de depuración.
 .TP
 .B \-r, \-\-regex
-Interpreta cada palabra clave como una expresión regular. Cada palabra clave
-va a tratar de casar independientemente con los nombres de las páginas
-y con las descripciones.
+Interpreta cada palabra clave como una expresión regular. Este comportamiento
+es el predeterminado. Cada palabra clave se comparará con los nombres de
+las páginas y con las descripciones de forma independiente. La comparación
+puede tener éxito con cualquier parte de ellas. La comparación no tiene
+por qué comprender palabras completas, sino también partes de ellas.
 .TP
 .B \-w, \-\-wildcard
-Interpreta cada palabra clave como patrones que incluyen caracteres comodín.
-Cada palabra clave será cuadrada con nombres de páginas y las descripciones
-de forma independiente. Sólo se cuandran nombres completos de página que
-correspondan con el resultado de expandir la palabra clave.
+Interpreta cada palabra clave como un patrón que incluye caracteres comodín
+del estilo de la shell. Cada palabra clave se comparará con los nombres de
+las páginas y con las descripciones de forma independiente. La comparación
+sólo tendrá éxito si la palabra clave una vez expandida corresponde con
+una descripción completa o un nombre de página.
+.TP
+.B \-e, \-\-exact
+Cada palabra clave se comparará de forma exacta con los nombres de páginas
+y las descripciones.
 .\"
 .\" Due to the rather silly limit of 6 args per request in some `native'
 .\" *roff compilers, we have do the following to get the two-line
@@ -75,8 +83,7 @@ Si este sistema puede acceder a las páginas de manual de otro sistema
 operativo, se puede activar su búsqueda mediante esta opción.
 Para buscar en las páginas de NuevoSO, use la opción 
 .B \-m
-.BR NuevoSO
-.
+.BR NuevoSO .
 
 El
 .I sistema
@@ -87,24 +94,22 @@ Para incluir la base de datos de descripciones
 del sistema operativo nativo en la búsqueda basta incluir
 .B man 
 como nombre de sistema en la lista de argumentos.
-
-El valor de esta opción sobreescribe el contenido de la variable
-del entorno
+Esta opción hace que se ignore el contenido de la variable de entorno
 .RB $ SYSTEM.
 .RE
 .TP
 .BI \-M\  ruta ,\ \-\-manpath= ruta
 Especifica un conjunto de jerarquías de páginas de manual
 separados por "dos puntos".
-
-Por defecto
+Por defecto,
 .B %apropos%
-utiliza la variable del entorno
+utiliza la variable de entorno
 .RB $ MANPATH
-a menos que esté vacía o desactivada en cuyo caso determinará
-la ruta para el manual apropiado, basándose en su variable de entorno
+a menos que esté vacía o no exista, en cuyo caso determinará
+la ruta para las páginas de manual apropiadas basándose en su
+variable de entorno
 .RB $ PATH .
-Esta opción se preferirá al contenido de 
+Esta opción hace que se ignore el contenido de la variable de entorno
 .RB $ MANPATH .
 .TP
 .B \-h, \-\-help
@@ -112,7 +117,6 @@ Imprime un mensaje de ayuda y termina.
 .TP
 .B \-V, \-\-version
 Presenta la información sobre la version y el autor.
-
 .SH "ESTADO DE SALIDA"
 .TP
 .B 0
@@ -129,43 +133,46 @@ No se ha encontrado nada que cuadre con los criterios especificados.
 .SH ENTORNO
 .TP
 .B SYSTEM
-Si se activa
+Si existe
 .RB $ SYSTEM ,
-tendrá el mismo efecto que si se especifica su contenido como argumento
+tendrá el mismo efecto que si se especifica su contenido como el argumento
 de la opción 
-.B \-m
-.
+.B \-m \ .
 .TP
 .B MANPATH
-Si se activa
+Si existe
 .RB $ MANPATH ,
-su valor es interpretado como un conjuto de jerarquías de
+su valor es interpretado como la ruta al conjunto de jerarquías de
 páginas a usar separadas por "dos puntos".
 .TP
 .B POSIXLY_CORRECT
 Si 
 .RB $ POSIXLY_CORRECT
-está activada, incluso si su valor es nulo, 
+existe, incluso si su valor es nulo, 
 .B %apropos% 
-ejecutará por defecto una búsqueda como expresión regular.
+realizará por defecto una búsqueda como expresión regular
 .RB ( \-r ).
+De todas formas, este es el comportamiento predeterminado actualmente.
 .SH FICHEROS
 .TP
-.I /usr/man/index.(bt|db|dir|pag)
-.I índice
-de la base de datos caché tradicional.
+.I /usr/share/man/index.(bt|db|dir|pag)
+.I Índice
+tradicional del caché de la base de datos global.
 .TP
-.I /var/catman/index.(bt|db|dir|pag)
-.I índice
-de la base de datos caché global alternativa o de acuerdo al FSSTND.
+.I /var/cache/man/index.(bt|db|dir|pag)
+.I Índice
+alternativo o de acuerdo con el FHS del caché de la base de datos global.
 .TP
-.I /usr/man/\|.\|.\|.\|/whatis
-Base de datos tipo texto 
-.B whatis
-tradicional.
-.SH "TAMBIÉN VER"
+.I /usr/share/man/\|.\|.\|.\|/whatis
+Base de datos tradicional de tipo texto de
+.B whatis .
+.SH "VÉASE TAMBIÉN"
 .BR %whatis% (1),
 .BR %man% (1).
 .SH AUTOR
+.nf
 Wilf. (G.Wilford@ee.surrey.ac.uk)
-Traducción realizada por Luis F. González (luisgh@cogs.susx.ac.uk)
+Fabrizio Polacco (fpolacco@debian.org).
+Traducción realizada por Luis F. González (luisgh@cogs.susx.ac.uk), y
+revisada por David Martínez (ender@adi.uam.es).
+.fi
