@@ -123,7 +123,7 @@ name_sec	{dbl_quote}?{style_change}?{name}{style_change}?{dbl_quote}?
  /* ROFF request removal */
 <MAN_NAME>{
 	{bol}{typeface}{blank}+		|	/* type face commands */
-	{bol}{comment}.*		{	/* per line comments */
+	{next}{comment}.*		{	/* per line comments */
 						newline_found();
 					}
 }

@@ -102,7 +102,7 @@ char *tmplist[MAXDIRS];
 char *manpathlist[MAXDIRS];
 
 static __inline__ char *get_manpath(char *path);
-static __inline__ char *has_subdirs(char *p);
+static __inline__ char *has_mandir(char *p);
 static __inline__ char *fsstnd(char *path);
 static char *def_path(int flag);
 static void add_dir_to_list(char **lp, char *dir);
@@ -360,11 +360,11 @@ char *add_system_manpath (char *systems, char *manpathlist)
  * try to determine the corresponding manpath, otherwise, return the
  * default manpath.
  *
- * The manpath.config file is used to map system wide /bin directories
+ * The man_db.config file is used to map system wide /bin directories
  * to top level man page directories.
  *
  * For directories which are in the user's path but not in the
- * manpath.config file, see if there is a subdirectory `man' or `MAN'.
+ * man_db.config file, see if there is a subdirectory `man' or `MAN'.
  * If so, add that directory to the path.  Example:  user has
  * $HOME/bin in his path and the directory $HOME/bin/man exists -- the
  * directory $HOME/bin/man will be added to the manpath.
@@ -650,12 +650,12 @@ static char *def_path (int flag)
 
 /*
  * For each directory in the user's path, see if it is one of the
- * directories listed in the manpath.config file.  If so, and it is
+ * directories listed in the man_db.config file.  If so, and it is
  * not already in the manpath, add it.  If the directory is not listed
- * in the manpath.config file, see if there is a subdirectory `man' or
- * `MAN'.  If so, and it is not already in the manpath, add it.
+ * in the man_db.config file, see if there is a subdirectory `../man' or
+ * `man'.  If so, and it is not already in the manpath, add it.
  * Example:  user has $HOME/bin in his path and the directory
- * $HOME/bin/man exists -- the directory $HOME/bin/man will be added
+ * $HOME/man exists -- the directory $HOME/man will be added
  * to the manpath.
  */
 static __inline__ char *get_manpath (char *path)
@@ -687,7 +687,7 @@ static __inline__ char *get_manpath (char *path)
       		 */
 
 		for (dlp = list; dlp->mandir[0] != '\0'; dlp++)
-			if (dlp->bin[0] != '\0' && !strcmp (p, dlp->bin)) {
+			if (dlp->bin[0] != '\0' && STREQ(p, dlp->bin)) {
 				if (debug)
 					fprintf (stderr, "is in the config file\n");
 
@@ -695,25 +695,23 @@ static __inline__ char *get_manpath (char *path)
 				 goto found;
 			}
 
-		/*
-      		 * The directory we're working on isn't in the config file.  See
-      		 * if it has man or MAN subdirectories.  If so, and it hasn't
-      		 * been added to the list, do.
-      		 */
+      		 /* The directory we're working on isn't in the config file.  
+      		    See if it has ../man or man subdirectories.  
+      		    If so, and it hasn't been added to the list, do. */
 
 		 if (debug)
 			fprintf (stderr, "is not in the config file\n");
 
-		 t = has_subdirs (p);
-		 if (t != NULL) {
+		 t = has_mandir (p);
+		 if (t) {
 			if (debug)
-				fprintf (stderr, "but it does have a man or MAN subdirectory\n");
+				fprintf (stderr, "but does have a ../man or man subdirectory\n");
 
 			 add_dir_to_list (tmplist, t);
 			 free (t);
 		  } else
 			if (debug)
-				fprintf (stderr, "and doesn't have man or MAN subdirectories\n");
+				fprintf (stderr, "and doesn't have ../man or man subdirectories\n");
 
 	found:
 		;
@@ -791,36 +789,37 @@ static void add_dir_to_list (char **lp, char *dir)
 	}
 }
 
-/*
- * Check to see if the current directory has man or MAN
- * subdirectories.
- *
- * Unsure if this is such a good idea... Should at least do a realpath()
- * on anything picked up!
- */
-static __inline__ char *has_subdirs (char *p)
+/* path does not exist in config file: check to see if path/../man or 
+   path/man exist.  If so return it, if not return NULL. */
+static __inline__ char *has_mandir (char *path)
 {
 	size_t len;
-	char *t;
+	char *newpath, *subdir;
 
-	len = strlen (p);
+	/* don't assume anything about path, especially that it ends in 
+	   "bin" or even has a '/' in it! */
+	   
+	subdir = strrchr(path, '/');
+	if (subdir) {
+		len = (size_t) (subdir - path + 1);
+		newpath = (char *) xmalloc (len + sizeof "man");
+		(void) strncpy(newpath, path, len);
+		(void) strcpy(newpath + len, "man");
+		
+		if (is_directory(newpath) == 1)
+			return newpath;
+	} else
+		newpath = NULL;
+		
+	len = strlen (path);
+	newpath = (char *) xrealloc (newpath, len + sizeof "/man");
+	(void) strcpy(newpath, path);
+	(void) strcpy(newpath + len, "/man");
 
-	t = (char *) xmalloc (len + 5);
+	if (is_directory (newpath) == 1)
+		return newpath;
 
-	(void) strcpy(t, p);
-	(void) strcpy(t + len, "/man");
-
-	if (is_directory (t) == 1)
-		return t;
-
-#if 0
-	(void) strcpy (t + len, "/MAN");
-
-	if (is_directory (t) == 1)
-		return t;
-
-	free (t);
-#endif
+	free(newpath);
 	return NULL;
 }
 

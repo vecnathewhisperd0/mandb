@@ -1,3 +1,16 @@
+Major changes since man_db-2.3.10:
+
+	o The man_db manual is bundled in source form.
+ 
+	o Components of $PATH not in the config file were checked for
+	  `man' subdirectories.  Now they are also checked for `../man'.
+	
+	o Untarring a new manual page (with a timestamp older than the
+	  relative cat file) over the original did *not* cause man/catman 
+	  to reformat the replacement.  This is changed.  As a side effect, 
+	  untarring an unchanged man file over the original will also cause 
+	  a reformat.
+
 Major changes since man_db-2.3.5:
 
 	Fixes:

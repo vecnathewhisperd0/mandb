@@ -631,7 +631,7 @@ static __inline__ void gripe_no_man(char *name, char *sec)
 		fprintf ( stderr, _( "No manual entry for %s"), name);
 #endif
 	}
-			 
+
 	if (sec)
 		fprintf ( stderr, _( " in section %s\n"), sec);
 	else

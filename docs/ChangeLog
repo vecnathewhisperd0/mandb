@@ -1,3 +1,24 @@
+Fri Apr 27 22:39:34 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* Merging in changes from Wilf's 2.3.11 release.
+	* docs/ChangeLog, docs/NEWS: Folded in changelog comments.
+
+	* GNUmakefile.in: Added deroff and manual targets.
+	* README: Added comment about manual; added notes on configure
+	  flags.
+	* configure.in: Minor improvement for non-GNU makes.
+
+	* src/lexgrog.l, src/lexgrog.l-2.4a: Allow comments other than at
+	  the beginning of a line.
+
+	* src/manp.c: Replace has_subdirs() with has_mandir(): for $PATH
+	  components not in config, check for ../man as well as man subdirs.
+
+	* zsoelim/zsoelim.l: Use #defines for exit codes.
+
+	* GNUmakefile.in, README, docs/INSTALL.quick, src/man.c: Cosmetic
+	  rearrangements (whitespace, typos, etc.).
+
 Fri Apr 27 21:36:11 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* manual/*: Add the source code for the man_db manual from Wilf's
@@ -226,6 +247,24 @@ Wed Feb 23 22:34:54 EET 2000  fab   (fpolacco@debian.org)
 
 	* find the huge list of changes (in three years) in file
 	  debian/changelog.
+
+Thu Sep 21 19:33:58 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk)
+
+	* Version: 2.3.11
+
+	* manual/*: bundle the source code of the man_db manual
+
+Wed Sep 20 16:17:19 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk)
+
+	* src/manp.c: replace has_subdirs() with has_mandir(): for $PATH
+	components not in config, check for ../man as well as man subdirs.
+
+	* various: small bug-fixes from Markus, 
+	Joey (joey@infodrom.north.de), Lionel (cons@dxcern.cern.ch) 
+
+	* src/util.c: when checking man/cat timestamps, compare mod time of
+	cat with latest of mod or create time of man: If untar new man
+	page with old timestamp, still reformat.
 
 Thu Jul 13 11:29:32 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk)
 

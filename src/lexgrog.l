@@ -158,7 +158,7 @@ vgrind_request	\.vS
 <MAN_NAME>{
 	{bol}{typeface}{blank}+		|	/* type face commands */
 	{bol}\.IX{blank}.*		|	/* .IX line */
-	{bol}{comment}.*		{	/* per line comments */
+	{next}{comment}.*		{	/* per line comments */
 						newline_found();
 					}
 }

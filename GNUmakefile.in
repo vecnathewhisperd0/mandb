@@ -15,10 +15,14 @@
 #									 #
 # `./configure --help' shows current options available			 #
 #									 #
-# All system specific definitions are now in include/Defines.		 # 
+# system specific definitions are now in	include/Defines.	 # 
+# path definitions are in 			include/manconfig.h	 #
+# compression related definitions are in 	include/comp_src.h	 #
+# 									 #
+# Make targets are:							 #
 #									 #
-# path definitions are in include/manconfig.h				 #
-# compression related definitions are in include/comp_src.h		 #
+#  all install uninstall mostlyclean clean distclean realclean TAGS ID	 #
+#  FILES lib src man nls libdb xcat zsoelim gencat update RCS dist	 #
 #------------------------------------------------------------------------#
 
 srcdir = @srcdir@
@@ -38,7 +42,8 @@ INSTALL = src zsoelim man intl po
 include include/Defines
 
 .PHONY: $(DEFAULT_TARGETS) $(EVERYTHING) dist nls_defines ID \
-	$(addsuffix _root, $(DEFAULT_TARGETS)) update default RCS check
+	$(addprefix __, $(DEFAULT_TARGETS)) update default RCS \
+	check deroff
         
 ifeq ($(nls),on)
 languages = $(notdir $(wildcard $(top_srcdir)/nls/*_*))
@@ -75,7 +80,7 @@ else # nls != on
   endif # nls = off
 
 all: $(ALL)
-	
+
 endif # nls = on
 
 $(EVERYTHING): $(INCLUDES) nls_defines
@@ -126,7 +131,7 @@ nls_defines:
 	sed -e 's/^nls = .*/nls = $(nls)/' include/Defines.old > include/Defines
 
 # Just make sure that all configure created files are up to date
-update: nls_defines $(INCLUDES) $(addsuffix /Makefile, $(ALL))
+update: nls_defines $(INCLUDES) $(addsuffix /Makefile, $(EVERYTHING))
 
 # testsuite doesn't exist
 testsuite:
@@ -137,19 +142,29 @@ testsuite:
 	@echo " "
 	@exit 1
 
-# Special loop-back root directory targets
-mostlyclean_root clean_root:
+# deRoff doesn't exist
+deRoff:
+	@echo " "
+	@echo "deroff is not available as this time."
+	@echo " "
+	@exit 1
+	
+# Special loop-back root directory targets: don't invoke directly
+__mostlyclean:
 	rm -f core *~ docs/*~ include/*~
 
-distclean_root: clean_root
+__clean: __mostlyclean
+	rm -f FILES
+
+__distclean: __clean
 	rm -f $(INCLUDES) include/Defines GNUmakefile makefile
 	rm -f include/Defines.old config.status config.cache config.log stamp-h
 	rm -f src/lexgrog.c configure zsoelim/zsoelim.c
 
-realclean_root: distclean_root
+__realclean: __distclean
 	rm -f tags ID
 
-TAGS_root:
+__TAGS:
 	$(MKTAGS) $(srcdir)/*.h include/*.h
 
 # Normal targets and dependencies.
@@ -162,16 +177,22 @@ install uninstall:
 
 TAGS realclean distclean mostlyclean clean:
 	for i in $(EVERYTHING); do $(MAKE) prefix=../$(prefix) -C $$i $@ clean=yes; done
-	$(MAKE) $@_root
+	$(MAKE) __$@
 	
 check: testsuite testsuite/Makefile
 	$(MAKE) -C testsuite
+
+deroff: deRoff deRoff/Makefile
+	$(MAKE) -C deRoff
+
+FILES:
+	echo $(FILES) | tr ' ' '\n' > FILES
 
 ifeq ($(srcdir),.)
 # Sorry folks, can only make a dist from the $(srcdir)
 
 # The files in the distribution
-_subdirs = $(EVERYTHING) tools docs include
+_subdirs = $(EVERYTHING) tools docs include manual
 
 _all = */README */Makefile.in
 _root = README configure *.h *.m4 *.in 
@@ -187,6 +208,7 @@ _tools = checkman install-sh mandb_\[nt\]fmt-script mkcatdirs \
 	 mkinstalldirs nroff-script
 _xcat = Register xcat.[cl]
 _zsoelim = *.[cl]
+_manual = Makefile *.me
 
 FILES = $(_root) $(_all) \
 	$(foreach _subdir, $(_subdirs), \

@@ -1,10 +1,15 @@
 README for the man_db manual pager suite, version 2.3.x
 =======================================================
 
-Please read the man_db-manual, available in cat/PostScript/dvi formats,
-located at an FTP site carrying this package.  It contains configuration 
-details and other aspects of this manual pager suite that are not 
-duplicated or relevant here.
+Please read the man_db manual, available in PostScript format, located at an
+FTP site carrying this package.  It contains configuration details and other
+aspects of this manual pager suite that are not duplicated or relevant in
+this README.
+
+As of man_db-2.3.11, the man_db manual is *included* with this distribution
+in source form.  Please check manual/README for details of the formatters
+required.  The man_db manual must be built from the manual subdirectory and
+does not require use of ./configure.
 
 Read docs/INSTALL.autoconf for generic options to configure.
 Read docs/INSTALL.quick if you know all about man_db.
@@ -16,9 +21,9 @@ This package _requires_ GNU make version 3.68 or newer to be used.
 Other vendors' make programs will not work with the Makefiles in this 
 package due to extensive utilization of GNU make features.
 
-The C source will require an ANSI C compiler. To generate dependencies 
-(only necessary if developing or source level debugging), a cpp that
-understands -M is required.
+The C source requires an ANSI C compiler. To generate dependencies (only
+necessary if developing or source level debugging), a cpp that understands
+-M is required.
 
 
 Notice to users of man_db version 2.2 or 2.2.1 
@@ -54,13 +59,55 @@ are defined in ./include/manconfig.h.in:
 Should these locations change, simply define the paths accordingly and
 recompile.  Other FSSTND changes relating to man/cat paths will not be
 compatible with this version of man_db.
-                                                
+
+Non generic arguments to configure
+==================================
+
+To allow the configuration program, configure, to be non-interactive, it can
+be passed various options to alter the default settings.  Generic configure
+options are discussed in docs/INSTALL.autoconf.  The following list of
+options is extracted from the man_db manual.  It is strongly recommended
+that relevant sections of the manual are read if any of these options are
+used.
+ 
+--enable-debug
+     By  default,  the configuration process creates produc-
+     tion quality Makefiles.  This option,  which  takes  no
+     argument,  changes  certain  values to aid in debugging
+     man_db-2.3.x. It does not alter the physical  behaviour
+     of any of the programs.
+
+--enable-setuid[=ARG]
+     By  default,  man will be installed as a setuid program
+     to user man. Use this option with an argument to change
+     the setuid owner.
+
+--disable-setuid
+     Use  this option to install man as a non-setuid program
+     and to change  the  default  cat  and  database  files'
+     access flags to allow users to modify them.
+
+--with-device=DEVICE
+     Use  this  flag to alter the default output device used
+     by NROFF. DEVICE is passed to NROFF with the -T option.
+     configure  will  test that NROFF will run with the sup-
+     plied device argument.
+
+--with-db=LIBRARY
+     configure will look for database interface libraries in
+     the  order  Berkeley DB, gdbm and finally ndbm and will
+     #define appropriate variables relative to the first one
+     found. To override the built in order on platforms hav-
+     ing a choice of interface library, use this  option  to
+     specify which library to use.
+
+
 INSTALL
 =======
 
 Running configure.
 
-	o READ `docs/INSTALL' regarding ./configure options
+	o READ `docs/INSTALL.autoconf' regarding ./configure options
 
 	o RUN `./configure --help' to see what --enable and --with
 	  options may be useful.
@@ -68,7 +115,7 @@ Running configure.
 	o RUN `./configure' with the appropriate options and environment
 	  variable settings
 
-BROWSE or EDIT the following files that are created by the configuration
+BROWSE or EDIT the following files that were created by the configuration
 process.
 
 	o `include/Defines' regarding general definitions used by all

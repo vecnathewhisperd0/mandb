@@ -51,7 +51,7 @@ extern int strncmp();
 extern int errno;
 #endif
 
-#define STATIC_VER	/* soelim has a static ver() */
+#define STATIC_VER	/* zsoelim has a static ver() */
 
 #define NAME	so_name[so_stack_ptr]
 #define LINE	so_line[so_stack_ptr]
@@ -146,7 +146,7 @@ W	[ \t]
 			sprintf( temp_name, "%s.gz", yytext);
 			if (open_file(xstrdup(yytext)) && open_file(temp_name)) {
 #ifndef __alpha
-				error(0, 0, 
+				error(OK, 0, 
 				      "%s:%d: warning: failed .so request", NAME, LINE);
 				printf(".so %s\n", yytext);
 #endif
@@ -167,7 +167,7 @@ W	[ \t]
 		
 <so>\n		{
 			no_newline = 0;
-			error(0, 0,
+			error(OK, 0,
 			      "%s:%d: warning: newline in .so request, ignoring",
 			      NAME, LINE);
 			putchar('\n');
@@ -217,7 +217,7 @@ W	[ \t]
 
 <lfnumber,lfname>.	{
 			no_newline = 1;
-			error(0, 0,
+			error(OK, 0,
 			      "%s:%d: warning: malformed .lf request, ignoring",
 			      NAME, LINE);
 			putchar(*yytext);
@@ -226,7 +226,7 @@ W	[ \t]
 		
 <lfnumber,lfname>\n	{
 			no_newline = 0;
-			error(0, 0,
+			error(OK, 0,
 			      "%s:%d: warning: newline in .lf request, ignoring",
 			      NAME, LINE);
 			putchar('\n');
@@ -265,7 +265,7 @@ static void zap_quotes(void)
 			yytext[yyleng - 1] = '\0';
 			yytext++;
 		} else
-			error(0, 0, "%s:%d: unterminated quote in roff request",
+			error(OK, 0, "%s:%d: unterminated quote in roff request",
 			      NAME, LINE);
 	}
 }
@@ -309,10 +309,10 @@ int main(int argc, char *argv[])
 			case 'C': 
 				break; /* compatibility with GNU soelim */
 			case 'h':
-				usage(0);
+				usage(OK);
 				break;
 			default:
-				usage(1);
+				usage(FAIL);
 				break;
 		}
 	}
@@ -407,7 +407,7 @@ static int open_file(char *filename)
 			close( file_fd);
 
 			if (exit_status != 0) {
-				error (0, 0, "%s exited with status %d",
+				error (OK, 0, "%s exited with status %d",
 				       command, exit_status);
 				free(command);
 				yyin = oldyyin;
@@ -417,7 +417,7 @@ static int open_file(char *filename)
 			free(command);
 
 			if( !(yyin = fopen( filename, "r" )) )  {
-				error (0, errno, "open decompressed file: %s",
+				error (OK, errno, "open decompressed file: %s",
 				       filename);
 				yyin = oldyyin;
 				return 1;
@@ -431,10 +431,10 @@ static int open_file(char *filename)
 		if (so_stack_ptr > 0) {
 			so_stack_ptr--;
 #ifndef __alpha
-			error (0, errno, "%s:%d: %s", NAME, LINE, filename);
+			error (OK, errno, "%s:%d: %s", NAME, LINE, filename);
 #endif
 		} else {
-			error (0, errno, filename);
+			error (OK, errno, filename);
 			status = FAIL;
 		}
 		yyin = oldyyin;
