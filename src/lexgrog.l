@@ -115,11 +115,11 @@ name		({cs_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?{dbl_quote}?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
-tbl_request	\.[Tt][Ss]
-eqn_request	\.[Ee][Qq]
-pic_request	\.[Pp][Ss][ 0-9.<]?
+tbl_request	\.TS
+eqn_request	\.EQ
+pic_request	\.PS
 grap_request	\.G1
-ref1_request	\.[Rr]1
+ref1_request	\.R1
 ref2_request	\.\[
 vgrind_request	\.vS
 
