@@ -67,6 +67,7 @@ extern int errno;
 #include "lib/error.h"
 #include "ult_src.h"
 #include "hashtable.h"
+#include "check_mandirs.h"
 
 int opt_test;		/* don't update db */
 int pages;
@@ -176,6 +177,64 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 	return 0;
 }
 
+/* Fill in a mandata structure with information about a file name.
+ * file is the name to examine. info points to the structure to be filled
+ * in.
+ * 
+ * Returns either a pointer to the buffer which the fields in info point
+ * into, to be freed by the caller, or NULL on error. The buffer will
+ * contain either three or four null-terminated strings: the directory name,
+ * the base of the file name in that directory, the section extension, and
+ * optionally the compression extension (if COMP_SRC is defined).
+ * 
+ * Only the fields ext, sec, and comp are filled in by this function.
+ */
+char *filename_info (char *file, struct mandata *info)
+{
+	char *manpage = xstrdup (file);
+	char *base_name = basename (manpage);
+#ifdef COMP_SRC
+	struct compression *comp;
+#endif
+
+	/* Bogus files either have (i) no period, ie no extension, (ii)
+	   a compression extension, but no sectional extension, (iii)
+	   a missmatch between the section they are under and the
+	   sectional part of their extension. */
+
+#ifdef COMP_SRC
+	comp = comp_info (base_name);
+	if (comp) {
+		info->comp = comp->ext;
+		*(comp->file) = '\0';		/* to strip the comp ext */
+	} else
+		info->comp = NULL;
+#else /* !COMP_SRC */	
+	info->comp = NULL;
+#endif /* COMP_SRC */
+
+	info->ext = strrchr (base_name, '.');
+	if (!info->ext) {
+		/* no section extension */
+		gripe_bogus_manpage (file);
+		free (manpage);
+		return NULL;
+	}
+
+	*(info->ext++) = '\0';			/* set section ext */
+	*(base_name - 1) = '\0';		/* strip '/base_name' */ 
+	info->sec = strrchr (manpage, '/') + 4;	/* set section name */
+
+	if (strncmp (info->sec, info->ext, strlen (info->sec)) != 0) {
+		/* missmatch in extension */
+		gripe_bogus_manpage (file);
+		free (manpage);
+		return NULL;
+	}
+
+	return manpage;
+}
+
 /* take absolute filename and path (for ult_src) and do sanity checks on 
    file. Also check that file is non-zero in length and is not already in
    the db. If not, find its ult_src() and see if we have the whatis cached, 
@@ -189,52 +248,18 @@ void test_manfile (char *file, const char *path)
 	struct mandata info, *exists;
 	struct nlist *in_cache;
 	struct stat buf;
-
-#ifdef COMP_SRC
-	struct compression *comp;
 	size_t len;
-#endif /* COMP_SRC */
 
 	memset (&lg, '\0', sizeof (struct lexgrog));
-	manpage = xstrdup (file);
-	base_name = basename (manpage);
 
-	/* Bogus files either have (i) no period, ie no extension, (ii)
-	   a compression extension, but no sectional extension, (iii)
-	   a missmatch between the section they are under and the
-	   sectional part of their extension. */
-
-#ifdef COMP_SRC
-	comp = comp_info (base_name);
-	if (comp) {
-		info.comp = comp->ext;
-		*(comp->file) = '\0';		/* to strip the comp ext */
-	} else
-		info.comp = NULL;
-
-	len = strlen (manpage);
-#else /* !COMP_SRC */	
-	info.comp = NULL;
-#endif /* COMP_SRC */
-
-	info.ext = strrchr (base_name, '.');
-	if (!info.ext) {
-		/* no section extension */
-		gripe_bogus_manpage (file);
-		free (manpage);
+	manpage = filename_info (file, &info);
+	if (!manpage)
 		return;
-	}
+	base_name = manpage + strlen (manpage) + 1;
 
-	*(info.ext++) = '\0';			/* set section ext */
-	*(base_name - 1) = '\0';		/* strip '/base_name' */ 
-	info.sec = strrchr (manpage, '/') + 4;	/* set section name */
-
-	if (strncmp (info.sec, info.ext, strlen (info.sec)) != 0) {
-		/* missmatch in extension */
-		gripe_bogus_manpage (file);
-		free (manpage);
-		return;
-	}
+	len  = strlen (manpage) + 1;		/* skip over directory name */
+	len += strlen (manpage + len) + 1;	/* skip over base name */
+	len += strlen (manpage + len);		/* skip over section ext */
 
 	/* to get mtime info */
 	(void) lstat (file, &buf);
@@ -310,13 +335,7 @@ void test_manfile (char *file, const char *path)
 	}
 
 	if (lookup (ult) == NULL) {
-		if (debug &&
-#ifdef COMP_SRC
-		    strncmp (ult, file, len) != 0
-#else /* not COMP_SRC */
-		    strcmp (ult, file) != 0
-#endif /* COMP_SRC */
-		    )
+		if (debug && strncmp (ult, file, len) != 0)
 			fprintf (stderr,
 				 "\ntest_manfile(): link not in cache:\n"
 				 " source = %s\n"
@@ -339,12 +358,7 @@ void test_manfile (char *file, const char *path)
 
 	pages++;			/* pages seen so far */
 
-#ifdef COMP_SRC
 	if (strncmp (ult, file, len) == 0)
-#else /* not COMP_SRC */
-	if (strcmp (ult, file) == 0)
-#endif /* COMP_SRC */
-
 		info.id = ULT_MAN;	/* ultimate source file */
 	else
 		info.id = SO_MAN;	/* .so, sym or hard linked file */

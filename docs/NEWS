@@ -24,18 +24,27 @@ Major changes since man_db-2.3.18:
 	  allows a single binary package to support setuid and non-setuid
 	  modes of operation.
 
+	o The ordering of manual sections is read from SECTION directives in
+	  the configuration file rather than being hard-coded.
+
 	o The MANDB_MAP configuration file directive is documented more
 	  clearly.
 
-	o Multiple whatis entries separated by commas and/or break requests
-	  are handled more intelligently.
+	o Multiple whatis entries separated by commas, break requests,
+	  and/or paragraph requests are handled more intelligently.
 
 	o Duplicate manpath entries (often generated in the course of
 	  national language support) are removed, so that 'man -a' works
 	  better.
 
-man_db-2.3.18
-=============
+	o man_db's binaries are installed unstripped by default.
+
+	o Since supporting certain layouts of manual page hierarchies causes
+	  problems for others, the layout is now selectable via configure.
+	  The default is to try all layouts.
+
+man_db-2.3.18 (14 May 2001)
+===========================
 
 Major changes since man_db-2.3.11:
 
@@ -126,8 +135,8 @@ Major changes since man_db-2.3.11:
 	  and guaranteeing that man will honour them even when the database
 	  is out of date causes performance problems. [Colin]
 
-man_db-2.3.11
-=============
+man_db-2.3.11 (21 September 1995)
+=================================
 
 Major changes since man_db-2.3.10:
 
@@ -142,8 +151,8 @@ Major changes since man_db-2.3.10:
 	  untarring an unchanged man file over the original will also cause 
 	  a reformat.
 
-man_db-2.3.10
-=============
+man_db-2.3.10 (13 July 1995)
+============================
 
 Major changes since man_db-2.3.5:
 
@@ -192,8 +201,8 @@ Major changes since man_db-2.3.5:
 
 	o ported to NeXTstep.
 
-man_db-2.3.5
-============
+man_db-2.3.5 (21 April 1995)
+============================
 
 Major changes since man_db-2.2.1:
 

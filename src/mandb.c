@@ -84,6 +84,7 @@ extern char *getwd();
 #include "libdb/mydbm.h"
 #include "lib/error.h"
 #include "lib/cleanup.h"
+#include "check_mandirs.h"
 #include "manp.h"
 
 int debug = 0;

@@ -120,6 +120,7 @@ extern int errno;
 #include "lib/error.h"
 #include "lib/cleanup.h"
 #include "hashtable.h"
+#include "check_mandirs.h"
 #include "ult_src.h"
 #include "manp.h"
 #include "man.h"
@@ -2255,6 +2256,26 @@ static int try_section (char *path, char *sec, char *name)
 		for (np = names; *np ; np++) {
 			char *man_file;
 			char *cat_file;
+			struct mandata info;
+			char *info_buffer;
+
+			info_buffer = filename_info (*np, &info);
+			if (!info_buffer)
+				continue;
+			if (strcmp (info.ext, sec) && is_section (info.ext)) {
+				/* This extension is mentioned in the config
+				 * file, and so is a section in its own
+				 * right. Leave it for whenever that section
+				 * is scanned.
+				 */
+				if (debug)
+					fprintf (stderr,
+						 "%s is in subsection %s\n",
+						 *np, info.ext);
+				free (info_buffer);
+				continue;
+			}
+			free (info_buffer);
 
 			man_file = ult_src (*np, path, NULL,
 					    SO_LINK | SOFT_LINK | HARD_LINK);

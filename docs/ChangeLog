@@ -1,3 +1,25 @@
+Mon Jun 25 02:55:36 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* docs/NEWS: Describe recent changes. Add dates of old releases.
+
+	* include/manconfig.h.in: Move check_mandirs.c prototypes to ...
+	* src/check_mandirs.h: ... here (new file).
+	* src/man.c: Include check_mandirs.h.
+	* src/mandb.c: Likewise.
+	* src/man.h (make_filename): Move prototype to check_mandirs.h.
+
+	* src/check_mandirs.c (test_manfile): Split parsing of file names
+	  into mandata structures into a new function ...
+	  (filename_info): ... this.
+	  (test_manfile): Calculate length of file name minus compression
+	  extension separately from the parsing, and do so whether COMP_SRC
+	  is defined or not.
+
+	* src/man.c (try_section): Use filename_info() to find out if the
+	  section of a glob-located file is different from the current
+	  section and is mentioned elsewhere in the configuration file. If
+	  so, ignore that file in the current section.
+
 Mon Jun 25 01:30:24 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (man_getopt): Conditionalize gxditview initialization on
