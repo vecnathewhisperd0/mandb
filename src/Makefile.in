@@ -38,7 +38,9 @@ MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I- -I../intl
 LFLAGS = -8B -Cem
 
 PROGS = man manpath mandb apropos whatis catman
-TOOLS = accessdb lexgrog globbing
+PUBTOOLS = accessdb
+PRIVTOOLS = lexgrog globbing
+TOOLS = $(PUBTOOLS) $(PRIVTOOLS)
 
 # Special definitions for some compilations
 DEFS_man.o = -DWHATIS=\"$(bindir)/$(whatis)\" \
@@ -98,23 +100,25 @@ globbing: globbing.c
 	$(LINK.c) -DTEST $^ $(LDLIBS) -o $@
 
 # The standard targets
-install: all
-	$(MKINSTALLDIRS) $(bindir)
-	$(INSTALL_PROGRAM) $(man_install_flags) man $(libdir)/man-db/$(man)
-	$(INSTALL_PROGRAM) $(man_install_flags) mandb $(libdir)/man-db/$(mandb)
+install:
+	$(MKINSTALLDIRS) $(bindir) $(sbindir) $(libdir)/man-db
+	$(INSTALL_PROGRAM) $(man_install_flags) man $(bindir)/$(man)
+	$(INSTALL_PROGRAM) $(man_install_flags) mandb $(bindir)/$(mandb)
 	$(INSTALL_PROGRAM) manpath $(bindir)/$(manpath)
 	$(INSTALL_PROGRAM) catman $(bindir)/$(catman)
 	$(INSTALL_PROGRAM) whatis $(bindir)/$(whatis)
 	$(INSTALL_PROGRAM) apropos $(bindir)/$(apropos)
-	$(INSTALL_PROGRAM) wrapper $(bindir)/wrapper
-	ln -f wrapper $(bindir)/$(man)
-	ln -f wrapper $(bindir)/$(mandb)
-	for j in $(TOOLS); do \
-		if test -x $$j ; then \
+	for j in $(PUBTOOLS); do \
+		if test -x $$j; then \
 			$(INSTALL_PROGRAM) $$j $(sbindir)/$$j; \
 		fi; \
 	done
-	@if test -f $(config_file) ; then \
+	for j in $(PRIVTOOLS); do \
+		if test -x $$j; then \
+			$(INSTALL_PROGRAM) $$j $(libdir)/man-db/$$j; \
+		fi; \
+	done
+	@if test -f $(config_file); then \
 		echo " "; \
 		echo "$(config_file) already exists. Overwrite manually if necessary"; \
 		echo " "; \
@@ -126,7 +130,8 @@ install: all
 
 uninstall:
 	rm -f $(addprefix $(bindir)/, $(PROGS))
-	rm -f $(addprefix $(sbindir)/, $(TOOLS))
+	rm -f $(addprefix $(sbindir)/, $(PUBTOOLS))
+	rm -f $(addprefix $(libdir)/man-db/, $(PRIVTOOLS))
 	@echo "Please remove $(config_file) manually if necessary"
 #	rm -f $(config_file)
 
