@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.20\n"
-"POT-Creation-Date: 2002-11-14 03:32+0000\n"
+"POT-Creation-Date: 2002-11-14 14:46+0100\n"
 "PO-Revision-Date: 2001-12-06 08:50+0100\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <da@li.org>\n"
@@ -95,7 +95,6 @@ msgid "usage: %s [-dhV] [-M manpath] [section] ...\n"
 msgstr "brug: %s [-dhV] [-M manpath] [section] ...\n"
 
 #: src/catman.c:134
-#, fuzzy
 msgid ""
 "-d, --debug                 produce debugging info.\n"
 "-M, --manpath path          set search path for manual pages to `path'.\n"
@@ -167,7 +166,7 @@ msgstr "advarsel: %s/man%s/%s.%s*: konkurrerende fil-endelser"
 #: src/check_mandirs.c:113
 #, c-format
 msgid "warning: failed to store entry for %s(%s)"
-msgstr ""
+msgstr "advarsel: mislykkedes at gemme element for %s(%s)"
 
 #: src/check_mandirs.c:127 src/check_mandirs.c:696 src/man.c:2942
 #, c-format
@@ -196,9 +195,9 @@ msgid "can't search directory %s"
 msgstr "kan ikke søge mappe %s"
 
 #: src/check_mandirs.c:663
-#, fuzzy, c-format
+#, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
-msgstr "Opdaterer indeks cache for sti `%s'. Vent..."
+msgstr "Opdaterer indeks cache for sti `%s/%s'. Vent..."
 
 #: src/check_mandirs.c:761
 #, c-format
@@ -219,9 +218,9 @@ msgid "can't create a temporary filename"
 msgstr "kan ikke oprette midlertidigt filnavn"
 
 #: src/compression.c:190
-#, fuzzy, c-format
+#, c-format
 msgid "command '%s' failed with exit status %d"
-msgstr "man kommando fejlede med afslutnings status %d"
+msgstr "kommando '%s' fejlede med afslutnings status %d"
 
 #: src/convert_name.c:56
 #, c-format
@@ -230,12 +229,12 @@ msgstr "Kan ikke konvertere %s til cat navn"
 
 #: src/fake_security.c:58
 msgid "can't get passwd structure for uid 0"
-msgstr ""
+msgstr "kan ikke hente passwd struktur for uid 0"
 
 #: src/lexgrog.l:318
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
-msgstr ""
+msgstr "advarsel: whatis for %s overskrider %d bytes, afklipper strengen."
 
 #: src/lexgrog.l:387 src/ult_src.c:310 src/ult_src.c:317
 #, c-format
@@ -759,9 +758,9 @@ msgstr ""
 msgid ""
 "usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
 msgstr ""
+"brug: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] nøgleord ...\n"
 
 #: src/whatis.c:158
-#, fuzzy
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-r, --regex                interpret each keyword as a regex.\n"
@@ -772,6 +771,9 @@ msgid ""
 "-h, --help                 show this usage message.\n"
 msgstr ""
 "-d --debug                  producerer fejlsøgnings info.\n"
+"-r, --regex                 læs hvert nøgleord som en reg. udtryk.\n"
+"-w, --wildcard              nøgleord(ene) indeholder wildcards.\n"
+"-m, --systems system        inkluder alternative systemers man sider.\n"
 "-M --manpath sti            sæt søgestien for manual sider til `sti'.\n"
 "-V --version                vis version.\n"
 "-h --help                   vis denne hjælpe besked.\n"
@@ -787,12 +789,12 @@ msgstr ""
 
 #: src/whatis.c:231 src/whatis.c:244 src/whatis.c:259 src/whatis.c:268
 msgid "(unknown subject)"
-msgstr ""
+msgstr "(ukendt emne)"
 
 #: src/whatis.c:475
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
-msgstr ""
+msgstr "Database %s er ødelagt; genbyg med mandb --create"
 
 #: src/whatis.c:583
 #, c-format
@@ -802,7 +804,7 @@ msgstr ""
 #: src/whatis.c:687
 #, c-format
 msgid "%s what?\n"
-msgstr ""
+msgstr "%s hvad?\n"
 
 #: src/whatis.c:710 src/whatis.c:719
 #, c-format
