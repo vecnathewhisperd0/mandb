@@ -1,3 +1,15 @@
+Sun Aug  3 23:52:14 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	infd and outfd should now only be set by pipeline_start(). Positive
+	values in want_in and want_out now indicate caller-supplied file
+	descriptors, while negative values indicate a request for
+	pipeline_start() to create a pipe.
+
+	* lib/pipeline.h (struct pipeline): Document this.
+	* lib/pipeline.c (pipeline_start): Implement it. Caller-supplied
+	  input and output file descriptors previously didn't work properly.
+	  (pipeline_wait): Update TODO comment.
+
 Sun Aug  3 21:07:46 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.h (struct command): New 'nice' member.
