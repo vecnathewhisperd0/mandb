@@ -1726,7 +1726,7 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 	if (cat_fd != -1)
 		created_tmp_cat = 1;
 	else {
-		if (!debug && errno == EACCES) {
+		if (!debug && (errno == EACCES || errno == EROFS)) {
 			/* No permission to write to the cat file. Oh well,
 			 * return NULL and let the caller sort it out.
 			 */
@@ -2347,7 +2347,7 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 			else
 				name = orig_name;
 		} else {
-			if (errno == EACCES) {
+			if (errno == EACCES || errno == EROFS) {
 				if (debug)
 					fprintf (stderr,
 						 "database %s is read-only\n",

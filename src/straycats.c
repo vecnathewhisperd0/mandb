@@ -260,22 +260,21 @@ static __inline__ int check_for_stray (void)
 				if (do_system (filter) != 0) {
 					remove (temp_name);
 					perror (filter);
-					exit (CHILD_FAIL);
+				} else {
+					strays++;
+
+					lg.type = CATPAGE;
+					if (!find_name (temp_name,
+							basename (catdir), &lg))
+						if (quiet < 2)
+							error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
+								catdir,
+								basename (mandir),
+								info.sec);
+
+					(void) splitline (lg.whatis, &info,
+							  basename (mandir));
 				}
-
-				strays++;
-
-				lg.type = CATPAGE;
-				if (!find_name (temp_name, basename (catdir),
-						&lg))
-					if (quiet < 2)
-						error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
-						       catdir,
-						       basename (mandir),
-						       info.sec);
-
-				(void) splitline (lg.whatis, &info,
-						  basename (mandir));
 			}
 
 			free (filter);

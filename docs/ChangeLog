@@ -1,3 +1,19 @@
+Sun Jun 10 13:49:02 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (testmandirs): Treat EROFS like EACCES while
+	  opening a database read-write (i.e. only print debug messages).
+	  (create_db): Likewise.
+	  src/man.c (open_cat_stream): Likewise.
+	  (try_db_section): Likewise.
+
+	* src/straycats.c (check_for_stray): Carry on gracefully rather than
+	  exiting if a straycat filter fails.
+
+	* src/manp.c (pathappend): Remove duplicate entries.
+
+	* src/lexgrog.l: Allow .LP, .PP, and .P as well as .br between
+	  whatis definitions.
+
 Sat Jun  2 14:34:59 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in: Give our English man pages the same date format as

@@ -239,9 +239,42 @@ static void add_mandatory (char *mandir)
 static char *pathappend (char *oldpath, const char *appendage)
 {
 	assert ((!oldpath || *oldpath) && appendage);
-	if (oldpath)
-		return strappend(oldpath, ":", appendage, NULL);
-	else
+	/* Remove duplicates */
+	if (oldpath) {
+		char *oldpathtok = xstrdup (oldpath), *tok;
+		char *app_dedup = xstrdup (appendage);
+		for (tok = strtok (oldpathtok, ":"); tok;
+		     tok = strtok (NULL, ":")) {
+			char *search = strstr (app_dedup, tok);
+			while (search) {
+				char *terminator = search + strlen (tok);
+				if (!*terminator) {
+					/* End of the string, so chop here. */
+					*search = 0;
+					while (search > app_dedup &&
+					       *--search == ':')
+						*search = 0;
+					break;
+				} else if (*terminator == ':') {
+					char *newapp;
+					*search = 0;
+					newapp = strappend (NULL, app_dedup,
+							    terminator + 1,
+							    NULL);
+					free (app_dedup);
+					app_dedup = newapp;
+				}
+				search = strstr (app_dedup, tok);
+			}
+		}
+		free (oldpathtok);
+		if (debug && !STREQ (appendage, app_dedup))
+			fprintf (stderr, "%s:%s reduced to %s:%s\n",
+				 oldpath, appendage, oldpath, app_dedup);
+		oldpath = strappend (oldpath, ":", app_dedup, NULL);
+		free (app_dedup);
+		return oldpath;
+	} else
 		return xstrdup(appendage);
 }
 
