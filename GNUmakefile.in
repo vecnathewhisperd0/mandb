@@ -75,7 +75,7 @@ $(srcdir)/configure: configure.in aclocal.m4
 	-cd $(srcdir) && autoconf
 
 $(srcdir)/include/config.h.in: stamp-h.in
-$(srcdir)/stamp-h.in: configure.in acconfig.h aclocal.m4
+$(srcdir)/stamp-h.in: configure.in aclocal.m4
 	-cd $(srcdir) && autoheader && echo timestamp > stamp-h.in
 
 # Use CONFIG_FILES= CONFIG_HEADERS= to force config.status to only

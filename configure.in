@@ -4,7 +4,7 @@ dnl Initialise and check we're in the correct directory.
 dnl
 AC_INIT(man-db, 2.4.0)
 AC_PREREQ(2.50a)
-AC_CONFIG_SRCDIR(acconfig.h)
+AC_CONFIG_SRCDIR(acinclude.m4)
 AC_CONFIG_AUX_DIR(tools)
 AC_CONFIG_HEADER(include/config.h)
 AC_ARG_PROGRAM
@@ -20,8 +20,10 @@ date_fr=`LANG=fr_FR date -d $datemark +'%d %B %Y'`
 dnl
 PACKAGE=AC_PACKAGE_NAME
 VERSION=AC_PACKAGE_VERSION
-AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
-AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE",
+		   [Define to the name of the distribution.])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION",
+		   [Define to the version of the distribution.])
 AC_SUBST(PACKAGE)dnl
 AC_SUBST(VERSION)dnl
 dnl
@@ -49,7 +51,8 @@ AC_ARG_ENABLE(debug,
 	  debug=on],
 	 [: ${CFLAGS=-g -O2 -Wall}
 	  : ${LIBS=-lc}
-	  AC_DEFINE(NDEBUG)
+	  AC_DEFINE(NDEBUG, 1,
+		    [Define if you want to remove debugging assertions.])
 	  debug=off])
 AC_ARG_ENABLE(setuid,
 [  --enable-setuid[=ARG]	  install man setuid to user ARG @<:@ARG=man@:>@
@@ -67,7 +70,8 @@ AC_ARG_ENABLE(setuid,
 		man_owner=$enableval
 		man_install_flags="-m 4755 -o $man_owner"
 		MAN_ECHO("Man will be installed setuid $enableval")
-	   	AC_DEFINE_UNQUOTED(SECURE_MAN_UID, "$man_owner")
+	   	AC_DEFINE_UNQUOTED(SECURE_MAN_UID, "$man_owner",
+				   [Define as the setuid owner of man or undefine if not installing setuid.])
 	   fi],
 	  [man_owner=man
 	   man_install_flags="-m 4755 -o man"
@@ -169,12 +173,12 @@ dnl		nroff="$nroff ${man_cv_prog_nroff_macro}${nroff_device}"
 else
 	AC_MSG_WARN(Cannot find an nroff-like program, formatting of manual page source will not be supported.)
 	nroff="(nroff not installed)"
-	AC_DEFINE(NROFF_MISSING)
+	AC_DEFINE(NROFF_MISSING, 1, [Define if you don't have nroff.])
 fi
 AC_PATH_PROGS(troff, groff)
 if test "$troff"
 then
-	AC_DEFINE(TROFF_IS_GROFF)
+	AC_DEFINE(TROFF_IS_GROFF, 1, [Define if you are using groff as troff.])
 	TROFF=groff
 else
 	AC_PATH_PROGS(troff, troff gtroff)
@@ -182,7 +186,7 @@ else
 fi
 if test "$troff"
 then
-	AC_DEFINE(HAS_TROFF)
+	AC_DEFINE(HAS_TROFF, 1, [Define if you have troff.])
 	AC_MSG_CHECKING(for appropriate $TROFF options)
 	AC_CACHE_VAL(man_cv_prog_troff_options, [
 dnl	
@@ -256,8 +260,8 @@ then
 fi
 if test "$gzip" || test "$compress" || test "$bzip2"
 then
-	AC_DEFINE(COMP_CAT)
-	AC_DEFINE(COMP_SRC)
+	AC_DEFINE(COMP_CAT, 1, [Define if you have compressors and want to support compressed cat files.])
+	AC_DEFINE(COMP_SRC, 1, [Define if you have compressors and want to support compressed manual source.])
 fi
 AC_SUBST(compressor)dnl
 AC_SUBST(compress_ext)dnl
@@ -274,7 +278,8 @@ AC_ARG_ENABLE(mandirs,
 [  --enable-mandirs=OS	  select manual page hierarchy organization
                           (GNU, HPUX, Solaris, IRIX)],
 	[MAN_ECHO("Using hierarchy organization(s) $enableval")
-	 AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$enableval")],
+	 AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$enableval",
+			    [Define to the manual page hierarchy organization(s) in use.])],
 	[MAN_ECHO("Allowing any hierarchy organization")
 	 AC_DEFINE(MANDIR_LAYOUT, "")])
 dnl
@@ -322,8 +327,10 @@ dnl Check for Berkeley db routines (first version API)
 dnl
 if test "$db" = "no" || test "$db" = "db3" || test "$db" = "db"; then
 MAN_CHECK_BDB([db_185.h db3/db_185.h], [db3],
-              [AC_DEFINE_UNQUOTED([BDB_H], [<$head>])
-               AC_DEFINE_UNQUOTED([BTREE], [$lib])
+              [AC_DEFINE_UNQUOTED([BDB_H], [<$head>],
+				  [Define if you have, and want to use, Berkeley database header files.])
+               AC_DEFINE_UNQUOTED([BTREE], [$lib],
+				  [Define if you have, and want to use, the Berkeley database library.])
               ])
 fi
 dnl
@@ -375,9 +382,10 @@ then
   AC_CHECK_HEADER(gdbm.h,[
     for lib in gdbm c dbm
     do
-      AC_CHECK_LIB($lib, gdbm_fetch, test "$lib" = "c" || LIBS="$LIBS -l$lib" 
-                                     [AC_DEFINE(GDBM)]
-                                     db=yes, db=no)
+      AC_CHECK_LIB($lib, gdbm_fetch,
+		   test "$lib" = "c" || LIBS="$LIBS -l$lib" 
+		   [AC_DEFINE(GDBM, 1, [Define if you have, and want to use, gdbm interface routines.])]
+		   db=yes, db=no)
       if test "$db" = "yes" 
       then
 dnl Need to explicitly check for some routines, rather than using 
@@ -395,9 +403,10 @@ then
   AC_CHECK_HEADER(ndbm.h,[
     for lib in ndbm c dbm
     do
-      AC_CHECK_LIB($lib, dbm_fetch, test "$lib" = "c" || LIBS="$LIBS -l$lib"
-      				    [AC_DEFINE(NDBM)]
-				    db=yes, db=no)
+      AC_CHECK_LIB($lib, dbm_fetch,
+		   test "$lib" = "c" || LIBS="$LIBS -l$lib"
+		   [AC_DEFINE(NDBM, 1, [Define if you have, and want to use, ndbm interface routines.])]
+		   db=yes, db=no)
       test "$db" = "yes" && break
       done], db=no)
 fi 
@@ -426,14 +435,19 @@ dnl
 dnl I think it's reasonable to assume that the system has the following 
 dnl headers if the (POSIXy) functions exist.
 dnl 
-AC_CHECK_FUNC(regcomp, [AC_DEFINE(POSIX_REGEX)],
-  [AC_CHECK_FUNC(re_comp, [AC_DEFINE(BSD_REGEX)],
+AC_CHECK_FUNC(regcomp, [AC_DEFINE(POSIX_REGEX, 1, [Define if you have the regcomp and regexec POSIX regex routines.])],
+  [AC_CHECK_FUNC(re_comp, [AC_DEFINE(BSD_REGEX, 1, [Define if you have the re_comp and re_exec BSD regex routines.])],
     [AC_MSG_WARN(no regex routines found, whatis/apropos will ignore -r)])])
-AC_CHECK_FUNC(fnmatch, [AC_DEFINE(HAVE_FNMATCH_H)], [AC_LIBOBJ([fnmatch])])
-AC_CHECK_FUNC(globfree, [AC_DEFINE(HAVE_GLOB_H)], [AC_LIBOBJ([glob])])
-AC_CHECK_FUNC(getopt_long, [AC_DEFINE(HAVE_GETOPT_H)],
-  [AC_LIBOBJ([getopt])
-   AC_LIBOBJ([getopt1])])
+AC_CHECK_FUNC(fnmatch,
+	      [AC_DEFINE(HAVE_FNMATCH_H, 1, [Define if using <fnmatch.h> rather than "lib/fnmatch.h".])],
+	      [AC_LIBOBJ([fnmatch])])
+AC_CHECK_FUNC(globfree,
+	      [AC_DEFINE(HAVE_GLOB_H, 1, [Define if using <glob.h> rather than "lib/glob.h".])],
+	      [AC_LIBOBJ([glob])])
+AC_CHECK_FUNC(getopt_long,
+	      [AC_DEFINE(HAVE_GETOPT_H, 1, [Define if using <getopt.h> rather than "lib/getopt.h".])],
+	      [AC_LIBOBJ([getopt])
+	       AC_LIBOBJ([getopt1])])
 AC_REPLACE_FUNCS(flock putenv realpath rename basename waitpid strstr strsep strcspn strspn strnlen mkdtemp mkstemp)
 dnl
 MAN_ECHO_VAR(CC)

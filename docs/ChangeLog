@@ -1,3 +1,14 @@
+Thu Nov 14 04:10:44 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* acinclude.m4, configure.in: Include documentation in all calls to
+	  AC_DEFINE and AC_DEFINE_UNQUOTED. Look for acinclude.m4 in
+	  AC_CONFIG_SRCDIR rather than acconfig.h.
+	* acconfig.h: Remove; the above makes it unnecessary.
+	* GNUmakefile.in: Remove acconfig.h from stamp-h.in's dependencies.
+
+	* autogen.sh: Run autopoint, not gettextize. autogen.sh no longer
+	  takes an optional --copy argument.
+
 Thu Nov 14 04:06:41 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* po/.cvsignore: Add messages.mo and remove-potcdate.sed.
