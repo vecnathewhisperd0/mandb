@@ -260,16 +260,23 @@ static char *get_whatis (struct mandata *info, const char *page)
 static void display (struct mandata *info, char *page)
 {
 	char *string, *whatis;
-	
+	const char *page_name;
+
 	whatis = get_whatis (info, page);
 	
 	if (debug)
 		dbprintf (info);
 
-	if (*(info->pointer) == '-' || STREQ (info->pointer, page))
-		string = strappend (NULL, page, " (", info->ext, ")", NULL);
+	if (STREQ (info->name, "-"))
+		page_name = page;
 	else
-		string = strappend (NULL, page, " (", info->ext, ") [",
+		page_name = info->name;
+
+	if (STREQ (info->pointer, "-") || STREQ (info->pointer, page))
+		string = strappend (NULL, page_name, " (", info->ext, ")",
+				    NULL);
+	else
+		string = strappend (NULL, page_name, " (", info->ext, ") [",
 				    info->pointer, "]", NULL);
 
 	if (strlen (string) < (size_t) 20)
