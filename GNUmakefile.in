@@ -132,6 +132,7 @@ __clean: __mostlyclean
 __distclean: __clean
 	rm -f $(INCLUDES) include/Defines GNUmakefile makefile
 	rm -f include/Defines.old config.status config.cache config.log stamp-h
+	rm -rf autom4te.cache
 
 __realclean: __distclean
 	rm -f configure tags ID
