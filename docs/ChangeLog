@@ -1,3 +1,19 @@
+Mon May 28 14:30:38 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* tools/README: Describe chconfig and install-manpage.
+	* man/man5/manpath.man5, docs/ToDo: Document the DEFINE directive.
+
+	* libdb/db_delete.c, libdb/db_lookup.c, libdb/db_store.c,
+	  src/whatis.c: Remove redundant strtok() declaration.
+	* src/check_mandirs.c: Declare strpbrk().
+
+	* src/*: Global style cleanup. Sorry about the large diff, but it
+	  had to happen sometime: I can't stick with the prevailing coding
+	  style when there are several to choose from! No meaningful code
+	  change, although I disentangled a few assignments from if
+	  conditions and rearranged a few other sections.
+	* po/*: Update accordingly.
+
 Sun May 27 18:32:41 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* acinclude.m4 (MAN_CHECK_BDB): New macro to check for Berkeley DB.

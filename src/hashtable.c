@@ -48,7 +48,7 @@ static int unique;				/* unique hash values */
 static int identical;				/* identical hash values */
 
 /* return hash value for string */
-static unsigned hash(char *s)
+static unsigned hash (char *s)
 {
 	unsigned hashval = 0;
 
@@ -57,46 +57,47 @@ static unsigned hash(char *s)
 		hashval = *s++ + 31 * hashval;
 	return hashval % HASHSIZE;
 #elif defined(PROLOGUE)
-		hashval = (hashval<<1) + *s++;
+		hashval = (hashval << 1) + *s++;
 	return hashval & (HASHSIZE - 1);
 #endif
 }
 
 /* return pointer to structure containing defn, else NULL if it 
    doesn't exist */
-struct nlist *lookup(char *s)
+struct nlist *lookup (char *s)
 {
 	struct nlist *np;
 	
 	for (np = hashtab[hash(s)]; np; np = np->next) {
-		if (strcmp(s, np->name) == 0)
+		if (strcmp (s, np->name) == 0)
 			return np;
 	}
 	return NULL;
 }
 
 /* free the defn ptr's contents (if not NULL) */
-static __inline__ void free_defn(struct nlist *np)
+static __inline__ void free_defn (struct nlist *np)
 {
 	if (np->defn) {
 		if (np->is_text)
-			free(np->defn);
+			free (np->defn);
 	 	else
-			free_mandata_struct(np->defn);
+			free_mandata_struct (np->defn);
 	}
 }
 	
 /* return struct containing defn or NULL if unable to store */
-static struct nlist *install(char *name, void *defn, int flag)
+static struct nlist *install (char *name, void *defn, int flag)
 {
 	struct nlist *np;
-	
-	if ((np = lookup(name)) == NULL) {
+
+	np = lookup (name);
+	if (np == NULL) {
 		unsigned hashval;
-		
-		np = (struct nlist *) xmalloc (sizeof(struct nlist));
-		np->name = xstrdup(name);
-		hashval = hash(name);
+
+		np = (struct nlist *) xmalloc (sizeof (struct nlist));
+		np->name = xstrdup (name);
+		hashval = hash (name);
 
 		/* record uniqueness if debugging */
 		if (debug) {
@@ -112,7 +113,7 @@ static struct nlist *install(char *name, void *defn, int flag)
 		/* attach to hashtab array */
 		hashtab[hashval] = np;
 	} else
-		free_defn(np);
+		free_defn (np);
 
 	np->defn = defn;
 	np->is_text = flag;
@@ -121,27 +122,29 @@ static struct nlist *install(char *name, void *defn, int flag)
 }
 
 /* special wrapper to insert a string or NULL */
-struct nlist *install_text(char *name, char *text)
+struct nlist *install_text (char *name, char *text)
 {
-	return install(name, text ? xstrdup(text) : text, 1);
+	return install (name, text ? xstrdup(text) : text, 1);
 }
 
 /* special wrapper to insert a ptr to in core mandata struct linked list */
-struct nlist *install_db_ptr(char *name, struct mandata *db_ptr)
+struct nlist *install_db_ptr (char *name, struct mandata *db_ptr)
 {
-	return install(name, db_ptr, 0);
+	return install (name, db_ptr, 0);
 }
 
 /* free up the hash tree (garbage collect), also free up any xstrdup()'d text
    or mandata structures */
-void free_hashtab(void)
+void free_hashtab (void)
 {
 	int i;
 
 	if (debug) {
-		fprintf(stderr, "free_hashtab: %d entries, %d (%d%%) unique\n", 
-		        unique + identical,
-		        unique, unique ? (unique * 100) / (unique + identical) : 0 );
+		fprintf (stderr,
+			 "free_hashtab: %d entries, %d (%d%%) unique\n", 
+		         unique + identical,
+		         unique,
+			 unique ? (unique * 100) / (unique + identical) : 0);
 		unique = identical = 0;
 	}
 
@@ -152,10 +155,10 @@ void free_hashtab(void)
 		while (np) {
 			struct nlist *next;
 
-			free_defn(np);
-			free(np->name);
+			free_defn (np);
+			free (np->name);
 			next = np->next;
-			free(np);
+			free (np);
 			np = next;
 		}
 		hashtab[i] = NULL;

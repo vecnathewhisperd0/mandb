@@ -72,9 +72,9 @@ static char *temp_name;
 static char *catdir, *mandir;
 
 /* prototype here as it uses struct mandata which is defined in db_storage.h */
-extern int splitline(char *raw_whatis, struct mandata *info, char *base_name);
+extern int splitline (char *raw_whatis, struct mandata *info, char *base_name);
 
-static __inline__ int check_for_stray(void)
+static __inline__ int check_for_stray (void)
 {
 	DIR *cdir;
 	struct dirent *catlist;
@@ -86,18 +86,19 @@ static __inline__ int check_for_stray(void)
 #else
 	char fullpath[PATH_MAX];
 #endif
-	
-	if ( !(cdir = opendir(catdir))) {
-		error (0, errno, _( "can't search directory %s"), catdir);
+
+	cdir = opendir (catdir);
+	if (!cdir) {
+		error (0, errno, _("can't search directory %s"), catdir);
 		return 0;
 	}
 
-	mandir = strappend(mandir, "/", NULL);
-	catdir = strappend(catdir, "/", NULL);
-	lenman = strlen(mandir);
-	lencat = strlen(catdir);
-		
-	while ((catlist = readdir(cdir))) {
+	mandir = strappend (mandir, "/", NULL);
+	catdir = strappend (catdir, "/", NULL);
+	lenman = strlen (mandir);
+	lencat = strlen (catdir);
+
+	while ((catlist = readdir (cdir))) {
 		struct mandata info;
 		char *ext, *section;
 		short found;
@@ -107,25 +108,28 @@ static __inline__ int check_for_stray(void)
 #endif
 		
 		if (*catlist->d_name == '.' && 
-		     strlen(catlist->d_name) < (size_t) 3)
+		    strlen (catlist->d_name) < (size_t) 3)
 			continue;
 
 		*(mandir + lenman) = *(catdir + lencat) = '\0';
-		mandir = strappend(mandir, catlist->d_name, NULL);
-		catdir = strappend(catdir, catlist->d_name, NULL);
+		mandir = strappend (mandir, catlist->d_name, NULL);
+		catdir = strappend (catdir, catlist->d_name, NULL);
 
-		ext = strrchr(mandir, '.');
+		ext = strrchr (mandir, '.');
 		if (!ext) {
 			if (quiet < 2)
-				error (0, 0, _( "warning: %s: ignoring bogus filename"), catdir);
+				error (0, 0,
+				       _("warning: %s: "
+					 "ignoring bogus filename"),
+				       catdir);
 			continue;
-			
+
 #if defined(COMP_SRC) || defined(COMP_CAT)
 
 #  if defined(COMP_SRC)
-		} else if (comp_info(ext)) {
+		} else if (comp_info (ext)) {
 #  elif defined(COMP_CAT)
-		} else if (strcmp(ext + 1, COMPRESS_EXT) == 0) {
+		} else if (strcmp (ext + 1, COMPRESS_EXT) == 0) {
 #  endif /* COMP_* */
 			*ext = '\0';
 			info.comp = ext + 1;
@@ -133,22 +137,25 @@ static __inline__ int check_for_stray(void)
 
 		} else
 			info.comp = NULL;
-			
-		ext = strrchr(mandir, '.');
+
+		ext = strrchr (mandir, '.');
 		*(mandir + lenman - 1) = '\0';
-		section = xstrdup(strrchr(mandir, '/') + 4);
+		section = xstrdup (strrchr (mandir, '/') + 4);
 		*(mandir + lenman - 1) = '/';
 
 		/* check for bogosity */
 		
-		if (!ext || strncmp(ext + 1, section, strlen(section)) != 0) {
+		if (!ext || strncmp (ext + 1, section, strlen (section)) != 0) {
 			if (quiet < 2)
-				error (0, 0, _( "warning: %s: ignoring bogus filename"), catdir);
-			free(section);
+				error (0, 0,
+				       _("warning: %s: "
+					 "ignoring bogus filename"),
+				       catdir);
+			free (section);
 			continue;
 		}
 
-		/* 
+		/*
 		 * now that we've stripped off the cat compression
 		 * extension (if it has one), we can try some of ours.
 		 */
@@ -156,19 +163,19 @@ static __inline__ int check_for_stray(void)
 		if (debug)
 			fprintf(stderr, "Testing for existence: %s\n", mandir);
 
-		if (stat(mandir, &buf) == 0) 
+		if (stat (mandir, &buf) == 0) 
 			found = 1;
 #ifdef COMP_SRC 
-		else if ( (comp = comp_file(mandir)) ) {
+		else if ((comp = comp_file (mandir))) {
 			found = 1;
-			free(comp->file);
+			free (comp->file);
 		}
 #endif
 		else 
 			found = 0;
-			
+
 		if (!found) { 
-			char *filter=0;
+			char *filter = NULL;
 			struct mandata *exists;
 			lexgrog lg;
 
@@ -181,20 +188,20 @@ static __inline__ int check_for_stray(void)
 
 			/* see if we already have it, before going any 
 			   further */
-			exists = dblookup_exact(basename(mandir), info.ext);
+			exists = dblookup_exact (basename (mandir), info.ext);
 #ifndef FAVOUR_STRAYCATS
 			if (exists && exists->id != WHATIS_CAT) {
 #else /* FAVOUR_STRAYCATS */
 			if (exists && exists->id != WHATIS_CAT &&
 			    exists->id != WHATIS_MAN) {
 #endif /* !FAVOUR_STRAYCATS */
-				free_mandata_struct(exists);
-				free(section);
+				free_mandata_struct (exists);
+				free (section);
 				continue;
 			}
 			if (debug)
-				fprintf(stderr, "%s(%s) is not in the db.\n",
-					basename(mandir), info.ext);
+				fprintf (stderr, "%s(%s) is not in the db.\n",
+					 basename (mandir), info.ext);
 
 			/* fill in the missing parts of the structure */
 			info.sec = section;
@@ -205,115 +212,124 @@ static __inline__ int check_for_stray(void)
 			/* Check to see how to filter the cat file */
 #if defined(COMP_SRC)
 			if (info.comp)
-				filter = strappend(NULL, 
-					           comp_info(catdir)->prog, " ",
-					           catdir, " | ",
-					           get_def("col", COL), "-bx > ",
-					           temp_name, NULL);
+				filter = strappend (NULL, 
+						    comp_info(catdir)->prog,
+						    " ", catdir, " | ",
+						    get_def("col", COL),
+						    "-bx > ", temp_name, NULL);
 			else
 #elif defined (COMP_CAT)
 			if (info.comp)
-				filter = strappend(NULL, get_def("decompressor", DECOMPRESSOR),
-						   " ",
-						   catdir, " | ",
-						   get_def("col", COL), "-bx > ",
-						   temp_name, NULL);
+				filter = strappend (NULL,
+						    get_def("decompressor",
+							    DECOMPRESSOR),
+						    " ", catdir, " | ",
+						    get_def("col", COL),
+						    "-bx > ", temp_name, NULL);
 			else
 #endif /* COMP_* */
-				filter = strappend(NULL, get_def("col", COL), 
-						   "-bx < ",
-						   catdir, " > ", temp_name,
-						   NULL);
+				filter = strappend (NULL, get_def("col", COL), 
+						    "-bx < ", catdir, " > ",
+						    temp_name, NULL);
 
-#ifdef HAVE_CANONICALIZE_FILE_NAME                                                                  
-			if ( !(fullpath = canonicalize_file_name(catdir)) ) {
+#ifdef HAVE_CANONICALIZE_FILE_NAME
+			fullpath = canonicalize_file_name (catdir);
+			if (fullpath) {
 				if (quiet < 2)
-					error (0, errno, _( "can't resolve %s"), catdir);
+					error (0, errno,
+					       _("can't resolve %s"), catdir);
 			} else
-#else                  
-			if (realpath(catdir, fullpath) == NULL) {
+#else
+			if (realpath (catdir, fullpath) == NULL) {
 				if (quiet < 2)
 					if (errno == ENOENT)
-						error (0, 0, _( "warning: %s is a dangling symlink"), fullpath);
+						error (0, 0, _("warning: %s is a dangling symlink"), fullpath);
 					else
-						error (0, errno, _( "can't resolve %s"), fullpath);
+						error (0, errno,
+						       _("can't resolve %s"),
+						       fullpath);
 				}
 			} else 
 #endif
 			{
-#ifdef HAVE_CANONICALIZE_FILE_NAME                                                                  
-				free(fullpath);                                                      
+#ifdef HAVE_CANONICALIZE_FILE_NAME
+				free (fullpath);
 #endif
-				if (do_system(filter) != 0) {
-					remove(temp_name);
-					perror(filter);
+				if (do_system (filter) != 0) {
+					remove (temp_name);
+					perror (filter);
 					exit (CHILD_FAIL);
 				}
 
 				strays++;
-				
+
 				lg.type = CATPAGE;
-				if ( ! find_name(temp_name, basename(catdir), &lg) )
+				if (!find_name (temp_name, basename (catdir),
+						&lg))
 					if (quiet < 2)
-						error (0, 0, _( "warning: %s: whatis parse for %s(%s) failed"),
-						       catdir, basename(mandir), info.sec);
+						error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
+						       catdir,
+						       basename (mandir),
+						       info.sec);
 
-				(void) splitline( lg.whatis, &info, basename(mandir));
+				(void) splitline (lg.whatis, &info,
+						  basename (mandir));
 			}
-			
-			free(filter);
 
-			if ( lg.whatis)
-				free( lg.whatis);
-		} 
-		free(section);
+			free (filter);
+
+			if (lg.whatis)
+				free (lg.whatis);
+		}
+		free (section);
 	}
-	closedir(cdir);
+	closedir (cdir);
 	return strays;
 }
 
-static int open_catdir(void)
+static int open_catdir (void)
 {
 	DIR *cdir;
 	struct dirent *catlist;
 	size_t catlen, manlen;
 	int strays = 0;
 
-	if ( !(cdir = opendir(catdir))) {
-		error (0, errno, _( "can't search directory %s"), catdir);
+	cdir = opendir (catdir);
+	if (!cdir) {
+		error (0, errno, _("can't search directory %s"), catdir);
 		return 0;
 	}
 
 	if (!quiet)
-		printf(_( "Checking for stray cats under %s...\n"), catdir);
+		printf (_("Checking for stray cats under %s...\n"), catdir);
 
-	catdir = strappend(catdir, "/", NULL);
-	mandir = strappend(mandir, "/", NULL);
-	catlen = strlen(catdir);
-	manlen = strlen(mandir);
-		
+	catdir = strappend (catdir, "/", NULL);
+	mandir = strappend (mandir, "/", NULL);
+	catlen = strlen (catdir);
+	manlen = strlen (mandir);
+
 	/* should make this case insensitive */
-	while ((catlist = readdir(cdir))) {
+	while ((catlist = readdir (cdir))) {
 		char *t1;
 
-		if (strncmp(catlist->d_name, "cat", 3) != 0)
+		if (strncmp (catlist->d_name, "cat", 3) != 0)
 			continue;
 
-		catdir = strappend(catdir, catlist->d_name, NULL);
-		mandir = strappend(mandir, catlist->d_name, NULL);
+		catdir = strappend (catdir, catlist->d_name, NULL);
+		mandir = strappend (mandir, catlist->d_name, NULL);
 
 		*(t1 = mandir + manlen) = 'm';
 		*(t1 + 2) = 'n';
-		
-		strays += check_for_stray();
+
+		strays += check_for_stray ();
 
 		*(catdir + catlen) = *(mandir + manlen) = '\0';
 	}
-	closedir(cdir);
+	closedir (cdir);
 	return strays;
 }
 
-int straycats(char *manpath)
+int straycats (char *manpath)
 {
 	char *catpath;
 	int strays;
@@ -321,53 +337,60 @@ int straycats(char *manpath)
 	if (!temp_name) {
 		int fd;
 
-		if ( !(temp_name=xstrdup("/tmp/zcatXXXXXX")) )
+		temp_name = xstrdup ("/tmp/zcatXXXXXX");
+		if (!temp_name)
 			return 0;
-		if ( (fd = mkstemp(temp_name)) == -1) {
-			error (0, errno, _( "warning: can't create temp file %s"), temp_name);
+		fd = mkstemp (temp_name);
+		if (fd == -1) {
+			error (0, errno,
+			       _("warning: can't create temp file %s"),
+			       temp_name);
 			return 0;
 		}
-		close( fd);
+		close (fd);
 	}
-	
-	dbf = MYDBM_RWOPEN(database);
-	if (dbf && dbver_rd(dbf)) {
-		MYDBM_CLOSE(dbf);
+
+	dbf = MYDBM_RWOPEN (database);
+	if (dbf && dbver_rd (dbf)) {
+		MYDBM_CLOSE (dbf);
 		dbf = NULL;
 	}
 	if (!dbf) {
-		error (0, errno, _( "warning: can't update index cache %s"), database);
+		error (0, errno, _("warning: can't update index cache %s"),
+		       database);
 		return 0;
 	}
-	
-	catpath = global_catpath(manpath);
-	
+
+	catpath = global_catpath (manpath);
+
 	/* look in the usual catpath location */
-	mandir = xstrdup(manpath);
-	catdir = xstrdup(manpath);
-	strays = open_catdir(); 
+	mandir = xstrdup (manpath);
+	catdir = xstrdup (manpath);
+	strays = open_catdir (); 
 
 	/* look in the alternate catpath location if we have one 
 	   and it's different from the usual catpath */
-	
+
 	if (debug && catpath)
-		fprintf(stderr, "catpath: %s, manpath: %s\n", catpath, manpath);
+		fprintf (stderr, "catpath: %s, manpath: %s\n",
+			 catpath, manpath);
 		
-	if (catpath && strcmp(catpath, manpath) != 0) {
+	if (catpath && strcmp (catpath, manpath) != 0) {
 		*mandir = *catdir = '\0';
-		mandir = strappend(mandir, manpath, NULL);
-		catdir = strappend(catdir, catpath, NULL);
-		strays += open_catdir();
+		mandir = strappend (mandir, manpath, NULL);
+		catdir = strappend (catdir, catpath, NULL);
+		strays += open_catdir ();
 	}
 
-	free(mandir);
-	free(catdir);
+	free (mandir);
+	free (catdir);
 
 	if (catpath)
-		free(catpath);
+		free (catpath);
 
-	MYDBM_CLOSE(dbf);
+	MYDBM_CLOSE (dbf);
 	remove (temp_name);
-	free(temp_name); temp_name = NULL;
+	free (temp_name);
+	temp_name = NULL;
 	return strays;
 }

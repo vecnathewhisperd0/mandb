@@ -50,26 +50,26 @@ extern int errno;
 #include "comp_src.h"
 
 static char *file;	/* pointer to temp file name */
-static int file_fd= -1;
+static int file_fd = -1;
 
 /* initialise temp filename */
-static __inline__ void create_ztemp(void)
+static __inline__ void create_ztemp (void)
 {
-	int oldmask=umask(022);
-	drop_effective_privs();
+	int oldmask = umask (022);
+	drop_effective_privs ();
 	errno = 0;		/* failing tempnam() might fail to set errno */
-	file = tempnam(NULL, "zman");
+	file = tempnam (NULL, "zman");
 
 	if (file) {
-		unlink( file);	/* remove a malicious dangling symlink */
-		file_fd = open(file, O_WRONLY|O_CREAT|O_EXCL, 0644);
+		unlink (file);	/* remove a malicious dangling symlink */
+		file_fd = open (file, O_WRONLY | O_CREAT | O_EXCL, 0644);
 	}
 
-	if (!file || (file_fd < 0))
-		error (FATAL, errno, _( "can't create a temporary filename"));
-	regain_effective_privs();
-	umask(oldmask);
-	atexit( remove_ztemp);
+	if (!file || file_fd < 0)
+		error (FATAL, errno, _("can't create a temporary filename"));
+	regain_effective_privs ();
+	umask (oldmask);
+	atexit (remove_ztemp);
 }
 
 /* Take filename as arg, return structure containing decompressor 
@@ -84,46 +84,47 @@ static __inline__ void create_ztemp(void)
    	comp->ext = "gz";
    	comp->file = filename + 19;				
  */
-struct compression *comp_info(char *filename)
+struct compression *comp_info (char *filename)
 {
 	char *ext;
 	static char buff[10];
-	static struct compression hpux_comp = {GUNZIP "  -S \"\"", "", buff};
+	static struct compression hpux_comp = {GUNZIP " -S \"\"", "", buff};
 
-	ext = strrchr(filename, '.');
-	
+	ext = strrchr (filename, '.');
+
 	if (ext) {
 		struct compression *comp;
 		ext++;
 		for (comp = comp_list; comp->ext; comp++) {
-			if (strcmp(comp->ext, ext) == 0) {
+			if (strcmp (comp->ext, ext) == 0) {
 				comp->file = --ext;
 				return comp;
 			}
 		}
 	}
-	ext = strstr(filename, ".Z/");
-	if (ext) return &hpux_comp;
+	ext = strstr (filename, ".Z/");
+	if (ext)
+		return &hpux_comp;
 	return NULL;
 }
 
 /* take filename w/o comp ext. as arg, return comp->file as a relative
    compressed file or NULL if none found */
-struct compression *comp_file(char *filename)
+struct compression *comp_file (char *filename)
 {
 	size_t len;
 	char *compfile;
 	struct compression *comp;
 
-	compfile = strappend(NULL, filename, ".", NULL);
-	len = strlen(compfile);
+	compfile = strappend (NULL, filename, ".", NULL);
+	len = strlen (compfile);
 	
 	for (comp = comp_list; comp->ext; comp++) {
 		struct stat buf;
 		
-		compfile = strappend(compfile, comp->ext, NULL);
+		compfile = strappend (compfile, comp->ext, NULL);
 
-		if (stat(compfile, &buf) == 0) {
+		if (stat (compfile, &buf) == 0) {
 			comp->file = compfile;
 			return comp;
 		}
@@ -134,7 +135,7 @@ struct compression *comp_file(char *filename)
 }
 
 /* set up a pointer to a unique temp filename on first call */
-char *decompress(char *filename, struct compression *comp)
+char *decompress (char *filename, struct compression *comp)
 {
 	char *command;
 	int status;
@@ -146,14 +147,15 @@ char *decompress(char *filename, struct compression *comp)
 		create_ztemp();
 
 	/* temporarily drop the debug flag, so that we can continue */
-	command = strappend(NULL, comp->prog, " ", filename,
-			    " > ", file, NULL);
+	command = strappend (NULL, comp->prog, " ", filename,
+			     " > ", file, NULL);
 	
 	if (debug) {
 #ifdef SECURE_MAN_UID
-		fputs("The following command done with dropped privs\n", stderr);
+		fputs ("The following command done with dropped privs\n",
+		       stderr);
 #endif /* SECURE_MAN_UID */
-		fprintf(stderr, "%s\n", command);
+		fprintf (stderr, "%s\n", command);
 	}
 
 #ifndef debug
@@ -165,28 +167,30 @@ char *decompress(char *filename, struct compression *comp)
 	debug = save_debug;
 #endif
 
-	free(command);
+	free (command);
 
 	if (status) {
-		(void) remove_with_dropped_privs(file);
-		free(file); file = NULL;
+		(void) remove_with_dropped_privs (file);
+		free (file);
+		file = NULL;
 		exit (CHILD_FAIL);
 	}
 	return file;
 }
 
 /* remove temporary file, drop privs if necessary */
-void remove_ztemp(void)
+void remove_ztemp (void)
 {
 	if (file) {
-		close( file_fd);
-		(void) remove_with_dropped_privs(file);
-		free(file); file = NULL;
+		close (file_fd);
+		(void) remove_with_dropped_privs (file);
+		free (file);
+		file = NULL;
 	}
 }
 
 /* return temporary filename */
-char *get_ztemp(void)
+char *get_ztemp (void)
 {	
 	return (file ? file : NULL);
 }

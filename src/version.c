@@ -23,10 +23,8 @@
 #include "lib/error.h"
 
 /* print the version message, then exit */
-void ver(void)
+void ver (void)
 {
-	printf(_( "%s, version %s, %s\n"),
-	       program_name, VERSION, DATE);
-	exit(OK);
+	printf (_("%s, version %s, %s\n"), program_name, VERSION, DATE);
+	exit (OK);
 }
-

@@ -26,7 +26,6 @@
 #elif defined(HAVE_STRINGS_H)
 #include <strings.h>
 #else /* no string(s) header file */
-extern char *strtok();
 extern char *strsep();
 #endif /* STDC_HEADERS */
 

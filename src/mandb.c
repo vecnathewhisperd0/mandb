@@ -140,10 +140,10 @@ extern int optind, opterr, optopt;
 extern char *manpathlist[];
 extern int pages;
 
-static void usage(int status)
+static void usage (int status)
 {
-	printf(_( "usage: %s [-dqsuc|-h|-V] [manpath]\n"), program_name);
-	printf(_(
+	printf (_("usage: %s [-dqsuc|-h|-V] [manpath]\n"), program_name);
+	printf (_(
 		"-d --debug                  produce debugging info.\n"
 		"-q --quiet                  work quietly, except for 'bogus' warning.\n"
 		"-s --no-straycats           don't look for or add stray cats to the dbs.\n"
@@ -157,54 +157,56 @@ static void usage(int status)
 }
 
 /* remove() with error checking */
-static __inline__ void xremove(const char *path)
+static __inline__ void xremove (const char *path)
 {
-	if (remove(path) == -1 && errno != ENOENT)
-		error(0, errno, _( "can't remove %s"), path);
+	if (remove (path) == -1 && errno != ENOENT)
+		error (0, errno, _("can't remove %s"), path);
 }
 
 /* rename() with error checking */
-static __inline__ void xrename(const char *from, const char *to)
+static __inline__ void xrename (const char *from, const char *to)
 {
-	if (rename(from, to) == -1 && errno != ENOENT) {
-		error(0, errno, _( "can't rename %s to %s"), from, to);
+	if (rename (from, to) == -1 && errno != ENOENT) {
+		error (0, errno, _("can't rename %s to %s"), from, to);
 		xremove (from);
 	}
 }
 
 /* CPhipps 2000/02/24 - Copy a file.
  * Still plenty of error handling could be added here. */
-static __inline__ void xcopy(const char *from, const char *to)
+static __inline__ void xcopy (const char *from, const char *to)
 {
-	FILE* ifp = fopen(from, "r");
-	FILE* ofp = fopen(to, "w");
+	FILE* ifp = fopen (from, "r");
+	FILE* ofp = fopen (to, "w");
 
 	if (!ifp || !ofp) {
-		if (ifp) fclose(ifp);
-		if (ofp) fclose(ofp);
-		perror("fopen");
+		if (ifp) fclose (ifp);
+		if (ofp) fclose (ofp);
+		perror ("fopen");
 		return;
 	}
 
-	while (!feof(ifp) && !ferror(ifp)) {
+	while (!feof (ifp) && !ferror (ifp)) {
 		char buf[1024];
-		size_t in = fread(buf, 1, sizeof(buf), ifp);
-		if (in > 0) fwrite(buf, 1, in, ofp);
+		size_t in = fread (buf, 1, sizeof (buf), ifp);
+		if (in > 0)
+			fwrite (buf, 1, in, ofp);
 	}
-	fclose(ifp); fclose(ofp);
+	fclose(ifp);
+	fclose(ofp);
 }
 
 /* chmod() with error checking */
-static __inline__ void xchmod(const char *path, mode_t mode)
+static __inline__ void xchmod (const char *path, mode_t mode)
 {
-	if (chmod(path, mode) == -1) {
-		error (0, errno, _( "can't chmod %s"), path);
+	if (chmod (path, mode) == -1) {
+		error (0, errno, _("can't chmod %s"), path);
 		xremove (path);
 	}
 }
 
 /* rename and chmod the database */
-static __inline__ void finish_up(void)
+static __inline__ void finish_up (void)
 {
 #ifdef NDBM
 #  ifdef BERKELEY_DB
@@ -221,19 +223,19 @@ static __inline__ void finish_up(void)
 	xchmod (xfile, DBMODE);
 #endif /* NDBM */
 }
-					
+
 #ifdef DO_CHOWN
 /* chown() with error checking */
-static __inline__ void xchown(const char *path, uid_t owner, uid_t group)
+static __inline__ void xchown (const char *path, uid_t owner, uid_t group)
 {
-	if (chown(path, owner, group) == -1) {
-		error (0, errno, _( "can't chown %s"), path);
+	if (chown (path, owner, group) == -1) {
+		error (0, errno, _("can't chown %s"), path);
 		xremove (path);
 	}
 }
 
 /* change the owner of global man databases */
-static __inline__ void do_chown(uid_t uid)
+static __inline__ void do_chown (uid_t uid)
 {
 #  ifdef NDBM
 #    ifdef BERKELEY_DB
@@ -247,16 +249,19 @@ static __inline__ void do_chown(uid_t uid)
 #  endif /* NDBM */
 }
 #endif /* DO_CHOWN */
-	
+
 /* dont actually create any dbs, just do an update */
-static __inline__ short update_db_wrapper(const char *manpath)
+static __inline__ short update_db_wrapper (const char *manpath)
 {
 	short amount;
 
-	amount = update_db(manpath);
-	return (amount != EOF ? amount : create_db(manpath));
+	amount = update_db (manpath);
+	if (amount != EOF)
+		return amount;
+
+	return create_db (manpath);
 }
-	
+
 /* remove incomplete databases */
 static void cleanup (void *dummy)
 {
@@ -273,38 +278,38 @@ static void cleanup (void *dummy)
 }
 
 /* sort out the database names */
-static short mandb(const char *catpath, const char *manpath)
+static short mandb (const char *catpath, const char *manpath)
 {
 	char pid[23];
 	short amount;
 	char *dbname;
 
-	dbname = mkdbname(catpath);
-	sprintf(pid, "%d", getpid());
-	database = strappend(NULL, catpath, "/", pid, NULL);
+	dbname = mkdbname (catpath);
+	sprintf (pid, "%d", getpid ());
+	database = strappend (NULL, catpath, "/", pid, NULL);
 	
 	if (!quiet) 
-		printf(_( "Processing manual pages under %s...\n"), manpath);
+		printf (_("Processing manual pages under %s...\n"), manpath);
 #ifdef NDBM
 #  ifdef BERKELEY_DB
-	dbfile = strappend(NULL, dbname, ".db", NULL);
-	tmpdbfile = strappend(NULL, database, ".db", NULL);
+	dbfile = strappend (NULL, dbname, ".db", NULL);
+	tmpdbfile = strappend (NULL, database, ".db", NULL);
 	if (create || opt_test) {
 		xremove (tmpdbfile);
-		amount = create_db(manpath);
+		amount = create_db (manpath);
 	} else {
 		xcopy (dbfile, tmpdbfile);
 		amount = update_db_wrapper (manpath);
 	}
 #  else /* !BERKELEY_DB NDBM */
-	dirfile = strappend(NULL, dbname, ".dir", NULL);
-	pagfile = strappend(NULL, dbname, ".pag", NULL);
-	tmpdirfile = strappend(NULL, database, ".dir", NULL);
-	tmppagfile = strappend(NULL, database, ".pag", NULL);
+	dirfile = strappend (NULL, dbname, ".dir", NULL);
+	pagfile = strappend (NULL, dbname, ".pag", NULL);
+	tmpdirfile = strappend (NULL, database, ".dir", NULL);
+	tmppagfile = strappend (NULL, database, ".pag", NULL);
 	if (create || opt_test) {
 		xremove (tmpdirfile);
 		xremove (tmppagfile);
-		amount = create_db(manpath);
+		amount = create_db (manpath);
 	} else {
 		xcopy (dirfile, tmpdirfile);
 		xcopy (pagfile, tmppagfile);
@@ -316,7 +321,7 @@ static short mandb(const char *catpath, const char *manpath)
 	xtmpfile = database;
 	if (create || opt_test) {
 		xremove (xtmpfile);
-		amount = create_db(manpath);
+		amount = create_db (manpath);
 	} else {
 		xcopy (xfile, xtmpfile);
 		amount = update_db_wrapper (manpath);
@@ -347,10 +352,10 @@ int main(int argc, char *argv[])
 	struct passwd *man_owner;
 #endif
 
-	program_name = xstrdup(basename((argv[0])));
+	program_name = xstrdup (basename (argv[0]));
 
 	/* initialise the locale */
-	locale = setlocale( LC_ALL, "");
+	locale = setlocale (LC_ALL, "");
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 
@@ -398,9 +403,9 @@ int main(int argc, char *argv[])
 
 #ifdef __profile__
 #  ifdef HAVE_GETCWD
-	if (!getcwd(cwd, PATH_MAX - 1))
+	if (!getcwd (cwd, PATH_MAX - 1))
 #  else /* not HAVE_GETCWD */
-	if (!getwd(cwd))
+	if (!getwd (cwd))
 #  endif
 		cwd[0] = '\0';
 #endif /* __profile__ */
@@ -408,102 +413,106 @@ int main(int argc, char *argv[])
 
 #ifdef SECURE_MAN_UID
 	/* record who we are and drop effective privs for later use */
-	init_security();
+	init_security ();
 #endif /* SECURE_MAN_UID */
 
 #ifdef DO_CHOWN
-	if ( (man_owner = getpwnam(MAN_OWNER)) == NULL)
+	man_owner = getpwnam (MAN_OWNER);
+	if (man_owner == NULL)
 		error (FAIL, 0,
-		       _( "the setuid man user \"%s\" does not exist"), MAN_OWNER);
+		       _("the setuid man user \"%s\" does not exist"),
+		       MAN_OWNER);
 	if (!user && euid != man_owner->pw_uid)
 		user = 1;
 #endif /* DO_CHOWN */
 
 
 	/* This is required for global_catpath(), regardless */
-	manp = manpath(NULL);	/* also calls read_config_file() */
+	manp = manpath (NULL);	/* also calls read_config_file() */
 
-	if ( opt_test )
+	if (opt_test)
 		quiet = 1;
-	else if ( quiet_temp == 1 )
+	else if (quiet_temp == 1)
 		quiet = 2;
 	else
 		quiet = quiet_temp;
 
 	/* pick up the system manpath or use the supplied one */
 	if (argc != optind) {
-		free(manp);
+		free (manp);
 		manp = argv[optind];
 	} else if (!user) {
-		if ( (sys_manp = get_mandb_manpath()) ) {
-			free(manp);
+		sys_manp = get_mandb_manpath ();
+		if (sys_manp) {
+			free (manp);
 			manp = sys_manp;
 		} else
-			error (0, 0, _( "warning: no MANDB_MAP directives in %s, using your manpath"),
+			error (0, 0,
+			       _("warning: no MANDB_MAP directives in %s, "
+				 "using your manpath"),
 			       CONFIG_FILE);
 	}
 	
 	if (debug)
-		fprintf(stderr, "manpath=%s\n", manp);
+		fprintf (stderr, "manpath=%s\n", manp);
 
 	/* get the manpath as an array of pointers */
-	create_pathlist(xstrdup(manp), manpathlist); 
+	create_pathlist (xstrdup (manp), manpathlist); 
 
 	/* finished manpath processing, regain privs */
-	regain_effective_privs();
+	regain_effective_privs ();
 
 	for (mp = manpathlist; *mp; mp++) {
-		catpath = global_catpath(*mp);
+		catpath = global_catpath (*mp);
 		if (catpath) { 	/* system db */
-		/*	if (access(catpath, W_OK) == 0 && !user) { */
+		/*	if (access (catpath, W_OK) == 0 && !user) { */
 			if (!user) {
 				push_cleanup (cleanup, NULL);
 				amount += mandb (catpath, *mp);
 				if (check_for_strays)
-					strays += straycats(*mp);
+					strays += straycats (*mp);
 				if (!opt_test) {
-					finish_up();
+					finish_up ();
 #ifdef DO_CHOWN
 					if (euid == 0)
 						do_chown (man_owner->pw_uid);
 #endif
 				} else
-					cleanup(NULL);
-				pop_cleanup();
+					cleanup (NULL);
+				pop_cleanup ();
 			}
-			free(catpath);
+			free (catpath);
 		} else {	/* user db */
 			push_cleanup (cleanup, NULL);
-			drop_effective_privs();
+			drop_effective_privs ();
 			amount += mandb (*mp, *mp);
 			if (check_for_strays)
-				strays += straycats(*mp);
+				strays += straycats (*mp);
 			if (!opt_test)
-				finish_up();
+				finish_up ();
 			else
-				cleanup(NULL);
-			regain_effective_privs();
-			pop_cleanup();
+				cleanup (NULL);
+			regain_effective_privs ();
+			pop_cleanup ();
 		}
 
-		chkr_garbage_detector();
+		chkr_garbage_detector ();
 	}
 
 	if (!quiet) {
-		printf(_(
-		       "%d man subdirectories contained newer manual pages.\n"
-		       "%d manual pages "), 
-		       amount, pages);
+		printf (_(
+		        "%d man subdirectories contained newer manual pages.\n"
+		        "%d manual pages "), 
+		        amount, pages);
 		if (check_for_strays)
-			printf(_(
-			       "and %d stray cats "), strays);
-		puts(_( "were added."));
+			printf (_("and %d stray cats "), strays);
+		puts (_("were added."));
 	}
 
 #ifdef __profile__
 	/* For profiling */
 	if (cwd[0])
-		chdir(cwd);
+		chdir (cwd);
 #endif /* __profile__ */
 
 	exit (OK);

@@ -116,24 +116,26 @@ extern char *optarg;
 extern int optind, opterr, optopt;
 extern char *manpathlist[];
 
-static void usage(int status)
+static void usage (int status)
 {
-	printf(_( "usage: %s [-dhV] [-M manpath] [section] ...\n"), program_name);
-	printf(_(
+	printf (_("usage: %s [-dhV] [-M manpath] [section] ...\n"),
+		program_name);
+	printf (_(
 		"-d --debug                  produce debugging info.\n"
-		"-M --manpath path           set search path for manual pages to `path'.\n"
+		"-M --manpath path           set search path for manual pages "
+					    "to `path'.\n"
 		"-V --version                show version.\n"
-		"-h --help                   show this usage message.\n")
-	);
+		"-h --help                   show this usage message.\n"));
 
 	exit (status);
 }
 
 /* open db for reading, return 0 for success, errcode for failure */
-static int rdopen_db(void)
+static int rdopen_db (void)
 { 
-	if ( (dbf = MYDBM_RDOPEN(database)) == NULL ) {
-		error (0, errno, _( "cannot read database %s"), database);
+	dbf = MYDBM_RDOPEN (database);
+	if (dbf == NULL) {
+		error (0, errno, _("cannot read database %s"), database);
 		return 1;
 	}
 	return 0;
@@ -141,7 +143,7 @@ static int rdopen_db(void)
 
 /* fork() and execve() man with the appropriate catman args. 
    If we __inline__ this function, gcc v2.6.2 gives us `clobber' warnings ?? */
-static void catman(char *argp[], int arg_no)
+static void catman (char *argp[], int arg_no)
 {
 	pid_t child;
 	int status;
@@ -150,43 +152,44 @@ static void catman(char *argp[], int arg_no)
 	if (debug) { 	/* show us what the command is going to be :) */
 		char **p;
 
-		fputs("man command =", stderr);
+		fputs ("man command =", stderr);
 		for (p = argp; *p; p++)
-			fprintf(stderr, " %s", *p);
-		putc('\n', stderr);
+			fprintf (stderr, " %s", *p);
+		putc ('\n', stderr);
 		return;
 	}
 		
-	child = vfork();
+	child = vfork ();
 	if (child < 0)
-		error(FATAL, errno, _( "fork failed"));
+		error (FATAL, errno, _("fork failed"));
 	else if (child == 0) {
 		char *const envp[] = { NULL };
 
-		execve(MAN, argp, envp);
-		_exit(127);
+		execve (MAN, argp, envp);
+		_exit (127);
 	} 
 
 	do {			/* cope with non-restarting system calls */
 		res = waitpid (child, &status, 0);
 	} while ((res == -1) && (errno == EINTR));
 	if (res == -1)
-		error (FATAL, 0, _( "can't get man command's exit status"));
+		error (FATAL, 0, _("can't get man command's exit status"));
 	else if (status)
-		error (CHILD_FAIL, 0, _( "man command failed with exit status %d"), status);
+		error (CHILD_FAIL, 0,
+		       _("man command failed with exit status %d"), status);
 }
 
 /* accept key and a pointer to the array address that needs to be filled in,
    fill in address and return 1 if key.dptr can be freed otherwise 0 */ 
-static __inline__ int add_arg(datum key, char **argument)
+static __inline__ int add_arg (datum key, char **argument)
 {
     	char *tab;
 
-	tab = strrchr(key.dptr, '\t');
+	tab = strrchr (key.dptr, '\t');
 
 	if (tab && tab != key.dptr) {
 		*tab = '\0';
-		*argument = xstrdup(key.dptr);
+		*argument = xstrdup (key.dptr);
 		*tab = '\t';
 		return 1;
 	} 
@@ -196,36 +199,37 @@ static __inline__ int add_arg(datum key, char **argument)
 }
 
 /* simply close db, tidy up, call catman() and then free() the array */
-static void do_catman(char *argp[], int arg_no, int first_arg)
+static void do_catman (char *argp[], int arg_no, int first_arg)
 {
-	MYDBM_CLOSE(dbf);
+	MYDBM_CLOSE (dbf);
 
 	/* The last argument must be NULL */
 	argp[arg_no] = NULL;
 	
-	catman(argp, arg_no);
+	catman (argp, arg_no);
 
 	/* don't free the last entry, it's NULL */
 	/* don't free the last but one entry, it's our nextkey */
 	arg_no -= 2;
 
 	while (arg_no >= first_arg)
-			/* all db methods now free() */	
-			MYDBM_FREE(argp[arg_no--]);
+		/* all db methods now free() */	
+		MYDBM_FREE (argp[arg_no--]);
 }
 
 #ifdef BTREE
 /* we need to reset the cursor position after a reopen */
-static __inline__ void reset_cursor(datum key)
+static __inline__ void reset_cursor (datum key)
 {
 	int status;
 	DBT content; /* dummy */
 	
-	status = (dbf->seq)(dbf, (DBT *) &key, &content, R_CURSOR);
+	status = (dbf->seq) (dbf, (DBT *) &key, &content, R_CURSOR);
 	if (status == 1)
-		status = (dbf->seq)(dbf, (DBT *) &key, &content, R_LAST);
+		status = (dbf->seq) (dbf, (DBT *) &key, &content, R_LAST);
 	if (status == -1)
-		error(FATAL, errno, _( "unable to reset cursor position in %s"), database);
+		error (FATAL, errno,
+		       _("unable to reset cursor position in %s"), database);
 }
 #else /* !BTREE */
 #  define reset_cursor(key) 		/* nothing */
@@ -233,14 +237,14 @@ static __inline__ void reset_cursor(datum key)
 
 /* find all pages that are in the supplied manpath and section and that are
    ultimate source files. */
-static __inline__ int parse_for_sec(char *manpath, char *section)
+static __inline__ int parse_for_sec (char *manpath, char *section)
 {
 	char *argp[MAX_ARGS];
 	datum key;
 	size_t arg_size, initial_bit;
 	int arg_no = 0, message = 1, first_arg;
 	
-	if (rdopen_db() || dbver_rd(dbf))
+	if (rdopen_db () || dbver_rd (dbf))
 		return 1;
 		
 	argp[arg_no++] = "man"; 	/* Name of program */
@@ -251,7 +255,7 @@ static __inline__ int parse_for_sec(char *manpath, char *section)
 	if (locale) {
 		argp[arg_no++] = "-L";		/* locale option */
 		argp[arg_no++] = locale;	/* The locale */
-		initial_bit += sizeof "-L" + strlen(locale) + 1;
+		initial_bit += sizeof "-L" + strlen (locale) + 1;
 	} else
 		initial_bit = 0;
 
@@ -264,10 +268,10 @@ static __inline__ int parse_for_sec(char *manpath, char *section)
 	first_arg = arg_no;		/* first pagename argument */
 	
 	initial_bit = sizeof "man" + sizeof "-caM" + 
-		      strlen(manpath) + strlen(section) + 2;
+		      strlen (manpath) + strlen (section) + 2;
 
 	arg_size = initial_bit;
-	key = MYDBM_FIRSTKEY(dbf);
+	key = MYDBM_FIRSTKEY (dbf);
 
 	while (key.dptr != NULL) {
 		int free_key = 1;
@@ -276,35 +280,38 @@ static __inline__ int parse_for_sec(char *manpath, char *section)
 		if (*key.dptr != '$') { 
 			datum content;
 
-			content = MYDBM_FETCH(dbf, key);
+			content = MYDBM_FETCH (dbf, key);
 
 			if (!content.dptr)
-				error(FATAL, 0, _( "NULL content for key: %s"), key.dptr);
+				error (FATAL, 0,
+				       _( "NULL content for key: %s"),
+				       key.dptr);
 
 			/* ignore overflow entries */
 			if (*content.dptr != '\t') { 
 				struct mandata entry;
 
-				split_content(content.dptr, &entry);
+				split_content (content.dptr, &entry);
 				content.dptr = entry.addr;
 
 				/* Accept if the entry is an ultimate manual
 				   page and the section matches the one we're
 				   currently dealing with */
 				if (entry.id == ULT_MAN && 
-				    strcmp(entry.sec, section) == 0) {
+				    strcmp (entry.sec, section) == 0) {
 					if (message) {
-						printf(_("\nUpdating cat files for section %s of man hierarchy %s\n"),
-						       section, manpath);
+						printf (_("\nUpdating cat files for section %s of man hierarchy %s\n"),
+							section, manpath);
 						message = 0;
 					}
 
-					free_key = add_arg(key, &(argp[arg_no]));
-					arg_size += strlen(argp[arg_no++]) + 1;
+					free_key = add_arg (key,
+							    &(argp[arg_no]));
+					arg_size += strlen (argp[arg_no++]) + 1;
 
 					if (debug)
-						fprintf(stderr, "arg space free: %d bytes\n",
-							ARG_MAX - arg_size);
+						fprintf (stderr, "arg space free: %d bytes\n",
+							 ARG_MAX - arg_size);
 
 					/* Check to see if we have enough room 
 					   to add another max sized filename 
@@ -312,12 +319,13 @@ static __inline__ int parse_for_sec(char *manpath, char *section)
 					   space too */ 
 				    	if (arg_size >= ARG_MAX - NAME_MAX ||
 				    	    arg_no == MAX_ARGS - 1) {
-				    		do_catman(argp, arg_no, first_arg);
+				    		do_catman (argp, arg_no,
+							   first_arg);
 
 				    		/* reopen db and tidy up */
-				    		if (rdopen_db())
+				    		if (rdopen_db ())
 				    			return 1;
-						reset_cursor(key);
+						reset_cursor (key);
 						free_key = 1;
 				    		arg_no = first_arg;
 				    		arg_size = initial_bit;
@@ -327,37 +335,37 @@ static __inline__ int parse_for_sec(char *manpath, char *section)
 			
 			/* we don't need the content ever again */
 			assert (content.dptr); /* just to be sure */
-			MYDBM_FREE(content.dptr);
+			MYDBM_FREE (content.dptr);
 		}
 
 		/* If we are not using the key, free it now */
 		if (free_key) {
 			datum nextkey;
 
-			nextkey = MYDBM_NEXTKEY(dbf, key);
-			MYDBM_FREE(key.dptr);
+			nextkey = MYDBM_NEXTKEY (dbf, key);
+			MYDBM_FREE (key.dptr);
 			key = nextkey;
 		} else 
-			key = MYDBM_NEXTKEY(dbf, key);
+			key = MYDBM_NEXTKEY (dbf, key);
 	}
 
 	if (arg_no > first_arg)
-		do_catman(argp, arg_no, first_arg);
+		do_catman (argp, arg_no, first_arg);
 
 	return 0;
 }
 
-static __inline__ int check_access(const char *directory)
+static __inline__ int check_access (const char *directory)
 {
-	if (access(directory, W_OK)) {
-		error(0, errno, _( "cannot write within %s"), directory);
+	if (access (directory, W_OK)) {
+		error (0, errno, _("cannot write within %s"), directory);
 		return 1;
 	}
 
 	return 0;
 }
 		
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	int c;
 	char *sys_manp;
@@ -365,10 +373,10 @@ int main(int argc, char *argv[])
 
 	int option_index; /* not used, but required by getopt_long() */
 
-	program_name = xstrdup(basename(argv[0]));
+	program_name = xstrdup (basename (argv[0]));
 
 	/* initialise the locale */
-	locale = setlocale( LC_ALL, "");
+	locale = setlocale (LC_ALL, "");
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 
@@ -390,13 +398,13 @@ int main(int argc, char *argv[])
 				manp = optarg;
 				break;
 			case 'V':
-				ver();
+				ver ();
 				break;
 			case 'h':
-				usage(OK);
+				usage (OK);
 				break;
 			default:
-				usage(FAIL);
+				usage (FAIL);
 				break;
 		}
 	}
@@ -409,26 +417,26 @@ int main(int argc, char *argv[])
 		
 		sections = sp = (char **) xmalloc ((argc - optind + 1) * 
 						    sizeof (char *));
-		while(optind != argc)
+		while (optind != argc)
 			*sp++ = argv[optind++];
 		*sp = NULL;
 	} else {
 		char *mansect;
 
-		mansect = getenv("MANSECT");
+		mansect = getenv ("MANSECT");
 		if (mansect && *mansect) {
 			/* MANSECT contains sections */
 			char *sec;
 			int i = 0;
 
-			mansect = xstrdup(mansect);
+			mansect = xstrdup (mansect);
 			sections = NULL;
-			for (sec = strtok(mansect, ":"); sec; 
-			     sec = strtok(NULL, ":")) {
+			for (sec = strtok (mansect, ":"); sec; 
+			     sec = strtok (NULL, ":")) {
 			     	sections = (char **) xrealloc (sections, 
-			     				       (i + 2) *
-			     				       sizeof (char *));
-			     	sections[i++] = sec;
+							       (i + 2) *
+							       sizeof (char *));
+				sections[i++] = sec;
 			}
 			sections[i] = NULL;
 		} else {
@@ -442,54 +450,57 @@ int main(int argc, char *argv[])
 		char **sp;
 
 		for (sp = sections; *sp; sp++)
-			fprintf(stderr, "sections: %s\n", *sp);
+			fprintf (stderr, "sections: %s\n", *sp);
 	}
 
 	/* Deal with the MANPATH */
 
 	/* This is required for global_catpath(), regardless */
-	sys_manp = manpath(NULL);
+	sys_manp = manpath (NULL);
 
 	/* pick up the system manpath or use the supplied one */
 	if (!manp) {
-		if ( !(manp = get_mandb_manpath()) )
+		manp = get_mandb_manpath ();
+		if (!manp)
 			manp = sys_manp;
 	}
 
 	if (debug)
-		fprintf(stderr, "manpath=%s\n", manp);
+		fprintf (stderr, "manpath=%s\n", manp);
 
 	/* get the manpath as an array of pointers */
-	create_pathlist(xstrdup(manp), manpathlist); 
+	create_pathlist (xstrdup (manp), manpathlist); 
 	
 	for (mp = manpathlist; *mp; mp++) {
 		char *catpath, **sp;
 		size_t len;
 		
-		catpath = global_catpath(*mp);
+		catpath = global_catpath (*mp);
 
 		if (catpath) { 
-			if (is_directory(catpath) != 1) {
+			if (is_directory (catpath) != 1) {
 				free (catpath);
 				continue;
 			}
-			database = mkdbname(catpath);
+			database = mkdbname (catpath);
 		} else {
-			if (is_directory(*mp) != 1)
+			if (is_directory (*mp) != 1)
 				continue;
-			database = mkdbname(*mp);
-			catpath = xstrdup(*mp);
+			database = mkdbname (*mp);
+			catpath = xstrdup (*mp);
 		}
 
-		len = strlen(catpath);
+		len = strlen (catpath);
 		
 		for (sp = sections; *sp; sp++) {
 			*(catpath + len) = '\0';
 			catpath = strappend (catpath, "/cat", *sp, NULL);
-			if (is_directory(catpath) != 1 || check_access(catpath))
+			if (is_directory (catpath) != 1)
 				continue;
-			if (parse_for_sec(*mp, *sp)) {
-				error(0, 0, _( "unable to update %s"), *mp);
+			if (check_access (catpath))
+				continue;
+			if (parse_for_sec (*mp, *sp)) {
+				error (0, 0, _("unable to update %s"), *mp);
 				break;
 			}
 		}

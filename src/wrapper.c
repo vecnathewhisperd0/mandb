@@ -44,14 +44,14 @@
 #endif
 
 
-/* this list is used to autenticate the program running.
+/* this list is used to authenticate the program running.
  * it is fixed at compile time to avoid a full class of 
  * dangers ...
  */
 struct	{
-	const char * prog;
-	const char * run;
-	const char * user;
+	const char *prog;
+	const char *run;
+	const char *user;
 } *wlp, wrapped_list[] =
 { /* prog	run				user	*/
 #ifdef DEBUG
@@ -65,11 +65,11 @@ struct	{
 
 char *program_name;
 
-int main( int argc, char **argv)
+int main (int argc, char **argv)
 {
 	uid_t ruid;
-	char * fakeroot;
-	char * p;
+	char *fakeroot;
+	char *p;
 	struct passwd *pwd;
 
 	setlocale (LC_ALL, "");
@@ -77,60 +77,65 @@ int main( int argc, char **argv)
 	textdomain (PACKAGE);
 
 	/* this wrapper can be run as "man" or as "mandb" */
-	p = strrchr( argv[0], '/');
-	program_name = ( p ? ++p : argv[0] );
+	p = strrchr (argv[0], '/');
+	program_name = (p ? ++p : argv[0]);
 
 	ruid = getuid ();
-	fakeroot = getenv("FAKEROOTKEY");
+	fakeroot = getenv ("FAKEROOTKEY");
 
 #ifdef DEBUG
-	printf( "%s:\n", program_name);
-	printf( "real = %d, = %d, fakeroot = %d\n"
-			, (int)ruid, (fakeroot!=0));
+	printf ("%s:\n", program_name);
+	printf ("real = %d, = %d, fakeroot = %d\n",
+		(int) ruid, (fakeroot != 0));
 #endif
 
-	for ( wlp=wrapped_list; wlp->prog && strcmp( program_name, wlp->prog); ++wlp)
+	for (wlp = wrapped_list; wlp->prog && strcmp (program_name, wlp->prog);
+	     ++wlp)
 		;
 	if (!wlp->prog) {
-		fprintf( stderr, _("Don't know which program should I run being >%s<\n"),
-				program_name);
+		fprintf (stderr, _("Don't know which program should I run being >%s<\n"),
+			 program_name);
 		return -ENOENT;
 	}
 
-	if ( !fakeroot && ruid == 0 ) {
-		pwd = getpwnam( wlp->user);
+	if (!fakeroot && ruid == 0) {
+		pwd = getpwnam (wlp->user);
 		/*
-		if ( !pwd
-		|| setgid(pwd->pw_gid)
-		|| initgroups( wlp->user, pwd->pw_gid)
-		|| setuid(pwd->pw_uid)) {
-			fprintf( stderr, _("%s: Failed su to user %s\n"),
-					wlp->prog, wlp->user);
-				    return -EACCES;
+		if (!pwd
+		 || setgid (pwd->pw_gid)
+		 || initgroups (wlp->user, pwd->pw_gid)
+		 || setuid (pwd->pw_uid)) {
+			fprintf (stderr, _("%s: Failed su to user %s\n"),
+				 wlp->prog, wlp->user);
+			return -EACCES;
 		}
 		*/
-		if ( !pwd )
+		if (!pwd)
 		{
-			fprintf( stderr, _("%s: Failed su to user %s\n"), wlp->prog, wlp->user);
-				    return -EACCES;
+			fprintf (stderr, _("%s: Failed su to user %s\n"),
+				 wlp->prog, wlp->user);
+			return -EACCES;
 		}
-		if ( setgid(pwd->pw_gid) )
+		if (setgid (pwd->pw_gid) )
 		{
-			fprintf( stderr, _("%s: Failed su to user %s\n"), wlp->prog, wlp->user);
-				    return -EACCES;
+			fprintf (stderr, _("%s: Failed su to user %s\n"),
+				 wlp->prog, wlp->user);
+			return -EACCES;
 		}
-		if ( initgroups( wlp->user, pwd->pw_gid) )
+		if (initgroups (wlp->user, pwd->pw_gid))
 		{
-			fprintf( stderr, _("%s: Failed su to user %s\n"), wlp->prog, wlp->user);
-				    return -EACCES;
+			fprintf (stderr, _("%s: Failed su to user %s\n"),
+				 wlp->prog, wlp->user);
+			return -EACCES;
 		}
-		if ( setuid(pwd->pw_uid))
+		if (setuid (pwd->pw_uid))
 		{
-			fprintf( stderr, _("%s: Failed su to user %s\n"), wlp->prog, wlp->user);
-				    return -EACCES;
+			fprintf (stderr, _("%s: Failed su to user %s\n"),
+				 wlp->prog, wlp->user);
+			return -EACCES;
 		}
 	}
-	execv( wlp->run, argv);
-	perror("execv");
+	execv (wlp->run, argv);
+	perror ("execv");
 	return -errno;
 }

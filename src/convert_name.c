@@ -41,7 +41,7 @@
 
 static __inline__ void gripe_converting_name (char *name)
 {
-	error (FATAL, 0, _( "Can't convert %s to cat name"), name);
+	error (FATAL, 0, _("Can't convert %s to cat name"), name);
 }
 
 /* derive the catpage path for manpage 'name'. If alternate is not NULL, use
@@ -59,21 +59,23 @@ char *convert_name (char *name, char *alternate)
 		name = alternate;
 
 #ifdef COMP_SRC
-	if ( (comp = comp_info(name)) )
+	comp = comp_info (name);
+	if (comp)
 		*comp->file = '\0';
 #endif /* COMP_SRC */
 
 #ifdef COMP_CAT
-	to_name = strappend(NULL, name, "." COMPRESS_EXT, NULL);
+	to_name = strappend (NULL, name, "." COMPRESS_EXT, NULL);
 #else /* !COMP_CAT */
 	to_name = xstrdup (name);
 #endif /* COMP_CAT */
 
-	if ( (t1 = strrchr (to_name, '/')) ) {
-
+	t1 = strrchr (to_name, '/');
+	if (t1) {
 		*t1 = '\0';
-	
-		if ((t2 = strrchr (to_name, '/')) == NULL)
+
+		t2 = strrchr (to_name, '/');
+		if (t2 == NULL)
 			gripe_converting_name (name);
 
 		*t1 = '/';

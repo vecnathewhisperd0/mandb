@@ -47,62 +47,62 @@ int debug;
 char *database;
 MYDBM_FILE dbf;
 
-static void usage(int status)
+static void usage (int status)
 {
-	fprintf(stderr,
-		_("\nUsage: accessdb [man_database]\n"
-		"\tman_database defaults to %s" MAN_DB "\n"), cat_root);
+	fprintf (stderr,
+		 _("\nUsage: accessdb [man_database]\n"
+		 "\tman_database defaults to %s" MAN_DB "\n"), cat_root);
 
 	exit (status);
 }
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	MYDBM_FILE dbf;
 	datum key,content;
 
-	program_name = basename(argv[0]);
-	if ( is_directory (FHS_CAT_ROOT) == 1 )
+	program_name = basename (argv[0]);
+	if (is_directory (FHS_CAT_ROOT) == 1)
 		cat_root = FHS_CAT_ROOT;
-	else if ( is_directory (CAT_ROOT) == 1 )
+	else if (is_directory (CAT_ROOT) == 1)
 		cat_root = CAT_ROOT;
 
 	if (argc > 2)
-		usage(FAIL);
+		usage (FAIL);
 	else if (argc == 2) 
 		database = argv[1];
 	else
-		database = strappend( NULL, cat_root, MAN_DB, NULL);
+		database = strappend (NULL, cat_root, MAN_DB, NULL);
 		
-	dbf = MYDBM_RDOPEN(database);
-	if (dbf && dbver_rd(dbf)) {
-		MYDBM_CLOSE(dbf);
+	dbf = MYDBM_RDOPEN (database);
+	if (dbf && dbver_rd (dbf)) {
+		MYDBM_CLOSE (dbf);
 		dbf = NULL;
 	}
 	if (!dbf) {
 		error (0, errno, _("can't open %s for reading"), database);
-		usage(FAIL);
+		usage (FAIL);
 	}
 
-	key = MYDBM_FIRSTKEY(dbf);
+	key = MYDBM_FIRSTKEY (dbf);
 
 	while (key.dptr != NULL) {
 		char *t, *nicekey;
 		
-		content = MYDBM_FETCH(dbf, key);
+		content = MYDBM_FETCH (dbf, key);
 		if (!content.dptr)
 			exit (FATAL);
-		nicekey = xstrdup(key.dptr);
-		while ( (t = strchr(nicekey, '\t')) )
+		nicekey = xstrdup (key.dptr);
+		while ( (t = strchr (nicekey, '\t')) )
 			*t = '~';
-		while ( (t = strchr(content.dptr, '\t')) )
+		while ( (t = strchr (content.dptr, '\t')) )
 			*t = ' ';
-		printf("%s -> \"%s\"\n", nicekey, content.dptr);
-		free(nicekey); 
-		MYDBM_FREE(content.dptr);
-		key = MYDBM_NEXTKEY(dbf, key);
+		printf ("%s -> \"%s\"\n", nicekey, content.dptr);
+		free (nicekey); 
+		MYDBM_FREE (content.dptr);
+		key = MYDBM_NEXTKEY (dbf, key);
 	}
 
-	MYDBM_CLOSE(dbf);
+	MYDBM_CLOSE (dbf);
 	exit (OK);
 }
