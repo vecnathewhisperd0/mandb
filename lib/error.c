@@ -43,6 +43,11 @@
 extern void exit ();
 #endif
 
+#ifdef BACKTRACE_ON_ERROR
+# include <unistd.h>
+# include <execinfo.h>
+#endif
+
 /* If NULL, error will flush stdout, then print on stderr the program
    name, a colon and a space.  Otherwise, error will call this
    function without parameters instead.  */
@@ -114,6 +119,17 @@ error (status, errnum, message, va_alist)
     fprintf (stderr, ": %s", strerror (errnum));
   putc ('\n', stderr);
   fflush (stderr);
+
+#ifdef BACKTRACE_ON_ERROR
+  {
+    void *frames[30];
+    int size;
+
+    size = backtrace (frames, 30);
+    backtrace_symbols_fd (frames, size, STDERR_FILENO);
+  }
+#endif
+
   if (status)
     exit (status);
 }
