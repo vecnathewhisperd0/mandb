@@ -37,14 +37,14 @@ ALLSRCS = alloca.c basename.c cleanup.c error.c fnmatch.c getopt.c getopt1.c \
 	  strappend.c strcspn.c strsep.c strspn.c strstr.c strnlen.c \
 	  xmalloc.c xstrdup.c xstrndup.c \
 	  waitpid.c tempfile.c mkdtemp.c mkstemp.c tempname.c hashtable.c \
-	  xstrsignal.c
+	  xstrsignal.c pipeline.c
 
 ALLOBJS = $(ALLSRCS:.c=.o)
 
 XOBJS = xstrdup.o xstrndup.o xmalloc.o error.o xstrsignal.o
 
 ALL = @LIBOBJS@ @ALLOCA@ $(libobjects) cleanup.o strappend.o tempfile.o \
-      hashtable.o $(XOBJS)
+      hashtable.o pipeline.o $(XOBJS)
 
 all: $(library)
 

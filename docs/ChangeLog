@@ -1,3 +1,11 @@
+Sun Aug  3 11:15:17 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c: New pipeline library, adapted from that in groff.
+	  The interface isn't complete yet; in particular, it can't be a
+	  replacement for popen() at the moment.
+	* lib/pipeline.h: New file with pipeline library interface.
+	* lib/Makefile.in (ALLSRCS, ALL): Build pipeline.
+
 Sun Aug  3 11:09:07 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* acinclude.m4 (MAN_FUNC_STRSIGNAL): New macro to check for the GNU
