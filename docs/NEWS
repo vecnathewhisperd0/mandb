@@ -1,3 +1,25 @@
+man-db 2.4.2
+============
+
+Major changes since man-db 2.4.1:
+
+	Fixes:
+	------
+
+	o Make sure to initialize mandata structures to zero. The uses of
+	  uninitialized memory resulting from this had been leading to random
+	  segfaults.
+
+	o Drop privileges in order to be able to read pages in
+	  non-world-readable user manpaths while setuid.
+
+	Improvements:
+	-------------
+
+	o man now calls mandb to update databases rather than doing it
+	  itself. This leaves cat pages as the sole remaining reason for man
+	  to be setuid.
+
 man-db 2.4.1 (22 December 2002)
 ===============================
 
