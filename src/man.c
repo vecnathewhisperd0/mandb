@@ -2158,7 +2158,8 @@ static __inline__ int close_cat_stream (FILE *cat_stream, const char *cat_file,
 	if (created_tmp_cat) {
 		status |= commit_tmp_cat (cat_file, tmp_cat_file,
 					  delete || status);
-		pop_cleanup ();
+		if (!debug)
+			pop_cleanup ();
 	}
 	free (tmp_cat_file);
 	return status;

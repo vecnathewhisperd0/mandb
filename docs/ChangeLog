@@ -1,3 +1,8 @@
+Wed Jul 30 12:33:25 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* man.c (close_cat_stream): The unlink(tmp_cat_file) cleanup is only
+	  pushed if (!debug), so apply the same condition to popping it.
+
 Wed Jul 30 12:21:20 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* descriptions.c (parse_descriptions): Revert this part of
