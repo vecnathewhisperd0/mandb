@@ -649,8 +649,7 @@ extern uid_t euid;			/* initial effective user id */
 static void
 mkcatdirs (const char *mandir, const char *catdir)
 {
-	char manname[PATH_MAX+6];
-	char catname[PATH_MAX+6];
+	char *manname, *catname;
 #ifdef SECURE_MAN_UID
 	struct passwd *man_owner = get_man_owner ();
 #endif
@@ -679,7 +678,8 @@ mkcatdirs (const char *mandir, const char *catdir)
 			drop_effective_privs ();
 		}
 		/* then the hierarchy */
-		sprintf (catname, "%s/cat1", catdir);
+		catname = strappend (NULL, catdir, "/cat1", NULL);
+		manname = strappend (NULL, mandir, "/man1", NULL);
 		if (is_directory (catdir) == 1) {
 			int j;
 			regain_effective_privs ();
@@ -688,8 +688,8 @@ mkcatdirs (const char *mandir, const char *catdir)
 					 "creating catdir hierarchy %s	",
 					 catdir);
 			for (j = 1; j <= 9; j++) {
-				sprintf (catname, "%s/cat%d", catdir, j);
-				sprintf (manname, "%s/man%d", mandir, j);
+				catname[strlen (catname) - 1] = '0' + j;
+				manname[strlen (manname) - 1] = '0' + j;
 				if ((is_directory (manname) == 1)
 				 && (is_directory (catname) != 1)) {
 					if (mkdir (catname,
@@ -711,6 +711,8 @@ mkcatdirs (const char *mandir, const char *catdir)
 				fprintf (stderr, "\n");
 			drop_effective_privs ();
 		}
+		free (catname);
+		free (manname);
 		umask (oldmask);
 	}
 }
