@@ -23,9 +23,8 @@
    If no '\0' terminator is found in that many characters, return MAXLEN.  */
 
 size_t
-__strnlen (const char *string, size_t maxlen)
+strnlen (const char *string, size_t maxlen)
 {
   const char *end = memchr (string, '\0', maxlen);
   return end ? (size_t) (end - string) : maxlen;
 }
-weak_alias (__strnlen, strnlen)
