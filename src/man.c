@@ -2729,7 +2729,7 @@ static int compare_candidates (const struct mandata *left,
 			       const struct mandata *right,
 			       const char *req_name)
 {
-	int sec_left = 0, sec_right = 0, ext_left = 0, ext_right = 0;
+	int sec_left = 0, sec_right = 0;
 	int cmp;
 
 	/* If one candidate matches the requested name exactly, sort it
@@ -2749,24 +2749,35 @@ static int compare_candidates (const struct mandata *left,
 	 * their source, but may be supplanted by a real page with a
 	 * slightly different extension, possibly in another hierarchy (!);
 	 * see Debian bug #204249 for the gory details.
+	 *
+	 * Any extension spelt out in full in section_list effectively
+	 * becomes a pure section; this allows extensions to be selectively
+	 * moved out of order with respect to their parent sections.
 	 */
-	cmp = strcmp (left->sec, right->sec);
-	if (cmp) {
-		/* Find out whether left->sec is ahead of right->sec in
+	if (strcmp (left->ext, right->ext)) {
+		/* Find out whether left->ext is ahead of right->ext in
 		 * section_list.
 		 */
 		const char **sp;
 		for (sp = section_list; *sp; ++sp) {
-			if (!sec_left && **sp == *(left->sec))
-				sec_left = sp - section_list + 1;
-			else if (!sec_right && **sp == *(right->sec))
+			if (!*(*sp + 1)) {
+				/* No extension */
+				if (!sec_left  && **sp == *(left->ext))
+					sec_left  = sp - section_list + 1;
+				if (!sec_right && **sp == *(right->ext))
+					sec_right = sp - section_list + 1;
+			} else if (STREQ (*sp, left->ext)) {
+				sec_left  = sp - section_list + 1;
+			} else if (STREQ (*sp, right->ext)) {
 				sec_right = sp - section_list + 1;
-			if (sec_left && sec_right)
-				break;
+			}
+			/* Keep looking for a more specific match */
 		}
 		if (sec_left != sec_right)
 			return sec_left - sec_right;
-		else
+
+		cmp = strcmp (left->sec, right->sec);
+		if (cmp)
 			return cmp;
 	}
 
@@ -2775,31 +2786,13 @@ static int compare_candidates (const struct mandata *left,
 	if (cmp)
 		return cmp;
 
+	/* The order in section_list has already been compared above. For
+	 * everything not mentioned explicitly there, we just compare
+	 * lexically.
+	 */
 	cmp = strcmp (left->ext, right->ext);
-	if (cmp) {
-		/* Find out whether left->ext is ahead of right->ext in
-		 * section_list.
-		 */
-		const char **sp;
-		for (sp = section_list; *sp; ++sp) {
-			if (!*(*sp + 1)) {
-				/* No extension */
-				if (!ext_left  && **sp == *(left->ext))
-					ext_left  = sp - section_list + 1;
-				if (!ext_right && **sp == *(right->ext))
-					ext_right = sp - section_list + 1;
-			} else if (STREQ (*sp, left->ext)) {
-				ext_left  = sp - section_list + 1;
-			} else if (STREQ (*sp, right->ext)) {
-				ext_right = sp - section_list + 1;
-			}
-			/* Keep looking for a more specific match */
-		}
-		if (ext_left != ext_right)
-			return ext_left - ext_right;
-		else
-			return cmp;
-	}
+	if (cmp)
+		return cmp;
 
 	/* add_candidate() will keep equal candidates in order of insertion
 	 * so that manpath ordering (e.g. language-specific hierarchies)

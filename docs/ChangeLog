@@ -1,3 +1,12 @@
+Sun Nov  7 15:31:18 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (compare_candidates): Compare extensions' positions in
+	  section_list at the same time as sections, but do the lexical
+	  comparison fallback after comparing ids; this restores the
+	  intended ability to use SECTIONS to move extensions out of order
+	  with respect to their parent sections without breaking the earlier
+	  workaround for Debian bug #204249.
+
 Thu Jul 22 14:46:30 BST 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/check_mandirs.c (testmandirs): Always scan directory if last
@@ -169,7 +178,7 @@ Mon Mar  8 09:33:08 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 Mon Mar  8 00:16:53 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
-	* src/man.c (compare_extensions): Instead of comparing extensions
+	* src/man.c (compare_candidates): Instead of comparing extensions
 	  followed by ids, compare pure sections first, then ids, then
 	  extensions. This works around the worst effects of Debian bug
 	  #204249, in which we have an incorrect whatis ref xterm(1) in
