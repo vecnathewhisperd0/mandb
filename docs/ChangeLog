@@ -1,3 +1,9 @@
+Mon Aug  4 19:35:26 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (command_dup): Terminate argv with a NULL.
+	  (command_dup, command_arg): Assert that argc < argv_max after
+	  changing either.
+
 Mon Aug  4 19:30:22 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_dump): New function to dump a printable
