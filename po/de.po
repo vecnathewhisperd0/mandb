@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.90\n"
-"POT-Creation-Date: 2002-11-14 03:32+0000\n"
+"POT-Creation-Date: 2002-11-26 22:40+0000\n"
 "PO-Revision-Date: 2002-06-05 15:09:13+0200\n"
 "Last-Translator: Michael Piefel <piefel@informatik.hu-berlin.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -168,7 +168,7 @@ msgstr "Warnung: %s/man%s/%s.%s*: konkurrierende Dateierweiterungen"
 msgid "warning: failed to store entry for %s(%s)"
 msgstr ""
 
-#: src/check_mandirs.c:127 src/check_mandirs.c:696 src/man.c:2942
+#: src/check_mandirs.c:127 src/check_mandirs.c:696 src/man.c:2948
 #, c-format
 msgid "can't update index cache %s"
 msgstr "Kann Indexcache %s nicht updaten"
@@ -213,7 +213,7 @@ msgstr "fertig.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "Lösche alte Datenbankeinträge in %s...\n"
 
-#: src/compression.c:77 src/man.c:1422
+#: src/compression.c:77 src/man.c:1428
 msgid "can't create a temporary filename"
 msgstr "Kann temporären Dateinamen nicht erzeugen"
 
@@ -231,22 +231,22 @@ msgstr "Kann %s nicht in Dateinamen für vorformatierte Manual-Seiten umwandeln"
 msgid "can't get passwd structure for uid 0"
 msgstr ""
 
-#: src/lexgrog.l:318
+#: src/lexgrog.l:320
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "Warnung: whatis-Eintrag für %s ist grösser als %d Bytes, verkürze ihn."
 
-#: src/lexgrog.l:387 src/ult_src.c:310 src/ult_src.c:317
+#: src/lexgrog.l:412 src/ult_src.c:310 src/ult_src.c:317
 #, c-format
 msgid "can't open %s"
 msgstr "Kann %s nicht öffnen"
 
-#: src/lexgrog.l:448
+#: src/lexgrog.l:473
 #, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "Aufruf: %s [-mcwfhV] datei ...\n"
 
-#: src/lexgrog.l:450
+#: src/lexgrog.l:475
 msgid ""
 "-m --man                    parse as man page.\n"
 "-c --cat                    parse as cat page.\n"
@@ -266,7 +266,7 @@ msgstr ""
 "\n"
 "Voreinstellung sind --man und --whatis.\n"
 
-#: src/lexgrog.l:496
+#: src/lexgrog.l:521
 msgid "-m -c: incompatible options"
 msgstr "-m -c: inkompatible Optionen"
 
@@ -412,104 +412,109 @@ msgstr "Kein Manual-Eintrag für %s vorhanden"
 msgid " in section %s\n"
 msgstr " in Sektion %s\n"
 
-#: src/man.c:788 src/man.c:2344
+#: src/man.c:642
+#, c-format
+msgid "See '%s' for help when manual pages are not available.\n"
+msgstr ""
+
+#: src/man.c:794 src/man.c:2350
 #, c-format
 msgid "can't chdir to %s"
 msgstr "Kann nicht ins Verzeichnis %s wechseln"
 
-#: src/man.c:961
+#: src/man.c:967
 msgid " Manual page "
 msgstr " Manual-Seite "
 
-#: src/man.c:962
+#: src/man.c:968
 msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 msgstr " ?ltZeile %lt?L/%L.:Byte %bB?s/%s..?e (ENDE):?pB %pB\\%.."
 
-#: src/man.c:1297
+#: src/man.c:1303
 msgid ": incompatible options"
 msgstr ": inkompatible Optionen"
 
-#: src/man.c:1530
+#: src/man.c:1536
 msgid "error trying to read from stdin"
 msgstr "Fehler beim Lesen von Standardeingabe"
 
-#: src/man.c:1544
+#: src/man.c:1550
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "Fehler beim Schreiben in temporäre Datei %s"
 
-#: src/man.c:1725
+#: src/man.c:1731
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "Ignoriere unbekannten Präprozessor »%c«"
 
-#: src/man.c:1923 src/mandb.c:254
+#: src/man.c:1929 src/mandb.c:254
 #, c-format
 msgid "can't chown %s"
 msgstr "Kann Besitzer und/oder Gruppe von %s nicht ändern"
 
-#: src/man.c:1934 src/mandb.c:225
+#: src/man.c:1940 src/mandb.c:225
 #, c-format
 msgid "can't chmod %s"
 msgstr "Kann Zugriffsrechte von %s nicht ändern"
 
-#: src/man.c:1946 src/mandb.c:191
+#: src/man.c:1952 src/mandb.c:191
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "Kann %s nicht in %s umbenennen"
 
-#: src/man.c:1966
+#: src/man.c:1972
 #, c-format
 msgid "can't set times on %s"
 msgstr "Kann keine Zeiten an %s setzen"
 
-#: src/man.c:1975
+#: src/man.c:1981
 #, c-format
 msgid "can't unlink %s"
 msgstr "Kann %s nicht löschen"
 
-#: src/man.c:2003
+#: src/man.c:2009
 msgid "can't create pipe"
 msgstr "Kann Datenübergabe nicht erzeugen"
 
-#: src/man.c:2029
+#: src/man.c:2035
 #, c-format
 msgid "can't create %s"
 msgstr "Kann %s nicht erzeugen"
 
-#: src/man.c:2037 src/security.c:272
+#: src/man.c:2043 src/security.c:272
 msgid "can't fork"
 msgstr "Kann keinen neuen Prozess erzeugen"
 
-#: src/man.c:2047 src/man.c:2053
+#: src/man.c:2053 src/man.c:2059
 msgid "can't dup2"
 msgstr "Kann Dateideskriptor nicht duplizieren"
 
-#: src/man.c:2072
+#: src/man.c:2078
 #, c-format
 msgid "can't exec %s"
 msgstr "Kann %s nicht ausführen"
 
-#: src/man.c:2108
+#: src/man.c:2114
 #, c-format
 msgid "waiting for pid %u"
 msgstr "Warte auf Prozess Nummer %u"
 
-#: src/man.c:2166
+#: src/man.c:2172
 msgid "Still saving the page, please wait...\n"
 msgstr "Speichern der Manual-Seite noch nicht beendet, bitte warten...\n"
 
-#: src/man.c:2213 src/man.c:2232 src/man.c:2263
+#: src/man.c:2219 src/man.c:2238 src/man.c:2269
 #, c-format
 msgid "can't change to directory %s"
 msgstr "Kann nicht in Verzeichnis %s wechseln"
 
-#: src/man.c:2238 src/man.c:2268
+#: src/man.c:2244 src/man.c:2274
 #, c-format
 msgid "can't remove directory %s"
 msgstr "Kann Verzeichnis %s nicht entfernen"
 
-#: src/man.c:2506
+#: src/man.c:2512
 #, c-format
 msgid ""
 "\n"
@@ -518,17 +523,17 @@ msgstr ""
 "\n"
 "Kann im catman Modus nicht nach %s schreiben"
 
-#: src/man.c:2526
+#: src/man.c:2532
 #, c-format
 msgid "Reformatting %s, please wait...\n"
 msgstr "Formatiere %s neu, bitte warten...\n"
 
-#: src/man.c:2950
+#: src/man.c:2956
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: von Verlassen auf whatis-Referenzen wird abgeraten\n"
 
-#: src/man.c:3340
+#: src/man.c:3346
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""

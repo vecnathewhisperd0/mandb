@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.90\n"
-"POT-Creation-Date: 2002-11-14 03:32+0000\n"
+"POT-Creation-Date: 2002-11-26 22:40+0000\n"
 "PO-Revision-Date: 2002-06-13 18:50+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -185,7 +185,7 @@ msgstr "avís: %s/man%s/%s.%s*: extensions en competència"
 msgid "warning: failed to store entry for %s(%s)"
 msgstr ""
 
-#: src/check_mandirs.c:127 src/check_mandirs.c:696 src/man.c:2942
+#: src/check_mandirs.c:127 src/check_mandirs.c:696 src/man.c:2948
 #, c-format
 msgid "can't update index cache %s"
 msgstr "no es pot actualitzar la cache d'índex %s"
@@ -233,7 +233,7 @@ msgstr "fet.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "S'estan purgant entrades antigues de la base de dades en %s...\n"
 
-#: src/compression.c:77 src/man.c:1422
+#: src/compression.c:77 src/man.c:1428
 msgid "can't create a temporary filename"
 msgstr "no es pot crear un fitxer temporal"
 
@@ -252,23 +252,23 @@ msgid "can't get passwd structure for uid 0"
 msgstr ""
 
 # Es trunca, es truncarà?  ivb
-#: src/lexgrog.l:318
+#: src/lexgrog.l:320
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "avís: el whatis per a %s s'excedeix en %d bytes, es truncarà."
 
-#: src/lexgrog.l:387 src/ult_src.c:310 src/ult_src.c:317
+#: src/lexgrog.l:412 src/ult_src.c:310 src/ult_src.c:317
 #, c-format
 msgid "can't open %s"
 msgstr "no es pot obrir %s"
 
-#: src/lexgrog.l:448
+#: src/lexgrog.l:473
 #, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "ús: %s [-mcwfhV] fitxer ...\n"
 
 # as -> com a, like -> com  ivb
-#: src/lexgrog.l:450
+#: src/lexgrog.l:475
 msgid ""
 "-m --man                    parse as man page.\n"
 "-c --cat                    parse as cat page.\n"
@@ -290,7 +290,7 @@ msgstr ""
 "Les opcions per defecte són --man i --whatis.\n"
 
 # Frase completa: «les opcions són incompatibles»  ivb
-#: src/lexgrog.l:496
+#: src/lexgrog.l:521
 msgid "-m -c: incompatible options"
 msgstr "-m -c: les opcions són incompatibles"
 
@@ -460,50 +460,55 @@ msgstr "No hi ha una entrada de manual de %s"
 msgid " in section %s\n"
 msgstr " en la secció %s\n"
 
-#: src/man.c:788 src/man.c:2344
+#: src/man.c:642
+#, c-format
+msgid "See '%s' for help when manual pages are not available.\n"
+msgstr ""
+
+#: src/man.c:794 src/man.c:2350
 #, c-format
 msgid "can't chdir to %s"
 msgstr "no es pot canviar de directori a %s"
 
-#: src/man.c:961
+#: src/man.c:967
 msgid " Manual page "
 msgstr " Pàgina de manual "
 
-#: src/man.c:962
+#: src/man.c:968
 msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 msgstr " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (FI):?pB %pB\\%.."
 
 # Frase completa: «les opcions són incompatibles»  ivb
-#: src/man.c:1297
+#: src/man.c:1303
 msgid ": incompatible options"
 msgstr ": les opcions són incompatibles"
 
-#: src/man.c:1530
+#: src/man.c:1536
 msgid "error trying to read from stdin"
 msgstr "error en intentar llegir des de l'entrada estàndard"
 
-#: src/man.c:1544
+#: src/man.c:1550
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "error en escriure en el fitxer temporal %s"
 
 # «es descarta el...»  ivb
-#: src/man.c:1725
+#: src/man.c:1731
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "es descarta el preprocessador desconegut «%c»"
 
-#: src/man.c:1923 src/mandb.c:254
+#: src/man.c:1929 src/mandb.c:254
 #, c-format
 msgid "can't chown %s"
 msgstr "no es pot fer «chown» a %s"
 
-#: src/man.c:1934 src/mandb.c:225
+#: src/man.c:1940 src/mandb.c:225
 #, c-format
 msgid "can't chmod %s"
 msgstr "no es pot fer «chmod» a %s"
 
-#: src/man.c:1946 src/mandb.c:191
+#: src/man.c:1952 src/mandb.c:191
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "no es pot reanomenar %s a %s"
@@ -511,34 +516,34 @@ msgstr "no es pot reanomenar %s a %s"
 # Segurament es referirà a l'{a,m,c}time; hores/dates?  ivb
 # I en eixe cas, què sugereixes? jm
 # Allò que s'use majoritàriament pel cas, només era per assegurar-me.  ivb
-#: src/man.c:1966
+#: src/man.c:1972
 #, c-format
 msgid "can't set times on %s"
 msgstr "no es poden establir les hores en %s"
 
-#: src/man.c:1975
+#: src/man.c:1981
 #, c-format
 msgid "can't unlink %s"
 msgstr "no es pot desenllaçar %s"
 
-#: src/man.c:2003
+#: src/man.c:2009
 msgid "can't create pipe"
 msgstr "no es pot crear un conducte"
 
-#: src/man.c:2029
+#: src/man.c:2035
 #, c-format
 msgid "can't create %s"
 msgstr "no es pot crear %s"
 
-#: src/man.c:2037 src/security.c:272
+#: src/man.c:2043 src/security.c:272
 msgid "can't fork"
 msgstr "no es pot fer «fork»"
 
-#: src/man.c:2047 src/man.c:2053
+#: src/man.c:2053 src/man.c:2059
 msgid "can't dup2"
 msgstr "no es pot fer «dup2»"
 
-#: src/man.c:2072
+#: src/man.c:2078
 #, c-format
 msgid "can't exec %s"
 msgstr "no es pot executar %s"
@@ -550,26 +555,26 @@ msgstr "no es pot executar %s"
 # "l'autobús?" jm
 # Això depén exclusivament d'un diccionari q ara no tinc a mà :(  ivb
 # A+a+, dep del contexte, podria ser «en esperar {a,e}l pid %u»  ivb
-#: src/man.c:2108
+#: src/man.c:2114
 #, c-format
 msgid "waiting for pid %u"
 msgstr "S'està esperant al pid %u"
 
-#: src/man.c:2166
+#: src/man.c:2172
 msgid "Still saving the page, please wait...\n"
 msgstr "Encara s'està desant la pàgina, espereu...\n"
 
-#: src/man.c:2213 src/man.c:2232 src/man.c:2263
+#: src/man.c:2219 src/man.c:2238 src/man.c:2269
 #, c-format
 msgid "can't change to directory %s"
 msgstr "no es pot canviar al directori %s"
 
-#: src/man.c:2238 src/man.c:2268
+#: src/man.c:2244 src/man.c:2274
 #, c-format
 msgid "can't remove directory %s"
 msgstr "no es pot eliminar el directori %s"
 
-#: src/man.c:2506
+#: src/man.c:2512
 #, c-format
 msgid ""
 "\n"
@@ -578,18 +583,18 @@ msgstr ""
 "\n"
 "no es pot escriure a %s en el mode catman"
 
-#: src/man.c:2526
+#: src/man.c:2532
 #, c-format
 msgid "Reformatting %s, please wait...\n"
 msgstr "S'està reformatant %s, espereu...\n"
 
 # Lo de sempre, deprecated? jm
-#: src/man.c:2950
+#: src/man.c:2956
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: basar-se en referències whatis està desaconsellat\n"
 
-#: src/man.c:3340
+#: src/man.c:3346
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
