@@ -2,61 +2,60 @@ dnl
 dnl Check to see if sprintf() returns the number of chars converted
 dnl Take no arguments
 dnl
-AC_DEFUN(MAN_FUNC_ANSI_SPRINTF,
-[AC_MSG_CHECKING(for ANSI C sprintf)
+AC_DEFUN([MAN_FUNC_ANSI_SPRINTF],
+[AC_MSG_CHECKING([for ANSI C sprintf])
 
-AC_CACHE_VAL(man_cv_func_ansi_sprintf,
+AC_CACHE_VAL([man_cv_func_ansi_sprintf],
 [AC_TRY_RUN(
-changequote(<<, >>)dnl
-<<int main(void)
-{char str[12];
-if ((int)sprintf(str,"test_string")==11) exit(0);
-exit(1);
-}>>,
-changequote([, ])dnl
-man_cv_func_ansi_sprintf=yes, 
-[man_cv_func_ansi_sprintf=no],
-[man_cv_func_ansi_sprintf=no])dnl
+  [int main(void) {
+     char str[12];
+     if ((int)sprintf(str,"test_string")==11) exit(0);
+     exit(1);
+   }],
+  [man_cv_func_ansi_sprintf=yes],
+  [man_cv_func_ansi_sprintf=no],
+  [man_cv_func_ansi_sprintf=no])
 ])
 
 if test "$man_cv_func_ansi_sprintf" = "yes"
 then
-	AC_DEFINE(ANSI_SPRINTF, 1, [Define if your sprintf function returns a count of converted characters.])
+	AC_DEFINE([ANSI_SPRINTF], 1, [Define if your sprintf function returns a count of converted characters.])
 fi
 
-AC_MSG_RESULT($man_cv_func_ansi_sprintf)
+AC_MSG_RESULT([$man_cv_func_ansi_sprintf])
 ])
 
 dnl
 dnl Check to see if nroff is GNU nroff, take nroff path as arg.
 dnl
-AC_DEFUN(MAN_PROG_GNU_NROFF,
-[AC_MSG_CHECKING(whether nroff is GNU nroff)
+AC_DEFUN([MAN_PROG_GNU_NROFF],
+[AC_MSG_CHECKING([whether nroff is GNU nroff])
 
-AC_CACHE_VAL(man_cv_prog_gnu_nroff,
-[if test `$1 <<EOF | tr -d '\n'
+AC_CACHE_VAL([man_cv_prog_gnu_nroff],
+  [if test `$1 <<EOF | tr -d '\n'
 \\n(.g
 EOF
 ` -eq 1
-then
+   then
 	man_cv_prog_gnu_nroff=yes
-else
+   else
 	man_cv_prog_gnu_nroff=no
-fi])
+   fi])
 
 if test "$man_cv_prog_gnu_nroff" = "yes" 
 then
-	AC_DEFINE(GNU_NROFF, 1, [Define if nroff is GNU nroff.])
+	AC_DEFINE([GNU_NROFF], 1, [Define if nroff is GNU nroff.])
 fi
-AC_MSG_RESULT($man_cv_prog_gnu_nroff)
+AC_MSG_RESULT([$man_cv_prog_gnu_nroff])
 ])
+
 dnl
 dnl Check to see if popen/pclose correctly handles multiple streams
 dnl
-AC_DEFUN(MAN_FUNC_PCLOSE,
-[AC_MSG_CHECKING(for working pclose)
+AC_DEFUN([MAN_FUNC_PCLOSE],
+[AC_MSG_CHECKING([for working pclose])
 
-AC_CACHE_VAL(man_cv_func_pclose,
+AC_CACHE_VAL([man_cv_func_pclose],
 [AC_TRY_RUN(
 [#include <stdio.h>
 #include <sys/wait.h>
@@ -91,14 +90,13 @@ main (void)
   }
   exit(0);
 }],
-man_cv_func_pclose=yes,
+[man_cv_func_pclose=yes],
 [man_cv_func_pclose=no],
-[man_cv_func_pclose=no])dnl
-])
+[man_cv_func_pclose=no])])
 
 test "$man_cv_func_pclose" = "no" && AC_LIBOBJ(popen)
 
-AC_MSG_RESULT($man_cv_func_pclose)
+AC_MSG_RESULT([$man_cv_func_pclose])
 ])
 
 dnl MAN_CHECK_BDB(HEADERS, LIBS, ACTION-IF-FOUND)
@@ -138,16 +136,16 @@ done[]dnl
 ])# MAN_CHECK_BDB
 
 dnl Check for strsignal(). If not available, check for sys_siglist.
-AC_DEFUN(MAN_FUNC_STRSIGNAL,
+AC_DEFUN([MAN_FUNC_STRSIGNAL],
 [
-AC_CACHE_CHECK([for strsignal], man_cv_func_strsignal,
+AC_CACHE_CHECK([for strsignal], [man_cv_func_strsignal],
 [AC_LINK_IFELSE([AC_LANG_PROGRAM([[#define _GNU_SOURCE]],
                                  [[char *p = strsignal (1);]])],
                 [man_cv_func_strsignal=yes],
                 [man_cv_func_strsignal=no])])
 if test "$man_cv_func_strsignal" = "yes"
 then
-	AC_DEFINE(HAVE_STRSIGNAL, 1, [Define to 1 if you have the `strsignal' function.])
+	AC_DEFINE([HAVE_STRSIGNAL], 1, [Define to 1 if you have the `strsignal' function.])
 fi
 if test "$man_cv_func_strsignal" = "no"
 then
