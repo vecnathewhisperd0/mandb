@@ -57,10 +57,12 @@ extern char *strrchr();
 #  include "lib/fnmatch.h"
 #endif
 
+#include <sys/types.h>
 #include <dirent.h>
 
 #include "manconfig.h"
 #include "lib/error.h"
+#include "lib/hashtable.h"
 
 char *extension;
 static char *mandir_layout = MANDIR_LAYOUT;
@@ -135,23 +137,91 @@ static int parse_layout (const char *layout)
 	}
 }
 
+struct dirent_hashent {
+	char **names;
+	size_t names_len, names_max;
+};
+
+static void dirent_hash_free (void *defn)
+{
+	struct dirent_hashent *hashent = defn;
+	int i;
+
+	for (i = 0; i < hashent->names_len; ++i)
+		free (hashent->names[i]);
+	free (hashent->names);
+	free (hashent);
+}
+
+static struct hashtable *dirent_hash = NULL;
+
+static struct dirent_hashent *update_directory_cache (const char *path)
+{
+	struct dirent_hashent *cache;
+	DIR *dir;
+	struct dirent *entry;
+
+	if (!dirent_hash)
+		dirent_hash = hash_create (&dirent_hash_free);
+	cache = hash_lookup (dirent_hash, path, strlen (path));
+
+	/* Check whether we've got this one already. */
+	if (cache) {
+		if (debug)
+			fprintf (stderr, "update_directory_cache %s: hit\n",
+				 path);
+		return cache;
+	}
+
+	if (debug)
+		fprintf (stderr, "update_directory_cache %s: miss\n", path);
+
+	dir = opendir (path);
+	if (!dir) {
+		if (debug)
+			fprintf (stderr, "can't open directory %s: %s\n",
+				 path, strerror (errno));
+		return NULL;
+	}
+
+	cache = xmalloc (sizeof (struct dirent_hashent));
+	cache->names_len = 0;
+	cache->names_max = 1024;
+	cache->names = xmalloc (sizeof (char *) * cache->names_max);
+
+	/* Dump all the entries into cache->names, resizing if necessary. */
+	for (entry = readdir (dir); entry; entry = readdir (dir)) {
+		if (cache->names_len >= cache->names_max) {
+			cache->names_max *= 2;
+			cache->names =
+				xrealloc (cache->names,
+					  sizeof (char *) * cache->names_max);
+		}
+		cache->names[cache->names_len++] = xstrdup (entry->d_name);
+	}
+
+	hash_install (dirent_hash, path, strlen (path), cache);
+	closedir (dir);
+
+	return cache;
+}
+
 int match_in_directory (const char *path, const char *pattern, int ignore_case,
 			glob_t *pglob)
 {
-	DIR *dir;
-	struct dirent *entry;
+	struct dirent_hashent *cache;
 	int allocated = 4;
 	int flags;
+	int i;
 
 	pglob->gl_pathc = 0;
 	pglob->gl_pathv = NULL;
 	pglob->gl_offs = 0;
 
-	dir = opendir (path);
-	if (!dir) {
+	cache = update_directory_cache (path);
+	if (!cache) {
 		if (debug)
-			fprintf (stderr, "can't open directory %s for %s: "
-				 "%s\n", path, pattern, strerror (errno));
+			fprintf (stderr, "directory cache update failed\n");
 		return -1;
 	}
 
@@ -162,14 +232,14 @@ int match_in_directory (const char *path, const char *pattern, int ignore_case,
 	pglob->gl_pathv = xmalloc (allocated * sizeof (char *));
 	flags = ignore_case ? FNM_CASEFOLD : 0;
 
-	for (entry = readdir (dir); entry; entry = readdir (dir)) {
-		int fnm = fnmatch (pattern, entry->d_name, flags);
+	for (i = 0; i < cache->names_len; ++i) {
+		int fnm = fnmatch (pattern, cache->names[i], flags);
 		if (fnm)
 			continue;
 
 		if (debug)
 			fprintf (stderr, "matched: %s/%s\n",
-				 path, entry->d_name);
+				 path, cache->names[i]);
 
 		if (pglob->gl_pathc >= allocated) {
 			allocated *= 2;
@@ -177,7 +247,7 @@ int match_in_directory (const char *path, const char *pattern, int ignore_case,
 				pglob->gl_pathv, allocated * sizeof (char *));
 		}
 		pglob->gl_pathv[pglob->gl_pathc++] =
-			strappend (NULL, path, "/", entry->d_name, NULL);
+			strappend (NULL, path, "/", cache->names[i], NULL);
 	}
 
 	if (pglob->gl_pathc >= allocated) {
@@ -186,7 +256,6 @@ int match_in_directory (const char *path, const char *pattern, int ignore_case,
 					    allocated * sizeof (char *));
 	}
 	pglob->gl_pathv[pglob->gl_pathc] = NULL;
-	closedir (dir);
 
 	return 0;
 }

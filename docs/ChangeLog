@@ -1,3 +1,15 @@
+Mon Apr 28 09:06:28 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Introduce a readdir() cache, which substantially speeds up mandb's
+	purging functions (from 2 minutes to under 45 seconds on my laptop,
+	and from about 280000 to about 13500 system calls).
+
+	* src/globbing.c (dirent_hash_free, update_directory_cache): New
+	  functions.
+	  (match_in_directory): Use update_directory_cache() rather than
+	  reading the directory on every call.
+	* docs/NEWS: Document this.
+
 Mon Apr 28 00:51:11 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/hashtable.c (hash_lookup): Return the definition rather than
