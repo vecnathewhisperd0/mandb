@@ -1,3 +1,14 @@
+Thu May 23 00:29:24 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/fake_security.c (get_man_owner): New fake function to match
+	  the real one in src/security.c.
+	* src/manp.c (mkcatdirs): Chown newly created cat directories to the
+	  MAN_OWNER when running as root.
+
+	* .cvsignore, intl/.cvsignore, po/.cvsignore: Ignore a few more
+	  files.
+	* src/man_db.conf.in: Correct the heading.
+
 Wed May 22 00:06:18 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_store.c (compare_ids): New function, replacing the
