@@ -2115,6 +2115,8 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 	char *command;
 	int status;
 
+	drop_effective_privs ();
+
 #ifdef TROFF_IS_GROFF
 	if (format_cmd && htmlout) {
 		char old_cwd[PATH_MAX];
@@ -2142,7 +2144,6 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 				     NULL);
 
 		status = do_system_drop_privs (command);
-		free (command);
 		/* Some shells report broken pipe; ignore it. */
 		if (status && status != (SIGPIPE + 0x80) * 256) {
 			if (chdir (old_cwd) == -1) {
@@ -2159,6 +2160,7 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 			free (htmldir);
 			gripe_system (command, status);
 		}
+		free (command);
 
 		browser_list = xstrdup (disp_cmd);
 		for (candidate = strtok (browser_list, ":"); candidate;
@@ -2200,6 +2202,8 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 		if (status && status != (SIGPIPE + 0x80) * 256)
 			gripe_system (command, status);
 	}
+
+	regain_effective_privs ();
 }
 
 /* "Display" a page in catman mode, which amounts to saving it. */

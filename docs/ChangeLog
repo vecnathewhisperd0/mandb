@@ -1,3 +1,8 @@
+Wed Nov  7 13:34:38 GMT 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (format_display): Drop privileges throughout. Don't free
+	  command until after it could have been used for an error message.
+
 Sun Oct 14 05:23:20 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/version.c: Include <stdlib.h> for exit().
