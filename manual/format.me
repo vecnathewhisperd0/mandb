@@ -1,4 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
+.\" Copyright (c) 2002 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -13,14 +14,15 @@ formatters common to \*U: \*N and \*T.
 .lp
 In the following sections, I
 will use the term \*T to describe the typesetter formatter and \*N to
-describe the typewriter formatter. The term \*R will be used to describe
-a generic formatter.
+describe the typewriter formatter.
+The term \*R will be used to describe a generic formatter.
 .BS 2 "\*G"
 .lp
 If using the \*G package, there is a further choice, \*G itself.
 Essentially, \*G forms a pipeline of processors including \*T and an output
 processor which translates the ditroff produced by \*T into the appropriate
-output format. The default output format, or device, for \*G is \*P.
+output format.
+The default output format, or device, for \*G is \*P.
 Anything else must be specified using the device argument.
 To illustrate \*G, the command
 .ip
@@ -31,7 +33,7 @@ will form the following pipeline
 troff \-Tdvi /dev/null | grodvi
 .lp
 If \*G is tied to
-.b "man's"
+.b man 's
 .b \-T
 option, it is still possible for
 .b man
@@ -47,43 +49,44 @@ passing the result through
 before it finally reaches the screen.
 .lp
 It is imperative that the script does not pass pre-processing options
-to \*G
+to \*G's
 command line as
 .b man
-takes care of this separately. The file
-.i tools/nroff_script
-may be used as a basis for an \*N script if your system is without one.
+takes care of this separately.
 .BS 2 Devices
 .lp
-Both \*N and \*G may allow output device selection. As mentioned previously,
+Both \*N and \*G may allow output device selection.
+As mentioned previously,
 classic \*N produces output suitable for a typewriter device, classic
 \*T produces output suitable for a
 .b C/A/T
-and \*G produces output suitable for a \*P interpreting device.
+and \*G produces output suitable for a \*P interpreting device by default.
 .BS 2 "Macros"
 .lp
-There are several \*R macros in existence that are suitable for manual
+There are several \*R macro sets in existence that are suitable for manual
 pages.
 Unfortunately, they tend to be incompatible with each other.
 .lp
 During configuration,
 .b configure
-will attempt to determine a suitable macro for the local system's manual page
-collection. It attempts to use \*N with the following three macro packages:
+will attempt to determine a suitable macro set for the local system's manual
+page collection.
+It attempts to use \*N with the following three macro packages:
 
 .TS
 center box tab(@);
 l | l | l .
 macro package@macro filename@nroff command
 _
-andoc@tmac.andoc@nroff \-mandoc
-an@tmac.an@nroff \-man
-doc@tmac.doc@nroff \-mdoc
+andoc@tmac.andoc or andoc.tmac@nroff \-mandoc
+an@tmac.an or an.tmac@nroff \-man
+doc@tmac.doc or doc.tmac@nroff \-mdoc
 .TE
 
-The first that succeeds is used. Macro
+The first that succeeds is used.
+The
 .b andoc
-is suitable for manual pages written using either
+macro set is suitable for manual pages written using either
 .b an
 or
 .b doc
@@ -107,8 +110,9 @@ vgrind@v@program listings
 .TE
 
 It is possible to assign a default pre-processor list that all
-manual pages will be passed through prior to the primary formatter. By
-default, this is empty. To define a default list, edit
+manual pages will be passed through prior to the primary formatter.
+By default, this is empty.
+To define a default list, edit
 .i include/manconfig.h
 and un-comment the following line
 .lp
@@ -116,15 +120,23 @@ and un-comment the following line
 .lp
 which will enable
 .b tbl
-processing by default. To change the list, replace the
+processing by default.
+To change the list, replace the
 .b t
 with a suitable string of processor ID's.
 .lp
 Pre-process options may be provided at run time in various forms, but in
 general the pre-processors required by each manual page is indicated in the
-first line of the manual page itself. See
+first line of the manual page itself.
+See
 .b man (1)
 for details.
+.lp
+If a manual page does not contain a pre-processor string in its first line,
+it will be scanned for well-known \*R requests used to pass input to
+certain pre-processors.
+Thus, the pre-processor string is often unnecessary for correct output,
+but should nevertheless be included for efficiency.
 .BS 2 "Format scripts"
 .lp
 It is very likely that alternate systems manual pages may require
@@ -139,12 +151,12 @@ If the file
 exists and is executable, it is expected to be able to correctly format a
 manual page originating from
 .i <manual_hierarchy>
-to its standard output. It will be supplied with either two or three
-arguments:
+to its standard output.
+It will be supplied with either two or three arguments:
 .(l
 \(bu manual page filename
 \(bu pre-processor string
-\(bu ouput device (optional)
+\(bu output device (optional)
 .)l
 Similarly, if the option
 .b \-T\c
@@ -165,7 +177,7 @@ An example of such a script, supplied by Markus Armbruster
 can be found as
 .i tools/mandb_[nt]fmt
 .lp
-The script can be used as both a \*N and \*T/\*G format script and can be
+The script can be used as both an \*N and \*T/\*G format script and can be
 installed as
 .i mandb_nfmt
 and hard linked to

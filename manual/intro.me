@@ -1,4 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
+.\" Copyright (c) 2001, 2002 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -24,6 +25,7 @@ It is made up of several user programs:
 @\(bu whatis@\- search the manual page names
 @\(bu apropos@\- search the manual page names and descriptions
 @\(bu manpath@\- determine search path for manual pages
+@\(bu lexgrog@\- directly read header information in manual pages
 .T&
 l s s s
 l lfB l.
@@ -36,7 +38,7 @@ several maintenance programs:
 l s s s
 l lfB l.
 .sp 6p
-and a special pre-formatter that knows about compressed manual pages
+and a special pre-formatter that knows about compressed manual pages:
 .sp 6p
 @\(bu zsoelim@\- satisfy .so requests in roff input
 .TE
@@ -57,6 +59,7 @@ format and usage.
 .b whatis (1),
 .b apropos (1),
 .b manpath (1),
+.b lexgrog (1),
 .b manpath (5),
 .b mandb (8),
 .b catman (8)
@@ -71,7 +74,7 @@ formed FSSTND committee regarding cat directories was added.
 .lp
 Since then, \*M's most innovative feature: the database cache scheme\**
 .(f
-\** originally conceived after observing the actions of the perl based
+\** originally conceived after observing the actions of the Perl-based
 manual pager suite, man-pl written by Tom Christiansen
 <tchrist@convex.com>
 .)f
@@ -82,14 +85,14 @@ man-db-2.2 distribution:
 The theory: If you go to a library to take a book out, what do you do?
 .sp
 a) Go and look where it might be on a micro-fiche/terminal, take a look
-   where it is supposed to be on the shelf, and then go look at the new
-   arrivals if it's not where it's supposed to be?
+where it is supposed to be on the shelf, and then go look at the new
+arrivals if it's not where it's supposed to be?
 .sp
 OR
 .sp
 b) Start at one end of the ground floor, look along every bookshelf
-   until you've completed that floor, then go up a level and start again
-   until you've found what you're looking for?
+until you've completed that floor, then go up a level and start again
+until you've found what you're looking for?
 .)q
 .lp
 Since then the database
@@ -102,9 +105,14 @@ timestamp, the location and the whatis\**
 .(f
 \** one line description of the manual page
 .)f
-information. This information is kept up to date by
+information.
+This information is kept up to date by regular runs of
+.b mandb .
+In some configurations
 .b man
-which looks for filesystem changes each time it is invoked.
+also looks for filesystem changes each time it is invoked and helps to
+keep the database cache current, but this imposes a penalty on manual page
+search times.
 .BS 2 "The manual page system"
 .lp
 The simplest manual page system will have a single manual page hierarchy.
@@ -129,7 +137,8 @@ or
 These are referred to as
 .i sections
 of the
-manual. Others may exist and they are not restricted to single
+manual.
+Others may exist and they are not restricted to single
 character names. eg.
 .ip
 .i /usr/man/manfoo
@@ -165,13 +174,13 @@ and has no special
 .BS 2 "Sections of the manual"
 .lp
 The manual is split up into sections to ease access and to cater for manual
-pages that share the same name. It is common for a
-program and function to share the same name.
+pages that share the same name.
+It is common for a program and function to share the same name.
 .b kill
 is a good example.
 This is both a program which can be used to send a process a signal and
-an operating system call with similar functionality. Their manual pages are
-stored under sections
+an operating system call with similar functionality.
+Their manual pages are stored under sections
 .b 1
 and
 .b 2
@@ -196,7 +205,7 @@ _
 6@games
 7@macro packages and conventions eg. \fBman\fR(7), \fBgroff\fR(7).
 8@system administration commands
-9@kernel routines [\|Non standard\|]
+9@kernel routines [\|Non-standard\|]
 n@new [\|obsolete\|]
 l@local [\|obsolete\|]
 p@public [\|obsolete\|]
@@ -211,8 +220,8 @@ This is a typesetter style language\**
 \** similar in some aspects to
 .b TeX
 .)f
-which requires formatting before
-being viewed. In fact some manual pages require pre-format processing to
+which requires formatting before being viewed.
+In fact some manual pages require pre-format processing to
 correctly format tables or equations.
 .lp
 If the page is to be viewed on screen in a text environment, \*N is
@@ -223,7 +232,8 @@ graphical environment, \*T is used. Traditionally, \*T formatted files for a
 
 The \*(GN \*R (\*G\**)
 .(f
-\** Written and maintained by James Clark <jjc@jclark.com>
+\** Written by James Clark <jjc@jclark.com> and now maintained by
+Ted Harding <ted.harding@nessie.mcc.ac.uk> and Werner Lemberg <wl@gnu.org>
 .)f
 suite of programs offer a choice of output types
 including
@@ -247,9 +257,9 @@ Options that are specific to the \*M package are described below.
 .lp
 .ip \-\-enable\-debug
 By default, the configuration process creates production quality Makefiles.
-This
-option, which takes no argument, changes certain values to aid in debugging
-\*M. It does not alter the physical behaviour of any of the programs.
+This option, which takes no argument, changes certain values to aid in
+debugging \*M.
+It does not alter the physical behaviour of any of the programs.
 .ip \-\-enable\-setuid[=ARG]
 By default,
 .b man
@@ -277,6 +287,6 @@ will test that \*N will run with the supplied device argument.
 .ip \-\-with\-db=LIBRARY
 configure will look for database interface libraries in the order Berkeley
 DB, gdbm and finally ndbm and will #define appropriate variables relative to
-the first one found. To override the built in order on platforms having a
-choice of interface library, use this option to specify which library to
-use.
+the first one found.
+To override the built-in order on platforms having a choice of interface
+library, use this option to specify which library to use.

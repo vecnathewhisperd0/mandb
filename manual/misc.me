@@ -1,4 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
+.\" Copyright (c) 2001, 2002 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -9,14 +10,14 @@
 .BS 1 "Miscellaneous"
 .BS 2 "Modes of operation"
 .lp
-The man\-db utilities can operate in many different modes, allowing varying
-degrees of freedom, functionality and security. No mode requires that the
-manual page hierarchies be writable.
+The \*M utilities can operate in many different modes, allowing varying
+degrees of freedom, functionality and security.
+No mode requires that the manual page hierarchies be writable.
 .lp
 .ip "(1) Default mode"
 .b man
-is setuid to the user MAN_OWNER which is `man' by default and is changeable
-via options to
+is setuid to the user MAN_OWNER which is \(oqman\(cq by default and is
+changeable via options to
 .b configure .
 .b mandb ,
 if run by the superuser or MAN_OWNER, creates globally accessible index
@@ -35,14 +36,16 @@ other users.
 If cat directories exist and have the correct permissions,
 .b man
 will take care of producing cat files.
-These will be owned by MAN_OWNER. The default
-permissions of both cat files and databases are 0644.
+These will be owned by MAN_OWNER.
+The default permissions of both cat files and databases are 0644.
 .ip "(2) No man database updates"
 This mode also requires
 .b man
 to be setuid, but is favoured where databases must be shared in an
-environment unfriendly to kernel locking procedures, eg. NFS. It also
-prevents possible `denial of service' attacks by malicious
+environment unfriendly to kernel locking procedures, eg. NFS.
+It also prevents possible
+.q "denial of service"
+attacks by malicious
 .b man
 users as
 .b man
@@ -60,10 +63,10 @@ Each index database may be owned by an arbitrary user who will have
 subsequent write access to the database.
 Cat files are created in the same way as for mode (1) above.
 .br
-To use the man\-db utilities in this mode, edit
+To use the \*M utilities in this mode, edit
 .i include/manconfig.h
 and comment out
-`#define MAN_DB_UPDATES'.
+\(oq#define MAN_DB_UPDATES\(cq.
 .ip "(3) No man database updates or cat production"
 .b man
 is installed not setuid.
@@ -71,30 +74,31 @@ This mode of operation probably offers the highest level of security but
 it requires higher levels of maintenance than other modes due to the
 restrictions imposed upon
 .b man .
-Each database is
-owned by an arbitrary user as in mode (2). Each cat hierarchy is also owned by
+Each database is owned by an arbitrary user as in mode (2).
+Each cat hierarchy is also owned by
 an arbitrary user who is responsible for creating cat files using
 .b catman
 whenever new manual files are installed.
 .b man
-will be completely passive in its action, ie. no index databases will be
+will be completely passive in its action, i.e. no index databases will be
 written to and no cat files are ever produced.
 .br
-To use the man\-db utilities in this mode, supply the option
-`\-\-disable\-setuid' to
+To use the \*M utilities in this mode, supply the option
+\(oq\-\-disable\-setuid\(cq to
 .b configure
 and edit
 .i include/manconfig.h ,
-commenting out `#define MAN_DB_UPDATES' and `#define MAN_CATS'
+commenting out \(oq#define MAN_DB_UPDATES\(cq and \(oq#define MAN_CATS\(cq
 after running
 .b configure ,
-or build man\-db as in mode (1) and install the binaries without the setuid
+or build \*M as in mode (1) and install the binaries without the setuid
 bit set.
 .ip "(4) Wide open"
 .b man
 is installed not setuid.
 This mode is similar in operation to the majority of vendor supplied, non
-setuid, cat file supporting manual pager suites. It is not recommended.
+setuid, cat file supporting manual pager suites.
+It is not recommended.
 The databases are owned by an arbitrary user who maintains them using
 .b mandb .
 .b man
@@ -102,22 +106,24 @@ does not update the databases.
 Cat files are produced and stored in world writable cat directories and have
 world write access themselves.
 .br
-To use the man\-db utilities in this mode, supply the option
-`\-\-disable\-setuid' to
+To use the \*M utilities in this mode, supply the option
+\(oq\-\-disable\-setuid\(cq to
 .b configure ,
 edit
 .i include/manconfig.h
-and comment out `#define MAN_DB_UPDATES' and change the definition of
+and comment out \(oq#define MAN_DB_UPDATES\(cq and change the definition of
 CATMODE from 0644 to 0666.
 .lp
-Other variations can also be used. In fact it is possible for
+Other variations can also be used.
+In fact it is possible for
 .b man
 to actually create index databases, usually the job of
 .b mandb ,
-for users private manual page hierarchies. This is enabled by editing
+for users' private manual page hierarchies.
+This is enabled by editing
 .i include/manconfig.h
-and un-commenting the `/* #define MAN_DB_CREATES */' line. man\-db\-2.2
-operated in this manner.
+and un-commenting the `/* #define MAN_DB_CREATES */' line.
+man\-db\-2.2 operated in this manner.
 .lp
 In summary,
 .i include/manconfig.h
@@ -148,8 +154,8 @@ If
 is installed setuid to an arbitrary user and is run by root, instead of
 gaining the effective user id of the setuid user,
 .b man
-is run with both uid and euid as root.  This is neccesary due to
-infelicities with the
+is run with both uid and euid as root.
+This is neccesary due to infelicities with the
 .b POSIX
 setuid() function call:  All users except root may change to and from the
 effective (setuid) user, however once root has setuid(user), there is no way
@@ -170,18 +176,16 @@ cat hierarchy or database owner before running
 whenever the databases need updating or cat files are to be produced.
 .BS 2 "NLS message catalogues"
 .lp
-\*M has built in support for native language message catalogues. That is, it
-can issue messages in the locale of the user's choice. This will only occur if
-the locale's translation has been written. Before undertaking a translation,
-please contact the author who will be maintaining a list of such activity.
-.lp
-Currently, the following translations exist
-.bu
-de_DE.88591
+\*M has built in support for native language message catalogues.
+That is, it can issue messages in the locale of the user's choice.
+This will only occur if the locale's translation has been written.
+Before undertaking a translation, please contact the Translation Project
+(http://www.iro.umontreal.ca/contrib/po/HTML/) who are coordinating such
+activities.
 .BS 2 "Credits"
 .lp
-I would like to thank the following people for their time, effort, support,
-ideas and code which went into \*M
+The authors would like to thank the following people for their time, effort,
+support, ideas and code which went into \*M:
 .(l
 Markus Armbruster <armbru@pond.sub.org>
 Lionel Cons & colleages <cons@dxcern.cern.ch>

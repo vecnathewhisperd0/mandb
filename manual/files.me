@@ -1,4 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
+.\" Copyright (c) 2002 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -10,7 +11,8 @@
 .BS 2 "Manual page hierarchies"
 .lp
 It is often common for manual page systems to have more than one manual page
-hierarchy. Indeed one of the systems I use has the following globally
+hierarchy.
+Indeed one of the systems I use has the following globally
 accessible hierarchies
 .ip
 .i
@@ -32,11 +34,12 @@ accessible hierarchies
 A full system
 .EV MANPATH
 would be a colon separated list of these directories.
-The order is important, and is observed by man\-db's search algorithms.
+The order is important, and is observed by \*M's search algorithms.
 The order is very much related to the user's
 .EV PATH
 environment variable, and should be set on a per user basis, or not
-set at all. If a user's
+set at all.
+If a user's
 .EV PATH
 causes
 .ip
@@ -62,7 +65,8 @@ To ensure correct order, the program
 .b manpath
 may be used to set the
 .EV MANPATH
-environment variable. See
+environment variable.
+See
 .b manpath (1)
 and
 .b manpath (5)
@@ -108,48 +112,56 @@ manpath if
 is unset.
 .BS 2 "Determination of the internal manpath"
 .lp
-All man\-db utilities,
+All \*M utilities,
 .b manpath
 included, will use the user's
 .EV MANPATH
-environment variable if set and not equal to "".  Otherwise the user's
+environment variable if set and not equal to "".
+Otherwise the user's
 .EV PATH
-environment variable is queried.  If this is unset or is set to "", the
+environment variable is queried.
+If this is unset or is set to "", the
 determined manpath will simply be any
 .ip
 .b MANDATORY_MANPATH
 .lp
-elements defined in the man\-db config file.
+elements defined in the \*M config file.
 .lp
 Assuming that a
 .EV PATH
-exists, each path element it contains is scanned for in the config file.  If
-found, the relative manpath element is appended to the internal manpath.
+exists, each path element it contains is scanned for in the config file.
+If found, the corresponding manpath element is appended to the internal
+manpath.
 However, if the element is not mentioned in the config file, a man directory
-relative to it will be sought.  The subdirectories
+relative to it will be sought.
+The subdirectories
 .i ../man
 or
 .i man
 relative to the path component are appended to the internal manpath if they
-exist.  Finally, the internal manpath is stripped of duplicate paths before
+exist.
+Finally, the internal manpath is stripped of duplicate paths before
 being processed by the
 .b NLS
-and `Other OS' routines. These may add to or modify the separate path
+and \(oqOther OS\(cq routines.
+These may add to or modify the separate path
 elements giving priority to
 .b NLS
 manual pages or add OS-relative manpaths.
 .BS 2 "Other OS's manual pages"
 .lp
 It is common to have collections of heterogeneous computer systems linked
-together in a network. In some circumstances\**
+together in a network.
+In some circumstances\**
 .(f
 \** writing portable software instantly comes to mind
 .)f
 it is advantageous to be able to access the manual
 pages of these other systems directly from your system.
-This feature is known as alternate system support. The accepted way to
-setup this support is to NFS mount the respective systems' manual page
-hierarchies under the native manual page hierarchies. An example:
+This feature is known as alternate system support.
+The accepted way to setup this support is to NFS mount the respective
+systems' manual page hierarchies under the native manual page hierarchies.
+An example:
 
 .TS
 center box tab(@);
@@ -177,9 +189,11 @@ using
 .b man
 use the
 .b \-m
+or
+.b \-\-systems
 option, eg.
 .ip
-.bx "man \-\-all\ \-\-system userix:newOS 5 passwd"
+.bx "man \-\-all\ \-\-systems userix:newOS 5 passwd"
 .lp
 would provide manual pages showing the structure of
 .i /etc/passwd
@@ -191,7 +205,7 @@ in that order.
 A manual page would
 .i not
 be displayed about the local systems conventions.
-Please read the relevant man\-db utility's manual
+Please read the relevant \*M utility's manual
 page for further and more specific information.
 .BS 2 "NLS manual pages"
 .lp
@@ -204,7 +218,7 @@ page hierarchy.
 A table illustrating the concept is reproduced from the
 .q "Filesystem Hierarchy Standard"\**
 .(f
-\** written and maintained by Daniel Quinlan <quinlan@yggdrasil.com>
+\** written and maintained by Daniel Quinlan <quinlan@pathname.com>
 .)f
 (\*F) manual from which further information may be obtained.
 
@@ -233,10 +247,12 @@ contain the usual section subdirectories.
 Access to NLS manual pages is achieved via use of the
 .b setlocale (3)
 function which queries user environment variables to
-determine the current locale. Internally to the man\-db utilities, this
+determine the current locale.
+Internally to the \*M utilities, this
 locale string is appended to each manpath element and the resultant NLS manpath
 element is
-searched before the standard manpath element. In this way, an NLS manual page
+searched before the standard manpath element.
+In this way, an NLS manual page
 that matches the search criteria will be shown before or in place of the standard
 American English page.
 .lp
@@ -250,9 +266,9 @@ and their locale is set to
 .b de_DE ,
 the command
 .ip
-.bx "man \-\-system userix:man foobar"
+.bx "man \-\-systems userix:man foobar"
 .lp
-would produce the following internal man\-db manpath elements
+would produce the following internal \*M manpath elements
 .ip
 .i
 .nf
@@ -265,7 +281,7 @@ would produce the following internal man\-db manpath elements
 /usr/local/man/de_DE
 /usr/local/man
 /usr/man/de_DE
-/usr/man/man
+/usr/man
 /usr/X11R6/man/de_DE
 /usr/X11R6/man
 .fi
@@ -306,6 +322,7 @@ The following commands included within an initialisation file such as
 .i /etc/rc.d/rc.local
 will enable the display of latin1 fonts on the first 5 virtual terminals.
 .nf  \" no fill
+.ft CR
 
 ---< part of /etc/rc.d/rc.local >---
 # sort out the vt font
@@ -324,6 +341,7 @@ for t in 1 2 3 4 5; do
 done
 ---< part of /etc/rc.d/rc.local >---
 
+.ft P
 .fi  \" fill (default)
 For display under the
 .q "X Window System",
@@ -333,14 +351,15 @@ a suitable 8 bit clean terminal emulator is required.
 When formatting an ASCII manual page for a latin1 output device,
 \*(GN \*N
 will take advantage of the extra characters available and will always
-produce a text page containing some latin1 (8-bit) symbols. The table\**
+produce a text page containing some latin1 (8-bit) symbols.
+The table\**
 .(f
 \** The ISO 8859-1 and ASCII columns of this table will be identical if this
 manual was formatted for an ASCII based typewriter display, i.e. using \*N
 in its native mode.
 .)f
 below, taken from
-.b man (1)
+.b man (1),
 illustrates the differences.
 
 .TS
@@ -355,7 +374,8 @@ multiplication sign@327@\(mu@x
 .TE
 
 To display such symbols on a 7 bit terminal or terminal emulator, they
-must be translated back into standard ASCII. The
+must be translated back into standard ASCII.
+The
 .b \-7
 option with
 .b man
@@ -367,12 +387,14 @@ devices and nroff is using the latin1 output device to format manual pages.
 .lp
 It has become standard practice to store the formatted manual pages on disk
 so that subsequent requests for the manual page do not have to involve the
-formatting process. These pre-formatted manual pages are known as
+formatting process.
+These pre-formatted manual pages are known as
 .i cat
-pages. Although cat pages require additional disk storage requirements, they
+pages.
+Although cat pages require additional disk storage requirements, they
 provide a substantial speed increase and their use is recommended.
 .lp
-The automatic support of storing and using cat pages is brought about by
+The automatic support for storing and using cat pages is brought about by
 simply creating suitable directories for them.
 .BS 2 "Cat page hierarchies"
 .lp
@@ -381,22 +403,24 @@ their source manual pages, in
 .i cat<sec>
 subdirectories rather than
 .i man<sec> .
-This situation is rather limiting in several situations
+This situation is rather limiting in several situations:
 .ip
 .bu
 When it is advantageous to mount
 .i /usr
-as a read-only filesystem. Cat pages cannot be supported in this situation
-without use of symbolic links to various other areas of the filesystem. This
-situation is a greater problem if the media itself is read-only, such as
+as a read-only filesystem.
+Cat pages cannot be supported in this situation
+without use of symbolic links to various other areas of the filesystem.
+This situation is a greater problem if the media itself is read-only, such as
 CD-ROM.
 .bu
-When NFS mounting alternate OS's manual page hierarchies. The alternate
-system may be under someone else's control and they may not want cat pages
-stored on their system. In fact it is usually a good idea to export the
-manual page filesystems read-only, or import them that way. It is possible to
-avoid the problems, this time with even more symbolic links that
-may need periodic updating.
+When NFS mounting alternate OS's manual page hierarchies.
+The alternate system may be under someone else's control and they may not
+want cat pages stored on their system.
+In fact, it is usually a good idea to export the manual page filesystems
+read-only, or import them that way.
+It is possible to avoid the problems, this time with even more symbolic
+links that may need periodic updating.
 .\".bu
 .\"When sharing 
 .\".i /usr 
@@ -417,16 +441,17 @@ local cat page directory caches.
 .BS 2 "Local cat page directory caches"
 .lp
 Any location for cat page hierarchy may be specified in the
-man\-db configuration file. The location of the database cache associated with
+\*M configuration file.
+The location of the database cache associated with
 each manual page hierarchy will always be at the root of the cat page
-hierarchy. By default, the cat page hierarchy shadows the manual page
 hierarchy.
+By default, the cat page hierarchy shadows the manual page hierarchy.
 The \*F
 proposes
 .i /var/cache/man
-as the location for such directories although \*M allows any directory
+as the location for such directories, although \*M allows any directory
 hierarchy to be used.
-The \*F path transformation rule is as follows
+The \*F path transformation rule is as follows:
 .ip
 .i /usr/<hierarchy>/share/man/<locale>/man<sec>/page.<sec><ext>
 .lp
@@ -451,13 +476,24 @@ follows strict rules in determining which file is displayed.
 As an example, the following route is
 taken if all three files exist.
 .np
-Check relative time stamps of the manual file and the traditional cat file.
-If the cat file is up to date (has a more recent time stamp), display it.
+Check relative modification time stamps of the manual file and the
+traditional cat file.
+If the cat file is up to date (has an equal time stamp), display it.
 .np
-The traditional cat file is out of date. Check relative time stamps of the
-manual file and the alternate cat file. If the cat file is up to date,
-display it.
+The traditional cat file is out of date.
+Check relative time stamps of the manual file and the alternate cat file.
+If the cat file is up to date, display it.
 .np
-The alternate cat file is out of date. Format the manual file and display
-the result in the foreground, while updating the alternate cat file in the
-background.
+The alternate cat file is out of date.
+Format the manual file and display the result in the foreground, while
+updating the alternate cat file in the background.
+.lp
+When a cat file is created, its time stamp is set to that of the
+corresponding manual file.
+Manual files are often stored in
+.b tar
+archives, and time stamps may be preserved when these archives are unpacked.
+Simply checking whether the cat file is newer would sometimes cause
+.b man
+to display an out-of-date cat file in this case, when it should have
+reformatted the manual file instead.

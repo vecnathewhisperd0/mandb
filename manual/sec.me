@@ -1,4 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
+.\" Copyright (c) 2002 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -11,8 +12,8 @@
 .lp
 The use of package specific manual page
 sections is discouraged as packages large enough to warrant their own
-section probably contain manual pages that span other sections. An example
-might be package
+section probably contain manual pages that span other sections.
+An example might be package
 .b foo
 that has its own section
 .ip
@@ -20,16 +21,17 @@ that has its own section
 .lp
 which contains manual pages
 describing its programs, the library routines it offers and the format of
-several of its configuration files. These pages would normally be allocated
-to sections
+several of its configuration files.
+These pages would normally be allocated to sections
 .b 1 ,
 .b 3
 and
 .b 5
 respectively and thus combining them all under section
 .b foo
-is misleading. Subtle problems will arise if there are any
-base name-space clashes with standard manual pages, eg.
+is misleading.
+Subtle problems will arise if there are any
+base name-space clashes with standard manual pages, e.g.
 .b exit (3),
 .b exit (foo)
 and the order in which they should be shown.
@@ -65,7 +67,8 @@ will look for
 .i exit.1*
 in section
 .b 1
-of the manual. If
+of the manual.
+If
 .i exit.1
 exists, it will be displayed in preference to
 .i exit.1foo
@@ -76,8 +79,9 @@ will look for
 .i exit.1foo*
 in section
 .b 1
-of the manual. The asterisk (*)
-represents a wild-card of any type or length, including length zero.
+of the manual.
+The asterisk (*) represents a wild-card of any type or length,
+including length zero.
 .lp
 For an argument to be interpreted as a section name rather than a page name, it
 must either begin with a digit, or be included in the standard section list.
@@ -99,11 +103,13 @@ and
 This should be modified in order and content to meet the local conventions.
 It may be altered at run-time using the
 .b SECTION
-directive in the man\-db configuration file.
+directive in the \*M configuration file.
 .lp
 Every subdirectory section name in the entire system must be in the list,
-including sections found in imported manual page hierarchies. The order is
-important because in normal operation,
+including sections found in imported manual page hierarchies.
+It is not necessary to list sections with extensions unless a special
+ordering for those extensions is desired.
+The order is important because in normal operation,
 .b man
 will only display the first manual page it finds that meets the search
 criteria. Using the
