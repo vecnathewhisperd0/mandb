@@ -286,6 +286,7 @@ extern VOID *xmalloc (size_t n);
 extern VOID *xrealloc (VOID *p, size_t n);
 extern __inline__ char *xstrdup (const char *string);
 extern __inline__ char *xstrndup (const char *string, size_t size);
+extern const char *xstrsignal (int signum);
 extern int create_tempfile (const char *template, char **created_filename);
 extern char *create_tempdir (const char *template);
 

@@ -1,3 +1,14 @@
+Sun Aug  3 11:09:07 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* acinclude.m4 (MAN_FUNC_STRSIGNAL): New macro to check for the GNU
+	  extension strsignal().
+	* configure.in: Use it.
+	* lib/xstrsignal.c: New file, wrapping strsignal() or sys_siglist
+	  depending on what's available (and with a saner return type than
+	  strsignal()).
+	* lib/Makefile.in (ALLSRCS, XOBJS): Build xstrsignal.
+	* include/manconfig.h.in (xstrsignal): Add prototype.
+
 Sun Aug  3 10:57:55 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* include/comp_src.h.in: Protect against multiple inclusions.
