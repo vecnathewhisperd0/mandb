@@ -54,17 +54,25 @@ static void gripe_insert_unused(char *data)
 	gripe_corrupt_data();
 }
 
-/* FAVOUR(a,b) is true if id 'a' is preferred to id 'b', i.e. if 'a' is a
- * more canonical database entry than 'b'. This usually goes in comparison
+/* compare_ids(a,b) is true if id 'a' is preferred to id 'b', i.e. if 'a' is
+ * a more canonical database entry than 'b'. This usually goes in comparison
  * order, but there's a special exception when FAVOUR_STRAYCATS is set.
  */
+int compare_ids(char a, char b)
+{
 #ifdef FAVOUR_STRAYCATS
-#define FAVOUR(a,b) \
-    (((a) < (b) && !((a) == WHATIS_MAN && (b) == STRAY_CAT)) || \
-     ((a) == STRAY_CAT && (b) == WHATIS_MAN))
-#else /* !FAVOUR_STRAYCATS */
-#define FAVOUR(a,b) ((a) < (b))
-#endif /* FAVOUR_STRAYCATS */
+	if (a == WHATIS_MAN && b == STRAY_CAT)
+		return 1;
+	else if (a == STRAY_CAT && b == WHATIS_MAN)
+		return -1;
+#endif
+	if (a < b)
+		return -1;
+	else if (a > b)
+		return 1;
+	else
+		return 0;
+}
 
 /* The do_we_replace logic. Decide, for some existing key, whether it should
  * be replaced with some new contents. Check that names and section
@@ -74,7 +82,7 @@ static int replace_if_necessary(struct mandata *newdata,
 				struct mandata *olddata,
 				datum newkey, datum newcont)
 {
-	if (FAVOUR(newdata->id, olddata->id)) {
+	if (compare_ids(newdata->id, olddata->id) < 0) {
 		if (MYDBM_REPLACE(dbf, newkey, newcont))
 			gripe_replace_key(newkey.dptr);
 	} else if (newdata->id == olddata->id) 
