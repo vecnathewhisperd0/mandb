@@ -729,7 +729,7 @@ static void add_to_dirlist (FILE *config, int user)
 		if (*bp == '#' || *bp == '\0')
 			continue;
 		else if (strncmp (bp, "NO", 2) == 0)
-			continue;	/* mach any word starting with NO */
+			continue;	/* match any word starting with NO */
 		else if (sscanf (bp, "MANBIN %*s") == 1)
 			continue;
 		else if (sscanf (bp, "MANDATORY_MANPATH %s", key) == 1)
