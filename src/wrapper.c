@@ -57,10 +57,9 @@ struct	{
 #ifdef DEBUG
   { "_man",	"src/man",	"man"	},
   { "_mandb",	"src/mandb",	"man"	},
-#else
+#endif
   { "man",	"/usr/lib/man-db/man",		"man"	},
   { "mandb",	"/usr/lib/man-db/mandb",	"man"	},
-#endif
   { 0,		0,				0,	}};
 
 char *program_name;

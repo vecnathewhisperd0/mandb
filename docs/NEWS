@@ -23,12 +23,16 @@ Major changes since man_db-2.3.19:
 	  rather than just the first time, in case pages in several
 	  different character sets are viewed in a single session.
 
-	o Use a variant of mkstemp() rather than tempnam(), to avoid classic
-	  race conditions. (I don't believe the races were usefully
-	  exploitable.)
+	o groff requests are no longer assumed to be case-insensitive when
+	  scanning for preprocessors, so for example mdoc's .Eq request
+	  isn't mistaken for the .EQ which introduces eqn commands.
 
 	Improvements:
 	-------------
+
+	o Use a variant of mkstemp() rather than tempnam(), to avoid classic
+	  race conditions. (I don't believe the races were usefully
+	  exploitable.)
 
 	o Tolerate whatis entries in a database that point to themselves.
 

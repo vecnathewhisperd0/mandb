@@ -1,3 +1,13 @@
+Thu Aug  9 15:10:26 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in: Require autoconf 2.50a (for AS_VAR_*).
+	* src/wrapper.c: If DEBUG is defined, allow _man and _mandb as
+	  argv[0] names as well as man and mandb, rather than instead of
+	  them.
+	* docs/NEWS: Document lexgrog improvement. The mkstemp() work was
+	  more an improvement than a fix, as I don't think it was
+	  exploitable.
+
 Mon Aug  6 02:22:38 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l: groff requests aren't case-sensitive, so stop the
