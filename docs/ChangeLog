@@ -1,3 +1,8 @@
+Sun Nov  7 16:07:26 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_wait): Close pipeline output before
+	  reaping processes, so that writing processes get SIGPIPE.
+
 Sun Nov  7 16:05:08 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_wait): Fix active process debugging
