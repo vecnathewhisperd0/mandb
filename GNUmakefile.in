@@ -216,9 +216,13 @@ dist: update
 	for file in $(FILES); do \
 	  cp -p $(srcdir)/$$file $(man_db)/$$file; \
 	done
-	for subdir in intl po; do \
-	  $(MAKE) -C $$subdir dist; \
-	done
+	$(MAKE) -C intl dist
+	# Maintainers may wish to run 'make -C po update-po' beforehand.
+	# This is not done automatically, since the .po files are stored
+	# in revision control.
+	$(MAKE) -C po man-db.pot
+	$(MAKE) -C po update-gmo
+	$(MAKE) -C po dist2
 	chmod -R a+rX $(man_db)
 	tar cvf - $(man_db) | gzip -9 > $(man_db).tar.gz
 	rm -fr $(man_db)
