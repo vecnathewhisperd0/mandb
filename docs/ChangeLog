@@ -1,3 +1,10 @@
+Sun Sep 14 16:58:34 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (get_source_encoding): Assume ISO-8859-1 source
+	  encoding if it's unknown (e.g. 'man -l').
+	  (get_default_device): source_encoding can no longer be NULL.
+	* src/man.c (make_roff_command): Likewise.
+
 Sun Sep 14 16:45:43 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (EXAMPLES, ENVIRONMENT, HISTORY): Change a few

@@ -112,6 +112,8 @@ static struct directory_entry directory_table[] = {
 	{ NULL,		NULL,		"NULL"			}
 };
 
+static const char *fallback_source_encoding = "ISO-8859-1";
+
 /* The default groff terminal output device to be used is determined based
  * on nl_langinfo(CODESET), which returns the character set used by the
  * current locale.
@@ -205,7 +207,7 @@ const char *get_source_encoding (const char *lang)
 	const char *dot;
 
 	if (!lang)
-		return NULL;
+		return fallback_source_encoding;
 
 	dot = strchr (lang, '.');
 	if (dot)
@@ -236,7 +238,7 @@ const char *get_source_encoding (const char *lang)
 		if (STRNEQ (entry->lang_dir, lang, strlen (entry->lang_dir)))
 			return entry->source_encoding;
 
-	return NULL;
+	return fallback_source_encoding;
 }
 
 /* Return the standard output encoding for the source man page, based on the
@@ -349,7 +351,7 @@ const char *get_default_device (const char *locale_charset,
 {
 	const struct charset_entry *entry;
 
-	if (!locale_charset || !source_encoding)
+	if (!locale_charset)
 		return fallback_default_device;
 
 	for (entry = charset_table; entry->locale_charset; ++entry) {

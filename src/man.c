@@ -1662,7 +1662,7 @@ static char *make_roff_command (const char *dir, const char *file,
 			source_encoding = get_source_encoding (lang);
 			if (debug)
 				fprintf (stderr, "source_encoding = %s\n",
-					 STRC (source_encoding, "NULL"));
+					 source_encoding);
 
 			cat_charset = get_standard_output_encoding (lang);
 			locale_charset = get_locale_charset ();
@@ -1704,7 +1704,7 @@ static char *make_roff_command (const char *dir, const char *file,
 			 *   from source_encoding to roff_encoding on input;
 			 *   from output_encoding to locale_charset on output.
 			 */
-			if (source_encoding && roff_encoding &&
+			if (roff_encoding &&
 			    !STREQ (source_encoding, roff_encoding))
 				command = strappend (command,
 						     " | iconv -c -f ",
@@ -1716,7 +1716,7 @@ static char *make_roff_command (const char *dir, const char *file,
 				output_encoding = source_encoding;
 			if (debug)
 				fprintf (stderr, "output_encoding = %s\n",
-					 STRC (output_encoding, "NULL"));
+					 output_encoding);
 
 			if (!getenv ("LESSCHARSET")) {
 				const char *less_charset =
