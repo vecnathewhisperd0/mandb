@@ -59,10 +59,11 @@ static void gripe_insert_unused(char *data)
  * order, but there's a special exception when FAVOUR_STRAYCATS is set.
  */
 #ifdef FAVOUR_STRAYCATS
-#define FAVOUR(a,b) ((a < b && !(a == WHATIS_MAN && b == STRAY_CAT)) || \
-		     (a == STRAY_CAT && b == WHATIS_MAN))
+#define FAVOUR(a,b) \
+    (((a) < (b) && !((a) == WHATIS_MAN && (b) == STRAY_CAT)) || \
+     ((a) == STRAY_CAT && (b) == WHATIS_MAN))
 #else /* !FAVOUR_STRAYCATS */
-#define FAVOUR(a,b) (a < b)
+#define FAVOUR(a,b) ((a) < (b))
 #endif /* FAVOUR_STRAYCATS */
 
 /* The do_we_replace logic */
@@ -209,13 +210,13 @@ int dbstore(struct mandata *in, const char *basename)
 
 		split_content(oldcont.dptr, &old);
 
-		/* Create multi keys for both 
+		/* Create multi keys for both old
 		   and new items, create new content */
 
 		if (old.name)
 			old_name = old.name;
 		else
-			old_name = basename;
+			old_name = oldkey.dptr;
 
 		lastkey = make_multi_key(old_name, old.ext);
 		newkey = make_multi_key(basename, in->ext);
