@@ -79,6 +79,7 @@ extern int errno;
 
 #include "manconfig.h"
 #include "lib/error.h"
+#include "lib/pipeline.h"
 
 #ifdef HAVE_GETOPT_H
 #  include <getopt.h>
@@ -101,6 +102,7 @@ static void zap_quotes (void);
 #endif
 
 char *program_name;
+int debug = 0;
 
 static const struct option long_options[] =
 {
@@ -433,7 +435,7 @@ static int open_file (char *filename)
 		} else if (!is_compr) {
 			compfile = strappend (NULL, filename, ".", NULL);
 			len = strlen (compfile);
-  		
+
 			for (comp = comp_list; comp->ext; comp++) {
 				compfile = strappend (compfile, comp->ext, NULL);
 				if (stat (compfile, &buf) == 0)
@@ -444,26 +446,35 @@ static int open_file (char *filename)
 			compfile = filename;
 
 		if (comp->ext) {
-			char *command;
+			command *decompress_cmd;
+			pipeline *decompress;
 			int exit_status;
 			int file_fd;
 
 			file_fd = create_tempfile ("zsman", &filename);
 			if (file_fd < 0)
 				error (FATAL, errno, _("can't create a temporary filename"));
-			command = strappend (NULL, comp->prog, " ", compfile, " > ", filename, NULL);
-			exit_status = system (command);
+			decompress_cmd = command_new_argstr (comp->prog);
+			command_arg (decompress_cmd, compfile);
+			decompress = pipeline_new_commands
+				(decompress_cmd, NULL);
+			decompress->want_out = file_fd;
+			pipeline_start (decompress);
+			exit_status = pipeline_wait (decompress);
 			close (file_fd);
 
 			if (exit_status != 0) {
+				char *decompress_str =
+					pipeline_tostring (decompress);
 				error (OK, 0, _("%s exited with status %d"),
-				       command, exit_status);
-				free (command);
+				       decompress_str, exit_status);
+				free (decompress_str);
+				pipeline_free (decompress);
 				yyin = oldyyin;
 				return 1;
 			}
 
-			free (command);
+			pipeline_free (decompress);
 
 			if (!(yyin = fopen (filename, "r")))  {
 				error (OK, errno,
