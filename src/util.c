@@ -40,6 +40,7 @@ extern char *strcpy();
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <dirent.h>
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>
@@ -171,4 +172,36 @@ char *escape_shell (const char *unesc)
 		}
 	*escp = 0;
 	return esc;
+}
+
+/* Remove a directory and all files in it. Does not recurse beyond that. */
+int remove_directory (const char *directory)
+{
+	DIR *handle = opendir (directory);
+	struct dirent *entry;
+
+	if (!handle)
+		return -1;
+	entry = readdir (handle);
+	while (entry) {
+		struct stat st;
+		char *path = xstrdup (directory);
+		path = strappend (path, "/", entry->d_name, NULL);
+		if (stat (path, &st) == -1) {
+			free (path);
+			return -1;
+		}
+		if (S_ISREG (st.st_mode)) {
+			if (unlink (path) == -1) {
+				free (path);
+				return -1;
+			}
+		}
+		free (path);
+		entry = readdir (handle);
+	}
+
+	if (rmdir (directory) == -1)
+		return -1;
+	return 0;
 }

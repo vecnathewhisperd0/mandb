@@ -27,16 +27,20 @@
 extern char *strappend (char *str, ...);
 extern char *xstrdup (char *string);
 
-/* Get a handle for a sane temporary file, looking in $TMPDIR, P_tmpdir, and
- * finally /tmp.
- */
-int create_tempfile (const char *template, char **created_filename)
+static char *path_search ()
 {
-	char *dir;
-	int fd;
-	dir = getenv ("TMPDIR");
-	if (!dir || access (dir, W_OK) == -1)
-		dir = NULL;
+	char *dir = NULL;
+
+	if (getuid () == geteuid () && getgid () == getegid ()) {
+		dir = getenv ("TMPDIR");
+		if (!dir || access (dir, W_OK) == -1)
+			dir = NULL;
+		if (!dir) {
+			dir = getenv ("TMP");
+			if (!dir || access (dir, W_OK) == -1)
+				dir = NULL;
+		}
+	}
 #ifdef P_tmpdir
 	if (!dir) {
 		dir = P_tmpdir;
@@ -50,14 +54,41 @@ int create_tempfile (const char *template, char **created_filename)
 			dir = NULL;
 	}
 
+	return dir;
+}
+
+/* Get a handle for a sane temporary file, looking in $TMPDIR, P_tmpdir, and
+ * finally /tmp.
+ */
+int create_tempfile (const char *template, char **created_filename)
+{
+	char *dir = path_search ();
+	int fd;
+	mode_t old_mode;
+
 	if (!dir)
 		return -1;
-
 	dir = xstrdup (dir);
 	*created_filename = strappend (dir, "/", template, "XXXXXX", NULL);
-	fd = mkstemp (*created_filename);
 	/* -rw-r--r-- so that it can be read with different privileges. */
-	if (fd != -1)
-		fchmod (fd, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	old_mode = umask (S_IWGRP | S_IXGRP | S_IWOTH | S_IXOTH);
+	fd = mkstemp (*created_filename);
+	umask (old_mode);
 	return fd;
+}
+
+/* Get a sane temporary directory, looking in $TMPDIR, P_tmpdir, and finally
+ * /tmp.
+ */
+char *create_tempdir (const char *template)
+{
+	char *dir = path_search ();
+	char *created_dirname;
+
+	if (!dir)
+		return NULL;
+	dir = xstrdup (dir);
+	created_dirname = strappend (dir, "/", template, "XXXXXX", NULL);
+	mkdtemp (created_dirname);
+	return created_dirname;
 }

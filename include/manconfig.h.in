@@ -256,6 +256,7 @@ extern VOID *xmalloc (size_t n);
 extern VOID *xrealloc (VOID *p, size_t n);
 extern __inline__ char *xstrdup (const char *string);
 extern int create_tempfile (const char *template, char **created_filename);
+extern char *create_tempdir (const char *template);
 
 /* ver.c */
 #ifndef STATIC_VER
@@ -282,6 +283,7 @@ extern int is_changed (char *fa, char *fb);
 extern int is_directory (char *path);
 extern __inline__ int do_system (const char *command);
 extern char *escape_shell (const char *unesc);
+extern int remove_directory (const char *directory);
 
 #if !defined(HAVE_BASENAME)
 extern char *basename ();

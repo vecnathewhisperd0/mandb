@@ -980,6 +980,7 @@ int main (int argc, char *argv[])
 
 #endif /* HAVE_SETLOCALE */
 
+#ifdef TROFF_IS_GROFF
 	if (htmlout) {
 		if (!html_pager) {
 			html_pager = getenv ("BROWSER");
@@ -988,6 +989,7 @@ int main (int argc, char *argv[])
 		}
 		pager = html_pager;
 	}
+#endif
 	if (pager == NULL) {
 		pager = getenv ("PAGER");
 		if (pager == NULL)
@@ -1221,6 +1223,7 @@ static void man_getopt (int argc, char *argv[])
 #ifdef TROFF_IS_GROFF
 				html_pager = (optarg ? optarg : 0);
 				htmlout = 1;
+				troff = 1;
 				roff_device = "html";
 #endif /* TROFF_IS_GROFF */
 				break;
@@ -1266,7 +1269,7 @@ static void man_getopt (int argc, char *argv[])
 	if (troff + whatis + apropos + catman + print_where > 1) {
 		error (0, 0,
 		       strappend (NULL,
-				  troff ? "-[tTZ] " : "",
+				  troff ? "-[tTZH] " : "",
 				  whatis ? "-f " : "",
 				  apropos ? "-k " : "",
 				  catman ? "-c " : "",
@@ -1548,7 +1551,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		/* Load the roff_device value dependent on the language dir
 		 * in the path.
 		 */
-		if (!troff && !htmlout)
+		if (!troff)
 			determine_lang_table (lang);
 
 		/* tell grops to guess the page size */
@@ -1781,9 +1784,11 @@ static char *make_display_command (char *file, char *title)
 					     " ", esc_file, " |",
 					     get_def ("tr", TR TR_SET1 TR_SET2),
 					     " |", pager, NULL);
+#ifdef TROFF_IS_GROFF
 		else if (htmlout)
 			/* The filename needs to be substituted in later. */
 			command = xstrdup (html_pager);
+#endif
 		else
 			command = strappend (NULL, pager, " ", esc_file, NULL);
 	} else {
@@ -1791,8 +1796,10 @@ static char *make_display_command (char *file, char *title)
 			command = strappend (NULL,
 					     get_def ("tr", TR TR_SET1 TR_SET2),
 					     " |", pager, NULL);
+#ifdef TROFF_IS_GROFF
 		else if (htmlout)
 			command = xstrdup (html_pager);
+#endif
 		else
 			command = xstrdup (pager);
 	}
@@ -2101,31 +2108,55 @@ static int format_display_and_save (char *format_cmd, char *disp_cmd,
 /* Format a manual page with format_cmd and display it with disp_cmd.
  * Handle temporary file creation if necessary.
  */
-static void format_display (char *format_cmd, char *disp_cmd)
+static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 {
 	char *command;
 	int status;
 
+#ifdef TROFF_IS_GROFF
 	if (format_cmd && htmlout) {
-		char *esc_stdin;
-		create_stdintmp ();
-		esc_stdin = escape_shell (stdin_tmpfile);
-		command = strappend (NULL, format_cmd, " > ", esc_stdin, NULL);
-		free (esc_stdin);
+		char *htmldir;
+		char *man_file_copy, *man_base, *man_ext;
+		char *htmlfile, *esc_htmlfile;
+
+		htmldir = create_tempdir ("hman");
+		man_file_copy = xstrdup (man_file);
+		man_base = basename (man_file_copy);
+		man_ext = strchr (man_base, '.');
+		if (man_ext)
+			*man_ext = '\0';
+		htmlfile = xstrdup (htmldir);
+		htmlfile = strappend (htmlfile, "/", man_base, ".html", NULL);
+		free (man_file_copy);
+		esc_htmlfile = escape_shell (htmlfile);
+		command = strappend (NULL, format_cmd, " > ", esc_htmlfile,
+				     NULL);
+
 		status = do_system_drop_privs (command);
 		free (command);
 		/* Some shells report broken pipe; ignore it. */
 		if (status && status != (SIGPIPE + 0x80) * 256) {
-			remove_stdintmp ();
+			if (remove_directory (htmldir) == -1)
+				error (0, errno,
+				       _("can't remove directory %s"),
+				       htmldir);
+			free (htmlfile);
+			free (htmldir);
 			gripe_system (command, status);
 		}
 
-		command = make_browser (disp_cmd, stdin_tmpfile);
+		command = make_browser (disp_cmd, htmlfile);
 		status = do_system_drop_privs (command);
-		remove_stdintmp ();
+		if (remove_directory (htmldir) == -1)
+			error (0, errno, _("can't remove directory %s"),
+			       htmldir);
+		free (htmlfile);
+		free (htmldir);
 		if (status && status != (SIGPIPE + 0x80) * 256)
 			gripe_system (command, status);
-	} else if (format_cmd) {
+	} else
+#endif
+	    if (format_cmd) {
 		command = strappend (NULL, format_cmd, " | ", disp_cmd, NULL);
 		status = do_system_drop_privs (command);
 		if (status && status != (SIGPIPE + 0x80) * 256)
@@ -2183,6 +2214,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 	int found;
 	static int pause;
 	char *format_cmd;	/* command to format man_file to stdout */
+	int display_to_stdout;
 
 	/* if dir is set chdir to it */
 	if (dir) {
@@ -2223,7 +2255,13 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			man_modtime = stb.st_mtime;
 	}
 
-	if (troff) {
+	display_to_stdout = troff;
+#ifdef TROFF_IS_GROFF
+	if (htmlout)
+		display_to_stdout = 0;
+#endif
+
+	if (display_to_stdout) {
 		found = !access (man_file, R_OK);
 		if (found) {
 			if (pause && do_prompt (title))
@@ -2242,10 +2280,13 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 		   Check there first ala the FSSTND, and display if newer
 		   than man_file, if older, ignore it altogether */
 
+#ifdef TROFF_IS_GROFF
 		if (htmlout) {
 			format = 1;
 			save_cat = 0;
-		} else if (!local_man_file) {
+		} else
+#endif
+		    if (!local_man_file) {
 			catpath = get_catpath
 				(dir, global_manpath ? SYSTEM_CAT : USER_CAT);
 
@@ -2362,7 +2403,8 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			} else 
 #endif /* MAN_CATS */
 				/* don't save cat */
-				format_display (format_cmd, disp_cmd);
+				format_display (format_cmd, disp_cmd,
+						man_file);
 
 			free (disp_cmd);
 
@@ -2410,7 +2452,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 
 			disp_cmd = make_display_command (cat_file, title);
 #endif /* COMP_SRC */
-			format_display (format_cmd, disp_cmd);
+			format_display (format_cmd, disp_cmd, man_file);
 			if (format_cmd) {
 				free (format_cmd);
 				format_cmd = NULL;

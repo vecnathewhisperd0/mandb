@@ -1,3 +1,28 @@
+  Colin Watson  <cjwatson@debian.org>
+
+	* lib/mkdtemp.c, lib/mkstemp.c, lib/tempname.c: New files, taken
+	  from glibc 2.2.4.
+	* lib/Makefile.in, lib/README: Add them.
+	* configure.in: Check for mkdtemp() and mkstemp().
+	* lib/tempfile.c (path_search): New function, split from
+	  create_tempfile(). Now checks $TMP as well as $TMPDIR, and ensures
+	  that neither is checked when privileges are raised.
+	  (create_tempfile): Use it. Fix the umask around the call to
+	  mkstemp() rather than calling fchmod() after the fact.
+	  (create_tempdir): New function.
+	* include/manconfig.h.in: Prototype create_tempdir().
+
+	* src/man.c: --html code needs to be guarded by TROFF_IS_GROFF.
+	  (man_getopt): If -H is given, set troff to 1. Add -H to the
+	  "incompatible options" error message.
+	  (make_roff_command): Revert determine_lang_table() special case.
+	  (format_display): Use a temporary directory for HTML output (groff
+	  tends to output several files, including images). Take an extra
+	  argument, used to set the name of the main output file.
+	  (display): Pass man_file to format_display().
+	* src/util.c (remove_directory): New function.
+	* include/manconfig.h.in: Prototype it.
+
 Fri Aug 31 22:20:08 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	Initial support for ESR's $BROWSER variable. Not complete yet.
