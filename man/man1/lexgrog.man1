@@ -1,0 +1,121 @@
+.\" Man page for lexgrog
+.\"
+.\" Copyright (c) 2001 Colin Watson <cjwatson@debian.org>
+.\"
+.\" You may distribute under the terms of the GNU General Public
+.\" License as specified in the file COPYING that comes with the
+.\" man_db distribution.
+.TH lexgrog 1 "%date%" "%version%" "Manual pager utils"
+.SH NAME
+lexgrog \- parse header information in man pages
+.SH SYNOPSIS
+.B lexgrog
+.RB [\| \-m \||\| -c \|]
+.RB [\| \-fhwV \|]
+.I file
+\&.\|.\|.
+.SH DESCRIPTION
+.B lexgrog
+is an implementation of the traditional \(lqgroff guess\(rq utility in
+.BR lex .
+It reads the list of files on its command line as either man page source
+files or preformatted \(lqcat\(rq pages, and displays their name and
+description as used by
+.B apropos
+and
+.BR whatis ,
+the list of preprocessing filters required by the man page before it is
+passed to
+.B nroff
+or
+.BR troff ,
+or both.
+.PP
+If its input is badly formatted,
+.B lexgrog
+will print \(lqparse failed\(rq; this may be useful for external
+programs that need to check man pages for correctness.
+.SH OPTIONS
+.TP
+.B \-m, \-\-man
+Parse input as man page source files.
+This is the default if neither
+.B \-\-man
+nor
+.B \-\-cat
+is given.
+.TP
+.B \-c, \-\-cat
+Parse input as preformatted man pages (\(lqcat pages\(rq).
+.B \-\-man
+and
+.B \-\-cat
+may not be given simultaneously.
+.TP
+.B \-w, \-\-whatis
+Display the name and description from the man page's header, as used by
+.B apropos
+and
+.BR whatis .
+This is the default if neither
+.B \-\-whatis
+nor
+.B \-\-filters
+is given.
+.TP
+.B \-f, \-\-filters
+Display the list of filters needed to preprocess the man page before
+formatting with
+.B nroff
+or
+.BR troff .
+.TP
+.B \-h, \-\-help
+Print a help message and exit.
+.TP
+.B \-V, \-\-version
+Display version and author information.
+.SH "EXIT STATUS"
+.TP
+.B 0
+Successful program execution.
+.TP
+.B 1
+Usage error.
+.TP
+.B 2
+.B lexgrog
+failed to parse one or more of its input files.
+.SH EXAMPLES
+.nf
+  $ lexgrog man.1
+  man.1: "man - an interface to the on-line reference manuals"
+  $ lexgrog -fw man.1
+  man.1 (t): "man - an interface to the on-line reference manuals"
+  $ lexgrog -c whatis.cat1 
+  whatis.cat1: "whatis - display manual page descriptions"
+  $ lexgrog broken.1
+  broken.1: parse failed
+.fi
+.SH "SEE ALSO"
+.IR man (1),
+.IR mandb (8),
+.IR apropos (1),
+.IR whatis (1).
+.SH BUGS
+.B lexgrog
+cannot yet read from its standard input (using \(lq-\(rq), nor can it
+yet read compressed input.
+.SH AUTHOR
+The code used by
+.B lexgrog
+to scan man pages was written by:
+.PP
+.nf
+Wilf. (G.Wilford@ee.surrey.ac.uk).
+Fabrizio Polacco (fpolacco@debian.org).
+Colin Watson (cjwatson@debian.org).
+.fi
+.PP
+Colin Watson wrote the current incarnation of the command-line
+front-end, as well as this man page.

@@ -72,7 +72,8 @@ man1files = $(addprefix $(path)/man1/, $(addsuffix .1, $(man1)))
 man5files = $(addprefix $(path)/man5/, $(addsuffix .5, $(man5)))
 man8files = $(addprefix $(path)/man8/, $(addsuffix .8, $(man8)))
 
-allmanpages = $(foreach path, . $(NLS), $(man1files) $(man5files) $(man8files))
+allmanpages := $(foreach path, . $(NLS), $(man1files) $(man5files) $(man8files))
+allmanpages := $(allmanpages) ./man1/lexgrog.1
 
 # NB manpath.5 is not expanded
 man.1 = $(manroot)/$(nlspath)/$(man1dir)/$(man)$(man1ext)
@@ -80,6 +81,7 @@ manpath.1 = $(manroot)/$(nlspath)/$(man1dir)/$(manpath)$(man1ext)
 apropos.1 = $(manroot)/$(nlspath)/$(man1dir)/$(apropos)$(man1ext)
 whatis.1 = $(manroot)/$(nlspath)/$(man1dir)/$(whatis)$(man1ext)
 zsoelim.1 = $(manroot)/$(nlspath)/$(man1dir)/$(zsoelim)$(man1ext)
+lexgrog.1 = $(manroot)/$(nlspath)/$(man1dir)/lexgrog$(man1ext)
 manpath.5 = $(manroot)/$(nlspath)/$(man5dir)/manpath$(man5ext)
 mandb.8 = $(manroot)/$(nlspath)/$(man8dir)/$(mandb)$(man8ext)
 catman.8 = $(manroot)/$(nlspath)/$(man8dir)/$(catman)$(man8ext)
@@ -115,6 +117,7 @@ nlsinstall:
 	$(INSTALL_DATA) $(nlspath)/man1/apropos.1 $(apropos.1)
 	$(INSTALL_DATA) $(nlspath)/man1/whatis.1 $(whatis.1)
 	$(INSTALL_DATA) $(nlspath)/man1/zsoelim.1 $(zsoelim.1)
+	-$(INSTALL_DATA) $(nlspath)/man1/lexgrog.1 $(lexgrog.1)
 	$(INSTALL_DATA) $(nlspath)/man5/manpath.5 $(manpath.5)
 	$(INSTALL_DATA) $(nlspath)/man8/mandb.8 $(mandb.8)
 	$(INSTALL_DATA) $(nlspath)/man8/catman.8 $(catman.8)
@@ -122,7 +125,7 @@ nlsinstall:
 
 nlsuninstall:
 	rm -f $(man.1) $(manpath.1) $(apropos.1) $(whatis.1) $(zsoelim.1)
-	rm -f $(manpath.5) $(mandb.8) $(catman.8) $(accessdb.8)
+	rm -f $(lexgrog.1) $(manpath.5) $(mandb.8) $(catman.8) $(accessdb.8)
 
 # The standard targets
 install: all

@@ -64,8 +64,29 @@ static char filters[MAX_FILTERS];
 static int fill_mode;
 
 #ifdef TEST
+
 #include <stdio.h>
+#ifdef HAVE_GETOPT_H
+#  include <getopt.h>
+#else /* !HAVE_GETOPT_H */
+#  include "lib/getopt.h"
+#endif /* HAVE_GETOPT_H */
+
 char *program_name = "lexgrog";
+
+static const struct option long_options[] =
+{
+	{"man",		no_argument,	0,	'm'},
+	{"cat",		no_argument,	0,	'c'},
+	{"whatis",	no_argument,	0,	'w'},
+	{"filters",	no_argument,	0,	'f'},
+	{"help",	no_argument,	0,	'h'},
+	{"version",	no_argument,	0,	'V'},
+	{0, 0, 0, 0}
+};
+
+static const char args[] = "mcwfhV";
+
 #endif /* TEST */
 %}
 
@@ -369,30 +390,93 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 }
 
 #ifdef TEST
+
+static void usage (int status)
+{
+	printf (_("usage: %s [-mcwfhV] file ...\n"), program_name);
+	printf (_(
+		"-m --man                    parse as man page.\n"
+		"-c --cat                    parse as cat page.\n"
+		"-w --whatis                 show whatis information.\n"
+		"-f --filters                show guessed series of "
+					    "preprocessing filters.\n"
+		"-V --version                show version.\n"
+		"-h --help                   show this usage message.\n"
+		"\n"
+		"The defaults are --man and --whatis.\n"));
+	exit (status);
+}
+
 int main (int argc, char **argv)
 {
-	if (argc <= 1)
-		return 0;
-	while (*++argv) {
-		int type;
-		for (type = 0; type <= 1; type++) {
-			lexgrog lg;
-			char *name;
-			lg.type = type;
-			if (find_name (*argv, "-", &lg))
-				printf ("%s:\n"
-					"  whatis:  \"%s\"\n"
-					"  filters: \"%s\"\n",
-					type ? "cat" : "man",
-					lg.whatis, lg.filters);
-			else
-				printf ("%s: parse failed\n",
-					type ? "cat" : "man");
+	int c, option_index;
+	int type = 0;
+	int parse_man = 0, parse_cat = 0, show_whatis = 0, show_filters = 0;
+	int some_failed = 0;
+	while ((c = getopt_long (argc, argv, args,
+				 long_options, &option_index)) != -1) {
+		switch (c) {
+			case 'm':
+				parse_man = 1;
+				break;
+			case 'c':
+				parse_cat = 1;
+				break;
+			case 'w':
+				show_whatis = 1;
+				break;
+			case 'f':
+				show_filters = 1;
+				break;
+			case 'V':
+				ver ();
+				break;
+			case 'h':
+				usage (OK);
+				break;
+			default:
+				usage (FAIL);
+				break;
 		}
 	}
-	return 0;
+	if (parse_man) {
+		if (parse_cat) {
+			error (0, 0, _("-m -c: incompatible options"));
+			usage (FAIL);
+		} else
+			type = 0;
+	} else {
+		if (parse_cat)
+			type = 1;
+		else
+			type = 0;	/* default = man */
+	}
+	if (!show_whatis && !show_filters)
+		show_whatis = 1;
+
+	while (optind != argc) {
+		lexgrog lg;
+		lg.type = type;
+		if (find_name (argv[optind], "-", &lg)) {
+			printf ("%s", argv[optind]);
+			if (show_filters)
+				printf (" (%s)", lg.filters);
+			if (show_whatis)
+				printf (": \"%s\"", lg.whatis);
+			printf ("\n");
+		} else {
+			printf ("%s: parse failed\n", argv[optind]);
+			some_failed = 1;
+		}
+		++optind;
+	}
+
+	if (some_failed)
+		return FATAL;
+	else
+		return OK;
 }
-#endif
+#endif /* TEST */
 
 #ifdef PROFILE
 void rule_profile (void)

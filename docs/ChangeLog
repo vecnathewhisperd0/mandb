@@ -1,3 +1,17 @@
+Wed Aug 29 01:34:33 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l (usage): New function.
+	  (main): Rewrite. Add command-line options, and make the output
+	  more easily parseable by other programs. By default, the lexgrog
+	  program now only attempts to parse its input as a man page and
+	  only displays the whatis line, although this can be changed on the
+	  command line.
+	* src/Makefile.in: Include lexgrog in $(PROGS), so that it gets
+	  built by default and linked against version.o.
+	* man/man1/lexgrog.man1: New man page. Still needs some work.
+	* man/Makefile.in: Install it. Tolerate it being missing in some
+	  languages (ugly hack).
+
 Tue Aug 21 01:57:44 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/Makefile.in: Link non-setuid programs against fake_security.o
