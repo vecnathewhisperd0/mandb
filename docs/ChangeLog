@@ -1,3 +1,34 @@
+Sat Aug  9 18:28:01 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Replace the old "wait() for one child at a time" approach with a
+	SIGCHLD-handling edifice that collects children's exit statuses as
+	they die.
+
+	* lib/pipeline.c (pipeline_new): Initialize statuses.
+	  (pipeline_join): Set statuses to NULL in joined pipeline.
+	  (pipeline_join, pipeline_get_infile, pipeline_get_outfile,
+	  pipeline_start, pipeline_wait): Assert that statuses field is NULL
+	  or non-NULL as appropriate.
+	  (pipeline_free): Free statuses if necessary.
+
+	  (pipeline_start): Add p to a new active_pipelines array, to be
+	  used while reaping children. Initialize statuses elements to -1.
+	  Block SIGCHLD while forking children.
+	  (reap_children): New function. Delivers collected exit statuses
+	  into statuses fields of entries in active_pipelines.
+	  (pipeline_wait): Rather than wait()ing manually here, check
+	  whether any statuses have been picked up by the SIGCHLD handler,
+	  and if not call reap_children(). Remove now-obsolete TODO comment.
+	  (pipeline_sigchld): New function, the SIGCHLD handler.
+	  (pipeline_install_sigchld): New function, to be called once per
+	  program.
+
+	  (pipeline_start, pipeline_wait): Add minimal debugging
+	  information.
+
+	* lib/pipeline.h: Prototype new functions.
+	  (struct pipeline): New statuses member.
+
 Sat Aug  9 17:00:12 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (command_dup): Copy cmd->nice.
