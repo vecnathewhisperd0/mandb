@@ -25,9 +25,6 @@ AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
 AC_SUBST(PACKAGE)dnl
 AC_SUBST(VERSION)dnl
-ALL_LINGUAS="de it es cs ja fr"
-AM_GNU_GETTEXT
-AC_LINK_FILES($nls_cv_header_libgt, $nls_cv_header_intl)
 dnl
 dnl MAN_ECHO("string to be echoed")dnl
 define(MAN_ECHO, [echo $1 1>&AC_FD_MSG])dnl
@@ -116,42 +113,8 @@ AC_PATH_PROG(cat, cat)
 AC_PATH_PROG(lynx, lynx)
 AC_PATH_PROG(tr, tr)
 AC_PATH_PROG(grep, grep)
-dnl
-if test -s /etc/debian_version
-then 	AC_PATH_PROGS(pager, pager)
-	test "$pager" || AC_MSG_ERROR(Debian requires /usr/bin/pager)
-else	AC_PATH_PROGS(pager, pager less more)
-fi
+AC_PATH_PROGS(pager, pager less more)
 test "$pager" && pager="exec $pager -s"
-dnl
-dnl
-dnl now test if this is a debian system
-dnl
-AC_MSG_CHECKING(if this is a Debian GNU/Linux system)
-if test -s /etc/debian_version
-then 
-	debian=`awk '{ print $1 }' /etc/debian_version`
-	AC_DEFINE_UNQUOTED(DEBIAN,$debian)
-	AC_MSG_RESULT(yes Debian-$debian)
-	dnl
-	AC_MSG_CHECKING(for the full debian version of this program)
-	dnl
-	tempfile=`tempfile`
-	if	test -r debian/changelog
-	then	`dpkg-parsechangelog 2>/dev/null >$tempfile`
-	elif	test -r ../debian/changelog
-	then	`dpkg-parsechangelog -l../debian/changelog 2>/dev/null >$tempfile`
-	else	`rm -f $tempfile`
-		AC_MSG_ERROR(this macro requires that configure runs inside a debianized tree)
-	fi
-	debian_version=`awk '/Version:/{ print $2 }' $tempfile`
-	debian_maint=`awk -F: '/Maintainer:/{ print $2 }' $tempfile`
-	AC_MSG_RESULT($debian_version $debian_maint)
-	AC_DEFINE_UNQUOTED(DEBVER,"$debian_version")
-	AC_DEFINE_UNQUOTED(DEBMAINT,"$debian_maint")
-else
-	AC_MSG_RESULT(no)
-fi
 dnl
 dnl define below (in list of preference) *roff macros to check for.
 dnl
@@ -259,10 +222,6 @@ then
 fi
 AC_PATH_PROGS(tbl, tbl gtbl)
 AC_PATH_PROGS(col, col gcol)
-if test -s /etc/debian_version -a ! "$col"
-then
-	AC_MSG_ERROR(man-db on debian must be built with col; install bsdmainutils)
-fi
 AC_PATH_PROGS(vgrind, vgrind gvgrind)
 AC_PATH_PROGS(refer, refer grefer)
 AC_PATH_PROGS(grap, grap)
@@ -312,6 +271,12 @@ AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT
 AC_CHECK_HEADERS(unistd.h memory.h fcntl.h limits.h sys/file.h regex.h)
 AC_CHECK_HEADERS(string.h strings.h, break)
+dnl
+dnl Internationalization support.
+dnl
+ALL_LINGUAS="de it es cs ja fr"
+AM_GNU_GETTEXT
+AC_LINK_FILES($nls_cv_header_libgt, $nls_cv_header_intl)
 dnl
 dnl Checks for structures and compiler characteristics.
 dnl
