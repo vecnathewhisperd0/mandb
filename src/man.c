@@ -838,7 +838,7 @@ int main (int argc, char *argv[])
 	int argc_env, status = 0, exit_status = OK;
 	char **argv_env;
 	const char *tmp;
-	char *multiple_locale;
+	char *multiple_locale = NULL;
 	extern int optind;
 	void (int_handler) (int);
 
@@ -854,13 +854,14 @@ int main (int argc, char *argv[])
 	textdomain (PACKAGE);
 
 	internal_locale = setlocale (LC_MESSAGES, NULL);
-	multiple_locale = getenv ("LANGUAGE");
 	/* Use LANGUAGE only when LC_MESSAGES locale category is
 	 * neither "C" nor "POSIX". */
-	if (multiple_locale)
-		if (internal_locale && strcmp (internal_locale, "C") &&
-		    strcmp (internal_locale, "POSIX"))
+	if (internal_locale && strcmp (internal_locale, "C") &&
+	    strcmp (internal_locale, "POSIX")) {
+		multiple_locale = getenv ("LANGUAGE");
+		if (multiple_locale)
 			internal_locale = multiple_locale;
+	}
 	if (internal_locale != NULL)
 		internal_locale = xstrdup (internal_locale);
 	else
@@ -920,7 +921,7 @@ int main (int argc, char *argv[])
 			 ruid, euid);
 
 #ifdef HAVE_SETLOCALE
-	/* close this locale and reinitialise incase a new locale was 
+	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
 	if (locale) {
 		internal_locale = setlocale (LC_ALL, locale);
@@ -1001,14 +1002,14 @@ int main (int argc, char *argv[])
 		manp = add_nls_manpath (manpath (alt_system_name), 
 					internal_locale);
 		/* Handle multiple :-separated locales in LANGUAGE */
-		idx = strlen (internal_locale);
+		idx = multiple_locale ? strlen (multiple_locale) : 0;
 		while (idx) {
-			while (idx && internal_locale[idx] != ':')
+			while (idx && multiple_locale[idx] != ':')
 				idx--;
-			if (internal_locale[idx] == ':')
+			if (multiple_locale[idx] == ':')
 				idx++;
-			tmp_locale[0] = internal_locale[idx];
-			tmp_locale[1] = internal_locale[idx + 1];
+			tmp_locale[0] = multiple_locale[idx];
+			tmp_locale[1] = multiple_locale[idx + 1];
 			tmp_locale[2] = 0;
 			/* step back over preceding ':' */
 			if (idx) idx--;

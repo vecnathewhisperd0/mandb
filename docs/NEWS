@@ -28,6 +28,10 @@ Major changes since man-db 2.4.0:
 
 	o lexgrog can now cope with man pages containing only a .so link.
 
+	o Manual hierarchies with a specific encoding are put into the
+	  search path in the correct order. A bug in $LANGUAGE handling had
+	  formerly meant that 'de' would take precedence over 'de_DE.UTF-8'.
+
 	Improvements:
 	-------------
 
