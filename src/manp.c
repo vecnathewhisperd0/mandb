@@ -732,6 +732,15 @@ void read_config_file(void)
 	char *home;
 	FILE *config;
 
+	home = xstrdup (getenv ("HOME"));
+	if (home) {
+		config = fopen (strappend (home, "/.manpath", NULL), "r");
+		if (config != NULL) {
+			add_to_dirlist (config);
+			fclose (config);
+		}
+	}
+
 	config = fopen (CONFIG_FILE, "r");
 	if (config == NULL)
 		error (FAIL, 0,
@@ -743,15 +752,6 @@ void read_config_file(void)
 
 	add_to_dirlist (config);
 	fclose (config);
-
-	home = xstrdup (getenv ("HOME"));
-	if (home) {
-		config = fopen (strappend (home, "/.manpath", NULL), "r");
-		if (config != NULL) {
-			add_to_dirlist (config);
-			fclose (config);
-		}
-	}
 
 	if (debug)
 		print_list ();

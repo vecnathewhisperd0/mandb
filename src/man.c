@@ -2671,9 +2671,13 @@ static int man (char *name)
 	} else {
 		char **sp;
 
-		/* sections in manpath are only 1 char */
-		for (sp = section_list; *sp && !sp[0][1]; sp++) {
+		for (sp = section_list; *sp; sp++) {
+			/* sections in manpath are only 1 char */
+			char sec[2];
 			char **mp;
+
+			sec[0] = sp[0][0];
+			sec[1] = '\0';
 
 			for (mp = manpathlist; *mp; mp++) {
 				found += locate_page(*mp, *sp, name);
