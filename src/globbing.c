@@ -135,7 +135,7 @@ int match_in_directory (const char *path, const char *pattern, int ignore_case,
 			 path, pattern);
 
 	pglob->gl_pathv = xmalloc (allocated * sizeof (char *));
-	flags = FNM_NOESCAPE | (ignore_case ? FNM_CASEFOLD : 0);
+	flags = ignore_case ? FNM_CASEFOLD : 0;
 
 	for (entry = readdir (dir); entry; entry = readdir (dir)) {
 		int fnm = fnmatch (pattern, entry->d_name, flags);
@@ -166,13 +166,14 @@ int match_in_directory (const char *path, const char *pattern, int ignore_case,
 	return 0;
 }
 
-char **look_for_file (const char *hier, const char *sec,
-		      const char *name, int cat, int match_case)
+char **look_for_file (const char *unesc_hier, const char *sec,
+		      const char *unesc_name, int cat, int match_case)
 {
 	char *pattern = NULL, *path = NULL;
 	static glob_t gbuf;
 	int status = 1;
 	static int layout = -1;
+	char *hier, *name;
 
 	/* As static struct is allocated and contains NULLs we don't need 
 	   to check it before attempting a free. Let globfree() do that */
@@ -188,6 +189,9 @@ char **look_for_file (const char *hier, const char *sec,
 			fprintf (stderr, "Layout is %s (%d)\n",
 				 mandir_layout, layout);
 	}
+
+	hier = escape_shell (unesc_hier);
+	name = escape_shell (unesc_name);
 
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
 
@@ -261,6 +265,8 @@ char **look_for_file (const char *hier, const char *sec,
 					     &gbuf);
 	}
 
+	free (name);
+	free (hier);
 	free (path);
 	free (pattern);
 
