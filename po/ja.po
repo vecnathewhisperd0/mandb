@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.4.10\n"
-"POT-Creation-Date: 2002-06-04 01:06+0100\n"
+"POT-Creation-Date: 2002-06-25 01:26+0100\n"
 "PO-Revision-Date: 2000-11-11 22:25+09:00\n"
 "Last-Translator: UCHIDA Norihiro <KY4N-UCD@asahi-net.or.jp>\n"
 "Language-Team: debian-doc <debian-doc@debian.or.jp>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=euc-jp\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: libdb/db_delete.c:118
+#: libdb/db_delete.c:105
 #, c-format
 msgid "multi key %s does not exist"
 msgstr "複合キー %s は存在しません"
@@ -43,7 +43,7 @@ msgstr ""
 msgid "only %d fields in content"
 msgstr "中身が %d フィールドしかありません"
 
-#: libdb/db_lookup.c:410
+#: libdb/db_lookup.c:401
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "複合キー %s は不正な呼び出しです"
@@ -159,7 +159,7 @@ msgstr "警告: %s: セクションが違うファイル名を無視しています"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "警告: %s/man%s/%s.%s*: 拡張子が競合しています"
 
-#: src/check_mandirs.c:106 src/check_mandirs.c:673 src/man.c:2841
+#: src/check_mandirs.c:106 src/check_mandirs.c:673 src/man.c:2844
 #, c-format
 msgid "can't update index cache %s"
 msgstr "index キャッシュ %s を更新できません"
@@ -205,7 +205,7 @@ msgstr "完了しました\n"
 msgid "Purging old database entries in %s...\n"
 msgstr ""
 
-#: src/compression.c:64 src/man.c:1345
+#: src/compression.c:64 src/man.c:1347
 msgid "can't create a temporary filename"
 msgstr "一時的なファイル名を作成できません"
 
@@ -214,22 +214,22 @@ msgstr "一時的なファイル名を作成できません"
 msgid "Can't convert %s to cat name"
 msgstr "%s を cat 名に変換できません"
 
-#: lexgrog.l:304
+#: lexgrog.l:305
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "警告: %s の whatis が %d バイトを超えています。切り詰めています。"
 
-#: lexgrog.l:370 src/ult_src.c:295 src/ult_src.c:302
+#: lexgrog.l:371 src/ult_src.c:295 src/ult_src.c:302
 #, c-format
 msgid "can't open %s"
 msgstr "%s をオープンできません"
 
-#: lexgrog.l:431
+#: lexgrog.l:432
 #, fuzzy, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "使用法: %s [-dhV] [-M manpath] [section] ...\n"
 
-#: lexgrog.l:433
+#: lexgrog.l:434
 #, fuzzy
 msgid ""
 "-m --man                    parse as man page.\n"
@@ -249,21 +249,21 @@ msgstr ""
 "-V --version                バージョンを表示する。\n"
 "-h --help                   この使用法を表示する。\n"
 
-#: lexgrog.l:479
+#: lexgrog.l:480
 #, fuzzy
 msgid "-m -c: incompatible options"
 msgstr " オプションが矛盾しています"
 
-#: src/man.c:252
+#: src/man.c:254
 msgid "can't popen"
 msgstr "オープン(popen)できません"
 
-#: src/man.c:293
+#: src/man.c:295
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "コマンドはステータス %d で終了しました: %s"
 
-#: src/man.c:431
+#: src/man.c:433
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-Slist]\n"
@@ -274,7 +274,7 @@ msgstr ""
 "           [-msystem] [-pstring] [-Llocale] [-eextension] [section] "
 "page ...\n"
 
-#: src/man.c:436
+#: src/man.c:438
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-msystem]\n"
@@ -283,7 +283,7 @@ msgstr ""
 "使用法: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-msystem]\n"
 "           [-pstring] [-Llocale] [-eextension] [section] page ...\n"
 
-#: src/man.c:442
+#: src/man.c:444
 #, fuzzy
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
@@ -318,7 +318,7 @@ msgstr ""
 "用)。\n"
 "-7, --ascii                 latin1 文字を ASCII 変換して表示する。"
 
-#: src/man.c:458
+#: src/man.c:460
 #, c-format
 msgid ""
 "-t, --troff                 use %s to format pages.\n"
@@ -327,31 +327,31 @@ msgstr ""
 "-t, --troff                 ページの整形に %s を使用する。\n"
 "-T, --troff-device device   選択したデバイスで %s を使用する。\n"
 
-#: src/man.c:462
+#: src/man.c:464
 msgid ""
 "-H, --html                  use lynx or argument to display html output.\n"
 msgstr ""
 "-H, --html                  html 表示に lynx (または引き数で指定したコマンド)"
 "を使用する。\n"
 
-#: src/man.c:463
+#: src/man.c:465
 msgid "-Z, --ditroff               use groff and force it to produce ditroff."
 msgstr ""
 "-Z, --ditroff               groff を使用して強制的に ditroff を生成する。"
 
-#: src/man.c:464
+#: src/man.c:466
 msgid ""
 "-X, --gxditview             use groff and display through gditview (X11):"
 msgstr ""
 "-X, --gxditview             groff を使用し、gditview 経由で出力する (X11):"
 
-#: src/man.c:465
+#: src/man.c:467
 msgid ""
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 msgstr ""
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:470
+#: src/man.c:472
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-M, --manpath path          set search path for manual pages to `path'.\n"
@@ -372,7 +372,7 @@ msgstr ""
 "定義する。\n"
 "-p, --preprocessor string   プリプロセッサ`string'を実行するように指定する。"
 
-#: src/man.c:480
+#: src/man.c:482
 msgid ""
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message."
@@ -380,131 +380,131 @@ msgstr ""
 "-V, --version               バージョンを表示する。\n"
 "-h, --help                  この使用法を表示する。"
 
-#: src/man.c:494
+#: src/man.c:496
 #, c-format
 msgid "What manual page do you want from section %s?\n"
 msgstr "セクション %s のマニュアルページを指定してください。\n"
 
-#: src/man.c:497
+#: src/man.c:499
 msgid "What manual page do you want?\n"
 msgstr "マニュアルページを指定してください\n"
 
-#: src/man.c:601
+#: src/man.c:603
 #, c-format
 msgid "No source manual entry for %s"
 msgstr "%s のマニュアルソースは登録されていません"
 
-#: src/man.c:610
+#: src/man.c:612
 #, c-format
 msgid "No manual entry for %s"
 msgstr "マニュアル %s は登録されていません"
 
-#: src/man.c:615
+#: src/man.c:617
 #, c-format
 msgid " in section %s\n"
 msgstr " (セクション %s )\n"
 
-#: src/man.c:767 src/man.c:2262
+#: src/man.c:769 src/man.c:2264
 #, c-format
 msgid "can't chdir to %s"
 msgstr "%s にディレクトリを変更できません"
 
-#: src/man.c:935
+#: src/man.c:937
 msgid " Manual page "
 msgstr ""
 
-#: src/man.c:936
+#: src/man.c:938
 #, fuzzy
 msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 msgstr ""
 " マニュアルページ $MAN_PN %lt?L/%L. ?lt行:byte %bB?s/%s..?e (終):?pB %pB\\\\"
 "%.."
 
-#: src/man.c:1223
+#: src/man.c:1225
 msgid ": incompatible options"
 msgstr " オプションが矛盾しています"
 
-#: src/man.c:1452
+#: src/man.c:1454
 msgid "error trying to read from stdin"
 msgstr "標準入力からの読み込みに失敗しました"
 
-#: src/man.c:1466
+#: src/man.c:1468
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "一時ファイル %s への書き込みに失敗しました"
 
-#: src/man.c:1648
+#: src/man.c:1650
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "不明なプリプロセッサ `%c' を無視しています"
 
-#: src/man.c:1842 src/mandb.c:241
+#: src/man.c:1844 src/mandb.c:241
 #, c-format
 msgid "can't chown %s"
 msgstr "%s の所有者を変更できません"
 
-#: src/man.c:1853 src/mandb.c:212
+#: src/man.c:1855 src/mandb.c:212
 #, c-format
 msgid "can't chmod %s"
 msgstr "%s の許可属性を変更できません"
 
-#: src/man.c:1865 src/mandb.c:179
+#: src/man.c:1867 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:1885
+#: src/man.c:1887
 #, fuzzy, c-format
 msgid "can't set times on %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:1894
+#: src/man.c:1896
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s を削除(unlink)できません"
 
-#: src/man.c:1922
+#: src/man.c:1924
 msgid "can't create pipe"
 msgstr "パイプを作成できません"
 
-#: src/man.c:1948
+#: src/man.c:1950
 #, c-format
 msgid "can't create %s"
 msgstr "%s を作成できません"
 
-#: src/man.c:1956 src/security.c:259
+#: src/man.c:1958 src/security.c:259
 msgid "can't fork"
 msgstr "fork できません"
 
-#: src/man.c:1966 src/man.c:1972
+#: src/man.c:1968 src/man.c:1974
 msgid "can't dup2"
 msgstr "複写できません(dup2失敗)"
 
-#: src/man.c:1991
+#: src/man.c:1993
 #, c-format
 msgid "can't exec %s"
 msgstr "%s を実行できません"
 
-#: src/man.c:2027
+#: src/man.c:2029
 #, c-format
 msgid "waiting for pid %u"
 msgstr "pid %u の終了を待っています"
 
-#: src/man.c:2085
+#: src/man.c:2087
 msgid "Still saving the page, please wait...\n"
 msgstr "ページを保存しています。しばらくお待ちください...\n"
 
-#: src/man.c:2132 src/man.c:2151 src/man.c:2182
+#: src/man.c:2134 src/man.c:2153 src/man.c:2184
 #, fuzzy, c-format
 msgid "can't change to directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/man.c:2157 src/man.c:2187
+#: src/man.c:2159 src/man.c:2189
 #, fuzzy, c-format
 msgid "can't remove directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/man.c:2411
+#: src/man.c:2413
 #, c-format
 msgid ""
 "\n"
@@ -513,17 +513,17 @@ msgstr ""
 "\n"
 "catman モードで %s に書き込みできません"
 
-#: src/man.c:2431
+#: src/man.c:2433
 #, c-format
 msgid "Reformatting %s, please wait...\n"
 msgstr "%s を再フォーマットしています。しばらくお待ちください...\n"
 
-#: src/man.c:2849
+#: src/man.c:2852
 #, fuzzy, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
-#: src/man.c:3231
+#: src/man.c:3234
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
