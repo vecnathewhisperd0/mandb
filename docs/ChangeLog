@@ -1,3 +1,21 @@
+Mon May 14 23:46:25 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.3.18.
+
+	* README: Add contact details.
+
+	* libdb/stamp-h: Removed.
+	* GNUmakefile.in, libdb/Makefile.in: Updated accordingly.
+
+	* src/man_db.conf.in: FHS 2.1 has /usr/local/share/man as the
+	  location of locally installed man pages rather than
+	  /usr/local/man. Accordingly, the MANDB_MAP for /usr/local/man is
+	  now /var/cache/man/oldlocal, and /usr/local/share/man takes over
+	  /var/cache/man/local.
+
+	* po/cs.po, po/de.po, po/es.po, po/fr.po, po/it.po, po/ja.po: Update
+	  with msgmerge.
+
 Mon May 14 22:18:32 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/security.c: Count how many times drop_effective_privs() has

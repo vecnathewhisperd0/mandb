@@ -16,7 +16,7 @@
 
 %%maintainer: Colin Watson <cjwatson@debian.org>
 
-%%updated: 2000-06-21
+%%updated: 2001-05-14
 
 %%keywords: manpage, man, browser, database, groff
 
