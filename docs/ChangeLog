@@ -1,3 +1,12 @@
+Sun Nov 16 17:06:29 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	Style cleanups; no functional changes.
+
+	* src/whatis.c (usage, match, apropos, search, main): Add a space
+	  before the open parenthesis in several function calls.
+	  (apropos): The nesting level has got out of control here. Use a
+	  goto and a 'nextpage' label near the end of the loop instead.
+
 Sun Nov 16 15:49:12 GMT 2003  Erik Andersen  <andersen@codepoet.org>
 
 	* src/straycats.c (check_for_stray): Add missing open brace to

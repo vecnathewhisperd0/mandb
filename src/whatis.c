@@ -163,7 +163,7 @@ static void usage (int status)
 static void usage (int status)
 {
 	printf (_("usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"), program_name);
-	printf(_(
+	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
 		"-r, --regex                interpret each keyword as a regex.\n"
@@ -393,15 +393,15 @@ static int match (char *lowpage, char *whatis)
 		char *left = p - 1; 
 		char *right = p + len;
 
-		if ((p == begin || (!islower(*left) && *left != '_')) &&
-		    (!*right || (!islower(*right) && *right != '_')) ) {
+		if ((p == begin || (!islower (*left) && *left != '_')) &&
+		    (!*right || (!islower (*right) && *right != '_')) ) {
 		    	free (begin);
 		    	return 1;
 		}
 		lowwhatis = p + 1;
 	}
 
-	free(begin);
+	free (begin);
 	return 0;
 }
 
@@ -481,6 +481,12 @@ static int apropos (char *page, char *lowpage)
 	end = btree_nextkeydata (dbf, &key, &cont);
 	while (!end) {
 #endif /* !BTREE */
+		char *tab;
+		int match;
+#ifdef APROPOS
+		char *whatis;
+#endif
+
 		/* bug#4372, NULL pointer dereference in cont.dptr, fix
 		 * by dassen@wi.leidenuniv.nl (J.H.M.Dassen), thanx Ray.
 		 * cjwatson: In that case, complain and exit, otherwise we
@@ -496,44 +502,42 @@ static int apropos (char *page, char *lowpage)
 			       database);
 		}
 
-		if (*key.dptr != '$') {
-			if (*cont.dptr != '\t')		/* a real page */
-			{
-				char *tab;
-				int match;
-#ifdef APROPOS
-				char *whatis;
-#endif
+		if (*key.dptr == '$')
+			goto nextpage;
 
-				tab = strrchr(key.dptr, '\t');
-				if (tab) 
-					 *tab = '\0';
+		if (*cont.dptr == '\t')
+			goto nextpage;
+
+		/* a real page */
+
+		tab = strrchr (key.dptr, '\t');
+		if (tab) 
+			 *tab = '\0';
 
 #ifdef APROPOS
-				match = parse_name (lowpage, key.dptr);
-				whatis = strrchr (cont.dptr, '\t');
-				if (!(whatis && *++whatis))
-					whatis = NULL;
-					
-				if (!match && whatis)
-					match = parse_whatis (page, lowpage,
-							      whatis);
+		match = parse_name (lowpage, key.dptr);
+		whatis = strrchr (cont.dptr, '\t');
+		if (!(whatis && *++whatis))
+			whatis = NULL;
+			
+		if (!match && whatis)
+			match = parse_whatis (page, lowpage, whatis);
 #else /* WHATIS */
-				match = parse_name (page, key.dptr);
+		match = parse_name (page, key.dptr);
 #endif /* APROPOS */
-				if (match) {
-					struct mandata info;
-					split_content (cont.dptr, &info);
-					display (&info, key.dptr);
-					found++;
-					cont.dptr = info.addr;
-				}
-
-				found += match;
-				if (tab)
-					*tab = '\t';
-			}
+		if (match) {
+			struct mandata info;
+			split_content (cont.dptr, &info);
+			display (&info, key.dptr);
+			found++;
+			cont.dptr = info.addr;
 		}
+
+		found += match;
+		if (tab)
+			*tab = '\t';
+
+nextpage:
 #ifndef BTREE
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE (cont.dptr);
@@ -596,7 +600,7 @@ static void search (char *page)
 		MYDBM_CLOSE (dbf);
 	}
 
-	chkr_garbage_detector();
+	chkr_garbage_detector ();
 
 	if (!found) {
 		printf (_("%s: nothing appropriate.\n"), page);
@@ -687,9 +691,9 @@ int main (int argc, char *argv[])
 		free (locale);
 		locale = xstrdup (llocale);
 		if (debug)
-			fprintf(stderr,
-				"main(): locale = %s, internal_locale = %s\n",
-				llocale, locale);
+			fprintf (stderr,
+				 "main(): locale = %s, internal_locale = %s\n",
+				 llocale, locale);
 		if (locale) {
 			extern int _nl_msg_cat_cntr;
 			if (locale[2] == '_' )
@@ -701,7 +705,7 @@ int main (int argc, char *argv[])
 
 #if defined(REGEX) && defined(APROPOS)
 	/* Become it even if it's null - GNU standards */
-	/* if (getenv("POSIXLY_CORRECT")) */
+	/* if (getenv ("POSIXLY_CORRECT")) */
 	if (!exact && !wildcard)
 		regex = 1;
 #endif
@@ -744,7 +748,7 @@ int main (int argc, char *argv[])
 				       argv[optind], error_string);
 		}
 #endif /* REGEX */
-		search(argv[optind++]);
+		search (argv[optind++]);
 	}
 
 	exit (status);
