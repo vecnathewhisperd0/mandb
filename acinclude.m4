@@ -93,7 +93,7 @@ man_cv_func_pclose=yes,
 [man_cv_func_pclose=no])dnl
 ])
 
-test "$man_cv_func_pclose" = "no" && AC_DEFINE(BROKEN_PCLOSE)
+test "$man_cv_func_pclose" = "no" && AC_LIBOBJ(popen)
 
 AC_MSG_RESULT($man_cv_func_pclose)
 ])

@@ -208,130 +208,19 @@ static int skip;		/* page exists but has been skipped */
 char **global_argv;
 #endif
 
+struct candidate {
+	char *name;
+	char from_db;
+	char cat;
+	char *path;
+	struct mandata *source;
+	struct candidate *next;
+};
+
+#define CANDIDATE_FILESYSTEM 0
+#define CANDIDATE_DATABASE   1
+
 #ifdef MAN_CATS
-#  ifdef BROKEN_PCLOSE
-
-/* Some pclose(), notably Ultrix's get confused if we use more than one
-   concurrently, blech.  Define our own popen()/pclose() combo. */
-
-static pid_t *fd2pid = NULL;	/* map fd to pid, unused entries are zero */
-static int max_fd = -1;		/* max fd seen, fd2pid has max_fd+1 elements */
-
-FILE *
-popen (const char *cmd, const char *type)
-{
-	pid_t child;
-	int for_reading;
-	int pipe_fd[2];
-	int fd;
-	FILE *stream;
-
-	/* check type */
-	if (type && (type[0] == 'r'))
-		for_reading = 1;
-	else if (type && (type[0] == 'w'))
-		for_reading = 0;
-	else
-		return NULL;
-
-	if (pipe (pipe_fd))
-		return NULL;
-
-	child = vfork ();
-	if (child == -1) {
-		close (pipe_fd[0]);
-		close (pipe_fd[1]);
-		return NULL;
-	} else if (child == 0) {
-		/* if for_reading connect the writing end of pipe to stdout
-		   else the reading end to stdin */
-		if (dup2 (pipe_fd[for_reading], for_reading) == -1)
-			_exit (127);
-
-		/* close pipe fds */
-		close (pipe_fd[0]);
-		close (pipe_fd[1]);
-
-		/* exec cmd in a shell */
-		execl ("/bin/sh", "sh", "-c", cmd, NULL);
-		/* if we hit this, execl() failed */
-		_exit (127);
-	}
-
-	/* if for_reading make a stream from the reading end of pipe
-	   else from the writing end */
-	fd = pipe_fd[!for_reading];
-	close (pipe_fd[for_reading]);
-	stream = fdopen (fd, type);
-
-	/* extend fd2pid up to index fd if necessary */
-	if (fd > max_fd) {
-		pid_t *new = malloc ((fd + 1) * sizeof (pid_t));
-		if (new) {
-			/* copy old entries */
-			memcpy (new, fd2pid, (max_fd + 1) * sizeof (pid_t));
-			/* zero new entries */
-			memset (new+max_fd+1, 0,
-				(fd - max_fd) * sizeof (pid_t));
-			fd2pid = new;
-			max_fd = fd;
-		}
-	}
-
-	/* if we didn't get the stream or couldn't extend fd2pid, clean up & fail */
-	if (!stream || (fd > max_fd)) {
-		int res;
-		int save = errno;
-
-		kill (child, SIGKILL);
-
-		if (stream)
-			fclose (stream);
-		else
-			close (fd);
-
-		do {		/* cope with non-restarting system calls */
-			res = waitpid (child, NULL, 0);
-		} while ((res == -1) && (errno == EINTR));
-
-		errno = save;
-		return NULL;
-	}
-
-	fd2pid[fd] = child;		/* save pid for pclose() */
-	return stream;
-}
-
-
-int
-pclose (FILE *stream)
-{
-	int fd = fileno (stream);
-	pid_t child;
-	int status;
-	int res;
-	int save;
-
-	if ((fd > max_fd) || !fd2pid[fd])
-		return -1;
-	child = fd2pid[fd];
-	fd2pid[fd] = 0;
-
-	if (fclose (stream))
-		return -1;
-
-	save = errno;
-	do {			/* cope with non-restarting system calls */
-		res = waitpid (child, &status, 0);
-	} while ((res == -1) && (errno == EINTR));
-	if (res != -1) errno = save;
-
-	return status;
-}
-
-#endif /* BROKEN_PCLOSE  */
-
-
 static FILE *checked_popen (char *command, char *type)
 {
 	FILE *stream;
@@ -2530,6 +2419,7 @@ static char *find_cat_file (char *path, char *man_file, char *sec)
 
 	/* could do this with `global' */
 
+	global_manpath = is_global_mandir (path);
 	cat_path = get_catpath
 		(man_file, global_manpath ? SYSTEM_CAT : USER_CAT);
 	cat_file = convert_name (man_file, cat_path);
@@ -2540,19 +2430,79 @@ static char *find_cat_file (char *path, char *man_file, char *sec)
 	return cat_file;
 }
 
-static int compare_names (const void *left, const void *right)
+static int compare_candidates (const struct mandata *left,
+			       const struct mandata *right)
 {
-	return strcmp (*(const char **)left, *(const char **)right);
+	int cmp = strcmp (left->ext, right->ext);
+	if (cmp)
+		return cmp;
+	/* Default to left sorting before right, so that insertion order is
+	 * stable.
+	 */
+	return -1;
+}
+
+/* Add an entry to the list of candidates. */
+static int add_candidate (struct candidate **head, char from_db, char cat,
+			  char *name, char *path, struct mandata *source)
+{
+	struct candidate *search, *tail, *candp;
+
+	if (debug)
+		fprintf (stderr, "candidate: %d %d %s %s %s %s\n",
+				 from_db, cat, name, path,
+				 source->sec, source->ext);
+
+	/* tail will be NULL (insert at start) or a pointer to the element
+	 * after which this element should be inserted.
+	 */
+	tail = NULL;
+	search = *head;
+	while (search) {
+		/* Check for duplicates. */
+		if (STREQ (name, search->name) && STREQ (path, search->path) &&
+		    STREQ (source->sec, search->source->sec) &&
+		    STREQ (source->ext, search->source->ext)) {
+			if (debug)
+				fprintf (stderr, "duplicate candidate\n");
+			return 0;
+		}
+		if (compare_candidates (source, search->source) > 0)
+			tail = search;
+
+		if (search->next)
+			search = search->next;
+		else
+			break;
+	}
+	if (!tail)
+		tail = search;
+
+	candp = (struct candidate *) malloc (sizeof (struct candidate));
+	candp->name = xstrdup (name);
+	candp->from_db = from_db;
+	candp->cat = cat;
+	candp->path = path;
+	candp->source = source;
+	candp->next = tail ? tail->next : *head;
+	if (tail)
+		tail->next = candp;
+	else
+		*head = candp;
+
+	return 1;
 }
 
 /*
  * See if the preformatted man page or the source exists in the given
  * section.
  */
-static int try_section (char *path, char *sec, char *name)
+static int try_section (char *path, char *sec, char *name,
+			struct candidate **cand_head)
 {
 	int found = 0;
-	char **names, **np;
+	char **names = NULL, **np;
+	char cat = 0;
 
 	if (debug)
 		fprintf (stderr, "trying section %s with globbing\n", sec);
@@ -2575,92 +2525,70 @@ static int try_section (char *path, char *sec, char *name)
 			return 1;
 
 		if (!troff) {
-			char *title;
-
 			names = look_for_file (path, sec, name, 1);
-			if (names) {
-				int name_count = 0;
-				for (np = names; *np; np++)
-					++name_count;
-				qsort (names, name_count, sizeof *names,
-				       compare_names);
-			}
-
-			title = strappend (NULL, name, "(", sec, ")", NULL);
-			for (np = names; np && *np; np++) {
-				found += display (path, NULL, *np, title);
-				if (found && !findall)
-					break;
-			}
-			free (title);
+			cat = 1;
 		}
 	}
-#ifndef NROFF_MISSING
-	else {
-		int name_count = 0;
-		for (np = names; *np; np++)
-			++name_count;
-		qsort (names, name_count, sizeof *names, &compare_names);
 
-		for (np = names; *np; np++) {
-			char *man_file;
-			char *cat_file;
-			struct mandata info;
-			char *info_buffer;
-			char *title;
-
-			info_buffer = filename_info (*np, &info);
-			if (!info_buffer)
-				continue;
-			if (strcmp (info.ext, sec) && is_section (info.ext)) {
-				/* This extension is mentioned in the config
-				 * file, and so is a section in its own
-				 * right. Leave it for whenever that section
-				 * is scanned.
-				 */
-				if (debug)
-					fprintf (stderr,
-						 "%s is in subsection %s\n",
-						 *np, info.ext);
-				free (info_buffer);
-				continue;
-			}
-			title = strappend (NULL, name, "(", info.ext, ")",
-					   NULL);
-			free (info_buffer);
-
-			man_file = ult_src (*np, path, NULL,
-					    SO_LINK | SOFT_LINK | HARD_LINK);
-			if (man_file == NULL) {
-				free (title);
-				found = 0;
-				break;
-			}
-
-			if (debug)
-				fprintf (stderr,
-					 "found ultimate source file %s\n",
-					 man_file);
-			lang = lang_dir (man_file);
-
-			cat_file = find_cat_file (path, man_file, sec);
-			found += display (path, man_file, cat_file, title);
-			free (cat_file);
-			free (title);
-#ifdef COMP_SRC
-			/* if ult_src() produced a ztemp file, we need to 
-			   remove it (and unexist it) before proceeding */
-			remove_ztemp ();
-#endif /* COMP_SRC */
-			/* free (man_file); can't free this, it's static !! */
-
-			if (found && !findall)
-				break;
-		}
+	for (np = names; np && *np; np++) {
+		struct mandata *info =
+			(struct mandata *) malloc (sizeof (struct mandata));
+		char *info_buffer = filename_info (*np, info);
+		if (!info_buffer)
+			continue;
+		info->addr = info_buffer;
+		found += add_candidate (cand_head, CANDIDATE_FILESYSTEM,
+					cat, name, path, info);
+		/* Don't free info and info_buffer here. */
 	}
-#endif /* NROFF_MISSING */
 
 	return found;
+}
+
+static int display_filesystem (char *name, struct candidate *candp)
+{
+	char *filename = make_filename (candp->path, name, candp->source,
+					candp->cat ? "cat" : "man");
+	char *title = strappend (NULL, name, "(", candp->source->ext, ")",
+				 NULL);
+	if (candp->cat) {
+		if (troff)
+			return 0;
+		return display (candp->path, NULL, filename, title);
+	} else {
+		char *man_file, *cat_file;
+		int found;
+
+		man_file = ult_src (filename, candp->path, NULL,
+				    SO_LINK | SOFT_LINK | HARD_LINK);
+		if (man_file == NULL) {
+			free (title);
+			return 0;
+		}
+
+		if (debug)
+			fprintf (stderr, "found ultimate source file %s\n",
+				 man_file);
+		lang = lang_dir (man_file);
+
+		cat_file = find_cat_file (candp->path, man_file,
+					  candp->source->sec);
+		if (debug)
+			fprintf (stderr, "will try cat file %s\n", cat_file);
+		found = display (candp->path, man_file, cat_file, title);
+		free (cat_file);
+		/* Be careful not to free man_file, as it's static. */
+		free (title);
+
+#ifdef COMP_SRC
+		/* If ult_src() produced a ztemp file, we need to remove it
+		 * before proceeding.
+		 */
+		remove_ztemp ();
+#endif /* COMP_SRC */
+
+		return found;
+	}
 }
 
 #ifdef MAN_DB_UPDATES
@@ -2682,11 +2610,12 @@ static void dbdelete_wrapper (char *page, struct mandata *info)
 
 /* This started out life as try_section, but a lot of that routine is 
    redundant wrt the db cache. */
-static int try_db_section (char *orig_name, char *path, struct mandata *in)
+static int display_database (char *orig_name, struct candidate *candp)
 {
 	int found = 0;
 	char *file, *name;
 	char *title;
+	struct mandata *in = candp->source;
 #ifdef MAN_DB_UPDATES
 	struct stat buf;
 #endif
@@ -2711,7 +2640,7 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 #ifdef MAN_DB_UPDATES
 	/* The next piece of code examines the db found manual page
 	   and checks for consistency */
-	file = make_filename (path, name, in, "man");
+	file = make_filename (candp->path, name, in, "man");
 	if (lstat (file, &buf) == 0 && buf.st_mtime != in->_st_mtime) {
 		/* update of this file required */
 		if (debug)
@@ -2721,7 +2650,7 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 		dbf = MYDBM_RWOPEN (database);
 		if (dbf) {
 			dbdelete (orig_name, in);
-			test_manfile (file, path);
+			test_manfile (file, candp->path);
 			in = dblookup_exact (orig_name, in->ext);
 			MYDBM_CLOSE (dbf);
 			if (!in)
@@ -2757,7 +2686,7 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
   	 */
 
 	if (in->id < STRAY_CAT) {	/* There should be a src page */
-		file = make_filename (path, name, in, "man");
+		file = make_filename (candp->path, name, in, "man");
 		if (debug)
 			fprintf (stderr, "Checking physical location: %s\n",
 				 file);
@@ -2766,7 +2695,7 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 			char *man_file;
 			char *cat_file;
 
-			man_file = ult_src (file, path, NULL,
+			man_file = ult_src (file, candp->path, NULL,
 					    SO_LINK | SOFT_LINK | HARD_LINK);
 			if (man_file == NULL) {
 				free (title);
@@ -2779,8 +2708,10 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 					 man_file);
 			lang = lang_dir (man_file);
 
-			cat_file = find_cat_file (path, man_file, in->ext);
-			found += display (path, man_file, cat_file, title);
+			cat_file = find_cat_file (candp->path, man_file,
+						  in->ext);
+			found += display (candp->path, man_file, cat_file,
+					  title);
 			free (cat_file);
 #ifdef COMP_SRC
 			/* if ult_src() produced a ztemp file, we need to 
@@ -2811,7 +2742,7 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 			return found;
 		}
 
-		file = make_filename (path, name, in, "cat");
+		file = make_filename (candp->path, name, in, "cat");
 		if (debug)
 			fprintf (stderr,
 				 "Checking physical location: %s\n",
@@ -2819,10 +2750,11 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 
 		if (access (file, R_OK) != 0) {
 			char *catpath;
-			catpath = get_catpath
-				(path, global_manpath ? SYSTEM_CAT : USER_CAT);
+			catpath = get_catpath (candp->path,
+					       global_manpath ? SYSTEM_CAT
+							      : USER_CAT);
 
-			if (catpath && strcmp (catpath, path) != 0) {
+			if (catpath && strcmp (catpath, candp->path) != 0) {
 				file = make_filename (catpath, name,
 						      in, "cat");
 				free (catpath);
@@ -2846,48 +2778,38 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 			}
 		}
 
-		found += display (path, NULL, file, title);
+		found += display (candp->path, NULL, file, title);
 	}
 	free (title);
 	return found;
 }
 
 /* test for existence, if fail: call dbdelete_wrapper, else return amount */
-static int exist_check (char *name, char *manpath, struct mandata *loc)
+static int display_database_check (char *name, struct candidate *candp)
 {
-	int exists;
-
-	exists = try_db_section (name, manpath, loc);
+	int exists = display_database (name, candp);
 
 #ifdef MAN_DB_UPDATES
 	if (!exists && !skip) {
 		if (debug)
 			fprintf (stderr, "dbdelete_wrapper (%s, %p)\n",
-				 name, loc);
-		dbdelete_wrapper (name, loc);
+				 name, candp->source);
+		dbdelete_wrapper (name, candp->source);
 	}
 #endif /* MAN_DB_UPDATES */
 
 	return exists;
 }
 
-/* Compare mandata structures by extension. */
-int compare_mandata_ext (const void *left, const void *right)
+/* Look for a page in the database. If db not accessible, return -1,
+   otherwise return number of pages found. */
+static int try_db (char *manpath, char *sec, char *name,
+		   struct candidate **cand_head)
 {
-	return strcmp (((struct mandata *) left)->ext,
-		       ((struct mandata *) right)->ext);
-}
-
-/* db wrapper for try_db_section(). If db not accessible, return -1,
-   otherwise return amount of pages found/displayed */
-static int try_db (char *manpath, char *sec, char *name)
-{
-	int found = 0;
 	struct nlist *in_cache;
-	struct mandata *loc, *data, *store[ENTRIES], *exact_ext = NULL;
-	struct mandata **exact_sec = store;
+	struct mandata *loc, *data;
 	char *catpath;
-	int store_count;
+	int found = 0;
 
 	/* find out where our db for this manpath should be */
 
@@ -2951,7 +2873,7 @@ static int try_db (char *manpath, char *sec, char *name)
 
 	/* if we already know that there is nothing here, get on with it */
 	if (!data)
-		return found; /* 0 */
+		return 0;
 
 	/* We already tried (and failed) to open this db before */
 	if (!data->addr)
@@ -2959,46 +2881,12 @@ static int try_db (char *manpath, char *sec, char *name)
 
 	/* cycle through the mandata structures (there's usually only 
 	   1 or 2) and see what we have w.r.t. the current section */
-	for (loc = data; loc; loc = loc->next) {
-		if (!extension || strcmp (extension, loc->ext) == 0
-			       || strcmp (extension, 
-					  loc->ext + strlen (sec)) == 0) {
-			if (strcmp (loc->ext, sec) == 0)
-				exact_ext = loc;
-			else if (strncmp (loc->ext, sec, strlen (sec)) == 0)
-				*(exact_sec++) = loc;
-		}
-	}
-	*exact_sec = NULL;
-
-	/* Sort the returned data by extension. */
-	store_count = 0;
-	for (exact_sec = store; *exact_sec; exact_sec++)
-		++store_count;
-	qsort (store, store_count, sizeof *store, compare_mandata_ext);
-
-	/* ALL free()ing of structures must be done by free_hashtab() only */
-
-	/* first see if we have the right extension */
-	if (exact_ext)
-		found = exist_check (name, manpath, exact_ext);
-
-	/* if (not or -a) and (we have a correct section), show that */
-	if (findall || !found) {
-		for (exact_sec = store; *exact_sec; exact_sec++) {
-			if (debug)
-				fprintf (stderr,
-					 "extension = %s, "
-					 "requested section = %s\n",
-					 (*exact_sec)->ext, sec);
-			if (!strcmp ((*exact_sec)->ext, sec) ||
-			    !is_section ((*exact_sec)->ext))
-				found += exist_check (name, manpath,
-						      *exact_sec);
-			if (found && !findall)
-				break;
-		}
-	}
+	for (loc = data; loc; loc = loc->next)
+		if (STREQ (sec, loc->sec) &&
+		    (!extension || STREQ (extension, loc->ext)
+				|| STREQ (extension, loc->ext + strlen (sec))))
+			found += add_candidate (cand_head, CANDIDATE_DATABASE,
+						0, name, manpath, loc);
 
 	return found;
 }
@@ -3006,7 +2894,8 @@ static int try_db (char *manpath, char *sec, char *name)
 /* try to locate the page under the specified manpath, in the desired section,
    with the supplied name. glob if necessary. Initially try to find it via
    a db cache access, if that fails, search the filesystem. */
-static int locate_page (char *manpath, char *sec, char *name)
+static int locate_page (char *manpath, char *sec, char *name,
+			struct candidate **candidates)
 {
 	int found, db_ok;
 
@@ -3024,14 +2913,14 @@ static int locate_page (char *manpath, char *sec, char *name)
 		fprintf (stderr, "searching in %s, section %s\n", 
 			 manpath, sec);
 
-	found = try_section (manpath, sec, name);
+	found = try_section (manpath, sec, name, candidates);
 
 	if (!found || findall) {
-		db_ok = try_db (manpath, sec, name);
+		db_ok = try_db (manpath, sec, name, candidates);
 
 #ifdef MAN_DB_CREATES
 		if (db_ok == -2) /* we created a db in the last call */
-			db_ok = try_db (manpath, sec, name);
+			db_ok = try_db (manpath, sec, name, candidates);
 #endif /* MAN_DB_CREATES */
 
 		if (db_ok > 0)  /* we found/opened a db and found something */
@@ -3040,6 +2929,23 @@ static int locate_page (char *manpath, char *sec, char *name)
 
 	if (!global_manpath)
 		regain_effective_privs ();
+
+	return found;
+}
+
+static int display_pages (char *name, struct candidate *candidates)
+{
+	struct candidate *candp;
+	int found = 0;
+
+	for (candp = candidates; candp; candp = candp->next) {
+		if (candp->from_db)
+			found += display_database_check (name, candp);
+		else
+			found += display_filesystem (name, candp);
+		if (found && !findall)
+			return found;
+	}
 
 	return found;
 }
@@ -3060,6 +2966,7 @@ static int locate_page (char *manpath, char *sec, char *name)
  */
 static int man (char *name)
 {
+	struct candidate *candidates = NULL;
 	int found = 0;
 
 	fflush (stdout);
@@ -3068,10 +2975,10 @@ static int man (char *name)
 		char **mp;
 
 		for (mp = manpathlist; *mp; mp++) {
-			found += locate_page (*mp, section, name);
+			found += locate_page (*mp, section, name, &candidates);
 			if (found && !findall)
 				/* i.e. only do this section... */
-				return found;
+				break;
 		}
 	} else {
 		char **sp;
@@ -3080,13 +2987,17 @@ static int man (char *name)
 			char **mp;
 
 			for (mp = manpathlist; *mp; mp++) {
-				found += locate_page(*mp, *sp, name);
+				found += locate_page (*mp, *sp, name,
+						      &candidates);
 				if (found && !findall)
 					/* i.e. only do this section... */
-					return found;
+					break;
 			}
 		}
 	}
+
+	if (found)
+		display_pages (name, candidates);
 
 #ifdef MAN_DB_UPDATES
 	/* check to see if any of the databases need updating */

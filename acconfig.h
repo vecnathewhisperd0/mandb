@@ -48,9 +48,6 @@
    manual source */
 #undef COMP_SRC
 
-/* define if your pclose function doesn't handle multiple streams properly */
-#undef BROKEN_PCLOSE
-
 /* define if using <fnmatch.h> rather than "lib/fnmatch.h" */
 #undef HAVE_FNMATCH_H
 

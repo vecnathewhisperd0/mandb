@@ -1,3 +1,33 @@
+Sun Dec 23 02:35:24 GMT 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (popen, pclose): Move to a separate library file ...
+	* lib/popen.c: ... here.
+	* acinclude.m4 (MAN_FUNC_PCLOSE): Use AC_LIBOBJ to conditionally
+	  compile this.
+	* acconfig.h: Remove BROKEN_PCLOSE definition.
+
+	Major rewrite of man's searching code to make it maintainable and to
+	prepare for better sorting of displayed man pages.
+
+	* src/man.c (add_candidate): New function to add an item to a list
+	  of candidate pages.
+	  (compare_candidates): New helper function.
+	  (compare_names, compare_mandata_ext): Remove.
+	  (try_section): Use add_candidate() rather than displaying the page
+	  immediately.
+	  (try_db): Likewise.
+	  (display_filesystem): New function to display pages found by
+	  try_section().
+	  (try_db_section): Rename to display_database(), and use the
+	  candidate structures.
+	  (exist_check): Rename to display_database_check(); use candidates.
+	  (locate_page): Pass the candidate list through to try_section()
+	  and try_db().
+	  (display_pages): New function to iterate through a candidate list
+	  and display each entry.
+	  (man): Create a candidate list and pass it to locate_page().
+	  Display pages only after building the full list.
+
 Mon Dec 17 03:40:48 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* man/man8/mandb.man8 (EXIT STATUS): Document mandb's exit codes.
@@ -17,7 +47,7 @@ Mon Dec 17 00:53:20 GMT 2001  Colin Watson  <cjwatson@debian.org>
 	  utf8 devices.
 	* man/*/man1/man.man1: Likewise.
 
-Sun Dec  9 03:31:54 GMT 2001  Morten Brix Pedersen <morten@wtf.dk>
+Sun Dec  9 03:31:54 GMT 2001  Morten Brix Pedersen  <morten@wtf.dk>
 
 	* po/da.po: New file.
 	* man/THANKS: Add credit.
