@@ -16,7 +16,7 @@
 .SH SYNOPSIS
 .\" The general command line
 .B %man%
-.RB [\| \-c \||\| \-w \||\| \-tZT
+.RB [\| \-c \||\| \-w \||\| \-tZHT
 .IR device \|]
 .RB [\| \-adhu7V \|]
 .RB [\| \-m
@@ -42,7 +42,7 @@
 .B %man%
 .B \-l
 .RB [\| \-7 \|]
-.RB [\| \-tZT
+.RB [\| \-tZHT
 .IR device \|]
 .RB [\| \-p
 .IR string \|]
@@ -614,7 +614,8 @@ option.
 
 This option is ignored when using options
 .BR \-t ,
-.B \-T
+.BR \-H ,
+.BR \-T ,
 or
 .B \-Z
 and may be useless for
@@ -762,8 +763,9 @@ is installed with the setuid bit set.
 Use
 .I %troff%
 to format the manual page to stdout.
-This option is not required in conjunction with either
-.B \-T
+This option is not required in conjunction with
+.BR \-H ,
+.BR \-T ,
 or
 .BR \-Z .
 .PP
@@ -797,6 +799,20 @@ this option is passed to
 and will suppress the use of a post-processor.
 It implies
 .BR \-t .
+.TP
+.B \-H, \-\-html
+This option will cause
+.B groff
+to produce HTML output, and will display that output in a web browser.
+The choice of browser is determined by the
+.RB $ BROWSER
+environment variable, or by a compile-time default if that is unset (usually
+.BR lynx ).
+This option implies
+.BR \-t ,
+and will only work with
+.B GNU
+.BR troff .
 .TP
 .B \-w, \-\-where, \-\-location
 Don't actually display the manual pages, but do print the location(s) of
@@ -850,6 +866,22 @@ the manual page.
 By default,
 .B %pager%
 is used.
+.TP
+.B BROWSER
+If
+.RB $ BROWSER
+is set, its value is a colon-delimited list of commands, each of which in
+turn is used to try to start a web browser for
+.B man
+.BR \-\-html .
+In each command,
+.I %s
+is replaced by a filename containing the HTML output from
+.BR groff ,
+.I %%
+is replaced by a single percent sign (%), and
+.I %c
+is replaced by a colon (:).
 .TP
 .B SYSTEM
 If

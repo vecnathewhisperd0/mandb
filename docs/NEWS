@@ -27,6 +27,14 @@ Major changes since man_db-2.3.19:
 	  scanning for preprocessors, so for example mdoc's .Eq request
 	  isn't mistaken for the .EQ which introduces eqn commands.
 
+	o Escape arguments passed to the shell that might contain dangerous
+	  characters.
+
+	o Avoid an infinite loop if the LANGUAGE environment variable is set
+	  but empty.
+
+	o The --create option to mandb now implies --no-purge.
+
 	Improvements:
 	-------------
 
@@ -40,8 +48,14 @@ Major changes since man_db-2.3.19:
 
 	o Add examples of man pages written in POD and SGML.
 
-	o Escape arguments passed to the shell that might contain dangerous
-	  characters.
+	o lexgrog is now installed in /usr/bin by default, with proper
+	  argument parsing, an improved output format, and a man page. It is
+	  expected to be used by programs that need to validate man pages.
+
+	o The -H (--html) option to man is now compiled in by default, and
+	  supports the BROWSER specification (as documented at
+	  http://www.tuxedo.org/~esr/BROWSER/ and amended at
+	  http://www.dwheeler.com/browse/secure_browser.html).
 
 man_db-2.3.19 (5 July 2001)
 ===========================
