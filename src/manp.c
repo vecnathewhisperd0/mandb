@@ -152,6 +152,17 @@ static char *get_from_list (char *key, int flag)
 	return NULL;
 }
 
+static struct list *iterate_over_list (struct list *prev, char *key, int flag)
+{
+	struct list *list;
+
+	for (list = prev ? prev->next : namestore; list; list = list->next)
+		if (flag == list->flag && STREQ (key, list->key))
+			return list;
+
+	return NULL;
+}
+
 char *get_def (char *thing, char *def)
 {
 	char *config_def = get_from_list (thing, DEFINE);
@@ -825,7 +836,7 @@ static __inline__ char *get_manpath (char *path)
 	tmppath = xstrdup (path);
 
 	for (end = p = tmppath; end; p = end + 1) {
-		char *mandir;
+		struct list *mandir_list;
 
 		end = strchr (p, ':');
 		if (end)
@@ -838,17 +849,21 @@ static __inline__ char *get_manpath (char *path)
 		if (debug)
 			fprintf (stderr, "\npath directory %s ", p);
 
-		mandir = get_from_list (p, MANPATH_MAP);
+		mandir_list = iterate_over_list (NULL, p, MANPATH_MAP);
 
 		/*
       		 * The directory we're working on is in the config file.
       		 * If we haven't added it to the list yet, do.
       		 */
 
-		if (mandir) {
+		if (mandir_list) {
 			if (debug)
 				fputs("is in the config file\n", stderr);
-			add_dir_to_list (tmplist, mandir);
+			while (mandir_list) {
+				add_dir_to_list (tmplist, mandir_list->cont);
+				mandir_list = iterate_over_list
+					(mandir_list, p, MANPATH_MAP);
+			}
 
       		 /* The directory we're working on isn't in the config file.  
       		    See if it has ../man or man subdirectories.  

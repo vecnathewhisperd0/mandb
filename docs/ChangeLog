@@ -1,3 +1,10 @@
+Sun Aug 19 13:16:01 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (iterate_over_list): New function (get_from_list() can
+	  only get the first matching element).
+	  (get_manpath): Use iterate_over_list() to get multiple matching
+	  MANPATH_MAP entries.
+
 Sun Aug 19 13:02:01 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (popen, pclose): Rely on the BROKEN_PCLOSE check in
