@@ -92,6 +92,7 @@ static struct {
 	/* These languages require a patched version of groff with the
 	 * ascii8 and nippon devices.
 	 */
+	{ "hu",		"ISO-8859-2"	}, /* Hungarian */
 	{ "ja",		"EUC-JP"	}, /* Japanese */
 	{ "ko",		"EUC-KR"	}, /* Korean */
 	{ "pl",		"ISO-8859-2"	}, /* Polish */
