@@ -41,7 +41,7 @@
 extern int errno;
 #endif
 
-#ifndef S_ISLNK /* loosing sys/stat.h */
+#ifndef S_ISLNK /* losing sys/stat.h */
 #  if defined(S_IFMT) && defined(S_IFLNK)
 #    define S_ISLNK(mode) (((mode) & S_IFMT) == S_IFLNK)
 #  endif

@@ -214,8 +214,8 @@ static __inline__ void xcopy (const char *from, const char *to)
 		if (in > 0)
 			fwrite (buf, 1, in, ofp);
 	}
-	fclose(ifp);
-	fclose(ofp);
+	fclose (ifp);
+	fclose (ofp);
 }
 
 /* chmod() with error checking */
@@ -353,7 +353,7 @@ static short mandb (const char *catpath, const char *manpath)
 	return amount;
 }
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	int c;
 	char *sys_manp;
@@ -417,13 +417,13 @@ int main(int argc, char *argv[])
 				opt_test = 1;
 				break;
 			case 'V':
-				ver();
+				ver ();
 				break;
 			case 'h':
-				usage(OK);
+				usage (OK);
 				break;
 			default:
-				usage(FAIL);
+				usage (FAIL);
 				break;
 		}
 	}
