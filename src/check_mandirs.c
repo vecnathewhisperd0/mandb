@@ -123,7 +123,7 @@ char *make_filename (const char *path, const char *name,
 	(void) sprintf (file, "%s/%s%s/%s.%s",
 			path, type, in->sec, name, in->ext);
 
-	if (*in->comp != '-')	/* Is there an extension ? */
+	if (in->comp && *in->comp != '-')	/* Is there an extension? */
 		file = strappend (file, ".", in->comp, NULL);
 
 	return file;
