@@ -69,6 +69,7 @@ extern int errno;
 #include "globbing.h"
 #include "ult_src.h"
 #include "hashtable.h"
+#include "security.h"
 #include "check_mandirs.h"
 
 int opt_test;		/* don't update db */
@@ -425,8 +426,11 @@ void test_manfile (char *file, const char *path)
 		   ult_src() will leave the last uncompressed nroff file it
 		   has to deal with in get_ztemp() */
 		char *ztemp;
-		
+#endif /* COMP_SRC */
+
 		lg.type = MANPAGE;
+		drop_effective_privs ();
+#ifdef COMP_SRC
 		ztemp = get_ztemp ();
 		if (ztemp) {
 			find_name (ztemp, basename (file), &lg);
@@ -434,6 +438,7 @@ void test_manfile (char *file, const char *path)
 		} else
 #endif /* COMP_SRC */
 			find_name (ult, basename (file), &lg);
+		regain_effective_privs ();
 			
 		install_text (ult, lg.whatis);
 	}

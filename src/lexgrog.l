@@ -43,6 +43,7 @@ extern int errno;
 
 #include "manconfig.h"
 #include "lib/error.h"
+#include "security.h"
 
 #define YY_READ_BUF_SIZE	1024
 #define MAX_NAME		2048
@@ -359,7 +360,9 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 		if (comp)
 			file = decompress (file, comp);
 #endif
+		drop_effective_privs ();
 		yyin = fopen (file, "r");
+		regain_effective_privs ();
 		if (!yyin) {
 			error (0, errno, _("can't open %s"), file);
 #ifdef COMP_SRC
@@ -380,6 +383,8 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 	else
 		BEGIN (MAN_FILE);
 
+	drop_effective_privs ();
+
 	yyrestart (yyin);
 	ret = yylex ();
 	fclose (yyin);
@@ -387,6 +392,8 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 #ifdef COMP_SRC
 	remove_ztemp ();
 #endif
+
+	regain_effective_privs ();
 
 	if (ret)
 		return 0;

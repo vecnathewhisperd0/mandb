@@ -67,6 +67,7 @@ extern char *canonicalize_file_name __P ((__const char *__name));
 #include "libdb/db_storage.h"
 #include "lib/error.h"
 #include "manp.h"
+#include "security.h"
 
 static char *temp_name;
 static char *catdir, *mandir;
@@ -257,8 +258,8 @@ static __inline__ int check_for_stray (void)
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 				free (fullpath);
 #endif
-				if (do_system (filter) != 0) {
-					remove (temp_name);
+				if (do_system_drop_privs (filter) != 0) {
+					remove_with_dropped_privs (temp_name);
 					perror (filter);
 				} else {
 					strays++;
@@ -336,7 +337,9 @@ int straycats (char *manpath)
 	int strays;
 
 	if (!temp_name) {
-		int fd = create_tempfile ("zcat", &temp_name);
+		int fd;
+		drop_effective_privs ();
+		fd = create_tempfile ("zcat", &temp_name);
 		if (fd == -1) {
 			error (0, errno,
 			       _("warning: can't create temp file %s"),
@@ -344,6 +347,7 @@ int straycats (char *manpath)
 			return 0;
 		}
 		close (fd);
+		regain_effective_privs ();
 	}
 
 	dbf = MYDBM_RWOPEN (database);
@@ -385,7 +389,7 @@ int straycats (char *manpath)
 		free (catpath);
 
 	MYDBM_CLOSE (dbf);
-	remove (temp_name);
+	remove_with_dropped_privs (temp_name);
 	free (temp_name);
 	temp_name = NULL;
 	return strays;

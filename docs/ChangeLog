@@ -1,3 +1,16 @@
+Fri Sep  7 00:55:53 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* GNUmakefile.in (dist): Include other manpage.example formats.
+
+	* lib/tempfile.c (create_tempfile): Create with mode 0600.
+	* src/check_mandirs.c (test_manfile): Drop privileges for temporary
+	  file operations.
+	* src/lexgrog.l (find_name): Likewise.
+	* src/man.c (make_roff_command): Likewise.
+	* src/straycats.c (check_for_stray): Likewise.
+	  (straycats): Likewise.
+	* src/ult_src.c (ult_src): Likewise.
+
 Thu Sep  6 21:54:05 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* include/Defines.in: Add lexgrog to list of transformed program

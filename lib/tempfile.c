@@ -70,8 +70,8 @@ int create_tempfile (const char *template, char **created_filename)
 		return -1;
 	dir = xstrdup (dir);
 	*created_filename = strappend (dir, "/", template, "XXXXXX", NULL);
-	/* -rw-r--r-- so that it can be read with different privileges. */
-	old_mode = umask (S_IWGRP | S_IXGRP | S_IWOTH | S_IXOTH);
+	/* -rw------- */
+	old_mode = umask (S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	fd = mkstemp (*created_filename);
 	umask (old_mode);
 	return fd;

@@ -1481,6 +1481,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 			error (FATAL, errno,
 			       _("error trying to read from stdin"));
 
+		drop_effective_privs ();
 		create_stdintmp ();
 		/* write bf to stdin_tmpfile_fd */
 		ctot = ct;
@@ -1501,6 +1502,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		signal (SIGPIPE, old_handler);
 
 		pp_string = get_preprocessors (stdin_tmpfile);
+		regain_effective_privs ();
 	} else
 		pp_string = get_preprocessors (file);
 
