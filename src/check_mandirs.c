@@ -282,7 +282,7 @@ void test_manfile (char *file, const char *path)
 		regain_effective_privs ();
 
 		hash_install (whatis_hash, ult, strlen (ult),
-			      lg.whatis ? xstrdup (lg.whatis) : NULL);
+			      xstrdup (lg.whatis));
 	}
 
 	if (debug)

@@ -389,10 +389,8 @@ int main (int argc, char *argv[])
 	program_name = xstrdup (basename (argv[0]));
 
 	/* initialise the locale */
-	locale = setlocale (LC_ALL, "");
-	if (locale)
-		locale = xstrdup (locale);
-	else {
+	locale = xstrdup (setlocale (LC_ALL, ""));
+	if (!locale) {
 		/* Obviously can't translate this. */
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");

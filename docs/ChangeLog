@@ -1,3 +1,12 @@
+Mon Apr 28 15:11:28 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/catman.c (main): Don't guard xstrdup() from NULL input, as it
+	  checks itself.
+	* src/check_mandirs.c (test_manfile): Likewise.
+	* src/descriptions.c (parse_descriptions): Likewise.
+	* src/mandb.c (main): Likewise.
+	* src/whatis.c (main): Likewise.
+
 Mon Apr 28 09:06:28 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	Introduce a readdir() cache, which substantially speeds up mandb's
