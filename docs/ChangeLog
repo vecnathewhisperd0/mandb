@@ -1,3 +1,9 @@
+Thu Jul 22 14:46:30 BST 2004  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (testmandirs): Always scan directory if last
+	  is 0 (i.e. creating) to avoid problems on systems with badly
+	  broken clocks set before the epoch.
+
 Mon Jun 28 03:56:56 BST 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (man): Free candidate list after displaying it.

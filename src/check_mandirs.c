@@ -393,7 +393,7 @@ static short testmandirs (const char *path, time_t last)
 			continue;
 		if (!S_ISDIR(stbuf.st_mode))		/* not a directory */
 			continue;
-		if (stbuf.st_mtime <= last) {
+		if (last && stbuf.st_mtime <= last) {
 			/* scanned already */
 			if (debug)
 				fprintf (stderr,
