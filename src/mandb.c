@@ -210,17 +210,20 @@ static int xcopy (const char *from, const char *to)
 
 	ifp = fopen (from, "r");
 	if (!ifp) {
-		fclose (ifp);
+		ret = -errno;
 		if (errno != ENOENT)
 			perror ("fopen");
-		return -errno;
+		fclose (ifp);
+		return ret;
 	}
 
 	ofp = fopen (to, "w");
 	if (!ofp) {
-		fclose (ofp);
+		ret = -errno;
 		perror ("fopen");
-		return -errno;
+		fclose (ifp);
+		fclose (ofp);
+		return ret;
 	}
 
 	while (!feof (ifp) && !ferror (ifp)) {
@@ -228,13 +231,13 @@ static int xcopy (const char *from, const char *to)
 		size_t in = fread (buf, 1, sizeof (buf), ifp);
 		if (in > 0) {
 			if (fwrite (buf, 1, in, ofp) == 0 && ferror (ofp)) {
-				error (0, errno, _("can't write to %s"), to);
 				ret = -errno;
+				error (0, errno, _("can't write to %s"), to);
 				break;
 			}
 		} else if (ferror (ifp)) {
-			error (0, errno, _("can't read from %s"), from);
 			ret = -errno;
+			error (0, errno, _("can't read from %s"), from);
 			break;
 		}
 	}

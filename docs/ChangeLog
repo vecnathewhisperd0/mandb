@@ -1,3 +1,9 @@
+Sun Mar  2 20:37:08 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/mandb.c (xcopy): Save errno before performing operations that
+	  might change it. Close ifp as well if an error occurs while
+	  opening ofp.
+
 Fri Feb 28 01:50:21 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (find_in_path): path needs to be preserved in order to
