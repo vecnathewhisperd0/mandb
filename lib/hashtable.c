@@ -72,6 +72,11 @@ static unsigned int hash (const char *s, size_t len)
 #endif
 }
 
+void null_hash_free (void *defn)
+{
+	defn = defn; /* unused */
+}
+
 void plain_hash_free (void *defn)
 {
 	if (defn)

@@ -44,6 +44,7 @@ struct nlist {
         void *defn;		/* the _definition_ */
 };
 
+extern void null_hash_free (void *defn);
 extern void plain_hash_free (void *defn);
 
 extern struct hashtable *hash_create (hash_free_ptr free_defn);
