@@ -127,12 +127,13 @@ char *make_filename (const char *path, const char *name,
 
 int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 {
-	char *pointer_name;
 	char *comma;
 	int ret;
 
 	info->whatis = NULL;	/* default */
 	if (raw_whatis) {
+		if (debug)
+			fprintf (stderr, "raw_whatis = %s\n", raw_whatis);
 		info->whatis = strstr (raw_whatis, " - ");
 		if (info->whatis) {
 			char *space = info->whatis;
@@ -152,28 +153,23 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 		fprintf (stderr, "base_name = `%s', id = %c\n",
 			 base_name, info->id);
 
-	pointer_name = xstrdup (base_name);
-	comma = strchr (pointer_name, ',');
+	comma = strchr (base_name, ',');
 	if (comma) {
 		*comma = '\0';
 		if (debug)
-			fprintf (stderr, "pointer_name = `%s'\n",
-				 pointer_name);
+			fprintf (stderr, "base_name = `%s'\n",
+				 base_name);
 	}
 
-	ret = dbstore (info, pointer_name);
-	if (ret > 0) {
-		free (pointer_name);
+	ret = dbstore (info, base_name);
+	if (ret > 0)
 		return ret;
-	}
 
 	/* if there are no indirect references, just go on to the 
 	   next file */
 
-	if (!raw_whatis || strchr (raw_whatis, ',') == NULL) {
-		free (pointer_name);
+	if (!raw_whatis || strchr (raw_whatis, ',') == NULL)
 		return 0;
-	}
 
 	/* If there are...  */
 		
@@ -184,7 +180,8 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 
 	/* don't waste space storing the whatis in the db */
 	info->whatis = NULL;
-	info->pointer = pointer_name; 
+	/* This may be used in the next splitline() call. */
+	info->pointer = base_name; 
 	
 	while ((comma = strrchr (raw_whatis, ',')) != NULL) {
 		*comma = '\0';
@@ -192,31 +189,25 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 
 		/* If we've already dealt with it, ignore */
 		
-		if (strcmp (comma, pointer_name) != 0) {
+		if (strcmp (comma, base_name) != 0) {
 			if (debug)
 				fprintf (stderr, "comma = `%s'\n", comma);
 			ret = dbstore (info, comma);
-			if (ret > 0) {
-				free (pointer_name);
+			if (ret > 0)
 				return ret;
-			}
 		}
 	}
 
 	/* If we've already dealt with it, ignore */
 		
-	if (strcmp (raw_whatis, pointer_name) == 0) {
-		free (pointer_name);
+	if (strcmp (raw_whatis, base_name) == 0)
 		return 0;
-	}
-		
+
 	if (debug)
 		fprintf (stderr, "raw_w = `%s'\n", raw_whatis);
 	ret = dbstore (info, raw_whatis);
-	if (ret > 0) {
-		free (pointer_name);
+	if (ret > 0)
 		return ret;
-	}
 
 	return 0;
 }
@@ -452,58 +443,64 @@ void test_manfile (char *file, const char *path)
 	if (lg.whatis) {
 		int last_name;
 		char save_id;
+		char *othername = xstrdup (lg.whatis);
 
 		last_name = 0;
 		save_id = info.id;
 
 		/* It's easier to run through the names in reverse order. */
 		while (!last_name) {
-			char *sep, *othername, *end_othername;
+			char *sep, *dup_whatis, *end_othername;
 			/* Get the next name, with leading spaces and the
 			 * description removed.
 			 */
-			sep = strrchr (lg.whatis, 0x11);
+			sep = strrchr (othername, 0x11);
 			if (sep)
 				*(sep++) = '\0';
 			else {
-				sep = lg.whatis;
+				sep = othername;
 				last_name = 1;
 			}
 			if (!*sep)
 				/* Probably a double line break or something */
 				continue;
 			sep += strspn (sep, " ");
-			othername = xstrdup (sep);
-			end_othername = strstr (othername, " - ");
+			dup_whatis = xstrdup (sep);
+			end_othername = strstr (sep, " - ");
 			if (end_othername) {
 				while (*(end_othername - 1) == ' ')
 					--end_othername;
 				*end_othername = '\0';
 			}
-			if (STREQ (base_name, othername))
+			if (STREQ (base_name, sep))
 				info.id = save_id;
 			else {
 				info.id = WHATIS_MAN;
 				info.pointer = base_name;
 			}
 			if (!opt_test) {
-				char *dup_whatis = xstrdup (sep);
-				if (splitline (dup_whatis, &info,
-					       othername) == 1)
+				if (splitline (dup_whatis, &info, sep) == 1)
 					gripe_multi_extensions (path, info.sec,
 								base_name,
 								info.ext);
-				free (dup_whatis);
 			}
-			free (othername);
+			free (dup_whatis);
 		}
 
 		info.id = save_id;
 		info.pointer = NULL;
-		if (!opt_test)
-			if (splitline (lg.whatis, &info, base_name) == 1)
+		if (!opt_test) {
+			/* Ugh. This whole thing needs to be rearranged. */
+			char *sep = strchr (lg.whatis, 0x11);
+			if (sep)
+				*sep = '\0';
+			if (splitline (lg.whatis,
+				       &info, base_name) == 1)
 				gripe_multi_extensions (path, info.sec,
 							base_name, info.ext);
+		}
+
+		free (othername);
 	} else {
 		(void) stat (ult, &buf);
 		if (buf.st_size == 0) {
