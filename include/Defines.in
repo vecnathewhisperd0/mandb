@@ -56,8 +56,8 @@ man5ext = .5
 man8ext = .8
 
 # special rule for sysconfdir
-ifeq ($(strip $(prefix)),/usr)
-sysconfdir = /etc
+ifeq ($(notdir $(prefix)),usr)
+sysconfdir = $(dir $(prefix))etc
 else
 sysconfdir = $(prefix)/etc
 endif
@@ -73,6 +73,7 @@ whatis = $(shell echo whatis |sed '$(transform)')
 apropos = $(shell echo apropos |sed '$(transform)')
 manpath = $(shell echo manpath |sed '$(transform)')
 zsoelim = $(shell echo zsoelim |sed '$(transform)')
+lexgrog = $(shell echo lexgrog |sed '$(transform)')
 
 config_file = $(sysconfdir)/man_db.conf
 

@@ -108,6 +108,7 @@ install:
 	$(INSTALL_PROGRAM) catman $(bindir)/$(catman)
 	$(INSTALL_PROGRAM) whatis $(bindir)/$(whatis)
 	$(INSTALL_PROGRAM) apropos $(bindir)/$(apropos)
+	$(INSTALL_PROGRAM) lexgrog $(bindir)/$(lexgrog)
 	for j in $(PUBTOOLS); do \
 		if test -x $$j; then \
 			$(INSTALL_PROGRAM) $$j $(sbindir)/$$j; \
@@ -123,7 +124,7 @@ install:
 		echo "$(config_file) already exists. Overwrite manually if necessary"; \
 		echo " "; \
 	else \
-		$(MKINSTALLDIRS) $(sysconfdir); \
+		$(MKINSTALLDIRS) $(dir $(config_file)); \
 		echo "$(INSTALL_DATA) man_db.conf $(config_file)"; \
 		$(INSTALL_DATA) man_db.conf $(config_file); \
 	fi
