@@ -1,3 +1,11 @@
+Thu Jun 28 01:02:32 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (gripe_stat_file): Downgrade the warning if a manpath
+	  element doesn't exist to a debugging message (affects people
+	  without a /usr/local/share/man, for example).
+	  (read_config_file): Additional debugging message. Free home if it
+	  gets allocated.
+
 Thu Jun 28 00:35:09 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	The caching cleanup I've been promising for weeks. Here be dragons.

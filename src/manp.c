@@ -328,7 +328,7 @@ static __inline__ void gripe_reading_mp_config (char *file)
 
 static __inline__ void gripe_stat_file (char *file)
 {
-	if (!quiet)
+	if (debug)
 		error (0, errno, _("warning: %s"), file);
 }
 
@@ -739,9 +739,13 @@ void read_config_file(void)
 	if (home) {
 		config = fopen (strappend (home, "/.manpath", NULL), "r");
 		if (config != NULL) {
+			if (debug)
+				fprintf (stderr,
+					 "From the config file %s:\n\n", home);
 			add_to_dirlist (config);
 			fclose (config);
 		}
+		free (home);
 	}
 
 	config = fopen (CONFIG_FILE, "r");
