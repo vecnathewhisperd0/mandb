@@ -66,9 +66,28 @@ char *extension;
 static char *mandir_layout = MANDIR_LAYOUT;
 
 #ifdef TEST
+
+#  ifdef HAVE_GETOPT_H
+#    include <getopt.h>
+#  else /* !HAVE_GETOPT_H */
+#    include "lib/getopt.h"
+#  endif /* HAVE_GETOPT_H */
+
 char *program_name;
-int debug = 1;
-#endif
+int debug = 0;
+
+static const struct option long_options[] =
+{
+	{"debug",	no_argument,		0,	'd'},
+	{"extension",	required_argument,	0,	'e'},
+	{"ignore-case",	no_argument,		0,	'i'},
+	{"match-case",	no_argument,		0,	'I'},
+	{0, 0, 0, 0}
+};
+
+static const char args[] = "de:iI";
+
+#endif /* TEST */
 
 static __inline__ char *end_pattern (char *pattern, const char *sec)
 {
@@ -277,18 +296,39 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 }		
 
 #ifdef TEST
-int main (int argc, char *argv[])
+int main (int argc, char **argv)
 {
+	int c, option_index;
 	int i;
-	
+	int match_case = 0;
+
+	while ((c = getopt_long (argc, argv, args,
+				 long_options, &option_index)) != -1) {
+		switch (c) {
+			case 'd':
+				debug = 1;
+				break;
+			case 'e':
+				extension = optarg;
+				break;
+			case 'i':
+				match_case = 0;
+				break;
+			case 'I':
+				match_case = 1;
+				break;
+		}
+	}
+
 	program_name = xstrdup (basename (argv[0]));
-	if (argc != 4)
+	if (argc - optind != 3)
 		error (FAIL, 0, "usage: %s path sec name", program_name);
 
 	for (i = 0; i <= 1; i++) {
 		char **files;
 
-		files = look_for_file (argv[1], argv[2], argv[3], i);
+		files = look_for_file (argv[optind], argv[optind + 1],
+				       argv[optind + 2], i, match_case);
 		if (files)
 			while (*files)
 				printf ("%s\n", *files++);

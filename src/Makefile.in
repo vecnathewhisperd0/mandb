@@ -108,7 +108,7 @@ apropos: whatis.c
 lexgrog: lexgrog.c compression.o fake_security.o ult_src.o util.o
 	$(LINK.c) -DTEST $^ $(LDLIBS) -o $@
 
-globbing: globbing.c
+globbing: globbing.c util.o
 	$(LINK.c) -DTEST $^ $(LDLIBS) -o $@
 
 # The standard targets
