@@ -54,10 +54,14 @@ MANPATH_MAP	/opt/sbin		/opt/man
 # the database cache for any manpaths not mentioned below unless explicitly
 # requested to do so.
 #
+# In a per-user configuration file, this directive only controls the
+# location of catpaths and the creation of database caches; it has no effect
+# on privileges.
+#
 # Any manpaths that are subdirectories of other manpaths must be mentioned
 # *before* the containing manpath. E.g. /usr/man/preformat must be listed
 # before /usr/man.
-# 
+#
 #		*MANPATH*     ->	*CATPATH*
 #
 MANDB_MAP	/usr/man		/var/cache/man/fsstnd

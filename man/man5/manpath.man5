@@ -55,8 +55,10 @@ Lines of this form indicate which manpaths are to be treated as system
 manpaths, and optionally where their cat files should be stored.
 This field type is particularly important if
 .B man
-is a setuid program, as it indicates which manual page hierarchies to access
-as the setuid user and which as the invoking user.
+is a setuid program, as (when in the system configuration file
+%manpath_config_file% rather than the per-user configuration file .manpath)
+it indicates which manual page hierarchies to access as the setuid user and
+which as the invoking user.
 
 The system manual page hierarchies are usually those stored under
 .I /usr
