@@ -128,31 +128,25 @@ process.
 	  inadequate for your requirements.  (usually .Z [compress], 
 	  .z, .gz [gzip])
 
+configure will determine your system's ability to use native language
+support (NLS) message catalogues.  You may set the environment variable
+LINGUAS to limit the set of translations installed.  LINGUAS should contain
+a space-separated list of two-letter language identifiers.  To compile
+man_db with no support for message catalogues, simply pass the --disable-nls
+option to configure.  N.B. This is not related to man's ability to display
+NLS manual pages, support for which is compiled in by default. 
+
 Running make.
 
-configure will determine your system's ability to use native language
-support (NLS) message catalogues.  If support is available, running `make'
-with no target will display the available language identifiers.  To compile 
-man_db with no support for message catalogues, simply run `make' with a 
-target of `all'.  N.B. This is not related to man's ability to display NLS 
-manual pages, support for which is compiled in by default. 
-
-	o RUN `make' to query nls languages on systems that support message
-	  catalogues or `make all' to compile with the default English
-	  messages only. 
-
-If you ran `make' with no target and the compile did not begin, do one of 
-the following.
-
-	o RUN `make nls=<your_choice>', `make nls=all' or `make nls=off'
-	  which is equivalent to `make all'.
+	o RUN `make' to compile man_db with the set of translations chosen
+	  when running `./configure'.
 
 Sort out the man_db configuration file.
 
 	o RUN `./src/man -l man/man5/manpath.5' from the root of this
 	  distribution to read the man_db configuration file details.
 
-	o EDIT `./src/man_db.config' to your local requirements.
+	o EDIT `./src/man_db.conf' to your local requirements.
 
 Install the package.
 
@@ -165,7 +159,7 @@ The following command is required if you elected to compile the package
 without support for message catalogues but would like to install native
 language manual page translations.
 
-	o RUN `make man targets=install nls=<your_choice>' to install
+	o RUN `make man targets=install LINGUAS=<your_choice>' to install
 	  translations of the standard English manual pages 
 
 Initialise the `index' databases for all manpaths marked as global in the
