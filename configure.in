@@ -1,4 +1,4 @@
-dnl Process this file with autoconf v1.116+ to produce a configure script.
+dnl Process this file with autoconf v2.1.2+ to produce a configure script.
 dnl
 dnl Initialise and check we're in the correct directory.
 dnl
@@ -18,8 +18,10 @@ date_es=`LANG=es_ES date -d $datemark +'%d %B %Y'`
 date_de=`LANG=de_DE date -d $datemark +'%d %B %Y'`
 date_fr=`LANG=fr_FR date -d $datemark +'%d %B %Y'`
 dnl
-AC_DEFINE_UNQUOTED(PACKAGE, "$AC_PACKAGE_NAME")
-AC_DEFINE_UNQUOTED(VERSION, "$AC_PACKAGE_VERSION")
+PACKAGE=AC_PACKAGE_NAME
+VERSION=AC_PACKAGE_VERSION
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
 AC_SUBST(PACKAGE)dnl
 AC_SUBST(VERSION)dnl
 dnl
