@@ -1,3 +1,9 @@
+Fri Feb 28 01:50:21 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (find_in_path): path needs to be preserved in order to
+	  be freed safely, or else we segfault. Use a temporary variable for
+	  strsep() instead.
+
 Mon Feb 24 17:05:25 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (OPTIONS): Only use the \[shc] character if it's
