@@ -2115,11 +2115,21 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 
 #ifdef TROFF_IS_GROFF
 	if (format_cmd && htmlout) {
+		char old_cwd[PATH_MAX];
 		char *htmldir;
 		char *man_file_copy, *man_base, *man_ext;
 		char *htmlfile, *esc_htmlfile;
 
+#  ifdef HAVE_GETCWD
+		if (!getcwd (old_cwd, PATH_MAX - 1))
+#  else /* !HAVE_GETCWD */
+		if (!getwd (old_cwd))
+#  endif
+			old_cwd[0] = '\0';
 		htmldir = create_tempdir ("hman");
+		if (chdir (htmldir) == -1)
+			error (FATAL, errno, _("can't change to directory %s"),
+			       htmldir);
 		man_file_copy = xstrdup (man_file);
 		man_base = basename (man_file_copy);
 		man_ext = strchr (man_base, '.');
@@ -2136,6 +2146,12 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 		free (command);
 		/* Some shells report broken pipe; ignore it. */
 		if (status && status != (SIGPIPE + 0x80) * 256) {
+			if (chdir (old_cwd) == -1) {
+				error (0, errno,
+				       _("can't change to directory %s"),
+				       old_cwd);
+				chdir ("/");
+			}
 			if (remove_directory (htmldir) == -1)
 				error (0, errno,
 				       _("can't remove directory %s"),
@@ -2147,6 +2163,11 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 
 		command = make_browser (disp_cmd, htmlfile);
 		status = do_system_drop_privs (command);
+		if (chdir (old_cwd) == -1) {
+			error (0, errno, _("can't change to directory %s"),
+			       old_cwd);
+			chdir ("/");
+		}
 		if (remove_directory (htmldir) == -1)
 			error (0, errno, _("can't remove directory %s"),
 			       htmldir);
@@ -2155,7 +2176,7 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 		if (status && status != (SIGPIPE + 0x80) * 256)
 			gripe_system (command, status);
 	} else
-#endif
+#endif /* TROFF_IS_GROFF */
 	    if (format_cmd) {
 		command = strappend (NULL, format_cmd, " | ", disp_cmd, NULL);
 		status = do_system_drop_privs (command);

@@ -392,6 +392,7 @@ int main(int argc, char *argv[])
 				break;
 			case 'c':
 				create = 1;
+				purge = 0;
 				break;
 			case 'p':
 				purge = 0;
