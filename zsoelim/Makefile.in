@@ -45,11 +45,11 @@ zsoelim: ../lib/libman.a
 
 # The standard targets
 install: all
-	$(MKINSTALLDIRS) $(bindir)
-	$(INSTALL_PROGRAM) zsoelim $(bindir)/$(zsoelim)
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) zsoelim $(DESTDIR)$(bindir)/$(zsoelim)
 
 uninstall:
-	rm -f $(bindir)/$(zsoelim)
+	rm -f $(DESTDIR)$(bindir)/$(zsoelim)
 	
 clean:
 	rm -f zsoelim *.o core *~

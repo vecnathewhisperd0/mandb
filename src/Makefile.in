@@ -113,40 +113,41 @@ globbing: globbing.c util.o
 
 # The standard targets
 install:
-	$(MKINSTALLDIRS) $(bindir) $(sbindir) $(libdir)/man-db
-	$(INSTALL_PROGRAM) $(man_install_flags) man $(bindir)/$(man)
-	$(INSTALL_PROGRAM) $(man_install_flags) mandb $(bindir)/$(mandb)
-	$(INSTALL_PROGRAM) manpath $(bindir)/$(manpath)
-	$(INSTALL_PROGRAM) catman $(bindir)/$(catman)
-	$(INSTALL_PROGRAM) whatis $(bindir)/$(whatis)
-	$(INSTALL_PROGRAM) apropos $(bindir)/$(apropos)
-	$(INSTALL_PROGRAM) lexgrog $(bindir)/$(lexgrog)
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir) $(DESTDIR)$(sbindir) \
+	                 $(DESTDIR)$(libdir)/man-db
+	$(INSTALL_PROGRAM) $(man_install_flags) man $(DESTDIR)$(bindir)/$(man)
+	$(INSTALL_PROGRAM) $(man_install_flags) mandb $(DESTDIR)$(bindir)/$(mandb)
+	$(INSTALL_PROGRAM) manpath $(DESTDIR)$(bindir)/$(manpath)
+	$(INSTALL_PROGRAM) catman $(DESTDIR)$(bindir)/$(catman)
+	$(INSTALL_PROGRAM) whatis $(DESTDIR)$(bindir)/$(whatis)
+	$(INSTALL_PROGRAM) apropos $(DESTDIR)$(bindir)/$(apropos)
+	$(INSTALL_PROGRAM) lexgrog $(DESTDIR)$(bindir)/$(lexgrog)
 	for j in $(PUBTOOLS); do \
 		if test -x $$j; then \
-			$(INSTALL_PROGRAM) $$j $(sbindir)/$$j; \
+			$(INSTALL_PROGRAM) $$j $(DESTDIR)$(sbindir)/$$j; \
 		fi; \
 	done
 	for j in $(PRIVTOOLS); do \
 		if test -x $$j; then \
-			$(INSTALL_PROGRAM) $$j $(libdir)/man-db/$$j; \
+			$(INSTALL_PROGRAM) $$j $(DESTDIR)$(libdir)/man-db/$$j; \
 		fi; \
 	done
-	@if test -f $(config_file); then \
+	@if test -f $(DESTDIR)$(config_file); then \
 		echo " "; \
-		echo "$(config_file) already exists. Overwrite manually if necessary"; \
+		echo "$(DESTDIR)$(config_file) already exists. Overwrite manually if necessary"; \
 		echo " "; \
 	else \
-		$(MKINSTALLDIRS) $(dir $(config_file)); \
-		echo "$(INSTALL_DATA) man_db.conf $(config_file)"; \
-		$(INSTALL_DATA) man_db.conf $(config_file); \
+		$(MKINSTALLDIRS) $(dir $(DESTDIR)$(config_file)); \
+		echo "$(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file)"; \
+		$(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file); \
 	fi
 
 uninstall:
-	rm -f $(addprefix $(bindir)/, $(PROGS))
-	rm -f $(addprefix $(sbindir)/, $(PUBTOOLS))
-	rm -f $(addprefix $(libdir)/man-db/, $(PRIVTOOLS))
-	@echo "Please remove $(config_file) manually if necessary"
-#	rm -f $(config_file)
+	rm -f $(addprefix $(DESTDIR)$(bindir)/, $(PROGS))
+	rm -f $(addprefix $(DESTDIR)$(sbindir)/, $(PUBTOOLS))
+	rm -f $(addprefix $(DESTDIR)$(libdir)/man-db/, $(PRIVTOOLS))
+	@echo "Please remove $(DESTDIR)$(config_file) manually if necessary"
+#	rm -f $(DESTDIR)$(config_file)
 
 mostlyclean clean: 
 	rm -f *.o *.i *~ core

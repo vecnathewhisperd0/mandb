@@ -76,16 +76,16 @@ allmanpages := $(foreach path, . $(NLS), $(man1files) $(man5files) $(man8files))
 allmanpages := $(allmanpages) ./man1/lexgrog.1
 
 # NB manpath.5 is not expanded
-man.1 = $(manroot)/$(nlspath)/$(man1dir)/$(man)$(man1ext)
-manpath.1 = $(manroot)/$(nlspath)/$(man1dir)/$(manpath)$(man1ext)
-apropos.1 = $(manroot)/$(nlspath)/$(man1dir)/$(apropos)$(man1ext)
-whatis.1 = $(manroot)/$(nlspath)/$(man1dir)/$(whatis)$(man1ext)
-zsoelim.1 = $(manroot)/$(nlspath)/$(man1dir)/$(zsoelim)$(man1ext)
-lexgrog.1 = $(manroot)/$(nlspath)/$(man1dir)/lexgrog$(man1ext)
-manpath.5 = $(manroot)/$(nlspath)/$(man5dir)/manpath$(man5ext)
-mandb.8 = $(manroot)/$(nlspath)/$(man8dir)/$(mandb)$(man8ext)
-catman.8 = $(manroot)/$(nlspath)/$(man8dir)/$(catman)$(man8ext)
-accessdb.8 = $(manroot)/$(nlspath)/$(man8dir)/accessdb$(man8ext)
+man.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(man)$(man1ext)
+manpath.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(manpath)$(man1ext)
+apropos.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(apropos)$(man1ext)
+whatis.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(whatis)$(man1ext)
+zsoelim.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(zsoelim)$(man1ext)
+lexgrog.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/lexgrog$(man1ext)
+manpath.5 = $(DESTDIR)$(manroot)/$(nlspath)/$(man5dir)/manpath$(man5ext)
+mandb.8 = $(DESTDIR)$(manroot)/$(nlspath)/$(man8dir)/$(mandb)$(man8ext)
+catman.8 = $(DESTDIR)$(manroot)/$(nlspath)/$(man8dir)/$(catman)$(man8ext)
+accessdb.8 = $(DESTDIR)$(manroot)/$(nlspath)/$(man8dir)/accessdb$(man8ext)
 
 # Rules... We've got some rules 'round here.
 %.1: %.man1
@@ -102,16 +102,16 @@ else
 # Have to create output dirs if using alternate build directory
 all: dirs $(allmanpages)
 dirs:
-	$(MKINSTALLDIRS) $(foreach path, . $(NLS), $(path)/man1)
-	$(MKINSTALLDIRS) $(foreach path, . $(NLS), $(path)/man5)
-	$(MKINSTALLDIRS) $(foreach path, . $(NLS), $(path)/man8)
+	$(MKINSTALLDIRS) $(foreach path, . $(NLS), $(DESTDIR)$(path)/man1)
+	$(MKINSTALLDIRS) $(foreach path, . $(NLS), $(DESTDIR)$(path)/man5)
+	$(MKINSTALLDIRS) $(foreach path, . $(NLS), $(DESTDIR)$(path)/man8)
 endif
 
 # special targets
 nlsinstall:
-	$(MKINSTALLDIRS) $(manroot)/$(nlspath)/$(man1dir)
-	$(MKINSTALLDIRS) $(manroot)/$(nlspath)/$(man5dir)
-	$(MKINSTALLDIRS) $(manroot)/$(nlspath)/$(man8dir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(manroot)/$(nlspath)/$(man5dir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(manroot)/$(nlspath)/$(man8dir)
 	$(INSTALL_DATA) $(nlspath)/man1/man.1 $(man.1)
 	$(INSTALL_DATA) $(nlspath)/man1/manpath.1 $(manpath.1)
 	$(INSTALL_DATA) $(nlspath)/man1/apropos.1 $(apropos.1)

@@ -56,6 +56,8 @@ INSTALL = src zsoelim man intl po
 
 include include/Defines
 
+export DESTDIR
+
 .PHONY: $(DEFAULT_TARGETS) $(EVERYTHING) dist ID \
 	$(addprefix __, $(DEFAULT_TARGETS)) update default RCS \
 	check deroff
