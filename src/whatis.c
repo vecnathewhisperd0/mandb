@@ -174,7 +174,7 @@ static void usage (int status)
 		"-v, --verbose              print verbose warning messages.\n"
 		"-r, --regex                interpret each keyword as a regex.\n"
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
-		"-s, --section              search only this section.\n"
+		"-s, --section section      search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
 		"-C, --config-file file     use this user configuration file.\n"
