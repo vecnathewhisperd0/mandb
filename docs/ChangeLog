@@ -1,3 +1,11 @@
+Mon Mar  8 00:16:53 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (compare_extensions): Instead of comparing extensions
+	  followed by ids, compare pure sections first, then ids, then
+	  extensions. This works around the worst effects of Debian bug
+	  #204249, in which we have an incorrect whatis ref xterm(1) in
+	  /usr/share/man and a correct real xterm(1x) in /usr/X11R6/man.
+
 Sun Mar  7 23:55:48 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (compare_candidates): Keep searching for more specific

@@ -2768,7 +2768,8 @@ static int compare_candidates (const struct mandata *left,
 			       const struct mandata *right,
 			       const char *req_name)
 {
-	int sec_left = 0, sec_right = 0, cmp;
+	int sec_left = 0, sec_right = 0, ext_left = 0, ext_right = 0;
+	int cmp;
 
 	/* If one candidate matches the requested name exactly, sort it
 	 * first. This makes --ignore-case behave more sensibly.
@@ -2782,25 +2783,25 @@ static int compare_candidates (const struct mandata *left,
 			return 1;
 	}
 
-	cmp = strcmp (left->ext, right->ext);
+	/* Compare pure sections first, then ids, then extensions.
+	 * Rationale: whatis refs get the same section and extension as
+	 * their source, but may be supplanted by a real page with a
+	 * slightly different extension, possibly in another hierarchy (!);
+	 * see Debian bug #204249 for the gory details.
+	 */
+	cmp = strcmp (left->sec, right->sec);
 	if (cmp) {
-		/* Find out whether left->ext is ahead of right->ext in
+		/* Find out whether left->sec is ahead of right->sec in
 		 * section_list.
 		 */
 		const char **sp;
-		for (sp = section_list; *sp; sp++) {
-			if (!*(*sp + 1)) {
-				/* No extension */
-				if (!sec_left  && **sp == *(left->ext))
-					sec_left  = sp - section_list + 1;
-				if (!sec_right && **sp == *(right->ext))
-					sec_right = sp - section_list + 1;
-			} else if (STREQ (*sp, left->ext)) {
-				sec_left  = sp - section_list + 1;
-			} else if (STREQ (*sp, right->ext)) {
+		for (sp = section_list; *sp; ++sp) {
+			if (!sec_left && **sp == *(left->sec))
+				sec_left = sp - section_list + 1;
+			else if (!sec_right && **sp == *(right->sec))
 				sec_right = sp - section_list + 1;
-			}
-			/* Keep looking for a more specific match */
+			if (sec_left && sec_right)
+				break;
 		}
 		if (sec_left != sec_right)
 			return sec_left - sec_right;
@@ -2812,6 +2813,32 @@ static int compare_candidates (const struct mandata *left,
 	cmp = compare_ids (left->id, right->id);
 	if (cmp)
 		return cmp;
+
+	cmp = strcmp (left->ext, right->ext);
+	if (cmp) {
+		/* Find out whether left->ext is ahead of right->ext in
+		 * section_list.
+		 */
+		const char **sp;
+		for (sp = section_list; *sp; ++sp) {
+			if (!*(*sp + 1)) {
+				/* No extension */
+				if (!ext_left  && **sp == *(left->ext))
+					ext_left  = sp - section_list + 1;
+				if (!ext_right && **sp == *(right->ext))
+					ext_right = sp - section_list + 1;
+			} else if (STREQ (*sp, left->ext)) {
+				ext_left  = sp - section_list + 1;
+			} else if (STREQ (*sp, right->ext)) {
+				ext_right = sp - section_list + 1;
+			}
+			/* Keep looking for a more specific match */
+		}
+		if (ext_left != ext_right)
+			return ext_left - ext_right;
+		else
+			return cmp;
+	}
 
 	/* add_candidate() will keep equal candidates in order of insertion
 	 * so that manpath ordering (e.g. language-specific hierarchies)
