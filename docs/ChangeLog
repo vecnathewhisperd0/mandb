@@ -1,3 +1,24 @@
+Sat May 26 15:14:29 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* GNUmakefile.in, autogen.sh: Put 'timestamp' in stamp-h and
+	  stamp-h.in rather than the date.
+
+	* src/man.c (open_cat_stream): Open the cat file before forking in
+	  order to deal with errors better. Open to /dev/null without
+	  complaining if the cat file is unwriteable.
+	  (close_cat_stream): Only commit the temporary cat if it was
+	  created.
+	  (locate_page): Fall back to the filesystem if nothing was found in
+	  the database (since it might be out of date).
+
+	* src/man.c (try_db_section): If the database can't be opened
+	  read-write due to EACCES, only print a message in debug mode.
+	* src/check_mandirs.c (testmandirs): Likewise.
+	  (create_db): Likewise.
+
+	* src/check_mandirs.c (test_manfile): Make sure separate whatis keys
+	  each get their own whatis entry.
+
 Wed May 23 17:06:31 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in: Fix PACKAGE and VERSION substitutions.

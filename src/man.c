@@ -457,6 +457,7 @@ static int found_a_stray;		/* found a straycat */
 #ifdef MAN_CATS
 static char *tmp_cat_file;	/* for open_cat_stream(), close_cat_stream() */
 static int cat_comp_pid;			/* dto. */
+static int created_tmp_cat;			/* dto. */
 #endif
 
 static const struct option long_options[] =
@@ -1661,12 +1662,14 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 #  ifdef COMP_CAT
 	pid_t child;
 	int pipe_fd[2];
+	int cat_fd;
 #  endif
 
 	tmp_cat_file = tmp_cat_filename (cat_file);
 	if (!debug) {
 		push_cleanup ((void (*)())unlink, tmp_cat_file);
 	}
+	created_tmp_cat = 0;
 
 #  ifdef COMP_CAT
 	/* write to a pipe that compresses into tmp_cat_file */
@@ -1675,6 +1678,37 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 	if (pipe (pipe_fd)) {
 		error (0, errno, _( "can't create pipe"));
 		return NULL;
+	}
+
+	/* Create the cat file out here so that we can deal with errors
+	 * properly.
+	 */
+	if (debug) {
+		fprintf (stderr, "compressing to temporary cat %s\n",
+			 tmp_cat_file);
+		strcpy (tmp_cat_file, "/dev/null");
+	}
+
+	cat_fd = open (tmp_cat_file, O_WRONLY|O_CREAT|O_TRUNC, CATMODE);
+	if (cat_fd != -1)
+		created_tmp_cat = 1;
+	else {
+		if (!debug && errno == EACCES) {
+			/* No permission to write to the cat file. Oh well,
+			 * not the end of the world - open it onto /dev/null
+			 * instead. (In debug mode we were already doing
+			 * this.)
+			 */
+			if (debug)
+				fprintf (stderr, "can't write to %s\n",
+					 tmp_cat_file);
+			cat_fd = open ("/dev/null", O_WRONLY, 0);
+			if (cat_fd == -1)
+				error (FATAL, errno,
+				       _("can't write to /dev/null"));
+		} else
+			error (FATAL, errno, _("can't create %s"),
+			       tmp_cat_file);
 	}
 
 	/* fork the compressor */
@@ -1686,15 +1720,8 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 	} else if (child == 0) {
 		/* compress reading end of pipe to tmp_cat_file */
 		char *const envp[] = { NULL };
-		int cat_fd;
 
 		pop_all_cleanups ();
-
-		if (debug) {
-			fprintf (stderr, "compressing to temporary cat %s\n",
-				 tmp_cat_file);
-			tmp_cat_file = "/dev/null";
-		}
 
 		/* connect standard input to reading end of pipe */
 		if (dup2 (pipe_fd[0], 0) == -1)
@@ -1703,10 +1730,6 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 		close (pipe_fd[1]);
 
 		/* set up standard output to write to tmp_cat_file */
-		cat_fd = open (tmp_cat_file, O_WRONLY|O_CREAT|O_TRUNC, CATMODE);
-		if (cat_fd == -1) {
-			error (FATAL, errno, _( "can't create %s"), tmp_cat_file);
-		}
 		if (dup2 (cat_fd, 1) == -1)
 			error (0, errno, _( "can't dup2"));
 		close (cat_fd);
@@ -1734,6 +1757,7 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 	/* connect save to the writing end of pipe */
 	close (pipe_fd[0]);
 	save = fdopen (pipe_fd[1], "w");
+	close (cat_fd);
 
 	cat_comp_pid = child;
 #  else
@@ -1776,8 +1800,11 @@ static __inline__ int close_cat_stream (FILE *cat_stream, char *cat_file, int de
 		status |= comp_status;
 	}
 #  endif
-	status |= commit_tmp_cat (cat_file, tmp_cat_file, delete || status);
-	if (!debug) pop_cleanup ();
+	if (created_tmp_cat) {
+		status |= commit_tmp_cat (cat_file, tmp_cat_file,
+					  delete || status);
+		pop_cleanup ();
+	}
 	free (tmp_cat_file);
 	return status;
 }
@@ -2260,9 +2287,17 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 				name = in->pointer;
 			else
 				name = orig_name;
-		} 
-		  else
-			error (0, errno, _( "can't update index cache %s"), database);
+		} else {
+			if (errno == EACCES) {
+				if (debug)
+					fprintf(stderr,
+						"database %s is read-only\n",
+						database);
+			} else
+				error (0, errno,
+				       _("can't update index cache %s"),
+				       database);
+		}
 	}
 #endif /* MAN_DB_UPDATES */
 
@@ -2521,7 +2556,7 @@ static int locate_page(char *manpath, char *sec, char *name)
 		db_ok = try_db(manpath, sec, name);
 #endif /* MAN_DB_CREATES */
 
-	if (db_ok == -1)  /* we failed to find/open a db */
+	if (db_ok <= 0)  /* we failed to find/open a db, or we found nothing */
 		found = try_section (manpath, sec, name);
 	else
 		found = db_ok;

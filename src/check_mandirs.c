@@ -176,7 +176,7 @@ int splitline(char *raw_whatis, struct mandata *info, char *base_name)
    it in the db along with any references found in the whatis. */
 void test_manfile(char *file, const char *path)
 {
-	char *base_name, *othername, *ult, *sep;
+	char *base_name, *ult, *sep;
 	struct lexgrog lg;
 	char *manpage;
 	struct mandata info, *exists;
@@ -383,9 +383,13 @@ void test_manfile(char *file, const char *path)
 		char save_id = info.id;
 		info.id = WHATIS_MAN;
 		while ((sep = strrchr(lg.whatis, 0x11))) {
+			char *othername, *end_othername;
 			*(sep++) = '\0';
+			sep += strspn(sep, " ");
 			othername = xstrdup(sep);
-			*(othername + strcspn(othername, " -")) = '\0';
+			end_othername = strpbrk(othername, " -");
+			if (end_othername)
+				*end_othername = '\0';
 			if ( ! opt_test )
 				splitline(sep, &info, othername);
 			free(othername);
@@ -403,9 +407,16 @@ void test_manfile(char *file, const char *path)
 			error (0, 0, _( "warning: %s: whatis parse for %s(%s) failed"),
 			       ult, base_name, info.ext);
 	}
-	if ( ! opt_test )
-		if (splitline(lg.whatis, &info, base_name) == 1)
-			gripe_multi_extensions(path, info.sec, base_name, info.ext);
+
+	if (!opt_test && lg.whatis) {
+		char *whatis_name = xstrdup(lg.whatis);
+		char *end_whatis_name = strpbrk(whatis_name, " -");
+		if (end_whatis_name)
+			*end_whatis_name = '\0';
+		if (splitline(lg.whatis, &info, whatis_name) == 1)
+			gripe_multi_extensions(path, info.sec,
+					       base_name, info.ext);
+	}
 
 	free(manpage);
 	if (lg.whatis)
@@ -485,10 +496,18 @@ static short testmandirs(const char *path, time_t last)
 
 			if (! dbf) {
 				/* rwopen(database); */
+				if (errno == EACCES) {
+					if (debug)
+						fprintf(stderr,
+							"database %s is read-only\n",
+							database);
+				} else
 #ifdef MAN_DB_UPDATES
-				if (!quiet)
+				    if (!quiet)
 #endif /* MAN_DB_UPDATES */
-				  error (0, errno, _( "can't update index cache %s"), database);
+					error (0, errno,
+					       _("can't update index cache %s"),
+					       database);
 				return 0;
 			}
 
@@ -530,7 +549,8 @@ void update_db_time(void)
 #ifdef MAN_DB_UPDATES
 		if (!quiet)
 #endif /* MAN_DB_UPDATES */
-		  error (0, errno, _( "can't update index cache %s"), database);
+			error (0, errno, _("can't update index cache %s"),
+			       database);
 		free(content.dptr);
 		return;
 	}
@@ -587,7 +607,13 @@ short create_db(const char *manpath)
 	/* Open the db in CTRW mode to store the $ver$ ID */
 
 	if ( (dbf = MYDBM_CTRWOPEN(database)) == NULL) {
-		error (0, errno, _( "can't create index cache %s"), database);
+		if (errno == EACCES) {
+			if (debug)
+				fprintf(stderr, "database %s is read-only\n",
+					database);
+		} else
+			error (0, errno, _( "can't create index cache %s"),
+			       database);
 		return 0;
 		/* should really return EOF */
 	}
