@@ -62,6 +62,14 @@ AC_ARG_ENABLE(undoc,
 		AC_DEFINE_UNQUOTED(UNDOC_COMMAND, "$enableval",
 				   [Define as the name of a command you want to suggest when a non-existent page is requested.])
 	 fi])
+AC_ARG_ENABLE(mb-groff,
+[  --enable-mb-groff       expect groff with Debian multibyte patch],
+	[if test "$enableval" = "yes"
+	 then
+		 AC_MSG_NOTICE([Including support for groff with Debian multibyte patch])
+		 AC_DEFINE(MULTIBYTE_GROFF, 1,
+			   [Define if your groff installation has the Debian multibyte patch.])
+	 fi])
 AC_ARG_WITH(device,
 [  --with-device=DEVICE	  use nroff with the output device DEVICE],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
