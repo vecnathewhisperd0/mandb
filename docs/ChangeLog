@@ -1,3 +1,12 @@
+Tue Nov 26 22:57:27 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* .cvsignore: Ignore the m4 directory, created by autopoint.
+	* GNUmakefile.in (_subdirs, _m4): Add m4/*.m4 to the distribution.
+	  (_root): There are no *.h files left in the top-level directory.
+	  (nls_man): de_DE.ascii is gone.
+	  (dist): Use 'cp -p' rather than 'ln', since ln notes that making a
+	  hard link to a symbolic link is not portable.
+
 Tue Nov 26 03:43:15 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* po/pt_BR.po: New from Translation Project.

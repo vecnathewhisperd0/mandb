@@ -177,14 +177,15 @@ ifeq ($(srcdir),.)
 # Sorry folks, can only make a dist from the $(srcdir)
 
 # The files in the distribution
-_subdirs = $(EVERYTHING) tools docs include manual
+_subdirs = $(EVERYTHING) tools docs include manual m4
 
 _all = */README
-_root = ABOUT-NLS README configure *.h *.m4 *.in man-db.*
+_root = ABOUT-NLS README configure *.m4 *.in man-db.*
 _docs = INSTALL.* COPYING ChangeLog NEWS ToDo manpage.example*
 _include = *.in
 _lib = Makefile.in *.[ch]
 _libdb = Makefile.in *.[ch] COPYING.LIB
+_m4 = *.m4
 _man = Makefile.in man?/*.man? */man?/*.man? THANKS
 _manual = Makefile *.me
 _src = Makefile.in README.lexgrog *.[chl] *.l-* lexgrog.l.new man_db.conf.in
@@ -197,7 +198,7 @@ FILES = $(_root) $(_all) \
 	  $(addprefix $(_subdir)/, $(_$(_subdir))))
 
 message = release $(version), date $(date)
-nls_man = de_DE.88591 de_DE.ascii es_ES.88591 it_IT.88591 ja_JP.eucJP
+nls_man = de_DE.88591 es_ES.88591 it_IT.88591 ja_JP.eucJP
 man_db := man-db-$(version)
 
 # Ensure the flex C files are current
@@ -213,7 +214,7 @@ dist: update
 	        $(foreach dir, . $(nls_man), \
 	          $(dir)/man1 $(dir)/man5 $(dir)/man8))
 	for file in $(FILES); do \
-	  ln $(srcdir)/$$file $(man_db)/$$file; \
+	  cp -p $(srcdir)/$$file $(man_db)/$$file; \
 	done
 	for subdir in intl po; do \
 	  $(MAKE) -C $$subdir dist; \
