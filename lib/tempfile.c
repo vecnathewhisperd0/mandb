@@ -56,8 +56,8 @@ int create_tempfile (const char *template, char **created_filename)
 	dir = xstrdup (dir);
 	*created_filename = strappend (dir, "/", template, "XXXXXX", NULL);
 	fd = mkstemp (*created_filename);
-	/* Just in case this is an old glibc that created files mode 0666. */
+	/* -rw-r--r-- so that it can be read with different privileges. */
 	if (fd != -1)
-		fchmod (fd, S_IRUSR | S_IWUSR);
+		fchmod (fd, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	return fd;
 }

@@ -1,3 +1,8 @@
+Mon Aug  6 01:26:26 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* lib/tempfile.c (create_tempfile): Use mode 0644 rather than mode
+	  0600 so that it can be read with different privilege levels.
+
 Thu Aug  2 00:12:41 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* lib/tempfile.c: New file. create_tempfile() does sane
