@@ -199,29 +199,50 @@ static __inline__ void xrename (const char *from, const char *to)
 	}
 }
 
-/* CPhipps 2000/02/24 - Copy a file.
- * Still plenty of error handling could be added here. */
-static __inline__ void xcopy (const char *from, const char *to)
+/* CPhipps 2000/02/24 - Copy a file. */
+static int xcopy (const char *from, const char *to)
 {
-	FILE* ifp = fopen (from, "r");
-	FILE* ofp = fopen (to, "w");
+	FILE *ifp, *ofp;
+	int ret = 0;
 
-	if (!ifp || !ofp) {
-		if (ifp) fclose (ifp);
-		if (ofp) fclose (ofp);
+	ifp = fopen (from, "r");
+	if (!ifp) {
+		fclose (ifp);
 		if (errno != ENOENT)
 			perror ("fopen");
-		return;
+		return -errno;
+	}
+
+	ofp = fopen (to, "w");
+	if (!ofp) {
+		fclose (ofp);
+		perror ("fopen");
+		return -errno;
 	}
 
 	while (!feof (ifp) && !ferror (ifp)) {
 		char buf[1024];
 		size_t in = fread (buf, 1, sizeof (buf), ifp);
-		if (in > 0)
-			fwrite (buf, 1, in, ofp);
+		if (in > 0) {
+			if (fwrite (buf, 1, in, ofp) == 0 && ferror (ofp)) {
+				error (0, errno, _("can't write to %s"), to);
+				ret = -errno;
+				break;
+			}
+		} else if (ferror (ifp)) {
+			error (0, errno, _("can't read from %s"), from);
+			ret = -errno;
+			break;
+		}
 	}
+
 	fclose (ifp);
 	fclose (ofp);
+
+	if (ret < 0)
+		xremove (to);
+
+	return ret;
 }
 
 /* chmod() with error checking */
@@ -351,7 +372,8 @@ static short mandb (const char *catpath, const char *manpath)
 		xremove (tmpdbfile);
 		amount = create_db (manpath);
 	} else {
-		xcopy (dbfile, tmpdbfile);
+		if (xcopy (dbfile, tmpdbfile) < 0)
+			return 0;
 		amount = update_db_wrapper (manpath);
 	}
 #  else /* !BERKELEY_DB NDBM */
@@ -364,8 +386,10 @@ static short mandb (const char *catpath, const char *manpath)
 		xremove (tmppagfile);
 		amount = create_db (manpath);
 	} else {
-		xcopy (dirfile, tmpdirfile);
-		xcopy (pagfile, tmppagfile);
+		if (xcopy (dirfile, tmpdirfile) < 0)
+			return 0;
+		if (xcopy (pagfile, tmppagfile) < 0)
+			return 0;
 		amount = update_db_wrapper (manpath);
 	}
 #  endif /* BERKELEY_DB NDBM */
@@ -376,7 +400,8 @@ static short mandb (const char *catpath, const char *manpath)
 		xremove (xtmpfile);
 		amount = create_db (manpath);
 	} else {
-		xcopy (xfile, xtmpfile);
+		if (xcopy (xfile, xtmpfile) < 0)
+			return 0;
 		amount = update_db_wrapper (manpath);
 	}
 #endif /* NDBM */
