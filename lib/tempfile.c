@@ -23,7 +23,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/* Other library functions used in man_db. */
+/* Other library functions used in man-db. */
 extern char *strappend (char *str, ...);
 extern char *xstrdup (char *string);
 

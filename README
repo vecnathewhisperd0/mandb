@@ -1,18 +1,18 @@
-README for the man_db manual pager suite, version 2.3.x
+README for the man-db manual pager suite, version 2.3.x
 =======================================================
 
-Please read the man_db manual, available in PostScript format, located at an
+Please read the man-db manual, available in PostScript format, located at an
 FTP site carrying this package.  It contains configuration details and other
 aspects of this manual pager suite that are not duplicated or relevant in
 this README.
 
-As of man_db-2.3.11, the man_db manual is *included* with this distribution
+As of man-db-2.3.11, the man-db manual is *included* with this distribution
 in source form.  Please check manual/README for details of the formatters
-required.  The man_db manual must be built from the manual subdirectory and
+required.  The man-db manual must be built from the manual subdirectory and
 does not require use of ./configure.
 
 Read docs/INSTALL.autoconf for generic options to configure.
-Read docs/INSTALL.quick if you know all about man_db.
+Read docs/INSTALL.quick if you know all about man-db.
 Read docs/NEWS for visible changes since the last public release.
 Read docs/ChangeLog for details of recent source code changes.
 Read docs/ToDo for future plans.
@@ -26,13 +26,13 @@ necessary if developing or source level debugging), a cpp that understands
 -M is required.
 
 
-Notice to users of man_db version 2.2 or 2.2.1 
+Notice to users of man-db version 2.2 or 2.2.1 
 ==============================================
 
 If you have stray-cats and created place-holders for them with `straycats'
-from the man_db-2.2 distribution, you must delete them before using
-man_db-2.3.  (straycats v2.2 with an option of `--delete-placeholders' will 
-do).  man_db-2.3 still provides support for stray-cats, but uses a database
+from the man-db-2.2 distribution, you must delete them before using
+man-db-2.3.  (straycats v2.2 with an option of `--delete-placeholders' will 
+do).  man-db-2.3 still provides support for stray-cats, but uses a database
 entry rather than a file system i-node to indicate their presence.
 
 Obsoleted files include $(libdir)/makewhatis, /etc/manpath.config,
@@ -63,7 +63,7 @@ defined:
 
 Should these locations change, simply define the paths accordingly and
 recompile.  Other FHS changes relating to man/cat paths will not be
-compatible with this version of man_db.
+compatible with this version of man-db.
 
 Non generic arguments to configure
 ==================================
@@ -71,7 +71,7 @@ Non generic arguments to configure
 To allow the configuration program, configure, to be non-interactive, it can
 be passed various options to alter the default settings.  Generic configure
 options are discussed in docs/INSTALL.autoconf.  The following list of
-options is extracted from the man_db manual.  It is strongly recommended
+options is extracted from the man-db manual.  It is strongly recommended
 that relevant sections of the manual are read if any of these options are
 used.
  
@@ -79,7 +79,7 @@ used.
      By  default,  the configuration process creates produc-
      tion quality Makefiles.  This option,  which  takes  no
      argument,  changes  certain  values to aid in debugging
-     man_db-2.3.x. It does not alter the physical  behaviour
+     man-db-2.3.x. It does not alter the physical  behaviour
      of any of the programs.
 
 --enable-setuid[=ARG]
@@ -93,10 +93,10 @@ used.
      access flags to allow users to modify them.
 
 --enable-mandirs=OS
-     By  default, man_db-2.3.x supports manual page directo-
+     By  default, man-db-2.3.x supports manual page directo-
      ries in any of several layouts used by free and propri-
      etary  versions  of  UNIX.   However, in certain cases,
-     this can cause man_db-2.3.x to find the wrong  page  by
+     this can cause man-db-2.3.x to find the wrong  page  by
      mistake, especially when the names of some manual pages
      on the system contain periods.  Use this option with an
      argument  of  GNU, HPUX, Solaris, or IRIX (or more than
@@ -148,19 +148,19 @@ configure will determine your system's ability to use native language
 support (NLS) message catalogues.  You may set the environment variable
 LINGUAS to limit the set of translations installed.  LINGUAS should contain
 a space-separated list of two-letter language identifiers.  To compile
-man_db with no support for message catalogues, simply pass the --disable-nls
+man-db with no support for message catalogues, simply pass the --disable-nls
 option to configure.  N.B. This is not related to man's ability to display
 NLS manual pages, support for which is compiled in by default. 
 
 Running make.
 
-	o RUN `make' to compile man_db with the set of translations chosen
+	o RUN `make' to compile man-db with the set of translations chosen
 	  when running `./configure'.
 
-Sort out the man_db configuration file.
+Sort out the man-db configuration file.
 
 	o RUN `./src/man -l man/man5/manpath.5' from the root of this
-	  distribution to read the man_db configuration file details.
+	  distribution to read the man-db configuration file details.
 
 	o EDIT `./src/man_db.conf' to your local requirements.
 
@@ -179,7 +179,7 @@ language manual page translations.
 	  translations of the standard English manual pages 
 
 Initialise the `index' databases for all manpaths marked as global in the
-man_db configuration file.
+man-db configuration file.
 
 	o RUN `mandb' (This step is equivalent to running straycats and 
 	  makewhatis too).
@@ -217,7 +217,7 @@ The following steps are optional / dependent on local conventions.
 Multiple build directories
 ==========================
 
-It is possible to build man_db-2.3 in a directory other than the directory
+It is possible to build man-db-2.3 in a directory other than the directory
 containing this file (and all of the program sources).  This is particularly
 useful if compiling on multiple architectures or testing various
 configuration options as only a single copy of the sources is required.
@@ -251,7 +251,7 @@ it on the make command line.
 Default preprocessors
 =====================
 
-man_db uses a manual page directed preprocessor system, that is, each manual
+man-db uses a manual page directed preprocessor system, that is, each manual
 page may request preprocessing by a selection of preprocessors.  Some
 systems' manual pages do not come with this information built in.  In such
 circumstances, it is advisable to set a default list of preprocessors that
@@ -312,7 +312,7 @@ Ultrix-4.3a
 Contacting the maintainer
 =========================
 
-The current maintainer of man_db is Colin Watson <cjwatson@debian.org>.
+The current maintainer of man-db is Colin Watson <cjwatson@debian.org>.
 Please feel free to contact me with any queries or problems you may have. If
 you are using the Debian GNU/Linux or GNU/Hurd system, I welcome bug reports
 against the man-db package by way of the Debian bug tracking system

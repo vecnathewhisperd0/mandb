@@ -1,3 +1,72 @@
+man-db 2.4.0
+============
+
+Major changes since man_db-2.3.20:
+
+	I have changed the package name to man-db, as the underscore was
+	awkward.
+
+	Fixes:
+	------
+
+	o The GNU nroff test in configure now works when /bin/sh is ash.
+
+	o When scanning pages for NAME sections, lexgrog and mandb no longer
+	  accidentally eat the line after each occurrence of the no-op
+	  request '.'.
+
+	o 'man --local' drops privileges throughout to avoid problems with
+	  non-world-readable home directories.
+
+	o Newly created cat directories are chowned to the man user when
+	  running as root.
+
+	o 'man --html' no longer creates its temporary file with raised
+	  privileges, so that it now works with a setuid man.
+
+	o man detects preprocessors correctly when setuid.
+
+	o Various segfault fixes: explicitly null-terminate data returned by
+	  the Berkeley DB library to avoid some rare crashes; don't reuse a
+	  freed pointer in some cases of pages with multiple names; handle
+	  MANPATHs containing '::' more safely.
+
+	Improvements:
+	-------------
+
+	o man looks in the filesystem followed by the database, rather than
+	  the other way round. Unix filesystems are quite good databases for
+	  this purpose, and the man database is only superior when looking
+	  up names that don't have associated links in the filesystem.
+
+	o 'apropos --wildcard --exact' makes sure wildcards match an entire
+	  description or page name, unlike 'apropos --wildcard' which may
+	  match on word boundaries too.
+
+	o man's page-searching code has been substantially rearranged, and
+	  now only starts displaying pages when it has finished searching
+	  for candidates. This allows pages to be sorted more sensibly.
+
+	o Man pages are formatted in UTF-8 if that is the current locale's
+	  character set. The -E option is now available to force a
+	  particular encoding. Note that some versions of (e.g.) less have
+	  problems displaying UTF-8 in conjunction with backspace
+	  characters.
+
+	o The less prompt string sets -PM as well as -Pm.
+
+	o Invoking man from within less now sets the correct page title in
+	  the inner less.
+
+	Translation updates:
+	--------------------
+
+	o Spanish, thanks to David Martínez <ender@adi.uam.es>.
+
+	o French, thanks to Laurent Pelecq <laurent.pelecq@wanadoo.fr>.
+
+	o German, thanks to Michael Piefel <piefel@debian.org>.
+
 man_db-2.3.20 (7 September 2001)
 ================================
 

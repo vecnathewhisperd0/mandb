@@ -1,4 +1,4 @@
-# manual Makefile for the man_db package.
+# manual Makefile for the man-db package.
 #
 # Copyright (C) 1995, Graeme Wilford.
 #

@@ -2,14 +2,14 @@
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
-.\" man_db distribution.
+.\" man-db distribution.
 .\"
 .\" Thu Sep 21 19:22:47 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk) 
 .\" 
 .BS 1 "Miscellaneous"
 .BS 2 "Modes of operation"
 .lp
-The man_db utilities can operate in many different modes, allowing varying
+The man\-db utilities can operate in many different modes, allowing varying
 degrees of freedom, functionality and security. No mode requires that the
 manual page hierarchies be writable.
 .lp
@@ -60,7 +60,7 @@ Each index database may be owned by an arbitrary user who will have
 subsequent write access to the database.
 Cat files are created in the same way as for mode (1) above.
 .br
-To use the man_db utilities in this mode, edit
+To use the man\-db utilities in this mode, edit
 .i include/manconfig.h
 and comment out
 `#define MAN_DB_UPDATES'.
@@ -80,7 +80,7 @@ whenever new manual files are installed.
 will be completely passive in its action, ie. no index databases will be
 written to and no cat files are ever produced.
 .br
-To use the man_db utilities in this mode, supply the option
+To use the man\-db utilities in this mode, supply the option
 `\-\-disable\-setuid' to
 .b configure
 and edit
@@ -88,7 +88,7 @@ and edit
 commenting out `#define MAN_DB_UPDATES' and `#define MAN_CATS'
 after running
 .b configure ,
-or build man_db as in mode (1) and install the binaries without the setuid
+or build man\-db as in mode (1) and install the binaries without the setuid
 bit set.
 .ip "(4) Wide open"
 .b man
@@ -102,7 +102,7 @@ does not update the databases.
 Cat files are produced and stored in world writable cat directories and have
 world write access themselves.
 .br
-To use the man_db utilities in this mode, supply the option
+To use the man\-db utilities in this mode, supply the option
 `\-\-disable\-setuid' to
 .b configure ,
 edit
@@ -116,7 +116,7 @@ to actually create index databases, usually the job of
 .b mandb ,
 for users private manual page hierarchies. This is enabled by editing
 .i include/manconfig.h
-and un-commenting the `/* #define MAN_DB_CREATES */' line. man_db\-2.2
+and un-commenting the `/* #define MAN_DB_CREATES */' line. man\-db\-2.2
 operated in this manner.
 .lp
 In summary,

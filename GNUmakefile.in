@@ -1,9 +1,9 @@
-# Master Makefile for the man_db package.
+# Master Makefile for the man-db package.
 #
 # Copyright (C) 1994, 1995, Graeme Wilford.
 #
 # You may distribute under the terms of the GNU General Public
-# License as specified in the COPYING file that comes with the man_db 
+# License as specified in the COPYING file that comes with the man-db 
 # distribution.  
 #
 # Sat Aug  6 15:46:44 BST 1994 Wilf. (G.Wilford@ee.surrey.ac.uk):
@@ -109,8 +109,8 @@ update: $(INCLUDES) $(CONF) $(addsuffix /Makefile, $(EVERYTHING))
 # testsuite doesn't exist
 testsuite:
 	@echo " "
-	@echo "The man_db testsuite was not found.  To perform a check of the installed"
-	@echo "programs, you must have the man_db testsuite package and DejaGNU, both"
+	@echo "The man-db testsuite was not found.  To perform a check of the installed"
+	@echo "programs, you must have the man-db testsuite package and DejaGNU, both"
 	@echo "available separately."
 	@echo " "
 	@exit 1
@@ -186,7 +186,7 @@ FILES = $(_root) $(_all) \
 
 message = release $(version), date $(date)
 nls_man = de_DE.88591 de_DE.ascii es_ES.88591 it_IT.88591 ja_JP.eucJP
-man_db := man_db-$(version)
+man_db := man-db-$(version)
 
 # Ensure the flex C files are current
 dist: update

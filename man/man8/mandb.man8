@@ -5,7 +5,7 @@
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
-.\" man_db distribution.
+.\" man-db distribution.
 .\" 
 .\" Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
 .\"
@@ -23,7 +23,7 @@ is used to initialise or manually update
 database caches that are usually maintained by 
 .BR %man% .
 The caches contain information relevant to the current state of the manual
-page system and the information stored within them is used by the man_db 
+page system and the information stored within them is used by the man-db 
 utilities to enhance their speed and functionality.
 
 When creating or updating an
@@ -38,7 +38,7 @@ Supplying
 .B %mandb% 
 with an optional colon-delimited path will override the internal system
 manual page hierarchy search path, determined from information found within 
-the man_db configuration file.
+the man-db configuration file.
 .SH "DATABASE CACHES"
 .B %mandb%
 can be compiled with support for any one of the following database types.
@@ -125,7 +125,7 @@ The following warning messages can be emitted during database building.
 An attempt to extract whatis line(s) from the given <filename> failed.
 This is usually due to a poorly written manual page, but if many such
 messages are emitted it is likely that the system contains non-standard
-manual pages which are incompatible with the man_db whatis parser.
+manual pages which are incompatible with the man-db whatis parser.
 See the
 .B WHATIS PARSING
 section in
@@ -155,7 +155,7 @@ All but the most recent are ignored.
 .SH FILES
 .TP
 .I %manpath_config_file%
-man_db configuration file.
+man-db configuration file.
 .TP
 .I /usr/man/index.(bt|db|dir|pag)
 A traditional global

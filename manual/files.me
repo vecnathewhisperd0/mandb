@@ -2,7 +2,7 @@
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
-.\" man_db distribution.
+.\" man-db distribution.
 .\"
 .\" Thu Sep 21 19:22:47 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk) 
 .\" 
@@ -32,7 +32,7 @@ accessible hierarchies
 A full system
 .EV MANPATH
 would be a colon separated list of these directories.
-The order is important, and is observed by man_db's search algorithms.
+The order is important, and is observed by man\-db's search algorithms.
 The order is very much related to the user's
 .EV PATH
 environment variable, and should be set on a per user basis, or not
@@ -108,7 +108,7 @@ manpath if
 is unset.
 .BS 2 "Determination of the internal manpath"
 .lp
-All man_db utilities,
+All man\-db utilities,
 .b manpath
 included, will use the user's
 .EV MANPATH
@@ -119,7 +119,7 @@ determined manpath will simply be any
 .ip
 .b MANDATORY_MANPATH
 .lp
-elements defined in the man_db config file.
+elements defined in the man\-db config file.
 .lp
 Assuming that a
 .EV PATH
@@ -191,7 +191,7 @@ in that order.
 A manual page would
 .i not
 be displayed about the local systems conventions.
-Please read the relevant man_db utility's manual
+Please read the relevant man\-db utility's manual
 page for further and more specific information.
 .BS 2 "NLS manual pages"
 .lp
@@ -233,7 +233,7 @@ contain the usual section subdirectories.
 Access to NLS manual pages is achieved via use of the
 .b setlocale (3)
 function which queries user environment variables to
-determine the current locale. Internally to the man_db utilities, this
+determine the current locale. Internally to the man\-db utilities, this
 locale string is appended to each manpath element and the resultant NLS manpath
 element is
 searched before the standard manpath element. In this way, an NLS manual page
@@ -252,7 +252,7 @@ the command
 .ip
 .bx "man \-\-system userix:man foobar"
 .lp
-would produce the following internal man_db manpath elements
+would produce the following internal man\-db manpath elements
 .ip
 .i
 .nf
@@ -417,7 +417,7 @@ local cat page directory caches.
 .BS 2 "Local cat page directory caches"
 .lp
 Any location for cat page hierarchy may be specified in the
-man_db configuration file. The location of the database cache associated with
+man\-db configuration file. The location of the database cache associated with
 each manual page hierarchy will always be at the root of the cat page
 hierarchy. By default, the cat page hierarchy shadows the manual page
 hierarchy.

@@ -302,7 +302,7 @@ void test_manfile (char *file, const char *path)
 	
 	/* check that our file actually contains some data */
 	if (buf.st_size == 0) {
-		/* man_db pre 2.3 place holder ? */
+		/* man-db pre 2.3 place holder ? */
 		free (manpage);
 		return;
 	}

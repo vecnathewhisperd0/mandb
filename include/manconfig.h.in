@@ -3,7 +3,7 @@
 /*--------------------------------------------------------------------------*/
 /* This file contains the paths/binary locations of the programs used by    */
 /* these utilities and various C pre-processor definitions that modify the  */
-/* behaviour of the man_db suite. You may like to check that all of the     */
+/* behaviour of the man-db suite. You may like to check that all of the     */
 /* formatters are from the same package. Ie, that we are not using a native */
 /* UNIX nroff with GNU tbl.                                                 */
 /*--------------------------------------------------------------------------*/
@@ -47,7 +47,7 @@
 #define MAN_DB_UPDATES
 #define MAN_CATS
 
-/* By default, man_db will store a whatis referenced manual page in favour
+/* By default, man-db will store a whatis referenced manual page in favour
    of a stray cat page when they both share identical namespace. If you
    would like to see a stray cat eg. kill(1) in favour of a kill(1) whatis
    referenced to bash_builtins(1), uncomment the following line. */
@@ -58,10 +58,10 @@
    Also the maximum amount of non-comment lines in the config file. */
 #define MAXDIRS 128
 
-/* CATMODE is the mode of the formatted cat pages that we create. The man_db
+/* CATMODE is the mode of the formatted cat pages that we create. The man-db
    package can be run in 4 main modes, 3 of which are relatively secure and
    allow the cats to be non world writable. The `wide open' mode requires
-   CATMODE to be 0666. Edit if necessary, after reading the man_db manual */ 
+   CATMODE to be 0666. Edit if necessary, after reading the man-db manual */ 
 
 #define CATMODE		0644 /* u=rw,go=r */
 
