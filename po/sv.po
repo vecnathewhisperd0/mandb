@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.3.90\n"
+"Project-Id-Version: man-db 2.4.1-pre1\n"
 "POT-Creation-Date: 2002-11-26 22:40+0000\n"
-"PO-Revision-Date: 2002-08-08 01:06+0200\n"
+"PO-Revision-Date: 2002-11-27 18:52+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -94,18 +94,16 @@ msgid "usage: %s [-dhV] [-M manpath] [section] ...\n"
 msgstr "användning: %s [-dhV] [-M mansökväg] [avsnitt] ...\n"
 
 #: src/catman.c:134
-#, fuzzy
 msgid ""
 "-d, --debug                 produce debugging info.\n"
 "-M, --manpath path          set search path for manual pages to `path'.\n"
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message.\n"
 msgstr ""
-"-d --debug                  skapa felsökningsinformation.\n"
-"-M --manpath sökväg         ställ in sökväg för manualsidor till \"sökväg"
-"\".\n"
-"-V --version                visa versionsnummer.\n"
-"-h --help                   visa detta användningsmeddelande.\n"
+"-d, --debug                 skapa felsökningsinformation.\n"
+"-M, --manpath sökväg        ställ in sökväg för manualsidor till \"sökväg\".\n"
+"-V, --version               visa versionsnummer.\n"
+"-h, --help                  visa detta användningsmeddelande.\n"
 
 #: src/catman.c:148
 #, c-format
@@ -167,7 +165,7 @@ msgstr "varning: %s/man%s/%s.%s*: filändelser i konflikt"
 #: src/check_mandirs.c:113
 #, c-format
 msgid "warning: failed to store entry for %s(%s)"
-msgstr ""
+msgstr "varning: misslyckades med att lagra post för %s(%s)"
 
 #: src/check_mandirs.c:127 src/check_mandirs.c:696 src/man.c:2948
 #, c-format
@@ -219,9 +217,9 @@ msgid "can't create a temporary filename"
 msgstr "kan inte skapa temporärt filnamn"
 
 #: src/compression.c:190
-#, fuzzy, c-format
+#, c-format
 msgid "command '%s' failed with exit status %d"
-msgstr "manualkommandot misslyckades med slutstatus %d"
+msgstr "kommandot \"%s\" misslyckades med slutstatus %d"
 
 #: src/convert_name.c:56
 #, c-format
@@ -230,7 +228,7 @@ msgstr "Kan inte konvertera %s till cat-namn"
 
 #: src/fake_security.c:58
 msgid "can't get passwd structure for uid 0"
-msgstr ""
+msgstr "kan inte få tag i passwd-struktur för uid 0"
 
 #: src/lexgrog.l:320
 #, c-format
@@ -284,8 +282,7 @@ msgstr "kommandot avslutade med status %d: %s"
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-Slist]\n"
-"           [-msystem] [-pstring] [-Llocale] [-eextension] [section] "
-"page ...\n"
+"           [-msystem] [-pstring] [-Llocale] [-eextension] [section] page ...\n"
 msgstr ""
 "användning: %s [-c|-f|-k|-w|-tZT enhet] [-adlhu7V] [-Msökväg] [-Psidvisare]\n"
 "                [-Slista] [-msystem] [-psträng] [-Llokal] [-etillägg]\n"
@@ -302,7 +299,6 @@ msgstr ""
 "                sida ...\n"
 
 #: src/man.c:458
-#, fuzzy
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -312,18 +308,14 @@ msgid ""
 "-w, --where, --location     print physical location of man page(s).\n"
 "-W, --where-cat,\n"
 "    --location-cat          print physical location of cat file(s).\n"
-"-l, --local-file            interpret `page' argument(s) as local filename"
-"(s).\n"
+"-l, --local-file            interpret `page' argument(s) as local filename(s).\n"
 "-u, --update                force a cache consistency check.\n"
 "-i, --ignore-case           look for pages case-insensitively (default).\n"
 "-I, --match-case            look for pages case-sensitively.\n"
 "-r, --prompt string         provide the `less' pager with a prompt\n"
-"-c, --catman                used by catman to reformat out of date cat "
-"pages.\n"
-"-7, --ascii                 display ASCII translation of certain latin1 "
-"chars.\n"
-"-E, --encoding encoding     use the selected nroff device and display in "
-"pager."
+"-c, --catman                used by catman to reformat out of date cat pages.\n"
+"-7, --ascii                 display ASCII translation of certain latin1 chars.\n"
+"-E, --encoding encoding     use the selected nroff device and display in pager."
 msgstr ""
 "-a, --all                   hitta alla matchande manualsidor.\n"
 "-d, --debug                 sänd ut felsökningsmeddelanden.\n"
@@ -331,10 +323,11 @@ msgstr ""
 "-f, --whatis                ekvivalent med whatis.\n"
 "-k, --apropos               ekvivalent med apropos.\n"
 "-w, --where, --location     skriv ut fysisk plats för manualsidorna.\n"
+"-W, --where-cat,\n"
+"    --location-cat          skriv ut fysisk plats för cat-filerna.\n"
 "-l, --local-file            tolka \"sid\"-argument som lokala filnamn.\n"
 "-u, --update                tvinga fram en cachekonsekvenskontroll.\n"
-"-i, --ignore-case           leta efter sidor skiftlägesokänsligt "
-"(standard).\n"
+"-i, --ignore-case           leta efter sidor skiftlägesokänsligt (standard).\n"
 "-I, --match-case            leta efter sidor skiftlägeskänsligt.\n"
 "-r, --prompt sträng         tillhandahåll sidvisaren \"less\" med en prompt\n"
 "-c, --catman                används av catman för att formatera om utgångna\n"
@@ -359,36 +352,37 @@ msgid ""
 "-X, --gxditview             use groff and display through gditview (X11):\n"
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 msgstr ""
+"-H, --html                  använd lynx eller argument för att visa html-\n"
+"                            utdata.\n"
+"-Z, --ditroff               använd groff och tvinga det att skapa ditroff.\n"
+"-X, --gxditview             använd groff och visa genom gditview (X11):\n"
+"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 
 #: src/man.c:488
-#, fuzzy
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-M, --manpath path          set search path for manual pages to `path'.\n"
 "-P, --pager pager           use program `pager' to display output.\n"
 "-S, --sections list         use colon separated section list.\n"
 "-m, --systems system        search for man pages from other unix system(s).\n"
-"-L, --locale locale         define the locale for this particular man "
-"search.\n"
+"-L, --locale locale         define the locale for this particular man search.\n"
 "-p, --preprocessor string   string indicates which preprocessors to run.\n"
 "                             e - [n]eqn   p - pic    t - tbl\n"
 "                             g - grap     r - refer  v - vgrind\n"
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message."
 msgstr ""
-"-D, --default               återställ alla flaggor till deras "
-"standardvärden.\n"
-"-M, --manpath sökväg        ställ in sökväg för manualsidor till \"sökväg"
-"\".\n"
-"-P, --pager sidvisare       använd programmet \"sidvisare\" för att visa "
-"utdata.\n"
+"-D, --default               återställ alla flaggor till deras standardvärden.\n"
+"-M, --manpath sökväg        ställ in sökväg för manualsidor till \"sökväg\".\n"
+"-P, --pager sidvisare       använd programmet \"sidvisare\" för att visa utdata.\n"
 "-S, --sections lista        använd kolonseparerad avsnittslista.\n"
-"-m, --systems system        sök efter manualsidor från annat/andra "
-"unixsystem.\n"
-"-L, --locale lokal          definiera lokal för denna specifika "
-"manualsökning.\n"
-"-p, --preprocessor sträng   sträng indikerar vilka förbehandlare som ska "
-"köras."
+"-m, --systems system        sök efter manualsidor från annat/andra unixsystem.\n"
+"-L, --locale lokal          definiera lokal för denna specifika manualsökning.\n"
+"-p, --preprocessor sträng   sträng indikerar vilka förbehandlare som ska köras.\n"
+"                             e - [n]eqn   p - pic    t - tbl\n"
+"                             g - grap     r - refer  v - vgrind\n"
+"-V, --version               visa versionsnummer.\n"
+"-h, --help                  visa detta användningsmeddelande."
 
 #: src/man.c:511
 #, c-format
@@ -417,7 +411,7 @@ msgstr " i avsnitt %s\n"
 #: src/man.c:642
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
-msgstr ""
+msgstr "Se \"%s\" för hjälp när manualsidor inte är tillgängliga.\n"
 
 #: src/man.c:794 src/man.c:2350
 #, c-format
@@ -538,8 +532,7 @@ msgstr "%s: förlitande på whatis-referenser är föråldrat\n"
 #: src/man.c:3346
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
-msgstr ""
-"--Man-- nästa: %s [ visa (retur) | hoppa över (Ctrl-D) | avsluta (Ctrl-C) ]\n"
+msgstr "--Man-- nästa: %s [ visa (retur) | hoppa över (Ctrl-D) | avsluta (Ctrl-C) ]\n"
 
 #: src/mandb.c:165
 #, c-format
@@ -547,7 +540,6 @@ msgid "usage: %s [-dqspuc|-h|-V] [manpath]\n"
 msgstr "användning: %s [-dqspuc|-h|-V] [manualsökväg]\n"
 
 #: src/mandb.c:167
-#, fuzzy
 msgid ""
 "-d, --debug                 produce debugging info.\n"
 "-q, --quiet                 work quietly, except for 'bogus' warning.\n"
@@ -558,17 +550,16 @@ msgid ""
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message.\n"
 msgstr ""
-"-d --debug                  skapa felsökningsinformation.\n"
-"-q --quiet                  arbeta tyst, utom \"bogus\"-varningar.\n"
-"-s --no-straycats           leta inte efter och lägg inte till lösa cat-"
-"sidor\n"
-"                            i databaserna.\n"
-"-p --no-purge               töm inte föråldrade poster från databaserna.\n"
-"-u --user-db                skapa endast användardatabaser.\n"
-"-c --create                 skapa databaser på nytt istället för att "
-"uppdatera.\n"
-"-V --version                visa versionsinformation.\n"
-"-h --help                   visa detta användningsmeddelande.\n"
+"-d, --debug                 skapa felsökningsinformation.\n"
+"-q, --quiet                 arbeta tyst, utom \"bogus\"-varningar.\n"
+"-s, --no-straycats          leta inte efter och lägg inte till lösa\n"
+"                            cat-sidor i databaserna.\n"
+"-p, --no-purge              töm inte föråldrade poster från databaserna.\n"
+"-u, --user-db               skapa endast användardatabaser.\n"
+"-c, --create                skapa databaser på nytt istället för att\n"
+"                            uppdatera.\n"
+"-V, --version               visa versionsinformation.\n"
+"-h, --help                  visa detta användningsmeddelande.\n"
 
 #: src/mandb.c:184 src/security.c:231
 #, c-format
@@ -687,7 +678,6 @@ msgid "usage: %s [[-gcdq] [-m system]] | [-V] | [-h]\n"
 msgstr "användning: %s [[-gcdq] [-m system]] | [-V] | [-h]\n"
 
 #: src/manpath.c:100
-#, fuzzy
 msgid ""
 "-c, --catpath               show relative catpaths.\n"
 "-g, --global                show the entire global manpath.\n"
@@ -697,13 +687,13 @@ msgid ""
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message.\n"
 msgstr ""
-"-c --catpath                visa relativa cat-sökvägar.\n"
-"-g --global                 visa hela den globala manualsökvägen.\n"
-"-d --debug                  skapa felsökningsinformation.\n"
-"-q --quiet                  skapa färre varningar.\n"
-"-m --systems system         ange vilka \"system\" som ska användas.\n"
-"-V --version                visa versionsnummer.\n"
-"-h --help                   visa detta användningsmeddelande.\n"
+"-c, --catpath               visa relativa cat-sökvägar.\n"
+"-g, --global                visa hela den globala manualsökvägen.\n"
+"-d, --debug                 skapa felsökningsinformation.\n"
+"-q, --quiet                 skapa färre varningar.\n"
+"-m, --systems system        ange vilka \"system\" som ska användas.\n"
+"-V, --version               visa versionsnummer.\n"
+"-h, --help                  visa detta användningsmeddelande.\n"
 
 #: src/manpath.c:174
 #, c-format
@@ -751,15 +741,10 @@ msgstr "%s version %s, %s\n"
 
 #: src/whatis.c:140
 #, c-format
-msgid ""
-"usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] "
-"keyword ...\n"
-msgstr ""
-"användning: %s [-d] [-r|-w|-e] [-m system] [-M manualsökväg] | [-h] | [-V] "
-"nyckelord ...\n"
+msgid "usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
+msgstr "användning: %s [-d] [-r|-w|-e] [-m system] [-M manualsökväg] | [-h] | [-V] nyckelord ...\n"
 
 #: src/whatis.c:142
-#, fuzzy
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-r, --regex                interpret each keyword as a regex (default).\n"
@@ -770,25 +755,22 @@ msgid ""
 "-V, --version              show version.\n"
 "-h, --help                 show this usage message.\n"
 msgstr ""
-"-d --debug\t\tskapa felsökningsinformation.\n"
-"-r --regex \t\ttolka varje nyckelord som ett reguljärt uttryck (standard).\n"
-"-e --exact \t\tsök varje nyckelord för exakt träff.\n"
-"-w --wildcard\t\tnyckelordet/nyckelorden som innehåller jokertecken.\n"
-"-m --systems system\tinkludera alternativa systemmanualsidor.\n"
-"-M --manpath sökväg\tställ in sökväg för manualsidor till \"sökväg\".\n"
-"-V --version\t\tvisa versionsnummer.\n"
-"-h --help\t\tvisa detta användningsmeddelande.\n"
+"-d, --debug                skapa felsökningsinformation.\n"
+"-r, --regex                tolka varje nyckelord som ett reguljärt uttryck\n"
+"                           (standard).\n"
+"-e, --exact                sök varje nyckelord för exakt träff.\n"
+"-w, --wildcard             nyckelordet/nyckelorden innehåller jokertecken.\n"
+"-m, --systems system       inkludera alternativa systemmanualsidor.\n"
+"-M, --manpath sökväg       ställ in sökväg för manualsidor till \"sökväg\".\n"
+"-V, --version              visa versionsnummer.\n"
+"-h, --help                 visa detta användningsmeddelande.\n"
 
 #: src/whatis.c:156
 #, c-format
-msgid ""
-"usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
-msgstr ""
-"användning: %s [-d] [-r|-w] [-m system] [-M manualsökväg] | [-h] | [-V] "
-"nyckelord ...\n"
+msgid "usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
+msgstr "användning: %s [-d] [-r|-w] [-m system] [-M manualsökväg] | [-h] | [-V] nyckelord ...\n"
 
 #: src/whatis.c:158
-#, fuzzy
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-r, --regex                interpret each keyword as a regex.\n"
@@ -798,13 +780,13 @@ msgid ""
 "-V, --version              show version.\n"
 "-h, --help                 show this usage message.\n"
 msgstr ""
-"-d --debug\t\tskapa felsökningsinformation.\n"
-"-r --regex \t\ttolka varje nyckelord som ett reguljärt uttryck.\n"
-"-w --wildcard\t\tnyckelordet/nyckelorden som innehåller jokertecken.\n"
-"-m --systems system\tinkludera alternativa systemmanualsidor.\n"
-"-M --manpath sökväg\tställ in sökväg för manualsidor till \"sökväg\".\n"
-"-V --version\t\tvisa versionsnummer.\n"
-"-h --help\t\tvisa detta användningsmeddelande.\n"
+"-d, --debug                skapa felsökningsinformation.\n"
+"-r, --regex                tolka varje nyckelord som ett reguljärt uttryck.\n"
+"-w, --wildcard             nyckelordet/nyckelorden innehåller jokertecken.\n"
+"-m, --systems system       inkludera alternativa systemmanualsidor.\n"
+"-M, --manpath sökväg       ställ in sökväg för manualsidor till \"sökväg\".\n"
+"-V, --version              visa versionsnummer.\n"
+"-h, --help                 visa detta användningsmeddelande.\n"
 
 #: src/whatis.c:204
 msgid "warning: can't read the fallback whatis text database."
@@ -816,9 +798,8 @@ msgid "warning: %s contains a pointer loop"
 msgstr "varning: %s innehåller en pekarslinga"
 
 #: src/whatis.c:231 src/whatis.c:244 src/whatis.c:259 src/whatis.c:268
-#, fuzzy
 msgid "(unknown subject)"
-msgstr "(okänd)"
+msgstr "(okänt ämne)"
 
 #: src/whatis.c:475
 #, c-format
@@ -850,28 +831,19 @@ msgstr "Vet inte vilket program jag ska köra om jag är >%s<\n"
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Misslyckades med att su:a till användare %s\n"
 
-#~ msgid ""
-#~ "-H, --html                  use lynx or argument to display html output.\n"
+#~ msgid "-H, --html                  use lynx or argument to display html output.\n"
 #~ msgstr ""
 #~ "-H, --html                  använd lynx eller argument för att visa\n"
 #~ "                            html-utdata.\n"
 
-#~ msgid ""
-#~ "-Z, --ditroff               use groff and force it to produce ditroff."
-#~ msgstr ""
-#~ "-Z, --ditroff               använd groff och tvinga det att skapa ditroff."
+#~ msgid "-Z, --ditroff               use groff and force it to produce ditroff."
+#~ msgstr "-Z, --ditroff               använd groff och tvinga det att skapa ditroff."
 
-#~ msgid ""
-#~ "-X, --gxditview             use groff and display through gditview (X11):"
-#~ msgstr ""
-#~ "-X, --gxditview             använd groff och visa genom gditview (X11):"
+#~ msgid "-X, --gxditview             use groff and display through gditview (X11):"
+#~ msgstr "-X, --gxditview             använd groff och visa genom gditview (X11):"
 
-#~ msgid ""
-#~ "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-"
-#~ "12."
-#~ msgstr ""
-#~ "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-"
-#~ "12."
+#~ msgid "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
+#~ msgstr "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 
 #~ msgid ""
 #~ "-V, --version               show version.\n"
