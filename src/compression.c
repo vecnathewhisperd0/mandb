@@ -169,6 +169,7 @@ char *decompress(char *filename, struct compression *comp)
 
 	if (status) {
 		(void) remove_with_dropped_privs(file);
+		free(file); file = NULL;
 		exit (CHILD_FAIL);
 	}
 	return file;

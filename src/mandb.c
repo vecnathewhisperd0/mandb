@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
 				create = 1;
 				break;
 			case 's':
-				check_for_strays = 1;
+				check_for_strays = 0;
 				break;
 			case 't':
 				opt_test = 1;

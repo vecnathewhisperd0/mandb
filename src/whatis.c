@@ -209,7 +209,7 @@ static char *get_whatis(struct mandata *info)
 
 	/* ensure we need to fill in the whatis */
 	if (*(info->pointer) == '-') {
-		if (*(info->whatis))
+		if (info->whatis != NULL && *(info->whatis))
 			return xstrdup(info->whatis);
 		else
 			return xstrdup(_( "(unknown)"));

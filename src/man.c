@@ -775,13 +775,22 @@ int local_man_loop (char *argv)
 		/* See if we need to decompress the file(s) first */
 		struct compression *comp;
 
+		if (cwd[0]) {
+			if (debug)
+				fprintf (stderr, "chdir %s\n", cwd);
+			if (chdir (cwd)) {
+				error (0, errno, _( "can't chdir to %s"), cwd);
+				return 0;
+			}
+		}
+
 		if ( (comp = comp_info(argv)) )
 			(void) decompress(argv, comp);
 #endif /* COMP_SRC */
 		lang = lang_dir (argv);
-		if (!display ((cwd[0]?cwd:NULL), argv, NULL, basename(argv))) {
+		if (!display (NULL, argv, NULL, basename(argv))) {
 			if ( local_mf )
-				error (0, errno, argv);
+				error (0, errno, "%s", argv);
 			exit_status = NOT_FOUND;
 		}
 

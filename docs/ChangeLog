@@ -1,3 +1,28 @@
+Wed Feb 21 00:54:47 GMT 2000  Colin Watson  <cjwatson@debian.org>
+
+	* Debian release 2.3.17-3.1.
+
+	* src/man.c (local_man_loop): Fix format string vulnerability in
+	  printing of error message.
+
+	* src/whatis.c (get_whatis): Fix segfault if whatis reference is
+	  NULL.
+
+	* src/man.c (local_man_loop): chdir() to original working directory
+	  so that 'man -l' works again on relative paths to compressed
+	  pages.
+
+	* src/compression.c (decompress): free() file if the decompressor
+	  failed so that atexit() doesn't try to remove it again.
+
+	* src/mandb.c (main): Reverse sense of -s option to agree with the
+	  documented intent.
+
+	* configure.in: Work around change in the behaviour of Debian nroff,
+	  which no longer accepts /dev/null as an input file.
+
+	* GNUmakefile.in: Restore full clean rules.
+
 Fri Apr  7 10:50:45 EET 2000  fab   (fpolacco@debian.org)
 
 	* Checked in by Colin Watson during SourceForge CVS sync.

@@ -162,7 +162,7 @@ install uninstall:
 
 TAGS realclean distclean mostlyclean clean:
 	for i in $(EVERYTHING); do $(MAKE) prefix=../$(prefix) -C $$i $@ clean=yes; done
-	#$(MAKE) $@_root
+	$(MAKE) $@_root
 	
 check: testsuite testsuite/Makefile
 	$(MAKE) -C testsuite
