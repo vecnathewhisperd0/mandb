@@ -1,3 +1,9 @@
+Sun Aug  3 21:07:46 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.h (struct command): New 'nice' member.
+	* lib/pipeline.c (command_new): Initialize nice.
+	  (pipeline_start): Change child process priority if nice is set.
+
 Sun Aug  3 20:50:35 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_start): Pop all cleanups in child.
