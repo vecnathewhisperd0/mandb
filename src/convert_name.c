@@ -77,7 +77,6 @@ char *convert_name (const char *name, const char *alternate)
 #endif /* COMP_SRC */
 
 #ifdef COMP_CAT
-	/* TODO: BSD layout requires .0. */
 	to_name = strappend (NULL, name, "." COMPRESS_EXT, NULL);
 #else /* !COMP_CAT */
 	to_name = xstrdup (name);
@@ -92,10 +91,6 @@ char *convert_name (const char *name, const char *alternate)
 			gripe_converting_name (name);
 
 		*t1 = '/';
-		/* TODO: This is broken beyond repair. Rewrite this whole
-		 * function, after understanding what on earth it's trying
-		 * to achieve!
-		 */
 		*(t2 + 1) = 'c';
 		*(t2 + 3) = 't';
 	} else
