@@ -1,30 +1,30 @@
 %%name: man-db
 
-%%short-description: reference manual pages database and browser
+%%short-description: reference manual page database and browser
 
 %%full-description: This package provides the man command. This utility
-	is the primary way of examining the reference manual pages.
-	Other utilities provided include the whatis and apropos commands
-	for searching the manual page database, the manpath utility for
-	determining the manual page search path, and the maintenance
-	utilities mandb and zsoelim. This package uses the groff
+	is the primary way of examining the on-line help files (manual
+	pages). Other utilities provided include the whatis and apropos
+	commands for searching the manual page database, the manpath utility
+	for determining the manual page search path, and the maintenance
+	utilities mandb, catman, and zsoelim. This package uses the groff
 	suite of programs to format and display the manual pages.
 
-%%category: documentation browser.
+%%category: system, util
 
 %%license: GPL
 
 %%maintainer: Colin Watson <cjwatson@debian.org>
 
-%%updated: 2001-05-14
+%%updated: 2001-07-05
 
 %%keywords: manpage, man, browser, database, groff
 
-%%interface: command-line
+%%interface: command line
 
-%%programs: man, mandb, manpath, whatis, apropos, zsoelim, accessdb.
+%%programs: man, mandb, manpath, whatis, apropos, catman, zsoelim, accessdb.
 
-%%GNU: why not?
+%%GNU: no
 
 %%web-page: http://man-db.sourceforge.net/
 
@@ -44,27 +44,25 @@
 
 %%redhat: 
 
-%%repository:
-
 %%related: 
 
-%%human-languages: cs, de, es, fr, it, ja.
+%%human-languages: cs, de, es, fr, it, ja
 
-%%source-language: C, perl, lex.
+%%source-language: C, perl, lex
 
 %%supported-languages:
 
 %%use-requirements: groff
 
-%%build-prerequisites: perl.
+%%build-prerequisites: perl
 
-%%weak-prerequisites: libdb2 (Berkeley DB)
+%%weak-prerequisites: libdb2-dev
 
 %%source-prerequisites:
 
-%%version: 2.3.18 on 21 Jun 2000 for alpha, arm, hurd-i386, i386, ia64, m68k, mips, powerpc, sparc.
+%%version: 2.3.19 released on 2001-07-05
 
-%%announce-list: man-db-announce@lists.sourceforge.net
+%%announce-list: man-db-announce@lists.sourceforge.net man-db-announce-request@lists.sourceforge.net http://lists.sourceforge.net/mailman/listinfo/man-db-announce
 
 %%announce-news:
 
@@ -76,5 +74,4 @@
 
 %%dev-news:
 
-%%bug-list: http://bugs.debian.org/man-db
-
+%%bug-database: http://bugs.debian.org/man-db
