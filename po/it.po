@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: man-db 2.4.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-08-09 21:24+0100\n"
-"PO-Revision-Date: 2003-03-14 12:46+01:00\n"
+"PO-Revision-Date: 2003-08-26 22:32+0200\n"
 "Last-Translator: Giuseppe Sacco <eppesuig@debian.org>\n"
 "Language-Team: Italian <tp@linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -18,69 +18,66 @@ msgstr ""
 #: lib/pipeline.c:216
 #, c-format
 msgid "badly formed configuration directive: '%s'"
-msgstr ""
+msgstr "direttiva di configurazione errata: '%s'"
 
 #: lib/pipeline.c:422
 msgid "pipeline input not open"
-msgstr ""
+msgstr "il pipeline di input non è aperto"
 
 #: lib/pipeline.c:435
 msgid "pipeline output not open"
-msgstr ""
+msgstr "il pipeline di output non è aperto"
 
 #: lib/pipeline.c:553 lib/pipeline.c:567
-#, fuzzy
 msgid "pipe failed"
-msgstr "fork fallito"
+msgstr "pipe fallita"
 
 #: lib/pipeline.c:587 src/catman.c:177 src/man.c:754
 msgid "fork failed"
 msgstr "fork fallito"
 
 #: lib/pipeline.c:595 lib/pipeline.c:604
-#, fuzzy
 msgid "dup2 failed"
-msgstr "fork fallito"
+msgstr "dup2 fallita"
 
 #: lib/pipeline.c:598 lib/pipeline.c:607 lib/pipeline.c:614 lib/pipeline.c:623
 #: lib/pipeline.c:636 lib/pipeline.c:640
-#, fuzzy
 msgid "close failed"
-msgstr "fork fallito"
+msgstr "close fallito"
 
 #: lib/pipeline.c:630
-#, fuzzy, c-format
+#, c-format
 msgid "couldn't exec %s"
 msgstr "impossibile eseguire %s"
 
 #: lib/pipeline.c:725
 msgid "closing pipeline input stream failed"
-msgstr ""
+msgstr "la chiusura del pipeline del flusso di input è fallita"
 
 #: lib/pipeline.c:730
 msgid "closing pipeline input failed"
-msgstr ""
+msgstr "la chiusura del pipeline di input è fallita"
 
 #: lib/pipeline.c:763
 #, c-format
 msgid "%s: %s%s"
-msgstr ""
+msgstr "%s: %s%s"
 
 #: lib/pipeline.c:791
 msgid "waitpid failed"
-msgstr ""
+msgstr "waitpid fallito"
 
 #: lib/pipeline.c:797
 msgid "closing pipeline output stream failed"
-msgstr ""
+msgstr "la chiusura del pipeline del flusso di output è fallita"
 
 #: lib/pipeline.c:802
 msgid "closing pipeline output failed"
-msgstr ""
+msgstr "la chiusura del pipeline di output è fallita"
 
 #: lib/pipeline.c:852
 msgid "can't install SIGCHLD handler"
-msgstr ""
+msgstr "non posso installare un handler per SIGCHLD"
 
 #: libdb/db_delete.c:119
 #, c-format
@@ -287,7 +284,7 @@ msgstr "Impossibile convertire %s nel nome cat"
 #: src/descriptions.c:51
 #, c-format
 msgid "warning: failed to store entry for %s(%s)"
-msgstr ""
+msgstr "attenzione: c'è stato un errore memorizzando il dato %s(%s)"
 
 #: src/fake_security.c:58
 msgid "can't get passwd structure for uid 0"
@@ -299,12 +296,11 @@ msgid "warning: %s: ignoring bogus filename"
 msgstr "attenzione: %s: sto ignorando i nomi di file fasulli"
 
 #: src/globbing.c:396
-#, fuzzy, c-format
+#, c-format
 msgid "usage: %s [-deiIhV] path sec name\n"
-msgstr "uso: %s [-hV] [database_man]\n"
+msgstr "uso: %s [-deiIhV] percorso sezione nome\n"
 
 #: src/globbing.c:398
-#, fuzzy
 msgid ""
 "-d, --debug                 emit debugging messages.\n"
 "-e, --extension             limit search to extension type `extension'.\n"
@@ -314,10 +310,9 @@ msgid ""
 "-h, --help                  show this usage message.\n"
 msgstr ""
 "-d, --debug                 produce informazioni utili al debug.\n"
-"-M, --manpath percorso      imposta a `percorso' il percorso di ricerca "
-"delle\n"
-"                            pagine di manuale.\n"
-"-C, --config-file file      usa questo file di configurazione.\n"
+"-e, --extension             limita la ricerca all'estensione `extension'.\n"
+"-i, --ignore-case           maiuscolo non diverso da minuscolo.\n"
+"-I, --match-case            maiuscolo diverso da minuscolo.\n"
 "-V, --version               mostra la versione.\n"
 "-h, --help                  mostra questo messaggio d'aiuto.\n"
 
@@ -758,7 +753,7 @@ msgstr "%d vecchie voci di database sono state rimosse.\n"
 
 #: src/mandb.c:627
 msgid "No databases updated."
-msgstr ""
+msgstr "Il database non è stato aggiornato."
 
 #: src/manp.c:347
 #, c-format
@@ -777,7 +772,7 @@ msgstr "attenzione: %s non ,Ah(B una directory"
 
 #: src/manp.c:365
 msgid "manpath list too long"
-msgstr ""
+msgstr "la lista dei percorsi manpath è troppo lunga"
 
 #: src/manp.c:577
 msgid "warning: $PATH not set"
