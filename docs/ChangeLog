@@ -1,3 +1,18 @@
+Sat Jul  6 21:30:07 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (get_roff_line_length): Widen to match groff 1.18's
+	  defaults.
+	  (add_roff_line_length, make_roff_command): Simplify by using en
+	  units rather than inches.
+
+	* src/man.c (main): Slight improvement in the error message for a
+	  missing page. If the name doesn't begin with a digit, never use
+	  gripe_no_name(): having the 'n' section shouldn't mean that 'man
+	  nonexistent' says "What manual page do you want from section
+	  nonexistent?".
+
+	* src/man.c (try_section): Check for ult_src() returning NULL.
+
 Wed Jul  3 23:46:31 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c (add_system_manpath): Make sure the loop that scans for

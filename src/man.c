@@ -571,9 +571,14 @@ static void store_line_length (void)
 
 static int get_roff_line_length (void)
 {
-	if (!troff && (line_length < 66 || line_length > 80))
-		return line_length * 9 / 10;
-	else
+	/* groff >= 1.18 defaults to 78. */
+	if (!troff && line_length != 80) {
+		int length = line_length * 39 / 40;
+		if (length > line_length - 2)
+			return line_length - 2;
+		else
+			return length;
+	} else
 		return 0;
 }
 
@@ -581,13 +586,12 @@ static char *add_roff_line_length (char *filter, int *save_cat)
 {
 	int length = get_roff_line_length ();
 	if (length) {
-		char ll_option[32], lt_option[32];
+		char options[64];
 		if (debug)
 			fprintf (stderr, "Using %d-character lines\n", length);
 		*save_cat = 0;
-		sprintf (ll_option, " -rLL=%d.%di", length / 10, length % 10);
-		sprintf (lt_option, " -rLT=%d.%di", length / 10, length % 10);
-		return strappend (NULL, filter, ll_option, lt_option, NULL);
+		sprintf (options, " -rLL=%dn -rLT=%dn", length, length);
+		return strappend (NULL, filter, options, NULL);
 	}
 	return filter;
 }
@@ -1078,7 +1082,8 @@ int main (int argc, char *argv[])
 				else
 					exit_status = NOT_FOUND;
 				if (exit_status == NOT_FOUND) {
-					if (!section && maybe_section)
+					if (!section && maybe_section &&
+					    isdigit (nextarg[0]))
 						gripe_no_name (nextarg);
 					else
 						gripe_no_man (nextarg, section);
@@ -1614,9 +1619,8 @@ static __inline__ char *make_roff_command (const char *dir, const char *file)
 					fprintf (stderr,
 						 "Using %d-character lines\n",
 						 roff_line_length);
-				sprintf (ll_macro, ".ll %d.%di",
-					 roff_line_length / 10,
-					 roff_line_length % 10);
+				sprintf (ll_macro, ".ll %dn",
+					 roff_line_length);
 				new_command = strappend (NULL, "(echo '",
 							 ll_macro, "'; ",
 							 command, ")", NULL);
@@ -2742,6 +2746,13 @@ static int try_section (const char *path, const char *sec, const char *name,
 		 */
 		ult = ult_src (*np, path, NULL,
 			       SO_LINK | SOFT_LINK | HARD_LINK);
+		if (!ult) {
+			/* already warned */
+			if (debug)
+				fprintf (stderr,
+					 "try_section(): bad link %s\n", *np);
+			continue;
+		}
 		if (STREQ (ult, *np))
 			info->id = ULT_MAN;
 		else
