@@ -2595,14 +2595,10 @@ static __inline__ char **get_section_list (void)
 	char **sections = NULL;
 	char *sec;
 
-	if (colon_sep_section_list == NULL) {
+	if (colon_sep_section_list == NULL)
 		colon_sep_section_list = getenv ("MANSECT");
-		if (colon_sep_section_list == NULL || 
-		    *colon_sep_section_list == '\0')
-			return std_sections;
-	}
-
-	sec = xstrdup(colon_sep_section_list);
+	if (colon_sep_section_list == NULL || *colon_sep_section_list == '\0')
+		return std_sections;
 
 	for (sec = strtok(colon_sep_section_list, ":"); sec; 
 	     sec = strtok(NULL, ":")) {
@@ -2610,8 +2606,15 @@ static __inline__ char **get_section_list (void)
  					       (i + 2) * sizeof (char *));
  		sections[i++] = sec;
  	}
- 	sections[i] = NULL;
-	return sections;
+
+	if (i > 0) {
+		sections[i] = NULL;
+		return sections;
+	} else {
+		if (sections)
+			free (sections);
+		return std_sections;
+	}
 }
 
 /* allow user to skip a page or quit after viewing desired page 

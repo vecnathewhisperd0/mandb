@@ -1,3 +1,10 @@
+Tue May 15 22:01:59 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (get_section_list): Return std_sections if argument to
+	  -S was an empty string or if that or $MANSECT contained only
+	  colons. Previously, man would behave wrongly in the former case
+	  and segfault in the latter. Also remove a redundant xstrdup().
+
 Mon May 14 23:46:25 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.3.18.
