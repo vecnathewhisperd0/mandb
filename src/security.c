@@ -143,7 +143,7 @@ void drop_effective_privs (void)
 
 	priv_drop_count++;
 	if (debug)
-		fprintf(stderr, "++priv_drop_count = %d\n", priv_drop_count);
+		fprintf (stderr, "++priv_drop_count = %d\n", priv_drop_count);
 }
 
 /* 

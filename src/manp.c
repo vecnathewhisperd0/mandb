@@ -308,9 +308,11 @@ static char *pathappend (char *oldpath, const char *appendage)
 		}
 		free (oldpathtok);
 		if (debug && !STREQ (appendage, app_dedup))
-			fprintf (stderr, "%s:%s reduced to %s:%s\n",
-				 oldpath, appendage, oldpath, app_dedup);
-		oldpath = strappend (oldpath, ":", app_dedup, NULL);
+			fprintf (stderr, "%s:%s reduced to %s%s%s\n",
+				 oldpath, appendage,
+				 oldpath, *app_dedup ? ":" : "", app_dedup);
+		if (*app_dedup)
+			oldpath = strappend (oldpath, ":", app_dedup, NULL);
 		free (app_dedup);
 		return oldpath;
 	} else
@@ -737,7 +739,8 @@ void read_config_file(void)
 
 	home = xstrdup (getenv ("HOME"));
 	if (home) {
-		config = fopen (strappend (home, "/.manpath", NULL), "r");
+		char *dotmanpath = strappend (home, "/.manpath", NULL);
+		config = fopen (dotmanpath, "r");
 		if (config != NULL) {
 			if (debug)
 				fprintf (stderr,
@@ -745,7 +748,7 @@ void read_config_file(void)
 			add_to_dirlist (config);
 			fclose (config);
 		}
-		free (home);
+		free (dotmanpath);
 	}
 
 	config = fopen (CONFIG_FILE, "r");

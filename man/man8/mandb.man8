@@ -36,7 +36,7 @@ cannot be parsed.
 
 Supplying 
 .B %mandb% 
-with an optional colon delimited path will override the internal `global'
+with an optional colon-delimited path will override the internal system
 manual page hierarchy search path, determined from information found within 
 the man_db configuration file.
 .SH "DATABASE CACHES"
@@ -74,19 +74,24 @@ Produce no warnings.
 Do not spend time looking for or adding information to the databases
 regarding stray cats.
 .TP
+.B \-p, \-\-no-purge
+Do not spend time checking for deleted manual pages and purging them from
+the databases.
+.TP
 .B \-c, \-\-create
 By default, 
 .B %mandb%
-will try to update any previously created databases. If a database
-does not exist, it will create it. This option forces 
+will try to update any previously created databases.
+If a database does not exist, it will create it.
+This option forces 
 .B %mandb%
-to delete previous databases and re-create them from scratch. This may be
-necessary if a database becomes corrupt or if a new database storage scheme
-is introduced in the future.
+to delete previous databases and re-create them from scratch.
+This may be necessary if a database becomes corrupt or if a new database
+storage scheme is introduced in the future.
 .TP
 .B \-u, \-\-user-db
 Create user databases only, even with write permissions necessary to create
-`global' databases.
+system databases.
 .TP
 .B \-t, \-\-test
 Perform correctness checks on manual pages in the hierarchy search path.
@@ -103,11 +108,10 @@ Show the version, then exit.
 The following warning messages can be emitted during database building.
 .TP 
 .B <filename>: whatis parse for page(sec) failed
-An attempt to extract whatis line(s) from the given
-<filename> failed.  This is usually due to a poorly written manual
-page, but if many such messages are emitted it is likely that the
-system contains non-standard manual pages which are incompatible with
-the man_db whatis parser.
+An attempt to extract whatis line(s) from the given <filename> failed.
+This is usually due to a poorly written manual page, but if many such
+messages are emitted it is likely that the system contains non-standard
+manual pages which are incompatible with the man_db whatis parser.
 See the
 .B WHATIS PARSING
 section for more information.
@@ -123,13 +127,15 @@ request to, a non existent file.
 .TP
 .B <filename>: ignoring bogus filename
 The <filename> may or may not be a valid manual page but its name is
-invalid.  This is usually due to a manual page with sectional extension <x>
-being put in manual page section <y>. 
+invalid.
+This is usually due to a manual page with sectional extension <x> being put
+in manual page section <y>. 
 .TP
 .B <filename_mask>: competing extensions
-The wildcard <filename_mask> is not unique.  This is usually caused by
-the existance of both a compressed and uncompressed version of the same
-manual page.  All but the most recent are ignored.
+The wildcard <filename_mask> is not unique.
+This is usually caused by the existence of both a compressed and
+uncompressed version of the same manual page.
+All but the most recent are ignored.
 .SH WHATIS PARSING
 .B %mandb%
 parses the
@@ -205,6 +211,8 @@ database cache.
 .BR manpath (5),
 .BR %catman% (8).
 .SH AUTHOR
+.nf
 Wilf. (G.Wilford@ee.surrey.ac.uk).
 Fabrizio Polacco (fpolacco@debian.org).
 Colin Watson (cjwatson@debian.org).
+.fi

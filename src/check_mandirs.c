@@ -65,6 +65,7 @@ extern int errno;
 #include "libdb/mydbm.h"
 #include "libdb/db_storage.h"
 #include "lib/error.h"
+#include "globbing.h"
 #include "ult_src.h"
 #include "hashtable.h"
 #include "check_mandirs.h"
@@ -86,6 +87,21 @@ static void gripe_multi_extensions (const char *path, const char *sec,
 		error (0, 0,
 		       _("warning: %s/man%s/%s.%s*: competing extensions"),
 		       path, sec, name, ext);
+}
+
+static void gripe_rwopen_failed (char *database)
+{
+	if (errno == EACCES || errno == EROFS) {
+		if (debug)
+			fprintf (stderr, "database %s is read-only\n",
+				 database);
+	} else {
+#ifdef MAN_DB_UPDATES
+		if (!quiet)
+#endif /* MAN_DB_UPDATES */
+			error (0, errno, _("can't update index cache %s"),
+			       database);
+	}
 }
 
 char *make_filename (const char *path, const char *name, 
@@ -564,20 +580,7 @@ static short testmandirs (const char *path, time_t last)
 			dbf = MYDBM_RWOPEN(database);
 
 			if (!dbf) {
-				/* rwopen(database); */
-				if (errno == EACCES || errno == EROFS) {
-					if (debug)
-						fprintf (stderr,
-							 "database %s is "
-							 "read-only\n",
-							 database);
-				} else
-#ifdef MAN_DB_UPDATES
-				    if (!quiet)
-#endif /* MAN_DB_UPDATES */
-					error (0, errno,
-					       _("can't update index cache %s"),
-					       database);
+				gripe_rwopen_failed (database);
 				return 0;
 			}
 
@@ -748,4 +751,85 @@ short update_db (const char *manpath)
 		fprintf (stderr, "failed to open %s O_RDONLY\n", database);
 		
 	return EOF;
+}
+
+/* Go through the database and purge references to man pages that no longer
+ * exist.
+ */
+short purge_missing (const char *manpath)
+{
+	datum key;
+	short count = 0;
+
+	if (!quiet)
+		printf (_("Purging old database entries in %s...\n"), manpath);
+
+	dbf = MYDBM_RWOPEN (database);
+	if (!dbf) {
+		gripe_rwopen_failed (database);
+		return 0;
+	}
+
+	key = MYDBM_FIRSTKEY (dbf);
+
+	while (key.dptr != NULL) {
+		datum content, nextkey;
+		struct mandata entry;
+
+		/* Ignore db identifier keys. */
+		if (*key.dptr == '$') {
+			datum nextkey = MYDBM_NEXTKEY (dbf, key);
+			MYDBM_FREE (key.dptr);
+			key = nextkey;
+			continue;
+		}
+
+		content = MYDBM_FETCH (dbf, key);
+		if (!content.dptr)
+			return count;
+
+		/* Ignore overflow entries. */
+		if (*content.dptr == '\t') {
+			datum nextkey;
+			MYDBM_FREE (content.dptr);
+			nextkey = MYDBM_NEXTKEY (dbf, key);
+			MYDBM_FREE (key.dptr);
+			key = nextkey;
+			continue;
+		}
+
+		split_content (content.dptr, &entry);
+		content.dptr = entry.addr;
+
+		if (entry.id == ULT_MAN || entry.id == SO_MAN) {
+			char *nicekey = xstrdup (key.dptr);
+			char *tab = strchr (nicekey, '\t');
+			int save_debug = debug;
+			char **found;
+
+			if (tab)
+				*tab = '\0';
+			debug = 0;	/* look_for_file() is quite noisy */
+			found = look_for_file (manpath, entry.ext, nicekey, 0);
+			debug = save_debug;
+			if (!found) {
+				if (!opt_test)
+					dbdelete (nicekey, &entry);
+				else if (debug)
+					fprintf (stderr,
+						 "Would delete %s(%s)\n",
+						 nicekey, entry.ext);
+				++count;
+			}
+			free (nicekey);
+		}
+
+		MYDBM_FREE (content.dptr);
+		nextkey = MYDBM_NEXTKEY (dbf, key);
+		MYDBM_FREE (key.dptr);
+		key = nextkey;
+	}
+
+	MYDBM_CLOSE (dbf);
+	return count;
 }

@@ -38,11 +38,11 @@ extern char *strrchr();
 #include "manconfig.h"
 #include "lib/error.h"
 
-extern char *extension;
+char *extension;
 static char *mandir_layout = MANDIR_LAYOUT;
 
 #ifdef TEST
-char *program_name, *extension;
+char *program_name;
 int debug = 1;
 #endif
 
@@ -86,7 +86,8 @@ static int parse_layout (const char *layout)
 	}
 }
 
-char **look_for_file (char *path, char *sec, char *name, int cat)
+char **look_for_file (const char *path, const char *sec,
+		      const char *name, int cat)
 {
 	char *pattern = NULL;
 	static glob_t gbuf;

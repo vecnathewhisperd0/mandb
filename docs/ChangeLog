@@ -1,3 +1,40 @@
+Thu Jun 28 22:38:41 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (gripe_rwopen_failed): New function.
+	  (testmandirs): Use it.
+	  (purge_missing): New function to purge database entries whose
+	  associated manual pages have been deleted.
+	* src/check_mandirs.h: Prototype purge_missing().
+
+	* src/mandb.c (main): New --no-purge option. Unless it is used,
+	  purge_missing() is called on each database before calling mandb().
+	  Don't call straycats() until after the temporary database has been
+	  moved to its permanent location. Make sure all cleanup code is
+	  called with dropped privileges.
+	  Add statistics message for purged entries, and separate messages
+	  for the benefit of translations.
+	  When --test is given, only assume --quiet if --debug wasn't given.
+	  (usage): Describe --no-purge.
+
+	* src/man.c: Move extension's storage to ...
+	* src/globbing.c: ... here.
+	  (look_for_file): Constify string arguments.
+	* src/man.h: Move prototype of look_for_file() to ...
+	* src/globbing.h: ... here (new file).
+
+	* src/manp.c (pathappend): Only append the new element(s) if any
+	  were left after removing duplicates.
+	  (read_config_file): Make sure what we free was actually allocated.
+
+	* src/Makefile.in (mandb): Link with globbing.o.
+
+	* man/man8/mandb.man8 (OPTIONS): Document --no-purge.
+	  General textual cleanup.
+
+	* src/accessdb.c (main): Move content into a tighter scope.
+
+	* src/security.c (drop_effective_privs): Style nit.
+
 Thu Jun 28 13:28:13 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (ENVIRONMENT): Document $MANWIDTH.

@@ -9,3 +9,4 @@ extern void update_db_time (void);
 extern void reset_db_time (void);
 extern short create_db (const char *manpath);
 extern short update_db (const char *manpath);
+extern short purge_missing (const char *manpath);

@@ -121,6 +121,7 @@ extern int errno;
 #include "lib/cleanup.h"
 #include "hashtable.h"
 #include "check_mandirs.h"
+#include "globbing.h"
 #include "ult_src.h"
 #include "manp.h"
 #include "man.h"
@@ -425,7 +426,7 @@ int quiet = 1;
 char *program_name;
 char *database;
 MYDBM_FILE dbf; 
-char *extension; /* global for globbing.c */
+extern char *extension; /* for globbing.c */
 
 /* locals */
 static char *alt_system_name;

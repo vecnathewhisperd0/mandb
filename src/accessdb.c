@@ -59,7 +59,7 @@ static void usage (int status)
 int main (int argc, char *argv[])
 {
 	MYDBM_FILE dbf;
-	datum key,content;
+	datum key;
 
 	program_name = basename (argv[0]);
 	if (is_directory (FHS_CAT_ROOT) == 1)
@@ -87,8 +87,9 @@ int main (int argc, char *argv[])
 	key = MYDBM_FIRSTKEY (dbf);
 
 	while (key.dptr != NULL) {
+		datum content;
 		char *t, *nicekey;
-		
+
 		content = MYDBM_FETCH (dbf, key);
 		if (!content.dptr)
 			exit (FATAL);

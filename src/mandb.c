@@ -94,6 +94,7 @@ extern int opt_test;		/* don't update db */
 MYDBM_FILE dbf;
 char *manp;
 char *database;
+extern char *extension;		/* for globbing.c */
 
 /* default options */
 static const struct option long_options[] =
@@ -101,6 +102,7 @@ static const struct option long_options[] =
     {"create", 		no_argument,	0, 'c'},
     {"debug",		no_argument, 	0, 'd'},
     {"help",		no_argument,	0, 'h'},
+    {"no-purge",	no_argument,	0, 'p'},
     {"quiet",		no_argument, 	0, 'q'},
     {"user-db",		no_argument, 	0, 'u'},
     {"no-straycats",    no_argument,	0, 's'},
@@ -109,8 +111,9 @@ static const struct option long_options[] =
     {0, 0, 0, 0}
 };
 
-static const char args[] = "cdhqstuV";
+static const char args[] = "cdhpqstuV";
 static int check_for_strays = 1;
+static int purge = 1;
 static int user;
 static int create;
 
@@ -144,11 +147,12 @@ extern int pages;
 
 static void usage (int status)
 {
-	printf (_("usage: %s [-dqsuc|-h|-V] [manpath]\n"), program_name);
+	printf (_("usage: %s [-dqspuc|-h|-V] [manpath]\n"), program_name);
 	printf (_(
 		"-d --debug                  produce debugging info.\n"
 		"-q --quiet                  work quietly, except for 'bogus' warning.\n"
 		"-s --no-straycats           don't look for or add stray cats to the dbs.\n"
+		"-p --no-purge               don't purge obsolete entries from the dbs.\n"
 		"-u --user-db                produce user databases only.\n"
 		"-c --create                 create dbs from scratch, rather than updating.\n"
 		"-V --version                show version.\n"
@@ -339,6 +343,7 @@ int main(int argc, char *argv[])
 	char *catpath, *sys_manp;
 	short amount = 0;
 	int strays = 0;
+	int purged = 0;
 	int quiet_temp = 0;
 	char **mp;
 	char *locale;
@@ -381,6 +386,9 @@ int main(int argc, char *argv[])
 				break;
 			case 'c':
 				create = 1;
+				break;
+			case 'p':
+				purge = 0;
 				break;
 			case 's':
 				check_for_strays = 0;
@@ -430,7 +438,7 @@ int main(int argc, char *argv[])
 	/* This is required for global_catpath(), regardless */
 	manp = manpath (NULL);	/* also calls read_config_file() */
 
-	if (opt_test)
+	if (opt_test && !debug)
 		quiet = 1;
 	else if (quiet_temp == 1)
 		quiet = 2;
@@ -467,10 +475,14 @@ int main(int argc, char *argv[])
 		if (catpath) { 	/* system db */
 		/*	if (access (catpath, W_OK) == 0 && !user) { */
 			if (!user) {
+				if (purge) {
+					database = mkdbname (catpath);
+					purged += purge_missing (*mp);
+				}
+
 				push_cleanup (cleanup, NULL);
 				amount += mandb (catpath, *mp);
-				if (check_for_strays)
-					strays += straycats (*mp);
+
 				if (!opt_test) {
 					finish_up ();
 #ifdef DO_CHOWN
@@ -480,20 +492,40 @@ int main(int argc, char *argv[])
 				} else
 					cleanup (NULL);
 				pop_cleanup ();
+				free (database);
+				database = NULL;
+
+				if (check_for_strays) {
+					database = mkdbname (catpath);
+					strays += straycats (*mp);
+				}
 			}
 			free (catpath);
 		} else {	/* user db */
-			push_cleanup (cleanup, NULL);
 			drop_effective_privs ();
+
+			if (purge) {
+				database = mkdbname (*mp);
+				purged += purge_missing (*mp);
+			}
+
+			push_cleanup (cleanup, NULL);
 			amount += mandb (*mp, *mp);
-			if (check_for_strays)
-				strays += straycats (*mp);
+
 			if (!opt_test)
 				finish_up ();
 			else
 				cleanup (NULL);
-			regain_effective_privs ();
 			pop_cleanup ();
+			free (database);
+			database = NULL;
+
+			if (check_for_strays) {
+				database = mkdbname (*mp);
+				strays += straycats (*mp);
+			}
+
+			regain_effective_privs ();
 		}
 
 		chkr_garbage_detector ();
@@ -502,11 +534,13 @@ int main(int argc, char *argv[])
 	if (!quiet) {
 		printf (_(
 		        "%d man subdirectories contained newer manual pages.\n"
-		        "%d manual pages "), 
+		        "%d manual pages were added.\n"), 
 		        amount, pages);
 		if (check_for_strays)
-			printf (_("and %d stray cats "), strays);
-		puts (_("were added."));
+			printf (_("%d stray cats were added.\n"), strays);
+		if (purge)
+			printf (_("%d old database entries were purged.\n"),
+				purged);
 	}
 
 #ifdef __profile__
