@@ -1,3 +1,13 @@
+Tue Aug 13 18:25:13 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (usage): Document new option -W, --where-cat,
+	  --location-cat.
+	  (man_getopt): Accept -W.
+	  (display): -w now just prints man_file, while -W prints cat_file.
+	  If both are given, the two filenames are printed separated by a
+	  space, as -w used to do.
+	* man/man1/man.man1, docs/NEWS: Document this.
+
 Sat Aug 10 13:19:34 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Preliminary entries for 2.4.1.

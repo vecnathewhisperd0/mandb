@@ -338,7 +338,7 @@ static struct hashtable *db_hash = NULL;
 
 static int troff;
 static const char *roff_device = NULL;
-static int print_where;
+static int print_where, print_where_cat;
 static int catman;
 static int local_man_file;
 static int findall;
@@ -378,6 +378,8 @@ static const struct option long_options[] =
     {"preprocessor", required_argument,	0, 'p'},
     {"location", no_argument, 		0, 'w'},
     {"where", no_argument,		0, 'w'},
+    {"location-cat", no_argument,	0, 'W'},
+    {"where-cat", no_argument,		0, 'W'},
     {"locale", required_argument,	0, 'L'},
     {"extension", required_argument,	0, 'e'},
     {"update", no_argument, 		0, 'u'},
@@ -400,7 +402,7 @@ static const struct option long_options[] =
     {0, 0, 0, 0}
 };
 
-static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::we:L:Zcr:X::E:iI";
+static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::wWe:L:Zcr:X::E:iI";
 
 # ifdef TROFF_IS_GROFF
 static int ditroff;
@@ -414,7 +416,7 @@ static char *html_pager;
     {0, 0, 0, 0}
 };
 
-static const char args[] = "7DlM:P:S:adfhkVum:p:we:L:cr:E:iI";
+static const char args[] = "7DlM:P:S:adfhkVum:p:wWe:L:cr:E:iI";
 
 #endif /* HAS_TROFF */
 
@@ -448,6 +450,8 @@ static void usage (int status)
 		"-f, --whatis                equivalent to whatis.\n"
 		"-k, --apropos               equivalent to apropos.\n"
 		"-w, --where, --location     print physical location of man page(s).\n"
+		"-W, --where-cat,\n"
+		"    --location-cat          print physical location of cat file(s).\n"
 		"-l, --local-file            interpret `page' argument(s) as local filename(s).\n"
 		"-u, --update                force a cache consistency check.\n"
 		"-i, --ignore-case           look for pages case-insensitively (default).\n"
@@ -1231,13 +1235,17 @@ static void man_getopt (int argc, char *argv[])
 		    	case 'w':
 				print_where = 1;
 				break;
+			case 'W':
+				print_where_cat = 1;
+				break;
 			case 'r':
 				prompt_string = optarg;
 				break;
 			case 'D':
 		    		/* discard all preset options */
 		    		local_man_file = findall = update = catman =
-					debug = troff = print_where =
+					debug = troff =
+					print_where = print_where_cat =
 					ascii = different_encoding =
 					match_case = 0;
 #ifdef TROFF_IS_GROFF
@@ -1261,14 +1269,16 @@ static void man_getopt (int argc, char *argv[])
 	}
 
 	/* check for incompatible options */
-	if (troff + whatis + apropos + catman + print_where > 1) {
+	if (troff + whatis + apropos + catman +
+	    (print_where || print_where_cat) > 1) {
 		error (0, 0,
 		       strappend (NULL,
 				  troff ? "-[tTZH] " : "",
 				  whatis ? "-f " : "",
 				  apropos ? "-k " : "",
 				  catman ? "-c " : "",
-				  print_where ? "-w " : "", 
+				  print_where ? "-w " : "",
+				  print_where_cat ? "-W " : "",
 				  _(": incompatible options"), NULL));
 		usage (FAIL);
 	}
@@ -2449,11 +2459,17 @@ static int display (const char *dir, const char *man_file,
 			return found;
 		}
 
-		if (print_where) {
-			if (man_file)
-				printf ("%s ", man_file);
-			if (cat_file && !format)
-				printf ("%s ", cat_file);
+		if (print_where || print_where_cat) {
+			int printed = 0;
+			if (print_where && man_file) {
+				printf ("%s", man_file);
+				printed = 1;
+			}
+			if (print_where_cat && cat_file && !format) {
+				if (printed)
+					putchar (' ');
+				printf ("%s", cat_file);
+			}
 			putchar ('\n');
 		} else if (catman) {
 			if (format) {
