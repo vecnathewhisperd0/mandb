@@ -834,7 +834,19 @@ static int count_glob_matches (const char *name, const char *ext,
 
 	for (walk = source; walk && *walk; ++walk) {
 		struct mandata info;
-		char *buf = filename_info (*walk, &info, name);
+		struct stat statbuf;
+		char *buf;
+
+		if (stat (*walk, &statbuf) == -1) {
+			if (debug)
+				fprintf (stderr,
+					 "count_glob_matches: excluding %s "
+					 "because stat failed\n",
+					 *walk);
+			continue;
+		}
+
+		buf = filename_info (*walk, &info, name);
 		if (buf) {
 			if (STREQ (ext, info.ext))
 				++count;
