@@ -65,7 +65,7 @@ sighandler (int signo)
   act.sa_handler = SIG_DFL;
   sigemptyset (&act.sa_mask);
   act.sa_flags = 0;
-  if (sigaction (SIGINT, &act, NULL)) {
+  if (sigaction (signo, &act, NULL)) {
     /* should not happen */
     _exit (FATAL);		/* exit() is taboo from signal handlers! */
   }
@@ -85,7 +85,7 @@ sighandler (int signo)
 }
 
 
-/* Save signo's current action to oldact, if it's handler is SIG_DFL
+/* Save signo's current action to oldact, if its handler is SIG_DFL
    install sighandler, return 0 on success, -1 on failure. */
 static int
 trap_signal (int signo, struct sigaction *oldact)
@@ -119,7 +119,7 @@ trap_abnormal_exits (void)
 }
 
 
-/* Restore signo's action from oldact if it's current handler is
+/* Restore signo's action from oldact if its current handler is
    sighandler, return 0 on success, -1 on failure. */
 static int
 untrap_signal (int signo, struct sigaction *oldact)

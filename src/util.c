@@ -48,6 +48,7 @@ extern char *strcpy();
 #include "manconfig.h"
 #include "libdb/mydbm.h" /* for full definition of MAN_DB */
 
+#undef MAX
 #define MAX(a,b)	((a)>(b)?a:b)
 
 /* take path, add db name and return */

@@ -1036,6 +1036,8 @@ if (debug) fprintf(stderr, "main(): locale= %s,internal_locale= %s\n", locale, i
 		chkr_garbage_detector();
 	}
 
+	drop_effective_privs();
+
 	/* For profiling */
 	if (cwd[0])
 		chdir(cwd);

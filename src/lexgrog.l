@@ -163,13 +163,13 @@ vgrind_request	\.vS
 					}
 }
 
-<CAT_NAME>-\n[ \t\n]*			/* strip continuations */
+<CAT_NAME>-\n[blank_eol]*		/* strip continuations */
 
  /* convert to DASH */
 <MAN_NAME>{next}{blank}*\\\((mi|hy|em){blank}*	|
-<MAN_NAME>{next}[ \t\n]+[-\\]-{blank}*		|
-<MAN_NAME>{next}[ \t\n]*[-\\]-{blank}+		|
-<CAT_NAME>{next}{blank}+-{1,2}[ \t\n]+		|
+<MAN_NAME>{next}[blank_eol]+[-\\]-{blank}*	|
+<MAN_NAME>{next}[blank_eol]*[-\\]-{blank}+	|
+<CAT_NAME>{next}{blank}+-{1,2}[blank_eol]+	|
 <MAN_NAME>{bol}\.Nd{blank}*			add_str_to_whatis(" - ", 3);
 
  /* escape sequences and special characters */
@@ -185,13 +185,13 @@ vgrind_request	\.vS
 
 	{next}\\[|^&!%acdpruz{}\n]	/* various useless control chars */
 	{next}\\[bhlLvx]{blank}*'[^']+'	/* various inline functions */
-	
+
 	{next}\\\$[1-9]			/* interpolate arg */
-	
+
 	{next}\\\*(\({alpha})?{alpha}	/* interpolate string */
 	{next}\\\({alpha}{alpha}	/* special (non printable) character */
 	{next}\\\".* 			/* comment */
-	
+
 	{next}{font_change}		/* font changes */
 	{next}\\k{alpha}		/* mark input place in register */
 
@@ -205,10 +205,10 @@ vgrind_request	\.vS
 
 	{next}\(\\\|\){blank}*		/* function() in hpux */
 }
-				
+
  /* collapse spaces, escpaed spaces, tabs, newlines to a single space */
 <CAT_NAME>{next}((\\[ ])|{blank})*	add_char_to_whatis(' ');
-				
+
  /* a ROFF break request (.br) usually means we have multiple 
     whatis definitions, provide a separator for later processing */
 <MAN_NAME>{bol}\.br{blank}*		add_char_to_whatis((char) 0x11);
@@ -262,7 +262,7 @@ static void add_char_to_whatis(unsigned char c)
 	else
 		*p_name++ = c;
 }
-	
+
 static void newline_found(void)
 {
 /* If we are mid p_name and the last added char was not a space, best add one */
@@ -278,7 +278,7 @@ int find_name( char *file, char *filename, lexgrog *p_lg)
 		error (0, errno, _( "can't open %s"), file);
 		return 0;
 	}
-	
+
 	fname = filename;
 	*(p_name = newname) = '\0';
 	memset( filters, '_', sizeof(filters));
@@ -287,7 +287,7 @@ int find_name( char *file, char *filename, lexgrog *p_lg)
 		BEGIN(CAT_FILE);
 	else
 		BEGIN(MAN_FILE);
-	
+
 	yyrestart(yyin);
 	ret = yylex();
 	fclose(yyin);

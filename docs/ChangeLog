@@ -1,3 +1,24 @@
+Wed May 16 00:07:04 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* A number of minor fixes from SuSE's diff:
+
+	* GNUmakefile.in: Don't prepend ../ to prefix before passing it to
+	  subdirs.
+	* lib/cleanup.c: HUP and TERM signal handling was mistakenly acting
+	  on INT instead.
+	* src/lexgrog.l: Replace a few instances of " \t\n" with
+	  "blank_eol".
+	* src/man.c: Drop privileges before changing back to the original
+	  directory just before exiting (only matters for profiling).
+	* src/util.c: Undefine MAX before redefining it.
+	* po/POTFILES.in: Read src/lexgrog.c rather than src/lexgrog.l
+	  (gettext understands C better than lex).
+	* po/de.po, po/es.po, po/fr.po: Remove a few stray '\r's.
+
+	* I'll look at the zlib bits of the patch soon. From a preliminary
+	  look I'll probably end up rewriting it - I'd prefer more of the
+	  compression stuff actually to go in src/compression.c.
+
 Tue May 15 22:01:59 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (get_section_list): Return std_sections if argument to

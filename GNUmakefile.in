@@ -145,10 +145,10 @@ __TAGS:
 install: $(INCLUDES) $(CONF)
 
 install uninstall:
-	for i in $(INSTALL); do $(MAKE) prefix=../$(prefix) -C $$i $@; done
+	for i in $(INSTALL); do $(MAKE) prefix=$(prefix) -C $$i $@; done
 
 TAGS realclean distclean mostlyclean clean:
-	for i in $(EVERYTHING); do $(MAKE) prefix=../$(prefix) -C $$i $@ clean=yes; done
+	for i in $(EVERYTHING); do $(MAKE) prefix=$(prefix) -C $$i $@ clean=yes; done
 	$(MAKE) __$@
 	
 check: testsuite testsuite/Makefile
