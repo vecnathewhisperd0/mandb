@@ -28,7 +28,7 @@ suite of programs to format and display the manual pages.
 
 %%maintainer: Colin Watson <cjwatson@debian.org>
 
-%%updated: 2002-06-26
+%%updated: 2002-12-22
 
 %%keywords: manpage, man, browser, database, groff, man-db, mandb
 
@@ -52,7 +52,7 @@ Colin Watson <cjwatson@debian.org>
 %%sponsors: 
 
 %%source:
-http://savannah.nongnu.org/download/man-db/stable.pkg/2.4.0/man-db-2.4.0.tar.gz
+http://savannah.nongnu.org/download/man-db/stable.pkg/2.4.1/man-db-2.4.1.tar.gz
 
 %%debian:
 ftp://ftp.debian.org/debian/pool/main/m/man-db/
@@ -77,7 +77,7 @@ ftp://ftp.debian.org/debian/pool/main/m/man-db/
 
 %%source-prerequisites:
 
-%%version: 2.4.0 released 2002-06-26
+%%version: 2.4.1 released 2002-12-22
 
 %%announce-list: <man-db-announce@nongnu.org>
 		 <man-db-announce-request@nongnu.org>
