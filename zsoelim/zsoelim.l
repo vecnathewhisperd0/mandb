@@ -70,6 +70,9 @@ extern int errno;
 #define NAME	so_name[so_stack_ptr]
 #define LINE	so_line[so_stack_ptr]
 
+#include <libintl.h>
+#define _(String) gettext (String)
+
 #include "manconfig.h"
 #include "lib/error.h"
 
@@ -166,7 +169,7 @@ W	[ \t]
 <so>\"?[^ \t\n\"]+\"?	{ 	/* file names including whitespace ?  */
 			if (so_stack_ptr == MAX_SO_DEPTH - 1) 
 				error (FATAL, 0, 
-				       "%s:%d: .so requests nested too deeply or are recursive",
+				       _("%s:%d: .so requests nested too deeply or are recursive"),
 				       NAME, LINE);
 
 			ZAP_QUOTES;
@@ -179,7 +182,7 @@ W	[ \t]
 			if (open_file(xstrdup(yytext)) && open_file(temp_name)) {
 #ifndef __alpha
 				error(OK, 0, 
-				      "%s:%d: warning: failed .so request", NAME, LINE);
+				      _("%s:%d: warning: failed .so request"), NAME, LINE);
 				printf(".so %s\n", yytext);
 #endif
 				BEGIN(end_request);
@@ -200,7 +203,7 @@ W	[ \t]
 <so>\n		{
 			no_newline = 0;
 			error(OK, 0,
-			      "%s:%d: warning: newline in .so request, ignoring",
+			      _("%s:%d: warning: newline in .so request, ignoring"),
 			      NAME, LINE);
 			putchar('\n');
 			LINE++;
@@ -250,7 +253,7 @@ W	[ \t]
 <lfnumber,lfname>.	{
 			no_newline = 1;
 			error(OK, 0,
-			      "%s:%d: warning: malformed .lf request, ignoring",
+			      _("%s:%d: warning: malformed .lf request, ignoring"),
 			      NAME, LINE);
 			putchar(*yytext);
 			BEGIN(INITIAL);
@@ -259,7 +262,7 @@ W	[ \t]
 <lfnumber,lfname>\n	{
 			no_newline = 0;
 			error(OK, 0,
-			      "%s:%d: warning: newline in .lf request, ignoring",
+			      _("%s:%d: warning: newline in .lf request, ignoring"),
 			      NAME, LINE);
 			putchar('\n');
 			LINE++;
@@ -297,7 +300,7 @@ static void zap_quotes(void)
 			yytext[yyleng - 1] = '\0';
 			yytext++;
 		} else
-			error(OK, 0, "%s:%d: unterminated quote in roff request",
+			error(OK, 0, _("%s:%d: unterminated quote in roff request"),
 			      NAME, LINE);
 	}
 }
@@ -306,15 +309,18 @@ static void zap_quotes(void)
 /* print the usage message, then exit */
 static void usage (int status)
 {
-	printf("usage: %s [ -VCh ] [ file ... ]\n", program_name);
+	printf (_("usage: %s [-CVh] [file ...]\n"), program_name);
+	printf (_(
+		"-C, --compatible            compatibility switch (ignored).\n"
+		"-V, --version               show version.\n"
+		"-h, --help                  show this usage message.\n"));
 	exit (status);
 }
 
 /* print the version, then exit */
 static __inline__ void ver(void)
 {
-	printf("%s, version %s, %s (G.Wilford@ee.surrey.ac.uk)\n",
-	       program_name, VERSION, DATE);
+	printf(_("%s, version %s, %s\n"), program_name, VERSION, DATE);
 	exit(OK);
 }
 
@@ -430,13 +436,13 @@ static int open_file(char *filename)
 
 			file_fd = create_tempfile ("zsman", &filename);
 			if (file_fd < 0)
-				error (FATAL, errno, "can't create a temporary filename");
+				error (FATAL, errno, _("can't create a temporary filename"));
 			command = strappend(NULL, comp->prog, " ", compfile, " > ", filename, NULL);
 			exit_status = system(command);
 			close( file_fd);
 
 			if (exit_status != 0) {
-				error (OK, 0, "%s exited with status %d",
+				error (OK, 0, _("%s exited with status %d"),
 				       command, exit_status);
 				free(command);
 				yyin = oldyyin;
@@ -446,7 +452,8 @@ static int open_file(char *filename)
 			free(command);
 
 			if( !(yyin = fopen( filename, "r" )) )  {
-				error (OK, errno, "open decompressed file: %s",
+				error (OK, errno,
+				       _("open decompressed file: %s"),
 				       filename);
 				yyin = oldyyin;
 				return 1;
