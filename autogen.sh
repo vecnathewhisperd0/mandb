@@ -1,6 +1,6 @@
 #! /bin/sh -e
 
-aclocal
 autopoint
+aclocal
 autoheader && echo timestamp > stamp-h.in
 autoconf
