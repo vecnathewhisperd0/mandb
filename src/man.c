@@ -2795,11 +2795,12 @@ static int compare_candidates (const struct mandata *left,
 					sec_left  = sp - section_list + 1;
 				if (!sec_right && **sp == *(right->ext))
 					sec_right = sp - section_list + 1;
-			} else if (!sec_left  && STREQ (*sp, left->ext)) {
+			} else if (STREQ (*sp, left->ext)) {
 				sec_left  = sp - section_list + 1;
-			} else if (!sec_right && STREQ (*sp, right->ext)) {
+			} else if (STREQ (*sp, right->ext)) {
 				sec_right = sp - section_list + 1;
 			}
+			/* Keep looking for a more specific match */
 		}
 		if (sec_left != sec_right)
 			return sec_left - sec_right;
