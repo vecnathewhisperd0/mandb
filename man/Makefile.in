@@ -37,6 +37,15 @@ catman := $(catman)
 manpath := $(manpath)
 zsoelim := $(zsoelim)
 
+# capitalized variants for .TH lines
+thman := $(shell echo '$(man)' | tr '[:lower:]' '[:upper:]')
+thmandb := $(shell echo '$(mandb)' | tr '[:lower:]' '[:upper:]')
+thwhatis := $(shell echo '$(whatis)' | tr '[:lower:]' '[:upper:]')
+thapropos := $(shell echo '$(apropos)' | tr '[:lower:]' '[:upper:]')
+thcatman := $(shell echo '$(catman)' | tr '[:lower:]' '[:upper:]')
+thmanpath := $(shell echo '$(manpath)' | tr '[:lower:]' '[:upper:]')
+thzsoelim := $(shell echo '$(zsoelim)' | tr '[:lower:]' '[:upper:]')
+
 # looks like a nice place to define a `canned' command sequence.
 define process_manpage
 sed -e 's,%pager%,$(pager),g' \
@@ -50,6 +59,13 @@ sed -e 's,%pager%,$(pager),g' \
     -e 's,%catman%,$(catman),g' \
     -e 's,%apropos%,$(apropos),g' \
     -e 's,%whatis%,$(whatis),g' \
+    -e 's,%thzsoelim%,$(thzsoelim),g' \
+    -e 's,%thman%,$(thman),g' \
+    -e 's,%thmandb%,$(thmandb),g' \
+    -e 's,%thmanpath%,$(thmanpath),g' \
+    -e 's,%thcatman%,$(thcatman),g' \
+    -e 's,%thapropos%,$(thapropos),g' \
+    -e 's,%thwhatis%,$(thwhatis),g' \
     -e 's,%manpath_config_file%,$(config_file),g' \
 $< > $@
 endef
