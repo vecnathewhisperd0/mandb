@@ -113,16 +113,20 @@ While the parser is quite tolerant, as it has to cope with a number of
 different forms that have historically been used, it may sometimes fail to
 extract the required information.
 .PP
-A correct
+When using the traditional
+.I man
+macro set, a correct
 .B NAME
 section looks something like this:
-.IP
+.PP
+.RS
 .ft CW
 .nf
 \&.SH NAME
 foo \e- program to do something
 .fi
 .ft P
+.RE
 .PP
 Some manual pagers require the `\e-' to be exactly as shown;
 .B %mandb%
@@ -134,7 +138,8 @@ The text on the right-hand side is free-form, and may be spread over
 multiple lines.
 If several features with different descriptions are being documented in the
 same manual page, the following form is therefore used:
-.IP
+.PP
+.RS
 .ft CW
 .nf
 \&.SH NAME
@@ -143,9 +148,26 @@ foo, bar \e- programs to do something
 baz \e- program to do nothing
 .fi
 .ft P
+.RE
 .PP
 (A macro which starts a new paragraph, like \f(CW.PP\fP, may be used instead
 of the break macro \f(CW.br\fP.)
+.PP
+When using the BSD-derived
+.I mdoc
+macro set, a correct
+.B NAME
+section looks something like this:
+.PP
+.RS
+.ft CW
+.nf
+\&.Sh NAME
+\&.Nm foo
+\&.Nd program to do something
+.fi
+.ft P
+.RE
 
 There are several common reasons why whatis parsing fails.
 Sometimes authors of manual pages replace `.SH NAME' with `.SH MYPROGRAM',
