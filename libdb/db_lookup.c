@@ -347,11 +347,13 @@ static struct mandata *dblookup(const char *page, const char *section,
 		split_content(cont.dptr, info);
 		if (!info->name)
 			info->name = xstrdup(page);
-		if (section == NULL || 
-		    STRNEQ(section, info->ext, 
-		           flags & EXACT ? strlen(info->ext) : 
-		                           strlen(section))) {
-		      	return info;
+		if (!(flags & MATCH_CASE) || STREQ(info->name, page)) {
+			if (section == NULL || 
+			    STRNEQ(section, info->ext, 
+				   flags & EXACT ? strlen(info->ext) : 
+						   strlen(section))) {
+				return info;
+			}
 		}
 		free_mandata_struct(info);
 		return NULL;
