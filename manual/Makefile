@@ -10,7 +10,9 @@
 
 manual := man_db
 
-.PHONY: dvi ps tps cat
+SOELIM = soelim
+
+.PHONY: dvi ps tps cat html
 
 all: dvi ps cat
 
@@ -18,11 +20,12 @@ dvi: $(manual).dvi
 ps: $(manual).ps
 cat: $(manual).cat
 tps: $(manual).tps
+html: $(manual).html
 
 SRCS := $(wildcard *.me)
 
 postpro: $(SRCS)
-	soelim $(manual).me | tbl > $@
+	$(SOELIM) $(manual).me | tbl > $@
 	
 $(manual).dvi: postpro
 	groff -me -Tdvi $< > $@
@@ -38,6 +41,9 @@ $(manual).tps: postpro
 $(manual).cat: postpro
 	nroff -me $< > $@
 
+$(manual).html: postpro
+	groff -Thtml -me -P-T -P-t -P-g $< > $@
+
 # The standard targets
 install uninstall:
 
@@ -48,7 +54,8 @@ clean: mostlyclean
 	rm -f postpro
 
 realclean distclean: clean
-	rm -f $(manual).dvi $(manual).ps $(manual).cat $(manual).tps
+	rm -f $(manual).dvi $(manual).ps $(manual).cat $(manual).tps \
+	      $(manual).html
 
 TAGS:
 	$(MKTAGS) $(SRCS)

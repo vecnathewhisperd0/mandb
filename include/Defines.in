@@ -56,7 +56,11 @@ man5ext = .5
 man8ext = .8
 
 # special rule for sysconfdir
-sysconfdir = $(subst /usr,,$(prefix)/etc)
+ifeq ($(strip $(prefix)),/usr)
+sysconfdir = /etc
+else
+sysconfdir = $(prefix)/etc
+endif
 
 # The names of the installed programs/manual pages are referred to 
 # as variables. They all undergo autoconf transformation rules.

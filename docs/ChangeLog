@@ -1,3 +1,21 @@
+Sun May 13 16:54:01 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* man/Makefile.in: Exclude NLS directories without man pages, as CVS
+	  can't delete directories quite as fully as I'd like.
+
+	* configure.in: No subdirectory Makefiles need ALL_LINGUAS any more.
+
+	* manual/Makefile: Make the location of soelim variable so that
+	  distributions can e.g. use the version in the build directory.
+
+	* manual/Makefile: Add an HTML target. Disabled by default as
+	  groff's HTML driver doesn't produce very good output yet (as of
+	  1.16).
+
+	* include/Defines.in: Only remove /usr from the default sysconfdir
+	  if the prefix is exactly /usr, not something that happens to
+	  contain /usr (like the default /usr/local).
+
 Sun May 13 13:39:17 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* man-db.gnu, man-db.lsm: Mention move to SourceForge and the new

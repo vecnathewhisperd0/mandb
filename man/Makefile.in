@@ -13,7 +13,6 @@ VPATH = @srcdir@
 top_srcdir = @top_srcdir@
 INSTALL = @INSTALL@
 USE_NLS = @USE_NLS@
-ALL_LINGUAS = @ALL_LINGUAS@
 LINGUAS = @LINGUAS@
 
 include ../include/Defines
@@ -21,11 +20,8 @@ include ../include/Defines
 .PHONY: $(DEFAULT_TARGETS) dirs nlsinstall nlsuninstall
 
 ifeq ($(USE_NLS),yes)
-  ifeq ($(LINGUAS),$(ALL_LINGUAS))
-    NLS := $(notdir $(wildcard $(srcdir)/*_*))
-  else
-    NLS := $(notdir $(wildcard $(srcdir)/$(LINGUAS)_*))
-  endif
+  NLS := $(foreach lingua, $(LINGUAS), $(wildcard $(srcdir)/$(lingua)_*))
+  NLS := $(shell for x in $(NLS); do [ -e $$x/man/man1 ] && echo $$x; done)
 endif
 
 # force these variables to be resolved here, rather than at each reference.
