@@ -75,7 +75,7 @@ static char *catdir, *mandir;
 /* prototype here as it uses struct mandata which is defined in db_storage.h */
 extern int splitline (char *raw_whatis, struct mandata *info, char *base_name);
 
-static __inline__ int check_for_stray (void)
+static int check_for_stray (void)
 {
 	DIR *cdir;
 	struct dirent *catlist;
@@ -206,9 +206,11 @@ static __inline__ int check_for_stray (void)
 					 basename (mandir), info.ext);
 
 			/* fill in the missing parts of the structure */
+			info.name = NULL;
 			info.sec = section;
 			info.id = STRAY_CAT;
 			info.pointer = NULL;
+			info.filter = "-";
 			info._st_mtime = 0L;
 
 			/* Check to see how to filter the cat file */
