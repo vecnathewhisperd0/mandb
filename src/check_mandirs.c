@@ -848,6 +848,7 @@ static __inline__ short purge_whatis (const char *manpath, char *name,
 				 "%s(%s): whatis target was deleted, "
 				 "would delete\n",
 				 name, info->ext);
+		return 1;
 	}
 }
 

@@ -207,7 +207,6 @@ static __inline__ int use_grep (char *page, char *manpath)
 static char *get_whatis (struct mandata *info, char *page)
 {
 	int rounds;
-	char *pointer, *ext;
 
 	/* See if we need to fill in the whatis here. */
 	if (*(info->pointer) == '-' || STREQ (info->pointer, page)) {

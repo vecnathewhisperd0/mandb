@@ -92,6 +92,7 @@ char *cwd = wd;
 
 #include <ctype.h>
 #include <signal.h>
+#include <time.h>
 #include <utime.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -836,7 +837,6 @@ int local_man_loop (char *argv)
 {
 	int exit_status = OK;
 	int local_mf = local_man_file;
-	char *dir;
 
 	local_man_file = 1;
 	if (strcmp (argv, "-") == 0)
@@ -1438,7 +1438,6 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 	char *pp_string;
 	char *fmt_prog;
 	char *command;
-	char *tmpfile;
 
 	if (!*file) {
 		/* file == "": this means we are reading input from stdin.
@@ -2657,7 +2656,7 @@ static int exist_check (char *name, char *manpath, struct mandata *loc)
 #ifdef MAN_DB_UPDATES
 	if (!exists && !skip) {
 		if (debug)
-			fprintf (stderr, "dbdelete_wrapper =%s =%s\n",
+			fprintf (stderr, "dbdelete_wrapper (%s, %p)\n",
 				 name, loc);
 		dbdelete_wrapper (name, loc);
 	}

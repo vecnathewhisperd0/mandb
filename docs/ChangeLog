@@ -1,3 +1,19 @@
+Sun Aug 19 23:56:36 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in: Compile with -Wall by default.
+	* src/compression.c: Include "security.h".
+	* src/manp.c: Likewise.
+	* src/check_mandirs.c (purge_whatis): Correct return value when
+	  purging a WHATIS_MAN entry with a missing target.
+	* src/whatis.c (get_whatis): Remove unused variables 'pointer' and
+	  'ext'.
+	* src/man.c: Include <time.h> for time().
+	  (local_man_loop): Remove unused variable 'dir'.
+	  (make_roff_command): Remove unused variable 'tmpfile'.
+	  (exist_check): Print 'loc' in pointer format rather than string
+	  format (it's a struct mandata *).
+	* src/wrapper.c: Include <grp.h> for initgroups().
+
 Sun Aug 19 13:16:01 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c (iterate_over_list): New function (get_from_list() can

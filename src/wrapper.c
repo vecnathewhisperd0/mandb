@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <pwd.h>
+#include <grp.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>

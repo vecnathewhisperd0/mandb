@@ -47,6 +47,7 @@ extern int errno;
 #ifdef COMP_SRC /* must come after manconfig.h */
 
 #include "lib/error.h"
+#include "security.h"
 #include "comp_src.h"
 
 static char *file;	/* pointer to temp file name */

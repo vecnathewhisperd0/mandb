@@ -83,6 +83,7 @@ extern int errno;
 
 #include "manconfig.h"
 #include "lib/error.h"
+#include "security.h"
 #include "manp.h"
 
 struct list {
