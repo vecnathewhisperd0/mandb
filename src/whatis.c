@@ -475,10 +475,6 @@ static int apropos (char *page, char *lowpage)
 	datum key, cont;
 	int found = 0;
 
-#ifndef APROPOS
-	lowpage = lowpage; /* not used in whatis */
-#endif
-
 #ifndef BTREE
 	datum nextkey;
 
@@ -565,6 +561,10 @@ nextpage:
 		end = btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
 	}
+
+#ifndef APROPOS
+	lowpage = lowpage; /* not used in whatis */
+#endif
 
 	return found;
 }
