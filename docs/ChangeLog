@@ -1,3 +1,13 @@
+Mon Mar  8 11:21:05 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_dump): Show caller-supplied input and
+	  output file descriptors.
+
+	* lib/pipeline.c (command_free, pipeline_free): Return safely if
+	  argument is NULL.
+	* lib/pipeline.h (command_free, pipeline_free): Document NULL
+	  arguments as a safe no-op, like free().
+
 Mon Mar  8 09:33:08 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	* docs/manpage.example (DESCRIPTION): ".SS macros" -> ".SS macro".
