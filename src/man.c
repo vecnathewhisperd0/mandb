@@ -212,7 +212,7 @@ char **global_argv;
 #endif
 
 struct candidate {
-	char *name;
+	char *req_name;
 	char from_db;
 	char cat;
 	char *path;
@@ -2486,10 +2486,22 @@ static char *find_cat_file (char *path, char *man_file, char *sec)
 }
 
 static int compare_candidates (const struct mandata *left,
-			       const struct mandata *right)
+			       const struct mandata *right,
+			       char *req_name)
 {
 	char **sp;
 	int sec_left = 0, sec_right = 0, cmp;
+
+	/* If one candidate matches the requested name exactly, sort it
+	 * first. This makes --ignore-case behave more sensibly.
+	 */
+	if (STREQ (left->name, req_name)) {
+		if (!STREQ (right->name, req_name))
+			return -1;
+	} else {
+		if (STREQ (right->name, req_name))
+			return 1;
+	}
 
 	cmp = strcmp (left->ext, right->ext);
 	if (cmp) {
@@ -2523,26 +2535,31 @@ static int compare_candidates (const struct mandata *left,
 
 /* Add an entry to the list of candidates. */
 static int add_candidate (struct candidate **head, char from_db, char cat,
-			  char *name, char *path, struct mandata *source)
+			  char *req_name, char *path, struct mandata *source)
 {
 	struct candidate *search, *insert, *candp;
 	int insert_found = 0;
 
 	if (debug)
-		fprintf (stderr, "candidate: %d %d %s %s %s %s\n",
-				 from_db, cat, name, path,
-				 source->sec, source->ext);
+		fprintf (stderr, "candidate: %d %d %s %s %s %s %s\n",
+				 from_db, cat, req_name, path,
+				 source->name, source->sec, source->ext);
+
+	if (STREQ (source->name, "-"))
+		source->name = req_name;
 
 	/* insert will be NULL (insert at start) or a pointer to the element
 	 * after which this element should be inserted.
 	 */
 	insert = NULL;
-	if (*head && compare_candidates (source, (*head)->source) < 0)
+	if (*head && compare_candidates (source, (*head)->source,
+					 req_name) < 0)
 		insert_found = 1;
 	search = *head;
 	while (search) {
 		/* Check for duplicates. */
-		if (STREQ (name, search->name) && STREQ (path, search->path) &&
+		if (STREQ (path, search->path) &&
+		    STREQ (source->name, search->source->name) &&
 		    STREQ (source->sec, search->source->sec) &&
 		    STREQ (source->ext, search->source->ext)) {
 			if (debug)
@@ -2551,7 +2568,8 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 		}
 		if (!insert_found &&
 		    (!search->next ||
-		     compare_candidates (source, search->next->source) < 0)) {
+		     compare_candidates (source, search->next->source,
+					 req_name) < 0)) {
 			insert = search;
 			insert_found = 1;
 		}
@@ -2563,7 +2581,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	}
 
 	candp = (struct candidate *) malloc (sizeof (struct candidate));
-	candp->name = xstrdup (name);
+	candp->req_name = req_name;
 	candp->from_db = from_db;
 	candp->cat = cat;
 	candp->path = path;
@@ -2617,17 +2635,12 @@ static int try_section (char *path, char *sec, char *name,
 	for (np = names; np && *np; np++) {
 		struct mandata *info =
 			(struct mandata *) malloc (sizeof (struct mandata));
-		char *info_buffer = filename_info (*np, info);
-		char *real_name;
+		char *info_buffer = filename_info (*np, info, name);
 		if (!info_buffer)
 			continue;
 		info->addr = info_buffer;
-		/* info_buffer is, for example:
-		 *   /usr/share/man/man1\0man\01\0gz
-		 */
-		real_name = info_buffer + strlen (info_buffer) + 1;
 		found += add_candidate (cand_head, CANDIDATE_FILESYSTEM,
-					cat, real_name, path, info);
+					cat, name, path, info);
 		/* Don't free info and info_buffer here. */
 	}
 
@@ -2636,10 +2649,9 @@ static int try_section (char *path, char *sec, char *name,
 
 static int display_filesystem (struct candidate *candp)
 {
-	char *filename = make_filename (candp->path, candp->name,
-					candp->source,
+	char *filename = make_filename (candp->path, NULL, candp->source,
 					candp->cat ? "cat" : "man");
-	char *title = strappend (NULL, candp->name,
+	char *title = strappend (NULL, candp->source->name,
 				 "(", candp->source->ext, ")", NULL);
 	if (candp->cat) {
 		if (troff || different_encoding)
@@ -2719,8 +2731,10 @@ static int display_database (struct candidate *candp)
 	   real page, use that instead. */
 	if (*in->pointer != '-')
 		name = in->pointer;
+	else if (*in->name != '-')
+		name = in->name;
 	else
-		name = candp->name;
+		name = candp->req_name;
 
 	dbfilters = in->filter;
 
@@ -2739,16 +2753,18 @@ static int display_database (struct candidate *candp)
 				 (long)buf.st_mtime);
 		dbf = MYDBM_RWOPEN (database);
 		if (dbf) {
-			dbdelete (candp->name, in);
+			dbdelete (candp->req_name, in);
 			test_manfile (file, candp->path);
-			in = dblookup_exact (candp->name, in->ext);
+			in = dblookup_exact (candp->req_name, in->ext);
 			MYDBM_CLOSE (dbf);
 			if (!in)
 				return 0;
 			if (*in->pointer != '-')
 				name = in->pointer;
+			else if (*in->name != '-')
+				name = in->name;
 			else
-				name = candp->name;
+				name = candp->req_name;
 		} else {
 			if (errno == EACCES || errno == EROFS) {
 				if (debug)
@@ -2885,8 +2901,8 @@ static int display_database_check (struct candidate *candp)
 	if (!exists && !skip) {
 		if (debug)
 			fprintf (stderr, "dbdelete_wrapper (%s, %p)\n",
-				 candp->name, candp->source);
-		dbdelete_wrapper (candp->name, candp->source);
+				 candp->req_name, candp->source);
+		dbdelete_wrapper (candp->req_name, candp->source);
 	}
 #endif /* MAN_DB_UPDATES */
 

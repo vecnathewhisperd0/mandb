@@ -34,6 +34,7 @@
 #endif
 
 VOID *xmalloc ();
+extern size_t strnlen (const char *string, size_t maxlen);
 
 /* Return a newly allocated copy of the first SIZE bytes of STRING.  */
 

@@ -1,3 +1,40 @@
+  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_storage.h (struct mandata): Add 'name' element.
+	* libdb/db_lookup.c (dbprintf): Print name.
+	  (split_content): Read name from start of data.
+	  (make_content): Prepend name to each data element.
+	  (name_to_key): New function, converting a name to lowercase for
+	  use in database keys.
+	  (make_multi_key): Use name_to_key().
+	  (dblookup): Use name_to_key(). If info->name is "-", set it to the
+	  requested key instead.
+	* libdb/db_delete.c (dbdelete): Use name_to_key().
+	* libdb/db_store.c (dbstore): Likewise.
+
+	* src/check_mandirs.c (make_filename): Use in->name if name is NULL.
+	  (filename_info): Fill in info->name with either a new req_name
+	  argument or the supplied base_name.
+	  (test_manfile): Update calls to make_filename() and
+	  filename_info().
+	* src/check_mandirs.h: Update prototype.
+
+	* src/man.c (struct candidate): Rename 'name' to 'req_name'.
+	  (display_filesystem, display_database_check): Update accordingly.
+	  (compare_candidates): Sort exact-case matches to the front.
+	  (add_candidate): Update calls to compare_candidate() and
+	  filename_info(). When comparing duplicates, check the name field
+	  in the mandata rather than the requested name.
+	  (try_section): The hack to get the name from info_buffer is no
+	  longer required now that filename_info() fills that in.
+	  (display_filesystem): Update calls to make_filename(). Use the
+	  mandata name for the displayed title rather than the requested
+	  name. Sanity-check in->name != "-".
+
+	* include/manconfig.h.in: Bump the database version to 2.4.0.
+
+	* lib/xstrndup.c: Prototype strnlen().
+
 Mon Apr 22 00:00:08 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/globbing.c (match_in_directory): New function, implementing a

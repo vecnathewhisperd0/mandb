@@ -130,6 +130,15 @@ int dbstore(struct mandata *in, char *basename)
 {
 	datum oldkey, oldcont;
 
+	if (in->name == NULL ||
+	    (*in->name != '-' &&
+	     (*in->name < 'a' || *in->name > 'z') &&
+	     (*in->name < 'A' || *in->name > 'Z') &&
+	     (*in->name < '0' || *in->name > '9'))) {
+		fprintf (stderr, "in->name broken? '%s'\n", in->name);
+		sleep (10);
+	}
+
 	/* create a simple key */
  	oldkey.dsize = strlen(basename) + 1;
 
@@ -139,7 +148,7 @@ int dbstore(struct mandata *in, char *basename)
  		return 2;
  	}
 
-	oldkey.dptr = basename;
+	oldkey.dptr = name_to_key(basename);
 
 	/* get the content for the simple key */
 	
@@ -171,6 +180,7 @@ int dbstore(struct mandata *in, char *basename)
 			free(info.addr);
 			free(newkey.dptr);
 			free(newcont.dptr);
+			free(oldkey.dptr);
 
 			return ret;
 		}
@@ -222,6 +232,7 @@ int dbstore(struct mandata *in, char *basename)
 			free(newcont.dptr);
 			free(newkey.dptr);
 			free(lastkey.dptr);
+			free(oldkey.dptr);
 
 			return ret;
 		}
@@ -253,6 +264,8 @@ int dbstore(struct mandata *in, char *basename)
 		free(old.addr);
 		free(newcont.dptr);
 	}
+
+	free(oldkey.dptr);
 	return 0;
 }
 #endif /* !FAST_BTREE */

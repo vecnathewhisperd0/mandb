@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <errno.h>
+#include <ctype.h>
 
 #ifdef HAVE_DIRENT_H
 #  include <dirent.h>
@@ -107,11 +108,14 @@ static void gripe_rwopen_failed (char *database)
 	}
 }
 
-char *make_filename (const char *path, const char *name, 
+char *make_filename (const char *path, const char *name,
 		     struct mandata *in, char *type)
 {
 	static char *file;
-	
+
+	if (!name)
+		name = in->name;
+
 	file = (char *) xrealloc (file, sizeof "//." + strlen (path) + 
 				  strlen (type) + strlen (in->sec) +
 				  strlen (name) + strlen (in->ext));
@@ -214,7 +218,7 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 
 /* Fill in a mandata structure with information about a file name.
  * file is the name to examine. info points to the structure to be filled
- * in.
+ * in. req_name is the page name that was requested.
  * 
  * Returns either a pointer to the buffer which the fields in info point
  * into, to be freed by the caller, or NULL on error. The buffer will
@@ -222,9 +226,11 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
  * the base of the file name in that directory, the section extension, and
  * optionally the compression extension (if COMP_SRC is defined).
  * 
- * Only the fields ext, sec, and comp are filled in by this function.
+ * Only the fields name, ext, sec, and comp are filled in by this function.
+ * name is only set if it differs from req_name; otherwise it remains at
+ * "-".
  */
-char *filename_info (char *file, struct mandata *info)
+char *filename_info (char *file, struct mandata *info, const char *req_name)
 {
 	char *manpage = xstrdup (file);
 	char *base_name = basename (manpage);
@@ -267,6 +273,24 @@ char *filename_info (char *file, struct mandata *info)
 		return NULL;
 	}
 
+	info->name = "-";
+	if (req_name) {
+		if (!STREQ (base_name, req_name))
+			info->name = base_name;
+	} else {
+		char *p;
+		for (p = base_name; *p; ++p) {
+			if (isupper (*p)) {
+				/* If an upper-case character was found, the
+				 * key will differ from the name, so we'd
+				 * better remember the real name here.
+				 */
+				info->name = base_name;
+				break;
+			}
+		}
+	}
+
 	return manpage;
 }
 
@@ -287,7 +311,7 @@ void test_manfile (char *file, const char *path)
 
 	memset (&lg, '\0', sizeof (struct lexgrog));
 
-	manpage = filename_info (file, &info);
+	manpage = filename_info (file, &info, NULL);
 	if (!manpage)
 		return;
 	base_name = manpage + strlen (manpage) + 1;
@@ -299,7 +323,7 @@ void test_manfile (char *file, const char *path)
 	/* to get mtime info */
 	(void) lstat (file, &buf);
 	info._st_mtime = buf.st_mtime;
-	
+
 	/* check that our file actually contains some data */
 	if (buf.st_size == 0) {
 		/* man-db pre 2.3 place holder ? */
@@ -330,7 +354,7 @@ void test_manfile (char *file, const char *path)
 			/* see if the cached file actually exists. It's 
 			   evident at this point that we have multiple 
 			   comp extensions */
-			abs_filename = make_filename (path, base_name,
+			abs_filename = make_filename (path, NULL,
 						      exists, "man");
 			if (debug)
 				fprintf (stderr, "test_manfile(): stat %s\n",

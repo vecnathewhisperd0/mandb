@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
+#include <ctype.h>
 
 #if defined(STDC_HEADERS)
 #include <string.h>
@@ -89,6 +90,7 @@ void gripe_replace_key(char *data)
 void dbprintf(struct mandata *info)
 {
 	fprintf(stderr,
+		"name:      %s\n"
 		"sec. ext:  %s\n"
 		"section:   %s\n"
 		"comp. ext: %s\n"
@@ -97,7 +99,7 @@ void dbprintf(struct mandata *info)
 		"pointer:   %s\n"
 		"filter:    %s\n"
 		"whatis:    %s\n\n",
-		info->ext, info->sec, info->comp,
+		info->name, info->ext, info->sec, info->comp,
 		info->id, (long)info->_st_mtime, 
 		info->pointer, info->filter, info->whatis);
 }
@@ -106,10 +108,12 @@ void dbprintf(struct mandata *info)
 datum make_multi_key(char *page, char *ext)
 {
 	datum key;
+	char *page_key = name_to_key (page);
 
-	key.dsize = strlen(page) + strlen(ext) + 2;
+	key.dsize = strlen(page_key) + strlen(ext) + 2;
 	key.dptr = (char *) xmalloc (key.dsize);
-	sprintf(key.dptr, "%s\t%s", page, ext);
+	sprintf(key.dptr, "%s\t%s", page_key, ext);
+	free(page_key);
 	return key;
 }
 
@@ -133,7 +137,19 @@ void free_mandata_struct(struct mandata *pinfo)
 		pinfo = next;
 	}
 }
- 
+
+/* Get the key that should be used for a given name. The caller is
+ * responsible for freeing the return value.
+ */
+char *name_to_key(const char *name)
+{
+	char *key = xstrdup (name);
+	char *p;
+	for (p = key; *p; ++p)
+		*p = tolower (*p);
+	return key;
+}
+
 /* return char ptr array to the data's fields */
 char **split_data(char *content, char *start[])
 {
@@ -170,6 +186,7 @@ void split_content(char *cont_ptr, struct mandata *pinfo)
 
 	data = split_data(cont_ptr, start);
 
+	pinfo->name = *(data++);
 	pinfo->ext = *(data++);
 	pinfo->sec = *(data++);
 	pinfo->_st_mtime = (time_t) atol(*(data++));	/* time_t format */
@@ -189,6 +206,8 @@ datum make_content(struct mandata *in)
 	datum cont;
 	static char dash[] = "-";
 
+	if (!in->name)
+		in->name = dash;
 	if (!in->pointer)
 		in->pointer = dash;
 	if (!in->filter)
@@ -198,37 +217,41 @@ datum make_content(struct mandata *in)
 	if (!in->whatis)
 		in->whatis = dash + 1;
 
-	cont.dsize = strlen(in->ext) + 
-	             strlen(in->sec) + 
-	          /* strlen(in->_st_mtime) */ + 11 +
-	          /* strlen(in->id) */ + 1 + 
-	             strlen(in->pointer) + 
-	             strlen(in->filter) + 
-	             strlen(in->comp) + 
-	             strlen(in->whatis) + 7;  
+	cont.dsize = strlen(in->name) +
+		     strlen(in->ext) + 
+		     strlen(in->sec) + 
+		  /* strlen(in->_st_mtime) */ + 11 +
+		  /* strlen(in->id) */ + 1 + 
+		     strlen(in->pointer) + 
+		     strlen(in->filter) + 
+		     strlen(in->comp) + 
+		     strlen(in->whatis) + 8;
 	cont.dptr = (char *) xmalloc (cont.dsize);
 #ifdef ANSI_SPRINTF
-	cont.dsize = 1 + sprintf(cont.dptr, "%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s", 
-	        in->ext,
-	        in->sec,
-	        in->_st_mtime,
-	        in->id, 
-	        in->pointer, 
-	        in->filter, 
-	        in->comp, 
-	        in->whatis);
+	cont.dsize = 1 + sprintf(cont.dptr,
+		"%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
+		in->name,
+		in->ext,
+		in->sec,
+		in->_st_mtime,
+		in->id, 
+		in->pointer, 
+		in->filter, 
+		in->comp, 
+		in->whatis);
 
 	assert(strlen(cont.dptr) + 1 == cont.dsize);
 #else /* !ANSI_SPRINTF */
-	sprintf(cont.dptr, "%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s", 
-	        in->ext,
-	        in->sec,
-	        (long)in->_st_mtime,
-	        in->id, 
-	        in->pointer, 
-	        in->filter, 
-	        in->comp, 
-	        in->whatis);
+	sprintf(cont.dptr, "%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
+		in->name,
+		in->ext,
+		in->sec,
+		(long)in->_st_mtime,
+		in->id, 
+		in->pointer, 
+		in->filter, 
+		in->comp, 
+		in->whatis);
 
 	cont.dsize = strlen(cont.dptr) + 1;	/* to be sure (st_mtime) */
 #endif /* ANSI_SPRINTF */
@@ -272,15 +295,18 @@ static struct mandata *dblookup(char *page, char *section, int flags)
 	struct mandata *info = NULL;
 	datum key, cont;
 
-	key.dptr = page;
-	key.dsize = strlen(page) + 1;
+	key.dptr = name_to_key(page);
+	key.dsize = strlen(key.dptr) + 1;
 	cont = MYDBM_FETCH(dbf, key);
+	free(key.dptr);
 
 	if (cont.dptr == NULL) {		/* No entries at all */
 		return info;			/* indicate no entries */
 	} else if (*cont.dptr != '\t') {	/* Just one entry */
 		info = infoalloc();
 		split_content(cont.dptr, info);
+		if (STREQ (info->name, "-"))
+			info->name = page;
 		if (section == NULL || 
 		      strncmp(section, info->ext, 
 		              flags & EXACT ? strlen(info->ext) : 
@@ -314,8 +340,7 @@ static struct mandata *dblookup(char *page, char *section, int flags)
 				multi_cont = MYDBM_FETCH(dbf, key);
 				if (multi_cont.dptr == NULL) {
 					error (0, 0,
-					       _(
-						       "bad fetch on multi key %s"),
+					       _("bad fetch on multi key %s"),
 					       key.dptr);
 					gripe_corrupt_data();
 				}
@@ -328,6 +353,8 @@ static struct mandata *dblookup(char *page, char *section, int flags)
 				else
 					info = info->next = infoalloc();
 				split_content(multi_cont.dptr, info);
+				if (STREQ (info->name, "-"))
+					info->name = page;
 			}
 			e++;
 		}

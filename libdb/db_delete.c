@@ -68,11 +68,12 @@ int dbdelete(char *name, struct mandata *info)
 		fprintf(stderr, "Attempting delete of %s(%s) entry.\n", 
 			name, info->ext);
 
-	key.dptr = name;
+	key.dptr = name_to_key(name);
 	key.dsize = strlen(key.dptr) + 1;
 	cont = MYDBM_FETCH(dbf, key);
 
 	if (!cont.dptr) {			/* 0 entries */
+		free(key.dptr);
 		return NO_ENTRY;
 	} else if (*cont.dptr != '\t') {	/* 1 entry */
 		MYDBM_DELETE(dbf, key);
@@ -93,6 +94,7 @@ int dbdelete(char *name, struct mandata *info)
 
 		if (!*e) {
 			MYDBM_FREE(cont.dptr);
+			free(key.dptr);
 			return NO_ENTRY;
 		}
 			
@@ -114,6 +116,7 @@ int dbdelete(char *name, struct mandata *info)
 		if (refs == 1) {
 			MYDBM_FREE(cont.dptr);
 			MYDBM_DELETE(dbf, key);
+			free(key.dptr);
 			return 0;
 		}
 			 
@@ -136,5 +139,7 @@ int dbdelete(char *name, struct mandata *info)
 		if (MYDBM_REPLACE(dbf, key, cont))
 			gripe_replace_key(key.dptr);
 	}
+
+	free(key.dptr);
 	return 0;
 }

@@ -31,14 +31,15 @@
 #define WHATIS_CAT	'E'
 
 #define ENTRIES 50      /* Max unique extensions per manual page name */
-#define FIELDS  8       /* No of fields in each database page `content' */
+#define FIELDS  9       /* No of fields in each database page `content' */
 
 #include "sys/time.h"	/* for time_t */
 
 struct mandata {
 	struct mandata *next;		/* ptr to next structure, if any */
 	char *addr;			/* ptr to memory containing the fields */
-	
+
+	char *name;			/* Name of page, if != key */
 	char *ext;			/* Filename ext w/o comp ext */
 	char *sec;			/* Section name/number */
 	char id;			/* id for this entry */
@@ -63,6 +64,7 @@ extern __inline__ void gripe_lock(char *filename);
 extern __inline__ void gripe_corrupt_data(void);
 extern datum make_multi_key(char *page, char *ext);
 extern __inline__ struct mandata *infoalloc(void);
+extern char *name_to_key(const char *name);
 extern char **split_data(char *content, char *start[]);
 extern datum make_content(struct mandata *in);
 extern int list_extensions(char *data, char *ext[]);
