@@ -161,9 +161,11 @@ struct lt {
 	/* non-ISO-8859-1 languages). */
 
 	/* LANG		roff_device	LESSCHARSET */
+	{ "C"		, "latin1"	, "latin1"	}, /* English */
+	{ "POSIX"	, "latin1"	, "latin1"	}, /* English */
 	{ "da"		, "latin1"	, "latin1"	}, /* Danish */
 	{ "de"		, "latin1"	, "latin1"	}, /* German */
-	{ "en"		, "latin1"	, "-----"	}, /* English */
+	{ "en"		, "latin1"	, "latin1"	}, /* English */
 	{ "es"		, "latin1"	, "latin1"	}, /* Spanish */
 	{ "fi"		, "latin1"	, "latin1"	}, /* Finnish */
 	{ "fr"		, "latin1"	, "latin1"	}, /* French */
@@ -806,17 +808,25 @@ int main (int argc, char *argv[])
 {
 	int argc_env, status = 0, exit_status = OK;
 	char **argv_env, *tmp;
-	char *nextarg;
+	char *nextarg, *multiple_locale;
 	extern int optind;
 	void (int_handler)( int);
 
 
 	umask(022);
 	/* initialise the locale */
-	internal_locale = setlocale( LC_ALL, "");
+	setlocale (LC_ALL, "");
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 
+	internal_locale = setlocale (LC_MESSAGES, NULL);
+	multiple_locale = getenv ("LANGUAGE");
+	/* Use LANGUAGE only when LC_MESSAGES locale category is
+	 * neither "C" nor "POSIX". */
+	if (multiple_locale)
+		if (internal_locale && strcmp (internal_locale, "C") &&
+		    strcmp (internal_locale, "POSIX"))
+			internal_locale = multiple_locale;
 	if (internal_locale != NULL)
 		internal_locale = xstrdup (internal_locale);
 	else
@@ -935,10 +945,30 @@ if (debug) fprintf(stderr, "main(): locale= %s,internal_locale= %s\n", locale, i
 		exit (exit_status);
 	}
 
-	if (manp == NULL)
+	if (manp == NULL) {
+		char tmp_locale[3];
+		int idx;
+
 		manp = add_nls_manpath(manpath (alt_system_name), 
 				       internal_locale);
-	else
+		/* Handle multiple :-separated locales in LANGUAGE */
+		for (idx = strlen (internal_locale) - 1; idx; ) {
+			while (idx && internal_locale[idx] != ':')
+				idx--;
+			if (internal_locale[idx] == ':')
+				idx++;
+			tmp_locale[0] = internal_locale[idx];
+			tmp_locale[1] = internal_locale[idx + 1];
+			tmp_locale[2] = 0;
+			/* step back over preceding ':' */
+			if (idx) idx--;
+			if (idx) idx--;
+			if (debug)
+				fprintf (stderr, "checking for locale %s\n",
+						 tmp_locale);
+			manp = add_nls_manpath (manp, tmp_locale);
+		}
+	} else
 		free(manpath(NULL));
 
 	create_pathlist(xstrdup(manp), manpathlist);

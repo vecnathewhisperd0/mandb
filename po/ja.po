@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.3.10\n"
-"POT-Creation-Date: 1998-06-09 14:14+0900\n"
-"PO-Revision-Date: 1998-12-13 17:02+09:00\n"
-"Last-Translator: Hidenobu NABETANI <nabetani@kern.phys.sci.osaka-u.ac.jp>\n"
+"Project-Id-Version: 2.4.10\n"
+"POT-Creation-Date: 2000-10-01 03:46+0900\n"
+"PO-Revision-Date: 2000-11-11 22:25+09:00\n"
+"Last-Translator: UCHIDA Norihiro <KY4N-UCD@asahi-net.or.jp>\n"
 "Language-Team: debian-doc <debian-doc@debian.or.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=euc-jp\n"
@@ -33,12 +33,12 @@ msgstr "index キャッシュ %s が壊れています"
 msgid "cannot replace key %s"
 msgstr "キー %s を置き換えることができません"
 
-#: libdb/db_lookup.c:146
+#: libdb/db_lookup.c:147
 #, c-format
 msgid "only %d fields in content"
 msgstr "中身が %d フィールドしかありません"
 
-#: libdb/db_lookup.c:305
+#: libdb/db_lookup.c:312
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "複合キー %s は不正な呼び出しです"
@@ -51,7 +51,7 @@ msgstr "未使用キー %s を挿入できません"
 #: libdb/db_ver.c:63
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
-msgstr "致命的エラー: バージョン識別子情報 %s を書き込めません"
+msgstr "致命的エラー: %s にバージョン識別子を書き込めません"
 
 #: libdb/db_ver.c:74
 #, c-format
@@ -75,10 +75,10 @@ msgid ""
 "-V --version                show version.\n"
 "-h --help                   show this usage message.\n"
 msgstr ""
-"-d --debug                  デバッグ情報を生成する\n"
-"-M --manpath path           マニュアルページの検索パスを`path'に設定する\n"
-"-V --version                バージョンを表示する\n"
-"-h --help                   このメッセージを表示する\n"
+"-d --debug                  デバッグ情報を生成する。\n"
+"-M --manpath path           マニュアルページの検索パスを`path'に設定する。\n"
+"-V --version                バージョンを表示する。\n"
+"-h --help                   この使用法を表示する。\n"
 
 #: src/catman.c:136
 #, c-format
@@ -120,62 +120,62 @@ msgstr "\nman 階層 %2$s のセクション %1$s の cat ファイルを更新しています\n"
 msgid "cannot write within %s"
 msgstr "%s に書き込めません"
 
-#: src/catman.c:497
+#: src/catman.c:495
 #, c-format
 msgid "unable to update %s"
 msgstr "%s を更新できません"
 
-#: src/check_mandirs.c:73 src/straycats.c:111 src/straycats.c:137
+#: src/check_mandirs.c:74 src/straycats.c:120 src/straycats.c:146
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
-msgstr "警告: %s : セクションが違うファイル名を無視しています"
+msgstr "警告: %s: セクションが違うファイル名を無視しています"
 
-#: src/check_mandirs.c:80
+#: src/check_mandirs.c:81
 #, c-format
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "警告: %s/man%s/%s.%s*: 拡張子が競合しています"
 
-#: src/check_mandirs.c:288
+#: src/check_mandirs.c:289
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
-msgstr "警告: %s : シンボリックリンクが不正であるか、ROFF `.so' 要求が不正です"
+msgstr "警告： %s： シンボリックリンクが不正であるか、ROFF `.so' 要求が不正です"
 
-#: src/check_mandirs.c:356
+#: src/check_mandirs.c:359
 #, c-format
 msgid "warning: %s: ignoring empty file"
-msgstr "警告: %s : 空ファイルを無視しています"
+msgstr "警告: %s: 空ファイルを無視しています"
 
-#: src/check_mandirs.c:361 src/straycats.c:232
+#: src/check_mandirs.c:364 src/straycats.c:254
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
-msgstr "警告: %s : whatis が %s(%s) の解析に失敗しました"
+msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
-#: src/check_mandirs.c:388 src/check_mandirs.c:423 src/straycats.c:82
-#: src/straycats.c:257 src/ult_src.c:109
+#: src/check_mandirs.c:392 src/check_mandirs.c:427 src/straycats.c:91
+#: src/straycats.c:279 src/ult_src.c:109
 #, c-format
 msgid "can't search directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/check_mandirs.c:446 src/check_mandirs.c:486 src/man.c:2004
+#: src/check_mandirs.c:450 src/check_mandirs.c:492 src/man.c:2248
 #, c-format
 msgid "can't update index cache %s"
-msgstr "ディレクトリ %s を更新できません"
+msgstr "index キャッシュ %s を更新できません"
 
-#: src/check_mandirs.c:451
+#: src/check_mandirs.c:456
 #, c-format
-msgid "\rUpdating index cache for path `%s'. Wait..."
-msgstr "\rパス`%s'の index キャッシュを更新しています。お待ちください..."
+msgid "Updating index cache for path `%s'. Wait..."
+msgstr "パス`%s'の index キャッシュを更新しています。お待ちください..."
 
-#: src/check_mandirs.c:543
+#: src/check_mandirs.c:549
 #, c-format
 msgid "can't create index cache %s"
 msgstr "index キャッシュ %s を作成できません"
 
-#: src/check_mandirs.c:556 src/check_mandirs.c:588
+#: src/check_mandirs.c:562 src/check_mandirs.c:594
 msgid "done.\n"
 msgstr "完了しました\n"
 
-#: src/compression.c:68
+#: src/compression.c:69 src/man.c:1270
 msgid "can't create a temporary filename"
 msgstr "一時的なファイル名を作成できません"
 
@@ -184,26 +184,26 @@ msgstr "一時的なファイル名を作成できません"
 msgid "Can't convert %s to cat name"
 msgstr "%s を cat 名に変換できません"
 
-#: src/lexgrog.l:204
+#: src/lexgrog.l:237
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "警告: %s の whatis が %d バイトを超えています。切り詰めています。"
 
-#: src/lexgrog.l:241 src/ult_src.c:296 src/ult_src.c:302
+#: src/lexgrog.l:274 src/ult_src.c:298 src/ult_src.c:304
 #, c-format
 msgid "can't open %s"
 msgstr "%s をオープンできません"
 
-#: src/man.c:313
+#: src/man.c:352
 msgid "can't popen"
 msgstr "オープン(popen)できません"
 
-#: src/man.c:320
+#: src/man.c:390
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "コマンドはステータス %d で終了しました: %s"
 
-#: src/man.c:450
+#: src/man.c:527
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-Slist]\n"
@@ -213,7 +213,7 @@ msgstr ""
 "使用法: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-Slist]\n"
 "           [-msystem] [-pstring] [-Llocale] [-eextension] [section] page ...\n"
 
-#: src/man.c:455
+#: src/man.c:532
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-msystem]\n"
@@ -222,7 +222,7 @@ msgstr ""
 "使用法: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-msystem]\n"
 "           [-pstring] [-Llocale] [-eextension] [section] page ...\n"
 
-#: src/man.c:461
+#: src/man.c:538
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -242,29 +242,44 @@ msgstr ""
 "-a, --all                   マッチするすべてのマニュアルページを検索する。\n"
 "-d, --debug                 デバッグ情報を出力する。\n"
 "-e, --extension             拡張子型`extension'に検索を限定する。\n"
-"-f, --whatis                コマンド whatis と同じ。\n"
-"-k, --apropos               コマンド apropos と同じ。\n"
-"-w, --where, --location     マニュアルページの実際の場所を出力。\n"
-"-l, --local-file            引数`page'をローカルファイル名として扱う。\n"
+"-f, --whatis                コマンド whatis と同等。\n"
+"-k, --apropos               コマンド apropos と同等。\n"
+"-w, --where, --location     マニュアルページの実際の場所を出力する。\n"
+"-l, --local-file            引き数`page'をローカルファイル名とみなす。\n"
 "-u, --update                強制的にキャッシュの整合性をチェックする。\n"
 "-r, --prompt string         `less'ページャのプロンプトを指定する。\n"
-"-c, --catman                古い cat ページを再フォーマット(catman が使用)。\n"
-"-7, --ascii                 latin1 文字を ASCII 変換して表示。"
+"-c, --catman                古い cat ページを再フォーマットする(catman が使用)。\n"
+"-7, --ascii                 latin1 文字を ASCII 変換して表示する。"
 
-#: src/man.c:474
+#: src/man.c:551
 #, c-format
 msgid ""
 "-t, --troff                 use %s to format pages.\n"
 "-T, --troff-device device   use %s with selected device.\n"
 msgstr ""
-"-t, --troff                 ページの整形に %s を使用する\n"
-"-T, --troff-device device   選択した device で %s を使用する\n"
+"-t, --troff                 ページの整形に %s を使用する。\n"
+"-T, --troff-device device   選択したデバイスで %s を使用する。\n"
 
-#: src/man.c:479
+#: src/man.c:556
+msgid ""
+"-H, --html                  use lynx or argument to display html output.\n"
+msgstr "-H, --html                  html 表示に lynx (または引き数で指定したコマンド)を使用する。\n"
+
+#: src/man.c:558
 msgid "-Z, --ditroff               use groff and force it to produce ditroff."
-msgstr "-Z, --ditroff               groff を使用し、強制的に ditroff を生成する。"
+msgstr "-Z, --ditroff               groff を使用して強制的に ditroff を生成する。"
 
-#: src/man.c:484
+#: src/man.c:559
+msgid ""
+"-X, --gxditview             use groff and display through gditview (X11):"
+msgstr "-X, --gxditview             groff を使用し、gditview 経由で出力する (X11):"
+
+#: src/man.c:560
+msgid ""
+"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
+msgstr "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
+
+#: src/man.c:565
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-M, --manpath path          set search path for manual pages to `path'.\n"
@@ -276,139 +291,147 @@ msgid ""
 "-p, --preprocessor string   string indicates which preprocessors to run."
 msgstr ""
 "-D, --default               すべてのオプションをデフォルト値に戻す。\n"
-"-M, --manpath path          man ページの検索パスを`path'に設定。\n"
-"-P, --pager pager           出力を表示するためにプログラム`pager'を使用。\n"
-"-S, --sections list         コロンで区切ったセクション list を使用。\n"
+"-M, --manpath path          マニュアルページの検索パスを`path'に設定する。\n"
+"-P, --pager pager           出力表示にプログラム`pager'を使用する。\n"
+"-S, --sections list         コロンで区切ったセクション`list'を使用する。\n"
 "-m, --systems system        他の UNIX システムのマニュアルページを検索する。\n"
-"-L, --locale locale         このマニュアル検索に対しロケール locale を定義する。\n"
-"-p, --preprocessor string   プリプロセッサ string を実行するよう指定する。"
+"-L, --locale locale         マニュアルページの検索に対してロケール`locale'を定義する。\n"
+"-p, --preprocessor string   プリプロセッサ`string'を実行するように指定する。"
 
-#: src/man.c:494
+#: src/man.c:575
 msgid ""
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message."
 msgstr ""
-"-V, --version               バージョンを表示する\n"
-"-h, --help                  このメッセージを表示する"
+"-V, --version               バージョンを表示する。\n"
+"-h, --help                  この使用法を表示する。"
 
-#: src/man.c:507
+#: src/man.c:588
 #, c-format
 msgid "What manual page do you want from section %s?\n"
-msgstr "セクション %s にある必要なマニュアルページを指定してください\n"
+msgstr "セクション %s のマニュアルページを指定してください。\n"
 
-#: src/man.c:509
+#: src/man.c:590
 msgid "What manual page do you want?\n"
-msgstr "必要なマニュアルページを指定してください。\n"
+msgstr "マニュアルページを指定してください\n"
 
-#: src/man.c:536
+#: src/man.c:620
 #, c-format
 msgid "No source manual entry for %s"
 msgstr "%s のマニュアルソースは登録されていません"
 
-#: src/man.c:545
+#: src/man.c:629
 #, c-format
 msgid "No manual entry for %s"
 msgstr "マニュアル %s は登録されていません"
 
-#: src/man.c:550
+#: src/man.c:634
 #, c-format
 msgid " in section %s\n"
 msgstr " (セクション %s )\n"
 
-#: src/man.c:808
+#: src/man.c:912
 msgid ""
 " Manual page $MAN_PN ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\\\%.."
 msgstr " マニュアルページ $MAN_PN %lt?L/%L. ?lt行:byte %bB?s/%s..?e (終):?pB %pB\\\\%.."
 
-#: src/man.c:1061
+#: src/man.c:1150
 msgid ": incompatible options"
-msgstr ": オプションが矛盾しています"
+msgstr " オプションが矛盾しています"
 
-#. didn't fail on roff
-#: src/man.c:1274
+#: src/man.c:1352
+msgid "error trying to read from stdin"
+msgstr "標準入力からの読み込みに失敗しました"
+
+#: src/man.c:1364
+#, c-format
+msgid "error writing to temporary file %s"
+msgstr "一時ファイル %s への書き込みに失敗しました"
+
+#: src/man.c:1505
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "不明なプリプロセッサ `%c' を無視しています"
 
-#: src/man.c:1335 src/man.c:1383 src/mandb.c:203
+#: src/man.c:1566 src/man.c:1614 src/mandb.c:227
 #, c-format
 msgid "can't chown %s"
 msgstr "%s の所有者を変更できません"
 
-#: src/man.c:1368 src/mandb.c:174
+#: src/man.c:1599 src/mandb.c:198
 #, c-format
 msgid "can't chmod %s"
 msgstr "%s の許可属性を変更できません"
 
-#: src/man.c:1395 src/mandb.c:165
+#: src/man.c:1626 src/mandb.c:167
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:1404
+#: src/man.c:1635
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s を削除(unlink)できません"
 
-#: src/man.c:1431
+#: src/man.c:1662
 msgid "can't create pipe"
 msgstr "パイプを作成できません"
 
-#: src/man.c:1439 src/security.c:208
+#: src/man.c:1670 src/security.c:208
 msgid "can't fork"
 msgstr "fork できません"
 
-#: src/man.c:1456 src/man.c:1466
+#: src/man.c:1687 src/man.c:1697
 msgid "can't dup2"
-msgstr "複写できません(dup2 失敗)"
+msgstr "複写できません(dup2失敗)"
 
-#: src/man.c:1463
+#: src/man.c:1694
 #, c-format
 msgid "can't create %s"
 msgstr "%s を作成できません"
 
-#: src/man.c:1485
+#: src/man.c:1716
 #, c-format
 msgid "can't exec %s"
 msgstr "%s を実行できません"
 
-#: src/man.c:1522
+#: src/man.c:1753
 #, c-format
 msgid "waiting for pid %u"
-msgstr "pid %u の終了まで wait しています"
+msgstr "pid %u の終了を待っています"
 
-#: src/man.c:1572
+#: src/man.c:1803
 msgid "Still saving the page, please wait...\n"
-msgstr "マニュアルページを保存しています。しばらくお待ちください...\n"
+msgstr "ページを保存しています。しばらくお待ちください...\n"
 
-#: src/man.c:1613
+#: src/man.c:1846
 #, c-format
 msgid "can't chdir to %s"
 msgstr "%s にディレクトリを変更できません"
 
-#: src/man.c:1722
+#: src/man.c:1963
 #, c-format
 msgid ""
 "\n"
 "cannot write to %s in catman mode"
 msgstr "\ncatman モードで %s に書き込みできません"
 
-#: src/man.c:1762
+#: src/man.c:2003
 #, c-format
 msgid "Reformatting %s, please wait...\n"
 msgstr "%s を再フォーマットしています。しばらくお待ちください...\n"
 
-#: src/man.c:2357
+#: src/man.c:2603
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- 次は: %s [ 閲覧 (return) | スキップ (Ctrl-D) | 終了 (Ctrl-C) ]\n"
 
-#: src/mandb.c:140
+#: src/mandb.c:142
 #, c-format
 msgid "usage: %s [-dqsuc|-h|-V] [manpath]\n"
 msgstr "使用法: %s [-dqsuc|-h|-V] [manpath]\n"
 
-#: src/mandb.c:142
+#: src/mandb.c:144
 msgid ""
 "-d --debug                  produce debugging info.\n"
 "-q --quiet                  work quietly, except for 'bogus' warning.\n"
@@ -418,35 +441,35 @@ msgid ""
 "-V --version                show version.\n"
 "-h --help                   show this usage message.\n"
 msgstr ""
-"-d --debug                 デバッグ情報を表示する。\n"
-"-q --quiet                 'ディレクトリとファイル名の不一致'の警告のみ出力。\n"
-"-s --no-straycats          roff なし cat ファイルの検索と DB へ追加を行わない。\n"
-"-u --user-db               ユーザ用データベースのみを生成。\n"
-"-c --create                データベースを更新せず、一から作成し直す。\n"
-"-V --version               バージョンを表示する。\n"
-"-h --help                  この使用法を表示する。\n"
+"-d --debug                  デバッグ情報を表示する。\n"
+"-q --quiet                  'ディレクトリとファイル名の不一致'の警告のみ出力する。\n"
+"-s --no-straycats           roff なし cat ファイルの検索と DB への追加を行わない。\n"
+"-u --user-db                ユーザ用データベースのみを作成する。\n"
+"-c --create                 データベースを更新せずに最初から作り直す。\n"
+"-V --version                バージョンを表示する。\n"
+"-h --help                   この使用法を表示する。\n"
 
-#: src/mandb.c:158 src/security.c:157
+#: src/mandb.c:160 src/security.c:157
 #, c-format
 msgid "can't remove %s"
 msgstr "%s を削除できません"
 
-#: src/mandb.c:260
+#: src/mandb.c:284
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "%s 配下のマニュアルページを処理しています...\n"
 
-#: src/mandb.c:388
+#: src/mandb.c:413
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
-msgstr "setuid された man ユーザ \\\"%s\\\" は存在しません"
+msgstr "setuid された man ユーザ \"%s\" は存在しません"
 
-#: src/mandb.c:409
+#: src/mandb.c:438
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "警告: %s に MANDB_MAP の指定はありません。あなたの manpath を使用します"
 
-#: src/mandb.c:449
+#: src/mandb.c:479
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -455,12 +478,12 @@ msgstr ""
 "%d 箇所の man サブディレクトリに新しいマニュアルページがありました。\n"
 "%d 個のマニュアルページ"
 
-#: src/mandb.c:454
+#: src/mandb.c:484
 #, c-format
 msgid "and %d stray cats "
 msgstr "と %d 個の roff のない cat ファイル"
 
-#: src/mandb.c:455
+#: src/mandb.c:485
 msgid "were added."
 msgstr "を追加しました。"
 
@@ -479,49 +502,68 @@ msgstr "警告: %s"
 msgid "warning: %s isn't a directory"
 msgstr "警告: %s はディレクトリではありません"
 
-#: src/manp.c:352
+#: src/manp.c:382
+msgid "warning: $PATH not set"
+msgstr "警告: $PATH が設定されていません"
+
+#: src/manp.c:393
+msgid "warning: empty $PATH"
+msgstr "警告: $PATH が定義されていません"
+
+#: src/manp.c:424
+#, c-format
+msgid "warning: $MANPATH set, prepending %s"
+msgstr "警告: $MANPATH が設定されています。%s の設定に追加します"
+
+#: src/manp.c:430
+#, c-format
+msgid "warning: $MANPATH set, appending %s"
+msgstr "警告: $MANPATH が設定されています。%s の設定を追加します"
+
+#: src/manp.c:437
+#, c-format
+msgid "warning: $MANPATH set, inserting '%s'"
+msgstr "警告: $MANPATH が設定されています。%s の設定を挿入します"
+
+#: src/manp.c:444
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "警告: $MANPATH が設定されています。%s を無視します"
 
-#: src/manp.c:366
-msgid "warning: $PATH not set"
-msgstr "警告: $PATH が設定されていません"
-
-#: src/manp.c:377
-msgid "warning: empty $PATH"
-msgstr "警告: $PATH が空です"
-
-#: src/manp.c:403 src/manp.c:424
+#: src/manp.c:471 src/manp.c:496
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "警告: cat ディレクトリ %s を作成できません"
 
-#: src/manp.c:448
-#, c-format
-msgid "can't open the manpath configuration file %s"
-msgstr "manpath 設定ファイル %s をオープンできません"
+#: src/manp.c:530
+msgid "too many entries in config file"
+msgstr "設定ファイルにエントリが多すぎます"
 
-#: src/manp.c:497
+#: src/manp.c:580
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "ディレクトリリスト `%s' を解析できません"
 
-#: src/manp.c:541
+#: src/manp.c:594
+#, c-format
+msgid "can't open the manpath configuration file %s"
+msgstr "manpath 設定ファイル %s をオープンできません"
+
+#: src/manp.c:641
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "警告: 必要なディレクトリ %s が存在しません"
 
-#: src/manp.c:754
+#: src/manp.c:848
 msgid "can't determine current directory"
-msgstr "カレントディレクトリを決めることができません"
+msgstr "カレントディレクトリを決定できません"
 
-#: src/manp.c:767
+#: src/manp.c:861
 #, c-format
 msgid "warning: %s does not have a man tree component"
 msgstr "警告: %s はマンツリーの構成をしていません"
 
-#: src/manp.c:897
+#: src/manp.c:991
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "警告: %s は %s で始まっていません"
@@ -545,11 +587,11 @@ msgstr ""
 "-g --global                 グローバルな manpath をすべて表示する。\n"
 "-d --debug                  デバッグ情報を生成する。\n"
 "-q --quiet                  警告をほとんど表示しない。\n"
-"-m --systems system         どの`システム'を使用するか明示する。\n"
+"-m --systems system         どの `systems' を使用するか明示する。\n"
 "-V --version                バージョンを表示する。\n"
-"-h --help                   このメッセージを表示する。\n"
+"-h --help                   この使用法を表示する。\n"
 
-#: src/manpath.c:165
+#: src/manpath.c:162
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
 msgstr "警告: 設定ファイル %s にグローバルな manpath の設定がありません"
@@ -558,48 +600,75 @@ msgstr "警告: 設定ファイル %s にグローバルな manpath の設定がありません"
 msgid "can't set effective uid"
 msgstr "有効な UID を設定できません"
 
-#: src/straycats.c:216 src/ult_src.c:144
-#, c-format
-msgid "warning: %s is a dangling symlink"
-msgstr "警告: %s はシンボリックリンクが切れています"
-
-#: src/straycats.c:218 src/ult_src.c:146 src/ult_src.c:236
+#: src/straycats.c:227 src/straycats.c:235 src/ult_src.c:146 src/ult_src.c:236
 #, c-format
 msgid "can't resolve %s"
 msgstr "%s を解決できません"
 
-#: src/straycats.c:262
+#: src/straycats.c:233 src/ult_src.c:144
+#, c-format
+msgid "warning: %s is a dangling symlink"
+msgstr "警告: %s はシンボリックリンクが切れています"
+
+#: src/straycats.c:284
 #, c-format
 msgid "Checking for stray cats under %s...\n"
-msgstr "%s 配下に roff のない cat ファイルがないか調べています...\n"
+msgstr "%s 配下の roff がない cat ファイルをチェックしています...\n"
 
-#: src/straycats.c:299
+#: src/straycats.c:323
+#, c-format
+msgid "warning: can't create temp file %s"
+msgstr "警告: 一時ファイル %s を作成できません"
+
+#: src/straycats.c:330
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "警告: index キャッシュ %s を更新できません"
 
-#: src/ult_src.c:262
+#: src/ult_src.c:264
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s は自分自身を参照しています"
 
 #: src/version.c:28
 #, c-format
-msgid "%s, version %s, db %s, %s (G.Wilford@ee.surrey.ac.uk)\n"
-msgstr "%s, バージョン %s, db %s, %s (G.Wilford@ee.surrey.ac.uk)\n"
+msgid "%s, version %s, %s (fpolacco@debian.org)\n"
+msgstr "%s, バージョン %s, %s (fpolacco@debian.org)\n"
 
-#: src/version.c:31
+#: src/whatis.c:128
 #, c-format
-msgid "\tdebian version %s, (%s), %s\n"
-msgstr "\tdebian バージョン %s, (%s), %s\n"
+msgid ""
+"usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] keyword "
+"...\n"
+msgstr "使用法: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
 
-#: src/whatis.c:125 src/whatis.c:141
+#: src/whatis.c:130
+msgid ""
+"-d --debug\t\tproduce debugging info.\n"
+"-r --regex \t\tinterpret each keyword as a regex (default).\n"
+"-e --exact \t\tsearch each keyword for exact match.\n"
+"-w --wildcard\t\tthe keyword(s) contain wildcards.\n"
+"-m --systems system\tinclude alternate systems man pages.\n"
+"-M --manpath path\tset search path for manual pages to `path'.\n"
+"-V --version\t\tshow version.\n"
+"-h --help\t\tshow this usage message.\n"
+msgstr ""
+"-d --debug\t\tデバッグ情報を生成する。\n"
+"-r --regex \t\tキーワードを正規表現として解釈する。(デフォルト)\n"
+"-e --exact \t\t厳密にマッチするキーワードを検索する。\n"
+"-w --wildcard\t\tキーワードがワイルドカードを含む。\n"
+"-m --systems system\t他のシステム `system' のマニュアルページを含める。\n"
+"-M --manpath path\tマニュアルページの検索パスを `path' に設定する。\n"
+"-V --version\t\tバージョンを表示する。\n"
+"-h --help\t\tこの使用法を表示する。\n"
+
+#: src/whatis.c:145
 #, c-format
 msgid ""
 "usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
 msgstr "使用法: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
 
-#: src/whatis.c:127 src/whatis.c:143
+#: src/whatis.c:147
 msgid ""
 "-d --debug\t\tproduce debugging info.\n"
 "-r --regex \t\tinterpret each keyword as a regex.\n"
@@ -609,33 +678,33 @@ msgid ""
 "-V --version\t\tshow version.\n"
 "-h --help\t\tshow this usage message.\n"
 msgstr ""
-"-d --debug\t\tデバッグ情報を生成する\n"
-"-r --regex \t\tキーワードを正規表現として解釈する\n"
-"-w --wildcard\t\tキーワードがワイルドカードを含む\n"
-"-m --systems system\t別のシステムのマンページを含める\n"
-"-M --manpath path\tマニュアルページの検索パスを`path'に設定する\n"
-"-V --version\t\tバージョンを表示する\n"
-"-h --help\t\tこのメッセージを表示する\n"
+"-d --debug\t\tデバッグ情報を生成する。\n"
+"-r --regex \t\tキーワードを正規表現として解釈する。\n"
+"-w --wildcard\t\tキーワードがワイルドカードを含む。\n"
+"-m --systems system\t他のシステム `system' のマニュアルページを含める。\n"
+"-M --manpath path\tマニュアルページの検索パスを `path' に設定する。\n"
+"-V --version\t\tバージョンを表示する。\n"
+"-h --help\t\tこの使用法を表示する。\n"
 
-#: src/whatis.c:183
+#: src/whatis.c:187
 msgid "warning: can't read the fallback whatis text database."
-msgstr "警告: 緊急用の whatis テキストデータベースを読み込めません"
+msgstr "警告: 緊急用の whatis テキストデータベースを読み込めません。"
 
-#: src/whatis.c:211 src/whatis.c:223
+#: src/whatis.c:215 src/whatis.c:227
 msgid "(unknown)"
 msgstr "(不明)"
 
-#: src/whatis.c:482
+#: src/whatis.c:486
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: 適切なものはありませんでした。\n"
 
-#: src/whatis.c:576
+#: src/whatis.c:585
 #, c-format
 msgid "%s what?\n"
-msgstr "%s: キーワードは何ですか？\n"
+msgstr "%s キーワードは何ですか？\n"
 
-#: src/whatis.c:599 src/whatis.c:609
+#: src/whatis.c:608 src/whatis.c:618
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "致命的エラー: 正規表現 `%s': %s"

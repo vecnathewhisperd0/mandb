@@ -21,10 +21,11 @@ curdate_it=`LANG=it_IT date +'%d %B %Y'`
 curdate_es=`LANG=es_ES date +'%d %B %Y'`
 curdate_de=`LANG=de_DE date +'%d %B %Y'`
 curdate_fr=`LANG=fr_FR date +'%d %B %Y'`
-pwd=`pwd`
+PWD=`pwd`
+changequote(, )
 VERSION=`expr $PWD : '.*-\([0-9.]*\)'`
-PACKAGE=`expr $PWD : '\(.*\)-[0-9.]*'`
-PACKAGE="man-db"
+PACKAGE=`expr $PWD : '.*/\(.*\)-[0-9.]*'`
+changequote([, ])
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
 AC_SUBST(PACKAGE)dnl

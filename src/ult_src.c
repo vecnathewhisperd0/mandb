@@ -244,9 +244,9 @@ char *ult_src(char *name, const char *path, struct stat *buf, int flags)
 		if (flags & SOFT_LINK) {
 			if (S_ISLNK(buf->st_mode))
 				/* Is a symlink, resolve it. */
-				(void) ult_softlink(basename, path); 
-			/*	if ( ! ult_softlink(basename, path) )
-					return NULL;	*/
+			/*	(void) ult_softlink(basename, path); */
+				if ( ! ult_softlink(basename, path) )
+					return NULL;
 		}
 #endif /* S_ISLNK */
 	

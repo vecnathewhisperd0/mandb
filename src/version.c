@@ -25,7 +25,7 @@
 /* print the version message, then exit */
 void ver(void)
 {
-	printf(_( "%s, version %s, %s (fpolacco@debian.org)\n"),
+	printf(_( "%s, version %s, %s\n"),
 	       program_name, VERSION, DATE);
 	exit(OK);
 }
