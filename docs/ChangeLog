@@ -1,3 +1,14 @@
+Mon Nov  8 09:57:27 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pathsearch.c: New file, containing functions for searching
+	  $PATH.
+	* lib/pathsearch.h: Prototype pathsearch_executable().
+	* lib/Makefile.in: Always compile pathsearch.c.
+	* src/man.c (find_in_path): Remove; replaced by
+	  pathsearch_executable().
+	  (gripe_no_man): Use pathsearch_executable() instead of
+	  find_in_path().
+
 Mon Nov  8 09:52:02 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	Get rid of plain getcwd(); this allows getting rid of most uses of

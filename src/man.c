@@ -130,6 +130,7 @@ extern int errno;
 #include "lib/hashtable.h"
 #include "lib/pipeline.h"
 #include "lib/getcwdalloc.h"
+#include "lib/pathsearch.h"
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "globbing.h"
@@ -571,46 +572,6 @@ static void add_roff_line_length (command *cmd, int *save_cat)
 	}
 }
 
-#ifdef UNDOC_COMMAND
-/* Return non-zero if name is found as an executable regular file on the
- * $PATH.
- */
-static int find_in_path (const char *name)
-{
-	char *path = xstrdup (getenv ("PATH"));
-	char *pathtok = path;
-	const char *element;
-	int ret = 0;
-
-	if (!path)
-		/* Eh? Oh well. */
-		return 0;
-
-	for (element = strsep (&pathtok, ":"); element;
-	     element = strsep (&pathtok, ":")) {
-		char *filename;
-		struct stat st;
-
-		if (!*element)
-			element = cwd;
-
-		filename = strappend (NULL, element, "/", name, NULL);
-		if (stat (filename, &st) == -1)
-			continue;
-
-		if (S_ISREG (st.st_mode) && access (filename, X_OK) == 0) {
-			ret = 1;
-			break;
-		}
-
-		free (filename);
-	}
-
-	free (path);
-	return ret;
-}
-#endif /* UNDOC_COMMAND */
-
 /*
  * changed these messages from stdout to stderr,
  * (Fabrizio Polacco) Fri, 14 Feb 1997 01:30:07 +0200
@@ -637,7 +598,7 @@ static __inline__ void gripe_no_man (const char *name, const char *sec)
 		putc ('\n', stderr);
 
 #ifdef UNDOC_COMMAND
-	if (find_in_path (name))
+	if (pathsearch_executable (name))
 		fprintf (stderr,
 			 _("See '%s' for help when manual pages are not "
 			   "available.\n"), UNDOC_COMMAND);
