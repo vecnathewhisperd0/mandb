@@ -3113,7 +3113,6 @@ static int maybe_update_file (const char *manpath, const char *name,
 static int try_db (const char *manpath, const char *sec, const char *name,
 		   struct candidate **cand_head)
 {
-	struct nlist *in_cache;
 	struct mandata *loc, *data;
 	char *catpath;
 	int found = 0;
@@ -3134,9 +3133,9 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 		db_hash = hash_create (&db_hash_free);
 
 	/* Have we looked here already? */
-	in_cache = hash_lookup (db_hash, manpath, strlen (manpath));
+	data = hash_lookup (db_hash, manpath, strlen (manpath));
 
-	if (!in_cache) {
+	if (!data) {
 		dbf = MYDBM_RDOPEN (database);
 		if (dbf && dbver_rd (dbf)) {
 			MYDBM_CLOSE (dbf);
@@ -3184,8 +3183,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 				      data);
 			return TRY_DATABASE_OPEN_FAILED;
 		}
-	} else
-		data = in_cache->defn;
+	}
 
 	/* if we already know that there is nothing here, get on with it */
 	if (!data)

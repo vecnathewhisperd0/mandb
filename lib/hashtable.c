@@ -92,15 +92,14 @@ struct hashtable *hash_create (hash_free_ptr free_defn)
 	return ht;
 }
 
-/* Return pointer to structure containing s, or NULL if it doesn't exist. */
-struct nlist *hash_lookup (const struct hashtable *ht,
-			   const char *s, size_t len)
+/* Return pointer to definition of s, or NULL if it doesn't exist. */
+void *hash_lookup (const struct hashtable *ht, const char *s, size_t len)
 {
 	struct nlist *np;
 
 	for (np = ht->hashtab[hash (s, len)]; np; np = np->next) {
 		if (strncmp (s, np->name, len) == 0)
-			return np;
+			return np->defn;
 	}
 	return NULL;
 }

@@ -128,7 +128,6 @@ void test_manfile (char *file, const char *path)
 	struct lexgrog lg;
 	char *manpage;
 	struct mandata info, *exists;
-	struct nlist *in_cache;
 	struct stat buf;
 	size_t len;
 
@@ -257,11 +256,9 @@ void test_manfile (char *file, const char *path)
 	 * clear the hash between calls.
 	 */
 
-	in_cache = hash_lookup (whatis_hash, ult, strlen (ult));
+	lg.whatis = xstrdup (hash_lookup (whatis_hash, ult, strlen (ult)));
 
-	if (in_cache) {		/* cache hit */
-		lg.whatis = in_cache->defn ? xstrdup (in_cache->defn) : NULL;
-	} else {		/* cache miss */
+	if (!lg.whatis) {	/* cache miss */
 		/* go get the whatis info in its raw state */
 #ifdef COMP_SRC
 		/* if the nroff was compressed, an uncompressed version is

@@ -1,3 +1,13 @@
+Mon Apr 28 00:51:11 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* lib/hashtable.c (hash_lookup): Return the definition rather than
+	  the hash entry structure. This turns out to be a lot more useful.
+	* lib/hashtable.h (hash_lookup): Update prototype.
+	* src/man.c (try_db): Simplify; in_cache is no longer needed. Just
+	  assign to the target variable directly.
+	* src/check_mandirs.c (test_manfile): Likewise. xstrdup() already
+	  checks for NULL input, so don't bother checking here.
+
 Tue Apr 22 19:56:13 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* docs/HACKING: New prototypical document for developers.
