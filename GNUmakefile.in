@@ -48,7 +48,7 @@ VERSION = @VERSION@
 USE_NLS = @USE_NLS@
 
 # GNUmakefile and include/Defines are automatic targets, don't add below.
-INCLUDES := $(addprefix include/, config.h manconfig.h comp_src.h)
+INCLUDES := config.h $(addprefix include/, manconfig.h comp_src.h)
 CONF = src/man_db.conf
 EVERYTHING = lib libdb src zsoelim man intl po
 ALL = lib libdb src zsoelim man intl po
@@ -76,15 +76,15 @@ $(EVERYTHING): $(INCLUDES) $(CONF)
 $(srcdir)/configure: configure.in aclocal.m4
 	-cd $(srcdir) && autoconf
 
-$(srcdir)/include/config.h.in: stamp-h.in
+$(srcdir)/config.h.in: stamp-h.in
 $(srcdir)/stamp-h.in: configure.in aclocal.m4
 	-cd $(srcdir) && autoheader && echo timestamp > stamp-h.in
 
 # Use CONFIG_FILES= CONFIG_HEADERS= to force config.status to only
 # re-create the relevant config file.
 
-include/config.h: stamp-h
-stamp-h: $(srcdir)/include/config.h.in config.status
+config.h: stamp-h
+stamp-h: $(srcdir)/config.h.in config.status
 	CONFIG_FILES= ./config.status
 	echo timestamp > stamp-h
 
@@ -96,7 +96,7 @@ config.status: $(srcdir)/configure
 	CONFIG_HEADERS= CONFIG_FILES=$@ ./config.status
 
 # The following 3 rules must be explicit as using a pattern match rule would
-# pick up include/config.h as a target which would be wrong.
+# pick up config.h as a target which would be wrong.
 
 BUILD.in = CONFIG_HEADERS= CONFIG_FILES=$@ ./config.status
 

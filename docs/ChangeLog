@@ -1,3 +1,13 @@
+Mon Mar 10 15:24:04 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in (AC_CONFIG_HEADER): Generate config.h rather than
+	  include/config.h. intl/Makefile.in is insistent on config.h being
+	  in the top-level directory.
+	* GNUmakefile.in, manual/comp.me: Replace 'include/config.h' with
+	  'config.h' throughout.
+	* .cvsignore, include/.cvsignore: Update for new config.h and
+	  config.h.in locations.
+
 Mon Mar 10 15:00:32 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/mkdtemp.c: Define __GT_DIR if necessary.
