@@ -1,3 +1,10 @@
+Thu May 16 00:47:05 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_btree.c (btree_flopen): If O_CREAT isn't set, check
+	  whether we're trying to open a zero-length database and, if so,
+	  return immediately. This works around some pathological behaviour
+	  in Berkeley DB.
+
 Mon May  6 03:48:17 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_store.c (FAVOUR): Parenthesize macro arguments.

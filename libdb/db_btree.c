@@ -18,6 +18,7 @@
 #ifdef BTREE
 
 #include <stdio.h>
+#include <errno.h>
 
 #if HAVE_SYS_FILE_H
 #  include <sys/file.h> /* for flock() */
@@ -88,6 +89,24 @@ DB *btree_flopen(char *filename, int flags, int mode)
 		lock_op = LOCK_EX | LOCK_NB;
 	} else {
 		lock_op = LOCK_SH | LOCK_NB;
+	}
+
+	if (!(flags & O_CREAT)) {
+		/* Berkeley DB thinks that a zero-length file means that
+		 * somebody else is writing it, and sleeps for a few
+		 * seconds to give the writer a chance. All very well, but
+		 * the common case is that the database is just zero-length
+		 * because mandb was interrupted or ran out of disk space or
+		 * something like that - so we check for this case by hand
+		 * and ignore the database if it's zero-length.
+		 */
+		struct stat iszero;
+		if (stat (filename, &iszero) < 0)
+			return NULL;
+		if (iszero.st_size == 0) {
+			errno = EINVAL;
+			return NULL;
+		}
 	}
 
 	if (flags & O_TRUNC) {
