@@ -451,7 +451,7 @@ int main (int argc, char *argv[])
 
 	/* Deal with the MANPATH */
 
-	/* This is required for global_catpath(), regardless */
+	/* This is required for get_catpath(), regardless */
 	sys_manp = manpath (NULL);
 
 	/* pick up the system manpath or use the supplied one */
@@ -470,8 +470,8 @@ int main (int argc, char *argv[])
 	for (mp = manpathlist; *mp; mp++) {
 		char *catpath, **sp;
 		size_t len;
-		
-		catpath = global_catpath (*mp);
+
+		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);
 
 		if (catpath) { 
 			if (is_directory (catpath) != 1) {

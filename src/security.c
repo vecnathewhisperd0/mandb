@@ -15,6 +15,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
+#include <assert.h>
 #include <errno.h>
 
 #ifndef STDC_HEADERS
@@ -42,6 +43,7 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/cleanup.h"
+#include "security.h"
 
 #ifdef SECURE_MAN_UID
 
@@ -97,6 +99,8 @@ uid_t ruid;				/* initial real user id */
 uid_t euid;				/* initial effective user id */
 uid_t uid;				/* current euid */
 
+static struct passwd *man_owner;
+
 /* Keep a count of how many times we've dropped privileges, and only regain
  * them if regain_effective_privs() is called an equal number of times.
  */
@@ -115,6 +119,22 @@ void init_security (void)
 		fprintf (stderr, "ruid=%d, euid=%d\n", (int) ruid, (int) euid);
 	priv_drop_count = 0;
 	drop_effective_privs ();
+}
+
+/* Return a pointer to the password entry structure for MAN_OWNER. This
+ * structure will be statically stored.
+ */
+struct passwd *get_man_owner (void)
+{
+	if (man_owner)
+		return man_owner;
+
+	man_owner = getpwnam (MAN_OWNER);
+	if (!man_owner)
+		error (FAIL, 0, _("the setuid man user \"%s\" does not exist"),
+		       MAN_OWNER);
+	assert (man_owner);
+	return man_owner;
 }
 
 #endif /* SECURE_MAN_UID */

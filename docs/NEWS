@@ -6,6 +6,10 @@ Major changes since man_db-2.3.18:
 	Fixes:
 	------
 
+	o The user configuration file ~/.manpath is no longer trusted when
+	  deciding whether to drop privileges. In the process, user cat
+	  directory handling has been improved.
+
 	o Commands of the form 'man -S "" foo' formerly emptied the list of
 	  acceptable sections and then searched the database anyway, and
 	  commands of the form 'man -S ::: foo' segfaulted. Both now use the
@@ -15,14 +19,20 @@ Major changes since man_db-2.3.18:
 
 	o straycats processing invokes 'col -bx' rather than 'col-bx'.
 
+	o The root user is now correctly allowed to update databases in
+	  system manpaths.
+
+	o apropos and whatis no longer enter infinite recursion if a
+	  database contains an entry pointing to itself.
+
 	Improvements:
 	-------------
 
 	o When compiled with --enable-setuid, man and mandb can be installed
 	  non-setuid. In this mode, they will be unable to write cat pages
-	  or modify the database, but will otherwise operate correctly. This
-	  allows a single binary package to support setuid and non-setuid
-	  modes of operation.
+	  in system directories or to modify system databases, but will
+	  otherwise operate correctly. This allows a single binary package
+	  to support setuid and non-setuid modes of operation.
 
 	o The ordering of manual sections is read from SECTION directives in
 	  the configuration file rather than being hard-coded.
@@ -33,6 +43,9 @@ Major changes since man_db-2.3.18:
 	o Multiple whatis entries separated by commas, break requests,
 	  and/or paragraph requests are handled more intelligently.
 
+	o Fill control requests (.nf and .fi) cause lexgrog to assume a
+	  break at each newline.
+
 	o Duplicate manpath entries (often generated in the course of
 	  national language support) are removed, so that 'man -a' works
 	  better.
@@ -42,6 +55,18 @@ Major changes since man_db-2.3.18:
 	o Since supporting certain layouts of manual page hierarchies causes
 	  problems for others, the layout is now selectable via configure.
 	  The default is to try all layouts.
+
+	o man only does an on-the-fly update of the database caches when the
+	  --update option is given.
+
+	o Manual pages are displayed with a line length appropriate to the
+	  current terminal. If a non-standard line length is used (i.e. the
+	  terminal is not between 66 and 80 characters wide) then cat pages
+	  will not be saved.
+
+	o mandb tries to purge obsolete entries from its databases. Using
+	  the --create flag should now usually only be necessary in cases of
+	  database corruption.
 
 man_db-2.3.18 (14 May 2001)
 ===========================

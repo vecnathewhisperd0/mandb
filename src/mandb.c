@@ -18,6 +18,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
+#include <assert.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>	/* for chmod() */
@@ -86,6 +87,7 @@ extern char *getwd();
 #include "lib/cleanup.h"
 #include "check_mandirs.h"
 #include "manp.h"
+#include "security.h"
 
 int debug = 0;
 char *program_name;
@@ -341,7 +343,7 @@ static short mandb (const char *catpath, const char *manpath)
 int main(int argc, char *argv[])
 {
 	int c;
-	char *catpath, *sys_manp;
+	char *sys_manp;
 	short amount = 0;
 	int strays = 0;
 	int purged = 0;
@@ -436,7 +438,7 @@ int main(int argc, char *argv[])
 #endif /* DO_CHOWN */
 
 
-	/* This is required for global_catpath(), regardless */
+	/* This is required for get_catpath(), regardless */
 	manp = manpath (NULL);	/* also calls read_config_file() */
 
 	if (opt_test && !debug)
@@ -461,7 +463,7 @@ int main(int argc, char *argv[])
 				 "using your manpath"),
 			       CONFIG_FILE);
 	}
-	
+
 	if (debug)
 		fprintf (stderr, "manpath=%s\n", manp);
 
@@ -472,64 +474,53 @@ int main(int argc, char *argv[])
 	regain_effective_privs ();
 
 	for (mp = manpathlist; *mp; mp++) {
-		catpath = global_catpath (*mp);
-		if (catpath) { 	/* system db */
-		/*	if (access (catpath, W_OK) == 0 && !user) { */
-			if (!user) {
-				force_rescan = 0;
-				if (purge) {
-					database = mkdbname (catpath);
-					purged += purge_missing (*mp);
-				}
+		int global_manpath = is_global_mandir (*mp);
+		char *catpath;
 
-				push_cleanup (cleanup, NULL);
-				amount += mandb (catpath, *mp);
-
-				if (!opt_test) {
-					finish_up ();
-#ifdef DO_CHOWN
-					if (euid == 0)
-						do_chown (man_owner->pw_uid);
-#endif
-				} else
-					cleanup (NULL);
-				pop_cleanup ();
-				free (database);
-				database = NULL;
-
-				if (check_for_strays) {
-					database = mkdbname (catpath);
-					strays += straycats (*mp);
-				}
-			}
-			free (catpath);
-		} else {	/* user db */
+		if (global_manpath) { 	/* system db */
+		/*	if (access (catpath, W_OK) == 0 && !user) */
+			if (user)
+				continue;
+			catpath = get_catpath (*mp, SYSTEM_CAT);
+			assert (catpath);
+		} else {		/* user db */
+			catpath = get_catpath (*mp, USER_CAT);
+			if (!catpath)
+				catpath = *mp;
 			drop_effective_privs ();
-
-			force_rescan = 0;
-			if (purge) {
-				database = mkdbname (*mp);
-				purged += purge_missing (*mp);
-			}
-
-			push_cleanup (cleanup, NULL);
-			amount += mandb (*mp, *mp);
-
-			if (!opt_test)
-				finish_up ();
-			else
-				cleanup (NULL);
-			pop_cleanup ();
-			free (database);
-			database = NULL;
-
-			if (check_for_strays) {
-				database = mkdbname (*mp);
-				strays += straycats (*mp);
-			}
-
-			regain_effective_privs ();
 		}
+
+		force_rescan = 0;
+		if (purge) {
+			database = mkdbname (catpath);
+			purged += purge_missing (*mp);
+		}
+
+		push_cleanup (cleanup, NULL);
+		amount += mandb (catpath, *mp);
+
+		if (!opt_test) {
+			finish_up ();
+#ifdef DO_CHOWN
+			if (global_manpath && euid == 0)
+				do_chown (man_owner->pw_uid);
+#endif
+		} else
+			cleanup (NULL);
+		pop_cleanup ();
+		free (database);
+		database = NULL;
+
+		if (check_for_strays) {
+			database = mkdbname (catpath);
+			strays += straycats (*mp);
+		}
+
+		if (!global_manpath)
+			regain_effective_privs ();
+
+		if (catpath != *mp)
+			free (catpath);
 
 		chkr_garbage_detector ();
 	}

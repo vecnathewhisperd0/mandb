@@ -488,7 +488,7 @@ static void search (char *page)
 		fprintf (stderr, "lower(%s) = \"%s\"\n", page, lowpage);
 
 	for (mp = manpathlist; *mp; mp++) {
-		catpath = global_catpath (*mp);
+		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);
 		
 		if (catpath) {
 			database = mkdbname (catpath);

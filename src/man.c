@@ -124,6 +124,7 @@ extern int errno;
 #include "globbing.h"
 #include "ult_src.h"
 #include "manp.h"
+#include "security.h"
 #include "man.h"
 
 #ifdef SECURE_MAN_UID
@@ -796,15 +797,17 @@ static int need_to_rerun(void)
 	for (mp = manpathlist; *mp; mp++) {
 		char *catpath;
 
-		catpath = global_catpath (*mp);
+		global_manpath = is_global_mandir (*mp);
+		if (!global_manpath)
+			drop_effective_privs ();
+
+		catpath = get_catpath
+			(*mp, global_manpath ? SYSTEM_CAT : USER_CAT);
 		if (catpath) {
 			database = mkdbname (catpath);
 			free (catpath);
-			global_manpath = 1;
 		} else {
 			database = mkdbname (*mp);
-			global_manpath = 0;
-			drop_effective_privs ();
 		}
 
 		if (update)
@@ -1497,11 +1500,12 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 
 #ifdef ALT_EXT_FORMAT
 	/* Check both external formatter locations */
-	if (global_manpath && dir) {
-		char *catpath = global_catpath (dir);
+	if (dir) {
+		char *catpath = get_catpath
+			(dir, global_manpath ? SYSTEM_CAT : USER_CAT);
 
 		/* If we have an alternate catpath */
-		if (strcmp (catpath, dir) != 0) {
+		if (catpath) {
 			fmt_prog = strappend (catpath, "/",
 					      troff ? TFMT_PROG : NFMT_PROG, 
 					      NULL);
@@ -1516,7 +1520,6 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 			}
 		/* If we don't */
 		} else {
-			free (catpath);
 #endif /* ALT_EXT_FORMAT */
 
 			fmt_prog = xstrdup (troff ? TFMT_PROG : NFMT_PROG);
@@ -1731,9 +1734,21 @@ static char *tmp_cat_filename (char *cat_file)
  */
 static int commit_tmp_cat (char *cat_file, char *tmp_cat, int delete)
 {
-	int status;
+	int status = 0;
 
-	if (!delete) {
+	if (!delete && global_manpath && euid == 0) {
+		if (debug) {
+			fprintf (stderr, "fixing temporary cat's ownership\n");
+			status = 0;
+		} else {
+			struct passwd *man_owner = get_man_owner ();
+			status = chown (tmp_cat, man_owner->pw_uid, -1);
+			if (status)
+				error (0, errno, _("can't chown %s"), tmp_cat);
+		}
+	}
+
+	if (!delete && !status) {
 		if (debug) {
 			fprintf (stderr, "fixing temporary cat's mode\n");
 			status = 0;
@@ -1742,8 +1757,7 @@ static int commit_tmp_cat (char *cat_file, char *tmp_cat, int delete)
 			if (status)
 				error (0, errno, _("can't chmod %s"), tmp_cat);
 		}
-	} else
-		status = 0;
+	}
 
 	if (!delete && !status) {
 		if (debug) {
@@ -2039,13 +2053,13 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 		   Check there first ala the FSSTND, and display if newer
 		   than man_file, if older, ignore it altogether */
 
-		if (!local_man_file && global_manpath) {
-			catpath = global_catpath (dir);
+		if (!local_man_file) {
+			catpath = get_catpath
+				(dir, global_manpath ? SYSTEM_CAT : USER_CAT);
 
-			assert (catpath);
 			assert (dir);
 
-			if (man_file && strcmp (catpath, dir) != 0) {
+			if (man_file && catpath) {
 				/* we may have a FSSTND cat != cat_file */
 				char *std_cat_file;
 	
@@ -2061,7 +2075,8 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			} else
 				format = 1;
 
-			free (catpath);
+			if (catpath)
+				free (catpath);
 		} else
 			format = 1;
 
@@ -2269,7 +2284,8 @@ static char *find_cat_file (char *path, char *man_file, char *sec)
 
 	/* could do this with `global' */
 
-	cat_path = global_catpath (man_file);
+	cat_path = get_catpath
+		(man_file, global_manpath ? SYSTEM_CAT : USER_CAT);
 	cat_file = convert_name (man_file, cat_path);
 
 	if (cat_path)
@@ -2540,7 +2556,8 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 
 		if (access (file, R_OK) != 0) {
 			char *catpath;
-			catpath = global_catpath (path);
+			catpath = get_catpath
+				(path, global_manpath ? SYSTEM_CAT : USER_CAT);
 
 			if (catpath && strcmp (catpath, path) != 0) {
 				file = make_filename (catpath, name,
@@ -2599,14 +2616,12 @@ static int try_db (char *manpath, char *sec, char *name)
 	struct nlist *in_cache;
 	struct mandata *loc, *data, *store[ENTRIES], *exact_ext = NULL;
 	struct mandata **exact_sec = store;
+	char *catpath;
 
 	/* find out where our db for this manpath should be */
 
-	if (global_manpath) {
-		char *catpath;
-
-		catpath = global_catpath (manpath);
-		assert (catpath);
+	catpath = get_catpath (manpath, global_manpath ? SYSTEM_CAT : USER_CAT);
+	if (catpath) {
 		database = mkdbname (catpath);
 		free (catpath);
 	} else
@@ -2723,14 +2738,11 @@ static int locate_page (char *manpath, char *sec, char *name)
 
 	   global: if setuid, use privs; don't create db.
 	   user  : if setuid, drop privs; allow db creation. */
-	   
-	if (is_global_mandir(manpath)) {
-		global_manpath = 1;
-	} else {
-		global_manpath = 0;
+
+	global_manpath = is_global_mandir (manpath);
+	if (!global_manpath)
 		drop_effective_privs ();
-	}
-		
+
 	if (debug)
 		fprintf (stderr, "searching in %s, section %s\n", 
 			 manpath, sec);

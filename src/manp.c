@@ -94,11 +94,12 @@ struct list {
 
 static struct list *namestore, *tailstore;
 
-#define SECTION		-3
-#define DEFINE		-2
-#define MANDB_MAP       -1
-#define MANPATH_MAP      0
-#define MANDATORY        1
+#define SECTION		-4
+#define DEFINE		-3
+#define MANDB_MAP_USER	-2
+#define MANDB_MAP	-1
+#define MANPATH_MAP	 0
+#define MANDATORY	 1
 
 /* DIRLIST list[MAXDIRS]; */
 char *tmplist[MAXDIRS];
@@ -227,7 +228,7 @@ static void add_manpath_map (char *path, char *mandir)
 			 path, mandir);
 }
 
-static void add_mandb_map (char *mandir, char *catdir, int flag)
+static void add_mandb_map (char *mandir, char *catdir, int flag, int user)
 {
 	assert (flag > 0);
 
@@ -251,11 +252,11 @@ static void add_mandb_map (char *mandir, char *catdir, int flag)
 		return;
 	}
 
-	add_to_list (mandir, catdir, MANDB_MAP);
+	add_to_list (mandir, catdir, user ? MANDB_MAP_USER : MANDB_MAP);
 
 	if (debug)
-		fprintf (stderr, "Global mandir `%s', catdir `%s'.\n",
-			 mandir, catdir);
+		fprintf (stderr, "%s mandir `%s', catdir `%s'.\n",
+			 user ? "User" : "Global", mandir, catdir);
 
 	/* create the catman hierarchy if it doesn't exist */
 	if (strcmp (program_name, "mandb") == 0)
@@ -348,7 +349,9 @@ char *cat_manpath (char *manp)
 	char *catp = NULL, *path, *catdir;
 
 	for (path = strtok (manp, ":"); path; path = strtok (NULL, ":")) {
-		catdir = get_from_list (path, MANDB_MAP);
+		catdir = get_from_list (path, MANDB_MAP_USER);
+		if (!catdir)
+			catdir = get_from_list (path, MANDB_MAP);
 		catp = catdir ? pathappend(catp, catdir) 
 			      : pathappend(catp, path);
 	}
@@ -693,7 +696,7 @@ mkcatdirs (char *mandir, char *catdir)
 
 extern char *program_name;
 /* Parse the manpath.config file, extracting appropriate information. */
-void add_to_dirlist (FILE *config)
+static void add_to_dirlist (FILE *config, int user)
 {
 	char *bp;
 	char buf[BUFSIZ];
@@ -716,7 +719,7 @@ void add_to_dirlist (FILE *config)
 		else if (sscanf (bp, "MANPATH_MAP %s %s", key, cont) == 2) 
 			add_manpath_map (key, cont);
 		else if ((c = sscanf (bp, "MANDB_MAP %s %s", key, cont)) > 0) 
-			add_mandb_map (key, cont, c);
+			add_mandb_map (key, cont, c, user);
 		else if ((c = sscanf (bp, "DEFINE %50s %511[^\n]",
 				      key, cont)) > 0)
 			add_def (key, cont, c);
@@ -745,7 +748,7 @@ void read_config_file(void)
 			if (debug)
 				fprintf (stderr,
 					 "From the config file %s:\n\n", home);
-			add_to_dirlist (config);
+			add_to_dirlist (config, 1);
 			fclose (config);
 		}
 		free (dotmanpath);
@@ -760,7 +763,7 @@ void read_config_file(void)
 	if (debug)
 		fprintf (stderr, "From the config file %s:\n\n", CONFIG_FILE);
 
-	add_to_dirlist (config);
+	add_to_dirlist (config, 0);
 	fclose (config);
 
 	if (debug)
@@ -1038,32 +1041,39 @@ void create_pathlist (char *manp, char **mp)
 	free (manp);
 }
 
-/* routine to get global manpath list (in reverse order) */
+/* Routine to get list of named system and user manpaths (in reverse order). */
 char *get_mandb_manpath (void)
 {
 	char *manpath = NULL;
 	struct list *list;
 
 	for (list = namestore; list; list = list->next)
-		if (list->flag == MANDB_MAP)
+		if (list->flag == MANDB_MAP || list->flag == MANDB_MAP_USER)
 			manpath = pathappend (manpath, list->key);
 
 	return manpath;
 }
 
-/*
- * Take manpath or manfile path as arg, return catdir mapping or NULL if
- * it isn't a global mandir.
+/* Take manpath or manfile path as the first argument, and the type of
+ * catpaths we want as the other (system catpaths, user catpaths, or both).
+ * Return catdir mapping or NULL if it isn't a global/user mandir (as
+ * appropriate).
+ *
+ * This routine would seem to work correctly for nls subdirs and would 
+ * specify the (correct) consistent catpath even if not defined in the 
+ * config file.
+ *
+ * Do not return user catpaths when cattype == 0! This is used to decide
+ * whether to drop privileges. When cattype != 0 it's OK to return global
+ * catpaths.
  */
-/* This routine would seem to work correctly for nls subdirs and would 
-   specify the (correct) consistent catpath even if not defined in the 
-   config file */
-char *global_catpath (char *name)
+char *get_catpath (char *name, int cattype)
 {
 	struct list *list;
 
 	for (list = namestore; list; list = list->next)
-		if (list->flag == MANDB_MAP) {
+		if (((cattype & SYSTEM_CAT) && list->flag == MANDB_MAP) ||
+		    ((cattype & USER_CAT)   && list->flag == MANDB_MAP_USER)) {
 			size_t manlen = strlen (list->key);
 			if (STRNEQ (name, list->key, manlen)) {
 				char *suffix = name + manlen;
@@ -1088,7 +1098,9 @@ char *global_catpath (char *name)
 	return NULL;
 }
 
-/* check to see if the supplied man directory is considered `global' */
+/* Check to see if the supplied man directory is a system-wide mandir.
+ * Obviously, user directories must not be included here.
+ */
 int is_global_mandir (const char *dir)
 {
 	struct list *list;

@@ -362,7 +362,7 @@ int straycats (char *manpath)
 		return 0;
 	}
 
-	catpath = global_catpath (manpath);
+	catpath = get_catpath (manpath, SYSTEM_CAT | USER_CAT);
 
 	/* look in the usual catpath location */
 	mandir = xstrdup (manpath);

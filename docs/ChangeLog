@@ -1,3 +1,57 @@
+Wed Jul  4 13:39:40 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	The product of some hacking at the Debian Conference. Enjoy.
+
+	* docs/NEWS: Describe recent changes.
+
+	* include/manconfig.h.in: Add SYSTEM_CAT and USER_CAT defines.
+	  Move includes from security.c to ...
+	* src/security.h: ... here (new file).
+	* src/man.c: Include security.h.
+	* src/mandb.c: Likewise.
+	* src/security.c: Likewise.
+
+	* src/manp.c (add_mandb_map): Take an additional parameter, user.
+	  Use the new MANDB_MAP_USER flag instead of MANDB_MAP if it is set.
+	  (cat_manpath): Look at user catpaths before system catpaths.
+	  (add_to_dirlist): Take user parameter, passed through to
+	  add_mandb_map().
+	  (read_config_file): Call add_to_dirlist() with user set for
+	  ~/.manpath, and reset for /etc/manpath.config (security fix).
+	  (get_mandb_manpath): Allow user manpaths.
+	  (global_catpath): Rename to get_catpath(), and only allow it to
+	  handle user catpaths (from ~/.manpath) as well if explicitly
+	  requested.
+	  (is_global_mandir): Note that this is trusted.
+	* src/manp.h: Reflect renaming of global_catpath() to get_catpath().
+
+	* src/man.c (need_to_rerun): Use get_catpath() instead of
+	  global_catpath().
+	  (make_roff_command): Likewise.
+	  (display): Likewise.
+	  (find_cat_file): Likewise.
+	  (try_db_section): Likewise.
+	  (try_db): Likewise.
+	* src/catman.c (main): Likewise (check only user mandirs).
+	* src/mandb.c (main): Likewise (check only user mandirs).
+	* src/straycats.c (straycats): Likewise (check only with user
+	  mandirs).
+	* src/whatis.c (search): Likewise (check only with user mandirs).
+
+	* src/man.c (need_to_rerun): Use is_global_mandir() rather than
+	  global_catpath() to decide whether to drop privileges.
+	* src/mandb.c (main): Likewise. Unify common code for system and
+	  user catpaths.
+
+	* src/man.c (make_roff_command): Check catpath even if
+	  global_manpath is false.
+	  (locate_page): Simplify slightly.
+
+	* src/security.c (get_man_owner): New function: gets and caches the
+	  password entry structure for MAN_OWNER.
+	* src/man.c (commit_tmp_cat): If running as root, chown created cat
+	  pages to MAN_OWNER.
+
 Sun Jul  1 01:58:33 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/check_mandirs.c (splitline): Don't initialize the pointer

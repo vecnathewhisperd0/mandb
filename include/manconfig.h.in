@@ -268,13 +268,6 @@ extern char *decompress (char *filename, struct compression *comp);
 extern __inline__ void remove_ztemp (void);
 extern __inline__ char *get_ztemp (void);
 
-/* security.c */
-extern __inline__ void drop_effective_privs (void);
-extern __inline__ void regain_effective_privs (void);
-extern int do_system_drop_privs (const char *command);
-extern int remove_with_dropped_privs (const char *filename);
-extern void init_security (void);
-
 /* straycats.c */
 extern int straycats (char *mandir);
 
@@ -317,6 +310,10 @@ extern char *program_name;	/* the basename of the program (as called) */
 #define CHILD_FAIL	3	/* child failed */
 #define INTERRUPTED	4	/* Interrupted by signal */
 #define NOT_FOUND	16	/* No action was taken */
+
+/* System or user catpaths? Allow bitwise disjunctions of these. */
+#define SYSTEM_CAT	1
+#define USER_CAT	2
 
 /* string macros */
 #define STREQ(a,b)	(strcmp(a,b) == 0)
