@@ -20,8 +20,12 @@ include ../include/Defines
 .PHONY: $(DEFAULT_TARGETS) dirs nlsinstall nlsuninstall
 
 ifeq ($(USE_NLS),yes)
-  NLS := $(foreach lingua, $(LINGUAS), $(wildcard $(srcdir)/$(lingua)_*))
-  NLS := $(shell for x in $(NLS); do [ -e $$x/man/man1 ] && echo $$x; done)
+  ifeq ($(strip $(LINGUAS)),)
+    NLS := $(wildcard $(srcdir)/*_*)
+  else
+    NLS := $(foreach lingua, $(LINGUAS), $(wildcard $(srcdir)/$(lingua)_*))
+  endif
+  NLS := $(shell for x in $(NLS); do [ -e $$x/man1/man.man1 ] && echo $$x; done)
 endif
 
 # force these variables to be resolved here, rather than at each reference.

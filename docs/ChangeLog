@@ -1,3 +1,10 @@
+Sun May 13 17:17:32 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* man/Makefile.in: Another try to get NLS installation working
+	  properly. The last change was wrong when LINGUAS was unset.
+
+	* GNUmakefile.in (dist): Install docs/manpage.example.
+
 Sun May 13 16:54:01 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* man/Makefile.in: Exclude NLS directories without man pages, as CVS
@@ -8,9 +15,9 @@ Sun May 13 16:54:01 BST 2001  Colin Watson  <cjwatson@debian.org>
 	* manual/Makefile: Make the location of soelim variable so that
 	  distributions can e.g. use the version in the build directory.
 
-	* manual/Makefile: Add an HTML target. Disabled by default as
-	  groff's HTML driver doesn't produce very good output yet (as of
-	  1.16).
+	* manual/Makefile, manual/README: Add an HTML target. Disabled by
+	  default as groff's HTML driver doesn't produce very good output
+	  yet (as of 1.16).
 
 	* include/Defines.in: Only remove /usr from the default sysconfdir
 	  if the prefix is exactly /usr, not something that happens to
