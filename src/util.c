@@ -80,7 +80,7 @@ char *mkdbname (const char *path)
  *   stat on b fails               returns   -2
  *   stat on a and b fails         returns   -3
  */
-int is_changed (char *fa, char *fb)
+int is_changed (const char *fa, const char *fb)
 {
 	struct stat fa_sb;
 	struct stat fb_sb;

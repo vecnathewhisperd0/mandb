@@ -48,7 +48,7 @@ static int unique;				/* unique hash values */
 static int identical;				/* identical hash values */
 
 /* return hash value for string */
-static unsigned hash (char *s)
+static unsigned hash (const char *s)
 {
 	unsigned hashval = 0;
 
@@ -64,7 +64,7 @@ static unsigned hash (char *s)
 
 /* return pointer to structure containing defn, else NULL if it 
    doesn't exist */
-struct nlist *lookup (char *s)
+struct nlist *lookup (const char *s)
 {
 	struct nlist *np;
 	
@@ -87,7 +87,7 @@ static __inline__ void free_defn (struct nlist *np)
 }
 	
 /* return struct containing defn or NULL if unable to store */
-static struct nlist *install (char *name, void *defn, int flag)
+static struct nlist *install (const char *name, void *defn, int flag)
 {
 	struct nlist *np;
 
@@ -122,13 +122,13 @@ static struct nlist *install (char *name, void *defn, int flag)
 }
 
 /* special wrapper to insert a string or NULL */
-struct nlist *install_text (char *name, char *text)
+struct nlist *install_text (const char *name, const char *text)
 {
-	return install (name, text ? xstrdup(text) : text, 1);
+	return install (name, text ? xstrdup(text) : NULL, 1);
 }
 
 /* special wrapper to insert a ptr to in core mandata struct linked list */
-struct nlist *install_db_ptr (char *name, struct mandata *db_ptr)
+struct nlist *install_db_ptr (const char *name, struct mandata *db_ptr)
 {
 	return install (name, db_ptr, 0);
 }

@@ -1,3 +1,29 @@
+  Colin Watson  <cjwatson@debian.org>
+
+	Pass through much of the code adding 'const' where appropriate. This
+	should help me avoid various memory management bugs.
+
+	Noteworthy changes from this:
+
+	* include/manconfig.h.in (struct compression): prog and ext
+	  generally shouldn't be modified directly.
+	* libdb/db_lookup.c (make_content): dash really has to stay
+	  constant, or the various things that point to it statically will
+	  break other things badly.
+	* libdb/db_storage.h (struct mandata): The only pointers here that
+	  should generally be modified directly are next and addr.
+	* libdb/db_store.c (dbstore): Remove debugging code left from
+	  previous checkin.
+	* src/check_mandirs.c (splitline): Note that we're deliberately
+	  modifying info->whatis here.
+	  (filename_info): Modify to be more const-friendly.
+	* src/compression.c (comp_file): Add TODO for comp->file.
+	* src/man.c (find_cat_file): Drop unused sec argument, and update
+	  callers.
+
+	* include/manconfig.h.in, libdb/db_storage.h, src/hashtable.h,
+	  src/man.h, src/manp.h: Update prototypes for all of the above.
+
 Fri Apr 26 01:59:46 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	Add case-insensitivity support to the database.

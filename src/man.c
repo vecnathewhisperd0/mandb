@@ -162,9 +162,9 @@ extern uid_t euid;
 
 char *lang;
 struct lt {
-	char *lang;
-	char *device;
-	char *charset;
+	const char *lang;
+	const char *device;
+	const char *charset;
 } lang_table[] = {
 
 	/* LESSCHARSET=latin1 means '0x80-0xff is displayable'. */
@@ -212,10 +212,10 @@ char **global_argv;
 #endif
 
 struct candidate {
-	char *req_name;
+	const char *req_name;
 	char from_db;
 	char cat;
-	char *path;
+	const char *path;
 	struct mandata *source;
 	struct candidate *next;
 };
@@ -224,7 +224,7 @@ struct candidate {
 #define CANDIDATE_DATABASE   1
 
 #ifdef MAN_CATS
-static FILE *checked_popen (char *command, char *type)
+static FILE *checked_popen (const char *command, const char *type)
 {
 	FILE *stream;
 
@@ -254,11 +254,11 @@ static FILE *checked_popen (char *command, char *type)
 }
 #endif /* MAN_CATS */
 
-char *lang_dir (char *filename)
+char *lang_dir (const char *filename)
 {
 	char *ld;	/* the lang dir: point to static data */
-	char *fm;	/* the first "/man/" dir */
-	char *sm;	/* the second "/man?/" dir */
+	const char *fm;	/* the first "/man/" dir */
+	const char *sm;	/* the second "/man?/" dir */
 
 	ld = "";
 	if (!filename) 
@@ -288,14 +288,14 @@ char *lang_dir (char *filename)
 	return ld;
 }
 
-static __inline__ void gripe_system (char *command, int status)
+static __inline__ void gripe_system (const char *command, int status)
 {
 	error (CHILD_FAIL, 0, _("command exited with status %d: %s"),
 	       status, command);
 }
 
 
-static int checked_system (char *command)
+static int checked_system (const char *command)
 {
 	int status;
 
@@ -323,7 +323,7 @@ static char **section_list;
 static char *section;
 static char *colon_sep_section_list;
 static char *preprocessors;
-static char *dbfilters;
+static const char *dbfilters;
 static char *pager;
 static char *locale;
 static char *internal_locale;
@@ -334,7 +334,7 @@ static char *manp;
 static char *external;
 
 static int troff;
-static char *roff_device = NULL;
+static const char *roff_device = NULL;
 static int print_where;
 static int catman;
 static int local_man_file;
@@ -420,9 +420,9 @@ static void usage (int status)
 {
 #ifdef HAS_TROFF
 #  ifdef TROFF_IS_GROFF
-	char formatter[] = "groff";
+	const char formatter[] = "groff";
 #  else
-	char formatter[] = "troff";
+	const char formatter[] = "troff";
 #  endif /* TROFF_IS_GROFF */
 #endif /* HAS_TROFF */
 	
@@ -487,7 +487,7 @@ static void usage (int status)
  * changed these messages from stdout to stderr,
  * (Fabrizio Polacco) Fri, 14 Feb 1997 01:30:07 +0200
  */
-static void gripe_no_name (char *section)
+static void gripe_no_name (const char *section)
 {
 	if (section)
 		fprintf (stderr,
@@ -533,7 +533,7 @@ static int line_length = 80;
 
 static void store_line_length (void)
 {
-	char *columns;
+	const char *columns;
 	int width;
 
 	line_length = 80;
@@ -580,7 +580,7 @@ static int get_roff_line_length (void)
  * changed these messages from stdout to stderr,
  * (Fabrizio Polacco) Fri, 14 Feb 1997 01:30:07 +0200
  */
-static __inline__ void gripe_no_man (char *name, char *sec)
+static __inline__ void gripe_no_man (const char *name, const char *sec)
 {
 	if (troff) {
 		fprintf (stderr, _("No source manual entry for %s"), name);
@@ -662,7 +662,7 @@ static __inline__ char **manopt_to_env (int *argc)
 }
 
 /* Return char array with 'less' special chars escaped. Uses static storage. */
-static __inline__ char *escape_less (const char *string)
+static __inline__ const char *escape_less (const char *string)
 {
 	static char *escaped_string; 
 	char *ptr;
@@ -729,7 +729,7 @@ static int need_to_rerun (void)
 
 
 /* man issued with `-l' option */
-int local_man_loop (char *argv)
+int local_man_loop (const char *argv)
 {
 	int exit_status = OK;
 	int local_mf = local_man_file;
@@ -1228,7 +1228,7 @@ static __inline__ char *is_section (char *name)
 }
 
 /* Snarf pre-processors from file, return (static) string or NULL on failure */
-static char *get_preprocessors_from_file (char *file)
+static const char *get_preprocessors_from_file (const char *file)
 {
 	char *directive = NULL;
 #ifdef PP_COOKIE
@@ -1264,10 +1264,10 @@ static char *get_preprocessors_from_file (char *file)
 
 /* Determine pre-processors, set save_cat and return
    (static) string */
-static char *get_preprocessors (char *file)
+static const char *get_preprocessors (const char *file)
 {
-	char *pp_string;
-	char *pp_source;
+	const char *pp_string;
+	const char *pp_source;
 
 	/* try in order: database, command line, file, environment, default */
 	/* command line overrides the database, but database empty overrides default */
@@ -1389,9 +1389,9 @@ static void determine_lang_table (const char *lang)
 }
 
 /* Return command (malloced string) to format file to stdout */
-static __inline__ char *make_roff_command (char *dir, char *file)
+static __inline__ char *make_roff_command (const char *dir, const char *file)
 {
-	char *pp_string;
+	const char *pp_string;
 	char *fmt_prog;
 	char *command;
 
@@ -1655,7 +1655,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
  * http://www.dwheeler.com/browse/secure_browser.html, but it's
  * backward-compatible.)
  */
-static char *make_browser (char *command, char *file)
+static char *make_browser (const char *command, const char *file)
 {
 	static char *browser;
 	static int browser_len = 0;
@@ -1709,11 +1709,11 @@ static char *make_browser (char *command, char *file)
 }
 
 /* Return command (malloced string) to display file, NULL means stdin */
-static char *make_display_command (char *file, char *title)
+static char *make_display_command (const char *file, const char *title)
 {
 	char *command;
 	char *esc_file = escape_shell (file);
-	char *esc_title = escape_less (title);
+	const char *esc_title = escape_less (title);
 	char *less_opts = xmalloc (strlen (LESS_OPTS) +
 				   strlen (prompt_string) * 2 + 1);
 	char *man_pn;
@@ -1861,7 +1861,7 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 #ifdef MAN_CATS
 
 /* Return stream to write formatted manual page to for saving as cat file */
-static __inline__ FILE *open_cat_stream (char *cat_file)
+static __inline__ FILE *open_cat_stream (const char *cat_file)
 {
 	FILE *save;
 #  ifdef COMP_CAT
@@ -1975,7 +1975,7 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 /* Close the cat page stream, return non-zero on error.
    If delete don't update the cat file.
  */
-static __inline__ int close_cat_stream (FILE *cat_stream, char *cat_file,
+static __inline__ int close_cat_stream (FILE *cat_stream, const char *cat_file,
 					int delete)
 {
 	int status = fclose (cat_stream);
@@ -2011,8 +2011,9 @@ static __inline__ int close_cat_stream (FILE *cat_stream, char *cat_file,
  * format a manual page with format_cmd, display it with disp_cmd, and
  * save it to cat_file
  */
-static int format_display_and_save (char *format_cmd, char *disp_cmd,
-				    char *cat_file)
+static int format_display_and_save (const char *format_cmd,
+				    const char *disp_cmd,
+				    const char *cat_file)
 {
 	FILE *in  = checked_popen (format_cmd, "r");
 	FILE *out = checked_popen (disp_cmd, "w");
@@ -2069,7 +2070,8 @@ static int format_display_and_save (char *format_cmd, char *disp_cmd,
 /* Format a manual page with format_cmd and display it with disp_cmd.
  * Handle temporary file creation if necessary.
  */
-static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
+static void format_display (const char *format_cmd, const char *disp_cmd,
+			    const char *man_file)
 {
 	char *command;
 	int status;
@@ -2156,10 +2158,10 @@ static void format_display (char *format_cmd, char *disp_cmd, char *man_file)
 			gripe_system (command, status);
 		free (command);
 	} else {
-		command = disp_cmd;
-		status = do_system_drop_privs (command);
+		const char *given_command = disp_cmd;
+		status = do_system_drop_privs (given_command);
 		if (status && status != (SIGPIPE + 0x80) * 256)
-			gripe_system (command, status);
+			gripe_system (given_command, status);
 	}
 
 	regain_effective_privs ();
@@ -2204,7 +2206,8 @@ static void display_catman (const char *cat_file, const char *format_cmd)
  * If man_file is "" this is a special case -- we expect the man page
  * on standard input.
  */
-static int display (char *dir, char *man_file, char *cat_file, char *title)
+static int display (const char *dir, const char *man_file,
+		    const char *cat_file, const char *title)
 {
 	int found;
 	static int pause;
@@ -2224,7 +2227,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 
 	/* define format_cmd */
 	{
-		char *source_file = NULL;
+		const char *source_file = NULL;
 #ifdef COMP_SRC
 		if (man_file) {
 			source_file = get_ztemp ();
@@ -2468,7 +2471,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 }
 
 
-static char *find_cat_file (char *path, char *man_file, char *sec)
+static char *find_cat_file (const char *path, const char *man_file)
 {
 	char *cat_file, *cat_path;
 
@@ -2487,7 +2490,7 @@ static char *find_cat_file (char *path, char *man_file, char *sec)
 
 static int compare_candidates (const struct mandata *left,
 			       const struct mandata *right,
-			       char *req_name)
+			       const char *req_name)
 {
 	char **sp;
 	int sec_left = 0, sec_right = 0, cmp;
@@ -2535,7 +2538,8 @@ static int compare_candidates (const struct mandata *left,
 
 /* Add an entry to the list of candidates. */
 static int add_candidate (struct candidate **head, char from_db, char cat,
-			  char *req_name, char *path, struct mandata *source)
+			  const char *req_name, const char *path,
+			  struct mandata *source)
 {
 	struct candidate *search, *insert, *candp;
 	int insert_found = 0;
@@ -2599,7 +2603,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
  * See if the preformatted man page or the source exists in the given
  * section.
  */
-static int try_section (char *path, char *sec, char *name,
+static int try_section (const char *path, const char *sec, const char *name,
 			struct candidate **cand_head)
 {
 	int found = 0;
@@ -2673,8 +2677,7 @@ static int display_filesystem (struct candidate *candp)
 				 man_file);
 		lang = lang_dir (man_file);
 
-		cat_file = find_cat_file (candp->path, man_file,
-					  candp->source->sec);
+		cat_file = find_cat_file (candp->path, man_file);
 		if (debug)
 			fprintf (stderr, "will try cat file %s\n", cat_file);
 		found = display (candp->path, man_file, cat_file, title);
@@ -2695,7 +2698,7 @@ static int display_filesystem (struct candidate *candp)
 
 #ifdef MAN_DB_UPDATES
 /* wrapper to dbdelete which deals with opening/closing the db */
-static void dbdelete_wrapper (char *page, struct mandata *info)
+static void dbdelete_wrapper (const char *page, struct mandata *info)
 {
 	if (!catman) {
 		dbf = MYDBM_RWOPEN (database);
@@ -2715,7 +2718,8 @@ static void dbdelete_wrapper (char *page, struct mandata *info)
 static int display_database (struct candidate *candp)
 {
 	int found = 0;
-	char *file, *name;
+	char *file;
+	const char *name;
 	char *title;
 	struct mandata *in = candp->source;
 #ifdef MAN_DB_UPDATES
@@ -2814,8 +2818,7 @@ static int display_database (struct candidate *candp)
 					 man_file);
 			lang = lang_dir (man_file);
 
-			cat_file = find_cat_file (candp->path, man_file,
-						  in->ext);
+			cat_file = find_cat_file (candp->path, man_file);
 			found += display (candp->path, man_file, cat_file,
 					  title);
 			free (cat_file);
@@ -2911,7 +2914,7 @@ static int display_database_check (struct candidate *candp)
 
 /* Look for a page in the database. If db not accessible, return -1,
    otherwise return number of pages found. */
-static int try_db (char *manpath, char *sec, char *name,
+static int try_db (const char *manpath, const char *sec, const char *name,
 		   struct candidate **cand_head)
 {
 	struct nlist *in_cache;
@@ -3002,7 +3005,7 @@ static int try_db (char *manpath, char *sec, char *name,
 /* try to locate the page under the specified manpath, in the desired section,
    with the supplied name. glob if necessary. Initially try to find it via
    a db cache access, if that fails, search the filesystem. */
-static int locate_page (char *manpath, char *sec, char *name,
+static int locate_page (const char *manpath, const char *sec, const char *name,
 			struct candidate **candidates)
 {
 	int found, db_ok;
@@ -3072,7 +3075,7 @@ static int display_pages (struct candidate *candidates)
  * being used, only look for the man page source file.
  *
  */
-static int man (char *name)
+static int man (const char *name)
 {
 	struct candidate *candidates = NULL;
 	int found = 0;
@@ -3163,7 +3166,7 @@ static __inline__ char **get_section_list (void)
    return 1 to skip
    return 0 to view
  */
-static __inline__ int do_prompt (char *name)
+static __inline__ int do_prompt (const char *name)
 {
 	int ch;
 

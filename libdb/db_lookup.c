@@ -78,7 +78,7 @@ void gripe_corrupt_data(void)
 }
 
 /* deal with situation where we cannot replace a key */
-void gripe_replace_key(char *data)
+void gripe_replace_key(const char *data)
 {
 	error (0, 0,
 	       _( "cannot replace key %s"),
@@ -87,7 +87,7 @@ void gripe_replace_key(char *data)
 }
 
 /* Just print out what would be stored in the db */
-void dbprintf(struct mandata *info)
+void dbprintf(const struct mandata *info)
 {
 	fprintf(stderr,
 		"name:      %s\n"
@@ -105,7 +105,7 @@ void dbprintf(struct mandata *info)
 }
 
 /* Form a multi-style key from page and extension info */
-datum make_multi_key(char *page, char *ext)
+datum make_multi_key(const char *page, const char *ext)
 {
 	datum key;
 	char *page_key = name_to_key (page);
@@ -204,7 +204,7 @@ void split_content(char *cont_ptr, struct mandata *pinfo)
 datum make_content(struct mandata *in)
 {
 	datum cont;
-	static char dash[] = "-";
+	static const char dash[] = "-";
 
 	if (!in->name)
 		in->name = dash;
@@ -290,7 +290,8 @@ int list_extensions(char *data, char *ext[])
  3) Many items exist. They are all returned, in a multiple structure set.
  */
 #ifndef FAST_BTREE
-static struct mandata *dblookup(char *page, char *section, int flags)
+static struct mandata *dblookup(const char *page, const char *section,
+				int flags)
 {
 	struct mandata *info = NULL;
 	datum key, cont;
@@ -364,12 +365,12 @@ static struct mandata *dblookup(char *page, char *section, int flags)
 }
 #endif /* !FAST_BTREE */
 
-struct mandata *dblookup_all(char *page, char *section)
+struct mandata *dblookup_all(const char *page, const char *section)
 {
 	return dblookup(page, section, ALL);
 }
 
-struct mandata *dblookup_exact(char *page, char *section)
+struct mandata *dblookup_exact(const char *page, const char *section)
 {
 	return dblookup(page, section, EXACT);
 }

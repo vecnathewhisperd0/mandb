@@ -58,7 +58,7 @@ extern char *strsep();
 
 #define NO_ENTRY	1;
 
-int dbdelete(char *name, struct mandata *info)
+int dbdelete(const char *name, struct mandata *info)
 {
 	datum key, cont;
 

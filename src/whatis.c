@@ -203,10 +203,10 @@ static __inline__ int use_grep (char *page, char *manpath)
    
 /* Take mandata struct (earlier returned from a dblookup()) and return 
    the relative whatis */
-static char *get_whatis (struct mandata *info, char *page)
+static char *get_whatis (struct mandata *info, const char *page)
 {
 	int rounds;
-	char *newpage;
+	const char *newpage;
 
 	/* See if we need to fill in the whatis here. */
 	if (*(info->pointer) == '-' || STREQ (info->pointer, page)) {

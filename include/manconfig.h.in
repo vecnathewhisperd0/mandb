@@ -236,8 +236,12 @@ extern void __chkr_garbage_detector (void);
    unconditionally */
 
 struct compression {
-	char *prog;
-	char *ext;
+	/* The following are const because they should be pointers to parts
+	 * of strings allocated elsewhere and should not be written through
+	 * or freed themselves.
+	 */
+	const char *prog;
+	const char *ext;
 	char *file;
 };
 
@@ -267,8 +271,8 @@ extern __inline__ void ver (void);
 #endif /* !STATIC_VER */
 
 /* compression.c */
-extern struct compression *comp_info (char *filename);
-extern struct compression *comp_file (char *filename);
+extern struct compression *comp_info (const char *filename);
+extern struct compression *comp_file (const char *filename);
 extern char *decompress (const char *filename, const struct compression *comp);
 extern __inline__ void remove_ztemp (void);
 extern __inline__ char *get_ztemp (void);
@@ -282,7 +286,7 @@ extern int find_name (char *file, char *filename, struct lexgrog *p_lg);
 
 /* util.c */
 extern char *mkdbname (const char *path);
-extern int is_changed (char *fa, char *fb);
+extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);
 extern __inline__ int do_system (const char *command);
 extern char *escape_shell (const char *unesc);

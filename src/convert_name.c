@@ -46,7 +46,7 @@ static __inline__ void gripe_converting_name (char *name)
 
 /* derive the catpage path for manpage 'name'. If alternate is not NULL, use
    its value as the catpath dir. */
-char *convert_name (char *name, char *alternate)
+char *convert_name (const char *name, const char *alternate)
 {
 	char *to_name, *t1 = NULL;
 	char *t2 = NULL;

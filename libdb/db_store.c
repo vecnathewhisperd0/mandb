@@ -126,18 +126,9 @@ static int replace_if_necessary(struct mandata *in, struct mandata *info,
  return errorcode or 0 on success.
 */
 #ifndef FAST_BTREE
-int dbstore(struct mandata *in, char *basename)
+int dbstore(struct mandata *in, const char *basename)
 {
 	datum oldkey, oldcont;
-
-	if (in->name == NULL ||
-	    (*in->name != '-' &&
-	     (*in->name < 'a' || *in->name > 'z') &&
-	     (*in->name < 'A' || *in->name > 'Z') &&
-	     (*in->name < '0' || *in->name > '9'))) {
-		fprintf (stderr, "in->name broken? '%s'\n", in->name);
-		sleep (10);
-	}
 
 	/* create a simple key */
  	oldkey.dsize = strlen(basename) + 1;

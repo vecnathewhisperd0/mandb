@@ -1050,7 +1050,7 @@ char *get_mandb_manpath (void)
  * whether to drop privileges. When cattype != 0 it's OK to return global
  * catpaths.
  */
-char *get_catpath (char *name, int cattype)
+char *get_catpath (const char *name, int cattype)
 {
 	struct list *list;
 

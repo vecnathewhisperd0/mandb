@@ -39,35 +39,41 @@ struct mandata {
 	struct mandata *next;		/* ptr to next structure, if any */
 	char *addr;			/* ptr to memory containing the fields */
 
-	char *name;			/* Name of page, if != key */
-	char *ext;			/* Filename ext w/o comp ext */
-	char *sec;			/* Section name/number */
+	/* The following are all const because they should be pointers to
+	 * parts of strings allocated elsewhere (often the addr field above)
+	 * and should not be written through or freed themselves.
+	 */
+	const char *name;		/* Name of page, if != key */
+	const char *ext;		/* Filename ext w/o comp ext */
+	const char *sec;		/* Section name/number */
 	char id;			/* id for this entry */
-	char *pointer;			/* id related file pointer */
-	char *comp;			/* Compression extension */
-	char *filter;			/* filters needed for the page */
-	char *whatis;			/* whatis description for page */
+	const char *pointer;		/* id related file pointer */
+	const char *comp;		/* Compression extension */
+	const char *filter;		/* filters needed for the page */
+	const char *whatis;		/* whatis description for page */
 	time_t _st_mtime;		/* mod time for file */
 }; 
 
 /* used by the world */
-extern __inline__ struct mandata *dblookup_all(char *page, char *section);
-extern __inline__ struct mandata *dblookup_exact(char *page, char *section);
-extern int dbstore(struct mandata *in, char *basename);
-extern int dbdelete(char *name, struct mandata *in);
-extern void dbprintf(struct mandata *info);
+extern __inline__ struct mandata *dblookup_all(const char *page,
+					       const char *section);
+extern __inline__ struct mandata *dblookup_exact(const char *page,
+						 const char *section);
+extern int dbstore(struct mandata *in, const char *basename);
+extern int dbdelete(const char *name, struct mandata *in);
+extern void dbprintf(const struct mandata *info);
 extern void free_mandata_struct(struct mandata *info);
 extern void split_content(char *cont_ptr, struct mandata *pinfo);
 
 /* local to db routines */
 extern __inline__ void gripe_lock(char *filename);
 extern __inline__ void gripe_corrupt_data(void);
-extern datum make_multi_key(char *page, char *ext);
+extern datum make_multi_key(const char *page, const char *ext);
 extern __inline__ struct mandata *infoalloc(void);
 extern char *name_to_key(const char *name);
 extern char **split_data(char *content, char *start[]);
 extern datum make_content(struct mandata *in);
 extern int list_extensions(char *data, char *ext[]);
-extern void gripe_replace_key(char *data);
+extern void gripe_replace_key(const char *data);
 
 #endif

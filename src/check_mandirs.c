@@ -140,7 +140,10 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 			fprintf (stderr, "raw_whatis = %s\n", raw_whatis);
 		info->whatis = strstr (raw_whatis, " - ");
 		if (info->whatis) {
-			char *space = info->whatis;
+			/* Deliberate cast in order to modify the whatis.
+			 * Don't change its length!
+			 */
+			char *space = (char *) info->whatis;
 			while (*space == ' ')
 				*space-- = '\0';    /* separate description */
 			info->whatis += 3;
@@ -254,15 +257,18 @@ char *filename_info (char *file, struct mandata *info, const char *req_name)
 	info->comp = NULL;
 #endif /* COMP_SRC */
 
-	info->ext = strrchr (base_name, '.');
-	if (!info->ext) {
-		/* no section extension */
-		gripe_bogus_manpage (file);
-		free (manpage);
-		return NULL;
+	{
+		char *ext = strrchr (base_name, '.');
+		if (!ext) {
+			/* no section extension */
+			gripe_bogus_manpage (file);
+			free (manpage);
+			return NULL;
+		}
+		*ext++ = '\0';			/* set section ext */
+		info->ext = ext;
 	}
 
-	*(info->ext++) = '\0';			/* set section ext */
 	*(base_name - 1) = '\0';		/* strip '/base_name' */ 
 	info->sec = strrchr (manpage, '/') + 4;	/* set section name */
 

@@ -79,7 +79,7 @@ static __inline__ void create_ztemp (void)
    	comp->ext = "gz";
    	comp->file = filename + 19;				
  */
-struct compression *comp_info (char *filename)
+struct compression *comp_info (const char *filename)
 {
 	char *ext;
 	static char buff[10];
@@ -105,7 +105,7 @@ struct compression *comp_info (char *filename)
 
 /* take filename w/o comp ext. as arg, return comp->file as a relative
    compressed file or NULL if none found */
-struct compression *comp_file (char *filename)
+struct compression *comp_file (const char *filename)
 {
 	size_t len;
 	char *compfile;
@@ -120,6 +120,13 @@ struct compression *comp_file (char *filename)
 		compfile = strappend (compfile, comp->ext, NULL);
 
 		if (stat (compfile, &buf) == 0) {
+			/* TODO: how to make this const? Calling code seems
+			 * to know that it needs to free comp->file after
+			 * calling this function, but this is messy.
+			 *
+			 * Perhaps it would be better to fix the dodgy reuse
+			 * of comp->file above ...
+			 */
 			comp->file = compfile;
 			return comp;
 		}

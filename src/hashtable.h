@@ -20,8 +20,9 @@ struct nlist {
         int is_text;		/* what did we store here ? */
 };
 
-extern struct nlist *lookup (char *s);
-extern __inline__ struct nlist *install_text (char *name, char *text);
-extern __inline__ struct nlist *install_db_ptr (char *name,
+extern struct nlist *lookup (const char *s);
+extern __inline__ struct nlist *install_text (const char *name,
+					      const char *text);
+extern __inline__ struct nlist *install_db_ptr (const char *name,
 						struct mandata *db_ptr);
 extern void free_hashtab (void);
