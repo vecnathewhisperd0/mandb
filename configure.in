@@ -76,6 +76,16 @@ AC_ARG_ENABLE(setuid,
 	  [man_owner=man
 	   man_install_flags="-m 4755 -o man"
 	   AC_DEFINE_UNQUOTED(SECURE_MAN_UID, "$man_owner")])
+AC_ARG_ENABLE(undoc,
+[  --enable-undoc=COMMAND  suggest COMMAND for missing manual pages],
+	[if test "$enableval" = "yes" || test "$enableval" = "no"
+	 then
+		AC_MSG_ERROR(--enable-undoc requires an argument)
+	 else
+		MAN_ECHO("Suggesting '$enableval' for missing manual pages")
+		AC_DEFINE_UNQUOTED(UNDOC_COMMAND, "$enableval",
+				   [Define as the name of a command you want to suggest when a non-existent page is requested.])
+	 fi])
 AC_ARG_WITH(device,
 [  --with-device=DEVICE	  use nroff with the output device DEVICE],
 	[if test "$withval" = "yes" || test "$withval" = "no" 

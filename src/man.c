@@ -636,6 +636,12 @@ static __inline__ void gripe_no_man (const char *name, const char *sec)
 		fprintf (stderr, _(" in section %s\n"), sec);
 	else
 		putc ('\n', stderr);
+
+#ifdef UNDOC_COMMAND
+	fprintf (stderr,
+		 _("See '%s' for help when manual pages are not available.\n"),
+		 UNDOC_COMMAND);
+#endif
 }
 
 /* fire up the appropriate external program */

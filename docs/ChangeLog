@@ -1,3 +1,11 @@
+Thu Nov 14 23:26:58 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in: Implement --enable-undoc=COMMAND.
+	* src/man.c (gripe_no_man): If --enable-undoc=COMMAND was set, print
+	  an additional message referring users to COMMAND. This is mostly
+	  here to support Debian's undocumented(7) page in a nicer way, but
+	  perhaps others will find it useful too.
+
 Thu Nov 14 04:21:09 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/Makefile.in: Use @LIBINTL@ rather than @INTLLIBS@. The latter
