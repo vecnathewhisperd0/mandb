@@ -1,3 +1,12 @@
+Sun Dec 29 19:57:55 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c, src/check_mandirs.h: Move page_description
+	  interface functions to ...
+	* src/descriptions.c, src/descriptions.h: ... here (new files).
+	* src/Makefile.in (man, mandb): Link descriptions.o.
+
+	* libdb/db_storage.h: Include libdb/mydbm.h for the datum type.
+
 Sun Dec 29 19:51:11 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l: Add commas between short and long options in usage

@@ -79,9 +79,9 @@ extern char *canonicalize_file_name __P ((__const char *__name));
 #include "libdb/mydbm.h"
 #include "libdb/db_storage.h"
 #include "lib/error.h"
+#include "descriptions.h"
 #include "manp.h"
 #include "security.h"
-#include "check_mandirs.h"
 
 static char *temp_name;
 static char *catdir, *mandir;

@@ -2,7 +2,7 @@
  * check_mandirs.c: used to auto-update the database caches
  *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001 Colin Watson.
+ * Copyright (C) 2001, 2002 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -80,6 +80,7 @@ extern int errno;
 #include "libdb/db_storage.h"
 #include "lib/error.h"
 #include "lib/hashtable.h"
+#include "descriptions.h"
 #include "globbing.h"
 #include "ult_src.h"
 #include "security.h"
@@ -105,13 +106,6 @@ static void gripe_multi_extensions (const char *path, const char *sec,
 		error (0, 0,
 		       _("warning: %s/man%s/%s.%s*: competing extensions"),
 		       path, sec, name, ext);
-}
-
-static void gripe_bad_store (const char *name, const char *ext)
-{
-	if (quiet < 2)
-		error (0, 0, _("warning: failed to store entry for %s(%s)"),
-		       name, ext);
 }
 
 static void gripe_rwopen_failed (const char *database)
@@ -148,154 +142,6 @@ char *make_filename (const char *path, const char *name,
 		file = strappend (file, ".", in->comp, NULL);
 
 	return file;
-}
-
-/* Parse the description in a whatis line returned by find_name() into a
- * sequence of names and whatis descriptions.
- */
-struct page_description *parse_descriptions (const char *base_name,
-					     const char *whatis)
-{
-	const char *sep, *nextsep;
-	struct page_description *desc = NULL, *head = NULL;
-	int seen_base_name = 0;
-
-	if (!whatis)
-		return NULL;
-
-	sep = whatis;
-
-	while (sep) {
-		char *record;
-		size_t length;
-		const char *dash;
-		char *names;
-		const char *token;
-
-		/* Use a while loop so that we skip over things like the
-		 * result of double line breaks.
-		 */
-		while (*sep == 0x11 || *sep == ' ')
-			++sep;
-		nextsep = strchr (sep, 0x11);
-
-		/* Get this record as a null-terminated string. */
-		if (nextsep)
-			length = (size_t) (nextsep - sep);
-		else
-			length = strlen (sep);
-		if (length == 0)
-			break;
-
-		record = xstrndup (sep, length);
-		if (debug)
-			fprintf (stderr, "record = '%s'\n", record);
-
-		/* Split the record into name and whatis description. */
-		dash = strstr (record, " - ");
-		if (dash)
-			names = xstrndup (record, dash - record);
-		else
-			names = xstrdup (record);
-
-		for (token = strtok (names, ","); token;
-		     token = strtok (NULL, ",")) {
-			/* Allocate new description node. */
-			if (head) {
-				desc->next = malloc (sizeof *desc);
-				desc = desc->next;
-			} else {
-				desc = malloc (sizeof *desc);
-				head = desc;
-			}
-			desc->name   = trim_spaces (token);
-			desc->whatis = dash ? trim_spaces (dash + 3) : NULL;
-			desc->next   = NULL;
-
-			if (STREQ (base_name, desc->name))
-				seen_base_name = 1;
-		}
-
-		free (names);
-
-		sep = nextsep;
-	}
-
-	/* If it isn't there already, add the base_name onto the returned
-	 * list.
-	 */
-	if (!seen_base_name) {
-		if (head) {
-			desc->next = malloc (sizeof *desc);
-			desc = desc->next;
-			desc->whatis = xstrdup (head->whatis);
-		} else {
-			desc = malloc (sizeof *desc);
-			head = desc;
-			desc->whatis = NULL;
-		}
-		desc->name = xstrdup (base_name);
-		desc->next = NULL;
-	}
-
-	return head;
-}
-
-/* Take a list of descriptions returned by parse_descriptions() and store
- * it into the database.
- */
-void store_descriptions (const struct page_description *head,
-			 struct mandata *info, const char *base_name)
-{
-	const struct page_description *desc;
-	char save_id = info->id;
-
-	if (debug)
-		fprintf (stderr, "base_name = '%s'\n", base_name);
-
-	for (desc = head; desc; desc = desc->next) {
-		/* Either it's the real thing or merely a reference. Get the
-		 * id and pointer right in either case.
-		 */
-		if (STREQ (base_name, desc->name)) {
-			info->id = save_id;
-			info->pointer = NULL;
-			info->whatis = desc->whatis;
-		} else {
-			if (save_id < STRAY_CAT)
-				info->id = WHATIS_MAN;
-			else
-				info->id = WHATIS_CAT;
-			info->pointer = base_name;
-			/* Don't waste space storing the whatis in the db
-			 * more than once.
-			 */
-			info->whatis = NULL;
-		}
-
-		if (debug)
-			fprintf (stderr, "name = '%s', id = %c\n",
-				 desc->name, info->id);
-		if (dbstore (info, desc->name) > 0) {
-			gripe_bad_store (base_name, info->ext);
-			break;
-		}
-	}
-}
-
-/* Free a description list and all its contents. */
-void free_descriptions (struct page_description *head)
-{
-	struct page_description *desc = head, *prev;
-
-	while (desc) {
-		free (desc->name);
-		if (desc->whatis)
-			free (desc->whatis);
-		prev = desc;
-		desc = desc->next;
-		free (prev);
-	}
 }
 
 /* Fill in a mandata structure with information about a file name.
