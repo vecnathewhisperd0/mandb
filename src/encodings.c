@@ -111,6 +111,7 @@ static struct directory_entry directory_table[] = {
 	{ "pl",		"ISO-8859-2",	"ISO-8859-2"		}, /* Polish */
 	{ "ru",		"KOI8-R",	"KOI8-R"		}, /* Russian */
 	{ "sk",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovak */
+	{ "tr",		"ISO-8859-9",	"ISO-8859-9"		}, /* Turkish */
 #endif /* MULTIBYTE_GROFF */
 
 	{ NULL,		NULL,		"NULL"			}
