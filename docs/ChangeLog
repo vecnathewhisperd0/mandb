@@ -1,3 +1,24 @@
+Mon May 20 01:16:02 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_lookup.c (free_mandata_elements): New function, to be
+	  used rather than freeing the addr field directly. This frees name
+	  as well.
+	  (free_mandata_struct): Use it.
+	* libdb/db_btree.c (dbstore, dblookup): Likewise.
+	* libdb/db_store.c (dbstore): Likewise.
+	* src/whatis.c (whatis): Likewise.
+	* libdb/db_storage.h: Prototype it.
+
+	* libdb/db_store.c (replace_if_necessary): Rename in and info to
+	  newdata and olddata, which are more comprehensible. Don't check
+	  that the name fields match here - the caller should do that.
+	  (dbstore): Make sure in->name isn't set on entry, and instead set
+	  it to the basename where necessary. Don't set the name field in
+	  multi keys, which use the proper case.
+
+	* src/check_mandirs.c (filename_info): We don't need to examine the
+	  case of base_name here.
+
 Thu May 16 00:47:05 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_btree.c (btree_flopen): If O_CREAT isn't set, check

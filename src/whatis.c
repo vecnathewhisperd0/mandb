@@ -320,8 +320,8 @@ static __inline__ int whatis (char *page)
 		display (info, page);
 		count++;
 		pinfo = info->next;	/* go on to next structure */
-	 	free (info->addr);	/* free info's `content' */
-	 	free (info);		/* free info */
+		free_mandata_elements (info);
+	 	free (info);
 		info = pinfo;
 	}
 	return count;

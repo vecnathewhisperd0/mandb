@@ -66,25 +66,29 @@ static void gripe_insert_unused(char *data)
 #define FAVOUR(a,b) ((a) < (b))
 #endif /* FAVOUR_STRAYCATS */
 
-/* The do_we_replace logic */
-static int replace_if_necessary(struct mandata *in, struct mandata *info, 
+/* The do_we_replace logic. Decide, for some existing key, whether it should
+ * be replaced with some new contents. Check that names and section
+ * extensions match before calling this.
+ */
+static int replace_if_necessary(struct mandata *newdata,
+				struct mandata *olddata,
 				datum newkey, datum newcont)
 {
-	if (FAVOUR(in->id, info->id)) {
+	if (FAVOUR(newdata->id, olddata->id)) {
 		if (MYDBM_REPLACE(dbf, newkey, newcont))
 			gripe_replace_key(newkey.dptr);
-	} else if (in->id == info->id) 
+	} else if (newdata->id == olddata->id) 
 		if (debug)
 			fprintf(stderr,
 				"ignoring identical multi key: %s\n",
 				newkey.dptr);
-			
-	if (in->id == info->id &&
-	    in->id == ULT_MAN) {
-		if (STREQ(dash_if_unset(in->comp), info->comp) &&
-		    STREQ(dash_if_unset(in->name),
-			  dash_if_unset(info->name))) {
-			if (in->_st_mtime != info->_st_mtime) {
+
+	/* TODO: name fields should be collated with the requested name */
+
+	if (newdata->id == olddata->id &&
+	    newdata->id == ULT_MAN) {
+		if (STREQ(dash_if_unset(newdata->comp), olddata->comp)) {
+			if (newdata->_st_mtime != olddata->_st_mtime) {
 				if (debug)
 					fprintf(stderr, "replace_if_necessary(): replace\n");
 				if (MYDBM_REPLACE(dbf, newkey, newcont))
@@ -143,16 +147,27 @@ int dbstore(struct mandata *in, const char *basename)
  	}
 
 	oldkey.dptr = name_to_key(basename);
+	if (in->name) {
+		error (0, 0, "in->name (%s) should not be set when calling "
+			     "dbstore()!\n",
+		       in->name);
+		free (in->name);
+		in->name = NULL;
+	}
 
 	/* get the content for the simple key */
 	
 	oldcont = MYDBM_FETCH(dbf, oldkey);
 
 	if (oldcont.dptr == NULL) { 		/* situation (1) */
+		if (!STREQ(basename, oldkey.dptr))
+			in->name = xstrdup(basename);
 		oldcont = make_content(in);
 		if (MYDBM_INSERT(dbf, oldkey, oldcont))
 			gripe_insert_unused(oldkey.dptr);
 		free(oldcont.dptr);
+		free(in->name);
+		in->name = NULL;
 	} else if (*oldcont.dptr == '\t') { 	/* situation (2) */
 		datum newkey, newcont;
 
@@ -160,18 +175,18 @@ int dbstore(struct mandata *in, const char *basename)
 		newcont = make_content(in);
 
 		/* Try to insert the new multi data */
-		
+
 		if (MYDBM_INSERT(dbf, newkey, newcont)) {
 			datum cont;
 			struct mandata info;
 			int ret;
-			
+
 			MYDBM_FREE(oldcont.dptr);
 			cont = MYDBM_FETCH(dbf, newkey);
 			split_content(cont.dptr, &info);
 			ret = replace_if_necessary(in, &info, newkey, newcont);
 			/* MYDBM_FREE(cont.dptr); */
-			free(info.addr);
+			free_mandata_elements(&info);
 			free(newkey.dptr);
 			free(newcont.dptr);
 			free(oldkey.dptr);
@@ -204,7 +219,7 @@ int dbstore(struct mandata *in, const char *basename)
 	} else { 				/* situation (3) */
 		datum newkey, newcont, lastkey, lastcont; 
 		struct mandata old;
-		const char *old_name;
+		char *old_name;
 
 		/* Extract the old singular reference */
 
@@ -214,29 +229,40 @@ int dbstore(struct mandata *in, const char *basename)
 		   and new items, create new content */
 
 		if (old.name)
-			old_name = old.name;
+			old_name = xstrdup(old.name);
 		else
-			old_name = oldkey.dptr;
+			old_name = xstrdup(oldkey.dptr);
 
 		lastkey = make_multi_key(old_name, old.ext);
-		newkey = make_multi_key(basename, in->ext);
-		newcont = make_content(in);
 
 		/* Check against identical multi keys before inserting
 		   into db */
 
-		if (STREQ(old.ext, in->ext)) {
+		if (STREQ(old_name, basename) && STREQ(old.ext, in->ext)) {
 			int ret;
 
+			if (!STREQ(basename, oldkey.dptr))
+				in->name = xstrdup(basename);
+			newcont = make_content(in);
 			ret = replace_if_necessary(in, &old, oldkey, newcont);
 			/* MYDBM_FREE(oldcont.dptr); */
-			free(old.addr);
+			free_mandata_elements(&old);
 			free(newcont.dptr);
-			free(newkey.dptr);
 			free(lastkey.dptr);
 			free(oldkey.dptr);
+			free(old_name);
+			free(in->name);
+			in->name = NULL;
 
 			return ret;
+		}
+
+		/* Multi keys use the proper case, and so don't need a name
+		 * field.
+		 */
+		if (old.name) {
+			free(old.name);
+			old.name = NULL;
 		}
 
 		lastcont = make_content(&old);	
@@ -246,6 +272,9 @@ int dbstore(struct mandata *in, const char *basename)
 
 		free(lastkey.dptr);
 		free(lastcont.dptr);
+
+		newkey = make_multi_key(basename, in->ext);
+		newcont = make_content(in);
 
 		if (MYDBM_INSERT(dbf, newkey, newcont))
 			gripe_insert_unused(newkey.dptr);
@@ -265,8 +294,9 @@ int dbstore(struct mandata *in, const char *basename)
 			gripe_replace_key(oldkey.dptr);
 
 		/* MYDBM_FREE(oldcont.dptr); */
-		free(old.addr);
+		free_mandata_elements(&old);
 		free(newcont.dptr);
+		free(old_name);
 	}
 
 	free(oldkey.dptr);

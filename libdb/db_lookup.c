@@ -149,18 +149,27 @@ struct mandata *infoalloc(void)
 	return info;
 }
 
-/* go through the linked list of structures, free()ing the `content' and the
-   structs themselves */
+/* Free allocated elements of a mandata structure, but not the structure
+ * itself.
+ */
+void free_mandata_elements(struct mandata *pinfo)
+{
+	if (pinfo->addr)
+		free(pinfo->addr);		/* free the 'content' */
+	if (pinfo->name)
+		free(pinfo->name);		/* free the real name */
+}
+
+/* Go through the linked list of structures, free()ing the 'content' and the
+ * structs themselves.
+ */
 void free_mandata_struct(struct mandata *pinfo)
 {
 	while(pinfo) {
 		struct mandata *next;
 
 		next = pinfo->next;
-		if (pinfo->addr)
-			free(pinfo->addr); 	/* free the `content' */
-		if (pinfo->name)
-			free(pinfo->name);	/* free the real name */
+		free_mandata_elements(pinfo);
 		free(pinfo);			/* free the structure */
 		pinfo = next;
 	}

@@ -277,10 +277,10 @@ int dbstore(struct mandata *in, char *basename)
 				cont = make_content(in);
 				status = replace_if_necessary(in, &old, key, cont);
 				free(cont.dptr);
-				free(old.addr);
+				free_mandata_elements(&old);
 				break;
 			}
-			free(old.addr);
+			free_mandata_elements(&old);
 			status = (dbf->seq)(dbf, (DBT *) &key, (DBT *) &cont, R_NEXT);
 			if (strcmp(key.dptr, basename) != 0) {
 				key.dptr = basename;
@@ -328,7 +328,7 @@ static struct mandata *dblookup(char *page, char *section, int flags)
 		    strncmp(section, info->ext, 
 		    	    flags & EXACT ? strlen(info->ext)
 		    	    : strlen(section)) == 0) ) {
-			free(info->addr);
+			free_mandata_elements(info);
 		} else {
 			null_me = &(info->next);
 			info = (info->next = infoalloc());

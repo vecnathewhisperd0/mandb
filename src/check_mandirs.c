@@ -231,7 +231,7 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
  * 
  * Only the fields name, ext, sec, and comp are filled in by this function.
  * name is only set if it differs from req_name; otherwise it remains at
- * "-".
+ * NULL.
  */
 char *filename_info (char *file, struct mandata *info, const char *req_name)
 {
@@ -279,23 +279,10 @@ char *filename_info (char *file, struct mandata *info, const char *req_name)
 		return NULL;
 	}
 
-	info->name = NULL;
-	if (req_name) {
-		if (!STREQ (base_name, req_name))
-			info->name = xstrdup (base_name);
-	} else {
-		char *p;
-		for (p = base_name; *p; ++p) {
-			if (isupper (*p)) {
-				/* If an upper-case character was found, the
-				 * key will differ from the name, so we'd
-				 * better remember the real name here.
-				 */
-				info->name = xstrdup (base_name);
-				break;
-			}
-		}
-	}
+	if (req_name && !STREQ (base_name, req_name))
+		info->name = xstrdup (base_name);
+	else
+		info->name = NULL;
 
 	return manpage;
 }
