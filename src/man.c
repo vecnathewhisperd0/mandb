@@ -187,7 +187,7 @@ struct lt {
 	{ "is"		, "latin1"	, "latin1"	}, /* Icelandic */
 	{ "it"		, "latin1"	, "latin1"	}, /* Italian */
 	{ "ja"		, "nippon"	, "ja"		}, /* Japanese */
-	{ "ko"		, "nippon"	, "latin1"	}, /* Korean */
+	{ "ko"		, "ascii8"	, "iso8859"	}, /* Korean */
 	{ "nl"		, "latin1"	, "latin1"	}, /* Dutch */
 	{ "no"		, "latin1"	, "latin1"	}, /* Norwegian */
 	{ "pt"		, "latin1"	, "latin1"	}, /* Portuguese */

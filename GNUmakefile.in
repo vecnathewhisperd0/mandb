@@ -192,7 +192,7 @@ dist: update
 	$(MAKE) -C src lexgrog.c
 	$(MAKE) -C zsoelim zsoelim.c
 	rm -fr $(man_db)
-	rm -f $(man_db).tgz
+	rm -f $(man_db).tar.gz
 	mkdir $(man_db) 
 	mkdir $(addprefix $(man_db)/, $(_subdirs))
 	mkdir $(addprefix $(man_db)/man/, $(nls_man))
@@ -206,6 +206,6 @@ dist: update
 	  $(MAKE) -C $$subdir dist; \
 	done
 	chmod -R a+rX $(man_db)
-	tar cvf - $(man_db) | gzip -9 > $(man_db).tgz
+	tar cvf - $(man_db) | gzip -9 > $(man_db).tar.gz
 	rm -fr $(man_db)
 endif

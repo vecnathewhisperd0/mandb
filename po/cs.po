@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.16\n"
-"POT-Creation-Date: 2001-08-29 20:02+0100\n"
+"POT-Creation-Date: 2001-09-05 04:05+0100\n"
 "PO-Revision-Date: 2000-04-07 08:32+02:00\n"
 "Last-Translator: Vladimir Michl <Vladimir.Michl@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -154,7 +154,7 @@ msgstr "varování: %s: ignoruji"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "varování: %s/man%s/%s.%s*: více pøípon"
 
-#: src/check_mandirs.c:104 src/check_mandirs.c:646 src/man.c:2632
+#: src/check_mandirs.c:104 src/check_mandirs.c:646 src/man.c:2704
 #, c-format
 msgid "can't update index cache %s"
 msgstr "restøík %s nelze aktualizovat"
@@ -199,7 +199,7 @@ msgstr "dokonèeno.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr ""
 
-#: src/compression.c:64 src/man.c:1396
+#: src/compression.c:64 src/man.c:1397
 msgid "can't create a temporary filename"
 msgstr "doèasný soubor nelze vytvoøit"
 
@@ -208,22 +208,22 @@ msgstr "doèasný soubor nelze vytvoøit"
 msgid "Can't convert %s to cat name"
 msgstr "%s nelze pøevést na jméno cat souboru"
 
-#: lexgrog.l:299
+#: lexgrog.l:300
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "varování: whatis argument %s je del¹í o bajtù: %d (bude zkrácen)"
 
-#: lexgrog.l:354 src/ult_src.c:292 src/ult_src.c:299
+#: lexgrog.l:364 src/ult_src.c:292 src/ult_src.c:299
 #, c-format
 msgid "can't open %s"
 msgstr "soubor %s nelze otevøít"
 
-#: lexgrog.l:396
+#: lexgrog.l:414
 #, fuzzy, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "Pou¾ití: %s [-dhV] [-M cesta_k_man_stránkám] [sekce] ...\n"
 
-#: lexgrog.l:398
+#: lexgrog.l:416
 #, fuzzy
 msgid ""
 "-m --man                    parse as man page.\n"
@@ -243,7 +243,7 @@ msgstr ""
 "-V --version                vypí¹e oznaèení verze\n"
 "-h --help                   vypí¹e tuto nápovìdu\n"
 
-#: lexgrog.l:444
+#: lexgrog.l:462
 #, fuzzy
 msgid "-m -c: incompatible options"
 msgstr ": nekompatibilní pøepínaè(e)"
@@ -257,7 +257,7 @@ msgstr "rouru nelze otevøít"
 msgid "command exited with status %d: %s"
 msgstr "pøíkaz skonèil s návratovým kódem %d: %s"
 
-#: src/man.c:535
+#: src/man.c:533
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-Slist]\n"
@@ -268,7 +268,7 @@ msgstr ""
 "            [-Sseznam] [-msystém] [-pøetìzec] [-Llokalizace] [-epøípona]\n"
 "            [sekce] stánka ...\n"
 
-#: src/man.c:540
+#: src/man.c:538
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-msystem]\n"
@@ -278,7 +278,7 @@ msgstr ""
 "msystém]\n"
 "            [-pøetìzec] [-Llokalizace] [-epøípona] [sekce] stránka ...\n"
 
-#: src/man.c:546
+#: src/man.c:544
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -310,7 +310,7 @@ msgstr ""
 "stránek\n"
 "-7, --ascii                 provádí pøeklad nìkterých latin1 znakù do ASCII"
 
-#: src/man.c:559
+#: src/man.c:557
 #, c-format
 msgid ""
 "-t, --troff                 use %s to format pages.\n"
@@ -319,31 +319,31 @@ msgstr ""
 "-t, --troff                 pou¾ije %s pro formátování stránek\n"
 "-T, --troff-device device   pou¾ije %s pro zvolené zaøízení\n"
 
-#: src/man.c:563
+#: src/man.c:561
 msgid ""
 "-H, --html                  use lynx or argument to display html output.\n"
 msgstr ""
 "-H, --html                  pou¾ije lynx nebo argument pro zobrazení html\n"
 "                            výstupu.\n"
 
-#: src/man.c:564
+#: src/man.c:562
 msgid "-Z, --ditroff               use groff and force it to produce ditroff."
 msgstr ""
 "-Z, --ditroff               pou¾ije groff a pøinutí ho produkovat ditroff"
 
-#: src/man.c:565
+#: src/man.c:563
 #, fuzzy
 msgid ""
 "-X, --gxditview             use groff and display through gditview (X11):"
 msgstr ""
 "-Z, --ditroff               pou¾ije groff a pøinutí ho produkovat ditroff"
 
-#: src/man.c:566
+#: src/man.c:564
 msgid ""
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 msgstr ""
 
-#: src/man.c:571
+#: src/man.c:569
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-M, --manpath path          set search path for manual pages to `path'.\n"
@@ -369,7 +369,7 @@ msgstr ""
 "po¾adujeme\n"
 "-p, --preprocessor øetìzec  øetìzec oznaèující, který preprocesor spustit."
 
-#: src/man.c:581
+#: src/man.c:579
 msgid ""
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message."
@@ -377,31 +377,31 @@ msgstr ""
 "-V, --version               vypí¹e oznaèení verze\n"
 "-h, --help                  vypí¹e tuto nápovìdu"
 
-#: src/man.c:595
+#: src/man.c:593
 #, c-format
 msgid "What manual page do you want from section %s?\n"
 msgstr "Kterou manuálovou stránku ze sekce %s si pøejete?\n"
 
-#: src/man.c:598
+#: src/man.c:596
 msgid "What manual page do you want?\n"
 msgstr "Kterou manuálovou stránku si pøejete?\n"
 
-#: src/man.c:687
+#: src/man.c:685
 #, c-format
 msgid "No source manual entry for %s"
 msgstr "Zdrojová manuálová stránka pro %s nebyla nalezena"
 
-#: src/man.c:696
+#: src/man.c:694
 #, c-format
 msgid "No manual entry for %s"
 msgstr "Manuálová stránka pro %s nebyla nalezena"
 
-#: src/man.c:701
+#: src/man.c:699
 #, c-format
 msgid " in section %s\n"
 msgstr " v sekci %s\n"
 
-#: src/man.c:850 src/man.c:2197
+#: src/man.c:848 src/man.c:2259
 #, c-format
 msgid "can't chdir to %s"
 msgstr "do adresáøe %s nelze vstoupit"
@@ -417,81 +417,91 @@ msgstr ""
 " Manuálová stránka $MAN_PN ?ltøádek %lt?L/%L.:bajt %bB?s/%s..?e (KONEC):?pB %"
 "pB\\\\%.."
 
-#: src/man.c:1276
+#: src/man.c:1277
 msgid ": incompatible options"
 msgstr ": nekompatibilní pøepínaè(e)"
 
-#: src/man.c:1481
+#: src/man.c:1482
 msgid "error trying to read from stdin"
 msgstr "chyba, zkou¹eno ètení ze standardního vstupu"
 
-#: src/man.c:1494
+#: src/man.c:1495
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "chyba, zápis do doèasného souboru %s"
 
-#: src/man.c:1665
+#: src/man.c:1666
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ignoruji neznámý preprocesor `%c'"
 
-#: src/man.c:1837 src/mandb.c:241
+#: src/man.c:1842 src/mandb.c:241
 #, c-format
 msgid "can't chown %s"
 msgstr "chown %s nelze provést"
 
-#: src/man.c:1848 src/mandb.c:212
+#: src/man.c:1853 src/mandb.c:212
 #, c-format
 msgid "can't chmod %s"
 msgstr "chmod %s nelze provést"
 
-#: src/man.c:1860 src/mandb.c:179
+#: src/man.c:1865 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s nelze pøejmenovat na %s"
 
-#: src/man.c:1880
+#: src/man.c:1885
 #, fuzzy, c-format
 msgid "can't set times on %s"
 msgstr "%s nelze pøejmenovat na %s"
 
-#: src/man.c:1889
+#: src/man.c:1894
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s nelze smazat"
 
-#: src/man.c:1917
+#: src/man.c:1922
 msgid "can't create pipe"
 msgstr "rouru nelze vytvoøit"
 
-#: src/man.c:1943
+#: src/man.c:1948
 #, c-format
 msgid "can't create %s"
 msgstr "%s nelze vytvoøit"
 
-#: src/man.c:1951 src/security.c:259
+#: src/man.c:1956 src/security.c:259
 msgid "can't fork"
 msgstr "fork nelze provést"
 
-#: src/man.c:1961 src/man.c:1967
+#: src/man.c:1966 src/man.c:1972
 msgid "can't dup2"
 msgstr "dup2 nelze provést"
 
-#: src/man.c:1986
+#: src/man.c:1991
 #, c-format
 msgid "can't exec %s"
 msgstr "exec %s nelze vykonat"
 
-#: src/man.c:2022
+#: src/man.c:2027
 #, c-format
 msgid "waiting for pid %u"
 msgstr "èekám na proces s èíslem %u"
 
-#: src/man.c:2079
+#: src/man.c:2084
 msgid "Still saving the page, please wait...\n"
 msgstr "Ukládám stránku na disk, prosím poèkejte chvíli...\n"
 
-#: src/man.c:2336
+#: src/man.c:2132 src/man.c:2152 src/man.c:2182
+#, fuzzy, c-format
+msgid "can't change to directory %s"
+msgstr "adresáø %s nelze prohledat"
+
+#: src/man.c:2158 src/man.c:2187
+#, fuzzy, c-format
+msgid "can't remove directory %s"
+msgstr "adresáø %s nelze prohledat"
+
+#: src/man.c:2407
 #, c-format
 msgid ""
 "\n"
@@ -500,17 +510,17 @@ msgstr ""
 "\n"
 "do %s nelze v módu catman zapsat"
 
-#: src/man.c:2356
+#: src/man.c:2427
 #, c-format
 msgid "Reformatting %s, please wait...\n"
 msgstr "Formátuji %s, prosím poèkejte chvíli...\n"
 
-#: src/man.c:2640
+#: src/man.c:2712
 #, fuzzy, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "varování: %s: pøíkaz whatis %s(%s) nenalezl"
 
-#: src/man.c:3031
+#: src/man.c:3103
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -554,17 +564,17 @@ msgstr "%s nelze pøejmenovat"
 msgid "Processing manual pages under %s...\n"
 msgstr "Zpracovávám manuálovou stránku v adresáøi %s...\n"
 
-#: src/mandb.c:437 src/security.c:134
+#: src/mandb.c:438 src/security.c:134
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "manový u¾ivatel `%s' neexistuje"
 
-#: src/mandb.c:465
+#: src/mandb.c:466
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "varování: v souboru %s není direktiva MANDB%MAP, pou¾ívám manpath"
 
-#: src/mandb.c:533
+#: src/mandb.c:534
 #, fuzzy, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -573,12 +583,12 @@ msgstr ""
 "%d manuálových adresáøù obsahuje nové manuálové stránky.\n"
 "%d manuálových stránek "
 
-#: src/mandb.c:537
+#: src/mandb.c:538
 #, fuzzy, c-format
 msgid "%d stray cats were added.\n"
 msgstr "a %d cat souborù bez zdroje "
 
-#: src/mandb.c:539
+#: src/mandb.c:540
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr ""
