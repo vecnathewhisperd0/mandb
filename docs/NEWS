@@ -33,6 +33,11 @@ Major changes since man-db 2.4.1:
 	  Debian multibyte patch applied, pass the --enable-mb-groff option
 	  to configure.
 
+	o When using GDBM, accessdb and apropos did not return database
+	  entries in sorted order, since GDBM's key traversal interface is
+	  not lexicographically ordered. The database layer has been
+	  corrected to cope with this.
+
 	Improvements:
 	-------------
 

@@ -45,26 +45,43 @@
 extern __inline__ int gdbm_exists(GDBM_FILE dbf, datum key);
 #  endif /* !HAVE_GDBM_EXISTS */
 
+/* gdbm_nextkey() is not lexicographically sorted, so we need to keep the
+ * filename around to use as a hash key.
+ */
+typedef struct {
+	char *name;
+	GDBM_FILE file;
+} *man_gdbm_wrapper;
+
+man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, GDBM_FILE file);
+datum man_gdbm_firstkey (man_gdbm_wrapper wrap);
+datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key);
+void man_gdbm_close (man_gdbm_wrapper wrap);
+
 #  define BLK_SIZE			0  /* to invoke normal fs block size */
 #  define DB_EXT				".db"
-#  define MYDBM_FILE 			GDBM_FILE
-#  define MYDBM_CTRWOPEN(file)		gdbm_open(file, BLK_SIZE,\
-					  GDBM_NEWDB|GDBM_FAST, DBMODE, 0)
-#  define MYDBM_CRWOPEN(file)		gdbm_open(file, BLK_SIZE,\
-					  GDBM_WRCREAT|GDBM_FAST, DBMODE, 0)
-#  define MYDBM_RWOPEN(file)		gdbm_open(file, BLK_SIZE,\
-					  GDBM_WRITER|GDBM_FAST, DBMODE, 0) 
-#  define MYDBM_RDOPEN(file)		gdbm_open(file, BLK_SIZE,\
-					  GDBM_READER, DBMODE, 0)
-#  define MYDBM_INSERT(dbf, key, cont)	gdbm_store(dbf, key, cont, GDBM_INSERT)
-#  define MYDBM_REPLACE(dbf, key, cont) 	gdbm_store(dbf, key, cont, GDBM_REPLACE)
-#  define MYDBM_EXISTS(dbf, key)		gdbm_exists(dbf, key)
-#  define MYDBM_DELETE(dbf, key)		gdbm_delete(dbf, key)
-#  define MYDBM_FETCH(dbf, key)		gdbm_fetch(dbf, key)
-#  define MYDBM_CLOSE(dbf)		gdbm_close(dbf)
-#  define MYDBM_FIRSTKEY(dbf)		gdbm_firstkey(dbf)
-#  define MYDBM_NEXTKEY(dbf, key)		gdbm_nextkey(dbf, key)
-#  define MYDBM_REORG(dbf)		gdbm_reorganize(dbf)
+#  define MYDBM_FILE 			man_gdbm_wrapper
+#  define MYDBM_CTRWOPEN(file)		man_gdbm_open_wrapper(file,\
+					  gdbm_open(file, BLK_SIZE,\
+					  GDBM_NEWDB|GDBM_FAST, DBMODE, 0))
+#  define MYDBM_CRWOPEN(file)		man_gdbm_open_wrapper(file,\
+					  gdbm_open(file, BLK_SIZE,\
+					  GDBM_WRCREAT|GDBM_FAST, DBMODE, 0))
+#  define MYDBM_RWOPEN(file)		man_gdbm_open_wrapper(file,\
+					  gdbm_open(file, BLK_SIZE,\
+					  GDBM_WRITER|GDBM_FAST, DBMODE, 0))
+#  define MYDBM_RDOPEN(file)		man_gdbm_open_wrapper(file,\
+					  gdbm_open(file, BLK_SIZE,\
+					  GDBM_READER, DBMODE, 0))
+#  define MYDBM_INSERT(dbf, key, cont)	gdbm_store((dbf)->file, key, cont, GDBM_INSERT)
+#  define MYDBM_REPLACE(dbf, key, cont) 	gdbm_store((dbf)->file, key, cont, GDBM_REPLACE)
+#  define MYDBM_EXISTS(dbf, key)		gdbm_exists((dbf)->file, key)
+#  define MYDBM_DELETE(dbf, key)		gdbm_delete((dbf)->file, key)
+#  define MYDBM_FETCH(dbf, key)		gdbm_fetch((dbf)->file, key)
+#  define MYDBM_CLOSE(dbf)		man_gdbm_close(dbf)
+#  define MYDBM_FIRSTKEY(dbf)		man_gdbm_firstkey(dbf)
+#  define MYDBM_NEXTKEY(dbf, key)		man_gdbm_nextkey(dbf, key)
+#  define MYDBM_REORG(dbf)		gdbm_reorganize((dbf)->file)
 #  define MYDBM_FREE(x)			free(x)
 
 # elif defined(NDBM) && !defined(GDBM) && !defined(BTREE)
@@ -80,7 +97,6 @@ extern __inline__ int gdbm_exists(GDBM_FILE dbf, datum key);
 #   define BERKELEY_DB
 #  endif /* _DB_H_ */
 
-extern __inline__ datum copy_datum (datum dat);
 extern DBM *ndbm_flopen(char *file, int flags, int mode);
 extern int ndbm_flclose(DBM *dbf);
 
@@ -115,7 +131,6 @@ typedef struct {
 	size_t dsize;
 } datum;
 
-extern __inline__ datum copy_datum (datum dat);
 extern DB *btree_flopen(char *filename, int flags, int mode);
 extern __inline__ int btree_close(DB *dbf);
 extern __inline__ int btree_exists(DB *dbf, datum key);
@@ -149,6 +164,9 @@ extern __inline__ int btree_nextkeydata(DB *dbf, datum *key, datum *cont);
 
 extern char *database;
 extern MYDBM_FILE dbf;
+
+/* db_lookup.c */
+extern datum copy_datum (datum dat);
 
 /* db_ver.c */
 extern void dbver_wr(MYDBM_FILE dbf);

@@ -1,3 +1,32 @@
+Tue Sep 16 22:37:33 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Work around the fact that GDBM's firstkey/nextkey interface doesn't
+	return ordered results.
+
+	* libdb/db_gdbm.c (man_gdbm_open_wrapper): New function. Wraps the
+	  return value from gdbm_open() in a structure that remembers the
+	  file name.
+	  (parent_sortkey_hash_free, sortkey_hash_free): New functions to
+	  free hashtables used here.
+	  (sortkey_compare): New comparison function for qsort().
+	  (man_gdbm_firstkey): New function. Retrieve all keys using
+	  gdbm_firstkey() and gdbm_nextkey() in advance, sort them into an
+	  ordered hashtable, remember that hashtable for later, and return
+	  the first key.
+	  (man_gdbm_nextkey): New function. Find the previously remembered
+	  ordered hashtable and return the next element from it.
+	  (man_gdbm_close): New function. Clean up remembered data.
+	* libdb/db_lookup.c (copy_datum): Define even if using GDBM.
+	  (gripe_lock): Explain why this isn't used for GDBM.
+	* libdb/mydbm.h (man_gdbm_wrapper): New type.
+	  (man_gdbm_open_wrapper, man_gdbm_firstkey, man_gdbm_nextkey,
+	  man_gdbm_close): Add prototypes.
+	  (MYDBM_FILE): Change to man_gdbm_wrapper for GDBM. Adjust all
+	  other MYDBM_* macros to cope with this and use man_gdbm_*
+	  functions where necessary.
+	  (copy_datum): Declare for all database types. Remove __inline__.
+	* docs/NEWS: Document this.
+
 Tue Sep 16 01:44:59 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/accessdb.c (main): Free each key after listing it rather than

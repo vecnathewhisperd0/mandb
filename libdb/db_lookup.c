@@ -60,8 +60,9 @@ extern int errno;
 #include "db_storage.h"
 
 /* If using ndbm or BTREE, copy the static storage before doing anything
-   interesting with it */
-#if defined(NDBM) || defined (BTREE)
+ * interesting with it. If using gdbm, firstkey and nextkey need to copy the
+ * storage because our ordered wrappers keep an effectively static copy.
+ */
 datum copy_datum (datum dat)
 {
 	if (dat.dptr) {
@@ -72,6 +73,8 @@ datum copy_datum (datum dat)
 	return dat;
 }
 
+/* gdbm does locking itself. */
+#if defined(NDBM) || defined(BTREE)
 void gripe_lock (char *filename)
 {
 	error (0, errno, _("can't lock index cache %s"), filename);
