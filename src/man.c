@@ -1307,6 +1307,7 @@ static char *get_preprocessors_from_file (char *file)
 	if (*file == '\0')
 		return NULL;
 
+	drop_effective_privs ();
 	fp = fopen (file, "r");
 	if (fp) {
 		if (fgets (line, sizeof (line), fp)) {
@@ -1321,6 +1322,7 @@ static char *get_preprocessors_from_file (char *file)
 		}
 		fclose (fp);
 	}
+	regain_effective_privs ();
 
 	/* if we couldn't read the first line from file, or we didn't
 	   find PP_COOKIE, then directive == NULL */
