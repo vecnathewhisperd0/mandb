@@ -79,40 +79,27 @@ int dbdelete(const char *name, struct mandata *info)
 		MYDBM_DELETE(dbf, key);
 		MYDBM_FREE(cont.dptr);
 	} else {				/* 2+ entries */
-		char *ext[ENTRIES], **e;
+		char *names[ENTRIES], *ext[ENTRIES];
 		char *multi_content = NULL;
 		datum multi_key;
-		int refs;
-		char *ext_only = NULL;
+		int refs, i, j;
 
 		/* Extract all of the extensions associated with 
 		   this key */
 
-		refs = list_extensions(cont.dptr + 1, e = ext);
-		
-		while (*e) {
-			char *dot = strrchr(*e, '.');
-			if (!dot) {
-				gripe_bad_multi_key(dot);
-				++e;
-				continue;
-			}
-			ext_only = dot + 1;
+		refs = list_extensions(cont.dptr + 1, names, ext);
 
-			if (!STRNEQ(*e, name, dot - *e) ||
-			    !STREQ(ext_only, info->ext))
-				++e;
-			else
+		for (i = 0; i < refs; ++i)
+			if (STREQ(names[i], name) && STREQ(ext[i], info->ext))
 				break;
-		}
 
-		if (!*e) {
+		if (i >= refs) {
 			MYDBM_FREE(cont.dptr);
 			free(key.dptr);
 			return NO_ENTRY;
 		}
 
-		multi_key = make_multi_key(name, ext_only);
+		multi_key = make_multi_key(names[i], ext[i]);
 		if (!MYDBM_EXISTS(dbf, multi_key)) {
 			error (0, 0,
 			       _( "multi key %s does not exist"),
@@ -121,7 +108,6 @@ int dbdelete(const char *name, struct mandata *info)
 		}
 		MYDBM_DELETE(dbf, multi_key);
 		free(multi_key.dptr);
-		**e = '\0';
 
 		/* refs *may* be 1 if all manual pages with this name 
 		   have been deleted. In this case, we'll have to remove 
@@ -135,11 +121,10 @@ int dbdelete(const char *name, struct mandata *info)
 		}
 			 
 		/* create our new multi content */
-		for (e = ext; *e; e++) {
-			if (**e)
+		for (j = 0; j < refs; ++j)
+			if (i != j)
 				multi_content = strappend(multi_content,
-							  "\t", *e, NULL);
-		}
+							  "\t", ext[j], NULL);
 
 		MYDBM_FREE(cont.dptr);
 

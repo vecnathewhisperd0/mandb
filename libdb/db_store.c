@@ -214,7 +214,7 @@ int dbstore(struct mandata *in, const char *basename)
 				strlen(in->ext) + 2;
 		newcont.dptr = (char *) xmalloc(newcont.dsize);
 
-		sprintf(newcont.dptr, "%s\t%s.%s",
+		sprintf(newcont.dptr, "%s\t%s\t%s",
 			oldcont.dptr, basename, in->ext);
 		MYDBM_FREE(oldcont.dptr);
 
@@ -295,7 +295,7 @@ int dbstore(struct mandata *in, const char *basename)
 		newcont.dsize = strlen(old_name) + strlen(old.ext) +
 				strlen(basename) + strlen(in->ext) + 5;
 		newcont.dptr = (char *) xmalloc (newcont.dsize);
-		sprintf(newcont.dptr, "\t%s.%s\t%s.%s",
+		sprintf(newcont.dptr, "\t%s\t%s\t%s\t%s",
 			old_name, old.ext, basename, in->ext);
 
 		if (MYDBM_REPLACE(dbf, oldkey, newcont))

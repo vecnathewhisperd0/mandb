@@ -1,3 +1,22 @@
+Mon Jun 24 02:53:00 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_store.c (dbstore): Use \t instead of . to separate
+	  case-variant-names and extensions in multi keys.
+	* libdb/db_lookup.c (list_extensions): Take an extra 'names' array
+	  argument, and split alternately into that and 'ext'.
+	  (dblookup): Update and simplify accordingly; we don't need the
+	  awkward '.' handling any more.
+	* libdb/db_delete.c (dbdelete): Likewise.
+	* libdb/db_storage.h (list_extensions): Update prototype.
+
+	* include/manconfig.h.in: Database format version 2.4.1.
+
+	* manual/db.me (Contents of an index database): Document
+	  case-insensitive name storage format. Bring the documentation of
+	  the database entry format up to date.
+	* manual/sec.me (Specifying a section): Mention the SECTION
+	  configuration directive.
+
 Fri Jun 21 10:50:40 UTC 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/check_mandirs.c (make_filename): in->comp may be NULL.

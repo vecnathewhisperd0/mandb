@@ -76,31 +76,38 @@ comprised of their name and their extension. The entire set of common named
 pages also has an common name index entry that informs of the extensions
 available.
 .np
-An indirect entry that has a pointer to the real entry. Manual pages that
-are whatis references to a particular page do not physically exist so they
-have a pointer to the entry containing the location of the real manual page.
+An indirect entry that has a pointer to the real entry.
+Manual pages that are whatis references to a particular page do not
+physically exist so they have a pointer to the entry containing the location
+of the real manual page.
 .np
-Special identification entries. There are two special key names,
+Special identification entries.
+There are two special key names,
 .q $mtime$
 that references an integer describing the last modification time of the
 database and
 .q $version$
 that identifies the database storage scheme version.
 .lp
+In order to support looking up manual pages in a case-insensitive fashion,
+keys are stored in lower case.
+If the name of the page was not already in lower case, its true case is also
+stored.
+.lp
 In the following entries, the character
 .q |
 will be used to separate the fields. In reality a tab is used.
 Direct and indirect entries takes the form:
 .ip
-.i "<name> \(-> <ext>|<sec>|<mtime>|<ID>|<ref>|<comp>|<whatis>"
+.i "<name> \(-> <realname>|<ext>|<sec>|<mtime>|<ID>|<ref>|<filter>|<comp>|<whatis>"
 .lp
 Common name index entries take the form:
 .ip
-.i "<name> \(-> |<ext1>|<ext2>|<ext3>| .\|.\|. <extn>"
+.i "<name> \(-> |<realname1>|<ext1>|<realname2>|<ext2>|<realname3>|<ext3>| .\|.\|. <realnamen>|<extn>"
 .lp
 and common name direct or indirect entries take the form:
 .ip
-.i "<name>|<ext> \(-> <ext>|<sec>|<mtime>|<ID>|<ref>|<comp>|<whatis>"
+.i "<name>|<ext> \(-> <realname>|<ext>|<sec>|<mtime>|<ID>|<ref>|<filter>|<comp>|<whatis>"
 .lp
 where in each case the filename being represented is formed as
 .ip
@@ -120,9 +127,11 @@ represents the compression extension.
 .i <mtime>
 is an integer representing the last modification time of the manual page,
 .i <ref>
-points to the entry containing the location of the real page and
+points to the entry containing the location of the real page,
 .i <ID>
-is one of the following identification letters.
+is one of the following identification letters, and
+.i <filter>
+represents any preprocessors that are needed to display the page.
 
 .TS
 center box tab (@);

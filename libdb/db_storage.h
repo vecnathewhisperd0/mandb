@@ -78,7 +78,7 @@ extern __inline__ struct mandata *infoalloc(void);
 extern char *name_to_key(const char *name);
 extern char **split_data(char *content, char *start[]);
 extern datum make_content(struct mandata *in);
-extern int list_extensions(char *data, char *ext[]);
+extern int list_extensions(char *data, char *names[], char *ext[]);
 extern void gripe_replace_key(const char *data);
 extern void gripe_bad_multi_key(const char *data);
 extern char *copy_if_set(const char *str);

@@ -304,12 +304,17 @@ datum make_content(struct mandata *in)
 /* Extract all of the names/extensions associated with this key. Each case
  * variant of a name will be returned separately.
  */
-int list_extensions(char *data, char *ext[])
+int list_extensions(char *data, char *names[], char *ext[])
 {  
 	int count = 0;
 
-	while ( (ext[count] = strsep(&data, "\t")) )
-		count++;
+	while ((names[count] = strsep(&data, "\t")) != NULL) {
+		ext[count] = strsep(&data, "\t");
+		if (ext[count])
+			++count;
+		else
+			break;
+	}
 
 	if (debug)
 		fprintf(stderr, "found %d names/extensions\n", count);
@@ -358,50 +363,36 @@ static struct mandata *dblookup(const char *page, const char *section,
 		free_mandata_struct(info);
 		return NULL;
 	} else {				/* multiple entries */
-		char *ext[ENTRIES], **e;
+		char *names[ENTRIES], *ext[ENTRIES];
 		struct mandata *ret = NULL;
+		int refs, i;
 
 		/* Extract all of the case-variant-names/extensions
 		 * associated with this key.
 		 */
 
-		(void) list_extensions(cont.dptr + 1, e = ext);
+		refs = list_extensions(cont.dptr + 1, names, ext);
 
 		/* Make the multi keys and look them up */
-		
-		while (*e) {
+
+		for (i = 0; i < refs; ++i) {
 			datum multi_cont;
-			char *dot;
-			const char *casevar;
 
 			/* Decide whether this part of a multi key is
 			 * suitable.
 			 */
-			dot = strrchr(*e, '.');
-			if (!dot) {
-				gripe_bad_multi_key(*e);
-				++e;
-				continue;
-			}
-			*dot = '\0';
-			casevar = *e;
-			*e = dot + 1;
 
-			if ((flags & MATCH_CASE) && !STREQ(casevar, page)) {
-				++e;
+			if ((flags & MATCH_CASE) && !STREQ(names[i], page))
 				continue;
-			}
 
 			if (section != NULL &&
-			    !STRNEQ(section, *e, 
-			            flags & EXACT ? strlen(*e)
-			                          : strlen(section))) {
-				++e;
+			    !STRNEQ(section, ext[i], 
+			            flags & EXACT ? strlen(ext[i])
+			                          : strlen(section)))
 				continue;
-			}
 
 			/* So the key is suitable ... */
-			key = make_multi_key(casevar, *e);
+			key = make_multi_key(names[i], ext[i]);
 			if (debug)
 				fprintf(stderr, "multi key lookup (%s)\n", 
 					key.dptr);
@@ -421,9 +412,7 @@ static struct mandata *dblookup(const char *page, const char *section,
 				info = info->next = infoalloc();
 			split_content(multi_cont.dptr, info);
 			if (!info->name)
-				info->name = xstrdup(casevar);
-
-			++e;
+				info->name = xstrdup(names[i]);
 		}
 		MYDBM_FREE(cont.dptr);
 		return ret;
