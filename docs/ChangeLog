@@ -1,3 +1,21 @@
+Sun Jun 24 17:22:53 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (try_section): Break if a page has been found and --all
+	  wasn't given.
+	  (try_db): Print extension in debug mode. Compare against requested
+	  section if the extension is a section in its own right, to avoid
+	  duplication.
+	* src/man_db.conf.in: It's SECTION, not SECTIONS.
+
+	* configure.in: --enable-mandirs=OS defines how the manual page
+	  hierarchy is laid out (GNU, HPUX, Solaris, IRIX). If unset,
+	  globbing behaves as before.
+	* acconfig.h: Add MANDIR_LAYOUT.
+	* src/globbing.c (parse_layout): New function.
+	  (look_for_file): Associate each glob with a layout.
+
+	* configure.in: Don't check for off_t (only used by gettext).
+
 Sat Jun 23 15:23:14 BST 2001  Colin Phipps  <cph@cph.demon.co.uk>
 
 	* zsoelim/zsoelim.l (open_file): Supply a format string to error().

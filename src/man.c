@@ -2241,9 +2241,12 @@ static int try_section (char *path, char *sec, char *name)
 			names = look_for_file (path, sec, name, 1);
 
 			if (names)
-				for (np = names; *np; np++)
+				for (np = names; *np; np++) {
 					found += display (path, NULL, *np, 
 							  title);
+					if (found && !findall)
+						break;
+				}
 		}
 	}
 #ifndef NROFF_MISSING
@@ -2274,6 +2277,9 @@ static int try_section (char *path, char *sec, char *name)
 			remove_ztemp ();
 #endif /* COMP_SRC */
 			/* free (man_file); can't free this, it's static !! */
+
+			if (found && !findall)
+				break;
 		}
 	}
 #endif /* NROFF_MISSING */
@@ -2588,7 +2594,15 @@ static int try_db (char *manpath, char *sec, char *name)
 	/* if (not or -a) and (we have a correct section), show that */
 	if (findall || !found) {
 		for (exact_sec = store; *exact_sec; exact_sec++) {
-			found += exist_check (name, manpath, *exact_sec);
+			if (debug)
+				fprintf (stderr,
+					 "extension = %s, "
+					 "requested section = %s\n",
+					 (*exact_sec)->ext, sec);
+			if (!strcmp ((*exact_sec)->ext, sec) ||
+			    !is_section ((*exact_sec)->ext))
+				found += exist_check (name, manpath,
+						      *exact_sec);
 			if (found && !findall)
 				break;
 		}

@@ -39,6 +39,7 @@ extern char *strrchr();
 #include "lib/error.h"
 
 extern char *extension;
+static char *mandir_layout = MANDIR_LAYOUT;
 
 #ifdef TEST
 char *program_name, *extension;
@@ -55,23 +56,59 @@ static __inline__ char *end_pattern (char *pattern, const char *sec)
 	return pattern;
 }
 
+#define LAYOUT_GNU	1
+#define LAYOUT_HPUX	2
+#define LAYOUT_IRIX	4
+#define LAYOUT_SOLARIS	8
+
+static int parse_layout (const char *layout)
+{
+	if (!*layout)
+		return LAYOUT_GNU | LAYOUT_HPUX | LAYOUT_SOLARIS | LAYOUT_IRIX;
+	else {
+		int flags = 0;
+
+		char *upper_layout = xstrdup (layout);
+		char *layoutp;
+		for (layoutp = upper_layout; *layoutp; layoutp++)
+			*layoutp = toupper (*layoutp);
+
+		if (strstr (layout, "GNU"))
+			flags |= LAYOUT_GNU;
+		if (strstr (layout, "HPUX"))
+			flags |= LAYOUT_HPUX;
+		if (strstr (layout, "IRIX"))
+			flags |= LAYOUT_IRIX;
+		if (strstr (layout, "SOLARIS"))
+			flags |= LAYOUT_SOLARIS;
+
+		return flags;
+	}
+}
+
 char **look_for_file (char *path, char *sec, char *name, int cat)
 {
 	char *pattern = NULL;
 	static glob_t gbuf;
-	int status;
+	int status = 1;
+	static int layout = -1;
 
-	/* As static struct is allocated and contains NULLS we don't need 
+	/* As static struct is allocated and contains NULLs we don't need 
 	   to check it before attempting a free. Let globfree() do that */
 
 	globfree (&gbuf);
 
-	/* This routine only does a minumum amount of matching. It does not
+	/* This routine only does a minimum amount of matching. It does not
 	   find cat files in the alternate cat directory. */
+
+	if (layout == -1)
+		layout = parse_layout (mandir_layout);
+	if (debug)
+		fprintf (stderr, "Layout is %s (%d)\n", mandir_layout, layout);
 
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
 
-	if (isdigit (*sec) && sec[1] != '\0') {
+	if ((layout & LAYOUT_GNU) && isdigit (*sec) && sec[1] != '\0') {
 		pattern = strappend (pattern, path, cat ? "/cat" : "/man", 
 				     "\t/", name, NULL);
 
@@ -80,14 +117,13 @@ char **look_for_file (char *path, char *sec, char *name, int cat)
 		if (debug)
 			fprintf (stderr, "globbing pattern: %s\n", pattern);
 		status = glob (pattern, 0, NULL, &gbuf);
-	} else
-		status = 1;
+	}
 
 	/* AIX glob.h doesn't define GLOB_NOMATCH and the manpage is vague
 	   regarding return status if there are no matches so check the
 	   path count member also */
 	   
-	if (status != 0 || gbuf.gl_pathc == 0) {
+	if ((layout & LAYOUT_GNU) && (status != 0 || gbuf.gl_pathc == 0)) {
 		if (pattern)
 			*pattern = '\0';
 		pattern = strappend (pattern, path, cat ? "/cat" : "/man", 
@@ -100,7 +136,7 @@ char **look_for_file (char *path, char *sec, char *name, int cat)
 	}
 
 	/* Try HPUX style compressed man pages */
-	if (status != 0 || gbuf.gl_pathc == 0) {
+	if ((layout & LAYOUT_HPUX) && (status != 0 || gbuf.gl_pathc == 0)) {
 		*pattern = '\0';
 		pattern = strappend (pattern, path, cat ? "/cat" : "/man",
 				     sec, ".Z/", name, NULL);
@@ -112,7 +148,7 @@ char **look_for_file (char *path, char *sec, char *name, int cat)
 	}
 
 	/* Try man pages without the section extension --- IRIX man pages */
-	if (status != 0 || gbuf.gl_pathc == 0) {
+	if ((layout & LAYOUT_IRIX) && (status != 0 || gbuf.gl_pathc == 0)) {
 		*pattern = '\0';
 		pattern = strappend (pattern, path, cat ? "/cat" : "/man",
 				     sec, "/", name, ".*", NULL);
@@ -122,7 +158,7 @@ char **look_for_file (char *path, char *sec, char *name, int cat)
 	}
 
 	/* Try Solaris style man page directories */
-	if (status != 0 || gbuf.gl_pathc == 0) {
+	if ((layout & LAYOUT_SOLARIS) && (status != 0 || gbuf.gl_pathc == 0)) {
 		*pattern = '\0';
 		pattern = strappend (pattern, path, cat ? "/cat" : "/man",
 				     sec, "*/", name, NULL);

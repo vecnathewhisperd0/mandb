@@ -66,3 +66,6 @@
 /* Define to the version of the distribution.  */
 #undef VERSION
 
+/* Define to the manual page hierarchy organization(s) in use. */
+#undef MANDIR_LAYOUT
+
