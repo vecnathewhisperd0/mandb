@@ -124,6 +124,7 @@ int dbdelete(const char *name, struct mandata *info)
 		for (j = 0; j < refs; ++j)
 			if (i != j)
 				multi_content = strappend(multi_content,
+							  "\t", names[j],
 							  "\t", ext[j], NULL);
 
 		MYDBM_FREE(cont.dptr);
