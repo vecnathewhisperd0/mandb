@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.16\n"
-"POT-Creation-Date: 2001-05-04 03:51+0100\n"
+"POT-Creation-Date: 2001-05-13 02:12+0100\n"
 "PO-Revision-Date: 2000-04-07 08:32+02:00\n"
 "Last-Translator: Vladimir Michl <Vladimir.Michl@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -32,12 +32,12 @@ msgstr "rejstøík %s je po¹kozen"
 msgid "cannot replace key %s"
 msgstr "klíè %s nelze nahradit"
 
-#: libdb/db_lookup.c:145
+#: libdb/db_lookup.c:145 libdb/db_lookup.c:155
 #, c-format
 msgid "only %d fields in content"
 msgstr "polo¾ek v obsahu: %d"
 
-#: libdb/db_lookup.c:310
+#: libdb/db_lookup.c:316
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "multiklíè %s nelze vyzvednout"
@@ -47,19 +47,19 @@ msgstr "multiklíè %s nelze vyzvednout"
 msgid "cannot insert unused key %s"
 msgstr "nepou¾itý klíè %s nelze vlo¾it"
 
-#: libdb/db_ver.c:62
+#: libdb/db_ver.c:61
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "chyba: identifikátor verze nelze do souboru %s vlo¾it"
 
-#: libdb/db_ver.c:73
-#, c-format
-msgid "warning: %s has no version identifier"
+#: libdb/db_ver.c:74
+#, fuzzy, c-format
+msgid "warning: %s has no version identifier\n"
 msgstr "varování: soubor %s nemá identifikátor verze"
 
-#: libdb/db_ver.c:77
-#, c-format
-msgid "warning: %s is version %s, expecting %s"
+#: libdb/db_ver.c:79
+#, fuzzy, c-format
+msgid "warning: %s is version %s, expecting %s\n"
 msgstr "varování: soubor %s je verze %s, ale oèekávána je verze %s"
 
 #: src/accessdb.c:53
@@ -175,22 +175,22 @@ msgstr "varování: %s: pøíkaz whatis %s(%s) nenalezl"
 msgid "can't search directory %s"
 msgstr "adresáø %s nelze prohledat"
 
-#: src/check_mandirs.c:489 src/check_mandirs.c:531 src/man.c:2263
+#: src/check_mandirs.c:491 src/check_mandirs.c:533 src/man.c:2263
 #, c-format
 msgid "can't update index cache %s"
 msgstr "restøík %s nelze aktualizovat"
 
-#: src/check_mandirs.c:495
+#: src/check_mandirs.c:497
 #, c-format
 msgid "Updating index cache for path `%s'. Wait..."
 msgstr "Aktualizuji rejstøík pro adresáø `%s'. Prosím èekejte..."
 
-#: src/check_mandirs.c:588
+#: src/check_mandirs.c:590
 #, c-format
 msgid "can't create index cache %s"
 msgstr "rejstøík %s nelze vytvoøit"
 
-#: src/check_mandirs.c:601 src/check_mandirs.c:638
+#: src/check_mandirs.c:603 src/check_mandirs.c:640
 msgid "done.\n"
 msgstr "dokonèeno.\n"
 
@@ -208,7 +208,7 @@ msgstr "%s nelze pøevést na jméno cat souboru"
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "varování: whatis argument %s je del¹í o bajtù: %d (bude zkrácen)"
 
-#: src/lexgrog.l:278 src/ult_src.c:298 src/ult_src.c:304
+#: src/lexgrog.l:278 src/ult_src.c:290 src/ult_src.c:296
 #, c-format
 msgid "can't open %s"
 msgstr "soubor %s nelze otevøít"
@@ -457,7 +457,12 @@ msgstr ""
 msgid "Reformatting %s, please wait...\n"
 msgstr "Formátuji %s, prosím poèkejte chvíli...\n"
 
-#: src/man.c:2623
+#: src/man.c:2269
+#, fuzzy, c-format
+msgid "warning: %s: relying on whatis refs is deprecated"
+msgstr "varování: %s: pøíkaz whatis %s(%s) nenalezl"
+
+#: src/man.c:2628
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -514,7 +519,7 @@ msgstr "manový u¾ivatel `%s' neexistuje"
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "varování: v souboru %s není direktiva MANDB%MAP, pou¾ívám manpath"
 
-#: src/mandb.c:489
+#: src/mandb.c:495
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -523,12 +528,12 @@ msgstr ""
 "%d manuálových adresáøù obsahuje nové manuálové stránky.\n"
 "%d manuálových stránek "
 
-#: src/mandb.c:494
+#: src/mandb.c:500
 #, c-format
 msgid "and %d stray cats "
 msgstr "a %d cat souborù bez zdroje "
 
-#: src/mandb.c:495
+#: src/mandb.c:501
 msgid "were added."
 msgstr "bylo pøidáno."
 
@@ -643,7 +648,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "efektivní uid nelze nastavit"
 
-#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:236
+#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:228
 #, c-format
 msgid "can't resolve %s"
 msgstr "cestu %s nelze analyzovat"
@@ -668,7 +673,7 @@ msgstr "varování: doèasný soubor %s nelze vytvoøit"
 msgid "warning: can't update index cache %s"
 msgstr "varování: rejstøík %s nelze aktualizovat"
 
-#: src/ult_src.c:264
+#: src/ult_src.c:256
 #, c-format
 msgid "%s is self referencing"
 msgstr "stránka %s se odkazuje sama na sebe"
@@ -744,17 +749,22 @@ msgstr "varování: textovou databázi pro whatis nelze èíst."
 msgid "(unknown)"
 msgstr "(není známo)"
 
-#: src/whatis.c:497
+#: src/whatis.c:403
+#, c-format
+msgid "Database %s corrupted; rebuild with mandb"
+msgstr ""
+
+#: src/whatis.c:510
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ¾ádná odpovídající\n"
 
-#: src/whatis.c:596
+#: src/whatis.c:609
 #, c-format
 msgid "%s what?\n"
 msgstr "Co má pøíkaz %s provést?\n"
 
-#: src/whatis.c:619 src/whatis.c:629
+#: src/whatis.c:632 src/whatis.c:642
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "Fatální: regvýr '%s': %s"

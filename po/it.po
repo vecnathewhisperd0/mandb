@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.10-69i\n"
-"POT-Creation-Date: 2001-05-04 03:51+0100\n"
+"POT-Creation-Date: 2001-05-13 02:12+0100\n"
 "PO-Revision-Date: 1999-08-20 13:12+02:00\n"
 "Last-Translator: Giovanni Bortolozzo <borto@pluto.linux.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -33,12 +33,12 @@ msgstr "cache index %s corrotta"
 msgid "cannot replace key %s"
 msgstr "impossibile rimpiazzare la chiave %s"
 
-#: libdb/db_lookup.c:145
+#: libdb/db_lookup.c:145 libdb/db_lookup.c:155
 #, c-format
 msgid "only %d fields in content"
 msgstr "trovati solo %d campi"
 
-#: libdb/db_lookup.c:310
+#: libdb/db_lookup.c:316
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "fetch errato sulla chiave multipla %s"
@@ -48,19 +48,19 @@ msgstr "fetch errato sulla chiave multipla %s"
 msgid "cannot insert unused key %s"
 msgstr "impossibile inserire la chiave non usata %s"
 
-#: libdb/db_ver.c:62
+#: libdb/db_ver.c:61
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "fatale: impossibile inserire l'identificatore di versione dentro a %s"
 
-#: libdb/db_ver.c:73
-#, c-format
-msgid "warning: %s has no version identifier"
+#: libdb/db_ver.c:74
+#, fuzzy, c-format
+msgid "warning: %s has no version identifier\n"
 msgstr "attenzione: %s non ha identificatore di versione"
 
-#: libdb/db_ver.c:77
-#, c-format
-msgid "warning: %s is version %s, expecting %s"
+#: libdb/db_ver.c:79
+#, fuzzy, c-format
+msgid "warning: %s is version %s, expecting %s\n"
 msgstr "attenzione: %s ha versione %s, invece dell'attesa %s"
 
 #: src/accessdb.c:53
@@ -177,22 +177,22 @@ msgstr "attenzione: %s: analisi whatis per %s(%s) fallita"
 msgid "can't search directory %s"
 msgstr "impossibile ricercare nella directory %s"
 
-#: src/check_mandirs.c:489 src/check_mandirs.c:531 src/man.c:2263
+#: src/check_mandirs.c:491 src/check_mandirs.c:533 src/man.c:2263
 #, c-format
 msgid "can't update index cache %s"
 msgstr "impossibile aggiornare la cache index %s"
 
-#: src/check_mandirs.c:495
+#: src/check_mandirs.c:497
 #, fuzzy, c-format
 msgid "Updating index cache for path `%s'. Wait..."
 msgstr "Aggiornamento della cache index per il percorso `%s'. Attendere..."
 
-#: src/check_mandirs.c:588
+#: src/check_mandirs.c:590
 #, c-format
 msgid "can't create index cache %s"
 msgstr "impossibile creare la cache index %s"
 
-#: src/check_mandirs.c:601 src/check_mandirs.c:638
+#: src/check_mandirs.c:603 src/check_mandirs.c:640
 msgid "done.\n"
 msgstr "fatto.\n"
 
@@ -210,7 +210,7 @@ msgstr "Impossibile convertire %s nel nome cat"
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "attenzione: whatis per %s eccede di %d byte, lo sto troncando."
 
-#: src/lexgrog.l:278 src/ult_src.c:298 src/ult_src.c:304
+#: src/lexgrog.l:278 src/ult_src.c:290 src/ult_src.c:296
 #, c-format
 msgid "can't open %s"
 msgstr "impossibile aprire %s"
@@ -461,7 +461,12 @@ msgstr ""
 msgid "Reformatting %s, please wait...\n"
 msgstr "Sto riformattando %s, attendere prego...\n"
 
-#: src/man.c:2623
+#: src/man.c:2269
+#, fuzzy, c-format
+msgid "warning: %s: relying on whatis refs is deprecated"
+msgstr "attenzione: %s: analisi whatis per %s(%s) fallita"
+
+#: src/man.c:2628
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -517,7 +522,7 @@ msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "attenzione: nessuna direttiva MANDB_MAP in %s, sto usando il tuo percorso_man"
 
-#: src/mandb.c:489
+#: src/mandb.c:495
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -526,12 +531,12 @@ msgstr ""
 "%d sottodirectory man contenevano nuove pagine di manuale.\n"
 "Sono state aggiunte %d pagine di manuale"
 
-#: src/mandb.c:494
+#: src/mandb.c:500
 #, c-format
 msgid "and %d stray cats "
 msgstr " e %d stray cat"
 
-#: src/mandb.c:495
+#: src/mandb.c:501
 msgid "were added."
 msgstr "."
 
@@ -646,7 +651,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "impossibile impostare lo uid effettivo"
 
-#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:236
+#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:228
 #, c-format
 msgid "can't resolve %s"
 msgstr "impossibile risolvere %s"
@@ -671,7 +676,7 @@ msgstr "attenzione: impossibile creare la directory %s"
 msgid "warning: can't update index cache %s"
 msgstr "attenzione: impossibile aggiornare la cache index %s"
 
-#: src/ult_src.c:264
+#: src/ult_src.c:256
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s  auto referenziante"
@@ -751,17 +756,22 @@ msgstr ""
 msgid "(unknown)"
 msgstr "(sconosciuto)"
 
-#: src/whatis.c:497
+#: src/whatis.c:403
+#, c-format
+msgid "Database %s corrupted; rebuild with mandb"
+msgstr ""
+
+#: src/whatis.c:510
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: niente di appropriato.\n"
 
-#: src/whatis.c:596
+#: src/whatis.c:609
 #, c-format
 msgid "%s what?\n"
 msgstr "%s cosa?\n"
 
-#: src/whatis.c:619 src/whatis.c:629
+#: src/whatis.c:632 src/whatis.c:642
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "fatal: regex `%s': %s"

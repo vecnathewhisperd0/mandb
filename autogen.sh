@@ -1,5 +1,5 @@
 #! /bin/sh -e
 
 aclocal
-autoheader
+autoheader && date > stamp-h.in
 autoconf

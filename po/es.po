@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.10\n"
-"POT-Creation-Date: 2001-05-04 03:51+0100\n"
+"POT-Creation-Date: 2001-05-13 02:12+0100\n"
 "PO-Revision-Date: 1998-04-16 19:52+0200\n"
 "Last-Translator: César Ballardini <cballard@santafe.com.ar>\n"
 "Language-Team: debian-l10n-spanish@lists.debian.org\n"
@@ -32,12 +32,12 @@ msgstr "el caché de índices %s está dañado"
 msgid "cannot replace key %s"
 msgstr "no se puede reemplazar la clave %s"
 
-#: libdb/db_lookup.c:145
+#: libdb/db_lookup.c:145 libdb/db_lookup.c:155
 #, c-format
 msgid "only %d fields in content"
 msgstr "sólo %d campos en el contenido"
 
-#: libdb/db_lookup.c:310
+#: libdb/db_lookup.c:316
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "no se ha encontrado la clave múltiple %s"
@@ -47,19 +47,19 @@ msgstr "no se ha encontrado la clave múltiple %s"
 msgid "cannot insert unused key %s"
 msgstr "no se puede insertar la clave no usada %s"
 
-#: libdb/db_ver.c:62
+#: libdb/db_ver.c:61
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "error grave: no se puede insertar identificador de versión en %s"
 
-#: libdb/db_ver.c:73
-#, c-format
-msgid "warning: %s has no version identifier"
+#: libdb/db_ver.c:74
+#, fuzzy, c-format
+msgid "warning: %s has no version identifier\n"
 msgstr "aviso: %s no tiene identificador de versión"
 
-#: libdb/db_ver.c:77
-#, c-format
-msgid "warning: %s is version %s, expecting %s"
+#: libdb/db_ver.c:79
+#, fuzzy, c-format
+msgid "warning: %s is version %s, expecting %s\n"
 msgstr "aviso: %s tiene la versión %s, se esperaba %s"
 
 #: src/accessdb.c:53
@@ -175,22 +175,22 @@ msgstr "aviso: %s: falló la exploración de whatis para %s(%s)"
 msgid "can't search directory %s"
 msgstr "no se puede buscar en el directorio %s"
 
-#: src/check_mandirs.c:489 src/check_mandirs.c:531 src/man.c:2263
+#: src/check_mandirs.c:491 src/check_mandirs.c:533 src/man.c:2263
 #, c-format
 msgid "can't update index cache %s"
 msgstr "no se puede actualizar el caché de índices %s"
 
-#: src/check_mandirs.c:495
+#: src/check_mandirs.c:497
 #, fuzzy, c-format
 msgid "Updating index cache for path `%s'. Wait..."
 msgstr "\rActualizando el caché de índices para la ruta `%s'. Aguarde..."
 
-#: src/check_mandirs.c:588
+#: src/check_mandirs.c:590
 #, c-format
 msgid "can't create index cache %s"
 msgstr "no se puede crear el caché de índices %s"
 
-#: src/check_mandirs.c:601 src/check_mandirs.c:638
+#: src/check_mandirs.c:603 src/check_mandirs.c:640
 msgid "done.\n"
 msgstr "listo.\n"
 
@@ -208,7 +208,7 @@ msgstr "No se puede convertir %s a un nombre tipo cat"
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "aviso: whatis para %s excede %d bytes, se truncará el exceso."
 
-#: src/lexgrog.l:278 src/ult_src.c:298 src/ult_src.c:304
+#: src/lexgrog.l:278 src/ult_src.c:290 src/ult_src.c:296
 #, c-format
 msgid "can't open %s"
 msgstr "no se puede abrir %s"
@@ -456,7 +456,12 @@ msgstr ""
 msgid "Reformatting %s, please wait...\n"
 msgstr "Dando formato a %s, aguarde por favor...\n"
 
-#: src/man.c:2623
+#: src/man.c:2269
+#, fuzzy, c-format
+msgid "warning: %s: relying on whatis refs is deprecated"
+msgstr "aviso: %s: falló la exploración de whatis para %s(%s)"
+
+#: src/man.c:2628
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -515,7 +520,7 @@ msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "aviso: no hay directivas MANDB_MAP en %s, se utilizará su ruta man (manpath)"
 
-#: src/mandb.c:489
+#: src/mandb.c:495
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -524,12 +529,12 @@ msgstr ""
 "%d subdirectorios man tenían páginas de manual más recientes.\n"
 "%d páginas de manual"
 
-#: src/mandb.c:494
+#: src/mandb.c:500
 #, c-format
 msgid "and %d stray cats "
 msgstr "y %d cats sin fuentes "
 
-#: src/mandb.c:495
+#: src/mandb.c:501
 msgid "were added."
 msgstr "fueron agregados."
 
@@ -645,7 +650,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "no se puede asignar el uid efectivo"
 
-#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:236
+#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:228
 #, c-format
 msgid "can't resolve %s"
 msgstr "Es imposible resolver %s"
@@ -670,7 +675,7 @@ msgstr "aviso: no se pudo crear catdir %s"
 msgid "warning: can't update index cache %s"
 msgstr "aviso: no se puede actualizar el caché de índices %s"
 
-#: src/ult_src.c:264
+#: src/ult_src.c:256
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s es autoreferenciante"
@@ -744,17 +749,22 @@ msgstr ""
 msgid "(unknown)"
 msgstr "(desconocido)"
 
-#: src/whatis.c:497
+#: src/whatis.c:403
+#, c-format
+msgid "Database %s corrupted; rebuild with mandb"
+msgstr ""
+
+#: src/whatis.c:510
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: nada apropiado.\n"
 
-#: src/whatis.c:596
+#: src/whatis.c:609
 #, c-format
 msgid "%s what?\n"
 msgstr "%s ¿qué?\n"
 
-#: src/whatis.c:619 src/whatis.c:629
+#: src/whatis.c:632 src/whatis.c:642
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "error fatal: regex `%s': %s"

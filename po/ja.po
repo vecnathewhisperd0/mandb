@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.4.10\n"
-"POT-Creation-Date: 2001-05-04 03:51+0100\n"
+"POT-Creation-Date: 2001-05-13 02:12+0100\n"
 "PO-Revision-Date: 2000-11-11 22:25+09:00\n"
 "Last-Translator: UCHIDA Norihiro <KY4N-UCD@asahi-net.or.jp>\n"
 "Language-Team: debian-doc <debian-doc@debian.or.jp>\n"
@@ -33,12 +33,12 @@ msgstr "index キャッシュ %s が壊れています"
 msgid "cannot replace key %s"
 msgstr "キー %s を置き換えることができません"
 
-#: libdb/db_lookup.c:145
+#: libdb/db_lookup.c:145 libdb/db_lookup.c:155
 #, c-format
 msgid "only %d fields in content"
 msgstr "中身が %d フィールドしかありません"
 
-#: libdb/db_lookup.c:310
+#: libdb/db_lookup.c:316
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "複合キー %s は不正な呼び出しです"
@@ -48,19 +48,19 @@ msgstr "複合キー %s は不正な呼び出しです"
 msgid "cannot insert unused key %s"
 msgstr "未使用キー %s を挿入できません"
 
-#: libdb/db_ver.c:62
+#: libdb/db_ver.c:61
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "致命的エラー: %s にバージョン識別子を書き込めません"
 
-#: libdb/db_ver.c:73
-#, c-format
-msgid "warning: %s has no version identifier"
+#: libdb/db_ver.c:74
+#, fuzzy, c-format
+msgid "warning: %s has no version identifier\n"
 msgstr "警告: %s にバージョン識別子がありません"
 
-#: libdb/db_ver.c:77
-#, c-format
-msgid "warning: %s is version %s, expecting %s"
+#: libdb/db_ver.c:79
+#, fuzzy, c-format
+msgid "warning: %s is version %s, expecting %s\n"
 msgstr "警告: %1$s のバージョンは、%3$s であるはずが %2$s です"
 
 #: src/accessdb.c:53
@@ -176,22 +176,22 @@ msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 msgid "can't search directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/check_mandirs.c:489 src/check_mandirs.c:531 src/man.c:2263
+#: src/check_mandirs.c:491 src/check_mandirs.c:533 src/man.c:2263
 #, c-format
 msgid "can't update index cache %s"
 msgstr "index キャッシュ %s を更新できません"
 
-#: src/check_mandirs.c:495
+#: src/check_mandirs.c:497
 #, c-format
 msgid "Updating index cache for path `%s'. Wait..."
 msgstr "パス`%s'の index キャッシュを更新しています。お待ちください..."
 
-#: src/check_mandirs.c:588
+#: src/check_mandirs.c:590
 #, c-format
 msgid "can't create index cache %s"
 msgstr "index キャッシュ %s を作成できません"
 
-#: src/check_mandirs.c:601 src/check_mandirs.c:638
+#: src/check_mandirs.c:603 src/check_mandirs.c:640
 msgid "done.\n"
 msgstr "完了しました\n"
 
@@ -209,7 +209,7 @@ msgstr "%s を cat 名に変換できません"
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "警告: %s の whatis が %d バイトを超えています。切り詰めています。"
 
-#: src/lexgrog.l:278 src/ult_src.c:298 src/ult_src.c:304
+#: src/lexgrog.l:278 src/ult_src.c:290 src/ult_src.c:296
 #, c-format
 msgid "can't open %s"
 msgstr "%s をオープンできません"
@@ -450,7 +450,12 @@ msgstr ""
 msgid "Reformatting %s, please wait...\n"
 msgstr "%s を再フォーマットしています。しばらくお待ちください...\n"
 
-#: src/man.c:2623
+#: src/man.c:2269
+#, fuzzy, c-format
+msgid "warning: %s: relying on whatis refs is deprecated"
+msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
+
+#: src/man.c:2628
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -507,7 +512,7 @@ msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "警告: %s に MANDB_MAP の指定はありません。あなたの manpath を使用します"
 
-#: src/mandb.c:489
+#: src/mandb.c:495
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -516,12 +521,12 @@ msgstr ""
 "%d 箇所の man サブディレクトリに新しいマニュアルページがありました。\n"
 "%d 個のマニュアルページ"
 
-#: src/mandb.c:494
+#: src/mandb.c:500
 #, c-format
 msgid "and %d stray cats "
 msgstr "と %d 個の roff のない cat ファイル"
 
-#: src/mandb.c:495
+#: src/mandb.c:501
 msgid "were added."
 msgstr "を追加しました。"
 
@@ -634,7 +639,7 @@ msgstr "警告: 設定ファイル %s にグローバルな manpath の設定がありません"
 msgid "can't set effective uid"
 msgstr "有効な UID を設定できません"
 
-#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:236
+#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:228
 #, c-format
 msgid "can't resolve %s"
 msgstr "%s を解決できません"
@@ -659,7 +664,7 @@ msgstr "警告: 一時ファイル %s を作成できません"
 msgid "warning: can't update index cache %s"
 msgstr "警告: index キャッシュ %s を更新できません"
 
-#: src/ult_src.c:264
+#: src/ult_src.c:256
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s は自分自身を参照しています"
@@ -731,17 +736,22 @@ msgstr "警告: 緊急用の whatis テキストデータベースを読み込めません。"
 msgid "(unknown)"
 msgstr "(不明)"
 
-#: src/whatis.c:497
+#: src/whatis.c:403
+#, c-format
+msgid "Database %s corrupted; rebuild with mandb"
+msgstr ""
+
+#: src/whatis.c:510
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: 適切なものはありませんでした。\n"
 
-#: src/whatis.c:596
+#: src/whatis.c:609
 #, c-format
 msgid "%s what?\n"
 msgstr "%s キーワードは何ですか？\n"
 
-#: src/whatis.c:619 src/whatis.c:629
+#: src/whatis.c:632 src/whatis.c:642
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "致命的エラー: 正規表現 `%s': %s"

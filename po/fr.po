@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.10\n"
-"POT-Creation-Date: 2001-05-04 03:51+0100\n"
+"POT-Creation-Date: 2001-05-13 02:12+0100\n"
 "PO-Revision-Date: 1999-10-10 18:23+02:00\n"
 "Last-Translator: Laurent Pélecq <laurent.pelecq@wanadoo.fr>\n"
 "Language-Team: debian-l10n-french@lists.debian.org\n"
@@ -33,12 +33,12 @@ msgstr "le cache d'index %s est endommagé"
 msgid "cannot replace key %s"
 msgstr "impossible de remplacer la clef %s"
 
-#: libdb/db_lookup.c:145
+#: libdb/db_lookup.c:145 libdb/db_lookup.c:155
 #, c-format
 msgid "only %d fields in content"
 msgstr "il n'y a que %d champs dans le contenu"
 
-#: libdb/db_lookup.c:310
+#: libdb/db_lookup.c:316
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "mauvais accés sur la clef multiple %s"
@@ -48,19 +48,19 @@ msgstr "mauvais accés sur la clef multiple %s"
 msgid "cannot insert unused key %s"
 msgstr "impossible d'insérer la clef non-utilisée %s"
 
-#: libdb/db_ver.c:62
+#: libdb/db_ver.c:61
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "fatal: imposible d'insérer l'identifiant de version dans %s"
 
-#: libdb/db_ver.c:73
-#, c-format
-msgid "warning: %s has no version identifier"
+#: libdb/db_ver.c:74
+#, fuzzy, c-format
+msgid "warning: %s has no version identifier\n"
 msgstr "attention: %s n'a pas d'identifiant de version"
 
-#: libdb/db_ver.c:77
-#, c-format
-msgid "warning: %s is version %s, expecting %s"
+#: libdb/db_ver.c:79
+#, fuzzy, c-format
+msgid "warning: %s is version %s, expecting %s\n"
 msgstr "attention: %s a pour version %s, on espérait la version %s"
 
 #: src/accessdb.c:53
@@ -176,22 +176,22 @@ msgstr "attention: %s: la recherche de whatis sur %s(%s) a échoué"
 msgid "can't search directory %s"
 msgstr "impossible de chercher dans le répertoire %s"
 
-#: src/check_mandirs.c:489 src/check_mandirs.c:531 src/man.c:2263
+#: src/check_mandirs.c:491 src/check_mandirs.c:533 src/man.c:2263
 #, c-format
 msgid "can't update index cache %s"
 msgstr "impossible de mettre à jour le cache d'index %s"
 
-#: src/check_mandirs.c:495
+#: src/check_mandirs.c:497
 #, fuzzy, c-format
 msgid "Updating index cache for path `%s'. Wait..."
 msgstr "\rMise à jour du cache d'index pour le chemin `%s'. Attendez..."
 
-#: src/check_mandirs.c:588
+#: src/check_mandirs.c:590
 #, c-format
 msgid "can't create index cache %s"
 msgstr "impossible de créer le cache d'index %s"
 
-#: src/check_mandirs.c:601 src/check_mandirs.c:638
+#: src/check_mandirs.c:603 src/check_mandirs.c:640
 msgid "done.\n"
 msgstr "terminé.\n"
 
@@ -209,7 +209,7 @@ msgstr "Impossible de convertir %s en nom de page préformattée"
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "attention: whatis pour %s produit plus de %d octets, excédant tronqué."
 
-#: src/lexgrog.l:278 src/ult_src.c:298 src/ult_src.c:304
+#: src/lexgrog.l:278 src/ult_src.c:290 src/ult_src.c:296
 #, c-format
 msgid "can't open %s"
 msgstr "impossible d'ouvrir %s"
@@ -455,7 +455,12 @@ msgstr ""
 msgid "Reformatting %s, please wait...\n"
 msgstr "Remise en forme de %s, attendez SVP...\n"
 
-#: src/man.c:2623
+#: src/man.c:2269
+#, fuzzy, c-format
+msgid "warning: %s: relying on whatis refs is deprecated"
+msgstr "attention: %s: la recherche de whatis sur %s(%s) a échoué"
+
+#: src/man.c:2628
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -512,7 +517,7 @@ msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "attention: aucune directive MANDB_MAP dans %s, votre chemin perso est utilisé"
 
-#: src/mandb.c:489
+#: src/mandb.c:495
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -521,12 +526,12 @@ msgstr ""
 "%d sous-répertoires de manuel contiennent de nouvelles pages.\n"
 "%d pages de manuel "
 
-#: src/mandb.c:494
+#: src/mandb.c:500
 #, c-format
 msgid "and %d stray cats "
 msgstr "et %d pages sans source "
 
-#: src/mandb.c:495
+#: src/mandb.c:501
 msgid "were added."
 msgstr "ont été ajouteés"
 
@@ -642,7 +647,7 @@ msgstr "attention: aucun chemin spécifié pour le manuel dans le fichier %s"
 msgid "can't set effective uid"
 msgstr "impossible de positionner le propriétaire effectif"
 
-#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:236
+#: src/straycats.c:231 src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:228
 #, c-format
 msgid "can't resolve %s"
 msgstr "impossible de résoudre %s"
@@ -667,7 +672,7 @@ msgstr "attention: impossible de créer le répertoire de pages préformattées %s"
 msgid "warning: can't update index cache %s"
 msgstr "attention: impossible de mettre à jour le cache d'index %s"
 
-#: src/ult_src.c:264
+#: src/ult_src.c:256
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s s'auto-référence"
@@ -741,17 +746,22 @@ msgstr "attention: impossible de lire la base de secours de whatis"
 msgid "(unknown)"
 msgstr "(inconnu)"
 
-#: src/whatis.c:497
+#: src/whatis.c:403
+#, c-format
+msgid "Database %s corrupted; rebuild with mandb"
+msgstr ""
+
+#: src/whatis.c:510
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: rien d'adéquat\n"
 
-#: src/whatis.c:596
+#: src/whatis.c:609
 #, c-format
 msgid "%s what?\n"
 msgstr "%s comment ?\n"
 
-#: src/whatis.c:619 src/whatis.c:629
+#: src/whatis.c:632 src/whatis.c:642
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "fatal: expression régulière `%s': %s"
