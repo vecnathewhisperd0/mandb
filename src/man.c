@@ -322,7 +322,7 @@ extern char *extension; /* for globbing.c */
 /* locals */
 static char *alt_system_name;
 static char **section_list;		
-static char *section;
+static const char *section;
 static char *colon_sep_section_list;
 static char *preprocessors;
 static const char *dbfilters;
@@ -806,8 +806,9 @@ int local_man_loop (const char *argv)
 int main (int argc, char *argv[])
 {
 	int argc_env, status = 0, exit_status = OK;
-	char **argv_env, *tmp;
-	char *nextarg, *multiple_locale;
+	char **argv_env;
+	const char *tmp;
+	char *multiple_locale;
 	extern int optind;
 	void (int_handler) (int);
 
@@ -1000,12 +1001,6 @@ int main (int argc, char *argv[])
 
 	section_list = get_section_list ();
 
-	if (optind == argc - 1) {
-		tmp = is_section (argv[optind]);
-		if (tmp)
-			gripe_no_name (tmp);
-	}
-
 #ifdef MAN_DB_UPDATES
 	/* If `-u', do it now. */
 	if (update)
@@ -1013,21 +1008,31 @@ int main (int argc, char *argv[])
 #endif /* MAN_DB_UPDATES */
 
 	while (optind < argc) {
-		nextarg = argv[optind++];
+		static int maybe_section = 0;
+		const char *nextarg = argv[optind++];
 
 		/*
      		 * See if this argument is a valid section name.  If not,
       		 * is_section returns NULL.
       		 */
-		if (optind < argc) {
-			tmp = is_section (nextarg);
-			if (tmp) {
-				section = tmp;
-				if (debug)
-					fprintf (stderr, "\nsection: %s\n",
-						 section);
-				continue;
-			}
+		tmp = is_section (nextarg);
+		if (tmp) {
+			section = tmp;
+			if (debug)
+				fprintf (stderr, "\nsection: %s\n", section);
+			maybe_section = 1;
+		}
+
+		if (maybe_section) {
+			if (optind < argc)
+				/* e.g. 'man 3perl Shell' */
+				nextarg = argv[optind++];
+			else
+				/* e.g. 'man 9wm' */
+				section = NULL;
+				/* ... but leave maybe_section set so we can
+				 * tell later that this happened.
+				 */
 		}
 
 		/* this is where we actually start looking for the man page */
@@ -1037,14 +1042,47 @@ int main (int argc, char *argv[])
 		/* clean out the memory cache for each man page */
 		free_hashtab ();
 
+		if (section && maybe_section) {
+			if (!status && !catman) {
+				/* Maybe the section wasn't a section after
+				 * all? e.g. 'man 9wm fvwm'.
+				 */
+				if (debug)
+					fprintf (stderr,
+						 "\nRetrying section %s as "
+						 "name\n", section);
+				tmp = section;
+				section = NULL;
+				status = man (tmp);
+				free_hashtab ();
+				/* ... but don't gripe about it if it doesn't
+				 * work!
+				 */
+				if (status) {
+					/* It was a name after all, so arrange
+					 * to try the next page again with a
+					 * null section.
+					 */
+					nextarg = tmp;
+					--optind;
+				} else
+					/* No go, it really was a section. */
+					section = tmp;
+			}
+		}
+
 		if (!status && !catman) {
 			if (!skip) {
 				if (strchr (nextarg, '/'))
 					exit_status = local_man_loop (nextarg);
 				else
 					exit_status = NOT_FOUND;
-				if (exit_status == NOT_FOUND)
-					gripe_no_man (nextarg, section);
+				if (exit_status == NOT_FOUND) {
+					if (!section && maybe_section)
+						gripe_no_name (nextarg);
+					else
+						gripe_no_man (nextarg, section);
+				}
 			}
 		} else {
 			if (debug)
@@ -1060,6 +1098,8 @@ int main (int argc, char *argv[])
 					fputs (".\n", stdout);
 			}
 		}
+
+		maybe_section = 0;
 
 		chkr_garbage_detector ();
 	}
@@ -1233,13 +1273,16 @@ static void man_getopt (int argc, char *argv[])
  * The list of sections in config.h simply allows us to specify oddly
  * named directories like .../man3f.  Yuk.
  */
-static __inline__ char *is_section (char *name)
+static __inline__ const char *is_section (const char *name)
 {
 	char **vs;
 
-	for (vs = section_list; *vs; vs++)
-		if (strcmp (*vs, name) == 0) 
+	for (vs = section_list; *vs; vs++) {
+		if (STREQ (*vs, name))
 			return name;
+		if (strlen (*vs) == 1 && STRNEQ (*vs, name, 1))
+			return name;
+	}
 	return NULL;
 }
 

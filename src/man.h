@@ -1,6 +1,6 @@
 /* man.c */
-static void man_getopt(int argc, char *argv[]);
-static __inline__ char *is_section(char *name);
+static void man_getopt (int argc, char *argv[]);
+static __inline__ const char *is_section (const char *name);
 static __inline__ char **get_section_list (void);
 static int man (const char *name);
 static int display (const char *dir, const char *man_file,

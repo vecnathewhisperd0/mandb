@@ -112,10 +112,14 @@ int match_in_directory (const char *path, const char *pattern, int ignore_case,
 	dir = opendir (path);
 	if (!dir) {
 		if (debug)
-			fprintf (stderr, "can't open directory %s: %s\n",
-				 path, strerror (errno));
+			fprintf (stderr, "can't open directory %s for %s: "
+				 "%s\n", path, pattern, strerror (errno));
 		return -1;
 	}
+
+	if (debug)
+		fprintf (stderr, "globbing pattern in %s: %s\n",
+			 path, pattern);
 
 	pglob->gl_pathv = xmalloc (allocated * sizeof (char *));
 	flags = FNM_NOESCAPE | (ignore_case ? FNM_CASEFOLD : 0);
@@ -180,9 +184,6 @@ char **look_for_file (const char *hier, const char *sec,
 		*strrchr (path, '\t') = *sec;
 		pattern = end_pattern (strappend (pattern, name, NULL), sec);
 
-		if (debug)
-			fprintf (stderr, "globbing pattern in %s: %s\n",
-				 path, pattern);
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
 	}
@@ -200,9 +201,6 @@ char **look_for_file (const char *hier, const char *sec,
 				  NULL);
 		pattern = end_pattern (strappend (pattern, name, NULL), sec);
 
-		if (debug)
-			fprintf (stderr, "globbing pattern in %s: %s\n",
-				 path, pattern);
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
 	}
@@ -217,9 +215,6 @@ char **look_for_file (const char *hier, const char *sec,
 				  sec, ".Z", NULL);
 		pattern = end_pattern (strappend (pattern, name, NULL), sec);
 
-		if (debug)
-			fprintf (stderr, "globbing pattern in %s: %s\n",
-				 path, pattern);
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
 	}
@@ -234,9 +229,6 @@ char **look_for_file (const char *hier, const char *sec,
 				  NULL);
 		pattern = strappend (pattern, name, ".*", NULL);
 
-		if (debug)
-			fprintf (stderr, "globbing pattern in %s: %s\n",
-				 path, pattern);
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
 	}
@@ -252,9 +244,6 @@ char **look_for_file (const char *hier, const char *sec,
 				  NULL);
 		pattern = end_pattern (strappend (pattern, name, NULL), sec);
 
-		if (debug)
-			fprintf (stderr, "globbing pattern in %s: %s\n",
-				 path, pattern);
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
 	}

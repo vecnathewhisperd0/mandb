@@ -1,3 +1,19 @@
+Sat Jun 29 14:58:08 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (main): If a section is given but the lookup fails,
+	  check to see if the section is actually a page name. This allows
+	  man page names that begin with a digit to work much more sanely.
+	  (is_section): If a single-character entry in section_list is a
+	  prefix of the requested section name, return successfully. This
+	  means that e.g. '3tcl' is treated as a valid section even if only
+	  '3' is in section_list.
+
+	* src/man.c (is_section), src/man.h (is_section): Constify argument
+	  and return type.
+
+	* src/globbing.c (match_in_directory, look_for_file): Reduce
+	  debugging chatter.
+
 Wed Jun 26 20:07:56 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/whatis.c (get_whatis): "(unknown)" => "(unknown subject)",
