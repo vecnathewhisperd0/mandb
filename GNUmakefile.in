@@ -166,44 +166,43 @@ ifeq ($(srcdir),.)
 _subdirs = $(EVERYTHING) tools docs include manual
 
 _all = */README */Makefile.in
-_root = ABOUT-NLS README configure *.h *.m4 *.in 
+_root = ABOUT-NLS README configure *.h *.m4 *.in man-db.*
 _docs = INSTALL.* COPYING ChangeLog NEWS ToDo
-_include = *.in 
+_include = *.in
 _lib = *.[ch]
 _libdb = *.[ch] stamp-h COPYING.LIB
 _man = man?/*.man? */man?/*.man? THANKS
-_po = Makefile.in.in POTFILES.in *.po
-_src = README.lexgrog *.[chl] *.l-* man_db.conf.in stamp-h
-_tools = checkman install-sh mandb_\[nt\]fmt-script mkcatdirs \
-	 mkinstalldirs nroff-script
-_zsoelim = *.[cl]
 _manual = Makefile *.me
+_src = README.lexgrog *.[chl] *.l-* lexgrog.l.new man_db.conf.in stamp-h
+_tools = chconfig checkman config.* install-manpage install-sh \
+	 mandb_\[nt\]fmt-script mkcatdirs mkinstalldirs nroff-script
+_zsoelim = *.[cl]
 
 FILES = $(_root) $(_all) \
 	$(foreach _subdir, $(_subdirs), \
 	  $(addprefix $(_subdir)/, $(_$(_subdir))))
 
 message = release $(version), date $(date)
-nls_man = de_DE.88591 de_DE.ascii
-nls_cat = en_GB de_DE.88591
+nls_man = de_DE.88591 de_DE.ascii es_ES.88591 it_IT.88591 ja_JP.eucJP
 man_db := man_db-$(version)
 
-# Ensure the flex C files and man_db-nls.h's are current
+# Ensure the flex C files are current
 dist: update
-	$(MAKE) -C src man_db-nls.h lexgrog.c nls=en_GB
-	$(MAKE) -C libdb man_db-nls.h nls=en_GB
+	$(MAKE) -C src lexgrog.c
 	$(MAKE) -C zsoelim zsoelim.c
 	rm -fr $(man_db)
 	rm -f $(man_db).tgz
 	mkdir $(man_db) 
 	mkdir $(addprefix $(man_db)/, $(_subdirs))
-	mkdir $(addprefix $(man_db)/nls/, $(nls_cat))
 	mkdir $(addprefix $(man_db)/man/, $(nls_man))
 	mkdir $(addprefix $(man_db)/man/, \
 	        $(foreach dir, . $(nls_man), \
 	          $(dir)/man1 $(dir)/man5 $(dir)/man8))
 	for file in $(FILES); do \
 	  ln $(srcdir)/$$file $(man_db)/$$file; \
+	done
+	for subdir in intl po; do \
+	  $(MAKE) -C $$subdir dist; \
 	done
 	chmod -R a+rX $(man_db)
 	tar cvf - $(man_db) | gzip -9 > $(man_db).tgz
