@@ -60,9 +60,7 @@ extern pid_t vfork();
 extern char *optarg;
 extern int optind, opterr, optopt;
 
-#ifndef debug
-int debug;
-#endif
+int debug = 0;
 char *program_name;
 int quiet = 0;
 
@@ -126,9 +124,7 @@ int main (int argc, char *argv[])
 				cat = 1;
 				break;
 			case 'd':
-#ifndef debug
 			    	debug = 1;
-#endif
 			    	break;
 		    	case 'q':
 			    	quiet = 1;

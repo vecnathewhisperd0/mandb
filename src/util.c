@@ -86,9 +86,6 @@ int is_newer (char *fa, char *fb)
 	int fa_stat;
 	int fb_stat;
 	int status = 0;
-#ifndef debug
-	extern int debug;
-#endif
 
 	if (debug)
 		fprintf (stderr, "is_newer: a=%s, b=%s", fa, fb);
@@ -144,10 +141,6 @@ int is_directory (char *path)
 /* wrapper for system() */
 int do_system (const char *command)
 {
-#ifndef debug
-	extern int debug;
-#endif
-
   	/*
   	 * If we're debugging, don't really execute the command -- you never
   	 * know what might be in that mangled string :-O.

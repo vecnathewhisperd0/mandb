@@ -259,10 +259,6 @@ extern void __chkr_garbage_detector(void);
 #  define chkr_garbage_detector()
 #endif
 
-/* Don't define debug at all, else you'll either engage all debug messages (1)
-   or you'll stop the utilities from being runtime debuggable (0) */
-/* #define debug	0 */
-
 /* This structure definition is only really needed if COMP_SRC==1, but it is
    used in external declarations quite freely, so it's included
    unconditionally */
@@ -340,10 +336,7 @@ extern char *basename(const char *path);
 extern char *strsep(char **stringp, const char *delim);
 #endif /* !HAVE_STRSEP */
 
-#ifndef debug
 extern int debug; 		/* shows whether -d issued */
-#endif /* !debug */
-
 extern int quiet;		/* be quiet(er) if 1 */
 extern char *program_name;	/* the basename of the program (as called) */
 

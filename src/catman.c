@@ -88,9 +88,7 @@ extern int errno;
 #include "manp.h"
 
 /* globals */
-#ifndef debug
 int debug = 0;
-#endif
 char *program_name;
 int quiet = 1;
 MYDBM_FILE dbf;
@@ -390,9 +388,7 @@ int main (int argc, char *argv[])
 		switch (c) {
 
 			case 'd':
-#ifndef debug
 				debug = 1;
-#endif
 				break;
 			case 'M':
 				manp = optarg;

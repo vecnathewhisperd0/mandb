@@ -83,9 +83,7 @@ extern char *getwd();
 #include "lib/cleanup.h"
 #include "manp.h"
 
-#ifndef debug
 int debug = 0;
-#endif
 char *program_name;
 int quiet = 1;
 extern int opt_test;		/* don't update db */
@@ -369,9 +367,7 @@ int main(int argc, char *argv[])
 		switch (c) {
 
 			case 'd':
-#ifndef debug
 				debug = 1;
-#endif
 				break;
 			case 'q':
 				quiet_temp++;

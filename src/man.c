@@ -416,10 +416,7 @@ static int checked_system (char *command)
 extern char *manpathlist[];	/* defined in manp.c     */
 
 /* globals */
-#ifndef debug
-int debug;
-#endif
-
+int debug = 0;
 int quiet = 1;
 char *program_name;
 char *database;
@@ -1107,9 +1104,7 @@ static void man_getopt (int argc, char *argv[])
 				catman = 1;
 				break;
 		    	case 'd':
-#ifndef debug
 				debug = 1;
-#endif
 				break;
 		    	case 'f':
 				external = WHATIS;

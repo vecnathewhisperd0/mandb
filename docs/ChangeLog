@@ -1,3 +1,13 @@
+Mon May 28 14:56:35 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* include/manconfig.h.in: Since it isn't sensible to define debug
+	  (-d options at run-time do just as well), remove the commented
+	  definition.
+	* include/manconfig.h.in, src/catman.c, src/check_mandirs.c,
+	  src/compression.c, src/man.c, src/mandb.c, src/manpath.c,
+	  src/whatis.c: Remove instances of '#ifndef debug'
+	* src/util.c: debug is already declared extern in manconfig.h.
+
 Mon May 28 14:30:38 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* tools/README: Describe chconfig and install-manpage.

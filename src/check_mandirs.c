@@ -290,14 +290,10 @@ void test_manfile (char *file, const char *path)
 	   links quite so many times. */
 	{
 		/* Avoid too much noise in debug output */
-#ifndef debug
 		int save_debug = debug;
 		debug = 0;
-#endif
 		ult = ult_src (file, path, &buf, SOFT_LINK | HARD_LINK);
-#ifndef debug
 		debug = save_debug;
-#endif
 	}
 
 	if (!ult) {

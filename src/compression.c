@@ -139,9 +139,7 @@ char *decompress (char *filename, struct compression *comp)
 {
 	char *command;
 	int status;
-#ifndef debug
 	int save_debug = debug;
-#endif
 
 	if (!file)
 		create_ztemp();
@@ -158,14 +156,9 @@ char *decompress (char *filename, struct compression *comp)
 		fprintf (stderr, "%s\n", command);
 	}
 
-#ifndef debug
 	debug = 0;
-#endif
 	status = do_system_drop_privs (command);
-
-#ifndef debug
 	debug = save_debug;
-#endif
 
 	free (command);
 
