@@ -39,15 +39,10 @@
 #  include <string.h>
 #elif defined(HAVE_STRINGS_H)
 #  include <strings.h>
-#else /* no string(s) header */
-extern char *strchr(), *strcat();
 #endif /* STDC_HEADERS */
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>
-#else 
-extern uid_t getuid(), geteuid();
-extern pid_t vfork();
 #endif /* HAVE_UNISTD_H */
 
 #if defined(HAVE_LIMITS_H)
