@@ -965,6 +965,7 @@ int main (int argc, char *argv[])
 			extern int _nl_msg_cat_cntr;
 			setenv ("LANGUAGE", internal_locale, 1);
 			++_nl_msg_cat_cntr;
+			multiple_locale = NULL;
 		}
 	}
 
