@@ -27,7 +27,7 @@ If not,
 will determine a suitable manual page hierarchy search path and display the
 results.
 
-The colon delimited path is determined using information gained from the
+The colon-delimited path is determined using information gained from the
 man_db configuration file -
 .RI ( "%manpath_config_file%" )
 and the user's environment.
@@ -70,8 +70,7 @@ To include NewOS's manual page hierarchies use the option
 
 The
 .I system
-specified can be a combination of comma delimited operating
-system names.
+specified can be a combination of comma delimited operating system names.
 To include the native operating system's manual page hierarchies, 
 the system name
 .B man
@@ -97,10 +96,10 @@ displays its value rather than determining it on the fly.
 If 
 .RB $ MANPATH
 is prefixed by a colon, then the value of the variable is appended
-to the list determined from the content of the configuration files. If
-the colon comes at the end of the value in the variable, then the
-determined list is appended after the content of the variable. If the
-value of the variable contains a double colon
+to the list determined from the content of the configuration files.
+If the colon comes at the end of the value in the variable, then the
+determined list is appended to the content of the variable.
+If the value of the variable contains a double colon
 .RB ( :: ),
 then the determined list is inserted in the middle of the value, between
 the two colons.
@@ -121,5 +120,7 @@ System configuration file.
 .BR %whatis% (1),
 .BR %man% (1).
 .SH AUTHOR
+.nf
 Wilf. (G.Wilford@ee.surrey.ac.uk).
 Fabrizio Polacco (fpolacco@debian.org).
+.fi

@@ -150,7 +150,7 @@ extern uid_t euid;
 #  define STDERR_FILENO 2
 #endif
 
-char * lang;
+char *lang;
 struct lt {
 	char *lang;
 	char *device;
@@ -224,17 +224,15 @@ popen (const char *cmd, const char *type)
 	FILE *stream;
 
 	/* check type */
-	if (type && (type[0] == 'r')) {
+	if (type && (type[0] == 'r'))
 		for_reading = 1;
-	} else if (type && (type[0] == 'w')) {
+	else if (type && (type[0] == 'w'))
 		for_reading = 0;
-	} else {
+	else
 		return NULL;
-	}
 
-	if (pipe (pipe_fd)) {
+	if (pipe (pipe_fd))
 		return NULL;
-	}
 
 	child = vfork ();
 	if (child == -1) {
@@ -244,9 +242,8 @@ popen (const char *cmd, const char *type)
 	} else if (child == 0) {
 		/* if for_reading connect the writing end of pipe to stdout
 		   else the reading end to stdin */
-		if (dup2 (pipe_fd[for_reading], for_reading) == -1) {
+		if (dup2 (pipe_fd[for_reading], for_reading) == -1)
 			_exit (127);
-		}
 
 		/* close pipe fds */
 		close (pipe_fd[0]);
@@ -285,11 +282,10 @@ popen (const char *cmd, const char *type)
 
 		kill (child, SIGKILL);
 
-		if (stream) {
+		if (stream)
 			fclose (stream);
-		} else {
+		else
 			close (fd);
-		}
 
 		do {		/* cope with non-restarting system calls */
 			res = waitpid (child, NULL, 0);
@@ -313,15 +309,13 @@ pclose (FILE *stream)
 	int res;
 	int save;
 
-	if ((fd > max_fd) || !fd2pid[fd]) {
+	if ((fd > max_fd) || !fd2pid[fd])
 		return -1;
-	}
 	child = fd2pid[fd];
 	fd2pid[fd] = 0;
 
-	if (fclose (stream)) {
+	if (fclose (stream))
 		return -1;
-	}
 
 	save = errno;
 	do {			/* cope with non-restarting system calls */
@@ -527,9 +521,9 @@ static void usage (int status)
 {
 #ifdef HAS_TROFF
 #  ifdef TROFF_IS_GROFF
-	char formatter[]="groff";
+	char formatter[] = "groff";
 #  else
-	char formatter[]="troff";
+	char formatter[] = "troff";
 #  endif /* TROFF_IS_GROFF */
 #endif /* HAS_TROFF */
 	
@@ -1077,7 +1071,8 @@ int main (int argc, char *argv[])
       		 * is_section returns NULL.
       		 */
 		if (optind < argc) {
-			if (tmp = is_section (nextarg)) {
+			tmp = is_section (nextarg);
+			if (tmp) {
 				section = tmp;
 				if (debug)
 					fprintf (stderr, "\nsection: %s\n",
@@ -1497,8 +1492,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		signal (SIGPIPE, old_handler);
 
 		pp_string = get_preprocessors (stdin_tmpfile);
-	}
-	else
+	} else
 		pp_string = get_preprocessors (file);
 
 #ifdef ALT_EXT_FORMAT
@@ -1757,7 +1751,8 @@ static int commit_tmp_cat (char *cat_file, char *tmp_cat, int delete)
 				 cat_file);
 			status = 0;
 		} else {
-			if ((status = rename (tmp_cat, cat_file)))
+			status = rename (tmp_cat, cat_file);
+			if (status)
 				error (0, errno, _("can't rename %s to %s"),
 				       tmp_cat, cat_file);
 		}
@@ -1766,10 +1761,8 @@ static int commit_tmp_cat (char *cat_file, char *tmp_cat, int delete)
 	if (delete || status) {
 		if (debug)
 			fprintf (stderr, "unlinking temporary cat\n");
-		else
-			if (unlink (tmp_cat))
-				error (0, errno, _("can't unlink %s"),
-				       tmp_cat);
+		else if (unlink (tmp_cat))
+			error (0, errno, _("can't unlink %s"), tmp_cat);
 	}
 
 	return status;
@@ -1895,28 +1888,26 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 static __inline__ int close_cat_stream (FILE *cat_stream, char *cat_file,
 					int delete)
 {
-	int status;
+	int status = fclose (cat_stream);
 
-	status = fclose (cat_stream);
 #  ifdef COMP_CAT
-	{			/* get compressor's exit status */
-		int comp_status;
+	int comp_status;	/* get compressor's exit status */
 
-		while (waitpid (cat_comp_pid, &comp_status, 0) == -1) {
-			if (errno != EINTR) {
-				error (0, errno, _("waiting for pid %u"),
-				       cat_comp_pid);
-				comp_status = -1;
-				break;
-			}
+	while (waitpid (cat_comp_pid, &comp_status, 0) == -1) {
+		if (errno != EINTR) {
+			error (0, errno, _("waiting for pid %u"),
+			       cat_comp_pid);
+			comp_status = -1;
+			break;
 		}
-
-		if (debug)
-			fprintf (stderr, "compressor exited with status %d\n",
-				 comp_status);
-		status |= comp_status;
 	}
+
+	if (debug)
+		fprintf (stderr, "compressor exited with status %d\n",
+			 comp_status);
+	status |= comp_status;
 #  endif
+
 	if (created_tmp_cat) {
 		status |= commit_tmp_cat (cat_file, tmp_cat_file,
 					  delete || status);
@@ -2535,43 +2526,47 @@ static int try_db_section (char *orig_name, char *path, struct mandata *in)
 		   we haven't just added the new page */
 		found_a_stray = 1;
 
-		if (!troff) {
-			file = make_filename (path, name, in, "cat");
-			if (debug)
-				fprintf (stderr,
-					 "Checking physical location: %s\n",
-					 file);
+		/* If explicitly asked for troff, don't show a stray cat. */
+		if (troff) {
+			free (title);
+			return found;
+		}
 
-			if (access (file, R_OK) != 0) {
-				char *catpath;
-				catpath = global_catpath (path);
+		file = make_filename (path, name, in, "cat");
+		if (debug)
+			fprintf (stderr,
+				 "Checking physical location: %s\n",
+				 file);
 
-				if (catpath && strcmp (catpath, path) != 0) {
-					file = make_filename (catpath, name,
-							      in, "cat");
-					free (catpath);
-					if (debug)
-						fprintf (stderr,
-							 "Checking physical "
-							 "location: %s\n",
-							 file);
+		if (access (file, R_OK) != 0) {
+			char *catpath;
+			catpath = global_catpath (path);
 
-					if (access (file, R_OK) != 0) {
-						/* don't delete here, 
-						   return==0 will do that */
-						free (title);
-						return found; /* zero */
-					}
-				} else {
-					if (catpath)
-						free (catpath);
+			if (catpath && strcmp (catpath, path) != 0) {
+				file = make_filename (catpath, name,
+						      in, "cat");
+				free (catpath);
+				if (debug)
+					fprintf (stderr,
+						 "Checking physical "
+						 "location: %s\n",
+						 file);
+
+				if (access (file, R_OK) != 0) {
+					/* don't delete here, 
+					   return==0 will do that */
 					free (title);
 					return found; /* zero */
 				}
+			} else {
+				if (catpath)
+					free (catpath);
+				free (title);
+				return found; /* zero */
 			}
-
-			found += display (path, NULL, file, title);
 		}
+
+		found += display (path, NULL, file, title);
 	}
 	free (title);
 	return found;
@@ -2863,30 +2858,32 @@ static __inline__ int do_prompt (char *name)
 	int ch;
 
 	skip = 0;
-	if (isatty (STDOUT_FILENO) && isatty (STDIN_FILENO)) {
-		fprintf (stderr, _( 
-		         "--Man-- next: %s "
-		         "[ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"), 
-		         name);
-		fflush (stderr);
+	if (!isatty (STDOUT_FILENO) || !isatty (STDIN_FILENO))
+		return 0;
 
-		do {
-			ch = getchar();
-			switch (ch) {
-				case '\n':
-					return 0;
-				case EOF:
-					skip = 1;
-					return 1;
-				default:
-					break;
-			}
-		} while (1);
-	}
+	fprintf (stderr, _( 
+		 "--Man-- next: %s "
+		 "[ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"), 
+		 name);
+	fflush (stderr);
+
+	do {
+		ch = getchar();
+		switch (ch) {
+			case '\n':
+				return 0;
+			case EOF:
+				skip = 1;
+				return 1;
+			default:
+				break;
+		}
+	} while (1);
+
 	return 0;
 }
 
-void (int_handler) (int signo)
+void int_handler (int signo)
 {
 	if (debug)
 		fprintf (stderr, "\ninterrupt signal %d handler\n", signo);

@@ -23,8 +23,7 @@
 .I name 
 \&.\|.\|.
 .SH DESCRIPTION
-Each manual page has a short description available within
-it. 
+Each manual page has a short description available within it. 
 .B %whatis%
 searches the manual page names and displays the manual page descriptions
 of any 
@@ -36,9 +35,7 @@ may contain wildcards
 .RB ( \-w )
 or be a regular expression
 .RB ( \-r ).
-Using these options,
-it may be
-necessary to quote the
+Using these options, it may be necessary to quote the
 .I name
 or escape (\\) the special characters to stop the shell from interpreting
 them.
@@ -109,8 +106,7 @@ use the option
 
 The
 .I system
-specified can be a combination of comma delimited operating
-system names.
+specified can be a combination of comma delimited operating system names.
 To include a search of the native operating system's
 manual page names, include the system name
 .B man
@@ -121,13 +117,13 @@ environment variable.
 .RE
 .TP
 .BI \-M\  path ,\ \-\-manpath= path
-Specify an alternate set of colon delimited, manual page hierarchies to
+Specify an alternate set of colon-delimited manual page hierarchies to
 search.
 By default,
 .B %apropos%
 uses the
 .RB $ MANPATH
-environment variable unless it is empty or unset in which case it will
+environment variable, unless it is empty or unset, in which case it will
 determine an appropriate manpath based on your
 .RB $ PATH
 environment variable.
@@ -165,7 +161,7 @@ option.
 .B MANPATH
 If
 .RB $ MANPATH
-is set, its value is interpreted as the colon delimited, manual page
+is set, its value is interpreted as the colon-delimited manual page
 hierarchy search path to use.
 .SH FILES
 .TP
@@ -188,5 +184,7 @@ text database.
 .BR %apropos% (1),
 .BR %man% (1).
 .SH AUTHOR
+.nf
 Wilf. (G.Wilford@ee.surrey.ac.uk).
 Fabrizio Polacco (fpolacco@debian.org).
+.fi

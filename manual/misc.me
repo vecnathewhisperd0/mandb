@@ -24,9 +24,9 @@ databases owned by MAN_OWNER.
 Once the databases are created,
 .b man
 will update entries in them if it finds newly installed
-manual pages or delete entries if manual pages are removed, if the
+manual pages (if the
 .b \-\-update
-flag is used.
+flag is used) or delete entries if manual pages are removed.
 In this mode it is possible for a malicious
 .b man
 user to deliberately lock a database as a writer, thus denying read access to
@@ -56,12 +56,6 @@ Otherwise,
 .b man
 will not be able to use the database to find and display the newly added
 manual pages, and will have to use the filesystem instead.
-As
-.b mandb
-lacks the ability to delete database entries for manual pages that have been
-removed, it is necessary to use the
-.b \-\-create
-flag whenever manual pages are removed from the filesystem.
 Each index database may be owned by an arbitrary user who will have
 subsequent write access to the database.
 Cat files are created in the same way as for mode (1) above.

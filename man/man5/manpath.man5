@@ -14,9 +14,8 @@ manpath \- format of the %manpath_config_file% file
 .SH DESCRIPTION
 The manpath configuration file is used by the manual page utilities
 to assess users' manpaths at run time, to indicate which manual page
-hierarchies (manpaths) are to be
-treated as `global' and to assign them directories to be used for storing
-cat files.
+hierarchies (manpaths) are to be treated as system hierarchies and to
+assign them directories to be used for storing cat files.
 
 If the environment variable
 .RB $ MANPATH
@@ -33,7 +32,8 @@ will be treated as comments and ignored.
 .BI MANDATORY_MANPATH \ manpath_element
 Lines of this form indicate manpaths that every automatically generated
 .RB $ MANPATH
-should contain. This will typically include
+should contain.
+This will typically include
 .IR /usr/man .
 .TP
 .BI MANPATH_MAP \ path_element\ manpath_element
@@ -41,7 +41,8 @@ Lines of this form set up
 .RB $ PATH
 to
 .RB $ MANPATH
-mappings. For each
+mappings.
+For each
 .I path_element
 found in the user's
 .RB $ PATH ,
@@ -54,9 +55,8 @@ Lines of this form indicate which manpaths are to be treated as system
 manpaths, and optionally where their cat files should be stored.
 This field type is particularly important if
 .B man
-is a setuid program, as it indicates
-which manual page hierarchies to access as the setuid user and which as the
-invoking user.
+is a setuid program, as it indicates which manual page hierarchies to access
+as the setuid user and which as the invoking user.
 
 The system manual page hierarchies are usually those stored under
 .I /usr
@@ -74,7 +74,8 @@ may be omitted.
 
 Traditional cat placement would be impossible for read only mounted manual
 page hierarchies and because of this it is possible to specify any valid
-directory hierarchy for their storage. To observe the
+directory hierarchy for their storage.
+To observe the
 .B Linux FSSTND
 the keyword
 .RB ` FSSTND
@@ -90,9 +91,8 @@ paths such as
 .IR /usr/man/de_DE.88591 .
 
 As the information is parsed line by line in the order written, it is
-necessary for any
-manpath that is a sub-hierarchy of another hierarchy to be listed
-first, otherwise an incorrect match will be made.
+necessary for any manpath that is a sub-hierarchy of another hierarchy to be
+listed first, otherwise an incorrect match will be made.
 An example is that
 .I /usr/man/de_DE.88591
 must come before
@@ -101,11 +101,13 @@ must come before
 .BI DEFINE \ key\ value
 Lines of this form define miscellaneous configuration variables; see the
 default configuration file for those variables used by the manual pager
-utilities. They include default paths to various programs (such as
+utilities.
+They include default paths to various programs (such as
 .I grep
 and
 .IR tbl ),
 and default sets of arguments to those programs.
 .SH BUGS
 Unless the rules above are followed and observed precisely, the manual pager
-utilities will not function as desired. The rules are overly complicated.
+utilities will not function as desired.
+The rules are overly complicated.

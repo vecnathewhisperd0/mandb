@@ -28,7 +28,8 @@ form:
 
 These requests are replaced by the contents of the 
 .I filename
-specified. If the request cannot be met,
+specified.
+If the request cannot be met,
 .B %zsoelim%
 looks for 
 .I filename.ext
@@ -47,15 +48,18 @@ the request.
 Traditionally,
 .B soelim 
 programs were used to allow roff preprocessors to be able to preprocess the 
-files referred to by the requests. This particular version was written 
-to circumvent problems created by support for compressed manual pages.
+files referred to by the requests.
+This particular version was written to circumvent problems created by
+support for compressed manual pages.
 .SH OPTIONS
 .TP
 .B \-C
 This flag is available for compatibility with other 
 .B soelim
-programs. Its use is to enable .so requests followed by something other than 
-whitespace. As this is already the default behaviour, it is ignored.
+programs.
+Its use is to enable .so requests followed by something other than 
+whitespace.
+As this is already the default behaviour, it is ignored.
 .TP
 .B \-h
 Print a help message and exit.
@@ -68,5 +72,7 @@ Display version and author information.
 .BR groff (1),
 .BR %man% (1).
 .SH AUTHOR
+.nf
 Wilf. (G.Wilford@ee.surrey.ac.uk).
 Fabrizio Polacco (fpolacco@debian.org).
+.fi
