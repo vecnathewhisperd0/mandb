@@ -35,7 +35,7 @@ fi
 echo "Search for duplicates under:" >&2
 echo $manpath >&2
 
-dups=`whatis -w -M $manpath "*" | sed -e 's/\([^ ]*\)[^(]* (\([^)]*\)).*/\2#\1/' | \
+dups=`whatis -w -M $manpath "*" | sed -e 's/\([^(]*\) (\([^)]*\)).*/\2#\1/' | \
       sort | uniq -d`
 
 for i in $dups
