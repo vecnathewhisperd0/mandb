@@ -1,3 +1,24 @@
+  Colin Watson  <cjwatson@debian.org>
+
+	* GNUmakefile.in: Strip .po from language names; fix it's -> its
+	  typo.
+
+	* src/manp.c: Remove #include of security.h (now merged elsewhere).
+	  (pathappend): Constify second argument.
+	  (mkcatdirs): Eliminate DIRLIST; now takes mandir and catdir as
+	  arguments.
+	  (add_2_dirlist): Rename to add_to_dirlist(); return void, and
+	  otherwise eliminate use of DIRLIST. As mentioned below, we now use
+	  a linked list instead.
+	  (read_config_file): Update accordingly.
+
+	* src/security.c: *uid no longer static for now, as other objects
+	  use them.
+	* src/man.c: Declare ruid and euid extern here now that security.h
+	  is gone.
+
+	* src/check_mandirs.c (update_db): Close dbf rather than database.
+
 Wed May  2 17:27:22 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* acinclude.m4: New file. Restore definitions inadvertently removed

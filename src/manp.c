@@ -84,7 +84,6 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "manp.h"
-#include "security.h"
 
 struct list {
 	char *key;
@@ -104,6 +103,7 @@ static struct list *namestore;
 char *tmplist[MAXDIRS];
 char *manpathlist[MAXDIRS];
 
+static void mkcatdirs(char *mandir, char *catdir);
 static __inline__ char *get_manpath(char *path);
 static __inline__ char *has_mandir(char *p);
 static __inline__ char *fsstnd(char *path);
@@ -236,7 +236,7 @@ static void add_mandatory (char *mandir)
 }
 
 /* accept (NULL or oldpath) and new path component. return new path */
-static char *pathappend (char *oldpath, char *appendage)
+static char *pathappend (char *oldpath, const char *appendage)
 {
 	assert ((!oldpath || *oldpath) && appendage);
 	return (oldpath ? strappend(oldpath, ":", appendage, NULL) :
@@ -530,44 +530,47 @@ char *manpath (char *systems)
 extern uid_t ruid;			/* initial real user id */
 extern uid_t euid;			/* initial effective user id */
 #endif /* SECURE_MAN_UID */
+
 /* create the catman hierarchy if it doesn't exist */
 void
-mkcatdirs( DIRLIST *dlp)
+mkcatdirs (char *mandir, char *catdir)
 {
 	char manname[PATH_MAX+6];
 	char catname[PATH_MAX+6];
 
-	if ( dlp->bin ) {
-		int oldmask=umask(022);
+	if (catdir) {
+		int oldmask = umask (022);
 		/* first the base catdir */
-		if ( is_directory( dlp->bin) != 1) {
+		if (is_directory (catdir) != 1) {
 			regain_effective_privs();
-			if ( mkdir( dlp->bin, S_ISGID|0755) < 0 ) {
+			if (mkdir (catdir, S_ISGID|0755) < 0) {
 				if (!quiet)
-					error (0, 0, _( "warning: cannot create catdir %s"), dlp->bin);
+					error (0, 0, _( "warning: cannot create catdir %s"), catdir);
 				if (debug)
-					fprintf (stderr, "warning: cannot create catdir %s\n", dlp->bin);
+					fprintf (stderr, "warning: cannot create catdir %s\n", catdir);
 			} else if (debug)
-				fprintf (stderr, "created base catdir %s\n", dlp->bin);
+				fprintf (stderr, "created base catdir %s\n", catdir);
 #ifdef SECURE_MAN_UID
-			if ( ruid == 0 )
-				chown( dlp->bin, euid, 0);
+			if (ruid == 0)
+				chown (catdir, euid, 0);
 #endif /* SECURE_MAN_UID */
 			drop_effective_privs();
 		}
 		/* then the hierarchy */
-		sprintf( catname, "%s/cat1", dlp->bin);
-		if ( is_directory( dlp->bin) == 1) {
+		sprintf (catname, "%s/cat1", catdir);
+		if (is_directory (catdir) == 1) {
 			int j;
 			regain_effective_privs();
-			if (debug)	fprintf (stderr, 
-				"creating catdir hierarchy %s  ", dlp->bin);
+			if (debug)
+				fprintf (stderr, 
+					 "creating catdir hierarchy %s	",
+					 catdir);
 			for (j=1; j<10; j++) {
-				sprintf( catname, "%s/cat%d", dlp->bin, j);
-				sprintf( manname, "%s/man%d", dlp->mandir, j);
-				if (( is_directory( manname) == 1)
-				&& (  is_directory( catname) != 1)) {
-					if ( mkdir( catname, S_ISGID|0755) < 0 ) {
+				sprintf (catname, "%s/cat%d", catdir, j);
+				sprintf (manname, "%s/man%d", mandir, j);
+				if ((is_directory (manname) == 1)
+				 && (is_directory (catname) != 1)) {
+					if (mkdir (catname, S_ISGID|0755) < 0) {
 						if (!quiet)
 							error (0, 0, _( "warning: cannot create catdir %s"), catname);
 						if (debug)
@@ -576,7 +579,7 @@ mkcatdirs( DIRLIST *dlp)
 						fprintf (stderr, " cat%d", j);
 #ifdef SECURE_MAN_UID
 					if ( ruid == 0 )
-						chown( catname, euid, 0);
+						chown (catname, euid, 0);
 #endif /* SECURE_MAN_UID */
 				}
 			}
@@ -584,13 +587,13 @@ mkcatdirs( DIRLIST *dlp)
 				fprintf (stderr, "\n");
 			drop_effective_privs();
 		}
-		umask(oldmask);
+		umask (oldmask);
 	}
 }
 
 extern char *program_name;
 /* Parse the manpath.config file, extracting appropriate information. */
-DIRLIST * add_2_dirlist ( FILE *config, DIRLIST *dlp)
+void add_to_dirlist (FILE *config)
 {
 	char *bp;
 	char buf[BUFSIZ];
@@ -599,15 +602,8 @@ DIRLIST * add_2_dirlist ( FILE *config, DIRLIST *dlp)
 
 	while ( (bp = fgets (buf, BUFSIZ, config)) ) {
 
-		while ( isspace(*bp) )
+		while (isspace(*bp))
 			bp++;
-
-		/* leave last element empty! */
-		if ( dlp >= &list[MAXDIRS-1] ) {
-			error (0, 0, _( "too many entries in config file"));
-			gripe_reading_mp_config (CONFIG_FILE);
-			return dlp;
-		}
 
 		if (*bp == '#' || *bp == '\0') {
 			continue;
@@ -628,8 +624,6 @@ DIRLIST * add_2_dirlist ( FILE *config, DIRLIST *dlp)
 			gripe_reading_mp_config (CONFIG_FILE);
 		}
 	}
-
-	return dlp;
 }
 
 void read_config_file(void)
@@ -641,15 +635,15 @@ void read_config_file(void)
 		error (FAIL, 0, _( "can't open the manpath configuration file %s"), CONFIG_FILE);
 
 	if (debug)
-		fprintf(stderr, "From the config file %s:\n\n", CONFIG_FILE);
+		fprintf (stderr, "From the config file %s:\n\n", CONFIG_FILE);
 
-	dlp = add_2_dirlist (config, dlp);
-	fclose(config);
+	add_to_dirlist (config);
+	fclose (config);
 
-	if ((home = xstrdup( getenv ("HOME"))) )
-		if ((config = fopen ( strappend ( home, "/.manpath", NULL), "r")) != NULL) {
-			dlp = add_2_dirlist (config, dlp);
-			fclose(config);
+	if ((home = xstrdup (getenv ("HOME"))) )
+		if ((config = fopen (strappend (home, "/.manpath", NULL), "r")) != NULL) {
+			add_to_dirlist (config);
+			fclose (config);
 		}
 
 #if 0

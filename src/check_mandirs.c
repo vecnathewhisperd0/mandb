@@ -610,7 +610,7 @@ short update_db(const char *manpath)
 {
 	dbf = MYDBM_RDOPEN(database);
 	if (dbf && dbver_rd(dbf)) {
-		MYDBM_CLOSE(database);
+		MYDBM_CLOSE(dbf);
 		dbf = NULL;
 	}
 	if (dbf) {

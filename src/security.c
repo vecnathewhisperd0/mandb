@@ -93,9 +93,9 @@ extern int errno;
 #    error Cannot compile man as a setuid program: insufficient seteuid funcs.
 #  endif
 
-static uid_t ruid;			/* initial real user id */
-static uid_t euid;			/* initial effective user id */
-static uid_t uid;			/* current euid */
+uid_t ruid;				/* initial real user id */
+uid_t euid;				/* initial effective user id */
+uid_t uid;				/* current euid */
 
 static __inline__ void gripe_set_euid()
 {

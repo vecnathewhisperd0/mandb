@@ -122,6 +122,11 @@ extern int errno;
 #include "manp.h"
 #include "man.h"
 
+#ifdef SECURE_MAN_UID
+extern uid_t ruid;
+extern uid_t euid;
+#endif /* SECURE_MAN_UID */
+
 /* the magic cookie to request preprocessing */
 #define PP_COOKIE "'\\\" "
 
