@@ -1829,6 +1829,10 @@ static void setenv_less (const char *title)
 	/* If there isn't enough space in the environment, ignore it. */
 	setenv ("LESS", less_opts, 1);
 
+	if (debug)
+		fprintf (stderr, "Setting MAN_PN to %s\n", esc_title);
+	setenv ("MAN_PN", esc_title, 1);
+
 	free (less_opts);
 }
 
