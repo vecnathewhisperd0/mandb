@@ -215,7 +215,7 @@ static __inline__ int test_for_include (char *buffer, char *rel)
  * name is full pathname, path is the MANPATH directory (/usr/man)
  * flags is a combination of SO_LINK | SOFT_LINK | HARD_LINK
  */
-char *ult_src (char *name, const char *path, struct stat *buf, int flags)
+char *ult_src (const char *name, const char *path, struct stat *buf, int flags)
 {
 	static char basename[2048];	/* must be static */
 	static short recurse; 		/* must be static */

@@ -316,7 +316,7 @@ static short mandb (const char *catpath, const char *manpath)
 #  ifdef BERKELEY_DB
 	dbfile = strappend (NULL, dbname, ".db", NULL);
 	tmpdbfile = strappend (NULL, database, ".db", NULL);
-	if (create || opt_test) {
+	if (create || force_rescan || opt_test) {
 		xremove (tmpdbfile);
 		amount = create_db (manpath);
 	} else {
@@ -328,7 +328,7 @@ static short mandb (const char *catpath, const char *manpath)
 	pagfile = strappend (NULL, dbname, ".pag", NULL);
 	tmpdirfile = strappend (NULL, database, ".dir", NULL);
 	tmppagfile = strappend (NULL, database, ".pag", NULL);
-	if (create || opt_test) {
+	if (create || force_rescan || opt_test) {
 		xremove (tmpdirfile);
 		xremove (tmppagfile);
 		amount = create_db (manpath);
@@ -341,7 +341,7 @@ static short mandb (const char *catpath, const char *manpath)
 #else /* !NDBM */
 	xfile = dbname;
 	xtmpfile = database;
-	if (create || opt_test) {
+	if (create || force_rescan || opt_test) {
 		xremove (xtmpfile);
 		amount = create_db (manpath);
 	} else {

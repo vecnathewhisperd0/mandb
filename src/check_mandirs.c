@@ -636,7 +636,7 @@ static short testmandirs (const char *path, time_t last)
 			continue;
 		if (!S_ISDIR(stbuf.st_mode))		/* not a directory */
 			continue;
-		if (!force_rescan && stbuf.st_mtime <= last) {
+		if (stbuf.st_mtime <= last) {
 			/* scanned already */
 			if (debug)
 				fprintf (stderr,
@@ -824,8 +824,7 @@ short update_db (const char *manpath)
 /* Decide whether to purge a reference to a "normal" (ULT_MAN or SO_MAN)
  * page.
  */
-static __inline__ short purge_normal (char *name, struct mandata *info,
-				      char **found)
+static short purge_normal (char *name, struct mandata *info, char **found)
 {
 	if (found)
 		return 0;
@@ -840,8 +839,8 @@ static __inline__ short purge_normal (char *name, struct mandata *info,
 }
 
 /* Decide whether to purge a reference to a WHATIS_MAN page. */
-static __inline__ short purge_whatis (const char *manpath, char *name,
-				      struct mandata *info, char **found)
+static short purge_whatis (const char *manpath, char *name,
+			   struct mandata *info, char **found)
 {
 	if (found) {
 		/* If the page exists and didn't beforehand, then presumably
@@ -902,6 +901,48 @@ static __inline__ short purge_whatis (const char *manpath, char *name,
 	}
 }
 
+/* Check that multi keys are correctly constructed. */
+static short check_multi_key (const char *name, const char *content)
+{
+	const char *walk, *next;
+
+	if (!*content)
+		return 0;
+
+	for (walk = content; walk && *walk; walk = next) {
+		/* The name in the multi key should only differ from the
+		 * name of the key itself in its case, if at all.
+		 */
+		int valid = 1;
+		++walk; /* skip over initial tab */
+		next = strchr (walk, '\t');
+		if (next) {
+			if (strncasecmp (name, walk, next - walk))
+				valid = 0;
+		} else {
+			if (strcasecmp (name, walk))
+				valid = 0;
+		}
+		if (!valid) {
+			if (debug)
+				fprintf (stderr,
+					 "%s: broken multi key \"%s\", "
+					 "forcing a rescan\n",
+					 name, content);
+			force_rescan = 1;
+			return 1;
+		}
+
+		/* If the name was valid, skip over the extension and
+		 * continue the scan.
+		 */
+		walk = next;
+		next = walk ? strchr (walk + 1, '\t') : NULL;
+	}
+
+	return 0;
+}
+
 /* Go through the database and purge references to man pages that no longer
  * exist.
  */
@@ -940,8 +981,17 @@ short purge_missing (const char *manpath)
 		if (!content.dptr)
 			return count;
 
-		/* Ignore overflow entries. */
+		/* Get just the name. */
+		nicekey = xstrdup (key.dptr);
+		tab = strchr (nicekey, '\t');
+		if (tab)
+			*tab = '\0';
+
+		/* Deal with multi keys. */
 		if (*content.dptr == '\t') {
+			if (check_multi_key (nicekey, content.dptr))
+				MYDBM_DELETE (dbf, key);
+			free (nicekey);
 			MYDBM_FREE (content.dptr);
 			nextkey = MYDBM_NEXTKEY (dbf, key);
 			MYDBM_FREE (key.dptr);
@@ -954,18 +1004,13 @@ short purge_missing (const char *manpath)
 
 		/* We only handle ULT_MAN, SO_MAN, and WHATIS_MAN for now. */
 		if (entry.id > WHATIS_MAN) {
+			free (nicekey);
 			MYDBM_FREE (content.dptr);
 			nextkey = MYDBM_NEXTKEY (dbf, key);
 			MYDBM_FREE (key.dptr);
 			key = nextkey;
 			continue;
 		}
-
-		/* Get just the name. */
-		nicekey = xstrdup (key.dptr);
-		tab = strchr (nicekey, '\t');
-		if (tab)
-			*tab = '\0';
 
 		save_debug = debug;
 		debug = 0;	/* look_for_file() is quite noisy */

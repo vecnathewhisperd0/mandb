@@ -367,45 +367,22 @@ static void newline_found (void)
 	}
 }
 
-int find_name (char *file, char *filename, lexgrog *p_lg)
+int find_name (const char *file, char *filename, lexgrog *p_lg)
 {
 	int ret;
 
 	if (strcmp (file, "-") == 0) {
 		yyin = fdopen (dup (0), "r");
 	} else {
-		char *path = xstrdup (file), *pathend;
-		struct stat statbuf;
 #ifdef COMP_SRC
-		char *ztemp;
-#endif
-
-		pathend = strrchr (path, '/');
-		if (pathend) {
-			*pathend = '\0';
-			pathend = strrchr (path, '/');
-			if (pathend && STRNEQ (pathend + 1, "man", 3))
-				*pathend = '\0';
-			else {
-				free (path);
-				path = NULL;
-			}
-		} else {
-			free (path);
-			path = NULL;
+		/* See if we need to decompress the file(s) first. */
+		struct compression *comp = comp_info (file);
+		if (comp) {
+			file = decompress (file, comp);
+			if (!file)
+				return 0;
 		}
-
-		file = ult_src (file, path ? path : ".", &statbuf, SO_LINK);
-		if (path)
-			free (path);
-		if (!file)
-			return 0;
-#ifdef COMP_SRC
-		ztemp = get_ztemp ();
-		if (ztemp)
-			file = ztemp;
 #endif
-
 		drop_effective_privs ();
 		yyin = fopen (file, "r");
 		regain_effective_privs ();
@@ -534,8 +511,46 @@ int main (int argc, char **argv)
 
 	while (optind != argc) {
 		lexgrog lg;
+		char *file;
+
 		lg.type = type;
-		if (find_name (argv[optind], "-", &lg)) {
+
+		if (STREQ (argv[optind], "-"))
+			file = argv[optind];
+		else {
+			char *path, *pathend;
+			struct stat statbuf;
+
+			path = xstrdup (argv[optind]);
+			pathend = strrchr (path, '/');
+			if (pathend) {
+				*pathend = '\0';
+				pathend = strrchr (path, '/');
+				if (pathend && STRNEQ (pathend + 1, "man", 3))
+					*pathend = '\0';
+				else {
+					free (path);
+					path = NULL;
+				}
+			} else {
+				free (path);
+				path = NULL;
+			}
+
+			file = ult_src (argv[optind], path ? path : ".",
+					&statbuf, SO_LINK);
+			if (path)
+				free (path);
+#ifdef COMP_SRC
+			if (file) {
+				char *ztemp = get_ztemp ();
+				if (ztemp)
+					file = ztemp;
+			}
+#endif
+		}
+
+		if (file && find_name (file, "-", &lg)) {
 			printf ("%s", argv[optind]);
 			if (show_filters)
 				printf (" (%s)", lg.filters);
