@@ -1,3 +1,59 @@
+Fri Apr  7 10:50:45 EET 2000  fab   (fpolacco@debian.org)
+
+	* Checked in by Colin Watson during SourceForge CVS sync.
+	* Version: 2.3.17.
+	* Upstream changes from Debian changelog:
+	  - Corrected apparent disappearing of option -e in apropos.
+	  - Corrected wrong usage of undocumented option -X which produced
+	    error when passed to filters. This is now parametrized as
+	    optional argument, defaulting to use devX75.  Documented in
+	    usage : -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12.
+	  - Applyed patch submitted by Tomohiro KUBOTA:
+	    - roff_device and LESSCHARSET are determined by user environment
+	      rather than language of manpage for English manpage.
+	    - roff_device "ascii8" is used for non-English/non-ISO-8859-1
+	      languages.
+	  - Added new check for libdb in configure.in
+	  - Added /usr/local/{share/}man to config file, due to bug in FHS,
+	    thanx to Gregor Hoffleit.
+	  - Added new message catalog po file for cs (czech) (4 new
+	    messages), thanx to Vladimir Michl.
+	  - tired of people continously complaining that man behaves
+	    differently than in RedHat (which is "The Reference Linux", you
+	    all know that), I'll add tbl as default filter for man. This
+	    will fix those three or four manpages that do not take the
+	    burden to declare their dependency on the tbl formatter (usually
+	    because upstream uses RedHat and so ...). Now what would I do if
+	    someone fill a bug against this because of wasting of CPU cicles
+	    for un-necessary filtering on the hundreds of pages that do not
+	    need tbl? I would certainly agree with them. Therefore I will
+	    fix this introducing scanning of manpages a la grog in mandb,
+	    and storing the result in the database.  ...[noise of hacking
+	    and debugging]...  Well, I did it (use accessdb to see it!). It
+	    took 4 weekend (stolen to the implementation of man 2.4) to
+	    complete and debug. Now you can announce the world that man-db
+	    2.3.17 knows in advance which filters to run when processing a
+	    manpage which is in the database.
+
+Wed Mar 22 16:00:16 EET 2000  fab   (fpolacco@debian.org)
+
+	* Checked in by Colin Watson during SourceForge CVS sync.
+	* Version: 2.3.16.
+	* Upstream changes from Debian changelog:
+	  - Applyed patch submitted by Javier Fernandez-Sanguino Pena to
+	    permit search of trnlated manpages before giving the first
+	    english one found.
+
+Mon Feb 28 22:09:09 EET 2000  fab   (fpolacco@debian.org)
+
+	* Checked in by Colin Watson during SourceForge CVS sync.
+	* Version: 2.3.13.
+	* Upstream changes from Debian changelog:
+	  - Applied patch to avoid disappearing of index file during
+	    regeneration. Thanx to Colin Phipps.
+	  - Applied patch to generate secure temporary file in straycat.
+	    Thanx to Colin Phipps.
+
 Wed Feb 23 22:34:54 EET 2000  fab   (fpolacco@debian.org)
 
 	* Version: 2.3.12
