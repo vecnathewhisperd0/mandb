@@ -1,7 +1,8 @@
 /*
- * hashtable.h: contains struct nlist
- *  
+ * hashtable.h: hashtable wrapper functions for convenience.
+ *
  * Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
+ * Copyright (c) 2002 Colin Watson <cjwatson@debian.org>.
  *
  * You may distribute under the terms of the GNU General Public
  * License as specified in the file COPYING that comes with this
@@ -10,19 +11,13 @@
  * Sat Aug 20 15:01:02 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
  */
 
-#include "libdb/mydbm.h"
-#include "libdb/db_storage.h" 
+#include "lib/hashtable.h"
 
-struct nlist {
-        struct nlist *next;	/* next in the chain */
-        char *name;		/* the _name_ */
-        void *defn;		/* the _definition_ */
-        int is_text;		/* what did we store here ? */
-};
+struct mandata;
+
+extern struct hashtable *man_hash;
 
 extern struct nlist *lookup (const char *s);
-extern __inline__ struct nlist *install_text (const char *name,
-					      const char *text);
-extern __inline__ struct nlist *install_db_ptr (const char *name,
-						struct mandata *db_ptr);
+extern struct nlist *install_text (const char *name, const char *text);
+extern struct nlist *install_db_ptr (const char *name, struct mandata *db_ptr);
 extern void free_hashtab (void);

@@ -1,3 +1,19 @@
+Mon May 27 23:57:26 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* lib/hashtable.c, lib/hashtable.h: New files, containing the
+	  generic parts of src/hashtable.{c,h}.
+	* lib/Makefile.in: Add hashtable.c.
+	* src/hashtable.c (hash, lookup, install): Remove. These functions
+	  have been renamed and moved to lib/hashtable.c.
+	  (free_defn): Rename to man_hash_free and update for new hashtable
+	  API.
+	  (free_hashtab): Update for new hashtable API.
+	* src/hashtable.h: Update prototypes.
+
+	* libdb/db_btree.c (btree_findkey): Check for entries we've seen
+	  before in the current run. These indicate a corrupt database
+	  containing a loop.
+
 Thu May 23 01:50:53 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* lib/cleanup.h: #endif must not be followed by a token on the same

@@ -38,8 +38,11 @@
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/flock.h"
+#include "lib/hashtable.h"
 #include "mydbm.h"
 #include "db_storage.h"
+
+struct hashtable *loop_check_hash;
 
 /* the Berkeley database libraries do nothing to arbitrate between concurrent 
    database accesses, so we do a simple flock(). If the db is opened in 
@@ -182,12 +185,36 @@ int btree_exists(DB *dbf, datum key)
 static __inline__ datum btree_findkey(DB *dbf, u_int flags)
 {
 	datum key, data;
-	
+
+	if (flags == R_FIRST) {
+		if (loop_check_hash) {
+			hash_free (loop_check_hash);
+			loop_check_hash = NULL;
+		}
+	}
+	if (!loop_check_hash)
+		loop_check_hash = hash_create (&plain_hash_free);
+
 	if (((dbf->seq)(dbf, (DBT *) &key, (DBT *) &data, flags))) {
 		key.dptr = NULL;
 		key.dsize = 0;
 		return key;
 	}
+
+	if (hash_lookup (loop_check_hash, key.dptr, key.dsize)) {
+		/* We've seen this key already, which is broken. Return NULL
+		 * so the caller doesn't go round in circles.
+		 */
+		if (debug)
+			fprintf (stderr, "Corrupt database! Already seen %*s. "
+					 "Attempting to recover ...\n",
+				 key.dsize, key.dptr);
+		key.dptr = NULL;
+		key.dsize = 0;
+		return key;
+	}
+
+	hash_install (loop_check_hash, key.dptr, key.dsize, 0, NULL);
 
 	return copy_datum(key);
 }
