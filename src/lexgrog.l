@@ -4,7 +4,7 @@
  * lexgrog.l: extract 'whatis' info from nroff man / formatted cat pages.
  *  
  * Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
- * Copyright (c) 2001 Colin Watson.
+ * Copyright (c) 2001, 2002 Colin Watson.
  *
  * You may distribute under the terms of the GNU General Public
  * License as specified in the file COPYING that comes with this
@@ -138,7 +138,7 @@ nl_name		N[Aa][Aa][Mm]
 pl_name		N[Aa][Zz][Ww][Aa]
 sv_name		N[Aa][Mm][Nn]
 name		({cs_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it_name}|{latin_name}|{nl_name}|{pl_name}|{sv_name})
-name_sec	{dbl_quote}?{style_change}?{name}{style_change}?{dbl_quote}?
+name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
 tbl_request	\.TS
