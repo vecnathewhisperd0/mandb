@@ -434,7 +434,7 @@ static int open_file(char *filename)
 			error (OK, errno, "%s:%d: %s", NAME, LINE, filename);
 #endif
 		} else {
-			error (OK, errno, filename);
+			error (OK, errno, "%s", filename);
 			status = FAIL;
 		}
 		yyin = oldyyin;
