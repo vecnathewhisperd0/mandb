@@ -1,3 +1,18 @@
+Mon Nov  8 09:52:02 GMT 2004  Colin Watson  <cjwatson@debian.org>
+
+	Get rid of plain getcwd(); this allows getting rid of most uses of
+	PATH_MAX.
+
+	* lib/getcwdalloc.c: New file, providing an allocating version of
+	  getcwd().
+	* lib/getcwdalloc.h: Prototype it.
+	* lib/Makefile.in: Always compile getcwdalloc.c.
+
+	* src/man.c (main, format_display): Use getcwd_allocated() instead
+	  of getcwd().
+	* src/mandb.c (main): Likewise.
+	* src/manp.c (add_dir_to_path_list): Likewise.
+
 Mon Nov  8 09:40:07 GMT 2004  Colin Watson  <cjwatson@debian.org>
 
 	* lib/hashtable.c (null_hash_free): No-op hash_free_ptr provider,

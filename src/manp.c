@@ -60,12 +60,6 @@ extern char *strstr();
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>
-#else
-#  ifdef HAVE_GETCWD_H
-extern char *getcwd();
-#  else
-extern char *getwd();
-#  endif
 #endif /* HAVE_UNISTD_H */
 
 #ifndef STDC_HEADERS
@@ -73,29 +67,12 @@ extern char *getenv();
 extern int errno;
 #endif
 
-#if defined(HAVE_LIMITS_H) && defined(_POSIX_VERSION)
-#  include <limits.h>                     /* for PATH_MAX */
-#else /* !(HAVE_LIMITS_H && _POSIX_VERSION) */
-#  include <sys/param.h>                  /* for MAXPATHLEN */
-#endif /* HAVE_LIMITS_H */
-
-#ifndef PATH_MAX
-#  if defined(_POSIX_VERSION) && defined(_POSIX_PATH_MAX)
-#    define PATH_MAX _POSIX_PATH_MAX
-#  else /* !_POSIX_VERSION */
-#    ifdef MAXPATHLEN
-#      define PATH_MAX MAXPATHLEN
-#    else /* !MAXPATHLEN */
-#      define PATH_MAX 1024
-#    endif /* MAXPATHLEN */
-#  endif /* _POSIX_VERSION */
-#endif /* !PATH_MAX */
-
 #include <libintl.h>
 #define _(String) gettext (String)
 
 #include "manconfig.h"
 #include "lib/error.h"
+#include "lib/getcwdalloc.h"
 #include "security.h"
 #include "manp.h"
 
@@ -1028,8 +1005,7 @@ static __inline__ char *has_mandir (const char *path)
 static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
 {
 	int status;
-	char wd[PATH_MAX];
-	char *cwd = wd;
+	char *cwd;
 
 	if (mp - mphead > MAXDIRS - 1)
 		gripe_overlong_list ();
@@ -1044,12 +1020,11 @@ static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
 		/* deal with relative paths */
 
 		if (*p != '/') {
-			if (!getcwd (cwd, PATH_MAX - 2 - strlen (p)))
+			cwd = getcwd_allocated ();
+			if (!cwd)
 				error (FATAL, errno,
 				       _("can't determine current directory"));
-			(void) strcat (wd, "/");
-			(void) strcat (wd, p);
-			*mp = xstrdup (wd);
+			*mp = strappend (cwd, "/", p, NULL);
 		} else 
 			*mp = xstrdup (p);
 

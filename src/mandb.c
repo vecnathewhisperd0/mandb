@@ -53,31 +53,7 @@ extern int errno;
 #  include <unistd.h>
 #else
 #  define W_OK	2
-#  ifdef HAVE_GETCWD_H
-extern char *getcwd();
-#  else
-extern char *getwd();
-#  endif
 #endif /* HAVE_UNISTD_H */
-
-#ifdef __profile__
-#  if defined(HAVE_LIMITS_H) && defined(_POSIX_VERSION)
-#    include <limits.h>                     /* for PATH_MAX */
-#  else /* !(HAVE_LIMITS_H && _POSIX_VERSION) */
-#    include <sys/param.h>                  /* for MAXPATHLEN */
-#  endif /* HAVE_LIMITS_H */
-#  ifndef PATH_MAX
-#    ifdef _POSIX_VERSION
-#      define PATH_MAX _POSIX_PATH_MAX
-#    else /* !_POSIX_VERSION */
-#      ifdef MAXPATHLEN
-#        define PATH_MAX MAXPATHLEN
-#      else /* !MAXPATHLEN */
-#        define PATH_MAX 1024
-#      endif /* MAXPATHLEN */
-#    endif /* _POSIX_VERSION */
-#  endif /* !PATH_MAX */
-#endif /* __profile__ */
 
 #ifdef SECURE_MAN_UID
 #  include <pwd.h>
@@ -102,6 +78,7 @@ extern char *getwd();
 #include "lib/error.h"
 #include "lib/cleanup.h"
 #include "lib/pipeline.h"
+#include "lib/getcwdalloc.h"
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "manp.h"
@@ -431,8 +408,7 @@ int main (int argc, char *argv[])
 	int option_index; /* not used, but required by getopt_long() */
 
 #ifdef __profile__
-	char wd[PATH_MAX];
-	char *cwd = wd;
+	char *cwd;
 #endif /* __profile__ */
 
 #ifdef SECURE_MAN_UID
@@ -497,8 +473,10 @@ int main (int argc, char *argv[])
 
 
 #ifdef __profile__
-	if (!getcwd (cwd, PATH_MAX - 1))
+	if (!getcwd_allocated ()) {
+		cwd = xmalloc (1);
 		cwd[0] = '\0';
+	}
 #endif /* __profile__ */
 
 	pipeline_install_sigchld ();

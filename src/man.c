@@ -70,20 +70,7 @@ extern pid_t vfork();
 #  include <sys/param.h>
 #endif
 
-#ifndef PATH_MAX
-#  ifdef _POSIX_VERSION
-#    define PATH_MAX _POSIX_PATH_MAX
-#  else /* !_POSIX_VERSION */
-#    ifdef MAXPATHLEN
-#      define PATH_MAX MAXPATHLEN
-#    else /* !MAXPATHLEN */
-#      define PATH_MAX 1024
-#    endif /* MAXPATHLEN */
-#  endif /* _POSIX_VERSION */
-#endif /* !PATH_MAX */
-
-static char wd[PATH_MAX];
-static char *cwd = wd;
+static char *cwd;
 
 #ifndef PIPE_BUF
 #  if defined(_POSIX_VERSION) && defined(_POSIX_PIPE_MAX)
@@ -142,6 +129,7 @@ extern int errno;
 #include "lib/cleanup.h"
 #include "lib/hashtable.h"
 #include "lib/pipeline.h"
+#include "lib/getcwdalloc.h"
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "globbing.h"
@@ -918,8 +906,11 @@ int main (int argc, char *argv[])
 
 	/* This will enable us to do some profiling and know
 	where gmon.out will end up. Must chdir(cwd) before we return */
-	if (!getcwd (cwd, PATH_MAX - 1))
+	cwd = getcwd_allocated ();
+	if (!cwd) {
+		cwd = xmalloc (1);
 		cwd[0] = '\0';
+	}
 
 	/* First of all, find out if $MANOPT is set. If so, put it in 
 	   *argv[] format for getopt to play with. */
@@ -2267,14 +2258,17 @@ static void format_display (pipeline *format_cmd, pipeline *disp_cmd,
 
 #ifdef TROFF_IS_GROFF
 	if (format_cmd && htmlout) {
-		char old_cwd[PATH_MAX];
+		char *old_cwd;
 		char *htmldir;
 		char *man_file_copy, *man_base, *man_ext;
 		char *htmlfile;
 		char *browser_list, *candidate;
 
-		if (!getcwd (old_cwd, PATH_MAX - 1))
+		old_cwd = getcwd_allocated ();
+		if (!old_cwd) {
+			old_cwd = xmalloc (1);
 			old_cwd[0] = '\0';
+		}
 		htmldir = create_tempdir ("hman");
 		if (chdir (htmldir) == -1)
 			error (FATAL, errno, _("can't change to directory %s"),
