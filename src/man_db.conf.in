@@ -41,18 +41,20 @@ MANPATH_MAP	/usr/games		/usr/share/man
 MANPATH_MAP	/opt/bin		/opt/man
 MANPATH_MAP	/opt/sbin		/opt/man
 #---------------------------------------------------------
-# For a manpath element to be considered `global' it must be mentioned
-# below. Each line may have an optional extra string indicating the
-# catpath associated with the manpath.  If no catpath string is used,
-# the catpath will default to the given manpath.
+# For a manpath element to be treated as a system manpath (as most of those
+# above should normally be), it must be mentioned below. Each line may have
+# an optional extra string indicating the catpath associated with the
+# manpath. If no catpath string is used, the catpath will default to the
+# given manpath.
 #
-# You *must* provide all `global' man paths, including alternate system
-# man paths and locale specific manpaths and combinations of both, if 
-# they exist, otherwise `user' permissions will be used to manipulate the 
-# manual pages. Also, utilities like mandb will not initialise the database
-# cache for any manpaths not mentioned below.
+# You *must* provide all system manpaths, including manpaths for alternate
+# operating systems, locale specific manpaths, and combinations of both, if
+# they exist, otherwise the permissions of the user running man/mandb will
+# be used to manipulate the manual pages. Also, mandb will not initialise
+# the database cache for any manpaths not mentioned below unless explicitly
+# requested to do so.
 #
-# Any manpaths that are `contained' within other manpaths must be mentioned 
+# Any manpaths that are subdirectories of other manpaths must be mentioned
 # *before* the containing manpath. E.g. /usr/man/preformat must be listed
 # before /usr/man.
 # 
