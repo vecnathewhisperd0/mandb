@@ -1,9 +1,7 @@
 /*
- * man.h: Headers for the manual pager
+ * convert_name.h: headers for pathname conversion
  *
- * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -20,15 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * Mon May  2 11:14:28 BST 1994 Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
-static void man_getopt (int argc, char *argv[]);
-static __inline__ const char *is_section (const char *name);
-static const char **get_section_list (void);
-static int man (const char *name, int *found);
-static int display (const char *dir, const char *man_file,
-		    const char *cat_file, const char *title,
-		    const char *dbfilters);
-static __inline__ char *make_roff_command (const char *dir, const char *file,
-					   const char *dbfilters);
-static __inline__ int do_prompt (const char *name);
+extern char *convert_name (const char *name, const char *alternate);

@@ -62,8 +62,6 @@ extern int errno;
 #  endif /* HAVE_NDIR_H */
 #endif /* HAVE_DIRENT_H  */
 
-extern char *realpath();
-
 #if defined(STDC_HEADERS)
 #  include <string.h>
 #  include <stdlib.h>
@@ -73,6 +71,7 @@ extern char *realpath();
 #  include <strings.h>
 #else /* no string(s) header */
 extern char *strrchr();
+extern char *realpath();
 #endif /* no string(s) header */
 
 #if defined(HAVE_UNISTD_H)

@@ -48,6 +48,8 @@ extern void exit ();
 # include <execinfo.h>
 #endif
 
+#include "error.h"
+
 /* If NULL, error will flush stdout, then print on stderr the program
    name, a colon and a space.  Otherwise, error will call this
    function without parameters instead.  */
@@ -58,7 +60,7 @@ void (*error_print_progname) () = NULL;
 extern char *program_name;
 
 #if HAVE_STRERROR
-extern char *strerror ();
+extern char *strerror (int errnum);
 #else
 static char *
 private_strerror (errnum)

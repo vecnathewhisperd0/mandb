@@ -144,6 +144,7 @@ extern int errno;
 #include "manp.h"
 #include "security.h"
 #include "encodings.h"
+#include "convert_name.h"
 #include "man.h"
 
 #ifdef SECURE_MAN_UID
@@ -486,13 +487,13 @@ static void gripe_no_name (const char *section)
 static struct termios tms;
 static int tms_set = 0;
 
-void set_term ()
+static void set_term (void)
 {
 	if (tms_set)
 		tcsetattr (0, TCSANOW, &tms);
 }
 
-void get_term()
+static void get_term (void)
 {
 	if (isatty (1)) {
 		if (debug)
@@ -860,6 +861,13 @@ static int local_man_loop (const char *argv)
 	return exit_status;
 }
 
+static void int_handler (int signo)
+{
+	if (debug)
+		fprintf (stderr, "\ninterrupt signal %d handler\n", signo);
+	exit (INTERRUPTED);
+}
+
 int main (int argc, char *argv[])
 {
 	int argc_env, exit_status = OK;
@@ -867,7 +875,6 @@ int main (int argc, char *argv[])
 	const char *tmp;
 	char *multiple_locale = NULL;
 	extern int optind;
-	void (int_handler) (int);
 
 	program_name = xstrdup (basename (argv[0]));
 
@@ -939,7 +946,7 @@ int main (int argc, char *argv[])
 	if (external)
 		do_extern (argv);
 
-	get_term(); /* stores terminal settings */
+	get_term (); /* stores terminal settings */
 #ifdef SECURE_MAN_UID
 	if (debug)
 		fprintf (stderr, "real user = %d; effective user = %d\n",
@@ -1498,7 +1505,7 @@ static char *make_roff_command (const char *dir, const char *file,
 		/* Ignore SIGPIPE; we want to be notified by write returning
 		 * EPIPE.
 		 */
-		RETSIGTYPE (*old_handler)() = signal (SIGPIPE, SIG_IGN);
+		RETSIGTYPE (*old_handler)(int) = signal (SIGPIPE, SIG_IGN);
 
 		/* read data into bf; we don't want to use the stream stuff
 		 * because we don't want data to be lost in the buffers, not
@@ -2019,7 +2026,7 @@ static __inline__ FILE *open_cat_stream (const char *cat_file)
 
 	tmp_cat_file = tmp_cat_filename (cat_file);
 	if (!debug)
-		push_cleanup ((void (*)()) unlink, tmp_cat_file);
+		push_cleanup ((cleanup_fun) unlink, tmp_cat_file);
 	created_tmp_cat = 0;
 
 #  ifdef COMP_CAT
@@ -2166,7 +2173,7 @@ static int format_display_and_save (const char *format_cmd,
 	FILE *out = checked_popen (disp_cmd, "w");
 	FILE *sav = open_cat_stream (cat_file);
 	int instat = 1, outstat;
-	RETSIGTYPE (*old_handler)() = signal (SIGPIPE, SIG_IGN);
+	RETSIGTYPE (*old_handler)(int) = signal (SIGPIPE, SIG_IGN);
 
 	if (in && out) {
 		/* copy in to both out and sav */
@@ -2334,7 +2341,7 @@ static void display_catman (const char *cat_file, const char *format_cmd)
 	 * (2) else depending on ruid's privs is ok, effectively disables
 	 *     catman for non-root.
 	 */
-	push_cleanup ((void (*)()) unlink, tmpcat);
+	push_cleanup ((cleanup_fun) unlink, tmpcat);
 	status = do_system_drop_privs (cmd);
 	if (status)
 		gripe_system (cmd, status);
@@ -3428,11 +3435,4 @@ static __inline__ int do_prompt (const char *name)
 	} while (1);
 
 	return 0;
-}
-
-void int_handler (int signo)
-{
-	if (debug)
-		fprintf (stderr, "\ninterrupt signal %d handler\n", signo);
-	exit (INTERRUPTED);
 }

@@ -110,6 +110,7 @@ static const char args[] = "mcwfhV";
 %option ecs meta-ecs
 %option 8bit batch caseful never-interactive 
 %option nostdinit
+%option warn
 %option noyywrap nounput
 
 %x MAN_NAME

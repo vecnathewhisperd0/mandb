@@ -63,6 +63,7 @@ extern char *strrchr();
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/hashtable.h"
+#include "globbing.h"
 
 const char *extension;
 static const char *mandir_layout = MANDIR_LAYOUT;
@@ -206,8 +207,8 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 	return cache;
 }
 
-int match_in_directory (const char *path, const char *pattern, int ignore_case,
-			glob_t *pglob)
+static int match_in_directory (const char *path, const char *pattern,
+			       int ignore_case, glob_t *pglob)
 {
 	struct dirent_hashent *cache;
 	size_t allocated = 4;

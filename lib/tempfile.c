@@ -35,13 +35,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "manconfig.h"
+
 /* Other library functions used in man-db. */
-extern char *strappend (char *str, ...);
-extern char *xstrdup (const char *string);
 extern int mkstemp (char *template);
 extern char *mkdtemp (char *template);
 
-static const char *path_search ()
+static const char *path_search (void)
 {
 	const char *dir = NULL;
 

@@ -1,3 +1,35 @@
+Thu May  1 19:12:54 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in (CFLAGS): Add -Wpointer-arith and -Wstrict-prototypes
+	  for gcc.
+
+	* src/man.h: Move prototype from convert_name.c to ...
+	* src/convert_name.h: ... here (new file).
+	* src/convert_name.c: Include "convert_name.h". Add some TODO
+	  comments.
+	* src/man.c: Include "convert_name.h".
+
+	* lib/error.c: Include "error.h". Prototype strerror() fully.
+	* lib/tempfile.c: Include "manconfig.h" instead of prototyping
+	  strappend() and xstrdup(). Prototype path_search() fully.
+	* lib/xmalloc.c: Remove most K&R compatibility, since it's not
+	  really supported elsewhere in man-db.
+	* src/globbing.c: Include "globbing.h".
+	  (match_in_directory): Add static.
+	* src/man.c (set_term, get_term): Add static.
+	  (int_handler): Move above main(), and add static.
+	  (main): Remove int_handler() prototype.
+	  (make_roff_command, format_display_and_save): Prototype
+	  old_handler fully.
+	  (open_cat_stream, display_catman): Cast to cleanup_fun rather than
+	  to an incomplete prototype.
+	* src/manp.c (guess_manpath): Add static.
+	* src/security.c (gripe_set_euid): Prototype fully.
+	* src/ult_src.c (realpath): Move prototype to the non-STDC_HEADERS
+	  case.
+
+	* src/lexgrog.l: Add '%option warn'.
+
 Thu May  1 17:39:55 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in (CFLAGS): Add -W for gcc.

@@ -552,7 +552,7 @@ static char *add_system_manpath (const char *systems, const char *manpathlist)
  * $HOME/bin in his path and the directory $HOME/bin/man exists -- the
  * directory $HOME/bin/man will be added to the manpath.
  */
-char *guess_manpath (const char *systems)
+static char *guess_manpath (const char *systems)
 {
 	char *path = getenv ("PATH");
 
