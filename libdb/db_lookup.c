@@ -144,7 +144,7 @@ char **split_data(char *content, char *start[])
 		start[count] = strsep(&content, "\t");
 		if (!start[count]) {
 			error (0, 0,
-			       _( "only %d fields in content"),
+			       _("only %d fields in content"),
 			       count);
 			gripe_corrupt_data();
 		}
@@ -177,7 +177,7 @@ void split_content(char *cont_ptr, struct mandata *pinfo)
 	pinfo->next = (struct mandata *) NULL;
 }
 	
-/* The compliment of split_content */
+/* The complement of split_content */
 datum make_content(struct mandata *in)
 {
 	datum cont;

@@ -14,7 +14,7 @@
 
 %%license: GPL
 
-%%maintainer: Fabrizio Polacco <fpolacco@debian.org>
+%%maintainer: Colin Watson <cjwatson@debian.org>
 
 %%updated: 2000-06-21
 
@@ -32,7 +32,7 @@
 
 %%doc: 
 
-%%developers: John W. Eaton, Graeme Wilford, Fabrizio Polacco <fpolacco@debian.org>
+%%developers: John W. Eaton, Graeme Wilford, Fabrizio Polacco <fpolacco@debian.org>, Colin Watson <cjwatson@debian.org>
 
 %%contributors: 
 

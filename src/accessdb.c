@@ -51,7 +51,7 @@ static void usage(int status)
 {
 	fprintf(stderr,
 		_("\nUsage: accessdb [man_database]\n"
-		"\tman_database defaults to %s " MAN_DB "\n"), cat_root);
+		"\tman_database defaults to %s" MAN_DB "\n"), cat_root);
 
 	exit (status);
 }

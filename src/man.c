@@ -2161,7 +2161,7 @@ static int try_section (char *path, char *sec, char *name)
 	}
 #ifndef NROFF_MISSING
 	else {
-		for (np = names; *np ; np++){
+		for (np = names; *np ; np++) {
 			char *man_file;
 			char *cat_file;
 
@@ -2478,7 +2478,7 @@ static int try_db(char *manpath, char *sec, char *name)
 	return found;
 }
 
-/* try to locate the page under the specified manpath, in the derised section,
+/* try to locate the page under the specified manpath, in the desired section,
    with the supplied name. glob if necessary. Initially try to find it via
    a db cache access, if that fails, search the filesystem. */
 static int locate_page(char *manpath, char *sec, char *name)

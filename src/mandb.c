@@ -127,10 +127,13 @@ static char *xfile;
 static char *xtmpfile;
 #endif /* NDBM */
 
-#if defined(SECURE_MAN_UID) && defined(MAN_DB_UPDATES)
-static uid_t euid;
+#ifdef SECURE_MAN_UID
+extern uid_t ruid;
+extern uid_t euid;
+#ifdef MAN_DB_UPDATES
 #  define DO_CHOWN
-#endif /* SECURE_MAN_UID && MAN_DB_UPDATES */
+#endif /* MAN_DB_UPDATES */
+#endif /* SECURE_MAN_UID */
 
 extern char *optarg;
 extern int optind, opterr, optopt;
@@ -403,8 +406,12 @@ int main(int argc, char *argv[])
 #endif /* __profile__ */
 
 
+#ifdef SECURE_MAN_UID
+	/* record who we are and drop effective privs for later use */
+	init_security();
+#endif /* SECURE_MAN_UID */
+
 #ifdef DO_CHOWN
-	euid = geteuid();
 	if ( (man_owner = getpwnam(MAN_OWNER)) == NULL)
 		error (FAIL, 0,
 		       _( "the setuid man user \"%s\" does not exist"), MAN_OWNER);
@@ -442,7 +449,10 @@ int main(int argc, char *argv[])
 
 	/* get the manpath as an array of pointers */
 	create_pathlist(xstrdup(manp), manpathlist); 
-	
+
+	/* finished manpath processing, regain privs */
+	regain_effective_privs();
+
 	for (mp = manpathlist; *mp; mp++) {
 		catpath = global_catpath(*mp);
 		if (catpath) { 	/* system db */
@@ -462,10 +472,12 @@ int main(int argc, char *argv[])
 			free(catpath);
 		} else {	/* user db */
 			push_cleanup (cleanup, NULL);
+			drop_effective_privs();
 			amount += mandb (*mp, *mp);
 			if (check_for_strays)
 				strays += straycats(*mp);
 			finish_up();
+			regain_effective_privs();
 			pop_cleanup();
 		}
 
