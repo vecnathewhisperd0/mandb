@@ -422,7 +422,7 @@ int main(int argc, char *argv[])
 		error (FAIL, 0,
 		       _("the setuid man user \"%s\" does not exist"),
 		       MAN_OWNER);
-	if (!user && euid != man_owner->pw_uid)
+	if (!user && euid != 0 && euid != man_owner->pw_uid)
 		user = 1;
 #endif /* DO_CHOWN */
 

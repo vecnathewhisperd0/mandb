@@ -12,7 +12,8 @@
  *
  * Wed Oct 12 18:46:11 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
  * 
- * CJW: Detect grap and vgrind. Other improvements in the syntax accepted.
+ * CJW: Detect grap and vgrind. Understand fill requests. Other improvements
+ * in the syntax accepted.
  */
 
 #undef PROFILE
@@ -51,9 +52,9 @@ static int ctr[YY_NUM_RULES];
 #  define YY_USER_ACTION ++ctr[yy_act];
 #endif
 
-static void add_str_to_whatis(const char *string, size_t length);
-static void add_char_to_whatis(unsigned char c);
-static void newline_found(void);
+static void add_str_to_whatis (const char *string, size_t length);
+static void add_char_to_whatis (unsigned char c);
+static void newline_found (void);
 
 static char newname[MAX_NAME];
 static char *p_name, *fname;
@@ -110,8 +111,8 @@ vgrind_request	\.vS
 %%
 
  /* begin NAME section processing */
-<MAN_FILE>{sec_request}{blank_eol}+{name_sec}{blank}*	BEGIN(MAN_NAME);
-<CAT_FILE>(\n{blank}*){2,}{name}{blank}*\n{blank}+	BEGIN(CAT_NAME);
+<MAN_FILE>{sec_request}{blank_eol}+{name_sec}{blank}*	BEGIN (MAN_NAME);
+<CAT_FILE>(\n{blank}*){2,}{name}{blank}*\n{blank}+	BEGIN (CAT_NAME);
 
  /* general text matching */
 <MAN_FILE>\.[^Ss].*{next}				|
@@ -133,14 +134,14 @@ vgrind_request	\.vS
 }
 <MAN_REST><<EOF>>		{	/* exit */
 					*p_name = '\0'; /* terminate the string */
-					yyterminate();
+					yyterminate ();
 				}
 <MAN_REST>.|\n
 
  /* rules to end NAME section processing */
 <FORCE_EXIT>.|\n		{	/* forced exit */
 					*p_name = '\0'; /* terminate the string */
-					yyterminate();
+					yyterminate ();
 				}
 
 <MAN_NAME>{bol}{sec_request}{blank}*	| 	/* Another section */
@@ -148,15 +149,15 @@ vgrind_request	\.vS
 <MAN_NAME>{bol}\.sp{blank}*		|	/* vertical spacing */
 <MAN_NAME>\n{blank}*{bol}.+	{	/* terminate the string */
 					*p_name = '\0';
-					BEGIN(MAN_REST);
+					BEGIN (MAN_REST);
 				}
 
 <CAT_NAME>{bol}S[yYeE]			|
 <CAT_NAME>\n{2,}.+			|
 <CAT_NAME>{next}__		{	/* terminate the string */
 					*p_name = '\0';
-					BEGIN(CAT_REST);
-					yyterminate();
+					BEGIN (CAT_REST);
+					yyterminate ();
 				}
 
  /* ROFF request removal */
@@ -164,12 +165,12 @@ vgrind_request	\.vS
 	{bol}{typeface}{blank}+		|	/* type face commands */
 	{bol}\.IX{blank}.*		|	/* .IX line */
 	{next}{comment}.*		{	/* per line comments */
-						newline_found();
+						newline_found ();
 					}
 }
 
  /* No-op requests */
-<MAN_NAME>{bol}\.{blank}*$		newline_found();
+<MAN_NAME>{bol}\.{blank}*$		newline_found ();
 
  /* Toggle fill mode */
 <MAN_NAME>{bol}\.nf.*			fill_mode = 0;
@@ -182,18 +183,18 @@ vgrind_request	\.vS
 <MAN_NAME>{next}[blank_eol]+[-\\]-{blank}*	|
 <MAN_NAME>{next}[blank_eol]*[-\\]-{blank}+	|
 <CAT_NAME>{next}{blank}+-{1,2}[blank_eol]+	|
-<MAN_NAME>{bol}\.Nd{blank}*			add_str_to_whatis(" - ", 3);
+<MAN_NAME>{bol}\.Nd{blank}*			add_str_to_whatis (" - ", 3);
 
  /* escape sequences and special characters */
 <MAN_NAME>{
- 	{next}\\[\\e]			add_char_to_whatis('\\');
- 	{next}\\('|\(aa)		add_char_to_whatis('\'');
- 	{next}\\(`|\(ga)		add_char_to_whatis('`');
-	{next}\\-			add_char_to_whatis('-');
- 	{next}\\\.			add_char_to_whatis('.');
-	{next}((\\[ 0t])|[ ]|\t)*	add_char_to_whatis(' ');
-	{next}\\\((ru|ul)		add_char_to_whatis('_');
-	{next}\\\\t			add_char_to_whatis('\t');
+ 	{next}\\[\\e]			add_char_to_whatis ('\\');
+ 	{next}\\('|\(aa)		add_char_to_whatis ('\'');
+ 	{next}\\(`|\(ga)		add_char_to_whatis ('`');
+	{next}\\-			add_char_to_whatis ('-');
+ 	{next}\\\.			add_char_to_whatis ('.');
+	{next}((\\[ 0t])|[ ]|\t)*	add_char_to_whatis (' ');
+	{next}\\\((ru|ul)		add_char_to_whatis ('_');
+	{next}\\\\t			add_char_to_whatis ('\t');
 
 	{next}\\[|^&!%acdpruz{}\n]	/* various useless control chars */
 	{next}\\[bhlLvx]{blank}*'[^']+'	/* various inline functions */
@@ -219,7 +220,7 @@ vgrind_request	\.vS
 }
 
  /* collapse spaces, escpaed spaces, tabs, newlines to a single space */
-<CAT_NAME>{next}((\\[ ])|{blank})*	add_char_to_whatis(' ');
+<CAT_NAME>{next}((\\[ ])|{blank})*	add_char_to_whatis (' ');
 
  /* a ROFF break request (.br) or a paragraph request (.LP, .PP, .P)
     usually means we have multiple whatis definitions, provide a separator
@@ -228,26 +229,26 @@ vgrind_request	\.vS
 	{bol}\.br{blank}*		|
 	{bol}\.LP{blank}*		|
 	{bol}\.PP{blank}*		|
-	{bol}\.P{blank}*		add_char_to_whatis((char) 0x11);
+	{bol}\.P{blank}*		add_char_to_whatis ((char) 0x11);
 }
 
 <MAN_NAME>{bol}\.{alpha}{2}{blank}*  	{ /* very general roff requests */
-						newline_found();
+						newline_found ();
 					}
 
  /* pass words as a chunk. speed optimization */
-<MAN_NAME>[[:alnum:]]*		add_str_to_whatis(yytext, yyleng);
+<MAN_NAME>[[:alnum:]]*		add_str_to_whatis (yytext, yyleng);
 
  /* normalise the period (,) separators */
 <CAT_NAME>{blank}*,[ \t\n]*		|
-<MAN_NAME>{blank}*,{blank}*		add_str_to_whatis(", ", 2);
+<MAN_NAME>{blank}*,{blank}*		add_str_to_whatis (", ", 2);
 
 <CAT_NAME,MAN_NAME>{bol}.	{
-					newline_found();
-					add_char_to_whatis(yytext[yyleng - 1]);
+					newline_found ();
+					add_char_to_whatis (yytext[yyleng - 1]);
 				}
 
-<CAT_NAME,MAN_NAME>.			add_char_to_whatis(*yytext);
+<CAT_NAME,MAN_NAME>.			add_char_to_whatis (*yytext);
 
  /* default EOF rule */
 <<EOF>>	return 1;
@@ -255,113 +256,117 @@ vgrind_request	\.vS
 %%
 
 /* print warning and force scanner to terminate */
-static void too_big(void)
+static void too_big (void)
 {
-	error(0, 0, _( "warning: whatis for %s exceeds %d bytes, truncating."), fname, MAX_NAME);
+	error (0, 0,
+	       _("warning: whatis for %s exceeds %d bytes, truncating."),
+	       fname, MAX_NAME);
 
-	BEGIN(FORCE_EXIT);
+	BEGIN (FORCE_EXIT);
 }
 
 /* append a string to newname if enough room */
-static void add_str_to_whatis(const char *string, size_t length)
+static void add_str_to_whatis (const char *string, size_t length)
 {
-	if (p_name - newname + length >= MAX_NAME) {
-		too_big();
-	} else {
-		(void) strncpy(p_name, string, length);
+	if (p_name - newname + length >= MAX_NAME)
+		too_big ();
+	else {
+		(void) strncpy (p_name, string, length);
 		p_name += length;
 	}
 } 
 
 /* append a char to newname if enough room */
-static void add_char_to_whatis(unsigned char c)
+static void add_char_to_whatis (unsigned char c)
 {
 	if (p_name - newname + 1 >= MAX_NAME)
-		too_big();
+		too_big ();
 	else
 		*p_name++ = c;
 }
 
-static void newline_found(void)
+static void newline_found (void)
 {
 	/* If we are mid p_name and the last added char was not a space,
 	 * best add one.
 	 */
 	if (p_name != newname && *(p_name - 1) != ' ') {
 		if (fill_mode)
-			add_char_to_whatis(' ');
+			add_char_to_whatis (' ');
 		else
-			add_char_to_whatis((char) 0x11);
+			add_char_to_whatis ((char) 0x11);
 	}
 }
 
-int find_name( char *file, char *filename, lexgrog *p_lg)
+int find_name (char *file, char *filename, lexgrog *p_lg)
 {
 	int ret;
 
-	if ( (yyin = fopen(file, "r")) == NULL) {
-		error (0, errno, _( "can't open %s"), file);
+	yyin = fopen (file, "r");
+	if (!yyin) {
+		error (0, errno, _("can't open %s"), file);
 		return 0;
 	}
 
 	fname = filename;
 	*(p_name = newname) = '\0';
-	memset( filters, '_', sizeof(filters));
+	memset (filters, '_', sizeof (filters));
 
 	fill_mode = 1;
 
 	if (p_lg->type)
-		BEGIN(CAT_FILE);
+		BEGIN (CAT_FILE);
 	else
-		BEGIN(MAN_FILE);
+		BEGIN (MAN_FILE);
 
-	yyrestart(yyin);
-	ret = yylex();
-	fclose(yyin);
+	yyrestart (yyin);
+	ret = yylex ();
+	fclose (yyin);
 
 	if (ret)
 		return 0;
 	else {
 		char f_tmp[MAX_FILTERS];
-		int j,k;
+		int j, k;
 
 		/* wipe out any initial spaces */
 		for (p_name = newname; *p_name == ' '; p_name++);
-		p_lg->whatis = xstrdup( p_name);
-		memset( f_tmp, '\0', MAX_FILTERS); f_tmp[0] = '-';
-		for ( p_lg->filters=0,j=k=0; j<MAX_FILTERS; j++ )
-			if ( filters[j] != '_' )
+		p_lg->whatis = xstrdup (p_name);
+		memset (f_tmp, '\0', MAX_FILTERS);
+		f_tmp[0] = '-';
+		for (j = k = 0; j < MAX_FILTERS; j++)
+			if (filters[j] != '_')
 				f_tmp[k++] = filters[j];
-		p_lg->filters = xstrdup( f_tmp);
+		p_lg->filters = xstrdup (f_tmp);
 		return p_name[0];
 	}
 }
 
 #ifdef TEST
-int main(int argc, char **argv)
+int main (int argc, char **argv)
 {
 	if (argc > 1)
 		while (*++argv) {
-			printf("man: \"%s\"\n", find_name(*argv, "-", 0));
-			printf("cat: \"%s\"\n", find_name(*argv, "-", 1));
+			printf ("man: \"%s\"\n", find_name (*argv, "-", 0));
+			printf ("cat: \"%s\"\n", find_name (*argv, "-", 1));
 		}
 	return 0;
 }
 #endif
 
 #ifdef PROFILE
-void rule_profile(void)
+void rule_profile (void)
 {
 	int i, tot = 0;
 
-	printf("found NAME in %d man, %d cat pages\n", ctr[1], ctr[2]);
+	printf ("found NAME in %d man, %d cat pages\n", ctr[1], ctr[2]);
 	for (i = 3; i <= YY_NUM_RULES; i++) 
 		if (ctr[i]) {
-			printf("rule[%d]: %d\n", i, ctr[i]);
+			printf ("rule[%d]: %d\n", i, ctr[i]);
 			tot += ctr[i];
 		}
-	printf("Total rules executed: %d\n", tot);
+	printf ("Total rules executed: %d\n", tot);
 }
 #else
-void rule_profile(void){}
+void rule_profile (void) {}
 #endif

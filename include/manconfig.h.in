@@ -223,7 +223,7 @@
 
 /* If running checker, support the garbage detector, else don't */
 #ifdef __CHECKER__
-extern void __chkr_garbage_detector(void);
+extern void __chkr_garbage_detector (void);
 #  define chkr_garbage_detector() __chkr_garbage_detector()
 #else
 #  define chkr_garbage_detector()
@@ -252,51 +252,51 @@ struct compression {
 
 /* some library function declarations */
 #include <stddef.h>	/* for size_t */
-extern VOID *xmalloc(size_t n);
-extern VOID *xrealloc(void *p, size_t n);
-extern __inline__ char *xstrdup(const char *string);
+extern VOID *xmalloc (size_t n);
+extern VOID *xrealloc (VOID *p, size_t n);
+extern __inline__ char *xstrdup (const char *string);
 
 /* ver.c */
 #ifndef STATIC_VER
-extern __inline__ void ver(void);
+extern __inline__ void ver (void);
 #endif /* !STATIC_VER */
 
 /* compression.c */
-extern struct compression *comp_info(char *filename);
-extern struct compression *comp_file(char *filename);
-extern char *decompress(char *filename, struct compression *comp);
-extern __inline__ void remove_ztemp(void);
-extern __inline__ char *get_ztemp(void);
+extern struct compression *comp_info (char *filename);
+extern struct compression *comp_file (char *filename);
+extern char *decompress (char *filename, struct compression *comp);
+extern __inline__ void remove_ztemp (void);
+extern __inline__ char *get_ztemp (void);
 
 /* security.c */
-extern __inline__ void drop_effective_privs(void);
-extern __inline__ void regain_effective_privs(void);
-extern int do_system_drop_privs(const char *command);
-extern int remove_with_dropped_privs(const char *filename);
-extern void init_security(void);
+extern __inline__ void drop_effective_privs (void);
+extern __inline__ void regain_effective_privs (void);
+extern int do_system_drop_privs (const char *command);
+extern int remove_with_dropped_privs (const char *filename);
+extern void init_security (void);
 
 /* straycats.c */
-extern int straycats(char *mandir);
+extern int straycats (char *mandir);
 
 /* lexgrog.l */
 struct lexgrog;
-extern int find_name(char *file, char *filename, struct lexgrog *p_lg);
+extern int find_name (char *file, char *filename, struct lexgrog *p_lg);
 
 /* util.c */
-extern char *strappend(char *, ...);
-extern int is_newer(char *fa, char *fb);
-extern int is_directory(char *path);
-extern __inline__ int do_system(const char *command);
-extern char *mkdbname(const char *path);
+extern char *strappend (char *, ...);
+extern int is_newer (char *fa, char *fb);
+extern int is_directory (char *path);
+extern __inline__ int do_system (const char *command);
+extern char *mkdbname (const char *path);
 
 #if !defined(HAVE_BASENAME)
-extern char *basename();
+extern char *basename ();
 #else /* HAVE_BASENAME */
-extern char *basename(const char *path);
+extern char *basename (const char *path);
 #endif /* !HAVE_BASENAME */
 
 #ifndef HAVE_STRSEP
-extern char *strsep(char **stringp, const char *delim);
+extern char *strsep (char **stringp, const char *delim);
 #endif /* !HAVE_STRSEP */
 
 extern int debug; 		/* shows whether -d issued */
@@ -347,8 +347,8 @@ enum	{ TBL_FILTER=0	/* tbl */
 	, MAX_FILTERS	/* delimiter */
 	};
 
-typedef struct lexgrog	{
-	int	type;
-	char * whatis;
-	char * filters;
-}lexgrog;
+typedef struct lexgrog {
+	int type;
+	char *whatis;
+	char *filters;
+} lexgrog;
