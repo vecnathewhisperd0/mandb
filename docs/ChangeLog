@@ -1,3 +1,9 @@
+Tue Sep 25 22:46:45 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/whatis.c (get_whatis): Suppress wrong report of a pointer loop
+	  when the second or subsequent element in a pointer chain points to
+	  itself and has a usable whatis.
+
 Wed Sep 19 00:47:55 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (local_man_loop): Drop privileges throughout.

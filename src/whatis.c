@@ -207,6 +207,7 @@ static __inline__ int use_grep (char *page, char *manpath)
 static char *get_whatis (struct mandata *info, char *page)
 {
 	int rounds;
+	char *newpage;
 
 	/* See if we need to fill in the whatis here. */
 	if (*(info->pointer) == '-' || STREQ (info->pointer, page)) {
@@ -221,26 +222,29 @@ static char *get_whatis (struct mandata *info, char *page)
 	/* Now we have to work through pointers. The limit of 10 is fairly
 	 * arbitrary: it's just there to avoid an infinite loop.
 	 */
-	info = dblookup_exact (info->pointer, info->ext);
+	newpage = info->pointer;
+	info = dblookup_exact (newpage, info->ext);
 	for (rounds = 0; rounds < 10; rounds++) {
 		struct mandata *newinfo;
-		char *return_whatis = NULL;
 
 		/* If the pointer lookup fails, do nothing. */
 		if (!info)
 			return xstrdup (_("(unknown)"));
 
 		/* See if we need to fill in the whatis here. */
-		if (*(info->pointer) == '-') {
-			if (info->whatis != NULL && *(info->whatis))
-				return_whatis = xstrdup (info->whatis);
-			else
-				return_whatis = xstrdup (_("(unknown)"));
-		}
-
-		if (return_whatis) {
+		if (*(info->pointer) == '-' ||
+		    STREQ (info->pointer, newpage)) {
+			if (info->whatis != NULL && *(info->whatis)) {
+				char *return_whatis = xstrdup (info->whatis);
+				free_mandata_struct (info);
+				return return_whatis;
+			}
+			if (*(info->pointer) != '-')
+				error (0, 0,
+				       _("warning: %s contains a pointer loop"),
+				       page);
 			free_mandata_struct (info);
-			return return_whatis;
+			return xstrdup (_("(unknown)"));
 		}
 
 		newinfo = dblookup_exact (info->pointer, info->ext);
