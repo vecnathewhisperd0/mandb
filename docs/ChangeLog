@@ -1,3 +1,13 @@
+Sun Aug  3 20:47:24 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (argstr_get_word, command_new_argstr,
+	  command_argstr, pipeline_command_argstr): New functions to handle
+	  constructing commands from shell-quoted strings, such as those
+	  found in man-db configuration files. They deliberately handle only
+	  a safe subset of shell syntax.
+	* lib/pipeline.h: Prototype command_new_argstr(), command_argstr(),
+	  and pipeline_command_argstr().
+
 Sun Aug  3 19:09:59 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (command_dup): New function to duplicate a command.
