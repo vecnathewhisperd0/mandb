@@ -1,3 +1,18 @@
+Mon Aug  4 00:31:44 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Add support for getting stdio streams for input and output. Needs
+	library support because pipeline_wait() needs to know to close the
+	stream rather than the underlying file descriptor.
+
+	* lib/pipeline.h (struct pipeline): New infile and outfile members.
+	  (pipeline_get_infile, pipeline_get_outfile): Add prototypes.
+	* lib/pipeline.c (pipeline_new): Initialize infile and outfile.
+	  (pipeline_join): Likewise.
+	  (pipeline_get_infile, pipeline_get_outfile): New functions.
+	  (pipeline_wait): Check for infile and outfile and fclose() them in
+	  preference to close()ing infd and outfd. Check for errors on
+	  close().
+
 Sun Aug  3 23:59:18 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_start): Use dup2() instead of close()
