@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.90\n"
-"POT-Creation-Date: 2002-06-04 01:35+0100\n"
+"POT-Creation-Date: 2002-11-14 03:32+0000\n"
 "PO-Revision-Date: 2002-08-08 01:06+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -18,57 +18,57 @@ msgstr ""
 msgid "multi key %s does not exist"
 msgstr "multinyckeln %s finns inte"
 
-#: libdb/db_lookup.c:67
+#: libdb/db_lookup.c:78
 #, c-format
 msgid "can't lock index cache %s"
 msgstr "kan inte låsa indexcachen %s"
 
-#: libdb/db_lookup.c:76
+#: libdb/db_lookup.c:87
 #, c-format
 msgid "index cache %s corrupt"
 msgstr "indexcachen %s är trasig"
 
-#: libdb/db_lookup.c:84
+#: libdb/db_lookup.c:95
 #, c-format
 msgid "cannot replace key %s"
 msgstr "kan inte ersätta nyckeln %s"
 
-#: libdb/db_lookup.c:92
+#: libdb/db_lookup.c:103
 #, c-format
 msgid "key %s is missing name component - is this an old db?"
 msgstr "nyckeln %s saknar namnkomponent - är detta en gammal databas?"
 
-#: libdb/db_lookup.c:200 libdb/db_lookup.c:210
+#: libdb/db_lookup.c:211 libdb/db_lookup.c:221
 #, c-format
 msgid "only %d fields in content"
 msgstr "endast %d fält i innehåll"
 
-#: libdb/db_lookup.c:410
+#: libdb/db_lookup.c:425
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "felaktig hämtning på multinyckel %s"
 
-#: libdb/db_store.c:52
+#: libdb/db_store.c:63
 #, c-format
 msgid "cannot insert unused key %s"
 msgstr "kan inte infoga oanvänd nyckel %s"
 
-#: libdb/db_ver.c:61
+#: libdb/db_ver.c:77
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "ödesdiger: kan inte infoga versionsidentifierare i %s"
 
-#: libdb/db_ver.c:74
+#: libdb/db_ver.c:90
 #, c-format
 msgid "warning: %s has no version identifier\n"
 msgstr "varning: %s har ingen versionsidentifierare\n"
 
-#: libdb/db_ver.c:79
+#: libdb/db_ver.c:95
 #, c-format
 msgid "warning: %s is version %s, expecting %s\n"
 msgstr "varning: %s är version %s, %s förväntas\n"
 
-#: src/accessdb.c:53
+#: src/accessdb.c:65
 #, c-format
 msgid ""
 "\n"
@@ -79,61 +79,63 @@ msgstr ""
 "Användning: accessdb [man-databas]\n"
 "\tman-databas är som standard %s"
 
-#: src/accessdb.c:54
+#: src/accessdb.c:66
 msgid "\n"
 msgstr "\n"
 
-#: src/accessdb.c:83
+#: src/accessdb.c:95
 #, c-format
 msgid "can't open %s for reading"
 msgstr "kan inte öppna %s för läsning"
 
-#: src/catman.c:119
+#: src/catman.c:131
 #, c-format
 msgid "usage: %s [-dhV] [-M manpath] [section] ...\n"
 msgstr "användning: %s [-dhV] [-M mansökväg] [avsnitt] ...\n"
 
-#: src/catman.c:122
+#: src/catman.c:134
+#, fuzzy
 msgid ""
-"-d --debug                  produce debugging info.\n"
-"-M --manpath path           set search path for manual pages to `path'.\n"
-"-V --version                show version.\n"
-"-h --help                   show this usage message.\n"
+"-d, --debug                 produce debugging info.\n"
+"-M, --manpath path          set search path for manual pages to `path'.\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
 msgstr ""
 "-d --debug                  skapa felsökningsinformation.\n"
-"-M --manpath sökväg         ställ in sökväg för manualsidor till \"sökväg\".\n"
+"-M --manpath sökväg         ställ in sökväg för manualsidor till \"sökväg"
+"\".\n"
 "-V --version                visa versionsnummer.\n"
 "-h --help                   visa detta användningsmeddelande.\n"
 
-#: src/catman.c:136
+#: src/catman.c:148
 #, c-format
 msgid "cannot read database %s"
 msgstr "kan inte läsa databasen %s"
 
-#: src/catman.c:162
+#: src/catman.c:174
 msgid "fork failed"
 msgstr "grening misslyckades"
 
-#: src/catman.c:174
+#: src/catman.c:186
 msgid "can't get man command's exit status"
 msgstr "kan inte få tag i manualkommandots slutstatus"
 
-#: src/catman.c:177
+#: src/catman.c:189
 #, c-format
 msgid "man command failed with exit status %d"
 msgstr "manualkommandot misslyckades med slutstatus %d"
 
-#: src/catman.c:230
+#: src/catman.c:242
 #, c-format
 msgid "unable to reset cursor position in %s"
 msgstr "kan inte återställa markörpositionen i %s"
 
-#: src/catman.c:285
+#: src/catman.c:297
 #, c-format
 msgid "NULL content for key: %s"
 msgstr "NULL-innehåll för nyckel: %s"
 
-#: src/catman.c:301
+#: src/catman.c:313
 #, c-format
 msgid ""
 "\n"
@@ -142,96 +144,110 @@ msgstr ""
 "\n"
 "Uppdaterar cat-filer för avsnitt %s i man-hierarkin %s\n"
 
-#: src/catman.c:359
+#: src/catman.c:371
 #, c-format
 msgid "cannot write within %s"
 msgstr "kan inte skriva inom %s"
 
-#: src/catman.c:502
+#: src/catman.c:514
 #, c-format
 msgid "unable to update %s"
 msgstr "kan inte uppdatera %s"
 
-#: src/check_mandirs.c:83 src/straycats.c:123 src/straycats.c:152
+#: src/check_mandirs.c:97 src/straycats.c:134 src/straycats.c:163
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "varning: %s: ignorerar felaktigt filnamn"
 
-#: src/check_mandirs.c:92
+#: src/check_mandirs.c:106
 #, c-format
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "varning: %s/man%s/%s.%s*: filändelser i konflikt"
 
-#: src/check_mandirs.c:106 src/check_mandirs.c:673 src/man.c:2841
+#: src/check_mandirs.c:113
+#, c-format
+msgid "warning: failed to store entry for %s(%s)"
+msgstr ""
+
+#: src/check_mandirs.c:127 src/check_mandirs.c:696 src/man.c:2942
 #, c-format
 msgid "can't update index cache %s"
 msgstr "kan inte uppdatera indexcachen %s"
 
-#: src/check_mandirs.c:405
+#: src/check_mandirs.c:487
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
 msgstr "varning: %s: felaktig symbolisk länk eller ROFF \".so\"-begäran"
 
-#: src/check_mandirs.c:526
+#: src/check_mandirs.c:556
 #, c-format
 msgid "warning: %s: ignoring empty file"
 msgstr "varning: %s: ignorerar tom fil"
 
-#: src/check_mandirs.c:533 src/straycats.c:272
+#: src/check_mandirs.c:560 src/straycats.c:289
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "varning: %s: whatis-tolkning för %s(%s) misslyckades"
 
-#: src/check_mandirs.c:559 src/check_mandirs.c:595 src/straycats.c:93
-#: src/straycats.c:302 src/ult_src.c:112
+#: src/check_mandirs.c:586 src/check_mandirs.c:622 src/straycats.c:104
+#: src/straycats.c:325 src/ult_src.c:125
 #, c-format
 msgid "can't search directory %s"
 msgstr "kan inte söka i katalogen %s"
 
-#: src/check_mandirs.c:636
+#: src/check_mandirs.c:663
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Uppdaterar indexcache för sökvägen \"%s/%s\". Vänta..."
 
-#: src/check_mandirs.c:738
+#: src/check_mandirs.c:761
 #, c-format
 msgid "can't create index cache %s"
 msgstr "kan inte skapa indexcachen %s"
 
-#: src/check_mandirs.c:752 src/check_mandirs.c:789
+#: src/check_mandirs.c:775 src/check_mandirs.c:812
 msgid "done.\n"
 msgstr "klar.\n"
 
-#: src/check_mandirs.c:891
+#: src/check_mandirs.c:914
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Tömmer gamla databasposter i %s...\n"
 
-#: src/compression.c:64 src/man.c:1345
+#: src/compression.c:77 src/man.c:1422
 msgid "can't create a temporary filename"
 msgstr "kan inte skapa temporärt filnamn"
 
-#: src/convert_name.c:44
+#: src/compression.c:190
+#, fuzzy, c-format
+msgid "command '%s' failed with exit status %d"
+msgstr "manualkommandot misslyckades med slutstatus %d"
+
+#: src/convert_name.c:56
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Kan inte konvertera %s till cat-namn"
 
-#: lexgrog.l:304
+#: src/fake_security.c:58
+msgid "can't get passwd structure for uid 0"
+msgstr ""
+
+#: src/lexgrog.l:318
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "varning: whatis för %s överskrider %d byte, förkortar."
 
-#: lexgrog.l:370 src/ult_src.c:295 src/ult_src.c:302
+#: src/lexgrog.l:387 src/ult_src.c:310 src/ult_src.c:317
 #, c-format
 msgid "can't open %s"
 msgstr "kan inte öppna %s"
 
-#: lexgrog.l:431
+#: src/lexgrog.l:448
 #, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "användning: %s [-mcwfhV] fil ...\n"
 
-#: lexgrog.l:433
+#: src/lexgrog.l:450
 msgid ""
 "-m --man                    parse as man page.\n"
 "-c --cat                    parse as cat page.\n"
@@ -251,30 +267,31 @@ msgstr ""
 "\n"
 "Standardflaggorna är --man och --whatis.\n"
 
-#: lexgrog.l:479
+#: src/lexgrog.l:496
 msgid "-m -c: incompatible options"
 msgstr "-m -c: inkompatibla flaggor"
 
-#: src/man.c:252
+#: src/man.c:266
 msgid "can't popen"
 msgstr "kan inte använda popen()"
 
-#: src/man.c:293
+#: src/man.c:307
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "kommandot avslutade med status %d: %s"
 
-#: src/man.c:431
+#: src/man.c:447
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-Slist]\n"
-"           [-msystem] [-pstring] [-Llocale] [-eextension] [section] page ...\n"
+"           [-msystem] [-pstring] [-Llocale] [-eextension] [section] "
+"page ...\n"
 msgstr ""
 "användning: %s [-c|-f|-k|-w|-tZT enhet] [-adlhu7V] [-Msökväg] [-Psidvisare]\n"
 "                [-Slista] [-msystem] [-psträng] [-Llokal] [-etillägg]\n"
 "                [avnitt] sida ...\n"
 
-#: src/man.c:436
+#: src/man.c:452
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-msystem]\n"
@@ -284,7 +301,8 @@ msgstr ""
 "                [-msystem] [-psträng] [-Llokal] [-etillägg] [avnitt]\n"
 "                sida ...\n"
 
-#: src/man.c:442
+#: src/man.c:458
+#, fuzzy
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -292,14 +310,20 @@ msgid ""
 "-f, --whatis                equivalent to whatis.\n"
 "-k, --apropos               equivalent to apropos.\n"
 "-w, --where, --location     print physical location of man page(s).\n"
-"-l, --local-file            interpret `page' argument(s) as local filename(s).\n"
+"-W, --where-cat,\n"
+"    --location-cat          print physical location of cat file(s).\n"
+"-l, --local-file            interpret `page' argument(s) as local filename"
+"(s).\n"
 "-u, --update                force a cache consistency check.\n"
 "-i, --ignore-case           look for pages case-insensitively (default).\n"
 "-I, --match-case            look for pages case-sensitively.\n"
 "-r, --prompt string         provide the `less' pager with a prompt\n"
-"-c, --catman                used by catman to reformat out of date cat pages.\n"
-"-7, --ascii                 display ASCII translation of certain latin1 chars.\n"
-"-E, --encoding encoding     use the selected nroff device and display in pager."
+"-c, --catman                used by catman to reformat out of date cat "
+"pages.\n"
+"-7, --ascii                 display ASCII translation of certain latin1 "
+"chars.\n"
+"-E, --encoding encoding     use the selected nroff device and display in "
+"pager."
 msgstr ""
 "-a, --all                   hitta alla matchande manualsidor.\n"
 "-d, --debug                 sänd ut felsökningsmeddelanden.\n"
@@ -309,7 +333,8 @@ msgstr ""
 "-w, --where, --location     skriv ut fysisk plats för manualsidorna.\n"
 "-l, --local-file            tolka \"sid\"-argument som lokala filnamn.\n"
 "-u, --update                tvinga fram en cachekonsekvenskontroll.\n"
-"-i, --ignore-case           leta efter sidor skiftlägesokänsligt (standard).\n"
+"-i, --ignore-case           leta efter sidor skiftlägesokänsligt "
+"(standard).\n"
 "-I, --match-case            leta efter sidor skiftlägeskänsligt.\n"
 "-r, --prompt sträng         tillhandahåll sidvisaren \"less\" med en prompt\n"
 "-c, --catman                används av catman för att formatera om utgångna\n"
@@ -318,7 +343,7 @@ msgstr ""
 "-E, --encoding kodning      använd den valda nroff-enheten och visa i\n"
 "                            sidvisare."
 
-#: src/man.c:458
+#: src/man.c:476
 #, c-format
 msgid ""
 "-t, --troff                 use %s to format pages.\n"
@@ -327,172 +352,166 @@ msgstr ""
 "-t, --troff                 använd %s för att formatera sidor.\n"
 "-T, --troff-device enhet    använd %s med vald enhet.\n"
 
-#: src/man.c:462
-msgid "-H, --html                  use lynx or argument to display html output.\n"
+#: src/man.c:480
+msgid ""
+"-H, --html                  use lynx or argument to display html output.\n"
+"-Z, --ditroff               use groff and force it to produce ditroff.\n"
+"-X, --gxditview             use groff and display through gditview (X11):\n"
+"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 msgstr ""
-"-H, --html                  använd lynx eller argument för att visa\n"
-"                            html-utdata.\n"
 
-#: src/man.c:463
-msgid "-Z, --ditroff               use groff and force it to produce ditroff."
-msgstr "-Z, --ditroff               använd groff och tvinga det att skapa ditroff."
-
-#: src/man.c:464
-msgid "-X, --gxditview             use groff and display through gditview (X11):"
-msgstr "-X, --gxditview             använd groff och visa genom gditview (X11):"
-
-#: src/man.c:465
-msgid "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
-msgstr "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
-
-#: src/man.c:470
+#: src/man.c:488
+#, fuzzy
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-M, --manpath path          set search path for manual pages to `path'.\n"
 "-P, --pager pager           use program `pager' to display output.\n"
 "-S, --sections list         use colon separated section list.\n"
 "-m, --systems system        search for man pages from other unix system(s).\n"
-"-L, --locale locale         define the locale for this particular man search.\n"
-"-p, --preprocessor string   string indicates which preprocessors to run."
-msgstr ""
-"-D, --default               återställ alla flaggor till deras standardvärden.\n"
-"-M, --manpath sökväg        ställ in sökväg för manualsidor till \"sökväg\".\n"
-"-P, --pager sidvisare       använd programmet \"sidvisare\" för att visa utdata.\n"
-"-S, --sections lista        använd kolonseparerad avsnittslista.\n"
-"-m, --systems system        sök efter manualsidor från annat/andra unixsystem.\n"
-"-L, --locale lokal          definiera lokal för denna specifika manualsökning.\n"
-"-p, --preprocessor sträng   sträng indikerar vilka förbehandlare som ska köras."
-
-#: src/man.c:480
-msgid ""
+"-L, --locale locale         define the locale for this particular man "
+"search.\n"
+"-p, --preprocessor string   string indicates which preprocessors to run.\n"
+"                             e - [n]eqn   p - pic    t - tbl\n"
+"                             g - grap     r - refer  v - vgrind\n"
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message."
 msgstr ""
-"-V, --version               visa versionsinformation.\n"
-"-h, --help                  visa detta användningsmeddelande."
+"-D, --default               återställ alla flaggor till deras "
+"standardvärden.\n"
+"-M, --manpath sökväg        ställ in sökväg för manualsidor till \"sökväg"
+"\".\n"
+"-P, --pager sidvisare       använd programmet \"sidvisare\" för att visa "
+"utdata.\n"
+"-S, --sections lista        använd kolonseparerad avsnittslista.\n"
+"-m, --systems system        sök efter manualsidor från annat/andra "
+"unixsystem.\n"
+"-L, --locale lokal          definiera lokal för denna specifika "
+"manualsökning.\n"
+"-p, --preprocessor sträng   sträng indikerar vilka förbehandlare som ska "
+"köras."
 
-#: src/man.c:494
+#: src/man.c:511
 #, c-format
 msgid "What manual page do you want from section %s?\n"
 msgstr "Vilken manualsida vill du ha från sektion %s?\n"
 
-#: src/man.c:497
+#: src/man.c:514
 msgid "What manual page do you want?\n"
 msgstr "Vilken manualsida vill du ha?\n"
 
-#: src/man.c:601
+#: src/man.c:622
 #, c-format
 msgid "No source manual entry for %s"
 msgstr "Ingen källmanualpost för %s"
 
-#: src/man.c:610
+#: src/man.c:631
 #, c-format
 msgid "No manual entry for %s"
 msgstr "Ingen manualpost för %s"
 
-#: src/man.c:615
+#: src/man.c:636
 #, c-format
 msgid " in section %s\n"
 msgstr " i avsnitt %s\n"
 
-#: src/man.c:767 src/man.c:2262
+#: src/man.c:788 src/man.c:2344
 #, c-format
 msgid "can't chdir to %s"
 msgstr "kan inte byta katalog till %s"
 
-#: src/man.c:935
+#: src/man.c:961
 msgid " Manual page "
 msgstr " Manualsida "
 
-#: src/man.c:936
+#: src/man.c:962
 msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 msgstr " ?ltrad %lt?L/%L.:byte %bB?s/%s..?e (SLUT):?pB %pB\\%.."
 
-#: src/man.c:1223
+#: src/man.c:1297
 msgid ": incompatible options"
 msgstr ": inkompatibla flaggor"
 
-#: src/man.c:1452
+#: src/man.c:1530
 msgid "error trying to read from stdin"
 msgstr "fel vid försök att läsa från standard in"
 
-#: src/man.c:1466
+#: src/man.c:1544
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "fel vid skrivande till temporära filen %s"
 
-#: src/man.c:1648
+#: src/man.c:1725
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ignorerar okänd förbehandlare \"%c\""
 
-#: src/man.c:1842 src/mandb.c:241
+#: src/man.c:1923 src/mandb.c:254
 #, c-format
 msgid "can't chown %s"
 msgstr "kan inte byta ägare på %s"
 
-#: src/man.c:1853 src/mandb.c:212
+#: src/man.c:1934 src/mandb.c:225
 #, c-format
 msgid "can't chmod %s"
 msgstr "kan inte ändra rättigheter på %s"
 
-#: src/man.c:1865 src/mandb.c:179
+#: src/man.c:1946 src/mandb.c:191
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "kan inte byta namn på %s till %s"
 
-#: src/man.c:1885
+#: src/man.c:1966
 #, c-format
 msgid "can't set times on %s"
 msgstr "kan inte ställa in tider på %s"
 
-#: src/man.c:1894
+#: src/man.c:1975
 #, c-format
 msgid "can't unlink %s"
 msgstr "kan inte avlänka %s"
 
-#: src/man.c:1922
+#: src/man.c:2003
 msgid "can't create pipe"
 msgstr "kan inte skapa rör"
 
-#: src/man.c:1948
+#: src/man.c:2029
 #, c-format
 msgid "can't create %s"
 msgstr "kan inte skapa %s"
 
-#: src/man.c:1956 src/security.c:259
+#: src/man.c:2037 src/security.c:272
 msgid "can't fork"
 msgstr "kan inte grena"
 
-#: src/man.c:1966 src/man.c:1972
+#: src/man.c:2047 src/man.c:2053
 msgid "can't dup2"
 msgstr "kan inte använda dup2"
 
-#: src/man.c:1991
+#: src/man.c:2072
 #, c-format
 msgid "can't exec %s"
 msgstr "kan inte köra %s"
 
-#: src/man.c:2027
+#: src/man.c:2108
 #, c-format
 msgid "waiting for pid %u"
 msgstr "väntar på pid %u"
 
-#: src/man.c:2085
+#: src/man.c:2166
 msgid "Still saving the page, please wait...\n"
 msgstr "Sparar fortfarande sidan, var vänlig vänta...\n"
 
-#: src/man.c:2132 src/man.c:2151 src/man.c:2182
+#: src/man.c:2213 src/man.c:2232 src/man.c:2263
 #, c-format
 msgid "can't change to directory %s"
 msgstr "kan inte byta till katalogen %s"
 
-#: src/man.c:2157 src/man.c:2187
+#: src/man.c:2238 src/man.c:2268
 #, c-format
 msgid "can't remove directory %s"
 msgstr "kan inte ta bort katalogen %s"
 
-#: src/man.c:2411
+#: src/man.c:2506
 #, c-format
 msgid ""
 "\n"
@@ -501,68 +520,72 @@ msgstr ""
 "\n"
 "kan inte skriva till %s i catman-läge"
 
-#: src/man.c:2431
+#: src/man.c:2526
 #, c-format
 msgid "Reformatting %s, please wait...\n"
 msgstr "Formaterar om %s, var vänlig vänta...\n"
 
-#: src/man.c:2849
+#: src/man.c:2950
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: förlitande på whatis-referenser är föråldrat\n"
 
-#: src/man.c:3231
+#: src/man.c:3340
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
-msgstr "--Man-- nästa: %s [ visa (retur) | hoppa över (Ctrl-D) | avsluta (Ctrl-C) ]\n"
+msgstr ""
+"--Man-- nästa: %s [ visa (retur) | hoppa över (Ctrl-D) | avsluta (Ctrl-C) ]\n"
 
-#: src/mandb.c:153
+#: src/mandb.c:165
 #, c-format
 msgid "usage: %s [-dqspuc|-h|-V] [manpath]\n"
 msgstr "användning: %s [-dqspuc|-h|-V] [manualsökväg]\n"
 
-#: src/mandb.c:155
+#: src/mandb.c:167
+#, fuzzy
 msgid ""
-"-d --debug                  produce debugging info.\n"
-"-q --quiet                  work quietly, except for 'bogus' warning.\n"
-"-s --no-straycats           don't look for or add stray cats to the dbs.\n"
-"-p --no-purge               don't purge obsolete entries from the dbs.\n"
-"-u --user-db                produce user databases only.\n"
-"-c --create                 create dbs from scratch, rather than updating.\n"
-"-V --version                show version.\n"
-"-h --help                   show this usage message.\n"
+"-d, --debug                 produce debugging info.\n"
+"-q, --quiet                 work quietly, except for 'bogus' warning.\n"
+"-s, --no-straycats          don't look for or add stray cats to the dbs.\n"
+"-p, --no-purge              don't purge obsolete entries from the dbs.\n"
+"-u, --user-db               produce user databases only.\n"
+"-c, --create                create dbs from scratch, rather than updating.\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
 msgstr ""
 "-d --debug                  skapa felsökningsinformation.\n"
 "-q --quiet                  arbeta tyst, utom \"bogus\"-varningar.\n"
-"-s --no-straycats           leta inte efter och lägg inte till lösa cat-sidor\n"
+"-s --no-straycats           leta inte efter och lägg inte till lösa cat-"
+"sidor\n"
 "                            i databaserna.\n"
 "-p --no-purge               töm inte föråldrade poster från databaserna.\n"
 "-u --user-db                skapa endast användardatabaser.\n"
-"-c --create                 skapa databaser på nytt istället för att uppdatera.\n"
+"-c --create                 skapa databaser på nytt istället för att "
+"uppdatera.\n"
 "-V --version                visa versionsinformation.\n"
 "-h --help                   visa detta användningsmeddelande.\n"
 
-#: src/mandb.c:172 src/security.c:218
+#: src/mandb.c:184 src/security.c:231
 #, c-format
 msgid "can't remove %s"
 msgstr "kan inte ta bort %s"
 
-#: src/mandb.c:301
+#: src/mandb.c:314
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Bearbetar manualsidor under %s...\n"
 
-#: src/mandb.c:434 src/security.c:134
+#: src/mandb.c:447 src/security.c:147
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "en manualanvändare \"%s\" som är setuid finns inte"
 
-#: src/mandb.c:462
+#: src/mandb.c:475
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "varning: inga MANDB_MAP-direktiv i %s, använder din manualsökväg"
 
-#: src/mandb.c:530
+#: src/mandb.c:543
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -571,102 +594,103 @@ msgstr ""
 "%d manualunderkataloger innehöll nyare manualsidor.\n"
 "%d manualsidor lades till.\n"
 
-#: src/mandb.c:534
+#: src/mandb.c:547
 #, c-format
 msgid "%d stray cats were added.\n"
 msgstr "%d lösa cat-sidor lades till.\n"
 
-#: src/mandb.c:536
+#: src/mandb.c:549
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr "%d gamla databasposter tömdes.\n"
 
-#: src/manp.c:320
+#: src/manp.c:333
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "kan inte förstå mig på konfigurationsfilen för manualsökväg %s"
 
-#: src/manp.c:328
+#: src/manp.c:341
 #, c-format
 msgid "warning: %s"
 msgstr "varning: %s"
 
-#: src/manp.c:334
+#: src/manp.c:347
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "varning: %s är inte en katalog"
 
-#: src/manp.c:545
+#: src/manp.c:559
 msgid "warning: $PATH not set"
 msgstr "varning: $PATH är inte satt"
 
-#: src/manp.c:552
+#: src/manp.c:566
 msgid "warning: empty $PATH"
 msgstr "varning: tom $PATH"
 
-#: src/manp.c:577
+#: src/manp.c:591
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "varning: $MANPATH är satt, lägger till %s före"
 
-#: src/manp.c:588
+#: src/manp.c:602
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "varning: $MANPATH är satt, lägger till %s efter"
 
-#: src/manp.c:600
+#: src/manp.c:614
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "varning: $MANPATH är satt, infogar %s"
 
-#: src/manp.c:613
+#: src/manp.c:627
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "varning: $MANPATH är satt, ignorerar %s"
 
-#: src/manp.c:647 src/manp.c:679
+#: src/manp.c:661 src/manp.c:693
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "varning: kan inte skapa cat-katalog %s"
 
-#: src/manp.c:734
+#: src/manp.c:748
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "kan inte tolka kataloglista \"%s\""
 
-#: src/manp.c:763
+#: src/manp.c:777
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "kan inte öppna konfigurationsfilen för manualsökväg %s"
 
-#: src/manp.c:794
+#: src/manp.c:808
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "varning: obligatoriska katalogen %s finns inte"
 
-#: src/manp.c:999
+#: src/manp.c:1013
 msgid "can't determine current directory"
 msgstr "kan inte avgöra aktuell katalog"
 
-#: src/manp.c:1112
+#: src/manp.c:1126
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "varning: %s börjar inte med %s"
 
-#: src/manpath.c:84
+#: src/manpath.c:97
 #, c-format
 msgid "usage: %s [[-gcdq] [-m system]] | [-V] | [-h]\n"
 msgstr "användning: %s [[-gcdq] [-m system]] | [-V] | [-h]\n"
 
-#: src/manpath.c:87
+#: src/manpath.c:100
+#, fuzzy
 msgid ""
-"-c --catpath                show relative catpaths.\n"
-"-g --global                 show the entire global manpath.\n"
-"-d --debug                  produce debugging info.\n"
-"-q --quiet                  produce fewer warnings.\n"
-"-m --systems system         express which `systems' to use.\n"
-"-V --version                show version.\n"
-"-h --help                   show this usage message.\n"
+"-c, --catpath               show relative catpaths.\n"
+"-g, --global                show the entire global manpath.\n"
+"-d, --debug                 produce debugging info.\n"
+"-q, --quiet                 produce fewer warnings.\n"
+"-m, --systems system        express which `systems' to use.\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
 msgstr ""
 "-c --catpath                visa relativa cat-sökvägar.\n"
 "-g --global                 visa hela den globala manualsökvägen.\n"
@@ -676,65 +700,70 @@ msgstr ""
 "-V --version                visa versionsnummer.\n"
 "-h --help                   visa detta användningsmeddelande.\n"
 
-#: src/manpath.c:161
+#: src/manpath.c:174
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
 msgstr "varning: inga globala manualsökvägar angivna i konfigurationsfilen %s"
 
-#: src/security.c:111
+#: src/security.c:124
 msgid "can't set effective uid"
 msgstr "kan inte ställa in effektivt uid"
 
-#: src/straycats.c:244 src/straycats.c:253 src/ult_src.c:148 src/ult_src.c:230
+#: src/straycats.c:257 src/straycats.c:266 src/ult_src.c:161 src/ult_src.c:243
 #, c-format
 msgid "can't resolve %s"
 msgstr "kan inte slå upp %s"
 
-#: src/straycats.c:250 src/ult_src.c:145
+#: src/straycats.c:263 src/ult_src.c:158
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "varning: %s är en lös symbolisk länk"
 
-#: src/straycats.c:307
+#: src/straycats.c:330
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "Undersöker lösa cat-sidor under %s...\n"
 
-#: src/straycats.c:346
+#: src/straycats.c:369
 #, c-format
 msgid "warning: can't create temp file %s"
 msgstr "varning: kan inte skapa temporär fil %s"
 
-#: src/straycats.c:360
+#: src/straycats.c:383
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "varning: kan inte uppdatera indexcachen %s"
 
-#: src/ult_src.c:257
+#: src/ult_src.c:270
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s refererar till sig själv"
 
-#: src/version.c:31
+#: src/version.c:43
 #, c-format
 msgid "%s, version %s, %s\n"
 msgstr "%s version %s, %s\n"
 
-#: src/whatis.c:128
+#: src/whatis.c:140
 #, c-format
-msgid "usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
-msgstr "användning: %s [-d] [-r|-w|-e] [-m system] [-M manualsökväg] | [-h] | [-V] nyckelord ...\n"
-
-#: src/whatis.c:130
 msgid ""
-"-d --debug\t\tproduce debugging info.\n"
-"-r --regex \t\tinterpret each keyword as a regex (default).\n"
-"-e --exact \t\tsearch each keyword for exact match.\n"
-"-w --wildcard\t\tthe keyword(s) contain wildcards.\n"
-"-m --systems system\tinclude alternate systems man pages.\n"
-"-M --manpath path\tset search path for manual pages to `path'.\n"
-"-V --version\t\tshow version.\n"
-"-h --help\t\tshow this usage message.\n"
+"usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] "
+"keyword ...\n"
+msgstr ""
+"användning: %s [-d] [-r|-w|-e] [-m system] [-M manualsökväg] | [-h] | [-V] "
+"nyckelord ...\n"
+
+#: src/whatis.c:142
+#, fuzzy
+msgid ""
+"-d, --debug                produce debugging info.\n"
+"-r, --regex                interpret each keyword as a regex (default).\n"
+"-e, --exact                search each keyword for exact match.\n"
+"-w, --wildcard             the keyword(s) contain wildcards.\n"
+"-m, --systems system       include alternate systems' man pages.\n"
+"-M, --manpath path         set search path for manual pages to `path'.\n"
+"-V, --version              show version.\n"
+"-h, --help                 show this usage message.\n"
 msgstr ""
 "-d --debug\t\tskapa felsökningsinformation.\n"
 "-r --regex \t\ttolka varje nyckelord som ett reguljärt uttryck (standard).\n"
@@ -745,20 +774,24 @@ msgstr ""
 "-V --version\t\tvisa versionsnummer.\n"
 "-h --help\t\tvisa detta användningsmeddelande.\n"
 
-#: src/whatis.c:144
+#: src/whatis.c:156
 #, c-format
-msgid "usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
-msgstr "användning: %s [-d] [-r|-w] [-m system] [-M manualsökväg] | [-h] | [-V] nyckelord ...\n"
-
-#: src/whatis.c:146
 msgid ""
-"-d --debug\t\tproduce debugging info.\n"
-"-r --regex \t\tinterpret each keyword as a regex.\n"
-"-w --wildcard\t\tthe keyword(s) contain wildcards.\n"
-"-m --systems system\tinclude alternate systems man pages.\n"
-"-M --manpath path\tset search path for manual pages to `path'.\n"
-"-V --version\t\tshow version.\n"
-"-h --help\t\tshow this usage message.\n"
+"usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] keyword ...\n"
+msgstr ""
+"användning: %s [-d] [-r|-w] [-m system] [-M manualsökväg] | [-h] | [-V] "
+"nyckelord ...\n"
+
+#: src/whatis.c:158
+#, fuzzy
+msgid ""
+"-d, --debug                produce debugging info.\n"
+"-r, --regex                interpret each keyword as a regex.\n"
+"-w, --wildcard             the keyword(s) contain wildcards.\n"
+"-m, --systems system       include alternate systems' man pages.\n"
+"-M, --manpath path         set search path for manual pages to `path'.\n"
+"-V, --version              show version.\n"
+"-h, --help                 show this usage message.\n"
 msgstr ""
 "-d --debug\t\tskapa felsökningsinformation.\n"
 "-r --regex \t\ttolka varje nyckelord som ett reguljärt uttryck.\n"
@@ -768,45 +801,76 @@ msgstr ""
 "-V --version\t\tvisa versionsnummer.\n"
 "-h --help\t\tvisa detta användningsmeddelande.\n"
 
-#: src/whatis.c:192
+#: src/whatis.c:204
 msgid "warning: can't read the fallback whatis text database."
 msgstr "varning: kan inte läsa whatis-reservtextdatabasen."
 
-#: src/whatis.c:217 src/whatis.c:244 src/whatis.c:255
+#: src/whatis.c:229 src/whatis.c:256 src/whatis.c:267
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "varning: %s innehåller en pekarslinga"
 
-#: src/whatis.c:219 src/whatis.c:232 src/whatis.c:247 src/whatis.c:256
-msgid "(unknown)"
+#: src/whatis.c:231 src/whatis.c:244 src/whatis.c:259 src/whatis.c:268
+#, fuzzy
+msgid "(unknown subject)"
 msgstr "(okänd)"
 
-#: src/whatis.c:463
+#: src/whatis.c:475
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Databasen %s är skadad; bygg om med mandb --create"
 
-#: src/whatis.c:571
+#: src/whatis.c:583
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ingenting lämpligt.\n"
 
-#: src/whatis.c:675
+#: src/whatis.c:687
 #, c-format
 msgid "%s what?\n"
 msgstr "%s vad?\n"
 
-#: src/whatis.c:698 src/whatis.c:707
+#: src/whatis.c:710 src/whatis.c:719
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "ödesdigert: reguljärt uttryck \"%s\": %s"
 
-#: src/wrapper.c:99
+#: src/wrapper.c:101
 #, c-format
 msgid "Don't know which program should I run being >%s<\n"
 msgstr "Vet inte vilket program jag ska köra om jag är >%s<\n"
 
-#: src/wrapper.c:117 src/wrapper.c:122 src/wrapper.c:127 src/wrapper.c:132
+#: src/wrapper.c:119 src/wrapper.c:124 src/wrapper.c:129 src/wrapper.c:134
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Misslyckades med att su:a till användare %s\n"
+
+#~ msgid ""
+#~ "-H, --html                  use lynx or argument to display html output.\n"
+#~ msgstr ""
+#~ "-H, --html                  använd lynx eller argument för att visa\n"
+#~ "                            html-utdata.\n"
+
+#~ msgid ""
+#~ "-Z, --ditroff               use groff and force it to produce ditroff."
+#~ msgstr ""
+#~ "-Z, --ditroff               använd groff och tvinga det att skapa ditroff."
+
+#~ msgid ""
+#~ "-X, --gxditview             use groff and display through gditview (X11):"
+#~ msgstr ""
+#~ "-X, --gxditview             använd groff och visa genom gditview (X11):"
+
+#~ msgid ""
+#~ "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-"
+#~ "12."
+#~ msgstr ""
+#~ "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-"
+#~ "12."
+
+#~ msgid ""
+#~ "-V, --version               show version.\n"
+#~ "-h, --help                  show this usage message."
+#~ msgstr ""
+#~ "-V, --version               visa versionsinformation.\n"
+#~ "-h, --help                  visa detta användningsmeddelande."
