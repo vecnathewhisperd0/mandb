@@ -25,7 +25,7 @@ include ../include/Defines
 
 .PHONY: $(DEFAULT_TARGETS)
 
-MANDEFS = $(NLS) -DCONFIG_FILE=\"$(config_file)\" \
+MANDEFS = -DCONFIG_FILE=\"$(config_file)\" \
 	-DLOCALEDIR=\"$(gnulocaledir)\" $(DEFS_$@)
 MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I- -I../intl
 
@@ -53,33 +53,8 @@ DEFS_catman = $(DEFS_catman.o)
 DEFS_whatis = $(DEFS_whatis.o)
 DEFS_apropos = $(DEFS_apropos.o)
 
-#-------------------------------------------------------------------#
-# This is just to make sure that things are done in the right order #
-#-------------------------------------------------------------------#
-
-ifeq ($(nls),on)
-all:
-	$(make_in_root)
-else
-
 # The default programs to build 
 all: manpath mandb apropos whatis catman man accessdb wrapper man_db.conf
-
-#-----------------------------------------------------------------------#
-# If we want any kind of NLS message catalogue support, nls must != off #
-# this is exported from the master Makefile.                            #
-#-----------------------------------------------------------------------#
-
-  ifneq ($(nls),off)
-NLS = -DNLS 
-
-MSGS = whatis.m version.m compression.m mandb.m check_mandirs.m \
-       man.m manp.m manpath.m security.m straycats.m \
-       ult_src.m catman.m lexgrog.m convert_name.m
-MSG_PATHS = $(addprefix $(MSG_DIR)/, $(MSGS))
-
-  endif
-endif
 
 #--------------------#
 # some general rules #

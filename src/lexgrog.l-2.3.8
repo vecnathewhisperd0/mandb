@@ -32,13 +32,6 @@ extern int errno;
 #  include <strings.h>
 #endif /* HAVE_STRING_H */
 
-#define NLS_SET	lexgrogSet
-#include "nls/nls.h"
-
-#ifdef NLS
-nl_catd catfd;
-#endif /* NLS */
-
 #include "manconfig.h"
 #include "lib/error.h"
 
@@ -155,9 +148,8 @@ W	[ \t]
 static void too_big(void)
 {
 	error(0, 0,
-	      CATGETS(lexgrog_TOOBIG,
-	      	      "warning: whatis for %s exceeds %d bytes, truncating."),
-	      	      fname, MAX_NAME);
+	      _("warning: whatis for %s exceeds %d bytes, truncating."),
+	      fname, MAX_NAME);
 
 	BEGIN(force_exit);
 }
@@ -195,8 +187,7 @@ char *find_name(char *file, char *filename, short catfile)
 	int ret;
 
 	if ( (yyin = fopen(file, "r")) == NULL) {
-		error (0, errno,
-		       CATGETS(lexgrog_OPEN, "can't open %s"), file);
+		error (0, errno, _("can't open %s"), file);
 		return NULL;
 	}
 	fname = filename;

@@ -42,49 +42,18 @@ INSTALL = src zsoelim man intl po
 
 include include/Defines
 
-.PHONY: $(DEFAULT_TARGETS) $(EVERYTHING) dist nls_defines ID \
+.PHONY: $(DEFAULT_TARGETS) $(EVERYTHING) dist ID \
 	$(addprefix __, $(DEFAULT_TARGETS)) update default RCS \
 	check deroff
         
-ifeq ($(nls),on)
-languages = $(basename $(notdir $(wildcard $(top_srcdir)/po/*.po)))
-
-default: $(INCLUDES) $(CONF)
-	@echo " "
-	@echo "./configure has determined that your system understands native language"
-	@echo "support (nls) message catalogues.  This package is able to exploit this"
-	@echo "feature by displaying its text messages in different languages on a per"
-	@echo "user basis.  British English is the default (built in) language."
-	@echo " "
-	@echo "Please issue make command with NLS language options (as shown below) or"
-	@echo "'make nls=off' to disable all native language support.  Currently the"
-	@echo "supported languages in POSIX 1003.1 locale format are:"
-	@echo " "
-	@for i in $(languages); do echo "	$$i"; done 
-	@echo "	"
-	@echo "To enable support for all of these locales issue 'make nls=all'"
-	@echo "To support only a subset of these locales, issue" 
-	@echo "'make nls=\"locale1 locale2 ...\"' (locales must be separated by spaces"
-	@echo "and the entire string quoted)"
-	@echo " "
-	@exit 0
-
-all:
-	$(MAKE) nls=off
-
-else # nls != on
-
-  ifeq ($(nls),off)
-    ALL = lib libdb src zsoelim man
-    INSTALL = src zsoelim man
-  else # nls != off
-  endif # nls = off
+ifneq ($(USE_NLS),yes)
+  ALL = lib libdb src zsoelim man
+  INSTALL = src zsoelim man
+endif # USE_NLS != yes
 
 all: $(ALL)
 
-endif # nls = on
-
-$(EVERYTHING): $(INCLUDES) $(CONF) nls_defines
+$(EVERYTHING): $(INCLUDES) $(CONF)
 	$(MAKE) -C $@ $(targets)
 
 # Automatic regeneration targets
@@ -132,12 +101,8 @@ ID:
 	mkid $(foreach dir, . $(EVERYTHING), \
 		$(srcdir)/$(dir)/*.[chl] $(srcdir)/$(dir)/Makefile.in)
 
-nls_defines:
-	cp include/Defines include/Defines.old
-	sed -e 's/^nls = .*/nls = $(nls)/' include/Defines.old > include/Defines
-
 # Just make sure that all configure created files are up to date
-update: nls_defines $(INCLUDES) $(CONF) $(addsuffix /Makefile, $(EVERYTHING))
+update: $(INCLUDES) $(CONF) $(addsuffix /Makefile, $(EVERYTHING))
 
 # testsuite doesn't exist
 testsuite:
@@ -176,7 +141,7 @@ __TAGS:
 # Normal targets and dependencies.
 # If the make variable clean is set to yes, no dependencies are re-created
 
-install: $(INCLUDES) $(CONF) nls_defines
+install: $(INCLUDES) $(CONF)
 
 install uninstall:
 	for i in $(INSTALL); do $(MAKE) prefix=../$(prefix) -C $$i $@; done

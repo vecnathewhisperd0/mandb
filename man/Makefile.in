@@ -17,16 +17,11 @@ include ../include/Defines
 
 .PHONY: $(DEFAULT_TARGETS) dirs nlsinstall nlsuninstall
 
-ifeq ($(nls),on)
-all:
-	$(make_in_root)
-else
-  ifeq ($(nls),all)
+ifeq ($(USE_NLS),yes)
+  ifeq ($(LINGUAS),$(ALL_LINGUAS))
     NLS := $(notdir $(wildcard $(srcdir)/*_*))
   else
-    ifneq ($(nls),off)
-      NLS := $(notdir $(wildcard $(srcdir)/$(nls)))
-    endif
+    NLS := $(notdir $(wildcard $(srcdir)/$(LINGUAS)_*))
   endif
 endif
 

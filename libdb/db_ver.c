@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #endif /* STDC_HEADERS */
 
-#define NLS_SET	db_verSet
 #include <libintl.h>
 #define _(String) gettext (String)
 

@@ -31,7 +31,7 @@
 
 #include "config.h"
 
-#if NLS
+#ifdef ENABLE_NLS
 # include <locale.h>
 # include <libintl.h>
 # define _(Text) gettext (Text)

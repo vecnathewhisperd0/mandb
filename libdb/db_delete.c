@@ -38,7 +38,6 @@ extern long atol();
 extern char *strsep();
 #endif /* not STDC_HEADERS */
 
-#define NLS_SET	db_deleteSet
 #include <libintl.h>
 #define _(String) gettext (String)
 

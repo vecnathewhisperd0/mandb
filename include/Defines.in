@@ -42,7 +42,6 @@ override CPPFLAGS = $(DEFS) $(MANDEFS) $(MANCPPFLAGS) $(USERCPPFLAGS)
 # system directories
 prefix = @prefix@
 exec_prefix = @exec_prefix@
-MSG_DIR = $(top_srcdir)/nls/en_GB
 
 # GNU installation variables
 bindir = $(exec_prefix)/bin
@@ -81,7 +80,6 @@ DEFAULT_TARGETS = TAGS all install uninstall \
 
 # Some misc stuff...
 debug = @debug@
-nls = @nls@
 date = @date@
 date_it = @date_it@
 date_es = @date_es@
@@ -116,15 +114,4 @@ ifneq ($(top_srcdir),$(srcdir))
 %: %.in
 	-$(MAKE) -C .. `basename \`pwd\``/$@
 endif
-
-# A message useful in some subdirectories.
-define make_in_root
-@echo " "
-@echo "The value of the nls variable has not yet been determined." 
-@echo "Please issue the make command in the directory above this one."
-@echo "Once the value of the nls variable has been determined, it will"
-@echo "be possible to issue make here." 
-@echo " "
-@exit 1
-endef
 

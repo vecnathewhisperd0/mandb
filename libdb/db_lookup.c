@@ -40,8 +40,6 @@ extern char *strsep();
 extern int errno;
 #endif /* not STDC_HEADERS */
 
-#define NLS_SET	db_lookupSet
-
 #include <libintl.h>
 #define _(String) gettext (String)
 

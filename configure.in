@@ -273,6 +273,8 @@ dnl Internationalization support.
 dnl
 ALL_LINGUAS="de it es cs ja fr"
 AM_GNU_GETTEXT
+AC_SUBST(ALL_LINGUAS)dnl
+AC_SUBST(LINGUAS)dnl
 AC_LINK_FILES($nls_cv_header_libgt, $nls_cv_header_intl)
 dnl
 dnl Checks for structures and compiler characteristics.
@@ -460,16 +462,7 @@ AC_CHECK_FUNCS(getcwd getwd, break)
 AC_CHECK_FUNCS(atexit on_exit, break)
 AC_CHECK_FUNCS(seteuid setreuid setresuid strerror)
 AC_CHECK_FUNCS(canonicalize_file_name)
-AC_CHECK_FUNC(setlocale,
-  AC_DEFINE(HAVE_SETLOCALE)
-  AC_CHECK_FUNC(catopen,
-    nls=on,
-    AC_CHECK_LIB(i, catopen,
-      LIBS="$LIBS -li"
-      nls=on,
-      nls=off)),
-  nls=off)
-AC_SUBST(nls)dnl
+AC_CHECK_FUNCS(setlocale)
 dnl
 dnl I think it's reasonable to assume that the system has the following 
 dnl headers if the (POSIXy) functions exist.
