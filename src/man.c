@@ -92,6 +92,7 @@ char *cwd = wd;
 
 #include <ctype.h>
 #include <signal.h>
+#include <utime.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -459,6 +460,7 @@ static int found_a_stray;		/* found a straycat */
 static char *tmp_cat_file;	/* for open_cat_stream(), close_cat_stream() */
 static int cat_comp_pid;			/* dto. */
 static int created_tmp_cat;			/* dto. */
+static int man_modtime;		/* modtime of man page, for commit_tmp_cat() */
 #endif
 
 static const struct option long_options[] =
@@ -1772,6 +1774,26 @@ static int commit_tmp_cat (char *cat_file, char *tmp_cat, int delete)
 		}
 	}
 
+	if (!delete && !status) {
+		if (debug) {
+			fprintf (stderr, "setting modtime on cat file %s\n",
+				 cat_file);
+			status = 0;
+		} else {
+			time_t now = time (NULL);
+			struct utimbuf utb;
+			utb.actime = now;
+			if (man_modtime)
+				utb.modtime = man_modtime;
+			else
+				utb.modtime = 0;
+			status = utime (cat_file, &utb);
+			if (status)
+				error (0, errno, _("can't set times on %s"),
+				       cat_file);
+		}
+	}
+
 	if (delete || status) {
 		if (debug)
 			fprintf (stderr, "unlinking temporary cat\n");
@@ -2033,6 +2055,15 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			roff_cmd = NULL;
 	}
 
+	/* Get modification time, for commit_tmp_cat(). */
+	if (man_file && *man_file) {
+		struct stat stb;
+		if (stat (man_file, &stb))
+			man_modtime = 0;
+		else
+			man_modtime = stb.st_mtime;
+	}
+
 	if (troff) {
 		found = !access (man_file, R_OK);
 		if (found) {
@@ -2064,7 +2095,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 				char *std_cat_file;
 	
 				std_cat_file = convert_name (man_file, NULL);
-				status = is_newer (man_file, std_cat_file);
+				status = is_changed (man_file, std_cat_file);
 	
 				if (status != -2 && !(status & 1) == 1) {
 					cat_file = std_cat_file;
@@ -2092,7 +2123,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			char *cat_dir;
 			char *tmp;
 
-			status = is_newer (man_file, cat_file);
+			status = is_changed (man_file, cat_file);
 			format = (status == -2) || ((status & 1) == 1);
 
 			/* don't save if we haven't a cat directory */

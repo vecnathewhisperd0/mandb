@@ -65,21 +65,21 @@ char *mkdbname (const char *path)
 }
 
 /*
- * Is file a newer than file b?
+ * Does file have a different timestamp to file b?
  *
  * case:
  *
  *   a is man_page, b is cat_page
  *
- *   a newer than b         returns    1/3  (ret & 1) == 1
- *   a older than b         returns    0/2  !(ret & 1) == 1
- *   a is zero in length    returns    + 2 (for Wilf. and his stray cats)
- *   b is zero in length    returns    + 4
- *   stat on a fails        returns   -1
- *   stat on b fails        returns   -2
- *   stat on a and b fails  returns   -3
+ *   a and b have different times  returns  1/3  (ret & 1) == 1
+ *   a and b have same times       returns  0/2  !(ret & 1) == 1
+ *   a is zero in length           returns  + 2 (for Wilf. and his stray cats)
+ *   b is zero in length           returns  + 4
+ *   stat on a fails               returns   -1
+ *   stat on b fails               returns   -2
+ *   stat on a and b fails         returns   -3
  */
-int is_newer (char *fa, char *fb)
+int is_changed (char *fa, char *fb)
 {
 	struct stat fa_sb;
 	struct stat fb_sb;
@@ -88,7 +88,7 @@ int is_newer (char *fa, char *fb)
 	int status = 0;
 
 	if (debug)
-		fprintf (stderr, "is_newer: a=%s, b=%s", fa, fb);
+		fprintf (stderr, "is_changed: a=%s, b=%s", fa, fb);
 
 	fa_stat = stat (fa, &fa_sb);
 	if (fa_stat != 0)
@@ -110,12 +110,7 @@ int is_newer (char *fa, char *fb)
 	if (fb_sb.st_size == 0)
 		status |= 4;
 
-	/* tar and similar archivers modify the st_mtime of output files.
-	 * It is possible to end up with a catfile *seemingly* newer than
-	 * a freshly untarred man file.  To get around this, we use
-	 * st_mtime or st_ctime, whichever is greatest (newest). */
-
-	status |= (MAX(fa_sb.st_mtime, fa_sb.st_ctime) > fb_sb.st_mtime);
+	status |= (fa_sb.st_mtime != fb_sb.st_mtime);
 
 	if (debug)
 		fprintf (stderr, " (%d)\n", status);

@@ -1,3 +1,20 @@
+Tue Jul 10 14:37:51 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/util.c (is_newer): Renamed to ...
+	  (is_changed): ... this. We now check whether the cat page has a
+	  different timestamp from the man page, rather than simply whether
+	  it is newer.
+	  Remove hack for archivers that preserve timestamps: it's no longer
+	  needed.
+	* include/manconfig.h.in: Rename is_newer() prototype to
+	  is_changed().
+
+	* src/man.c (commit_tmp_cat): Set the modification time of a created
+	  cat page to be the same as the corresponding man page.
+	  (display): stat() the man page so that commit_tmp_cat() can get
+	  its modification time.
+	  Use is_changed() rather than is_newer().
+
 Sun Jul  8 16:06:43 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/whatis.c (get_whatis): Allow an entry to point to itself if it
