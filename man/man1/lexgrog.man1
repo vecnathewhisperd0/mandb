@@ -35,6 +35,10 @@ If its input is badly formatted,
 .B lexgrog
 will print \(lqparse failed\(rq; this may be useful for external
 programs that need to check man pages for correctness.
+If one of
+.BR lexgrog 's
+input files is \(lq-\(rq, it will read from standard input; if any input
+file is compressed, a decompressed version will be read automatically.
 .SH OPTIONS
 .TP
 .B \-m, \-\-man
@@ -156,10 +160,12 @@ However, any syntax resembling the above should be accepted.
 .IR mandb (8),
 .IR apropos (1),
 .IR whatis (1).
-.SH BUGS
+.SH NOTES
 .B lexgrog
-cannot yet read from its standard input (using \(lq-\(rq), nor can it
-yet read compressed input.
+cannot parse files containing .so requests.
+These are probably best checked by other problems, as
+.B lexgrog
+often does not have enough context to know what to do with them.
 .SH AUTHOR
 The code used by
 .B lexgrog

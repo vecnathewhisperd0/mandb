@@ -266,7 +266,7 @@ extern __inline__ void ver (void);
 /* compression.c */
 extern struct compression *comp_info (char *filename);
 extern struct compression *comp_file (char *filename);
-extern char *decompress (char *filename, struct compression *comp);
+extern char *decompress (const char *filename, const struct compression *comp);
 extern __inline__ void remove_ztemp (void);
 extern __inline__ char *get_ztemp (void);
 

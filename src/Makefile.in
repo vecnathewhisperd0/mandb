@@ -56,7 +56,7 @@ DEFS_whatis = $(DEFS_whatis.o)
 DEFS_apropos = $(DEFS_apropos.o)
 
 # The default programs to build 
-all: manpath mandb apropos whatis catman man accessdb wrapper man_db.conf
+all: $(PROGS) $(PUBTOOLS) wrapper man_db.conf
 
 #--------------------#
 # some general rules #
@@ -93,7 +93,7 @@ apropos: whatis.c
 	$(LINK.c) $^ $(LDLIBS) -o $@
 
 # Rules to test code as program unit
-lexgrog: lexgrog.c
+lexgrog: lexgrog.c compression.o fake_security.o util.o
 	$(LINK.c) -DTEST $^ $(LDLIBS) -o $@
 
 globbing: globbing.c

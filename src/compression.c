@@ -130,7 +130,7 @@ struct compression *comp_file (char *filename)
 }
 
 /* set up a pointer to a unique temp filename on first call */
-char *decompress (char *filename, struct compression *comp)
+char *decompress (const char *filename, const struct compression *comp)
 {
 	char *command;
 	int status;

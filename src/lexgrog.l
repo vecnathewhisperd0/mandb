@@ -73,6 +73,7 @@ static int fill_mode;
 #endif /* HAVE_GETOPT_H */
 
 char *program_name = "lexgrog";
+int debug = 0;
 
 static const struct option long_options[] =
 {
@@ -349,10 +350,23 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 {
 	int ret;
 
-	yyin = fopen (file, "r");
-	if (!yyin) {
-		error (0, errno, _("can't open %s"), file);
-		return 0;
+	if (strcmp (file, "-") == 0) {
+		yyin = fdopen (dup (0), "r");
+	} else {
+#ifdef COMP_SRC
+		/* See if we need to decompress the file(s) first. */
+		struct compression *comp = comp_info (file);
+		if (comp)
+			file = decompress (file, comp);
+#endif
+		yyin = fopen (file, "r");
+		if (!yyin) {
+			error (0, errno, _("can't open %s"), file);
+#ifdef COMP_SRC
+			remove_ztemp ();
+#endif
+			return 0;
+		}
 	}
 
 	fname = filename;
@@ -369,6 +383,10 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 	yyrestart (yyin);
 	ret = yylex ();
 	fclose (yyin);
+
+#ifdef COMP_SRC
+	remove_ztemp ();
+#endif
 
 	if (ret)
 		return 0;

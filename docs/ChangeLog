@@ -1,3 +1,15 @@
+Wed Sep  5 03:42:18 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/compression.c (decompress): Constify arguments.
+	* include/manconfig.h.in: Likewise.
+
+	* src/lexgrog.l (find_name): Deal with '-' and compressed files.
+	* man/man1/lexgrog.man1 (DESCRIPTION): Document this.
+	  (BUGS): Remove (optimism ...).
+	  (NOTES): New section. lexgrog can't parse .so requests.
+	* src/Makefile.in: Really build lexgrog by default, and add some
+	  objects.
+
 Wed Sep  5 02:02:20 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Describe recent changes.
