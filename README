@@ -43,21 +43,26 @@ $(bindir)/{man,mandb,manpath,apropos,whatis} and associated manual pages
 may be replaced by this version depending upon install directories.
 
 
-Notice regarding current state of FSSTND (Linux/?BSD)
-=====================================================
+Notice regarding current state of FHS (Linux/?BSD)
+==================================================
 
-The FSSTND is currently in a state of flux with respect to manual and
-cat page hierarchies.  As of July 13th, 1995, the last public release
-of the standard proposed the root of the manual page hierarchy as
-`/usr' and the root of the writable cat hierarchy as `/var/catman' for
-the purposes of man->cat filename translation.  As such, the following
-are defined in ./include/manconfig.h.in:
+As of May 13th, 2001, the last public release of the Filesystem Hierarchy
+Standard proposed the root of the manual page hierarchy as `/usr/share' and
+the root of the writable cat hierarchy as `/var/cache/man' for the purposes
+of man->cat filename translation.  As such, the following are defined in
+./include/manconfig.h.in:
+
+#define FHS_CAT_ROOT    "/var/cache/man"        /* required by fsstnd() */
+#define FHS_MAN_ROOT    "/usr/share"            /* required by fsstnd() */
+
+For compatibility with the old FSSTND, the following locations are also
+defined:
 
 #define CAT_ROOT        "/var/catman"           /* required by fsstnd() */
 #define MAN_ROOT        "/usr"                  /* required by fsstnd() */
 
 Should these locations change, simply define the paths accordingly and
-recompile.  Other FSSTND changes relating to man/cat paths will not be
+recompile.  Other FHS changes relating to man/cat paths will not be
 compatible with this version of man_db.
 
 Non generic arguments to configure
@@ -209,7 +214,7 @@ configuration options as only a single copy of the sources is required.
 To enable this support, simply change directory to where you would like to
 build the package and run the configure program in this directory 
 *from there*.  Further information about this support can be found in the 
-generic install document `docs/INSTALL'
+generic install document `docs/INSTALL.autoconf'.
 
 
 Makefile targets and variables
