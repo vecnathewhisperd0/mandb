@@ -173,8 +173,8 @@ vgrind_request	\.vS
 %%
 
  /* begin NAME section processing */
-<MAN_FILE>{sec_request}{blank_eol}+{name_sec}{blank}*	BEGIN (MAN_NAME);
-<CAT_FILE>{empty}{2,}{name}{blank}*{indent}		BEGIN (CAT_NAME);
+<MAN_FILE>{sec_request}{blank_eol}+{name_sec}{blank_eol}*	BEGIN (MAN_NAME);
+<CAT_FILE>{empty}{2,}{name}{blank}*{indent}			BEGIN (CAT_NAME);
 
  /* general text matching */
 <MAN_FILE>\.[^Ss\r\n].*{next}				|
