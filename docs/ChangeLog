@@ -1,3 +1,18 @@
+Sun Jul  7 22:19:41 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* tools/config.guess: Update to 2002-05-29.
+	* tools/config.sub: Update to 2002-06-21.
+	* tools/README: Describe config.guess and config.sub.
+
+	* tools/nroff-script: Remove. groff has had this since 1992, and its
+	  version is considerably more up-to-date.
+	* GNUmakefile.in, tools/README: Remove references to nroff-script.
+
+	* zsoelim/zsoelim.l: -Wall cleanup. Set the nounput option, since we
+	  don't need yyunput().
+	  (open_file): Make sure the compiler knows that compfile and comp
+	  are always initialized.
+
 Sat Jul  6 21:30:07 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (get_roff_line_length): Widen to match groff 1.18's

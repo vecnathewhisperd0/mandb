@@ -94,6 +94,8 @@ extern int optind;
 
 W	[ \t]
 
+%option nounput
+
 %%
 
 ^\.de{W}*.+	{	
@@ -339,10 +341,9 @@ static int open_file(char *filename)
 {
 	FILE *oldyyin;
 	char *ext;
-	char *compfile;
 	int is_hpux=0;
 	int is_compr=0;
-	struct compression *comp;
+	struct compression *comp = NULL;
 	struct stat buf;
 
 	oldyyin = yyin;
@@ -350,7 +351,6 @@ static int open_file(char *filename)
 /* #ifdef __hpux */
 	ext = strrchr(filename, '.');
 	if (strstr(filename, ".Z/")) { /* The file is in an HPUX directory */
-		compfile = filename;
 		is_hpux = 1;
 		is_compr = 0;
 	} else if (ext) {
@@ -360,7 +360,6 @@ static int open_file(char *filename)
 				if (stat(filename, &buf) == 0) {
 					comp->file = --ext;
 					is_compr = 1;
-					compfile = filename;
 					break;
 				}
 			}
@@ -372,12 +371,14 @@ static int open_file(char *filename)
 	if( is_hpux || is_compr || !(yyin = fopen( filename, "r" ))) {
 
 #ifdef COMP_SRC
+		char *compfile;
 		size_t len;
 
 		if (is_hpux) {
-			struct compression hpux_comp = {GUNZIP "  -S \"\"", 
+			struct compression hpux_comp = {GUNZIP " -S \"\"", 
 							"", NULL};
 			comp = &hpux_comp;
+			compfile = filename;
 		} else if ( ! is_compr) {
 			compfile = strappend(NULL, filename, ".", NULL);
 			len = strlen(compfile);
@@ -388,7 +389,8 @@ static int open_file(char *filename)
 					break;
 				*(compfile + len) = '\0';
 			}
-		}
+		} else
+			compfile = filename;
 
 		if (comp->ext) {
 			char *command;
