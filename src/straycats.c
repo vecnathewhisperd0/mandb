@@ -68,6 +68,10 @@ extern char *strrchr();
 #  endif /* HAVE_NDIR_H */
 #endif /* HAVE_DIRENT_H  */
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 extern char *canonicalize_file_name __P ((__const char *__name));
 #endif
@@ -192,6 +196,8 @@ static int check_for_stray (void)
 			char *filter = NULL;
 			struct mandata *exists;
 			lexgrog lg;
+			char *mandir_copy;
+			const char *mandir_base;
 
 			/* we have a straycat. Need to filter it and get
 			   its whatis (if necessary)  */
@@ -202,8 +208,9 @@ static int check_for_stray (void)
 
 			/* see if we already have it, before going any 
 			   further */
-			exists = dblookup_exact (basename (mandir), info.ext,
-						 1);
+			mandir_copy = xstrdup (mandir);
+			mandir_base = basename (mandir_copy);
+			exists = dblookup_exact (mandir_base, info.ext, 1);
 #ifndef FAVOUR_STRAYCATS
 			if (exists && exists->id != WHATIS_CAT) {
 #else /* FAVOUR_STRAYCATS */
@@ -212,11 +219,12 @@ static int check_for_stray (void)
 #endif /* !FAVOUR_STRAYCATS */
 				free_mandata_struct (exists);
 				free (section);
+				free (mandir_copy);
 				continue;
 			}
 			if (debug)
 				fprintf (stderr, "%s(%s) is not in the db.\n",
-					 basename (mandir), info.ext);
+					 mandir_base, info.ext);
 
 			/* fill in the missing parts of the structure */
 			info.name = NULL;
@@ -280,33 +288,37 @@ static int check_for_stray (void)
 					remove_with_dropped_privs (temp_name);
 					perror (filter);
 				} else {
-					const char *manbase =
-						basename (mandir);
 					struct page_description *descs;
+					char *catdir_copy;
+					const char *catdir_base;
 
 					strays++;
 
 					lg.type = CATPAGE;
+					catdir_copy = xstrdup (catdir);
+					catdir_base = basename (catdir_copy);
 					if (!find_name (temp_name,
-							basename (catdir), &lg))
+							catdir_base, &lg))
 						if (quiet < 2)
 							error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
 								catdir,
-								basename (mandir),
+								mandir_base,
 								info.sec);
+					free (catdir_copy);
 
-					descs = parse_descriptions (manbase,
+					descs = parse_descriptions (mandir_base,
 								    lg.whatis);
 					if (descs) {
 						store_descriptions (descs,
 								    &info,
-								    manbase);
+								    mandir_base);
 						free_descriptions (descs);
 					}
 				}
 			}
 
 			free (filter);
+			free (mandir_copy);
 
 			if (lg.whatis)
 				free (lg.whatis);

@@ -65,6 +65,10 @@ extern int strncmp();
 extern int errno;
 #endif
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #define STATIC_VER	/* zsoelim has a static ver() */
 
 #define NAME	so_name[so_stack_ptr]

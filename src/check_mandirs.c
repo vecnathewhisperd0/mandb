@@ -72,6 +72,10 @@ extern time_t time();
 extern int errno;
 #endif
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #include <libintl.h>
 #define _(String) gettext (String)
 
@@ -261,6 +265,7 @@ void test_manfile (char *file, const char *path)
 
 	if (!lg.whatis) {	/* cache miss */
 		/* go get the whatis info in its raw state */
+		char *file_copy = xstrdup (file);
 #ifdef COMP_SRC
 		/* if the nroff was compressed, an uncompressed version is
 		   shown by a call to get_ztemp(), grog this for a whatis
@@ -275,11 +280,12 @@ void test_manfile (char *file, const char *path)
 #ifdef COMP_SRC
 		ztemp = get_ztemp ();
 		if (ztemp) {
-			find_name (ztemp, basename (file), &lg);
+			find_name (ztemp, basename (file_copy), &lg);
 			remove_ztemp ();  /* get rid of temp file identifier */
 		} else
 #endif /* COMP_SRC */
-			find_name (ult, basename (file), &lg);
+			find_name (ult, basename (file_copy), &lg);
+		free (file_copy);
 		regain_effective_privs ();
 
 		hash_install (whatis_hash, ult, strlen (ult),

@@ -319,9 +319,7 @@ extern char *escape_shell (const char *unesc);
 extern int remove_directory (const char *directory);
 extern char *trim_spaces (const char *s);
 
-#ifdef HAVE_BASENAME
-extern char *basename (const char *path);
-#else /* !HAVE_BASENAME */
+#ifndef HAVE_BASENAME
 extern char *basename ();
 #endif /* HAVE_BASENAME */
 

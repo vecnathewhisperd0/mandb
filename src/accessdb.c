@@ -45,6 +45,10 @@ extern int errno;
 extern char *strchr();
 #endif /* STDC_HEADERS */
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #include <libintl.h>
 #define _(String) gettext (String)
 

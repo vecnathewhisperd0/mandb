@@ -1,3 +1,17 @@
+Fri Aug 15 18:05:37 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* include/manconfig.h.in: Remove incorrect prototype of basename()
+	  which was hiding several bugs.
+	* configure.in: Check for <libgen.h>.
+	* lib/pipeline.c, src/accessdb.c, src/catman.c, src/check_mandirs.c,
+	  src/filenames.c, src/lexgrog.l, src/man.c, src/mandb.c,
+	  src/manpath.c, src/straycats.c, src/whatis.c, zsoelim/zsoelim.l:
+	  Include <libgen.h> instead of relying on basename() prototype in
+	  manconfig.h.
+	* src/check_mandirs.c (test_manfile), src/man.c (local_man_loop),
+	  src/straycats.c (check_for_stray): Copy strings before calling
+	  basename() on them.
+
 Fri Aug 15 00:16:13 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/ult_src.c (ult_hardlink): Return a newly allocated string

@@ -51,6 +51,10 @@ extern int errno;
 #  include <strings.h>
 #endif /* HAVE_STRING_H */
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #include <libintl.h>
 #define _(String) gettext (String)
 

@@ -38,6 +38,10 @@
 extern char *strrchr();
 #endif /* no string(s) header */
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #include <libintl.h>
 #define _(String) gettext (String)
 

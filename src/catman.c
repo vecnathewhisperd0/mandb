@@ -83,6 +83,10 @@ extern int errno;
 #  endif /* _POSIX_VERSION */
 #endif /* !ARG_MAX */
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #ifdef HAVE_GETOPT_H
 #  include <getopt.h>
 #else /* !HAVE_GETOPT_H */

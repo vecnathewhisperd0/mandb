@@ -83,6 +83,10 @@ extern char *getwd();
 #  include <pwd.h>
 #endif /* SECURE_MAN_UID */
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #ifdef HAVE_GETOPT_H
 #  include <getopt.h>
 #else /* !HAVE_GETOPT_H */

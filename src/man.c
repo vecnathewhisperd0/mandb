@@ -121,6 +121,10 @@ extern char *getenv();
 extern int errno;
 #endif
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #ifdef HAVE_GETOPT_H
 #  include <getopt.h>
 #else /* !HAVE_GETOPT_H */
@@ -846,13 +850,15 @@ static int local_man_loop (const char *argv)
 				exit_status = CHILD_FAIL;
 #endif /* COMP_SRC */
 		if (exit_status == OK) {
+			char *argv_copy = xstrdup (argv);
 			lang = lang_dir (argv);
-			if (!display (NULL, argv, NULL, basename (argv),
+			if (!display (NULL, argv, NULL, basename (argv_copy),
 				      NULL)) {
 				if (local_mf)
 					error (0, errno, "%s", argv);
 				exit_status = NOT_FOUND;
 			}
+			free (argv_copy);
 		}
 
 #ifdef COMP_SRC

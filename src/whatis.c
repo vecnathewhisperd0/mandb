@@ -65,6 +65,10 @@ extern char *strrchr();
 #  include <regex.h>
 #endif /* HAVE_REGEX_H */
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #ifdef HAVE_FNMATCH_H
 #  include <fnmatch.h>
 #else /* !HAVE_FNMATCH_H */
