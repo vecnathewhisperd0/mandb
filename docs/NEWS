@@ -15,6 +15,13 @@ Major changes since man-db 2.4.1:
 
 	o man can be built with --disable-setuid again.
 
+	o man's locale support has been revamped. The encoding of source
+	  manual pages is no longer related to the encoding of the input
+	  passed to *roff or to *roff's terminal output device. These
+	  frequently differ, especially in UTF-8 locales but in other
+	  circumstances as well, and a "just send 8-bit data" approach is no
+	  longer adequate.
+
 	Improvements:
 	-------------
 

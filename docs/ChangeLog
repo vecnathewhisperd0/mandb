@@ -1,3 +1,34 @@
+Sun Apr  6 20:28:57 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Revamp locale encoding support. The old code made the incorrect
+	assumption that the source encoding of manual pages is dependent on
+	the locale.
+
+	If MULTIBYTE_GROFF is defined then man will assume that it is using
+	a version of groff with the multibyte patch applied, which supports
+	some additional locales.
+
+	* src/man.c (lang_table, determine_lang_table): Remove.
+	  (lang_dir): Return "C" if there is no language directory element.
+	  (make_roff_command): Find out the source encoding for the
+	  requested man page and the default device for the current locale,
+	  and use these to select a device more intelligently. Insert an
+	  iconv pipe if the source encoding differs from the input *roff
+	  encoding for the current device.
+	* src/encodings.c: New file. There are three tables replacing the
+	  old lang_table: directory_table, charset_table, and device_table.
+	  (get_source_encoding): New function, returning the assumed source
+	  encoding for the current page from directory_table.
+	  (get_default_device): New function, returning the default *roff
+	  output device based on the current locale from charset_table.
+	  (get_roff_encoding): New function, returning the input encoding
+	  expected by *roff from device_table. This is always ISO-8859-1
+	  unless MULTIBYTE_GROFF is defined (this is still a subject of some
+	  debate, and will be UTF-8 for all devices in groff 2).
+	* src/encodings.h: Prototype new functions.
+	* src/Makefile.in (man): Add encodings.o.
+	* docs/NEWS: Document the above.
+
 Sun Mar 30 23:14:47 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (SYNOPSIS): Both -H and -T take optional

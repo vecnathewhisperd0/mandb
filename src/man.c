@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -130,9 +130,6 @@ extern int errno;
 #include <locale.h>
 #include <libintl.h>
 #define _(String) gettext (String)
-#ifdef HAVE_LANGINFO_CODESET
-#  include <langinfo.h>
-#endif
 
 #include "manconfig.h"
 #include "libdb/mydbm.h"
@@ -146,6 +143,7 @@ extern int errno;
 #include "ult_src.h"
 #include "manp.h"
 #include "security.h"
+#include "encodings.h"
 #include "man.h"
 
 #ifdef SECURE_MAN_UID
@@ -175,44 +173,7 @@ extern uid_t euid;
 #  define STDERR_FILENO 2
 #endif
 
-char *lang;
-struct lt {
-	const char *lang;
-	const char *device;
-	const char *charset;
-} lang_table[] = {
-
-	/* LESSCHARSET=latin1 means '0x80-0xff is displayable'. */
-	/* It does not mean 'ISO-8859-1 charset'. */
-
-	/* roff_device=latin1 means 'groff uses ISO-8859-1 characters'. */
-	/* Thus 'ascii' should be used for ISO-8859-{2,3,4,...} languages. */
-
-	/* LANG means language of manpage.  However, for English manpages, */
-	/* roff_device and LESSCHARSET are determined by user environment */
-	/* (latin1+latin1 for ISO-8859-1 languages and ascii+ascii for */
-	/* non-ISO-8859-1 languages). */
-
-	/* LANG		roff_device	LESSCHARSET */
-	{ "C"		, "latin1"	, "latin1"	}, /* English */
-	{ "POSIX"	, "latin1"	, "latin1"	}, /* English */
-	{ "da"		, "latin1"	, "latin1"	}, /* Danish */
-	{ "de"		, "latin1"	, "latin1"	}, /* German */
-	{ "en"		, "latin1"	, "latin1"	}, /* English */
-	{ "es"		, "latin1"	, "latin1"	}, /* Spanish */
-	{ "fi"		, "latin1"	, "latin1"	}, /* Finnish */
-	{ "fr"		, "latin1"	, "latin1"	}, /* French */
-	{ "ga"		, "latin1"	, "latin1"	}, /* Irish */
-	{ "is"		, "latin1"	, "latin1"	}, /* Icelandic */
-	{ "it"		, "latin1"	, "latin1"	}, /* Italian */
-	{ "ja"		, "nippon"	, "ja"		}, /* Japanese */
-	{ "ko"		, "ascii8"	, "latin1"	}, /* Korean */
-	{ "nl"		, "latin1"	, "latin1"	}, /* Dutch */
-	{ "no"		, "latin1"	, "latin1"	}, /* Norwegian */
-	{ "pt"		, "latin1"	, "latin1"	}, /* Portuguese */
-	{ "sv"		, "latin1"	, "latin1"	}, /* Swedish */
-	{ "*"		, "ascii8"	, "latin1"	}, /* universal */
-	{ 0		, 0		, 0		} };
+const char *lang;
 
 /* external formatter programs, one for use without -t, and one with -t */
 #define NFMT_PROG "./mandb_nfmt"
@@ -279,18 +240,22 @@ char *lang_dir (const char *filename)
 	if (!filename) 
 		return ld;
 
+	/* Check whether filename is in a man page hierarchy. */
 	fm = strstr (filename, "/man/");
 	if (!fm)
 		return ld;
 	sm = strstr (fm + 3, "/man");
 	if (!sm)
 		return ld;
-	if (sm == fm + 4)
-		return ld;
 	if (sm[5] != '/')
 		return ld;
 	if (!strchr ("123456789lno", sm[4]))
 		return ld;
+
+	/* If there's no lang dir element, it's an English man page. */
+	if (sm == fm + 4)
+		return "C";
+
 	/* found a lang dir */
 	fm += 5;
 	sm = strchr (fm, '/');
@@ -1503,68 +1468,13 @@ static __inline__ void create_stdintmp (void)
 	atexit (remove_stdintmp);
 }
 
-/* Determine roff_device and LESSCHARSET */
-static void determine_lang_table (const char *lang)
-{
-	int j;
-	int chosen_locale;
-	char *ctype;
-	int is_utf8;
-	if (lang && *lang)
-		chosen_locale = 1;
-	else {
-		/* English manpages */
-		chosen_locale = 0;
-		lang = internal_locale;
-	}
-	for (j = 0; lang_table[j].lang; j++) {
-		if (STRNEQ (lang_table[j].lang, lang,
-			    strlen (lang_table[j].lang))
-		    || lang_table[j].lang[0] == '*') {
-			if (chosen_locale) {
-				roff_device = lang_table[j].device;
-				putenv (strappend (NULL, "LESSCHARSET=",
-						   lang_table[j].charset,
-						   NULL));
-			} else if (!strcmp (lang_table[j].device, "latin1")) {
-				roff_device = "latin1";
-				putenv ("LESSCHARSET=latin1");
-			} else {
-				roff_device = "ascii";
-				putenv ("LESSCHARSET=ascii");
-			}
-			break;
-		}
-	}
-
-	/* This is done at the end for now so that we can special-case the
-	 * nippon device.
-	 */
-#ifdef HAVE_LANGINFO_CODESET
-	ctype = setlocale (LC_CTYPE, "");
-	is_utf8 = !strcmp (nl_langinfo (CODESET), "UTF-8");
-#else
-	ctype = setlocale (LC_CTYPE, NULL);
-	is_utf8 = (strstr (ctype, "UTF-8") != NULL);
-#endif
-	if (is_utf8) {
-		if (debug)
-			fprintf (stderr, "Using UTF-8 locale\n");
-		if (!STREQ (roff_device, "nippon"))
-			roff_device = "utf8";
-		putenv ("LESSCHARSET=utf-8");
-		/* Can't cat these for now. */
-		save_cat = 0;
-	}
-}
-
 /* Return command (malloced string) to format file to stdout */
 static __inline__ char *make_roff_command (const char *dir, const char *file,
 					   const char *dbfilters)
 {
 	const char *pp_string;
 	char *fmt_prog;
-	char *command;
+	char *command = NULL;
 
 	if (!*file) {
 		/* file == "": this means we are reading input from stdin.
@@ -1676,28 +1586,11 @@ static __inline__ char *make_roff_command (const char *dir, const char *file,
 		char *dev;	/* either " -T<mumble>" or "" */
 		int using_tbl = 0;
 
-		/* Load the roff_device value dependent on the language dir
-		 * in the path.
-		 */
-		if (!troff && !different_encoding)
-			determine_lang_table (lang);
-
-		/* tell grops to guess the page size */
-		if (roff_device && strcmp (roff_device, "ps") == 0)
-			roff_device = strappend (NULL, "ps -P-g ", NULL);
-		if (gxditview && roff_device)
-			dev = strappend (NULL, " -X -T", roff_device, NULL);
-		else if (gxditview)
-			dev = strappend (NULL, " -TX", gxditview, NULL);
-		else if (roff_device)
-			dev = strappend (NULL, " -T", roff_device, NULL);
-		else
-			dev = "";
-
 		if (*file) {
 			char *esc_file = escape_shell (file);
-			command = strappend (NULL, get_def ("soelim", SOELIM),
-					     " ", esc_file, NULL); 
+			command = strappend (command,
+					     get_def ("soelim", SOELIM), " ",
+					     esc_file, NULL);
 			free (esc_file);
 		} else {
 			char *esc_tmpfile = escape_shell (stdin_tmpfile);
@@ -1706,7 +1599,8 @@ static __inline__ char *make_roff_command (const char *dir, const char *file,
 			 * ? is '-' as a cat argument standard?
 			 * If not we could try "(cat tempfile; cat) | SOELIM..."
 			 */
-			command = strappend (NULL, get_def ("cat", CAT), " ",
+			command = strappend (command,
+					     get_def ("cat", CAT), " ",
 					     esc_tmpfile, " - | ",
 					     get_def ("soelim", SOELIM), NULL);
 			free (esc_tmpfile);
@@ -1736,6 +1630,58 @@ static __inline__ char *make_roff_command (const char *dir, const char *file,
 				save_cat = 0;
 			}
 		}
+
+		/* Load the roff_device value dependent on the language dir
+		 * in the path.
+		 */
+		if (!troff) {
+			const char *source_encoding, *roff_encoding;
+			const char *default_device;
+
+			source_encoding = get_source_encoding (lang);
+			if (debug)
+				fprintf (stderr, "source_encoding = %s\n",
+					 source_encoding ? source_encoding
+							 : "NULL");
+
+			default_device = get_default_device (internal_locale);
+			if (debug)
+				fprintf (stderr, "default_device = %s\n",
+					 default_device ? default_device
+							: "NULL");
+
+			/* Only save cat pages for the default device. */
+			if (roff_device && default_device &&
+			    !STREQ (roff_device, default_device))
+				save_cat = 0;
+			if (!roff_device)
+				roff_device = default_device;
+
+			roff_encoding = get_roff_encoding (roff_device);
+			if (debug)
+				fprintf (stderr, "roff_encoding = %s\n",
+					 roff_encoding ? roff_encoding
+						       : "NULL");
+
+			if (source_encoding && roff_encoding &&
+			    !STREQ (source_encoding, roff_encoding))
+				command = strappend (command,
+						     " | iconv -c -f ",
+						     source_encoding, " -t ",
+						     roff_encoding, NULL);
+		}
+
+		/* tell grops to guess the page size */
+		if (roff_device && strcmp (roff_device, "ps") == 0)
+			roff_device = strappend (NULL, "ps -P-g ", NULL);
+		if (gxditview && roff_device)
+			dev = strappend (NULL, " -X -T", roff_device, NULL);
+		else if (gxditview)
+			dev = strappend (NULL, " -TX", gxditview, NULL);
+		else if (roff_device)
+			dev = strappend (NULL, " -T", roff_device, NULL);
+		else
+			dev = "";
 
 		do {
 			char *filter;
