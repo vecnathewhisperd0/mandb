@@ -765,8 +765,8 @@ static __inline__ char **manopt_to_env (int *argc)
 	return argv;
 }
 
-/* return char array with 'less' special chars escaped */
-static __inline__ char *escape_special (char *string)
+/* Return char array with 'less' special chars escaped. Uses static storage. */
+static __inline__ char *escape_less (const char *string)
 {
 	static char *escaped_string; 
 	char *ptr;
@@ -789,11 +789,11 @@ static __inline__ char *escape_special (char *string)
 	*ptr = *string;
 	return escaped_string;
 }
-			
+
 #ifdef MAN_DB_UPDATES
 /* test for new files. If any found return 1, else 0 */
-static int need_to_rerun(void)
-{						
+static int need_to_rerun (void)
+{
 	int rerun = 0;
 	char **mp;
 
@@ -1396,38 +1396,34 @@ static __inline__ void create_stdintmp (void)
 }
 
 /* Determine roff_device and LESSCHARSET */
-static void determine_lang_table (char *lang)
+static void determine_lang_table (const char *lang)
 {
 	int j;
-	if (!lang || !*lang) {
+	int chosen_locale;
+	if (lang && *lang)
+		chosen_locale = 1;
+	else {
 		/* English manpages */
-		for (j = 0; lang_table[j].lang; j++) {
-			if (STRNEQ (lang_table[j].lang, internal_locale,
-				    strlen (lang_table[j].lang))
-			    || lang_table[j].lang[0] == '*') {
-				if (!strcmp (lang_table[j].device, "latin1")) {
-					roff_device = "latin1";
-					putenv ("LESSCHARSET=latin1");
-				} else {
-					roff_device = "ascii";
-					putenv ("LESSCHARSET=ascii");
-				}
-				break;
-			}
-		}
-	} else {
-		int j;
-		for (j = 0; lang_table[j].lang; j++) {
-			if (STRNEQ (lang_table[j].lang, lang,
-				    strlen (lang_table[j].lang))
-			    || lang_table[j].lang[0] == '*') {
+		chosen_locale = 0;
+		lang = internal_locale;
+	}
+	for (j = 0; lang_table[j].lang; j++) {
+		if (STRNEQ (lang_table[j].lang, lang,
+			    strlen (lang_table[j].lang))
+		    || lang_table[j].lang[0] == '*') {
+			if (chosen_locale) {
 				roff_device = lang_table[j].device;
 				putenv (strappend (NULL, "LESSCHARSET=",
 						   lang_table[j].charset,
 						   NULL));
-				j = sizeof (lang_table) / sizeof (struct lt)
-					- 2;
+			} else if (!strcmp (lang_table[j].device, "latin1")) {
+				roff_device = "latin1";
+				putenv ("LESSCHARSET=latin1");
+			} else {
+				roff_device = "ascii";
+				putenv ("LESSCHARSET=ascii");
 			}
+			break;
 		}
 	}
 }
@@ -1696,7 +1692,7 @@ static char *make_display_command (char *file, char *title)
 	char *command;
 	char *esc_file = escape_shell (file);
 	/* The title needs to be escaped both for less and for the shell. */
-	char *esc_title = escape_shell (escape_special (title));
+	char *esc_title = escape_shell (escape_less (title));
 	char *less_opts = strappend (NULL, LESS_OPTS, prompt_string, "$",
 				     getenv ("LESS"), NULL);
 	char *esc_less_opts;

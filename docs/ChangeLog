@@ -1,3 +1,12 @@
+Tue Aug 21 00:40:47 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (escape_special): Rename to escape_less(). Constify
+	  argument.
+	  (determine_lang_table): Constify argument. Unify some common code.
+	  (make_display_common): Use escape_less() rather than
+	  escape_special().
+	* docs/NEWS: Document shell escaping.
+
 Sun Aug 19 23:56:36 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in: Compile with -Wall by default.
