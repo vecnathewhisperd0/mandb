@@ -1,3 +1,14 @@
+Sun Sep 15 23:53:28 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade to gettext 0.11.5.
+
+	* configure.in: Remove ALL_LINGUAS. Add AM_GNU_GETTEXT_VERSION.
+	* po/LINGUAS: New file. Adds sv to the value of the old ALL_LINGUAS.
+	* po/Makevars: New file.
+	* po/POTFILES.in: Add src/fakesecurity.c. Change src/lexgrog.c to
+	  src/lexgrog.l.
+	* tools/mkinstalldirs: Upgrade to current version.
+
 Fri Sep  6 23:58:10 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/mandb.c (xcopy): Don't print the error from fopen() if it's
