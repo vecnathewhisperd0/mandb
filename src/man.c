@@ -3230,10 +3230,18 @@ static int display_pages (struct candidate *candidates)
 	int found = 0;
 
 	for (candp = candidates; candp; candp = candp->next) {
+		global_manpath = is_global_mandir (candp->path);
+		if (!global_manpath)
+			drop_effective_privs ();
+
 		if (candp->from_db)
 			found += display_database_check (candp);
 		else
 			found += display_filesystem (candp);
+
+		if (!global_manpath)
+			regain_effective_privs ();
+
 		if (found && !findall)
 			return found;
 	}

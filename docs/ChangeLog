@@ -1,3 +1,11 @@
+Mon Jan  6 03:25:16 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (display_pages): Drop privileges if candp->path is a
+	  user manpath. Inner code generally dropped privileges anyway,
+	  certainly when running external commands, but the absence of this
+	  drop meant that pages in non-world-readable user manpaths could
+	  not be read.
+
 Mon Jan  6 03:19:57 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	* lib/error.c (error): Print a backtrace if the BACKTRACE_ON_ERROR
