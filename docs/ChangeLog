@@ -1,3 +1,8 @@
+Sun Jun 10 13:59:04 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (pathappend): Fix infinite loop when adding a manpath
+	  entry which is a substring of an existing entry.
+
 Sun Jun 10 13:49:02 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/check_mandirs.c (testmandirs): Treat EROFS like EACCES while

@@ -264,7 +264,7 @@ static char *pathappend (char *oldpath, const char *appendage)
 					free (app_dedup);
 					app_dedup = newapp;
 				}
-				search = strstr (app_dedup, tok);
+				search = strstr (terminator, tok);
 			}
 		}
 		free (oldpathtok);
