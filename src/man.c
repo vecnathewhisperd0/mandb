@@ -992,10 +992,10 @@ int main (int argc, char *argv[])
 	if (pager == NULL) {
 		pager = getenv ("PAGER");
 		if (pager == NULL)
-			pager = get_def("pager", PAGER);
+			pager = get_def ("pager", PAGER);
 	}
 	if (*pager == '\0')
-		pager = get_def("cat", CAT);
+		pager = get_def ("cat", CAT);
 
 	if (prompt_string == NULL)
 #ifdef LESS_PROMPT
