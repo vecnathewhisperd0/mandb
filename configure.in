@@ -249,7 +249,12 @@ then
 		decompressor="$uncompress"
 	fi
 fi
-if test "$gzip" || test "$compress"
+AC_PATH_PROG(bzip2, bzip2)
+if test "$bzip2"
+then
+	bunzip2="$bzip2 -dc"
+fi
+if test "$gzip" || test "$compress" || test "$bzip2"
 then
 	AC_DEFINE(COMP_CAT)
 	AC_DEFINE(COMP_SRC)
@@ -258,6 +263,7 @@ AC_SUBST(compressor)dnl
 AC_SUBST(compress_ext)dnl
 AC_SUBST(gunzip)dnl
 AC_SUBST(uncompress)dnl
+AC_SUBST(bunzip2)dnl
 AC_SUBST(decompressor)dnl
 dnl
 dnl to add more decompressors just follow the scheme above.
