@@ -269,7 +269,8 @@ static int match_in_directory (const char *path, const char *pattern,
 		pglob->gl_pathv[0] = NULL;
 		return 0;
 	}
-	while (!strncasecmp (pattern_start.pattern, *(bsearched - 1),
+	while (bsearched > cache->names &&
+	       !strncasecmp (pattern_start.pattern, *(bsearched - 1),
 			     pattern_start.len))
 		--bsearched;
 

@@ -1,3 +1,12 @@
+Mon Nov 17 22:50:39 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/globbing.c (match_in_directory): Oops; stop decrementing
+	  bsearched when it reaches the beginning of the cache->names array,
+	  otherwise patterns beginning with a metacharacter cause a
+	  segfault. (The decrement loop is necessary because bsearch()
+	  doesn't specify which element it returns if there are multiple
+	  matches.)
+
 Mon Nov 17 05:04:54 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	Speed up mandb's purging functions further, from about 20 seconds to
