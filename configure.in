@@ -387,7 +387,7 @@ then
     for lib in gdbm c dbm
     do
       AC_CHECK_LIB($lib, gdbm_fetch,
-		   test "$lib" = "c" || LIBS="$LIBS -l$lib" 
+		   test "$lib" = "c" || DBLIBS="$DBLIBS -l$lib" 
 		   [AC_DEFINE(GDBM, 1, [Define if you have, and want to use, gdbm interface routines.])]
 		   db=yes, db=no)
       if test "$db" = "yes" 
@@ -408,7 +408,7 @@ then
     for lib in ndbm c dbm
     do
       AC_CHECK_LIB($lib, dbm_fetch,
-		   test "$lib" = "c" || LIBS="$LIBS -l$lib"
+		   test "$lib" = "c" || DBLIBS="$DBLIBS -l$lib"
 		   [AC_DEFINE(NDBM, 1, [Define if you have, and want to use, ndbm interface routines.])]
 		   db=yes, db=no)
       test "$db" = "yes" && break
@@ -423,6 +423,7 @@ then
       AC_MSG_ERROR(Fatal: $db: unsupported database library)
     fi
 fi
+AC_SUBST(DBLIBS)
 dnl
 dnl Check for available functions.
 dnl
@@ -459,6 +460,7 @@ MAN_ECHO_VAR(CPPFLAGS)
 MAN_ECHO_VAR(CFLAGS)
 MAN_ECHO_VAR(LDFLAGS)
 MAN_ECHO_VAR(LIBS)
+MAN_ECHO_VAR(DBLIBS)
 
 AC_CONFIG_FILES(GNUmakefile
 	lib/Makefile

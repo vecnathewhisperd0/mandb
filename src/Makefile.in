@@ -32,6 +32,7 @@ PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 
 LIBS = @LIBINTL@ @LIBS@
+DBLIBS = @DBLIBS@
 
 include ../include/Defines
 
@@ -103,6 +104,8 @@ wrapper:	LDLIBS=-lc
 catman manpath whatis apropos: fake_security.o manp.o
 catman manpath whatis apropos accessdb: util.o 
 man mandb catman whatis apropos accessdb: ../libdb/libmandb.a
+
+man mandb catman whatis apropos accessdb: LDLIBS += $(DBLIBS)
 
 $(PROGS) $(TOOLS): version.o ../lib/libman.a
 

@@ -1,3 +1,11 @@
+Sat Sep  6 00:23:03 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* acinclude.m4 (MAN_CHECK_BDB): Append to DBLIBS rather than LIBS.
+	* configure.in: Likewise for gdbm and ndbm tests. Make DBLIBS an
+	  output variable.
+	* src/Makefile.in: Link only the necessary programs with the
+	  database library.
+
 Sat Sep  6 00:15:37 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_lookup.c (make_content): Cast cont.dsize to size_t when
