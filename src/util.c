@@ -148,3 +148,27 @@ int do_system (const char *command)
 		return system (command);
 	}
 }
+
+/* Escape dangerous metacharacters before dumping into a shell command. */
+char *escape_shell (const char *unesc)
+{
+	char *esc, *escp;
+	const char *unescp;
+
+	if (!unesc)
+		return NULL;
+
+	escp = esc = (char *) xmalloc (strlen (unesc) * 2 + 1);
+	for (unescp = unesc; *unescp; unescp++)
+		if ((*unescp >= '0' && *unescp <= '9') ||
+		    (*unescp >= 'A' && *unescp <= 'Z') ||
+		    (*unescp >= 'a' && *unescp <= 'z') ||
+		    strchr (",-./:=@_", *unescp))
+			*escp++ = *unescp;
+		else {
+			*escp++ = '\\';
+			*escp++ = *unescp;
+		}
+	*escp = 0;
+	return esc;
+}

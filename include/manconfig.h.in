@@ -277,11 +277,11 @@ struct lexgrog;
 extern int find_name (char *file, char *filename, struct lexgrog *p_lg);
 
 /* util.c */
-extern char *strappend (char *, ...);
+extern char *mkdbname (const char *path);
 extern int is_changed (char *fa, char *fb);
 extern int is_directory (char *path);
 extern __inline__ int do_system (const char *command);
-extern char *mkdbname (const char *path);
+extern char *escape_shell (const char *unesc);
 
 #if !defined(HAVE_BASENAME)
 extern char *basename ();
@@ -292,6 +292,8 @@ extern char *basename (const char *path);
 #ifndef HAVE_STRSEP
 extern char *strsep (char **stringp, const char *delim);
 #endif /* !HAVE_STRSEP */
+
+extern char *strappend (char *, ...);
 
 extern int debug; 		/* shows whether -d issued */
 extern int quiet;		/* be quiet(er) if 1 */

@@ -163,16 +163,13 @@ static __inline__ int use_grep (char *page, char *manpath)
 	int status;
 
 	if (access (whatis_file, R_OK) == 0) {
+		char *esc_page = escape_shell (page);
+		char *esc_file = escape_shell (whatis_file);
+		char *flags, *anchor, *command;
 #if defined(WHATIS)
-		char *command = strappend (NULL, get_def ("grep", GREP), " ",
-					   get_def ("whatis_grep_flags", 
-						    WHATIS_GREP_FLAGS),
-					   " '^", page, "' ", whatis_file,
-					   NULL);
-
+		flags = get_def ("whatis_grep_flags", WHATIS_GREP_FLAGS);
+		anchor = "^";
 #elif defined(APROPOS)
-		char *flags, *command;
-
 #ifdef REGEX
 		if (regex)
 			flags = get_def ("apropos_regex_grep_flags",
@@ -181,13 +178,15 @@ static __inline__ int use_grep (char *page, char *manpath)
 #endif
 			flags = get_def ("apropos_grep_flags",
 					 APROPOS_GREP_FLAGS);
-
-		command = strappend (NULL, get_def ("grep", GREP),
-				     flags, " '", page,
-				     "' ", whatis_file, NULL);
+		anchor = "";
 #endif 	
+
+		command = strappend (NULL, get_def ("grep", GREP), flags, " ",
+				     anchor, esc_page, " ", esc_file, NULL);
 		status = (system (command) == 0);
 		free (command);
+		free (esc_file);
+		free (esc_page);
 	} else {
 		if (debug) {
 			error (0, 0, _("warning: can't read the fallback whatis text database."));
@@ -404,7 +403,7 @@ static int apropos (char *page, char *lowpage)
 
 	key = MYDBM_FIRSTKEY (dbf);
 	while (key.dptr) {
-		cont= MYDBM_FETCH (dbf, key);
+		cont = MYDBM_FETCH (dbf, key);
 #else /* BTREE */
 	int end;
 
@@ -421,8 +420,8 @@ static int apropos (char *page, char *lowpage)
 			if (debug)
 				fprintf (stderr, "key was %s\n", key.dptr);
 			error (FATAL, 0,
-			       _("Database %s corrupted; rebuild with mandb "
-				 "--create"),
+			       _("Database %s corrupted; rebuild with "
+				 "mandb --create"),
 			       database);
 		}
 
@@ -540,19 +539,23 @@ int main (int argc, char *argv[])
 {
 	int c;
 	char *manp = NULL, *alt_systems = "";
-	char *llocale=0, *locale;
+	char *llocale = 0, *locale;
 	int option_index;
 
 	program_name = xstrdup (basename (argv[0]));
 
 	/* initialise the locale */
 	locale = setlocale (LC_ALL, "");
+	if (locale)
+		locale = xstrdup (locale);
+	else {
+		/* Obviously can't translate this. */
+		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
+			     "are correct");
+		locale = "C";
+	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
-	if (locale != NULL)
-		locale = xstrdup (locale);
-	else
-		locale = "C";
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, &option_index)) != EOF) {
@@ -609,7 +612,7 @@ int main (int argc, char *argv[])
 		locale = xstrdup (llocale);
 		if (debug)
 			fprintf(stderr,
-				"main(): locale= %s,internal_locale= %s\n",
+				"main(): locale = %s, internal_locale = %s\n",
 				llocale, locale);
 		if (locale) {
 			extern int _nl_msg_cat_cntr;

@@ -134,13 +134,16 @@ char *decompress (char *filename, struct compression *comp)
 	char *command;
 	int status;
 	int save_debug = debug;
+	char *esc_filename, *esc_file;
 
 	if (!file)
 		create_ztemp();
 
+	esc_filename = escape_shell (filename);
+	esc_file = escape_shell (file);
 	/* temporarily drop the debug flag, so that we can continue */
-	command = strappend (NULL, comp->prog, " ", filename,
-			     " > ", file, NULL);
+	command = strappend (NULL, comp->prog, " ", esc_filename,
+			     " > ", esc_file, NULL);
 
 	if (debug) {
 #ifdef SECURE_MAN_UID

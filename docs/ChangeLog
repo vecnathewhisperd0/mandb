@@ -1,3 +1,38 @@
+Sun Aug 19 13:02:01 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (popen, pclose): Rely on the BROKEN_PCLOSE check in
+	  configure rather than checking architectures here.
+	  (man_getopt): Wrap the remaining code related to --html in '#ifdef
+	  ENABLE_HTML'.
+	  (make_roff_command): Remove HAS_TROFF and NROFF_MISSING asserts; I
+	  think they're unnecessarily unwieldy here.
+	  (tmp_cat_filename): Constify argument.
+	  (commit_tmp_cat): Constify arguments.
+	  (display_catman): New function, split from display().
+	  (display): Use display_catman(). Don't shadow status from an outer
+	  scope.
+	  (try_section): Simplify cat page case.
+
+	* src/util.c (escape_shell): New function.
+	* include/manconfig.h.in: strappend() is no longer in util.c.
+	  Prototype escape_shell().
+	* src/man.c (make_roff_command): Use escape_shell() liberally to
+	  protect against strange characters.
+	  (make_display_command): Likewise. Add special handling for $MAN_PN
+	  in the less prompt string, since the environment variable is no
+	  longer parsed by the shell.
+	  (display_catman): Likewise.
+	  (display): Likewise.
+	* src/whatis.c (use_grep): Likewise.
+
+	* src/catman.c (main): Print a warning if setlocale() fails.
+	* src/man.c (main): Likewise.
+	* src/mandb.c (main): Likewise.
+	* src/manpath.c (main): Likewise.
+	* src/whatis.c (main): Likewise.
+	* src/wrapper.c (main): Explain why this doesn't need to warn if
+	  setlocale() fails.
+
 Thu Aug  9 15:10:26 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in: Require autoconf 2.50a (for AS_VAR_*).

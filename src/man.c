@@ -141,6 +141,9 @@ extern uid_t euid;
 #  define DEFAULT_MANROFFSEQ ""
 #endif
 
+/* placeholder for the manual page name in the less prompt string */
+#define MAN_PN "$MAN_PN"
+
 /* Some systems lack these */
 #ifndef STDIN_FILENO
 #  define STDIN_FILENO 0
@@ -201,10 +204,6 @@ static int skip;		/* page exists but has been skipped */
 
 #if defined _AIX || defined __sgi
 char **global_argv;
-#endif
-
-#if defined(__ultrix) || defined(__alpha)
-#define BROKEN_PCLOSE
 #endif
 
 #ifdef MAN_CATS
@@ -488,7 +487,6 @@ static const struct option long_options[] =
     {"catman", no_argument, 		0, 'c'},
 
 #ifdef HAS_TROFF
-
     {"troff", no_argument, 		0, 't'},
     {"troff-device", optional_argument,	0, 'T'},
 # ifdef TROFF_IS_GROFF
@@ -503,12 +501,14 @@ static const struct option long_options[] =
 
 static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::we:L:Zcr:X::";
 
-#  ifdef TROFF_IS_GROFF
+# ifdef TROFF_IS_GROFF
 static int ditroff;
+static char *gxditview;
+#  ifdef ENABLE_HTML
 static int htmlout;
 static char *html_pager;
-static char *gxditview;
-#  endif /* TROFF_IS_GROFF */
+#  endif /* ENABLE_HTML */
+# endif /* TROFF_IS_GROFF */
 
 #else /* !HAS_TROFF */
 
@@ -884,7 +884,10 @@ int main (int argc, char *argv[])
 
 	umask (022);
 	/* initialise the locale */
-	setlocale (LC_ALL, "");
+	if (!setlocale (LC_ALL, ""))
+		/* Obviously can't translate this. */
+		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
+			     "are correct");
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 
@@ -982,8 +985,10 @@ int main (int argc, char *argv[])
 
 #endif /* HAVE_SETLOCALE */
 
+#ifdef ENABLE_HTML
 	if (htmlout)
 		pager = (html_pager == NULL ? WEB_BROWSER : html_pager);
+#endif
 	if (pager == NULL) {
 		pager = getenv ("PAGER");
 		if (pager == NULL)
@@ -997,8 +1002,8 @@ int main (int argc, char *argv[])
 		prompt_string = LESS_PROMPT;
 #else
 		prompt_string = _(
-				" Manual page $MAN_PN "
-				"?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):"
+				" Manual page " MAN_PN
+				" ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):"
 				"?pB %pB\\\\%..");
 #endif
 
@@ -1209,19 +1214,21 @@ static void man_getopt (int argc, char *argv[])
 #ifdef TROFF_IS_GROFF
 				troff = 1;
 				gxditview = (optarg ? optarg : "75");
-#endif/* TROFF_IS_GROFF */
+#endif /* TROFF_IS_GROFF */
 				break;
+#ifdef ENABLE_HTML
 			case 'H':
 #ifdef TROFF_IS_GROFF
 				html_pager = (optarg ? optarg : 0);
 				htmlout = 1;
-#endif/* TROFF_IS_GROFF */
+#endif /* TROFF_IS_GROFF */
 				break;
+#endif
 			case 'Z':
 #ifdef TROFF_IS_GROFF
 				ditroff = 1;
 				troff = 1;
-#endif/* TROFF_IS_GROFF */
+#endif /* TROFF_IS_GROFF */
 				break;
 #endif /* HAS_TROFF */
 		    	case 'w':
@@ -1559,18 +1566,23 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		else
 			dev = "";
 
-		if (*file)
+		if (*file) {
+			char *esc_file = escape_shell (file);
 			command = strappend (NULL, get_def ("soelim", SOELIM),
-					     " '", file, "'", NULL); 
-		else
+					     " ", esc_file, NULL); 
+			free (esc_file);
+		} else {
+			char *esc_tmpfile = escape_shell (stdin_tmpfile);
 			/* Reading from stdin: use cat to pick up the part we
 			 * read in to figure out the format pipeline.
 			 * ? is '-' as a cat argument standard?
 			 * If not we could try "(cat tempfile; cat) | SOELIM..."
 			 */
 			command = strappend (NULL, get_def ("cat", CAT), " ",
-					     stdin_tmpfile, " - | ",
+					     esc_tmpfile, " - | ",
 					     get_def ("soelim", SOELIM), NULL);
+			free (esc_tmpfile);
+		}
 
 		/* Preformatted pages get standard 80-character lines. */
 		if (!catman) {
@@ -1631,19 +1643,10 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 							    " -Z", NULL);
 				else
 #endif
-                                if (troff) {
-#ifdef HAS_TROFF
+                                if (troff)
 					filter = get_def ("troff", TROFF);
-#else
-					assert (0);
-#endif
-                                } else {
-#ifdef NROFF_MISSING
-					assert (0);
-#else
+                                else
 					filter = get_def ("nroff", NROFF);
-#endif
-                                }
 
 				wants_dev = 1;
 				break;
@@ -1677,9 +1680,12 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
 		   output device */
-		command = strappend (fmt_prog,
-				     " '", file, "' \"", pp_string, "\" ",
+		char *esc_file = escape_shell (file);
+		char *esc_pp   = escape_shell (pp_string);
+		command = strappend (fmt_prog, " ", esc_file, " ", esc_pp, " ",
 				     roff_device ? roff_device : "", NULL);
+		free (esc_pp);
+		free (esc_file);
 	}
 
 	return command;
@@ -1689,20 +1695,38 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 static char *make_display_command (char *file, char *title)
 {
 	char *command;
+	char *esc_file = escape_shell (file);
+	/* The title needs to be escaped both for less and for the shell. */
+	char *esc_title = escape_shell (escape_special (title));
+	char *less_opts = strappend (NULL, LESS_OPTS, prompt_string, "$",
+				     getenv ("LESS"), NULL);
+	char *esc_less_opts;
+	char *man_pn = strstr (less_opts, MAN_PN);
+	while (man_pn) {
+		char *subst_opts =
+			xmalloc (strlen (less_opts) - strlen (MAN_PN) +
+				 strlen (esc_title) + 1);
+		strncpy (subst_opts, less_opts, man_pn - less_opts);
+		subst_opts[man_pn - less_opts] = '\0';
+		strcat (subst_opts, esc_title);
+		strcat (subst_opts, man_pn + strlen (MAN_PN));
+		free (less_opts);
+		less_opts = subst_opts;
+		man_pn = strstr (less_opts, MAN_PN);
+	}
+	esc_less_opts = escape_shell (less_opts);
 
-	command = strappend (NULL, "{ export MAN_PN LESS; MAN_PN=\'",
-			     escape_special (title),
-			     "\'; LESS=\"" LESS_OPTS, prompt_string,
-			     "\\$$LESS\"; ", NULL);
+	command = strappend (NULL, "{ LESS=", esc_less_opts, "; export LESS; ",
+			     NULL);
 	if (file) {
 		if (ascii)
 			command = strappend (command, get_def ("cat", CAT), 
-					     " '", file, "' |",
+					     " ", esc_file, " |",
 					     get_def ("tr", TR TR_SET1 TR_SET2),
 					     " |", pager, "; }", NULL);
 		else
-			command = strappend (command, pager, " '", file, 
-					     "'; }", NULL);
+			command = strappend (command, pager, " ", esc_file, 
+					     "; }", NULL);
 	} else {
 		if (ascii)
 			command = strappend (command,
@@ -1712,12 +1736,17 @@ static char *make_display_command (char *file, char *title)
 			command = strappend (command, pager, "; }", NULL);
 	}
 
+	free (esc_less_opts);
+	free (less_opts);
+	free (esc_title);
+	free (esc_file);
+
 	return command;
 }
 
 
 /* return a (malloced) temporary name in cat_file's directory */
-static char *tmp_cat_filename (char *cat_file)
+static char *tmp_cat_filename (const char *cat_file)
 {
 	char *name = xmalloc (strlen (cat_file) + 12);
 	char *base;
@@ -1731,7 +1760,8 @@ static char *tmp_cat_filename (char *cat_file)
 /* If delete unlink tmp_cat, else commit tmp_cat to cat_file.
    Return non-zero on error.
  */
-static int commit_tmp_cat (char *cat_file, char *tmp_cat, int delete)
+static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
+			   int delete)
 {
 	int status = 0;
 
@@ -2009,6 +2039,38 @@ static int format_display_and_save (char *roff_cmd, char *disp_cmd,
 }
 #endif /* MAN_CATS */
 
+/* "Display" a page in catman mode, which amounts to saving it. */
+static void display_catman (const char *cat_file, const char *roff_cmd)
+{
+	char *tmpcat = tmp_cat_filename (cat_file);
+	char *esc_tmpcat = escape_shell (tmpcat);
+	char *cmd;
+	int status;
+
+#ifdef COMP_CAT
+	cmd = strappend (NULL, roff_cmd, " | ",
+			 get_def ("compressor", COMPRESSOR),
+			 " > ", esc_tmpcat);
+#else /* !COMP_CAT */
+	cmd = strappend (NULL, roff_cmd, " > ", esc_tmpcat);
+#endif /* COMP_CAT */
+	/* save the cat as real user
+	 * (1) required for user man hierarchy
+	 * (2) else depending on ruid's privs is ok, effectively disables
+	 *     catman for non-root.
+	 */
+	push_cleanup ((void (*)()) unlink, tmpcat);
+	status = do_system_drop_privs (cmd);
+	if (status)
+		gripe_system (cmd, status);
+	free (cmd);
+
+	commit_tmp_cat (cat_file, tmpcat, status);
+	pop_cleanup();
+	free (esc_tmpcat);
+	free (tmpcat);
+}
+
 /*
  * optionally chdir to dir, if necessary update cat_file from man_file
  * and display it.  if man_file is NULL cat_file is a stray cat.  If
@@ -2089,9 +2151,8 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 
 			if (man_file && catpath) {
 				/* we may have a FSSTND cat != cat_file */
-				char *std_cat_file;
-	
-				std_cat_file = convert_name (man_file, NULL);
+				char *std_cat_file =
+					convert_name (man_file, NULL);
 				status = is_changed (man_file, std_cat_file);
 	
 				if (status != -2 && !(status & 1) == 1) {
@@ -2116,7 +2177,6 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			save_cat = 0;
 			format = 1;
 		} else if (format && save_cat) {
-			int status;
 			char *cat_dir;
 			char *tmp;
 
@@ -2165,44 +2225,14 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			putchar ('\n');
 		} else if (catman) {
 			if (format) {
-				if (!save_cat) {
+				if (!save_cat)
 					error (0, 0,
 					       _("\ncannot write to "
 						 "%s in catman mode"),
 					       cat_file);
-				} else {
-					char *tmpcat =
-						tmp_cat_filename (cat_file);
-					cmd = strappend (NULL, roff_cmd,
-#ifdef COMP_CAT	
-							 " | ",
-							 get_def ("compressor",
-								  COMPRESSOR),
-							 " >",
-#else
-							 " >",
-#endif /* COMP_CAT */
-							 tmpcat, NULL);
-					/* save the cat as real user
-					 * (1) required for user man hierarchy
-					 * (2) else depending on ruid's privs
-					 *     is ok, effectively disables
-					 *     catman for non-root.
-					 */
-					push_cleanup ((void (*)()) unlink,
-						      tmpcat);
-					status = do_system_drop_privs (cmd);
-					if (status)
-						gripe_system (cmd, status);
-					free (cmd);
-
-					commit_tmp_cat (cat_file, tmpcat,
-							status);
-					pop_cleanup ();
-					free (tmpcat);
-				}
+				else
+					display_catman (cat_file, roff_cmd);
 			}
-
 		} else if (format) {
 			/* no cat or out of date */
 			char *disp_cmd;
@@ -2244,6 +2274,8 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 
 		} else {
 			/* display preformatted cat */
+			char *disp_cmd;
+			char *esc_cat_file;
 #if defined(COMP_SRC)
 			struct compression *comp;
 
@@ -2255,18 +2287,16 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 
 			comp = comp_info (cat_file);
 			if (comp) {
-				char *disp_cmd;
-
 				disp_cmd = make_display_command (NULL, title);
+				esc_cat_file = escape_shell (cat_file);
 				cmd = strappend (NULL, comp->prog,
-						 " '", cat_file,
-						 "' | ", disp_cmd, NULL);
-				free(disp_cmd);
+						 " ", esc_cat_file,
+						 " | ", disp_cmd, NULL);
+				free (esc_cat_file);
+				free (disp_cmd);
 			} else 
 				cmd = make_display_command (cat_file, title);
 #elif defined(COMP_CAT)
-			char *disp_cmd;
-
 			if (pause && do_prompt(title)) {
 				if (roff_cmd)
 					free (roff_cmd);
@@ -2274,10 +2304,12 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			}
 
 			disp_cmd = make_display_command (NULL, title);
+			esc_cat_file = escape_shell (cat_file);
 			cmd = strappend (NULL, 
 					 get_def("decompressor", DECOMPRESSOR),
-					 " '", cat_file,
-					 "' | ", disp_cmd, NULL);
+					 " ", esc_cat_file,
+					 " | ", disp_cmd, NULL);
+			free (esc_cat_file);
 			free (disp_cmd);
 #else /* !(COMP_SRC || COMP_CAT) */
 			if (pause && do_prompt(title)) {
@@ -2360,18 +2392,16 @@ static int try_section (char *path, char *sec, char *name)
 		if (!troff) {
 			names = look_for_file (path, sec, name, 1);
 
-			if (names)
-				for (np = names; *np; np++) {
-					found += display (path, NULL, *np, 
-							  title);
-					if (found && !findall)
-						break;
-				}
+			for (np = names; np && *np; np++) {
+				found += display (path, NULL, *np, title);
+				if (found && !findall)
+					break;
+			}
 		}
 	}
 #ifndef NROFF_MISSING
 	else {
-		for (np = names; *np ; np++) {
+		for (np = names; *np; np++) {
 			char *man_file;
 			char *cat_file;
 			struct mandata info;
@@ -2872,8 +2902,8 @@ static __inline__ char **get_section_list (void)
 	if (colon_sep_section_list == NULL || *colon_sep_section_list == '\0')
 		return config_sections;
 
-	for (sec = strtok(colon_sep_section_list, ":"); sec; 
-	     sec = strtok(NULL, ":")) {
+	for (sec = strtok (colon_sep_section_list, ":"); sec; 
+	     sec = strtok (NULL, ":")) {
 		sections = (char **) xrealloc (sections,
  					       (i + 2) * sizeof (char *));
  		sections[i++] = sec;
@@ -2908,7 +2938,7 @@ static __inline__ int do_prompt (char *name)
 	fflush (stderr);
 
 	do {
-		ch = getchar();
+		ch = getchar ();
 		switch (ch) {
 			case '\n':
 				return 0;

@@ -375,13 +375,16 @@ int main (int argc, char *argv[])
 
 	/* initialise the locale */
 	locale = setlocale (LC_ALL, "");
+	if (locale)
+		locale = xstrdup (locale);
+	else {
+		/* Obviously can't translate this. */
+		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
+			     "are correct");
+		locale = "C";
+	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
-
-	if (locale != NULL)
-		locale = xstrdup (locale);
-	else
-		locale = "C";
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, &option_index)) != EOF) {
