@@ -117,10 +117,11 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 			raw_whatis = NULL; /* kill entire whatis line */
 		}
 	}
+	info->pointer = NULL;	/* direct page, so far */
 	
 	/* Here we store the direct reference */
 	if (debug)
-		fprintf (stderr, "base_name = %s\n", base_name);
+		fprintf (stderr, "base_name = `%s'\n", base_name);
 
 	ret = dbstore (info, base_name);
 	if (ret > 0)
@@ -173,13 +174,13 @@ int splitline (char *raw_whatis, struct mandata *info, char *base_name)
 }
 
 /* take absolute filename and path (for ult_src) and do sanity checks on 
-   file. Also check that file is non zero in length and is not already in
-   the db. If not, find it's ult_src() and see if we have the whatis cached, 
-   otherwise cache it incase we trace another manpage back to it. Next, store 
-   it in the db along with any references found in the whatis. */
+   file. Also check that file is non-zero in length and is not already in
+   the db. If not, find its ult_src() and see if we have the whatis cached, 
+   otherwise cache it in case we trace another manpage back to it. Next,
+   store it in the db along with any references found in the whatis. */
 void test_manfile (char *file, const char *path)
 {
-	char *base_name, *ult, *sep;
+	char *base_name, *ult;
 	struct lexgrog lg;
 	char *manpage;
 	struct mandata info, *exists;
@@ -334,7 +335,6 @@ void test_manfile (char *file, const char *path)
 	}
 
 	pages++;			/* pages seen so far */
-	info.pointer = NULL;		/* we have a direct page (so far) */
 
 #ifdef COMP_SRC
 	if (strncmp (ult, file, len) == 0)
@@ -384,19 +384,38 @@ void test_manfile (char *file, const char *path)
 	/* split up the raw whatis data and store references */
 	info.filter = lg.filters;
 	if (lg.whatis) {
+		int last_name;
 		char save_id = info.id;
 		info.id = WHATIS_MAN;
-		while ((sep = strrchr (lg.whatis, 0x11))) {
-			char *othername, *end_othername;
+		/* If there's only one entry, don't bother inserting a
+		 * WHATIS_MAN for it. Really we should compare against
+		 * lg.whatis, but that's awkward here ...
+		 */
+		if (strchr (lg.whatis, 0x11))
+			last_name = 0;
+		else
+			last_name = 1;
+		/* It's easier to run through the names in reverse order. */
+		while (!last_name) {
+			char *sep, *othername, *end_othername;
 			/* Get the next name, with leading spaces and the
 			 * description removed.
 			 */
-			*(sep++) = '\0';
+			sep = strrchr (lg.whatis, 0x11);
+			if (sep)
+				*(sep++) = '\0';
+			else {
+				sep = lg.whatis;
+				last_name = 1;
+			}
 			sep += strspn (sep, " ");
 			othername = xstrdup (sep);
 			end_othername = strstr (othername, " - ");
-			if (end_othername)
+			if (end_othername) {
+				while (*(end_othername - 1) == ' ')
+					--end_othername;
 				*end_othername = '\0';
+			}
 			if (!opt_test)
 				splitline (sep, &info, othername);
 			free (othername);
@@ -418,24 +437,10 @@ void test_manfile (char *file, const char *path)
 			       ult, base_name, info.ext);
 	}
 
-	if (!opt_test && lg.whatis) {
-		/* Say we have foo.1 and bar.1 as links to the same page. We
-		 * don't want to add just one of them, as they might have
-		 * phantom whatis refs that it's nice to pick up, so we add
-		 * everything in the whatis line. However, if we do this for
-		 * foo.1, we'll run into problems when we get to bar.1 if
-		 * the base name is different. Thus we use the first whatis
-		 * name as the base name rather than whatever the filesystem
-		 * says.
-		 */
-		char *whatis_name = xstrdup (lg.whatis);
-		char *end_whatis_name = strpbrk (whatis_name, " ,-");
-		if (end_whatis_name)
-			*end_whatis_name = '\0';
-		if (splitline (lg.whatis, &info, whatis_name) == 1)
+	if (!opt_test)
+		if (splitline (lg.whatis, &info, base_name) == 1)
 			gripe_multi_extensions (path, info.sec,
 						base_name, info.ext);
-	}
 
 	free (manpage);
 	if (lg.whatis)
@@ -494,7 +499,7 @@ static short testmandirs (const char *path, time_t last)
 		fprintf (stderr, "Testing %s for new files\n", path);
 
 	dir = opendir (path);
-	if (dir) {
+	if (!dir) {
 		error (0, errno, _("can't search directory %s"), path);
 		return 0;
 	}

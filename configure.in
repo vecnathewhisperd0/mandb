@@ -48,7 +48,6 @@ AC_ARG_ENABLE(debug,
 	  MAN_ECHO("Enabling debugging Makefile")
 	  debug=on],
 	 [: ${CFLAGS=-g -O2}
-	  : ${LDFLAGS=-s}
 	  : ${LIBS=-lc}
 	  AC_DEFINE(NDEBUG)
 	  debug=off])

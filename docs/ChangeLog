@@ -1,3 +1,23 @@
+Sat Jun 16 18:30:09 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_store.c: Move id-favouring logic to a macro. If
+	  FAVOUR_STRAYCATS is set, make sure a WHATIS_MAN entry won't
+	  inadvertently replace a STRAY_CAT.
+
+	* configure.in: Don't strip binaries in LDFLAGS (GNU standards).
+
+	* src/check_mandirs.c (testmandirs): Check that opendir() succeeded,
+	  not that it failed!
+	  (testmandirs): Instead of initializing info.pointer here,
+	  initialize it ...
+	  (splitline): ... here.
+	  (testmandirs): Shuffle whatis logic some more, to make sure pages
+	  that really are in the filesystem don't end up as WHATIS_MAN. This
+	  reverts part of the change of 26 May 2001.
+
+	* man/man8/mandb.man8: Document the expected format of NAME sections
+	  for whatis parsing, and some common reasons why parsing fails.
+
 Tue Jun 12 22:20:17 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: More 2.3.19 stuff.

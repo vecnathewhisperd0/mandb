@@ -54,16 +54,22 @@ static void gripe_insert_unused(char *data)
 	gripe_corrupt_data();
 }
 
+/* FAVOUR(a,b) is true if id 'a' is preferred to id 'b', i.e. if 'a' is a
+ * more canonical database entry than 'b'. This usually goes in comparison
+ * order, but there's a special exception when FAVOUR_STRAYCATS is set.
+ */
+#ifdef FAVOUR_STRAYCATS
+#define FAVOUR(a,b) ((a < b && !(a == WHATIS_MAN && b == STRAY_CAT)) || \
+		     (a == STRAY_CAT && b == WHATIS_MAN))
+#else /* !FAVOUR_STRAYCATS */
+#define FAVOUR(a,b) (a < b)
+#endif /* FAVOUR_STRAYCATS */
+
 /* The do_we_replace logic */
 static int replace_if_necessary(struct mandata *in, struct mandata *info, 
 				datum newkey, datum newcont)
 {
-#ifndef FAVOUR_STRAYCATS
-	if (in->id < info->id) {
-#else /* FAVOUR_STRAYCATS */
-	if (in->id < info->id ||
-	    (in->id == STRAY_CAT && info->id == WHATIS_MAN)) {
-#endif /* !FAVOUR_STRAYCATS */
+	if (FAVOUR(in->id, info->id)) {
 		if (MYDBM_REPLACE(dbf, newkey, newcont))
 			gripe_replace_key(newkey.dptr);
 	} else if (in->id == info->id) 
