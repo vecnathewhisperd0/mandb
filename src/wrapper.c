@@ -1,23 +1,24 @@
 /*
  * wrapper.c - wrapper program around man and mandb
- * Copyright (c) 2000 Fabrizio Polacco, <fpolacco@debian.org>
- * This source file is part of the package man-db
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 dated June, 1991.
+ * Copyright (C) 2000 Fabrizio Polacco <fpolacco@debian.org>
+ * Copyright (C) 2001, 2002 Colin Watson.
  *
- * This program is distributed in the hope that it will be useful, but
+ * This file is part of man-db.
+ *
+ * man-db is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * man-db is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * A copy of the GNU General Public License is available in
- * the original source package which contains this file, or, on a Debian
- * GNU/Linux system, in /usr/share/common-license/GPL (as installed by
- * package base-files); if not, write to the Free Software Foundation,
- * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. 
- *
+ * You should have received a copy of the GNU General Public License
+ * along with man-db; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include <string.h>

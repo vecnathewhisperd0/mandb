@@ -1,14 +1,29 @@
 #!/usr/bin/perl -w
 
-  # chconfig
-  # (c) 1999 Fabrizio Polacco <fpolacco@prosa.it>
-  #
-  # tool to convert the man-db configuration file to the FHS.
-  # it slurps the file in argument (default /etc/manpath.config) and,
-  # unless exists in it a single line containing the keyword
-  #		NOFHS
-  # it tries to make the changes to comply with FHS.
-  #
+# chconfig
+# Copyright (C) 1999 Fabrizio Polacco <fpolacco@prosa.it>
+#
+# This file is part of man-db.
+#
+# man-db is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# man-db is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with man-db; if not, write to the Free Software Foundation,
+# Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# tool to convert the man-db configuration file to the FHS.
+# it slurps the file in argument (default /etc/manpath.config) and,
+# unless exists in it a single line containing the keyword
+#		NOFHS
+# it tries to make the changes to comply with FHS.
 
 push @ARGV, "/etc/manpath.config" unless @ARGV;
 	print "  Upgrading $ARGV[0]\n";
