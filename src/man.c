@@ -576,6 +576,21 @@ static int get_roff_line_length (void)
 		return 0;
 }
 
+static char *add_roff_line_length (char *filter, int *save_cat)
+{
+	int length = get_roff_line_length ();
+	if (length) {
+		char ll_option[32], lt_option[32];
+		if (debug)
+			fprintf (stderr, "Using %d-character lines\n", length);
+		*save_cat = 0;
+		sprintf (ll_option, " -rLL=%d.%di", length / 10, length % 10);
+		sprintf (lt_option, " -rLT=%d.%di", length / 10, length % 10);
+		return strappend (NULL, filter, ll_option, lt_option, NULL);
+	}
+	return filter;
+}
+
 /*
  * changed these messages from stdout to stderr,
  * (Fabrizio Polacco) Fri, 14 Feb 1997 01:30:07 +0200
@@ -1543,6 +1558,11 @@ static __inline__ char *make_roff_command (const char *dir, const char *file)
 
 		/* Preformatted pages get standard 80-character lines. */
 		if (!catman) {
+			/* This code is for groff < 1.18. groff >= 1.18 uses
+			 * a different mechanism; see add_roff_line_length().
+			 * However, this does no harm, so it's here for
+			 * backward compatibility.
+			 */
 			int roff_line_length = get_roff_line_length();
 			if (roff_line_length) {
 				char ll_macro[32], *new_command;
@@ -1602,8 +1622,13 @@ static __inline__ char *make_roff_command (const char *dir, const char *file)
 #endif
                                 if (troff)
 					filter = get_def ("troff", TROFF);
-                                else
+                                else {
 					filter = get_def ("nroff", NROFF);
+#ifdef TROFF_IS_GROFF
+					filter = add_roff_line_length
+						(filter, &save_cat);
+#endif
+				}
 
 				wants_dev = 1;
 				break;

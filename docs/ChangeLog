@@ -1,3 +1,10 @@
+Fri May  3 19:27:40 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (add_roff_line_length): New function, adding -rLL and
+	  -rLT to the groff command line (supported in groff >= 1.18).
+	  (make_roff_command): Call add_roff_line_length(). The old code to
+	  set .ll and .lt remains for compatibility purposes.
+
 Wed May  1 02:16:11 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/check_mandirs.c (testmandirs): Include the subdirectory name
