@@ -125,6 +125,7 @@ AC_PROG_RANLIB
 AC_PATH_PROG(cat, cat)
 AC_PATH_PROG(lynx, lynx)
 AC_PATH_PROG(tr, tr)
+AC_PATH_PROG(grep, grep)
 dnl
 if test -s /etc/debian_version
 then 	AC_PATH_PROGS(pager, pager)
@@ -505,7 +506,7 @@ dnl Check for available functions.
 dnl
 AC_CHECK_FUNCS(getcwd getwd, break)
 AC_CHECK_FUNCS(atexit on_exit, break)
-AC_CHECK_FUNCS(setreuid strerror)
+AC_CHECK_FUNCS(seteuid setreuid setresuid strerror)
 AC_CHECK_FUNCS(canonicalize_file_name)
 AC_CHECK_FUNC(setlocale,
   AC_DEFINE(HAVE_SETLOCALE)
@@ -535,16 +536,17 @@ MAN_ECHO_VAR(CPPFLAGS)
 MAN_ECHO_VAR(CFLAGS)
 MAN_ECHO_VAR(LDFLAGS)
 MAN_ECHO_VAR(LIBS)
-AC_OUTPUT([GNUmakefile \
-	lib/Makefile \
-	src/Makefile \
-	man/Makefile \
-	libdb/Makefile \
-	zsoelim/Makefile \
-	include/Defines \
-	include/comp_src.h \
-	include/manconfig.h \
-	intl/Makefile \
+AC_OUTPUT([GNUmakefile
+	lib/Makefile
+	src/Makefile
+	src/man_db.conf
+	man/Makefile
+	libdb/Makefile
+	zsoelim/Makefile
+	include/Defines
+	include/comp_src.h
+	include/manconfig.h
+	intl/Makefile
 	po/Makefile.in], \
 	[sed -e "/POTFILES =/r po/POTFILES" po/Makefile.in > po/Makefile ]) 
 date > stamp-h

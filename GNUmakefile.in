@@ -35,6 +35,7 @@ VERSION = @VERSION@
 
 # GNUmakefile and include/Defines are automatic targets, don't add below.
 INCLUDES := $(addprefix include/, config.h manconfig.h comp_src.h)
+CONF = src/man_db.conf
 EVERYTHING = lib libdb src zsoelim man intl po
 ALL = lib libdb src zsoelim man intl po
 INSTALL = src zsoelim man intl po
@@ -48,7 +49,7 @@ include include/Defines
 ifeq ($(nls),on)
 languages = $(notdir $(wildcard $(top_srcdir)/nls/*_*))
 
-default: $(INCLUDES)
+default: $(INCLUDES) $(CONF)
 	@echo " "
 	@echo "./configure has determined that your system understands native language"
 	@echo "support (nls) message catalogues.  This package is able to exploit this"
@@ -83,7 +84,7 @@ all: $(ALL)
 
 endif # nls = on
 
-$(EVERYTHING): $(INCLUDES) nls_defines
+$(EVERYTHING): $(INCLUDES) $(CONF) nls_defines
 	$(MAKE) -C $@ $(targets)
 
 # Automatic regeneration targets
@@ -112,14 +113,19 @@ config.status: $(srcdir)/configure
 # The following 3 rules must be explicit as using a pattern match rule would
 # pick up include/config.h as a target which would be wrong.
 
+BUILD.in = CONFIG_HEADERS= CONFIG_FILES=$@ ./config.status
+
 include/manconfig.h: include/manconfig.h.in config.status
-	CONFIG_HEADERS= CONFIG_FILES=$@ ./config.status
+	$(BUILD.in)
 
 include/comp_src.h: include/comp_src.h.in config.status
-	CONFIG_HEADERS= CONFIG_FILES=$@ ./config.status
+	$(BUILD.in)
 
 include/Defines: include/Defines.in config.status
-	CONFIG_HEADERS= CONFIG_FILES=$@ ./config.status
+	$(BUILD.in)
+
+src/man_db.conf: src/man_db.conf.in config.status
+	$(BUILD.in)
 
 # Special targets
 ID:
@@ -131,7 +137,7 @@ nls_defines:
 	sed -e 's/^nls = .*/nls = $(nls)/' include/Defines.old > include/Defines
 
 # Just make sure that all configure created files are up to date
-update: nls_defines $(INCLUDES) $(addsuffix /Makefile, $(EVERYTHING))
+update: nls_defines $(INCLUDES) $(CONF) $(addsuffix /Makefile, $(EVERYTHING))
 
 # testsuite doesn't exist
 testsuite:
@@ -170,7 +176,7 @@ __TAGS:
 # Normal targets and dependencies.
 # If the make variable clean is set to yes, no dependencies are re-created
 
-install: $(INCLUDES) nls_defines
+install: $(INCLUDES) $(CONF) nls_defines
 
 install uninstall:
 	for i in $(INSTALL); do $(MAKE) prefix=../$(prefix) -C $$i $@; done
@@ -203,7 +209,7 @@ _lib = *.[ch]
 _libdb = *.[ch] stamp-h COPYING.LIB
 _man = man?/*.man? */man?/*.man? THANKS
 _nls = nls.h *_*/*.m THANKS
-_src = README.lexgrog *.[chl] *.l-* man_db.config stamp-h
+_src = README.lexgrog *.[chl] *.l-* man_db.conf.in stamp-h
 _tools = checkman install-sh mandb_\[nt\]fmt-script mkcatdirs \
 	 mkinstalldirs nroff-script
 _xcat = Register xcat.[cl]

@@ -36,34 +36,79 @@ extern int errno;
 #  include <sys/wait.h>
 #endif
 
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-
 #include <libintl.h>
 #define _(String) gettext (String)
 
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/cleanup.h"
-#include "security.h"
 
 #ifdef SECURE_MAN_UID
-uid_t ruid;			/* initial real user id */
-uid_t euid;			/* initial effective user id */
-#endif /* SECURE_MAN_UID */
 
-/* 
- * If you want to try to understand the following routines, go make 
- * a coffee, you'll need it. (a copy of your kernel sources may also 
- * be handy :-)
- */
+   /*
+    * This is the name of the user that the preformatted man pages belong to.
+    * If you are running man as a setuid program, you should make sure
+    * that all of the cat pages and the directories that
+    * they live in are writeable by this user.
+    */
 
-#ifdef SECURE_MAN_UID
+#  ifdef HAVE_UNISTD_H
+#    include <unistd.h> 			/* for _POSIX_SAVED_IDS */
+#    if defined(_POSIX_SAVED_IDS)
+#      if defined(__ultrix__)
+         /* Ultrix pretends to have saved uids, but hasn't unless: */
+#        if defined(POSIX) || defined(SYSTEM_FIVE)
+#          define POSIX_SAVED_IDS
+#        endif /* POSIX || SYSTEM_FIVE */
+#      else /* !ultrix */
+#        define POSIX_SAVED_IDS
+#      endif /* ultrix */
+#    endif /* _POSIX_SAVED_IDS */
+#  endif /* HAVE_UNISTD_H */
+
+/* Sort out the function to use to set the euid.  Used if we have suid */
+  
+#  ifdef POSIX_SAVED_IDS
+#    if defined (HAVE_SETEUID)
+#      define SET_EUID(euid)		seteuid(euid)
+#    elif defined (HAVE_SETREUID)
+#      define SET_EUID(euid)		setreuid(-1, euid)
+#    elif defined (HAVE_SETRESUID)
+#      define SET_EUID(euid)		setresuid(-1, euid, -1)
+#    endif /* HAVE_SETEUID */
+
+/* Sort out the function to use to swap ruid with euid.  Used if no suid. */
+
+#  else /* !POSIX_SAVED_IDS */
+#    if defined (HAVE_SETREUID)
+#      define SWAP_UIDS(ida, idb)	setreuid(idb, ida)
+#    elif defined (HAVE_SETRESUID)
+#      define SWAP_UIDS(ida, idb)	setresuid(idb, ida, -1)
+#      warning Using setresuid() whithout _POSIX_SAVED_IDS!
+#    endif /* HAVE_SETREUID */
+#  endif /* POSIX_SAVED_IDS */
+
+#  if defined (POSIX_SAVED_IDS) && !defined (SET_EUID) || \
+    !defined (POSIX_SAVED_IDS) && !defined (SWAP_UIDS)
+#    error Cannot compile man as a setuid program: insufficient seteuid funcs.
+#  endif
+
+static uid_t ruid;			/* initial real user id */
+static uid_t euid;			/* initial effective user id */
+static uid_t uid;			/* current euid */
 
 static __inline__ void gripe_set_euid()
 {
 	error (FATAL, errno, _( "can't set effective uid"));
+}
+
+void init_security(void)
+{
+	ruid = getuid();
+	uid = euid = geteuid();
+	if (debug)
+		fprintf(stderr, "ruid=%d, euid=%d\n", (int) ruid, (int) euid);
+	drop_effective_privs();
 }
 
 #endif /* SECURE_MAN_UID */
@@ -76,30 +121,19 @@ static __inline__ void gripe_set_euid()
 void drop_effective_privs (void)
 {
 #ifdef SECURE_MAN_UID
-
-	/* user is root or we've already dropped privs */
-	if (ruid == 0 || geteuid() == ruid)
-		return;
-		
-	if (debug)
-		fputs("drop_effective_privs()\n", stderr);
-		
+	if (uid != ruid) {
+		if (debug)
+			fputs("drop_effective_privs()\n", stderr);
 #  if defined (POSIX_SAVED_IDS)
-	if (seteuid (ruid))
-		gripe_set_euid();
-	
-#  elif defined(BROKEN_LINUX_SAVED_IDS)
-	if (setuid (ruid))
-		gripe_set_euid();
-	
-#  elif defined(HAVE_SETREUID) /* fallback (could just be #else ) */
-	if (setreuid (euid, ruid))
-		gripe_set_euid();
-	
-#  endif /* all ways to drop privs */
+		if (SET_EUID (ruid))
+#  else
+		if (SWAP_UIDS (euid, ruid))
+#  endif 
+			gripe_set_euid();
 
+		uid = ruid;
+	}
 #endif /* SECURE_MAN_UID */
-
 	return;
 }
 
@@ -110,29 +144,19 @@ void drop_effective_privs (void)
 void regain_effective_privs (void)
 {
 #ifdef SECURE_MAN_UID
-	/* user is root or we've already regained (never dropped) privs */
-	if (ruid == 0 || geteuid() == euid)
-		return;
-		
-	if (debug)
-		fputs("regain_effective_privs()\n", stderr);
-		
-#  if defined(POSIX_SAVED_IDS)
-	if (seteuid (euid))
-		gripe_set_euid();
-	
-#  elif defined(BROKEN_LINUX_SAVED_IDS)
-	if (setuid (euid))
-		gripe_set_euid();
-
-#  elif defined(HAVE_SETREUID) /* fallback (could just be #else ) */
-	if (setreuid (ruid, euid))
-		gripe_set_euid();
-
+	if (uid != euid) {
+		if (debug)
+			fputs("regain_effective_privs()\n", stderr);
+#  if defined (POSIX_SAVED_IDS)
+		if (SET_EUID (euid))
+#  else
+		if (SWAP_UIDS (ruid, euid))
 #  endif
+			gripe_set_euid();
 
+		uid = euid;
+	}
 #endif /* SECURE_MAN_UID */
-
 	return;
 }
 
@@ -143,7 +167,7 @@ int remove_with_dropped_privs(const char *filename)
 	int ret;
 	
 #ifdef SECURE_MAN_UID
-	if (geteuid() != ruid) {
+	if (uid != ruid) {
 		drop_effective_privs();
 		ret = remove (filename);
 		if (debug)
@@ -170,62 +194,51 @@ int remove_with_dropped_privs(const char *filename)
  * not required in the child again. (a) does not require a fork() as the
  * system()'d processes will not have suid=MAN_OWNER and will be unable 
  * to gain any man derived priveledges.
- *
- * Obviously (a) is favoured, but there are many implementations...
- * some broken :-(
  */
 int do_system_drop_privs (const char *command)
 {
 #ifdef SECURE_MAN_UID
 	
-#  if defined(POSIX_SAVED_IDS) || defined(BROKEN_LINUX_SAVED_IDS)
-
-	/* if root or we already dropped privs, just do it */
-	if (ruid == 0 || geteuid() == ruid)
+#  if defined(POSIX_SAVED_IDS)
+	if (uid == ruid)
 		return do_system (command);
 	else {
 		int status;
-
 		drop_effective_privs();
 		status = do_system (command);
 		regain_effective_privs();
 		return status;
 	}
 	
-#  elif defined(HAVE_SETREUID) /* fallback (could just be #else ) */
+#  else /* !POSIX_SAVED_IDS */
 
-	/* if root, just do it */
-	if (ruid == 0)
-		return do_system (command);
-	else {
-		pid_t child;
-		int status;
+	pid_t child;
+	int status;
 
-		fflush (NULL);
-		child = fork ();
+	fflush (NULL);
+	child = fork ();
 
-		if (child < 0) {
-			error (0, errno, _( "can't fork"));
-			status = 0;
-		} else if (child == 0) {
-			pop_all_cleanups ();
-			if (setreuid (ruid, ruid))
-				gripe_set_euid();
-			exit (do_system (command));
-		} else {
-			pid_t res;
-			int save = errno;
-			do {	/* cope with non-restarting system calls */
-				res = waitpid (child, &status, 0);
-			} while ((res == -1) && (errno == EINTR));
-			if (res == -1)
-				status = -1;
-			else
-				errno = save;
-		}
-
-		return status;
+	if (child < 0) {
+		error (0, errno, _("can't fork"));
+		status = 0;
+	} else if (child == 0) {
+		pop_all_cleanups ();
+		if (SWAP_UIDS(ruid, ruid))
+			gripe_set_euid();
+		exit (do_system (command));
+	} else {
+		pid_t res;
+		int save = errno;
+		do {	/* cope with non-restarting system calls */
+			res = waitpid (child, &status, 0);
+		} while ((res == -1) && (errno == EINTR));
+		if (res == -1)
+			status = -1;
+		else
+			errno = save;
 	}
+
+	return status;
 #  endif /* all ways to do a sys command after dropping privs */
 
 #else  /* !SECURE_MAN_UID */

@@ -25,24 +25,33 @@ include ../include/Defines
 
 .PHONY: $(DEFAULT_TARGETS)
 
+MANDEFS = $(NLS) -DCONFIG_FILE=\"$(config_file)\" \
+	-DLOCALEDIR=\"$(gnulocaledir)\" $(DEFS_$@)
+MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I- -I../intl
+
 #----------------------------------------------------------------#
 # user changeable definitions can be found in ../include/Defines #
 #----------------------------------------------------------------#
 
 # You may need to modify these options if you have lex instead of flex
 # or flex < 2.4.7 and you want to play with lexgrog.l (developement only)
-#
-FLEXOPTS = -8B -Cem
-LEX := $(LEX) $(FLEXOPTS)
+LFLAGS = -8B -Cem
 
 PROGS = man manpath mandb apropos whatis catman
 TOOLS = accessdb lexgrog globbing
 
-MANCPPFLAGS = -DWHATIS=\"$(bindir)/$(whatis)\" \
-	      -DAPROPOS=\"$(bindir)/$(apropos)\" \
-	      -DSOELIM=\"$(bindir)/$(zsoelim)\"
+# Special definitions for some compilations
+DEFS_man.o = -DWHATIS=\"$(bindir)/$(whatis)\" \
+	     -DAPROPOS=\"$(bindir)/$(apropos)\" \
+	     -DSOELIM=\"$(bindir)/$(zsoelim)\"
+DEFS_catman.o = -DMAN=\"$(bindir)/$(man)\"
+DEFS_whatis.o = -DWHATIS
+DEFS_apropos.o = -DAPROPOS
 
-CATMANCPPFLAGS = -DMAN=\"$(bindir)/$(man)\"
+DEFS_man = $(DEFS_man.o)
+DEFS_catman = $(DEFS_catman.o)
+DEFS_whatis = $(DEFS_whatis.o)
+DEFS_apropos = $(DEFS_apropos.o)
 
 #-------------------------------------------------------------------#
 # This is just to make sure that things are done in the right order #
@@ -54,7 +63,7 @@ all:
 else
 
 # The default programs to build 
-all: manpath mandb apropos whatis catman man accessdb wrapper
+all: manpath mandb apropos whatis catman man accessdb wrapper man_db.conf
 
 #-----------------------------------------------------------------------#
 # If we want any kind of NLS message catalogue support, nls must != off #
@@ -85,11 +94,6 @@ $(MSG_PATHS): $(MSG_DIR)/%.m: $(srcdir)/%.c
   endif
 endif
 
-override CPPFLAGS := $(DEFS) $(NLS) -DCONFIG_FILE=\"$(config_file)\" \
-		-DLOCALEDIR=\"$(gnulocaledir)\" \
-	     -I../include -I$(top_srcdir) -I$(srcdir) -I- -I../intl \
-	     $(CPPFLAGS)
-
 #--------------------#
 # some general rules #
 #--------------------#
@@ -114,32 +118,22 @@ mandb: security.o manp.o util.o ult_src.o check_mandirs.o hashtable.o straycats.
 
 wrapper:	LDLIBS=-lc
 
-catman manpath whatis apropos: security.o manp.o util.o 
-accessdb: util.o ../lib/libman.a
-
-whatis.o: whatis.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -DWHATIS -c $< -o $@
-
-apropos.o: whatis.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -DAPROPOS -c $< -o $@
-
-lexgrog: lexgrog.c ../lib/libman.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) -DTEST $(LDFLAGS) $^ -o $@
-
-man.o: man.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(MANCPPFLAGS) -c $< -o $@
-
-catman.o: catman.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(CATMANCPPFLAGS) -c $< -o $@
-
-globbing: globbing.c ../lib/libman.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) -DTEST $(LDFLAGS) $^ -o $@
-
-# programs that depend on db routines...
+catman manpath whatis apropos: security.o manp.o
+catman manpath whatis apropos accessdb: util.o 
 man mandb catman whatis apropos accessdb: ../libdb/libmandb.a
 
-# All programs depend on these...
 $(PROGS): version.o ../lib/libman.a
+$(TOOLS): ../lib/libman.a
+
+apropos: whatis.c
+	$(LINK.c) $^ $(LDLIBS) -o $@
+
+# Rules to test code as program unit
+lexgrog: lexgrog.c
+	$(LINK.c) -DTEST $^ $(LDLIBS) -o $@
+
+globbing: globbing.c
+	$(LINK.c) -DTEST $^ $(LDLIBS) -o $@
 
 # The standard targets
 install: all
@@ -164,8 +158,8 @@ install: all
 		echo " "; \
 	else \
 		$(MKINSTALLDIRS) $(sysconfdir); \
-		echo "$(INSTALL_DATA) $(srcdir)/man_db.config $(config_file)"; \
-		$(INSTALL_DATA) $(srcdir)/man_db.config $(config_file); \
+		echo "$(INSTALL_DATA) man_db.conf $(config_file)"; \
+		$(INSTALL_DATA) man_db.conf $(config_file); \
 	fi
 
 uninstall:
@@ -175,11 +169,11 @@ uninstall:
 #	rm -f $(config_file)
 
 mostlyclean clean: 
-	rm -f *.o *~ core
+	rm -f *.o *.i *~ core
 	rm -f $(PROGS) $(TOOLS) wrapper
 
 distclean: lexgrog.c clean
-	rm -f *.d *.out Makefile
+	rm -f *.d *.out Makefile man_db.conf
 
 realclean: distclean
 	rm -f lexgrog.c stamp-h tags

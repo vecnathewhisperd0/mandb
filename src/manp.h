@@ -9,4 +9,5 @@ extern char *global_catpath(char *name);
 extern int is_global_mandir(const char *dir);
 extern char * iterate_catlist( int global );
 extern void start_iterator( void);
-extern int get_dirlist (void);
+extern void read_config_file(void);
+extern char *get_def(char *thing, char *def);

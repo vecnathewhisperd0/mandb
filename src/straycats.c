@@ -207,20 +207,24 @@ static __inline__ int check_for_stray(void)
 			if (info.comp)
 				filter = strappend(NULL, 
 					           comp_info(catdir)->prog, " ",
-					           catdir, " | " COL " -bx > ",
+					           catdir, " | ",
+					           get_def("col", COL), "-bx > ",
 					           temp_name, NULL);
 			else
 #elif defined (COMP_CAT)
 			if (info.comp)
-				filter = strappend(NULL, DECOMPRESSOR " ",
-						   catdir, " | " COL " -bx > ",
+				filter = strappend(NULL, get_def("decompressor", DECOMPRESSOR),
+						   " ",
+						   catdir, " | ",
+						   get_def("col", COL), "-bx > ",
 						   temp_name, NULL);
 			else
 #endif /* COMP_* */
-				filter = strappend(NULL, COL " -bx < ",
+				filter = strappend(NULL, get_def("col", COL), 
+						   "-bx < ",
 						   catdir, " > ", temp_name,
 						   NULL);
-                                                                               
+
 #ifdef HAVE_CANONICALIZE_FILE_NAME                                                                  
 			if ( !(fullpath = canonicalize_file_name(catdir)) ) {
 				if (quiet < 2)

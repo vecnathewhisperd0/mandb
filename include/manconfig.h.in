@@ -126,6 +126,10 @@
 #  define TR		"@tr@"
 #endif
 
+#ifndef GREP
+#  define GREP		"@grep@"
+#endif
+
 #ifdef HAS_TROFF
 #  ifndef TROFF
 #    define TROFF 	"@troff@"
@@ -174,9 +178,25 @@
 /* The following definitions are best left alone by the uninitiated */
 /*------------------------------------------------------------------*/
 
-/* less options (i)gnore case on search 
-		(x8) set tab stops to 8 spaces
-		(m)ore display style */
+/* GNU grep flags (i)gnore case
+		  (E)xtended regex
+		  (w)hole word matches only */
+
+#ifndef WHATIS_GREP_FLAGS
+#  define WHATIS_GREP_FLAGS		"-i"
+#endif
+
+#ifndef APROPOS_GREP_FLAGS
+#  define APROPOS_GREP_FLAGS		"-iEw"
+#endif
+
+#ifndef APROPOS_REGEX_GREP_FLAGS
+#  define APROPOS_REGEX_GREP_FLAGS	"-iE"
+#endif
+
+/* GNU less flags (i)gnore case on search 
+		  (x8) set tab stops to 8 spaces
+		  (m)ore display style */
 
 #ifndef LESS_OPTS
 #  define LESS_OPTS	"$LESS\\$-Pm\\:\\$ix8mPm"
@@ -302,6 +322,7 @@ extern __inline__ void drop_effective_privs(void);
 extern __inline__ void regain_effective_privs(void);
 extern int do_system_drop_privs(const char *command);
 extern int remove_with_dropped_privs(const char *filename);
+extern void init_security(void);
 
 /* check_mandirs.c */
 extern void test_manfile(char *file, const char *path);

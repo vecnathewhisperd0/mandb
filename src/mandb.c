@@ -413,8 +413,9 @@ int main(int argc, char *argv[])
 #endif /* DO_CHOWN */
 
 
-	/* This is required for global_catpath(), regardless */
-	manp = manpath(NULL); 
+	/* This is required for global_catpath(), regardless
+	manp = manpath(NULL);  */
+	read_config_file();
 
 	if ( opt_test )
 		quiet = 1;

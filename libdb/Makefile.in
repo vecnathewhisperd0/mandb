@@ -18,6 +18,9 @@ include ../include/Defines
 
 .PHONY: $(DEFAULT_TARGETS)
 
+MANDEFS = $(NLS)
+MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I-
+
 # The default programs to build
 ALL = db_store.o db_delete.o db_lookup.o \
       db_ver.o db_btree.o db_gdbm.o db_ndbm.o
@@ -54,10 +57,6 @@ $(MSG_PATHS): $(MSG_DIR)/%.m: $(srcdir)/%.c
 
   endif
 endif
-
-override CPPFLAGS := $(DEFS) $(NLS) -I../include -I$(top_srcdir) \
-		     -I$(srcdir) -I- $(CPPFLAGS)
-		     
 
 $(library): $(library)($(ALL))
 	-$(RANLIB) $@

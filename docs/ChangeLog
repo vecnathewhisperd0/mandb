@@ -1,3 +1,44 @@
+Wed May  2 01:02:19 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* Merging in changes from Wilf's 2.3b12 beta release.
+	* docs/ChangeLog: Folded in changelog comments.
+
+	* GNUmakefile.in, configure.in: Build configuration file.
+	* */Makefile.in: Rearrange code for CPPFLAGS and similar.
+
+	* configure.in: Look for grep, seteuid(), setresuid().
+	* include/config.h.in: Add HAVE_SETEUID and HAVE_SETRESUID.
+	* include/manconfig.h.in: Add GREP and various grep flags.
+	* src/whatis.c: Use GREP rather than "grep".
+
+	* src/man_db.config: Renamed to src/man_db.conf.in.
+	* src/man_db.conf.in: Add commented out DEFINE directives.
+	* docs/ToDo: Need to document DEFINE directive. (Also, I (cjwatson)
+	  checked in two other todo items by mistake earlier: inline
+	  pipelines and merging work done by Wilf and Andries.)
+	* include/Defines.in: CPPFLAGS tweaks; rename config file; %.i rule.
+	* include/comp_src.h.in: paths.h -> ./manconfig.h.
+
+	* src/security.c, src/man.c: Rewrite seteuid() handling; remove
+	  special "running as root" case.
+	* src/security.h: Remove; combine previous contents with security.c.
+	* src/man_db-nls.h: No longer need man_CHOWN.
+	* include/manconfig.h.in: Add init_security() prototype.
+
+	* src/manp.c: Major rewrite. Replace static storage with linked
+	  list. Improve configuration file handling, replacing get_dirlist()
+	  with read_config_file(). Move some of the more deeply nested bits
+	  of read_config_file() into separate functions like
+	  add_mandb_map(). (cjwatson: This won't compile yet. Fabrizio also
+	  hacked on this heavily, including splitting part of get_dirlist()
+	  out into add_2_dirlist() and adding mkcatdirs(). I've merged these
+	  as best I can for now, but it's still unfinished.)
+	* src/manp.h: Remove get_dirlist() prototype, add prototypes for
+	  read_config_file() and get_def().
+	* src/man.c, src/mandb.c, src/straycats.c, src/whatis.c: Use new
+	  get_defs() functions to pull paths from config file rather than
+	  hard-coding them.
+
 Fri Apr 27 22:39:34 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* Merging in changes from Wilf's 2.3.11 release.
@@ -247,6 +288,31 @@ Wed Feb 23 22:34:54 EET 2000  fab   (fpolacco@debian.org)
 
 	* find the huge list of changes (in three years) in file
 	  debian/changelog.
+
+Wed Sep 27 23:59:05 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk)
+
+	* Version: 2.3b12
+
+	* src/manp.c: replace static storage with linked list
+
+	* src/security.h: removed/combined with security.c
+
+	* src/security.c, src/man.c: re-write seteuid() handling: 
+	remove special "running as root" case
+
+	* src/whatis.c: use GREP rather than "grep"
+
+	* include/manconfig.h: many #DEFINE additions
+
+	* configure.in: look for grep, seteuid(), setresuid()
+
+	* GNUmakefile.in, */Makefile.in: minor modifications
+
+	* include/Defines.in: modifications
+
+	* src/man_db.config: renamed as src/man_db.conf.in
+
+	* src/man_db.conf.in: add commented out DEFINE directives.
 
 Thu Sep 21 19:33:58 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk)
 

@@ -41,7 +41,6 @@
 #  include <strings.h>
 #else /* no string(s) header */
 extern char *strtok();
-extern char *strpbrk();
 extern char *strchr();
 extern char *strstr();
 #endif
@@ -87,17 +86,21 @@ extern int errno;
 #include "manp.h"
 #include "security.h"
 
-typedef struct {
-	char mandir[PATH_MAX];
-	char bin[PATH_MAX];
-	int mandatory;
-} DIRLIST;
+struct list {
+	char *key;
+	char *cont;
+	int flag;
+	struct list *next;
+};
 
+static struct list *namestore;
+
+#define DEFINE		-2
 #define MANDB_MAP       -1
 #define MANPATH_MAP      0
 #define MANDATORY        1
 
-DIRLIST list[MAXDIRS];
+/* DIRLIST list[MAXDIRS]; */
 char *tmplist[MAXDIRS];
 char *manpathlist[MAXDIRS];
 
@@ -108,6 +111,137 @@ static char *def_path(int flag);
 static void add_dir_to_list(char **lp, char *dir);
 static char **add_dir_to_path_list(char **mp, char *p);
 
+
+static char *checkpath (char *path)
+{
+#if 0
+	char scratch[PATH_MAX];
+	char *res_path;
+	
+	res_path = realpath(path, scratch);
+	return res_path ? xstrdup(res_path) : res_path;
+#else
+	return xstrdup(path);
+#endif
+}
+
+static void add_to_list (char *key, char *cont, int flag)
+{
+	struct list *list = (struct list *) malloc (sizeof (struct list));
+	list->key = key;
+	list->cont = cont;
+	list->flag = flag;
+	list->next = namestore;
+	namestore = list;
+}
+
+static char *get_from_list (char *key, int flag)
+{
+	struct list *list;
+
+	for (list = namestore; list; list = list->next)
+		if (flag == list->flag && STREQ(key, list->key))
+			return list->cont;
+
+	return NULL;
+}
+
+char *get_def (char *thing, char *def)
+{
+	char *config_def = get_from_list(thing, DEFINE);
+	return config_def ? config_def : def;
+}
+	
+static void print_list (void)
+{
+	struct list *list;
+
+	for (list = namestore; list; list = list->next)
+			fprintf(stderr, "`%s'\t`%s'\t`%d'\n", list->key, 
+				list->cont, list->flag);
+}
+
+static void add_def (char *thing, char *config_def, int flag)
+{
+	add_to_list(xstrdup(thing), 
+		    xstrdup(flag == 2 ? config_def : ""), DEFINE);
+
+	if (debug)
+		fprintf(stderr, "Defined `%s' as `%s'.\n", thing, config_def);
+}
+
+static void add_manpath_map (char *path, char *mandir)
+{
+	path = checkpath(path);
+	if (!path)
+		return;
+	mandir = checkpath(mandir);
+	if (!mandir) {
+		free(path);
+		return;
+	}
+		
+	add_to_list(path, mandir, MANPATH_MAP);
+
+	if (debug)
+		fprintf(stderr, "Path `%s' mapped to mandir `%s'.\n",
+			path, mandir);
+}
+
+static void add_mandb_map (char *mandir, char *catdir, int flag)
+{
+	assert (flag > 0);
+	
+	mandir = checkpath(mandir);
+	if (!mandir)
+		return;
+		
+	if (flag == 1) {
+		catdir = mandir;
+	} else if (STREQ(catdir, "FSSTND")) {
+		char *tmpcatdir;
+		tmpcatdir = fsstnd(mandir);
+		catdir = checkpath(tmpcatdir);
+		free(tmpcatdir);
+	} else {
+		catdir = checkpath(catdir);
+	}
+	
+	if (!catdir) {
+		free(mandir);
+		return;
+	}
+
+	add_to_list(mandir, catdir, MANDB_MAP);
+
+	if (debug)
+		fprintf(stderr, "Global mandir `%s', catdir `%s'.\n",
+			mandir, catdir);
+
+	/* create the catman hierarchy if it doesn't exist */
+	if (strcmp(program_name, "mandb") == 0)
+		mkcatdirs(mandir, catdir);
+}
+
+static void add_mandatory (char *mandir)
+{
+	mandir = checkpath(mandir);
+	if (!mandir)
+		return;
+
+	add_to_list(mandir, "", MANDATORY);
+
+	if (debug)
+		fprintf(stderr, "Mandatory mandir `%s'.\n", mandir);
+}
+
+/* accept (NULL or oldpath) and new path component. return new path */
+static char *pathappend (char *oldpath, char *appendage)
+{
+	assert ((!oldpath || *oldpath) && appendage);
+	return (oldpath ? strappend(oldpath, ":", appendage, NULL) :
+			  xstrdup(appendage));
+}
 
 static __inline__ void gripe_reading_mp_config (char *file)
 {
@@ -130,42 +264,17 @@ static __inline__ void gripe_not_directory(char *dir)
 
 /* accept a manpath list, separated with ':', return the associated 
    catpath list */
-char *cat_manpath(char *manp)
+char *cat_manpath (char *manp)
 {
-	DIRLIST *manlist;
-	size_t len = 0;
-	char *catp, *path;
-
-	catp = xstrdup(manp);
-
-	for (path = strtok(catp, ":"); path; path = strtok(NULL, ":")) {
-		for (manlist = list; manlist->mandir[0] != '\0'; manlist++)
-			if (manlist->mandatory == MANDB_MAP
-			  && strcmp(path, manlist->mandir) == 0) {
-				len += strlen (manlist->bin) + 1;
-				break;
-			}
-		if (manlist->mandir[0] == '\0')
-			len += strlen(path) + 1;
-	}
-
-	catp = (char *) xrealloc (catp, len + 1);
-
-	*catp = '\0';
+	char *catp = NULL, *path, *catdir;
 
 	for (path = strtok(manp, ":"); path; path = strtok(NULL, ":")) {
-		(void) strcat(catp, ":");
-		for (manlist = list; manlist->mandir[0] != '\0'; manlist++)
-			if (manlist->mandatory == MANDB_MAP
-			  && strcmp(path, manlist->mandir) == 0) {
-				(void) strcat(catp, manlist->bin);
-				break;
-			}
-		if (manlist->mandir[0] == '\0') 
-			(void) strcat(catp, path);
+		catdir = get_from_list(path, MANDB_MAP);
+		catp = catdir ? pathappend(catp, catdir) 
+			      : pathappend(catp, path);
 	}
 	
-	return ++catp;
+	return catp;
 }		
 
 static char *
@@ -195,10 +304,7 @@ add_to_manpath (char *manpath, const char *path)
 {
 	char *result;
 
-	if (manpath == NULL)
-		result = xstrdup (path);
-	else
-		result = strappend (manpath, ":", path, NULL);
+	result = pathappend (manpath, path);
 
 	return result;
 }
@@ -255,50 +361,37 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 #endif /* HAVE_SETLOCALE */
 }
 
-/* Add to the manpathlist system dependent subdirs */
 char *add_system_manpath (char *systems, char *manpathlist)
 {
-	const char *system;
-	char *path;
+	char *system;
 	char *manpath = NULL;
-	size_t manpathsize = 0;
 
-	if (systems == NULL)
-		if ((systems = getenv ("SYSTEM")) == NULL)
-			systems = "";
-	if (*systems == '\0')
+	if (!systems)
+		systems = getenv ("SYSTEM");
+
+	if (!systems || !*systems)
 		return manpathlist;
 
-	/* For each manpathlist[] component */
+	/* For each systems component */
 
 	for (system = strtok (systems, ",:"); system;
 	     system = strtok (NULL, ",:")) {
-		char *next;
 
-		/* For each systems component */
+		/* For each manpathlist component */
 
-		if (strcmp(system, "man") != 0) {
+		if (!STREQ(system, "man")) {
+			char *next, *path;
+			char *newdir = NULL;
 			for (path = manpathlist; path; 
 			     path = next) {
-				size_t pathlen;
-				size_t newdirlen;
-				char *newdir;
 				int status;
 	
-				next = strpbrk (path, ":" );
-				pathlen = next ? next++ - path : strlen (path);
-				newdirlen = strlen (system) + pathlen + 3;
-				newdir = (char *) xmalloc (newdirlen);
-	
-				/* add it to the manpath component */
-	
-				strncpy (newdir, path, pathlen);
-				*(newdir + pathlen) = '\0';
-				strcat (newdir, "/");
-				strcat (newdir, system);
-	
-				/* and see if it exists */
-	
+				if ((next = strchr (path, ':')))
+					*next = '\0';
+				newdir = strappend(newdir, path, "/", system, NULL);
+				if (next)
+					*(next++) = ':';
+
 				status = is_directory (newdir);
 	
 				if (status == 0)
@@ -308,36 +401,18 @@ char *add_system_manpath (char *systems, char *manpathlist)
 						fprintf (stderr,
 							 "adding %s to manpathlist\n",
 							 newdir);
-					manpath = (char *) xrealloc (manpath,
-							   manpathsize + newdirlen);
-					/* Add to manpath */
-					if (manpathsize)
-						strcat (manpath, ":");
-					else
-						*manpath = '\0';
-					strcat (manpath, newdir);
-					manpathsize += newdirlen;
-				} else {
-					if (debug) {
+					manpath = pathappend(manpath, newdir);
+				} else if (debug) {
 					fputs ("can't stat ", stderr);
 					perror (newdir);
-					}
 				}
-				free (newdir);
+				/* reset newdir */
+				*newdir = '\0';
 			}
-		} else {
-			/* Add base directory */
-			size_t pathlen;
-
-			pathlen = strlen(manpathlist) + 1;
-			manpath = (char *) xrealloc (manpath, manpathsize + pathlen);
-			if (manpathsize)
-				strcat (manpath, ":");
-			else
-				*manpath = '\0';
-			strcat (manpath, manpathlist);
-			manpathsize += pathlen;
-		}
+		if (newdir)
+			free(newdir);
+		} else
+			manpath = pathappend(manpath, manpathlist);
 	}
 	/*
 	 * Thu, 21 Nov 1996 22:24:19 +0200 fpolacco@debian.org
@@ -408,8 +483,8 @@ char *manpath (char *systems)
 	char *manpathlist;
 
 	/* need to read config file even if MANPATH set, for mandb(8) */
-	if (get_dirlist ())
-		gripe_reading_mp_config (CONFIG_FILE);
+	if (!namestore)
+		read_config_file();
 
 	manpathlist = getenv ("MANPATH");
 	if ( manpathlist && *manpathlist ) {
@@ -417,7 +492,8 @@ char *manpath (char *systems)
 		/*
     		 * This must be it.
     		 */
-		/* xstrdup() required below so that we don't hack up the environment */
+		/* xstrdup() required below so that we don't hack up the
+		   environment */
 		manpathlist = xstrdup (manpathlist);
 		if ( manpathlist[0] == ':' ) {
 			if (!quiet) error (0, 0, 
@@ -518,7 +594,8 @@ DIRLIST * add_2_dirlist ( FILE *config, DIRLIST *dlp)
 {
 	char *bp;
 	char buf[BUFSIZ];
-	int converted;
+	char key[50], cont[512];
+	int c;
 
 	while ( (bp = fgets (buf, BUFSIZ, config)) ) {
 
@@ -536,47 +613,17 @@ DIRLIST * add_2_dirlist ( FILE *config, DIRLIST *dlp)
 			continue;
 		} else if (strncmp(bp, "NO", 2) == 0) {
 			continue;	/* mach any word starting with NO */
-		} else if (sscanf(bp, "MANBIN %*s") == 1) {
+		} else if (sscanf(bp, "MANBIN %*s") == 1)
 			continue;
-		} else if (sscanf(bp, "MANDATORY_MANPATH %s", dlp->mandir) == 1) {
-			dlp->mandatory = MANDATORY;
-			if (debug)
-				fprintf (stderr, "found mandatory man directory %s\n",
-				  dlp->mandir); 
-			dlp++;
-		} else if (sscanf(bp, "MANPATH_MAP %s %s", dlp->bin, 
-		  dlp->mandir) == 2) {
-			dlp->mandatory = MANPATH_MAP;
-			if (debug)
-				fprintf (stderr, "found manpath map %s --> %s\n",
-				  dlp->bin, dlp->mandir);
-			dlp++;
-		} else if ( (converted = 
-		  sscanf(bp, "MANDB_MAP %s %s", dlp->mandir, dlp->bin)) > 0) {
-		  	dlp->mandatory = MANDB_MAP;
-		  	if (is_directory(dlp->mandir) != 1) {
-		  		continue;
-			}
-		  	if (converted == 1) {
-		  		(void) strcpy(dlp->bin, dlp->mandir);
-#ifdef USE_FSSTND
-		  	} else if (converted == 2 && 
-		  	         strcmp(dlp->bin, "FSSTND") == 0) {
-		  	        char *fsstnd_catpath;
-		  		(void) strcpy(dlp->bin, 
-		  		              fsstnd_catpath = fsstnd(dlp->mandir));
-		  		free(fsstnd_catpath);
-#endif /* USE_FSSTND */
-		  	}
-		  	if (debug)
-		  		fprintf (stderr, 
-		  		  "found global mandir %s mapped to catdir %s\n",
-		  		  dlp->mandir, dlp->bin);
-			/* create the catman hierarchy if it doesn't exist */
-			if ( strcmp(program_name,"mandb") == 0)
-				mkcatdirs( dlp);
-		  	dlp++;
-	 	} else {
+		else if (sscanf(bp, "MANDATORY_MANPATH %s", key) == 1)
+			add_mandatory(key);	
+		else if (sscanf(bp, "MANPATH_MAP %s %s", key, cont) == 2) 
+			add_manpath_map(key, cont);
+		else if ((c = sscanf(bp, "MANDB_MAP %s %s", key, cont)) > 0) 
+			add_mandb_map(key, cont, c);
+		else if ((c = sscanf(bp, "DEFINE %50s %511[^\n]", key, cont)) > 0)
+			add_def(key, cont, c);
+	 	else {
 			error (0, 0, _( "can't parse directory list `%s'"), bp);
 			gripe_reading_mp_config (CONFIG_FILE);
 		}
@@ -584,14 +631,18 @@ DIRLIST * add_2_dirlist ( FILE *config, DIRLIST *dlp)
 
 	return dlp;
 }
-int get_dirlist (void)
+
+void read_config_file(void)
 {
 	char *home;
 	FILE *config;
-	DIRLIST *dlp = list;
 
 	if ((config = fopen (CONFIG_FILE, "r")) == NULL)
 		error (FAIL, 0, _( "can't open the manpath configuration file %s"), CONFIG_FILE);
+
+	if (debug)
+		fprintf(stderr, "From the config file %s:\n\n", CONFIG_FILE);
+
 	dlp = add_2_dirlist (config, dlp);
 	fclose(config);
 
@@ -600,9 +651,11 @@ int get_dirlist (void)
 			dlp = add_2_dirlist (config, dlp);
 			fclose(config);
 		}
-	dlp->bin[0] = dlp->mandir[0] = '\0';
-	dlp->mandatory = 0;
-	return 0;
+
+#if 0
+	if (debug)
+		print_list();
+#endif
 }
 
 
@@ -612,40 +665,28 @@ int get_dirlist (void)
  */
 static char *def_path (int flag)
 {
-	int len = 0;
-	char *manpathlist; 
-	DIRLIST *dlp;
+	char *manpath = NULL;
+	struct list *list; 
 
-	dlp = list;
-	while (dlp->mandatory == flag) {
-		  len += strlen (dlp->mandir) + 1;
-		  dlp++;
+	for (list = namestore; list; list = list->next)
+		if (list->flag == flag) {
+	 		int status;
+	
+			status = is_directory (list->key);
+	
+			if (status < 0)
+				gripe_stat_file(list->key);
+			else if (status == 0 && !quiet)
+				error (0, 0, _( "warning: mandatory directory %s doesn't exist"), list->key);
+			else if (status == 1)
+				manpath = pathappend(manpath, list->key);
 	}
 
 	/* If we have complete config file failure... */
-	if (len == 0)
+	if (!manpath)
 		return xstrdup("/usr/man");
 
-	manpathlist = (char *) xmalloc (len);
-	*manpathlist = '\0';
-
-	dlp = list;
-	while (dlp->mandatory == flag) {
-		int status;
-
-		status = is_directory (dlp->mandir);
-
-		if (status < 0) {
-			gripe_stat_file(dlp->mandir);
-		} else if (status == 0 && !quiet) {
-			error (0, 0, _( "warning: mandatory directory %s doesn't exist"), dlp->mandir);
-		} else if (status == 1){
-			(void) strcat(manpathlist, dlp->mandir);
-			(void) strcat(manpathlist, ":"); 
-			dlp++;
-		}
-	}
-	return manpathlist;
+	return manpath;
 }
 
 /*
@@ -667,10 +708,14 @@ static __inline__ char *get_manpath (char *path)
 	char **lp;
 	char *end;
 	char *manpathlist;
-	DIRLIST *dlp;
+	struct list *list;
 
-	for (end = p = tmppath = xstrdup (path); end; p = end + 1){
+	tmppath = xstrdup (path);
+
+	for (end = p = tmppath; end; p = end + 1){
 	
+		char *mandir;
+
 		if ((end = strchr (p, ':')))
 			*end = '\0';
 
@@ -681,39 +726,37 @@ static __inline__ char *get_manpath (char *path)
 		if (debug)
 			fprintf (stderr, "\npath directory %s ", p);
 
+		mandir = get_from_list(p, MANPATH_MAP);
+		
 		/*
       		 * The directory we're working on is in the config file.
       		 * If we haven't added it to the list yet, do.
       		 */
 
-		for (dlp = list; dlp->mandir[0] != '\0'; dlp++)
-			if (dlp->bin[0] != '\0' && STREQ(p, dlp->bin)) {
+		if (mandir) {
 				if (debug)
-					fprintf (stderr, "is in the config file\n");
-
-				 add_dir_to_list (tmplist, dlp->mandir);
-				 goto found;
-			}
+					fputs("is in the config file\n", stderr);
+				add_dir_to_list (tmplist, mandir);
 
       		 /* The directory we're working on isn't in the config file.  
       		    See if it has ../man or man subdirectories.  
       		    If so, and it hasn't been added to the list, do. */
 
-		 if (debug)
-			fprintf (stderr, "is not in the config file\n");
-
-		 t = has_mandir (p);
-		 if (t) {
+		} else {
 			if (debug)
-				fprintf (stderr, "but does have a ../man or man subdirectory\n");
+				fputs ("is not in the config file\n", stderr);
 
-			 add_dir_to_list (tmplist, t);
-			 free (t);
-		  } else
-			if (debug)
-				fprintf (stderr, "and doesn't have ../man or man subdirectories\n");
-
-	found:
+		 	t = has_mandir (p);
+		 	if (t) {
+				if (debug)
+					fprintf (stderr, "but does have a ../man or man subdirectory\n");
+	
+				 add_dir_to_list (tmplist, t);
+				 free (t);
+		 	 } else
+				if (debug)
+					fprintf (stderr, "and doesn't have ../man or man subdirectories\n");
+		}
 		;
 	}
 
@@ -722,11 +765,9 @@ static __inline__ char *get_manpath (char *path)
 	if (debug)
 		fprintf (stderr, "\nadding mandatory man directories\n\n");
 
-	dlp = list;
-	while (dlp->mandatory == MANDATORY) {
-		add_dir_to_list (tmplist, dlp->mandir);
-		dlp++;
-	}
+	for (list = namestore; list; list = list->next)
+		if (list->flag == MANDATORY) 
+			add_dir_to_list (tmplist, list->key);
 
 	len = 0;
 	lp = tmplist;
@@ -793,28 +834,24 @@ static void add_dir_to_list (char **lp, char *dir)
    path/man exist.  If so return it, if not return NULL. */
 static __inline__ char *has_mandir (char *path)
 {
-	size_t len;
-	char *newpath, *subdir;
+	char *newpath = NULL;
 
 	/* don't assume anything about path, especially that it ends in 
 	   "bin" or even has a '/' in it! */
 	   
-	subdir = strrchr(path, '/');
+	char *subdir = strrchr(path, '/');
 	if (subdir) {
-		len = (size_t) (subdir - path + 1);
-		newpath = (char *) xmalloc (len + sizeof "man");
-		(void) strncpy(newpath, path, len);
-		(void) strcpy(newpath + len, "man");
+		*(++subdir) = '\0';
+		newpath = strappend(newpath, path, "man", NULL);
+		*subdir = '/';
 		
 		if (is_directory(newpath) == 1)
 			return newpath;
-	} else
-		newpath = NULL;
-		
-	len = strlen (path);
-	newpath = (char *) xrealloc (newpath, len + sizeof "/man");
-	(void) strcpy(newpath, path);
-	(void) strcpy(newpath + len, "/man");
+		else
+			*newpath = '\0';
+	}
+
+	newpath = strappend(newpath, path, "/man", NULL);
 
 	if (is_directory (newpath) == 1)
 		return newpath;
@@ -873,7 +910,7 @@ static __inline__ char **add_dir_to_path_list (char **mp, char *p)
 	return mp;
 }
 
-void create_pathlist(char *manp, char **mp)
+void create_pathlist (char *manp, char **mp)
 {
 	char *p, *end;
 
@@ -895,33 +932,17 @@ void create_pathlist(char *manp, char **mp)
 	free(manp);
 }
 
-/* routine to get global manpath list */
-char *get_mandb_manpath(void)
+/* routine to get global manpath list (in reverse order) */
+char *get_mandb_manpath (void)
 {
-	size_t len = 0;
-	char *manpathlist;
-	DIRLIST *dlp;
-	/* extern DIRLIST list[]; mappings set up by manpath() */
+	char *manpath = NULL;
+	struct list *list;
 
-	for (dlp = list; dlp->mandir[0] != '\0'; dlp++)
-		if (dlp->mandatory == MANDB_MAP)
-			len += strlen (dlp->mandir) + 1;
+	for (list = namestore; list; list = list->next)
+		if (list->flag == MANDB_MAP)
+			manpath = pathappend(manpath, list->key);
 
-	/* see if we have anything at all */
-
-	if (!len)
-		return NULL;
-
-	manpathlist = (char *) xmalloc (len + 1);
-	*manpathlist = '\0';
-
-	for (dlp = list; dlp->mandir[0] != '\0'; dlp++) {
-		if (dlp->mandatory == MANDB_MAP) {
-			(void) strcat(manpathlist, ":");
-			(void) strcat(manpathlist, dlp->mandir);
-		}
-	}
-	return ++manpathlist;
+	return manpath;
 }
 
 /*
@@ -931,49 +952,45 @@ char *get_mandb_manpath(void)
 /* This routine would seem to work correctly for nls subdirs and would 
    specify the (correct) consistent catpath even if not defined in the 
    config file */
-char *global_catpath(char *name)
+char *global_catpath (char *name)
 {
-	DIRLIST *dlp;
+	struct list *list;
 
-	for (dlp = list; dlp->mandir[0] != '\0'; dlp++) {
-		size_t mandir_length = strlen (dlp->mandir);
+	for (list = namestore; list; list = list->next)
+		if (list->flag == MANDB_MAP) {
+			size_t manlen = strlen(list->key);
+			if (STRNEQ(name, list->key, manlen)) {
+				char *suffix = name + manlen;
+				char *catpath;
 
-		if (dlp->mandatory == MANDB_MAP &&
-		    strncmp(name, dlp->mandir, mandir_length) == 0) {
-			char *suffix = name + mandir_length;
-			char *catpath;
-
-			catpath = xmalloc (  strlen (dlp->bin)
-					   + strlen (suffix) + 1);
-			(void) strcpy (catpath, dlp->bin);
-			if (*suffix == '/') {
-				++suffix;
-				(void) strcat (catpath, "/");
+				catpath = xmalloc (  strlen (list->cont)
+						   + strlen (suffix) + 1);
+				(void) strcpy (catpath, list->cont);
+				if (*suffix == '/') {
+					++suffix;
+					(void) strcat (catpath, "/");
+				}
+				if (!strncmp (suffix, "man", 3)) {
+					suffix += 3;
+					(void) strcat (catpath, "cat");
+				}
+				(void) strcat (catpath, suffix);
+			  	return catpath;
 			}
-			if (!strncmp (suffix, "man", 3)) {
-				suffix += 3;
-				(void) strcat (catpath, "cat");
-			}
-			(void) strcat (catpath, suffix);
-#if 0
-			if (debug)
-			fprintf(stderr, "global_catpath: %s\n", catpath);
-#endif
-		  	return catpath;
 		}
-	}
+		
 	return NULL;
 }
 
 /* check to see if the supplied man directory is considered `global' */
-int is_global_mandir(const char *dir)
+int is_global_mandir (const char *dir)
 {
-	DIRLIST *dlp;
-	
-	for (dlp = list; dlp->mandir[0] != '\0'; dlp++)
-		if (dlp->mandatory == MANDB_MAP &&
-		    strncmp(dir, dlp->mandir, strlen(dlp->mandir)) == 0)
-			return 1;
+	struct list *list;
+
+	for (list = namestore; list; list = list->next)
+		if (list->flag == MANDB_MAP &&
+		    STRNEQ(dir, list->key, strlen(list->key)))
+		    	return 1;
 	return 0;
 }
 
@@ -994,11 +1011,7 @@ static __inline__ char *fsstnd(char *path)
 	path += sizeof MAN_ROOT - 1;
 	manpath = xstrdup (path);
 	catpath = (char *) xmalloc (strlen(path) + sizeof CAT_ROOT -  3);
-#if 0
-	if (debug)
-		fprintf(stderr, "fsstnd size = %d\n", strlen(path) + 
-			sizeof CAT_ROOT - 4);
-#endif
+
 	/* start with CAT_ROOT */ 
 	(void) strcpy (catpath, CAT_ROOT);
 
@@ -1006,10 +1019,6 @@ static __inline__ char *fsstnd(char *path)
 	for (element = strtok(manpath, "/"); element; element = strtok(NULL, "/")) {
 		if (strncmp(element, "man", 3) == 0) {
 			if (*(element + 3)) { 
-#if 0
-				*element -= 10;		/* [Mm] -> [Cc] */
-				*(element + 2) += 6;	/* [Nn] -> [Tt] */
-#endif
 				*element = 'c';
 				*(element + 2) = 't';
 			} else
@@ -1019,9 +1028,5 @@ static __inline__ char *fsstnd(char *path)
 		(void) strcat (catpath, element);
 	}
 	free(manpath);
-#if 0
-	if (debug)
-		fprintf(stderr, "fsstnd: %s -> %s\n", path, catpath);
-#endif
 	return catpath;
 }

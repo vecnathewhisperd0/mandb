@@ -165,19 +165,25 @@ static __inline__ int use_grep(char *page, char *manpath)
 
 	if (access(whatis_file, R_OK) == 0) {
 #if defined(WHATIS)
-		char *command = strappend(NULL, "grep -i '^", page, 
-				    	  "' ", whatis_file, NULL);
+		char *command = strappend(NULL, get_def("grep", GREP), " ",
+					  get_def("whatis_grep_flags", 
+					  	  WHATIS_GREP_FLAGS),
+					  " '^", page, "' ", whatis_file, NULL);
+				    	  
 #elif defined(APROPOS)
 		char *flags, *command;
 
 #ifdef REGEX
 		if (regex)
-			flags = "-iE";
+			flags = get_def("apropos_regex_grep_flags",
+					APROPOS_REGEX_GREP_FLAGS);
 		else
 #endif
-			flags = "-iEw";
+			flags = get_def("apropos_grep_flags",
+					APROPOS_GREP_FLAGS);
 			
-		command = strappend(NULL, "grep ", flags, " '", page,
+		command = strappend(NULL, get_def("grep", GREP),
+				    flags, " '", page,
 				    "' ", whatis_file, NULL);
 #endif 	
 		status = (system(command) == 0);

@@ -34,6 +34,11 @@ CFLAGS = @CFLAGS@
 LDFLAGS = @LDFLAGS@
 LDLIBS = @LIBS@ #@LEXLIB@
 
+# Allow prog-specific MANDEFS and ensure MANCPPFLAGS comes before
+# user/configure defined CPPFLAGS
+USERCPPFLAGS := $(CPPFLAGS)
+override CPPFLAGS = $(DEFS) $(MANDEFS) $(MANCPPFLAGS) $(USERCPPFLAGS)
+
 # system directories
 prefix = @prefix@
 exec_prefix = @exec_prefix@
@@ -66,7 +71,7 @@ apropos = $(shell echo apropos |sed '$(transform)')
 manpath = $(shell echo manpath |sed '$(transform)')
 zsoelim = $(shell echo zsoelim |sed '$(transform)')
 
-config_file = $(sysconfdir)/manpath.config
+config_file = $(sysconfdir)/man_db.conf
 sections_file = $(sysconfdir)/man/sections.list
 message_catalogue = man_db
 
@@ -108,8 +113,8 @@ troff="@troff@"
 	$(CPP) -M $(CPPFLAGS) $< | \
 	  sed -e 's/$*\.o[ 	]*/& $@/g' > $@ || (rm -f $@; exit 1)
 
-%.o: %.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+%.i: %.c
+	$(CPP) $(CPPFLAGS) $< > $@
 
 # A rule to re-create subdirectory Makefiles
 ifneq ($(top_srcdir),$(srcdir))

@@ -18,8 +18,7 @@ include ../include/Defines
 
 .PHONY: $(DEFAULT_TARGETS) test
 
-override CPPFLAGS := $(DEFS) -I../include -I$(top_srcdir) -I$(srcdir) -I- \
-		     $(CPPFLAGS)
+MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I-
 
 ALLSRCS = alloca.c basename.c cleanup.c error.c fnmatch.c getopt.c getopt1.c \
 	  glob.c memcmp.c putenv.c realpath.c rename.c \

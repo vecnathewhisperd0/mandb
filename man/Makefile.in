@@ -93,11 +93,11 @@ catman.8 = $(manroot)/$(nlspath)/$(man8dir)/$(catman)$(man8ext)
 accessdb.8 = $(manroot)/$(nlspath)/$(man8dir)/accessdb$(man8ext)
 
 # Rules... We've got some rules 'round here.
-%.1 : %.man1
+%.1: %.man1
 	$(process_manpage)
-%.5 : %.man5
+%.5: %.man5
 	$(process_manpage)
-%.8 : %.man8
+%.8: %.man8
 	$(process_manpage)
 
 # The default programs to build 

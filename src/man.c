@@ -40,7 +40,6 @@ extern char *strchr(), *strcat();
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>
 #else 
-extern uid_t getuid(), geteuid();
 extern pid_t vfork();
 #  define R_OK		4
 #  define STDOUT_FILENO	1
@@ -405,8 +404,6 @@ static int checked_system (char *command)
 }
 
 
-extern uid_t ruid; 		/* defined in security.c */
-extern uid_t euid;		/* 	"	"	 */ 
 extern char *manpathlist[];	/* defined in manp.c     */
 
 /* globals */
@@ -852,22 +849,6 @@ int main (int argc, char *argv[])
 			freopen( "/dev/null", "w", stderr);
 	}
 
-/* if the user happens to be root and man is installed setuid, forget all
- * of the priv dropping etc. Just make sure that any cat files produced
- * are owned by MAN_OWNER by doing explicit chown() calls */
-
-#ifdef SECURE_MAN_UID
-	/* record who we actually are */
-	ruid = getuid ();
-	euid = geteuid ();
-
-	if (ruid == 0)
-		setuid(ruid);
-
-	/* so that manpath code respects user privs */
-	drop_effective_privs();
-#endif
-
 	/* This will enable us to do some profiling and know
 	where gmon.out will end up. Must chdir(cwd) before we return */
 #  ifdef HAVE_GETCWD
@@ -886,6 +867,13 @@ int main (int argc, char *argv[])
 
 	/* give the actual program args to getopt */
 	man_getopt (argc, argv);
+
+#ifdef SECURE_MAN_UID
+	/* record who we are and drop effective privs for later use */
+	init_security();
+#endif
+
+	read_config_file();
 
 	/* if the user wants whatis or apropos, give it to them... */
 	if (external)
@@ -916,9 +904,9 @@ if (debug) fprintf(stderr, "main(): locale= %s,internal_locale= %s\n", locale, i
 		pager = (html_pager == NULL ?  WEB_BROWSER : html_pager);
 	if (pager == NULL)
 		if ((pager = getenv ("PAGER")) == NULL)
-			pager = PAGER;
+			pager = get_def("pager", PAGER);
 	if (*pager == '\0')
-		pager = CAT;
+		pager = get_def("cat", CAT);
 
 	if (prompt_string == NULL)
 #ifdef LESS_PROMPT
@@ -1468,15 +1456,19 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 			dev = "";
 
 		if (*file)
-			command = strappend (NULL, SOELIM " '", file, "'", NULL); 
+			command = strappend (NULL, get_def("soelim", SOELIM),
+					     " '", file, "'", NULL); 
 		else {
 			/* Reading from stdin: use cat to pick up the part we
 			 * read in to figure out the format pipeline.
 			 * ? is '-' as a cat argument standard?
 			 * If not we could try "(cat tempfile; cat) | SOELIM..."
 			 */
-			command = strappend(NULL, "cat ", stdin_tmpfile, " - | ", SOELIM, NULL);
+			command = strappend(NULL, get_def("cat", CAT), " ",
+					    stdin_tmpfile, " - | ",
+					    get_def("soelim", SOELIM), NULL);
 		}
+
 		do {
 			char *filter;
 			int wants_dev = 0; /* filter wants a dev argument */
@@ -1485,34 +1477,38 @@ static __inline__ char *make_roff_command (char *dir, char *file)
                            errors set filter to "" */
 			switch (*pp_string) {
 			case 'e':
-				filter = troff ? EQN : NEQN;
+				filter = troff ? get_def("eqn", EQN) 
+					       : get_def("neqn", NEQN);
 				wants_dev = 1;
 				break;
 			case 'g':
-				filter = GRAP;
+				filter = get_def("grap", GRAP);
 				break;
 			case 'p':
-				filter = PIC;
+				filter = get_def("pic", PIC);
 				break;
 			case 't':
-				filter = TBL;
+				filter = get_def("tbl", TBL);
 				using_tbl = 1;
 				break;
 			case 'v':
-				filter = VGRIND;
+				filter = get_def("vgrind", VGRIND);
 				break;
 			case 'r':
-				filter = REFER;
+				filter = get_def("refer", REFER);
 				break;
 			case 0:
 				/* done with preprocessors, now add roff */
 #ifdef TROFF_IS_GROFF
-				if (troff && ditroff) filter = TROFF " -Z";
+				if (troff && ditroff) 
+					filter = strappend(NULL, 
+							   get_def("troff", TROFF), 
+							   " -Z", NULL);
 				else
 #endif
                                 if (troff) {
 #ifdef HAS_TROFF
-                                  filter = TROFF;
+                                  filter = get_def("troff", TROFF);
 #else
                                   assert (0);
 #endif
@@ -1520,7 +1516,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 #ifdef NROFF_MISSING
                                   assert (0);
 #else
-                                  filter = NROFF;
+                                  filter = get_def("nroff", NROFF);
 #endif
                                 }
 
@@ -1572,17 +1568,20 @@ static char *make_display_command (char *file, char *title)
 			     "\"; ", NULL);
 	if (file) {
 	  if (ascii) {
-	    command = strappend (command, CAT " '", file,
-	      			   "' |" TR TR_SET1 TR_SET2 " |",
-	      			   pager, "; }", NULL);
+	    command = strappend (command, get_def("cat", CAT), 
+	    			   " '", file,
+	      			   "' |", get_def("tr", TR TR_SET1 TR_SET2),
+	      			   " |", pager, "; }", NULL);
+	      			   
 	  } else {
 	    command = strappend (command, pager, " '", file, 
 				   "'; }", NULL);
 	  }
 	} else {
 	  if (ascii) {
-	    command = strappend (command, TR TR_SET1 TR_SET2 " |",
-	      			   pager, "; }", NULL);
+	    command = strappend (command, get_def("tr", TR TR_SET1 TR_SET2),
+	    			   " |", pager, "; }", NULL);
+	      			   
 	  } else {
 	    command = strappend (command, pager, "; }", NULL);
 	  }
@@ -1590,20 +1589,6 @@ static char *make_display_command (char *file, char *title)
 
 	return command;
 }
-
-
-#ifdef SECURE_MAN_UID
-/* Required if man is setuid and user has ruid==0 */
-static __inline__ int do_chown(const char *file)
-{
-	int status;
-	
-	if ((status = chown (file, euid, (uid_t) -1)) )
-		error (0, errno, _( "can't chown %s"), file);
-	
-	return status;
-}
-#endif /* SECURE_MAN_UID */
 
 
 /* return a (malloced) temporary name in cat_file's directory */
@@ -1637,20 +1622,6 @@ static int commit_tmp_cat (char *cat_file, char *tmp_cat, int delete)
 	} else
 		status = 0;
 
-#if defined(SECURE_MAN_UID) && defined(MAN_CATS)
-	/* @@@ if root has a private man hierarchy (strange idea), the
-           generated cats don't belong to him */
-	if (!delete && !status && (ruid == 0)) {
-		if (debug) {
-			fprintf (stderr, "chowning temporary cat\n");
-			status = 0;
-		} else {
-			status = do_chown(tmp_cat);
-			if (status)
-				error(0, errno, _( "can't chown %s"), tmp_cat);
-		}
-	}
-#endif /* SECURE_MAN_UID && MAN_CATS */
 
 	if (!delete && !status) {
 		if (debug) {
@@ -1742,7 +1713,7 @@ static __inline__ FILE *open_cat_stream (char *cat_file)
 			char *path;
 			char *argv[8];
 			int n;
-			cmd = xstrdup (COMPRESSOR);
+			cmd = xstrdup (get_def("compressor", COMPRESSOR));
 			path = strtok (cmd, " \t\n");
 			argv[0] = basename (path);
 			for (n = 1;  argv[n-1];  ++n) {
@@ -2001,7 +1972,9 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 						char *tmpcat = tmp_cat_filename (cat_file);
 						cmd = strappend (NULL, roff_cmd,
 #ifdef COMP_CAT	
-								 " | " COMPRESSOR " >",
+								 " | ",
+								 get_def("compressor", COMPRESSOR),
+								 " >",
 #else
 								 " >",
 #endif /* COMP_CAT */
@@ -2094,8 +2067,9 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 				}
 
 				disp_cmd = make_display_command (NULL, title);
-				cmd = strappend (NULL, DECOMPRESSOR " '",
-						 cat_file,
+				cmd = strappend (NULL, 
+						 get_def("decompressor", DECOMPRESSOR),
+						 " '", cat_file,
 						 "' | ", disp_cmd, NULL);
 				free (disp_cmd);
 #else /* !(COMP_SRC || COMP_CAT) */
