@@ -367,6 +367,11 @@ static int parse_whatis(char *page, char *lowpage, char *whatis)
 }
 #endif /* APROPOS */
 
+/* cjwatson: Optimized functions don't seem to be correct in some
+ * circumstances; disabled for now.
+ */
+#undef BTREE
+
 /* scan for the page, print any matches */
 static int apropos(char *page, char *lowpage)
 {
@@ -378,19 +383,29 @@ static int apropos(char *page, char *lowpage)
 
 	key = MYDBM_FIRSTKEY(dbf);
 	while (key.dptr) {
-		if (*key.dptr != '$') {
-			cont= MYDBM_FETCH(dbf, key);
+		cont= MYDBM_FETCH(dbf, key);
 #else /* BTREE */
 	int end;
 
 	end = btree_nextkeydata(dbf, &key, &cont);
 	while (!end) {
-		if (*key.dptr != '$') {
 #endif /* !BTREE */
 
 		/* bug#4372, NULL pointer dereference in cont.dptr, fix
 		 * by dassen@wi.leidenuniv.nl (J.H.M.Dassen), thanx Ray.
+		 * cjwatson: In that case, complain and exit, otherwise we
+		 * might loop (bug #95052).
 		 */
+		if (!cont.dptr)
+		{
+			if (debug)
+				fprintf (stderr, "key was %s\n", key.dptr);
+			error (FATAL, 0,
+			       _( "Database %s corrupted; rebuild with mandb"),
+			       database);
+		}
+
+		if (*key.dptr != '$') {
 			if (cont.dptr && (*cont.dptr != '\t'))	/* a real page */
 			{
 				char *tab;
@@ -427,14 +442,13 @@ static int apropos(char *page, char *lowpage)
 				if (tab)
 					*tab = '\t';
 			}
-#ifndef BTREE
-			MYDBM_FREE(cont.dptr);
 		}
+#ifndef BTREE
 		nextkey = MYDBM_NEXTKEY(dbf, key);
+		MYDBM_FREE(cont.dptr);
 		MYDBM_FREE(key.dptr);
 		key = nextkey; 
 #else /* BTREE */
-		}
 		MYDBM_FREE(cont.dptr);
 		MYDBM_FREE(key.dptr);
 		end = btree_nextkeydata(dbf, &key, &cont);

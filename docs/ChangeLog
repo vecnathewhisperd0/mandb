@@ -1,3 +1,10 @@
+Sun May 13 01:00:47 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/whatis.c (apropos): Complain and exit if a data pointer is
+	  NULL. For this, locally undefine BTREE to avoid using optimized
+	  functions, as they don't appear to provide enough error checking
+	  yet.
+
 Fri May  4 03:59:08 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in: Change PACKAGE from man-db to man_db.
