@@ -1,6 +1,25 @@
 Fri Apr  7 10:50:45 EET 2000  fab   (fpolacco@debian.org)
 
 	* Checked in by Colin Watson during SourceForge CVS sync.
+
+	* Upstream changes from Debian changelog (2.3.17-2):
+	  - Commented away call to distclean_root in GNUmakefile: need to
+	    leave the Makefile and configure in the tarball.
+	  - Found and fixed subtle bug which made wrapper uselessly linked
+	    with -ldb2. When invoked by root on a system which enables
+	    group.db, then the call to initgroups() segfaults due to the
+	    libc link to libdb!
+
+	* Other changes not mentioned in Debian changelog:
+	  - man-db.gnu: Update date and prerequisites (libdb2 becomes weak
+	    prerequisite).
+	  - man-db.lsm: New file.
+	  - src/lexgrog.l: Cosmetic changes.
+	  - src/wrapper.c: Add debugging code.
+
+Fri Apr  7 10:50:45 EET 2000  fab   (fpolacco@debian.org)
+
+	* Checked in by Colin Watson during SourceForge CVS sync.
 	* Version: 2.3.17.
 	* Upstream changes from Debian changelog:
 	  - Corrected apparent disappearing of option -e in apropos.

@@ -54,8 +54,13 @@ struct	{
 	const char * user;
 } *wlp, wrapped_list[] =
 { /* prog	run				user	*/
+#ifdef DEBUG
+  { "_man",	"src/man",	"man"	},
+  { "_mandb",	"src/mandb",	"man"	},
+#else
   { "man",	"/usr/lib/man-db/man",		"man"	},
   { "mandb",	"/usr/lib/man-db/mandb",	"man"	},
+#endif
   { 0,		0,				0,	}};
 
 char *program_name;
@@ -94,12 +99,34 @@ int main( int argc, char **argv)
 
 	if ( !fakeroot && ruid == 0 ) {
 		pwd = getpwnam( wlp->user);
+		/*
 		if ( !pwd
 		|| setgid(pwd->pw_gid)
 		|| initgroups( wlp->user, pwd->pw_gid)
 		|| setuid(pwd->pw_uid)) {
 			fprintf( stderr, _("%s: Failed su to user %s\n"),
 					wlp->prog, wlp->user);
+				    return -EACCES;
+		}
+		*/
+		if ( !pwd )
+		{
+			fprintf( stderr, _("%s: Failed su to user %s\n"), wlp->prog, wlp->user);
+				    return -EACCES;
+		}
+		if ( setgid(pwd->pw_gid) )
+		{
+			fprintf( stderr, _("%s: Failed su to user %s\n"), wlp->prog, wlp->user);
+				    return -EACCES;
+		}
+		if ( initgroups( wlp->user, pwd->pw_gid) )
+		{
+			fprintf( stderr, _("%s: Failed su to user %s\n"), wlp->prog, wlp->user);
+				    return -EACCES;
+		}
+		if ( setuid(pwd->pw_uid))
+		{
+			fprintf( stderr, _("%s: Failed su to user %s\n"), wlp->prog, wlp->user);
 				    return -EACCES;
 		}
 	}

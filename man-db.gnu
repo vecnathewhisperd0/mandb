@@ -16,7 +16,7 @@
 
 %%maintainer: Fabrizio Polacco <fpolacco@debian.org>
 
-%%updated: 4 Jun 2000
+%%updated: 2000-06-21
 
 %%keywords: manpage, man, browser, database, groff
 
@@ -54,15 +54,15 @@
 
 %%supported-languages:
 
-%%use-requirements: libdb2, groff
+%%use-requirements: groff
 
-%%build-prerequisites: libdb2-dev, perl.
+%%build-prerequisites: perl.
 
-%%weak-prerequisites: 
+%%weak-prerequisites: libdb2 (Berkeley DB)
 
 %%source-prerequisites:
 
-%%version: 2.3.17 on 04 Jun 2000 for alpha, hurd-i386, i386, m68k, powerpc, sparc.
+%%version: 2.3.18 on 21 Jun 2000 for alpha, hurd-i386, i386, m68k, powerpc, sparc.
 
 %%announce-list: debian-devel-changes@lists.debian.org
 

@@ -112,7 +112,7 @@ man: security.o convert_name.o manp.o ult_src.o compression.o \
 mandb: security.o manp.o util.o ult_src.o check_mandirs.o hashtable.o straycats.o \
        compression.o lexgrog.o
 
-wrapper: LIBS = "-lc"
+wrapper:	LDLIBS=-lc
 
 catman manpath whatis apropos: security.o manp.o util.o 
 accessdb: util.o ../lib/libman.a

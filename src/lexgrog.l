@@ -62,7 +62,8 @@ char *program_name = "lexgrog";
 #endif /* TEST */
 %}
 
-%option 8bit batch caseful never-interactive ecs meta-ecs
+%option ecs meta-ecs
+%option 8bit batch caseful never-interactive 
 %option nostdinit
 %option noyywrap nounput
 
