@@ -1,3 +1,9 @@
+Sun Apr 13 13:39:38 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/mandb.c (xcopy): Return 0 if the source file doesn't exist, so
+	  that the caller can go on and silently create a non-existent
+	  database rather than bailing out.
+
 Sun Apr 13 12:49:33 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/mandb.c: Remove DO_CHOWN define and simply use SECURE_MAN_UID.

@@ -208,8 +208,9 @@ static int xcopy (const char *from, const char *to)
 	ifp = fopen (from, "r");
 	if (!ifp) {
 		ret = -errno;
-		if (errno != ENOENT)
-			perror ("fopen");
+		if (errno == ENOENT)
+			return 0;
+		perror ("fopen");
 		return ret;
 	}
 
