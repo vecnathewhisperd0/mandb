@@ -7,12 +7,12 @@
 .\" Thu Sep 21 19:22:47 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk) 
 .\" 
 .\" chap1.me
-.BS 1 Introduction 
+.BS 1 Introduction
 .BS 2 "\*M"
 .lp
 \*M is a package that is designed to provide users with online information
 in a fast and friendly manner while at the same time offering flexibility to
-the system administrator. 
+the system administrator.
 .TS
 tab(@);
 l s s s
@@ -41,7 +41,7 @@ and a special pre-formatter that knows about compressed manual pages
 @\(bu zsoelim@\- satisfy .so requests in roff input
 .TE
 
-In addition to these compiled programs, there are two shell scripts, 
+In addition to these compiled programs, there are two shell scripts,
 .b mkcatdirs
 and
 .b checkman
@@ -67,7 +67,7 @@ and
 \*M originally started out life as program suite man\-1.1B, written by John W.
 Eaton <jwe@che.utexas.edu> and maintained by Rik Faith <faith@cs.unc.edu>
 to which support proposed by the newly
-formed \*F committee regarding cat directories was added.
+formed FSSTND committee regarding cat directories was added.
 .lp
 Since then, \*M's most innovative feature: the database cache scheme\**
 .(f
@@ -90,12 +90,12 @@ OR
 b) Start at one end of the ground floor, look along every bookshelf
    until you've completed that floor, then go up a level and start again
    until you've found what you're looking for?
-.)q                                                 
+.)q
 .lp
-Since then the database 
+Since then the database
 .b index
 scheme has evolved greatly.
-Every manual page and stray cat page on the system is registered in an 
+Every manual page and stray cat page on the system is registered in an
 .b index
 database cache which stores various details about the file including the
 timestamp, the location and the whatis\**
@@ -112,43 +112,43 @@ This will typically be
 .ip
 .i /usr/man
 .lp
-beneath which will be several subdirectories of the form 
-.i man<sec> 
+beneath which will be several subdirectories of the form
+.i man<sec>
 where
-.i <sec> 
-is 
-.b 1 , 
-.b 2 , 
-.b 3 , 
-.b 4 , 
-.b 5 , 
-.b 6 , 
-.b 7 
-or 
-.b 8 . 
-These are referred to as 
-.i sections 
+.i <sec>
+is
+.b 1 ,
+.b 2 ,
+.b 3 ,
+.b 4 ,
+.b 5 ,
+.b 6 ,
+.b 7
+or
+.b 8 .
+These are referred to as
+.i sections
 of the
 manual. Others may exist and they are not restricted to single
 character names. eg.
 .ip
 .i /usr/man/manfoo
 .lp
-is a valid section subdirectory. 
-Other common sections include 
-.b 9 , 
-.b n , 
-.b l , 
-.b p 
-and 
-.b o . 
+is a valid section subdirectory.
+Other common sections include
+.b 9 ,
+.b n ,
+.b l ,
+.b p
+and
+.b o .
 .lp
 Within these section subdirectories reside the manual pages themselves. Their
-filenames follow the pattern 
+filenames follow the pattern
 .ip
 .i /usr/man/man<sec>/<name>.<sec><ext>
 .lp
-where in most cases 
+where in most cases
 .i <ext>
 is an empty string.
 An example is manual page
@@ -156,11 +156,11 @@ An example is manual page
 .ip
 .i /usr/man/man1/cp.1
 .lp
-which resides in 
-.i section                      
+which resides in
+.i section
 .b 1
-and has no special 
-.i extension . 
+and has no special
+.i extension .
 .lp
 .BS 2 "Sections of the manual"
 .lp
@@ -176,7 +176,7 @@ stored under sections
 and
 .b 2
 respectively.
-Thus, sections are used to separate out the program manual pages from the 
+Thus, sections are used to separate out the program manual pages from the
 function manual pages and so on.
 The table below shows the
 .i section
@@ -205,21 +205,20 @@ o@old [\|obsolete\|]
 
 .BS 2 "The format of manual pages"
 .lp
-The format in which manual pages are stored is \*N/\*T or more generally \*R. 
+The format in which manual pages are stored is \*N/\*T or more generally \*R.
 This is a typesetter style language\**
 .(f
-\** similar in some aspects to 
+\** similar in some aspects to
 .b TeX
-.)f 
+.)f
 which requires formatting before
-being viewed. In fact some manual pages require pre-format processing to 
+being viewed. In fact some manual pages require pre-format processing to
 correctly format tables or equations.
 .lp
 If the page is to be viewed on screen in a text environment, \*N is
 used as the primary formatter. If the page is to be printed or displayed in a
-graphical environment, \*T is used. Traditionally, \*T
-formatted files for a 
-.b C/A/T 
+graphical environment, \*T is used. Traditionally, \*T formatted files for a
+.b C/A/T
 (Computer aided Typesetter) which is now obsolete.
 
 The \*(GN \*R (\*G\**)
@@ -227,35 +226,35 @@ The \*(GN \*R (\*G\**)
 \** Written and maintained by James Clark <jjc@jclark.com>
 .)f
 suite of programs offer a choice of output types
-including 
-.b X , 
-.b dvi 
-and 
-.b postscript . 
+including
+.b X ,
+.b dvi
+and
+.b postscript .
 When configuring \*M, the preference is
 to use \*G rather than \*T.
 .BS 2 "Arguments to configure"
 .lp
-To allow the configuration program,  
+To allow the configuration program,
 .b configure ,
 to be non-interactive, it can be passed various options to alter the
-default settings. 
-Generic 
+default settings.
+Generic
 .b configure
-options are discussed in 
+options are discussed in
 .i docs/INSTALL .
 Options that are specific to the \*M package are described below.
 .lp
 .ip \-\-enable\-debug
-By default, the configuration process creates production quality Makefiles. 
+By default, the configuration process creates production quality Makefiles.
 This
 option, which takes no argument, changes certain values to aid in debugging
 \*M. It does not alter the physical behaviour of any of the programs.
 .ip \-\-enable\-setuid[=ARG]
-By default, 
+By default,
 .b man
 will be installed as a setuid program to user man. Use this option with an
-argument to change the setuid owner. 
+argument to change the setuid owner.
 .ip \-\-disable\-setuid
 Use this option to install
 .b man
@@ -263,7 +262,7 @@ as a non-setuid program and to change the default cat and database files'
 access flags to allow users to modify them.
 .ip \-\-with\-device=DEVICE
 Use this flag to alter the default output device used by \*N. DEVICE is
-passed to \*N with the \-T option. 
+passed to \*N with the \-T option.
 .b configure
 will test that \*N will run with the supplied device argument.
 .ip \-\-with\-db=LIBRARY

@@ -11,7 +11,7 @@
 As already pointed out in the introduction, there are two primary
 formatters common to \*U: \*N and \*T.
 .lp
-In the following sections, I 
+In the following sections, I
 will use the term \*T to describe the typesetter formatter and \*N to
 describe the typewriter formatter. The term \*R will be used to describe
 a generic formatter.
@@ -20,7 +20,7 @@ a generic formatter.
 If using the \*G package, there is a further choice, \*G itself.
 Essentially, \*G forms a pipeline of processors including \*T and an output
 processor which translates the ditroff produced by \*T into the appropriate
-output format. The default output format, or device, for \*G is \*P. 
+output format. The default output format, or device, for \*G is \*P.
 Anything else must be specified using the device argument.
 To illustrate \*G, the command
 .ip
@@ -30,26 +30,26 @@ will form the following pipeline
 .ip
 troff \-Tdvi /dev/null | grodvi
 .lp
-If \*G is tied to 
-.b man's
+If \*G is tied to
+.b "man's"
 .b \-T
-option, it is still possible for 
+option, it is still possible for
 .b man
-to produce ditroff via use of the 
-.b \-Z 
+to produce ditroff via use of the
+.b \-Z
 option.
 .lp
 In \*G 1.09, \*N is bundled as a shell script that calls \*G, which in turn
 calls \*T with the default options
 .b "\-Wall \-mtty-char \-Tascii" ,
-passing the result through 
+passing the result through
 .b grotty
-before it finally reaches the screen. 
+before it finally reaches the screen.
 .lp
-It is imperative that the script does not pass pre-processing options 
+It is imperative that the script does not pass pre-processing options
 to \*G
-command line as 
-.b man 
+command line as
+.b man
 takes care of this separately. The file
 .i tools/nroff_script
 may be used as a basis for an \*N script if your system is without one.
@@ -57,17 +57,17 @@ may be used as a basis for an \*N script if your system is without one.
 .lp
 Both \*N and \*G may allow output device selection. As mentioned previously,
 classic \*N produces output suitable for a typewriter device, classic
-\*T produces output suitable for a 
-.b C/A/T 
-and \*G produces output suitable for a \*P interpreting device. 
+\*T produces output suitable for a
+.b C/A/T
+and \*G produces output suitable for a \*P interpreting device.
 .BS 2 "Macros"
 .lp
 There are several \*R macros in existence that are suitable for manual
 pages.
 Unfortunately, they tend to be incompatible with each other.
 .lp
-During configuration, 
-.b configure 
+During configuration,
+.b configure
 will attempt to determine a suitable macro for the local system's manual page
 collection. It attempts to use \*N with the following three macro packages:
 
@@ -106,7 +106,7 @@ refer@r@A bibliography
 vgrind@v@program listings
 .TE
 
-It is possible to assign a default pre-processor list that all 
+It is possible to assign a default pre-processor list that all
 manual pages will be passed through prior to the primary formatter. By
 default, this is empty. To define a default list, edit
 .i include/manconfig.h
@@ -116,15 +116,15 @@ and un-comment the following line
 .lp
 which will enable
 .b tbl
-processing by default. To change the list, replace the 
+processing by default. To change the list, replace the
 .b t
 with a suitable string of processor ID's.
 .lp
 Pre-process options may be provided at run time in various forms, but in
 general the pre-processors required by each manual page is indicated in the
-first line of the manual page itself. See 
-.b man (1) 
-for details.  
+first line of the manual page itself. See
+.b man (1)
+for details.
 .BS 2 "Format scripts"
 .lp
 It is very likely that alternate systems manual pages may require
@@ -133,26 +133,26 @@ To tackle such problems, special format scripts may be created on a per
 manual hierarchy basis.
 .lp
 If the file
-.ip 
+.ip
 .i <manual_hierarchy>/mandb_nfmt
 .lp
 exists and is executable, it is expected to be able to correctly format a
-manual page originating from 
+manual page originating from
 .i <manual_hierarchy>
 to its standard output. It will be supplied with either two or three
 arguments:
 .(l
-\(bu manual page filename 
+\(bu manual page filename
 \(bu pre-processor string
 \(bu ouput device (optional)
 .)l
 Similarly, if the option
 .b \-T\c
-.i <device> 
+.i <device>
 .r
 or
 .b \-t
-was supplied to 
+was supplied to
 .b man
 and the file
 .ip
@@ -161,13 +161,13 @@ and the file
 exists and is executable, it will be used in the same way.
 .lp
 An example of such a script, supplied by Markus Armbruster
-<armbru@pond.sub.org>, who provided support for external formatter scripts, 
+<armbru@pond.sub.org>, who provided support for external formatter scripts,
 can be found as
 .i tools/mandb_[nt]fmt
 .lp
 The script can be used as both a \*N and \*T/\*G format script and can be
-installed as 
+installed as
 .i mandb_nfmt
-and hard linked to 
+and hard linked to
 .i mandb_tfmt
 after modification appropriate for your particular site.

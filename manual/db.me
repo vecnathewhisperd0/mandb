@@ -10,18 +10,18 @@
 .lp
 As mentioned in the introduction, \*M uses database lookups to search for
 manual page locations and information. When performing a manual page lookup
-or a basic 
+or a basic
 .b whatis
-search, the databases are searched in 
+search, the databases are searched in
 .ip
 .i "key \(-> content"
 .lp
-mode and are as fast as the underlying databases can be. When performing 
+mode and are as fast as the underlying databases can be. When performing
 .b apropos
-or special 
+or special
 .b whatis
 searches, the databases are searched in a linear way, which although far
-more expensive than 
+more expensive than
 .i keyed
 lookup, is no worse than traditional text based file searching.
 .BS 2 "index database location"
@@ -31,34 +31,34 @@ whether this is the same as the manual page hierarchy or not.
 As file locking mechanisms are employed to ensure that concurrent
 processes do not update a database simultaneously, it is almost imperative
 that the databases reside on a local filesystem since file locking across
-NFS filesystems may be unavailable or flaky. To avoid such problems, 
+NFS filesystems may be unavailable or flaky. To avoid such problems,
 .b man
 can be compiled without database maintenance support.
 See the
 section titled "Modes of operation" for details.
-.BS 3 "Manual hierarchies with no index database  
+.BS 3 "Manual hierarchies with no index database"
 .lp
 It is possible for the \*M utilities to operate without aid from an index
 database. Under such circumstances, search methods will resort to file
 globbing and whatis type searches are performed on any traditional whatis
-text databases that may exist. 
-Only the traditional cat hierarchy is searched for cat files. 
+text databases that may exist.
+Only the traditional cat hierarchy is searched for cat files.
 .BS 3 "User manual page hierarchies"
 .lp
 A user may have any number of personal manual page hierarchies listed in
-their 
+their
 .EV MANPATH\c
 .r .
 .r
-By default, 
+By default,
 .b man
-will maintain 
+will maintain
 .b mandb
 created databases at the root of user manual page
-hierarchies. 
+hierarchies.
 The definition of a user manual hierarchy is that it
-does not have an entry in the man_db configuration file. See 
-.b manpath (5) 
+does not have an entry in the man_db configuration file. See
+.b manpath (5)
 for details.
 .BS 2 "Contents of an index database"
 .lp
@@ -73,21 +73,21 @@ pages sharing the common index entry name.
 Manual pages that share common names, but have differing extensions each
 have a single database entry, but this time they are looked up with a key
 comprised of their name and their extension. The entire set of common named
-pages also has an common name index entry that informs of the extensions 
+pages also has an common name index entry that informs of the extensions
 available.
 .np
 An indirect entry that has a pointer to the real entry. Manual pages that
 are whatis references to a particular page do not physically exist so they
 have a pointer to the entry containing the location of the real manual page.
 .np
-Special identification entries. There are two special key names, 
+Special identification entries. There are two special key names,
 .q $mtime$
 that references an integer describing the last modification time of the
 database and
 .q $version$
 that identifies the database storage scheme version.
 .lp
-In the following entries, the character 
+In the following entries, the character
 .q |
 will be used to separate the fields. In reality a tab is used.
 Direct and indirect entries takes the form:
@@ -112,16 +112,16 @@ in the case of a manual page, or
 .lp
 in the case of a stray cat.
 .lp
-If any of the fields would be empty, a single 
-.q \- 
+If any of the fields would be empty, a single
+.q \-
 is stored in its place.
 .i <comp>
-represents the compression extension. 
-.i <mtime> 
+represents the compression extension.
+.i <mtime>
 is an integer representing the last modification time of the manual page,
 .i <ref>
-points to the entry containing the location of the real page and 
-.i <ID> 
+points to the entry containing the location of the real page and
+.i <ID>
 is one of the following identification letters.
 
 .TS
@@ -147,42 +147,42 @@ which.
 With the above rules of precedence, it is possible for a valid stray cat page
 to be replaced by a whatis referred page sharing identical name-space.
 .lp
-If you would like to see the stray cat page  
+If you would like to see the stray cat page
 .b kill (1)
 instead of the
 .b bash_builtins (1)
-page referenced by 
+page referenced by
 .b kill (1)
-edit 
+edit
 .i include/manconfig.h
 and un-comment the following line
 .lp
 /* #define FAVOUR_STRAYCATS */
 .BS 3 "Accessdb"
 .lp
-A simple program, 
+A simple program,
 .b accessdb
-is included with \*M. It will output the data contained within a man_db 
-database in a human readable form. By default, it will 
+is included with \*M. It will output the data contained within a man_db
+database in a human readable form. By default, it will
 .i dump
-the data from 
-.i /var/catman/index.<db-type> ,
-where 
-.i <db-type> 
+the data from
+.i /var/cache/man/index.<db-type> ,
+where
+.i <db-type>
 is dependent on the database library in use.
 .lp
-Supplying an argument to 
+Supplying an argument to
 .b accessdb
-will override this default. 
+will override this default.
 Tabs are replaced in the output by a tilde
 .q ~
-in the 
+in the
 .i key
-field and a single space in the 
-.i content 
+field and a single space in the
+.i content
 field
 .lp
-.b accessdb 
+.b accessdb
 is not compiled by default. Type
 .ip
 .bx "make accessdb"
@@ -190,7 +190,7 @@ is not compiled by default. Type
 in the src directory to compile it.
 .BS 3 "Example database"
 .lp
-As an example of both 
+As an example of both
 .b accessdb
 and the database storage method, the output of
 .ip
@@ -227,7 +227,7 @@ gdbm (\*(GN)
 .bu
 btree (Berkeley DB)
 .lp
-\*M currently does not hold more than one database open at any time, so 
+\*M currently does not hold more than one database open at any time, so
 .bu
 dbm (\*U)
 .lp
@@ -252,7 +252,7 @@ btree@binary tree@index.bt@static@\-@none@yes
 .TE
 
 .(f
-\** ndbm databases are physically represented by two files: 
+\** ndbm databases are physically represented by two files:
 .i index.dir
 and
 .i index.pag
@@ -261,22 +261,22 @@ but are referred to simply as
 by the interface routines.
 .)f
 Those types that have no built in concurrent access strategy, are provided
-with 
+with
 .b flock (2)
 based file locking by \*M.
 .lp
-As 
+As
 .b btree
-is noticeably faster when doing 
+is noticeably faster when doing
 .b man
 searches, mainly due to the fast initialization of the databases, it is the
 preferred library interface.
-.b configure 
-will look for 
+.b configure
+will look for
 .b btree ,
 .b gdbm
 and then finally
-.b ndbm 
+.b ndbm
 routines when configuring \*M.
 .BS 2 "Sharing databases in a heterogeneous environment"
 It may be necessary or advantageous to share databases across
@@ -290,7 +290,7 @@ In this context, the database cache will have the same name and reside in
 the same place on all machines. There are at least two ways to deal with
 this problem.
 .bu
-Hack the 
+Hack the
 .i include/manconfig.h
 file on each platform to provide a unique database name for each system. No
 databases will be shared.

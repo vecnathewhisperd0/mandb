@@ -12,42 +12,42 @@
 The use of package specific manual page
 sections is discouraged as packages large enough to warrant their own
 section probably contain manual pages that span other sections. An example
-might be package  
-.b foo 
-that has it's own section
+might be package
+.b foo
+that has its own section
 .ip
-.i /usr/man/manfoo 
+.i /usr/man/manfoo
 .lp
 which contains manual pages
-describing it's programs, the library routines it offers and the format of
+describing its programs, the library routines it offers and the format of
 several of its configuration files. These pages would normally be allocated
-to sections 
-.b 1 , 
-.b 3 
-and 
-.b 5 
-respectively and thus combining them all under section 
-.b foo 
+to sections
+.b 1 ,
+.b 3
+and
+.b 5
+respectively and thus combining them all under section
+.b foo
 is misleading. Subtle problems will arise if there are any
-base name-space clashes with standard manual pages, eg. 
+base name-space clashes with standard manual pages, eg.
 .b exit (3),
-.b exit (foo) 
+.b exit (foo)
 and the order in which they should be shown.
 .lp
 There are two standard solutions to this problem.
 .np
 Create a separate manual page hierarchy for the package's manual pages such as
-.(l 
+.(l
 .i /usr/local/packages/foo/man
 .)l
 .np
 Install the pages in their relevant sections, with a unique extension
 appended to the filename such that
-.(l 
-.i /usr/man/manfoo/exit.foo 
+.(l
+.i /usr/man/manfoo/exit.foo
 .)l
 would instead be installed as
-.(l 
+.(l
 .i /usr/man/man1/exit.1foo
 .)l
 .lp
@@ -61,23 +61,23 @@ This is done via use of the section argument to man
 .ip
 .bx "man 1 exit"
 .lp
-will look for 
+will look for
 .i exit.1*
-in section 
+in section
 .b 1
 of the manual. If
 .i exit.1
-exists, it will be displayed in preference to 
+exists, it will be displayed in preference to
 .i exit.1foo
 .ip
 .bx "man 1foo exit"
 .lp
-will look for  
+will look for
 .i exit.1foo*
-in section 
+in section
 .b 1
 of the manual. The asterisk (*)
-represents a wild-card of any type or length, including length zero. 
+represents a wild-card of any type or length, including length zero.
 .lp
 For an argument to be interpreted as a section name rather than a page name, it
 must either begin with a digit, or be included in the standard section list.
@@ -98,16 +98,16 @@ and
 .b 7 .
 This should be modified in order and content to meet the local conventions.
 .lp
-Every subdirectory section name in the entire system must be in the list, 
+Every subdirectory section name in the entire system must be in the list,
 including sections found in imported manual page hierarchies. The order is
-important because in normal operation, 
+important because in normal operation,
 .b man
 will only display the first manual page it finds that meets the search
 criteria. Using the
 .b \-\-all
-argument will cause 
-.b man 
-to attempt to display all manual pages that meet the criteria. See 
+argument will cause
+.b man
+to attempt to display all manual pages that meet the criteria. See
 .b man (1)
 for further information.
 .lp
@@ -116,12 +116,12 @@ Having an excess of sections listed will not slow
 down.
 .BS 3 "Specifying an extension"
 .lp
-If the section is unknown, but the package extension is, 
+If the section is unknown, but the package extension is,
 it is possible to use the extension argument
 .ip
 .bx "man \-e foo exit"
 .lp
-to search in all sections for manual pages named 
+to search in all sections for manual pages named
 .i exit
 from package
 .i foo .
