@@ -15,8 +15,11 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
+#include <sys/types.h>
 
 #include "manconfig.h"
+
+uid_t ruid, euid, uid;
 
 void drop_effective_privs (void)
 {

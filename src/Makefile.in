@@ -82,7 +82,7 @@ mandb: security.o manp.o util.o ult_src.o check_mandirs.o hashtable.o \
 
 wrapper:	LDLIBS=-lc
 
-catman manpath whatis apropos: security.o manp.o
+catman manpath whatis apropos: fake_security.o manp.o
 catman manpath whatis apropos accessdb: util.o 
 man mandb catman whatis apropos accessdb: ../libdb/libmandb.a
 

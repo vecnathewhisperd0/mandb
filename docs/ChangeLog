@@ -1,3 +1,10 @@
+Tue Aug 21 01:57:44 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/Makefile.in: Link non-setuid programs against fake_security.o
+	  rather than security.o.
+	* src/fake_security.c: Add a few stub variables to match recent
+	  security.c changes.
+
 Tue Aug 21 01:34:49 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/Makefile.in (install): Don't depend on all, so that the
