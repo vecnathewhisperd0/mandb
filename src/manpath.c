@@ -109,13 +109,10 @@ int main (int argc, char *argv[])
 
 	program_name = xstrdup(basename((argv[0])));
 	/* initialise the locale */
-	locale = setlocale( LC_MESSAGES, "");
+	locale = setlocale( LC_ALL, "");
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
-	if (locale != NULL
-	|| (locale = getenv ("LC_ALL"))
-	|| (locale = getenv ("LC_MESSAGES"))
-	|| (locale = getenv ("LANG")) )
+	if (locale != NULL)
 		locale = xstrdup (locale);
 	else
 		locale = "C";

@@ -280,10 +280,49 @@ void test_manfile(char *file, const char *path)
 		free_mandata_struct(exists);
 	}
 
-	/* Trace the file to its ultimate source, else we'll be looking
-	   for whatis info in files containing only '.so manx/foo.x', which
-	   will give us an unobtainable whatis for the entry. */
-	ult = ult_src(file, path, &buf, SO_LINK | SOFT_LINK | HARD_LINK);
+	/* Check if it happens to be a symlink/hardlink to something already
+	   in our cache. This just does some extra checks to avoid scanning
+	   links quite so many times. */
+	{
+		/* Avoid too much noise in debug output */
+#ifndef debug
+		int save_debug = debug;
+		debug = 0;
+#endif
+		ult = ult_src(file, path, &buf, SOFT_LINK | HARD_LINK);
+#ifndef debug
+		debug = save_debug;
+#endif
+	}
+
+	if (!ult) {
+		/* already warned about this, don't do so again */
+		if (debug)
+			fprintf(stderr,
+				"test_manfile(): bad link %s\n", file);
+		free(manpage);
+		return;
+	}
+
+	if (lookup(ult) == NULL) {
+		if (debug &&
+#ifdef COMP_SRC
+		    strncmp(ult, file, len) != 0
+#else /* not COMP_SRC */
+		    strcmp(ult, file) != 0
+#endif /* COMP_SRC */
+		    )
+			fprintf(stderr,
+				"\ntest_manfile(): link not in cache:\n"
+				" source = %s\n"
+				" target = %s\n", file, ult);
+		/* Trace the file to its ultimate source, else we'll be
+		   looking for whatis info in files containing only
+		   '.so manx/foo.x', which will give us an unobtainable
+		   whatis for the entry. */
+		ult = ult_src(file, path, &buf,
+			      SO_LINK | SOFT_LINK | HARD_LINK);
+	}
 
 	if (!ult) {
 		error (0, 0, _( "warning: %s: bad symlink or ROFF `.so' request"), file);
@@ -353,7 +392,7 @@ void test_manfile(char *file, const char *path)
 		}
 		info.id = save_id;
 	} else {
-		(void) lstat(ult, &buf);
+		(void) stat(ult, &buf);
 		if (buf.st_size == 0) {
 			if (quiet < 2)
 				error (0, 0, _( "warning: %s: ignoring empty file"), ult);

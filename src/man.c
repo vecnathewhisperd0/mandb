@@ -813,14 +813,11 @@ int main (int argc, char *argv[])
 
 	umask(022);
 	/* initialise the locale */
-	internal_locale = setlocale( LC_MESSAGES, "");
+	internal_locale = setlocale( LC_ALL, "");
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 
-	if (internal_locale != NULL
-	|| (internal_locale = getenv ("LC_ALL"))
-	|| (internal_locale = getenv ("LC_MESSAGES"))
-	|| (internal_locale = getenv ("LANG")) )
+	if (internal_locale != NULL)
 		internal_locale = xstrdup (internal_locale);
 	else
 		internal_locale = "C";
@@ -891,7 +888,7 @@ int main (int argc, char *argv[])
 	/* close this locale and reinitialise incase a new locale was 
 	   issued as an argument or in $MANOPT */
 	if (locale) {
-		if ((internal_locale = setlocale(LC_MESSAGES, locale)) == NULL)
+		if ((internal_locale = setlocale(LC_ALL, locale)) == NULL)
 			internal_locale = locale;
 
 		internal_locale = xstrdup (internal_locale);

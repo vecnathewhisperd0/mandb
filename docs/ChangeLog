@@ -1,4 +1,25 @@
-Wed Feb 28 21:02:41 GMT 2000  Colin Watson  <cjwatson@debian.org>
+Sat Mar 31 18:07:46 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* Debian release 2.3.17.1-1.
+
+	* src/check_mandirs.c (test_manfile): Check if the result of symlink
+	  and hard link resolution is in the cache before looking for .so
+	  links. This provides a substantial speedup when many symlinks
+	  exist in the mantree.
+
+	* src/catman.c (main): Initialize full locale by calling setlocale()
+	  with LC_ALL rather than LC_MESSAGES (GOTO Masanori). Remove manual
+	  getenv() calls accordingly.
+	* src/man.c (main): Likewise.
+	* src/mandb.c (main): Likewise.
+	* src/manpath.c (main): Likewise.
+	* src/whatis.c (main): Likewise.
+
+	* include/manconfig.h.in: Add 3perl to section names, following 3pm;
+	  Debian is using this to allow other packages to shadow pages from
+	  core Perl packages.
+
+Wed Feb 28 21:02:41 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* Debian release 2.3.17-3.2.
 
@@ -12,7 +33,7 @@ Wed Feb 28 21:02:41 GMT 2000  Colin Watson  <cjwatson@debian.org>
 	  the root of a mantree.
 	  (SEE ALSO): Add reference to man-db manual to explain the above.
 
-Wed Feb 21 00:54:47 GMT 2000  Colin Watson  <cjwatson@debian.org>
+Wed Feb 21 00:54:47 GMT 2001  Colin Watson  <cjwatson@debian.org>
 
 	* Debian release 2.3.17-3.1.
 
