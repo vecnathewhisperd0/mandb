@@ -1116,20 +1116,19 @@ char *get_catpath (const char *name, int cattype)
 			size_t manlen = strlen (list->key);
 			if (STRNEQ (name, list->key, manlen)) {
 				const char *suffix = name + manlen;
-				char *catpath;
+				char *catpath = xstrdup (list->cont);
 
-				catpath = xmalloc (strlen (list->cont) +
-						   strlen (suffix) + 1);
-				(void) strcpy (catpath, list->cont);
 				if (*suffix == '/') {
 					++suffix;
-					(void) strcat (catpath, "/");
+					catpath = strappend (catpath, "/",
+							     NULL);
 				}
-				if (!strncmp (suffix, "man", 3)) {
+				if (STRNEQ (suffix, "man", 3)) {
 					suffix += 3;
-					(void) strcat (catpath, "cat");
+					catpath = strappend (catpath, "cat",
+							     NULL);
 				}
-				(void) strcat (catpath, suffix);
+				catpath = strappend (catpath, suffix, NULL);
 			  	return catpath;
 			}
 		}
