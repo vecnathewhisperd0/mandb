@@ -69,21 +69,6 @@
 /* define if using <glob.h> rather than "lib/glob.h" */
 #undef HAVE_GLOB_H
 
-/* Define to 1 if NLS is requested.  */
-#undef ENABLE_NLS
-
-/* Define as 1 if you have catgets and don't want to use GNU gettext.  */
-#undef HAVE_CATGETS
-
-/* Define as 1 if you have gettext and don't want to use GNU gettext.  */
-#undef HAVE_GETTEXT
-
-/* Define if your locale.h file contains LC_MESSAGES.  */
-#undef HAVE_LC_MESSAGES
-
-/* Define to 1 if stpcpy function is available.  */
-#undef HAVE_STPCPY
-
 /* Define to the name of the distribution.  */
 #undef PACKAGE
 
