@@ -155,9 +155,6 @@ static char *xtmpfile;
 #ifdef SECURE_MAN_UID
 extern uid_t ruid;
 extern uid_t euid;
-#ifdef MAN_DB_UPDATES
-#  define DO_CHOWN
-#endif /* MAN_DB_UPDATES */
 #endif /* SECURE_MAN_UID */
 
 extern char *optarg;
@@ -277,7 +274,7 @@ static __inline__ void finish_up (void)
 #endif /* NDBM */
 }
 
-#ifdef DO_CHOWN
+#ifdef SECURE_MAN_UID
 /* chown() with error checking */
 static __inline__ void xchown (const char *path, uid_t owner, uid_t group)
 {
@@ -301,7 +298,7 @@ static __inline__ void do_chown (uid_t uid)
 	xchown (xfile, uid, -1);
 #  endif /* NDBM */
 }
-#endif /* DO_CHOWN */
+#endif /* SECURE_MAN_UID */
 
 /* Update a single file in an existing database. */
 static short update_one_file (const char *manpath, char *filename)
@@ -431,7 +428,7 @@ int main (int argc, char *argv[])
 	char *cwd = wd;
 #endif /* __profile__ */
 
-#ifdef DO_CHOWN
+#ifdef SECURE_MAN_UID
 	struct passwd *man_owner;
 #endif
 
@@ -508,7 +505,7 @@ int main (int argc, char *argv[])
 	init_security ();
 #endif /* SECURE_MAN_UID */
 
-#ifdef DO_CHOWN
+#ifdef SECURE_MAN_UID
 	man_owner = getpwnam (MAN_OWNER);
 	if (man_owner == NULL)
 		error (FAIL, 0,
@@ -516,7 +513,7 @@ int main (int argc, char *argv[])
 		       MAN_OWNER);
 	if (!user && euid != 0 && euid != man_owner->pw_uid)
 		user = 1;
-#endif /* DO_CHOWN */
+#endif /* SECURE_MAN_UID */
 
 
 	/* This is required for get_catpath(), regardless */
@@ -587,10 +584,10 @@ int main (int argc, char *argv[])
 
 		if (!opt_test) {
 			finish_up ();
-#ifdef DO_CHOWN
+#ifdef SECURE_MAN_UID
 			if (global_manpath && euid == 0)
 				do_chown (man_owner->pw_uid);
-#endif
+#endif /* SECURE_MAN_UID */
 		} else
 			cleanup (NULL);
 		pop_cleanup ();
