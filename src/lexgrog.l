@@ -34,6 +34,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <sys/stat.h>
 #include <errno.h>
 
 #ifndef STDC_HEADERS
@@ -56,6 +57,7 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "security.h"
+#include "ult_src.h"
 
 #define YY_READ_BUF_SIZE	1024
 #define MAX_NAME		2048
@@ -371,15 +373,38 @@ int find_name (char *file, char *filename, lexgrog *p_lg)
 	if (strcmp (file, "-") == 0) {
 		yyin = fdopen (dup (0), "r");
 	} else {
+		char *path = xstrdup (file), *pathend;
+		struct stat statbuf;
 #ifdef COMP_SRC
-		/* See if we need to decompress the file(s) first. */
-		struct compression *comp = comp_info (file);
-		if (comp) {
-			file = decompress (file, comp);
-			if (!file)
-				return 0;
-		}
+		char *ztemp;
 #endif
+
+		pathend = strrchr (path, '/');
+		if (pathend) {
+			*pathend = '\0';
+			pathend = strrchr (path, '/');
+			if (pathend && STRNEQ (pathend + 1, "man", 3))
+				*pathend = '\0';
+			else {
+				free (path);
+				path = NULL;
+			}
+		} else {
+			free (path);
+			path = NULL;
+		}
+
+		file = ult_src (file, path ? path : ".", &statbuf, SO_LINK);
+		if (path)
+			free (path);
+		if (!file)
+			return 0;
+#ifdef COMP_SRC
+		ztemp = get_ztemp ();
+		if (ztemp)
+			file = ztemp;
+#endif
+
 		drop_effective_privs ();
 		yyin = fopen (file, "r");
 		regain_effective_privs ();

@@ -105,7 +105,7 @@ apropos: whatis.c
 	$(LINK.c) $^ $(LDLIBS) -o $@
 
 # Rules to test code as program unit
-lexgrog: lexgrog.c compression.o fake_security.o util.o
+lexgrog: lexgrog.c compression.o fake_security.o ult_src.o util.o
 	$(LINK.c) -DTEST $^ $(LDLIBS) -o $@
 
 globbing: globbing.c
