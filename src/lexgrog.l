@@ -73,7 +73,8 @@ static void add_separator_to_whatis (void);
 static void newline_found (void);
 
 static char newname[MAX_NAME];
-static char *p_name, *fname;
+static char *p_name;
+static const char *fname;
 static char filters[MAX_FILTERS];
 
 static int fill_mode;
@@ -87,7 +88,7 @@ static int fill_mode;
 #  include "lib/getopt.h"
 #endif /* HAVE_GETOPT_H */
 
-char *program_name = "lexgrog";
+char *program_name;
 int debug = 0;
 
 static const struct option long_options[] =
@@ -367,7 +368,7 @@ static void newline_found (void)
 	}
 }
 
-int find_name (const char *file, char *filename, lexgrog *p_lg)
+int find_name (const char *file, const char *filename, lexgrog *p_lg)
 {
 	int ret;
 
@@ -468,6 +469,9 @@ int main (int argc, char **argv)
 	int type = 0;
 	int parse_man = 0, parse_cat = 0, show_whatis = 0, show_filters = 0;
 	int some_failed = 0;
+
+	program_name = xstrdup (basename (argv[0]));
+
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, &option_index)) != -1) {
 		switch (c) {

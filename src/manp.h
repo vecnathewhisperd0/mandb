@@ -31,5 +31,5 @@ extern char *get_mandb_manpath (void);
 extern char *get_catpath (const char *name, int cattype);
 extern int is_global_mandir (const char *dir);
 extern void read_config_file (void);
-extern char *get_def (char *thing, char *def);
-extern char **get_sections (void);
+extern const char *get_def (const char *thing, const char *def);
+extern const char **get_sections (void);

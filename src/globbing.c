@@ -64,8 +64,8 @@ extern char *strrchr();
 #include "lib/error.h"
 #include "lib/hashtable.h"
 
-char *extension;
-static char *mandir_layout = MANDIR_LAYOUT;
+const char *extension;
+static const char *mandir_layout = MANDIR_LAYOUT;
 
 #ifdef TEST
 

@@ -59,7 +59,7 @@ extern char *strchr();
 #endif /* HAVE_GETOPT_H */
 
 char *program_name;
-char *cat_root;
+const char *cat_root;
 int debug;
 
 static const struct option long_options[] =

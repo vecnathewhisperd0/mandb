@@ -1,3 +1,68 @@
+Thu May  1 16:52:44 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Remove all assumptions that string literals have type 'char *'
+	rather than 'const char *'.
+
+	* configure.in (CFLAGS): Add -Wwrite-strings for gcc.
+
+	* lib/tempfile.c (xstrdup): First argument is const.
+	  (path_search): Return 'const char *'.
+	  (create_tempfile, create_tempdir): Copy return value of
+	  path_search() right away rather than after checking for NULL.
+
+	* libdb/db_ver.c (dbver): Take a private copy of VER_KEY.
+	  (dbver_wr): Take private copies of VER_KEY and VER_ID.
+
+	* src/accessdb.c (cat_root): Add const.
+	* src/catman.c (parse_for_sec): Remove __inline__; add const to both
+	  arguments. Take private copies of "man" and the basic options.
+	  (main): Copy "C" for locale. Make sections etc. 'const char **',
+	  since STD_SECTIONS is an array of 'const char *'.
+	* src/check_mandirs.c (update_db_time, reset_db_time, update_db):
+	  Take a private copy of KEY.
+	* src/filenames.c (make_filename): Make type const.
+	* src/filenames.h (make_filename): Update prototype.
+	* src/globbing.c (extension, mandir_layout): Add const.
+	* src/lexgrog.l (fname): Add const.
+	  (find_name): Make filename const.
+	  (main): Set program_name here from argv[0] rather than from a
+	  string literal.
+	* include/manconfig.h.in (find_name): Update prototype.
+	* src/man.c (lang_dir): Add static. Copy string literals into ld.
+	  Use xstrndup() rather than copying and then inserting '\0'.
+	  (extension, alt_system_name, section_list, preprocessors, pager,
+	  locale, std_sections, external, gxditview, html_pager): Add const.
+	  (add_roff_line_length): First argument is const. Return a copy of
+	  it if necessary.
+	  (gripe_no_man): Copy external before passing it to basename().
+	  (main): Copy "C" for internal_locale. Reorganize locale
+	  reinitialization slightly so that locale can be const.
+	  (man_getopt): Set 'const char *' and 'char *' variables to NULL
+	  separately.
+	  (is_section, compare_candidates, man): Use a 'const char **' to
+	  iterate through section_list.
+	  (make_roff_command): Remove __inline__. Take a copy of "" for dev
+	  so that dev is always allocated memory. Handle filter in a more
+	  const-safe way (although there's still a memory leak).
+	  (get_section_list): Remove __inline__. Return 'const char **'.
+	* src/man.h (get_section_list): Update prototype.
+	* src/manp.c (get_from_list): Make return value and first argument
+	  const.
+	  (get_def): Make return value and both arguments const.
+	  (get_sections): Return const.
+	  (cat_manpath): Make path and catdir const.
+	* src/manp.h (get_def, get_sections): Update prototypes.
+	* src/manpath.c (main): Make alt_system const.
+	* src/whatis.c (use_grep): Make flags and anchor const.
+	  (main): Make manp and alt_systems const. Copy "C" for locale.
+	* zsoelim/zsoelim.l (main): Copy argv[0] basename for program_name,
+	  as basename()'s return value may not be long-lived. Copy "-" for
+	  so_name[0].
+
+	* src/mandb.c (main): Don't bother remembering the return value of
+	  setlocale().
+	* src/manpath.c (main): Likewise.
+
 Mon Apr 28 15:11:28 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* src/catman.c (main): Don't guard xstrdup() from NULL input, as it

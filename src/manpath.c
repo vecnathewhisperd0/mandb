@@ -113,22 +113,16 @@ static void usage (int status)
 int main (int argc, char *argv[])
 {
 	int c, global = 0, cat = 0;
-	char *alt_system = "";
+	const char *alt_system = "";
 	char *path_string;
 	int option_index; /* not used, but required by getopt_long() */
-	char *locale;
 
 	program_name = xstrdup (basename (argv[0]));
 	/* initialise the locale */
-	locale = setlocale (LC_ALL, "");
-	if (locale)
-		locale = xstrdup (locale);
-	else {
+	if (!setlocale (LC_ALL, ""))
 		/* Obviously can't translate this. */
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
-		locale = "C";
-	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 

@@ -54,7 +54,7 @@ static void gripe_bogus_manpage (const char *manpage)
 }	  	  
 
 char *make_filename (const char *path, const char *name,
-		     struct mandata *in, char *type)
+		     struct mandata *in, const char *type)
 {
 	static char *file;
 

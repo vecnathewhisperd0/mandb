@@ -429,7 +429,7 @@ void update_db_time (void)
 	datum key1, content1;
 #endif /* FAST_BTREE */
 
-	key.dptr = KEY;
+	key.dptr = xstrdup (KEY);
 	key.dsize = sizeof KEY;
 	content.dptr = (char *) xmalloc (16); /* 11 is max long with '\0' */
 	(void) sprintf (content.dptr, "%ld", (long) time (NULL));
@@ -462,6 +462,7 @@ void update_db_time (void)
 #endif /* !FAST_BTREE */
 
 	MYDBM_CLOSE (dbf);
+	free (key.dptr);
 	free (content.dptr);
 }
 
@@ -471,7 +472,7 @@ void reset_db_time (void)
 {
 	datum key;
 
-	key.dptr = KEY;
+	key.dptr = xstrdup (KEY);
 	key.dsize = sizeof KEY;
 
 	/* we don't really care if we can't open it RW - it's not fatal */
@@ -488,6 +489,7 @@ void reset_db_time (void)
 	if (debug)
 		fprintf (stderr, "reset_db_time()\n");
 	MYDBM_CLOSE (dbf);
+	free (key.dptr);
 }
 
 /* routine to prepare/create the db prior to calling testmandirs() */
@@ -540,10 +542,11 @@ short update_db (const char *manpath)
 		datum key, content;
 		short new;
 
-		key.dptr = KEY;
+		key.dptr = xstrdup (KEY);
 		key.dsize = sizeof KEY;
 		content = MYDBM_FETCH (dbf, key);
 		MYDBM_CLOSE (dbf);
+		free (key.dptr);
 
 		if (debug)
 			fprintf (stderr, "update_db(): %ld\n",

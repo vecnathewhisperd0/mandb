@@ -23,6 +23,6 @@
 #include "libdb/db_storage.h"
 
 extern char *make_filename (const char *path, const char *name,
-			    struct mandata *in, char *type);
+			    struct mandata *in, const char *type);
 extern char *filename_info (const char *file, struct mandata *info,
 			    const char *req_name);

@@ -230,13 +230,13 @@ static FILE *checked_popen (const char *command, const char *type)
 }
 #endif /* MAN_CATS */
 
-char *lang_dir (const char *filename)
+static char *lang_dir (const char *filename)
 {
 	char *ld;	/* the lang dir: point to static data */
 	const char *fm;	/* the first "/man/" dir */
 	const char *sm;	/* the second "/man?/" dir */
 
-	ld = "";
+	ld = xstrdup ("");
 	if (!filename) 
 		return ld;
 
@@ -254,15 +254,15 @@ char *lang_dir (const char *filename)
 
 	/* If there's no lang dir element, it's an English man page. */
 	if (sm == fm + 4)
-		return "C";
+		return xstrdup ("C");
 
 	/* found a lang dir */
 	fm += 5;
 	sm = strchr (fm, '/');
 	if (!sm)
 		return ld;
-	ld = xstrdup (fm);
-	ld[sm - fm] = '\0';
+	free (ld);
+	ld = xstrndup (fm, sm - fm);
 	if (debug)
 		fprintf (stderr, "found lang dir element %s\n", ld);
 	return ld;
@@ -295,23 +295,23 @@ int quiet = 1;
 char *program_name;
 char *database;
 MYDBM_FILE dbf; 
-extern char *extension; /* for globbing.c */
+extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
 
 /* locals */
-static char *alt_system_name;
-static char **section_list;		
+static const char *alt_system_name;
+static const char **section_list;		
 static const char *section;
 static char *colon_sep_section_list;
-static char *preprocessors;
-static char *pager;
-static char *locale;
+static const char *preprocessors;
+static const char *pager;
+static const char *locale;
 static char *internal_locale;
 static char *prompt_string;
 static char *less;
-static char *std_sections[] = STD_SECTIONS;
+static const char *std_sections[] = STD_SECTIONS;
 static char *manp;
-static char *external;
+static const char *external;
 static struct hashtable *db_hash = NULL;
 
 static int troff;
@@ -381,9 +381,9 @@ static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::wWe:L:Zcr:X::E:iIC:";
 
 # ifdef TROFF_IS_GROFF
 static int ditroff;
-static char *gxditview;
+static const char *gxditview;
 static int htmlout;
-static char *html_pager;
+static const char *html_pager;
 # endif /* TROFF_IS_GROFF */
 
 #else /* !HAS_TROFF */
@@ -565,7 +565,7 @@ static int get_roff_line_length (void)
 		return 0;
 }
 
-static char *add_roff_line_length (char *filter, int *save_cat)
+static char *add_roff_line_length (const char *filter, int *save_cat)
 {
 	int length = get_roff_line_length ();
 	if (length) {
@@ -576,7 +576,7 @@ static char *add_roff_line_length (char *filter, int *save_cat)
 		sprintf (options, " -rLL=%dn -rLT=%dn", length, length);
 		return strappend (NULL, filter, options, NULL);
 	}
-	return filter;
+	return xstrdup (filter);
 }
 
 #ifdef UNDOC_COMMAND
@@ -654,7 +654,8 @@ static __inline__ void gripe_no_man (const char *name, const char *sec)
 static void do_extern (char *argv[])
 {
 	/* privs are already dropped */
-	argv[0] = basename (external);
+	char *external_copy = xstrdup (external);
+	argv[0] = basename (external_copy);
 	execv (external, argv);
 	exit (FATAL);
 }
@@ -888,10 +889,7 @@ int main (int argc, char *argv[])
 		if (multiple_locale)
 			internal_locale = multiple_locale;
 	}
-	if (internal_locale != NULL)
-		internal_locale = xstrdup (internal_locale);
-	else
-		internal_locale = "C";
+	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
 
 /* export argv, it might be needed when invoking the vendor supplied browser */
 #if defined _AIX || defined __sgi
@@ -952,11 +950,11 @@ int main (int argc, char *argv[])
 	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
 	if (locale) {
-		internal_locale = setlocale (LC_ALL, locale);
+		free (internal_locale);
+		internal_locale = xstrdup (setlocale (LC_ALL, locale));
 		if (internal_locale == NULL)
-			internal_locale = locale;
+			internal_locale = xstrdup (locale);
 
-		internal_locale = xstrdup (internal_locale);
 		if (debug)
 			fprintf(stderr,
 				"main(): locale = %s, internal_locale = %s\n",
@@ -1274,7 +1272,7 @@ static void man_getopt (int argc, char *argv[])
 				break;
 			case 'H':
 #ifdef TROFF_IS_GROFF
-				html_pager = (optarg ? optarg : 0);
+				html_pager = (optarg ? optarg : NULL);
 				htmlout = 1;
 				troff = 1;
 				roff_device = "html";
@@ -1313,9 +1311,9 @@ static void man_getopt (int argc, char *argv[])
 				html_pager = NULL;
 #endif
 		    		roff_device = extension = pager = locale
-		    			     = colon_sep_section_list
 		    			     = alt_system_name = external
-		    			     = preprocessors = manp = NULL;
+		    			     = preprocessors = NULL;
+				colon_sep_section_list = manp = NULL;
 		    		break;
 		    	case 'h':
 		    		usage(OK);
@@ -1351,7 +1349,7 @@ static void man_getopt (int argc, char *argv[])
  */
 static __inline__ const char *is_section (const char *name)
 {
-	char **vs;
+	const char **vs;
 
 	for (vs = section_list; *vs; vs++) {
 		if (STREQ (*vs, name))
@@ -1469,8 +1467,8 @@ static __inline__ void create_stdintmp (void)
 }
 
 /* Return command (malloced string) to format file to stdout */
-static __inline__ char *make_roff_command (const char *dir, const char *file,
-					   const char *dbfilters)
+static char *make_roff_command (const char *dir, const char *file,
+				const char *dbfilters)
 {
 	const char *pp_string;
 	char *fmt_prog;
@@ -1681,10 +1679,10 @@ static __inline__ char *make_roff_command (const char *dir, const char *file,
 		else if (roff_device)
 			dev = strappend (NULL, " -T", roff_device, NULL);
 		else
-			dev = "";
+			dev = xstrdup ("");
 
 		do {
-			char *filter;
+			const char *filter = NULL;
 			int wants_dev = 0; /* filter wants a dev argument */
 
 			/* set filter according to *pp_string, on
@@ -1715,6 +1713,7 @@ static __inline__ char *make_roff_command (const char *dir, const char *file,
 				/* done with preprocessors, now add roff */
 #ifdef TROFF_IS_GROFF
 				if (troff && ditroff) 
+					/* TODO: leak */
 					filter = strappend (NULL, 
 							    get_def ("troff",
 								     TROFF), 
@@ -1726,6 +1725,7 @@ static __inline__ char *make_roff_command (const char *dir, const char *file,
                                 else {
 					filter = get_def ("nroff", NROFF);
 #ifdef TROFF_IS_GROFF
+					/* TODO: leak */
 					filter = add_roff_line_length
 						(filter, &save_cat);
 #endif
@@ -1733,11 +1733,9 @@ static __inline__ char *make_roff_command (const char *dir, const char *file,
 
 				wants_dev = 1;
 				break;
-			default:
-				filter = "";
 			}
 
-			if (*filter) {
+			if (filter && *filter) {
 				command = strappend (command,
 						     " | ",
 						     filter,
@@ -1757,8 +1755,7 @@ static __inline__ char *make_roff_command (const char *dir, const char *file,
 			command = strappend (command, " | ", COL, NULL);
 #endif /* GNU_NROFF */
 
-		if (roff_device || gxditview)
-			free (dev);
+		free (dev);
 	} else {
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
@@ -2652,7 +2649,6 @@ static int compare_candidates (const struct mandata *left,
 			       const struct mandata *right,
 			       const char *req_name)
 {
-	char **sp;
 	int sec_left = 0, sec_right = 0, cmp;
 
 	/* If one candidate matches the requested name exactly, sort it
@@ -2672,6 +2668,7 @@ static int compare_candidates (const struct mandata *left,
 		/* Find out whether left->ext is ahead of right->ext in
 		 * section_list.
 		 */
+		const char **sp;
 		for (sp = section_list; *sp; sp++) {
 			if (!*(*sp + 1)) {
 				/* No extension */
@@ -3342,7 +3339,7 @@ static int man (const char *name, int *found)
 		for (mp = manpathlist; *mp; mp++)
 			*found += locate_page (*mp, section, name, &candidates);
 	} else {
-		char **sp;
+		const char **sp;
 
 		for (sp = section_list; *sp; sp++) {
 			char **mp;
@@ -3360,12 +3357,12 @@ static int man (const char *name, int *found)
 }
 
 
-static __inline__ char **get_section_list (void)
+static const char **get_section_list (void)
 {
 	int i = 0;
-	char **config_sections;
-	char **sections = NULL;
-	char *sec;
+	const char **config_sections;
+	const char **sections = NULL;
+	const char *sec;
 
 	/* Section list from configuration file, or STD_SECTIONS if it's
 	 * empty.
@@ -3381,8 +3378,7 @@ static __inline__ char **get_section_list (void)
 
 	for (sec = strtok (colon_sep_section_list, ":"); sec; 
 	     sec = strtok (NULL, ":")) {
-		sections = (char **) xrealloc (sections,
- 					       (i + 2) * sizeof (char *));
+		sections = xrealloc (sections, (i + 2) * sizeof *sections);
  		sections[i++] = sec;
  	}
 

@@ -420,7 +420,6 @@ int main (int argc, char *argv[])
 	int purged = 0;
 	int quiet_temp = 0;
 	char **mp;
-	char *locale;
 
 	int option_index; /* not used, but required by getopt_long() */
 
@@ -436,13 +435,10 @@ int main (int argc, char *argv[])
 	program_name = xstrdup (basename (argv[0]));
 
 	/* initialise the locale */
-	locale = xstrdup (setlocale (LC_ALL, ""));
-	if (!locale) {
+	if (!setlocale (LC_ALL, ""))
 		/* Obviously can't translate this. */
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
-		locale = "C";
-	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 

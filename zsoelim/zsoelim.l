@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 {
 	int c, option_index;
 
-	program_name = basename(argv[0]);
+	program_name = xstrdup(basename(argv[0]));
 
 	while ( (c = getopt_long(argc, argv, args,
 				 long_options, &option_index)) != EOF ) {
@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
 	/* if we have any arguments, parse them in command line order, else
 	   open stdin */
 	if (optind == argc) {
-		so_name[0] = "-";
+		so_name[0] = xstrdup("-");
 		parse_file();
 	} else {
 		while (optind < argc) {

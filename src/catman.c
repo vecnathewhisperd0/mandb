@@ -218,7 +218,7 @@ static void do_catman (char *argp[], int arg_no, int first_arg)
 
 	/* The last argument must be NULL */
 	argp[arg_no] = NULL;
-	
+
 	catman (argp, arg_no);
 
 	/* don't free the last entry, it's NULL */
@@ -250,7 +250,7 @@ static __inline__ void reset_cursor (datum key)
 
 /* find all pages that are in the supplied manpath and section and that are
    ultimate source files. */
-static __inline__ int parse_for_sec (char *manpath, char *section)
+static int parse_for_sec (const char *manpath, const char *section)
 {
 	char *argp[MAX_ARGS];
 	datum key;
@@ -260,23 +260,23 @@ static __inline__ int parse_for_sec (char *manpath, char *section)
 	if (rdopen_db () || dbver_rd (dbf))
 		return 1;
 		
-	argp[arg_no++] = "man"; 	/* Name of program */
+	argp[arg_no++] = xstrdup ("man"); 	/* Name of program */
 
 #ifdef HAVE_SETLOCALE
 	/* As we supply a NULL environment to save precious execve() space,
 	   we must also supply a locale if necessary */
 	if (locale) {
-		argp[arg_no++] = "-L";		/* locale option */
-		argp[arg_no++] = locale;	/* The locale */
+		argp[arg_no++] = xstrdup ("-L");	/* locale option */
+		argp[arg_no++] = xstrdup (locale);	/* The locale */
 		initial_bit += sizeof "-L" + strlen (locale) + 1;
 	} else
 		initial_bit = 0;
 
 #endif /* HAVE_SETLOCALE */
 
-	argp[arg_no++] = "-caM";	/* options */
-	argp[arg_no++] = manpath;	/* particular manpath */
-	argp[arg_no++] = section;	/* particular section */
+	argp[arg_no++] = xstrdup ("-caM");	/* options */
+	argp[arg_no++] = xstrdup (manpath);	/* particular manpath */
+	argp[arg_no++] = xstrdup (section);	/* particular section */
 
 	first_arg = arg_no;		/* first pagename argument */
 	
@@ -365,6 +365,10 @@ static __inline__ int parse_for_sec (char *manpath, char *section)
 	if (arg_no > first_arg)
 		do_catman (argp, arg_no, first_arg);
 
+	arg_no = first_arg - 1;
+	while (arg_no >= 0)
+		free (argp[arg_no--]);
+
 	return 0;
 }
 
@@ -382,7 +386,8 @@ int main (int argc, char *argv[])
 {
 	int c;
 	char *sys_manp;
-	char **mp, **sections;
+	char **mp;
+	const char **sections;
 
 	int option_index; /* not used, but required by getopt_long() */
 
@@ -394,7 +399,7 @@ int main (int argc, char *argv[])
 		/* Obviously can't translate this. */
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
-		locale = "C";
+		locale = xstrdup ("C");
 	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
@@ -428,10 +433,10 @@ int main (int argc, char *argv[])
 
 	/* If we were supplied sections: sort them out */
 	if (optind != argc) {
-		char **sp;
+		const char **sp;
 		
-		sections = sp = (char **) xmalloc ((argc - optind + 1) * 
-						    sizeof (char *));
+		sections = sp = xmalloc ((argc - optind + 1) *
+					 sizeof *sections);
 		while (optind != argc)
 			*sp++ = argv[optind++];
 		*sp = NULL;
@@ -441,28 +446,29 @@ int main (int argc, char *argv[])
 		mansect = getenv ("MANSECT");
 		if (mansect && *mansect) {
 			/* MANSECT contains sections */
-			char *sec;
+			const char *sec;
 			int i = 0;
 
 			mansect = xstrdup (mansect);
 			sections = NULL;
 			for (sec = strtok (mansect, ":"); sec; 
 			     sec = strtok (NULL, ":")) {
-			     	sections = (char **) xrealloc (sections, 
-							       (i + 2) *
-							       sizeof (char *));
+			     	sections = xrealloc (sections,
+						     (i + 2) *
+						     sizeof *sections);
 				sections[i++] = sec;
 			}
 			sections[i] = NULL;
+			free (mansect);
 		} else {
 			/* use default sections */ 
-			static char *std_sections[] = STD_SECTIONS;
+			static const char *std_sections[] = STD_SECTIONS;
 			sections = std_sections;
 		}
 	}
 
 	if (debug) {
-		char **sp;
+		const char **sp;
 
 		for (sp = sections; *sp; sp++)
 			fprintf (stderr, "sections: %s\n", *sp);
@@ -487,7 +493,8 @@ int main (int argc, char *argv[])
 	create_pathlist (manp, manpathlist); 
 	
 	for (mp = manpathlist; *mp; mp++) {
-		char *catpath, **sp;
+		char *catpath;
+		const char **sp;
 		size_t len;
 
 		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);

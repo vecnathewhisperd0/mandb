@@ -100,6 +100,10 @@ dnl
 AC_PROG_CC
 AC_PROG_CPP
 CFLAGS="$CFLAGS -Wall"
+if test "$GCC" = yes
+then
+	CFLAGS="$CFLAGS -Wwrite-strings"
+fi
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PATH_PROG(cat, cat)

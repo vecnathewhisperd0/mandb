@@ -183,7 +183,8 @@ static __inline__ int use_grep (char *page, char *manpath)
 	if (access (whatis_file, R_OK) == 0) {
 		char *esc_page = escape_shell (page);
 		char *esc_file = escape_shell (whatis_file);
-		char *flags, *anchor, *command;
+		const char *flags, *anchor;
+		char *command;
 #if defined(WHATIS)
 		flags = get_def ("whatis_grep_flags", WHATIS_GREP_FLAGS);
 		anchor = "^";
@@ -599,8 +600,8 @@ static void search (char *page)
 int main (int argc, char *argv[])
 {
 	int c;
-	char *manp = NULL, *alt_systems = "";
-	char *llocale = 0, *locale;
+	const char *manp = NULL, *alt_systems = "";
+	char *llocale = NULL, *locale;
 	int option_index;
 
 	program_name = xstrdup (basename (argv[0]));
@@ -611,7 +612,7 @@ int main (int argc, char *argv[])
 		/* Obviously can't translate this. */
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
-		locale = "C";
+		locale = xstrdup ("C");
 	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
@@ -674,6 +675,7 @@ int main (int argc, char *argv[])
 	   issued as an argument or in $MANOPT */
 	if (llocale) {
 		setlocale (LC_ALL, llocale);
+		free (locale);
 		locale = xstrdup (llocale);
 		if (debug)
 			fprintf(stderr,

@@ -49,10 +49,12 @@ static int dbver (MYDBM_FILE dbf)
 {
 	datum key;
 
-	key.dptr = VER_KEY;
+	key.dptr = xstrdup (VER_KEY);
 	key.dsize = sizeof VER_KEY;
 
 	content = MYDBM_FETCH (dbf, key);
+
+	free (key.dptr);
 
 	if (content.dptr == NULL)
 		return -1;
@@ -60,22 +62,24 @@ static int dbver (MYDBM_FILE dbf)
 		return 1;
 	else
 		return 0;
-
 }
 
 void dbver_wr (MYDBM_FILE dbf)
 {
 	datum key, content;
 
-	key.dptr = VER_KEY;
+	key.dptr = xstrdup (VER_KEY);
 	key.dsize = sizeof VER_KEY;
-	content.dptr = VER_ID;
+	content.dptr = xstrdup (VER_ID);
 	content.dsize = sizeof VER_ID;
 
 	if (MYDBM_INSERT (dbf, key, content) != 0)
 		error (FATAL, 0,
 		       _("fatal: unable to insert version identifier into %s"),
 		       database);
+
+	free (key.dptr);
+	free (content.dptr);
 }
 
 int dbver_rd (MYDBM_FILE dbf)

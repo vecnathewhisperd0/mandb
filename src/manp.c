@@ -144,7 +144,7 @@ static void add_to_list (const char *key, const char *cont, int flag)
 		namestore = list;
 }
 
-static char *get_from_list (char *key, int flag)
+static const char *get_from_list (const char *key, int flag)
 {
 	struct list *list;
 
@@ -166,9 +166,9 @@ static struct list *iterate_over_list (struct list *prev, char *key, int flag)
 	return NULL;
 }
 
-char *get_def (char *thing, char *def)
+const char *get_def (const char *thing, const char *def)
 {
-	char *config_def = get_from_list (thing, DEFINE);
+	const char *config_def = get_from_list (thing, DEFINE);
 	return config_def ? config_def : def;
 }
 	
@@ -197,11 +197,11 @@ static void add_sections (char *sections)
 	}
 }
 
-char **get_sections (void)
+const char **get_sections (void)
 {
 	struct list *list;
 	int length = 0;
-	char **sections, **sectionp;
+	const char **sections, **sectionp;
 
 	for (list = namestore; list; list = list->next)
 		if (list->flag == SECTION)
@@ -354,7 +354,8 @@ static __inline__ void gripe_not_directory (const char *dir)
    catpath list */
 char *cat_manpath (char *manp)
 {
-	char *catp = NULL, *path, *catdir;
+	char *catp = NULL;
+	const char *path, *catdir;
 
 	for (path = strsep (&manp, ":"); path; path = strsep (&manp, ":")) {
 		catdir = get_from_list (path, MANDB_MAP_USER);

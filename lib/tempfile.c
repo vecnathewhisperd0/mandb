@@ -37,13 +37,13 @@
 
 /* Other library functions used in man-db. */
 extern char *strappend (char *str, ...);
-extern char *xstrdup (char *string);
+extern char *xstrdup (const char *string);
 extern int mkstemp (char *template);
 extern char *mkdtemp (char *template);
 
-static char *path_search ()
+static const char *path_search ()
 {
-	char *dir = NULL;
+	const char *dir = NULL;
 
 	if (getuid () == geteuid () && getgid () == getegid ()) {
 		dir = getenv ("TMPDIR");
@@ -76,13 +76,12 @@ static char *path_search ()
  */
 int create_tempfile (const char *template, char **created_filename)
 {
-	char *dir = path_search ();
+	char *dir = xstrdup (path_search ());
 	int fd;
 	mode_t old_mode;
 
 	if (!dir)
 		return -1;
-	dir = xstrdup (dir);
 	*created_filename = strappend (dir, "/", template, "XXXXXX", NULL);
 	/* -rw------- */
 	old_mode = umask (S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
@@ -96,12 +95,11 @@ int create_tempfile (const char *template, char **created_filename)
  */
 char *create_tempdir (const char *template)
 {
-	char *dir = path_search ();
+	char *dir = xstrdup (path_search ());
 	char *created_dirname;
 
 	if (!dir)
 		return NULL;
-	dir = xstrdup (dir);
 	created_dirname = strappend (dir, "/", template, "XXXXXX", NULL);
 	mkdtemp (created_dirname);
 	return created_dirname;
