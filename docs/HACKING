@@ -1,0 +1,134 @@
+Hacking on man-db
+=================
+
+man-db is not a large or particularly complicated project, but there is
+still plenty for an interested developer to contribute. Here's a very brief
+guide on how to get started.
+
+
+Directory layout
+----------------
+
+The source tree looks something like this, ignoring some directories added
+by autoconf and gettext:
+
+  docs/
+    Assorted documentation.
+  man/
+    Man pages for man-db's programs.
+  manual/
+    The man-db manual, written in troff.
+  include/
+    Header files used throughout the package.
+  lib/
+    Basic library files, some of which supplement inadequate C libraries on
+    various systems and some of which implement utility functions used
+    throughout the package.
+  libdb/
+    The database access library. Code outside this directory should not know
+    about specific back-end database implementations.
+  src/
+    Source code to the man-db programs themselves.
+  zsoelim/
+    A soelim replacement, capable of dealing with compressed *roff files.
+    (Let's quietly ignore why this isn't in src/.)
+  tools/
+    Miscellaneous add-on scripts.
+  po/
+    Translations.
+
+
+Coding style
+------------
+
+Each indent is a single tab. Brace style is K&R. Each function name is
+separated from the following opening parenthesis by a single space. (All
+this is almost certainly controversial somewhere, but it's as close as
+you'll get to a prevailing style here.) If you're editing existing code and
+it differs from the above, stick with whatever the existing code does.
+
+Keep all code within 80 columns (counting tabs as 8). This can sometimes be
+a little tight with the deep indent; think of it as a useful discipline to
+stop indentation levels getting out of hand. :-)
+
+
+Memory allocation and string operations
+---------------------------------------
+
+The lib/ directory provides various functions beginning with 'x' which check
+the return values from the system's memory allocation calls. Please use them
+instead of their non-'x' siblings.
+
+strappend() provides manageable string concatenation. Use it where
+appropriate. Remember to terminate its argument list with a NULL.
+
+
+Testing
+-------
+
+Somebody please figure out how to do good regression testing on man-db! It's
+embarrassing that no test suite yet exists.
+
+
+Things to do
+------------
+
+docs/ToDo has a number of outstanding projects. Things near the bottom are
+usually more detailed and accurate.
+
+The Debian bug tracking system has a number of outstanding reports on man-db
+at <http://bugs.debian.org/man-db>.
+
+Much of the work needed on man-db is for maintainability. Patches that take
+difficult-to-understand code with hairy memory allocation and replace it
+with clean, obvious, and reliable code are most welcome, especially if they
+introduce new abstractions which are of more general use. The replacement of
+splitline() with the page_description interface is a good example of this.
+
+Work on porting to platforms other than GNU/Linux is welcome. It's been a
+while since serious effort in that direction has been invested in man-db.
+Most of the code should be quite portable, but the occasional teething
+problem would not be a surprise.
+
+
+Sending patches
+---------------
+
+Please send patches in unified diff format (use GNU diff with the -u option)
+to cjwatson@debian.org. There is currently no man-db development mailing
+list, but if interest picks up then one will be created, together with some
+kind of policy on commit access.
+
+
+Release process
+---------------
+
+1. Update the AC_INIT version number in configure.in to "x.y.z-pre1". Commit
+   and tag.
+
+2. Run ./release.sh to produce a preliminary tarball for translators. This
+   doesn't have to be particularly well-tested or even compile; it's only
+   there to provide context for po/man-db.pot. Send this to the Translation
+   Project robot.
+
+3. Wait a couple of weeks for a reasonable number of translation updates to
+   arrive. During this time, test until your eyeballs fall out, but try to
+   avoid changing any translated messages.
+
+4. Ensure that docs/NEWS is up to date. Commit.
+
+5. Update the AC_INIT version number and 'datemark' in configure.in, but
+   don't commit yet.
+
+6. Run ./release.sh, which will spit out a tarball. Test it.
+
+7. Commit the changes from step 5.
+
+8. Tag everything.
+
+9. Check out a working copy on the tag and run ./release.sh there. This is
+   the distribution tarball; test it as thoroughly as you can.
+
+10. Upload the tarball to Savannah.
+
+11. Announce to wherever seems appropriate.
