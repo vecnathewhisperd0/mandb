@@ -322,8 +322,8 @@ static char *lower (char *s)
 	p = low = (char *) xmalloc (strlen (s) +1);
 
 	while (*s) {
-		if (isupper (*s))
-			*p++ = tolower (*s++);
+		if (CTYPE (isupper, *s))
+			*p++ = CTYPE (tolower, *s++);
 		else
 			*p++ = *s++;
 	}
@@ -393,8 +393,8 @@ static int match (char *lowpage, char *whatis)
 		char *left = p - 1; 
 		char *right = p + len;
 
-		if ((p == begin || (!islower (*left) && *left != '_')) &&
-		    (!*right || (!islower (*right) && *right != '_')) ) {
+		if ((p == begin || (!CTYPE (islower, *left) && *left != '_')) &&
+		    (!*right || (!CTYPE (islower, *right) && *right != '_'))) {
 		    	free (begin);
 		    	return 1;
 		}
@@ -414,7 +414,7 @@ static int word_fnmatch (char *lowpage, char *whatis)
 	char *begin = lowwhatis, *p;
 
 	for (p = lowwhatis; *p; p++) {
-		if (islower (*p) || *p == '_')
+		if (CTYPE (islower, *p) || *p == '_')
 			continue;
 
 		/* Check for multiple non-word characters in a row. */

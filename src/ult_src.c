@@ -186,7 +186,7 @@ static char *ult_softlink (const char *fullpath)
 static char *test_for_include (const char *buffer)
 {
 	/* strip out any leading whitespace (if any) */
-	while (isspace ((int) *buffer))
+	while (CTYPE (isspace, *buffer))
 		buffer++;
 
 	/* see if the `command' is a .so */
@@ -195,7 +195,7 @@ static char *test_for_include (const char *buffer)
 
 		/* strip out any whitespace between the command and 
 		   it's argumant */
-		while (isspace ((int) *buffer))
+		while (CTYPE (isspace, *buffer))
 			buffer++;
 
 		/* If .so's argument is an absolute filename, it could be
@@ -209,7 +209,7 @@ static char *test_for_include (const char *buffer)
 		 * ultimate source file */
 		if (*buffer != '/') {
 			const char *end = buffer;
-			while (*end && !isspace (*end))
+			while (*end && !CTYPE (isspace, *end))
 				++end;
 			return xstrndup (buffer, end - buffer);
 		}

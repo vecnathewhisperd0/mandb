@@ -741,7 +741,7 @@ static void add_to_dirlist (FILE *config, int user)
 
 	while ((bp = fgets (buf, BUFSIZ, config))) {
 
-		while (isspace (*bp))
+		while (CTYPE (isspace, *bp))
 			bp++;
 
 		/* TODO: would like a (limited) replacement for sscanf()

@@ -184,7 +184,7 @@ char *name_to_key (const char *name)
 	char *key = xstrdup (name);
 	char *p;
 	for (p = key; *p; ++p)
-		*p = tolower (*p);
+		*p = CTYPE (tolower, *p);
 	return key;
 }
 

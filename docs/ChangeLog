@@ -1,3 +1,14 @@
+Sun Nov 16 18:47:46 GMT 2003  Colin Watson  <cjwatson@debian.org>
+
+	* include/manconfig.h.in (CTYPE): New macro to help get <ctype.h>
+	  calls right.
+	* libdb/db_lookup.c (name_to_key): Use it.
+	* src/globbing.c (parse_layout, look_for_file): Likewise.
+	* src/man.c (manopt_to_env, main): Likewise.
+	* src/manp.c (add_to_dirlist): Likewise.
+	* src/ult_src.c (ult_softlink, test_for_include): Likewise.
+	* src/whatis.c (lower, match, word_fnmatch): Likewise.
+
 Sun Nov 16 17:06:29 GMT 2003  Colin Watson  <cjwatson@debian.org>
 
 	Style cleanups; no functional changes.

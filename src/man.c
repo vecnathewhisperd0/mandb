@@ -697,7 +697,7 @@ static __inline__ char **manopt_to_env (int *argc)
 							 sizeof (char *));
 					argv[(*argc)++] = opt_start;
 				}
-				while (isspace (*(manopt + 1)))
+				while (CTYPE (isspace, *(manopt + 1)))
 					*++manopt = '\0';
 				opt_start = manopt + 1;
 				break;
@@ -1159,7 +1159,7 @@ int main (int argc, char *argv[])
 				exit_status = status;
 				if (exit_status == NOT_FOUND) {
 					if (!section && maybe_section &&
-					    isdigit (nextarg[0]))
+					    CTYPE (isdigit, nextarg[0]))
 						gripe_no_name (nextarg);
 					else
 						gripe_no_man (nextarg, section);

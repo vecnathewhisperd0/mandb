@@ -360,6 +360,11 @@ extern char *program_name;	/* the basename of the program (as called) */
 #define STREQ(a,b)	(strcmp(a,b) == 0)
 #define STRNEQ(a,b,d)	(strncmp(a,b,d) == 0)
 
+/* Functions in <ctype.h> require their argument to be either an unsigned
+ * char promoted to int or EOF. This macro helps get that right.
+ */
+#define CTYPE(func,arg) (func((unsigned char)(arg)))
+
 /* FSSTND directories */
 #define CAT_ROOT	"/var/catman"		/* required by fsstnd() */
 #define MAN_ROOT	"/usr" 			/* required by fsstnd() */

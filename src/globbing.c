@@ -121,7 +121,7 @@ static int parse_layout (const char *layout)
 		char *upper_layout = xstrdup (layout);
 		char *layoutp;
 		for (layoutp = upper_layout; *layoutp; layoutp++)
-			*layoutp = toupper (*layoutp);
+			*layoutp = CTYPE (toupper, *layoutp);
 
 		if (strstr (layout, "GNU"))
 			flags |= LAYOUT_GNU;
@@ -290,7 +290,7 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
 
-	if ((layout & LAYOUT_GNU) && isdigit (*sec) && sec[1] != '\0') {
+	if ((layout & LAYOUT_GNU) && CTYPE (isdigit, *sec) && sec[1] != '\0') {
 		path = strappend (path, hier, cat ? "/cat" : "/man", "\t",
 				  NULL);
 		*strrchr (path, '\t') = *sec;
