@@ -231,11 +231,11 @@ dnl
 dnl do a quick test to see if -t works [AIX needs this], groff doesn't as
 dnl it indicates pre-process with tbl.
 dnl
-	test "$TROFF" = "troff" && $troff -t /dev/null >/dev/null 2>&1 3>&1 \
+	test "$TROFF" = "troff" && $troff -t </dev/null >/dev/null 2>&1 3>&1 \
 				&& troff_filter="-t "
 	for macro in $macros
 	do
-		if $troff $troff_filter -m$macro /dev/null >/dev/null 2>&1 3>&1
+		if $troff $troff_filter -m$macro </dev/null >/dev/null 2>&1 3>&1
 		then
 			man_cv_prog_troff_options="${troff_filter}-m${macro}"
 			break

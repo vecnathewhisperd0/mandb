@@ -447,7 +447,7 @@ determined locale.
 .B \-D, \-\-default
 This option is normally issued as the very first option and resets 
 .B %man%'s
-behaviour to its default. It's use is to reset those options that may have
+behaviour to its default. Its use is to reset those options that may have
 been set in
 .RB $ MANOPT .
 Any options that follow
@@ -464,6 +464,13 @@ derived code to determine the path to search. This option overrides the
 environment variable and causes option
 .B \-m
 to be ignored. 
+
+A path specified as a manpath must be the root of a manual page hierarchy
+structured into sections as described in the man-db manual (under "The
+manual page system").
+To view manual pages outside such hierarchies, see the
+.B \-l
+option.
 .TP
 .BI \-P\  pager ,\ \-\-pager= pager
 Specify which output pager to use.  By default, 
@@ -903,6 +910,7 @@ database cache.
 .BR setlocale (3),
 .BR ascii (7),
 .BR latin1 (7),
+the man-db package manual,
 .BR FSSTND .
 .SH HISTORY
 1990, 1991 \- Originally written by John W. Eaton (jwe@che.utexas.edu).
