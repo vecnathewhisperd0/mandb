@@ -1,3 +1,16 @@
+Thu Jun 28 13:15:04 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (store_line_length, get_roff_line_length): New
+	  functions, adapted from Andries Brouwer's man.
+	  (main): Outside catman mode, find out and store the line length.
+	  (make_roff_command): Outside catman mode, retrieve the stored line
+	  length and feed a .ll request into the pipeline if it's
+	  non-standard. We let recent groff handle the page length.
+	  (display): Don't even consider saving the cat page if save_cat is
+	  already false.
+	  (get_preprocessors): If the database says no preprocessors are to
+	  be used, it's OK to save the cat page.
+
 Thu Jun 28 01:44:02 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/man_db.conf.in (SECTION): Remove guarantee that ties will be

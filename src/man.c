@@ -624,6 +624,63 @@ void get_term()
 	}
 }
 
+/* Line length detection code adapted from Andries Brouwer's man. */
+
+/* Try to determine the line length to use.
+ * Preferences: 1. MANWIDTH, 2. ioctl, 3. COLUMNS, 4. 80
+ *
+ * joey, 950902
+ */
+
+#include <sys/ioctl.h>
+
+static int line_length = 80;
+
+static void store_line_length (void)
+{
+	char *columns;
+	int width;
+
+	line_length = 80;
+
+	columns = getenv ("MANWIDTH");
+	if (columns != NULL) {
+		int width = atoi (columns);
+		if (width > 0) {
+			line_length = width;
+			return;
+		}
+	}
+
+#ifdef TIOCGWINSZ
+	if (isatty(0) && isatty(1)) { /* Jon Tombs */
+		struct winsize wsz;
+
+		if (ioctl (0, TIOCGWINSZ, &wsz))
+			perror ("TIOCGWINSZ failed\n");
+		else if (wsz.ws_col) {
+			line_length = wsz.ws_col;
+			return;
+		}
+	}
+#endif
+
+	columns = getenv ("COLUMNS");
+	if (columns != NULL) {
+		width = atoi (columns);
+		if (width > 0)
+			line_length = width;
+	}
+}
+
+static int get_roff_line_length (void)
+{
+	if (!troff && (line_length < 66 || line_length > 80))
+		return line_length * 9 / 10;
+	else
+		return 0;
+}
+
 /*
  * changed these messages from stdout to stderr,
  * (Fabrizio Polacco) Fri, 14 Feb 1997 01:30:07 +0200
@@ -888,6 +945,9 @@ int main (int argc, char *argv[])
 	/* record who we are and drop effective privs for later use */
 	init_security ();
 #endif
+
+	if (!catman)
+		store_line_length();
 
 	read_config_file ();
 
@@ -1285,7 +1345,7 @@ static char *get_preprocessors (char *file)
 	} else {
 		pp_string = "";
 		pp_source = "no filters";
-		save_cat = 0;
+		save_cat = 1;
 	}
 
 	if (debug)
@@ -1484,10 +1544,12 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		char *dev;	/* either " -T<mumble>" or "" */
 		int using_tbl = 0;
 
-		/* load the roff_device value dependent on the language dir in path */
-		if (!roff_device && !troff) {
+		/* Load the roff_device value dependent on the language dir
+		 * in the path.
+		 */
+		if (!roff_device && !troff)
 			determine_lang_table (lang);
-		}
+
 		/* tell grops to guess the page size */
 		if (roff_device && strcmp (roff_device, "ps") == 0)
 			roff_device = strappend (NULL, "ps -P-g ", NULL);
@@ -1503,7 +1565,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		if (*file)
 			command = strappend (NULL, get_def ("soelim", SOELIM),
 					     " '", file, "'", NULL); 
-		else {
+		else
 			/* Reading from stdin: use cat to pick up the part we
 			 * read in to figure out the format pipeline.
 			 * ? is '-' as a cat argument standard?
@@ -1512,6 +1574,26 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 			command = strappend (NULL, get_def ("cat", CAT), " ",
 					     stdin_tmpfile, " - | ",
 					     get_def ("soelim", SOELIM), NULL);
+
+		/* Preformatted pages get standard 80-character lines. */
+		if (!catman) {
+			int roff_line_length = get_roff_line_length();
+			if (roff_line_length) {
+				char ll_macro[32], *new_command;
+				if (debug)
+					fprintf (stderr,
+						 "Using %d-character lines\n",
+						 roff_line_length);
+				sprintf (ll_macro, ".ll %d.%di",
+					 roff_line_length / 10,
+					 roff_line_length % 10);
+				new_command = strappend (NULL, "(echo '",
+							 ll_macro, "'; ",
+							 command, ")", NULL);
+				free (command);
+				command = new_command;
+				save_cat = 0;
+			}
 		}
 
 		do {
@@ -1998,7 +2080,7 @@ static int display (char *dir, char *man_file, char *cat_file, char *title)
 			assert (man_file);
 			save_cat = 0;
 			format = 1;
-		} else if (format) {
+		} else if (format && save_cat) {
 			int status;
 			char *cat_dir;
 			char *tmp;
