@@ -3274,7 +3274,7 @@ static int man (const char *name)
 	}
 
 	if (found)
-		display_pages (candidates);
+		found = display_pages (candidates);
 
 #ifdef MAN_DB_UPDATES
 	/* check to see if any of the databases need updating */

@@ -1,3 +1,11 @@
+Mon Nov 11 01:50:28 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (man): Update the count of found pages with the return
+	  value of display_pages(). This should fix the situation where man
+	  finds a matching entry in the database, discovers that it's
+	  actually a dangling symlink, but fails to print an error message
+	  to say that no page was found.
+
 Mon Nov 11 00:47:38 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (OPTIONS): Change \[char173] to \[shc]. The
