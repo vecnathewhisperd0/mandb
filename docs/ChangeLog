@@ -1,3 +1,9 @@
+Sun May  5 15:38:34 BST 2002  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_delete.c (dbdelete): Don't scribble over the list
+	  returned by list_extensions(). We need it shortly afterwards to
+	  construct the new multi key.
+
 Fri May  3 19:43:52 BST 2002  Colin Watson  <cjwatson@debian.org>
 
 	* include/manconfig.h.in (LESS_OPTS): Add the -R flag, which helps

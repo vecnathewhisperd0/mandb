@@ -83,6 +83,7 @@ int dbdelete(const char *name, struct mandata *info)
 		char *multi_content = NULL;
 		datum multi_key;
 		int refs;
+		char *ext_only = NULL;
 
 		/* Extract all of the extensions associated with 
 		   this key */
@@ -90,20 +91,16 @@ int dbdelete(const char *name, struct mandata *info)
 		refs = list_extensions(cont.dptr + 1, e = ext);
 		
 		while (*e) {
-			char *dot;
-			const char *casevar;
-
-			dot = strrchr(*e, '.');
+			char *dot = strrchr(*e, '.');
 			if (!dot) {
 				gripe_bad_multi_key(dot);
 				++e;
 				continue;
 			}
-			*dot = '\0';
-			casevar = *e;
-			*e = dot + 1;
+			ext_only = dot + 1;
 
-			if (!STREQ(casevar, name) || !STREQ(*e, info->ext))
+			if (!STRNEQ(*e, name, dot - *e) ||
+			    !STREQ(ext_only, info->ext))
 				++e;
 			else
 				break;
@@ -114,8 +111,8 @@ int dbdelete(const char *name, struct mandata *info)
 			free(key.dptr);
 			return NO_ENTRY;
 		}
-			
-		multi_key = make_multi_key(name, *e);
+
+		multi_key = make_multi_key(name, ext_only);
 		if (!MYDBM_EXISTS(dbf, multi_key)) {
 			error (0, 0,
 			       _( "multi key %s does not exist"),
