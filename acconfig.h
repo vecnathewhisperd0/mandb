@@ -1,15 +1,6 @@
 /* define if you want to remove debugging assertions */
 #undef NDEBUG
 
-/* define to the version of the OS, if you have a debian gnu/linux system */
-#undef DEBIAN
-
-/* define to the full version of the program, if you have a debian gnu/linux system */
-#undef DEBVER
-
-/* define to the full email address of the debian maintainer, if you have a debian gnu/linux system */
-#undef DEBMAINT
-
 /* define if you have, and want to use, ndbm interface routines */ 
 #undef NDBM
 
