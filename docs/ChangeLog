@@ -1,3 +1,11 @@
+Thu Apr  1 04:56:02 BST 2004  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (get_page_encoding, get_standard_output_encoding):
+	  Remove trailing ,<version> and @<modifier> from locale names.
+	* src/encodings.h (get_page_encoding, get_standard_output_encoding):
+	  Update prototypes: these no longer return const.
+	* src/man.c (make_roff_command): Free page_encoding and cat_charset.
+
 Thu Apr  1 00:18:55 BST 2004  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (do_extern): Pass only options understood by

@@ -204,8 +204,10 @@ static const char *fallback_less_charset = "iso8859";
 /* Return the assumed encoding of the source man page, based on the
  * directory in which it was found. The caller should attempt to recode from
  * this to whatever encoding is expected by groff.
+ *
+ * The caller should free the returned string when it is finished with it.
  */
-const char *get_page_encoding (const char *lang)
+char *get_page_encoding (const char *lang)
 {
 	const struct directory_entry *entry;
 	const char *dot;
@@ -214,7 +216,7 @@ const char *get_page_encoding (const char *lang)
 		/* Guess based on the locale. */
 		lang = setlocale (LC_MESSAGES, NULL);
 		if (!lang)
-			return fallback_source_encoding;
+			return xstrdup (fallback_source_encoding);
 	}
 
 	dot = strchr (lang, '.');
@@ -239,14 +241,13 @@ const char *get_page_encoding (const char *lang)
 		 * grounds that it's obviously wrong, and petition to have
 		 * it changed.
 		 */
-		/* TODO: I should probably drop any ,<version> components. */
-		return dot + 1;
+		return xstrndup (dot + 1, strcspn (dot + 1, ",@"));
 
 	for (entry = directory_table; entry->lang_dir; ++entry)
 		if (STRNEQ (entry->lang_dir, lang, strlen (entry->lang_dir)))
-			return entry->source_encoding;
+			return xstrdup (entry->source_encoding);
 
-	return fallback_source_encoding;
+	return xstrdup (fallback_source_encoding);
 }
 
 /* Return the canonical encoding for source man pages in the specified
@@ -302,8 +303,10 @@ const char *get_source_encoding (const char *lang)
 /* Return the standard output encoding for the source man page, based on the
  * directory in which it was found. This should only be used to determine
  * whether a cat page can be saved.
+ *
+ * The caller should free the returned string when it is finished with it.
  */
-const char *get_standard_output_encoding (const char *lang)
+char *get_standard_output_encoding (const char *lang)
 {
 	const struct directory_entry *entry;
 	const char *dot;
@@ -321,12 +324,11 @@ const char *get_standard_output_encoding (const char *lang)
 		 * man directory including an explicit character set, so the
 		 * pages it contains should have that encoding.
 		 */
-		/* TODO: I should probably drop any ,<version> components. */
-		return dot + 1;
+		return xstrndup (dot + 1, strcspn (dot + 1, ",@"));
 
 	for (entry = directory_table; entry->lang_dir; ++entry)
 		if (STRNEQ (entry->lang_dir, lang, strlen (entry->lang_dir)))
-			return entry->standard_output_encoding;
+			return xstrdup (entry->standard_output_encoding);
 
 	return NULL;
 }

@@ -1619,9 +1619,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		 * in the path.
 		 */
 		if (!troff) {
-			const char *page_encoding, *source_encoding,
-				   *roff_encoding;
-			const char *cat_charset;
+			char *page_encoding;
+			const char *source_encoding, *roff_encoding;
+			char *cat_charset;
 
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
 
@@ -1698,6 +1698,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				putenv (strappend (NULL, "LESSCHARSET=",
 						   less_charset, NULL));
 			}
+
+			free (page_encoding);
+			free (cat_charset);
 		}
 
 		do {

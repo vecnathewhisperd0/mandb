@@ -20,9 +20,9 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-const char *get_page_encoding (const char *lang);
+char *get_page_encoding (const char *lang);
 const char *get_source_encoding (const char *lang);
-const char *get_standard_output_encoding (const char *lang);
+char *get_standard_output_encoding (const char *lang);
 const char *get_locale_charset (void);
 const char *get_default_device (const char *locale_charset,
 				const char *source_encoding);
