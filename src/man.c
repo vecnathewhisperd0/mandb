@@ -19,6 +19,8 @@
  *
  * CJW: Various robustness, security, and internationalization fixes.
  * Improved HTML support (originally written by Fabrizio Polacco).
+ * Rewrite of page location routines for improved maintainability and
+ * accuracy.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -3064,9 +3066,9 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	return found;
 }
 
-/* try to locate the page under the specified manpath, in the desired section,
-   with the supplied name. glob if necessary. Initially try to find it via
-   a db cache access, if that fails, search the filesystem. */
+/* Try to locate the page under the specified manpath, in the desired section,
+ * with the supplied name. Glob if necessary. Initially search the filesystem;
+ * if that fails, try finding it via a db cache access. */
 static int locate_page (const char *manpath, const char *sec, const char *name,
 			struct candidate **candidates)
 {

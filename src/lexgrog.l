@@ -188,6 +188,7 @@ vgrind_request	\.vS
 <MAN_NAME>{bol}{sec_request}{blank}*	| 	/* Another section */
 <MAN_NAME>{bol}\.X{upper}{blank}+	|	/* special - hpux */
 <MAN_NAME>{bol}\.sp{blank}*		|	/* vertical spacing */
+<MAN_NAME>{bol}\.ig{blank}*		|	/* block comment */
 <MAN_NAME>{empty}{bol}.+	{	/* terminate the string */
 					*p_name = '\0';
 					BEGIN (MAN_REST);
@@ -233,8 +234,8 @@ vgrind_request	\.vS
  	{next}\\('|\(aa)		add_char_to_whatis ('\'');
  	{next}\\(`|\(ga)		add_char_to_whatis ('`');
 	{next}\\-			add_char_to_whatis ('-');
- 	{next}\\\.			add_char_to_whatis ('.');
-	{next}((\\[ 0t])|[ ]|\t)*	add_char_to_whatis (' ');
+	{next}\\\.			add_char_to_whatis ('.');
+	{next}((\\[ 0t~])|[ ]|\t)*	add_char_to_whatis (' ');
 	{next}\\\((ru|ul)		add_char_to_whatis ('_');
 	{next}\\\\t			add_char_to_whatis ('\t');
 
@@ -245,7 +246,7 @@ vgrind_request	\.vS
 
 	{next}\\\*(\({alpha})?{alpha}	/* interpolate string */
 	{next}\\\({alpha}{alpha}	/* special (non printable) character */
-	{next}\\\".* 			/* comment */
+	{next}\\["#].* 			/* comment */
 
 	{next}{font_change}		/* font changes */
 	{next}\\k{alpha}		/* mark input place in register */
