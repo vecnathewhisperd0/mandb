@@ -81,7 +81,8 @@ AC_ARG_WITH(device,
 	 	nroff_device=" -T$withval"
 	 fi])
 AC_ARG_WITH(db,
-[  --with-db=LIBRARY	  use database library LIBRARY (db2, db1, db, gdbm, ndbm)],
+[  --with-db=LIBRARY	  use database library LIBRARY
+                          (db2, db1, db, gdbm, ndbm)],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
 	 then
 	 	AC_MSG_ERROR(--with-db requires an argument)

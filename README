@@ -92,6 +92,17 @@ used.
      and to change  the  default  cat  and  database  files'
      access flags to allow users to modify them.
 
+--enable-mandirs=OS
+     By  default, man_db-2.3.x supports manual page directo-
+     ries in any of several layouts used by free and propri-
+     etary  versions  of  UNIX.   However, in certain cases,
+     this can cause man_db-2.3.x to find the wrong  page  by
+     mistake, especially when the names of some manual pages
+     on the system contain periods.  Use this option with an
+     argument  of  GNU, HPUX, Solaris, or IRIX (or more than
+     one of these, separated by commas) to support only  the
+     layouts typically used on each of those systems.
+
 --with-device=DEVICE
      Use  this  flag to alter the default output device used
      by NROFF. DEVICE is passed to NROFF with the -T option.

@@ -42,7 +42,7 @@ $(manual).cat: postpro
 	nroff -me $< > $@
 
 $(manual).html: postpro
-	groff -Thtml -me -P-T -P-t -P-g $< > $@
+	groff -Thtml -me -P-I$(manual) $< > $@
 
 # The standard targets
 install uninstall:
@@ -55,7 +55,7 @@ clean: mostlyclean
 
 realclean distclean: clean
 	rm -f $(manual).dvi $(manual).ps $(manual).cat $(manual).tps \
-	      $(manual).html
+	      $(manual).html $(manual)-*.png
 
 TAGS:
 	$(MKTAGS) $(SRCS)
