@@ -1815,7 +1815,7 @@ static char *make_roff_command (const char *dir, const char *file,
 			}
 		} while (*pp_string++);
 
-		if (output_encoding && locale_charset &&
+		if (!different_encoding && output_encoding && locale_charset &&
 		    !STREQ (output_encoding, locale_charset))
 			command = strappend (command, " | iconv -c -f ",
 					     output_encoding, " -t ",
