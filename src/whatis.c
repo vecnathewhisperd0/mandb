@@ -216,7 +216,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 		if (*(info->pointer) != '-')
 			error (0, 0, _("warning: %s contains a pointer loop"),
 			       page);
-		return xstrdup (_("(unknown)"));
+		return xstrdup (_("(unknown subject)"));
 	}
 
 	/* Now we have to work through pointers. The limit of 10 is fairly
@@ -229,7 +229,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 
 		/* If the pointer lookup fails, do nothing. */
 		if (!info)
-			return xstrdup (_("(unknown)"));
+			return xstrdup (_("(unknown subject)"));
 
 		/* See if we need to fill in the whatis here. */
 		if (*(info->pointer) == '-' ||
@@ -244,7 +244,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 				       _("warning: %s contains a pointer loop"),
 				       page);
 			free_mandata_struct (info);
-			return xstrdup (_("(unknown)"));
+			return xstrdup (_("(unknown subject)"));
 		}
 
 		newinfo = dblookup_exact (info->pointer, info->ext, 1);
@@ -253,7 +253,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 	}
 
 	error (0, 0, _("warning: %s contains a pointer loop"), page);
-	return xstrdup (_("(unknown)"));
+	return xstrdup (_("(unknown subject)"));
 }
 
 /* print out any matches found */
