@@ -1547,7 +1547,7 @@ static __inline__ char *make_roff_command (char *dir, char *file)
 		/* Load the roff_device value dependent on the language dir
 		 * in the path.
 		 */
-		if (!roff_device && !troff)
+		if (!troff)
 			determine_lang_table (lang);
 
 		/* tell grops to guess the page size */
