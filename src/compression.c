@@ -193,6 +193,7 @@ char *decompress (const char *filename, const struct compression *comp)
 	status = do_system_drop_privs (pl);
 	debug = save_debug;
 	close (file_fd);
+	file_fd = -1;
 
 	if (status) {
 		char *pl_str = pipeline_tostring (pl);
