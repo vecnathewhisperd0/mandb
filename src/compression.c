@@ -183,14 +183,14 @@ char *decompress (const char *filename, const struct compression *comp)
 	status = do_system_drop_privs (command);
 	debug = save_debug;
 
-	free (command);
-
 	if (status) {
 		remove_ztemp ();
 		error (0, 0, _("command '%s' failed with exit status %d"),
 		       command, status);
+		free (command);
 		return NULL;
 	}
+	free (command);
 	return file;
 }
 
