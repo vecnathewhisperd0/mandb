@@ -116,6 +116,9 @@ extern int errno;
 #include <locale.h>
 #include <libintl.h>
 #define _(String) gettext (String)
+#ifdef HAVE_LANGINFO_CODESET
+#  include <langinfo.h>
+#endif
 
 #include "manconfig.h"
 #include "libdb/mydbm.h"
@@ -1310,6 +1313,8 @@ static void determine_lang_table (const char *lang)
 {
 	int j;
 	int chosen_locale;
+	char *ctype;
+	int is_utf8;
 	if (lang && *lang)
 		chosen_locale = 1;
 	else {
@@ -1335,6 +1340,26 @@ static void determine_lang_table (const char *lang)
 			}
 			break;
 		}
+	}
+
+	/* This is done at the end for now so that we can special-case the
+	 * nippon device.
+	 */
+#ifdef HAVE_LANGINFO_CODESET
+	ctype = setlocale (LC_CTYPE, "");
+	is_utf8 = !strcmp (nl_langinfo (CODESET), "UTF-8");
+#else
+	ctype = setlocale (LC_CTYPE, NULL);
+	is_utf8 = (strstr (ctype, "UTF-8") != NULL);
+#endif
+	if (is_utf8) {
+		if (debug)
+			fprintf (stderr, "Using UTF-8 locale\n");
+		if (!STREQ (roff_device, "nippon"))
+			roff_device = "utf8";
+		putenv ("LESSCHARSET=utf-8");
+		/* Can't cat these for now. */
+		save_cat = 0;
 	}
 }
 
