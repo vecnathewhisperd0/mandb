@@ -608,7 +608,12 @@ short create_db(const char *manpath)
    filesystem */
 short update_db(const char *manpath)
 {
-	if ( (dbf = MYDBM_RDOPEN(database)) && !dbver_rd(dbf)) {
+	dbf = MYDBM_RDOPEN(database);
+	if (dbf && dbver_rd(dbf)) {
+		MYDBM_CLOSE(database);
+		dbf = NULL;
+	}
+	if (dbf) {
 		datum key, content;
 		short new;
 

@@ -326,7 +326,12 @@ int straycats(char *manpath)
 		close( fd);
 	}
 	
-	if ( !(dbf = MYDBM_RWOPEN(database)) || dbver_rd(dbf)) {
+	dbf = MYDBM_RWOPEN(database);
+	if (dbf && dbver_rd(dbf)) {
+		MYDBM_CLOSE(dbf);
+		dbf = NULL;
+	}
+	if (!dbf) {
 		error (0, errno, _( "warning: can't update index cache %s"), database);
 		return 0;
 	}

@@ -2417,7 +2417,12 @@ static int try_db(char *manpath, char *sec, char *name)
 	in_cache = lookup(manpath); /* have we looked here already? */
 	
 	if ( !in_cache ) {
-		if ( (dbf = MYDBM_RDOPEN(database)) && !dbver_rd(dbf)) {
+		dbf = MYDBM_RDOPEN(database);
+		if (dbf && dbver_rd(dbf)) {
+			MYDBM_CLOSE(dbf);
+			dbf = NULL;
+		}
+		if (dbf) {
 			if (debug)
 				fprintf(stderr,
 					"Succeeded in opening %s O_RDONLY\n",

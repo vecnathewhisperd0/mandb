@@ -1,3 +1,12 @@
+Fri Apr 27 18:33:17 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/accessdb.c (main): Close the database and set dbf to NULL if
+	  dbver_rd() fails.
+	* src/check_mandirs.c (update_db): Likewise.
+	* src/man.c (try_db): Likewise.
+	* src/straycats.c (straycats): Likewise.
+	* src/whatis.c (search): Likewise.
+
 Fri Apr 27 18:10:47 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l: Detect grap (.G1) and vgrind (.vS).

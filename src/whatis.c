@@ -460,7 +460,12 @@ static void search(char *page)
 		if (debug)
 			fprintf(stderr, "path=%s\n", *mp);
 
-		if ( !(dbf = MYDBM_RDOPEN(database)) || dbver_rd(dbf)) {
+		dbf = MYDBM_RDOPEN(database);
+		if (dbf && dbver_rd(dbf)) {
+			MYDBM_CLOSE(dbf);
+			dbf = NULL;
+		}
+		if (!dbf) {
 			found += use_grep(page, *mp);			
 			continue;
 		}

@@ -74,7 +74,12 @@ int main(int argc, char *argv[])
 	else
 		database = strappend( NULL, cat_root, MAN_DB, NULL);
 		
-	if ( !(dbf = MYDBM_RDOPEN(database)) || dbver_rd(dbf)) {
+	dbf = MYDBM_RDOPEN(database);
+	if (dbf && dbver_rd(dbf)) {
+		MYDBM_CLOSE(dbf);
+		dbf = NULL;
+	}
+	if (!dbf) {
 		error (0, errno, _("can't open %s for reading"), database);
 		usage(FAIL);
 	}
