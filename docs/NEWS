@@ -1,0 +1,205 @@
+Major changes since man_db-2.3.5:
+
+	Fixes:
+	------
+
+	o Global databases were not owned by setuid owner (if applicable).
+	  As a consequence only mandb could update the databases unless
+	  man was run by superuser.  Stupid bug.  
+
+	o The keyword passed to apropos _never_ matched the first word
+	  of any whatis line.
+
+	o FAVOUR_STRAYCATS code (if enabled), did not work properly.
+
+	o zsoelim did not work as advertised.
+
+	Improvements:
+	-------------
+
+	o Man removes it's temporary files upon abnormal termination.
+
+	o apropos does proper word matching rather than the fuzzy
+	  matching of 2.3.5.  eg. supplying any of the keywords:
+	  `ld.so', `a.out', `dynamic', `linker' or `loader' will match 
+	  the following entry:
+
+	  ld.so (8)            - a.out dynamic linker/loader
+	
+	  whereas `a.out' and `loader' used to fail.
+
+	o man/whatis/apropos return with exit code 16 if manual
+	  page/file or keyword is not matched.  Previously exit code 0
+	  was used making it difficult for callers to know if the lookup 
+	  was successful.
+
+	o addition of German message catalogue.
+
+	o `apropos' and `man -k' do POSIX specified regex matching rather 
+	  than keyword searches if the environment variable POSIXLY_CORRECT 
+	  is defined.
+
+	o added glob-only support of native system manual hierarchies
+	  on HP-UX, OSF and Solaris operating systems.  Improved the
+	  whatis parsing code to cope with majority of HP-UX manual pages.
+
+	o ported to NeXTstep.
+
+Major changes since man_db-2.2.1:
+
+	Added support for...
+	--------------------
+	
+	o Non-standard section names i.e. multi-character
+
+	o Compressed manual pages. 
+	  A new utility `zsoelim' is included to correctly handle nroff
+	  .so requests that point to a file which has been compressed.
+
+	o Compressed stray cats.
+	  By definition, stray cats are not re-creatable as they have no
+	  relative source manual page. As they may have non-default
+	  compression extensions and may reside on read-only media, 
+	  stray cats have the same compression support as manual pages.
+
+	o FSSTND proposed `extension' support.
+	  Specific package manual pages may be installed in the standard 
+	  sections but with a package-unique extension appended as in
+	  exit(3tcl) - ../man/man3/exit.3tcl.  Using the command 
+
+		`man -e tcl exit' 
+
+	  would then display an exit manual page with a tcl extension, if
+	  available.  Of course, `man 3tcl exit' works as always.
+
+	o FSSTND proposed NLS man subdirectories.
+	  Of the form .../man/<locale>/man<sec>/
+
+	o NLS message catalogue hooks.
+	  Provision has been made for the programs to emit their messages in
+	  a language dependent form.
+
+	o `whatis' referred manual pages.
+	  Some manual pages contain relevant information for commands or 
+	  programs that would not otherwise reference the page.
+	  The `whatis' part of the manual page is used to create virtual
+	  links to these pages by all of the names mentioned within it.
+	  Examples include names such as `.' and `:' referencing the local
+	  shell manual page.
+
+	o Catman utility.
+	  Used to pre-format the manual pages into cat pages.
+
+	o Operating systems other than Linux.
+	  man_db has been reported to compile on the following platforms:
+	  
+		Linux, SunOS, Solaris, Ultrix, OSF, HP-UX, AIX, IRIX
+
+          (although portability does not extend to support of native 
+	   manual tree structures on some of these systems, eg. HP-UX)
+
+	o Berkeley DB library routines.
+	  This compliments the support of both gdbm and ndbm which already
+	  existed.  DB databases may be shared across platforms.
+
+	o $MANOPTS environment variable.
+	  The environment variable MANOPTS may be set to any string in
+	  command line option/argument format.  It is parsed by man(1) prior
+	  to it's actual command line.
+
+	o Per manual hierarchy cat directory locations.
+	  It is possible to redirect your cat pages to other directories or
+	  even other file systems. 
+	  
+	o Per manual hierarchy nroff/[tg]roff format scripts.
+	  Ability to create custom formatter scripts that are called by
+	  man(1) to enable format/display of non-standard manual pages or 
+	  manual pages requiring a special macro package.
+
+	o Extension of `man -l'.
+	  Arguments following -l are interpreted as local files requiring
+	  format and display.  Extensions are: 
+
+		`man -l -' formats and displays stdin.
+		`man -l foo.1.gz' decompresses, formats and displays foo.1.gz.
+	
+	o Latin1 manual pages/choice of nroff output device.
+
+	o Viewing of ASCII manual pages formatted for a latin1 output device
+	  on a 7 bit ASCII terminal (-7).
+	  
+	o Whatis and apropos utilities support regex and wildcard matching.
+
+	o checkman. 
+	  Shell script utility that will find and display duplicated manual
+	  pages found across manual page hierarchies.
+
+	o mkcatdirs. 
+	  Shell script utility to create appropriate cat directories after
+	  installation and setup.
+
+	Conceptual improvements
+	-----------------------
+
+	o Replacement of single database with multiple modular db's.
+	  Easier integration of additional information into the databases in
+	  the future. 
+
+	o Both user and global databases share the same name: 
+	  	
+		`index.<db-type>' 
+	
+	  where <db-type> could be `bt', `db' or `pag' and `dir'.
+
+	o Databases contain `whatis' text.
+	  Makewhatis and text whatis databases are redundant, although
+	  whatis and apropos will use the text whatis database for information 
+	  if they cannot read from a relevant index database.
+
+	o straycats handled without need for `placeholders'.
+
+	o Friendly less(1) prompt.
+	  If man(1) uses less(1) as it's pager (dependent on both static and
+	  dynamic factors), the prompt is modified to suit the manual page 
+	  being displayed.  The modification performed is also changeable by
+	  the user.
+
+	o man_db manual.
+	  man_db has a manual that covers the setup, maintenance and use of
+	  a generic online manual page system.
+
+	o Modes of operation.
+	  The man_db utilities can be compiled with various modes of
+	  operation in mind.  Eg. man can be stopped from updating databases 
+	  and/or creating cat files in situations where security is extremely 
+	  important.  See the man_db manual for details.
+
+	Speed improvements
+	------------------
+
+	o Background compression/saving of cat files.
+	  Cat files are compressed and saved in the background, whilst the
+	  user is able to browse the formatted page directly.
+
+	o Merge of straycats and makewhatis into mandb.
+	  While mandb has slowed, it now incorporates makewhatis and straycats 
+	  functionality and is much faster as a whole.  2.0a2 used grep/awk, 
+	  2.2 used C regex and 2.3 now uses lex sourced C to strip out the 
+	  whatis information from the raw man or cat files.
+
+	o Berkeley DB support.
+	  Provides lower database initialisation overhead as compared with 
+	  gdbm.
+
+	o Extremely fast whatis(1) searches.
+	  whatis(1) uses keyed database lookups to retrieve whatis strings
+	  for standard (non regex/wildcard) searches.
+	
+	Fixes
+	-----
+	
+	o Correct handling of $MANSECT.
+	  The environment variable MANSECT is no longer ignored.
+
+	o Acknowledgement of $MANPATH order.
+	  manpath elements are searched in the order specified.

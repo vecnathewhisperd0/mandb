@@ -1,0 +1,201 @@
+# Programs Makefile for the man package.
+#
+# Copyright (C) 1994, 1995, Graeme Wilford.
+#
+# You may distribute under the terms of the GNU General Public
+# License as specified in the COPYING file that comes with this
+# distribution.  
+#
+# Sat Aug  6 13:28:44 BST 1994 Wilf. (G.Wilford@ee.surrey.ac.uk):
+
+srcdir = @srcdir@
+libdir = @libdir@
+VPATH = @srcdir@
+top_srcdir = @top_srcdir@
+subdir = src
+gnulocaledir = $(prefix)/share/locale
+
+INSTALL = @INSTALL@
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+
+LIBS = @INTLLIBS@ @LIBS@
+
+include ../include/Defines
+
+.PHONY: $(DEFAULT_TARGETS)
+
+#----------------------------------------------------------------#
+# user changeable definitions can be found in ../include/Defines #
+#----------------------------------------------------------------#
+
+# You may need to modify these options if you have lex instead of flex
+# or flex < 2.4.7 and you want to play with lexgrog.l (developement only)
+#
+FLEXOPTS = -8B -Cem
+LEX := $(LEX) $(FLEXOPTS)
+
+PROGS = man manpath mandb apropos whatis catman
+TOOLS = accessdb lexgrog globbing
+
+MANCPPFLAGS = -DWHATIS=\"$(bindir)/$(whatis)\" \
+	      -DAPROPOS=\"$(bindir)/$(apropos)\" \
+	      -DSOELIM=\"$(bindir)/$(zsoelim)\"
+
+CATMANCPPFLAGS = -DMAN=\"$(bindir)/$(man)\"
+
+#-------------------------------------------------------------------#
+# This is just to make sure that things are done in the right order #
+#-------------------------------------------------------------------#
+
+ifeq ($(nls),on)
+all:
+	$(make_in_root)
+else
+
+# The default programs to build 
+all: manpath mandb apropos whatis catman man accessdb wrapper
+
+#-----------------------------------------------------------------------#
+# If we want any kind of NLS message catalogue support, nls must != off #
+# this is exported from the master Makefile.                            #
+#-----------------------------------------------------------------------#
+
+  ifneq ($(nls),off)
+NLS = -DNLS 
+
+MSGS = whatis.m version.m compression.m mandb.m check_mandirs.m \
+       man.m manp.m manpath.m security.m straycats.m \
+       ult_src.m catman.m lexgrog.m convert_name.m
+MSG_PATHS = $(addprefix $(MSG_DIR)/, $(MSGS))
+
+local_gencat = ../gencat/gencat
+
+$(srcdir)/man_db-nls.h: $(srcdir)/stamp-h
+$(srcdir)/stamp-h: $(MSG_PATHS)
+	test -f $(gencat) || $(MAKE) -C ../gencat
+	$(gencat) -new /dev/null $^ -h $(srcdir)/man_db-nls.h
+	rm -f $@
+	date > $@
+
+$(MSG_PATHS): $(MSG_DIR)/%.m: $(srcdir)/%.c
+	test -f ../xcat/xcat || $(MAKE) -C ../xcat
+	../xcat/xcat $(top_srcdir)/xcat/Register < $< > $@
+
+  endif
+endif
+
+override CPPFLAGS := $(DEFS) $(NLS) -DCONFIG_FILE=\"$(config_file)\" \
+		-DLOCALEDIR=\"$(gnulocaledir)\" \
+	     -I../include -I$(top_srcdir) -I$(srcdir) -I- -I../intl \
+	     $(CPPFLAGS)
+
+#--------------------#
+# some general rules #
+#--------------------#
+
+../lib/libman.a:
+	$(MAKE) -C ../lib
+
+../libdb/libmandb.a:
+	$(MAKE) -C ../libdb
+
+#-------------------------------------------------------------------#
+# The individual program dependencies...                            #
+# note that anything requiring compression.o must also have either  #
+# security.o (man), or fake_security.o (others) in the object list. #
+#-------------------------------------------------------------------#
+
+man: security.o convert_name.o manp.o ult_src.o compression.o \
+     check_mandirs.o hashtable.o util.o lexgrog.o globbing.o
+
+mandb: security.o manp.o util.o ult_src.o check_mandirs.o hashtable.o straycats.o \
+       compression.o lexgrog.o
+
+wrapper: LIBS = "-lc"
+
+catman manpath whatis apropos: security.o manp.o util.o 
+accessdb: util.o ../lib/libman.a
+
+whatis.o: whatis.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -DWHATIS -c $< -o $@
+
+apropos.o: whatis.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -DAPROPOS -c $< -o $@
+
+lexgrog: lexgrog.c ../lib/libman.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) -DTEST $(LDFLAGS) $^ -o $@
+
+man.o: man.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(MANCPPFLAGS) -c $< -o $@
+
+catman.o: catman.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(CATMANCPPFLAGS) -c $< -o $@
+
+globbing: globbing.c ../lib/libman.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) -DTEST $(LDFLAGS) $^ -o $@
+
+# programs that depend on db routines...
+man mandb catman whatis apropos accessdb: ../libdb/libmandb.a
+
+# All programs depend on these...
+$(PROGS): version.o ../lib/libman.a
+
+# The standard targets
+install: all
+	$(MKINSTALLDIRS) $(bindir)
+	$(INSTALL_PROGRAM) $(man_install_flags) man $(libdir)/man-db/$(man)
+	$(INSTALL_PROGRAM) $(man_install_flags) mandb $(libdir)/man-db/$(mandb)
+	$(INSTALL_PROGRAM) manpath $(bindir)/$(manpath)
+	$(INSTALL_PROGRAM) catman $(bindir)/$(catman)
+	$(INSTALL_PROGRAM) whatis $(bindir)/$(whatis)
+	$(INSTALL_PROGRAM) apropos $(bindir)/$(apropos)
+	$(INSTALL_PROGRAM) wrapper $(bindir)/wrapper
+	ln -f wrapper $(bindir)/$(man)
+	ln -f wrapper $(bindir)/$(mandb)
+	for j in $(TOOLS); do \
+		if test -x $$j ; then \
+			$(INSTALL_PROGRAM) $$j $(sbindir)/$$j; \
+		fi; \
+	done
+	@if test -f $(config_file) ; then \
+		echo " "; \
+		echo "$(config_file) already exists. Overwrite manually if necessary"; \
+		echo " "; \
+	else \
+		$(MKINSTALLDIRS) $(sysconfdir); \
+		echo "$(INSTALL_DATA) $(srcdir)/man_db.config $(config_file)"; \
+		$(INSTALL_DATA) $(srcdir)/man_db.config $(config_file); \
+	fi
+
+uninstall:
+	rm -f $(addprefix $(bindir)/, $(PROGS))
+	rm -f $(addprefix $(sbindir)/, $(TOOLS))
+	@echo "Please remove $(config_file) manually if necessary"
+#	rm -f $(config_file)
+
+mostlyclean clean: 
+	rm -f *.o *~ core
+	rm -f $(PROGS) $(TOOLS) wrapper
+
+distclean: lexgrog.c clean
+	rm -f *.d *.out Makefile
+
+realclean: distclean
+	rm -f lexgrog.c stamp-h tags
+
+TAGS:
+	$(MKTAGS) $(srcdir)/*.[chl]
+	
+#------------------------------------------------------------------#
+# These lines sort out proper dependencies, done if --enable-debug #
+# passed to ../configure. To override uncomment the following line #
+#------------------------------------------------------------------#
+#debug=on
+
+ifneq ($(clean),yes)
+  ifeq ($(debug),on)
+    SRCS = $(notdir $(wildcard $(srcdir)/*.c))
+    include $(SRCS:.c=.d)
+  endif
+endif
