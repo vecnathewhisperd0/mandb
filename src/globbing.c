@@ -101,10 +101,12 @@ char **look_for_file (char *path, char *sec, char *name, int cat)
 	/* This routine only does a minimum amount of matching. It does not
 	   find cat files in the alternate cat directory. */
 
-	if (layout == -1)
+	if (layout == -1) {
 		layout = parse_layout (mandir_layout);
-	if (debug)
-		fprintf (stderr, "Layout is %s (%d)\n", mandir_layout, layout);
+		if (debug)
+			fprintf (stderr, "Layout is %s (%d)\n",
+				 mandir_layout, layout);
+	}
 
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
 

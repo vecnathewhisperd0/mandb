@@ -73,10 +73,10 @@ all: manpath mandb apropos whatis catman man accessdb wrapper man_db.conf
 #-------------------------------------------------------------------#
 
 man: security.o convert_name.o manp.o ult_src.o compression.o \
-     check_mandirs.o hashtable.o util.o lexgrog.o globbing.o
+     check_mandirs.o hashtable.o util.o lexgrog.o globbing.o man.o
 
-mandb: security.o manp.o util.o ult_src.o check_mandirs.o hashtable.o straycats.o \
-       compression.o lexgrog.o
+mandb: security.o manp.o util.o ult_src.o check_mandirs.o hashtable.o \
+       straycats.o compression.o lexgrog.o mandb.o
 
 wrapper:	LDLIBS=-lc
 

@@ -1,3 +1,16 @@
+Mon Jun 25 01:30:24 BST 2001  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (man_getopt): Conditionalize gxditview initialization on
+	  TROFF_IS_GROFF. As a bonus, this squashes a compiler warning.
+	  (man): Remove some unreferenced cruft, while I'm in the process of
+	  fixing up multi-character sections.
+
+	* src/Makefile.in: Build intermediate man.o and mandb.o objects, so
+	  that changing other objects just requires a relink.
+
+	* src/globbing.c (look_for_file): Print the layout in debugging mode
+	  only when it's first parsed.
+
 Sun Jun 24 18:47:20 BST 2001  Colin Watson  <cjwatson@debian.org>
 
 	* configure.in (--with-db): Improve help output formatting.

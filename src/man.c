@@ -1170,11 +1170,12 @@ static void man_getopt (int argc, char *argv[])
 				break;
 			case 'D':
 		    		/* discard all preset options */
-		    		local_man_file = findall = update = catman = debug
-		    			 = troff = gxditview
-		    			 = print_where = ascii = 0;
+		    		local_man_file = findall = update = catman =
+					debug = troff = print_where =
+					ascii = 0;
 #ifdef TROFF_IS_GROFF
 				ditroff = 0;
+				gxditview = NULL;
 #endif
 		    		roff_device = extension = pager = locale
 		    			     = colon_sep_section_list
@@ -2686,12 +2687,7 @@ static int man (char *name)
 		char **sp;
 
 		for (sp = section_list; *sp; sp++) {
-			/* sections in manpath are only 1 char */
-			char sec[2];
 			char **mp;
-
-			sec[0] = sp[0][0];
-			sec[1] = '\0';
 
 			for (mp = manpathlist; *mp; mp++) {
 				found += locate_page(*mp, *sp, name);
