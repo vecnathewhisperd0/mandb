@@ -1,3 +1,19 @@
+Tue Sep 16 22:53:36 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	Purge database entries corresponding to removed stray cat pages.
+
+	* src/check_mandirs.c (purge_normal, purge_whatis): Add TODO notes
+	  for systems where the cat extension differs from the man
+	  extension.
+	  (purge_whatis): Rename manpath to path. New cat argument, passed
+	  through to look_for_file().
+	  (purge_missing): New catpath argument, passed to look_for_file()
+	  and purge_whatis() in the STRAY_CAT and WHATIS_CAT cases, which
+	  are now handled.
+	* src/check_mandirs.h (purge_missing): Update prototype.
+	* src/mandb.c (main): Pass catpath to purge_missing().
+	* docs/NEWS: Document this.
+
 Tue Sep 16 22:37:33 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	Work around the fact that GDBM's firstkey/nextkey interface doesn't

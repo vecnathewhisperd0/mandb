@@ -29,4 +29,4 @@ extern void reset_db_time (void);
 extern short create_db (const char *manpath);
 extern short update_db (const char *manpath);
 extern void purge_pointers (const char *name);
-extern short purge_missing (const char *manpath);
+extern short purge_missing (const char *manpath, const char *catpath);

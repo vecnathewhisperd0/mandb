@@ -572,7 +572,7 @@ int main (int argc, char *argv[])
 		force_rescan = 0;
 		if (purge) {
 			database = mkdbname (catpath);
-			purged += purge_missing (*mp);
+			purged += purge_missing (*mp, catpath);
 		}
 
 		push_cleanup (cleanup, NULL);

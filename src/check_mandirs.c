@@ -87,6 +87,7 @@ extern int errno;
 #include "descriptions.h"
 #include "filenames.h"
 #include "globbing.h"
+#include "manp.h"
 #include "ult_src.h"
 #include "security.h"
 #include "check_mandirs.h"
@@ -682,6 +683,9 @@ static int count_glob_matches (const char *name, const char *ext,
 static short purge_normal (const char *name, struct mandata *info,
 			   char **found)
 {
+	/* TODO: On some systems, the cat page extension differs from the
+	 * man page extension, so this may be too strict.
+	 */
 	if (count_glob_matches (name, info->ext, found))
 		return 0;
 
@@ -694,10 +698,13 @@ static short purge_normal (const char *name, struct mandata *info,
 	return 1;
 }
 
-/* Decide whether to purge a reference to a WHATIS_MAN page. */
-static short purge_whatis (const char *manpath, const char *name,
+/* Decide whether to purge a reference to a WHATIS_MAN or WHATIS_CAT page. */
+static short purge_whatis (const char *path, int cat, const char *name,
 			   struct mandata *info, char **found)
 {
+	/* TODO: On some systems, the cat page extension differs from the
+	 * man page extension, so this may be too strict.
+	 */
 	if (count_glob_matches (name, info->ext, found)) {
 		/* If the page exists and didn't beforehand, then presumably
 		 * we're about to rescan, which will replace the WHATIS_MAN
@@ -739,8 +746,8 @@ static short purge_whatis (const char *manpath, const char *name,
 		char **real_found;
 		int save_debug = debug;
 		debug = 0;
-		real_found = look_for_file (manpath, info->ext,
-					    info->pointer, 0, 1);
+		real_found = look_for_file (path, info->ext,
+					    info->pointer, cat, 1);
 		debug = save_debug;
 
 		if (count_glob_matches (info->pointer, info->ext, real_found))
@@ -802,7 +809,7 @@ static short check_multi_key (const char *name, const char *content)
 /* Go through the database and purge references to man pages that no longer
  * exist.
  */
-short purge_missing (const char *manpath)
+short purge_missing (const char *manpath, const char *catpath)
 {
 	datum key;
 	short count = 0;
@@ -858,30 +865,31 @@ short purge_missing (const char *manpath)
 		split_content (content.dptr, &entry);
 		content.dptr = entry.addr;
 
-		/* We only handle ULT_MAN, SO_MAN, and WHATIS_MAN for now. */
-		if (entry.id > WHATIS_MAN) {
-			free (nicekey);
-			MYDBM_FREE (content.dptr);
-			nextkey = MYDBM_NEXTKEY (dbf, key);
-			MYDBM_FREE (key.dptr);
-			key = nextkey;
-			continue;
-		}
-
 		save_debug = debug;
 		debug = 0;	/* look_for_file() is quite noisy */
-		found = look_for_file (manpath, entry.ext,
-				       entry.name ? entry.name : nicekey,
-				       0, 1);
+		if (entry.id <= WHATIS_MAN)
+			found = look_for_file (manpath, entry.ext,
+					       entry.name ? entry.name
+							  : nicekey,
+					       0, 1);
+		else
+			found = look_for_file (catpath, entry.ext,
+					       entry.name ? entry.name
+							  : nicekey,
+					       1, 1);
 		debug = save_debug;
 
 		/* Now actually decide whether to purge, depending on the
 		 * type of entry.
 		 */
-		if (entry.id == ULT_MAN || entry.id == SO_MAN)
+		if (entry.id == ULT_MAN || entry.id == SO_MAN ||
+		    entry.id == STRAY_CAT)
 			count += purge_normal (nicekey, &entry, found);
-		else		/* entry.id == WHATIS_MAN */
-			count += purge_whatis (manpath, nicekey,
+		else if (entry.id == WHATIS_MAN)
+			count += purge_whatis (manpath, 0, nicekey,
+					       &entry, found);
+		else	/* entry.id == WHATIS_CAT */
+			count += purge_whatis (catpath, 1, nicekey,
 					       &entry, found);
 
 		free (nicekey);
