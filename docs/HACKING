@@ -52,8 +52,8 @@ a little tight with the deep indent; think of it as a useful discipline to
 stop indentation levels getting out of hand. :-)
 
 
-Memory allocation and string operations
----------------------------------------
+Utility functions to use
+------------------------
 
 The lib/ directory provides various functions beginning with 'x' which check
 the return values from the system's memory allocation calls. Please use them
@@ -61,6 +61,10 @@ instead of their non-'x' siblings.
 
 strappend() provides manageable string concatenation. Use it where
 appropriate. Remember to terminate its argument list with a NULL.
+
+If you're calling any of the is*() or to*() functions in <ctype.h>, please
+do so via the CTYPE() macro in include/manconfig.h to ensure that the
+argument type is correct.
 
 
 Testing
