@@ -82,6 +82,7 @@ static const char *fname;
 static char filters[MAX_FILTERS];
 
 static int fill_mode;
+static int waiting_for_quote;
 
 #ifdef TEST
 
@@ -241,6 +242,12 @@ vgrind_request	\.vS
 
  /* ROFF request removal */
 <MAN_NAME>{
+ /* some include quoting; dealing with this is unpleasant */
+	{bol}{typeface}{blank}+\"	{
+						newline_found ();
+						waiting_for_quote = 1;
+					}
+
 	{bol}{typeface}{blank}+		|	/* type face commands */
 	{bol}\.IX{blank}.*		|	/* .IX line */
 	{next}{comment}.*		{	/* per line comments */
@@ -361,6 +368,8 @@ static void add_char_to_whatis (unsigned char c)
 {
 	if (p_name - newname + 1 >= MAX_NAME)
 		too_big ();
+	else if (waiting_for_quote && c == '"')
+		waiting_for_quote = 0;
 	else
 		*p_name++ = c;
 }
@@ -386,6 +395,7 @@ static void newline_found (void)
 		else
 			add_char_to_whatis ((char) 0x11);
 	}
+	waiting_for_quote = 0;
 }
 
 int find_name (const char *file, const char *filename, lexgrog *p_lg)
@@ -436,6 +446,7 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 	memset (filters, '_', sizeof (filters));
 
 	fill_mode = 1;
+	waiting_for_quote = 0;
 
 	if (p_lg->type)
 		BEGIN (CAT_FILE);
