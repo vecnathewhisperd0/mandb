@@ -111,9 +111,10 @@ troff="@troff@"
 # become the default for all Makefiles.
 
 # A couple of rules.
-%.d: %.c
-	$(CPP) -M $(CPPFLAGS) $< | \
-	  sed -e 's/$*\.o[ 	]*/& $@/g' > $@ || (rm -f $@; exit 1)
+.depend/%.d: %.c
+	@test -d .depend || mkdir .depend
+	@$(CPP) -M $(CPPFLAGS) $< | \
+	  sed -e 's,$*\.o[ 	]*,& $@,g' > $@ || (rm -f $@; exit 1)
 
 %.i: %.c
 	$(CPP) $(CPPFLAGS) $< > $@

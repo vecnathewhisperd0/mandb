@@ -38,7 +38,7 @@ include ../include/Defines
 .PHONY: $(DEFAULT_TARGETS)
 
 MANDEFS = -DCONFIG_FILE=\"$(config_file)\" \
-	-DLOCALEDIR=\"$(gnulocaledir)\" $(DEFS_$@)
+	-DLOCALEDIR=\"$(gnulocaledir)\" $(DEFS_$(subst /,_,$@))
 MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I- -I../intl
 
 #----------------------------------------------------------------#
@@ -62,6 +62,11 @@ DEFS_man.o = -DWHATIS=\"$(bindir)/$(whatis)\" \
 DEFS_catman.o = -DMAN=\"$(bindir)/$(man)\"
 DEFS_whatis.o = -DWHATIS
 DEFS_apropos.o = -DAPROPOS
+
+DEFS_.depend_man.d = $(DEFS_man.o)
+DEFS_.depend_catman.d = $(DEFS_catman.o)
+DEFS_.depend_whatis.d = $(DEFS_whatis.o)
+DEFS_.depend_apropos.d = $(DEFS_apropos.o)
 
 DEFS_man = $(DEFS_man.o)
 DEFS_catman = $(DEFS_catman.o)
@@ -154,7 +159,8 @@ mostlyclean clean:
 	rm -f $(PROGS) $(TOOLS) wrapper
 
 distclean: lexgrog.c clean
-	rm -f *.d *.out Makefile man_db.conf
+	rm -rf .depend
+	rm -f *.out Makefile man_db.conf
 
 realclean: distclean
 	rm -f lexgrog.c tags
@@ -162,15 +168,8 @@ realclean: distclean
 TAGS:
 	$(MKTAGS) $(srcdir)/*.[chl]
 	
-#------------------------------------------------------------------#
-# These lines sort out proper dependencies, done if --enable-debug #
-# passed to ../configure. To override uncomment the following line #
-#------------------------------------------------------------------#
-#debug=on
-
-ifneq ($(clean),yes)
-  ifeq ($(debug),on)
-    SRCS = $(notdir $(wildcard $(srcdir)/*.c))
-    include $(SRCS:.c=.d)
-  endif
+# These lines sort out proper dependencies.
+ifeq (,$(findstring clean,$(MAKECMDGOALS)))
+  SRCS = $(notdir $(wildcard $(srcdir)/*.c))
+  -include $(SRCS:%.c=.depend/%.d)
 endif

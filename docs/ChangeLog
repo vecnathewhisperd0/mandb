@@ -1,3 +1,22 @@
+Mon Apr  7 08:09:08 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* include/Defines.in: Generate dependencies in .depend rather than
+	  the current directory. Suppress echoing of dependency generation
+	  commands.
+	* libdb/Makefile.in: Remove .depend directory on distclean. Always
+	  use dependencies (except on clean), not just when --enable-debug
+	  was passed to configure.
+	* src/Makefile.in: Likewise. Set up $(DEFS_*) variables so that the
+	  correct flags are used when generating dependencies.
+	* libdb/.cvsignore, src/.cvsignore: Ignore .depend.
+
+	* configure.in: Remove now-redundant --enable-debug option. Remove
+	  search for libefence if --enable-debug is used; using it with
+	  LD_PRELOAD is generally more convenient anyway.
+	* README, manual/intro.me (Arguments to configure): Remove
+	  documentation for --enable-debug.
+	* docs/NEWS: Document the removal.
+
 Mon Apr  7 01:02:27 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* man/ja_JP.eucJP/man1/man.man1: Replace "%date%" with the Japanese

@@ -56,7 +56,8 @@ clean mostlyclean:
 	rm -f *~ core $(ALL) $(library)
 
 distclean: clean
-	rm -f *.d Makefile
+	rm -rf .depend
+	rm -f Makefile
 
 realclean: distclean
 	rm -f tags
@@ -64,14 +65,8 @@ realclean: distclean
 TAGS:
 	$(MKTAGS) $(srcdir)/*.[ch]
 
-# These lines sort out proper dependencies, done if --enable-debug
-# passed to configure. To override uncomment the following line.
-#debug=on
-ifneq ($(clean),yes)
-
-  ifeq ($(debug),on)
-    SRCS = $(notdir $(wildcard $(srcdir)/*.c))
-    include $(SRCS:.c=.d)
-  endif
-
+# These lines sort out proper dependencies.
+ifeq (,$(findstring clean,$(MAKECMDGOALS)))
+  SRCS = $(notdir $(wildcard $(srcdir)/*.c))
+  -include $(SRCS:%.c=.depend/%.d)
 endif

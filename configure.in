@@ -28,18 +28,8 @@ dnl
 dnl We have to be a bit naughty here and supply options.
 dnl The autoconf literature states that only features that can be 
 dnl separately 'built' should use --enable and friends. Oh well...
-dnl Current options: debug, setuid, device, db.
+dnl Current options: setuid, device, db.
 dnl 
-AC_ARG_ENABLE(debug,
-[  --enable-debug	  build a Makefile suitable for debugging purposes], 
-	 [: ${LDFLAGS=-g -Wall}
-	  AC_MSG_NOTICE([Enabling debugging Makefile])
-	  debug=on],
-	 [: ${CFLAGS=-g -O2 -Wall}
-	  : ${LIBS=-lc}
-	  AC_DEFINE(NDEBUG, 1,
-		    [Define if you want to remove debugging assertions.])
-	  debug=off])
 AC_ARG_ENABLE(setuid,
 [  --enable-setuid[=ARG]	  install man setuid to user ARG @<:@ARG=man@:>@
   --disable-setuid	  don't install man setuid],
@@ -103,13 +93,13 @@ dnl
 dnl Finish the argument parsing
 dnl
 AC_SUBST(man_install_flags)dnl
-AC_SUBST(debug)dnl
 AC_SUBST(config_file)dnl
 dnl
 dnl Check $PATH for the following progs and append suitable options.
 dnl 
 AC_PROG_CC
 AC_PROG_CPP
+CFLAGS="$CFLAGS -Wall"
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PATH_PROG(cat, cat)
@@ -426,10 +416,6 @@ then
     else
       AC_MSG_ERROR(Fatal: $db: unsupported database library)
     fi
-fi
-if test "$debug" = "on" 
-then
-  AC_CHECK_LIB(efence, EF_Print)
 fi
 dnl
 dnl Check for available functions.
