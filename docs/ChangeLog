@@ -1,3 +1,18 @@
+Sat Dec 21 03:01:34 GMT 2002  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (count_glob_matches): New function,
+	  sanity-checking results from look_for_file(). This should probably
+	  be done in look_for_file() itself eventually, but that requires
+	  more widespread changes.
+	  (purge_normal, purge_whatis): Use it.
+
+	* src/check_mandirs.c (gripe_bogus_manpage, gripe_rwopen_failed,
+	  filename_info, purge_normal, purge_whatis): Constify arguments.
+	* src/check_mandirs.h (filename_info): Update prototype.
+
+	* docs/NEWS: Document --enable-mandirs guesswork.
+	* src/.cvsignore: Add the globbing test executable.
+
 Fri Dec 20 15:38:48 GMT 2002  Colin Watson  <cjwatson@debian.org>
 
 	* src/globbing.c (main): Make the test program compile again, and

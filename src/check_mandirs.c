@@ -91,7 +91,7 @@ int force_rescan = 0;
 
 static struct hashtable *whatis_hash = NULL;
 
-static void gripe_bogus_manpage (char *manpage)
+static void gripe_bogus_manpage (const char *manpage)
 {
 	if (quiet < 2)
 		error (0, 0, _("warning: %s: ignoring bogus filename"),
@@ -114,7 +114,7 @@ static void gripe_bad_store (const char *name, const char *ext)
 		       name, ext);
 }
 
-static void gripe_rwopen_failed (char *database)
+static void gripe_rwopen_failed (const char *database)
 {
 	if (errno == EACCES || errno == EROFS) {
 		if (debug)
@@ -312,7 +312,8 @@ void free_descriptions (struct page_description *head)
  * name is only set if it differs from req_name; otherwise it remains at
  * NULL.
  */
-char *filename_info (char *file, struct mandata *info, const char *req_name)
+char *filename_info (const char *file, struct mandata *info,
+		     const char *req_name)
 {
 	char *manpage = xstrdup (file);
 	char *base_name = basename (manpage);
@@ -821,12 +822,36 @@ short update_db (const char *manpath)
 	return EOF;
 }
 
+/* Count the number of exact extension matches returned from look_for_file()
+ * (which may return inexact extension matches in some cases). It may turn
+ * out that this is better handled in look_for_file() itself.
+ */
+static int count_glob_matches (const char *name, const char *ext,
+			       char **source)
+{
+	char **walk;
+	int count = 0;
+
+	for (walk = source; walk && *walk; ++walk) {
+		struct mandata info;
+		char *buf = filename_info (*walk, &info, name);
+		if (buf) {
+			if (STREQ (ext, info.ext))
+				++count;
+			free (buf);
+		}
+	}
+
+	return count;
+}
+
 /* Decide whether to purge a reference to a "normal" (ULT_MAN or SO_MAN)
  * page.
  */
-static short purge_normal (char *name, struct mandata *info, char **found)
+static short purge_normal (const char *name, struct mandata *info,
+			   char **found)
 {
-	if (found)
+	if (count_glob_matches (name, info->ext, found))
 		return 0;
 
 	if (!opt_test)
@@ -839,10 +864,10 @@ static short purge_normal (char *name, struct mandata *info, char **found)
 }
 
 /* Decide whether to purge a reference to a WHATIS_MAN page. */
-static short purge_whatis (const char *manpath, char *name,
+static short purge_whatis (const char *manpath, const char *name,
 			   struct mandata *info, char **found)
 {
-	if (found) {
+	if (count_glob_matches (name, info->ext, found)) {
 		/* If the page exists and didn't beforehand, then presumably
 		 * we're about to rescan, which will replace the WHATIS_MAN
 		 * entry with something better. However, there have been
@@ -887,7 +912,7 @@ static short purge_whatis (const char *manpath, char *name,
 					    info->pointer, 0, 1);
 		debug = save_debug;
 
-		if (real_found)
+		if (count_glob_matches (info->pointer, info->ext, real_found))
 			return 0;
 
 		if (!opt_test)
