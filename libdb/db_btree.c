@@ -219,7 +219,7 @@ static __inline__ datum btree_findkey(DB *dbf, u_int flags)
 		if (debug)
 			fprintf (stderr, "Corrupt database! Already seen %*s. "
 					 "Attempting to recover ...\n",
-				 key.dsize, key.dptr);
+				 (int) key.dsize, key.dptr);
 		key.dptr = NULL;
 		key.dsize = 0;
 		return key;
