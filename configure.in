@@ -395,7 +395,7 @@ then
     for lib in gdbm c dbm
     do
       AC_CHECK_LIB($lib, gdbm_fetch,
-		   test "$lib" = "c" || DBLIBS="$DBLIBS -l$lib" 
+		   test "$lib" = "c" || DBLIBS="-l$lib" 
 		   [AC_DEFINE(GDBM, 1, [Define if you have, and want to use, gdbm interface routines.])]
 		   db=yes, db=no)
       if test "$db" = "yes" 
@@ -416,7 +416,7 @@ then
     for lib in ndbm c dbm
     do
       AC_CHECK_LIB($lib, dbm_fetch,
-		   test "$lib" = "c" || DBLIBS="$DBLIBS -l$lib"
+		   test "$lib" = "c" || DBLIBS="-l$lib"
 		   [AC_DEFINE(NDBM, 1, [Define if you have, and want to use, ndbm interface routines.])]
 		   db=yes, db=no)
       test "$db" = "yes" && break
