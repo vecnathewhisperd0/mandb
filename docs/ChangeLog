@@ -1,3 +1,8 @@
+Sat Sep  6 11:28:46 BST 2003  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (purge_missing): Call MYDBM_REORG() after
+	  deleting entries. Currently only useful for gdbm.
+
 Sat Sep  6 00:23:03 BST 2003  Colin Watson  <cjwatson@debian.org>
 
 	* acinclude.m4 (MAN_CHECK_BDB): Append to DBLIBS rather than LIBS.

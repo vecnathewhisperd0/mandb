@@ -892,6 +892,7 @@ short purge_missing (const char *manpath)
 		key = nextkey;
 	}
 
+	MYDBM_REORG (dbf);
 	MYDBM_CLOSE (dbf);
 	return count;
 }
