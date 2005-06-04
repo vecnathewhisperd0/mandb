@@ -1,5 +1,5 @@
 /*
- * getdirname.c: get current directory name
+ * getcwdalloc.c: get current directory name, allocating memory
  *
  * Copyright (C) 2004 Colin Watson.
  *

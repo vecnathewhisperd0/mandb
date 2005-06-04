@@ -1,5 +1,5 @@
 /*
- * getdirname.h: interface to get current directory name
+ * getcwdalloc.h: interface to get current directory name
  *
  * Copyright (C) 2004 Colin Watson.
  *
