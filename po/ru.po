@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2003-09-20 12:05+0100\n"
+"POT-Creation-Date: 2005-06-04 11:49+0100\n"
 "PO-Revision-Date: 2004-08-28 12:39+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@id.ru>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
@@ -21,67 +21,67 @@ msgstr ""
 msgid "badly formed configuration directive: '%s'"
 msgstr "неправильный формат директивы конфигурации: '%s'"
 
-#: lib/pipeline.c:426
+#: lib/pipeline.c:429
 msgid "pipeline input not open"
 msgstr "ввод конвейера не открыт"
 
-#: lib/pipeline.c:439
+#: lib/pipeline.c:442
 msgid "pipeline output not open"
 msgstr "вывод конвейера не открыт"
 
-#: lib/pipeline.c:557 lib/pipeline.c:571
+#: lib/pipeline.c:569 lib/pipeline.c:583
 msgid "pipe failed"
 msgstr "pipe вернул ошибку"
 
-#: lib/pipeline.c:591 src/catman.c:181 src/man.c:758
+#: lib/pipeline.c:603 src/catman.c:181
 msgid "fork failed"
 msgstr "fork вернул ошибку"
 
-#: lib/pipeline.c:599 lib/pipeline.c:608
+#: lib/pipeline.c:611 lib/pipeline.c:620
 msgid "dup2 failed"
 msgstr "dup2 вернул ошибку"
 
-#: lib/pipeline.c:602 lib/pipeline.c:611 lib/pipeline.c:618 lib/pipeline.c:627
-#: lib/pipeline.c:640 lib/pipeline.c:644
+#: lib/pipeline.c:614 lib/pipeline.c:623 lib/pipeline.c:630 lib/pipeline.c:639
+#: lib/pipeline.c:652 lib/pipeline.c:656
 msgid "close failed"
 msgstr "close вернул ошибку"
 
-#: lib/pipeline.c:634 src/man.c:791
+#: lib/pipeline.c:646
 #, c-format
 msgid "can't execute %s"
 msgstr "не удалось выполнить %s"
 
-#: lib/pipeline.c:729
+#: lib/pipeline.c:741
 msgid "closing pipeline input stream failed"
 msgstr "не удалось закрыть поток ввода конвейера"
 
-#: lib/pipeline.c:734
+#: lib/pipeline.c:746
 msgid "closing pipeline input failed"
 msgstr "не удалось закрыть ввод конвейера"
 
-#: lib/pipeline.c:773
+#: lib/pipeline.c:753
+msgid "closing pipeline output stream failed"
+msgstr "не удалось закрыть поток вывода конвейера"
+
+#: lib/pipeline.c:758
+msgid "closing pipeline output failed"
+msgstr "не удалось закрыть вывод конвейера"
+
+#: lib/pipeline.c:797
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr "%s: %s (создан файл core)"
 
-#: lib/pipeline.c:778
+#: lib/pipeline.c:802
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: lib/pipeline.c:805
+#: lib/pipeline.c:829
 msgid "waitpid failed"
 msgstr "waitpid вернул ошибку"
 
-#: lib/pipeline.c:811
-msgid "closing pipeline output stream failed"
-msgstr "не удалось закрыть поток вывода конвейера"
-
-#: lib/pipeline.c:816
-msgid "closing pipeline output failed"
-msgstr "не удалось закрыть вывод конвейера"
-
-#: lib/pipeline.c:866
+#: lib/pipeline.c:878
 msgid "can't install SIGCHLD handler"
 msgstr "не удалось установить обработчик SIGCHLD"
 
@@ -164,6 +164,7 @@ msgid "usage: %s [-dhV] [-C file] [-M manpath] [section] ...\n"
 msgstr "использование: %s [-dhV] [-C файл] [-M manpath] [раздел] ...\n"
 
 #: src/catman.c:140
+#, c-format
 msgid ""
 "-d, --debug                 produce debugging info.\n"
 "-M, --manpath path          set search path for manual pages to `path'.\n"
@@ -233,20 +234,21 @@ msgstr "не удалось обновить индексный кэш %s"
 #: src/check_mandirs.c:244
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
-msgstr "предупреждение: %s: неверная символическая ссылка или запрос ROFF `.so'"
+msgstr ""
+"предупреждение: %s: неверная символическая ссылка или запрос ROFF `.so'"
 
 #: src/check_mandirs.c:313
 #, c-format
 msgid "warning: %s: ignoring empty file"
 msgstr "предупреждение: %s: игнорирую пустой файл"
 
-#: src/check_mandirs.c:317 src/straycats.c:303
+#: src/check_mandirs.c:317 src/straycats.c:324
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "предупреждение: %s: whatis анализ %s(%s) не удался"
 
-#: src/check_mandirs.c:343 src/check_mandirs.c:379 src/straycats.c:108
-#: src/straycats.c:341 src/ult_src.c:125
+#: src/check_mandirs.c:343 src/check_mandirs.c:379 src/straycats.c:113
+#: src/straycats.c:362 src/ult_src.c:125
 #, c-format
 msgid "can't search directory %s"
 msgstr "не удалось найти каталог %s"
@@ -270,11 +272,11 @@ msgstr "завершено.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "Удаление старых записей базы данных в %s...\n"
 
-#: src/compression.c:77 src/man.c:1479
+#: src/compression.c:78 src/man.c:1424
 msgid "can't create a temporary filename"
 msgstr "не удалось создать временный файл"
 
-#: src/compression.c:188
+#: src/compression.c:201
 #, c-format
 msgid "command '%s' failed with exit status %d"
 msgstr "команда '%s' завершилась неудачно (код выхода %d)"
@@ -289,21 +291,22 @@ msgstr "Не удалось преобразовать %s в cat имя"
 msgid "warning: failed to store entry for %s(%s)"
 msgstr "предупреждение: не удалось сохранить запись для %s(%s)"
 
-#: src/fake_security.c:58
+#: src/fake_security.c:59
 msgid "can't get passwd structure for uid 0"
 msgstr "не удалось получить структуру passwd для uid 0"
 
-#: src/filenames.c:56 src/straycats.c:140 src/straycats.c:169
+#: src/filenames.c:56 src/straycats.c:145 src/straycats.c:174
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "предупреждение: %s: игнорирую фальшивое имя файла"
 
-#: src/globbing.c:396
+#: src/globbing.c:445
 #, c-format
 msgid "usage: %s [-deiIhV] path section name\n"
 msgstr "использование: %s [-deiIhV] путь раздел имя\n"
 
-#: src/globbing.c:398
+#: src/globbing.c:447
+#, c-format
 msgid ""
 "-d, --debug                 emit debugging messages.\n"
 "-e, --extension             limit search to extension type `extension'.\n"
@@ -313,28 +316,30 @@ msgid ""
 "-h, --help                  show this usage message.\n"
 msgstr ""
 "-d, --debug              показывать отладочные сообщения.\n"
-"-e, --extension          ограничить поиск файлами с расширением `расширение'.\n"
+"-e, --extension          ограничить поиск файлами с расширением "
+"`расширение'.\n"
 "-i, --ignore-case        регистронезависимый поиск страниц (по умолчанию).\n"
 "-I, --match-case         регистрозависимый поиск страниц.\n"
 "-V, --version            показать версию.\n"
 "-h, --help               показать это сообщение.\n"
 
-#: src/lexgrog.l:327
+#: src/lexgrog.l:351
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "предупреждение: whatis для %s превысил %d байт, обрезание."
 
-#: src/lexgrog.l:411 src/ult_src.c:330 src/ult_src.c:337
+#: src/lexgrog.l:438 src/straycats.c:264 src/ult_src.c:333 src/ult_src.c:340
 #, c-format
 msgid "can't open %s"
 msgstr "не удалось открыть %s"
 
-#: src/lexgrog.l:472
+#: src/lexgrog.l:500
 #, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "использование: %s [-mcwfhV] файл ...\n"
 
-#: src/lexgrog.l:474
+#: src/lexgrog.l:502
+#, c-format
 msgid ""
 "-m, --man                   parse as man page.\n"
 "-c, --cat                   parse as cat page.\n"
@@ -355,20 +360,16 @@ msgstr ""
 "\n"
 "По умолчанию используются --man и --whatis.\n"
 
-#: src/lexgrog.l:523
+#: src/lexgrog.l:551
 msgid "-m -c: incompatible options"
 msgstr "-m -c: несовместимые параметры"
 
-#: src/man.c:233
-msgid "can't popen"
-msgstr "popen вернул ошибку"
-
-#: src/man.c:278
+#: src/man.c:264
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "команда завершилась с кодом %d: %s"
 
-#: src/man.c:416
+#: src/man.c:403
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -377,10 +378,11 @@ msgid ""
 msgstr ""
 "использование: %s [-c|-f|-k|-w|-tZT устройство] [-i|-I]\n"
 "        [-adlhu7V] [-Mпуть] [-Pпейджер]\n"
-"        [-Cфайл] [-Sсписок] [-mсистема] [-pстрока] [-Lлокаль] [-eрасширение]\n"
+"        [-Cфайл] [-Sсписок] [-mсистема] [-pстрока] [-Lлокаль] [-"
+"eрасширение]\n"
 "        [раздел] страница ...\n"
 
-#: src/man.c:422
+#: src/man.c:409
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -388,10 +390,11 @@ msgid ""
 "           [section] page ...\n"
 msgstr ""
 "использование: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mпуть] [-Pпейджер]\n"
-"        [-Cфайл] [-Sсписок] [-mсистема] [-pстрока] [-Lлокаль] [-eрасширение]\n"
+"        [-Cфайл] [-Sсписок] [-mсистема] [-pстрока] [-Lлокаль] [-"
+"eрасширение]\n"
 "        [раздел] страница ...\n"
 
-#: src/man.c:429
+#: src/man.c:416
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -416,14 +419,15 @@ msgid ""
 msgstr ""
 "-a, --all                найти все подходящие страницы руководств.\n"
 "-d, --debug              показывать отладочные сообщения.\n"
-"-e, --extension          ограничить поиск файлами с расширением `расширение'.\n"
+"-e, --extension          ограничить поиск файлами с расширением "
+"`расширение'.\n"
 "-f, --whatis             эквивалентно whatis.\n"
 "-k, --apropos            эквивалентно apropos.\n"
 "-w, --where, --location  показывать физическое расположение man страниц.\n"
 "-W, --where-cat,\n"
 "    --location-cat        показывать физическое расположение cat file(s).\n"
-"-l, --local-file         рассматривать аргумент`страница' как локальные имена "
-"файлов.\n"
+"-l, --local-file         рассматривать аргумент`страница' как локальные "
+"имена файлов.\n"
 "-u, --update              включить проверку целостности кэша.\n"
 "-i, --ignore-case        регистронезависимый поиск страниц (по умолчанию).\n"
 "-I, --match-case         регистрозависимый поиск страниц.\n"
@@ -431,10 +435,10 @@ msgstr ""
 "-c, --catman             используется catman для реформатирования устаревших "
 "cat страниц.\n"
 "-7, --ascii              показывать ASCII символы вместо некоторых latin1.\n"
-"-E, --encoding кодировка  использовать заданное nroff устройство и показать в "
-"пейджере."
+"-E, --encoding кодировка  использовать заданное nroff устройство и показать "
+"в пейджере."
 
-#: src/man.c:447
+#: src/man.c:434
 #, c-format
 msgid ""
 "-t, --troff                 use %s to format pages.\n"
@@ -443,7 +447,7 @@ msgstr ""
 "-t, --troff                 использовать %s для форматирования страниц.\n"
 "-T, --troff-device устройство   использовать %s с заданным устройством.\n"
 
-#: src/man.c:451
+#: src/man.c:438
 msgid ""
 "-H, --html                  use lynx or argument to display html output.\n"
 "-Z, --ditroff               use groff and force it to produce ditroff.\n"
@@ -451,11 +455,13 @@ msgid ""
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 msgstr ""
 "-H, --html                  использовать lynx или аргумент для показа html.\n"
-"-Z, --ditroff               использовать groff и заставить его создавать ditroff.\n"
-"-X, --gxditview         использовать groff и показать с помощью gditview (X11):\n"
+"-Z, --ditroff               использовать groff и заставить его создавать "
+"ditroff.\n"
+"-X, --gxditview         использовать groff и показать с помощью gditview "
+"(X11):\n"
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 
-#: src/man.c:459
+#: src/man.c:446
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-C, --config-file file      use this user configuration file.\n"
@@ -478,149 +484,130 @@ msgstr ""
 "-S, --sections список         использовать список разделов,\n"
 "                             отделённых двоеточием.\n"
 "-m, --systems система        поиск man страниц в других unix системах.\n"
-"-L, --locale локаль         поиск man страниц только для определённой локали.\n"
+"-L, --locale локаль         поиск man страниц только для определённой "
+"локали.\n"
 "-p, --preprocessor строка   в строке указан препроцессов для запуска.\n"
 "                             e - [n]eqn   p - pic    t - tbl\n"
 "                             g - grap     r - refer  v - vgrind\n"
 "-V, --version               показать версию.\n"
 "-h, --help                  показать это сообщение."
 
-#: src/man.c:483
+#: src/man.c:470
 #, c-format
 msgid "What manual page do you want from section %s?\n"
 msgstr "Какая страница руководства вам нужна из раздела %s?\n"
 
-#: src/man.c:486
+#: src/man.c:473
 msgid "What manual page do you want?\n"
 msgstr "Какая страница руководства вам нужна?\n"
 
-#: src/man.c:635
+#: src/man.c:582
 #, c-format
 msgid "No source manual entry for %s"
 msgstr "Нет записи источника руководства для %s"
 
-#: src/man.c:644
+#: src/man.c:591
 #, c-format
 msgid "No manual entry for %s"
 msgstr "Нет записи руководства для %s"
 
-#: src/man.c:649
+#: src/man.c:596
 #, c-format
 msgid " in section %s\n"
 msgstr " в разделе %s\n"
 
-#: src/man.c:656
+#: src/man.c:603
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Смотрите '%s' в помощи, если недоступны страницы руководства.\n"
 
-#: src/man.c:800
-msgid "can't get mandb command's exit status"
-msgstr "не удалось получить код выхода команды mandb"
-
-#: src/man.c:829 src/man.c:2442
+#: src/man.c:770 src/man.c:2364
 #, c-format
 msgid "can't chdir to %s"
 msgstr "не удалось выполнить chdir в %s"
 
-#: src/man.c:1011
+#: src/man.c:958
 msgid " Manual page "
 msgstr " Страница руководства"
 
-#: src/man.c:1012
+#: src/man.c:959
 msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 msgstr " ?ltline %lt?L/%L.:байт %bB?s/%s..?e (END):?pB %pB\\%.."
 
-#: src/man.c:1084 src/man.c:3164
+#: src/man.c:1029 src/man.c:3145
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "команда mandb завершилась неудачно (код выхода %d)"
 
-#: src/man.c:1354
+#: src/man.c:1299
 msgid ": incompatible options"
 msgstr ": несовместивые параметры"
 
-#: src/man.c:1536
+#: src/man.c:1481
 msgid "error trying to read from stdin"
 msgstr "ошибка при попытке чтения из stdin"
 
-#: src/man.c:1550
+#: src/man.c:1495
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "ошибка записи во временный файл %s"
 
-#: src/man.c:1813
+#: src/man.c:1718
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "игнорирование неизвестного препроцессора `%c'"
 
-#: src/man.c:2019 src/mandb.c:287
+#: src/man.c:1990 src/mandb.c:265
 #, c-format
 msgid "can't chown %s"
 msgstr "не удалось выполнить chown %s"
 
-#: src/man.c:2031 src/mandb.c:258
+#: src/man.c:2002 src/mandb.c:236
 #, c-format
 msgid "can't chmod %s"
 msgstr "не удалось выполнить chmod %s"
 
-#: src/man.c:2043 src/mandb.c:201
+#: src/man.c:2014 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "не удалось переименовать %s в %s"
 
-#: src/man.c:2063
+#: src/man.c:2034
 #, c-format
 msgid "can't set times on %s"
 msgstr "не удалось установить время на %s"
 
-#: src/man.c:2072
+#: src/man.c:2043
 #, c-format
 msgid "can't unlink %s"
 msgstr "не удалось выполнить unlink %s"
 
-#: src/man.c:2100
-msgid "can't create pipe"
-msgstr "не удалось создать канал"
+#: src/man.c:2081
+#, fuzzy, c-format
+msgid "can't create temporary cat for %s"
+msgstr "не удалось создать временный файл"
 
-#: src/man.c:2126
+#: src/man.c:2182
 #, c-format
-msgid "can't create %s"
-msgstr "не удалось создать %s"
-
-#: src/man.c:2134 src/security.c:272
-msgid "can't fork"
-msgstr "не удалось выполнить fork"
-
-#: src/man.c:2144 src/man.c:2150
-msgid "can't dup2"
-msgstr "не удалось выполнить dup2"
-
-#: src/man.c:2169
-#, c-format
-msgid "can't exec %s"
-msgstr "не удалось выполнить %s"
-
-#: src/man.c:2205
-#, c-format
-msgid "waiting for pid %u"
-msgstr "ожмдание процесса с pid %u"
-
-#: src/man.c:2264
 msgid "Still saving the page, please wait...\n"
 msgstr "Страница сохраняется, подождите...\n"
 
-#: src/man.c:2311 src/man.c:2330 src/man.c:2361
+#: src/man.c:2235 src/man.c:2256 src/man.c:2287
 #, c-format
 msgid "can't change to directory %s"
 msgstr "не удалось сменить каталог на %s"
 
-#: src/man.c:2336 src/man.c:2366
+#: src/man.c:2249
+#, fuzzy, c-format
+msgid "can't open temporary file %s"
+msgstr "не удалось открыть manpath файл настроек %s"
+
+#: src/man.c:2262 src/man.c:2292
 #, c-format
 msgid "can't remove directory %s"
 msgstr "не удалось удалить каталог %s"
 
-#: src/man.c:2604
+#: src/man.c:2500
 #, c-format
 msgid ""
 "\n"
@@ -629,32 +616,34 @@ msgstr ""
 "\n"
 "не удалось записать в %s в режиме catman"
 
-#: src/man.c:2624
+#: src/man.c:2519
 #, c-format
 msgid "Reformatting %s, please wait...\n"
 msgstr "Переформатирование %s, подождите...\n"
 
-#: src/man.c:3002
+#: src/man.c:2982
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: доверять ссылкам whatis осуждается\n"
 
-#: src/man.c:3369
+#: src/man.c:3350
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "внутренняя ошибка: тип кандидата %d вне диапазона"
 
-#: src/man.c:3483
+#: src/man.c:3469
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
-msgstr "--Man-- след: %s [ просм (ввод) | пропуск (Ctrl-D) | выход (Ctrl-C) ]\n"
+msgstr ""
+"--Man-- след: %s [ просм (ввод) | пропуск (Ctrl-D) | выход (Ctrl-C) ]\n"
 
-#: src/mandb.c:171
+#: src/mandb.c:149
 #, c-format
 msgid "usage: %s [-dqspuct|-h|-V] [-C file] [-f filename] [manpath]\n"
 msgstr "использование: %s [-dqspuct|-h|-V] [-C файл] [-f имяфайла] [manpath]\n"
 
-#: src/mandb.c:174
+#: src/mandb.c:152
+#, c-format
 msgid ""
 "-d, --debug                 produce debugging info.\n"
 "-q, --quiet                 work quietly, except for 'bogus' warning.\n"
@@ -681,37 +670,37 @@ msgstr ""
 "-V, --version               показать версию.\n"
 "-h, --help                  показать это сообщение.\n"
 
-#: src/mandb.c:194 src/security.c:231
+#: src/mandb.c:172 src/security.c:232
 #, c-format
 msgid "can't remove %s"
 msgstr "не удалось удалить %s"
 
-#: src/mandb.c:235
+#: src/mandb.c:213
 #, c-format
 msgid "can't write to %s"
 msgstr "не удалось записать в %s"
 
-#: src/mandb.c:240
+#: src/mandb.c:218
 #, c-format
 msgid "can't read from %s"
 msgstr "не удалось прочитать из %s"
 
-#: src/mandb.c:374
+#: src/mandb.c:352
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Обработка страниц руководства в %s...\n"
 
-#: src/mandb.c:513 src/security.c:147
+#: src/mandb.c:493 src/security.c:148
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "setuid man пользователь \"%s\" не существует"
 
-#: src/mandb.c:541
+#: src/mandb.c:521
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "предупреждение: нет директивы MANDB_MAP в %s, используется ваш manpath"
 
-#: src/mandb.c:614
+#: src/mandb.c:594
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -720,92 +709,94 @@ msgstr ""
 "%d man подкаталоги содержат более новые страницы руководства.\n"
 "добавлены %d страницы руководства.\n"
 
-#: src/mandb.c:618
+#: src/mandb.c:598
 #, c-format
 msgid "%d stray cats were added.\n"
 msgstr "побочные %d cats добавлены.\n"
 
-#: src/mandb.c:620
+#: src/mandb.c:600
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr "удалены %d старые записи базы данных.\n"
 
-#: src/mandb.c:631
+#: src/mandb.c:611
 msgid "No databases updated."
 msgstr "Базы данных не обновлены."
 
-#: src/manp.c:347
+#: src/manp.c:324
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "нет правильного manpath файла настроек %s"
 
-#: src/manp.c:354
+#: src/manp.c:331
 #, c-format
 msgid "warning: %s"
 msgstr "предупреждение: %s"
 
-#: src/manp.c:360
+#: src/manp.c:337
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "предупреждение: %s не является каталогом"
 
-#: src/manp.c:365
+#: src/manp.c:342
 msgid "manpath list too long"
 msgstr "список manpath слишком длинный"
 
-#: src/manp.c:577
+#: src/manp.c:554
 msgid "warning: $PATH not set"
 msgstr "предупреждение: переменая среды $PATH не установлена"
 
-#: src/manp.c:584
+#: src/manp.c:561
 msgid "warning: empty $PATH"
 msgstr "предупреждение: переменная среды $PATH пуста"
 
-#: src/manp.c:609
+#: src/manp.c:586
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
-msgstr "предупреждение: найдена переменая среды $MANPATH, добавляется к началу %s"
+msgstr ""
+"предупреждение: найдена переменая среды $MANPATH, добавляется к началу %s"
 
-#: src/manp.c:620
+#: src/manp.c:597
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
-msgstr "предупреждение: найдена переменая среды $MANPATH, добавляется в конец %s"
+msgstr ""
+"предупреждение: найдена переменая среды $MANPATH, добавляется в конец %s"
 
-#: src/manp.c:632
+#: src/manp.c:609
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "предупреждение: найдена переменая среды $MANPATH, вставляется в %s"
 
-#: src/manp.c:645
+#: src/manp.c:622
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "предупреждение: найдена переменая среды $MANPATH, игнорируется %s"
 
-#: src/manp.c:678 src/manp.c:711
+#: src/manp.c:655 src/manp.c:688
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "предупреждение: не удалось создать cat каталог %s"
 
-#: src/manp.c:773
+#: src/manp.c:750
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "не удалось разобрать список каталогов `%s'"
 
-#: src/manp.c:806
+#: src/manp.c:783
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "не удалось открыть manpath файл настроек %s"
 
-#: src/manp.c:837
+#: src/manp.c:814
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "предупреждение: обязательный каталог %s не существует"
 
-#: src/manp.c:1049
+#: src/manp.c:1026
 msgid "can't determine current directory"
 msgstr "не удалось определить текущий каталог"
 
-#: src/manp.c:1164
+#: src/manp.c:1138
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "предупреждение: %s не начинается с %s"
@@ -816,6 +807,7 @@ msgid "usage: %s [[-gcdq] [-C file] [-m system]] | [-V] | [-h]\n"
 msgstr "использование: %s [[-gcdq] [-C файл] [-m система]] | [-V] | [-h]\n"
 
 #: src/manpath.c:102
+#, c-format
 msgid ""
 "-c, --catpath               show relative catpaths.\n"
 "-g, --global                show the entire global manpath.\n"
@@ -840,31 +832,40 @@ msgstr ""
 msgid "warning: no global manpaths set in config file %s"
 msgstr "предупреждение: не установлены глобальные manpaths в файле настроек %s"
 
-#: src/security.c:124
+#: src/security.c:125
 msgid "can't set effective uid"
 msgstr "не удалось установить эффективный uid"
 
-#: src/straycats.c:269 src/straycats.c:278 src/ult_src.c:171 src/ult_src.c:254
+#: src/security.c:273
+msgid "can't fork"
+msgstr "не удалось выполнить fork"
+
+#: src/straycats.c:278
+#, fuzzy, c-format
+msgid "can't open %s for writing"
+msgstr "не удалось открыть %s на чтение"
+
+#: src/straycats.c:287 src/straycats.c:296 src/ult_src.c:171 src/ult_src.c:254
 #, c-format
 msgid "can't resolve %s"
 msgstr "не удалось определить %s"
 
-#: src/straycats.c:275 src/ult_src.c:168
+#: src/straycats.c:293 src/ult_src.c:168
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "предупреждение: %s ссылается на несуществующий объект"
 
-#: src/straycats.c:346
+#: src/straycats.c:367
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "Проверка побочных cats в %s...\n"
 
-#: src/straycats.c:385
+#: src/straycats.c:406
 #, c-format
 msgid "warning: can't create temp file %s"
 msgstr "предупреждение: не удалось создать временный файл %s"
 
-#: src/straycats.c:399
+#: src/straycats.c:420
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "предупреждение: не удалось обновить индексный кэш %s"
@@ -879,20 +880,25 @@ msgstr "%s ссылается на себя"
 msgid "%s, version %s, %s\n"
 msgstr "%s, версия %s, %s\n"
 
-#: src/whatis.c:147
-#, c-format
-msgid "usage: %s [-dhV] [-r|-w|-e] [-m systems] [-M manpath] [-C file] keyword ...\n"
+#: src/whatis.c:151
+#, fuzzy, c-format
+msgid ""
+"usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C "
+"file]\n"
+"               keyword ...\n"
 msgstr ""
 "использование: %s [-dhV] [-r|-w|-e] [-m системы] [-M manpath]\n"
 "                               [-C файл] ключевое слово ...\n"
 
-#: src/whatis.c:149
+#: src/whatis.c:154
+#, fuzzy, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
 "-r, --regex                interpret each keyword as a regex (default).\n"
 "-e, --exact                search each keyword for exact match.\n"
 "-w, --wildcard             the keyword(s) contain wildcards.\n"
+"-s, --section section      search only this section.\n"
 "-m, --systems system       include alternate systems' man pages.\n"
 "-M, --manpath path         set search path for manual pages to `path'.\n"
 "-C, --config-file file     use this user configuration file.\n"
@@ -911,19 +917,23 @@ msgstr ""
 "-V, --version              показать версию.\n"
 "-h, --help                 показать это сообщение.\n"
 
-#: src/whatis.c:165
-#, c-format
-msgid "usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"
+#: src/whatis.c:171
+#, fuzzy, c-format
+msgid ""
+"usage: %s [-dhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
+"              keyword ...\n"
 msgstr ""
-"использование: %s [-dhV] [-r|-w] [-m системы] [-M manpath]\n"
-"                              [-C файл] ключевое слово ...\n"
+"использование: %s [-dhV] [-r|-w|-e] [-m системы] [-M manpath]\n"
+"                               [-C файл] ключевое слово ...\n"
 
-#: src/whatis.c:167
+#: src/whatis.c:174
+#, fuzzy, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
 "-r, --regex                interpret each keyword as a regex.\n"
 "-w, --wildcard             the keyword(s) contain wildcards.\n"
+"-s, --section section      search only this section.\n"
 "-m, --systems system       include alternate systems' man pages.\n"
 "-M, --manpath path         set search path for manual pages to `path'.\n"
 "-C, --config-file file     use this user configuration file.\n"
@@ -932,7 +942,8 @@ msgid ""
 msgstr ""
 "-d, --debug                выводить отладочную информацию.\n"
 "-v, --verbose              выводить полные предупреждающие сообщения.\n"
-"-r, --regex                рассматривать ключевые слова как regex выражения.\n"
+"-r, --regex                рассматривать ключевые слова как regex "
+"выражения.\n"
 "-w, --wildcard             ключевые слово(а) содержат символы подстановки.\n"
 "-m, --systems система      включить man страницы альтернативных систем.\n"
 "-M, --manpath путь         установить путь поиска страниц руководства.\n"
@@ -940,35 +951,36 @@ msgstr ""
 "-V, --version              показать версию.\n"
 "-h, --help                 показать это сообщение.\n"
 
-#: src/whatis.c:217
+#: src/whatis.c:227
 msgid "warning: can't read the fallback whatis text database."
-msgstr "предупреждение: не удалось прочитать аварийную whatis текстовую базу данных."
+msgstr ""
+"предупреждение: не удалось прочитать аварийную whatis текстовую базу данных."
 
-#: src/whatis.c:242 src/whatis.c:269 src/whatis.c:281
+#: src/whatis.c:252 src/whatis.c:279 src/whatis.c:291
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "warning: %s содержит циклический указатель"
 
-#: src/whatis.c:244 src/whatis.c:257 src/whatis.c:272 src/whatis.c:282
+#: src/whatis.c:254 src/whatis.c:267 src/whatis.c:282 src/whatis.c:292
 msgid "(unknown subject)"
 msgstr "(неизвестный объект)"
 
-#: src/whatis.c:494
+#: src/whatis.c:507
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "База данных %s повреждена; пересборка командой mandb --create"
 
-#: src/whatis.c:602
+#: src/whatis.c:622
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ничего подходящего не найдено.\n"
 
-#: src/whatis.c:711
+#: src/whatis.c:736
 #, c-format
 msgid "%s what?\n"
 msgstr "%s что?\n"
 
-#: src/whatis.c:734 src/whatis.c:743
+#: src/whatis.c:759 src/whatis.c:768
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "неустранимая ошибка: regex `%s': %s"
@@ -983,3 +995,29 @@ msgstr "Неизвестно, какую программу нужно запу�
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Не удалось выполнить su в пользователя %s\n"
 
+#~ msgid "can't popen"
+#~ msgstr "popen вернул ошибку"
+
+#~ msgid "can't get mandb command's exit status"
+#~ msgstr "не удалось получить код выхода команды mandb"
+
+#~ msgid "can't create pipe"
+#~ msgstr "не удалось создать канал"
+
+#~ msgid "can't create %s"
+#~ msgstr "не удалось создать %s"
+
+#~ msgid "can't dup2"
+#~ msgstr "не удалось выполнить dup2"
+
+#~ msgid "can't exec %s"
+#~ msgstr "не удалось выполнить %s"
+
+#~ msgid "waiting for pid %u"
+#~ msgstr "ожмдание процесса с pid %u"
+
+#~ msgid ""
+#~ "usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"
+#~ msgstr ""
+#~ "использование: %s [-dhV] [-r|-w] [-m системы] [-M manpath]\n"
+#~ "                              [-C файл] ключевое слово ...\n"
