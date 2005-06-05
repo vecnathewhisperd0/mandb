@@ -80,7 +80,7 @@ AC_ARG_WITH(device,
 	 fi])
 AC_ARG_WITH(db,
 [  --with-db=LIBRARY	  use database library LIBRARY
-                          (db3, db2, db1, db, gdbm, ndbm)],
+                          (db4, db3, db2, db1, db, gdbm, ndbm)],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
 	 then
 	 	AC_MSG_ERROR(--with-db requires an argument)
@@ -337,8 +337,17 @@ dnl Find a suitable database interface header and library
 dnl
 dnl Check for Berkeley db routines (first version API)
 dnl
+if test "$db" = "no" || test "$db" = "db4" || test "$db" = "db"; then
+MAN_CHECK_BDB([db4/db_185.h db_185.h], [db4 db-4],
+              [AC_DEFINE_UNQUOTED([BDB_H], [<$head>],
+				  [Define if you have, and want to use, Berkeley database header files.])
+               AC_DEFINE_UNQUOTED([BTREE], [$lib],
+				  [Define if you have, and want to use, the Berkeley database library.])
+              ])
+fi
+dnl
 if test "$db" = "no" || test "$db" = "db3" || test "$db" = "db"; then
-MAN_CHECK_BDB([db_185.h db3/db_185.h], [db3],
+MAN_CHECK_BDB([db3/db_185.h db_185.h], [db3],
               [AC_DEFINE_UNQUOTED([BDB_H], [<$head>],
 				  [Define if you have, and want to use, Berkeley database header files.])
                AC_DEFINE_UNQUOTED([BTREE], [$lib],
