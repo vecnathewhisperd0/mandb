@@ -3,6 +3,12 @@ man-db 2.4.3
 
 Major changes since man-db 2.4.2:
 
+	Fixes:
+	------
+
+	o Avoid problems creating databases on systems with badly broken
+	  clocks set before the Unix epoch.
+
 	Improvements:
 	-------------
 
@@ -19,6 +25,13 @@ Major changes since man-db 2.4.2:
 	o When invoking apropos (man -k) or whatis (man -f) as external
 	  programs, man now only passes through command-line options
 	  understood by the respective programs.
+
+	o Improve handling of locales with versions and/or modifiers.
+
+	o Add support for Turkish pages (ISO-8859-9 by default).
+
+	o man-db may now be built to use Berkeley DB version 4
+	  (--with-db=db4).
 
 	Compatibility notes:
 	--------------------
