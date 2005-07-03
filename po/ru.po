@@ -1,20 +1,20 @@
 # translation of ru.po to Russian
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR Colin Watson <cjwatson@debian.org>.
-# Yuri Kozlov <yuray@id.ru>, 2004.
+# Yuri Kozlov <yuray@id.ru>, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2005-06-04 11:49+0100\n"
-"PO-Revision-Date: 2004-08-28 12:39+0400\n"
+"PO-Revision-Date: 2005-06-06 20:56+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@id.ru>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3.1\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: lib/pipeline.c:220
 #, c-format
@@ -583,9 +583,9 @@ msgid "can't unlink %s"
 msgstr "не удалось выполнить unlink %s"
 
 #: src/man.c:2081
-#, fuzzy, c-format
+#, c-format
 msgid "can't create temporary cat for %s"
-msgstr "не удалось создать временный файл"
+msgstr "не удалось создать временный файл %s"
 
 #: src/man.c:2182
 #, c-format
@@ -598,9 +598,9 @@ msgid "can't change to directory %s"
 msgstr "не удалось сменить каталог на %s"
 
 #: src/man.c:2249
-#, fuzzy, c-format
+#, c-format
 msgid "can't open temporary file %s"
-msgstr "не удалось открыть manpath файл настроек %s"
+msgstr "не удалось открыть временный файл %s"
 
 #: src/man.c:2262 src/man.c:2292
 #, c-format
@@ -841,9 +841,9 @@ msgid "can't fork"
 msgstr "не удалось выполнить fork"
 
 #: src/straycats.c:278
-#, fuzzy, c-format
+#, c-format
 msgid "can't open %s for writing"
-msgstr "не удалось открыть %s на чтение"
+msgstr "не удалось открыть %s на запись"
 
 #: src/straycats.c:287 src/straycats.c:296 src/ult_src.c:171 src/ult_src.c:254
 #, c-format
@@ -881,17 +881,17 @@ msgid "%s, version %s, %s\n"
 msgstr "%s, версия %s, %s\n"
 
 #: src/whatis.c:151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C "
 "file]\n"
 "               keyword ...\n"
 msgstr ""
-"использование: %s [-dhV] [-r|-w|-e] [-m системы] [-M manpath]\n"
+"использование: %s [-dhV] [-r|-w|-e] [-s раздел] [-m системы] [-M manpath]\n"
 "                               [-C файл] ключевое слово ...\n"
 
 #: src/whatis.c:154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
@@ -911,6 +911,7 @@ msgstr ""
 "                           выражения (по умолчанию).\n"
 "-e, --exact                поиск точного совпадения каждого слова.\n"
 "-w, --wildcard             ключевые слово(а) содержат символы подстановки.\n"
+"-s, --section раздел       искать только в этом разделе.\n"
 "-m, --systems система      включить man страницы альтернативных систем.\n"
 "-M, --manpath путь         установить путь поиска страниц руководства.\n"
 "-C, --config-file файл     использовать файл настроек пользователя.\n"
@@ -918,16 +919,16 @@ msgstr ""
 "-h, --help                 показать это сообщение.\n"
 
 #: src/whatis.c:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "usage: %s [-dhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
 "              keyword ...\n"
 msgstr ""
-"использование: %s [-dhV] [-r|-w|-e] [-m системы] [-M manpath]\n"
+"использование: %s [-dhV] [-r|-w] [-s раздел] [-m системы] [-M manpath]\n"
 "                               [-C файл] ключевое слово ...\n"
 
 #: src/whatis.c:174
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
@@ -945,6 +946,7 @@ msgstr ""
 "-r, --regex                рассматривать ключевые слова как regex "
 "выражения.\n"
 "-w, --wildcard             ключевые слово(а) содержат символы подстановки.\n"
+"-s, --section раздел       искать только в этом разделе.\n"
 "-m, --systems система      включить man страницы альтернативных систем.\n"
 "-M, --manpath путь         установить путь поиска страниц руководства.\n"
 "-C, --config-file файл     использовать файл настроек пользователя.\n"
@@ -994,30 +996,3 @@ msgstr "Неизвестно, какую программу нужно запу�
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Не удалось выполнить su в пользователя %s\n"
-
-#~ msgid "can't popen"
-#~ msgstr "popen вернул ошибку"
-
-#~ msgid "can't get mandb command's exit status"
-#~ msgstr "не удалось получить код выхода команды mandb"
-
-#~ msgid "can't create pipe"
-#~ msgstr "не удалось создать канал"
-
-#~ msgid "can't create %s"
-#~ msgstr "не удалось создать %s"
-
-#~ msgid "can't dup2"
-#~ msgstr "не удалось выполнить dup2"
-
-#~ msgid "can't exec %s"
-#~ msgstr "не удалось выполнить %s"
-
-#~ msgid "waiting for pid %u"
-#~ msgstr "ожмдание процесса с pid %u"
-
-#~ msgid ""
-#~ "usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"
-#~ msgstr ""
-#~ "использование: %s [-dhV] [-r|-w] [-m системы] [-M manpath]\n"
-#~ "                              [-C файл] ключевое слово ...\n"
