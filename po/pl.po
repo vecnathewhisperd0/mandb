@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: man-db 2.4.2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2005-06-04 11:49+0100\n"
-"PO-Revision-Date: 2004-02-01 23:12+0100\n"
+"PO-Revision-Date: 2005-06-08 20:46+0200\n"
 "Last-Translator: Robert Luberda <robert@debian.org>\n"
 "Language-Team: Polish <debian-l10n-polish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -420,7 +420,8 @@ msgid ""
 msgstr ""
 "-a, --all                   znajduje wszystkie pasuj±ce strony podrêcznika.\n"
 "-d, --debug                 wy¶wietla informacje debugowe.\n"
-"-e, --extension             limit search to extension type `extension'.\n"
+"-e, --extension             ogranicza wyszukiwanie do plików maj±cych dane "
+"rozszerzenie.\n"
 "-f, --whatis                odpowiednik whatis.\n"
 "-k, --apropos               odpowiednik apropos.\n"
 "-w, --where, --location     wypisuje fizyczne lokalizacje stron(y)\n"
@@ -599,9 +600,9 @@ msgid "can't unlink %s"
 msgstr "nie mo¿na usun±æ %s"
 
 #: src/man.c:2081
-#, fuzzy, c-format
+#, c-format
 msgid "can't create temporary cat for %s"
-msgstr "nie mo¿na utworzyæ nazwy pliku tymczasowego"
+msgstr "nie mo¿na utworzyæ tymczasowego pliku cat dla %s"
 
 #: src/man.c:2182
 #, c-format
@@ -614,9 +615,9 @@ msgid "can't change to directory %s"
 msgstr "nie mo¿na przej¶æ do katalogu %s"
 
 #: src/man.c:2249
-#, fuzzy, c-format
+#, c-format
 msgid "can't open temporary file %s"
-msgstr "nie mo¿na otworzyæ pliku konfiguracyjnego %s"
+msgstr "nie mo¿na otworzyæ pliku tymczasowego %s"
 
 #: src/man.c:2262 src/man.c:2292
 #, c-format
@@ -867,9 +868,9 @@ msgid "can't fork"
 msgstr "b³±d fork"
 
 #: src/straycats.c:278
-#, fuzzy, c-format
+#, c-format
 msgid "can't open %s for writing"
-msgstr "nie mo¿na otworzyæ %s do odczytu"
+msgstr "nie mo¿na otworzyæ %s do zapisu"
 
 #: src/straycats.c:287 src/straycats.c:296 src/ult_src.c:171 src/ult_src.c:254
 #, c-format
@@ -907,17 +908,18 @@ msgid "%s, version %s, %s\n"
 msgstr "%s w wersji %s, %s\n"
 
 #: src/whatis.c:151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C "
 "file]\n"
 "               keyword ...\n"
 msgstr ""
-"u¿ycie: %s [-dhV] [-r|-w|-e] [-m systemy] [-M ¶cie¿ka_man [-C plik] "
-"s³owo_kluczowe ...\n"
+"u¿ycie: %s [-dhV] [-r|-w|-e] [-s sekcja] [-m systemy] [-M ¶cie¿ka_man] [-C "
+"plik]\n"
+"               s³owo_kluczowe ...\n"
 
 #: src/whatis.c:154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
@@ -933,11 +935,12 @@ msgid ""
 msgstr ""
 "-d, --debug                wy¶wietla informacje debugowania.\n"
 "-v, --verbose              wy¶wietla rozwlek³e ostrze¿enia.\n"
-"-r, --regex                interpretuje ka¿de s³ow kluczowe jako wyra¿enie\n"
+"-r, --regex                interpretuje ka¿de s³owo kluczowe jako wyra¿enie\n"
 "                           regularne (domy¶lnie).\n"
 "-e, --exact                dok³adnie dopasowuje s³owa kluczowe podczas\n"
 "                           wyszukiwania.\n"
 "-w, --wildcard             s³owo kluczowe zawiera znaki maski.\n"
+"-s, --section sekcja       wyszukuje tylko w podanej sekcji\n"
 "-m, --systems system       do³±cza strony podrêcznika innych systemów.\n"
 "-M, --manpath ¶cie¿ka      ustawia ¶cie¿kê poszukiwañ stron podrêcznika.\n"
 "-C, --config-file plik     u¿ywa podanego pliku konfiguracyjnego.\n"
@@ -945,16 +948,17 @@ msgstr ""
 "-h, --help                 wy¶wietla tê pomoc.\n"
 
 #: src/whatis.c:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "usage: %s [-dhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
 "              keyword ...\n"
 msgstr ""
-"u¿ycie: %s [-dhV] [-r|-w|-e] [-m systemy] [-M ¶cie¿ka_man [-C plik] "
-"s³owo_kluczowe ...\n"
+"u¿ycie: %s [-dhV] [-r|-w] [-s sekcja] [-m systemy] [-M ¶cie¿ka_man] [-C "
+"plik]\n"
+"              s³owo_kluczowe ...\n"
 
 #: src/whatis.c:174
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
@@ -969,9 +973,10 @@ msgid ""
 msgstr ""
 "-d, --debug                wy¶wietla informacje debugowania.\n"
 "-v, --verbose              wy¶wietla rozwlek³e ostrze¿enia.\n"
-"-r, --regex                interpretuje ka¿de s³ow kluczowe jako wyra¿enie\n"
+"-r, --regex                interpretuje ka¿de s³owo kluczowe jako wyra¿enie\n"
 "                           regularne.\n"
 "-w, --wildcard             s³owo kluczowe zawiera znaki maski.\n"
+"-s, --section sekcja       wyszukuje tylko w podanej sekcji\n"
 "-m, --systems system       do³±cza strony podrêcznika innych systemów.\n"
 "-M, --manpath ¶cie¿ka      ustawia ¶cie¿kê poszukiwañ stron podrêcznika.\n"
 "-C, --config-file plik     u¿ywa podanego pliku konfiguracyjnego.\n"
