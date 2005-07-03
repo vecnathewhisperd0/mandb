@@ -1,3 +1,14 @@
+Sun Jul  3 20:55:13 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* configure.in: Define HAVE_GZIP, HAVE_COMPRESS, and HAVE_BZIP2 as
+	  appropriate.
+	* include/comp_src.h.in: Conditionalise compressor list on
+	  HAVE_GZIP, HAVE_COMPRESS, and HAVE_BZIP2 rather than on GUNZIP,
+	  UNCOMPRESS, and BUNZIP2; if a compressor isn't detected, the
+	  latter will end up as empty strings, not undefined. Thanks to Paul
+	  Slootman (Debian bug #196097).
+	* docs/NEWS: Document this.
+
 Sun Jul  3 18:58:14 BST 2005  Colin Watson  <cjwatson@debian.org>
 
 	* GNUmakefile.in (__distclean): Remove po/Makevars.template.
