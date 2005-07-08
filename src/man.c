@@ -2515,9 +2515,6 @@ static int display (const char *dir, const char *man_file,
 					return 0;
 			}
 
-			fprintf (stderr,
-				 _("Reformatting %s, please wait...\n"),
-				 title);
 			disp_cmd = make_display_command (NULL, title);
 
 #ifdef MAN_CATS
