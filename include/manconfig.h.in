@@ -247,6 +247,13 @@
    gmon.out ended up), uncomment the following line */
 /* #define __profile__ */
  
+/* Does this compiler support sentinel checking? */
+#if defined(__GNUC__) && __GNUC__ >= 4
+#  define ATTRIBUTE_SENTINEL __attribute__ ((sentinel))
+#else
+#  define ATTRIBUTE_SENTINEL
+#endif
+
 /* if testing BTREE db allowing inserts of identical keys, uncomment below */
 /* #define FAST_BTREE */
 
@@ -338,7 +345,7 @@ extern char *strsep (char **stringp, const char *delim);
 #  define getcwd(buf,size) getwd (buf)
 #endif
 
-extern char *strappend (char *, ...);
+extern char *strappend (char *, ...) ATTRIBUTE_SENTINEL;
 
 extern int debug; 		/* shows whether -d issued */
 extern int quiet;		/* be quiet(er) if 1 */

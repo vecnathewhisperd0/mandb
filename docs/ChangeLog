@@ -1,3 +1,12 @@
+Mon Jul 11 14:41:52 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* include/manconfig.h.in: Define ATTRIBUTE_SENTINEL to a function
+	  attribute enabling sentinel checking if using GCC 4.0 or newer.
+	  (strappend): Use it.
+	* lib/pipeline.h (command_new_args, command_args,
+	  pipeline_new_commands, pipeline_command_args, pipeline_commands):
+	  Likewise.
+
 Mon Jul 11 14:38:30 BST 2005  Colin Watson  <cjwatson@debian.org>
 
 	* lib/Makefile.in, libdb/Makefile.in, src/Makefile.in,
