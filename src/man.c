@@ -437,7 +437,7 @@ static void usage (int status)
 # ifdef TROFF_IS_GROFF
 	puts (_("-H, --html                  use lynx or argument to display html output.\n"
 		"-Z, --ditroff               use groff and force it to produce ditroff.\n"
-		"-X, --gxditview             use groff and display through gditview (X11):\n"
+		"-X, --gxditview             use groff and display through gxditview (X11):\n"
 		"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."));
 # endif /* TROFF_IS_GROFF */
 #endif /* HAS_TROFF */
