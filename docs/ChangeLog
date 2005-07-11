@@ -1,3 +1,10 @@
+Mon Jul 11 14:38:30 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* lib/Makefile.in, libdb/Makefile.in, src/Makefile.in,
+	  zsoelim/Makefile.in: Stop using -I-; it's deprecated in GCC 4.0,
+	  and it doesn't seem worth the effort of switching to the -iquote
+	  replacement.
+
 Mon Jul 11 12:02:57 BST 2005  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (usage): Fix "gditview" typo (Debian bug #317696).

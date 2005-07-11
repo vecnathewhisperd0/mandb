@@ -40,7 +40,7 @@ include ../include/Defines
 
 MANDEFS = -DCONFIG_FILE=\"$(config_file)\" \
 	-DLOCALEDIR=\"$(gnulocaledir)\" $(DEFS_$(subst /,_,$@))
-MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I- -I../intl
+MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir) -I../intl
 
 #----------------------------------------------------------------#
 # user changeable definitions can be found in ../include/Defines #

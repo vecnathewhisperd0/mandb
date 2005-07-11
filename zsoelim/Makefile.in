@@ -29,7 +29,7 @@ include ../include/Defines
 
 .PHONY:	$(DEFAULT_TARGETS)
 
-MANCPPFLAGS := -I../include -I$(top_srcdir) -I-
+MANCPPFLAGS := -I../include -I$(top_srcdir)
 override LDLIBS = -lc @LEXLIB@
 
 # You may need to modify these options if you have lex instead of flex
