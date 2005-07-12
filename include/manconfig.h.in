@@ -263,6 +263,13 @@
 #  define ATTRIBUTE_FORMAT_PRINTF(a,b)
 #endif
 
+/* Does this compiler support malloc return checking? */
+#if GNUC_PREREQ(2,96)
+#  define ATTRIBUTE_MALLOC __attribute__ ((__malloc__))
+#else
+#  define ATTRIBUTE_MALLOC
+#endif
+
 /* Does this compiler support sentinel checking? */
 #if GNUC_PREREQ(4,0)
 #  define ATTRIBUTE_SENTINEL __attribute__ ((__sentinel__))
@@ -311,10 +318,11 @@ struct compression {
 
 /* some library function declarations */
 #include <stddef.h>	/* for size_t */
-extern VOID *xmalloc (size_t n);
-extern VOID *xrealloc (VOID *p, size_t n);
-extern __inline__ char *xstrdup (const char *string);
-extern __inline__ char *xstrndup (const char *string, size_t size);
+extern VOID *xmalloc (size_t n) ATTRIBUTE_MALLOC;
+extern VOID *xrealloc (VOID *p, size_t n) ATTRIBUTE_MALLOC;
+extern __inline__ char *xstrdup (const char *string) ATTRIBUTE_MALLOC;
+extern __inline__ char *xstrndup (const char *string, size_t size) 
+	ATTRIBUTE_MALLOC;
 extern const char *xstrsignal (int signum);
 extern int create_tempfile (const char *template, char **created_filename);
 extern char *create_tempdir (const char *template);

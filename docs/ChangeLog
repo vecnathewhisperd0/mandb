@@ -1,3 +1,10 @@
+Tue Jul 12 02:08:41 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* include/manconfig.h.in (ATTRIBUTE_MALLOC): Define to a function
+	  attribute enabling malloc return value checking if using GCC 2.96
+	  or newer.
+	  (xmalloc, xrealloc, xstrdup, xstrndup): Use it.
+
 Tue Jul 12 01:59:10 BST 2005  Colin Watson  <cjwatson@debian.org>
 
 	* include/manconfig.h.in (GNUC_PREREQ): Helper macro borrowed from
