@@ -26,8 +26,10 @@
 extern int errno;
 #endif
 
+#include "manconfig.h"
+
 #if __STDC__ && (HAVE_VPRINTF || HAVE_DOPRNT)
-void error (int, int, const char *, ...);
+void error (int, int, const char *, ...) ATTRIBUTE_FORMAT_PRINTF(3, 4);
 #else
 void error ();
 #endif

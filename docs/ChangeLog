@@ -1,3 +1,14 @@
+Tue Jul 12 01:59:10 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* include/manconfig.h.in (GNUC_PREREQ): Helper macro borrowed from
+	  glibc.
+	  (ATTRIBUTE_FORMAT_PRINTF): Define to a function attribute enabling
+	  printf-style format string checking if using GCC 2.0 or newer.
+	  (ATTRIBUTE_SENTINEL): Use GNUC_PREREQ. Use __sentinel__ rather
+	  than sentinel to avoid possible clashes with other macros.
+	* lib/error.h (error): Add printf format attribute.
+	* lib/xmalloc.c: Include "error.h" rather than redeclaring error.
+
 Mon Jul 11 18:12:58 BST 2005  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_wait): Emit a debugging message.

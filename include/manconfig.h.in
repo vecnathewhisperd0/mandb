@@ -246,10 +246,26 @@
    the -p or -pg flag, to do this manually (needed if you want to know where
    gmon.out ended up), uncomment the following line */
 /* #define __profile__ */
- 
+
+/* GCC version checking borrowed from glibc. */
+#if defined(__GNUC__) && defined(__GNUC_MINOR)
+#  define GNUC_PREREQ(maj,min) \
+	((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
+#else
+#  define GNUC_PREREQ(maj,min) 0
+#endif
+
+/* Does this compiler support format string checking? */
+#if GNUC_PREREQ(2,0)
+#  define ATTRIBUTE_FORMAT_PRINTF(a,b) \
+	__attribute__ ((__format__ (__printf__, a, b)))
+#else
+#  define ATTRIBUTE_FORMAT_PRINTF(a,b)
+#endif
+
 /* Does this compiler support sentinel checking? */
-#if defined(__GNUC__) && __GNUC__ >= 4
-#  define ATTRIBUTE_SENTINEL __attribute__ ((sentinel))
+#if GNUC_PREREQ(4,0)
+#  define ATTRIBUTE_SENTINEL __attribute__ ((__sentinel__))
 #else
 #  define ATTRIBUTE_SENTINEL
 #endif

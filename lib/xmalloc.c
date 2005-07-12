@@ -29,6 +29,8 @@ void *realloc ();
 void free ();
 #endif
 
+#include "error.h"
+
 #ifndef EXIT_FAILURE
 #define EXIT_FAILURE 1
 #endif
@@ -36,12 +38,6 @@ void free ();
 /* Exit value when the requested amount of memory is not available.
    The caller may set it to some other value.  */
 int xmalloc_exit_failure = EXIT_FAILURE;
-
-#if __STDC__ && (HAVE_VPRINTF || HAVE_DOPRNT)
-void error (int, int, const char *, ...);
-#else
-void error ();
-#endif
 
 static void *
 fixup_null_alloc (size_t n)
