@@ -1760,7 +1760,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			if (!isatty (fileno (stdout))) {
 				save_cat = 0;
 				setenv ("GROFF_NO_SGR", "1", 1);
-				pipeline_command_args (p, COL, "-b", NULL);
+				pipeline_command_args (p, COL,
+						       "-b", "-p", "-x", NULL);
 			}
 #ifndef GNU_NROFF
 			/* tbl needs col */
