@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2005-06-04 11:49+0100\n"
+"POT-Creation-Date: 2005-07-27 11:20+0100\n"
 "PO-Revision-Date: 2005-06-06 20:56+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@id.ru>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
@@ -51,37 +51,37 @@ msgstr "close вернул ошибку"
 msgid "can't execute %s"
 msgstr "не удалось выполнить %s"
 
-#: lib/pipeline.c:741
+#: lib/pipeline.c:746
 msgid "closing pipeline input stream failed"
 msgstr "не удалось закрыть поток ввода конвейера"
 
-#: lib/pipeline.c:746
+#: lib/pipeline.c:751
 msgid "closing pipeline input failed"
 msgstr "не удалось закрыть ввод конвейера"
 
-#: lib/pipeline.c:753
+#: lib/pipeline.c:758
 msgid "closing pipeline output stream failed"
 msgstr "не удалось закрыть поток вывода конвейера"
 
-#: lib/pipeline.c:758
+#: lib/pipeline.c:763
 msgid "closing pipeline output failed"
 msgstr "не удалось закрыть вывод конвейера"
 
-#: lib/pipeline.c:797
+#: lib/pipeline.c:802
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr "%s: %s (создан файл core)"
 
-#: lib/pipeline.c:802
+#: lib/pipeline.c:807
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: lib/pipeline.c:829
+#: lib/pipeline.c:834
 msgid "waitpid failed"
 msgstr "waitpid вернул ошибку"
 
-#: lib/pipeline.c:878
+#: lib/pipeline.c:883
 msgid "can't install SIGCHLD handler"
 msgstr "не удалось установить обработчик SIGCHLD"
 
@@ -272,7 +272,7 @@ msgstr "завершено.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "Удаление старых записей базы данных в %s...\n"
 
-#: src/compression.c:78 src/man.c:1424
+#: src/compression.c:78 src/man.c:1415
 msgid "can't create a temporary filename"
 msgstr "не удалось создать временный файл"
 
@@ -501,113 +501,108 @@ msgstr "Какая страница руководства вам нужна и�
 msgid "What manual page do you want?\n"
 msgstr "Какая страница руководства вам нужна?\n"
 
-#: src/man.c:582
-#, c-format
-msgid "No source manual entry for %s"
-msgstr "Нет записи источника руководства для %s"
-
-#: src/man.c:591
-#, c-format
-msgid "No manual entry for %s"
+#: src/man.c:586
+#, fuzzy, c-format
+msgid "No manual entry for %s in section %s\n"
 msgstr "Нет записи руководства для %s"
 
-#: src/man.c:596
-#, c-format
-msgid " in section %s\n"
-msgstr " в разделе %s\n"
+#: src/man.c:589
+#, fuzzy, c-format
+msgid "No manual entry for %s\n"
+msgstr "Нет записи руководства для %s"
 
-#: src/man.c:603
+#: src/man.c:594
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Смотрите '%s' в помощи, если недоступны страницы руководства.\n"
 
-#: src/man.c:770 src/man.c:2364
+#: src/man.c:761 src/man.c:2356
 #, c-format
 msgid "can't chdir to %s"
 msgstr "не удалось выполнить chdir в %s"
 
-#: src/man.c:958
+#: src/man.c:949
 msgid " Manual page "
 msgstr " Страница руководства"
 
-#: src/man.c:959
+#: src/man.c:950
 msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 msgstr " ?ltline %lt?L/%L.:байт %bB?s/%s..?e (END):?pB %pB\\%.."
 
-#: src/man.c:1029 src/man.c:3145
+#: src/man.c:1020 src/man.c:3134
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "команда mandb завершилась неудачно (код выхода %d)"
 
-#: src/man.c:1299
+#: src/man.c:1290
 msgid ": incompatible options"
 msgstr ": несовместивые параметры"
 
-#: src/man.c:1481
+#: src/man.c:1472
 msgid "error trying to read from stdin"
 msgstr "ошибка при попытке чтения из stdin"
 
-#: src/man.c:1495
+#: src/man.c:1486
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "ошибка записи во временный файл %s"
 
-#: src/man.c:1718
+#: src/man.c:1709
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "игнорирование неизвестного препроцессора `%c'"
 
-#: src/man.c:1990 src/mandb.c:265
+#: src/man.c:1982 src/mandb.c:265
 #, c-format
 msgid "can't chown %s"
 msgstr "не удалось выполнить chown %s"
 
-#: src/man.c:2002 src/mandb.c:236
+#: src/man.c:1994 src/mandb.c:236
 #, c-format
 msgid "can't chmod %s"
 msgstr "не удалось выполнить chmod %s"
 
-#: src/man.c:2014 src/mandb.c:179
+#: src/man.c:2006 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "не удалось переименовать %s в %s"
 
-#: src/man.c:2034
+#: src/man.c:2026
 #, c-format
 msgid "can't set times on %s"
 msgstr "не удалось установить время на %s"
 
-#: src/man.c:2043
+#: src/man.c:2035
 #, c-format
 msgid "can't unlink %s"
 msgstr "не удалось выполнить unlink %s"
 
-#: src/man.c:2081
+#: src/man.c:2073
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "не удалось создать временный файл %s"
 
-#: src/man.c:2182
+#: src/man.c:2174
 #, c-format
 msgid "Still saving the page, please wait...\n"
 msgstr "Страница сохраняется, подождите...\n"
 
-#: src/man.c:2235 src/man.c:2256 src/man.c:2287
+#: src/man.c:2227 src/man.c:2248 src/man.c:2279
 #, c-format
 msgid "can't change to directory %s"
 msgstr "не удалось сменить каталог на %s"
 
-#: src/man.c:2249
+#: src/man.c:2241
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "не удалось открыть временный файл %s"
 
-#: src/man.c:2262 src/man.c:2292
+#: src/man.c:2254 src/man.c:2284
 #, c-format
 msgid "can't remove directory %s"
 msgstr "не удалось удалить каталог %s"
 
-#: src/man.c:2500
+#: src/man.c:2492
 #, c-format
 msgid ""
 "\n"
@@ -616,22 +611,17 @@ msgstr ""
 "\n"
 "не удалось записать в %s в режиме catman"
 
-#: src/man.c:2519
-#, c-format
-msgid "Reformatting %s, please wait...\n"
-msgstr "Переформатирование %s, подождите...\n"
-
-#: src/man.c:2982
+#: src/man.c:2971
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: доверять ссылкам whatis осуждается\n"
 
-#: src/man.c:3350
+#: src/man.c:3339
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "внутренняя ошибка: тип кандидата %d вне диапазона"
 
-#: src/man.c:3469
+#: src/man.c:3458
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -996,3 +986,12 @@ msgstr "Неизвестно, какую программу нужно запу�
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Не удалось выполнить su в пользователя %s\n"
+
+#~ msgid "No source manual entry for %s"
+#~ msgstr "Нет записи источника руководства для %s"
+
+#~ msgid " in section %s\n"
+#~ msgstr " в разделе %s\n"
+
+#~ msgid "Reformatting %s, please wait...\n"
+#~ msgstr "Переформатирование %s, подождите...\n"

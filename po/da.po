@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.2-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2005-06-04 11:49+0100\n"
+"POT-Creation-Date: 2005-07-27 11:20+0100\n"
 "PO-Revision-Date: 2003-09-15 22:39+0200\n"
 "Last-Translator: Byrial Ole Jensen <byrial@image.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -51,37 +51,37 @@ msgstr "close-systemkald mislykkedes"
 msgid "can't execute %s"
 msgstr "kan ikke køre %s"
 
-#: lib/pipeline.c:741
+#: lib/pipeline.c:746
 msgid "closing pipeline input stream failed"
 msgstr "lukning af rørledningsindgangsstrøm mislykkedes"
 
-#: lib/pipeline.c:746
+#: lib/pipeline.c:751
 msgid "closing pipeline input failed"
 msgstr "lukning af rørledningsindgang mislykkedes"
 
-#: lib/pipeline.c:753
+#: lib/pipeline.c:758
 msgid "closing pipeline output stream failed"
 msgstr "lukning af rørledningsudgangsstrøm mislykkedes"
 
-#: lib/pipeline.c:758
+#: lib/pipeline.c:763
 msgid "closing pipeline output failed"
 msgstr "lukning af rørledningsudgang mislykkedes"
 
-#: lib/pipeline.c:797
+#: lib/pipeline.c:802
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr ""
 
-#: lib/pipeline.c:802
+#: lib/pipeline.c:807
 #, fuzzy, c-format
 msgid "%s: %s"
 msgstr "%s: %s%s"
 
-#: lib/pipeline.c:829
+#: lib/pipeline.c:834
 msgid "waitpid failed"
 msgstr "waitpid-systemkald mislykkedes"
 
-#: lib/pipeline.c:878
+#: lib/pipeline.c:883
 msgid "can't install SIGCHLD handler"
 msgstr "kan ikke installere håndtering for SIGCHLD"
 
@@ -271,7 +271,7 @@ msgstr "færdig.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "Tømmer gamle databaseindgange i %s...\n"
 
-#: src/compression.c:78 src/man.c:1424
+#: src/compression.c:78 src/man.c:1415
 msgid "can't create a temporary filename"
 msgstr "kan ikke oprette midlertidigt filnavn"
 
@@ -494,113 +494,108 @@ msgstr "Hvilken manualside vil du have fra sektion %s?\n"
 msgid "What manual page do you want?\n"
 msgstr "Hvilken manualside vil du have?\n"
 
-#: src/man.c:582
-#, c-format
-msgid "No source manual entry for %s"
-msgstr "Ingen kildemanualindgang for %s"
-
-#: src/man.c:591
-#, c-format
-msgid "No manual entry for %s"
+#: src/man.c:586
+#, fuzzy, c-format
+msgid "No manual entry for %s in section %s\n"
 msgstr "Ingen manualindgang for %s"
 
-#: src/man.c:596
-#, c-format
-msgid " in section %s\n"
-msgstr " i afsnit %s\n"
+#: src/man.c:589
+#, fuzzy, c-format
+msgid "No manual entry for %s\n"
+msgstr "Ingen manualindgang for %s"
 
-#: src/man.c:603
+#: src/man.c:594
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Se \"%s\" for hjælp når manualsider ikke er tilgængelige.\n"
 
-#: src/man.c:770 src/man.c:2364
+#: src/man.c:761 src/man.c:2356
 #, c-format
 msgid "can't chdir to %s"
 msgstr "kan ikke skifte katalog til %s"
 
-#: src/man.c:958
+#: src/man.c:949
 msgid " Manual page "
 msgstr " Manualside "
 
-#: src/man.c:959
+#: src/man.c:950
 msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 msgstr " ?ltlinje %lt?L/%L.:byte %bB?s/%s..?e (SLUT):?pB %pB\\%.."
 
-#: src/man.c:1029 src/man.c:3145
+#: src/man.c:1020 src/man.c:3134
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb-kommandoen mislykkedes med slutstatus %d"
 
-#: src/man.c:1299
+#: src/man.c:1290
 msgid ": incompatible options"
 msgstr ": inkompatible flag"
 
-#: src/man.c:1481
+#: src/man.c:1472
 msgid "error trying to read from stdin"
 msgstr "fejl ved forsøg på at læse fra standard-ind"
 
-#: src/man.c:1495
+#: src/man.c:1486
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "fejl ved skrivning til midlertidig fil %s"
 
-#: src/man.c:1718
+#: src/man.c:1709
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ignorerer ukendt forbehandler \"%c\""
 
-#: src/man.c:1990 src/mandb.c:265
+#: src/man.c:1982 src/mandb.c:265
 #, c-format
 msgid "can't chown %s"
 msgstr "kan ikke skifte ejer på %s"
 
-#: src/man.c:2002 src/mandb.c:236
+#: src/man.c:1994 src/mandb.c:236
 #, c-format
 msgid "can't chmod %s"
 msgstr "kan ikke ændre rettigheder på %s"
 
-#: src/man.c:2014 src/mandb.c:179
+#: src/man.c:2006 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "kan ikke omdøbe %s til %s"
 
-#: src/man.c:2034
+#: src/man.c:2026
 #, c-format
 msgid "can't set times on %s"
 msgstr "kan ikke sætte tider på %s"
 
-#: src/man.c:2043
+#: src/man.c:2035
 #, c-format
 msgid "can't unlink %s"
 msgstr "kan ikke aflænke %s"
 
-#: src/man.c:2081
+#: src/man.c:2073
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "kan ikke oprette midlertidigt filnavn"
 
-#: src/man.c:2182
+#: src/man.c:2174
 #, c-format
 msgid "Still saving the page, please wait...\n"
 msgstr "Gemmer stadigvæk siden, vent venligst...\n"
 
-#: src/man.c:2235 src/man.c:2256 src/man.c:2287
+#: src/man.c:2227 src/man.c:2248 src/man.c:2279
 #, c-format
 msgid "can't change to directory %s"
 msgstr "kan ikke skifte til kataloget %s"
 
-#: src/man.c:2249
+#: src/man.c:2241
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "kan ikke åbne konfigurationsfilen for manualsøgesti %s"
 
-#: src/man.c:2262 src/man.c:2292
+#: src/man.c:2254 src/man.c:2284
 #, c-format
 msgid "can't remove directory %s"
 msgstr "kan ikke fjerne kataloget %s"
 
-#: src/man.c:2500
+#: src/man.c:2492
 #, c-format
 msgid ""
 "\n"
@@ -609,22 +604,17 @@ msgstr ""
 "\n"
 "kan ikke skrive til %s i catman-tilstand"
 
-#: src/man.c:2519
-#, c-format
-msgid "Reformatting %s, please wait...\n"
-msgstr "Omformaterer %s, vent venligst...\n"
-
-#: src/man.c:2982
+#: src/man.c:2971
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: at stole på whatis-referencer er forældet\n"
 
-#: src/man.c:3350
+#: src/man.c:3339
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "Intern fejl: kandidattype %d uden for værdiområdet"
 
-#: src/man.c:3469
+#: src/man.c:3458
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -984,6 +974,15 @@ msgstr "Véd ikke hvilket program jeg skal køre hvis jeg er >%s<\n"
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Det mislykkedes at su-e til bruger %s\n"
+
+#~ msgid "No source manual entry for %s"
+#~ msgstr "Ingen kildemanualindgang for %s"
+
+#~ msgid " in section %s\n"
+#~ msgstr " i afsnit %s\n"
+
+#~ msgid "Reformatting %s, please wait...\n"
+#~ msgstr "Omformaterer %s, vent venligst...\n"
 
 #~ msgid "can't popen"
 #~ msgstr "kan ikke bruge popen()"

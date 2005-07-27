@@ -572,30 +572,21 @@ static void add_roff_line_length (command *cmd, int *save_cat)
 	}
 }
 
-/*
- * changed these messages from stdout to stderr,
- * (Fabrizio Polacco) Fri, 14 Feb 1997 01:30:07 +0200
- */
 static __inline__ void gripe_no_man (const char *name, const char *sec)
 {
-	if (troff) {
-		fprintf (stderr, _("No source manual entry for %s"), name);
-	} else {
-
-/* On AIX and IRIX, fall back to the vendor supplied browser */
+	/* On AIX and IRIX, fall back to the vendor supplied browser. */
 #if defined _AIX || defined __sgi
-
+	if (!troff) {
 		putenv ("MANPATH=");  /* reset the MANPATH variable */
 		execv ("/usr/bin/man", global_argv);
-#else
-		fprintf (stderr, _("No manual entry for %s"), name);
-#endif
 	}
+#endif
 
 	if (sec)
-		fprintf (stderr, _(" in section %s\n"), sec);
+		fprintf (stderr, _("No manual entry for %s in section %s\n"),
+			 name, sec);
 	else
-		putc ('\n', stderr);
+		fprintf (stderr, _("No manual entry for %s\n"), name);
 
 #ifdef UNDOC_COMMAND
 	if (pathsearch_executable (name))

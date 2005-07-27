@@ -1,3 +1,13 @@
+Wed Jul 27 11:29:02 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (gripe_no_man): Don't emit a different message in the
+	  troff case; it's extra translation load and nobody really cares
+	  about the distinction. Avoid splitting up a sentence into two
+	  translatable pieces (Debian bug #320111).
+	* po/ca.po, po/cs.po, po/da.po, po/de.po, po/es.po, po/fi.po,
+	  po/fr.po, po/it.po, po/ja.po, po/pl.po, po/pt_BR.po, po/ro.po,
+	  po/ru.po, po/sv.po: Update with msgmerge.
+
 Tue Jul 26 00:05:02 BST 2005  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (make_roff_command): Use 'col -b -p -x' rather than just
