@@ -1,3 +1,13 @@
+Wed Aug 31 01:23:55 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (directory_table): Add Simplified Chinese ->
+	  GB2312 and Traditional Chinese -> BIG5.
+	  (charset_table): Use the nippon device for BIG5, GB2312, and GBK.
+	  (device_table): Assume that the nippon device is
+	  encoding-agnostic, since it handles several encodings now.
+	  (compatible_encodings, get_roff_encoding): Extend the ja_JP.UTF-8
+	  hack to cover zh_CN.UTF-8, zh_SG.UTF-8, and zh_TW.UTF-8 too.
+
 Sun Jul 31 16:34:15 BST 2005  Colin Watson  <cjwatson@debian.org>
 
 	* docs/COPYING, docs/COPYING.LIB: Update from www.gnu.org to pick up
