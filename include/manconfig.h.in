@@ -270,6 +270,13 @@
 #  define ATTRIBUTE_MALLOC
 #endif
 
+/* Does this compiler support unused result checking? */
+#if GNUC_PREREQ(3,4)
+#  define ATTRIBUTE_WARN_UNUSED_RESULT __attribute__ ((__warn_unused_result__))
+#else
+#  define ATTRIBUTE_WARN_UNUSED_RESULT
+#endif
+
 /* Does this compiler support sentinel checking? */
 #if GNUC_PREREQ(4,0)
 #  define ATTRIBUTE_SENTINEL __attribute__ ((__sentinel__))
@@ -318,8 +325,9 @@ struct compression {
 
 /* some library function declarations */
 #include <stddef.h>	/* for size_t */
-extern VOID *xmalloc (size_t n) ATTRIBUTE_MALLOC;
-extern VOID *xrealloc (VOID *p, size_t n) ATTRIBUTE_MALLOC;
+extern VOID *xmalloc (size_t n) ATTRIBUTE_MALLOC ATTRIBUTE_WARN_UNUSED_RESULT;
+extern VOID *xrealloc (VOID *p, size_t n)
+	ATTRIBUTE_MALLOC ATTRIBUTE_WARN_UNUSED_RESULT;
 extern __inline__ char *xstrdup (const char *string) ATTRIBUTE_MALLOC;
 extern __inline__ char *xstrndup (const char *string, size_t size) 
 	ATTRIBUTE_MALLOC;
@@ -369,7 +377,8 @@ extern char *strsep (char **stringp, const char *delim);
 #  define getcwd(buf,size) getwd (buf)
 #endif
 
-extern char *strappend (char *, ...) ATTRIBUTE_SENTINEL;
+extern char *strappend (char *, ...)
+	ATTRIBUTE_SENTINEL ATTRIBUTE_WARN_UNUSED_RESULT;
 
 extern int debug; 		/* shows whether -d issued */
 extern int quiet;		/* be quiet(er) if 1 */
