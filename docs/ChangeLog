@@ -1,3 +1,10 @@
+Wed Sep 21 10:10:12 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_start, pipeline_wait): Ignore SIGINT and
+	  SIGQUIT in the parent while running subprocesses (Debian bug
+	  #328982).
+	* docs/NEWS: Document this.
+
 Wed Sep 21 10:04:42 BST 2005  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Start 2.4.4.
