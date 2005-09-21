@@ -1,3 +1,10 @@
+Wed Sep 21 10:56:22 BST 2005  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_wait): Queue SIGCHLD for the whole time
+	  we're collecting child process statuses; we need to keep a careful
+	  count of processes. Forget any previous errno before calling
+	  reap_children. Should fix Debian bug #326488.
+
 Wed Sep 21 10:47:51 BST 2005  Nicolas Velin  <nsv@fr.st>
 
 	* po/fr.po: Update from Rosetta.
