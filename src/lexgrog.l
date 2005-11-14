@@ -160,8 +160,10 @@ ja_name		\314\276\301\260
 latin_name	N[Oo][Mm][Ee][Nn]
 nl_name		N[Aa][Aa][Mm]
 pl_name		N[Aa][Zz][Ww][Aa]
+ /* UTF-8 Russian */
+ru_name         \320\235(\320\220|\320\260)(\320\227|\320\267)(\320\222|\320\262)(\320\220|\320\260)(\320\235|\320\275)(\320\230|\320\270)(\320\225|\320\265)
 sv_name		N[Aa][Mm][Nn]
-name		({cs_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it_name}|{ja_name}|{latin_name}|{nl_name}|{pl_name}|{sv_name})
+name		({cs_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it_name}|{ja_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sv_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
