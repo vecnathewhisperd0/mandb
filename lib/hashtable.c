@@ -180,7 +180,7 @@ void hash_free (struct hashtable *ht)
 
 	if (debug) {
 		fprintf (stderr,
-			 "free_hashtab: %d entries, %d (%d%%) unique\n", 
+			 "hash_free: %d entries, %d (%d%%) unique\n",
 		         ht->unique + ht->identical,
 		         ht->unique,
 			 ht->unique ? (ht->unique * 100) /
