@@ -148,6 +148,7 @@ comment		['.]\\{dbl_quote}
 
  /* Please add to this list if you know how. */
 cs_name		J[Mm][…ÈEe][Nn][Oo]
+da_name		N[Aa][Vv][Nn]
 de_name		B[Ee][Zz][Ee][Ii][Cc][Hh][Nn][Uu][Nn][Gg]
 en_name		N[Aa][Mm][Ee]
 es_name		N[Oo][Mm][Bb][Rr][Ee]
@@ -162,7 +163,7 @@ nl_name		N[Aa][Aa][Mm]
 pl_name		N[Aa][Zz][Ww][Aa]
 ru_name         \356\341\372\367\341\356\351\345
 sv_name		N[Aa][Mm][Nn]
-name		({cs_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it_name}|{ja_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sv_name})
+name		({cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it_name}|{ja_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sv_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
