@@ -85,6 +85,7 @@ extern char *strrchr();
 #include "libdb/mydbm.h"
 #include "libdb/db_storage.h"
 #include "lib/error.h"
+#include "lib/setenv.h"
 #include "lib/pipeline.h"
 #include "manp.h"
 

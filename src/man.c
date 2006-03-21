@@ -127,6 +127,7 @@ extern int errno;
 #include "libdb/db_storage.h"
 #include "lib/error.h"
 #include "lib/cleanup.h"
+#include "lib/setenv.h"
 #include "lib/hashtable.h"
 #include "lib/pipeline.h"
 #include "lib/getcwdalloc.h"
