@@ -253,15 +253,15 @@ datum make_content (struct mandata *in)
 	if (!in->whatis)
 		in->whatis = dash + 1;
 
-	cont.dsize = strlen (dash_if_unset (in->name)) +
-		     strlen (in->ext) +
-		     strlen (in->sec) +
-		  /* strlen (in->_st_mtime) */ + 11 +
-		  /* strlen (in->id) */ + 1 +
-		     strlen (in->pointer) +
-		     strlen (in->filter) +
-		     strlen (in->comp) +
-		     strlen (in->whatis) + 8;
+	cont.dsize = strlen (dash_if_unset (in->name)) + 1 +
+		     strlen (in->ext) + 1 +
+		     strlen (in->sec) + 1 +
+		  /* strlen (in->_st_mtime) */ + 10 + 1 +
+		  /* strlen (in->id) */ + 1 + 1 +
+		     strlen (in->pointer) + 1 +
+		     strlen (in->filter) + 1 +
+		     strlen (in->comp) + 1 +
+		     strlen (in->whatis) + 1;
 	cont.dptr = (char *) xmalloc (cont.dsize);
 #ifdef ANSI_SPRINTF
 	cont.dsize = 1 + sprintf (cont.dptr,
