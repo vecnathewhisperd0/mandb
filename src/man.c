@@ -1541,6 +1541,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		int using_tbl = 0;
 		command *cmd;
 		const char *output_encoding = NULL, *locale_charset = NULL;
+		char *pp_encoding = NULL;
 
 		if (*file) {
 			cmd = command_new_argstr (get_def ("soelim", SOELIM));
@@ -1647,6 +1648,33 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			free (cat_charset);
 		}
 
+		if (strstr (pp_string, "-*-")) {
+			const char *pp_search = strstr (pp_string, "-*-") + 3;
+			while (*pp_search == ' ')
+				++pp_search;
+			if (STRNEQ (pp_search, "coding:", 7)) {
+				const char *pp_encoding_end;
+				pp_search += 7;
+				while (*pp_search == ' ')
+					++pp_search;
+				pp_encoding_end = strchr (pp_search, ' ');
+				if (pp_encoding_end)
+					pp_encoding = xstrndup
+						(pp_search,
+						 pp_encoding_end - pp_search);
+				else
+					pp_encoding = xstrdup (pp_search);
+				if (debug)
+					fprintf (stderr,
+						 "preprocessor encoding: %s\n",
+						 pp_encoding);
+				if (pathsearch_executable ("preconv"))
+					pipeline_command_args
+						(p, "preconv", "-e",
+						 pp_encoding, NULL);
+			}
+		}
+
 		do {
 			command *cmd = NULL;
 			int wants_dev = 0; /* filter wants a dev argument */
@@ -1684,6 +1712,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				cmd = command_new_argstr
 					(get_def ("refer", REFER));
 				break;
+			case ' ':
+			case '-':
 			case 0:
 				/* done with preprocessors, now add roff */
                                 if (troff)
@@ -1737,6 +1767,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			}
 
 			pipeline_command (p, cmd);
+
+			if (*pp_string == ' ' || *pp_string == '-')
+				break;
 		} while (*pp_string++);
 
 		if (!different_encoding && output_encoding && locale_charset &&
