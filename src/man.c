@@ -1560,6 +1560,29 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 						 get_def ("soelim", SOELIM));
 		}
 
+		if (strstr (pp_string, "-*-")) {
+			const char *pp_search = strstr (pp_string, "-*-") + 3;
+			while (*pp_search == ' ')
+				++pp_search;
+			if (STRNEQ (pp_search, "coding:", 7)) {
+				const char *pp_encoding_end;
+				pp_search += 7;
+				while (*pp_search == ' ')
+					++pp_search;
+				pp_encoding_end = strchr (pp_search, ' ');
+				if (pp_encoding_end)
+					pp_encoding = xstrndup
+						(pp_search,
+						 pp_encoding_end - pp_search);
+				else
+					pp_encoding = xstrdup (pp_search);
+				if (debug)
+					fprintf (stderr,
+						 "preprocessor encoding: %s\n",
+						 pp_encoding);
+			}
+		}
+
 		/* Load the roff_device value dependent on the language dir
 		 * in the path.
 		 */
@@ -1570,7 +1593,21 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
 
-			page_encoding = get_page_encoding (lang);
+			if (pp_encoding) {
+				page_encoding = xstrdup (pp_encoding);
+				if (pathsearch_executable ("preconv")) {
+					pipeline_command_args
+						(p, "preconv", "-e",
+						 pp_encoding, NULL);
+					/* Any subsequent iconv will now
+					 * have no effect, so we could drop
+					 * it. On the other hand, it'll be
+					 * harmless, so we'll just leave it
+					 * there for now.
+					 */
+				}
+			} else
+				page_encoding = get_page_encoding (lang);
 			source_encoding = get_source_encoding (lang);
 			if (debug) {
 				fprintf (stderr, "page_encoding = %s\n",
@@ -1646,33 +1683,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 			free (page_encoding);
 			free (cat_charset);
-		}
-
-		if (strstr (pp_string, "-*-")) {
-			const char *pp_search = strstr (pp_string, "-*-") + 3;
-			while (*pp_search == ' ')
-				++pp_search;
-			if (STRNEQ (pp_search, "coding:", 7)) {
-				const char *pp_encoding_end;
-				pp_search += 7;
-				while (*pp_search == ' ')
-					++pp_search;
-				pp_encoding_end = strchr (pp_search, ' ');
-				if (pp_encoding_end)
-					pp_encoding = xstrndup
-						(pp_search,
-						 pp_encoding_end - pp_search);
-				else
-					pp_encoding = xstrdup (pp_search);
-				if (debug)
-					fprintf (stderr,
-						 "preprocessor encoding: %s\n",
-						 pp_encoding);
-				if (pathsearch_executable ("preconv"))
-					pipeline_command_args
-						(p, "preconv", "-e",
-						 pp_encoding, NULL);
-			}
 		}
 
 		do {
@@ -1794,6 +1804,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				pipeline_command_args (p, COL, NULL);
 #endif /* GNU_NROFF */
 		}
+
+		free (pp_encoding);
 	} else {
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
