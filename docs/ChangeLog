@@ -1,3 +1,10 @@
+Thu Aug 10 17:00:21 BST 2006  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (get_groff_preconv): New function, moved from
+	  src/man.c because other functions here are going to need it.
+	* src/encodings.h (get_groff_preconv): Prototype it.
+	* src/man.c (make_roff_command): Use it.
+
 Wed Aug  9 14:58:50 BST 2006  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (make_roff_command): Set page_encoding to pp_encoding if

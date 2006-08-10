@@ -40,6 +40,7 @@
 #endif
 
 #include "manconfig.h"
+#include "lib/pathsearch.h"
 #include "encodings.h"
 
 
@@ -207,6 +208,33 @@ static struct less_charset_entry less_charset_table[] = {
 
 static const char *fallback_less_charset = "iso8859";
 
+
+const char *groff_preconv = NULL;
+
+/* Is the groff "preconv" helper available? If so, return its name.
+ * Otherwise, return NULL.
+ */
+const char *get_groff_preconv (void)
+{
+	if (groff_preconv) {
+		if (*groff_preconv)
+			return groff_preconv;
+		else
+			return NULL;
+	}
+
+	if (pathsearch_executable ("gpreconv"))
+		groff_preconv = "gpreconv";
+	else if (pathsearch_executable ("preconv"))
+		groff_preconv = "preconv";
+	else
+		groff_preconv = "";
+
+	if (*groff_preconv)
+		return groff_preconv;
+	else
+		return NULL;
+}
 
 /* Return the assumed encoding of the source man page, based on the
  * directory in which it was found. The caller should attempt to recode from

@@ -1594,10 +1594,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
 
 			if (pp_encoding) {
+				const char *groff_preconv =
+					get_groff_preconv ();
 				page_encoding = xstrdup (pp_encoding);
-				if (pathsearch_executable ("preconv")) {
+				if (groff_preconv) {
 					pipeline_command_args
-						(p, "preconv", "-e",
+						(p, groff_preconv, "-e",
 						 pp_encoding, NULL);
 					/* Any subsequent iconv will now
 					 * have no effect, so we could drop
