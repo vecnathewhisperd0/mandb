@@ -446,6 +446,9 @@ const char *get_default_device (const char *locale_charset,
 {
 	const struct charset_entry *entry;
 
+	if (get_groff_preconv ())
+		return "utf8";
+
 	if (!locale_charset)
 		return fallback_default_device;
 
@@ -490,7 +493,7 @@ const char *get_roff_encoding (const char *device, const char *source_encoding)
 	 * This is evil, but there's not much that can be done about it
 	 * apart from waiting for groff 2.0.
 	 */
-	if (STREQ (device, "utf8")) {
+	if (STREQ (device, "utf8") && !get_groff_preconv ()) {
 		const char *ctype = setlocale (LC_CTYPE, NULL);
 		if (STREQ (ctype, "ja_JP.UTF-8") ||
 		    STREQ (ctype, "zh_CN.UTF-8") ||

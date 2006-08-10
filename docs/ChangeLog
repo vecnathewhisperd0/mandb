@@ -1,3 +1,12 @@
+Thu Aug 10 17:23:03 BST 2006  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (get_default_device): Always use utf8 if preconv
+	  is available.
+	  (get_roff_encoding): Skip CJK UTF-8 hack if preconv is available.
+	* src/man.c (make_roff_command): Use preconv if available to recode
+	  input even if the encoding is detected by means other than looking
+	  at the preprocessor line. Skip iconv preprocessing in that case.
+
 Thu Aug 10 17:00:21 BST 2006  Colin Watson  <cjwatson@debian.org>
 
 	* src/encodings.c (get_groff_preconv): New function, moved from

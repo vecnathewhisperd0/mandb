@@ -1590,24 +1590,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			char *page_encoding;
 			const char *source_encoding, *roff_encoding;
 			char *cat_charset;
+			const char *groff_preconv;
 
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
 
 			if (pp_encoding) {
-				const char *groff_preconv =
-					get_groff_preconv ();
 				page_encoding = xstrdup (pp_encoding);
-				if (groff_preconv) {
-					pipeline_command_args
-						(p, groff_preconv, "-e",
-						 pp_encoding, NULL);
-					/* Any subsequent iconv will now
-					 * have no effect, so we could drop
-					 * it. On the other hand, it'll be
-					 * harmless, so we'll just leave it
-					 * there for now.
-					 */
-				}
 			} else
 				page_encoding = get_page_encoding (lang);
 			source_encoding = get_source_encoding (lang);
@@ -1658,8 +1646,15 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			/* We may need to recode:
 			 *   from page_encoding to roff_encoding on input;
 			 *   from output_encoding to locale_charset on output.
+			 * If we have preconv, then use it to recode the
+			 * input to a safe escaped form.
 			 */
-			if (roff_encoding &&
+			groff_preconv = get_groff_preconv ();
+			if (groff_preconv)
+				pipeline_command_args
+					(p, groff_preconv, "-e", page_encoding,
+					 NULL);
+			else if (roff_encoding &&
 			    !STREQ (page_encoding, roff_encoding))
 				pipeline_command_args (p, "iconv", "-c",
 						       "-f", page_encoding,
