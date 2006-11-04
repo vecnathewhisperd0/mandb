@@ -74,11 +74,11 @@ $(EVERYTHING): $(INCLUDES) $(CONF)
 	$(MAKE) -C $@ $(targets)
 
 # Automatic regeneration targets
-$(srcdir)/configure: configure.in aclocal.m4
+$(srcdir)/configure: configure.ac aclocal.m4
 	-cd $(srcdir) && autoconf
 
 $(srcdir)/config.h.in: stamp-h.in
-$(srcdir)/stamp-h.in: configure.in aclocal.m4
+$(srcdir)/stamp-h.in: configure.ac aclocal.m4
 	-cd $(srcdir) && autoheader && echo timestamp > stamp-h.in
 
 # Use CONFIG_FILES= CONFIG_HEADERS= to force config.status to only
