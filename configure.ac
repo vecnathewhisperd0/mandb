@@ -3,7 +3,7 @@ dnl
 dnl Initialise and check we're in the correct directory.
 dnl
 AC_INIT(man-db, 2.4.3)
-AC_PREREQ(2.50a)
+AC_PREREQ(2.53)
 AC_CONFIG_SRCDIR(acinclude.m4)
 AC_CONFIG_AUX_DIR(tools)
 AC_CONFIG_HEADER(config.h)
@@ -31,8 +31,8 @@ dnl separately 'built' should use --enable and friends. Oh well...
 dnl Current options: setuid, device, db.
 dnl 
 AC_ARG_ENABLE(setuid,
-[  --enable-setuid[=ARG]	  install man setuid to user ARG @<:@ARG=man@:>@
-  --disable-setuid	  don't install man setuid],
+[AS_HELP_STRING([--enable-setuid[=ARG]], [install man setuid to user ARG [ARG=man]])
+AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 	  [if test "$enableval" = "yes" 
 	   then
 		enableval=man
@@ -53,7 +53,7 @@ AC_ARG_ENABLE(setuid,
 	   man_install_flags="-m 4755 -o man"
 	   AC_DEFINE_UNQUOTED(SECURE_MAN_UID, "$man_owner")])
 AC_ARG_ENABLE(undoc,
-[  --enable-undoc=COMMAND  suggest COMMAND for missing manual pages],
+[AS_HELP_STRING([--enable-undoc=COMMAND], [suggest COMMAND for missing manual pages])],
 	[if test "$enableval" = "yes" || test "$enableval" = "no"
 	 then
 		AC_MSG_ERROR(--enable-undoc requires an argument)
@@ -63,7 +63,7 @@ AC_ARG_ENABLE(undoc,
 				   [Define as the name of a command you want to suggest when a non-existent page is requested.])
 	 fi])
 AC_ARG_ENABLE(mb-groff,
-[  --enable-mb-groff       expect groff with Debian multibyte patch],
+[AS_HELP_STRING([--enable-mb-groff], [expect groff with Debian multibyte patch])],
 	[if test "$enableval" = "yes"
 	 then
 		 AC_MSG_NOTICE([Including support for groff with Debian multibyte patch])
@@ -71,7 +71,7 @@ AC_ARG_ENABLE(mb-groff,
 			   [Define if your groff installation has the Debian multibyte patch.])
 	 fi])
 AC_ARG_WITH(device,
-[  --with-device=DEVICE	  use nroff with the output device DEVICE],
+[AS_HELP_STRING([--with-device=DEVICE], [use nroff with the output device DEVICE])],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
 	 then
 	 	AC_MSG_ERROR(--with-device requires an argument)
@@ -79,8 +79,7 @@ AC_ARG_WITH(device,
 	 	nroff_device=" -T$withval"
 	 fi])
 AC_ARG_WITH(db,
-[  --with-db=LIBRARY	  use database library LIBRARY
-                          (db4, db3, db2, db1, db, gdbm, ndbm)],
+[AS_HELP_STRING([--with-db=LIBRARY], [use database library LIBRARY (db4, db3, db2, db1, db, gdbm, ndbm)])],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
 	 then
 	 	AC_MSG_ERROR(--with-db requires an argument)
@@ -89,7 +88,7 @@ AC_ARG_WITH(db,
 	 fi],
 	 : ${db=no})
 AC_ARG_WITH(config-file,
-[  --with-config-file=CF	  use config file CF @<:@CF=SYSCONFDIR/man_db.conf@:>@],
+[AS_HELP_STRING([--with-config-file=CF], [use config file CF [CF=SYSCONFDIR/man_db.conf]])],
 	[if test "$withval" = "yes" || test "$withval" = "no"
 	 then
 		AC_MSG_ERROR(--with-config-file requires an argument)
@@ -279,8 +278,7 @@ dnl
 dnl Work out which manual page hierarchy scheme might be in use.
 dnl
 AC_ARG_ENABLE(mandirs,
-[  --enable-mandirs=OS	  select manual page hierarchy organization
-                          (GNU, HPUX, IRIX, Solaris, BSD)],
+[AS_HELP_STRING([--enable-mandirs=OS], [select manual page hierarchy organization (GNU, HPUX, IRIX, Solaris, BSD)])],
 	[AC_MSG_NOTICE([Using hierarchy organization(s) $enableval])
 	 AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$enableval",
 			    [Define to the manual page hierarchy organization(s) in use.])],
