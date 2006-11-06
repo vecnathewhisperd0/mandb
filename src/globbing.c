@@ -27,9 +27,6 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-/* Need _GNU_SOURCE for FNM_CASEFOLD. */
-#define _GNU_SOURCE
-
 #include <stdio.h>
 
 #if defined(STDC_HEADERS)
