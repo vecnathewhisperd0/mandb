@@ -1,3 +1,9 @@
+Mon Nov  6 08:34:57 PST 2006  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (make_browser): Fix buffer overrun if BROWSER contains
+	  multiple %s expansions. Thanks to Jochen Voß for the report.
+	* docs/NEWS: Document this.
+
 Sun Nov  5 23:41:45 PST 2006  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Call AC_GNU_SOURCE before AC_PROG_CC, as autoconf

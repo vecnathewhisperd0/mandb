@@ -1829,33 +1829,35 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 static pipeline *make_browser (const char *command, const char *file)
 {
 	pipeline *p;
-	char *browser;
-	int command_len = strlen (command) * 2 + strlen (file) + 1;
+	char *browser = xmalloc (1);
 	int found_percent_s = 0;
 	char *percent;
 	char *esc_file;
 
-	browser = xmalloc (command_len + 1);
 	*browser = '\0';
 
 	percent = strchr (command, '%');
 	while (percent) {
+		size_t len = (browser ? strlen (browser) : 0);
+		browser = xrealloc (browser, len + 1 + (percent - command));
 		strncat (browser, command, percent - command);
 		switch (*(percent + 1)) {
 			case '\0':
 			case '%':
-				strcat (browser, "%");
+				browser = strappend (browser, "%", NULL);
 				break;
 			case 'c':
-				strcat (browser, ":");
+				browser = strappend (browser, ":", NULL);
 				break;
 			case 's':
 				esc_file = escape_shell (file);
-				strcat (browser, esc_file);
+				browser = strappend (browser, esc_file, NULL);
 				free (esc_file);
 				found_percent_s = 1;
 				break;
 			default:
+				len = strlen (browser); /* cannot be NULL */
+				browser = xrealloc (browser, len + 3);
 				strncat (browser, percent, 2);
 				break;
 		}
@@ -1865,11 +1867,10 @@ static pipeline *make_browser (const char *command, const char *file)
 			command = percent + 1;
 		percent = strchr (command, '%');
 	}
-	strcat (browser, command);
+	browser = strappend (browser, command, NULL);
 	if (!found_percent_s) {
-		strcat (browser, " ");
 		esc_file = escape_shell (file);
-		strcat (browser, esc_file);
+		browser = strappend (browser, " ", esc_file, NULL);
 		free (esc_file);
 	}
 

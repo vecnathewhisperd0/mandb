@@ -6,6 +6,10 @@ Major changes since man-db 2.4.3:
 	Fixes:
 	------
 
+	o SECURITY: Fix a buffer overrun if using -H and the designated web
+	  browser (argument to -H or $BROWSER) contains multiple %s
+	  expansions.
+
 	o Ignore SIGINT and SIGQUIT while running subprocesses, so that
 	  typing Ctrl-C doesn't kill less (broken in 2.4.3).
 
