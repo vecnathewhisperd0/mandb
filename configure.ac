@@ -107,6 +107,7 @@ AC_SUBST(config_file_basename)dnl
 dnl
 dnl Check $PATH for the following progs and append suitable options.
 dnl 
+AC_GNU_SOURCE
 AC_PROG_CC
 AC_PROG_CPP
 CFLAGS="$CFLAGS -Wall"

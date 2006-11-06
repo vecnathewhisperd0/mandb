@@ -1,3 +1,9 @@
+Sun Nov  5 23:41:45 PST 2006  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Call AC_GNU_SOURCE before AC_PROG_CC, as autoconf
+	  objects otherwise (due to macros called by AM_GNU_GETTEXT). Let's
+	  hope using _GNU_SOURCE for everything doesn't break anything ...
+
 Sat Nov  4 17:24:27 GMT 2006  Colin Watson  <cjwatson@debian.org>
 
 	* GNUmakefile.in, docs/HACKING: Update references to configure.in to
