@@ -119,6 +119,7 @@ AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PATH_PROG(cat, cat)
 AC_PATH_PROG(lynx, lynx)
+test -n "$lynx" && lynx="exec $lynx"
 AC_PATH_PROG(tr, tr)
 AC_PATH_PROG(grep, grep)
 AC_PATH_PROGS(pager, pager less more)
