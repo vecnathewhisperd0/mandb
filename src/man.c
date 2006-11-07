@@ -1838,7 +1838,7 @@ static pipeline *make_browser (const char *command, const char *file)
 
 	percent = strchr (command, '%');
 	while (percent) {
-		size_t len = (browser ? strlen (browser) : 0);
+		size_t len = strlen (browser);
 		browser = xrealloc (browser, len + 1 + (percent - command));
 		strncat (browser, command, percent - command);
 		switch (*(percent + 1)) {
