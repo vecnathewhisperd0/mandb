@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.3-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2005-07-27 11:20+0100\n"
+"POT-Creation-Date: 2006-12-26 15:00+0000\n"
 "PO-Revision-Date: 2005-06-21 14:00+0200\n"
 "Last-Translator: Jordi Mallach <jordi@gnu.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -15,72 +15,72 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/pipeline.c:220
+#: lib/pipeline.c:220 lib/pipeline.c:232
 #, c-format
 msgid "badly formed configuration directive: '%s'"
 msgstr "la directiva de configuració està mal formatada: «%s»"
 
-#: lib/pipeline.c:429
+#: lib/pipeline.c:442
 msgid "pipeline input not open"
 msgstr "l'entrada del conducte no està oberta"
 
-#: lib/pipeline.c:442
+#: lib/pipeline.c:455
 msgid "pipeline output not open"
 msgstr "l'eixida del conducte no està oberta"
 
-#: lib/pipeline.c:569 lib/pipeline.c:583
+#: lib/pipeline.c:606 lib/pipeline.c:620
 msgid "pipe failed"
 msgstr "«pipe» ha fallat"
 
-#: lib/pipeline.c:603 src/catman.c:181
+#: lib/pipeline.c:640 src/catman.c:181
 msgid "fork failed"
 msgstr "«fork» ha fallat"
 
-#: lib/pipeline.c:611 lib/pipeline.c:620
+#: lib/pipeline.c:650 lib/pipeline.c:659
 msgid "dup2 failed"
 msgstr "«dup2» ha fallat"
 
-#: lib/pipeline.c:614 lib/pipeline.c:623 lib/pipeline.c:630 lib/pipeline.c:639
-#: lib/pipeline.c:652 lib/pipeline.c:656
+#: lib/pipeline.c:653 lib/pipeline.c:662 lib/pipeline.c:669 lib/pipeline.c:678
+#: lib/pipeline.c:706 lib/pipeline.c:710
 msgid "close failed"
 msgstr "«close» ha fallat"
 
-#: lib/pipeline.c:646
+#: lib/pipeline.c:700
 #, c-format
 msgid "can't execute %s"
 msgstr "no es pot executar %s"
 
-#: lib/pipeline.c:746
+#: lib/pipeline.c:800
 msgid "closing pipeline input stream failed"
 msgstr "no s'ha pogut tancar el conducte de flux d'entrada"
 
-#: lib/pipeline.c:751
+#: lib/pipeline.c:805
 msgid "closing pipeline input failed"
 msgstr "no s'ha pogut tancar el conducte d'entrada"
 
-#: lib/pipeline.c:758
+#: lib/pipeline.c:812
 msgid "closing pipeline output stream failed"
 msgstr "no s'ha pogut tancar el conducte de flux d'eixida"
 
-#: lib/pipeline.c:763
+#: lib/pipeline.c:817
 msgid "closing pipeline output failed"
 msgstr "no s'ha pogut tancar el conducte d'eixida"
 
-#: lib/pipeline.c:802
+#: lib/pipeline.c:859
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr "%s: %s (s'ha fet un bolcat)"
 
-#: lib/pipeline.c:807
+#: lib/pipeline.c:864
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: lib/pipeline.c:834
+#: lib/pipeline.c:889
 msgid "waitpid failed"
 msgstr "«waitpid» ha fallat"
 
-#: lib/pipeline.c:883
+#: lib/pipeline.c:950
 msgid "can't install SIGCHLD handler"
 msgstr "no es pot instal·lar el gestor de SIGCHLD"
 
@@ -290,7 +290,7 @@ msgstr "fet.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "S'estan purgant entrades antigues de la base de dades en %s...\n"
 
-#: src/compression.c:78 src/man.c:1415
+#: src/compression.c:78 src/man.c:1416
 msgid "can't create a temporary filename"
 msgstr "no es pot crear un fitxer temporal"
 
@@ -321,12 +321,12 @@ msgid "warning: %s: ignoring bogus filename"
 msgstr "avís: %s: s'ha descartat un nom de fitxer erroni"
 
 # Brrr... què serà «sec»? jm.
-#: src/globbing.c:445
+#: src/globbing.c:442
 #, c-format
 msgid "usage: %s [-deiIhV] path section name\n"
 msgstr "forma d'ús: %s [-deiIhV] nom de la secció del camí\n"
 
-#: src/globbing.c:447
+#: src/globbing.c:444
 #, c-format
 msgid ""
 "-d, --debug                 emit debugging messages.\n"
@@ -347,23 +347,23 @@ msgstr ""
 "-h, --help                  mostra aquest missatge sobre l'ús.\n"
 
 # Es trunca, es truncarà?  ivb
-#: src/lexgrog.l:351
+#: src/lexgrog.l:353
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "avís: el whatis per a %s s'excedeix en %d bytes, es truncarà."
 
-#: src/lexgrog.l:438 src/straycats.c:264 src/ult_src.c:333 src/ult_src.c:340
+#: src/lexgrog.l:440 src/straycats.c:264 src/ult_src.c:333 src/ult_src.c:340
 #, c-format
 msgid "can't open %s"
 msgstr "no es pot obrir %s"
 
-#: src/lexgrog.l:500
+#: src/lexgrog.l:502
 #, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "forma d'ús: %s [-mcwfhV] fitxer ...\n"
 
 # as -> com a, like -> com  ivb
-#: src/lexgrog.l:502
+#: src/lexgrog.l:504
 #, c-format
 msgid ""
 "-m, --man                   parse as man page.\n"
@@ -386,16 +386,16 @@ msgstr ""
 "Les opcions per defecte són --man i --whatis.\n"
 
 # Frase completa: «les opcions són incompatibles»  ivb
-#: src/lexgrog.l:551
+#: src/lexgrog.l:553
 msgid "-m -c: incompatible options"
 msgstr "-m -c: les opcions són incompatibles"
 
-#: src/man.c:264
+#: src/man.c:265
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "l'ordre ha finalitzat amb l'estat %d: %s"
 
-#: src/man.c:403
+#: src/man.c:404
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -406,7 +406,7 @@ msgstr ""
 "                [-Ppaginador] [-Cfitxer] [-Sllista] [-msistema] [-pcadena]\n"
 "                [-Llocale] [-eextensió] [secció] pàgina ...\n"
 
-#: src/man.c:409
+#: src/man.c:410
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -422,7 +422,7 @@ msgstr ""
 # en «--catman» no sé si és «per» o «per a».  ivb
 # D'acord en lo de ubicació, i la segona, crec que es "per a"
 # (és equivalent a "para" en castellà, no?). jm
-#: src/man.c:416
+#: src/man.c:417
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -477,7 +477,7 @@ msgstr ""
 # Si no recorde mal, miquel va dir que
 # "per a" == "para", i "per" == "por".
 # Pero probablement recorde mal :) jm
-#: src/man.c:434
+#: src/man.c:435
 #, c-format
 msgid ""
 "-t, --troff                 use %s to format pages.\n"
@@ -486,7 +486,7 @@ msgstr ""
 "-t, --troff                    utilitza %s per a formatar les pàgines.\n"
 "-T, --troff-device dispositiu  utilitza %s amb el dispositiu seleccionat.\n"
 
-#: src/man.c:438
+#: src/man.c:439
 msgid ""
 "-H, --html                  use lynx or argument to display html output.\n"
 "-Z, --ditroff               use groff and force it to produce ditroff.\n"
@@ -502,7 +502,7 @@ msgstr ""
 
 # --manpath, --locale: cerca/recerca?  ivb
 # --page: per/per a?  ivb
-#: src/man.c:446
+#: src/man.c:447
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-C, --config-file file      use this user configuration file.\n"
@@ -541,83 +541,79 @@ msgstr ""
 "-V, --version               mostra la versió.\n"
 "-h, --help                  mostra aquest missatge sobre l'ús."
 
-#: src/man.c:470
+#: src/man.c:471
 #, c-format
 msgid "What manual page do you want from section %s?\n"
 msgstr "Quina pàgina de manual voleu de la secció %s?\n"
 
-#: src/man.c:473
+#: src/man.c:474
 msgid "What manual page do you want?\n"
 msgstr "Quina pàgina de manual voleu?\n"
 
 # per/per a/de?  ivb
-#: src/man.c:586
+#: src/man.c:587
 #, fuzzy, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "No hi ha una entrada de manual de %s"
 
 # per/per a/de?  ivb
-#: src/man.c:589
+#: src/man.c:590
 #, fuzzy, c-format
 msgid "No manual entry for %s\n"
 msgstr "No hi ha una entrada de manual de %s"
 
-#: src/man.c:594
+#: src/man.c:595
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 "Vegeu «%s» per a obtindre ajuda quan les pàgines de manual no són "
 "disponibles.\n"
 
-#: src/man.c:761 src/man.c:2356
+#: src/man.c:762 src/man.c:2400
 #, c-format
 msgid "can't chdir to %s"
 msgstr "no es pot canviar de directori a %s"
 
-#: src/man.c:949
+#: src/man.c:950
 msgid " Manual page "
 msgstr " Pàgina de manual "
 
-#: src/man.c:950
-msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
-msgstr " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (FI):?pB %pB\\%.."
-
-#: src/man.c:1020 src/man.c:3134
+#: src/man.c:1021 src/man.c:3178
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "l'ordre de mandb ha fallat amb l'estat d'eixida %d"
 
 # Frase completa: «les opcions són incompatibles»  ivb
-#: src/man.c:1290
+#: src/man.c:1291
 msgid ": incompatible options"
 msgstr ": les opcions són incompatibles"
 
-#: src/man.c:1472
+#: src/man.c:1473
 msgid "error trying to read from stdin"
 msgstr "error en intentar llegir des de l'entrada estàndard"
 
-#: src/man.c:1486
+#: src/man.c:1487
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "error en escriure en el fitxer temporal %s"
 
 # «es descarta el...»  ivb
-#: src/man.c:1709
+#: src/man.c:1747
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "es descarta el preprocessador desconegut «%c»"
 
-#: src/man.c:1982 src/mandb.c:265
+#: src/man.c:2026 src/mandb.c:265
 #, c-format
 msgid "can't chown %s"
 msgstr "no es pot fer «chown» a %s"
 
-#: src/man.c:1994 src/mandb.c:236
+#: src/man.c:2038 src/mandb.c:236
 #, c-format
 msgid "can't chmod %s"
 msgstr "no es pot fer «chmod» a %s"
 
-#: src/man.c:2006 src/mandb.c:179
+#: src/man.c:2050 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "no es pot reanomenar %s a %s"
@@ -625,42 +621,42 @@ msgstr "no es pot reanomenar %s a %s"
 # Segurament es referirà a l'{a,m,c}time; hores/dates?  ivb
 # I en eixe cas, què sugereixes? jm
 # Allò que s'use majoritàriament pel cas, només era per assegurar-me.  ivb
-#: src/man.c:2026
+#: src/man.c:2070
 #, c-format
 msgid "can't set times on %s"
 msgstr "no es poden establir les hores en %s"
 
-#: src/man.c:2035
+#: src/man.c:2079
 #, c-format
 msgid "can't unlink %s"
 msgstr "no es pot desenllaçar %s"
 
-#: src/man.c:2073
+#: src/man.c:2117
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "no es pot crear un fitxer cat temporal per a %s"
 
-#: src/man.c:2174
+#: src/man.c:2218
 #, c-format
 msgid "Still saving the page, please wait...\n"
 msgstr "Encara s'està desant la pàgina, espereu...\n"
 
-#: src/man.c:2227 src/man.c:2248 src/man.c:2279
+#: src/man.c:2271 src/man.c:2292 src/man.c:2323
 #, c-format
 msgid "can't change to directory %s"
 msgstr "no es pot canviar al directori %s"
 
-#: src/man.c:2241
+#: src/man.c:2285
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "no es pot obrir el fitxer temporal %s"
 
-#: src/man.c:2254 src/man.c:2284
+#: src/man.c:2298 src/man.c:2328
 #, c-format
 msgid "can't remove directory %s"
 msgstr "no es pot eliminar el directori %s"
 
-#: src/man.c:2492
+#: src/man.c:2536
 #, c-format
 msgid ""
 "\n"
@@ -670,18 +666,18 @@ msgstr ""
 "no es pot escriure a %s en el mode catman"
 
 # Lo de sempre, deprecated? jm
-#: src/man.c:2971
+#: src/man.c:3015
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: basar-se en referències whatis està desaconsellat\n"
 
-#: src/man.c:3339
+#: src/man.c:3383
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 "s'ha produït un error intern: el candidat de tipus %d està fora de rang"
 
-#: src/man.c:3458
+#: src/man.c:3502
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -949,7 +945,7 @@ msgstr "%s es referència a ell mateix"
 msgid "%s, version %s, %s\n"
 msgstr "%s, versió %s, %s\n"
 
-#: src/whatis.c:151
+#: src/whatis.c:152
 #, c-format
 msgid ""
 "usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C "
@@ -960,7 +956,7 @@ msgstr ""
 "               [-C fitxer] paraula clau ...\n"
 
 # -e: cerca coincidències exactes en cada paraula clau.  ivb
-#: src/whatis.c:154
+#: src/whatis.c:155
 #, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
@@ -993,7 +989,7 @@ msgstr ""
 "-V, --version              mostra la versió.\n"
 "-h, --help                 mostra aquest missatge sobre l'ús.\n"
 
-#: src/whatis.c:171
+#: src/whatis.c:172
 #, c-format
 msgid ""
 "usage: %s [-dhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
@@ -1002,7 +998,7 @@ msgstr ""
 "forma d'ús: %s [-dhV] [-r|-w] [-s secció] [-m sistemes] [-M camí de man]\n"
 "               [-C fitxer] paraula clau ...\n"
 
-#: src/whatis.c:174
+#: src/whatis.c:175
 #, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
@@ -1031,11 +1027,11 @@ msgstr ""
 "-V, --version              mostra la versió.\n"
 "-h, --help                 mostra aquest missatge sobre l'ús.\n"
 
-#: src/whatis.c:227
+#: src/whatis.c:228
 msgid "warning: can't read the fallback whatis text database."
 msgstr "avís: %s no es pot llegir la base de dades"
 
-#: src/whatis.c:252 src/whatis.c:279 src/whatis.c:291
+#: src/whatis.c:253 src/whatis.c:280 src/whatis.c:292
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "avís: %s conté un bucle de punters"
@@ -1044,42 +1040,45 @@ msgstr "avís: %s conté un bucle de punters"
 # Gènere? Nombre? És bo posar-ne un comentari.  ivb
 # Pareix que es refereix al resultat d'un whois. «whois desconegut?» jm
 # Arreglat en 2.4.0pre. jm
-#: src/whatis.c:254 src/whatis.c:267 src/whatis.c:282 src/whatis.c:292
+#: src/whatis.c:255 src/whatis.c:268 src/whatis.c:283 src/whatis.c:293
 msgid "(unknown subject)"
 msgstr "(assumpte desconegut)"
 
-#: src/whatis.c:507
+#: src/whatis.c:508
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "La base de dades %s està corrompuda; reconstruïu-la amb mandb --create"
 
 # «res d'apropiat»?  ivb
-#: src/whatis.c:622
+#: src/whatis.c:623
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: res d'apropiat.\n"
 
 # «comor?»  ivb
 # «el que tu has dit entendre no he pogut» yoda
-#: src/whatis.c:736
+#: src/whatis.c:737
 #, c-format
 msgid "%s what?\n"
 msgstr "%s què?\n"
 
-#: src/whatis.c:759 src/whatis.c:768
+#: src/whatis.c:760 src/whatis.c:769
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "fatal: expreg «%s»: %s"
 
-#: src/wrapper.c:103
+#: src/wrapper.c:94
 #, c-format
 msgid "Don't know which program should I run being >%s<\n"
 msgstr "No es sap quin programa s'hauria d'executar com a «%s»\n"
 
-#: src/wrapper.c:121 src/wrapper.c:126 src/wrapper.c:131 src/wrapper.c:136
+#: src/wrapper.c:112 src/wrapper.c:117 src/wrapper.c:122 src/wrapper.c:127
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Ha fallat el su a l'usuari %s\n"
+
+#~ msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
+#~ msgstr " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (FI):?pB %pB\\%.."
 
 # per/per a/de?  ivb
 #~ msgid "No source manual entry for %s"

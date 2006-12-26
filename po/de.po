@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.3-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2005-06-04 11:49+0100\n"
+"POT-Creation-Date: 2006-12-26 15:00+0000\n"
 "PO-Revision-Date: 2006-01-19 10:46+0100\n"
 "Last-Translator: Karl Eichwalder <ke@suse.de>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -16,72 +16,72 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: lib/pipeline.c:220
+#: lib/pipeline.c:220 lib/pipeline.c:232
 #, c-format
 msgid "badly formed configuration directive: '%s'"
 msgstr "fehlformatierte Konfigurationsdirektive: „%s“"
 
-#: lib/pipeline.c:429
+#: lib/pipeline.c:442
 msgid "pipeline input not open"
 msgstr "Eingabe der Weiterleitung nicht offen"
 
-#: lib/pipeline.c:442
+#: lib/pipeline.c:455
 msgid "pipeline output not open"
 msgstr "Ausgabe der Weiterleitung nicht offen"
 
-#: lib/pipeline.c:569 lib/pipeline.c:583
+#: lib/pipeline.c:606 lib/pipeline.c:620
 msgid "pipe failed"
 msgstr "Weiterleitungserzeugung (pipe) fehlgeschlagen"
 
-#: lib/pipeline.c:603 src/catman.c:181
+#: lib/pipeline.c:640 src/catman.c:181
 msgid "fork failed"
 msgstr "Prozesserzeugung (fork) fehlgeschlagen"
 
-#: lib/pipeline.c:611 lib/pipeline.c:620
+#: lib/pipeline.c:650 lib/pipeline.c:659
 msgid "dup2 failed"
 msgstr "Dateideskriptorverdoppelung (dup2) fehlgeschlagen"
 
-#: lib/pipeline.c:614 lib/pipeline.c:623 lib/pipeline.c:630 lib/pipeline.c:639
-#: lib/pipeline.c:652 lib/pipeline.c:656
+#: lib/pipeline.c:653 lib/pipeline.c:662 lib/pipeline.c:669 lib/pipeline.c:678
+#: lib/pipeline.c:706 lib/pipeline.c:710
 msgid "close failed"
 msgstr "Schließen fehlgeschlagen"
 
-#: lib/pipeline.c:646
+#: lib/pipeline.c:700
 #, c-format
 msgid "can't execute %s"
 msgstr "kann %s nicht ausführen"
 
-#: lib/pipeline.c:741
+#: lib/pipeline.c:800
 msgid "closing pipeline input stream failed"
 msgstr "Schließen des Eingabestroms der Weiterleitung fehlgeschlagen"
 
-#: lib/pipeline.c:746
+#: lib/pipeline.c:805
 msgid "closing pipeline input failed"
 msgstr "Schließen der Eingabe der Weiterleitung fehlgeschlagen"
 
-#: lib/pipeline.c:753
+#: lib/pipeline.c:812
 msgid "closing pipeline output stream failed"
 msgstr "Schließen des Ausgabestroms der Weiterleitung fehlgeschlagen"
 
-#: lib/pipeline.c:758
+#: lib/pipeline.c:817
 msgid "closing pipeline output failed"
 msgstr "Schließen der Ausgabe der Weiterleitung fehlgeschlagen"
 
-#: lib/pipeline.c:797
+#: lib/pipeline.c:859
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr ""
 
-#: lib/pipeline.c:802
+#: lib/pipeline.c:864
 #, fuzzy, c-format
 msgid "%s: %s"
 msgstr "%s: %s%s"
 
-#: lib/pipeline.c:829
+#: lib/pipeline.c:889
 msgid "waitpid failed"
 msgstr "Warten auf Prozessbeendigung (waitpid) fehlgeschlagen"
 
-#: lib/pipeline.c:878
+#: lib/pipeline.c:950
 msgid "can't install SIGCHLD handler"
 msgstr "kann keine Bearbeitungsroutine für SIGCHLD installieren"
 
@@ -271,7 +271,7 @@ msgstr "fertig.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "Lösche alte Datenbankeinträge in %s...\n"
 
-#: src/compression.c:78 src/man.c:1424
+#: src/compression.c:78 src/man.c:1416
 msgid "can't create a temporary filename"
 msgstr "Kann temporären Dateinamen nicht erzeugen"
 
@@ -299,12 +299,12 @@ msgstr "kann passwd-Struktur für UID 0 nicht erhalten"
 msgid "warning: %s: ignoring bogus filename"
 msgstr "Warnung: %s: ignoriere unsinnigen Dateinamen"
 
-#: src/globbing.c:445
+#: src/globbing.c:442
 #, c-format
 msgid "usage: %s [-deiIhV] path section name\n"
 msgstr "Aufruf: %s [-deiIhV] pfad sektion name ...\n"
 
-#: src/globbing.c:447
+#: src/globbing.c:444
 #, c-format
 msgid ""
 "-d, --debug                 emit debugging messages.\n"
@@ -315,28 +315,30 @@ msgid ""
 "-h, --help                  show this usage message.\n"
 msgstr ""
 "-d, --debug                 Debugging-Ausgaben erzeugen\n"
-"-e, --extension             Suche auf Dateierweiterung „extension“ einschränken\n"
-"-i, --ignore-case           Groß‐/Kleinschreibung nicht beachten (Voreinst.)\n"
+"-e, --extension             Suche auf Dateierweiterung „extension“ "
+"einschränken\n"
+"-i, --ignore-case           Groß‐/Kleinschreibung nicht beachten "
+"(Voreinst.)\n"
 "-I, --match-case            Groß‐/Kleinschreibung beachten\n"
 "-V, --version               Versionsnummer anzeigen\n"
 "-h, --help                  diese Options-Zusammenfassung anzeigen\n"
 
-#: src/lexgrog.l:351
+#: src/lexgrog.l:353
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "Warnung: whatis-Eintrag für %s ist größer als %d Bytes, verkürze ihn."
 
-#: src/lexgrog.l:438 src/straycats.c:264 src/ult_src.c:333 src/ult_src.c:340
+#: src/lexgrog.l:440 src/straycats.c:264 src/ult_src.c:333 src/ult_src.c:340
 #, c-format
 msgid "can't open %s"
 msgstr "Kann %s nicht öffnen"
 
-#: src/lexgrog.l:500
+#: src/lexgrog.l:502
 #, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "Aufruf: %s [-mcwfhV] datei ...\n"
 
-#: src/lexgrog.l:502
+#: src/lexgrog.l:504
 #, c-format
 msgid ""
 "-m, --man                   parse as man page.\n"
@@ -351,22 +353,23 @@ msgstr ""
 "-m --man                    als Man-Seite parsen\n"
 "-c --cat                    als Cat-Seite parsen\n"
 "-w --whatis                 whatis-Information anzeigen\n"
-"-f --filters                erratene Folge von Präprozessor-Filtern anzeigen\n"
+"-f --filters                erratene Folge von Präprozessor-Filtern "
+"anzeigen\n"
 "-V --version                Versionsnummer anzeigen\n"
 "-h --help                   diese Options-Zusammenfassung anzeigen\n"
 "\n"
 "Voreinstellung sind --man und --whatis.\n"
 
-#: src/lexgrog.l:551
+#: src/lexgrog.l:553
 msgid "-m -c: incompatible options"
 msgstr "-m -c: inkompatible Optionen"
 
-#: src/man.c:264
+#: src/man.c:265
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "Befehl beendete sich mit Exit-Status %d: %s"
 
-#: src/man.c:403
+#: src/man.c:404
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -374,10 +377,11 @@ msgid ""
 "           [section] page ...\n"
 msgstr ""
 "Aufruf: %s [-c|-f|-k|-w|-tZT gerät] [-i|-I] [-adlhu7V] [-Mpfad] [-Ppager]\n"
-"           [-Cdatei] [-Sliste] [-msystem] [-pzkette] [-Llocale] [-eerweiterung]\n"
+"           [-Cdatei] [-Sliste] [-msystem] [-pzkette] [-Llocale] [-"
+"eerweiterung]\n"
 "           [sektion] seite ...\n"
 
-#: src/man.c:409
+#: src/man.c:410
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -385,10 +389,11 @@ msgid ""
 "           [section] page ...\n"
 msgstr ""
 "Aufruf: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpfad] [-Ppager]\n"
-"           [-Cdatei] [-Sliste] [-msystem] [-pzkette] [-Llocale] [-eerweiterung]\n"
+"           [-Cdatei] [-Sliste] [-msystem] [-pzkette] [-Llocale] [-"
+"eerweiterung]\n"
 "           [sektion] seite ...\n"
 
-#: src/man.c:416
+#: src/man.c:417
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -398,33 +403,43 @@ msgid ""
 "-w, --where, --location     print physical location of man page(s).\n"
 "-W, --where-cat,\n"
 "    --location-cat          print physical location of cat file(s).\n"
-"-l, --local-file            interpret `page' argument(s) as local filename(s).\n"
+"-l, --local-file            interpret `page' argument(s) as local filename"
+"(s).\n"
 "-u, --update                force a cache consistency check.\n"
 "-i, --ignore-case           look for pages case-insensitively (default).\n"
 "-I, --match-case            look for pages case-sensitively.\n"
 "-r, --prompt string         provide the `less' pager with a prompt\n"
-"-c, --catman                used by catman to reformat out of date cat pages.\n"
-"-7, --ascii                 display ASCII translation of certain latin1 chars.\n"
-"-E, --encoding encoding     use the selected nroff device and display in pager."
+"-c, --catman                used by catman to reformat out of date cat "
+"pages.\n"
+"-7, --ascii                 display ASCII translation of certain latin1 "
+"chars.\n"
+"-E, --encoding encoding     use the selected nroff device and display in "
+"pager."
 msgstr ""
 "-a, --all                   alle passenden Manual-Seiten anzeigen\n"
 "-d, --debug                 Debugging-Ausgaben erzeugen\n"
-"-e, --extension             Suche auf Dateierweiterung „extension“ einschränken\n"
+"-e, --extension             Suche auf Dateierweiterung „extension“ "
+"einschränken\n"
 "-f, --whatis                Gleichwertig zu einem Aufruf von whatis\n"
 "-k, --apropos               Gleichwertig zu einem Aufruf von apropos\n"
 "-w, --where, --location     physische Position der Manual-Seiten anzeigen\n"
 "-W, --where-cat,\n"
 "    --location-cat          physische Position der Cat-Dateien anzeigen\n"
-"-l, --local-file            „page“-Argumente als lokale Dateinamen interpretieren\n"
+"-l, --local-file            „page“-Argumente als lokale Dateinamen "
+"interpretieren\n"
 "-u, --update                Cache-Konsistenz-Test erzwingen\n"
-"-i, --ignore-case           Groß/Klein bei Suche unterscheiden (Voreinstellung)\n"
+"-i, --ignore-case           Groß/Klein bei Suche unterscheiden "
+"(Voreinstellung)\n"
 "-I, --match-case            Groß/Klein bei Suche nicht unterscheiden\n"
-"-r, --prompt zkette         Seitenanzeiger „less“ mit diesem Prompt aufrufen\n"
-"-c, --catman                für catman zum Neuformatieren veralteter Cat-Seiten\n"
-"-7, --ascii                 ASCII-Übersetzung bestimmter Latin1-Zeichen anzeigen\n"
+"-r, --prompt zkette         Seitenanzeiger „less“ mit diesem Prompt "
+"aufrufen\n"
+"-c, --catman                für catman zum Neuformatieren veralteter Cat-"
+"Seiten\n"
+"-7, --ascii                 ASCII-Übersetzung bestimmter Latin1-Zeichen "
+"anzeigen\n"
 "-E, --encoding encoding     gewähltes nroff-Gerät wählen und im Pager zeigen"
 
-#: src/man.c:434
+#: src/man.c:435
 #, c-format
 msgid ""
 "-t, --troff                 use %s to format pages.\n"
@@ -433,11 +448,12 @@ msgstr ""
 "-t, --troff                 Benutze %s um Seiten zu formatieren.\n"
 "-T, --troff-device device   Benutze %s mit gewünschtem Gerät.\n"
 
-#: src/man.c:438
+#: src/man.c:439
+#, fuzzy
 msgid ""
 "-H, --html                  use lynx or argument to display html output.\n"
 "-Z, --ditroff               use groff and force it to produce ditroff.\n"
-"-X, --gxditview             use groff and display through gditview (X11):\n"
+"-X, --gxditview             use groff and display through gxditview (X11):\n"
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 msgstr ""
 "-H, --html                  lynx oder Argument zur Anzeige von HTML-Ausgabe\n"
@@ -445,7 +461,7 @@ msgstr ""
 "-X, --gxditview             groff benutzen und mit gditview (X11) anzeigen:\n"
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 
-#: src/man.c:446
+#: src/man.c:447
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-C, --config-file file      use this user configuration file.\n"
@@ -453,18 +469,22 @@ msgid ""
 "-P, --pager pager           use program `pager' to display output.\n"
 "-S, --sections list         use colon separated section list.\n"
 "-m, --systems system        search for man pages from other unix system(s).\n"
-"-L, --locale locale         define the locale for this particular man search.\n"
+"-L, --locale locale         define the locale for this particular man "
+"search.\n"
 "-p, --preprocessor string   string indicates which preprocessors to run.\n"
 "                             e - [n]eqn   p - pic    t - tbl\n"
 "                             g - grap     r - refer  v - vgrind\n"
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message."
 msgstr ""
-"-D, --default               alle Optionen auf ihre Standardwerte zurücksetzen\n"
+"-D, --default               alle Optionen auf ihre Standardwerte "
+"zurücksetzen\n"
 "-C, --config-file datei     angegebene Nutzer‐Konfigurationsdatei benutzen\n"
 "-M, --manpath pfad          Suchpfad für Manual‐Seiten auf „pfad“ setzen\n"
-"-P, --pager pager           Programm „pager“ zum Anzeigen der Ausgabe benutzen\n"
-"-S, --sections list         durch Doppelpunkt getrennte Sektions-Liste benutzen\n"
+"-P, --pager pager           Programm „pager“ zum Anzeigen der Ausgabe "
+"benutzen\n"
+"-S, --sections list         durch Doppelpunkt getrennte Sektions-Liste "
+"benutzen\n"
 "-m, --systems system        in Manual-Seiten anderer Unixsysteme suchen\n"
 "-L, --locale locale         zu benutzende Locale für diese Suche bestimmen.\n"
 "-p, --preprocessor zkette   Zeichenkette gibt an, mit welchem Programm die\n"
@@ -474,122 +494,113 @@ msgstr ""
 "-V, --version               Version anzeigen\n"
 "-h, --help                  diese Options-Zusammenfassung anzeigen"
 
-#: src/man.c:470
+#: src/man.c:471
 #, c-format
 msgid "What manual page do you want from section %s?\n"
 msgstr "Welche Manual-Seiten wollen Sie aus Sektion %s haben?\n"
 
-#: src/man.c:473
+#: src/man.c:474
 msgid "What manual page do you want?\n"
 msgstr "Welche Manual-Seite wollen Sie haben?\n"
 
-#: src/man.c:582
-#, c-format
-msgid "No source manual entry for %s"
-msgstr "Kein Quellcode-Eintrag für %s vorhanden"
-
-#: src/man.c:591
-#, c-format
-msgid "No manual entry for %s"
+#: src/man.c:587
+#, fuzzy, c-format
+msgid "No manual entry for %s in section %s\n"
 msgstr "Kein Manual-Eintrag für %s vorhanden"
 
-#: src/man.c:596
-#, c-format
-msgid " in section %s\n"
-msgstr " in Sektion %s\n"
+#: src/man.c:590
+#, fuzzy, c-format
+msgid "No manual entry for %s\n"
+msgstr "Kein Manual-Eintrag für %s vorhanden"
 
-#: src/man.c:603
+#: src/man.c:595
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Siehe auch „%s“ für Hilfe, wenn Manual-Seiten nicht verfügbar sind.\n"
 
-#: src/man.c:770 src/man.c:2364
+#: src/man.c:762 src/man.c:2400
 #, c-format
 msgid "can't chdir to %s"
 msgstr "Kann nicht ins Verzeichnis %s wechseln"
 
-#: src/man.c:958
+#: src/man.c:950
 msgid " Manual page "
 msgstr " Manual-Seite "
 
-#: src/man.c:959
-msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
-msgstr " ?ltZeile %lt?L/%L.:Byte %bB?s/%s..?e (ENDE):?pB %pB\\%.."
-
-#: src/man.c:1029 src/man.c:3145
+#: src/man.c:1021 src/man.c:3178
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "Man-Befehl schlug fehl mit Beendigungs-Status %d"
 
-#: src/man.c:1299
+#: src/man.c:1291
 msgid ": incompatible options"
 msgstr ": inkompatible Optionen"
 
-#: src/man.c:1481
+#: src/man.c:1473
 msgid "error trying to read from stdin"
 msgstr "Fehler beim Lesen von Standardeingabe"
 
-#: src/man.c:1495
+#: src/man.c:1487
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "Fehler beim Schreiben in temporäre Datei %s"
 
-#: src/man.c:1718
+#: src/man.c:1747
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "Ignoriere unbekannten Präprozessor „%c“"
 
-#: src/man.c:1990 src/mandb.c:265
+#: src/man.c:2026 src/mandb.c:265
 #, c-format
 msgid "can't chown %s"
 msgstr "Kann Besitzer und/oder Gruppe von %s nicht ändern"
 
-#: src/man.c:2002 src/mandb.c:236
+#: src/man.c:2038 src/mandb.c:236
 #, c-format
 msgid "can't chmod %s"
 msgstr "Kann Zugriffsrechte von %s nicht ändern"
 
-#: src/man.c:2014 src/mandb.c:179
+#: src/man.c:2050 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "Kann %s nicht in %s umbenennen"
 
-#: src/man.c:2034
+#: src/man.c:2070
 #, c-format
 msgid "can't set times on %s"
 msgstr "Kann keine Zeiten an %s setzen"
 
-#: src/man.c:2043
+#: src/man.c:2079
 #, c-format
 msgid "can't unlink %s"
 msgstr "Kann %s nicht löschen"
 
-#: src/man.c:2081
+#: src/man.c:2117
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "Kann temporären Dateinamen nicht erzeugen"
 
-#: src/man.c:2182
+#: src/man.c:2218
 #, c-format
 msgid "Still saving the page, please wait...\n"
 msgstr "Speichern der Manual-Seite noch nicht beendet, bitte warten...\n"
 
-#: src/man.c:2235 src/man.c:2256 src/man.c:2287
+#: src/man.c:2271 src/man.c:2292 src/man.c:2323
 #, c-format
 msgid "can't change to directory %s"
 msgstr "Kann nicht in Verzeichnis %s wechseln"
 
-#: src/man.c:2249
+#: src/man.c:2285
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "Kann Manualpfad-Konfigurationsdatei %s nicht öffnen"
 
-#: src/man.c:2262 src/man.c:2292
+#: src/man.c:2298 src/man.c:2328
 #, c-format
 msgid "can't remove directory %s"
 msgstr "Kann Verzeichnis %s nicht entfernen"
 
-#: src/man.c:2500
+#: src/man.c:2536
 #, c-format
 msgid ""
 "\n"
@@ -598,25 +609,22 @@ msgstr ""
 "\n"
 "Kann im catman Modus nicht nach %s schreiben"
 
-#: src/man.c:2519
-#, c-format
-msgid "Reformatting %s, please wait...\n"
-msgstr "Formatiere %s neu, bitte warten...\n"
-
-#: src/man.c:2982
+#: src/man.c:3015
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: von Verlassen auf whatis-Referenzen wird abgeraten\n"
 
-#: src/man.c:3350
+#: src/man.c:3383
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "interner Fehler: Kandidatentyp %d außerhalb des Bereichs"
 
-#: src/man.c:3469
+#: src/man.c:3502
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
-msgstr "--Man-- nächste: %s [ Anzeigen (Return) | Überspringen (^D) | Beenden (^C) ]\n"
+msgstr ""
+"--Man-- nächste: %s [ Anzeigen (Return) | Überspringen (^D) | Beenden "
+"(^C) ]\n"
 
 #: src/mandb.c:149
 #, c-format
@@ -643,7 +651,8 @@ msgstr ""
 "                              Dateinamen\n"
 "-s, --no-straycats          Manual-Seiten ohne Quellcode nicht in die\n"
 "                              Datenbanken einfügen\n"
-"-p, --no-purge              veraltete Einträge nicht aus Datenbank entfernen\n"
+"-p, --no-purge              veraltete Einträge nicht aus Datenbank "
+"entfernen\n"
 "-u, --user-db               nur Benutzer-Datenbanken erzeugen\n"
 "-c, --create                Datenbanken völlig neu erzeugen\n"
 "-t, --test                  Manaul-Seiten auf Korrektheit überprüfen\n"
@@ -680,7 +689,8 @@ msgstr "Der von Man benutzte Nutzer „%s“ existiert nicht"
 #: src/mandb.c:521
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
-msgstr "Warnung: Keine MANDB_MAP Anweisung in %s, benutze den Manualpfad (MANPATH)"
+msgstr ""
+"Warnung: Keine MANDB_MAP Anweisung in %s, benutze den Manualpfad (MANPATH)"
 
 #: src/mandb.c:594
 #, c-format
@@ -861,14 +871,17 @@ msgstr "%s bezieht sich auf sich selbst"
 msgid "%s, version %s, %s\n"
 msgstr "%s, Version %s, %s\n"
 
-#: src/whatis.c:151
+#: src/whatis.c:152
 #, fuzzy, c-format
 msgid ""
-"usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C file]\n"
+"usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C "
+"file]\n"
 "               keyword ...\n"
-msgstr "Aufruf: %s [-dhV] [-r|-w|-e] [-m systems] [-M manpfad] [-C datei] schlüssel ...\n"
+msgstr ""
+"Aufruf: %s [-dhV] [-r|-w|-e] [-m systems] [-M manpfad] [-C datei] "
+"schlüssel ...\n"
 
-#: src/whatis.c:154
+#: src/whatis.c:155
 #, fuzzy, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
@@ -894,14 +907,16 @@ msgstr ""
 "-V, --version              Versionsnummer anzeigen\n"
 "-h, --help                 diese Options-Zusammenfassung anzeigen\n"
 
-#: src/whatis.c:171
+#: src/whatis.c:172
 #, fuzzy, c-format
 msgid ""
 "usage: %s [-dhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
 "              keyword ...\n"
-msgstr "Aufruf: %s [-dhV] [-r|-w|-e] [-m systems] [-M manpfad] [-C datei] schlüssel ...\n"
+msgstr ""
+"Aufruf: %s [-dhV] [-r|-w|-e] [-m systems] [-M manpfad] [-C datei] "
+"schlüssel ...\n"
 
-#: src/whatis.c:174
+#: src/whatis.c:175
 #, fuzzy, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
@@ -925,48 +940,60 @@ msgstr ""
 "-V, --version              Versionsnummer anzeigen\n"
 "-h, --help                 diese Options-Zusammenfassung anzeigen\n"
 
-#: src/whatis.c:227
+#: src/whatis.c:228
 msgid "warning: can't read the fallback whatis text database."
 msgstr "Warnung: Kann whatis-Textdatenbank nicht lesen"
 
-#: src/whatis.c:252 src/whatis.c:279 src/whatis.c:291
+#: src/whatis.c:253 src/whatis.c:280 src/whatis.c:292
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "Warnung: %s enthält zyklische Verweise"
 
-#: src/whatis.c:254 src/whatis.c:267 src/whatis.c:282 src/whatis.c:292
+#: src/whatis.c:255 src/whatis.c:268 src/whatis.c:283 src/whatis.c:293
 msgid "(unknown subject)"
 msgstr "(unbekanntes Thema)"
 
-#: src/whatis.c:507
+#: src/whatis.c:508
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Datenbank %s korrumpiert; neu erzeugen mit mandb --create"
 
-#: src/whatis.c:622
+#: src/whatis.c:623
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: nichts passendes.\n"
 
-#: src/whatis.c:736
+#: src/whatis.c:737
 #, c-format
 msgid "%s what?\n"
 msgstr "%s was bitte?\n"
 
-#: src/whatis.c:759 src/whatis.c:768
+#: src/whatis.c:760 src/whatis.c:769
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "Fatal: Suchausdruck „%s“: %s"
 
-#: src/wrapper.c:103
+#: src/wrapper.c:94
 #, c-format
 msgid "Don't know which program should I run being >%s<\n"
 msgstr "Weiß nicht, welches Programm als „%s“ laufen soll\n"
 
-#: src/wrapper.c:121 src/wrapper.c:126 src/wrapper.c:131 src/wrapper.c:136
+#: src/wrapper.c:112 src/wrapper.c:117 src/wrapper.c:122 src/wrapper.c:127
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Konnte nicht zum Nutzer %s wechseln\n"
+
+#~ msgid "No source manual entry for %s"
+#~ msgstr "Kein Quellcode-Eintrag für %s vorhanden"
+
+#~ msgid " in section %s\n"
+#~ msgstr " in Sektion %s\n"
+
+#~ msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
+#~ msgstr " ?ltZeile %lt?L/%L.:Byte %bB?s/%s..?e (ENDE):?pB %pB\\%.."
+
+#~ msgid "Reformatting %s, please wait...\n"
+#~ msgstr "Formatiere %s neu, bitte warten...\n"
 
 #~ msgid "couldn't exec %s"
 #~ msgstr "Konnte %s nicht ausführen"
@@ -992,8 +1019,11 @@ msgstr "%s: Konnte nicht zum Nutzer %s wechseln\n"
 #~ msgid "waiting for pid %u"
 #~ msgstr "Warte auf Prozess Nummer %u"
 
-#~ msgid "usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"
-#~ msgstr "Aufruf: %s [-dhV] [-r|-w] [-m systeme] [-M manpfad] [-C datei] schlüssel ...\n"
+#~ msgid ""
+#~ "usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"
+#~ msgstr ""
+#~ "Aufruf: %s [-dhV] [-r|-w] [-m systeme] [-M manpfad] [-C datei] "
+#~ "schlüssel ...\n"
 
 #~ msgid "key %s is missing name component - is this an old db?"
 #~ msgstr "Suchschlüssel %s hat keine Namenskomponente - ist das eine alte DB?"
@@ -1010,14 +1040,26 @@ msgstr "%s: Konnte nicht zum Nutzer %s wechseln\n"
 #~ msgid "\n"
 #~ msgstr "\n"
 
-#~ msgid "-H, --html                  use lynx or argument to display html output.\n"
-#~ msgstr "-H, --html                  Lynx (oder Argument) zur Anzeige von HTML nutzen.\n"
+#~ msgid ""
+#~ "-H, --html                  use lynx or argument to display html output.\n"
+#~ msgstr ""
+#~ "-H, --html                  Lynx (oder Argument) zur Anzeige von HTML "
+#~ "nutzen.\n"
 
-#~ msgid "-Z, --ditroff               use groff and force it to produce ditroff."
-#~ msgstr "-Z, --ditroff               groff benutzen und ditroff-Ausgabe erzwingen"
+#~ msgid ""
+#~ "-Z, --ditroff               use groff and force it to produce ditroff."
+#~ msgstr ""
+#~ "-Z, --ditroff               groff benutzen und ditroff-Ausgabe erzwingen"
 
-#~ msgid "-X, --gxditview             use groff and display through gditview (X11):"
-#~ msgstr "-X, --gxditview             groff benutzen und mit gxditview (X11) anzeigen:"
+#~ msgid ""
+#~ "-X, --gxditview             use groff and display through gditview (X11):"
+#~ msgstr ""
+#~ "-X, --gxditview             groff benutzen und mit gxditview (X11) "
+#~ "anzeigen:"
 
-#~ msgid "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
-#~ msgstr "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
+#~ msgid ""
+#~ "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-"
+#~ "12."
+#~ msgstr ""
+#~ "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-"
+#~ "12."
