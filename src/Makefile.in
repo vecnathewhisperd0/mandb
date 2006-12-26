@@ -161,11 +161,11 @@ uninstall:
 #	rm -f $(DESTDIR)$(config_file)
 
 mostlyclean clean: 
+	rm -rf .depend
 	rm -f *.o *.i *~ core
 	rm -f $(PROGS) $(TOOLS) wrapper
 
 distclean: lexgrog.c clean
-	rm -rf .depend
 	rm -f *.out Makefile man_db.conf
 
 realclean: distclean

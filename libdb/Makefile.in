@@ -53,10 +53,10 @@ $(library): $(library)($(ALL))
 install uninstall:
 
 clean mostlyclean:
+	rm -rf .depend
 	rm -f *~ core $(ALL) $(library)
 
 distclean: clean
-	rm -rf .depend
 	rm -f Makefile
 
 realclean: distclean
