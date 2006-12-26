@@ -776,6 +776,12 @@ static int local_man_loop (const char *argv)
 			return NOT_FOUND;
 		}
 
+		if (S_ISCHR (st.st_mode) || S_ISBLK (st.st_mode)) {
+			/* EINVAL is about the best I can do. */
+			error (0, EINVAL, "%s", argv);
+			return NOT_FOUND;
+		}
+
 #ifdef COMP_SRC
 		comp = comp_info (argv, 0);
 		if (comp)
