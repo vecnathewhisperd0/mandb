@@ -80,7 +80,7 @@ extern char *strrchr();
 extern char *canonicalize_file_name __P ((__const char *__name));
 #endif
 
-#include <libintl.h>
+#include "lib/gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"

@@ -56,8 +56,8 @@ extern int errno;
 extern char *strrchr();
 #endif /* no string(s) header */
 
+#include "lib/gettext.h"
 #include <locale.h>
-#include <libintl.h>
 #define _(String) gettext (String)
 
 #ifdef HAVE_REGEX_H

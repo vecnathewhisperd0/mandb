@@ -1,3 +1,20 @@
+Tue Dec 26 14:27:59 GMT 2006  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac (AM_GNU_GETTEXT_VERSION): Upgrade to gettext 0.15.
+	* lib/gettext.h: Copy from gettext 0.15.
+	* lib/README: Mention the above.
+	* lib/pipeline.c, libdb/db_delete.c, libdb/db_lookup.c,
+	  libdb/db_store.c, libdb/db_ver.c, src/accessdb.c, src/catman.c,
+	  src/check_mandirs.c, src/compression.c, src/convert_name.c,
+	  src/descriptions.c, src/encodings.c, src/fake_security.c,
+	  src/filenames.c, src/globbing.c, src/lexgrog.l, src/lexgrog.l.new,
+	  src/man.c, src/mandb.c, src/manp.c, src/manpath.c, src/security.c,
+	  src/straycats.c, src/ult_src.c, src/version.c, src/whatis.c,
+	  src/wrapper.c, zsoelim/zsoelim.l: Include "gettext.h" rather than
+	  <libintl.h>. Make sure not to include <locale.h> before
+	  "gettext.h", for portability to Solaris.
+	* src/wrapper.c: Drop ENABLE_NLS test, now handled by gettext.h.
+
 Tue Nov  7 11:00:14 PST 2006  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (make_browser): Remove unnecessary check for browser

@@ -37,7 +37,7 @@
 extern char *strchr();
 #endif /* no string(s) header */
 
-#include <libintl.h>
+#include "lib/gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"

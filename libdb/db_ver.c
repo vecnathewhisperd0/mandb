@@ -36,7 +36,7 @@
 #include <strings.h>
 #endif /* STDC_HEADERS */
 
-#include <libintl.h>
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"

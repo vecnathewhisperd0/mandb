@@ -316,7 +316,7 @@ dnl
 dnl Internationalization support.
 dnl
 AM_GNU_GETTEXT
-AM_GNU_GETTEXT_VERSION(0.12.1)
+AM_GNU_GETTEXT_VERSION([0.15])
 AC_SUBST(LINGUAS)dnl
 dnl
 dnl Checks for structures and compiler characteristics.

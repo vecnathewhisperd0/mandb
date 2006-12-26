@@ -33,8 +33,8 @@
 #  include <strings.h>
 #endif /* STDC_HEADERS */
 
+#include "lib/gettext.h"
 #include <locale.h>
-#include <libintl.h>
 #ifdef HAVE_LANGINFO_CODESET
 #  include <langinfo.h>
 #endif

@@ -48,7 +48,7 @@ extern long atol();
 extern char *strsep();
 #endif /* not STDC_HEADERS */
 
-#include <libintl.h>
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"

@@ -51,7 +51,7 @@ extern char *strsep();
 extern int errno;
 #endif /* not STDC_HEADERS */
 
-#include <libintl.h>
+#include "lib/gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"

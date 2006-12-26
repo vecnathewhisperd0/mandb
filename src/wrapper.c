@@ -33,18 +33,9 @@
 
 #include "config.h"
 
+#include "lib/gettext.h"
 #include <locale.h>
-
-#ifdef ENABLE_NLS
-# include <libintl.h>
-# define _(Text) gettext (Text)
-#else
-# undef bindtextdomain
-# define bindtextdomain(Domain, Directory) /* empty */
-# undef textdomain
-# define textdomain(Domain) /* empty */
-# define _(Text) Text
-#endif
+#define _(Text) gettext (Text)
 
 
 /* this list is used to authenticate the program running.

@@ -55,7 +55,7 @@ extern int errno;
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include <libintl.h>
+#include "lib/gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"

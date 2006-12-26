@@ -74,7 +74,7 @@ extern int errno;
 #define NAME	so_name[so_stack_ptr]
 #define LINE	so_line[so_stack_ptr]
 
-#include <libintl.h>
+#include "lib/gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"

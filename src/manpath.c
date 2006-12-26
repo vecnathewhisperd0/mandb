@@ -61,8 +61,8 @@
 #  include "lib/getopt.h"
 #endif /* HAVE_GETOPT_H */
 
+#include "lib/gettext.h"
 #include <locale.h>
-#include <libintl.h>
 #define _(String) gettext (String)
 
 #include "manconfig.h"

@@ -97,7 +97,7 @@ extern char *realpath();
 #  endif /* _POSIX_VERSION */
 #endif /* !PATH_MAX */
 
-#include <libintl.h>
+#include "lib/gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"

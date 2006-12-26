@@ -67,7 +67,7 @@ static const char *mandir_layout = MANDIR_LAYOUT;
 
 #ifdef TEST
 
-#  include <libintl.h>
+#  include "lib/gettext.h"
 #  define _(String) gettext (String)
 
 #  ifdef HAVE_GETOPT_H
