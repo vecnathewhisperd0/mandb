@@ -99,7 +99,8 @@ all: $(PROGS) $(PUBTOOLS) wrapper man_db.conf
 man: security.o convert_name.o manp.o ult_src.o compression.o \
      filenames.o util.o globbing.o encodings.o man.o
 
-mandb: security.o manp.o util.o ult_src.o check_mandirs.o descriptions.o \
+mandb: security.o manp.o util.o ult_src.o check_mandirs.o \
+       descriptions.o descriptions_store.o \
        filenames.o straycats.o compression.o lexgrog.o globbing.o mandb.o
 
 wrapper:	LDLIBS=-lc
@@ -116,7 +117,7 @@ apropos: whatis.c
 	$(LINK.c) $^ $(LDLIBS) -o $@
 
 # Rules to test code as program unit
-lexgrog: lexgrog.c compression.o fake_security.o ult_src.o util.o
+lexgrog: lexgrog.c compression.o descriptions.o fake_security.o ult_src.o util.o
 	$(LINK.c) -DTEST $^ $(LDLIBS) -o $@
 
 globbing: globbing.c util.o

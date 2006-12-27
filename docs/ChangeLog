@@ -1,3 +1,19 @@
+Wed Dec 27 13:34:23 GMT 2006  Colin Watson  <cjwatson@debian.org>
+
+	Teach lexgrog front-end about pages with multiple name/description
+	pairs (Debian bug #342834).
+
+	* src/descriptions.c (parse_descriptions): Allow base_name to be
+	  NULL to suppress ensuring that base_name is in the returned list.
+	  (gripe_bad_store, store_descriptions): Move to ...
+	* src/descriptions_store.c: ... here.
+	* src/lexgrog.l (main): Use parse_descriptions to split lg.whatis up
+	  into its component descriptions, and display each on a separate
+	  line.
+	* src/Makefile.in (mandb, lexgrog): Adjust object lists for the
+	  above.
+	* docs/NEWS: Document this.
+
 Tue Dec 26 20:52:50 GMT 2006  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (local_man_loop): Fail with an error message if argv is

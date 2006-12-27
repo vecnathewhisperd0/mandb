@@ -1,7 +1,7 @@
 /*
  * descriptions.c: manipulate man page descriptions
  *
- * Copyright (C) 2002 Colin Watson.
+ * Copyright (C) 2002, 2003, 2006 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -37,20 +37,8 @@
 extern char *strchr();
 #endif /* no string(s) header */
 
-#include "lib/gettext.h"
-#define _(String) gettext (String)
-
 #include "manconfig.h"
-#include "libdb/db_storage.h"
-#include "lib/error.h"
 #include "descriptions.h"
-
-static void gripe_bad_store (const char *name, const char *ext)
-{
-	if (quiet < 2)
-		error (0, 0, _("warning: failed to store entry for %s(%s)"),
-		       name, ext);
-}
 
 /* Parse the description in a whatis line returned by find_name() into a
  * sequence of names and whatis descriptions.
@@ -114,7 +102,7 @@ struct page_description *parse_descriptions (const char *base_name,
 			desc->whatis = dash ? trim_spaces (dash + 3) : NULL;
 			desc->next   = NULL;
 
-			if (STREQ (base_name, desc->name))
+			if (base_name && STREQ (base_name, desc->name))
 				seen_base_name = 1;
 		}
 
@@ -126,7 +114,7 @@ struct page_description *parse_descriptions (const char *base_name,
 	/* If it isn't there already, add the base_name onto the returned
 	 * list.
 	 */
-	if (!seen_base_name) {
+	if (base_name && !seen_base_name) {
 		if (head) {
 			desc->next = malloc (sizeof *desc);
 			desc = desc->next;
@@ -141,48 +129,6 @@ struct page_description *parse_descriptions (const char *base_name,
 	}
 
 	return head;
-}
-
-/* Take a list of descriptions returned by parse_descriptions() and store
- * it into the database.
- */
-void store_descriptions (const struct page_description *head,
-			 struct mandata *info, const char *base_name)
-{
-	const struct page_description *desc;
-	char save_id = info->id;
-
-	if (debug)
-		fprintf (stderr, "base_name = '%s'\n", base_name);
-
-	for (desc = head; desc; desc = desc->next) {
-		/* Either it's the real thing or merely a reference. Get the
-		 * id and pointer right in either case.
-		 */
-		if (STREQ (base_name, desc->name)) {
-			info->id = save_id;
-			info->pointer = NULL;
-			info->whatis = desc->whatis;
-		} else {
-			if (save_id < STRAY_CAT)
-				info->id = WHATIS_MAN;
-			else
-				info->id = WHATIS_CAT;
-			info->pointer = base_name;
-			/* Don't waste space storing the whatis in the db
-			 * more than once.
-			 */
-			info->whatis = NULL;
-		}
-
-		if (debug)
-			fprintf (stderr, "name = '%s', id = %c\n",
-				 desc->name, info->id);
-		if (dbstore (info, desc->name) > 0) {
-			gripe_bad_store (base_name, info->ext);
-			break;
-		}
-	}
 }
 
 /* Free a description list and all its contents. */

@@ -4,7 +4,7 @@
  * lexgrog.l: extract 'whatis' info from nroff man / formatted cat pages.
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -61,6 +61,7 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/pipeline.h"
+#include "descriptions.h"
 #include "security.h"
 #include "ult_src.h"
 
@@ -568,6 +569,7 @@ int main (int argc, char **argv)
 	while (optind != argc) {
 		lexgrog lg;
 		const char *file;
+		int found = 0;
 
 		lg.type = type;
 
@@ -607,16 +609,27 @@ int main (int argc, char **argv)
 		}
 
 		if (file && find_name (file, "-", &lg)) {
-			printf ("%s", argv[optind]);
-			if (show_filters)
-				printf (" (%s)", lg.filters);
-			if (show_whatis)
-				printf (": \"%s\"", lg.whatis);
-			printf ("\n");
-		} else {
+			struct page_description *descs =
+				parse_descriptions (NULL, lg.whatis);
+			const struct page_description *desc;
+			for (desc = descs; desc; desc = desc->next) {
+				found = 1;
+				printf ("%s", argv[optind]);
+				if (show_filters)
+					printf (" (%s)", lg.filters);
+				if (show_whatis)
+					printf (": \"%s - %s\"",
+						desc->name, desc->whatis);
+				printf ("\n");
+			}
+			free_descriptions (descs);
+		}
+
+		if (!found) {
 			printf ("%s: parse failed\n", argv[optind]);
 			some_failed = 1;
 		}
+
 		++optind;
 	}
 
