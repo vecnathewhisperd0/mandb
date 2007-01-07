@@ -124,15 +124,15 @@ static int parse_layout (const char *layout)
 		for (layoutp = upper_layout; *layoutp; layoutp++)
 			*layoutp = CTYPE (toupper, *layoutp);
 
-		if (strstr (layout, "GNU"))
+		if (strstr (upper_layout, "GNU"))
 			flags |= LAYOUT_GNU;
-		if (strstr (layout, "HPUX"))
+		if (strstr (upper_layout, "HPUX"))
 			flags |= LAYOUT_HPUX;
-		if (strstr (layout, "IRIX"))
+		if (strstr (upper_layout, "IRIX"))
 			flags |= LAYOUT_IRIX;
-		if (strstr (layout, "SOLARIS"))
+		if (strstr (upper_layout, "SOLARIS"))
 			flags |= LAYOUT_SOLARIS;
-		if (strstr (layout, "BSD"))
+		if (strstr (upper_layout, "BSD"))
 			flags |= LAYOUT_BSD;
 
 		free (upper_layout);
