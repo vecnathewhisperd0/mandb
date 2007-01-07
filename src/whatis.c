@@ -495,6 +495,8 @@ static int apropos (char *page, char *lowpage)
 		char *whatis;
 #endif
 
+		memset (&info, 0, sizeof (info));
+
 		/* bug#4372, NULL pointer dereference in cont.dptr, fix
 		 * by dassen@wi.leidenuniv.nl (J.H.M.Dassen), thanx Ray.
 		 * cjwatson: In that case, complain and exit, otherwise we
@@ -543,7 +545,6 @@ static int apropos (char *page, char *lowpage)
 		if (match) {
 			display (&info, key.dptr);
 			found++;
-			cont.dptr = info.addr;
 		}
 
 		found += match;
@@ -561,6 +562,8 @@ nextpage:
 		MYDBM_FREE (key.dptr);
 		end = btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
+		info.addr = NULL; /* == cont.dptr, freed above */
+		free_mandata_elements (&info);
 	}
 
 #ifndef APROPOS
@@ -614,6 +617,8 @@ static void search (char *page)
 #else /* APROPOS */
 		found += apropos (page, lowpage);
 #endif /* WHATIS */
+		free (database);
+		database = NULL;
 		MYDBM_CLOSE (dbf);
 	}
 
@@ -630,7 +635,8 @@ static void search (char *page)
 int main (int argc, char *argv[])
 {
 	int c;
-	const char *manp = NULL, *alt_systems = "";
+	char *manp = NULL;
+	const char *alt_systems = "";
 	char *llocale = NULL, *locale;
 	int option_index;
 
@@ -664,7 +670,7 @@ int main (int argc, char *argv[])
 				alt_systems = optarg;
 				break;
 			case 'M':
-				manp = optarg;
+				manp = xstrdup (optarg);
 				break;
 			case 'e':
 #ifdef REGEX
@@ -735,6 +741,8 @@ int main (int argc, char *argv[])
 	/* Make sure that we have a keyword! */
 	if (argc == optind) {
 		printf (_("%s what?\n"), program_name);
+		free (locale);
+		free (program_name);
 		return 0;
 	}
 
@@ -771,7 +779,14 @@ int main (int argc, char *argv[])
 		}
 #endif /* REGEX */
 		search (argv[optind++]);
+#ifdef POSIX_REGEX
+		regfree (&preg);
+#endif /* POSIX_REGEX */
 	}
 
+	free_pathlist (manpathlist);
+	free (manp);
+	free (locale);
+	free (program_name);
 	exit (status);
 }

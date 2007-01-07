@@ -68,10 +68,10 @@ extern char *strcpy();
 /* take path, add db name and return */
 char *mkdbname (const char *path)
 {
-	static char *name;
+	char *name;
 	size_t len = strlen (path);
 
-	name = (char *) xrealloc (name, sizeof MAN_DB + len);
+	name = (char *) xmalloc (sizeof MAN_DB + len);
 	(void) strcpy (name, path);
 	(void) strcpy (name + len, MAN_DB);
 

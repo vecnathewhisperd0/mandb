@@ -132,6 +132,8 @@ error (status, errnum, message, va_alist)
   }
 #endif
 
-  if (status)
+  if (status) {
+    free (program_name); /* for valgrind */
     exit (status);
+  }
 }

@@ -56,7 +56,7 @@ endif
 PROGS = man manpath mandb apropos whatis catman lexgrog
 PUBTOOLS = accessdb
 PRIVTOOLS = globbing
-TOOLS = $(PUBTOOLS) $(PRIVTOOLS)
+TOOLS = $(PUBTOOLS) $(PRIVTOOLS) wrapper
 
 # Special definitions for some compilations
 DEFS_man.o = -DWHATIS=\"$(bindir)/$(whatis)\" \
@@ -164,7 +164,7 @@ uninstall:
 mostlyclean clean: 
 	rm -rf .depend
 	rm -f *.o *.i *~ core
-	rm -f $(PROGS) $(TOOLS) wrapper
+	rm -f $(PROGS) $(TOOLS)
 
 distclean: lexgrog.c clean
 	rm -f *.out Makefile man_db.conf

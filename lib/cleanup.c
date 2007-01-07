@@ -173,6 +173,8 @@ do_cleanups (void)
   for (i = tos;  i > 0;  --i) {
     stack[i-1].fun (stack[i-1].arg);
   }
+  free (stack);
+  stack = NULL;
 }
 
 

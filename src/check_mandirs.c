@@ -670,6 +670,8 @@ static int count_glob_matches (const char *name, const char *ext,
 		if (buf) {
 			if (STREQ (ext, info.ext))
 				++count;
+			if (info.name)
+				free (info.name);
 			free (buf);
 		}
 	}
@@ -863,7 +865,6 @@ short purge_missing (const char *manpath, const char *catpath)
 		}
 
 		split_content (content.dptr, &entry);
-		content.dptr = entry.addr;
 
 		save_debug = debug;
 		debug = 0;	/* look_for_file() is quite noisy */
@@ -894,7 +895,7 @@ short purge_missing (const char *manpath, const char *catpath)
 
 		free (nicekey);
 
-		MYDBM_FREE (content.dptr);
+		free_mandata_elements (&entry);
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE (key.dptr);
 		key = nextkey;

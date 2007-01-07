@@ -90,7 +90,7 @@ int quiet = 1;
 extern int opt_test;		/* don't update db */
 MYDBM_FILE dbf;
 char *manp;
-char *database;
+char *database = NULL;
 extern char *extension;		/* for globbing.c */
 extern int force_rescan;	/* for check_mandirs.c */
 static char *single_filename = NULL;
@@ -131,7 +131,7 @@ static char *tmppagfile;
 #  endif /* BERKELEY_DB */
 #else /* !NDBM */
 static char *xfile;
-static char *xtmpfile;
+static const char *xtmpfile;
 #endif /* NDBM */
 
 #ifdef SECURE_MAN_UID
@@ -245,15 +245,22 @@ static __inline__ void finish_up (void)
 #  ifdef BERKELEY_DB
 	xrename (tmpdbfile, dbfile);
 	xchmod (dbfile, DBMODE);
+	free (tmpdbfile);
+	tmpdbfile = NULL;
 #  else /* not BERKELEY_DB */
 	xrename (tmpdirfile, dirfile);
 	xchmod (dirfile, DBMODE);
 	xrename (tmppagfile, pagfile);
 	xchmod (pagfile, DBMODE);
+	free (tmpdirfile);
+	free (tmppagfile);
+	tmpdirfile = tmppagfile = NULL;
 #  endif /* BERKELEY_DB */
 #else /* not NDBM */
 	xrename (xtmpfile, xfile);
 	xchmod (xfile, DBMODE);
+	/* xtmpfile == database, so freed elsewhere */
+	xtmpfile = NULL;
 #endif /* NDBM */
 }
 
@@ -296,7 +303,9 @@ static short update_one_file (const char *manpath, const char *filename)
 		if (info.name) {
 			dbdelete (info.name, &info);
 			purge_pointers (info.name);
+			free (info.name);
 		}
+		free (manpage);
 
 		test_manfile (filename, manpath);
 	}
@@ -327,13 +336,31 @@ static void cleanup (void *dummy)
 
 #ifdef NDBM
 #  ifdef BERKELEY_DB
-	unlink (tmpdbfile);
+	if (tmpdbfile) {
+		unlink (tmpdbfile);
+		free (tmpdbfile);
+		tmpdbfile = NULL;
+	}
 #  else /* !BERKELEY_DB NDBM */
-	unlink (tmpdirfile);
-	unlink (tmppagfile);
+	if (tmpdirfile) {
+		unlink (tmpdirfile);
+		free (tmpdirfile);
+		tmpdirfile = NULL;
+	}
+	if (tmppagfile) {
+		unlink (tmppagfile);
+		free (tmppagfile);
+		tmppagfile = NULL;
+	}
 #  endif /* BERKELEY_DB NDBM */
 #else /* !NDBM */
-	unlink (xtmpfile);
+	if (xtmpfile) {
+		unlink (xtmpfile);
+		/* xtmpfile == database, so freed elsewhere */
+		xtmpfile = NULL;
+	}
+	free (xfile);
+	xfile = NULL;
 #endif /* NDBM */
 }
 
@@ -353,6 +380,7 @@ static short mandb (const char *catpath, const char *manpath)
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	dbfile = strappend (NULL, dbname, ".db", NULL);
+	free (dbname);
 	tmpdbfile = strappend (NULL, database, ".db", NULL);
 	if (create || force_rescan || opt_test) {
 		xremove (tmpdbfile);
@@ -365,6 +393,7 @@ static short mandb (const char *catpath, const char *manpath)
 #  else /* !BERKELEY_DB NDBM */
 	dirfile = strappend (NULL, dbname, ".dir", NULL);
 	pagfile = strappend (NULL, dbname, ".pag", NULL);
+	free (dbname);
 	tmpdirfile = strappend (NULL, database, ".dir", NULL);
 	tmppagfile = strappend (NULL, database, ".pag", NULL);
 	if (create || force_rescan || opt_test) {
@@ -380,7 +409,7 @@ static short mandb (const char *catpath, const char *manpath)
 	}
 #  endif /* BERKELEY_DB NDBM */
 #else /* !NDBM */
-	xfile = dbname;
+	xfile = dbname; /* steal memory */
 	xtmpfile = database;
 	if (create || force_rescan || opt_test) {
 		xremove (xtmpfile);
@@ -473,7 +502,8 @@ int main (int argc, char *argv[])
 
 
 #ifdef __profile__
-	if (!getcwd_allocated ()) {
+	cwd = getcwd_allocated ();
+	if (!cwd) {
 		cwd = xmalloc (1);
 		cwd[0] = '\0';
 	}
@@ -510,7 +540,7 @@ int main (int argc, char *argv[])
 	/* pick up the system manpath or use the supplied one */
 	if (argc != optind) {
 		free (manp);
-		manp = argv[optind];
+		manp = xstrdup (argv[optind]);
 	} else if (!user) {
 		sys_manp = get_mandb_manpath ();
 		if (sys_manp) {
@@ -553,6 +583,8 @@ int main (int argc, char *argv[])
 		if (purge) {
 			database = mkdbname (catpath);
 			purged += purge_missing (*mp, catpath);
+			free (database);
+			database = NULL;
 		}
 
 		push_cleanup (cleanup, NULL);
@@ -569,8 +601,8 @@ int main (int argc, char *argv[])
 			if (global_manpath && euid == 0)
 				do_chown (man_owner->pw_uid);
 #endif /* SECURE_MAN_UID */
-		} else
-			cleanup (NULL);
+		}
+		cleanup (NULL);
 		pop_cleanup ();
 		free (database);
 		database = NULL;
@@ -578,6 +610,8 @@ int main (int argc, char *argv[])
 		if (check_for_strays) {
 			database = mkdbname (catpath);
 			strays += straycats (*mp);
+			free (database);
+			database = NULL;
 		}
 
 		if (!global_manpath)
@@ -607,7 +641,10 @@ int main (int argc, char *argv[])
 		chdir (cwd);
 #endif /* __profile__ */
 
+	free_pathlist (manpathlist);
+	free (manp);
 	if (!amount)
 		error (FAIL, 0, _("No databases updated."));
+	free (program_name);
 	exit (OK);
 }

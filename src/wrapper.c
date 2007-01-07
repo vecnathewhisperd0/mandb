@@ -33,9 +33,15 @@
 
 #include "config.h"
 
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#endif /* HAVE_LIBGEN_H */
+
 #include "lib/gettext.h"
 #include <locale.h>
 #define _(Text) gettext (Text)
+
+#include "manconfig.h"
 
 
 /* this list is used to authenticate the program running.
@@ -62,7 +68,6 @@ int main (int argc, char **argv)
 {
 	uid_t ruid;
 	char *fakeroot;
-	char *p;
 	struct passwd *pwd;
 
 	argc = argc; /* not used */
@@ -75,8 +80,7 @@ int main (int argc, char **argv)
 	textdomain (PACKAGE);
 
 	/* this wrapper can be run as "man" or as "mandb" */
-	p = strrchr (argv[0], '/');
-	program_name = (p ? ++p : argv[0]);
+	program_name = xstrdup (basename (argv[0]));
 
 	ruid = getuid ();
 	fakeroot = getenv ("FAKEROOTKEY");

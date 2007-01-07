@@ -1,3 +1,60 @@
+Sun Jan  7 20:48:58 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	Fix a slew of memory leaks, including a nasty per-search leak in
+	apropos (Debian bug #368749).
+
+	* include/manconfig.h.in (ATTRIBUTE_UNUSED): Define to an attribute
+	  marking a variable as unused if using GCC 2.4 or newer.
+
+	* lib/error.c (error): Free program_name before exiting.
+	* src/accessdb.c (main): Put program_name in allocated memory.
+	* src/wrapper.c (main): Likewise.
+	* src/Makefile.in: Link wrapper against libman.
+
+	* libdb/db_gdbm.c (man_gdbm_firstkey): Register cleanup function to
+	  free parent_sortkey_hash on exit.
+	* src/globbing.c (update_directory_cache): Register cleanup function
+	  to free dirent_hash on exit.
+	  (look_for_file): Register cleanup function to free gbuf on exit.
+	  Move freeing of gbuf before each search to ...
+	  (match_in_directory): ... here.
+	* src/manp.c (free_config_file): New function.
+	  (read_config_file): Register cleanup function to free
+	  configuration file structures on exit.
+
+	* lib/cleanup.c (do_cleanups): Free the stack after processing it.
+	* lib/hashtable.c (hash_free): Free ht->hashtab as well.
+	* libdb/db_lookup.c (free_mandata_elements): Add TODO comment about
+	  strange memory handling.
+	* src/catman.c (parse_for_sec): Free entry.
+	  (main): Free various variables before exiting.
+	* src/check_mandirs.c (count_glob_matches): Free info.name.
+	  (purge_missing): Free entry rather than just content.dptr (==
+	  entry.addr).
+	* src/globbing.c (parse_layout): Free upper_layout.
+	  (match_in_directory): Free pattern_start.pattern in early return
+	  case.
+	* src/man.c (main): Free various variables before exiting.
+	* src/mandb.c (finish_up, cleanup, mandb, main): Free various
+	  database file names properly.
+	  (main): Remember to assign the result of getcwd_allocated
+	  somewhere. Free various variables before exiting.
+	* src/manp.c (add_sections): Free section_list; comment was
+	  incorrect.
+	  (add_nls_manpath): Free temp_locale.
+	  (guess_manpath): Constify path. Free result of get_manpath before
+	  returning.
+	  (get_manpath): Constify path. Free tmplist elements.
+	  (create_pathlist): Free result of xstrndup.
+	  (free_pathlist): New function.
+	* src/manp.h (free_pathlist): Add prototype.
+	* src/util.c (mkdbname): Don't allocate mkdbname statically; it's
+	  less confusing just to free it each time.
+	* src/whatis.c (apropos): Initialise and free info.
+	  (search): Free database.
+	  (main): Free regular expression after each search. Free various
+	  variables before exiting.
+
 Wed Dec 27 13:34:23 GMT 2006  Colin Watson  <cjwatson@debian.org>
 
 	Teach lexgrog front-end about pages with multiple name/description

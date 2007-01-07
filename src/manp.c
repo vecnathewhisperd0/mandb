@@ -73,6 +73,7 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/getcwdalloc.h"
+#include "lib/cleanup.h"
 #include "security.h"
 #include "manp.h"
 
@@ -100,7 +101,7 @@ char *manpathlist[MAXDIRS];
 char *user_config_file = NULL;
 
 static void mkcatdirs (const char *mandir, const char *catdir);
-static __inline__ char *get_manpath (char *path);
+static __inline__ char *get_manpath (const char *path);
 static __inline__ char *has_mandir (const char *p);
 static __inline__ char *fsstnd (const char *path);
 static char *def_path (int flag);
@@ -172,9 +173,6 @@ static void print_list (void)
 
 static void add_sections (char *sections)
 {
-	/* No need to free section_list; it's tokenized and each element is
-	 * put into a linked list, which is kept around for later.
-	 */
 	char *section_list = xstrdup (sections);
 	char *sect;
 
@@ -184,6 +182,7 @@ static void add_sections (char *sections)
 		if (debug)
 			fprintf (stderr, "Added section `%s'.\n", sect);
 	}
+	free (section_list);
 }
 
 const char **get_sections (void)
@@ -439,6 +438,7 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 	/* After doing all the locale stuff we add the manpath to the *END*
 	 * so the locale dirs are checked first on each section */
 	manpath = add_to_manpath (manpath, omanpathlist);
+	free (temp_locale);
 	free (omanpathlist);
 
 	free (manpathlist);
@@ -546,14 +546,15 @@ static char *add_system_manpath (const char *systems, const char *manpathlist)
  */
 static char *guess_manpath (const char *systems)
 {
-	char *path = getenv ("PATH");
+	const char *path = getenv ("PATH");
+	char *manpathlist, *manpath;
 
 	if (path == NULL) {
 		/* Things aren't going to work well, but hey... */
 		if (!quiet)
 			error (0, 0, _("warning: $PATH not set"));
 
-		return add_system_manpath (systems, def_path (MANDATORY));
+		manpathlist = def_path (MANDATORY);
 	} else {
 		if (strlen (path) == 0) {
 			/* Things aren't going to work well here either... */
@@ -564,8 +565,11 @@ static char *guess_manpath (const char *systems)
 						   def_path (MANDATORY));
 		}
 
-		return add_system_manpath (systems, get_manpath (path));
+		manpathlist = get_manpath (path);
 	}
+	manpath = add_system_manpath (systems, manpathlist);
+	free (manpathlist);
+	return manpath;
 }
 
 char *manpath (const char *systems)
@@ -753,10 +757,27 @@ static void add_to_dirlist (FILE *config, int user)
 	}
 }
 
+static void free_config_file (void *unused ATTRIBUTE_UNUSED)
+{
+	struct list *list = namestore, *prev;
+
+	while (list) {
+		free (list->key);
+		free (list->cont);
+		prev = list;
+		list = list->next;
+		free (prev);
+	}
+
+	namestore = tailstore = NULL;
+}
+
 void read_config_file(void)
 {
 	char *home;
 	FILE *config;
+
+	push_cleanup (free_config_file, NULL);
 
 	home = xstrdup (getenv ("HOME"));
 	if (home) {
@@ -834,7 +855,7 @@ static char *def_path (int flag)
  * $HOME/man exists -- the directory $HOME/man will be added
  * to the manpath.
  */
-static __inline__ char *get_manpath (char *path)
+static __inline__ char *get_manpath (const char *path)
 {
 	int len;
 	char *tmppath;
@@ -923,6 +944,8 @@ static __inline__ char *get_manpath (char *path)
 	while (*lp != NULL) {
 		len = strlen (*lp);
 		memcpy (p, *lp, len);
+		free (*lp);
+		*lp = NULL;
 		p += len;
 		*p++ = ':';
 		lp++;
@@ -1044,15 +1067,24 @@ void create_pathlist (const char *manp, char **mp)
 
 	for (p = manp;; p = end + 1) {
 		end = strchr (p, ':');
-		if (end)
-			mp = add_dir_to_path_list (mphead, mp,
-						   xstrndup (p, end - p));
-		else {
+		if (end) {
+			char *element = xstrndup (p, end - p);
+			mp = add_dir_to_path_list (mphead, mp, element);
+			free (element);
+		} else {
 			mp = add_dir_to_path_list (mphead, mp, p);
 			break;
 		}
 	}
 	*mp = NULL;
+}
+
+void free_pathlist (char **mp)
+{
+	while (*mp) {
+		free (*mp);
+		*mp++ = NULL;
+	}
 }
 
 /* Routine to get list of named system and user manpaths (in reverse order). */

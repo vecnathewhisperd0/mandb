@@ -204,5 +204,6 @@ void hash_free (struct hashtable *ht)
 		}
 	}
 
+	free (ht->hashtab);
 	free (ht);
 }

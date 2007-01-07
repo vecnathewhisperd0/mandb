@@ -156,6 +156,9 @@ struct mandata *infoalloc (void)
 void free_mandata_elements (struct mandata *pinfo)
 {
 	if (pinfo->addr)
+		/* TODO: this memory appears to be properly owned by the
+		 * caller; why do we free it here?
+		 */
 		free (pinfo->addr);		/* free the 'content' */
 	if (pinfo->name)
 		free (pinfo->name);		/* free the real name */

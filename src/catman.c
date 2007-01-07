@@ -309,7 +309,6 @@ static int parse_for_sec (const char *manpath, const char *section)
 				struct mandata entry;
 
 				split_content (content.dptr, &entry);
-				content.dptr = entry.addr;
 
 				/* Accept if the entry is an ultimate manual
 				   page and the section matches the one we're
@@ -348,6 +347,10 @@ static int parse_for_sec (const char *manpath, const char *section)
 				    		arg_size = initial_bit;
 				    	}
 				}
+
+				/* == content.dptr, freed below */
+				entry.addr = NULL;
+				free_mandata_elements (&entry);
 			}
 			
 			/* we don't need the content ever again */
@@ -534,5 +537,8 @@ int main (int argc, char *argv[])
 		free (catpath);
 	}
 
+	free_pathlist (manpathlist);
+	free (locale);
+	free (program_name);
 	exit (OK);
 }

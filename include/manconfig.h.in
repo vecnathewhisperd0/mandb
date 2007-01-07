@@ -263,6 +263,13 @@
 #  define ATTRIBUTE_FORMAT_PRINTF(a,b)
 #endif
 
+/* Does this compiler support marking variables as unused? */
+#if GNUC_PREREQ(2,4)
+#  define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
+#else
+#  define ATTRIBUTE_UNUSED
+#endif
+
 /* Does this compiler support malloc return checking? */
 #if GNUC_PREREQ(2,96)
 #  define ATTRIBUTE_MALLOC __attribute__ ((__malloc__))

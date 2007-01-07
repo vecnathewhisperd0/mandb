@@ -978,6 +978,9 @@ int main (int argc, char *argv[])
 			exit_status = local_man_loop (argv[optind]);
 			optind++;
 		}
+		free (cwd);
+		free (internal_locale);
+		free (program_name);
 		exit (exit_status);
 	}
 
@@ -1127,6 +1130,8 @@ int main (int argc, char *argv[])
 
 		chkr_garbage_detector ();
 	}
+	hash_free (db_hash);
+	db_hash = NULL;
 
 	drop_effective_privs ();
 
@@ -1134,6 +1139,10 @@ int main (int argc, char *argv[])
 	if (cwd[0])
 		chdir (cwd);
 
+	free_pathlist (manpathlist);
+	free (cwd);
+	free (internal_locale);
+	free (program_name);
 	exit (exit_status);
 }
 
