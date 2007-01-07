@@ -48,6 +48,14 @@ them.
 
 The standard matching rules allow matches to be made against the page name
 and word boundaries in the description.
+
+The database searched by
+.B %apropos%
+is updated by the
+.B %mandb%
+program.
+Depending on your installation, this may be run by a periodic cron job, or
+may need to be run manually after new manual pages have been installed.
 .SH OPTIONS
 .TP
 .B \-d, \-\-debug
@@ -202,7 +210,8 @@ A traditional
 text database.
 .SH "SEE ALSO"
 .BR %whatis% (1),
-.BR %man% (1).
+.BR %man% (1),
+.BR %mandb% (8).
 .SH AUTHOR
 .nf
 Wilf. (G.Wilford@ee.surrey.ac.uk).
