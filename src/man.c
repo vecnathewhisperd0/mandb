@@ -1700,6 +1700,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		do {
 			command *cmd = NULL;
 			int wants_dev = 0; /* filter wants a dev argument */
+			int wants_post = 0; /* postprocessor arguments */
 
 			/* set cmd according to *pp_string, on
                            errors leave cmd as NULL */
@@ -1753,6 +1754,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #endif
 
 				wants_dev = 1;
+				wants_post = 1;
 				break;
 			}
 
@@ -1765,20 +1767,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			}
 
 			if (wants_dev) {
-				if (gxditview)
-					command_arg (cmd, "-X");
-
 				if (roff_device) {
 					char *tmpdev = strappend (NULL, "-T",
 								  roff_device,
 								  NULL);
 					command_arg (cmd, tmpdev);
 					free (tmpdev);
-					if (STREQ (roff_device, "ps"))
-						/* Tell grops to guess the
-						 * page size.
-						 */
-						command_arg (cmd, "-P-g");
 				} else if (gxditview) {
 					char *tmpdev = strappend (NULL, "-TX",
 								  gxditview,
@@ -1786,6 +1780,17 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 					command_arg (cmd, tmpdev);
 					free (tmpdev);
 				}
+			}
+
+			if (wants_post) {
+				if (gxditview)
+					command_arg (cmd, "-X");
+
+				if (roff_device && STREQ (roff_device, "ps"))
+					/* Tell grops to guess the page
+					 * size.
+					 */
+					command_arg (cmd, "-P-g");
 			}
 
 			pipeline_command (p, cmd);
