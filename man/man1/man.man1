@@ -22,6 +22,8 @@
 .RI [\| browser \|]\|]
 .RB [\| \-T \|\c
 .RI [\| device \|]\|]
+.RB [\| \-X \|\c
+.RI [\| dpi \|]\|]
 .RB [\| \-adhu7V \|]
 .RB [\| \-i \||\| \-I \|]
 .RB [\| \-m
@@ -54,6 +56,8 @@
 .RI [\| browser \|]\|]
 .RB [\| \-T \|\c
 .RI [\| device \|]\|]
+.RB [\| \-X \|\c
+.RI [\| dpi \|]\|]
 .RB [\| \-p
 .IR string \|]
 .RB [\| \-P
@@ -819,6 +823,20 @@ It implies
 Examples (provided with Groff-1.17) include
 .BR dvi ", " latin1 ", " ps ", " utf8 ,
 .BR X75 " and " X100 .
+.TP
+\fB\-X\fP[\fIdpi\fP], \fB\-\-gxditview\fP[=\fIdpi\fP]
+This option displays the output of
+.B groff
+in a graphical window using the
+.B gxditview
+program.
+The
+.I dpi
+(dots per inch) may be 75, 75-12, 100, or 100-12, defaulting to 75;
+the -12 variants use a 12-point base font.
+This option implies
+.B \-T
+with the X75, X75-12, X100, or X100-12 device respectively.
 .TP
 .B \-Z, \-\-ditroff
 .B groff
