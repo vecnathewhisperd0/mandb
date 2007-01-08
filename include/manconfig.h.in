@@ -339,6 +339,9 @@ extern __inline__ char *xstrdup (const char *string) ATTRIBUTE_MALLOC;
 extern __inline__ char *xstrndup (const char *string, size_t size) 
 	ATTRIBUTE_MALLOC;
 extern const char *xstrsignal (int signum);
+struct sigaction;
+extern int xsigaction (int signum, const struct sigaction *act,
+		       struct sigaction *oldact);
 extern int create_tempfile (const char *template, char **created_filename);
 extern char *create_tempdir (const char *template);
 

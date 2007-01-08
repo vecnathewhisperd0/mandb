@@ -1,3 +1,14 @@
+Mon Jan  8 10:39:24 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/xsigaction.c: New file: sigaction with EINTR checking.
+	* include/manconfig.h.in: Add prototype.
+	* lib/Makefile.in: Build xsigaction.
+	* lib/cleanup.c (sighandler, trap_signal, untrap_signal): Use
+	  xsigaction instead of bare sigaction.
+	* lib/pipeline.c (pipeline_start, pipeline_wait,
+	  pipeline_install_sigchld): Use xsigaction instead of
+	  sigaction-plus-EINTR-check.
+
 Mon Jan  8 09:55:48 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Rename lynx variable to browser. Check for
