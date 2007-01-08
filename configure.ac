@@ -472,6 +472,7 @@ AC_CHECK_FUNC(getopt_long,
 	       AC_LIBOBJ([getopt1])])
 AC_REPLACE_FUNCS(flock putenv realpath rename basename waitpid strstr strsep strcspn strspn strnlen mkdtemp mkstemp)
 gt_FUNC_SETENV
+gl_FUNC_GEN_TEMPNAME
 dnl
 dnl MAN_ECHO_VAR(ENV-VARIABLE)
 define(MAN_ECHO_VAR, [AC_MSG_NOTICE([default $1 = "$$1"])])dnl
