@@ -1,3 +1,14 @@
+Mon Jan  8 12:37:12 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	Update setenv module from gnulib.
+
+	* m4/setenv.m4: New file.
+	* .bzrignore: Ignore only gettextize-generated files in m4
+	  directory.
+	* autogen.sh: Pass '-I m4' option to aclocal.
+	* configure.ac: Use gt_FUNC_SETENV.
+	* lib/setenv.c, lib/unsetenv.c: Update.
+
 Mon Jan  8 12:14:59 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* acinclude.m4 (MAN_FUNC_STRSIGNAL): Include <string.h> for
