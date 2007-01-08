@@ -1,9 +1,9 @@
-dnl Process this file with autoconf v2.50a+ to produce a configure script.
+dnl Process this file with autoconf to produce a configure script.
 dnl
 dnl Initialise and check we're in the correct directory.
 dnl
 AC_INIT(man-db, 2.4.4-pre1)
-AC_PREREQ(2.53)
+AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR(acinclude.m4)
 AC_CONFIG_AUX_DIR(tools)
 AC_CONFIG_HEADER(config.h)
