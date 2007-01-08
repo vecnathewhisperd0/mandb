@@ -1,3 +1,12 @@
+Mon Jan  8 09:15:04 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/mandb.c (main): If no database changes were necessary, then:
+	  don't bother committing database changes or running straycats;
+	  only exit non-zero if the -c option was given; only emit "No
+	  databases updated" message (should be "No databases created" now)
+	  if the -c option was given but not -q, to help automatic
+	  invocation from man.
+
 Sun Jan  7 23:54:18 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (make_roff_command): Don't try to pass -X or -P-g

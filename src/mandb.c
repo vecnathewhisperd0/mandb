@@ -565,6 +565,7 @@ int main (int argc, char *argv[])
 	for (mp = manpathlist; *mp; mp++) {
 		int global_manpath = is_global_mandir (*mp);
 		char *catpath;
+		short amount_changed = 0;
 
 		if (global_manpath) { 	/* system db */
 		/*	if (access (catpath, W_OK) == 0 && !user) */
@@ -590,12 +591,14 @@ int main (int argc, char *argv[])
 		push_cleanup (cleanup, NULL);
 		if (single_filename) {
 			if (STRNEQ (*mp, single_filename, strlen (*mp)))
-				amount += mandb (catpath, *mp);
+				amount_changed += mandb (catpath, *mp);
 			/* otherwise try the next manpath */
 		} else
-			amount += mandb (catpath, *mp);
+			amount_changed += mandb (catpath, *mp);
 
-		if (!opt_test) {
+		amount += amount_changed;
+
+		if (!opt_test && amount_changed) {
 			finish_up ();
 #ifdef SECURE_MAN_UID
 			if (global_manpath && euid == 0)
@@ -607,7 +610,7 @@ int main (int argc, char *argv[])
 		free (database);
 		database = NULL;
 
-		if (check_for_strays) {
+		if (check_for_strays && amount_changed) {
 			database = mkdbname (catpath);
 			strays += straycats (*mp);
 			free (database);
@@ -643,8 +646,14 @@ int main (int argc, char *argv[])
 
 	free_pathlist (manpathlist);
 	free (manp);
-	if (!amount)
-		error (FAIL, 0, _("No databases updated."));
+	if (create && !amount) {
+		if (!quiet)
+			/* TODO: should be "No databases created." but we're
+			 * string-frozen at the moment.
+			 */
+			fprintf (stderr, _("No databases updated."));
+		exit (FAIL);
+	}
 	free (program_name);
 	exit (OK);
 }
