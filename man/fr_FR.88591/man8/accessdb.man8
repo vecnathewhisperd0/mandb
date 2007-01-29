@@ -1,0 +1,71 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.\" Man page for accessdb
+.\"
+.\" Copyright (c) 1998 Fabrizio Polacco <fpolacco@debian.org
+.\"
+.\" You may distribute under the terms of the GNU General Public
+.\" License as specified in the file COPYING that comes with the
+.\" man-db distribution.
+.\"
+.\" Tue, 24 Feb 1998 18:18:36 +0200
+.\" 
+.pc ""
+.TH ACCESSDB 8 %date% %version% "Utilitaires de l'afficheur des pages de manuel"
+.SH NOM
+accessdb \- affiche le contenu d'une base de données man\-db dans un format 
+lisible par l'homme.
+.SH SYNOPSIS
+\fB/usr/sbin/accessdb\fP [\|\fB\-hV\fP\|] [\fI<fichier\-index>\fP]
+.SH DESCRIPTION
+\fBaccessdb\fP affiche les données contenues dans une base de données man\-db 
+sous une forme lisible par l'homme. Par défaut, ce résultat est obtenu à 
+partir du contenu de \fB/var/cache/man/index.<type\-de\-db>,\fP où 
+<type\-de\-db> est fonction de la bibliothèque de base de données 
+utilisée.
+
+La présence d'un argument dans la commande \fBaccessdb\fP remplacera la valeur 
+par défaut.
+
+.nf
+Exemple de sorties générées par accessdb\ :
+
+NdT\ : La commande accessdb utilise la base de données d'indexation. Or, 
+celle\-ci ne prend en compte que les pages de manuel en dialecte 
+anglo\-américain. Pour cette raison, les résultats ci\-dessous n'ont pas 
+été traduits. Toutefois, ceci ne présage en rien de l'absence, dans votre 
+système, de ces pages traduites dans votre langue.
+
+$mtime$ \-> "1134451650"
+$version$ \-> "2.4.1"
+apropos \-> "\- 1 1 1104942616 A \- \- gz search the manual page names and descriptions"
+catman \-> "\- 8 8 1104942616 A \- \- gz create or update the pre\-formated manual pages"
+man \-> "\- 1 1 1104942616 A \- t gz an interface to the on\-line reference manuals"
+mandb \-> "\- 8 8 1104942616 A \- t gz create or update the manual page index caches"
+manpath \-> " manpath 1 manpath 5"
+manpath~1 \-> "\- 1 1 1104942616 A \- \- gz determine search path for manual pages"
+manpath~5 \-> "\- 5 5 1104942616 A \- \- gz format of the /etc/manpath.config file"
+whatis \-> "\- 1 1 1104942616 A \- \- gz display manual page descriptions"
+zsoelim \-> "\- 1 1 1104942616 A \- \- gz satisfy .so requests in roff input"
+.fi
+.SH OPTIONS
+.TP
+\fB\-h, \-\-help\fP
+Affiche un message d'aide et s'arrête.
+.TP
+\fB\-v, \-\-version\fP
+Affiche le numéro de version.
+.SH AUTEUR
+.nf
+Wilf. (G.Wilford@ee.surrey.ac.uk).
+Fabrizio Polacco (fpolacco@debian.org).
+Colin Watson (cjwatson@debian.org).
+.fi
+.SH TRADUCTION
+Valéry Perrin <valery.perrin.debian@free.fr> le 2 janvier 2006.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable via la commande  «\ man -L en nom_de_la_page\ ».
+
+N'hésitez pas à signaler à l'auteur ou au traducteur, selon le cas, toute erreur dans cette page de manuel.
