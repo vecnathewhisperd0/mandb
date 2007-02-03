@@ -5,10 +5,12 @@
 .\" Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
 .\"
 .\" Traduzione di Bortolozzo Giovanni <borto@pluto.linux.it>
+.\" dal 2006: Giuseppe Sacco <eppesuig@debian.org>
 .\" Febbraio 1997
 .\" 1^ Revisione Marzo 1997
 .\" 2^ Revisione Agosto 1999
 .\" 3^ Revisione e aggionamento Settembre 1999
+.\" 4^ revisione e aggirnamento Febbraio 2007
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -17,21 +19,30 @@
 .\" Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
 .\" 
 .\"" for hilit19
+.pc
 .TH %thman% 1 "%date%" "%version%" "Utility per le Pagine di Manuale"
 .SH NOME
 %man% \- un'interfaccia ai manuali di riferimento in linea
 .SH SINTASSI
-.\"" The general command line
+.\" Linea di comando generale
 .B %man% 
-.RB [\| \-c \||\| \-w \||\| \-tZT 
+.RB [\| \-c \||\| \-w \||\| \-tZ \|]
+.RB [\| \-H \|\c
+.RI [\| browser \|]\|]
+.RB [\| \-T \|\c
 .IR dispositivo \|]
+.RB [\| \-X \|\c
+.RI [\| dpi \|]\|]
 .RB [\| \-adhu7V \|]
+.RB [\| \-i \||\| \-I \|]
 .RB [\| \-m
 .IR sistema \|[\|,.\|.\|.\|]\|]
 .RB [\| \-L 
 .IR locale \|]
 .RB [\| \-p 
 .IR stringa \|] 
+.RB [\| \-C
+.IR file \|]
 .RB [\| \-M 
 .IR percorso \|] 
 .RB [\| \-P 
@@ -44,13 +55,18 @@
 .IR estensione \|] 
 .RI [\|[\| sezione \|]
 .IR pagina \ .\|.\|.\|]\ .\|.\|.
-.\"" The --local command line
+.\" The --local command line
 .br
 .B %man% 
 .B \-l
 .RB [\| \-7 \|]
-.RB [\| \-tZT
+.RB [\| \-tZT \|]
+.RB [\| \-H \|\c
+.RI [\| browser \|]\|]
+.RB [\| \-T \|\c
 .IR dispositivo \|]
+.RB [\| \-X \|\c
+.RI [\| dpi \|]\|]
 .RB [\| \-p
 .IR stringa \|]
 .RB [\| \-P
@@ -59,14 +75,18 @@
 .IR prompt \|]
 .I file
 \&.\|.\|.
-.\"" The apropos command line
+.\" The apropos command line
 .br
+.B %man%
+.B \-k
 .RI [\| apropos 
 .IR opzioni \|]
 .I espr_reg
 \&.\|.\|.
-.\"" The whatis command line
+.\" The whatis command line
 .br
+.B %man%
+.B \-f
 .RI [\| whatis 
 .IR opzioni \|]
 .I pagina
@@ -89,7 +109,7 @@ a guardare solo in quella
 del manuale.
 L'azione predefinita è di ricercare in tutte le 
 .I sezioni
-disponibili seguendo un ordine predefinito e di mostrare solo la
+disponibili seguendo un ordine prestabilito e di mostrare solo la
 prima 
 .I pagina
 trovata, anche se
@@ -128,7 +148,7 @@ Queste possono essere etichettate
 .BR OPZIONI " (OPTIONS),"
 .BR FILE " (FILES),"
 .BR "VEDERE ANCHE" " (SEE\ ALSO),"
-.BR PROBLEMI " (BUGS),"
+.BR PROBLEMI " (BUGS)"
 e
 .BR AUTORE " (AUTHOR)."
 
@@ -139,21 +159,18 @@ e possono essere usate come una guida per le altre sezioni.
 .TS
 tab (@);
 l l.
-\fBtesto in grossetto\fR@scrivere esattamente come mostrato.
+\fBtesto in grassetto\fR@scrivere esattamente come mostrato.
 \fItesto in corsivo\fR@rimpiazzare con un argomento appropriato.
-[\|\fB\-abc\fR\|]@ognuno o tutti gli argomenti all'interno 
-@di [ ] sono opzionali.
-\fB\-a\|\fR|\|\fB\-b\fR@opzioni separate da | non possono essere 
-@usate assieme.
+[\|\fB\-abc\fR\|]@ognuno o tutti gli argomenti all'interno di [ ] sono opzionali.
+\fB\-a\|\fR|\|\fB\-b\fR@opzioni separate da | non possono essere usate assieme.
 \fIargomento\fB .\|.\|.@\fIargomento\fR è ripetibile.
-[\|\fIespressione\fR\|]\fB .\|.\|.@\fRl'intera \fIespressione\fR\ all'interno 
- @di [ ] è ripetibile.
+[\|\fIespressione\fR\|]\fB .\|.\|.@\fRl'intera \fIespressione\fR\ all'interno di [ ] è ripetibile.
 .TE
 
 L'illustrazione del comando o funzione è un modello che dovrebbe
 corrispondere a tutte le possibili invocazioni. In alcuni casi è
-preferibile illustrare diverse invocazioni esclusive come mostrato
-nella sezione
+preferibile illustrare diverse invocazioni che si escludono a vicenda
+ come mostrato nella sezione
 .B SINTASSI 
 di questa pagina di manuale.
 .SH ESEMPI
@@ -167,7 +184,7 @@ Mostra la pagina di manuale per la
 .BI %man%\ \-a \ intro
 Mostra, in successione, tutte le pagine di manuale
 .I intro
-disponibili contenute nel manuale. È possibile uscire tra due
+disponibili nel manuale. È possibile uscire tra due
 visualizzazioni successive o saltarne una qualsiasi.
 .TP
 \fB%man% \-t \fIalias \fR|\fI lpr -Pps
@@ -217,15 +234,15 @@ e mostra una breve descrizione di tutte quelle trovate.
 Equivalente a 
 .BI %whatis%\ \-r \ smail .
 .SH PANORAMICA
-Molte sono le opzioni disponibili a
+Molte sono le opzioni disponibili per
 .B %man%
 in modo da fornire all'utente la maggior flessibilità
 possibile. Possono essere fatti cambiamenti al percorso di ricerca,
 all'ordine delle sezioni, al preprocessore per l'output, e ad altri
 comportamenti e operazioni elencati in dettaglio più avanti.
 
-Se impostate, le varie variabili d'ambiente sono interrogate per
-determinare le operazioni di 
+Se impostate, alcune variabili d'ambiente sono interrogate per
+determinare le funzionalità di 
 .BR %man% . 
 È possibile impostare la variabile "omni comprensiva"
 .RB $ MANOPT
@@ -237,7 +254,7 @@ analizzerà
 .RB $ MANOPT
 prima di analizzare la propria riga di comando. Quelle opzioni che
 richiedono un argomento, saranno ridefinite se le stesse opzioni si
-trovano anche nella riga di comando. Per inizializzare tutte le
+trovano anche nella riga di comando. Per annullare tutte le
 opzioni impostate in
 .RB $ MANOPT , 
 può essere specificato
@@ -249,27 +266,28 @@ sebbene debbano restare ancora valide.
 
 Le utility per le pagine di manuale raggruppate nel pacchetto
 .B man-db 
-fanno un uso intenso delle cache delle basi di dati
+fanno un uso intenso delle cache di
 .BR index .
 Tali cache contengono informazioni come la posizione di ogni pagina di
 manuale nel filesystem e cosa contiene il relativo
 .I whatis
-(breve descrizione della pagina di manuale). Uno dei compiti di
+(breve descrizione della pagina di manuale), inoltre permettono a
 .B %man%
-è assicurare che tali cache rimangano consistenti. Queste cache delle
-basi di dati evitano il bisogno di dover lanciare manualmente del
-software per aggiornare le tradizionali basi di dati 
-.I whatis
-in formato testo, ed inoltre permettono a
-.B %man% 
-di girare più veloce di quello che farebbe se dovesse ogni volta
-cercare la pagina di manuale appropriata.
+di cercare le pagine molto più velocemente rispetto ad una ricerca
+su file system per ogni pagine da cercare.
+Se richiesto tramite l'opzione
+.B \-u
+.B %man%
+può verificare che tali cache rimangano consistenti, in modo
+da non dover lanciare manualmente del
+software per aggiornare le tradizionali basi di dati di
+.IR whatis .
 
 Se
 .B %man%
 non può trovare una base di dati
 .B index
-inizializzata da
+inizializzato da
 .B %mandb%
 per una particolare gerarchia di pagine di manuale, cercherà comunque
 la pagina di manuale richiesta sebbene sarà necessario un globbing dei
@@ -295,7 +313,7 @@ di default, una fra le seguenti estensioni
 .BR .Z ", " .z " e " .gz .
 È possibile trattare con qualsiasi estensione di file compresso, ma
 questa informazione deve essere nota al momento della compilazione.
-Inoltre, di default, qualsiasi pagina cat prodotta è compressa usando
+Inoltre, normalmente, qualsiasi pagina cat prodotta è compressa usando
 .BR gzip .
 Ognuna delle gerarchie `globali' delle pagine di manuale, come
 .I /usr/share/man
@@ -317,14 +335,14 @@ nel proprio sistema) usando le funzioni
 Per attivare tale supporto, è necessario impostare
 .RB $ LC_MESSAGES " e " 
 .RB $ LANG
-o qualche altra variabile d'ambiente dipendente dal sistema, al proprio
-linguaggio locale, solitamente specificato nel formato basato sul
+o qualche altra variabile d'ambiente dipendente dal sistema, alla propria
+lingua locale, solitamente specificata nel formato basato sul
 .BR "POSIX 1003.1" :
 
 .\"
 .\" Need a \c to make sure we don't get a space where we don't want one
 .\""
-.RI < linguaggio >[\|\c
+.RI < lingua >[\|\c
 .B _\c 
 .RI < zona >\|[\|\c
 .B .\c
@@ -352,12 +370,23 @@ forniti con il pacchetto.
 cercherà la pagina di manuale desiderata all'interno delle cache delle
 basi di dati
 .IR index .
-Se tale ricerca non ha successo, è eseguita una verifica della
+Se l'opzione
+.B \-u
+viene specificata, è eseguita una verifica della
 consistenza della cache per assicurarsi che le basi di dati riflettano
 accuratamente il filesystem. Non è generalmente necessario eseguire 
 .B %mandb%
 dopo che le cache sono state create inizialmente, finché una di questa
 non sia in qualche modo corrotta.
+Il controllo della cache su sistemi con molte pagine di manuale può
+essere piuttosto lungo; per questo non viene svolto automaticamente, ma
+gli amministratori di sistema possono esseguire
+.B %mandb%
+settimanalmente per aggiornare la base di dati.
+Per superare eventuali problemi causati da cache non aggiornate
+.B %man%
+passa automaticamente al `file globbing' se una ricerca nella cache
+non ha esito, allo stesso modo di quando la cache non è presente.
 
 Una volta che una pagina di manuale è stata localizzata, è eseguita
 una verifica per scoprire se il relativo file `cat' preformattato
@@ -382,13 +411,12 @@ o la variabile d'ambiente
 .RB $ MANROFFSEQ .
 Se
 .B \-p 
-non è usata e la variabile d'ambiente non è settata, viene analizzata
+non è usata e la variabile d'ambiente non è impostata, viene analizzata
 la riga iniziale del file troff per cercare una "stringa
 preprocessore". Per contenere una stringa preprocessore valida, la
 prima riga deve assomigliare a
 
 .B '\e" 
-.\""
 .RB < stringa >  
 
 dove
@@ -414,16 +442,16 @@ Alternativamente, se esiste un programma eseguibile
 .I mandb_tfmt
 con 
 .BR \-t ) 
-nella radice dell'albero dei manuali, questi è eseguito. A questi è
+nella radice dell'albero dei manuali, questo è eseguito. Gli viene
 passato il file sorgente del manuale, la stringa preprocessore, ed
 eventualmente il dispositivo specificato come argomento di
-.BR \-T .
-.\"" ********************************************************************
+.BR \-T " o " \-E .
+.\" ********************************************************************
 .SH OPZIONI
-Nessun argomento delle opzioni che non sia duplicato nelle riga di
+Le opzioni che non richiedono argomenti, duplicate nelle riga di
 comando, in
 .RB $ MANOPT ,
-o in entrambe è dannoso. Per le opzioni che richiedono un argomento,
+o in entrambe sono dannose. Per le opzioni che richiedono un argomento,
 ogni duplicazione annullerà il valore del precendente argomento.
 .TP
 .B \-l, \-\-local-file
@@ -470,11 +498,14 @@ Qualsiasi opzione successiva
 .B \-D
 avrà il solito effetto.
 .TP
+.BI \-C\  file ,\ \-\-config\-file= file
+Usa il file di configurazione speficiato al posto di
+.IR ~/.manpath .
+.TP
 .BI \-M\  percorso ,\ \-\-manpath= percorso
-Specifica un percorso man alternativo. Di default,
+Specifica un percorso man alternativo. Normalmente
 .B %man% 
-usa
-il codice derivato da
+usa il codice derivato da
 .B %manpath%
 per determinare il percorso di ricerca. Questa opzione ha priorità
 sulla variabile d'ambiente
@@ -482,9 +513,16 @@ sulla variabile d'ambiente
 e fa sì che questa e l'opzione 
 .B \-m
 siano ignorate.
+
+Un percorso specificato come manpath deve essere la radice di una
+gerarchia di pagine di manuali strutturate in sezioni come descritto
+nel manuale di man-db (nella sezione "The manual page system").
+Per vedere le pagine di manuali esterne a questa gerarchia, si usi
+l'opzione
+.B \-l .
 .TP
 .BI \-P\  paginatore ,\ \-\-pager= paginatore
-Specifica quale paginatore dell'output usare. Di default,
+Specifica quale paginatore dell'output usare. Normalmente
 .B %man% 
 usa
 .BR %pager% .
@@ -513,7 +551,7 @@ denota il nome della pagina di manuale,
 .I sez
 denota la sezione in cui è stata trovata e
 .IR x 
-il numero di riga corrente.
+è il numero di riga corrente.
 Ciò è ottenuto usando la variabile d'ambiente
 .RB $ LESS .
 
@@ -535,14 +573,20 @@ il suo significato si veda la pagina di manuale
 .BR less (1).
 La stringa di prompt per prima cosa è valutata dalla shell. Perciò le
 doppie virgolette `"', le virgolette rovesce ``' e i backslash `\\'
-devono essere precedute da `\\'. La stringa di prompt potrebbe
+devono essere preceduti da `\\'. La stringa di prompt potrebbe
 terminare con un `\\$' il quale può essere seguito da ulteriori
 opzioni per less. Di default
 .B %man%
-setta le opzioni
+imposta le opzioni
 .BR \-ix8 .
+
+Se si vuole eliminare completamente la gestione del prompt da
+parte di
+.B %man%
+si faccia uso della variabile d'ambiente
+.RB $ MANLESS
+descritta sotto.
 .TP
-.\""
 .B \-7, \-\-ascii
 Quando visualizza una pagina di manuale in 
 .IR ascii (7) 
@@ -561,14 +605,24 @@ con il dispositivo
 .IR latin1 .
 Non tradurrà alcun testo 
 .IR latin1 .
-La seguente tabella mostra le traduzioni effettuate.
+La seguente tabella mostra le traduzioni effettuate: alcune parti
+di essa potrebbero essere mostrate in maniera corretta solo usando
+il dispositivo
+.IR latin1 (7)
+di
+.B GNU
+.BR nroff .
 
+.ie c \[shc] \
+.  ds soft-hyphen \[shc]
+.el \
+.  ds soft-hyphen \(hy
 .TS
 tab (@);
 l c c c.
 Descrizione@Ottale@latin1@ascii
 _
-trattino di continuazione@255@\[shc]@-
+trattino di continuazione@255@\[soft-hyphen\]@-
 bullet (middle dot)@267@\(bu@o
 accento acuto@264@\(aa@'
 segno di moltiplicazione@327@\(mu@x
@@ -596,6 +650,7 @@ usando questa opzione.
 
 Questa opzione è ignorata quando si usano le opzioni
 .BR \-t , 
+.BR \-H ,
 .B \-T
 o
 .B \-Z
@@ -605,13 +660,13 @@ diversi dalla versione
 .BR GNU .
 .TP
 .BI \-S\  lista ,\ \-\-sections= lista
-Lista è un elenco ordinato di sezioni di manuale separate da `:' su
+Lista è un elenco ordinato di sezioni di manuale su
 cui effettuare la ricerca. Usando questa opzione viene ignorata la
 variabile d'ambiente
 .RB $ MANSECT .
 .TP
 .B \-a, \-\-all
-Di default,
+Normalmente,
 .B %man% 
 uscirà dopo aver visualizzato la pagina di manuale più adatta che
 trova. Usando questa opzione si forza
@@ -675,6 +730,14 @@ per i dettagli.
 .B \-h, \-\-help
 Mostra un messaggio d'aiuto ed esce.
 .TP
+.B \-i, \-\-ignore\-case
+Non fa distinzione tra maiuscole e minuscole durante la ricerca della
+pagine. Questo è il comportamento normale
+.TP
+.B \-I, \-\-match\-case
+Effettua la ricerca della pagina facendo distinzione tra lettere
+minuscole e maiuscole.
+.TP
 .B \-k, \-\-apropos
 Equivalente a
 .BR %apropos% .
@@ -734,33 +797,25 @@ Usando questa opzione viene ignorata la variabile d'ambiente
 è sempre lanciato come primo preprocessore.
 .TP
 .B \-u, \-\-update
-Le cache delle basi di dati
-.B index
-sono aggiornate `al volo', cioè non è necessario che 
-.B %mandb%
-sia lanciato periodicamente per mantenerle consistenti. Se la pagina
-di manuale richiesta non è trovata all'interno della cache o è usata
-l'opzione 
-.BR \-a ,
+Questa opzione fa in modo che
 .B %man%
-farà una verifica della consistenza a livello directory per
-assicurarsi che le proprie cache siano una rappresentazione accurata
-del filesystem. Per forzare una verifica della consistenza a livello
-inode prima di trovare alcuna pagina di manuale, si usi l'opzione
-.BR \-u .
+effettui un controllo a livello di `inode' sulla propria base di dati
+per assicurarsi che sia una accurata rappresentazione del file system.
+Il suo effetto è positivo solo se
+.B %man%
+è installato con il bit setuid impostato.
 .TP
 .B \-t, \-\-troff
 Usa
 .I %troff% 
-per formattare le pagine di manuale nello stdout. Questa opzione non è
+per formattare la pagina di manuale nello stdout. Questa opzione non è
 richiesta assieme a 
+.BR \-H ,
 .B \-T
 o
 .BR \-Z .
-.PP
-.BI \-T\  dispositivo ,\ \-\-troff-device 
-.RI [\| =dispositivo \|]
-.RS
+.TP
+\fB\-T\fP[\fIdispositivo\fP], \fB\-\-troff\-device\fP[=\fIdispositivo\fP]
 Questa opzione è usata per cambiare l'output di
 .B groff 
 (o se possibile quello di
@@ -770,7 +825,18 @@ per adattarlo ad un dispositivo diverso da quello predefinito. Implica
 Esempi (forniti con Groff-1.17) comprendono
 .BR dvi ", " latin1 ", " ps ", " utf8 ,
 .BR X75 " e " X100 .
-.RE
+.TP
+\fB\-X\fP[\fIdpi\fP], \fB\-\-gxditview\fP[=\fIdpi\fP]
+Questa opzione mostra l'output di
+.B groff
+in una finestra grafica usando il programma
+.BR gxditview .
+.I dpi
+(punti per pollice) può essere 75, 75-12, 100 o 100-12, con valore
+predefinito 75; le varianti -12 usano un font da 12 punti.
+Questa opzione implica
+.B \-T
+con i dispositivi X75, X75-12, X100, X100-12 rispettivamente.
 .TP
 .B \-Z, \-\-ditroff
 .B groff 
@@ -786,13 +852,45 @@ questa opzione è passata a
 e verrà soppresso l'uso del post-processore. Implica
 .BR \-t .
 .TP
+\fB\-H\fP[\fIbrowser\fP], \fB\-\-html\fP[=\fIbrowser\fP]
+Questa opzione indica a 
+.B groff
+di produrre un output HTML, e mostra tale output in un browser
+web. La scelta del browser è opzionale ed è determinata
+dall'argomento opzionale
+.I browser
+se questo è fornito; altrimenti dalla variabile
+.RB $ BROWSER
+oppure dal valore definito durante la compilazione (in genere
+.BR lynx ).
+Questa opzione implica
+.BR \-t ,
+e funziona solo con la versione
+.B GNU
+di
+.BR troff .
+.TP
+.BI \-E\  dispositivo\fR,\ \fI \-\-encoding\fR=\fIdispositivo
+Genera un output usando una codifica di caratteri diversa dal
+valore predefinito. Per il modo nel quale
+.B nroff
+è strutturato, l'argomento di questa opzione deve essere un
+dispositivo di
+.B nroff
+come
+.BR ascii ", " latin1 " o " utf8 .
+.TP
 .B \-w, \-\-where, \-\-location
 Non mostra veramente le pagine di manuale, ma stampa le posizioni dei
-file che sarebbero stati formattati o visualizzati. Se il file è
-un file cat, mostra anche la posizione del suo file sorgente nroff.
+file che sarebbero stati formattati.
+.TP
+.B \-W, \-\-where\-cat, \-\-location\-cat
+Non mostra veramente le pagine di manuale, ma stampa le posizioni dei
+file cat che sarebbero stati visualizzati.
+Se entrambi \-w e \-W vengono specificati, li stampa separati da uno spazio.
 .TP
 .B \-V, \-\-version
-Mostra informazioni sulla versione e l'autore.
+Mostra informazioni sulla versione.
 .SH STATI D'USCITA
 .TP
 .B 0
@@ -808,7 +906,7 @@ Errore operativo.
 Un processo figlio ha restituito uno stato d'uscita diverso da zero.
 .TP
 .B 16
-Almeno una delle pagine/file/parole chiave non esisteva e non aveva
+Almeno una delle pagine/file/parole chiave non esisteva o non aveva
 corrispondenza. 
 .SH VARIABLI D'AMBIENTE
 .\".TP \w'MANROFFSEQ\ \ 'u
@@ -840,6 +938,41 @@ Se
 è impostata, il suo valore è usato come il nome del programma da usare
 per visualizzare la pagina di manuale. Di default, è usato
 .BR %pager% .
+.TP
+.B MANLESS
+Se
+.RB $ MANLESS
+è impostata,
+.B %man%
+non effettuerà alcuna operazione per impostare una stringa di prompt
+per il pager
+.BR less .
+Invece, il valore di
+.RB $ MANLESS
+verrà passato senza modifiche
+.RB $ LESS .
+Ad esempio, per impostare il prompt a
+\(lqla mia stringa prompt\(rq, impostare
+.RB $ MANLESS
+to
+.RB \(oq \-Psla\ mia\ stringa\ prompt \(cq.
+.TP
+.B BROWSER
+Se
+.RB $ BROWSER
+è impostata, il suo valore deve essere una lista di comandi separati
+da virgole, ciascuno dei quali viene provato nell'ordine per cercare
+di eseguire un browser web per
+.B man
+.BR \-\-html .
+In ogni comando
+.I %s
+viene sostituito da un nome di file contiene l'output HTML di
+.BR groff ,
+.I %%
+viene sostituito da un singolo carattere di percento, e
+.I %c
+viene sostituito dal carattere di due punti.
 .TP 
 .B SYSTEM
 Se
@@ -863,6 +996,21 @@ quindi candidate per essere incluse in
 ci si può aspettare che diventeranno obsolete. 
 N.B.: Tutti gli spazi che dovrebbero essere interpretati come parte
 dell'argomento di un opzione devono essere preceduti da `\\'.
+.TP
+.B MANWIDTH
+Se
+.RB $ MANWIDTH
+è impostata, il suo valore sarà utilizzato come lunghezza della riga
+per il quale le pagine di manuale verranno formattate. Se non viene
+impostata, le pagine saranno formattate usando una lunghezza appropriata
+al terminale in uso (tramite
+.BR ioctl (2)
+se disponibile, oppure il valore di
+.RB $ COLUMNS ,
+o ancora usando il valore 80 se nessuno dei due metodi precedenti
+funziona).
+Le pagine cat verranno salvate solo le la lunghezza della linea di
+terminale si trova tra 66 e 80 caratteri.
 .TP
 .BR LANG , " LC_MESSAGES"
 A seconda del sistema e dell'implementazione, una o entrambe le variabili
@@ -890,7 +1038,7 @@ tradizionale.
 .I /var/cache/man/index.(bt|db|dir|pag)
 Una cache della base di dati globale
 .I index
-alternativa e conforme con FHS.
+alternativa e conforme con FSSTND.
 .SH "VEDERE ANCHE"
 .BR %mandb% (8), 
 .BR %manpath% (1),
@@ -907,8 +1055,9 @@ alternativa e conforme con FHS.
 .BR man (7),
 .BR ascii (7),
 .BR latin1 (7),
+la pagina del pacchetto man-db,
 .BR FSSTND .
-.SH STORIA
+.SH CRONOLOGIA
 1990, 1991 \- Originalmente scritta da John W. Eaton (jwe@che.utexas.edu).
 
 23 Dicembre 1992: Rik Faith (faith@cs.unc.edu) applica le soluzioni ai
@@ -925,3 +1074,4 @@ l'aiuto di tutta la comunità.
 31 Marzo 2001 - presente: Colin Watson <cjwatson@debian.org>
 
 Traduzione di Bortolozzo Giovanni (borto@pluto.linux.it) 
+Aggiornamento di Giuseppe Sacco <eppesuig@debian.org>
