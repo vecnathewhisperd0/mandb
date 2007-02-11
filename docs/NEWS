@@ -19,6 +19,9 @@ Major changes since man-db 2.4.3:
 
 	o Similarly, ignore SIGPIPE in subprocesses.
 
+	o Various fixes to SIGCHLD handling in pipeline library, preventing
+	  "waitpid failed: No child processes" errors.
+
 	o Skip "exec" in configuration file commands (perhaps left over from
 	  old installations), which the pipeline execution library cannot
 	  handle directly.
