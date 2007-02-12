@@ -32,10 +32,6 @@ include ../include/Defines
 MANCPPFLAGS := -I../include -I$(top_srcdir)
 override LDLIBS = -lc @LEXLIB@
 
-# You may need to modify these options if you have lex instead of flex
-# and you want to play with zsoelim.l
-LFLAGS = -8 -B -Cfe
-
 all: zsoelim
 
 zsoelim: ../lib/libman.a

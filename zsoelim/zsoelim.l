@@ -132,6 +132,8 @@ extern int optind;
 
 W	[ \t]
 
+%option full noread ecs
+%option 8bit batch
 %option nounput
 
 %%
