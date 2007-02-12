@@ -567,12 +567,16 @@ No traducira ningún texto en
 .I latin1 . 
 La siguiente tabla explica las traducciones que se realizan.
 
+.ie c \[shc] \
+.  ds soft-hyphen \[shc]
+.el \
+.  ds soft-hyphen \(hy
 .TS
 tab (@);
 l c c c.
 Descripción@Octal@latin1@ascii
 _
-guión de continuación@255@\[shc]@-
+guión de continuación@255@\*[soft-hyphen]@-
 marcador (punto medio)@267@\(bu@o
 acento agudo@264@\(aa@'
 signo de multiplicar@327@\(mu@x

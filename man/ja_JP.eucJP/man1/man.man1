@@ -565,17 +565,21 @@ man が要求されたページの検索に失敗した場合は、
 .I latin1
 テキストは変換しない。以下の表に、変換の様子を示す。
 
+.ie c \[shc] \
+.  ds soft-hyphen \[shc]
+.el \
+.  ds soft-hyphen \(hy
 .TS
 tab (@);
 l c c c.
 Description@Octal@latin1@ascii
 _
-continuation hyphen@255@\[shc]@-
+continuation hyphen@255@\*[soft-hyphen]@-
 bullet (middle dot)@267@\(bu@o
 acute accent@264@\(aa@'
 multiplication sign@327@\(mu@x
 .\"
-.\"連続ハイフン@255@\[shc]@-
+.\"連続ハイフン@255@\*[soft-hyphen]@-
 .\"中点 (bullet)@267@\(bu@o
 .\"アキュートアクセント@264@\(aa@'
 .\"積符号@326@\(mu@x
