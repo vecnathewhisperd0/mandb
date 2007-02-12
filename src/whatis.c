@@ -94,7 +94,6 @@ extern char *user_config_file;
 extern char *optarg;
 extern int optind, opterr, optopt;
 
-int debug = 0;
 char *program_name;
 char *database;
 MYDBM_FILE dbf;
@@ -224,10 +223,8 @@ static __inline__ int use_grep (char *page, char *manpath)
 		free (anchored_page);
 		pipeline_free (grep_pl);
 	} else {
-		if (debug) {
-			error (0, 0, _("warning: can't read the fallback whatis text database."));
-			error (0, errno, "%s/whatis", manpath);
-		}
+		debug ("warning: can't read the fallback whatis text database "
+		       "%s/whatis", manpath);
 		status = 0;
 	}
 
@@ -301,8 +298,7 @@ static void display (struct mandata *info, char *page)
 
 	whatis = get_whatis (info, page);
 	
-	if (debug)
-		dbprintf (info);
+	dbprintf (info);
 
 	if (info->name)
 		page_name = info->name;
@@ -504,8 +500,7 @@ static int apropos (char *page, char *lowpage)
 		 */
 		if (!cont.dptr)
 		{
-			if (debug)
-				fprintf (stderr, "key was %s\n", key.dptr);
+			debug ("key was %s\n", key.dptr);
 			error (FATAL, 0,
 			       _("Database %s corrupted; rebuild with "
 				 "mandb --create"),
@@ -580,8 +575,7 @@ static void search (char *page)
 	char *lowpage = lower (page);
 	char *catpath, **mp;
 
-	if (debug)
-		fprintf (stderr, "lower(%s) = \"%s\"\n", page, lowpage);
+	debug ("lower(%s) = \"%s\"\n", page, lowpage);
 
 	for (mp = manpathlist; *mp; mp++) {
 		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);
@@ -592,8 +586,7 @@ static void search (char *page)
 		} else
 			database = mkdbname (*mp);
 
-		if (debug)
-			fprintf (stderr, "path=%s\n", *mp);
+		debug ("path=%s\n", *mp);
 
 		dbf = MYDBM_RDOPEN (database);
 		if (dbf && dbver_rd (dbf)) {
@@ -658,7 +651,7 @@ int main (int argc, char *argv[])
 		switch (c) {
 
 			case 'd':
-				debug = 1;
+				debug_level = 1;
 				break;
 			case 'v':
 				quiet = 0;
@@ -716,10 +709,8 @@ int main (int argc, char *argv[])
 		setlocale (LC_ALL, llocale);
 		free (locale);
 		locale = xstrdup (llocale);
-		if (debug)
-			fprintf (stderr,
-				 "main(): locale = %s, internal_locale = %s\n",
-				 llocale, locale);
+		debug ("main(): locale = %s, internal_locale = %s\n",
+		       llocale, locale);
 		if (locale) {
 			extern int _nl_msg_cat_cntr;
 			if (locale[2] == '_' )

@@ -133,8 +133,7 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 		    strcmp (link, manlist->d_name) > 0) {
 			free (link);
 			link = xstrdup (manlist->d_name);
-			if (debug)
-				fprintf (stderr, "ult_hardlink: (%s)\n", link);
+			debug ("ult_hardlink: (%s)\n", link);
 		}
 	}
 	closedir (mdir);
@@ -172,8 +171,7 @@ static char *ult_softlink (const char *fullpath)
 		return NULL;
 	}
 
-	if (debug)
-		fprintf (stderr, "ult_softlink: (%s)\n", resolved_path);
+	debug ("ult_softlink: (%s)\n", resolved_path);
 
 	return xstrdup (resolved_path);
 }
@@ -243,9 +241,7 @@ const char *ult_src (const char *name, const char *path,
 			free (basename);
 		basename = xstrdup (name);
 
-		if (debug)
-			fprintf (stderr, "\nult_src: File %s in mantree %s\n",
-				 name, path);
+		debug ("\nult_src: File %s in mantree %s\n", name, path);
 
 		/* If we don't have a buf, allocate and assign one */
 		if (!buf && ((flags & SOFT_LINK) || (flags & HARD_LINK))) {
@@ -362,10 +358,7 @@ const char *ult_src (const char *name, const char *path,
 						      NULL);
 				free (include);
 
-				if (debug)
-					fprintf (stderr,
-						 "ult_src: points to %s\n",
-						 basename);
+				debug ("ult_src: points to %s\n", basename);
 
 				recurse++;
 				ult = ult_src (basename, path, NULL, flags);

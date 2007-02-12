@@ -75,9 +75,7 @@ int dbdelete (const char *name, struct mandata *info)
 
 	/* get entry for info */
 
-	if (debug)
-		fprintf (stderr, "Attempting delete of %s(%s) entry.\n",
-			 name, info->ext);
+	debug ("Attempting delete of %s(%s) entry.\n", name, info->ext);
 
 	key.dptr = name_to_key (name);
 	key.dsize = strlen (key.dptr) + 1;

@@ -101,8 +101,7 @@ int is_changed (const char *fa, const char *fb)
 	int fb_stat;
 	int status = 0;
 
-	if (debug)
-		fprintf (stderr, "is_changed: a=%s, b=%s", fa, fb);
+	debug ("is_changed: a=%s, b=%s", fa, fb);
 
 	fa_stat = stat (fa, &fa_sb);
 	if (fa_stat != 0)
@@ -113,8 +112,7 @@ int is_changed (const char *fa, const char *fb)
 		status |= 2;
 
 	if (status != 0) {
-		if (debug)
-			fprintf (stderr, " (%d)\n", -status);
+		debug (" (%d)\n", -status);
 		return -status;
 	}
 
@@ -126,8 +124,7 @@ int is_changed (const char *fa, const char *fb)
 
 	status |= (fa_sb.st_mtime != fb_sb.st_mtime);
 
-	if (debug)
-		fprintf (stderr, " (%d)\n", status);
+	debug (" (%d)\n", status);
 	return status;
 }
 

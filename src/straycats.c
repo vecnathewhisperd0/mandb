@@ -183,8 +183,7 @@ static int check_for_stray (void)
 		 * extension (if it has one), we can try some of ours.
 		 */
 
-		if (debug)
-			fprintf(stderr, "Testing for existence: %s\n", mandir);
+		debug ("Testing for existence: %s\n", mandir);
 
 		if (stat (mandir, &buf) == 0) 
 			found = 1;
@@ -228,9 +227,8 @@ static int check_for_stray (void)
 				free (mandir_copy);
 				continue;
 			}
-			if (debug)
-				fprintf (stderr, "%s(%s) is not in the db.\n",
-					 mandir_base, info.ext);
+			debug ("%s(%s) is not in the db.\n",
+			       mandir_base, info.ext);
 
 			/* fill in the missing parts of the structure */
 			info.name = NULL;
@@ -432,9 +430,8 @@ int straycats (char *manpath)
 	/* look in the alternate catpath location if we have one 
 	   and it's different from the usual catpath */
 
-	if (debug && catpath)
-		fprintf (stderr, "catpath: %s, manpath: %s\n",
-			 catpath, manpath);
+	if (catpath)
+		debug ("catpath: %s, manpath: %s\n", catpath, manpath);
 		
 	if (catpath && strcmp (catpath, manpath) != 0) {
 		*mandir = *catdir = '\0';

@@ -89,15 +89,10 @@ int dbver_rd (MYDBM_FILE dbf)
 	status = dbver (dbf);
 
 	if (status == -1) {
-		if (debug)
-			fprintf (stderr,
-				 _("warning: %s has no version identifier\n"),
-				 database);
+		debug (_("warning: %s has no version identifier\n"), database);
 	} else if (status == 1) {
-		if (debug)
-			fprintf (stderr,
-				 _("warning: %s is version %s, expecting %s\n"),
-				 database, content.dptr, VER_ID);
+		debug (_("warning: %s is version %s, expecting %s\n"),
+		       database, content.dptr, VER_ID);
 	} else {
 		MYDBM_FREE (content.dptr);
 		return 0;

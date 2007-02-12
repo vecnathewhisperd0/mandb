@@ -113,20 +113,19 @@ const char *dash_if_unset (const char *str)
 /* Just print out what would be stored in the db */
 void dbprintf (const struct mandata *info)
 {
-	fprintf (stderr,
-		 "name:      %s\n"
-		 "sec. ext:  %s\n"
-		 "section:   %s\n"
-		 "comp. ext: %s\n"
-		 "id:        %c\n"
-		 "st_mtime   %ld\n"
-		 "pointer:   %s\n"
-		 "filter:    %s\n"
-		 "whatis:    %s\n\n",
-		 dash_if_unset (info->name),
-		 info->ext, info->sec, info->comp,
-		 info->id, (long) info->_st_mtime,
-		 info->pointer, info->filter, info->whatis);
+	debug ("name:      %s\n"
+	       "sec. ext:  %s\n"
+	       "section:   %s\n"
+	       "comp. ext: %s\n"
+	       "id:        %c\n"
+	       "st_mtime   %ld\n"
+	       "pointer:   %s\n"
+	       "filter:    %s\n"
+	       "whatis:    %s\n\n",
+	       dash_if_unset (info->name),
+	       info->ext, info->sec, info->comp,
+	       info->id, (long) info->_st_mtime,
+	       info->pointer, info->filter, info->whatis);
 }
 
 /* Form a multi-style key from page and extension info. The page should
@@ -333,8 +332,7 @@ int list_extensions (char *data, char ***names, char ***ext)
 		}
 	}
 
-	if (debug)
-		fprintf (stderr, "found %d names/extensions\n", count);
+	debug ("found %d names/extensions\n", count);
 	return count;
 }
 
@@ -410,9 +408,7 @@ static struct mandata *dblookup (const char *page, const char *section,
 
 			/* So the key is suitable ... */
 			key = make_multi_key (names[i], ext[i]);
-			if (debug)
-				fprintf (stderr, "multi key lookup (%s)\n",
-					 key.dptr);
+			debug ("multi key lookup (%s)\n", key.dptr);
 			multi_cont = MYDBM_FETCH (dbf, key);
 			if (multi_cont.dptr == NULL) {
 				error (0, 0, _("bad fetch on multi key %s"),

@@ -112,15 +112,13 @@ char *convert_name (const char *name, int fsstnd)
 			*(t2 + 2) = 't';
 		} else {
 			free (to_name);
-			if (debug)
-				fprintf (stderr, "couldn't convert %s to "
-						 "FSSTND cat file\n", name);
+			debug ("couldn't convert %s to FSSTND cat file\n",
+			       name);
 			return NULL;
 		}
 	}
 
-	if (debug)
-		fprintf (stderr, "converted %s to %s\n", name, to_name);
+	debug ("converted %s to %s\n", name, to_name);
 
 	return to_name;
 }

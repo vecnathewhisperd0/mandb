@@ -100,25 +100,19 @@ static int replace_if_necessary (struct mandata *newdata,
 	if (newdata->id == olddata->id) {
 		if (STREQ (dash_if_unset (newdata->comp), olddata->comp)) {
 			if (newdata->_st_mtime != olddata->_st_mtime) {
-				if (debug)
-					fprintf (stderr,
-						 "replace_if_necessary(): "
-						 "replace\n");
+				debug ("replace_if_necessary(): replace\n");
 				if (MYDBM_REPLACE (dbf, newkey, newcont))
 					gripe_replace_key (newkey.dptr);
 			}
 			return 0; /* same file */
 		} else {
-			if (debug)
-				fprintf (stderr,
-					 "ignoring differing compression "
-					 "extensions: %s\n", newkey.dptr);
+			debug ("ignoring differing compression "
+			       "extensions: %s\n", newkey.dptr);
 			return 1; /* differing exts */
 		}
 	}
 
-	if (debug)
-		fprintf (stderr, "ignoring differing ids: %s\n", newkey.dptr);
+	debug ("ignoring differing ids: %s\n", newkey.dptr);
 	return 0;
 }
 
@@ -161,8 +155,7 @@ int dbstore (struct mandata *in, const char *basename)
  	oldkey.dsize = strlen (basename) + 1;
 
  	if (oldkey.dsize == 1) {
- 		if (debug)
- 			dbprintf (in);
+		dbprintf (in);
  		return 2;
  	}
 

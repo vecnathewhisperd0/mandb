@@ -72,7 +72,6 @@
 extern char *optarg;
 extern int optind, opterr, optopt;
 
-int debug = 0;
 char *program_name;
 int quiet = 0;
 
@@ -138,7 +137,7 @@ int main (int argc, char *argv[])
 				cat = 1;
 				break;
 			case 'd':
-			    	debug = 1;
+			    	debug_level = 1;
 			    	break;
 		    	case 'q':
 			    	quiet = 1;

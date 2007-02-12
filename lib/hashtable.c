@@ -127,7 +127,7 @@ struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
 		hashval = hash (name, len);
 
 		/* record uniqueness if debugging */
-		if (debug) {
+		if (debug_level) {
 			if (ht->hashtab[hashval])
 				ht->identical++;
 			else
@@ -178,15 +178,11 @@ void hash_free (struct hashtable *ht)
 	if (!ht)
 		return;
 
-	if (debug) {
-		fprintf (stderr,
-			 "hash_free: %d entries, %d (%d%%) unique\n",
-		         ht->unique + ht->identical,
-		         ht->unique,
-			 ht->unique ? (ht->unique * 100) /
-				      (ht->unique + ht->identical)
-				    : 0);
-	}
+	debug ("hash_free: %d entries, %d (%d%%) unique\n",
+	       ht->unique + ht->identical,
+	       ht->unique,
+	       ht->unique ? (ht->unique * 100) / (ht->unique + ht->identical)
+	                  : 0);
 
 	for (i = 0; i < HASHSIZE; i++) {
 		struct nlist *np;

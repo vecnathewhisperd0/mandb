@@ -78,7 +78,6 @@ static const char *mandir_layout = MANDIR_LAYOUT;
 #  endif /* HAVE_GETOPT_H */
 
 char *program_name;
-int debug = 0;
 
 static const struct option long_options[] =
 {
@@ -179,20 +178,15 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 
 	/* Check whether we've got this one already. */
 	if (cache) {
-		if (debug)
-			fprintf (stderr, "update_directory_cache %s: hit\n",
-				 path);
+		debug ("update_directory_cache %s: hit\n", path);
 		return cache;
 	}
 
-	if (debug)
-		fprintf (stderr, "update_directory_cache %s: miss\n", path);
+	debug ("update_directory_cache %s: miss\n", path);
 
 	dir = opendir (path);
 	if (!dir) {
-		if (debug)
-			fprintf (stderr, "can't open directory %s: %s\n",
-				 path, strerror (errno));
+		debug_error ("can't open directory %s", path);
 		return NULL;
 	}
 
@@ -254,14 +248,11 @@ static int match_in_directory (const char *path, const char *pattern,
 
 	cache = update_directory_cache (path);
 	if (!cache) {
-		if (debug)
-			fprintf (stderr, "directory cache update failed\n");
+		debug ("directory cache update failed\n");
 		return -1;
 	}
 
-	if (debug)
-		fprintf (stderr, "globbing pattern in %s: %s\n",
-			 path, pattern);
+	debug ("globbing pattern in %s: %s\n", path, pattern);
 
 	pglob->gl_pathv = xmalloc (allocated * sizeof (char *));
 	flags = ignore_case ? FNM_CASEFOLD : 0;
@@ -292,9 +283,7 @@ static int match_in_directory (const char *path, const char *pattern,
 		if (fnm)
 			continue;
 
-		if (debug)
-			fprintf (stderr, "matched: %s/%s\n",
-				 path, cache->names[i]);
+		debug ("matched: %s/%s\n", path, cache->names[i]);
 
 		if (pglob->gl_pathc >= allocated) {
 			allocated *= 2;
@@ -338,9 +327,7 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 
 	if (layout == -1) {
 		layout = parse_layout (mandir_layout);
-		if (debug)
-			fprintf (stderr, "Layout is %s (%d)\n",
-				 mandir_layout, layout);
+		debug ("Layout is %s (%d)\n", mandir_layout, layout);
 	}
 
 	hier = escape_shell (unesc_hier);
@@ -475,7 +462,7 @@ int main (int argc, char **argv)
 				 long_options, &option_index)) != -1) {
 		switch (c) {
 			case 'd':
-				debug = 1;
+				debug_level = 1;
 				break;
 			case 'e':
 				extension = optarg;

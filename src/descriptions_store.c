@@ -61,8 +61,7 @@ void store_descriptions (const struct page_description *head,
 	const struct page_description *desc;
 	char save_id = info->id;
 
-	if (debug)
-		fprintf (stderr, "base_name = '%s'\n", base_name);
+	debug ("base_name = '%s'\n", base_name);
 
 	for (desc = head; desc; desc = desc->next) {
 		/* Either it's the real thing or merely a reference. Get the
@@ -84,9 +83,7 @@ void store_descriptions (const struct page_description *head,
 			info->whatis = NULL;
 		}
 
-		if (debug)
-			fprintf (stderr, "name = '%s', id = %c\n",
-				 desc->name, info->id);
+		debug ("name = '%s', id = %c\n", desc->name, info->id);
 		if (dbstore (info, desc->name) > 0) {
 			gripe_bad_store (base_name, info->ext);
 			break;

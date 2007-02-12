@@ -217,10 +217,9 @@ static __inline__ datum btree_findkey (DB *dbf, u_int flags)
 		/* We've seen this key already, which is broken. Return NULL
 		 * so the caller doesn't go round in circles.
 		 */
-		if (debug)
-			fprintf (stderr, "Corrupt database! Already seen %*s. "
-					 "Attempting to recover ...\n",
-				 (int) key.dsize, key.dptr);
+		debug ("Corrupt database! Already seen %*s. "
+		       "Attempting to recover ...\n",
+		       (int) key.dsize, key.dptr);
 		key.dptr = NULL;
 		key.dsize = 0;
 		return key;
@@ -282,8 +281,7 @@ int dbstore (struct mandata *in, char *basename)
  	key.dsize = strlen (basename) + 1;
 
  	if (key.dsize == 1) {
- 		if (debug)
- 			dbprintf (in);
+		dbprintf (in);
  		return 2;
  	}
 

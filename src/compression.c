@@ -161,7 +161,7 @@ char *decompress (const char *filename, const struct compression *comp)
 	pipeline *pl = pipeline_new ();
 	command *cmd;
 	int status;
-	int save_debug = debug;
+	int save_debug = debug_level;
 
 	if (!comp->prog || !*comp->prog) {
 		/* TODO: Temporary workaround for poor decompression program
@@ -180,18 +180,17 @@ char *decompress (const char *filename, const struct compression *comp)
 	pipeline_command (pl, cmd);
 	pl->want_out = file_fd;
 
-	if (debug) {
+	if (debug_level) {
 #ifdef SECURE_MAN_UID
-		fputs ("The following command done with dropped privs\n",
-		       stderr);
+		debug ("The following command done with dropped privs\n");
 #endif /* SECURE_MAN_UID */
 		pipeline_dump (pl, stderr);
 	}
 
 	/* temporarily drop the debug flag, so that we can continue */
-	debug = 0;
+	debug_level = 0;
 	status = do_system_drop_privs (pl);
-	debug = save_debug;
+	debug_level = save_debug;
 	close (file_fd);
 	file_fd = -1;
 

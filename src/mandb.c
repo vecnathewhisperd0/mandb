@@ -84,7 +84,6 @@ extern int errno;
 #include "manp.h"
 #include "security.h"
 
-int debug = 0;
 char *program_name;
 int quiet = 1;
 extern int opt_test;		/* don't update db */
@@ -458,7 +457,7 @@ int main (int argc, char *argv[])
 				 long_options, &option_index)) != EOF) {
 		switch (c) {
 			case 'd':
-				debug = 1;
+				debug_level = 1;
 				break;
 			case 'q':
 				quiet_temp++;
@@ -530,7 +529,7 @@ int main (int argc, char *argv[])
 	/* This is required for get_catpath(), regardless */
 	manp = manpath (NULL);	/* also calls read_config_file() */
 
-	if (opt_test && !debug)
+	if (opt_test && !debug_level)
 		quiet = 1;
 	else if (quiet_temp == 1)
 		quiet = 2;
@@ -553,8 +552,7 @@ int main (int argc, char *argv[])
 			       CONFIG_FILE);
 	}
 
-	if (debug)
-		fprintf (stderr, "manpath=%s\n", manp);
+	debug ("manpath=%s\n", manp);
 
 	/* get the manpath as an array of pointers */
 	create_pathlist (manp, manpathlist); 

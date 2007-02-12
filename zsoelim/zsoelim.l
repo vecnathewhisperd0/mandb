@@ -102,7 +102,6 @@ static void zap_quotes (void);
 #endif
 
 char *program_name;
-int debug = 0;
 
 static const struct option long_options[] =
 {

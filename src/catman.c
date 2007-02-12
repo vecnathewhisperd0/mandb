@@ -104,7 +104,6 @@ extern int errno;
 #include "manp.h"
 
 /* globals */
-int debug = 0;
 char *program_name;
 int quiet = 1;
 MYDBM_FILE dbf;
@@ -166,7 +165,8 @@ static void catman (char *argp[])
 	int status;
 	int res;
 
-	if (debug) { 	/* show us what the command is going to be :) */
+	if (debug_level) {
+		/* just show the command, but don't execute it */
 		char **p;
 
 		fputs ("man command =", stderr);
@@ -325,9 +325,8 @@ static int parse_for_sec (const char *manpath, const char *section)
 							    &(argp[arg_no]));
 					arg_size += strlen (argp[arg_no++]) + 1;
 
-					if (debug)
-						fprintf (stderr, "arg space free: %d bytes\n",
-							 ARG_MAX - arg_size);
+					debug ("arg space free: %d bytes\n",
+					       ARG_MAX - arg_size);
 
 					/* Check to see if we have enough room 
 					   to add another max sized filename 
@@ -394,7 +393,7 @@ int main (int argc, char *argv[])
 	int c;
 	char *sys_manp;
 	char **mp;
-	const char **sections;
+	const char **sections, **sp;
 
 	int option_index; /* not used, but required by getopt_long() */
 
@@ -416,7 +415,7 @@ int main (int argc, char *argv[])
 		switch (c) {
 
 			case 'd':
-				debug = 1;
+				debug_level = 1;
 				break;
 			case 'M':
 				manp = optarg;
@@ -440,8 +439,6 @@ int main (int argc, char *argv[])
 
 	/* If we were supplied sections: sort them out */
 	if (optind != argc) {
-		const char **sp;
-		
 		sections = sp = xmalloc ((argc - optind + 1) *
 					 sizeof *sections);
 		while (optind != argc)
@@ -474,12 +471,8 @@ int main (int argc, char *argv[])
 		}
 	}
 
-	if (debug) {
-		const char **sp;
-
-		for (sp = sections; *sp; sp++)
-			fprintf (stderr, "sections: %s\n", *sp);
-	}
+	for (sp = sections; *sp; sp++)
+		debug ("sections: %s\n", *sp);
 
 	/* Deal with the MANPATH */
 
@@ -493,15 +486,13 @@ int main (int argc, char *argv[])
 			manp = sys_manp;
 	}
 
-	if (debug)
-		fprintf (stderr, "manpath=%s\n", manp);
+	debug ("manpath=%s\n", manp);
 
 	/* get the manpath as an array of pointers */
 	create_pathlist (manp, manpathlist); 
 	
 	for (mp = manpathlist; *mp; mp++) {
 		char *catpath;
-		const char **sp;
 		size_t len;
 
 		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);

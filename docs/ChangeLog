@@ -1,3 +1,12 @@
+Mon Feb 12 17:44:48 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/debug.c: New file for debugging functions.
+	* include/manconfig.h.in: debug -> debug_level; prototype debug and
+	  debug_error.
+	* lib/Makefile.in (ALL): Add debug.o.
+	* Update all emissions of debugging messages to use the new
+	  functions where possible; otherwise, debug -> debug_level.
+
 Mon Feb 12 13:00:42 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/mandb.c (main): Change "No databases updated" to "No databases

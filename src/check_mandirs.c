@@ -109,11 +109,9 @@ static void gripe_multi_extensions (const char *path, const char *sec,
 
 static void gripe_rwopen_failed (const char *database)
 {
-	if (errno == EACCES || errno == EROFS) {
-		if (debug)
-			fprintf (stderr, "database %s is read-only\n",
-				 database);
-	} else {
+	if (errno == EACCES || errno == EROFS)
+		debug ("database %s is read-only\n", database);
+	else {
 #ifdef MAN_DB_UPDATES
 		if (!quiet)
 #endif /* MAN_DB_UPDATES */
@@ -185,9 +183,7 @@ void test_manfile (const char *file, const char *path)
 			   comp extensions */
 			abs_filename = make_filename (path, NULL,
 						      exists, "man");
-			if (debug)
-				fprintf (stderr, "test_manfile(): stat %s\n",
-					 abs_filename);
+			debug ("test_manfile(): stat %s\n", abs_filename);
 			if (stat (abs_filename, &physical) == -1) {
 				if (!opt_test)
 					dbdelete (base_name, exists);
@@ -207,17 +203,15 @@ void test_manfile (const char *file, const char *path)
 	   links quite so many times. */
 	{
 		/* Avoid too much noise in debug output */
-		int save_debug = debug;
-		debug = 0;
+		int save_debug = debug_level;
+		debug_level = 0;
 		ult = ult_src (file, path, &buf, SOFT_LINK | HARD_LINK);
-		debug = save_debug;
+		debug_level = save_debug;
 	}
 
 	if (!ult) {
 		/* already warned about this, don't do so again */
-		if (debug)
-			fprintf (stderr,
-				 "test_manfile(): bad link %s\n", file);
+		debug ("test_manfile(): bad link %s\n", file);
 		free (manpage);
 		return;
 	}
@@ -226,11 +220,10 @@ void test_manfile (const char *file, const char *path)
 		whatis_hash = hash_create (&plain_hash_free);
 
 	if (hash_lookup (whatis_hash, ult, strlen (ult)) == NULL) {
-		if (debug && strncmp (ult, file, len) != 0)
-			fprintf (stderr,
-				 "\ntest_manfile(): link not in cache:\n"
-				 " source = %s\n"
-				 " target = %s\n", file, ult);
+		if (!STRNEQ (ult, file, len))
+			debug ("\ntest_manfile(): link not in cache:\n"
+			       " source = %s\n"
+			       " target = %s\n", file, ult);
 		/* Trace the file to its ultimate source, else we'll be
 		   looking for whatis info in files containing only
 		   '.so manx/foo.x', which will give us an unobtainable
@@ -293,8 +286,7 @@ void test_manfile (const char *file, const char *path)
 			      xstrdup (lg.whatis));
 	}
 
-	if (debug)
-		fprintf (stderr, "\"%s\"\n", lg.whatis);
+	debug ("\"%s\"\n", lg.whatis);
 
 	/* split up the raw whatis data and store references */
 	info.pointer = NULL;	/* direct page, so far */
@@ -371,8 +363,7 @@ static short testmandirs (const char *path, time_t last)
 	struct stat stbuf;
 	short amount = 0;
 
-	if (debug)
-		fprintf (stderr, "Testing %s for new files\n", path);
+	debug ("Testing %s for new files\n", path);
 
 	dir = opendir (path);
 	if (!dir) {
@@ -386,8 +377,7 @@ static short testmandirs (const char *path, time_t last)
 		if (strncmp (mandir->d_name, "man", 3) != 0)
 			continue;
 
-		if (debug)
-			fprintf (stderr, "Examining %s\n", mandir->d_name);
+		debug ("Examining %s\n", mandir->d_name);
 
 		if (stat (mandir->d_name, &stbuf) != 0)	/* stat failed */
 			continue;
@@ -395,17 +385,13 @@ static short testmandirs (const char *path, time_t last)
 			continue;
 		if (last && stbuf.st_mtime <= last) {
 			/* scanned already */
-			if (debug)
-				fprintf (stderr,
-					 "%s modified %ld, db modified %ld\n",
-					 mandir->d_name, stbuf.st_mtime, last);
+			debug ("%s modified %ld, db modified %ld\n",
+			       mandir->d_name, stbuf.st_mtime, last);
 			continue;
 		}
 
-		if (debug)
-			fprintf (stderr,
-			  "\tsubdirectory %s has been 'modified'\n",
-			  mandir->d_name);
+		debug ("\tsubdirectory %s has been 'modified'\n",
+		       mandir->d_name);
 
 		dbf = MYDBM_RWOPEN(database);
 
@@ -486,16 +472,12 @@ void reset_db_time (void)
 	/* we don't really care if we can't open it RW - it's not fatal */
 	dbf = MYDBM_RWOPEN (database);
 	if (dbf == NULL) {
-		if (debug) {
-			fprintf (stderr, "reset_db_time(): ");
-			perror ("can't open db");
-		}
+		debug_error ("reset_db_time(): can't open db");
 		return;
 	}
 
 	MYDBM_DELETE (dbf, key);
-	if (debug)
-		fprintf (stderr, "reset_db_time()\n");
+	debug ("reset_db_time()\n");
 	MYDBM_CLOSE (dbf);
 	free (key.dptr);
 }
@@ -505,18 +487,15 @@ short create_db (const char *manpath)
 {
 	short amount;
 	
-	if (debug)
-		fprintf (stderr, "create_db(%s): %s\n", manpath, database);
+	debug ("create_db(%s): %s\n", manpath, database);
 
 	/* Open the db in CTRW mode to store the $ver$ ID */
 
 	dbf = MYDBM_CTRWOPEN (database);
 	if (dbf == NULL) {
-		if (errno == EACCES || errno == EROFS) {
-			if (debug)
-				fprintf (stderr, "database %s is read-only\n",
-					 database);
-		} else
+		if (errno == EACCES || errno == EROFS)
+			debug ("database %s is read-only\n", database);
+		else
 			error (0, errno, _("can't create index cache %s"),
 			       database);
 		return 0;
@@ -556,9 +535,8 @@ short update_db (const char *manpath)
 		MYDBM_CLOSE (dbf);
 		free (key.dptr);
 
-		if (debug)
-			fprintf (stderr, "update_db(): %ld\n",
-				 content.dptr ? atol (content.dptr) : 0L);
+		debug ("update_db(): %ld\n",
+		       content.dptr ? atol (content.dptr) : 0L);
 		if (content.dptr) {
 			new = testmandirs (manpath,
 					   (time_t) atol (content.dptr));
@@ -575,8 +553,7 @@ short update_db (const char *manpath)
 		return new;
 	}
 		
-	if (debug)
-		fprintf (stderr, "failed to open %s O_RDONLY\n", database);
+	debug ("failed to open %s O_RDONLY\n", database);
 		
 	return EOF;
 }
@@ -591,9 +568,7 @@ void purge_pointers (const char *name)
 {
 	datum key = MYDBM_FIRSTKEY (dbf);
 
-	if (debug)
-		fprintf (stderr, "Purging pointers to vanished page \"%s\"\n",
-			 name);
+	debug ("Purging pointers to vanished page \"%s\"\n", name);
 
 	while (key.dptr != NULL) {
 		datum content, nextkey;
@@ -624,10 +599,9 @@ void purge_pointers (const char *name)
 		if (STREQ (entry.pointer, name)) {
 			if (!opt_test)
 				dbdelete (nicekey, &entry);
-			else if (debug)
-				fprintf (stderr,
-					 "%s(%s): pointer vanished, "
-					 "would delete\n", nicekey, entry.ext);
+			else
+				debug ("%s(%s): pointer vanished, "
+				       "would delete\n", nicekey, entry.ext);
 		}
 
 pointers_contentnext:
@@ -658,11 +632,8 @@ static int count_glob_matches (const char *name, const char *ext,
 		memset (&info, 0, sizeof (struct mandata));
 
 		if (stat (*walk, &statbuf) == -1) {
-			if (debug)
-				fprintf (stderr,
-					 "count_glob_matches: excluding %s "
-					 "because stat failed\n",
-					 *walk);
+			debug ("count_glob_matches: excluding %s "
+			       "because stat failed\n", *walk);
 			continue;
 		}
 
@@ -693,9 +664,9 @@ static short purge_normal (const char *name, struct mandata *info,
 
 	if (!opt_test)
 		dbdelete (name, info);
-	else if (debug)
-		fprintf (stderr, "%s(%s): missing page, would delete\n",
-			 name, info->ext);
+	else
+		debug ("%s(%s): missing page, would delete\n",
+		       name, info->ext);
 
 	return 1;
 }
@@ -715,11 +686,10 @@ static short purge_whatis (const char *path, int cat, const char *name,
 		 * rescan just to be sure; since in the absence of a bug we
 		 * would rescan anyway, this isn't a problem.
 		 */
-		if (debug && !force_rescan)
-			fprintf (stderr,
-				 "%s(%s): whatis replaced by real page; "
-				 "forcing a rescan just in case\n",
-				 name, info->ext);
+		if (!force_rescan)
+			debug ("%s(%s): whatis replaced by real page; "
+			       "forcing a rescan just in case\n",
+			       name, info->ext);
 		force_rescan = 1;
 		return 0;
 	} else if (STREQ (info->pointer, "-")) {
@@ -730,38 +700,33 @@ static short purge_whatis (const char *path, int cat, const char *name,
 		 */
 		if (!opt_test)
 			dbdelete (name, info);
-		else if (debug)
-			fprintf (stderr,
-				 "%s(%s): whatis with empty pointer, "
-				 "would delete\n",
-				 name, info->ext);
+		else
+			debug ("%s(%s): whatis with empty pointer, "
+			       "would delete\n", name, info->ext);
 
-		if (debug && !force_rescan)
-			fprintf (stderr,
-				 "%s(%s): whatis had empty pointer; "
-				 "forcing a rescan just in case\n",
-				 name, info->ext);
+		if (!force_rescan)
+			debug ("%s(%s): whatis had empty pointer; "
+			       "forcing a rescan just in case\n",
+			       name, info->ext);
 		force_rescan = 1;
 		return 1;
 	} else {
 		/* Does the real page still exist? */
 		char **real_found;
-		int save_debug = debug;
-		debug = 0;
+		int save_debug = debug_level;
+		debug_level = 0;
 		real_found = look_for_file (path, info->ext,
 					    info->pointer, cat, 1);
-		debug = save_debug;
+		debug_level = save_debug;
 
 		if (count_glob_matches (info->pointer, info->ext, real_found))
 			return 0;
 
 		if (!opt_test)
 			dbdelete (name, info);
-		else if (debug)
-			fprintf (stderr,
-				 "%s(%s): whatis target was deleted, "
-				 "would delete\n",
-				 name, info->ext);
+		else
+			debug ("%s(%s): whatis target was deleted, "
+			       "would delete\n", name, info->ext);
 		return 1;
 	}
 }
@@ -789,11 +754,8 @@ static short check_multi_key (const char *name, const char *content)
 				valid = 0;
 		}
 		if (!valid) {
-			if (debug)
-				fprintf (stderr,
-					 "%s: broken multi key \"%s\", "
-					 "forcing a rescan\n",
-					 name, content);
+			debug ("%s: broken multi key \"%s\", "
+			       "forcing a rescan\n", name, content);
 			force_rescan = 1;
 			return 1;
 		}
@@ -866,8 +828,8 @@ short purge_missing (const char *manpath, const char *catpath)
 
 		split_content (content.dptr, &entry);
 
-		save_debug = debug;
-		debug = 0;	/* look_for_file() is quite noisy */
+		save_debug = debug_level;
+		debug_level = 0;	/* look_for_file() is quite noisy */
 		if (entry.id <= WHATIS_MAN)
 			found = look_for_file (manpath, entry.ext,
 					       entry.name ? entry.name
@@ -878,7 +840,7 @@ short purge_missing (const char *manpath, const char *catpath)
 					       entry.name ? entry.name
 							  : nicekey,
 					       1, 1);
-		debug = save_debug;
+		debug_level = save_debug;
 
 		/* Now actually decide whether to purge, depending on the
 		 * type of entry.

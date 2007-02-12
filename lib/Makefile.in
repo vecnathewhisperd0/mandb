@@ -44,7 +44,7 @@ ALLOBJS = $(ALLSRCS:.c=.o)
 XOBJS = xstrdup.o xstrndup.o xmalloc.o error.o xstrsignal.o xsigaction.o
 
 ALL = @LIBOBJS@ @ALLOCA@ $(libobjects) cleanup.o strappend.o tempfile.o \
-      hashtable.o pipeline.o getcwdalloc.o pathsearch.o $(XOBJS)
+      hashtable.o pipeline.o getcwdalloc.o pathsearch.o debug.o $(XOBJS)
 
 all: $(library)
 

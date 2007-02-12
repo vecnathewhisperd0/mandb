@@ -78,8 +78,7 @@ struct page_description *parse_descriptions (const char *base_name,
 			break;
 
 		record = xstrndup (sep, length);
-		if (debug)
-			fprintf (stderr, "record = '%s'\n", record);
+		debug ("record = '%s'\n", record);
 
 		/* Split the record into name and whatis description. */
 		dash = strstr (record, " - ");

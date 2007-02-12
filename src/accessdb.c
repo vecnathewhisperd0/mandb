@@ -64,7 +64,6 @@ extern char *strchr();
 
 char *program_name;
 const char *cat_root;
-int debug;
 
 static const struct option long_options[] =
 {
