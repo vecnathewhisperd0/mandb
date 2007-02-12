@@ -648,10 +648,7 @@ int main (int argc, char *argv[])
 	free (manp);
 	if (create && !amount) {
 		if (!quiet)
-			/* TODO: should be "No databases created." but we're
-			 * string-frozen at the moment.
-			 */
-			fprintf (stderr, _("No databases updated."));
+			fprintf (stderr, _("No databases created."));
 		exit (FAIL);
 	}
 	free (program_name);
