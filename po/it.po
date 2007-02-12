@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.3\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2006-12-26 15:00+0000\n"
+"POT-Creation-Date: 2007-02-12 12:57+0000\n"
 "PO-Revision-Date: 2005-12-10 17:30+0100\n"
 "Last-Translator: Giuseppe Sacco <eppesuig@debian.org>\n"
 "Language-Team: Italian <tp@linux.it>\n"
@@ -28,59 +28,59 @@ msgstr "la pipeline di input non è aperta"
 msgid "pipeline output not open"
 msgstr "la pipeline di output non è aperta"
 
-#: lib/pipeline.c:606 lib/pipeline.c:620
+#: lib/pipeline.c:600 lib/pipeline.c:614
 msgid "pipe failed"
 msgstr "pipe fallita"
 
-#: lib/pipeline.c:640 src/catman.c:181
+#: lib/pipeline.c:634 src/catman.c:181
 msgid "fork failed"
 msgstr "fork fallito"
 
-#: lib/pipeline.c:650 lib/pipeline.c:659
+#: lib/pipeline.c:644 lib/pipeline.c:653
 msgid "dup2 failed"
 msgstr "dup2 fallita"
 
-#: lib/pipeline.c:653 lib/pipeline.c:662 lib/pipeline.c:669 lib/pipeline.c:678
-#: lib/pipeline.c:706 lib/pipeline.c:710
+#: lib/pipeline.c:647 lib/pipeline.c:656 lib/pipeline.c:663 lib/pipeline.c:672
+#: lib/pipeline.c:694 lib/pipeline.c:698
 msgid "close failed"
 msgstr "close fallito"
 
-#: lib/pipeline.c:700
+#: lib/pipeline.c:688
 #, c-format
 msgid "can't execute %s"
 msgstr "impossibile eseguire %s"
 
-#: lib/pipeline.c:800
+#: lib/pipeline.c:788
 msgid "closing pipeline input stream failed"
 msgstr "la chiusura del pipeline del flusso di input è fallita"
 
-#: lib/pipeline.c:805
+#: lib/pipeline.c:793
 msgid "closing pipeline input failed"
 msgstr "la chiusura del pipeline di input è fallita"
 
-#: lib/pipeline.c:812
+#: lib/pipeline.c:800
 msgid "closing pipeline output stream failed"
 msgstr "la chiusura del pipeline del flusso di output è fallita"
 
-#: lib/pipeline.c:817
+#: lib/pipeline.c:805
 msgid "closing pipeline output failed"
 msgstr "la chiusura del pipeline di output è fallita"
 
-#: lib/pipeline.c:859
+#: lib/pipeline.c:847
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr "%s: %s (core dumped)"
 
-#: lib/pipeline.c:864
+#: lib/pipeline.c:852
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: lib/pipeline.c:889
+#: lib/pipeline.c:877
 msgid "waitpid failed"
 msgstr "waitpid fallito"
 
-#: lib/pipeline.c:950
+#: lib/pipeline.c:932
 msgid "can't install SIGCHLD handler"
 msgstr "non posso installare un handler per SIGCHLD"
 
@@ -104,12 +104,12 @@ msgstr "indice %s della cache corrotto"
 msgid "cannot replace key %s"
 msgstr "impossibile rimpiazzare la chiave %s"
 
-#: libdb/db_lookup.c:201 libdb/db_lookup.c:211
+#: libdb/db_lookup.c:204 libdb/db_lookup.c:214
 #, c-format
 msgid "only %d fields in content"
 msgstr "trovati solo %d campi"
 
-#: libdb/db_lookup.c:415
+#: libdb/db_lookup.c:418
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "fetch errato sulla chiave multipla %s"
@@ -203,7 +203,7 @@ msgstr "impossibile inizializzare la posizione del cursore in %s"
 msgid "NULL content for key: %s"
 msgstr "contenuto NULL per la chiave: %s"
 
-#: src/catman.c:320
+#: src/catman.c:319
 #, c-format
 msgid ""
 "\n"
@@ -212,12 +212,12 @@ msgstr ""
 "\n"
 "Aggiornamento dei file cat della sezione %s della gerarchia di manuali %s\n"
 
-#: src/catman.c:382
+#: src/catman.c:385
 #, c-format
 msgid "cannot write within %s"
 msgstr "impossibile scrivere all'interno di %s"
 
-#: src/catman.c:529
+#: src/catman.c:532
 #, c-format
 msgid "unable to update %s"
 msgstr "impossibile aggiornare %s"
@@ -268,12 +268,12 @@ msgstr "impossibile creare l'indice %s della cache"
 msgid "done.\n"
 msgstr "fatto.\n"
 
-#: src/check_mandirs.c:818
+#: src/check_mandirs.c:820
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Rimozione delle vecchie voci di basi dati in %s...\n"
 
-#: src/compression.c:78 src/man.c:1416
+#: src/compression.c:78 src/man.c:1431
 msgid "can't create a temporary filename"
 msgstr "impossibile creare un nome di file temporaneo"
 
@@ -287,7 +287,7 @@ msgstr "comando \"%s\" fallito con stato d'uscita %d"
 msgid "Can't convert %s to cat name"
 msgstr "Impossibile convertire %s nel nome cat"
 
-#: src/descriptions.c:51
+#: src/descriptions_store.c:51
 #, c-format
 msgid "warning: failed to store entry for %s(%s)"
 msgstr "attenzione: c'è stato un errore memorizzando il dato %s(%s)"
@@ -301,12 +301,12 @@ msgstr "impossibile trovare i dati utente per uid 0"
 msgid "warning: %s: ignoring bogus filename"
 msgstr "attenzione: %s: vengono ignorati i nomi di file fasulli"
 
-#: src/globbing.c:442
+#: src/globbing.c:454
 #, c-format
 msgid "usage: %s [-deiIhV] path section name\n"
 msgstr "uso: %s [-deiIhV] percorso sezione nome\n"
 
-#: src/globbing.c:444
+#: src/globbing.c:456
 #, c-format
 msgid ""
 "-d, --debug                 emit debugging messages.\n"
@@ -323,22 +323,22 @@ msgstr ""
 "-V, --version               mostra la versione.\n"
 "-h, --help                  mostra questo messaggio d'aiuto.\n"
 
-#: src/lexgrog.l:353
+#: src/lexgrog.l:354
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "attenzione: whatis per %s eccede di %d byte, troncato."
 
-#: src/lexgrog.l:440 src/straycats.c:264 src/ult_src.c:333 src/ult_src.c:340
+#: src/lexgrog.l:441 src/straycats.c:264 src/ult_src.c:333 src/ult_src.c:340
 #, c-format
 msgid "can't open %s"
 msgstr "impossibile aprire %s"
 
-#: src/lexgrog.l:502
+#: src/lexgrog.l:503
 #, c-format
 msgid "usage: %s [-mcwfhV] file ...\n"
 msgstr "uso: %s [-mcwfhV] file ...\n"
 
-#: src/lexgrog.l:504
+#: src/lexgrog.l:505
 #, c-format
 msgid ""
 "-m, --man                   parse as man page.\n"
@@ -359,7 +359,7 @@ msgstr ""
 "\n"
 "Gli argomenti predefiniti sono --man e --whatis.\n"
 
-#: src/lexgrog.l:553
+#: src/lexgrog.l:554
 msgid "-m -c: incompatible options"
 msgstr "-m -c: opzioni incompatibili"
 
@@ -526,89 +526,89 @@ msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 "Si veda \"%s\" per l'aiuto quando le pagine di manuali non sono presenti.\n"
 
-#: src/man.c:762 src/man.c:2400
+#: src/man.c:762 src/man.c:2420
 #, c-format
 msgid "can't chdir to %s"
 msgstr "impossibile fare chdir a %s"
 
-#: src/man.c:950
+#: src/man.c:956
 msgid " Manual page "
 msgstr " Pagina di manuale "
 
-#: src/man.c:1021 src/man.c:3178
+#: src/man.c:1030 src/man.c:3198
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "comando mandb fallito con stato d'uscita %d"
 
-#: src/man.c:1291
+#: src/man.c:1306
 msgid ": incompatible options"
 msgstr ": opzioni incompatibili"
 
-#: src/man.c:1473
+#: src/man.c:1488
 msgid "error trying to read from stdin"
 msgstr "errore nel tentativo di lettura da stdin"
 
-#: src/man.c:1487
+#: src/man.c:1502
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "errore nella scrittura nel file temporaneo %s"
 
-#: src/man.c:1747
+#: src/man.c:1764
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "preprocessore \"%c\" sconosciuto, lo ignoro"
 
-#: src/man.c:2026 src/mandb.c:265
+#: src/man.c:2046 src/mandb.c:272
 #, c-format
 msgid "can't chown %s"
 msgstr "impossibile fare chown su %s"
 
-#: src/man.c:2038 src/mandb.c:236
+#: src/man.c:2058 src/mandb.c:236
 #, c-format
 msgid "can't chmod %s"
 msgstr "impossibile fare chmod su %s"
 
-#: src/man.c:2050 src/mandb.c:179
+#: src/man.c:2070 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "impossibile rinominare %s in %s"
 
-#: src/man.c:2070
+#: src/man.c:2090
 #, c-format
 msgid "can't set times on %s"
 msgstr "impossibile impostare la data per %s"
 
-#: src/man.c:2079
+#: src/man.c:2099
 #, c-format
 msgid "can't unlink %s"
 msgstr "impossibile fare unlink di %s"
 
-#: src/man.c:2117
+#: src/man.c:2137
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "impossibile creare un file 'cat' temporaneo per %s"
 
-#: src/man.c:2218
+#: src/man.c:2238
 #, c-format
 msgid "Still saving the page, please wait...\n"
 msgstr "Registrazione della pagina, attendere prego...\n"
 
-#: src/man.c:2271 src/man.c:2292 src/man.c:2323
+#: src/man.c:2291 src/man.c:2312 src/man.c:2343
 #, c-format
 msgid "can't change to directory %s"
 msgstr "impossibile posizionarsi nella directory %s"
 
-#: src/man.c:2285
+#: src/man.c:2305
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "impossibile aprire il file temporaneo %s"
 
-#: src/man.c:2298 src/man.c:2328
+#: src/man.c:2318 src/man.c:2348
 #, c-format
 msgid "can't remove directory %s"
 msgstr "impossibile rimuovere la directory %s"
 
-#: src/man.c:2536
+#: src/man.c:2556
 #, c-format
 msgid ""
 "\n"
@@ -617,17 +617,17 @@ msgstr ""
 "\n"
 "impossibile scrivere in %s in modo catman"
 
-#: src/man.c:3015
+#: src/man.c:3035
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: confidare nei whatis refs è obsoleto\n"
 
-#: src/man.c:3383
+#: src/man.c:3403
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "errore interno: il tipo %d candidato è oltre il limite"
 
-#: src/man.c:3502
+#: src/man.c:3522
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -683,22 +683,22 @@ msgstr "impossibile scrivere in %s"
 msgid "can't read from %s"
 msgstr "impossibile leggere da %s"
 
-#: src/mandb.c:352
+#: src/mandb.c:379
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Lavorazione delle pagine di manuale sotto a %s...\n"
 
-#: src/mandb.c:493 src/security.c:148
+#: src/mandb.c:523 src/security.c:148
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "non esiste l'utente man con setuid \"%s\""
 
-#: src/mandb.c:521
+#: src/mandb.c:551
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "attenzione: nessuna direttiva MANDB_MAP in %s, uso del tuo manpath"
 
-#: src/mandb.c:594
+#: src/mandb.c:631
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -707,92 +707,93 @@ msgstr ""
 "%d sottodirectory man contenevano nuove pagine di manuale.\n"
 "Sono state aggiunte %d pagine di manuale\n"
 
-#: src/mandb.c:598
+#: src/mandb.c:635
 #, c-format
 msgid "%d stray cats were added.\n"
 msgstr "%d stray cat sono stati aggiunti.\n"
 
-#: src/mandb.c:600
+#: src/mandb.c:637
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr "%d vecchie voci di database sono state rimosse.\n"
 
-#: src/mandb.c:611
+#: src/mandb.c:654
+#, c-format
 msgid "No databases updated."
 msgstr "Il database non è stato aggiornato."
 
-#: src/manp.c:324
+#: src/manp.c:323
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "il file di configurazione dei percorsi man %s non ha senso"
 
-#: src/manp.c:331
+#: src/manp.c:330
 #, c-format
 msgid "warning: %s"
 msgstr "attenzione: %s"
 
-#: src/manp.c:337
+#: src/manp.c:336
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "attenzione: %s non è una directory"
 
-#: src/manp.c:342
+#: src/manp.c:341
 msgid "manpath list too long"
 msgstr "la lista dei percorsi manpath è troppo lunga"
 
-#: src/manp.c:554
+#: src/manp.c:555
 msgid "warning: $PATH not set"
 msgstr "attenzione: $PATH non impostata"
 
-#: src/manp.c:561
+#: src/manp.c:562
 msgid "warning: empty $PATH"
 msgstr "attenzione: $PATH vuota"
 
-#: src/manp.c:586
+#: src/manp.c:590
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "attenzione: $MANPATH già impostata, aggiungo in testa %s"
 
-#: src/manp.c:597
+#: src/manp.c:601
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "attenzione: $MANPATH già impostata, aggiungo in coda %s"
 
-#: src/manp.c:609
+#: src/manp.c:613
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "attenzione: $MANPATH già impostata, inserisco %s"
 
-#: src/manp.c:622
+#: src/manp.c:626
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "attenzione: $MANPATH già impostata, ignoro %s"
 
-#: src/manp.c:655 src/manp.c:688
+#: src/manp.c:659 src/manp.c:692
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "attenzione: impossibile creare la directory %s"
 
-#: src/manp.c:750
+#: src/manp.c:754
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "impossibile analizzare la lista di directory \"%s\""
 
-#: src/manp.c:783
+#: src/manp.c:804
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "impossibile aprire il file di configurazione dei percorsi man %s"
 
-#: src/manp.c:814
+#: src/manp.c:835
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "attenzione: la directory essenziale %s non esiste"
 
-#: src/manp.c:1026
+#: src/manp.c:1049
 msgid "can't determine current directory"
 msgstr "impossibile determinare la directory corrente"
 
-#: src/manp.c:1138
+#: src/manp.c:1170
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "attenzione: %s non inizia con %s"
@@ -972,32 +973,32 @@ msgstr "attenzione: %s contiene un riferimeno a se stesso"
 msgid "(unknown subject)"
 msgstr "(oggetto sconosciuto)"
 
-#: src/whatis.c:508
+#: src/whatis.c:510
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Il database %s è corrotto; lo si ricrei con mandb --create"
 
-#: src/whatis.c:623
+#: src/whatis.c:628
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: niente di appropriato.\n"
 
-#: src/whatis.c:737
+#: src/whatis.c:743
 #, c-format
 msgid "%s what?\n"
 msgstr "%s cosa?\n"
 
-#: src/whatis.c:760 src/whatis.c:769
+#: src/whatis.c:768 src/whatis.c:777
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "errore grave: regex \"%s\": %s"
 
-#: src/wrapper.c:94
+#: src/wrapper.c:98
 #, c-format
 msgid "Don't know which program should I run being >%s<\n"
 msgstr "Non so quale programma devo lanciare essendo >%s<\n"
 
-#: src/wrapper.c:112 src/wrapper.c:117 src/wrapper.c:122 src/wrapper.c:127
+#: src/wrapper.c:116 src/wrapper.c:121 src/wrapper.c:126 src/wrapper.c:131
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: su fallito per l'utente %s\n"
