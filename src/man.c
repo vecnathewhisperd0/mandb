@@ -840,7 +840,7 @@ int main (int argc, char *argv[])
 	if (internal_locale && strcmp (internal_locale, "C") &&
 	    strcmp (internal_locale, "POSIX")) {
 		multiple_locale = getenv ("LANGUAGE");
-		if (multiple_locale)
+		if (multiple_locale && *multiple_locale)
 			internal_locale = multiple_locale;
 	}
 	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
