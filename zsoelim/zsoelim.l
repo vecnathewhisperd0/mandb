@@ -134,7 +134,7 @@ W	[ \t]
 
 %option full noread ecs
 %option 8bit batch
-%option nounput
+%option noyywrap nounput
 
 %%
 
@@ -504,10 +504,4 @@ static int open_file (char *filename)
 	}
 	NAME = filename;
 	return 0;
-}
-
-/* for compatibility with systems not having libfl, can't be static */
-int yywrap (void)
-{
-	return 1;
 }

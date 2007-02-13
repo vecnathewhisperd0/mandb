@@ -1,3 +1,9 @@
+Tue Feb 13 10:52:33 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	* zsoelim/zsoelim.l (yywrap): Remove; use %option noyywrap instead.
+	* zsoelim/Makefile.in (LDLIBS): zsoelim doesn't need to be linked
+	  with LEXLIB any more.
+
 Mon Feb 12 18:06:42 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/Makefile.in (LFLAGS), zsoelim/Makefile.in (LFLAGS),
