@@ -52,7 +52,7 @@ ifeq ($(LEXGROG_DEBUG),yes)
 LFLAGS = -d
 endif
 
-PROGS = man manpath mandb apropos whatis catman lexgrog
+PROGS = man manpath mandb apropos whatis catman lexgrog zsoelim
 PUBTOOLS = accessdb
 PRIVTOOLS = globbing
 TOOLS = $(PUBTOOLS) $(PRIVTOOLS) wrapper
@@ -133,6 +133,7 @@ install:
 	$(INSTALL_PROGRAM) whatis $(DESTDIR)$(bindir)/$(whatis)
 	$(INSTALL_PROGRAM) apropos $(DESTDIR)$(bindir)/$(apropos)
 	$(INSTALL_PROGRAM) lexgrog $(DESTDIR)$(bindir)/$(lexgrog)
+	$(INSTALL_PROGRAM) zsoelim $(DESTDIR)$(bindir)/$(zsoelim)
 	for j in $(PUBTOOLS); do \
 		if test -x $$j; then \
 			$(INSTALL_PROGRAM) $$j $(DESTDIR)$(sbindir)/$$j; \
@@ -165,11 +166,11 @@ mostlyclean clean:
 	rm -f *.o *.i *~ core
 	rm -f $(PROGS) $(TOOLS)
 
-distclean: lexgrog.c clean
+distclean: lexgrog.c zsoelim.c clean
 	rm -f *.out Makefile man_db.conf
 
 realclean: distclean
-	rm -f lexgrog.c tags
+	rm -f lexgrog.c zsoelim.c tags
 
 TAGS:
 	$(MKTAGS) $(srcdir)/*.[chl]

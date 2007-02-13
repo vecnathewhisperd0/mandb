@@ -491,7 +491,6 @@ AC_CONFIG_FILES(GNUmakefile
 	src/man_db.conf
 	man/Makefile
 	libdb/Makefile
-	zsoelim/Makefile
 	include/Defines
 	include/comp_src.h
 	include/manconfig.h

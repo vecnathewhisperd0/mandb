@@ -35,7 +35,7 @@
 # Make targets are:							 #
 #									 #
 #  all install uninstall mostlyclean clean distclean realclean TAGS ID	 #
-#  FILES lib src man intl libdb zsoelim update RCS dist                  #
+#  FILES lib src man intl libdb update RCS dist                          #
 #------------------------------------------------------------------------#
 
 srcdir = @srcdir@
@@ -51,9 +51,9 @@ USE_NLS = @USE_NLS@
 # GNUmakefile and include/Defines are automatic targets, don't add below.
 INCLUDES := config.h $(addprefix include/, manconfig.h comp_src.h)
 CONF = src/man_db.conf
-EVERYTHING = intl lib libdb src zsoelim man po
-ALL = intl lib libdb src zsoelim man po
-INSTALL = src zsoelim man intl po
+EVERYTHING = intl lib libdb src man po
+ALL = intl lib libdb src man po
+INSTALL = src man intl po
 
 include include/Defines
 
@@ -64,8 +64,8 @@ export DESTDIR
 	check deroff
         
 ifneq ($(USE_NLS),yes)
-  ALL = lib libdb src zsoelim man
-  INSTALL = src zsoelim man
+  ALL = lib libdb src man
+  INSTALL = src man
 endif # USE_NLS != yes
 
 all: $(ALL)
@@ -192,10 +192,10 @@ _libdb = Makefile.in *.[ch]
 _m4 = *.m4
 _man = Makefile.in man?/*.man? */man?/*.man? THANKS
 _manual = Makefile *.me
-_src = Makefile.in README.lexgrog *.[chl] *.l-* lexgrog.l.new man_db.conf.in
+_src = Makefile.in README.lexgrog README.zsoelim \
+       *.[chl] *.l-* lexgrog.l.new man_db.conf.in
 _tools = chconfig checkman config.* install-sh \
 	 mandb_\[nt\]fmt-script mkcatdirs mkinstalldirs
-_zsoelim = Makefile.in *.[cl]
 
 FILES = $(_root) $(_all) \
 	$(foreach _subdir, $(_subdirs), \
@@ -207,8 +207,7 @@ man_db := man-db-$(version)
 
 # Ensure the flex C files are current
 dist: update
-	$(MAKE) -C src lexgrog.c
-	$(MAKE) -C zsoelim zsoelim.c
+	$(MAKE) -C src lexgrog.c zsoelim.c
 	rm -fr $(man_db)
 	rm -f $(man_db).tar.gz
 	mkdir $(man_db) 
