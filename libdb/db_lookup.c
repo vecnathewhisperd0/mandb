@@ -283,7 +283,7 @@ datum make_content (struct mandata *in)
 		in->comp,
 		in->whatis);
 
-	assert (strlen (MYDBM_DPTR (cont)) + 1 == MYDBM_DSIZE (cont));
+	assert (strlen (MYDBM_DPTR (cont)) + 1 == (size_t) MYDBM_DSIZE (cont));
 #else /* !ANSI_SPRINTF */
 	sprintf (MYDBM_DPTR (cont), "%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
 		 dash_if_unset (in->name),
