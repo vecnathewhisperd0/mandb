@@ -4,7 +4,7 @@ dnl Initialise and check we're in the correct directory.
 dnl
 AC_INIT(man-db, 2.4.4)
 AC_PREREQ([2.59])
-AC_CONFIG_SRCDIR(acinclude.m4)
+AC_CONFIG_SRCDIR(src/man.c)
 AC_CONFIG_AUX_DIR(tools)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
