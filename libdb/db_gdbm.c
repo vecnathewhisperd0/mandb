@@ -177,7 +177,7 @@ datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key)
 		return empty_datum;
 
 	sortkey = hash_lookup (sortkey_hash,
-			       MYDBM_DPTR (key), MYDBM_DPTR (key));
+			       MYDBM_DPTR (key), MYDBM_DSIZE (key));
 	if (!sortkey || !sortkey->next)
 		return empty_datum;
 
