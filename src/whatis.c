@@ -476,7 +476,7 @@ static int apropos (char *page, char *lowpage)
 	datum nextkey;
 
 	key = MYDBM_FIRSTKEY (dbf);
-	while (key.dptr) {
+	while (MYDBM_DPTR (key)) {
 		cont = MYDBM_FETCH (dbf, key);
 #else /* BTREE */
 	int end;
@@ -493,29 +493,29 @@ static int apropos (char *page, char *lowpage)
 
 		memset (&info, 0, sizeof (info));
 
-		/* bug#4372, NULL pointer dereference in cont.dptr, fix
-		 * by dassen@wi.leidenuniv.nl (J.H.M.Dassen), thanx Ray.
+		/* bug#4372, NULL pointer dereference in MYDBM_DPTR (cont),
+		 * fix by dassen@wi.leidenuniv.nl (J.H.M.Dassen), thanx Ray.
 		 * cjwatson: In that case, complain and exit, otherwise we
 		 * might loop (bug #95052).
 		 */
-		if (!cont.dptr)
+		if (!MYDBM_DPTR (cont))
 		{
-			debug ("key was %s\n", key.dptr);
+			debug ("key was %s\n", MYDBM_DPTR (key));
 			error (FATAL, 0,
 			       _("Database %s corrupted; rebuild with "
 				 "mandb --create"),
 			       database);
 		}
 
-		if (*key.dptr == '$')
+		if (*MYDBM_DPTR (key) == '$')
 			goto nextpage;
 
-		if (*cont.dptr == '\t')
+		if (*MYDBM_DPTR (cont) == '\t')
 			goto nextpage;
 
 		/* a real page */
 
-		split_content (cont.dptr, &info);
+		split_content (MYDBM_DPTR (cont), &info);
 
 		/* If there's a section given, does it match either the
 		 * section or extension of this page?
@@ -524,21 +524,21 @@ static int apropos (char *page, char *lowpage)
 		    (!STREQ (section, info.sec) && !STREQ (section, info.ext)))
 			goto nextpage;
 
-		tab = strrchr (key.dptr, '\t');
+		tab = strrchr (MYDBM_DPTR (key), '\t');
 		if (tab) 
 			 *tab = '\0';
 
 #ifdef APROPOS
-		match = parse_name (lowpage, key.dptr);
+		match = parse_name (lowpage, MYDBM_DPTR (key));
 		whatis = xstrdup (info.whatis);
 		if (!match && whatis)
 			match = parse_whatis (page, lowpage, whatis);
 		free (whatis);
 #else /* WHATIS */
-		match = parse_name (page, key.dptr);
+		match = parse_name (page, MYDBM_DPTR (key));
 #endif /* APROPOS */
 		if (match) {
-			display (&info, key.dptr);
+			display (&info, MYDBM_DPTR (key));
 			found++;
 		}
 
@@ -549,15 +549,15 @@ static int apropos (char *page, char *lowpage)
 nextpage:
 #ifndef BTREE
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (cont.dptr);
-		MYDBM_FREE (key.dptr);
+		MYDBM_FREE (MYDBM_DPTR (cont));
+		MYDBM_FREE (MYDBM_DPTR (key));
 		key = nextkey; 
 #else /* BTREE */
-		MYDBM_FREE (cont.dptr);
-		MYDBM_FREE (key.dptr);
+		MYDBM_FREE (MYDBM_DPTR (cont));
+		MYDBM_FREE (MYDBM_DPTR (key));
 		end = btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
-		info.addr = NULL; /* == cont.dptr, freed above */
+		info.addr = NULL; /* == MYDBM_DPTR (cont), freed above */
 		free_mandata_elements (&info);
 	}
 

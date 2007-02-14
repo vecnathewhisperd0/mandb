@@ -1,3 +1,40 @@
+Wed Feb 14 09:52:15 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_btree.c (test_insert): Use debug function.
+
+	* libdb/mydbm.h (GDBM, NDBM, BTREE): Add MYDBM_DPTR, MYDBM_SET_DPTR,
+	  and MYDBM_DSIZE accessor macros.
+	  (BTREE): Make datum be a typedef for DBT rather than our own
+	  struct, fixing "dereferencing type-punned pointer will break
+	  strict-aliasing rules" warnings from GCC. Adjust MYDBM_DELETE
+	  definition accordingly.
+	* libdb/db_btree.c (test_insert, btree_findkey, dbstore, dblookup):
+	  Use MYDBM_DPTR, MYDBM_SET_DPTR, and MYDBM_DSIZE macros instead of
+	  accessing dptr and dsize members directly.
+	* libdb/db_delete.c (dbdelete): Likewise.
+	* libdb/db_gdbm.c (parent_sortkey_hash_free, sortkey_compare,
+	  man_gdbm_firstkey, man_gdbm_nextkey, gdbm_exists): Likewise.
+	* libdb/db_lookup.c (copy_datum, make_multi_key, make_content,
+	  dblookup): Likewise.
+	* libdb/db_store.c (replace_if_necessary, dbstore): Likewise.
+	* libdb/db_ver.c (dbver, dbver_wr, dbver_rd): Likewise.
+	* src/accessdb.c (main): Likewise.
+	* src/catman.c (add_arg, parse_for_sec): Likewise.
+	* src/check_mandirs.c (update_db_time, reset_db_time, update_db,
+	  purge_pointers, purge_missing): Likewise.
+	* src/whatis.c (apropos): Likewise.
+
+	* libdb/db_btree.c (btree_fetch, btree_findkey, dbstore, dblookup):
+	  Make sure that datum structures allocated on the stack are zeroed
+	  properly.
+	* libdb/db_delete.c (dbdelete): Likewise.
+	* libdb/db_lookup.c (make_multi_key, make_content, dblookup):
+	  Likewise.
+	* libdb/db_store.c (dbstore): Likewise.
+	* libdb/db_ver.c (dbver, dbver_wr): Likewise.
+	* src/check_mandirs.c (update_db_time, reset_db_time, update_db):
+	  Likewise.
+
 Tue Feb 13 11:02:08 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* zsoelim/README: Rename to ...

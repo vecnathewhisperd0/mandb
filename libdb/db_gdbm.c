@@ -70,7 +70,7 @@ static void parent_sortkey_hash_free (void *defn)
 static void sortkey_hash_free (void *defn)
 {
 	struct sortkey *key = (struct sortkey *) defn;
-	free (key->key.dptr);
+	free (MYDBM_DPTR (key->key));
 	free (key);
 }
 
@@ -79,21 +79,25 @@ static int sortkey_compare (const void *a, const void *b)
 	const struct sortkey **left = (const struct sortkey **) a;
 	const struct sortkey **right = (const struct sortkey **) b;
 	int cmp;
+	size_t minsize;
 
 	/* Sentinel NULL elements sort to the end. */
-	if (!(*left)->key.dptr)
+	if (!MYDBM_DPTR ((*left)->key))
 		return 1;
-	else if (!(*right)->key.dptr)
+	else if (!MYDBM_DPTR ((*right)->key))
 		return -1;
 
-	cmp = strncmp ((*left)->key.dptr, (*right)->key.dptr,
-		       ((*left)->key.dsize < (*right)->key.dsize)
-				? (*left)->key.dsize : (*right)->key.dsize);
+	if (MYDBM_DSIZE ((*left)->key) < MYDBM_DSIZE ((*right)->key))
+		minsize = MYDBM_DSIZE ((*left)->key);
+	else
+		minsize = MYDBM_DSIZE ((*right)->key);
+	cmp = strncmp (MYDBM_DPTR ((*left)->key), MYDBM_DPTR ((*right)->key),
+		       minsize);
 	if (cmp)
 		return cmp;
-	else if ((*left)->key.dsize < (*right)->key.dsize)
+	else if (MYDBM_DSIZE ((*left)->key) < MYDBM_DSIZE ((*right)->key))
 		return 1;
-	else if ((*left)->key.dsize > (*right)->key.dsize)
+	else if (MYDBM_DSIZE ((*left)->key) > MYDBM_DSIZE ((*right)->key))
 		return -1;
 	else
 		return 0;
@@ -117,7 +121,7 @@ datum man_gdbm_firstkey (man_gdbm_wrapper wrap)
 	keys = xmalloc (maxkeys * sizeof *keys);
 	keys[0] = xmalloc (sizeof **keys);
 	keys[0]->key = gdbm_firstkey (wrap->file);
-	while (keys[numkeys]->key.dptr) {
+	while (MYDBM_DPTR (keys[numkeys]->key)) {
 		if (++numkeys >= maxkeys) {
 			maxkeys *= 2;
 			keys = xrealloc (keys, maxkeys * sizeof *keys);
@@ -138,7 +142,9 @@ datum man_gdbm_firstkey (man_gdbm_wrapper wrap)
 		else
 			keys[i]->next = NULL;
 		hash_install (sortkey_hash,
-			      keys[i]->key.dptr, keys[i]->key.dsize, keys[i]);
+			      MYDBM_DPTR (keys[i]->key),
+			      MYDBM_DSIZE (keys[i]->key),
+			      keys[i]);
 	}
 	firstkey = keys[0];
 	free (keys);	/* element memory now owned by hashtable */
@@ -170,7 +176,8 @@ datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key)
 	if (!sortkey_hash)
 		return empty_datum;
 
-	sortkey = hash_lookup (sortkey_hash, key.dptr, key.dsize);
+	sortkey = hash_lookup (sortkey_hash,
+			       MYDBM_DPTR (key), MYDBM_DPTR (key));
 	if (!sortkey || !sortkey->next)
 		return empty_datum;
 
@@ -202,7 +209,7 @@ int gdbm_exists (GDBM_FILE dbf, datum key)
 {
 	char *memory;
 
-	memory = gdbm_fetch (dbf, key).dptr;
+	memory = MYDBM_DPTR (gdbm_fetch (dbf, key));
 	if (memory) {
 		free (memory);
 		return 1;

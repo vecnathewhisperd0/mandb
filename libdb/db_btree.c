@@ -31,6 +31,12 @@
 #include <stdio.h>
 #include <errno.h>
 
+#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
+#include <string.h>
+#elif defined(HAVE_STRINGS_H)
+#include <strings.h>
+#endif /* STDC_HEADERS */
+
 #if HAVE_SYS_FILE_H
 #  include <sys/file.h> /* for flock() */
 #endif
@@ -66,8 +72,8 @@ struct hashtable *loop_check_hash;
 
 void test_insert (int line, const datum key, const datum cont)
 {
-	fprintf (stderr, "(%d) key: \"%s\", cont: \"%.40s\"\n", line, key.dptr,
-		 cont.dptr);
+	debug ("(%d) key: \"%s\", cont: \"%.40s\"\n",
+	       line, MYDBM_DPTR (key), MYDBM_DPTR (cont));
 }
 #else /* !FAST_BTREE */
 #define B_FLAGS		0	/* do not allow any duplicate keys */
@@ -177,9 +183,10 @@ datum btree_fetch (DB *dbf, datum key)
 {
 	datum data;
 
+	memset (&data, 0, sizeof data);
+
 	if ((dbf->get) (dbf, (DBT *) &key, (DBT *) &data, 0)) {
-		data.dptr = NULL;
-		data.dsize = 0;
+		memset (&data, 0, sizeof data);
 		return data;
 	}
 
@@ -198,6 +205,9 @@ static __inline__ datum btree_findkey (DB *dbf, u_int flags)
 {
 	datum key, data;
 
+	memset (&key, 0, sizeof key);
+	memset (&data, 0, sizeof data);
+
 	if (flags == R_FIRST) {
 		if (loop_check_hash) {
 			hash_free (loop_check_hash);
@@ -208,24 +218,24 @@ static __inline__ datum btree_findkey (DB *dbf, u_int flags)
 		loop_check_hash = hash_create (&plain_hash_free);
 
 	if (((dbf->seq) (dbf, (DBT *) &key, (DBT *) &data, flags))) {
-		key.dptr = NULL;
-		key.dsize = 0;
+		memset (&key, 0, sizeof key);
 		return key;
 	}
 
-	if (hash_lookup (loop_check_hash, key.dptr, key.dsize)) {
+	if (hash_lookup (loop_check_hash,
+	                 MYDBM_DPTR (key), MYDBM_DSIZE (key))) {
 		/* We've seen this key already, which is broken. Return NULL
 		 * so the caller doesn't go round in circles.
 		 */
 		debug ("Corrupt database! Already seen %*s. "
 		       "Attempting to recover ...\n",
-		       (int) key.dsize, key.dptr);
-		key.dptr = NULL;
-		key.dsize = 0;
+		       (int) MYDBM_DSIZE (key), MYDBM_DPTR (key));
+		memset (&key, 0, sizeof key);
 		return key;
 	}
 
-	hash_install (loop_check_hash, key.dptr, key.dsize, NULL);
+	hash_install (loop_check_hash, MYDBM_DPTR (key), MYDBM_DSIZE (key),
+	              NULL);
 
 	return copy_datum (key);
 }
@@ -278,14 +288,17 @@ int dbstore (struct mandata *in, char *basename)
 	datum key, cont;
 	int status;
 
- 	key.dsize = strlen (basename) + 1;
+	memset (&key, 0, sizeof key);
+	memset (&cont, 0, sizeof cont);
 
- 	if (key.dsize == 1) {
+ 	MYDBM_DSIZE (key) = strlen (basename) + 1;
+
+ 	if (MYDBM_DSIZE (key) == 1) {
 		dbprintf (in);
  		return 2;
  	}
 
-	key.dptr = basename;
+	MYDBM_SET_DPTR (key, basename);
 
 	/* initialise the cursor to (possibly) our key/cont */
 	status = (dbf->seq) (dbf, (DBT *) &key, (DBT *) &cont, R_CURSOR);
@@ -294,13 +307,13 @@ int dbstore (struct mandata *in, char *basename)
 		gripe_get (__LINE__);
 
 	/* either nothing was found or the key was not an exact match */
-	else if (status == 1 || !STREQ (key.dptr, basename)) {
+	else if (status == 1 || !STREQ (MYDBM_DPTR (key), basename)) {
 		cont = make_content (in);
-		key.dptr = basename;
-		key.dsize = strlen (basename) + 1;
+		MYDBM_SET_DPTR (key, basename);
+		MYDBM_DSIZE (key) = strlen (basename) + 1;
 		test_insert (__LINE__, key, cont);
 		status = (dbf->put) (dbf, (DBT *) &key, (DBT *) &cont, 0);
-		free (cont.dptr);
+		free (MYDBM_DPTR (cont));
 
 	/* There is already a key with this name */
 	} else {
@@ -309,27 +322,28 @@ int dbstore (struct mandata *in, char *basename)
 		while (1) {
 			struct mandata old;
 
+			/* TODO: what if cont is unset? */
 			cont = copy_datum (cont);
-			split_content (cont.dptr, &old);
+			split_content (MYDBM_DPTR (cont), &old);
 			if (STREQ (in->ext, old.ext)) {
 				cont = make_content (in);
 				status = replace_if_necessary (in, &old,
 							       key, cont);
-				free (cont.dptr);
+				free (MYDBM_DPTR (cont));
 				free_mandata_elements (&old);
 				break;
 			}
 			free_mandata_elements (&old);
 			status = (dbf->seq) (dbf, (DBT *) &key, (DBT *) &cont,
 					     R_NEXT);
-			if (!STREQ (key.dptr, basename)) {
-				key.dptr = basename;
-				key.dsize = strlen (basename) + 1;
+			if (!STREQ (MYDBM_DPTR (key), basename)) {
+				MYDBM_SET_DPTR (key, basename);
+				MYDBM_DSIZE (key) = strlen (basename) + 1;
 				cont = make_content (in);
 				test_insert (__LINE__, key, cont);
 				status = (dbf->put) (dbf, (DBT *) &key,
 						     (DBT *) &cont, 0);
-				free (cont.dptr);
+				free (MYDBM_DPTR (cont));
 				break;
 			}
 		}
@@ -345,14 +359,17 @@ static struct mandata *dblookup (char *page, char *section, int flags)
 	datum key, cont;
 	int status;
 
-	key.dptr = page;
-	key.dsize = strlen (page) + 1;
+	memset (&key, 0, sizeof key);
+	memset (&cont, 0, sizeof cont);
+
+	MYDBM_SET_DPTR (key, page);
+	MYDBM_DSIZE (key) = strlen (page) + 1;
 
 	/* initialise the cursor to (possibly) our key/cont */
 	status = (dbf->seq) (dbf, (DBT *) &key, (DBT *) &cont, R_CURSOR);
 
 	/* either nothing was found or the key was not an exact match */
-	if (status == 1 || !STREQ (page, key.dptr))
+	if (status == 1 || !STREQ (page, MYDBM_DPTR (key)))
 		return NULL;
 	if (status == -1)
 		gripe_get (__LINE__);
@@ -361,8 +378,9 @@ static struct mandata *dblookup (char *page, char *section, int flags)
 	null_me = &(info->next);
 
 	do {
+		/* TODO: what if cont is unset? */
 		cont = copy_datum (cont);
-		split_content (cont.dptr, info);
+		split_content (MYDBM_DPTR (cont), info);
 
 		if (!(section == NULL ||
 		    STRNEQ (section, info->ext,
@@ -381,7 +399,7 @@ static struct mandata *dblookup (char *page, char *section, int flags)
 			gripe_get (__LINE__);
 
 		/* run out of identical keys */
-	} while (!(status == 1 || !STREQ (page, key.dptr)));
+	} while (!(status == 1 || !STREQ (page, MYDBM_DPTR (key))));
 
 	free (info);
 	*null_me = NULL;

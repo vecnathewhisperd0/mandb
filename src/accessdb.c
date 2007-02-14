@@ -135,23 +135,23 @@ int main (int argc, char *argv[])
 
 	key = MYDBM_FIRSTKEY (dbf);
 
-	while (key.dptr != NULL) {
+	while (MYDBM_DPTR (key) != NULL) {
 		datum content, nextkey;
 		char *t, *nicekey;
 
 		content = MYDBM_FETCH (dbf, key);
-		if (!content.dptr)
+		if (!MYDBM_DPTR (content))
 			exit (FATAL);
-		nicekey = xstrdup (key.dptr);
+		nicekey = xstrdup (MYDBM_DPTR (key));
 		while ( (t = strchr (nicekey, '\t')) )
 			*t = '~';
-		while ( (t = strchr (content.dptr, '\t')) )
+		while ( (t = strchr (MYDBM_DPTR (content), '\t')) )
 			*t = ' ';
-		printf ("%s -> \"%s\"\n", nicekey, content.dptr);
+		printf ("%s -> \"%s\"\n", nicekey, MYDBM_DPTR (content));
 		free (nicekey); 
-		MYDBM_FREE (content.dptr);
+		MYDBM_FREE (MYDBM_DPTR (content));
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (key.dptr);
+		MYDBM_FREE (MYDBM_DPTR (key));
 		key = nextkey;
 	}
 

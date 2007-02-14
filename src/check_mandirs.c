@@ -423,11 +423,18 @@ void update_db_time (void)
 	datum key1, content1;
 #endif /* FAST_BTREE */
 
-	key.dptr = xstrdup (KEY);
-	key.dsize = sizeof KEY;
-	content.dptr = (char *) xmalloc (16); /* 11 is max long with '\0' */
-	(void) sprintf (content.dptr, "%ld", (long) time (NULL));
-	content.dsize = strlen (content.dptr) + 1;
+	memset (&key, 0, sizeof key);
+	memset (&content, 0, sizeof content);
+#ifdef FAST_BTREE
+	memset (&key1, 0, sizeof key);
+	memset (&content1, 0, sizeof content);
+#endif
+
+	MYDBM_SET_DPTR (key, xstrdup (KEY));
+	MYDBM_DSIZE (key) = sizeof KEY;
+	MYDBM_SET_DPTR (content, xmalloc (16)); /* 11 is max long with '\0' */
+	sprintf (MYDBM_DPTR (content), "%ld", (long) time (NULL));
+	MYDBM_DSIZE (content) = strlen (MYDBM_DPTR (content)) + 1;
 
 	/* Open the db in RW to store the $mtime$ ID */
 	/* we know that this should succeed because we just updated the db! */
@@ -438,26 +445,26 @@ void update_db_time (void)
 #endif /* MAN_DB_UPDATES */
 			error (0, errno, _("can't update index cache %s"),
 			       database);
-		free (content.dptr);
+		free (MYDBM_DPTR (content));
 		return;
 	}
 #ifndef FAST_BTREE
 	MYDBM_REPLACE (dbf, key, content);
 #else /* FAST_BTREE */
-	key1.dptr = KEY;
-	key1.dsize = sizeof KEY;
+	MYDBM_SET_DPTR (key1, KEY);
+	MYDBM_DSIZE (key1) = sizeof KEY;
 
 	(dbf->seq) (dbf, (DBT *) &key1, (DBT *) &content1, R_CURSOR);
 	
-	if (strcmp (key1.dptr, key.dptr) == 0)
+	if (strcmp (MYDBM_DPTR (key1), MYDBM_DPTR (key)) == 0)
 		(dbf->put) (dbf, (DBT *) &key, (DBT *) &content, R_CURSOR);
 	else
 		(dbf->put) (dbf, (DBT *) &key, (DBT *) &content, 0);
 #endif /* !FAST_BTREE */
 
 	MYDBM_CLOSE (dbf);
-	free (key.dptr);
-	free (content.dptr);
+	free (MYDBM_DPTR (key));
+	free (MYDBM_DPTR (content));
 }
 
 /* remove the db's time key - called prior to update_db if we want
@@ -466,8 +473,10 @@ void reset_db_time (void)
 {
 	datum key;
 
-	key.dptr = xstrdup (KEY);
-	key.dsize = sizeof KEY;
+	memset (&key, 0, sizeof key);
+
+	MYDBM_SET_DPTR (key, xstrdup (KEY));
+	MYDBM_DSIZE (key) = sizeof KEY;
 
 	/* we don't really care if we can't open it RW - it's not fatal */
 	dbf = MYDBM_RWOPEN (database);
@@ -479,7 +488,7 @@ void reset_db_time (void)
 	MYDBM_DELETE (dbf, key);
 	debug ("reset_db_time()\n");
 	MYDBM_CLOSE (dbf);
-	free (key.dptr);
+	free (MYDBM_DPTR (key));
 }
 
 /* routine to prepare/create the db prior to calling testmandirs() */
@@ -529,18 +538,21 @@ short update_db (const char *manpath)
 		datum key, content;
 		short new;
 
-		key.dptr = xstrdup (KEY);
-		key.dsize = sizeof KEY;
+		memset (&key, 0, sizeof key);
+		memset (&content, 0, sizeof content);
+
+		MYDBM_SET_DPTR (key, xstrdup (KEY));
+		MYDBM_DSIZE (key) = sizeof KEY;
 		content = MYDBM_FETCH (dbf, key);
 		MYDBM_CLOSE (dbf);
-		free (key.dptr);
+		free (MYDBM_DPTR (key));
 
 		debug ("update_db(): %ld\n",
-		       content.dptr ? atol (content.dptr) : 0L);
-		if (content.dptr) {
-			new = testmandirs (manpath,
-					   (time_t) atol (content.dptr));
-			MYDBM_FREE (content.dptr);
+		       MYDBM_DPTR (content) ? atol (MYDBM_DPTR (content)) : 0L);
+		if (MYDBM_DPTR (content)) {
+			new = testmandirs (
+				manpath, (time_t) atol (MYDBM_DPTR (content)));
+			MYDBM_FREE (MYDBM_DPTR (content));
 		} else
 			new = testmandirs (manpath, (time_t) 0);
 
@@ -570,29 +582,29 @@ void purge_pointers (const char *name)
 
 	debug ("Purging pointers to vanished page \"%s\"\n", name);
 
-	while (key.dptr != NULL) {
+	while (MYDBM_DPTR (key) != NULL) {
 		datum content, nextkey;
 		struct mandata entry;
 		char *nicekey, *tab;
 
 		/* Ignore db identifier keys. */
-		if (*key.dptr == '$')
+		if (*MYDBM_DPTR (key) == '$')
 			goto pointers_next;
 
 		content = MYDBM_FETCH (dbf, key);
-		if (!content.dptr)
+		if (!MYDBM_DPTR (content))
 			return;
 
 		/* Get just the name. */
-		nicekey = xstrdup (key.dptr);
+		nicekey = xstrdup (MYDBM_DPTR (key));
 		tab = strchr (nicekey, '\t');
 		if (tab)
 			*tab = '\0';
 
-		if (*content.dptr == '\t')
+		if (*MYDBM_DPTR (content) == '\t')
 			goto pointers_contentnext;
 
-		split_content (content.dptr, &entry);
+		split_content (MYDBM_DPTR (content), &entry);
 		if (entry.id != SO_MAN && entry.id != WHATIS_MAN)
 			goto pointers_contentnext;
 
@@ -606,10 +618,10 @@ void purge_pointers (const char *name)
 
 pointers_contentnext:
 		free (nicekey);
-		MYDBM_FREE (content.dptr);
+		MYDBM_FREE (MYDBM_DPTR (content));
 pointers_next:
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (key.dptr);
+		MYDBM_FREE (MYDBM_DPTR (key));
 		key = nextkey;
 	}
 }
@@ -789,7 +801,7 @@ short purge_missing (const char *manpath, const char *catpath)
 
 	key = MYDBM_FIRSTKEY (dbf);
 
-	while (key.dptr != NULL) {
+	while (MYDBM_DPTR (key) != NULL) {
 		datum content, nextkey;
 		struct mandata entry;
 		char *nicekey, *tab;
@@ -797,36 +809,36 @@ short purge_missing (const char *manpath, const char *catpath)
 		char **found;
 
 		/* Ignore db identifier keys. */
-		if (*key.dptr == '$') {
+		if (*MYDBM_DPTR (key) == '$') {
 			nextkey = MYDBM_NEXTKEY (dbf, key);
-			MYDBM_FREE (key.dptr);
+			MYDBM_FREE (MYDBM_DPTR (key));
 			key = nextkey;
 			continue;
 		}
 
 		content = MYDBM_FETCH (dbf, key);
-		if (!content.dptr)
+		if (!MYDBM_DPTR (content))
 			return count;
 
 		/* Get just the name. */
-		nicekey = xstrdup (key.dptr);
+		nicekey = xstrdup (MYDBM_DPTR (key));
 		tab = strchr (nicekey, '\t');
 		if (tab)
 			*tab = '\0';
 
 		/* Deal with multi keys. */
-		if (*content.dptr == '\t') {
-			if (check_multi_key (nicekey, content.dptr))
+		if (*MYDBM_DPTR (content) == '\t') {
+			if (check_multi_key (nicekey, MYDBM_DPTR (content)))
 				MYDBM_DELETE (dbf, key);
 			free (nicekey);
-			MYDBM_FREE (content.dptr);
+			MYDBM_FREE (MYDBM_DPTR (content));
 			nextkey = MYDBM_NEXTKEY (dbf, key);
-			MYDBM_FREE (key.dptr);
+			MYDBM_FREE (MYDBM_DPTR (key));
 			key = nextkey;
 			continue;
 		}
 
-		split_content (content.dptr, &entry);
+		split_content (MYDBM_DPTR (content), &entry);
 
 		save_debug = debug_level;
 		debug_level = 0;	/* look_for_file() is quite noisy */
@@ -859,7 +871,7 @@ short purge_missing (const char *manpath, const char *catpath)
 
 		free_mandata_elements (&entry);
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (key.dptr);
+		MYDBM_FREE (MYDBM_DPTR (key));
 		key = nextkey;
 	}
 

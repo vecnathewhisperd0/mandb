@@ -61,6 +61,9 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #  define BLK_SIZE			0  /* to invoke normal fs block size */
 #  define DB_EXT				".db"
 #  define MYDBM_FILE 			man_gdbm_wrapper
+#  define MYDBM_DPTR(d)			((d).dptr)
+#  define MYDBM_SET_DPTR(d, value)	((d).dptr = (value))
+#  define MYDBM_DSIZE(d)		((d).dsize)
 #  define MYDBM_CTRWOPEN(file)		man_gdbm_open_wrapper(file,\
 					  gdbm_open(file, BLK_SIZE,\
 					  GDBM_NEWDB|GDBM_FAST, DBMODE, 0))
@@ -102,6 +105,9 @@ extern int ndbm_flclose(DBM *dbf);
 
 #  define DB_EXT				""
 #  define MYDBM_FILE 			DBM*
+#  define MYDBM_DPTR(d)			((d).dptr)
+#  define MYDBM_SET_DPTR(d, value)	((d).dptr = (value))
+#  define MYDBM_DSIZE(d)		((d).dsize)
 #  define MYDBM_CTRWOPEN(file)		ndbm_flopen(file, O_TRUNC|O_CREAT|O_RDWR, DBMODE)
 #  define MYDBM_CRWOPEN(file)             ndbm_flopen(file, O_CREAT|O_RDWR, DBMODE)
 #  define MYDBM_RWOPEN(file)		ndbm_flopen(file, O_RDWR, DBMODE)
@@ -126,10 +132,7 @@ extern int ndbm_flclose(DBM *dbf);
 #   include <limits.h>
 #  endif
 
-typedef struct {
-	char *dptr;
-	size_t dsize;
-} datum;
+typedef DBT datum;
 
 extern DB *btree_flopen(char *filename, int flags, int mode);
 extern __inline__ int btree_close(DB *dbf);
@@ -143,6 +146,9 @@ extern __inline__ int btree_nextkeydata(DB *dbf, datum *key, datum *cont);
 
 #  define DB_EXT			".bt"
 #  define MYDBM_FILE			DB*
+#  define MYDBM_DPTR(d)			((char *) (d).data)
+#  define MYDBM_SET_DPTR(d, value)	((d).data = (char *) (value))
+#  define MYDBM_DSIZE(d)		((d).size)
 #  define MYDBM_CTRWOPEN(file)		btree_flopen(file, O_TRUNC|O_CREAT|O_RDWR, DBMODE)
 #  define MYDBM_CRWOPEN(file)             btree_flopen(file, O_CREAT|O_RDWR, DBMODE)
 #  define MYDBM_RWOPEN(file)		btree_flopen(file, O_RDWR, DBMODE)
@@ -150,7 +156,7 @@ extern __inline__ int btree_nextkeydata(DB *dbf, datum *key, datum *cont);
 #  define MYDBM_INSERT(dbf, key, cont)	btree_insert(dbf, key, cont)
 #  define MYDBM_REPLACE(dbf, key, cont)	btree_replace(dbf, key, cont)
 #  define MYDBM_EXISTS(dbf, key)	btree_exists(dbf, key)
-#  define MYDBM_DELETE(dbf, key)	((dbf->del)(dbf, (DBT *) &key, 0) ? -1 : 0)
+#  define MYDBM_DELETE(dbf, key)	((dbf->del)(dbf, &key, 0) ? -1 : 0)
 #  define MYDBM_FETCH(dbf, key) 	btree_fetch(dbf, key)
 #  define MYDBM_CLOSE(dbf)		btree_close(dbf)
 #  define MYDBM_FIRSTKEY(dbf)		btree_firstkey(dbf)

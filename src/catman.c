@@ -197,21 +197,21 @@ static void catman (char *argp[])
 }
 
 /* accept key and a pointer to the array address that needs to be filled in,
-   fill in address and return 1 if key.dptr can be freed otherwise 0 */ 
+   fill in address and return 1 if MYDBM_DPTR (key) can be freed otherwise 0 */
 static __inline__ int add_arg (datum key, char **argument)
 {
     	char *tab;
 
-	tab = strrchr (key.dptr, '\t');
+	tab = strrchr (MYDBM_DPTR (key), '\t');
 
-	if (tab && tab != key.dptr) {
+	if (tab && tab != MYDBM_DPTR (key)) {
 		*tab = '\0';
-		*argument = xstrdup (key.dptr);
+		*argument = xstrdup (MYDBM_DPTR (key));
 		*tab = '\t';
 		return 1;
 	} 
 
-	*argument = key.dptr;
+	*argument = MYDBM_DPTR (key);
 	return 0;
 }
 
@@ -290,25 +290,25 @@ static int parse_for_sec (const char *manpath, const char *section)
 	arg_size = initial_bit;
 	key = MYDBM_FIRSTKEY (dbf);
 
-	while (key.dptr != NULL) {
+	while (MYDBM_DPTR (key) != NULL) {
 		int free_key = 1;
 
 		/* ignore db identifier keys */
-		if (*key.dptr != '$') { 
+		if (*MYDBM_DPTR (key) != '$') { 
 			datum content;
 
 			content = MYDBM_FETCH (dbf, key);
 
-			if (!content.dptr)
+			if (!MYDBM_DPTR (content))
 				error (FATAL, 0,
 				       _( "NULL content for key: %s"),
-				       key.dptr);
+				       MYDBM_DPTR (key));
 
 			/* ignore overflow entries */
-			if (*content.dptr != '\t') { 
+			if (*MYDBM_DPTR (content) != '\t') { 
 				struct mandata entry;
 
-				split_content (content.dptr, &entry);
+				split_content (MYDBM_DPTR (content), &entry);
 
 				/* Accept if the entry is an ultimate manual
 				   page and the section matches the one we're
@@ -347,14 +347,14 @@ static int parse_for_sec (const char *manpath, const char *section)
 				    	}
 				}
 
-				/* == content.dptr, freed below */
+				/* == MYDBM_DPTR (content), freed below */
 				entry.addr = NULL;
 				free_mandata_elements (&entry);
 			}
 			
 			/* we don't need the content ever again */
-			assert (content.dptr); /* just to be sure */
-			MYDBM_FREE (content.dptr);
+			assert (MYDBM_DPTR (content)); /* just to be sure */
+			MYDBM_FREE (MYDBM_DPTR (content));
 		}
 
 		/* If we are not using the key, free it now */
@@ -362,7 +362,7 @@ static int parse_for_sec (const char *manpath, const char *section)
 			datum nextkey;
 
 			nextkey = MYDBM_NEXTKEY (dbf, key);
-			MYDBM_FREE (key.dptr);
+			MYDBM_FREE (MYDBM_DPTR (key));
 			key = nextkey;
 		} else 
 			key = MYDBM_NEXTKEY (dbf, key);

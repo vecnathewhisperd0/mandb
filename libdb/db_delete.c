@@ -73,21 +73,24 @@ int dbdelete (const char *name, struct mandata *info)
 {
 	datum key, cont;
 
+	memset (&key, 0, sizeof key);
+	memset (&cont, 0, sizeof cont);
+
 	/* get entry for info */
 
 	debug ("Attempting delete of %s(%s) entry.\n", name, info->ext);
 
-	key.dptr = name_to_key (name);
-	key.dsize = strlen (key.dptr) + 1;
+	MYDBM_SET_DPTR (key, name_to_key (name));
+	MYDBM_DSIZE (key) = strlen (MYDBM_DPTR (key)) + 1;
 	cont = MYDBM_FETCH (dbf, key);
 
-	if (!cont.dptr) {			/* 0 entries */
-		free (key.dptr);
+	if (!MYDBM_DPTR (cont)) {			/* 0 entries */
+		free (MYDBM_DPTR (key));
 		return NO_ENTRY;
-	} else if (*cont.dptr != '\t') {	/* 1 entry */
+	} else if (*MYDBM_DPTR (cont) != '\t') {	/* 1 entry */
 		MYDBM_DELETE (dbf, key);
-		MYDBM_FREE (cont.dptr);
-	} else {				/* 2+ entries */
+		MYDBM_FREE (MYDBM_DPTR (cont));
+	} else {					/* 2+ entries */
 		char **names, **ext;
 		char *multi_content = NULL;
 		datum multi_key;
@@ -96,7 +99,7 @@ int dbdelete (const char *name, struct mandata *info)
 		/* Extract all of the extensions associated with
 		   this key */
 
-		refs = list_extensions (cont.dptr + 1, &names, &ext);
+		refs = list_extensions (MYDBM_DPTR (cont) + 1, &names, &ext);
 
 		for (i = 0; i < refs; ++i)
 			if (STREQ (names[i], name) &&
@@ -106,8 +109,8 @@ int dbdelete (const char *name, struct mandata *info)
 		if (i >= refs) {
 			free (names);
 			free (ext);
-			MYDBM_FREE (cont.dptr);
-			free (key.dptr);
+			MYDBM_FREE (MYDBM_DPTR (cont));
+			free (MYDBM_DPTR (key));
 			return NO_ENTRY;
 		}
 
@@ -115,11 +118,11 @@ int dbdelete (const char *name, struct mandata *info)
 		if (!MYDBM_EXISTS (dbf, multi_key)) {
 			error (0, 0,
 			       _( "multi key %s does not exist"),
-			       multi_key.dptr);
+			       MYDBM_DPTR (multi_key));
 			gripe_corrupt_data ();
 		}
 		MYDBM_DELETE (dbf, multi_key);
-		free (multi_key.dptr);
+		free (MYDBM_DPTR (multi_key));
 
 		/* refs *may* be 1 if all manual pages with this name
 		   have been deleted. In this case, we'll have to remove
@@ -128,9 +131,9 @@ int dbdelete (const char *name, struct mandata *info)
 		if (refs == 1) {
 			free (names);
 			free (ext);
-			MYDBM_FREE (cont.dptr);
+			MYDBM_FREE (MYDBM_DPTR (cont));
 			MYDBM_DELETE (dbf, key);
-			free (key.dptr);
+			free (MYDBM_DPTR (key));
 			return 0;
 		}
 
@@ -141,22 +144,22 @@ int dbdelete (const char *name, struct mandata *info)
 							   "\t", names[j],
 							   "\t", ext[j], NULL);
 
-		MYDBM_FREE (cont.dptr);
+		MYDBM_FREE (MYDBM_DPTR (cont));
 
 		/* if refs = 2 do something else. Doesn't really matter as
 		   the gdbm db file does not shrink any after a deletion
 		   anyway */
 
-		cont.dptr = multi_content;
-		cont.dsize = strlen (cont.dptr) + 1;
+		MYDBM_SET_DPTR (cont, multi_content);
+		MYDBM_DSIZE (cont) = strlen (MYDBM_DPTR (cont)) + 1;
 
 		if (MYDBM_REPLACE (dbf, key, cont))
-			gripe_replace_key (key.dptr);
+			gripe_replace_key (MYDBM_DPTR (key));
 
 		free (names);
 		free (ext);
 	}
 
-	free (key.dptr);
+	free (MYDBM_DPTR (key));
 	return 0;
 }
