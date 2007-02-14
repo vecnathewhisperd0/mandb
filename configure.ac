@@ -118,11 +118,11 @@ fi
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PATH_PROG(cat, cat)
-AC_PATH_PROGS(browser, www-browser lynx)
+MAN_PATH_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx])
 test -n "$browser" && browser="exec $browser"
 AC_PATH_PROG(tr, tr)
 AC_PATH_PROG(grep, grep)
-AC_PATH_PROGS(pager, pager less more)
+MAN_PATH_PROGS([pager], [PAGER], [use PAGER as default pager], [pager less more])
 test -n "$pager" && pager="$pager -s"
 dnl
 dnl define below (in list of preference) *roff macros to check for.
@@ -132,7 +132,7 @@ dnl
 dnl We have problems here, as different systems have different *roff
 dnl formatters and they accept different options and do different things :(
 dnl
-AC_PATH_PROGS(nroff, nroff gnroff groff)
+MAN_PATH_PROGS([nroff], [NROFF], [use NROFF as roff formatter for character devices], [nroff gnroff groff])
 if test -n "$nroff"
 then
 	dnl define GNU_NROFF if necessary
@@ -177,6 +177,8 @@ else
 	nroff="(nroff not installed)"
 	AC_DEFINE(NROFF_MISSING, 1, [Define if you don't have nroff.])
 fi
+dnl It would be nice to use MAN_PATH_PROGS here, but how do we determine
+dnl TROFF_IS_GROFF?
 AC_PATH_PROGS(troff, groff)
 if test -n "$troff"
 then
@@ -217,8 +219,8 @@ else
 	troff="(troff not installed)"
 fi
 dnl 
-AC_PATH_PROGS(eqn, eqn geqn)
-AC_PATH_PROGS(neqn, neqn gneqn)
+MAN_PATH_PROGS([eqn], [EQN], [use EQN to preprocess equations], [eqn geqn])
+MAN_PATH_PROGS([neqn], [NEQN], [use NEQN to preprocess equations for character devices], [neqn gneqn])
 dnl
 dnl if we fail to find an neqn, use eqn and try to force it to output
 dnl for an ascii device. As this is only relevant for equations (?), not
@@ -229,14 +231,14 @@ then
 	test -n "$eqn" && 
 	(test -n "$nroff_device" && neqn="$eqn -T$nroff_device" || neqn="$eqn -Tascii")
 fi
-AC_PATH_PROGS(tbl, tbl gtbl)
-AC_PATH_PROGS(col, col gcol)
-AC_PATH_PROGS(vgrind, vgrind gvgrind)
-AC_PATH_PROGS(refer, refer grefer)
-AC_PATH_PROGS(grap, grap)
-AC_PATH_PROGS(pic, pic gpic)
+MAN_PATH_PROGS([tbl], [TBL], [use TBL to preprocess tables], [tbl gtbl])
+MAN_PATH_PROGS([col], [COL], [use COL to filter formatting characters from output], [col gcol])
+MAN_PATH_PROGS([vgrind], [VGRIND], [use VGRIND to preprocess program sources], [vgrind gvgrind])
+MAN_PATH_PROGS([refer], [REFER], [use REFER to preprocess bibliographic references], [refer grefer])
+MAN_PATH_PROGS([grap], [GRAP], [use GRAP to preprocess graphs], [grap])
+MAN_PATH_PROGS([pic], [PIC], [use PIC to preprocess pictures], [pic gpic])
 test -n "$pic" && pic="$pic -S"
-AC_PATH_PROG(gzip, gzip)
+MAN_PATH_PROGS([gzip], [GZIP], [use GZIP as GNU compression utility], [gzip])
 if test -n "$gzip"
 then
 	AC_DEFINE(HAVE_GZIP, 1, [Define if you have gzip.])
@@ -245,7 +247,7 @@ then
 	compress_ext="gz"
 	decompressor="$gunzip"
 fi
-AC_PATH_PROG(compress, compress)
+MAN_PATH_PROGS([compress], [COMPRESS], [use COMPRESS as UNIX compression utility], [compress])
 if test -n "$compress"
 then
 	AC_DEFINE(HAVE_COMPRESS, 1, [Define if you have compress.])
@@ -257,7 +259,7 @@ then
 		decompressor="$uncompress"
 	fi
 fi
-AC_PATH_PROG(bzip2, bzip2)
+MAN_PATH_PROGS([bzip2], [BZIP2], [use BZIP2 as block-sorting compression utility], [bzip2])
 if test -n "$bzip2"
 then
 	AC_DEFINE(HAVE_BZIP2, 1, [Define if you have bzip2.])
