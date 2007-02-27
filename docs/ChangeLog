@@ -1,3 +1,8 @@
+Tue Feb 27 20:58:31 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_start): Save previous value of SIGQUIT
+	  such that it gets restored as SIGQUIT, not as SIGINT.
+
 Wed Feb 14 12:20:28 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* m4/man-path-progs.m4: New file with MAN_PATH_PROGS macro.
