@@ -95,7 +95,7 @@ static struct list *namestore, *tailstore;
 #define MANDATORY	 1
 
 /* DIRLIST list[MAXDIRS]; */
-char *tmplist[MAXDIRS];
+static char *tmplist[MAXDIRS];
 char *manpathlist[MAXDIRS];
 
 char *user_config_file = NULL;
