@@ -148,7 +148,7 @@ static int replace_if_necessary (struct mandata *newdata,
  return errorcode or 0 on success.
 */
 #ifndef FAST_BTREE
-int dbstore (struct mandata *in, const char *basename)
+int dbstore (struct mandata *in, const char *base)
 {
 	datum oldkey, oldcont;
 
@@ -156,14 +156,14 @@ int dbstore (struct mandata *in, const char *basename)
 	memset (&oldcont, 0, sizeof oldcont);
 
 	/* create a simple key */
- 	MYDBM_DSIZE (oldkey) = strlen (basename) + 1;
+ 	MYDBM_DSIZE (oldkey) = strlen (base) + 1;
 
  	if (MYDBM_DSIZE (oldkey) == 1) {
 		dbprintf (in);
  		return 2;
  	}
 
-	MYDBM_SET_DPTR (oldkey, name_to_key (basename));
+	MYDBM_SET_DPTR (oldkey, name_to_key (base));
 	if (in->name) {
 		error (0, 0, "in->name (%s) should not be set when calling "
 			     "dbstore()!\n",
@@ -177,8 +177,8 @@ int dbstore (struct mandata *in, const char *basename)
 	oldcont = MYDBM_FETCH (dbf, oldkey);
 
 	if (MYDBM_DPTR (oldcont) == NULL) { 		/* situation (1) */
-		if (!STREQ (basename, MYDBM_DPTR (oldkey)))
-			in->name = xstrdup (basename);
+		if (!STREQ (base, MYDBM_DPTR (oldkey)))
+			in->name = xstrdup (base);
 		oldcont = make_content (in);
 		if (MYDBM_INSERT (dbf, oldkey, oldcont))
 			gripe_insert_unused (MYDBM_DPTR (oldkey));
@@ -191,7 +191,7 @@ int dbstore (struct mandata *in, const char *basename)
 		memset (&newkey, 0, sizeof newkey);
 		memset (&newcont, 0, sizeof newcont);
 
-		newkey = make_multi_key (basename, in->ext);
+		newkey = make_multi_key (base, in->ext);
 		newcont = make_content (in);
 
 		/* Try to insert the new multi data */
@@ -224,11 +224,11 @@ int dbstore (struct mandata *in, const char *basename)
 		free (MYDBM_DPTR (newcont));
 
 		MYDBM_DSIZE (newcont) = MYDBM_DSIZE (oldcont) +
-			strlen (basename) + strlen (in->ext) + 2;
+			strlen (base) + strlen (in->ext) + 2;
 		MYDBM_SET_DPTR (newcont, xmalloc (MYDBM_DSIZE (newcont)));
 
 		sprintf (MYDBM_DPTR (newcont), "%s\t%s\t%s",
-			 MYDBM_DPTR (oldcont), basename, in->ext);
+			 MYDBM_DPTR (oldcont), base, in->ext);
 		MYDBM_FREE (MYDBM_DPTR (oldcont));
 
 		/* Try to replace the old simple data with the new stuff */
@@ -264,11 +264,11 @@ int dbstore (struct mandata *in, const char *basename)
 		/* Check against identical multi keys before inserting
 		   into db */
 
-		if (STREQ (old_name, basename) && STREQ (old.ext, in->ext)) {
+		if (STREQ (old_name, base) && STREQ (old.ext, in->ext)) {
 			int ret;
 
-			if (!STREQ (basename, MYDBM_DPTR (oldkey)))
-				in->name = xstrdup (basename);
+			if (!STREQ (base, MYDBM_DPTR (oldkey)))
+				in->name = xstrdup (base);
 			newcont = make_content (in);
 			ret = replace_if_necessary (in, &old, oldkey, newcont);
 			/* MYDBM_FREE (MYDBM_DPTR (oldcont)); */
@@ -299,7 +299,7 @@ int dbstore (struct mandata *in, const char *basename)
 		free (MYDBM_DPTR (lastkey));
 		free (MYDBM_DPTR (lastcont));
 
-		newkey = make_multi_key (basename, in->ext);
+		newkey = make_multi_key (base, in->ext);
 		newcont = make_content (in);
 
 		if (MYDBM_INSERT (dbf, newkey, newcont))
@@ -312,10 +312,10 @@ int dbstore (struct mandata *in, const char *basename)
 
 		MYDBM_DSIZE (newcont) =
 			strlen (old_name) + strlen (old.ext) +
-			strlen (basename) + strlen (in->ext) + 5;
+			strlen (base) + strlen (in->ext) + 5;
 		MYDBM_SET_DPTR (newcont, xmalloc (MYDBM_DSIZE (newcont)));
 		sprintf (MYDBM_DPTR (newcont), "\t%s\t%s\t%s\t%s",
-			 old_name, old.ext, basename, in->ext);
+			 old_name, old.ext, base, in->ext);
 
 		if (MYDBM_REPLACE (dbf, oldkey, newcont))
 			gripe_replace_key (MYDBM_DPTR (oldkey));
