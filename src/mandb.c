@@ -138,9 +138,10 @@ extern uid_t ruid;
 extern uid_t euid;
 #endif /* SECURE_MAN_UID */
 
+static char *manpathlist[MAXDIRS];
+
 extern char *optarg;
 extern int optind, opterr, optopt;
-extern char *manpathlist[];
 extern int pages;
 
 static void usage (int status)
@@ -527,7 +528,7 @@ int main (int argc, char *argv[])
 
 
 	/* This is required for get_catpath(), regardless */
-	manp = manpath (NULL);	/* also calls read_config_file() */
+	manp = get_manpath (NULL);	/* also calls read_config_file() */
 
 	if (opt_test && !debug_level)
 		quiet = 1;

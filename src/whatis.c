@@ -89,7 +89,8 @@ extern char *strrchr();
 #include "lib/pipeline.h"
 #include "manp.h"
 
-extern char *manpathlist[];
+static char *manpathlist[MAXDIRS];
+
 extern char *user_config_file;
 extern char *optarg;
 extern int optind, opterr, optopt;
@@ -116,7 +117,6 @@ extern void regfree();
 #endif
 
 static int wildcard;
-static int status = OK;
 
 static const char *section;
 
@@ -485,7 +485,7 @@ static int apropos (char *page, char *lowpage)
 	while (!end) {
 #endif /* !BTREE */
 		char *tab;
-		int match;
+		int got_match;
 		struct mandata info;
 #ifdef APROPOS
 		char *whatis;
@@ -529,20 +529,20 @@ static int apropos (char *page, char *lowpage)
 			 *tab = '\0';
 
 #ifdef APROPOS
-		match = parse_name (lowpage, MYDBM_DPTR (key));
+		got_match = parse_name (lowpage, MYDBM_DPTR (key));
 		whatis = xstrdup (info.whatis);
-		if (!match && whatis)
-			match = parse_whatis (page, lowpage, whatis);
+		if (!got_match && whatis)
+			got_match = parse_whatis (page, lowpage, whatis);
 		free (whatis);
 #else /* WHATIS */
-		match = parse_name (page, MYDBM_DPTR (key));
+		got_match = parse_name (page, MYDBM_DPTR (key));
 #endif /* APROPOS */
-		if (match) {
+		if (got_match) {
 			display (&info, MYDBM_DPTR (key));
 			found++;
 		}
 
-		found += match;
+		found += got_match;
 		if (tab)
 			*tab = '\t';
 
@@ -569,7 +569,7 @@ nextpage:
 }
 
 /* loop through the man paths, searching for a match */
-static void search (char *page)
+static int search (char *page)
 {
 	int found = 0;
 	char *lowpage = lower (page);
@@ -617,12 +617,12 @@ static void search (char *page)
 
 	chkr_garbage_detector ();
 
-	if (!found) {
+	if (!found)
 		printf (_("%s: nothing appropriate.\n"), page);
-		status = NOT_FOUND;
-	}
 
 	free (lowpage);
+
+	return found;
 }
 
 int main (int argc, char *argv[])
@@ -632,6 +632,7 @@ int main (int argc, char *argv[])
 	const char *alt_systems = "";
 	char *llocale = NULL, *locale;
 	int option_index;
+	int status = OK;
 
 	program_name = xstrdup (basename (argv[0]));
 
@@ -739,9 +740,9 @@ int main (int argc, char *argv[])
 
 	/* sort out the internal manpath */
 	if (manp == NULL)
-		manp = add_nls_manpath (manpath (alt_systems), locale);
+		manp = add_nls_manpath (get_manpath (alt_systems), locale);
 	else
-		free (manpath (NULL));
+		free (get_manpath (NULL));
 
 	create_pathlist (manp, manpathlist);
 
@@ -769,7 +770,8 @@ int main (int argc, char *argv[])
 				       argv[optind], error_string);
 		}
 #endif /* REGEX */
-		search (argv[optind++]);
+		if (!search (argv[optind++]))
+			status = NOT_FOUND;
 #ifdef POSIX_REGEX
 		regfree (&preg);
 #endif /* POSIX_REGEX */

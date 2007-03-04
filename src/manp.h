@@ -25,7 +25,7 @@
 /* manp.c */
 extern char *cat_manpath (char *manp);
 extern char *add_nls_manpath (char *manpathlist, const char *locale);
-extern char *manpath (const char *systems);
+extern char *get_manpath (const char *systems);
 extern void create_pathlist (const char *manp, char **mp);
 extern void free_pathlist (char **mp);
 extern char *get_mandb_manpath (void);

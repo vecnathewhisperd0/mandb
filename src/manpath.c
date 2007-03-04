@@ -164,7 +164,7 @@ int main (int argc, char *argv[])
 		}
 	}
 	
-	path_string = manpath (alt_system);
+	path_string = get_manpath (alt_system);
 
 	if (global) {
 		path_string = get_mandb_manpath ();

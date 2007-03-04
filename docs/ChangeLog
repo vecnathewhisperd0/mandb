@@ -1,3 +1,43 @@
+Sun Mar  4 00:51:30 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	Eliminate variable and function shadowing.
+
+	* configure.ac (CFLAGS): Add -Wshadow if the compiler is GCC.
+
+	* src/manp.c: Don't declare manpathlist here, as it's never used in
+	  this file.
+	* src/catman.c, src/man.c, src/mandb.c, src/whatis.c: Declare it
+	  here instead.
+
+	* lib/pipeline.c (pipeline_start): Remove duplicate declarations of
+	  set and oset.
+	* libdb/db_ver.c (dbver): Merge into ...
+	  (dbver_rd): ... this, eliminating a global variable.
+	  (dbver_rd, dbver_wr): Rename dbf to dbfile.
+	* src/accessdb.c (main): Don't redeclare dbf locally.
+	* src/check_mandirs.c (gripe_rwopen_failed): Use global database
+	  rather than passing it as an argument. Update all callers.
+	* src/man.c (gripe_no_name): Rename section to sect.
+	  (add_roff_line_length): Rename save_cat to save_cat_p.
+	  (make_roff_command): Declare cmd only once.
+	  (make_browser): Rename command to pattern.
+	  (display): Rename pause to prompt.
+	* src/manp.c (get_manpath): Rename to ...
+	  (get_manpath_from_path): ... this. Update all callers.
+	  (manpath): Rename to ...
+	  (get_manpath): ... this. Update all callers.
+	  (add_system_manpath): Rename system to one_system.
+	* src/manp.h (manpath): Rename to ...
+	  (get_manpath): ... this.
+	* src/ult_src.c (ult_hardlink): Rename link to base.
+	  (ult_src): Rename basename to base.
+	* src/whatis.c (apropos): Rename match to got_match.
+	  (search): Return found rather than setting the global variable
+	  status based on it.
+	  (main): Use search's return value, eliminating a global variable.
+	* src/zsoelim.l (usage): Rename status to exit_status.
+	  (open_file): Rename decompress to decomp.
+
 Sat Mar  3 22:35:31 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c: Declare tmplist as static.

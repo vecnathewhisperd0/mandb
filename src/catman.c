@@ -126,9 +126,10 @@ static const char args[] = "dM:C:hV";
 static char *locale;
 #endif /* HAVE_SETLOCALE */
 
+static char *manpathlist[MAXDIRS];
+
 extern char *optarg;
 extern int optind, opterr, optopt;
-extern char *manpathlist[];
 extern char *user_config_file;
 
 static void usage (int status)
@@ -477,7 +478,7 @@ int main (int argc, char *argv[])
 	/* Deal with the MANPATH */
 
 	/* This is required for get_catpath(), regardless */
-	sys_manp = manpath (NULL);
+	sys_manp = get_manpath (NULL);
 
 	/* pick up the system manpath or use the supplied one */
 	if (!manp) {

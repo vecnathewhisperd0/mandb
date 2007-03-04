@@ -321,14 +321,14 @@ static void zap_quotes (void)
 #endif
 
 /* print the usage message, then exit */
-static void usage (int status)
+static void usage (int exit_status)
 {
 	printf (_("usage: %s [-CVh] [file ...]\n"), program_name);
 	printf (_(
 		"-C, --compatible            compatibility switch (ignored).\n"
 		"-V, --version               show version.\n"
 		"-h, --help                  show this usage message.\n"));
-	exit (status);
+	exit (exit_status);
 }
 
 /* print the version, then exit */
@@ -448,7 +448,7 @@ static int open_file (char *filename)
 
 		if (comp->ext) {
 			command *decompress_cmd;
-			pipeline *decompress;
+			pipeline *decomp;
 			int exit_status;
 			int file_fd;
 
@@ -457,25 +457,24 @@ static int open_file (char *filename)
 				error (FATAL, errno, _("can't create a temporary filename"));
 			decompress_cmd = command_new_argstr (comp->prog);
 			command_arg (decompress_cmd, compfile);
-			decompress = pipeline_new_commands
-				(decompress_cmd, NULL);
-			decompress->want_out = file_fd;
-			pipeline_start (decompress);
-			exit_status = pipeline_wait (decompress);
+			decomp = pipeline_new_commands (decompress_cmd, NULL);
+			decomp->want_out = file_fd;
+			pipeline_start (decomp);
+			exit_status = pipeline_wait (decomp);
 			close (file_fd);
 
 			if (exit_status != 0) {
 				char *decompress_str =
-					pipeline_tostring (decompress);
+					pipeline_tostring (decomp);
 				error (OK, 0, _("%s exited with status %d"),
 				       decompress_str, exit_status);
 				free (decompress_str);
-				pipeline_free (decompress);
+				pipeline_free (decomp);
 				yyin = oldyyin;
 				return 1;
 			}
 
-			pipeline_free (decompress);
+			pipeline_free (decomp);
 
 			if (!(yyin = fopen (filename, "r")))  {
 				error (OK, errno,

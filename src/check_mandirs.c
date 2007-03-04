@@ -107,7 +107,7 @@ static void gripe_multi_extensions (const char *path, const char *sec,
 		       path, sec, name, ext);
 }
 
-static void gripe_rwopen_failed (const char *database)
+static void gripe_rwopen_failed (void)
 {
 	if (errno == EACCES || errno == EROFS)
 		debug ("database %s is read-only\n", database);
@@ -396,7 +396,7 @@ static short testmandirs (const char *path, time_t last)
 		dbf = MYDBM_RWOPEN(database);
 
 		if (!dbf) {
-			gripe_rwopen_failed (database);
+			gripe_rwopen_failed ();
 			return 0;
 		}
 
@@ -795,7 +795,7 @@ short purge_missing (const char *manpath, const char *catpath)
 
 	dbf = MYDBM_RWOPEN (database);
 	if (!dbf) {
-		gripe_rwopen_failed (database);
+		gripe_rwopen_failed ();
 		return 0;
 	}
 

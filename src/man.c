@@ -277,7 +277,7 @@ static int checked_system (pipeline *p)
 }
 
 
-extern char *manpathlist[];	/* defined in manp.c     */
+static char *manpathlist[MAXDIRS];
 
 /* globals */
 int quiet = 1;
@@ -461,12 +461,12 @@ static void usage (int status)
  * changed these messages from stdout to stderr,
  * (Fabrizio Polacco) Fri, 14 Feb 1997 01:30:07 +0200
  */
-static void gripe_no_name (const char *section)
+static void gripe_no_name (const char *sect)
 {
 	if (section)
 		fprintf (stderr,
 			 _("What manual page do you want from section %s?\n"),
-			 section);
+			 sect);
 	else
 		fputs (_("What manual page do you want?\n"), stderr);
 
@@ -555,13 +555,13 @@ static int get_roff_line_length (void)
 		return 0;
 }
 
-static void add_roff_line_length (command *cmd, int *save_cat)
+static void add_roff_line_length (command *cmd, int *save_cat_p)
 {
 	int length = get_roff_line_length ();
 	if (length) {
 		char optionll[32], optionlt[32];
 		debug ("Using %d-character lines\n", length);
-		*save_cat = 0;
+		*save_cat_p = 0;
 		sprintf (optionll, "-rLL=%dn", length);
 		sprintf (optionlt, "-rLT=%dn", length);
 		command_args (cmd, optionll, optionlt, NULL);
@@ -976,7 +976,7 @@ int main (int argc, char *argv[])
 		char tmp_locale[3];
 		int idx;
 
-		manp = add_nls_manpath (manpath (alt_system_name), 
+		manp = add_nls_manpath (get_manpath (alt_system_name),
 					internal_locale);
 		/* Handle multiple :-separated locales in LANGUAGE */
 		idx = multiple_locale ? strlen (multiple_locale) : 0;
@@ -995,7 +995,7 @@ int main (int argc, char *argv[])
 			manp = add_nls_manpath (manp, tmp_locale);
 		}
 	} else
-		free (manpath (NULL));
+		free (get_manpath (NULL));
 
 	create_pathlist (manp, manpathlist);
 
@@ -1419,6 +1419,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	const char *pp_string;
 	char *fmt_prog;
 	pipeline *p = pipeline_new ();
+	command *cmd;
 
 #ifndef ALT_EXT_FORMAT
 	dir = dir; /* not used unless looking for formatters in catdir */
@@ -1532,7 +1533,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	if (!fmt_prog) {
 		/* we don't have an external formatter script */
 		int using_tbl = 0;
-		command *cmd;
 		const char *output_encoding = NULL, *locale_charset = NULL;
 		char *pp_encoding = NULL;
 
@@ -1660,10 +1660,10 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		}
 
 		do {
-			command *cmd = NULL;
 			int wants_dev = 0; /* filter wants a dev argument */
 			int wants_post = 0; /* postprocessor arguments */
 
+			cmd = NULL;
 			/* set cmd according to *pp_string, on
                            errors leave cmd as NULL */
 			switch (*pp_string) {
@@ -1789,8 +1789,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
 		   output device */
-		command *cmd = command_new_args (fmt_prog, file, pp_string,
-						 NULL);
+		cmd = command_new_args (fmt_prog, file, pp_string, NULL);
 		if (roff_device)
 			command_arg (cmd, roff_device);
 		pipeline_command (p, cmd);
@@ -1808,7 +1807,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
  *
  * TODO: Is there any way to use the pipeline library better here?
  */
-static pipeline *make_browser (const char *command, const char *file)
+static pipeline *make_browser (const char *pattern, const char *file)
 {
 	pipeline *p;
 	char *browser = xmalloc (1);
@@ -1818,11 +1817,11 @@ static pipeline *make_browser (const char *command, const char *file)
 
 	*browser = '\0';
 
-	percent = strchr (command, '%');
+	percent = strchr (pattern, '%');
 	while (percent) {
 		size_t len = strlen (browser);
-		browser = xrealloc (browser, len + 1 + (percent - command));
-		strncat (browser, command, percent - command);
+		browser = xrealloc (browser, len + 1 + (percent - pattern));
+		strncat (browser, pattern, percent - pattern);
 		switch (*(percent + 1)) {
 			case '\0':
 			case '%':
@@ -1844,12 +1843,12 @@ static pipeline *make_browser (const char *command, const char *file)
 				break;
 		}
 		if (*(percent + 1))
-			command = percent + 2;
+			pattern = percent + 2;
 		else
-			command = percent + 1;
-		percent = strchr (command, '%');
+			pattern = percent + 1;
+		percent = strchr (pattern, '%');
 	}
-	browser = strappend (browser, command, NULL);
+	browser = strappend (browser, pattern, NULL);
 	if (!found_percent_s) {
 		esc_file = escape_shell (file);
 		browser = strappend (browser, " ", esc_file, NULL);
@@ -2358,7 +2357,7 @@ static int display (const char *dir, const char *man_file,
 		    const char *dbfilters)
 {
 	int found;
-	static int pause;
+	static int prompt;
 	pipeline *format_cmd;	/* command to format man_file to stdout */
 	int display_to_stdout;
 
@@ -2416,7 +2415,7 @@ static int display (const char *dir, const char *man_file,
 		else
 			found = !access (man_file, R_OK);
 		if (found) {
-			if (pause && do_prompt (title))
+			if (prompt && do_prompt (title))
 				return 0;
 			checked_system (format_cmd);
 		}
@@ -2510,7 +2509,7 @@ static int display (const char *dir, const char *man_file,
 			/* no cat or out of date */
 			pipeline *disp_cmd;
 
-			if (pause && do_prompt (title)) {
+			if (prompt && do_prompt (title)) {
 				pipeline_free (format_cmd);
 				if (local_man_file)
 					return 1;
@@ -2546,7 +2545,7 @@ static int display (const char *dir, const char *man_file,
 			format_cmd = NULL;
 
 #if defined(COMP_SRC)
-			if (pause && do_prompt (title))
+			if (prompt && do_prompt (title))
 				return 0;
 
 			comp = comp_info (cat_file, 0);
@@ -2561,7 +2560,7 @@ static int display (const char *dir, const char *man_file,
 				disp_cmd = make_display_command (cat_file,
 								 title);
 #elif defined(COMP_CAT)
-			if (pause && do_prompt (title))
+			if (prompt && do_prompt (title))
 				return 0;
 
 			format_cmd = pipeline_new ();
@@ -2575,7 +2574,7 @@ static int display (const char *dir, const char *man_file,
 
 			disp_cmd = make_display_command (NULL, title);
 #else /* !(COMP_SRC || COMP_CAT) */
-			if (pause && do_prompt (title))
+			if (prompt && do_prompt (title))
 				return 0;
 
 			disp_cmd = make_display_command (cat_file, title);
@@ -2587,8 +2586,8 @@ static int display (const char *dir, const char *man_file,
 
 	pipeline_free (format_cmd);
 		
-	if (!pause)
-		pause = found;
+	if (!prompt)
+		prompt = found;
 
 	return found;
 }

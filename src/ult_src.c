@@ -112,28 +112,28 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 {
 	DIR *mdir;
 	struct dirent *manlist;
-	char *link, *dir, *ret;
+	char *base, *dir, *ret;
 	const char *slash;
 
 	slash = strrchr (fullpath, '/');
 	assert (slash);
 	dir = xstrndup (fullpath, slash - fullpath);
-	link = xstrdup (++slash);
+	base = xstrdup (++slash);
 
 	mdir = opendir (dir);
 	if (mdir == NULL) {
 		error (0, errno, _("can't search directory %s"), dir);
 		free (dir);
-		free (link);
+		free (base);
 		return NULL;
 	}
 
 	while ((manlist = readdir (mdir))) {
 		if (manlist->d_ino == inode &&
-		    strcmp (link, manlist->d_name) > 0) {
-			free (link);
-			link = xstrdup (manlist->d_name);
-			debug ("ult_hardlink: (%s)\n", link);
+		    strcmp (base, manlist->d_name) > 0) {
+			free (base);
+			base = xstrdup (manlist->d_name);
+			debug ("ult_hardlink: (%s)\n", base);
 		}
 	}
 	closedir (mdir);
@@ -141,15 +141,15 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 	/* If we already are the link with the smallest name value */
 	/* return NULL */
 
-	if (strcmp (link, slash) == 0) {
+	if (strcmp (base, slash) == 0) {
 		free (dir);
-		free (link);
+		free (base);
 		return NULL;
 	}
 
-	ret = strappend (NULL, dir, "/", link, NULL);
+	ret = strappend (NULL, dir, "/", base, NULL);
 	free (dir);
-	free (link);
+	free (base);
 	return ret;
 }
 
@@ -226,7 +226,7 @@ static char *test_for_include (const char *buffer)
 const char *ult_src (const char *name, const char *path,
 		     struct stat *buf, int flags)
 {
-	static char *basename;		/* must be static */
+	static char *base;		/* must be static */
 	static short recurse; 		/* must be static */
 
 	/* initialise the function */
@@ -237,18 +237,17 @@ const char *ult_src (const char *name, const char *path,
 
 	if (recurse == 0) {
 		struct stat new_buf;
-		if (basename)
-			free (basename);
-		basename = xstrdup (name);
+		if (base)
+			free (base);
+		base = xstrdup (name);
 
 		debug ("\nult_src: File %s in mantree %s\n", name, path);
 
 		/* If we don't have a buf, allocate and assign one */
 		if (!buf && ((flags & SOFT_LINK) || (flags & HARD_LINK))) {
 			buf = &new_buf;
-			if (lstat (basename, buf) == -1) {
-				error (0, errno, _("can't resolve %s"),
-				       basename);
+			if (lstat (base, buf) == -1) {
+				error (0, errno, _("can't resolve %s"), base);
 				return NULL;
 			}
 		}
@@ -258,10 +257,10 @@ const char *ult_src (const char *name, const char *path,
 		if (flags & SOFT_LINK) {
 			if (S_ISLNK (buf->st_mode)) {
 				/* Is a symlink, resolve it. */
-				char *softlink = ult_softlink (basename);
+				char *softlink = ult_softlink (base);
 				if (softlink) {
-					free (basename);
-					basename = softlink;
+					free (base);
+					base = softlink;
 				} else
 					return NULL;
 			}
@@ -272,11 +271,11 @@ const char *ult_src (const char *name, const char *path,
 		if (flags & HARD_LINK) {
 			if (buf->st_nlink > 1) {
 				/* Has HARD links, find least value */
-				char *hardlink = ult_hardlink (basename,
+				char *hardlink = ult_hardlink (base,
 							       buf->st_ino);
 				if (hardlink) {
-					free (basename);
-					basename = hardlink;
+					free (base);
+					base = hardlink;
 				}
 			}
 		}
@@ -299,31 +298,30 @@ const char *ult_src (const char *name, const char *path,
 
 		/* if we are handed the name of a compressed file, remove
 		   the compression extension? */
-		comp = comp_info (basename, 1);
+		comp = comp_info (base, 1);
 		if (comp) {
-			free (basename);
-			basename = comp->stem;
+			free (base);
+			base = comp->stem;
 			comp->stem = NULL; /* steal memory */
 		}
 
 		/* if the open fails, try looking for compressed */
-		fp = fopen (basename, "r");
+		fp = fopen (base, "r");
 		if (fp == NULL) {
 			char *filename;
 
-			comp = comp_file (basename);
+			comp = comp_file (base);
 			if (comp) {
 				filename = decompress (comp->stem, comp);
 				free (comp->stem);
 				if (!filename)
 					return NULL;
-				basename = strappend (basename, ".", comp->ext,
-						      NULL);
+				base = strappend (base, ".", comp->ext, NULL);
 				drop_effective_privs ();
 				fp = fopen (filename, "r");
 				regain_effective_privs ();
 			} else
-				filename = basename;
+				filename = base;
 
 			if (!fp) {
 				error (0, errno, _("can't open %s"), filename);
@@ -331,9 +329,9 @@ const char *ult_src (const char *name, const char *path,
 			}
 		}
 #else
-		fp = fopen (basename, "r");
+		fp = fopen (base, "r");
 		if (fp == NULL) {
-			error (0, errno, _("can't open %s"), basename);
+			error (0, errno, _("can't open %s"), base);
 			return NULL;
 		}
 #endif
@@ -353,15 +351,15 @@ const char *ult_src (const char *name, const char *path,
 				 * ult_softlink() etc., in case it went
 				 * outside the mantree.
 				 */
-				free (basename);
-				basename = strappend (NULL, path, "/", include,
-						      NULL);
+				free (base);
+				base = strappend (NULL, path, "/", include,
+						  NULL);
 				free (include);
 
-				debug ("ult_src: points to %s\n", basename);
+				debug ("ult_src: points to %s\n", base);
 
 				recurse++;
-				ult = ult_src (basename, path, NULL, flags);
+				ult = ult_src (base, path, NULL, flags);
 				recurse--;
 
 				return ult;
@@ -370,5 +368,5 @@ const char *ult_src (const char *name, const char *path,
 	}
 
 	/* We have the ultimate source */
-	return basename;
+	return base;
 }

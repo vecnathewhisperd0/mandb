@@ -96,12 +96,11 @@ static struct list *namestore, *tailstore;
 
 /* DIRLIST list[MAXDIRS]; */
 static char *tmplist[MAXDIRS];
-char *manpathlist[MAXDIRS];
 
 char *user_config_file = NULL;
 
 static void mkcatdirs (const char *mandir, const char *catdir);
-static __inline__ char *get_manpath (const char *path);
+static __inline__ char *get_manpath_from_path (const char *path);
 static __inline__ char *has_mandir (const char *p);
 static __inline__ char *fsstnd (const char *path);
 static char *def_path (int flag);
@@ -440,7 +439,7 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 
 static char *add_system_manpath (const char *systems, const char *manpathlist)
 {
-	char *system;
+	char *one_system;
 	char *manpath = NULL;
 	char *tmpsystems;
 
@@ -455,12 +454,12 @@ static char *add_system_manpath (const char *systems, const char *manpathlist)
 
 	/* For each systems component */
 
-	for (system = strtok (tmpsystems, ",:"); system;
-	     system = strtok (NULL, ",:")) {
+	for (one_system = strtok (tmpsystems, ",:"); one_system;
+	     one_system = strtok (NULL, ",:")) {
 
 		/* For each manpathlist component */
 
-		if (!STREQ (system, "man")) {
+		if (!STREQ (one_system, "man")) {
 			const char *next, *path;
 			char *newdir = NULL;
 			for (path = manpathlist; path; path = next) {
@@ -474,7 +473,7 @@ static char *add_system_manpath (const char *systems, const char *manpathlist)
 				} else
 					element = xstrdup (path);
 				newdir = strappend (newdir, element, "/",
-						    system, NULL);
+						    one_system, NULL);
 				free (element);
 
 				status = is_directory (newdir);
@@ -548,14 +547,14 @@ static char *guess_manpath (const char *systems)
 						   def_path (MANDATORY));
 		}
 
-		manpathlist = get_manpath (path);
+		manpathlist = get_manpath_from_path (path);
 	}
 	manpath = add_system_manpath (systems, manpathlist);
 	free (manpathlist);
 	return manpath;
 }
 
-char *manpath (const char *systems)
+char *get_manpath (const char *systems)
 {
 	char *manpathlist;
 
@@ -825,7 +824,7 @@ static char *def_path (int flag)
  * $HOME/man exists -- the directory $HOME/man will be added
  * to the manpath.
  */
-static __inline__ char *get_manpath (const char *path)
+static __inline__ char *get_manpath_from_path (const char *path)
 {
 	int len;
 	char *tmppath;

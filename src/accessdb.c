@@ -93,7 +93,6 @@ static void usage (int status)
 int main (int argc, char *argv[])
 {
 	int c, option_index;
-	MYDBM_FILE dbf;
 	datum key;
 
 	program_name = xstrdup (basename (argv[0]));
