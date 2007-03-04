@@ -205,11 +205,11 @@ void man_gdbm_close (man_gdbm_wrapper wrap)
 
 #ifndef HAVE_GDBM_EXISTS
 
-int gdbm_exists (GDBM_FILE dbf, datum key)
+int gdbm_exists (GDBM_FILE file, datum key)
 {
 	char *memory;
 
-	memory = MYDBM_DPTR (gdbm_fetch (dbf, key));
+	memory = MYDBM_DPTR (gdbm_fetch (file, key));
 	if (memory) {
 		free (memory);
 		return 1;
