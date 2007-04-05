@@ -313,14 +313,18 @@ vgrind_request	\.vS
  /* collapse spaces, escaped spaces, tabs, newlines to a single space */
 <CAT_NAME>{next}((\\[ ])|{blank})*	add_char_to_whatis (' ');
 
- /* a ROFF break request (.br) or a paragraph request (.LP, .PP, .P)
+ /* a ROFF break request, a paragraph request, or an indentation change
     usually means we have multiple whatis definitions, provide a separator
     for later processing */
 <MAN_NAME>{
 	{bol}\.br{blank}*		|
 	{bol}\.LP{blank}*		|
 	{bol}\.PP{blank}*		|
-	{bol}\.P{blank}*		add_char_to_whatis ((char) 0x11);
+	{bol}\.P{blank}*		|
+	{bol}\.IP{blank}.*		|
+	{bol}\.HP{blank}.*		|
+	{bol}\.RS{blank}.*		|
+	{bol}\.RE{blank}.*		add_char_to_whatis ((char) 0x11);
 }
 
 <MAN_NAME>{bol}\.{alpha}{2}{blank}*  	{ /* very general roff requests */
