@@ -517,8 +517,11 @@ By default,
 uses
 .BR %pager% .
 This option overrides the
+.RB $ MANPAGER
+environment variable, which in turn overrides the
 .RB $ PAGER
-environment variable and is not used in conjunction with
+environment variable.
+It is not used in conjunction with
 .B \-f
 or
 .BR \-k .
@@ -926,11 +929,15 @@ If
 is set, its value is a colon-delimited list of sections and it is used to
 determine which manual sections to search and in what order.
 .TP
-.B PAGER
+.BR MANPAGER , " PAGER"
 If
+.RB $ MANPAGER
+or
 .RB $ PAGER
-is set, its value is used as the name of the program used to display
-the manual page.
+is set
+.RB ($ MANPAGER
+is used in preference), its value is used as the name of the program used to
+display the manual page.
 By default,
 .B %pager%
 is used.

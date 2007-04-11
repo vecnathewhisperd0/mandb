@@ -930,9 +930,12 @@ int main (int argc, char *argv[])
 	}
 #endif
 	if (pager == NULL) {
-		pager = getenv ("PAGER");
-		if (pager == NULL)
-			pager = get_def_user ("pager", PAGER);
+		pager = getenv ("MANPAGER");
+		if (pager == NULL) {
+			pager = getenv ("PAGER");
+			if (pager == NULL)
+				pager = get_def_user ("pager", PAGER);
+		}
 	}
 	if (*pager == '\0')
 		pager = get_def_user ("cat", CAT);
