@@ -114,6 +114,7 @@ static struct directory_entry directory_table[] = {
 	{ "sk",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovak */
 	{ "tr",		"ISO-8859-9",	"ISO-8859-9"		}, /* Turkish */
 	{ "zh_CN",	"GB2312",	"GB2312"		}, /* Simplified Chinese */
+	{ "zh_HK",	"BIG5-HKSCS",	"BIG5-HKSCS"		}, /* Traditional Chinese, Hong Kong */
 	{ "zh_TW",	"BIG5",		"BIG5"			}, /* Traditional Chinese */
 #endif /* MULTIBYTE_GROFF */
 
@@ -139,6 +140,7 @@ static struct charset_entry charset_table[] = {
 
 #ifdef MULTIBYTE_GROFF
 	{ "BIG5",		"nippon"	},
+	{ "BIG5-HKSCS",		"nippon"	},
 	{ "EUC-JP",		"nippon"	},
 	{ "GB2312",		"nippon"	},
 	{ "GBK",		"nippon"	},
@@ -423,7 +425,7 @@ static int compatible_encodings (const char *input, const char *output)
 	 * recoded from EUC-JP (etc.) and produce UTF-8 output. This is
 	 * rather filthy.
 	 */
-	if ((STREQ (input, "BIG5") ||
+	if ((STREQ (input, "BIG5") || STREQ (input, "BIG5-HKSCS") ||
 	     STREQ (input, "EUC-JP") ||
 	     STREQ (input, "GB2312") || STREQ (input, "GBK")) &&
 	    STREQ (output, "UTF-8"))
@@ -497,6 +499,7 @@ const char *get_roff_encoding (const char *device, const char *source_encoding)
 		const char *ctype = setlocale (LC_CTYPE, NULL);
 		if (STREQ (ctype, "ja_JP.UTF-8") ||
 		    STREQ (ctype, "zh_CN.UTF-8") ||
+		    STREQ (ctype, "zh_HK.UTF-8") ||
 		    STREQ (ctype, "zh_SG.UTF-8") ||
 		    STREQ (ctype, "zh_TW.UTF-8"))
 			roff_encoding = "UTF-8";
