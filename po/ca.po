@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.3-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2007-05-26 10:49+0100\n"
+"POT-Creation-Date: 2007-05-26 10:57+0100\n"
 "PO-Revision-Date: 2005-06-21 14:00+0200\n"
 "Last-Translator: Jordi Mallach <jordi@gnu.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -290,7 +290,7 @@ msgstr "fet.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "S'estan purgant entrades antigues de la base de dades en %s...\n"
 
-#: src/compression.c:78 src/man.c:1412
+#: src/compression.c:78 src/man.c:1414
 msgid "can't create a temporary filename"
 msgstr "no es pot crear un fitxer temporal"
 
@@ -541,79 +541,79 @@ msgstr ""
 "-V, --version               mostra la versió.\n"
 "-h, --help                  mostra aquest missatge sobre l'ús."
 
-#: src/man.c:466
-msgid "What manual page do you want?\n"
-msgstr "Quina pàgina de manual voleu?\n"
+# per/per a/de?  ivb
+#: src/man.c:467 src/man.c:587
+#, fuzzy, c-format
+msgid "No manual entry for %s\n"
+msgstr "No hi ha una entrada de manual de %s"
 
 #: src/man.c:469
 #, fuzzy, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "Quina pàgina de manual voleu de la secció %s?\n"
 
+#: src/man.c:473
+msgid "What manual page do you want?\n"
+msgstr "Quina pàgina de manual voleu?\n"
+
 # per/per a/de?  ivb
-#: src/man.c:582
+#: src/man.c:584
 #, fuzzy, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "No hi ha una entrada de manual de %s"
 
-# per/per a/de?  ivb
-#: src/man.c:585
-#, fuzzy, c-format
-msgid "No manual entry for %s\n"
-msgstr "No hi ha una entrada de manual de %s"
-
-#: src/man.c:590
+#: src/man.c:592
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 "Vegeu «%s» per a obtindre ajuda quan les pàgines de manual no són "
 "disponibles.\n"
 
-#: src/man.c:756 src/man.c:2372
+#: src/man.c:758 src/man.c:2374
 #, c-format
 msgid "can't chdir to %s"
 msgstr "no es pot canviar de directori a %s"
 
-#: src/man.c:948
+#: src/man.c:950
 msgid " Manual page "
 msgstr " Pàgina de manual "
 
-#: src/man.c:1018 src/man.c:3112
+#: src/man.c:1020 src/man.c:3114
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "l'ordre de mandb ha fallat amb l'estat d'eixida %d"
 
 # Frase completa: «les opcions són incompatibles»  ivb
-#: src/man.c:1289
+#: src/man.c:1291
 msgid ": incompatible options"
 msgstr ": les opcions són incompatibles"
 
-#: src/man.c:1470
+#: src/man.c:1472
 msgid "error trying to read from stdin"
 msgstr "error en intentar llegir des de l'entrada estàndard"
 
-#: src/man.c:1484
+#: src/man.c:1486
 #, c-format
 msgid "error writing to temporary file %s"
 msgstr "error en escriure en el fitxer temporal %s"
 
 # «es descarta el...»  ivb
-#: src/man.c:1729
+#: src/man.c:1731
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "es descarta el preprocessador desconegut «%c»"
 
-#: src/man.c:2008 src/mandb.c:272
+#: src/man.c:2010 src/mandb.c:272
 #, c-format
 msgid "can't chown %s"
 msgstr "no es pot fer «chown» a %s"
 
-#: src/man.c:2020 src/mandb.c:236
+#: src/man.c:2022 src/mandb.c:236
 #, c-format
 msgid "can't chmod %s"
 msgstr "no es pot fer «chmod» a %s"
 
-#: src/man.c:2031 src/mandb.c:179
+#: src/man.c:2033 src/mandb.c:179
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "no es pot reanomenar %s a %s"
@@ -621,42 +621,42 @@ msgstr "no es pot reanomenar %s a %s"
 # Segurament es referirà a l'{a,m,c}time; hores/dates?  ivb
 # I en eixe cas, què sugereixes? jm
 # Allò que s'use majoritàriament pel cas, només era per assegurar-me.  ivb
-#: src/man.c:2050
+#: src/man.c:2052
 #, c-format
 msgid "can't set times on %s"
 msgstr "no es poden establir les hores en %s"
 
-#: src/man.c:2059
+#: src/man.c:2061
 #, c-format
 msgid "can't unlink %s"
 msgstr "no es pot desenllaçar %s"
 
-#: src/man.c:2094
+#: src/man.c:2096
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "no es pot crear un fitxer cat temporal per a %s"
 
-#: src/man.c:2193
+#: src/man.c:2195
 #, c-format
 msgid "Still saving the page, please wait...\n"
 msgstr "Encara s'està desant la pàgina, espereu...\n"
 
-#: src/man.c:2246 src/man.c:2267 src/man.c:2296
+#: src/man.c:2248 src/man.c:2269 src/man.c:2298
 #, c-format
 msgid "can't change to directory %s"
 msgstr "no es pot canviar al directori %s"
 
-#: src/man.c:2260
+#: src/man.c:2262
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "no es pot obrir el fitxer temporal %s"
 
-#: src/man.c:2273 src/man.c:2301
+#: src/man.c:2275 src/man.c:2303
 #, c-format
 msgid "can't remove directory %s"
 msgstr "no es pot eliminar el directori %s"
 
-#: src/man.c:2505
+#: src/man.c:2507
 #, c-format
 msgid ""
 "\n"
@@ -666,18 +666,18 @@ msgstr ""
 "no es pot escriure a %s en el mode catman"
 
 # Lo de sempre, deprecated? jm
-#: src/man.c:2963
+#: src/man.c:2965
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: basar-se en referències whatis està desaconsellat\n"
 
-#: src/man.c:3306
+#: src/man.c:3308
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 "s'ha produït un error intern: el candidat de tipus %d està fora de rang"
 
-#: src/man.c:3425
+#: src/man.c:3427
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""

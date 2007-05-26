@@ -463,12 +463,14 @@ static void usage (int status)
  */
 static void gripe_no_name (const char *sect)
 {
-	fputs (_("What manual page do you want?\n"), stderr);
-	if (sect)
+	if (sect) {
+		fprintf (stderr, _("No manual entry for %s\n"), sect);
 		fprintf (stderr,
 			 _("(Alternatively, what manual page do you want from "
 			   "section %s?)\n"),
 			 sect);
+	} else
+		fputs (_("What manual page do you want?\n"), stderr);
 
 	exit (FAIL);
 }
