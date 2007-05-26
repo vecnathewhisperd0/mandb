@@ -463,7 +463,7 @@ static void usage (int status)
  */
 static void gripe_no_name (const char *sect)
 {
-	if (section)
+	if (sect)
 		fprintf (stderr,
 			 _("What manual page do you want from section %s?\n"),
 			 sect);
