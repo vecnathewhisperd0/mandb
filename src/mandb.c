@@ -94,6 +94,11 @@ extern char *extension;		/* for globbing.c */
 extern int force_rescan;	/* for check_mandirs.c */
 static char *single_filename = NULL;
 extern char *user_config_file;	/* for manp.c */
+#ifdef SECURE_MAN_UID
+struct passwd *man_owner;
+#endif
+static int purged = 0;
+static int strays = 0;
 
 /* default options */
 static const struct option long_options[] =
@@ -424,13 +429,54 @@ static short mandb (const char *catpath, const char *manpath)
 	return amount;
 }
 
+static short process_manpath (const char *manpath, const char *catpath,
+			      int global_manpath)
+{
+	short amount = 0;
+
+	force_rescan = 0;
+	if (purge) {
+		database = mkdbname (catpath);
+		purged += purge_missing (manpath, catpath);
+		free (database);
+		database = NULL;
+	}
+
+	push_cleanup (cleanup, NULL);
+	if (single_filename) {
+		if (STRNEQ (manpath, single_filename, strlen (manpath)))
+			amount += mandb (catpath, manpath);
+		/* otherwise try the next manpath */
+	} else
+		amount += mandb (catpath, manpath);
+
+	if (!opt_test && amount) {
+		finish_up ();
+#ifdef SECURE_MAN_UID
+		if (global_manpath && euid == 0)
+			do_chown (man_owner->pw_uid);
+#endif /* SECURE_MAN_UID */
+	}
+	cleanup (NULL);
+	pop_cleanup ();
+	free (database);
+	database = NULL;
+
+	if (check_for_strays && amount) {
+		database = mkdbname (catpath);
+		strays += straycats (manpath);
+		free (database);
+		database = NULL;
+	}
+
+	return amount;
+}
+
 int main (int argc, char *argv[])
 {
 	int c;
 	char *sys_manp;
 	short amount = 0;
-	int strays = 0;
-	int purged = 0;
 	int quiet_temp = 0;
 	char **mp;
 
@@ -439,10 +485,6 @@ int main (int argc, char *argv[])
 #ifdef __profile__
 	char *cwd;
 #endif /* __profile__ */
-
-#ifdef SECURE_MAN_UID
-	struct passwd *man_owner;
-#endif
 
 	program_name = xstrdup (basename (argv[0]));
 
@@ -564,7 +606,6 @@ int main (int argc, char *argv[])
 	for (mp = manpathlist; *mp; mp++) {
 		int global_manpath = is_global_mandir (*mp);
 		char *catpath;
-		short amount_changed = 0;
 
 		if (global_manpath) { 	/* system db */
 		/*	if (access (catpath, W_OK) == 0 && !user) */
@@ -579,42 +620,7 @@ int main (int argc, char *argv[])
 			drop_effective_privs ();
 		}
 
-		force_rescan = 0;
-		if (purge) {
-			database = mkdbname (catpath);
-			purged += purge_missing (*mp, catpath);
-			free (database);
-			database = NULL;
-		}
-
-		push_cleanup (cleanup, NULL);
-		if (single_filename) {
-			if (STRNEQ (*mp, single_filename, strlen (*mp)))
-				amount_changed += mandb (catpath, *mp);
-			/* otherwise try the next manpath */
-		} else
-			amount_changed += mandb (catpath, *mp);
-
-		amount += amount_changed;
-
-		if (!opt_test && amount_changed) {
-			finish_up ();
-#ifdef SECURE_MAN_UID
-			if (global_manpath && euid == 0)
-				do_chown (man_owner->pw_uid);
-#endif /* SECURE_MAN_UID */
-		}
-		cleanup (NULL);
-		pop_cleanup ();
-		free (database);
-		database = NULL;
-
-		if (check_for_strays && amount_changed) {
-			database = mkdbname (catpath);
-			strays += straycats (*mp);
-			free (database);
-			database = NULL;
-		}
+		amount += process_manpath (*mp, catpath, global_manpath);
 
 		if (!global_manpath)
 			regain_effective_privs ();

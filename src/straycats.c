@@ -390,7 +390,7 @@ static int open_catdir (void)
 	return strays;
 }
 
-int straycats (char *manpath)
+int straycats (const char *manpath)
 {
 	char *catpath;
 	int strays;
