@@ -1,7 +1,13 @@
   Colin Watson  <cjwatson@debian.org>
 
+	* src/check_mandirs.c (make_database_directory): New function.
+	  (create_db, update_db): Use it.
+	  (purge_missing): Check that the database exists before starting.
 	* src/mandb.c (process_manpath): New function, split out from main.
+	  Make the single_filename check aware that the file might be in a
+	  per-locale subdirectory that we aren't processing right now.
 	  (main): Use it. Move man_owner, purged, and strays to file scope.
+	  Build databases for all per-locale subdirectories.
 	* src/straycats.c (straycats): Constify manpath argument.
 	* include/manconfig.h.in (straycats): Update prototype.
 

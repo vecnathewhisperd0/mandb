@@ -34,6 +34,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>	/* for chmod() */
+#include <dirent.h>
 
 #if defined(STDC_HEADERS)
 #  include <string.h>
@@ -429,10 +430,19 @@ static short mandb (const char *catpath, const char *manpath)
 	return amount;
 }
 
-static short process_manpath (const char *manpath, const char *catpath,
-			      int global_manpath)
+static short process_manpath (const char *manpath, int global_manpath)
 {
+	char *catpath;
 	short amount = 0;
+
+	if (global_manpath) { 	/* system db */
+		catpath = get_catpath (manpath, SYSTEM_CAT);
+		assert (catpath);
+	} else {		/* user db */
+		catpath = get_catpath (manpath, USER_CAT);
+		if (!catpath)
+			catpath = xstrdup (manpath);
+	}
 
 	force_rescan = 0;
 	if (purge) {
@@ -444,8 +454,14 @@ static short process_manpath (const char *manpath, const char *catpath,
 
 	push_cleanup (cleanup, NULL);
 	if (single_filename) {
-		if (STRNEQ (manpath, single_filename, strlen (manpath)))
+		/* The file might be in a per-locale subdirectory that we
+		 * aren't processing right now.
+		 */
+		char *manpath_prefix = strappend (NULL, manpath, "/man", NULL);
+		if (STRNEQ (manpath_prefix, single_filename,
+		    strlen (manpath_prefix)))
 			amount += mandb (catpath, manpath);
+		free (manpath_prefix);
 		/* otherwise try the next manpath */
 	} else
 		amount += mandb (catpath, manpath);
@@ -468,6 +484,8 @@ static short process_manpath (const char *manpath, const char *catpath,
 		free (database);
 		database = NULL;
 	}
+
+	free (catpath);
 
 	return amount;
 }
@@ -605,28 +623,49 @@ int main (int argc, char *argv[])
 
 	for (mp = manpathlist; *mp; mp++) {
 		int global_manpath = is_global_mandir (*mp);
-		char *catpath;
+		DIR *dir;
+		struct dirent *subdirent;
+		struct stat st;
 
-		if (global_manpath) { 	/* system db */
-		/*	if (access (catpath, W_OK) == 0 && !user) */
+		if (global_manpath) {	/* system db */
 			if (user)
 				continue;
-			catpath = get_catpath (*mp, SYSTEM_CAT);
-			assert (catpath);
 		} else {		/* user db */
-			catpath = get_catpath (*mp, USER_CAT);
-			if (!catpath)
-				catpath = *mp;
 			drop_effective_privs ();
 		}
 
-		amount += process_manpath (*mp, catpath, global_manpath);
+		amount += process_manpath (*mp, global_manpath);
 
+		dir = opendir (*mp);
+		if (!dir) {
+			error (0, errno, _("can't search directory %s"), *mp);
+			goto next_manpath;
+		}
+
+		while ((subdirent = readdir (dir)) != NULL) {
+			char *subdirpath;
+
+			/* Look for per-locale subdirectories. */
+			if (STREQ (subdirent->d_name, ".") ||
+			    STREQ (subdirent->d_name, ".."))
+				continue;
+			if (STRNEQ (subdirent->d_name, "man", 3))
+				continue;
+
+			subdirpath = strappend (NULL, *mp, "/",
+						subdirent->d_name, NULL);
+			if (stat (subdirpath, &st) == 0 &&
+			    S_ISDIR (st.st_mode))
+				amount += process_manpath (subdirpath,
+							   global_manpath);
+			free (subdirpath);
+		}
+
+		closedir (dir);
+
+next_manpath:
 		if (!global_manpath)
 			regain_effective_privs ();
-
-		if (catpath != *mp)
-			free (catpath);
 
 		chkr_garbage_detector ();
 	}
