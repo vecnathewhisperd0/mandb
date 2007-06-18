@@ -751,7 +751,7 @@ void read_config_file(void)
 	char *home;
 	FILE *config;
 
-	push_cleanup (free_config_file, NULL);
+	push_cleanup (free_config_file, NULL, 0);
 
 	home = xstrdup (getenv ("HOME"));
 	if (home) {

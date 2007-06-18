@@ -1,3 +1,24 @@
+Mon Jun 18 10:19:22 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/cleanup.c (do_cleanups): Split out signal-safe processing ...
+	  (do_cleanups_sigsafe): ... here.
+	  (sighandler): Call do_cleanups_sigsafe rather than do_cleanups.
+	  (push_cleanup): Add sigsafe argument to allow cleanup functions to
+	  be flagged as non-signal-safe (e.g. freeing memory).
+	* lib/cleanup.h: Update prototypes.
+	* libdb/db_gdbm.c (man_gdbm_firstkey): hash_free cleanup is not
+	  signal-safe.
+	* src/globbing.c (update_directory_cache): hash_free cleanup is not
+	  signal-safe.
+	  (look_for_file): globfree cleanup is not signal-safe.
+	* src/man.c (open_cat_stream, display_catman): unlink cleanup is
+	  signal-safe.
+	* src/mandb.c (cleanup): Split out signal-safe processing ...
+	  (cleanup_sigsafe): ... here.
+	  (main): Call cleanup_sigsafe as well as cleanup.
+	* src/manp.c (read_config_file): free_config_file cleanup is not
+	  signal-safe.
+
 Mon Jun 18 08:03:30 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* lib/xstrsignal.c: Include config.h.

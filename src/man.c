@@ -2098,7 +2098,7 @@ static pipeline *open_cat_stream (const char *cat_file)
 	}
 
 	if (!debug_level)
-		push_cleanup ((cleanup_fun) unlink, tmp_cat_file);
+		push_cleanup ((cleanup_fun) unlink, tmp_cat_file, 1);
 
 #  ifdef COMP_CAT
 	/* write to a pipe that compresses into tmp_cat_file */
@@ -2339,7 +2339,7 @@ static void display_catman (const char *cat_file, pipeline *format_cmd)
 	 * (2) else depending on ruid's privs is ok, effectively disables
 	 *     catman for non-root.
 	 */
-	push_cleanup ((cleanup_fun) unlink, tmpcat);
+	push_cleanup ((cleanup_fun) unlink, tmpcat, 1);
 	status = do_system_drop_privs (format_cmd);
 	if (status)
 		gripe_system (format_cmd, status);

@@ -1,6 +1,7 @@
 /*
  * cleanup.h -- simple dynamic cleanup function management
  * Copyright (C) 1995 Markus Armbruster.
+ * Copyright (C) 2007 Colin Watson.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,8 +24,9 @@
 
 typedef void (*cleanup_fun) (void *);
 
+extern void do_cleanups_sigsafe (int);
 extern void do_cleanups (void);
-extern int push_cleanup (cleanup_fun, void *);
+extern int push_cleanup (cleanup_fun, void *, int);
 extern void pop_cleanup (void);
 extern void pop_all_cleanups (void);
 
