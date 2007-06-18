@@ -135,14 +135,14 @@ extern int ndbm_flclose(DBM *dbf);
 typedef DBT datum;
 
 extern DB *btree_flopen(char *filename, int flags, int mode);
-extern __inline__ int btree_close(DB *dbf);
-extern __inline__ int btree_exists(DB *dbf, datum key);
-extern __inline__ datum btree_fetch(DB *dbf, datum key);
-extern int btree_insert(DB *dbf, datum key, datum cont);
-extern __inline__ datum btree_firstkey(DB *dbf);
-extern __inline__ datum btree_nextkey(DB *dbf);
-extern __inline__ int btree_replace(DB *dbf, datum key, datum content);
-extern __inline__ int btree_nextkeydata(DB *dbf, datum *key, datum *cont);
+extern __inline__ int btree_close(DB *db);
+extern __inline__ int btree_exists(DB *db, datum key);
+extern __inline__ datum btree_fetch(DB *db, datum key);
+extern int btree_insert(DB *db, datum key, datum cont);
+extern __inline__ datum btree_firstkey(DB *db);
+extern __inline__ datum btree_nextkey(DB *db);
+extern __inline__ int btree_replace(DB *db, datum key, datum content);
+extern __inline__ int btree_nextkeydata(DB *db, datum *key, datum *cont);
 
 #  define DB_EXT			".bt"
 #  define MYDBM_FILE			DB*
@@ -153,15 +153,15 @@ extern __inline__ int btree_nextkeydata(DB *dbf, datum *key, datum *cont);
 #  define MYDBM_CRWOPEN(file)             btree_flopen(file, O_CREAT|O_RDWR, DBMODE)
 #  define MYDBM_RWOPEN(file)		btree_flopen(file, O_RDWR, DBMODE)
 #  define MYDBM_RDOPEN(file)		btree_flopen(file, O_RDONLY, DBMODE)
-#  define MYDBM_INSERT(dbf, key, cont)	btree_insert(dbf, key, cont)
-#  define MYDBM_REPLACE(dbf, key, cont)	btree_replace(dbf, key, cont)
-#  define MYDBM_EXISTS(dbf, key)	btree_exists(dbf, key)
-#  define MYDBM_DELETE(dbf, key)	((dbf->del)(dbf, &key, 0) ? -1 : 0)
-#  define MYDBM_FETCH(dbf, key) 	btree_fetch(dbf, key)
-#  define MYDBM_CLOSE(dbf)		btree_close(dbf)
-#  define MYDBM_FIRSTKEY(dbf)		btree_firstkey(dbf)
-#  define MYDBM_NEXTKEY(dbf, key)	btree_nextkey(dbf)
-#  define MYDBM_REORG(dbf)		/* nothing - not implemented */
+#  define MYDBM_INSERT(db, key, cont)	btree_insert(db, key, cont)
+#  define MYDBM_REPLACE(db, key, cont)	btree_replace(db, key, cont)
+#  define MYDBM_EXISTS(db, key)		btree_exists(db, key)
+#  define MYDBM_DELETE(db, key)		((db->del)(db, &key, 0) ? -1 : 0)
+#  define MYDBM_FETCH(db, key)		btree_fetch(db, key)
+#  define MYDBM_CLOSE(db)		btree_close(db)
+#  define MYDBM_FIRSTKEY(db)		btree_firstkey(db)
+#  define MYDBM_NEXTKEY(db, key)	btree_nextkey(db)
+#  define MYDBM_REORG(db)		/* nothing - not implemented */
 #  define MYDBM_FREE(x)			free(x)
 
 # else /* not GDBM or NDBM or BTREE */

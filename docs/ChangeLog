@@ -1,3 +1,11 @@
+Mon Jun 18 07:50:56 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_btree.c (btree_close, btree_flopen, btree_replace,
+	  btree_insert, btree_fetch, btree_exists, btree_findkey,
+	  btree_firstkey, btree_nextkey, btree_nextkeydata): Rename dbf to
+	  db to avoid shadowing a global variable.
+	* libdb/mydbm.h: Update prototypes and btree macros likewise.
+
 Sat May 26 10:58:11 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (gripe_no_name): On reflection, borrowing the error
