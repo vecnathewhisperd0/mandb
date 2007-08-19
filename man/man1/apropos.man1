@@ -14,7 +14,7 @@
 %apropos% \- search the manual page names and descriptions
 .SH SYNOPSIS
 .B %apropos% 
-.RB [\| \-dhV  \|] 
+.RB [\| \-dlhV  \|] 
 .RB [\| \-e \||\| \-w \||\| \-r\c
 \|]
 .RB [\| \-s
@@ -87,6 +87,13 @@ description.
 .B \-e, \-\-exact
 Each keyword will be exactly matched against the page names and the
 descriptions.
+.TP
+.B \-l, \-\-long
+Do not trim output to the terminal width.
+Normally, output will be truncated to the terminal width to avoid ugly
+results from poorly-written
+.B NAME
+sections.
 .TP
 \fB\-s\fP \fIsection\fP, \fB\-\-section\fP \fIsection\fP
 Search only the given manual section.
@@ -182,6 +189,18 @@ If
 .RB $ MANPATH
 is set, its value is interpreted as the colon-delimited manual page
 hierarchy search path to use.
+.TP
+.B MANWIDTH
+If
+.RB $ MANWIDTH
+is set, its value is used as the terminal width (see the
+.B \-\-long
+option).
+If it is not set, the terminal width will be calculated using an
+.BR ioctl (2)
+if available, the value of
+.RB $ COLUMNS ,
+or falling back to 80 characters if all else fails.
 .TP
 .B POSIXLY_CORRECT
 If 

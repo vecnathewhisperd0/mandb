@@ -14,7 +14,7 @@
 %whatis% \- display manual page descriptions
 .SH SYNOPSIS
 .B %whatis% 
-.RB [\| \-dhV \|] 
+.RB [\| \-dlhV \|] 
 .RB [\| \-r \||\| \-w\c 
 \|] 
 .RB [\| \-s
@@ -95,6 +95,13 @@ must match the entire page name.
 This option causes
 .B %whatis%
 to be somewhat slower due to the nature of database searches.
+.TP
+.B \-l, \-\-long
+Do not trim output to the terminal width.
+Normally, output will be truncated to the terminal width to avoid ugly
+results from poorly-written
+.B NAME
+sections.
 .TP
 \fB\-s\fP \fIsection\fP, \fB\-\-section\fP \fIsection\fP
 Search only the given manual section.
@@ -190,6 +197,18 @@ If
 .RB $ MANPATH
 is set, its value is interpreted as the colon-delimited manual page
 hierarchy search path to use.
+.TP
+.B MANWIDTH
+If
+.RB $ MANWIDTH
+is set, its value is used as the terminal width (see the
+.B \-\-long
+option).
+If it is not set, the terminal width will be calculated using an
+.BR ioctl (2)
+if available, the value of
+.RB $ COLUMNS ,
+or falling back to 80 characters if all else fails.
 .SH FILES
 .TP
 .I /usr/share/man/index.(bt|db|dir|pag)

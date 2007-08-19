@@ -87,6 +87,7 @@ extern char *strrchr();
 #include "lib/error.h"
 #include "lib/setenv.h"
 #include "lib/pipeline.h"
+#include "lib/linelength.h"
 #include "manp.h"
 
 static char *manpathlist[MAXDIRS];
@@ -118,13 +119,15 @@ extern void regfree();
 
 static int wildcard;
 
+static int long_output;
+
 static const char *section;
 
 #if !defined(APROPOS) && !defined(WHATIS)
 #  error #define WHATIS or APROPOS, so I know who I am
 #endif
 
-static const char args[] = "dvrews:hVm:M:fkL:C:";
+static const char args[] = "dvrews:lhVm:M:fkL:C:";
 
 static const struct option long_options[] =
 {
@@ -133,6 +136,7 @@ static const struct option long_options[] =
 	{"regex",	no_argument,		0, 'r'},
 	{"exact",	no_argument,		0, 'e'},
 	{"wildcard",	no_argument,		0, 'w'},
+	{"long",	no_argument,		0, 'l'},
 	{"section",	required_argument,	0, 's'},
 	{"help",	no_argument,		0, 'h'},
 	{"version",	no_argument,		0, 'V'},
@@ -148,7 +152,7 @@ static const struct option long_options[] =
 #ifdef APROPOS
 static void usage (int status)
 {
-	printf (_("usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C file]\n"
+	printf (_("usage: %s [-dlhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C file]\n"
 		  "               keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
@@ -156,6 +160,7 @@ static void usage (int status)
 		"-r, --regex                interpret each keyword as a regex (default).\n"
 		"-e, --exact                search each keyword for exact match.\n"
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
+		"-l, --long                 do not trim output to terminal width.\n"
 		"-s, --section section      search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
@@ -168,13 +173,14 @@ static void usage (int status)
 #else	
 static void usage (int status)
 {
-	printf (_("usage: %s [-dhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
+	printf (_("usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
 		  "              keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
 		"-r, --regex                interpret each keyword as a regex.\n"
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
+		"-l, --long                 do not trim output to terminal width.\n"
 		"-s, --section section      search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
@@ -295,6 +301,7 @@ static void display (struct mandata *info, char *page)
 {
 	char *string, *whatis;
 	const char *page_name;
+	int line_len, string_len, rest;
 
 	whatis = get_whatis (info, page);
 	
@@ -305,17 +312,29 @@ static void display (struct mandata *info, char *page)
 	else
 		page_name = page;
 
-	if (STREQ (info->pointer, "-") || STREQ (info->pointer, page))
-		string = strappend (NULL, page_name, " (", info->ext, ")",
-				    NULL);
-	else
-		string = strappend (NULL, page_name, " (", info->ext, ") [",
-				    info->pointer, "]", NULL);
+	line_len = get_line_length ();
 
-	if (strlen (string) < (size_t) 20)
-		printf ("%-20s - %s\n", string, whatis);
+	if (strlen (page_name) > (size_t) (line_len / 2)) {
+		string = xstrndup (page_name, line_len / 2 - 3);
+		string = strappend (string, "...", NULL);
+	} else
+		string = xstrdup (page_name);
+	string = strappend (string, " (", info->ext, ")", NULL);
+	if (!STREQ (info->pointer, "-") && !STREQ (info->pointer, page))
+		string = strappend (string, " [", info->pointer, "]", NULL);
+
+	if (strlen (string) < (size_t) 20) {
+		printf ("%-20s - ", string);
+		string_len = 23;
+	} else {
+		printf ("%s - ", string);
+		string_len = strlen (string) + 3;
+	}
+	rest = line_len - string_len;
+	if (!long_output && strlen (whatis) > (size_t) rest)
+		printf ("%.*s...\n", rest - 3, whatis);
 	else
-		printf ("%s - %s\n", string, whatis);
+		printf ("%s\n", whatis);
 
 	free (whatis);
 	free (string);
@@ -682,6 +701,9 @@ int main (int argc, char *argv[])
 				regex = 0;
 #endif
 				wildcard = 1;
+				break;
+			case 'l':
+				long_output = 1;
 				break;
 			case 's':
 				section = optarg;

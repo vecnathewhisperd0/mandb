@@ -132,6 +132,7 @@ extern int errno;
 #include "lib/pipeline.h"
 #include "lib/getcwdalloc.h"
 #include "lib/pathsearch.h"
+#include "lib/linelength.h"
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "globbing.h"
@@ -494,58 +495,10 @@ static void get_term (void)
 	}
 }
 
-/* Line length detection code adapted from Andries Brouwer's man. */
-
-/* Try to determine the line length to use.
- * Preferences: 1. MANWIDTH, 2. ioctl, 3. COLUMNS, 4. 80
- *
- * joey, 950902
- */
-
-#include <sys/ioctl.h>
-
-static int line_length = 80;
-
-static void store_line_length (void)
-{
-	const char *columns;
-	int width;
-
-	line_length = 80;
-
-	columns = getenv ("MANWIDTH");
-	if (columns != NULL) {
-		width = atoi (columns);
-		if (width > 0) {
-			line_length = width;
-			return;
-		}
-	}
-
-#ifdef TIOCGWINSZ
-	/* Jon Tombs */
-	if (isatty (fileno (stdin)) && isatty (fileno (stdout))) {
-		struct winsize wsz;
-
-		if (ioctl (fileno (stdin), TIOCGWINSZ, &wsz))
-			perror ("TIOCGWINSZ failed\n");
-		else if (wsz.ws_col) {
-			line_length = wsz.ws_col;
-			return;
-		}
-	}
-#endif
-
-	columns = getenv ("COLUMNS");
-	if (columns != NULL) {
-		width = atoi (columns);
-		if (width > 0)
-			line_length = width;
-	}
-}
-
 static int get_roff_line_length (void)
 {
+	int line_length = get_line_length ();
+
 	/* groff >= 1.18 defaults to 78. */
 	if (!troff && line_length != 80) {
 		int length = line_length * 39 / 40;
@@ -885,9 +838,6 @@ int main (int argc, char *argv[])
 	signal (SIGINT, int_handler);
 
 	pipeline_install_sigchld ();
-
-	if (!catman)
-		store_line_length();
 
 	read_config_file ();
 
