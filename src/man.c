@@ -2103,6 +2103,17 @@ static int close_cat_stream (pipeline *cat_p, const char *cat_file,
 	return status;
 }
 
+/* TODO: This should all be refactored after work on the decompression
+ * library is complete.
+ */
+void discard_stderr (pipeline *p)
+{
+	int i;
+
+	for (i = 0; i < p->ncommands; ++i)
+		p->commands[i]->discard_err = 1;
+}
+
 /*
  * format a manual page with format_cmd, display it with disp_cmd, and
  * save it to cat_file
@@ -2119,6 +2130,8 @@ static int format_display_and_save (pipeline *format_cmd,
 	FILE *sav = sav_p ? pipeline_get_infile (sav_p) : NULL;
 	int instat = 1, outstat;
 	RETSIGTYPE (*old_handler)(int) = signal (SIGPIPE, SIG_IGN);
+
+	discard_stderr (format_cmd);
 
 	if (in && out) {
 		/* copy in to both out and sav */
@@ -2177,6 +2190,8 @@ static void format_display (pipeline *format_cmd, pipeline *disp_cmd,
 {
 	pipeline *p;
 	int status;
+
+	discard_stderr (format_cmd);
 
 	drop_effective_privs ();
 
