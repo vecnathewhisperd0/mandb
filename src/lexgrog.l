@@ -253,6 +253,8 @@ vgrind_request	\.vS
 					}
 
 	{bol}{typeface}{blank}+		|	/* type face commands */
+	{bol}\.ft{blank}.*		|	/* font change */
+	{bol}\.V[be]{blank}.*		|	/* pod2man, verbatim mode */
 	{bol}\.IX{blank}.*		|	/* .IX line */
 	{next}{comment}.*		{	/* per line comments */
 						newline_found ();
