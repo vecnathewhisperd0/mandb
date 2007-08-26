@@ -1,3 +1,9 @@
+Sun Aug 26 16:10:26 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l (main): Skip descriptions with NULL name or whatis.
+	  This causes pages with no description to be flagged as parse
+	  failures, so that automatic scanners can pick them up more easily.
+
 Sun Aug 26 15:08:45 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (is_section): Disallow sectional extensions of

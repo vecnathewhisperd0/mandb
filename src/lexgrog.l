@@ -618,6 +618,8 @@ int main (int argc, char **argv)
 				parse_descriptions (NULL, lg.whatis);
 			const struct page_description *desc;
 			for (desc = descs; desc; desc = desc->next) {
+				if (!desc->name || !desc->whatis)
+					continue;
 				found = 1;
 				printf ("%s", argv[optind]);
 				if (show_filters)
