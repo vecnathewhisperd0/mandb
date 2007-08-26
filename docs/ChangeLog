@@ -1,3 +1,10 @@
+Sun Aug 26 15:08:45 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (is_section): Disallow sectional extensions of
+	  alphabetic sections, e.g. n and l from the default configuration
+	  (Debian bug #391977). Also disallow sectional extensions beginning
+	  with a digit (Debian bug #421481).
+
 Mon Aug 20 00:10:49 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	Discard stderr from formatting processes when outputting to a pager,

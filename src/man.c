@@ -1257,7 +1257,10 @@ static __inline__ const char *is_section (const char *name)
 	for (vs = section_list; *vs; vs++) {
 		if (STREQ (*vs, name))
 			return name;
-		if (strlen (*vs) == 1 && STRNEQ (*vs, name, 1))
+		/* allow e.g. 3perl but disallow 8139too and libfoo */
+		if (strlen (*vs) == 1 && CTYPE (isdigit, **vs) &&
+		    strlen (name) > 1 && !CTYPE (isdigit, name[1]) &&
+		    STRNEQ (*vs, name, 1))
 			return name;
 	}
 	return NULL;
