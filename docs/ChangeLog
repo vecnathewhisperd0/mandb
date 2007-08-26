@@ -1,3 +1,18 @@
+Sun Aug 26 16:40:50 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Suppress warnings in --quiet mode (thanks, Martin Dorey; Debian bugs
+	#348008, #378428, and #411220).
+
+	* src/check_mandirs.c (test_manfile): Suppress "bad symlink" warning
+	  under --quiet.
+	* src/ult_src.c (ult_hardlink): Suppress "can't search directory"
+	  warning under --quiet.
+	  (ult_softlink): Suppress "dangling symlinks" and "can't resolve"
+	  warnings under --quiet.
+	  (ult_src): Suppress "can't resolve", "is self referencing", and
+	  "can't open" warnings under --quiet.
+	* src/lexgrog.l: Declare global quiet variable.
+
 Sun Aug 26 16:10:26 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l (main): Skip descriptions with NULL name or whatis.

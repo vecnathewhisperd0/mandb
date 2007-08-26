@@ -233,9 +233,10 @@ void test_manfile (const char *file, const char *path)
 	}
 
 	if (!ult) {
-		error (0, 0,
-		       _("warning: %s: bad symlink or ROFF `.so' request"),
-		       file);
+		if (quiet < 2)
+			error (0, 0,
+			       _("warning: %s: bad symlink or ROFF `.so' request"),
+			       file);
 		free (manpage);
 		return;
 	}

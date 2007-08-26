@@ -96,6 +96,7 @@ static int waiting_for_quote;
 #endif /* HAVE_GETOPT_H */
 
 char *program_name;
+int quiet = 1;
 
 static const struct option long_options[] =
 {

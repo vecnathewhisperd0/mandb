@@ -122,7 +122,8 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 
 	mdir = opendir (dir);
 	if (mdir == NULL) {
-		error (0, errno, _("can't search directory %s"), dir);
+		if (quiet < 2)
+			error (0, errno, _("can't search directory %s"), dir);
 		free (dir);
 		free (base);
 		return NULL;
@@ -163,11 +164,15 @@ static char *ult_softlink (const char *fullpath)
 
 	if (realpath (fullpath, resolved_path) == NULL) {
 		/* discard the unresolved path */
-		if (errno == ENOENT)
-			error (0, 0, _("warning: %s is a dangling symlink"),
-			       fullpath);
-		else
-			error (0, errno, _("can't resolve %s"), fullpath);
+		if (quiet < 2) {
+			if (errno == ENOENT)
+				error (0, 0,
+				       _("warning: %s is a dangling symlink"),
+				       fullpath);
+			else
+				error (0, errno, _("can't resolve %s"),
+				       fullpath);
+		}
 		return NULL;
 	}
 
@@ -247,7 +252,9 @@ const char *ult_src (const char *name, const char *path,
 		if (!buf && ((flags & SOFT_LINK) || (flags & HARD_LINK))) {
 			buf = &new_buf;
 			if (lstat (base, buf) == -1) {
-				error (0, errno, _("can't resolve %s"), base);
+				if (quiet < 2)
+					error (0, errno, _("can't resolve %s"),
+					       base);
 				return NULL;
 			}
 		}
@@ -283,7 +290,8 @@ const char *ult_src (const char *name, const char *path,
 
 	/* keep a check on recursion level */
 	else if (recurse == 10) {
-		error (0, 0, _("%s is self referencing"), name);
+		if (quiet < 2)
+			error (0, 0, _("%s is self referencing"), name);
 		return NULL;
 	}
 
@@ -324,14 +332,17 @@ const char *ult_src (const char *name, const char *path,
 				filename = base;
 
 			if (!fp) {
-				error (0, errno, _("can't open %s"), filename);
+				if (quiet < 2)
+					error (0, errno, _("can't open %s"),
+					       filename);
 				return NULL;
 			}
 		}
 #else
 		fp = fopen (base, "r");
 		if (fp == NULL) {
-			error (0, errno, _("can't open %s"), base);
+			if (quiet < 2)
+				error (0, errno, _("can't open %s"), base);
 			return NULL;
 		}
 #endif
