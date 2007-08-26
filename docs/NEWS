@@ -27,6 +27,12 @@ Major changes since man-db 2.4.4:
 	  outputting to a pager, to avoid visual corruption from any error
 	  messages.
 
+	o If the MAN_KEEP_FORMATTING environment variable is set to any
+	  non-empty value, then man will preserve formatting characters in
+	  its output even when standard output is not a terminal. This may
+	  be useful for programs such as pinfo that call man and can
+	  interpret its formatted output.
+
 man-db 2.4.4 (12 February 2007)
 ===============================
 

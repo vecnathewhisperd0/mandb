@@ -1729,7 +1729,10 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			/* get rid of special characters if not writing to a
 			 * terminal
 			 */
-			if (!isatty (fileno (stdout))) {
+			const char *man_keep_formatting =
+				getenv ("MAN_KEEP_FORMATTING");
+			if ((!man_keep_formatting || !*man_keep_formatting) &&
+			    !isatty (fileno (stdout))) {
 				save_cat = 0;
 				setenv ("GROFF_NO_SGR", "1", 1);
 				pipeline_command_args (p, COL,
