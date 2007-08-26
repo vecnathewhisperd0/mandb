@@ -199,10 +199,8 @@ struct candidate {
 #ifdef MAN_CATS
 static pipeline *checked_popen (pipeline *p, const char *type)
 {
-#ifdef SECURE_MAN_UID
 	if (global_manpath)
 		drop_effective_privs ();
-#endif /* SECURE_MAN_UID */
 
 	debug ("start pipeline (\"%s\")\n", type);
 
@@ -213,10 +211,8 @@ static pipeline *checked_popen (pipeline *p, const char *type)
 
 	pipeline_start (p);
 
-#ifdef SECURE_MAN_UID
 	if (global_manpath)
 		regain_effective_privs ();
-#endif /* SECURE_MAN_UID */
 
 	return p;
 }
