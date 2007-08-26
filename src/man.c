@@ -2193,7 +2193,8 @@ static void format_display (pipeline *format_cmd, pipeline *disp_cmd,
 	pipeline *p;
 	int status;
 
-	discard_stderr (format_cmd);
+	if (format_cmd)
+		discard_stderr (format_cmd);
 
 	drop_effective_privs ();
 
