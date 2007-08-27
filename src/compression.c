@@ -149,6 +149,7 @@ struct compression *comp_file (const char *filename)
 
 		*(compfile + len) = '\0';
 	}
+	free (compfile);
 	return NULL;
 }
 
