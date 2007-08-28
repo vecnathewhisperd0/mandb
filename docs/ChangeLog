@@ -61,6 +61,17 @@
 	  Rearrange control flow a bit to reduce duplication.
 	* src/ult_src.c (ult_src): Use pipeline and decompression layers
 	  rather than older decompression methods.
+	* src/zsoelim.l (YY_INPUT): Define to read from a 'struct pipeline'.
+	  (<so>\"?[^ \t\n\"]+\"?): Call open_file only once; let it worry
+	  about compression extensions. Decrement so_stack_ptr here if
+	  open_file fails rather than having it do it.
+	  (<lfname>\"?[^ \t\n\"]+\"?): Free the old value of NAME, if set.
+	  (<<EOF>>): Clean up used pipeline and free NAME. Remove so_delete
+	  handling.
+	  (main): Let open_file handle stdin.
+	  (open_file): Use decompress_open/decompress_fdopen rather than
+	  older decompression methods. Don't decrement so_stack_ptr here on
+	  failure.
 
 	* configure.ac: Remove decompressor variable. Check for gzopen in
 	  libz.
