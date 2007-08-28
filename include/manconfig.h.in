@@ -351,6 +351,8 @@ extern void debug (const char *message, ...) ATTRIBUTE_FORMAT_PRINTF(1, 2);
 extern void debug_error (const char *message, ...)
 	ATTRIBUTE_FORMAT_PRINTF(1, 2);
 
+struct pipeline;
+
 /* ver.c */
 #ifndef STATIC_VER
 extern __inline__ void ver (void);
@@ -367,9 +369,10 @@ extern int straycats (char *mandir);
 struct lexgrog;
 extern int find_name (const char *file, const char *filename,
 		      struct lexgrog *p_lg);
+extern int find_name_decompressed (struct pipeline *p, const char *filename,
+				   struct lexgrog *p_lg);
 
 /* util.c */
-struct pipeline;
 extern char *mkdbname (const char *path);
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);

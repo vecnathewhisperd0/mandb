@@ -93,7 +93,6 @@ extern char *canonicalize_file_name __P ((__const char *__name));
 #include "manp.h"
 #include "security.h"
 
-static char *temp_name;
 static char *catdir, *mandir;
 
 static int check_for_stray (void)
@@ -247,17 +246,7 @@ static int check_for_stray (void)
 				(get_def_user ("col", COL));
 			command_arg (col_cmd, "-bx");
 			pipeline_command (filter, col_cmd);
-
-			drop_effective_privs ();
-			filter->want_out = open (temp_name, O_WRONLY);
-			if (filter->want_out == -1) {
-				error (0, errno,
-				       _("can't open %s for writing"),
-				       temp_name);
-				regain_effective_privs ();
-				goto next_filter;
-			}
-			regain_effective_privs ();
+			filter->want_out = -1;
 
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 			fullpath = canonicalize_file_name (catdir);
@@ -279,6 +268,9 @@ static int check_for_stray (void)
 			} else 
 #endif
 			{
+				char *catdir_copy;
+				const char *catdir_base;
+
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 				free (fullpath);
 #endif
@@ -287,45 +279,34 @@ static int check_for_stray (void)
 				pipeline_pump (decomp, filter, NULL);
 				regain_effective_privs ();
 				pipeline_wait (decomp);
-				if (pipeline_wait (filter) != 0) {
-					char *filter_str =
-						pipeline_tostring (filter);
-					remove_with_dropped_privs (temp_name);
-					perror (filter_str);
-					free (filter_str);
-				} else {
+
+				strays++;
+
+				lg.type = CATPAGE;
+				catdir_copy = xstrdup (catdir);
+				catdir_base = basename (catdir_copy);
+				if (find_name_decompressed (filter,
+							    catdir_base,
+							    &lg)) {
 					struct page_description *descs;
-					char *catdir_copy;
-					const char *catdir_base;
-
 					strays++;
-
-					lg.type = CATPAGE;
-					catdir_copy = xstrdup (catdir);
-					catdir_base = basename (catdir_copy);
-					if (!find_name (temp_name,
-							catdir_base, &lg))
-						if (quiet < 2)
-							error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
-								catdir,
-								mandir_base,
-								info.sec);
-					free (catdir_copy);
-
-					descs = parse_descriptions (mandir_base,
-								    lg.whatis);
+					descs = parse_descriptions
+						(mandir_base, lg.whatis);
 					if (descs) {
-						store_descriptions (descs,
-								    &info,
-								    mandir_base);
+						store_descriptions
+							(descs, &info,
+							 mandir_base);
 						free_descriptions (descs);
 					}
-				}
+				} else if (quiet < 2)
+					error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
+					       catdir, mandir_base, info.sec);
+				free (catdir_copy);
+
 			}
 
 			if (lg.whatis)
 				free (lg.whatis);
-next_filter:
 			pipeline_free (filter);
 			if (decomp->pids)
 				pipeline_wait (decomp);
@@ -388,21 +369,6 @@ int straycats (char *manpath)
 	char *catpath;
 	int strays;
 
-	if (!temp_name) {
-		int fd;
-		drop_effective_privs ();
-		fd = create_tempfile ("zcat", &temp_name);
-		if (fd == -1) {
-			error (0, errno,
-			       _("warning: can't create temp file %s"),
-			       temp_name);
-			regain_effective_privs ();
-			return 0;
-		}
-		close (fd);
-		regain_effective_privs ();
-	}
-
 	dbf = MYDBM_RWOPEN (database);
 	if (dbf && dbver_rd (dbf)) {
 		MYDBM_CLOSE (dbf);
@@ -441,8 +407,5 @@ int straycats (char *manpath)
 		free (catpath);
 
 	MYDBM_CLOSE (dbf);
-	remove_with_dropped_privs (temp_name);
-	free (temp_name);
-	temp_name = NULL;
 	return strays;
 }

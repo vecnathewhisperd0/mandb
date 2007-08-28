@@ -426,10 +426,10 @@ static void newline_found (void)
 int find_name (const char *file, const char *filename, lexgrog *p_lg)
 {
 	int ret;
-	int decomp_status;
+	pipeline *p;
 
 	if (strcmp (file, "-") == 0) {
-		decomp = decompress_fdopen (dup (fileno (stdin)));
+		p = decompress_fdopen (dup (fileno (stdin)));
 	} else {
 		struct stat st;
 
@@ -444,14 +444,26 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 		}
 
 		drop_effective_privs ();
-		decomp = decompress_open (file);
-		if (!decomp) {
+		p = decompress_open (file);
+		if (!p) {
 			error (0, errno, _("can't open %s"), file);
 			regain_effective_privs ();
 			return 0;
 		}
 		regain_effective_privs ();
 	}
+
+	ret = find_name_decompressed (p, filename, p_lg);
+	pipeline_free (p);
+	return ret;
+}
+
+int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
+{
+	int ret;
+	int decomp_status;
+
+	decomp = p;
 
 	fname = filename;
 	*(p_name = newname) = '\0';
@@ -473,7 +485,6 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 	regain_effective_privs ();
 
 	decomp_status = pipeline_wait (decomp);
-	pipeline_free (decomp);
 
 	if (ret || decomp_status)
 		return 0;

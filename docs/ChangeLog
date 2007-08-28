@@ -34,7 +34,9 @@
 
 	* src/lexgrog.l (YY_INPUT): Define to read from a 'struct pipeline'.
 	  (find_name): Use decompress_open/decompress_fdopen rather than
-	  older decompression methods.
+	  older decompression methods. Split handling once we have a
+	  decompressor pipeline out to ...
+	  (find_name_decompressed): ... here.
 	* src/check_mandirs.c (test_manfile): Remove decompression code;
 	  find_name will handle this itself now.
 	* src/compression.c (create_ztemp, decompress, remove_ztemp,
@@ -58,7 +60,10 @@
 	  decompression methods.
 	  (display_filesystem, display_database): Drop remove_ztemp calls.
 	* src/straycats.c (check_for_stray): Use decompression layer.
-	  Rearrange control flow a bit to reduce duplication.
+	  Rearrange control flow a bit to reduce duplication. Remove use of
+	  temporary file; use find_name_decompressed instead. Only increment
+	  strays if find_name_decompressed succeeds.
+	  (straycats): Remove temporary file creation.
 	* src/ult_src.c (ult_src): Use pipeline and decompression layers
 	  rather than older decompression methods.
 	* src/zsoelim.l (YY_INPUT): Define to read from a 'struct pipeline'.
@@ -78,6 +83,7 @@
 	* include/manconfig.h.in (DECOMPRESSOR): Remove.
 	  (comp_list): Declare extern here.
 	  (decompress, remove_ztemp, get_ztemp): Remove.
+	  (find_name_decompressed): Add prototype.
 	* src/man_db.conf.in (decompressor): Remove.
 
 	* docs/TODO: Update.
