@@ -270,12 +270,14 @@ static int check_for_stray (void)
 			command_arg (col_cmd, "-bx");
 			pipeline_command (filter, col_cmd);
 
+			drop_effective_privs ();
 			filter->want_out = open (temp_name, O_WRONLY);
 			if (filter->want_out == -1) {
 				error (0, errno,
 				       _("can't open %s for writing"),
 				       temp_name);
 			}
+			regain_effective_privs ();
 
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 			fullpath = canonicalize_file_name (catdir);
