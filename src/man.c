@@ -2116,7 +2116,8 @@ static void format_display (pipeline *decomp,
 
 /* "Display" a page in catman mode, which amounts to saving it. */
 /* TODO: merge with format_display_and_save? */
-static void display_catman (const char *cat_file, pipeline *format_cmd)
+static void display_catman (const char *cat_file, pipeline *decomp,
+			    pipeline *format_cmd)
 {
 	char *tmpcat = tmp_cat_filename (cat_file);
 	int status;
@@ -2126,15 +2127,22 @@ static void display_catman (const char *cat_file, pipeline *format_cmd)
 				 get_def ("compressor", COMPRESSOR));
 #endif /* COMP_CAT */
 
+	discard_stderr (format_cmd);
 	format_cmd->want_out = tmp_cat_fd;
+
+	push_cleanup ((cleanup_fun) unlink, tmpcat, 1);
 
 	/* save the cat as real user
 	 * (1) required for user man hierarchy
 	 * (2) else depending on ruid's privs is ok, effectively disables
 	 *     catman for non-root.
 	 */
-	push_cleanup ((cleanup_fun) unlink, tmpcat, 1);
-	status = do_system_drop_privs (format_cmd);
+	drop_effective_privs ();
+	pipeline_connect (decomp, format_cmd, NULL);
+	pipeline_pump (decomp, format_cmd, NULL);
+	pipeline_wait (decomp);
+	status = pipeline_wait (format_cmd);
+	regain_effective_privs ();
 	if (status)
 		gripe_system (format_cmd, status);
 
@@ -2301,7 +2309,8 @@ static int display (const char *dir, const char *man_file,
 						 "%s in catman mode"),
 					       cat_file);
 				else
-					display_catman (cat_file, format_cmd);
+					display_catman (cat_file, decomp,
+							format_cmd);
 			}
 		} else if (format) {
 			/* no cat or out of date */
