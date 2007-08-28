@@ -262,6 +262,7 @@ char *database;
 MYDBM_FILE dbf; 
 extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
+extern int disable_cache;
 extern int optind;
 
 /* locals */
@@ -2230,7 +2231,8 @@ static int display (const char *dir, const char *man_file,
 #ifdef TROFF_IS_GROFF
 		    || htmlout
 #endif
-		    || local_man_file)
+		    || local_man_file
+		    || disable_cache)
 			save_cat = 0;
 
 		if (!man_file) {

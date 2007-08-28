@@ -1,3 +1,14 @@
+Tue Aug 28 18:38:31 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Add a configuration file flag (NOCACHE) to disable cat page caching
+	(thanks, Ralph Corderoy; Debian bug #196642).
+
+	* src/manp.c (add_to_dirlist): Recognise NOCACHE.
+	* src/man.c (display): Don't save a cat page if NOCACHE is set.
+	* src/man_db.conf.in: Document NOCACHE.
+	* man/man5/manpath.man5 (FORMAT): Document NOCACHE.
+	* docs/NEWS: Document this.
+
 Tue Aug 28 17:23:26 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Bump to 2.5.0; I think there's now enough to justify
