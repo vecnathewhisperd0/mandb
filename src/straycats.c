@@ -403,6 +403,7 @@ int straycats (char *manpath)
 			error (0, errno,
 			       _("warning: can't create temp file %s"),
 			       temp_name);
+			regain_effective_privs ();
 			return 0;
 		}
 		close (fd);
