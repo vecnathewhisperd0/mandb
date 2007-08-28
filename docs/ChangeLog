@@ -22,7 +22,8 @@
 	  (pipeline_tostring): Use command_tostring.
 	  (pipeline_start): Implement want_infile, want_outfile, and
 	  function commands. Make zero-command case work properly (read
-	  directly from input file).
+	  directly from input file). Flush all pending stdio output so that
+	  subprocesses don't inherit it.
 	  (pipeline_connect, pipeline_pump, get_block, pipeline_read,
 	  pipeline_peek, pipeline_peek_size, pipeline_peek_skip, get_line,
 	  pipeline_readline, pipeline_peekline): New functions.
