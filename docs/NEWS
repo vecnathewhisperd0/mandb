@@ -33,6 +33,18 @@ Major changes since man-db 2.4.4:
 	  be useful for programs such as pinfo that call man and can
 	  interpret its formatted output.
 
+	o A decompression library is now in place. This allows man-db to use
+	  zlib to decompress gzipped files, and allows most of its uses of
+	  temporary files to be removed. The only remaining exceptions are
+	  cat file creation (which uses a temporary file in the cat tree
+	  rather than in /tmp) and viewing HTML manual pages (which uses a
+	  temporary directory). Otherwise, man-db should now work fine even
+	  with a read-only /tmp during system recovery.
+
+	o Cat pages are now saved in the background while the pager is
+	  active, so man will only need to block afterwards if the pager is
+	  exited very quickly.
+
 man-db 2.4.4 (12 February 2007)
 ===============================
 

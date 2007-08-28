@@ -1,3 +1,101 @@
+Tue Aug 28 17:19:16 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Implement and use a decompression library. This allows cat pages to
+	be saved in the background (Debian bug #18452) and operation with a
+	read-only /tmp (Debian bug #165499).
+
+	* lib/pipeline.h (struct command): Add support for commands that
+	  consist of calling a function rather than executing a process.
+	  (struct pipeline): Add want_infile and want_outfile members. Note
+	  that infile and outfile default to NULL. Add source, buffer,
+	  buflen, bufmax, line_cache, and peek_offset members.
+	  (command_new_function, command_dump, command_tostring,
+	  pipeline_connect, pipeline_pump, pipeline_read, pipeline_peek,
+	  pipeline_peek_size, pipeline_peek_skip, pipeline_readline,
+	  pipeline_peekline): New prototypes.
+	  (pipeline_join): Update description for want_infile and
+	  want_outfile.
+	* lib/pipeline.c (command_new, command_dup, command_arg,
+	  command_argv, command_args, command_argstr, command_free): Update
+	  for 'struct command' changes.
+	  (command_new_function, command_dump, command_tostring): New
+	  functions.
+	  (pipeline_new, pipeline_join, pipeline_dump, pipeline_tostring):
+	  Update for 'struct pipeline' changes.
+	  (pipeline_dump): Use command_dump.
+	  (pipeline_tostring): Use command_tostring.
+	  (pipeline_start): Implement want_infile, want_outfile, and
+	  function commands. Make zero-command case work properly (read
+	  directly from input file). Flush all pending stdio output so that
+	  subprocesses don't inherit it.
+	  (pipeline_connect, pipeline_pump, get_block, pipeline_read,
+	  pipeline_peek, pipeline_peek_size, pipeline_peek_skip, get_line,
+	  pipeline_readline, pipeline_peekline): New functions.
+
+	* lib/decompress.c, lib/decompress.h: New files, implementing a
+	  decompression abstraction layer.
+	* lib/Makefile.in: Always compile decompress.c.
+
+	* src/lexgrog.l (YY_INPUT): Define to read from a 'struct pipeline'.
+	  (find_name): Use decompress_open/decompress_fdopen rather than
+	  older decompression methods. Split handling once we have a
+	  decompressor pipeline out to ...
+	  (find_name_decompressed): ... here.
+	* src/check_mandirs.c (test_manfile): Remove decompression code;
+	  find_name will handle this itself now.
+	* src/compression.c (create_ztemp, decompress, remove_ztemp,
+	  get_ztemp): Remove.
+	* src/man.c (checked_popen): Remove.
+	  (local_man_loop): Remove decompression code.
+	  (get_preprocessors_from_file): Convert to peeking the first line
+	  from a pipeline.
+	  (get_preprocessors): Adjust arguments and
+	  get_preprocessors_from_file call.
+	  (remove_stdintmp, create_stdintmp): Remove.
+	  (make_roff_command): Remove special handling of stdin, now handled
+	  by peeking a pipeline.
+	  (open_cat_stream): Don't start the returned pipeline.
+	  (close_cat_stream): Remove unnecessary COMP_CAT special case.
+	  (format_display_and_save): Take a decompressor pipeline argument.
+	  Simplify by using pipeline_connect and pipeline_pump.
+	  (format_display): Take a decompressor pipeline argument. Use
+	  pipeline_connect and pipeline_pump.
+	  (display): Use decompress_open/decompress_fdopen rather than older
+	  decompression methods.
+	  (display_filesystem, display_database): Drop remove_ztemp calls.
+	* src/straycats.c (check_for_stray): Use decompression layer.
+	  Rearrange control flow a bit to reduce duplication. Remove use of
+	  temporary file; use find_name_decompressed instead. Only increment
+	  strays if find_name_decompressed succeeds.
+	  (straycats): Remove temporary file creation.
+	* src/ult_src.c (ult_src): Use pipeline and decompression layers
+	  rather than older decompression methods.
+	* src/zsoelim.l (YY_INPUT): Define to read from a 'struct pipeline'.
+	  (<so>\"?[^ \t\n\"]+\"?): Call open_file only once; let it worry
+	  about compression extensions. Decrement so_stack_ptr here if
+	  open_file fails rather than having it do it.
+	  (<lfname>\"?[^ \t\n\"]+\"?): Free the old value of NAME, if set.
+	  (<<EOF>>): Clean up used pipeline and free NAME. Remove so_delete
+	  handling.
+	  (main): Let open_file handle stdin.
+	  (open_file): Use decompress_open/decompress_fdopen rather than
+	  older decompression methods. Don't decrement so_stack_ptr here on
+	  failure.
+
+	* configure.ac: Remove decompressor variable. Check for gzopen in
+	  libz.
+	* include/manconfig.h.in (DECOMPRESSOR): Remove.
+	  (comp_list): Declare extern here.
+	  (create_tempfile): Remove.
+	  (decompress, remove_ztemp, get_ztemp): Remove.
+	  (find_name_decompressed): Add prototype.
+	* lib/tempfile.c (create_tempfile): Remove. We now only need
+	  temporary directory creation.
+	* src/man_db.conf.in (decompressor): Remove.
+
+	* docs/TODO: Update.
+	* docs/NEWS: Document this.
+
 Tue Aug 28 11:14:53 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* tools/mandb_[nt]fmt-script: Rename to tools/mandb_fmt-script,

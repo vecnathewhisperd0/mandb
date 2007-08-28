@@ -245,7 +245,6 @@ then
 	gunzip="$gzip -dc"
 	compressor="$gzip -c7"
 	compress_ext="gz"
-	decompressor="$gunzip"
 fi
 MAN_PATH_PROGS([compress], [COMPRESS], [use COMPRESS as UNIX compression utility], [compress])
 if test -n "$compress"
@@ -256,7 +255,6 @@ then
 	then
 		compressor="$compress -c"
 		compress_ext="Z"
-		decompressor="$uncompress"
 	fi
 fi
 MAN_PATH_PROGS([bzip2], [BZIP2], [use BZIP2 as block-sorting compression utility], [bzip2])
@@ -275,7 +273,7 @@ AC_SUBST(compress_ext)dnl
 AC_SUBST(gunzip)dnl
 AC_SUBST(uncompress)dnl
 AC_SUBST(bunzip2)dnl
-AC_SUBST(decompressor)dnl
+AC_CHECK_LIB(z, gzopen)
 dnl
 dnl to add more decompressors just follow the scheme above.
 dnl

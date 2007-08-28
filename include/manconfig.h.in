@@ -207,13 +207,12 @@
 #endif
 
 #ifdef COMP_CAT
-/* This is the default compressor, decompressor and compressed extension.
+/* This is the default compressor and compressed extension.
    These are used for compressing cat pages. The compressor is likely to
    be gzip or compress and the extension: .gz or .Z . Please make sure that
    all of your cat pages have the same extension (whatever that may be) */
 
 #  define COMPRESSOR "@compressor@"
-#  define DECOMPRESSOR "@decompressor@"
 #  define COMPRESS_EXT "@compress_ext@"
 #endif /* COMP_CAT */
 
@@ -319,6 +318,8 @@ struct compression {
 	char *stem;
 };
 
+extern struct compression comp_list[];
+
 /* depending on the compiler ... */
 #if __STDC__
 #  define VOID void
@@ -342,13 +343,14 @@ extern const char *xstrsignal (int signum);
 struct sigaction;
 extern int xsigaction (int signum, const struct sigaction *act,
 		       struct sigaction *oldact);
-extern int create_tempfile (const char *template, char **created_filename);
 extern char *create_tempdir (const char *template);
 
 extern int debug_level;		/* shows whether -d issued */
 extern void debug (const char *message, ...) ATTRIBUTE_FORMAT_PRINTF(1, 2);
 extern void debug_error (const char *message, ...)
 	ATTRIBUTE_FORMAT_PRINTF(1, 2);
+
+struct pipeline;
 
 /* ver.c */
 #ifndef STATIC_VER
@@ -358,9 +360,6 @@ extern __inline__ void ver (void);
 /* compression.c */
 extern struct compression *comp_info (const char *filename, int want_stem);
 extern struct compression *comp_file (const char *filename);
-extern char *decompress (const char *filename, const struct compression *comp);
-extern __inline__ void remove_ztemp (void);
-extern __inline__ char *get_ztemp (void);
 
 /* straycats.c */
 extern int straycats (char *mandir);
@@ -369,9 +368,10 @@ extern int straycats (char *mandir);
 struct lexgrog;
 extern int find_name (const char *file, const char *filename,
 		      struct lexgrog *p_lg);
+extern int find_name_decompressed (struct pipeline *p, const char *filename,
+				   struct lexgrog *p_lg);
 
 /* util.c */
-struct pipeline;
 extern char *mkdbname (const char *path);
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);

@@ -629,7 +629,7 @@ int main (int argc, char *argv[])
 		free (database);
 		database = NULL;
 
-		if (check_for_strays && amount_changed) {
+		if (check_for_strays /* && amount_changed */) {
 			database = mkdbname (catpath);
 			strays += straycats (*mp);
 			free (database);

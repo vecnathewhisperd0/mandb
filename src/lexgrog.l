@@ -61,6 +61,7 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/pipeline.h"
+#include "lib/decompress.h"
 #include "descriptions.h"
 #include "security.h"
 #include "ult_src.h"
@@ -85,6 +86,19 @@ static char filters[MAX_FILTERS];
 
 static int fill_mode;
 static int waiting_for_quote;
+
+static pipeline *decomp;
+
+#define YY_INPUT(buf,result,max_size) { \
+	size_t size = max_size; \
+	const char *block = pipeline_read (decomp, &size); \
+	if (block && size != 0) { \
+		memcpy (buf, block, size); \
+		buf[size] = '\0'; \
+		result = size; \
+	} else \
+		result = YY_NULL; \
+}
 
 #ifdef TEST
 
@@ -412,13 +426,11 @@ static void newline_found (void)
 int find_name (const char *file, const char *filename, lexgrog *p_lg)
 {
 	int ret;
+	pipeline *p;
 
 	if (strcmp (file, "-") == 0) {
-		yyin = fdopen (dup (0), "r");
+		p = decompress_fdopen (dup (fileno (stdin)));
 	} else {
-#ifdef COMP_SRC
-		struct compression *comp;
-#endif /* COMP_SRC */
 		struct stat st;
 
 		if (stat (file, &st)) {
@@ -431,26 +443,27 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 			return 0;
 		}
 
-#ifdef COMP_SRC
-		/* See if we need to decompress the file(s) first. */
-		comp = comp_info (file, 0);
-		if (comp) {
-			file = decompress (file, comp);
-			if (!file)
-				return 0;
-		}
-#endif /* COMP_SRC */
 		drop_effective_privs ();
-		yyin = fopen (file, "r");
-		regain_effective_privs ();
-		if (!yyin) {
+		p = decompress_open (file);
+		if (!p) {
 			error (0, errno, _("can't open %s"), file);
-#ifdef COMP_SRC
-			remove_ztemp ();
-#endif /* COMP_SRC */
+			regain_effective_privs ();
 			return 0;
 		}
+		regain_effective_privs ();
 	}
+
+	ret = find_name_decompressed (p, filename, p_lg);
+	pipeline_free (p);
+	return ret;
+}
+
+int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
+{
+	int ret;
+	int decomp_status;
+
+	decomp = p;
 
 	fname = filename;
 	*(p_name = newname) = '\0';
@@ -466,17 +479,14 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 
 	drop_effective_privs ();
 
-	yyrestart (yyin);
+	yyrestart (NULL);
 	ret = yylex ();
-	fclose (yyin);
-
-#ifdef COMP_SRC
-	remove_ztemp ();
-#endif
 
 	regain_effective_privs ();
 
-	if (ret)
+	decomp_status = pipeline_wait (decomp);
+
+	if (ret || decomp_status)
 		return 0;
 	else {
 		char f_tmp[MAX_FILTERS];
@@ -605,13 +615,6 @@ int main (int argc, char **argv)
 					&statbuf, SO_LINK);
 			if (path)
 				free (path);
-#ifdef COMP_SRC
-			if (file) {
-				char *ztemp = get_ztemp ();
-				if (ztemp)
-					file = ztemp;
-			}
-#endif
 		}
 
 		if (file && find_name (file, "-", &lg)) {

@@ -1,6 +1,7 @@
-/* tempfile.c: handle temporary file creation.
+/* tempfile.c: handle temporary directory creation (formerly also temporary
+ * files but this is no longer used).
  *
- * Copyright (C) 2001 Colin Watson <cjwatson@debian.org>.
+ * Copyright (C) 2001, 2003, 2007 Colin Watson <cjwatson@debian.org>.
  *
  * This file is part of man-db.
  *
@@ -31,9 +32,6 @@
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 #endif /* HAVE_UNISTD_H */
-
-#include <sys/types.h>
-#include <sys/stat.h>
 
 #include "manconfig.h"
 
@@ -69,25 +67,6 @@ static const char *path_search (void)
 	}
 
 	return dir;
-}
-
-/* Get a handle for a sane temporary file, looking in $TMPDIR, P_tmpdir, and
- * finally /tmp.
- */
-int create_tempfile (const char *template, char **created_filename)
-{
-	char *dir = xstrdup (path_search ());
-	int fd;
-	mode_t old_mode;
-
-	if (!dir)
-		return -1;
-	*created_filename = strappend (dir, "/", template, "XXXXXX", NULL);
-	/* -rw------- */
-	old_mode = umask (S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-	fd = mkstemp (*created_filename);
-	umask (old_mode);
-	return fd;
 }
 
 /* Get a sane temporary directory, looking in $TMPDIR, P_tmpdir, and finally
