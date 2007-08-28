@@ -1,5 +1,9 @@
   Colin Watson  <cjwatson@debian.org>
 
+	Implement and use a decompression library. This allows cat pages to
+	be saved in the background (Debian bug #18452) and operation with a
+	read-only /tmp (Debian bug #165499).
+
 	* lib/pipeline.h (struct command): Add support for commands that
 	  consist of calling a function rather than executing a process.
 	  (struct pipeline): Add want_infile and want_outfile members. Note
@@ -90,6 +94,7 @@
 	* src/man_db.conf.in (decompressor): Remove.
 
 	* docs/TODO: Update.
+	* docs/NEWS: Document this.
 
 Tue Aug 28 10:36:20 BST 2007  Colin Watson  <cjwatson@debian.org>
 
