@@ -62,24 +62,6 @@ extern int errno;
 #include "lib/error.h"
 #include "lib/pipeline.h"
 #include "security.h"
-#include "comp_src.h"
-
-static char *file;	/* pointer to temp file name */
-static int file_fd = -1;
-
-/* initialise temp filename */
-static __inline__ void create_ztemp (void)
-{
-	int oldmask = umask (022);
-	drop_effective_privs ();
-	file_fd = create_tempfile ("zman", &file);
-
-	if (file_fd < 0)
-		error (FATAL, errno, _("can't create a temporary filename"));
-	regain_effective_privs ();
-	umask (oldmask);
-	atexit (remove_ztemp);
-}
 
 /* Take filename as arg, return structure containing decompressor 
    and extension, or NULL if no comp extension found. 
@@ -153,74 +135,4 @@ struct compression *comp_file (const char *filename)
 	return NULL;
 }
 
-/* Set up a pointer to a unique temp filename on first call.
- * If this returns NULL, an error message will have been printed and the
- * caller should abort the current operation as appropriate.
- */
-char *decompress (const char *filename, const struct compression *comp)
-{
-	pipeline *pl = pipeline_new ();
-	command *cmd;
-	int status;
-	int save_debug = debug_level;
-
-	if (!comp->prog || !*comp->prog) {
-		/* TODO: Temporary workaround for poor decompression program
-		 * detection, so deliberately left untranslated for now. See
-		 * Debian bug #196097.
-		 */
-		error (0, 0, "missing decompression program for %s", filename);
-		return NULL;
-	}
-
-	if (!file)
-		create_ztemp();
-
-	cmd = command_new_argstr (comp->prog);
-	command_arg (cmd, filename);
-	pipeline_command (pl, cmd);
-	pl->want_out = file_fd;
-
-	if (debug_level) {
-#ifdef SECURE_MAN_UID
-		debug ("The following command done with dropped privs\n");
-#endif /* SECURE_MAN_UID */
-		pipeline_dump (pl, stderr);
-	}
-
-	/* temporarily drop the debug flag, so that we can continue */
-	debug_level = 0;
-	status = do_system_drop_privs (pl);
-	debug_level = save_debug;
-	close (file_fd);
-	file_fd = -1;
-
-	if (status) {
-		char *pl_str = pipeline_tostring (pl);
-		remove_ztemp ();
-		error (0, 0, _("command '%s' failed with exit status %d"),
-		       pl_str, status);
-		free (pl_str);
-	}
-	pipeline_free (pl);
-	return file;
-}
-
-/* remove temporary file, drop privs if necessary */
-void remove_ztemp (void)
-{
-	if (file) {
-		if (file_fd >= 0)
-			close (file_fd);
-		(void) remove_with_dropped_privs (file);
-		free (file);
-		file = NULL;
-	}
-}
-
-/* return temporary filename */
-char *get_ztemp (void)
-{
-	return file;
-}
 #endif /* COMP_SRC */

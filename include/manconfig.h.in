@@ -207,13 +207,12 @@
 #endif
 
 #ifdef COMP_CAT
-/* This is the default compressor, decompressor and compressed extension.
+/* This is the default compressor and compressed extension.
    These are used for compressing cat pages. The compressor is likely to
    be gzip or compress and the extension: .gz or .Z . Please make sure that
    all of your cat pages have the same extension (whatever that may be) */
 
 #  define COMPRESSOR "@compressor@"
-#  define DECOMPRESSOR "@decompressor@"
 #  define COMPRESS_EXT "@compress_ext@"
 #endif /* COMP_CAT */
 
@@ -319,6 +318,8 @@ struct compression {
 	char *stem;
 };
 
+extern struct compression comp_list[];
+
 /* depending on the compiler ... */
 #if __STDC__
 #  define VOID void
@@ -358,9 +359,6 @@ extern __inline__ void ver (void);
 /* compression.c */
 extern struct compression *comp_info (const char *filename, int want_stem);
 extern struct compression *comp_file (const char *filename);
-extern char *decompress (const char *filename, const struct compression *comp);
-extern __inline__ void remove_ztemp (void);
-extern __inline__ char *get_ztemp (void);
 
 /* straycats.c */
 extern int straycats (char *mandir);
