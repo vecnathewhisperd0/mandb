@@ -82,8 +82,11 @@
 	  libz.
 	* include/manconfig.h.in (DECOMPRESSOR): Remove.
 	  (comp_list): Declare extern here.
+	  (create_tempfile): Remove.
 	  (decompress, remove_ztemp, get_ztemp): Remove.
 	  (find_name_decompressed): Add prototype.
+	* lib/tempfile.c (create_tempfile): Remove. We now only need
+	  temporary directory creation.
 	* src/man_db.conf.in (decompressor): Remove.
 
 	* docs/TODO: Update.
