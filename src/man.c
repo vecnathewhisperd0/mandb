@@ -2056,6 +2056,7 @@ static void format_display (pipeline *decomp,
 	} else {
 		pipeline_connect (decomp, disp_cmd, NULL);
 		pipeline_pump (decomp, disp_cmd, NULL);
+		pipeline_wait (decomp);
 		status = pipeline_wait (disp_cmd);
 	}
 
