@@ -88,6 +88,7 @@ extern char *strrchr();
 #include "lib/setenv.h"
 #include "lib/pipeline.h"
 #include "lib/linelength.h"
+#include "lib/hashtable.h"
 #include "manp.h"
 
 static char *manpathlist[MAXDIRS];
@@ -122,6 +123,8 @@ static int wildcard;
 static int long_output;
 
 static const char *section;
+
+static struct hashtable *apropos_seen = NULL;
 
 #if !defined(APROPOS) && !defined(WHATIS)
 #  error #define WHATIS or APROPOS, so I know who I am
@@ -508,6 +511,7 @@ static int apropos (char *page, char *lowpage)
 		struct mandata info;
 #ifdef APROPOS
 		char *whatis;
+		char *seen_key;
 #endif
 
 		memset (&info, 0, sizeof (info));
@@ -548,6 +552,13 @@ static int apropos (char *page, char *lowpage)
 			 *tab = '\0';
 
 #ifdef APROPOS
+		if (info.name)
+			seen_key = xstrdup (info.name);
+		else
+			seen_key = xstrdup (MYDBM_DPTR (key));
+		seen_key = strappend (seen_key, " (", info.ext, ")", NULL);
+		if (hash_lookup (apropos_seen, seen_key, strlen (seen_key)))
+			goto nextpage_tab;
 		got_match = parse_name (lowpage, MYDBM_DPTR (key));
 		whatis = xstrdup (info.whatis);
 		if (!got_match && whatis)
@@ -559,12 +570,20 @@ static int apropos (char *page, char *lowpage)
 		if (got_match) {
 			display (&info, MYDBM_DPTR (key));
 			found++;
+#ifdef APROPOS
+			hash_install (apropos_seen, seen_key,
+				      strlen (seen_key), &key);
+#endif
 		}
 
 		found += got_match;
+
+#ifdef APROPOS
+		free (seen_key);
+nextpage_tab:
+#endif
 		if (tab)
 			*tab = '\t';
-
 nextpage:
 #ifndef BTREE
 		nextkey = MYDBM_NEXTKEY (dbf, key);
@@ -768,6 +787,8 @@ int main (int argc, char *argv[])
 
 	create_pathlist (manp, manpathlist);
 
+	apropos_seen = hash_create (&null_hash_free);
+
 	while (optind < argc) {
 #if defined(POSIX_REGEX)		
 		if (regex) {
@@ -799,6 +820,7 @@ int main (int argc, char *argv[])
 #endif /* POSIX_REGEX */
 	}
 
+	hash_free (apropos_seen);
 	free_pathlist (manpathlist);
 	free (manp);
 	free (locale);
