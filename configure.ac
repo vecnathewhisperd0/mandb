@@ -117,12 +117,12 @@ then
 fi
 AC_PROG_INSTALL
 AC_PROG_RANLIB
-AC_PATH_PROG(cat, cat)
-MAN_PATH_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx])
+AC_CHECK_PROGS(cat, cat)
+MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx])
 test -n "$browser" && browser="exec $browser"
-AC_PATH_PROG(tr, tr)
-AC_PATH_PROG(grep, grep)
-MAN_PATH_PROGS([pager], [PAGER], [use PAGER as default pager], [pager less more])
+AC_CHECK_PROGS(tr, tr)
+AC_CHECK_PROGS(grep, grep)
+MAN_CHECK_PROGS([pager], [PAGER], [use PAGER as default pager], [pager less more])
 test -n "$pager" && pager="$pager -s"
 dnl
 dnl define below (in list of preference) *roff macros to check for.
@@ -132,7 +132,7 @@ dnl
 dnl We have problems here, as different systems have different *roff
 dnl formatters and they accept different options and do different things :(
 dnl
-MAN_PATH_PROGS([nroff], [NROFF], [use NROFF as roff formatter for character devices], [nroff gnroff groff])
+MAN_CHECK_PROGS([nroff], [NROFF], [use NROFF as roff formatter for character devices], [nroff gnroff groff])
 if test -n "$nroff"
 then
 	dnl define GNU_NROFF if necessary
@@ -177,15 +177,15 @@ else
 	nroff="(nroff not installed)"
 	AC_DEFINE(NROFF_MISSING, 1, [Define if you don't have nroff.])
 fi
-dnl It would be nice to use MAN_PATH_PROGS here, but how do we determine
+dnl It would be nice to use MAN_CHECK_PROGS here, but how do we determine
 dnl TROFF_IS_GROFF?
-AC_PATH_PROGS(troff, groff)
+AC_CHECK_PROGS(troff, groff)
 if test -n "$troff"
 then
 	AC_DEFINE(TROFF_IS_GROFF, 1, [Define if you are using groff as troff.])
 	TROFF=groff
 else
-	AC_PATH_PROGS(troff, troff gtroff)
+	AC_CHECK_PROGS(troff, troff gtroff)
 	TROFF=troff
 fi
 if test -n "$troff"
@@ -219,8 +219,8 @@ else
 	troff="(troff not installed)"
 fi
 dnl 
-MAN_PATH_PROGS([eqn], [EQN], [use EQN to preprocess equations], [eqn geqn])
-MAN_PATH_PROGS([neqn], [NEQN], [use NEQN to preprocess equations for character devices], [neqn gneqn])
+MAN_CHECK_PROGS([eqn], [EQN], [use EQN to preprocess equations], [eqn geqn])
+MAN_CHECK_PROGS([neqn], [NEQN], [use NEQN to preprocess equations for character devices], [neqn gneqn])
 dnl
 dnl if we fail to find an neqn, use eqn and try to force it to output
 dnl for an ascii device. As this is only relevant for equations (?), not
@@ -231,21 +231,21 @@ then
 	test -n "$eqn" && 
 	(test -n "$nroff_device" && neqn="$eqn -T$nroff_device" || neqn="$eqn -Tascii")
 fi
-MAN_PATH_PROGS([tbl], [TBL], [use TBL to preprocess tables], [tbl gtbl])
-MAN_PATH_PROGS([col], [COL], [use COL to filter formatting characters from output], [col gcol])
-MAN_PATH_PROGS([vgrind], [VGRIND], [use VGRIND to preprocess program sources], [vgrind gvgrind])
-MAN_PATH_PROGS([refer], [REFER], [use REFER to preprocess bibliographic references], [refer grefer])
-MAN_PATH_PROGS([grap], [GRAP], [use GRAP to preprocess graphs], [grap])
-MAN_PATH_PROGS([pic], [PIC], [use PIC to preprocess pictures], [pic gpic])
+MAN_CHECK_PROGS([tbl], [TBL], [use TBL to preprocess tables], [tbl gtbl])
+MAN_CHECK_PROGS([col], [COL], [use COL to filter formatting characters from output], [col gcol])
+MAN_CHECK_PROGS([vgrind], [VGRIND], [use VGRIND to preprocess program sources], [vgrind gvgrind])
+MAN_CHECK_PROGS([refer], [REFER], [use REFER to preprocess bibliographic references], [refer grefer])
+MAN_CHECK_PROGS([grap], [GRAP], [use GRAP to preprocess graphs], [grap])
+MAN_CHECK_PROGS([pic], [PIC], [use PIC to preprocess pictures], [pic gpic])
 test -n "$pic" && pic="$pic -S"
-MAN_PATH_PROGS([gzip], [GZIP], [use GZIP as GNU compression utility], [gzip])
+MAN_CHECK_PROGS([gzip], [GZIP], [use GZIP as GNU compression utility], [gzip])
 if test -n "$gzip"
 then
 	gunzip="$gzip -dc"
 	compressor="$gzip -c7"
 	compress_ext="gz"
 fi
-MAN_PATH_PROGS([compress], [COMPRESS], [use COMPRESS as UNIX compression utility], [compress])
+MAN_CHECK_PROGS([compress], [COMPRESS], [use COMPRESS as UNIX compression utility], [compress])
 if test -n "$compress"
 then
 	uncompress="$compress -dc"
@@ -255,7 +255,7 @@ then
 		compress_ext="Z"
 	fi
 fi
-MAN_PATH_PROGS([bzip2], [BZIP2], [use BZIP2 as block-sorting compression utility], [bzip2])
+MAN_CHECK_PROGS([bzip2], [BZIP2], [use BZIP2 as block-sorting compression utility], [bzip2])
 if test -n "$bzip2"
 then
 	bunzip2="$bzip2 -dc"

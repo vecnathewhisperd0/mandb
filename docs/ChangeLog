@@ -1,3 +1,13 @@
+Wed Aug 29 11:09:31 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* m4/man-path-progs.m4: Rename to ...
+	* m4/man-check-progs.m4: ... this. Use AC_CHECK_PROGS rather than
+	  AC_PATH_PROGS.
+	* configure.ac: Use AC_CHECK_PROGS rather than
+	  AC_PATH_PROG/AC_PATH_PROGS, and MAN_CHECK_PROGS rather than
+	  MAN_PATH_PROGS. This fixes problems due to system utilities moving
+	  around on $PATH (Debian bug #385651).
+
 Wed Aug 29 10:42:08 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Move bogus makefile content ...
