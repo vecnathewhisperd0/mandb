@@ -241,7 +241,6 @@ test -n "$pic" && pic="$pic -S"
 MAN_PATH_PROGS([gzip], [GZIP], [use GZIP as GNU compression utility], [gzip])
 if test -n "$gzip"
 then
-	AC_DEFINE(HAVE_GZIP, 1, [Define if you have gzip.])
 	gunzip="$gzip -dc"
 	compressor="$gzip -c7"
 	compress_ext="gz"
@@ -249,7 +248,6 @@ fi
 MAN_PATH_PROGS([compress], [COMPRESS], [use COMPRESS as UNIX compression utility], [compress])
 if test -n "$compress"
 then
-	AC_DEFINE(HAVE_COMPRESS, 1, [Define if you have compress.])
 	uncompress="$compress -dc"
 	if test -z "$gzip"
 	then
@@ -260,7 +258,6 @@ fi
 MAN_PATH_PROGS([bzip2], [BZIP2], [use BZIP2 as block-sorting compression utility], [bzip2])
 if test -n "$bzip2"
 then
-	AC_DEFINE(HAVE_BZIP2, 1, [Define if you have bzip2.])
 	bunzip2="$bzip2 -dc"
 fi
 if test -n "$gzip" || test -n "$compress" || test -n "$bzip2"
