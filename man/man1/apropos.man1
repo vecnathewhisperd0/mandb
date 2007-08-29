@@ -14,7 +14,7 @@
 %apropos% \- search the manual page names and descriptions
 .SH SYNOPSIS
 .B %apropos% 
-.RB [\| \-dlhV  \|] 
+.RB [\| \-dalhV  \|] 
 .RB [\| \-e \||\| \-w \||\| \-r\c
 \|]
 .RB [\| \-s
@@ -87,6 +87,10 @@ description.
 .B \-e, \-\-exact
 Each keyword will be exactly matched against the page names and the
 descriptions.
+.TP
+.B \-a, \-\-and
+Only display items that match all the supplied keywords.
+The default is to display items that match any keyword.
 .TP
 .B \-l, \-\-long
 Do not trim output to the terminal width.

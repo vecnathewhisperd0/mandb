@@ -1,3 +1,19 @@
+Wed Aug 29 11:57:59 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Add an option to apropos to display only items matching all keywords
+	(thanks, Alfie Costa; Debian bug #259340).
+
+	* src/whatis.c (args, long_options, main): New -a/--and option for
+	  apropos.
+	  (usage): Document it.
+	  (apropos): Store a count of how many times each item has been seen
+	  in the hashtable. If --and was given, only display an item if its
+	  count equals the number of supplied keywords.
+	  (main): Store the number of supplied keywords. Adjust hash free
+	  function.
+	* man/man1/apropos.man1 (SYNOPSIS, OPTIONS): Document --and.
+	* docs/NEWS: Document this.
+
 Wed Aug 29 11:09:31 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* m4/man-path-progs.m4: Rename to ...

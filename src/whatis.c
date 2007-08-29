@@ -96,6 +96,7 @@ static char *manpathlist[MAXDIRS];
 extern char *user_config_file;
 extern char *optarg;
 extern int optind, opterr, optopt;
+static int num_keywords;
 
 char *program_name;
 char *database;
@@ -120,6 +121,10 @@ extern void regfree();
 
 static int wildcard;
 
+#ifdef APROPOS
+static int require_all;
+#endif
+
 static int long_output;
 
 static const char *section;
@@ -130,7 +135,11 @@ static struct hashtable *apropos_seen = NULL;
 #  error #define WHATIS or APROPOS, so I know who I am
 #endif
 
+#ifdef APROPOS
+static const char args[] = "dvrewas:lhVm:M:fkL:C:";
+#else
 static const char args[] = "dvrews:lhVm:M:fkL:C:";
+#endif
 
 static const struct option long_options[] =
 {
@@ -139,6 +148,9 @@ static const struct option long_options[] =
 	{"regex",	no_argument,		0, 'r'},
 	{"exact",	no_argument,		0, 'e'},
 	{"wildcard",	no_argument,		0, 'w'},
+#ifdef APROPOS
+	{"and",		no_argument,		0, 'a'},
+#endif
 	{"long",	no_argument,		0, 'l'},
 	{"section",	required_argument,	0, 's'},
 	{"help",	no_argument,		0, 'h'},
@@ -155,7 +167,7 @@ static const struct option long_options[] =
 #ifdef APROPOS
 static void usage (int status)
 {
-	printf (_("usage: %s [-dlhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C file]\n"
+	printf (_("usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C file]\n"
 		  "               keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
@@ -163,6 +175,7 @@ static void usage (int status)
 		"-r, --regex                interpret each keyword as a regex (default).\n"
 		"-e, --exact                search each keyword for exact match.\n"
 		"-w, --wildcard             the keyword(s) contain wildcards.\n"
+		"-a, --and                  require all keywords to match.\n"
 		"-l, --long                 do not trim output to terminal width.\n"
 		"-s, --section section      search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
@@ -512,6 +525,7 @@ static int apropos (char *page, char *lowpage)
 #ifdef APROPOS
 		char *whatis;
 		char *seen_key;
+		int *seen_count;
 #endif
 
 		memset (&info, 0, sizeof (info));
@@ -557,7 +571,9 @@ static int apropos (char *page, char *lowpage)
 		else
 			seen_key = xstrdup (MYDBM_DPTR (key));
 		seen_key = strappend (seen_key, " (", info.ext, ")", NULL);
-		if (hash_lookup (apropos_seen, seen_key, strlen (seen_key)))
+		seen_count = hash_lookup (apropos_seen, seen_key,
+					  strlen (seen_key));
+		if (seen_count && !require_all)
 			goto nextpage_tab;
 		got_match = parse_name (lowpage, MYDBM_DPTR (key));
 		whatis = xstrdup (info.whatis);
@@ -568,12 +584,18 @@ static int apropos (char *page, char *lowpage)
 		got_match = parse_name (page, MYDBM_DPTR (key));
 #endif /* APROPOS */
 		if (got_match) {
-			display (&info, MYDBM_DPTR (key));
-			found++;
 #ifdef APROPOS
-			hash_install (apropos_seen, seen_key,
-				      strlen (seen_key), &key);
+			if (!seen_count) {
+				seen_count = xmalloc (sizeof *seen_count);
+				*seen_count = 0;
+				hash_install (apropos_seen, seen_key,
+					      strlen (seen_key), seen_count);
+			}
+			++(*seen_count);
+			if (!require_all || *seen_count == num_keywords)
 #endif
+			    display (&info, MYDBM_DPTR (key));
+			found++;
 		}
 
 		found += got_match;
@@ -721,6 +743,11 @@ int main (int argc, char *argv[])
 #endif
 				wildcard = 1;
 				break;
+#ifdef APROPOS
+			case 'a':
+				require_all = 1;
+				break;
+#endif
 			case 'l':
 				long_output = 1;
 				break;
@@ -772,7 +799,8 @@ int main (int argc, char *argv[])
 #endif
 
 	/* Make sure that we have a keyword! */
-	if (argc == optind) {
+	num_keywords = argc - optind;
+	if (!num_keywords) {
 		printf (_("%s what?\n"), program_name);
 		free (locale);
 		free (program_name);
@@ -787,7 +815,7 @@ int main (int argc, char *argv[])
 
 	create_pathlist (manp, manpathlist);
 
-	apropos_seen = hash_create (&null_hash_free);
+	apropos_seen = hash_create (&plain_hash_free);
 
 	while (optind < argc) {
 #if defined(POSIX_REGEX)		
