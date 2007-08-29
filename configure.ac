@@ -483,6 +483,7 @@ MAN_ECHO_VAR(LIBS)
 MAN_ECHO_VAR(DBLIBS)
 
 AC_CONFIG_FILES(GNUmakefile
+	makefile
 	lib/Makefile
 	src/Makefile
 	src/man_db.conf
@@ -496,16 +497,3 @@ AC_CONFIG_FILES(GNUmakefile
 AC_OUTPUT
 
 date > stamp-h
-dnl Create a bogus makefile that non-GNU make's will try to use. This is 
-dnl better than messages like `make:105: missing separator **' 
-cat > makefile <<\MEOF
-all: GNUmakefile
-	@echo "Compilation of this package requires GNU make ver 3.68 or above."
-	@echo "If you are using GNU make and it ignores the GNUmakefile in this"
-	@echo "directory, issue the command 'make -f GNUmakefile'"
-
-GNUmakefile: GNUmakefile.in
-	CONFIG_HEADERS= CONFIG_FILES=$@ ./config.status
-
-update install clean realclean distclean TAGS dist: all
-MEOF
