@@ -3,14 +3,15 @@ In progress:
 * store .so link in the db.
 * reduce wasted/duplicated text stored within the databases.
   10-20% database size reduction so far.
-* execute pipelines inline rather than using the shell.
+* pipeline library:
+  - make COMMAND_FUNCTION child reentrant, so it doesn't have to be a
+    subprocess; will save lots of forks of zlib children in mandb
 
 In need of attention:
 
 * clear up the use of troff and/or groff
 * complete configuration file redesign to allow better dynamic determination 
   of programs/paths/extensions etc.
-* use zlib for gzipped pages rather than forking gzip.
 * look at work done by SuSE and Andries.
 
 Case-insensitive lookup transition:

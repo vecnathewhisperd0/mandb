@@ -61,6 +61,7 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/pipeline.h"
+#include "lib/decompress.h"
 #include "descriptions.h"
 #include "security.h"
 #include "ult_src.h"
@@ -86,6 +87,19 @@ static char filters[MAX_FILTERS];
 static int fill_mode;
 static int waiting_for_quote;
 
+static pipeline *decomp;
+
+#define YY_INPUT(buf,result,max_size) { \
+	size_t size = max_size; \
+	const char *block = pipeline_read (decomp, &size); \
+	if (block && size != 0) { \
+		memcpy (buf, block, size); \
+		buf[size] = '\0'; \
+		result = size; \
+	} else \
+		result = YY_NULL; \
+}
+
 #ifdef TEST
 
 #include <stdio.h>
@@ -96,6 +110,7 @@ static int waiting_for_quote;
 #endif /* HAVE_GETOPT_H */
 
 char *program_name;
+int quiet = 1;
 
 static const struct option long_options[] =
 {
@@ -155,6 +170,7 @@ es_name		N[Oo][Mm][Bb][Rr][Ee]
 fi_name		N[Ii][Mm][Ii]
 fr_name		N[Oo][Mm]
 hu_name		N[ÉéEe][Vv]
+id_name		N[Aa][Mm][Aa]
  /* NOME also works for gl, pt */
 it_name		N[Oo][Mm][Ee]
 ja_name		\314\276\301\260
@@ -163,7 +179,7 @@ nl_name		N[Aa][Aa][Mm]
 pl_name		N[Aa][Zz][Ww][Aa]
 ru_name         \356\341\372\367\341\356\351\345
 sv_name		N[Aa][Mm][Nn]
-name		({cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{it_name}|{ja_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sv_name})
+name		({cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sv_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
@@ -253,6 +269,8 @@ vgrind_request	\.vS
 					}
 
 	{bol}{typeface}{blank}+		|	/* type face commands */
+	{bol}\.ft{blank}.*		|	/* font change */
+	{bol}\.V[be]{blank}.*		|	/* pod2man, verbatim mode */
 	{bol}\.IX{blank}.*		|	/* .IX line */
 	{next}{comment}.*		{	/* per line comments */
 						newline_found ();
@@ -409,13 +427,11 @@ static void newline_found (void)
 int find_name (const char *file, const char *filename, lexgrog *p_lg)
 {
 	int ret;
+	pipeline *p;
 
 	if (strcmp (file, "-") == 0) {
-		yyin = fdopen (dup (0), "r");
+		p = decompress_fdopen (dup (fileno (stdin)));
 	} else {
-#ifdef COMP_SRC
-		struct compression *comp;
-#endif /* COMP_SRC */
 		struct stat st;
 
 		if (stat (file, &st)) {
@@ -428,26 +444,27 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 			return 0;
 		}
 
-#ifdef COMP_SRC
-		/* See if we need to decompress the file(s) first. */
-		comp = comp_info (file, 0);
-		if (comp) {
-			file = decompress (file, comp);
-			if (!file)
-				return 0;
-		}
-#endif /* COMP_SRC */
 		drop_effective_privs ();
-		yyin = fopen (file, "r");
-		regain_effective_privs ();
-		if (!yyin) {
+		p = decompress_open (file);
+		if (!p) {
 			error (0, errno, _("can't open %s"), file);
-#ifdef COMP_SRC
-			remove_ztemp ();
-#endif /* COMP_SRC */
+			regain_effective_privs ();
 			return 0;
 		}
+		regain_effective_privs ();
 	}
+
+	ret = find_name_decompressed (p, filename, p_lg);
+	pipeline_free (p);
+	return ret;
+}
+
+int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
+{
+	int ret;
+	int decomp_status;
+
+	decomp = p;
 
 	fname = filename;
 	*(p_name = newname) = '\0';
@@ -463,17 +480,14 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 
 	drop_effective_privs ();
 
-	yyrestart (yyin);
+	yyrestart (NULL);
 	ret = yylex ();
-	fclose (yyin);
-
-#ifdef COMP_SRC
-	remove_ztemp ();
-#endif
 
 	regain_effective_privs ();
 
-	if (ret)
+	decomp_status = pipeline_wait (decomp);
+
+	if (ret || decomp_status)
 		return 0;
 	else {
 		char f_tmp[MAX_FILTERS];
@@ -602,13 +616,6 @@ int main (int argc, char **argv)
 					&statbuf, SO_LINK);
 			if (path)
 				free (path);
-#ifdef COMP_SRC
-			if (file) {
-				char *ztemp = get_ztemp ();
-				if (ztemp)
-					file = ztemp;
-			}
-#endif
 		}
 
 		if (file && find_name (file, "-", &lg)) {
@@ -616,6 +623,8 @@ int main (int argc, char **argv)
 				parse_descriptions (NULL, lg.whatis);
 			const struct page_description *desc;
 			for (desc = descs; desc; desc = desc->next) {
+				if (!desc->name || !desc->whatis)
+					continue;
 				found = 1;
 				printf ("%s", argv[optind]);
 				if (show_filters)

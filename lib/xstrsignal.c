@@ -25,9 +25,15 @@
 #ifndef MAN_XSTRSIGNAL_H
 #define MAN_XSTRSIGNAL_H
 
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
+
 #ifdef HAVE_STRSIGNAL
 
-#  define _GNU_SOURCE
+#  ifndef _GNU_SOURCE
+#    define _GNU_SOURCE
+#  endif
 #  include <string.h>
 
 const char *xstrsignal (int signum)

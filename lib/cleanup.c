@@ -1,6 +1,7 @@
 /*
  * cleanup.c -- simple dynamic cleanup function management
  * Copyright (C) 1995 Markus Armbruster.
+ * Copyright (C) 2007 Colin Watson.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,14 +55,14 @@ static struct sigaction saved_int_action;
 static struct sigaction saved_term_action;
 
 
-/* Call do_cleanups(), then reraise signal with default handler. */
+/* Run cleanups, then reraise signal with default handler. */
 static void
 sighandler (int signo)
 {
   struct sigaction act;
   sigset_t set;
 
-  do_cleanups ();
+  do_cleanups_sigsafe (1);
 
   /* set default signal action */
   act.sa_handler = SIG_DFL;
@@ -155,6 +156,7 @@ untrap_abnormal_exits (void)
 typedef struct {
   cleanup_fun fun;
   void *arg;
+  int sigsafe;
 } slot;
 
 static slot *stack = NULL;	/* stack of cleanup functions */
@@ -162,27 +164,43 @@ static unsigned nslots = 0;	/* #slots in stack */
 static unsigned tos = 0;	/* top of stack, 0 <= tos <= nslots */
 
 /* Call cleanup functions in stack from from top to bottom,
-   Automatically called on program termination via exit(3) or default
-   action for SIGHUP, SIGINT or SIGTERM. */
+ * Automatically called on program termination via exit(3) or default
+ * action for SIGHUP, SIGINT or SIGTERM.
+ * Since this may be called from a signal handler, do not use free().
+ * If in_sighandler is true, cleanup functions with sigsafe=0 will not be
+ * called.
+ */
 void
-do_cleanups (void)
+do_cleanups_sigsafe (int in_sighandler)
 {
   unsigned i;
 
   assert (tos <= nslots);
-  for (i = tos;  i > 0;  --i) {
-    stack[i-1].fun (stack[i-1].arg);
-  }
+  for (i = tos; i > 0; --i)
+    if (!in_sighandler || stack[i-1].sigsafe)
+      stack[i-1].fun (stack[i-1].arg);
+}
+
+/* Call cleanup functions in stack from from top to bottom,
+ * Automatically called on program termination via exit(3).
+ */
+void
+do_cleanups (void)
+{
+  do_cleanups_sigsafe (0);
   free (stack);
   stack = NULL;
 }
 
 
 /* Push a cleanup function on the cleanup stack,
-   return 0 on success, -1 on failure.
-   Caution: the cleanup function may be called from signal handlers. */
+ * return 0 on success, -1 on failure.
+ * Caution: the cleanup function may be called from signal handlers if
+ * sigsafe=1. If you just want a convenient atexit() wrapper, pass
+ * sigsafe=0.
+ */
 int
-push_cleanup (cleanup_fun fun, void *arg)
+push_cleanup (cleanup_fun fun, void *arg, int sigsafe)
 {
   static int handler_installed = 0;
 
@@ -213,6 +231,7 @@ push_cleanup (cleanup_fun fun, void *arg)
   assert (tos < nslots);
   stack[tos].fun = fun;
   stack[tos].arg = arg;
+  stack[tos].sigsafe = sigsafe;
   ++tos;
 
 

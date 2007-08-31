@@ -73,6 +73,7 @@ extern int errno;
 
 #define NAME	so_name[so_stack_ptr]
 #define LINE	so_line[so_stack_ptr]
+#define PIPE	so_pipe[so_stack_ptr]
 
 #include "lib/gettext.h"
 #define _(String) gettext (String)
@@ -80,6 +81,7 @@ extern int errno;
 #include "manconfig.h"
 #include "lib/error.h"
 #include "lib/pipeline.h"
+#include "lib/decompress.h"
 
 #ifdef HAVE_GETOPT_H
 #  include <getopt.h>
@@ -87,12 +89,7 @@ extern int errno;
 #  include "lib/getopt.h"
 #endif /* HAVE_GETOPT_H */
 
-#ifdef COMP_SRC
-#include "comp_src.h"
-static char* so_delete[MAX_SO_DEPTH];
-#endif /* COMP_SRC */
-
-static int open_file (char *filename);
+static int open_file (const char *filename);
 
 #ifdef ACCEPT_QUOTES
 #  define ZAP_QUOTES	zap_quotes ()
@@ -115,13 +112,28 @@ static const char args[] = "ChV";
 
 static YY_BUFFER_STATE so_stack[MAX_SO_DEPTH];
 static char *so_name[MAX_SO_DEPTH];
-static char temp_name[1024];
 static int so_line[MAX_SO_DEPTH];
+static pipeline *so_pipe[MAX_SO_DEPTH];
 static int so_stack_ptr;
 static int no_newline;
 static int status = OK;
 
 extern int optind;
+
+/* The flex documentation says that yyin is only used by YY_INPUT, so we
+ * should safely be able to abuse it as a handy way to keep track of the
+ * current 'pipeline *' rather than the usual 'FILE *'.
+ */
+#define YY_INPUT(buf,result,max_size) { \
+	size_t size = max_size; \
+	const char *block = pipeline_read ((pipeline *) yyin, &size); \
+	if (block && size != 0) { \
+		memcpy (buf, block, size); \
+		buf[size] = '\0'; \
+		result = size; \
+	} else \
+		result = YY_NULL; \
+}
 %}
 
 %x so
@@ -186,9 +198,8 @@ W	[ \t]
 
 			no_newline = 0;
 
-			sprintf (temp_name, "%s.gz", yytext);
-			if (open_file (xstrdup (yytext)) &&
-			    open_file (temp_name)) {
+			if (open_file (yytext)) {
+				--so_stack_ptr;
 #ifndef __alpha
 				error (OK, 0, 
 				       _("%s:%d: warning: failed .so request"),
@@ -252,6 +263,8 @@ W	[ \t]
 			ECHO;
 			putchar ('\n');
 			ZAP_QUOTES;
+			if (NAME)
+				free (NAME);
 			NAME = xstrdup (yytext);
 			BEGIN (end_request); 
 		}
@@ -283,12 +296,12 @@ W	[ \t]
 			}
 
 <<EOF>>	{
-		fclose (yyin);
+		pipeline_wait (PIPE);
+		pipeline_free (PIPE);
+		PIPE = NULL;
+		free (NAME);
+		NAME = NULL;
 
-#ifdef COMP_SRC
-		if (so_delete[so_stack_ptr])
-			remove (so_delete[so_stack_ptr]);
-#endif
 		if (no_newline)
 			putchar ('\n');
 
@@ -373,7 +386,7 @@ int main (int argc, char *argv[])
 	/* if we have any arguments, parse them in command line order, else
 	   open stdin */
 	if (optind == argc) {
-		so_name[0] = xstrdup ("-");
+		open_file ("-");
 		parse_file ();
 	} else {
 		while (optind < argc) {
@@ -388,119 +401,47 @@ int main (int argc, char *argv[])
 
 /* This routine is used to open the specified file or uncompress a compressed
    version and open that instead */
-static int open_file (char *filename)
+static int open_file (const char *filename)
 {
-	FILE *oldyyin;
-	char *ext;
-	int is_hpux=0;
-	int is_compr=0;
-	struct compression *comp = NULL;
-	struct stat buf;
+	pipeline *decomp;
 
-	oldyyin = yyin;
+	if (strcmp (filename, "-") == 0) {
+		decomp = decompress_fdopen (dup (fileno (stdin)));
+		NAME = xstrdup (filename);
+	} else {
+		decomp = decompress_open (filename);
 
-	/* WARNING: This is horribly cloned-and-hacked from
-	 * src/compression.c! TODO: Unify this code.
-	 */
+		if (decomp)
+			NAME = xstrdup (filename);
+		else {
+			struct compression *comp;
+			char *compfile = strappend (NULL, filename, ".", NULL);
+			size_t len = strlen (compfile);
 
-/* #ifdef __hpux */
-	ext = strrchr (filename, '.');
-	if (strstr (filename, ".Z/")) { /* The file is in an HPUX directory */
-		is_hpux = 1;
-		is_compr = 0;
-	} else if (ext) {
-		ext++;
-		for (comp = comp_list; comp->ext && !is_compr; comp++) {
-			if (strcmp (comp->ext, ext) == 0) {
-				if (stat (filename, &buf) == 0) {
-					is_compr = 1;
+			for (comp = comp_list; comp->ext; ++comp) {
+				compfile = strappend (compfile, comp->ext,
+						      NULL);
+				decomp = decompress_open (compfile);
+				if (decomp) {
+					NAME = compfile;
 					break;
 				}
+				compfile[len] = '\0';
 			}
+
+			if (!decomp)
+				free (compfile);
 		}
-		is_hpux = 0;
+
+		if (!decomp) {
+			error (0, errno, _("can't open %s"), filename);
+			return 1;
+		}
 	}
-/* #endif __hpux */
 
-	if (is_hpux || is_compr || !(yyin = fopen (filename, "r"))) {
+	PIPE = decomp;
+	/* only used by YY_INPUT, which casts it back to 'pipeline *' */
+	yyin = (FILE *) decomp;
 
-#ifdef COMP_SRC
-		char *compfile;
-		size_t len;
-
-		if (is_hpux) {
-			struct compression hpux_comp = {GUNZIP " -S \"\"", 
-							"", NULL};
-			comp = &hpux_comp;
-			compfile = filename;
-		} else if (!is_compr) {
-			compfile = strappend (NULL, filename, ".", NULL);
-			len = strlen (compfile);
-
-			for (comp = comp_list; comp->ext; comp++) {
-				compfile = strappend (compfile, comp->ext, NULL);
-				if (stat (compfile, &buf) == 0)
-					break;
-				*(compfile + len) = '\0';
-			}
-		} else
-			compfile = filename;
-
-		if (comp->ext) {
-			command *decompress_cmd;
-			pipeline *decomp;
-			int exit_status;
-			int file_fd;
-
-			file_fd = create_tempfile ("zsman", &filename);
-			if (file_fd < 0)
-				error (FATAL, errno, _("can't create a temporary filename"));
-			decompress_cmd = command_new_argstr (comp->prog);
-			command_arg (decompress_cmd, compfile);
-			decomp = pipeline_new_commands (decompress_cmd, NULL);
-			decomp->want_out = file_fd;
-			pipeline_start (decomp);
-			exit_status = pipeline_wait (decomp);
-			close (file_fd);
-
-			if (exit_status != 0) {
-				char *decompress_str =
-					pipeline_tostring (decomp);
-				error (OK, 0, _("%s exited with status %d"),
-				       decompress_str, exit_status);
-				free (decompress_str);
-				pipeline_free (decomp);
-				yyin = oldyyin;
-				return 1;
-			}
-
-			pipeline_free (decomp);
-
-			if (!(yyin = fopen (filename, "r")))  {
-				error (OK, errno,
-				       _("open decompressed file: %s"),
-				       filename);
-				yyin = oldyyin;
-				return 1;
-			}
-			
-			so_delete[so_stack_ptr] = filename;
-			NAME = compfile;
-			return 0; 
-		}
-#endif /* COMP_SRC */
-		if (so_stack_ptr > 0) {
-			so_stack_ptr--;
-#ifndef __alpha
-			error (OK, errno, "%s:%d: %s", NAME, LINE, filename);
-#endif
-		} else {
-			error (OK, errno, "%s", filename);
-			status = FAIL;
-		}
-		yyin = oldyyin;
-		return 1;
-	}
-	NAME = filename;
 	return 0;
 }

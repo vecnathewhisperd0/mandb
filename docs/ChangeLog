@@ -12,6 +12,377 @@
 	* include/manconfig.h.in (straycats): Update prototype.
 	* docs/TODO: Update.
 
+Wed Aug 29 17:12:52 BST 2007  Lars Wirzenius  <liw@iki.fi>
+
+	* po/fi.po: Adjust translation of "No manual entry for %s" (Debian
+	  bug #320108).
+
+Wed Aug 29 15:22:54 BST 2007  Clytie Siddall  <clytie@riverland.net.au>
+
+	* po/vi.po: Update from Translation Project.
+
+Wed Aug 29 15:18:34 BST 2007  Daniel Nylander  <po@danielnylander.se>
+
+	* po/sv.po: Update from Translation Project.
+
+Wed Aug 29 12:07:38 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* docs/NEWS: Reorganise slightly. Document mandb --quiet fixes.
+
+Wed Aug 29 11:57:59 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Add an option to apropos to display only items matching all keywords
+	(thanks, Alfie Costa; Debian bug #259340).
+
+	* src/whatis.c (args, long_options, main): New -a/--and option for
+	  apropos.
+	  (usage): Document it.
+	  (apropos): Store a count of how many times each item has been seen
+	  in the hashtable. If --and was given, only display an item if its
+	  count equals the number of supplied keywords.
+	  (main): Store the number of supplied keywords. Adjust hash free
+	  function.
+	* man/man1/apropos.man1 (SYNOPSIS, OPTIONS): Document --and.
+	* docs/NEWS: Document this.
+
+Wed Aug 29 11:09:31 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* m4/man-path-progs.m4: Rename to ...
+	* m4/man-check-progs.m4: ... this. Use AC_CHECK_PROGS rather than
+	  AC_PATH_PROGS.
+	* configure.ac: Use AC_CHECK_PROGS rather than
+	  AC_PATH_PROG/AC_PATH_PROGS, and MAN_CHECK_PROGS rather than
+	  MAN_PATH_PROGS. This fixes problems due to system utilities moving
+	  around on $PATH (Debian bug #385651).
+
+Wed Aug 29 10:42:08 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Move bogus makefile content ...
+	* makefile.in: ... here.
+
+Wed Aug 29 10:15:33 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* m4/man-path-progs.m4: Define HAVE_WITH-ARG if the program is
+	  found.
+	* configure.ac: Rely on the above rather than setting HAVE_GZIP,
+	  HAVE_COMPRESS, and HAVE_BZIP2 here.
+
+Wed Aug 29 09:41:51 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/mandb.c (main): Revert inadvertently-committed debugging
+	  change to straycats logic.
+
+Wed Aug 29 09:34:50 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l: Add Indonesian translation of NAME.
+
+Wed Aug 29 09:29:36 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* docs/NEWS: Document previous apropos change.
+
+Wed Aug 29 09:26:23 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/whatis.c (apropos): Add output keys to a hashtable, and skip
+	  any that have already been seen (Debian bug #259338).
+	  (main): Create the hashtable on startup and free it on exit.
+
+Tue Aug 28 19:16:18 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (format_display): Wait for the decomp pipeline in the
+	  !format_cmd case too.
+
+Tue Aug 28 19:07:53 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (display_catman): Take a decompressor pipeline argument.
+	  Connect it to format_cmd.
+	  (display): Update call to display_catman.
+
+Tue Aug 28 18:38:31 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Add a configuration file flag (NOCACHE) to disable cat page caching
+	(thanks, Ralph Corderoy; Debian bug #196642).
+
+	* src/manp.c (add_to_dirlist): Recognise NOCACHE.
+	* src/man.c (display): Don't save a cat page if NOCACHE is set.
+	* src/man_db.conf.in: Document NOCACHE.
+	* man/man5/manpath.man5 (FORMAT): Document NOCACHE.
+	* docs/NEWS: Document this.
+
+Tue Aug 28 17:23:26 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* docs/NEWS: Bump to 2.5.0; I think there's now enough to justify
+	  that.
+
+Tue Aug 28 17:19:16 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Implement and use a decompression library. This allows cat pages to
+	be saved in the background (Debian bug #18452) and operation with a
+	read-only /tmp (Debian bug #165499).
+
+	* lib/pipeline.h (struct command): Add support for commands that
+	  consist of calling a function rather than executing a process.
+	  (struct pipeline): Add want_infile and want_outfile members. Note
+	  that infile and outfile default to NULL. Add source, buffer,
+	  buflen, bufmax, line_cache, and peek_offset members.
+	  (command_new_function, command_dump, command_tostring,
+	  pipeline_connect, pipeline_pump, pipeline_read, pipeline_peek,
+	  pipeline_peek_size, pipeline_peek_skip, pipeline_readline,
+	  pipeline_peekline): New prototypes.
+	  (pipeline_join): Update description for want_infile and
+	  want_outfile.
+	* lib/pipeline.c (command_new, command_dup, command_arg,
+	  command_argv, command_args, command_argstr, command_free): Update
+	  for 'struct command' changes.
+	  (command_new_function, command_dump, command_tostring): New
+	  functions.
+	  (pipeline_new, pipeline_join, pipeline_dump, pipeline_tostring):
+	  Update for 'struct pipeline' changes.
+	  (pipeline_dump): Use command_dump.
+	  (pipeline_tostring): Use command_tostring.
+	  (pipeline_start): Implement want_infile, want_outfile, and
+	  function commands. Make zero-command case work properly (read
+	  directly from input file). Flush all pending stdio output so that
+	  subprocesses don't inherit it.
+	  (pipeline_connect, pipeline_pump, get_block, pipeline_read,
+	  pipeline_peek, pipeline_peek_size, pipeline_peek_skip, get_line,
+	  pipeline_readline, pipeline_peekline): New functions.
+
+	* lib/decompress.c, lib/decompress.h: New files, implementing a
+	  decompression abstraction layer.
+	* lib/Makefile.in: Always compile decompress.c.
+
+	* src/lexgrog.l (YY_INPUT): Define to read from a 'struct pipeline'.
+	  (find_name): Use decompress_open/decompress_fdopen rather than
+	  older decompression methods. Split handling once we have a
+	  decompressor pipeline out to ...
+	  (find_name_decompressed): ... here.
+	* src/check_mandirs.c (test_manfile): Remove decompression code;
+	  find_name will handle this itself now.
+	* src/compression.c (create_ztemp, decompress, remove_ztemp,
+	  get_ztemp): Remove.
+	* src/man.c (checked_popen): Remove.
+	  (local_man_loop): Remove decompression code.
+	  (get_preprocessors_from_file): Convert to peeking the first line
+	  from a pipeline.
+	  (get_preprocessors): Adjust arguments and
+	  get_preprocessors_from_file call.
+	  (remove_stdintmp, create_stdintmp): Remove.
+	  (make_roff_command): Remove special handling of stdin, now handled
+	  by peeking a pipeline.
+	  (open_cat_stream): Don't start the returned pipeline.
+	  (close_cat_stream): Remove unnecessary COMP_CAT special case.
+	  (format_display_and_save): Take a decompressor pipeline argument.
+	  Simplify by using pipeline_connect and pipeline_pump.
+	  (format_display): Take a decompressor pipeline argument. Use
+	  pipeline_connect and pipeline_pump.
+	  (display): Use decompress_open/decompress_fdopen rather than older
+	  decompression methods.
+	  (display_filesystem, display_database): Drop remove_ztemp calls.
+	* src/straycats.c (check_for_stray): Use decompression layer.
+	  Rearrange control flow a bit to reduce duplication. Remove use of
+	  temporary file; use find_name_decompressed instead. Only increment
+	  strays if find_name_decompressed succeeds.
+	  (straycats): Remove temporary file creation.
+	* src/ult_src.c (ult_src): Use pipeline and decompression layers
+	  rather than older decompression methods.
+	* src/zsoelim.l (YY_INPUT): Define to read from a 'struct pipeline'.
+	  (<so>\"?[^ \t\n\"]+\"?): Call open_file only once; let it worry
+	  about compression extensions. Decrement so_stack_ptr here if
+	  open_file fails rather than having it do it.
+	  (<lfname>\"?[^ \t\n\"]+\"?): Free the old value of NAME, if set.
+	  (<<EOF>>): Clean up used pipeline and free NAME. Remove so_delete
+	  handling.
+	  (main): Let open_file handle stdin.
+	  (open_file): Use decompress_open/decompress_fdopen rather than
+	  older decompression methods. Don't decrement so_stack_ptr here on
+	  failure.
+
+	* configure.ac: Remove decompressor variable. Check for gzopen in
+	  libz.
+	* include/manconfig.h.in (DECOMPRESSOR): Remove.
+	  (comp_list): Declare extern here.
+	  (create_tempfile): Remove.
+	  (decompress, remove_ztemp, get_ztemp): Remove.
+	  (find_name_decompressed): Add prototype.
+	* lib/tempfile.c (create_tempfile): Remove. We now only need
+	  temporary directory creation.
+	* src/man_db.conf.in (decompressor): Remove.
+
+	* docs/TODO: Update.
+	* docs/NEWS: Document this.
+
+Tue Aug 28 11:14:53 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* tools/mandb_[nt]fmt-script: Rename to tools/mandb_fmt-script,
+	  which is a rather less hostile filename.
+	* tools/README: Update.
+	* GNUmakefile.in: Update.
+
+Tue Aug 28 10:36:20 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/straycats.c (check_for_stray): Drop privileges while opening
+	  temporary file (previously created with dropped privileges).
+
+Tue Aug 28 10:31:03 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/straycats.c (straycats): Regain privileges on the error path
+	  too.
+
+Mon Aug 27 20:13:09 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/compression.c (comp_file): Free compfile if returning NULL.
+
+Mon Aug 27 20:02:17 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_wait): Re-raise SIGINT or SIGQUIT if they
+	  terminate a subprocess.
+
+Mon Aug 27 19:58:19 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_wait): Return 1 if we fail to close the
+	  pipeline's output.
+
+Sun Aug 26 23:33:23 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (format_display): Check whether format_cmd is NULL
+	  before discarding stderr from it.
+
+Sun Aug 26 21:20:45 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (checked_popen): Remove unnecessary SECURE_MAN_UID
+	  guard; drop_effective_privs/regain_effective_privs already check
+	  this.
+	* src/security.c (remove_with_dropped_privs): Likewise. The uid !=
+	  ruid check is no longer necessary now that
+	  drop_effective_privs/regain_effective_privs handle nesting
+	  correctly.
+
+Sun Aug 26 19:40:12 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (make_roff_command): If MAN_KEEP_FORMATTING is set in
+	  the environment, don't strip formatting characters with col
+	  (Debian bug #340673).
+	* man/man1/man.man1 (ENVIRONMENT): Document MAN_KEEP_FORMATTING.
+	* docs/NEWS: Document this.
+
+Sun Aug 26 16:40:50 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Suppress warnings in --quiet mode (thanks, Martin Dorey; Debian bugs
+	#348008, #378428, and #411220).
+
+	* src/check_mandirs.c (test_manfile): Suppress "bad symlink" warning
+	  under --quiet.
+	* src/ult_src.c (ult_hardlink): Suppress "can't search directory"
+	  warning under --quiet.
+	  (ult_softlink): Suppress "dangling symlinks" and "can't resolve"
+	  warnings under --quiet.
+	  (ult_src): Suppress "can't resolve", "is self referencing", and
+	  "can't open" warnings under --quiet.
+	* src/lexgrog.l: Declare global quiet variable.
+
+Sun Aug 26 16:10:26 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l (main): Skip descriptions with NULL name or whatis.
+	  This causes pages with no description to be flagged as parse
+	  failures, so that automatic scanners can pick them up more easily.
+
+Sun Aug 26 15:08:45 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (is_section): Disallow sectional extensions of
+	  alphabetic sections, e.g. n and l from the default configuration
+	  (Debian bug #391977). Also disallow sectional extensions beginning
+	  with a digit (Debian bug #421481).
+
+Mon Aug 20 00:10:49 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Discard stderr from formatting processes when outputting to a pager,
+	to avoid visual corruption from any error messages (thanks, Vincent
+	Lefevre; Debian bug #372939).
+
+	* lib/pipeline.h (struct command): Add discard_err member.
+	* lib/pipeline.c (command_new, command_dup): Initialise discard_err.
+	  (pipeline_start): Redirect the child's stderr to /dev/null if
+	  discard_err is set.
+	* src/man.c (discard_stderr): New function to set discard_err on all
+	  commands in a pipeline.
+	  (format_display_and_save, format_display): Use it on format_cmd.
+	* docs/NEWS: Document this.
+
+Sun Aug 19 21:04:24 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/descriptions.c (parse_descriptions): Skip name tokens
+	  containing whitespace, as they are almost never useful as manual
+	  page names.
+	* man/man1/lexgrog.1 (WHATIS PARSING), docs/NEWS: Document this.
+
+Sun Aug 19 21:00:20 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l: Skip over .ft font change requests, and the .Vb and
+	  .Ve definitions used by pod2man to begin and end verbatim mode.
+	  This handles some POD-generated pages better.
+
+Sun Aug 19 20:48:42 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Truncate apropos/whatis output to the terminal width by default
+	(thanks, Dan Jacobson; Debian bug #411721).
+
+	* lib/linelength.c: New file for terminal line length detection,
+	  split out from src/man.c. Unlike the previous implementation, this
+	  does its own memoisation rather than requiring explicit
+	  initialisation.
+	* lib/linelength.h: Prototype get_line_length.
+	* lib/Makefile.in: Always compile linelength.c.
+	* src/man.c (line_length, store_line_length): Remove.
+	  (get_roff_line_length): Use get_line_length.
+	  (main): We no longer need to call store_line_length.
+	* src/whatis.c (args, long_options, main): New -l/--long option.
+	  (usage): Document it.
+	  (display): Truncate names and descriptions to fit within the
+	  terminal width.
+	* man/man1/apropos.man1 (SYNOPSIS, OPTIONS, ENVIRONMENT): Document
+	  --long and the MANWIDTH override.
+	* man/man1/whatis.man1 (SYNOPSIS, OPTIONS, ENVIRONMENT): Likewise.
+	* docs/NEWS: Document this.
+
+Tue Jun 26 10:48:45 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* man/de_DE.88591/man1/man.man1 (UMGEBUNG),
+	  man/de_DE.88591/man8/catman.man8 (BESCHREIBUNG): MANSEC -> MANSECT
+	  (thanks, Holger Kubiak; Debian bug #430635).
+
+Mon Jun 18 10:19:22 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/cleanup.c (do_cleanups): Split out signal-safe processing ...
+	  (do_cleanups_sigsafe): ... here.
+	  (sighandler): Call do_cleanups_sigsafe rather than do_cleanups.
+	  (push_cleanup): Add sigsafe argument to allow cleanup functions to
+	  be flagged as non-signal-safe (e.g. freeing memory).
+	* lib/cleanup.h: Update prototypes.
+	* libdb/db_gdbm.c (man_gdbm_firstkey): hash_free cleanup is not
+	  signal-safe.
+	* src/globbing.c (update_directory_cache): hash_free cleanup is not
+	  signal-safe.
+	  (look_for_file): globfree cleanup is not signal-safe.
+	* src/man.c (open_cat_stream, display_catman): unlink cleanup is
+	  signal-safe.
+	* src/mandb.c (cleanup): Split out signal-safe processing ...
+	  (cleanup_sigsafe): ... here.
+	  (main): Call cleanup_sigsafe as well as cleanup.
+	* src/manp.c (read_config_file): free_config_file cleanup is not
+	  signal-safe.
+
+Mon Jun 18 08:03:30 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/xstrsignal.c: Include config.h.
+
+Mon Jun 18 07:50:56 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_btree.c (btree_close, btree_flopen, btree_replace,
+	  btree_insert, btree_fetch, btree_exists, btree_findkey,
+	  btree_firstkey, btree_nextkey, btree_nextkeydata): Rename dbf to
+	  db to avoid shadowing a global variable.
+	* libdb/mydbm.h: Update prototypes and btree macros likewise.
+
 Sat May 26 10:58:11 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (gripe_no_name): On reflection, borrowing the error

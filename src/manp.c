@@ -98,6 +98,7 @@ static struct list *namestore, *tailstore;
 static char *tmplist[MAXDIRS];
 
 char *user_config_file = NULL;
+int disable_cache;
 
 static void mkcatdirs (const char *mandir, const char *catdir);
 static __inline__ char *get_manpath_from_path (const char *path);
@@ -705,6 +706,8 @@ static void add_to_dirlist (FILE *config, int user)
 		 */
 		if (*bp == '#' || *bp == '\0')
 			continue;
+		else if (strncmp (bp, "NOCACHE", 7) == 0)
+			disable_cache = 1;
 		else if (strncmp (bp, "NO", 2) == 0)
 			continue;	/* match any word starting with NO */
 		else if (sscanf (bp, "MANBIN %*s") == 1)
@@ -751,7 +754,7 @@ void read_config_file(void)
 	char *home;
 	FILE *config;
 
-	push_cleanup (free_config_file, NULL);
+	push_cleanup (free_config_file, NULL, 0);
 
 	home = xstrdup (getenv ("HOME"));
 	if (home) {

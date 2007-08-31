@@ -336,6 +336,27 @@ static __inline__ short update_db_wrapper (const char *manpath)
 }
 
 /* remove incomplete databases */
+static void cleanup_sigsafe (void *dummy)
+{
+	dummy = dummy; /* not used */
+
+#ifdef NDBM
+#  ifdef BERKELEY_DB
+	if (tmpdbfile)
+		unlink (tmpdbfile);
+#  else /* !BERKELEY_DB NDBM */
+	if (tmpdirfile)
+		unlink (tmpdirfile);
+	if (tmppagfile)
+		unlink (tmppagfile);
+#  endif /* BERKELEY_DB NDBM */
+#else /* !NDBM */
+	if (xtmpfile)
+		unlink (xtmpfile);
+#endif /* NDBM */
+}
+
+/* remove incomplete databases */
 static void cleanup (void *dummy)
 {
 	dummy = dummy; /* not used */
@@ -343,25 +364,21 @@ static void cleanup (void *dummy)
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	if (tmpdbfile) {
-		unlink (tmpdbfile);
 		free (tmpdbfile);
 		tmpdbfile = NULL;
 	}
 #  else /* !BERKELEY_DB NDBM */
 	if (tmpdirfile) {
-		unlink (tmpdirfile);
 		free (tmpdirfile);
 		tmpdirfile = NULL;
 	}
 	if (tmppagfile) {
-		unlink (tmppagfile);
 		free (tmppagfile);
 		tmppagfile = NULL;
 	}
 #  endif /* BERKELEY_DB NDBM */
 #else /* !NDBM */
 	if (xtmpfile) {
-		unlink (xtmpfile);
 		/* xtmpfile == database, so freed elsewhere */
 		xtmpfile = NULL;
 	}
@@ -452,7 +469,8 @@ static short process_manpath (const char *manpath, int global_manpath)
 		database = NULL;
 	}
 
-	push_cleanup (cleanup, NULL);
+	push_cleanup (cleanup, NULL, 0);
+	push_cleanup (cleanup_sigsafe, NULL, 1);
 	if (single_filename) {
 		/* The file might be in a per-locale subdirectory that we
 		 * aren't processing right now.
@@ -473,6 +491,8 @@ static short process_manpath (const char *manpath, int global_manpath)
 			do_chown (man_owner->pw_uid);
 #endif /* SECURE_MAN_UID */
 	}
+	cleanup_sigsafe (NULL);
+	pop_cleanup ();
 	cleanup (NULL);
 	pop_cleanup ();
 	free (database);

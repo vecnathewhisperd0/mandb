@@ -1,7 +1,15 @@
-man-db 2.4.5
+man-db 2.5.0
 ============
 
 Major changes since man-db 2.4.4:
+
+	Fixes:
+	------
+
+	o mandb --quiet now suppresses several more warnings.
+
+	o The output of apropos no longer includes duplicates when multiple
+	  search terms are used.
 
 	Improvements:
 	-------------
@@ -11,6 +19,45 @@ Major changes since man-db 2.4.4:
 
 	o man now supports the MANPAGER environment variable, overriding
 	  PAGER.
+
+	o apropos/whatis output is now truncated to the terminal width by
+	  default. As with man, this may be overridden using the MANWIDTH
+	  environment variable.
+
+	o lexgrog now ignores alleged manual page names containing spaces,
+	  as these usually indicate parsing errors or ill-formed NAME
+	  sections and they clutter up apropos output badly. I'm only aware
+	  of one legitimate counterexample, the Intercal compiler "oo, ick",
+	  which no longer appears to be known by that name anyway; let me
+	  know if there are any others.
+
+	o man now discards stderr from formatting subprocesses when
+	  outputting to a pager, to avoid visual corruption from any error
+	  messages.
+
+	o If the MAN_KEEP_FORMATTING environment variable is set to any
+	  non-empty value, then man will preserve formatting characters in
+	  its output even when standard output is not a terminal. This may
+	  be useful for programs such as pinfo that call man and can
+	  interpret its formatted output.
+
+	o A decompression library is now in place. This allows man-db to use
+	  zlib to decompress gzipped files, and allows most of its uses of
+	  temporary files to be removed. The only remaining exceptions are
+	  cat file creation (which uses a temporary file in the cat tree
+	  rather than in /tmp) and viewing HTML manual pages (which uses a
+	  temporary directory). Otherwise, man-db should now work fine even
+	  with a read-only /tmp during system recovery.
+
+	o Cat pages are now saved in the background while the pager is
+	  active, so man will only need to block afterwards if the pager is
+	  exited very quickly.
+
+	o Setting NOCACHE in the configuration file now prevents man from
+	  ever creating cat pages automatically.
+
+	o apropos now accepts the --and option to display only items that
+	  match all the supplied keywords.
 
 man-db 2.4.4 (12 February 2007)
 ===============================

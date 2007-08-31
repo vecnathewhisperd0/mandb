@@ -80,16 +80,16 @@ void test_insert (int line, const datum key, const datum cont)
 #endif /* FAST_BTREE */
 
 /* release the lock and close the database */
-int btree_close (DB *dbf)
+int btree_close (DB *db)
 {
-	(void) flock ((dbf->fd) (dbf), LOCK_UN);
-	return (dbf->close) (dbf);
+	(void) flock ((db->fd) (db), LOCK_UN);
+	return (db->close) (db);
 }
 
 /* open a btree type database, with file locking. */
 DB *btree_flopen (char *filename, int flags, int mode)
 {
-	DB *dbf;
+	DB *db;
 	BTREEINFO b;
 	int lock_op;
 	int lock_failed;
@@ -133,59 +133,59 @@ DB *btree_flopen (char *filename, int flags, int mode)
 		/* opening the db is destructive, need to lock first */
 		int fd;
 
-		dbf = NULL;
+		db = NULL;
 		lock_failed = 1;
 		fd = open (filename, flags & ~O_TRUNC, mode);
 		if (fd != -1) {
 			if (!(lock_failed = flock (fd, lock_op)))
-				dbf = dbopen (filename, flags, mode,
-					      DB_BTREE, &b);
+				db = dbopen (filename, flags, mode,
+					     DB_BTREE, &b);
 			close (fd);
 		}
 	} else {
-		dbf = dbopen (filename, flags, mode, DB_BTREE, &b);
-		if (dbf)
-			lock_failed = flock ((dbf->fd) (dbf), lock_op);
+		db = dbopen (filename, flags, mode, DB_BTREE, &b);
+		if (db)
+			lock_failed = flock ((db->fd) (db), lock_op);
 	}
 
-	if (!dbf)
+	if (!db)
 		return NULL;
 
 	if (lock_failed) {
 		gripe_lock (filename);
-		btree_close (dbf);
+		btree_close (db);
 		return NULL;
 	}
 
-	return dbf;
+	return db;
 }
 
 /* do a replace when we have the duplicate flag set on the database -
    we must do a del and insert, as a direct insert will not wipe out the
    old entry */
-int btree_replace (DB *dbf, datum key, datum cont)
+int btree_replace (DB *db, datum key, datum cont)
 {
 #ifdef FAST_BTREE
 	test_insert (__LINE__, key, cont);
-	return (dbf->put) (dbf, (DBT *) &key, (DBT *) &cont, R_CURSOR);
+	return (db->put) (db, (DBT *) &key, (DBT *) &cont, R_CURSOR);
 #else /* normal BTREE */
-	return (dbf->put) (dbf, (DBT *) &key, (DBT *) &cont, 0);
+	return (db->put) (db, (DBT *) &key, (DBT *) &cont, 0);
 #endif /* FAST_BTREE */
 }
 
-int btree_insert (DB *dbf, datum key, datum cont)
+int btree_insert (DB *db, datum key, datum cont)
 {
-	return (dbf->put) (dbf, (DBT *) &key, (DBT *) &cont, R_NOOVERWRITE);
+	return (db->put) (db, (DBT *) &key, (DBT *) &cont, R_NOOVERWRITE);
 }
 
 /* generic fetch routine for the btree database */
-datum btree_fetch (DB *dbf, datum key)
+datum btree_fetch (DB *db, datum key)
 {
 	datum data;
 
 	memset (&data, 0, sizeof data);
 
-	if ((dbf->get) (dbf, (DBT *) &key, (DBT *) &data, 0)) {
+	if ((db->get) (db, (DBT *) &key, (DBT *) &data, 0)) {
 		memset (&data, 0, sizeof data);
 		return data;
 	}
@@ -194,14 +194,14 @@ datum btree_fetch (DB *dbf, datum key)
 }
 
 /* return 1 if the key exists, 0 otherwise */
-int btree_exists (DB *dbf, datum key)
+int btree_exists (DB *db, datum key)
 {
 	datum data;
-	return ((dbf->get) (dbf, (DBT *) &key, (DBT *) &data, 0) ? 0 : 1);
+	return ((db->get) (db, (DBT *) &key, (DBT *) &data, 0) ? 0 : 1);
 }
 
 /* initiate a sequential access */
-static __inline__ datum btree_findkey (DB *dbf, u_int flags)
+static __inline__ datum btree_findkey (DB *db, u_int flags)
 {
 	datum key, data;
 
@@ -217,7 +217,7 @@ static __inline__ datum btree_findkey (DB *dbf, u_int flags)
 	if (!loop_check_hash)
 		loop_check_hash = hash_create (&plain_hash_free);
 
-	if (((dbf->seq) (dbf, (DBT *) &key, (DBT *) &data, flags))) {
+	if (((db->seq) (db, (DBT *) &key, (DBT *) &data, flags))) {
 		memset (&key, 0, sizeof key);
 		return key;
 	}
@@ -241,27 +241,26 @@ static __inline__ datum btree_findkey (DB *dbf, u_int flags)
 }
 
 /* return the first key in the db */
-datum btree_firstkey (DB *dbf)
+datum btree_firstkey (DB *db)
 {
-	return btree_findkey (dbf, R_FIRST);
+	return btree_findkey (db, R_FIRST);
 }
 
 /* return the next key in the db. NB. This routine only works if the cursor
    has been previously set by btree_firstkey() since it was last opened. So
    if we close/reopen a db mid search, we have to manually set up the
    cursor again. */
-datum btree_nextkey (DB *dbf)
+datum btree_nextkey (DB *db)
 {
-	return btree_findkey (dbf, R_NEXT);
+	return btree_findkey (db, R_NEXT);
 }
 
 /* compound nextkey routine, initialising key and content */
-int btree_nextkeydata (DB *dbf, datum *key, datum *cont)
+int btree_nextkeydata (DB *db, datum *key, datum *cont)
 {
 	int status;
 
-	if ((status = (dbf->seq) (dbf, (DBT *) key, (DBT *) cont,
-				  R_NEXT)) != 0)
+	if ((status = (db->seq) (db, (DBT *) key, (DBT *) cont, R_NEXT)) != 0)
 		return status;
 
 	*key = copy_datum (*key);

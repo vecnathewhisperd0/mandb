@@ -172,7 +172,7 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 
 	if (!dirent_hash) {
 		dirent_hash = hash_create (&dirent_hash_free);
-		push_cleanup ((cleanup_fun) hash_free, dirent_hash);
+		push_cleanup ((cleanup_fun) hash_free, dirent_hash, 0);
 	}
 	cache = hash_lookup (dirent_hash, path, strlen (path));
 
@@ -318,7 +318,7 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 
 	if (!cleanup_installed) {
 		/* appease valgrind */
-		push_cleanup ((cleanup_fun) globfree, &gbuf);
+		push_cleanup ((cleanup_fun) globfree, &gbuf, 0);
 		cleanup_installed = 1;
 	}
 

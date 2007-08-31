@@ -135,6 +135,10 @@ is more tolerant, but for compatibility with other systems it is
 nevertheless a good idea to retain the backslash.
 .PP
 On the left-hand side, there may be several names, separated by commas.
+Names containing whitespace will be ignored to avoid pathological behaviour
+on certain ill-formed
+.B NAME
+sections.
 The text on the right-hand side is free-form, and may be spread over
 multiple lines.
 If several features with different descriptions are being documented in the

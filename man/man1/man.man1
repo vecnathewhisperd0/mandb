@@ -1015,6 +1015,17 @@ or falling back to 80 characters if neither is available).
 Cat pages will only be saved when the default formatting can be used, that
 is when the terminal line length is between 66 and 80 characters.
 .TP
+.B MAN_KEEP_FORMATTING
+Normally, when output is not being directed to a terminal (such as to a file
+or a pipe), formatting characters are discarded to make it easier to read
+the result without special tools.
+However, if
+.RB $ MAN_KEEP_FORMATTING
+is set to any non-empty value, these formatting characters are retained.
+This may be useful for wrappers around
+.B %man%
+that can interpret formatting characters.
+.TP
 .BR LANG , " LC_MESSAGES"
 Depending on system and implementation, either or both of
 .RB $ LANG

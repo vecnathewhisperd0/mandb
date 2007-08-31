@@ -102,6 +102,8 @@ extern char *realpath();
 
 #include "manconfig.h"
 #include "lib/error.h"
+#include "lib/pipeline.h"
+#include "lib/decompress.h"
 #include "security.h"
 #include "ult_src.h"
 
@@ -122,7 +124,8 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 
 	mdir = opendir (dir);
 	if (mdir == NULL) {
-		error (0, errno, _("can't search directory %s"), dir);
+		if (quiet < 2)
+			error (0, errno, _("can't search directory %s"), dir);
 		free (dir);
 		free (base);
 		return NULL;
@@ -163,11 +166,15 @@ static char *ult_softlink (const char *fullpath)
 
 	if (realpath (fullpath, resolved_path) == NULL) {
 		/* discard the unresolved path */
-		if (errno == ENOENT)
-			error (0, 0, _("warning: %s is a dangling symlink"),
-			       fullpath);
-		else
-			error (0, errno, _("can't resolve %s"), fullpath);
+		if (quiet < 2) {
+			if (errno == ENOENT)
+				error (0, 0,
+				       _("warning: %s is a dangling symlink"),
+				       fullpath);
+			else
+				error (0, errno, _("can't resolve %s"),
+				       fullpath);
+		}
 		return NULL;
 	}
 
@@ -247,7 +254,9 @@ const char *ult_src (const char *name, const char *path,
 		if (!buf && ((flags & SOFT_LINK) || (flags & HARD_LINK))) {
 			buf = &new_buf;
 			if (lstat (base, buf) == -1) {
-				error (0, errno, _("can't resolve %s"), base);
+				if (quiet < 2)
+					error (0, errno, _("can't resolve %s"),
+					       base);
 				return NULL;
 			}
 		}
@@ -283,64 +292,45 @@ const char *ult_src (const char *name, const char *path,
 
 	/* keep a check on recursion level */
 	else if (recurse == 10) {
-		error (0, 0, _("%s is self referencing"), name);
+		if (quiet < 2)
+			error (0, 0, _("%s is self referencing"), name);
 		return NULL;
 	}
 
 	if (flags & SO_LINK) {
-		char buffer[1024], *bptr;
-		FILE *fp;
+		const char *buffer;
+		pipeline *decomp;
 #ifdef COMP_SRC
-		struct compression *comp;
+		struct stat st;
 
-		/* get rid of the previous ztemp file (if any) */
-		remove_ztemp ();
+		if (stat (base, &st) < 0) {
+			struct compression *comp = comp_file (base);
 
-		/* if we are handed the name of a compressed file, remove
-		   the compression extension? */
-		comp = comp_info (base, 1);
-		if (comp) {
-			free (base);
-			base = comp->stem;
-			comp->stem = NULL; /* steal memory */
-		}
-
-		/* if the open fails, try looking for compressed */
-		fp = fopen (base, "r");
-		if (fp == NULL) {
-			char *filename;
-
-			comp = comp_file (base);
 			if (comp) {
-				filename = decompress (comp->stem, comp);
-				free (comp->stem);
-				if (!filename)
-					return NULL;
-				base = strappend (base, ".", comp->ext, NULL);
-				drop_effective_privs ();
-				fp = fopen (filename, "r");
-				regain_effective_privs ();
-			} else
-				filename = base;
-
-			if (!fp) {
-				error (0, errno, _("can't open %s"), filename);
+				if (base)
+					free (base);
+				base = comp->stem;
+				comp->stem = NULL; /* steal memory */
+			} else {
+				if (quiet < 2)
+					error (0, errno, _("can't open %s"),
+					       base);
 				return NULL;
 			}
 		}
-#else
-		fp = fopen (base, "r");
-		if (fp == NULL) {
-			error (0, errno, _("can't open %s"), base);
+#endif
+
+		decomp = decompress_open (base);
+		if (!decomp) {
+			if (quiet < 2)
+				error (0, errno, _("can't open %s"), base);
 			return NULL;
 		}
-#endif
+
 		/* make sure that we skip over any comments */
 		do {
-			bptr = fgets (buffer, 1024, fp);
-		} while (bptr && STRNEQ (buffer, ".\\\"", 3));
-
-		fclose(fp);
+			buffer = pipeline_readline (decomp);
+		} while (buffer && STRNEQ (buffer, ".\\\"", 3));
 
 		if (buffer) {
 			char *include = test_for_include (buffer);
@@ -362,9 +352,14 @@ const char *ult_src (const char *name, const char *path,
 				ult = ult_src (base, path, NULL, flags);
 				recurse--;
 
+				pipeline_wait (decomp);
+				pipeline_free (decomp);
 				return ult;
 			}
 		}
+
+		pipeline_wait (decomp);
+		pipeline_free (decomp);
 	}
 
 	/* We have the ultimate source */

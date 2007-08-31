@@ -151,7 +151,7 @@ datum man_gdbm_firstkey (man_gdbm_wrapper wrap)
 
 	if (!parent_sortkey_hash) {
 		parent_sortkey_hash = hash_create (&parent_sortkey_hash_free);
-		push_cleanup ((cleanup_fun) hash_free, parent_sortkey_hash);
+		push_cleanup ((cleanup_fun) hash_free, parent_sortkey_hash, 0);
 	}
 
 	/* Remember this structure for use by nextkey. */

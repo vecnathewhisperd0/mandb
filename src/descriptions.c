@@ -89,6 +89,12 @@ struct page_description *parse_descriptions (const char *base_name,
 
 		for (token = strtok (names, ","); token;
 		     token = strtok (NULL, ",")) {
+			/* Skip name tokens containing whitespace. They are
+			 * almost never useful as manual page names.
+			 */
+			if (strpbrk (token, " \t") != NULL)
+				continue;
+
 			/* Allocate new description node. */
 			if (head) {
 				desc->next = malloc (sizeof *desc);

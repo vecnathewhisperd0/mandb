@@ -233,9 +233,10 @@ void test_manfile (const char *file, const char *path)
 	}
 
 	if (!ult) {
-		error (0, 0,
-		       _("warning: %s: bad symlink or ROFF `.so' request"),
-		       file);
+		if (quiet < 2)
+			error (0, 0,
+			       _("warning: %s: bad symlink or ROFF `.so' request"),
+			       file);
 		free (manpage);
 		return;
 	}
@@ -260,25 +261,10 @@ void test_manfile (const char *file, const char *path)
 	if (!lg.whatis) {	/* cache miss */
 		/* go get the whatis info in its raw state */
 		char *file_copy = xstrdup (file);
-#ifdef COMP_SRC
-		/* if the nroff was compressed, an uncompressed version is
-		   shown by a call to get_ztemp(), grog this for a whatis
-		   rather than ult. This is a bit difficult to follow, sorry:
-		   ult_src() will leave the last uncompressed nroff file it
-		   has to deal with in get_ztemp() */
-		char *ztemp;
-#endif /* COMP_SRC */
 
 		lg.type = MANPAGE;
 		drop_effective_privs ();
-#ifdef COMP_SRC
-		ztemp = get_ztemp ();
-		if (ztemp) {
-			find_name (ztemp, basename (file_copy), &lg);
-			remove_ztemp ();  /* get rid of temp file identifier */
-		} else
-#endif /* COMP_SRC */
-			find_name (ult, basename (file_copy), &lg);
+		find_name (ult, basename (file_copy), &lg);
 		free (file_copy);
 		regain_effective_privs ();
 

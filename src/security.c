@@ -205,21 +205,15 @@ void regain_effective_privs (void)
 #endif /* SECURE_MAN_UID */
 }
 
-/* remove() a file after dropping privs. If already dropped, just remove and 
-   return, don't regain any privs! */
+/* remove() a file after dropping privs. */
 int remove_with_dropped_privs (const char *filename)
 {
 	int ret;
 	
-#ifdef SECURE_MAN_UID
-	if (uid != ruid) {
-		drop_effective_privs ();
-		ret = remove (filename);
-		debug ("remove(\"%s\")\n", filename);
-		regain_effective_privs ();
-	} else
-#endif /* SECURE_MAN_UID */
-		ret = remove (filename);
+	drop_effective_privs ();
+	ret = remove (filename);
+	debug ("remove(\"%s\")\n", filename);
+	regain_effective_privs ();
 
 	if (ret != 0)
 		error (0, errno, _("can't remove %s"), filename);
