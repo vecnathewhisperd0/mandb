@@ -2551,12 +2551,44 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	search = *head;
 	while (search) {
 		/* Check for duplicates. */
-		if (STREQ (path, search->path) &&
-		    STREQ (source->name, search->source->name) &&
+		if (STREQ (source->name, search->source->name) &&
 		    STREQ (source->sec, search->source->sec) &&
 		    STREQ (source->ext, search->source->ext)) {
-			debug ("duplicate candidate\n");
-			return 0;
+			const char *slash1, *slash2;
+
+			if (STREQ (path, search->path)) {
+				debug ("duplicate candidate\n");
+				return 0;
+			}
+
+			/* Figure out if we've had a sufficiently similar
+			 * candidate for this language already. Note that
+			 * this textual comparison is a bit of a hack.
+			 */
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+			slash1 = strrchr (path, '/');
+			slash2 = strrchr (search->path, '/');
+			if (slash1 && slash2 &&
+			    STRNEQ (path, search->path,
+				    MAX (slash1 - path,
+					 slash2 - search->path))) {
+				const char *locale_delim1, *locale_delim2;
+				size_t prefix_len1 = 0, prefix_len2 = 0;
+				locale_delim1 = strpbrk (++slash1, "@,._");
+				locale_delim2 = strpbrk (++slash2, "@,._");
+				if (locale_delim1)
+					prefix_len1 = locale_delim1 - slash1;
+				if (locale_delim2)
+					prefix_len2 = locale_delim2 - slash2;
+				if ((prefix_len1 || prefix_len2) &&
+				    STRNEQ (slash1, slash2,
+					    MAX (prefix_len1, prefix_len2))) {
+					debug ("duplicate candidate "
+					       "(language)\n");
+					return 0;
+				}
+			}
+#undef MAX
 		}
 		if (!insert_found &&
 		    (!search->next ||

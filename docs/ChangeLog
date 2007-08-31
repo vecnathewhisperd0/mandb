@@ -3,6 +3,9 @@
 	* src/check_mandirs.c (make_database_directory): New function.
 	  (create_db, update_db): Use it.
 	  (purge_missing): Check that the database exists before starting.
+	* src/man.c (add_candidate): Skip candidates that match an existing
+	  candidate for the same language even if they are for a different
+	  country, codeset, etc.
 	* src/mandb.c (process_manpath): New function, split out from main.
 	  Make the single_filename check aware that the file might be in a
 	  per-locale subdirectory that we aren't processing right now.
