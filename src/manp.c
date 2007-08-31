@@ -379,6 +379,16 @@ add_to_manpath (char *manpath, const char *path)
 	return pathappend (manpath, path);
 }
 
+static void check_and_add (char **manpath, const char *path,
+			   const char *locale)
+{
+	char *testpath = check_and_give (path, locale);
+	if (testpath) {
+		*manpath = add_to_manpath (*manpath, testpath);
+		free (testpath);
+	}
+}
+
 
 char *add_nls_manpath (char *manpathlist, const char *locale)
 {
@@ -400,29 +410,53 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 	     path = strsep (&manpathlist_ptr, ":") ) {
 
 		static char locale_delims[] = "@,._";
-		char *delim, *tempo;
-		char *testpath;
+		char *delim, *tempo = NULL;
+		int try_no_country = 0;
+
+		check_and_add (&manpath, path, locale);
 
 		strcpy (temp_locale, locale);
-
-		testpath = check_and_give (path, temp_locale);
-		if (testpath) {
-			manpath = add_to_manpath (manpath, testpath);
-			free (testpath);
-		}
 		for (delim = locale_delims; *delim != '\0'; ++delim) {
 			tempo = strchr (temp_locale, *delim);
 			if (tempo) {
 				/* Strip out the rest of the line */
 				*tempo = '\0';
-				testpath = check_and_give (path, temp_locale);
-				if (testpath) {
-					manpath = add_to_manpath (manpath,
-								  testpath);
-					free (testpath);
+				if (!strpbrk (temp_locale, locale_delims)) {
+					/* Try language+codeset before
+					 * proceeding with just the language.
+					 */
+					try_no_country = 1;
+					break;
 				}
+				check_and_add (&manpath, path, temp_locale);
 			}
 		}
+
+		/* Try language+codeset if possible, e.g. fr_FR.UTF-8 ->
+		 * fr.UTF-8. This saves excessive specification of country
+		 * codes which can be inconvenient.
+		 * This code is in an odd place because it needs to go after
+		 * fr_FR.UTF-8 and fr_FR but before fr (since _CC may
+		 * indicate different text, which is more important than
+		 * encoding). Messy.
+		 */
+		delim = strchr (locale, '_');
+		if (try_no_country && delim && strchr (delim + 1, '.')) {
+			char *no_country = xmalloc (strlen (locale) + 1);
+			strncpy (no_country, locale, delim - locale);
+			strcpy (no_country + (delim - locale),
+				strchr (delim + 1, '.'));
+			check_and_add (&manpath, path, no_country);
+			tempo = strchr (no_country, '@');
+			if (tempo) {
+				*tempo = '\0';
+				check_and_add (&manpath, path, no_country);
+			}
+			free (no_country);
+		}
+
+		if (try_no_country)
+			check_and_add (&manpath, path, temp_locale);
 	}
 	/* After doing all the locale stuff we add the manpath to the *END*
 	 * so the locale dirs are checked first on each section */
