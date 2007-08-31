@@ -2852,6 +2852,9 @@ static int maybe_update_file (const char *manpath, const char *name,
 	struct stat buf;
 	int status;
 
+	if (!update)
+		return 0;
+
 	/* If the pointer holds some data, then we need to look at that
 	 * name in the filesystem instead.
 	 */
