@@ -383,6 +383,8 @@ int main (int argc, char *argv[])
 		}
 	}
 
+	pipeline_install_sigchld ();
+
 	/* if we have any arguments, parse them in command line order, else
 	   open stdin */
 	if (optind == argc) {
