@@ -133,7 +133,6 @@ pipeline *decompress_open (const char *filename)
 got_pipeline:
 	p->want_infile = filename;
 	p->want_out = -1;
-	pipeline_start (p);
 	return p;
 }
 
@@ -153,6 +152,5 @@ pipeline *decompress_fdopen (int fd)
 
 	p->want_in = fd;
 	p->want_out = -1;
-	pipeline_start (p);
 	return p;
 }

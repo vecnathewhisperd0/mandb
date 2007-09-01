@@ -453,6 +453,7 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg)
 		}
 		regain_effective_privs ();
 	}
+	pipeline_start (p);
 
 	ret = find_name_decompressed (p, filename, p_lg);
 	pipeline_free (p);

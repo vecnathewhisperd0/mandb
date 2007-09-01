@@ -196,7 +196,7 @@ static int check_for_stray (void)
 			found = 0;
 
 		if (!found) {
-			pipeline *decomp, *filter;
+			pipeline *decomp;
 			struct mandata *exists;
 			lexgrog lg;
 			char *mandir_copy;
@@ -241,12 +241,10 @@ static int check_for_stray (void)
 				goto next_exists;
 			}
 
-			filter = pipeline_new ();
 			col_cmd = command_new_argstr
 				(get_def_user ("col", COL));
 			command_arg (col_cmd, "-bx");
-			pipeline_command (filter, col_cmd);
-			filter->want_out = -1;
+			pipeline_command (decomp, col_cmd);
 
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 			fullpath = canonicalize_file_name (catdir);
@@ -274,18 +272,16 @@ static int check_for_stray (void)
 #ifdef HAVE_CANONICALIZE_FILE_NAME
 				free (fullpath);
 #endif
-				pipeline_connect (decomp, filter, NULL);
 				drop_effective_privs ();
-				pipeline_pump (decomp, filter, NULL);
+				pipeline_start (decomp);
 				regain_effective_privs ();
-				pipeline_wait (decomp);
 
 				strays++;
 
 				lg.type = CATPAGE;
 				catdir_copy = xstrdup (catdir);
 				catdir_base = basename (catdir_copy);
-				if (find_name_decompressed (filter,
+				if (find_name_decompressed (decomp,
 							    catdir_base,
 							    &lg)) {
 					struct page_description *descs;
@@ -307,9 +303,6 @@ static int check_for_stray (void)
 
 			if (lg.whatis)
 				free (lg.whatis);
-			pipeline_free (filter);
-			if (decomp->pids)
-				pipeline_wait (decomp);
 			pipeline_free (decomp);
 next_exists:
 			free_mandata_struct (exists);

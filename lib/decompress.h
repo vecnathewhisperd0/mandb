@@ -27,10 +27,14 @@
 
 struct decompress;
 
-/* Open a decompressor reading from FILENAME. */
+/* Open a decompressor reading from FILENAME. The caller must start the
+ * resulting pipeline.
+ */
 pipeline *decompress_open (const char *filename);
 
-/* Open a decompressor reading from file descriptor FD. */
+/* Open a decompressor reading from file descriptor FD. The caller must
+ * start the resulting pipeline.
+ */
 pipeline *decompress_fdopen (int fd);
 
 #endif /* MAN_DECOMPRESS_H */
