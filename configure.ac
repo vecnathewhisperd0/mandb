@@ -315,6 +315,7 @@ dnl
 AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION([0.15])
 AC_SUBST(LINGUAS)dnl
+AM_ICONV
 dnl
 dnl Checks for structures and compiler characteristics.
 dnl

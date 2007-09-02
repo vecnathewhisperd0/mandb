@@ -111,6 +111,9 @@ man mandb catman whatis apropos accessdb: ../libdb/libmandb.a
 
 man mandb catman whatis apropos accessdb: LDLIBS += $(DBLIBS)
 
+whatis apropos: encodings.o
+whatis apropos: LDLIBS += $(LIBICONV)
+
 $(PROGS) $(TOOLS): version.o ../lib/libman.a
 
 apropos: whatis.c

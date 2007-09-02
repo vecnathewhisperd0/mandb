@@ -47,9 +47,15 @@
 	* src/straycats.c (check_for_stray): Guess the page's encoding from
 	  its filesystem location, and add an iconv command to recode it to
 	  UTF-8.
+	* src/whatis.c (display): Convert output from UTF-8 to locale
+	  charset.
+	  (main): Initialise iconv descriptor.
 	* include/manconfig.h.in (find_name): Update prototype.
 	  (lang_dir): Add prototype.
+	* configure.ac: Call AM_ICONV.
 	* src/Makefile.in (mandb, lexgrog): Add encodings.o.
+	* src/Makefile.in (whatis, apropos): Add encodings.o and
+	  $(LIBICONV).
 
 Sun Sep  2 01:21:11 BST 2007  Colin Watson  <cjwatson@debian.org>
 

@@ -60,6 +60,10 @@ extern char *strrchr();
 #include <locale.h>
 #define _(String) gettext (String)
 
+#ifdef HAVE_ICONV
+#  include <iconv.h>
+#endif /* HAVE_ICONV */
+
 #ifdef HAVE_REGEX_H
 #  include <sys/types.h>
 #  include <regex.h>
@@ -89,6 +93,7 @@ extern char *strrchr();
 #include "lib/pipeline.h"
 #include "lib/linelength.h"
 #include "lib/hashtable.h"
+#include "encodings.h"
 #include "manp.h"
 
 static char *manpathlist[MAXDIRS];
@@ -102,6 +107,10 @@ char *program_name;
 char *database;
 MYDBM_FILE dbf;
 int quiet = 1;
+
+#ifdef HAVE_ICONV
+iconv_t conv;
+#endif /* HAVE_ICONV */
 
 #if defined(POSIX_REGEX) || defined(BSD_REGEX)
 #  define REGEX
@@ -315,9 +324,9 @@ static char *get_whatis (struct mandata *info, const char *page)
 /* print out any matches found */
 static void display (struct mandata *info, char *page)
 {
-	char *string, *whatis;
+	char *string, *whatis, *string_conv;
 	const char *page_name;
-	int line_len, string_len, rest;
+	int line_len, rest;
 
 	whatis = get_whatis (info, page);
 	
@@ -340,17 +349,49 @@ static void display (struct mandata *info, char *page)
 		string = strappend (string, " [", info->pointer, "]", NULL);
 
 	if (strlen (string) < (size_t) 20) {
-		printf ("%-20s - ", string);
-		string_len = 23;
-	} else {
-		printf ("%s - ", string);
-		string_len = strlen (string) + 3;
+		int i;
+		string = xrealloc (string, 21);
+		for (i = strlen (string); i < 20; ++i)
+			string[i] = ' ';
+		string[i] = '\0';
 	}
-	rest = line_len - string_len;
-	if (!long_output && strlen (whatis) > (size_t) rest)
-		printf ("%.*s...\n", rest - 3, whatis);
-	else
-		printf ("%s\n", whatis);
+	string = strappend (string, " - ", NULL);
+
+	rest = line_len - strlen (string);
+	if (!long_output && strlen (whatis) > (size_t) rest) {
+		whatis[rest - 3] = '\0';
+		string = strappend (string, whatis, "...\n", NULL);
+	} else
+		string = strappend (string, whatis, "\n", NULL);
+
+#ifdef HAVE_ICONV
+	if (conv != (iconv_t) -1) {
+		size_t string_conv_alloc = strlen (string) + 1;
+		string_conv = xmalloc (string_conv_alloc);
+		for (;;) {
+			char *inptr = string, *outptr = string_conv;
+			size_t inleft = strlen (string);
+			size_t outleft = string_conv_alloc - 1;
+			if (iconv (conv, (ICONV_CONST char **) &inptr, &inleft,
+				   &outptr, &outleft) == (size_t) -1 &&
+			    errno == E2BIG) {
+				string_conv_alloc <<= 1;
+				string_conv = xrealloc (string_conv,
+							string_conv_alloc);
+			} else {
+				/* Either we succeeded, or we've done our
+				 * best; go ahead and print what we've got.
+				 */
+				free (string);
+				string = string_conv;
+				string[string_conv_alloc - 1 - outleft] = '\0';
+				break;
+			}
+		}
+	}
+#endif /* HAVE_ICONV */
+
+	fputs (string, stdout);
 
 	free (whatis);
 	free (string);
@@ -691,6 +732,9 @@ int main (int argc, char *argv[])
 	char *manp = NULL;
 	const char *alt_systems = "";
 	char *llocale = NULL, *locale;
+#ifdef HAVE_ICONV
+	char *locale_charset;
+#endif
 	int option_index;
 	int status = OK;
 
@@ -817,6 +861,13 @@ int main (int argc, char *argv[])
 
 	apropos_seen = hash_create (&plain_hash_free);
 
+#ifdef HAVE_ICONV
+	locale_charset = strappend (NULL, get_locale_charset (), "//IGNORE",
+				    NULL);
+	conv = iconv_open (locale_charset, "UTF-8");
+	free (locale_charset);
+#endif /* HAVE_ICONV */
+
 	while (optind < argc) {
 #if defined(POSIX_REGEX)		
 		if (regex) {
@@ -848,6 +899,10 @@ int main (int argc, char *argv[])
 #endif /* POSIX_REGEX */
 	}
 
+#ifdef HAVE_ICONV
+	if (conv != (iconv_t) -1)
+		iconv_close (conv);
+#endif /* HAVE_ICONV */
 	hash_free (apropos_seen);
 	free_pathlist (manpathlist);
 	free (manp);
