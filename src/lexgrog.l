@@ -164,24 +164,34 @@ sec_request	\.[Ss][HhYySs]
 comment		['.]\\{dbl_quote}
 
  /* Please add to this list if you know how. */
-cs_name		J[Mm][ÉéEe][Nn][Oo]
+ /* Note that, since flex only supports UTF-8 by accident, character classes
+  * including non-ASCII characters must be written out as (a|b|c|d) rather
+  * than [abcd].
+  */
+cs_name		(J[Mm](É|é|\\\('[Ee]|E|e)[Nn][Oo]|N(Á|á)[Zz][Ee][Vv])
 da_name		N[Aa][Vv][Nn]
 de_name		B[Ee][Zz][Ee][Ii][Cc][Hh][Nn][Uu][Nn][Gg]
 en_name		N[Aa][Mm][Ee]
 es_name		N[Oo][Mm][Bb][Rr][Ee]
 fi_name		N[Ii][Mm][Ii]
 fr_name		N[Oo][Mm]
-hu_name		N[ÉéEe][Vv]
+hu_name		N(É|é|E|e)[Vv]
 id_name		N[Aa][Mm][Aa]
  /* NOME also works for gl, pt */
 it_name		N[Oo][Mm][Ee]
 ja_name		名前
+ko_name		이름
 latin_name	N[Oo][Mm][Ee][Nn]
 nl_name		N[Aa][Aa][Mm]
 pl_name		N[Aa][Zz][Ww][Aa]
-ru_name         НАЗВАНИЕ
+ru_name         (ИМЯ|НАЗВАНИЕ|НАИМЕНОВАНИЕ)
+sk_name		M[Ee][Nn][Oo]
+sr_name		НАЗИВ
 sv_name		N[Aa][Mm][Nn]
-name		({cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sv_name})
+tr_name		(İ|i)S(İ|i)M  
+zh_CN_name	名{blank}?称{blank}?.*
+zh_TW_name	(名{blank}?稱|命令名){blank}?.*
+name		({cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{ko_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sk_name}|{sr_name}|{sv_name}|{tr_name}|{zh_CN_name}|{zh_TW_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
@@ -482,7 +492,6 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
 {
 	int ret;
-	int decomp_status;
 
 	decomp = p;
 
@@ -505,9 +514,9 @@ int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
 
 	regain_effective_privs ();
 
-	decomp_status = pipeline_wait (decomp);
+	pipeline_wait (decomp);
 
-	if (ret || decomp_status)
+	if (ret)
 		return 0;
 	else {
 		char f_tmp[MAX_FILTERS];

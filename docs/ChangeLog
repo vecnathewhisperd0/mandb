@@ -57,6 +57,18 @@
 	* src/Makefile.in (whatis, apropos): Add encodings.o and
 	  $(LIBICONV).
 
+	* src/encodings.c (directory_table): Add Serbian -> ISO-8859-5.
+	* src/lexgrog.l (cs_name, hu_name): Expand character classes
+	  containing non-ASCII characters into the form (a|b|...); flex
+	  doesn't understand Unicode well enough to deal with them
+	  otherwise.
+	  (cs_name, ru_name): Add more possible translations.
+	  (ko_name, sk_name, sr_name, tr_name, zh_CN_name, zh_TW_name): Add.
+	  (find_name_decompressed): Ignore exit status from decompressor
+	  pipeline; iconv may exit non-zero on misencoded pages, but if we
+	  manage to extract a whatis from it anyway then it doesn't really
+	  matter.
+
 	* src/whatis.c (usage): Document -L/--locale.
 	* man/man1/apropos.man1 (SYNOPSIS, OPTIONS): Likewise.
 	* man/man1/whatis.man1 (SYNOPSIS, OPTIONS): Likewise.
