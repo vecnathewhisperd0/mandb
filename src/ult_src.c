@@ -326,6 +326,7 @@ const char *ult_src (const char *name, const char *path,
 				error (0, errno, _("can't open %s"), base);
 			return NULL;
 		}
+		pipeline_start (decomp);
 
 		/* make sure that we skip over any comments */
 		do {

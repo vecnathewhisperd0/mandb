@@ -2188,10 +2188,11 @@ static int display (const char *dir, const char *man_file,
 			decomp = decompress_fdopen (dup (fileno (stdin)));
 	}
 
-	if (decomp)
+	if (decomp) {
+		pipeline_start (decomp);
 		format_cmd = make_roff_command (dir, man_file, decomp,
 						dbfilters);
-	else
+	} else
 		format_cmd = NULL;
 
 	/* Get modification time, for commit_tmp_cat(). */

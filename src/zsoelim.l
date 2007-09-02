@@ -441,6 +441,7 @@ static int open_file (const char *filename)
 		}
 	}
 
+	pipeline_start (decomp);
 	PIPE = decomp;
 	/* only used by YY_INPUT, which casts it back to 'pipeline *' */
 	yyin = (FILE *) decomp;

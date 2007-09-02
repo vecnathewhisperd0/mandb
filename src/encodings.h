@@ -1,7 +1,7 @@
 /*
  * encodings.h: Interface to locale and encoding handling for man
  *
- * Copyright (C) 2003 Colin Watson.
+ * Copyright (C) 2003, 2004, 2006, 2007 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -24,6 +24,7 @@ const char *get_groff_preconv (void);
 char *get_page_encoding (const char *lang);
 const char *get_source_encoding (const char *lang);
 char *get_standard_output_encoding (const char *lang);
+const char *get_canonical_charset_name (const char *charset);
 const char *get_locale_charset (void);
 const char *get_default_device (const char *locale_charset,
 				const char *source_encoding);

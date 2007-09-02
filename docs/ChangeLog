@@ -19,6 +19,41 @@
 	* include/manconfig.h.in (straycats): Update prototype.
 	* docs/TODO: Update.
 
+Sun Sep  2 01:21:11 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Add limited character set aliasing support.
+
+	* src/encodings.c (charset_alias_table): New table for common
+	  character set aliases.
+	  (get_canonical_charset_name): New function to inspect
+	  charset_alias_table.
+	  (get_page_encoding): Use get_canonical_charset_name. Adjust FHS
+	  commentary, since we now support its craziness.
+	  (get_standard_output_encoding): Use get_canonical_charset_name.
+	  (get_locale_charset): Likewise.
+	* src/encodings.h: Prototype get_canonical_charset_name.
+
+	* src/encodings.c (directory_table): Use EUC-CN rather than GB2312
+	  and BIG5HKSCS rather than BIG5-HKSCS (canonical names according to
+	  glibc's /usr/lib/gconv/gconv-modules).
+	  (charset_table): Likewise.
+	  (compatible_encodings): Likewise.
+
+Sun Sep  2 00:49:27 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/decompress.c (decompress_open, decompress_fdopen): Don't start
+	  the returned pipeline.
+	* lib/decompress.h (decompress_open, decompress_fdopen): Note that
+	  the caller must start the returned pipeline.
+	* src/lexgrog.l (find_name): Start the decompressor pipeline.
+	* src/man.c (display): Likewise.
+	* src/ult_src.c (ult_src): Likewise.
+	* src/zsoelim.l (open_file): Likewise.
+	* src/straycats.c (check_for_stray): Append 'col -bx' to the
+	  decompressor pipeline rather than connecting two pipelines
+	  together. Don't call pipeline_wait by hand as pipeline_free will
+	  do this for us now.
+
 Fri Aug 31 14:52:22 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (maybe_update_file): Only recache pages automatically if
