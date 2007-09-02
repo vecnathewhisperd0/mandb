@@ -9,8 +9,10 @@
 	  (main): Use it. Move man_owner, purged, and strays to file scope.
 	  Build databases for all per-locale subdirectories.
 	* src/straycats.c (straycats): Constify manpath argument.
+	* src/whatis.c (main): Sync locale handling with src/man.c, in order
+	  to look up per-locale databases correctly. Based on a patch by
+	  Nicolas François (Debian bug #281811).
 	* include/manconfig.h.in (straycats): Update prototype.
-	* docs/TODO: Update.
 
 	* src/man.c (duplicate_candidates): New function to determine
 	  whether candidates are substantially duplicated, and if so in

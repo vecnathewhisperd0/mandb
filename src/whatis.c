@@ -733,7 +733,7 @@ int main (int argc, char *argv[])
 	int c;
 	char *manp = NULL;
 	const char *alt_systems = "";
-	char *llocale = NULL, *locale;
+	char *multiple_locale = NULL, *locale = NULL, *internal_locale;
 #ifdef HAVE_ICONV
 	char *locale_charset;
 #endif
@@ -743,15 +743,23 @@ int main (int argc, char *argv[])
 	program_name = xstrdup (basename (argv[0]));
 
 	/* initialise the locale */
-	locale = xstrdup (setlocale (LC_ALL, ""));
-	if (!locale) {
+	if (!setlocale (LC_ALL, ""))
 		/* Obviously can't translate this. */
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
-		locale = xstrdup ("C");
-	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
+
+	internal_locale = setlocale (LC_MESSAGES, NULL);
+	/* Use LANGUAGE only when LC_MESSAGES locale category is
+	 * neither "C" nor "POSIX". */
+	if (internal_locale && strcmp (internal_locale, "C") &&
+	    strcmp (internal_locale, "POSIX")) {
+		multiple_locale = getenv ("LANGUAGE");
+		if (multiple_locale && *multiple_locale)
+			internal_locale = multiple_locale;
+	}
+	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, &option_index)) != EOF) {
@@ -764,7 +772,7 @@ int main (int argc, char *argv[])
 				quiet = 0;
 				break;
 			case 'L':
-				llocale = optarg;
+				locale = optarg;
 				break;
 			case 'm':
 				alt_systems = optarg;
@@ -818,22 +826,25 @@ int main (int argc, char *argv[])
 		}
 	}
 
-	/* close this locale and reinitialise in case a new locale was 
+#ifdef HAVE_SETLOCALE
+	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
-	if (llocale) {
-		setlocale (LC_ALL, llocale);
-		free (locale);
-		locale = xstrdup (llocale);
+	if (locale) {
+		free (internal_locale);
+		internal_locale = xstrdup (setlocale (LC_ALL, locale));
+		if (internal_locale == NULL)
+			internal_locale = xstrdup (locale);
+
 		debug ("main(): locale = %s, internal_locale = %s\n",
-		       llocale, locale);
-		if (locale) {
+		       locale, internal_locale);
+		if (internal_locale) {
 			extern int _nl_msg_cat_cntr;
-			if (locale[2] == '_' )
-				locale[2] = '\0';
-			setenv ("LANGUAGE", locale, 1);
+			setenv ("LANGUAGE", internal_locale, 1);
 			++_nl_msg_cat_cntr;
+			multiple_locale = NULL;
 		}
 	}
+#endif /* HAVE_SETLOCALE */
 
 	pipeline_install_sigchld ();
 
@@ -854,9 +865,29 @@ int main (int argc, char *argv[])
 	}
 
 	/* sort out the internal manpath */
-	if (manp == NULL)
-		manp = add_nls_manpath (get_manpath (alt_systems), locale);
-	else
+	if (manp == NULL) {
+		char tmp_locale[3];
+		int idx;
+
+		manp = add_nls_manpath (get_manpath (alt_systems),
+					internal_locale);
+		/* Handle multiple :-separated locales in LANGUAGE */
+		idx = multiple_locale ? strlen (multiple_locale) : 0;
+		while (idx) {
+			while (idx && multiple_locale[idx] != ':')
+				idx--;
+			if (multiple_locale[idx] == ':')
+				idx++;
+			tmp_locale[0] = multiple_locale[idx];
+			tmp_locale[1] = multiple_locale[idx + 1];
+			tmp_locale[2] = 0;
+			/* step back over preceding ':' */
+			if (idx) idx--;
+			if (idx) idx--;
+			debug ("checking for locale %s\n", tmp_locale);
+			manp = add_nls_manpath (manp, tmp_locale);
+		}
+	} else
 		free (get_manpath (NULL));
 
 	create_pathlist (manp, manpathlist);
