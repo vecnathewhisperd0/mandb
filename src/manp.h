@@ -22,8 +22,17 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+struct locale_bits {
+	char *language;
+	char *territory;
+	char *codeset;
+	char *modifier;
+};
+
 /* manp.c */
 extern char *cat_manpath (char *manp);
+extern void unpack_locale_bits (const char *locale, struct locale_bits *bits);
+extern void free_locale_bits (struct locale_bits *bits);
 extern char *add_nls_manpath (char *manpathlist, const char *locale);
 extern char *get_manpath (const char *systems);
 extern void create_pathlist (const char *manp, char **mp);

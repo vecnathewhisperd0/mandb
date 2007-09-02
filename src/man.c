@@ -2450,6 +2450,130 @@ static char *find_cat_file (const char *path, const char *original,
 	return cat_file;
 }
 
+/* Is this candidate substantially a duplicate of a previous one?
+ * Returns 0 if it is distinct, 1 if source/path is no better than search,
+ * and 2 if source/path is better than search.
+ */
+static int duplicate_candidates (struct mandata *source, const char *path,
+				 struct candidate *search)
+{
+	const char *slash1, *slash2;
+	char *locale_copy, *p;
+	struct locale_bits bits1, bits2, lbits;
+	const char *codeset1, *codeset2;
+	int ret;
+
+	if (!STREQ (source->name, search->source->name) ||
+	    !STREQ (source->sec, search->source->sec) ||
+	    !STREQ (source->ext, search->source->ext))
+		return 0; /* different name/section/extension */
+
+	if (STREQ (path, search->path)) {
+		debug ("duplicate candidate\n");
+		return 1;
+	}
+
+	/* Figure out if we've had a sufficiently similar candidate for this
+	 * language already.
+	 */
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+	slash1 = strrchr (path, '/');
+	slash2 = strrchr (search->path, '/');
+	if (!slash1 || !slash2 ||
+	    !STRNEQ (path, search->path,
+		     MAX (slash1 - path, slash2 - search->path)))
+		return 0; /* different path base */
+#undef MAX
+
+	unpack_locale_bits (++slash1, &bits1);
+	unpack_locale_bits (++slash2, &bits2);
+
+	if (!STREQ (bits1.language, bits2.language)) {
+		ret = 0; /* different language */
+		goto out;
+	}
+
+	/* From here on in we need the current locale as well. */
+	locale_copy = xstrdup (internal_locale);
+	p = strchr (locale_copy, ':');
+	if (p)
+		*p = '\0';
+	unpack_locale_bits (locale_copy, &lbits);
+	free (locale_copy);
+
+	/* For different territories, prefer one that matches the locale if
+	 * possible.
+	 */
+	if (*lbits.territory) {
+		if (STREQ (lbits.territory, bits1.territory)) {
+			if (!STREQ (lbits.territory, bits2.territory)) {
+				ret = 2;
+				goto out_locale;
+			}
+		} else {
+			if (STREQ (lbits.territory, bits2.territory)) {
+				ret = 1;
+				goto out_locale;
+			}
+		}
+	}
+	if (!STREQ (bits1.territory, bits2.territory)) {
+		ret = 0; /* different territories, no help from locale */
+		goto out_locale;
+	}
+
+	/* For different modifiers, prefer one that matches the locale if
+	 * possible.
+	 */
+	if (*lbits.modifier) {
+		if (STREQ (lbits.modifier, bits1.modifier)) {
+			if (!STREQ (lbits.modifier, bits2.modifier)) {
+				ret = 2;
+				goto out_locale;
+			}
+		} else {
+			if (STREQ (lbits.modifier, bits2.modifier)) {
+				ret = 1;
+				goto out_locale;
+			}
+		}
+	}
+	if (!STREQ (bits1.modifier, bits2.modifier)) {
+		ret = 0; /* different modifiers, no help from locale */
+		goto out_locale;
+	}
+
+	/* Prefer UTF-8 if available. Otherwise, the last one is probably
+	 * just as good as this one.
+	 */
+	codeset1 = get_canonical_charset_name (bits1.codeset);
+	codeset2 = get_canonical_charset_name (bits2.codeset);
+	if (STREQ (codeset1, "UTF-8")) {
+		if (!STREQ (codeset2, "UTF-8")) {
+			ret = 2;
+			goto out_locale;
+		}
+	} else {
+		/* Either codeset2 is UTF-8 or it's some other legacy
+		 * encoding; either way, we prefer it.
+		 */
+		ret = 1;
+		goto out_locale;
+	}
+
+	/* Everything seems to be the same; we can find nothing to choose
+	 * between them. Prefer the one that got there first.
+	 */
+	ret = 1;
+
+out_locale:
+	free_locale_bits (&lbits);
+out:
+	free_locale_bits (&bits1);
+	free_locale_bits (&bits2);
+	return ret;
+}
+
 static int compare_candidates (const struct mandata *left,
 			       const struct mandata *right,
 			       const char *req_name)
@@ -2531,7 +2655,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 			  const char *req_name, const char *path,
 			  struct mandata *source)
 {
-	struct candidate *search, *insert, *candp;
+	struct candidate *search, *prev, *insert, *candp;
 	int insert_found = 0;
 
 	debug ("candidate: %d %d %s %s %c %s %s %s\n",
@@ -2546,64 +2670,42 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	 * after which this element should be inserted.
 	 */
 	insert = NULL;
-	if (*head && compare_candidates (source, (*head)->source,
-					 req_name) < 0)
-		insert_found = 1;
 	search = *head;
+	prev = NULL;
 	while (search) {
 		/* Check for duplicates. */
-		if (STREQ (source->name, search->source->name) &&
-		    STREQ (source->sec, search->source->sec) &&
-		    STREQ (source->ext, search->source->ext)) {
-			const char *slash1, *slash2;
-
-			if (STREQ (path, search->path)) {
-				debug ("duplicate candidate\n");
-				return 0;
+		int dupcand = duplicate_candidates (source, path, search);
+		if (dupcand == 1) {
+			debug ("duplicate candidate\n");
+			return 0;
+		} else if (dupcand == 2) {
+			debug ("superior duplicate candidate\n");
+			if (prev) {
+				prev->next = search->next;
+				free (search);
+				search = prev->next;
+			} else {
+				*head = search->next;
+				free (search);
+				search = *head;
 			}
-
-			/* Figure out if we've had a sufficiently similar
-			 * candidate for this language already. Note that
-			 * this textual comparison is a bit of a hack.
-			 */
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
-			slash1 = strrchr (path, '/');
-			slash2 = strrchr (search->path, '/');
-			if (slash1 && slash2 &&
-			    STRNEQ (path, search->path,
-				    MAX (slash1 - path,
-					 slash2 - search->path))) {
-				const char *locale_delim1, *locale_delim2;
-				size_t prefix_len1 = 0, prefix_len2 = 0;
-				locale_delim1 = strpbrk (++slash1, "@,._");
-				locale_delim2 = strpbrk (++slash2, "@,._");
-				if (locale_delim1)
-					prefix_len1 = locale_delim1 - slash1;
-				if (locale_delim2)
-					prefix_len2 = locale_delim2 - slash2;
-				if ((prefix_len1 || prefix_len2) &&
-				    STRNEQ (slash1, slash2,
-					    MAX (prefix_len1, prefix_len2))) {
-					debug ("duplicate candidate "
-					       "(language)\n");
-					return 0;
-				}
-			}
-#undef MAX
+			continue;
 		}
 		if (!insert_found &&
-		    (!search->next ||
-		     compare_candidates (source, search->next->source,
-					 req_name) < 0)) {
-			insert = search;
+		    compare_candidates (source, search->source,
+					req_name) < 0) {
+			insert = prev;
 			insert_found = 1;
 		}
 
+		prev = search;
 		if (search->next)
 			search = search->next;
 		else
 			break;
 	}
+	if (!insert_found)
+		insert = prev;
 
 	candp = (struct candidate *) malloc (sizeof (struct candidate));
 	candp->req_name = req_name;

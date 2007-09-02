@@ -3,18 +3,32 @@
 	* src/check_mandirs.c (make_database_directory): New function.
 	  (create_db, update_db): Use it.
 	  (purge_missing): Check that the database exists before starting.
-	* src/man.c (add_candidate): Skip candidates that match an existing
-	  candidate for the same language even if they are for a different
-	  country, codeset, etc.
+	* src/man.c (duplicate_candidates): New function to determine
+	  whether candidates are substantially duplicated, and if so in
+	  which direction. The logic is better than before: it now knows how
+	  to compare locales and pick the best available candidate for each
+	  language, and prefers UTF-8 candidates if everything else is
+	  equal.
+	  (add_candidate): Move duplication logic to duplicate_candidates.
+	  Adjust insertion handling so that we can drop old candidates in
+	  favour of new candidates.
 	* src/mandb.c (process_manpath): New function, split out from main.
 	  Make the single_filename check aware that the file might be in a
 	  per-locale subdirectory that we aren't processing right now.
 	  (main): Use it. Move man_owner, purged, and strays to file scope.
 	  Build databases for all per-locale subdirectories.
-	* src/manp.c (check_and_add): New function.
-	  (add_nls_manpath): Use check_and_add to reduce repetition. When
-	  processing ll_CC.CODESET, try ll.CODESET after ll_CC.CODESET and
-	  ll_CC but before ll.
+	* src/manp.c (check_and_give): Remove.
+	  (unpack_locale_bits): New function, inspired by _nl_explode_name
+	  in libintl.
+	  (free_locale_bits): New function.
+	  (add_nls_manpath): Instead of trying individual directories (which
+	  doesn't work so well with character set aliasing), iterate over
+	  all subdirectories of each manpath entry and add all those
+	  matching the current locale's language and (if specified)
+	  territory. This now includes ll.CODESET as well as more
+	  conventional locale names.
+	* src/manp.h: Declare 'struct locale_bits'. Prototype
+	  unpack_locale_bits and free_locale_bits.
 	* src/straycats.c (straycats): Constify manpath argument.
 	* include/manconfig.h.in (straycats): Update prototype.
 	* docs/TODO: Update.
