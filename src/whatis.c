@@ -176,8 +176,8 @@ static const struct option long_options[] =
 #ifdef APROPOS
 static void usage (int status)
 {
-	printf (_("usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C file]\n"
-		  "               keyword ...\n"), program_name);
+	printf (_("usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
+		  "               [-L locale] [-C file] keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
@@ -189,6 +189,7 @@ static void usage (int status)
 		"-s, --section section      search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
+		"-L, --locale locale        define the locale for this search.\n"
 		"-C, --config-file file     use this user configuration file.\n"
 		"-V, --version              show version.\n"
 		"-h, --help                 show this usage message.\n"));
@@ -198,8 +199,8 @@ static void usage (int status)
 #else	
 static void usage (int status)
 {
-	printf (_("usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
-		  "              keyword ...\n"), program_name);
+	printf (_("usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath]\n"
+		  "              [-L locale] [-C file] keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
@@ -209,6 +210,7 @@ static void usage (int status)
 		"-s, --section section      search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
+		"-L, --locale locale        define the locale for this search.\n"
 		"-C, --config-file file     use this user configuration file.\n"
 		"-V, --version              show version.\n"
 		"-h, --help                 show this usage message.\n"));

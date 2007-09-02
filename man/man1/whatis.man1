@@ -23,6 +23,8 @@
 .IR system \|[\|,.\|.\|.\|]\|]
 .RB [\| \-M 
 .IR path \|] 
+.RB [\| \-L
+.IR locale \|]
 .RB [\| \-C
 .IR file \|]
 .I name 
@@ -159,6 +161,23 @@ determine an appropriate manpath based on your
 environment variable.
 This option overrides the contents of
 .RB $ MANPATH .
+.TP
+.BI \-L\  locale ,\ \-\-locale= locale
+.B %whatis%
+will normally determine your current locale by a call to the C function
+.BR setlocale (3)
+which interrogates various environment variables, possibly including
+.RB $ LC_MESSAGES
+and
+.RB $ LANG .
+To temporarily override the determined value, use this option to supply a
+.I locale
+string directly to
+.BR %whatis% .
+Note that it will not take effect until the search for pages actually
+begins.
+Output such as the help message will always be displayed in the initially
+determined locale.
 .TP
 .BI \-C\  file ,\ \-\-config\-file= file
 Use this user configuration file rather than the default of
