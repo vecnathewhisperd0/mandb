@@ -33,6 +33,23 @@
 	* include/manconfig.h.in (straycats): Update prototype.
 	* docs/TODO: Update.
 
+	* src/man.c (lang_dir): Move to ...
+	* src/util.c (lang_dir): ... here.
+	* src/lexgrog.l (long_options, args, main): New -E/--encoding
+	  option.
+	  (usage): Document it.
+	  (cs_name, hu_name, ja_name, ru_name): Recode to UTF-8.
+	  (find_name): Add encoding argument. Guess the page's encoding from
+	  its filesystem location (or use encoding if supplied), and add an
+	  iconv command to recode it to UTF-8.
+	* man/man1/lexgrog.man1 (SYNOPSIS, OPTIONS): Document --encoding.
+	* src/straycats.c (check_for_stray): Guess the page's encoding from
+	  its filesystem location, and add an iconv command to recode it to
+	  UTF-8.
+	* include/manconfig.h.in (find_name): Update prototype.
+	  (lang_dir): Add prototype.
+	* src/Makefile.in (mandb, lexgrog): Add encodings.o.
+
 Sun Sep  2 01:21:11 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	Add limited character set aliasing support.

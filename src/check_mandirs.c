@@ -264,7 +264,7 @@ void test_manfile (const char *file, const char *path)
 
 		lg.type = MANPAGE;
 		drop_effective_privs ();
-		find_name (ult, basename (file_copy), &lg);
+		find_name (ult, basename (file_copy), &lg, NULL);
 		free (file_copy);
 		regain_effective_privs ();
 
