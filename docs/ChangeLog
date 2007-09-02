@@ -3,6 +3,15 @@
 	* src/check_mandirs.c (make_database_directory): New function.
 	  (create_db, update_db): Use it.
 	  (purge_missing): Check that the database exists before starting.
+	* src/mandb.c (process_manpath): New function, split out from main.
+	  Make the single_filename check aware that the file might be in a
+	  per-locale subdirectory that we aren't processing right now.
+	  (main): Use it. Move man_owner, purged, and strays to file scope.
+	  Build databases for all per-locale subdirectories.
+	* src/straycats.c (straycats): Constify manpath argument.
+	* include/manconfig.h.in (straycats): Update prototype.
+	* docs/TODO: Update.
+
 	* src/man.c (duplicate_candidates): New function to determine
 	  whether candidates are substantially duplicated, and if so in
 	  which direction. The logic is better than before: it now knows how
@@ -12,11 +21,6 @@
 	  (add_candidate): Move duplication logic to duplicate_candidates.
 	  Adjust insertion handling so that we can drop old candidates in
 	  favour of new candidates.
-	* src/mandb.c (process_manpath): New function, split out from main.
-	  Make the single_filename check aware that the file might be in a
-	  per-locale subdirectory that we aren't processing right now.
-	  (main): Use it. Move man_owner, purged, and strays to file scope.
-	  Build databases for all per-locale subdirectories.
 	* src/manp.c (check_and_give): Remove.
 	  (unpack_locale_bits): New function, inspired by _nl_explode_name
 	  in libintl.
@@ -29,9 +33,6 @@
 	  conventional locale names.
 	* src/manp.h: Declare 'struct locale_bits'. Prototype
 	  unpack_locale_bits and free_locale_bits.
-	* src/straycats.c (straycats): Constify manpath argument.
-	* include/manconfig.h.in (straycats): Update prototype.
-	* docs/TODO: Update.
 
 	* src/man.c (lang_dir): Move to ...
 	* src/util.c (lang_dir): ... here.
