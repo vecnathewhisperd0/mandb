@@ -1,3 +1,23 @@
+Sun Sep  2 01:21:11 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Add limited character set aliasing support.
+
+	* src/encodings.c (charset_alias_table): New table for common
+	  character set aliases.
+	  (get_canonical_charset_name): New function to inspect
+	  charset_alias_table.
+	  (get_page_encoding): Use get_canonical_charset_name. Adjust FHS
+	  commentary, since we now support its craziness.
+	  (get_standard_output_encoding): Use get_canonical_charset_name.
+	  (get_locale_charset): Likewise.
+	* src/encodings.h: Prototype get_canonical_charset_name.
+
+	* src/encodings.c (directory_table): Use EUC-CN rather than GB2312
+	  and BIG5HKSCS rather than BIG5-HKSCS (canonical names according to
+	  glibc's /usr/lib/gconv/gconv-modules).
+	  (charset_table): Likewise.
+	  (compatible_encodings): Likewise.
+
 Sun Sep  2 00:49:27 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* lib/decompress.c (decompress_open, decompress_fdopen): Don't start
