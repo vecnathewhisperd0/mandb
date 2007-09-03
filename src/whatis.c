@@ -60,6 +60,10 @@ extern char *strrchr();
 #include <locale.h>
 #define _(String) gettext (String)
 
+#ifdef HAVE_ICONV
+#  include <iconv.h>
+#endif /* HAVE_ICONV */
+
 #ifdef HAVE_REGEX_H
 #  include <sys/types.h>
 #  include <regex.h>
@@ -89,6 +93,7 @@ extern char *strrchr();
 #include "lib/pipeline.h"
 #include "lib/linelength.h"
 #include "lib/hashtable.h"
+#include "encodings.h"
 #include "manp.h"
 
 static char *manpathlist[MAXDIRS];
@@ -102,6 +107,10 @@ char *program_name;
 char *database;
 MYDBM_FILE dbf;
 int quiet = 1;
+
+#ifdef HAVE_ICONV
+iconv_t conv_to_locale;
+#endif /* HAVE_ICONV */
 
 #if defined(POSIX_REGEX) || defined(BSD_REGEX)
 #  define REGEX
@@ -167,8 +176,8 @@ static const struct option long_options[] =
 #ifdef APROPOS
 static void usage (int status)
 {
-	printf (_("usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C file]\n"
-		  "               keyword ...\n"), program_name);
+	printf (_("usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
+		  "               [-L locale] [-C file] keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
@@ -180,6 +189,7 @@ static void usage (int status)
 		"-s, --section section      search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
+		"-L, --locale locale        define the locale for this search.\n"
 		"-C, --config-file file     use this user configuration file.\n"
 		"-V, --version              show version.\n"
 		"-h, --help                 show this usage message.\n"));
@@ -189,8 +199,8 @@ static void usage (int status)
 #else	
 static void usage (int status)
 {
-	printf (_("usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
-		  "              keyword ...\n"), program_name);
+	printf (_("usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath]\n"
+		  "              [-L locale] [-C file] keyword ...\n"), program_name);
 	printf (_(
 		"-d, --debug                produce debugging info.\n"
 		"-v, --verbose              print verbose warning messages.\n"
@@ -200,6 +210,7 @@ static void usage (int status)
 		"-s, --section section      search only this section.\n"
 		"-m, --systems system       include alternate systems' man pages.\n"
 		"-M, --manpath path         set search path for manual pages to `path'.\n"
+		"-L, --locale locale        define the locale for this search.\n"
 		"-C, --config-file file     use this user configuration file.\n"
 		"-V, --version              show version.\n"
 		"-h, --help                 show this usage message.\n"));
@@ -207,6 +218,37 @@ static void usage (int status)
 	exit (status);
 }
 #endif
+
+static char *simple_convert (iconv_t conv, char *string)
+{
+#ifdef HAVE_ICONV
+	if (conv != (iconv_t) -1) {
+		size_t string_conv_alloc = strlen (string) + 1;
+		char *string_conv = xmalloc (string_conv_alloc);
+		for (;;) {
+			char *inptr = string, *outptr = string_conv;
+			size_t inleft = strlen (string);
+			size_t outleft = string_conv_alloc - 1;
+			if (iconv (conv, (ICONV_CONST char **) &inptr, &inleft,
+				   &outptr, &outleft) == (size_t) -1 &&
+			    errno == E2BIG) {
+				string_conv_alloc <<= 1;
+				string_conv = xrealloc (string_conv,
+							string_conv_alloc);
+			} else {
+				/* Either we succeeded, or we've done our
+				 * best; go ahead and print what we've got.
+				 */
+				string_conv[string_conv_alloc - 1 - outleft] =
+					'\0';
+				break;
+			}
+		}
+		return string_conv;
+	} else
+#endif /* HAVE_ICONV */
+		return xstrdup (string);
+}
 
 /* do the old thing, if we cannot find the relevant database */
 static __inline__ int use_grep (char *page, char *manpath)
@@ -315,9 +357,9 @@ static char *get_whatis (struct mandata *info, const char *page)
 /* print out any matches found */
 static void display (struct mandata *info, char *page)
 {
-	char *string, *whatis;
+	char *string, *whatis, *string_conv;
 	const char *page_name;
-	int line_len, string_len, rest;
+	int line_len, rest;
 
 	whatis = get_whatis (info, page);
 	
@@ -340,19 +382,26 @@ static void display (struct mandata *info, char *page)
 		string = strappend (string, " [", info->pointer, "]", NULL);
 
 	if (strlen (string) < (size_t) 20) {
-		printf ("%-20s - ", string);
-		string_len = 23;
-	} else {
-		printf ("%s - ", string);
-		string_len = strlen (string) + 3;
+		int i;
+		string = xrealloc (string, 21);
+		for (i = strlen (string); i < 20; ++i)
+			string[i] = ' ';
+		string[i] = '\0';
 	}
-	rest = line_len - string_len;
-	if (!long_output && strlen (whatis) > (size_t) rest)
-		printf ("%.*s...\n", rest - 3, whatis);
-	else
-		printf ("%s\n", whatis);
+	string = strappend (string, " - ", NULL);
+
+	rest = line_len - strlen (string);
+	if (!long_output && strlen (whatis) > (size_t) rest) {
+		whatis[rest - 3] = '\0';
+		string = strappend (string, whatis, "...\n", NULL);
+	} else
+		string = strappend (string, whatis, "\n", NULL);
+
+	string_conv = simple_convert (conv_to_locale, string);
+	fputs (string_conv, stdout);
 
 	free (whatis);
+	free (string_conv);
 	free (string);
 }
 
@@ -690,22 +739,33 @@ int main (int argc, char *argv[])
 	int c;
 	char *manp = NULL;
 	const char *alt_systems = "";
-	char *llocale = NULL, *locale;
+	char *multiple_locale = NULL, *locale = NULL, *internal_locale;
+#ifdef HAVE_ICONV
+	char *locale_charset;
+#endif
 	int option_index;
 	int status = OK;
 
 	program_name = xstrdup (basename (argv[0]));
 
 	/* initialise the locale */
-	locale = xstrdup (setlocale (LC_ALL, ""));
-	if (!locale) {
+	if (!setlocale (LC_ALL, ""))
 		/* Obviously can't translate this. */
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
-		locale = xstrdup ("C");
-	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
+
+	internal_locale = setlocale (LC_MESSAGES, NULL);
+	/* Use LANGUAGE only when LC_MESSAGES locale category is
+	 * neither "C" nor "POSIX". */
+	if (internal_locale && strcmp (internal_locale, "C") &&
+	    strcmp (internal_locale, "POSIX")) {
+		multiple_locale = getenv ("LANGUAGE");
+		if (multiple_locale && *multiple_locale)
+			internal_locale = multiple_locale;
+	}
+	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, &option_index)) != EOF) {
@@ -718,7 +778,7 @@ int main (int argc, char *argv[])
 				quiet = 0;
 				break;
 			case 'L':
-				llocale = optarg;
+				locale = optarg;
 				break;
 			case 'm':
 				alt_systems = optarg;
@@ -772,22 +832,25 @@ int main (int argc, char *argv[])
 		}
 	}
 
-	/* close this locale and reinitialise in case a new locale was 
+#ifdef HAVE_SETLOCALE
+	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
-	if (llocale) {
-		setlocale (LC_ALL, llocale);
-		free (locale);
-		locale = xstrdup (llocale);
+	if (locale) {
+		free (internal_locale);
+		internal_locale = xstrdup (setlocale (LC_ALL, locale));
+		if (internal_locale == NULL)
+			internal_locale = xstrdup (locale);
+
 		debug ("main(): locale = %s, internal_locale = %s\n",
-		       llocale, locale);
-		if (locale) {
+		       locale, internal_locale);
+		if (internal_locale) {
 			extern int _nl_msg_cat_cntr;
-			if (locale[2] == '_' )
-				locale[2] = '\0';
-			setenv ("LANGUAGE", locale, 1);
+			setenv ("LANGUAGE", internal_locale, 1);
 			++_nl_msg_cat_cntr;
+			multiple_locale = NULL;
 		}
 	}
+#endif /* HAVE_SETLOCALE */
 
 	pipeline_install_sigchld ();
 
@@ -808,14 +871,41 @@ int main (int argc, char *argv[])
 	}
 
 	/* sort out the internal manpath */
-	if (manp == NULL)
-		manp = add_nls_manpath (get_manpath (alt_systems), locale);
-	else
+	if (manp == NULL) {
+		char tmp_locale[3];
+		int idx;
+
+		manp = add_nls_manpath (get_manpath (alt_systems),
+					internal_locale);
+		/* Handle multiple :-separated locales in LANGUAGE */
+		idx = multiple_locale ? strlen (multiple_locale) : 0;
+		while (idx) {
+			while (idx && multiple_locale[idx] != ':')
+				idx--;
+			if (multiple_locale[idx] == ':')
+				idx++;
+			tmp_locale[0] = multiple_locale[idx];
+			tmp_locale[1] = multiple_locale[idx + 1];
+			tmp_locale[2] = 0;
+			/* step back over preceding ':' */
+			if (idx) idx--;
+			if (idx) idx--;
+			debug ("checking for locale %s\n", tmp_locale);
+			manp = add_nls_manpath (manp, tmp_locale);
+		}
+	} else
 		free (get_manpath (NULL));
 
 	create_pathlist (manp, manpathlist);
 
 	apropos_seen = hash_create (&plain_hash_free);
+
+#ifdef HAVE_ICONV
+	locale_charset = strappend (NULL, get_locale_charset (), "//IGNORE",
+				    NULL);
+	conv_to_locale = iconv_open (locale_charset, "UTF-8");
+	free (locale_charset);
+#endif /* HAVE_ICONV */
 
 	while (optind < argc) {
 #if defined(POSIX_REGEX)		
@@ -848,6 +938,10 @@ int main (int argc, char *argv[])
 #endif /* POSIX_REGEX */
 	}
 
+#ifdef HAVE_ICONV
+	if (conv_to_locale != (iconv_t) -1)
+		iconv_close (conv_to_locale);
+#endif /* HAVE_ICONV */
 	hash_free (apropos_seen);
 	free_pathlist (manpathlist);
 	free (manp);

@@ -34,6 +34,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>	/* for chmod() */
+#include <dirent.h>
 
 #if defined(STDC_HEADERS)
 #  include <string.h>
@@ -94,6 +95,11 @@ extern char *extension;		/* for globbing.c */
 extern int force_rescan;	/* for check_mandirs.c */
 static char *single_filename = NULL;
 extern char *user_config_file;	/* for manp.c */
+#ifdef SECURE_MAN_UID
+struct passwd *man_owner;
+#endif
+static int purged = 0;
+static int strays = 0;
 
 /* default options */
 static const struct option long_options[] =
@@ -441,13 +447,74 @@ static short mandb (const char *catpath, const char *manpath)
 	return amount;
 }
 
+static short process_manpath (const char *manpath, int global_manpath)
+{
+	char *catpath;
+	short amount = 0;
+
+	if (global_manpath) { 	/* system db */
+		catpath = get_catpath (manpath, SYSTEM_CAT);
+		assert (catpath);
+	} else {		/* user db */
+		catpath = get_catpath (manpath, USER_CAT);
+		if (!catpath)
+			catpath = xstrdup (manpath);
+	}
+
+	force_rescan = 0;
+	if (purge) {
+		database = mkdbname (catpath);
+		purged += purge_missing (manpath, catpath);
+		free (database);
+		database = NULL;
+	}
+
+	push_cleanup (cleanup, NULL, 0);
+	push_cleanup (cleanup_sigsafe, NULL, 1);
+	if (single_filename) {
+		/* The file might be in a per-locale subdirectory that we
+		 * aren't processing right now.
+		 */
+		char *manpath_prefix = strappend (NULL, manpath, "/man", NULL);
+		if (STRNEQ (manpath_prefix, single_filename,
+		    strlen (manpath_prefix)))
+			amount += mandb (catpath, manpath);
+		free (manpath_prefix);
+		/* otherwise try the next manpath */
+	} else
+		amount += mandb (catpath, manpath);
+
+	if (!opt_test && amount) {
+		finish_up ();
+#ifdef SECURE_MAN_UID
+		if (global_manpath && euid == 0)
+			do_chown (man_owner->pw_uid);
+#endif /* SECURE_MAN_UID */
+	}
+	cleanup_sigsafe (NULL);
+	pop_cleanup ();
+	cleanup (NULL);
+	pop_cleanup ();
+	free (database);
+	database = NULL;
+
+	if (check_for_strays && amount) {
+		database = mkdbname (catpath);
+		strays += straycats (manpath);
+		free (database);
+		database = NULL;
+	}
+
+	free (catpath);
+
+	return amount;
+}
+
 int main (int argc, char *argv[])
 {
 	int c;
 	char *sys_manp;
 	short amount = 0;
-	int strays = 0;
-	int purged = 0;
 	int quiet_temp = 0;
 	char **mp;
 
@@ -456,10 +523,6 @@ int main (int argc, char *argv[])
 #ifdef __profile__
 	char *cwd;
 #endif /* __profile__ */
-
-#ifdef SECURE_MAN_UID
-	struct passwd *man_owner;
-#endif
 
 	program_name = xstrdup (basename (argv[0]));
 
@@ -580,67 +643,49 @@ int main (int argc, char *argv[])
 
 	for (mp = manpathlist; *mp; mp++) {
 		int global_manpath = is_global_mandir (*mp);
-		char *catpath;
-		short amount_changed = 0;
+		DIR *dir;
+		struct dirent *subdirent;
+		struct stat st;
 
-		if (global_manpath) { 	/* system db */
-		/*	if (access (catpath, W_OK) == 0 && !user) */
+		if (global_manpath) {	/* system db */
 			if (user)
 				continue;
-			catpath = get_catpath (*mp, SYSTEM_CAT);
-			assert (catpath);
 		} else {		/* user db */
-			catpath = get_catpath (*mp, USER_CAT);
-			if (!catpath)
-				catpath = *mp;
 			drop_effective_privs ();
 		}
 
-		force_rescan = 0;
-		if (purge) {
-			database = mkdbname (catpath);
-			purged += purge_missing (*mp, catpath);
-			free (database);
-			database = NULL;
+		amount += process_manpath (*mp, global_manpath);
+
+		dir = opendir (*mp);
+		if (!dir) {
+			error (0, errno, _("can't search directory %s"), *mp);
+			goto next_manpath;
 		}
 
-		push_cleanup (cleanup, NULL, 0);
-		push_cleanup (cleanup_sigsafe, NULL, 1);
-		if (single_filename) {
-			if (STRNEQ (*mp, single_filename, strlen (*mp)))
-				amount_changed += mandb (catpath, *mp);
-			/* otherwise try the next manpath */
-		} else
-			amount_changed += mandb (catpath, *mp);
+		while ((subdirent = readdir (dir)) != NULL) {
+			char *subdirpath;
 
-		amount += amount_changed;
+			/* Look for per-locale subdirectories. */
+			if (STREQ (subdirent->d_name, ".") ||
+			    STREQ (subdirent->d_name, ".."))
+				continue;
+			if (STRNEQ (subdirent->d_name, "man", 3))
+				continue;
 
-		if (!opt_test && amount_changed) {
-			finish_up ();
-#ifdef SECURE_MAN_UID
-			if (global_manpath && euid == 0)
-				do_chown (man_owner->pw_uid);
-#endif /* SECURE_MAN_UID */
-		}
-		cleanup_sigsafe (NULL);
-		pop_cleanup ();
-		cleanup (NULL);
-		pop_cleanup ();
-		free (database);
-		database = NULL;
-
-		if (check_for_strays && amount_changed) {
-			database = mkdbname (catpath);
-			strays += straycats (*mp);
-			free (database);
-			database = NULL;
+			subdirpath = strappend (NULL, *mp, "/",
+						subdirent->d_name, NULL);
+			if (stat (subdirpath, &st) == 0 &&
+			    S_ISDIR (st.st_mode))
+				amount += process_manpath (subdirpath,
+							   global_manpath);
+			free (subdirpath);
 		}
 
+		closedir (dir);
+
+next_manpath:
 		if (!global_manpath)
 			regain_effective_privs ();
-
-		if (catpath != *mp)
-			free (catpath);
 
 		chkr_garbage_detector ();
 	}

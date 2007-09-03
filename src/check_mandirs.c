@@ -264,7 +264,7 @@ void test_manfile (const char *file, const char *path)
 
 		lg.type = MANPAGE;
 		drop_effective_privs ();
-		find_name (ult, basename (file_copy), &lg);
+		find_name (ult, basename (file_copy), &lg, NULL);
 		free (file_copy);
 		regain_effective_privs ();
 
@@ -477,12 +477,44 @@ void reset_db_time (void)
 	free (MYDBM_DPTR (key));
 }
 
+/* Create directory containing database.
+ *
+ * I'm too lazy to implement mkdir -p properly; one level should do for the
+ * case at hand, namely per-locale databases.
+ */
+int make_database_directory (const char *db)
+{
+	char *dbcopy, *dbdir;
+	struct stat st;
+
+	if (!strchr (db, '/'))
+		return 0;
+
+	dbcopy = xstrdup (db);
+	dbdir = dirname (dbcopy);
+	if (stat (dbdir, &st) == 0)
+		goto success;
+	if (errno != ENOENT)
+		goto success; /* don't know, but we'll find out soon enough */
+	if (mkdir (dbdir, 0777) != 0) {
+		error (0, errno,
+		       _("can't create index cache directory %s"), dbdir);
+		return 1;
+	}
+success:
+	free (dbcopy);
+	return 0;
+}
+
 /* routine to prepare/create the db prior to calling testmandirs() */
 short create_db (const char *manpath)
 {
 	short amount;
 	
 	debug ("create_db(%s): %s\n", manpath, database);
+
+	if (make_database_directory (database) != 0)
+		return 0;
 
 	/* Open the db in CTRW mode to store the $ver$ ID */
 
@@ -515,6 +547,9 @@ short create_db (const char *manpath)
    filesystem */
 short update_db (const char *manpath)
 {
+	if (make_database_directory (database) != 0)
+		return 0;
+
 	dbf = MYDBM_RDOPEN (database);
 	if (dbf && dbver_rd (dbf)) {
 		MYDBM_CLOSE (dbf);
@@ -773,8 +808,13 @@ static short check_multi_key (const char *name, const char *content)
  */
 short purge_missing (const char *manpath, const char *catpath)
 {
+	struct stat st;
 	datum key;
 	short count = 0;
+
+	if (stat (database, &st) != 0)
+		/* nothing to purge */
+		return 0;
 
 	if (!quiet)
 		printf (_("Purging old database entries in %s...\n"), manpath);

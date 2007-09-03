@@ -220,3 +220,40 @@ char *trim_spaces (const char *s)
 		--length;
 	return xstrndup (s, length);
 }
+
+char *lang_dir (const char *filename)
+{
+	char *ld;	/* the lang dir: point to static data */
+	const char *fm;	/* the first "/man/" dir */
+	const char *sm;	/* the second "/man?/" dir */
+
+	ld = xstrdup ("");
+	if (!filename) 
+		return ld;
+
+	/* Check whether filename is in a man page hierarchy. */
+	fm = strstr (filename, "/man/");
+	if (!fm)
+		return ld;
+	sm = strstr (fm + 3, "/man");
+	if (!sm)
+		return ld;
+	if (sm[5] != '/')
+		return ld;
+	if (!strchr ("123456789lno", sm[4]))
+		return ld;
+
+	/* If there's no lang dir element, it's an English man page. */
+	if (sm == fm + 4)
+		return xstrdup ("C");
+
+	/* found a lang dir */
+	fm += 5;
+	sm = strchr (fm, '/');
+	if (!sm)
+		return ld;
+	free (ld);
+	ld = xstrndup (fm, sm - fm);
+	debug ("found lang dir element %s\n", ld);
+	return ld;
+}

@@ -59,6 +59,16 @@ Major changes since man-db 2.4.4:
 	o apropos now accepts the --and option to display only items that
 	  match all the supplied keywords.
 
+	o Databases are now created for non-English manual hierarchies. All
+	  database entries should be encoded in UTF-8; man-db converts from
+	  the character set of the manual hierarchy and to the character set
+	  specified in the user's locale as necessary.
+
+	o Per-locale directory handling has been improved. Directories such
+	  as "fr.UTF-8" may be used for occasions when it is appropriate to
+	  specify the character set but not the country, and so a full
+	  locale name is inconvenient.
+
 man-db 2.4.4 (12 February 2007)
 ===============================
 

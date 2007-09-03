@@ -1,3 +1,87 @@
+Mon Sep  3 11:38:11 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Create and use databases for non-English manual hierarchies (Debian
+	bug #29448). Extensive changes elsewhere to support this by means of
+	better UTF-8 handling and knowledge of more languages.
+
+	* src/check_mandirs.c (make_database_directory): New function.
+	  (create_db, update_db): Use it.
+	  (purge_missing): Check that the database exists before starting.
+	* src/mandb.c (process_manpath): New function, split out from main.
+	  Make the single_filename check aware that the file might be in a
+	  per-locale subdirectory that we aren't processing right now.
+	  (main): Use it. Move man_owner, purged, and strays to file scope.
+	  Build databases for all per-locale subdirectories.
+	* src/straycats.c (straycats): Constify manpath argument.
+	* src/whatis.c (main): Sync locale handling with src/man.c, in order
+	  to look up per-locale databases correctly. Based on a patch by
+	  Nicolas François (Debian bug #281811).
+	* include/manconfig.h.in (straycats): Update prototype.
+
+	* src/man.c (duplicate_candidates): New function to determine
+	  whether candidates are substantially duplicated, and if so in
+	  which direction. The logic is better than before: it now knows how
+	  to compare locales and pick the best available candidate for each
+	  language, and prefers UTF-8 candidates if everything else is
+	  equal.
+	  (add_candidate): Move duplication logic to duplicate_candidates.
+	  Adjust insertion handling so that we can drop old candidates in
+	  favour of new candidates.
+	* src/manp.c (check_and_give): Remove.
+	  (unpack_locale_bits): New function, inspired by _nl_explode_name
+	  in libintl.
+	  (free_locale_bits): New function.
+	  (add_nls_manpath): Instead of trying individual directories (which
+	  doesn't work so well with character set aliasing), iterate over
+	  all subdirectories of each manpath entry and add all those
+	  matching the current locale's language and (if specified)
+	  territory. This now includes ll.CODESET as well as more
+	  conventional locale names.
+	* src/manp.h: Declare 'struct locale_bits'. Prototype
+	  unpack_locale_bits and free_locale_bits.
+
+	* src/man.c (lang_dir): Move to ...
+	* src/util.c (lang_dir): ... here.
+	* src/lexgrog.l (long_options, args, main): New -E/--encoding
+	  option.
+	  (usage): Document it.
+	  (cs_name, hu_name, ja_name, ru_name): Recode to UTF-8.
+	  (find_name): Add encoding argument. Guess the page's encoding from
+	  its filesystem location (or use encoding if supplied), and add an
+	  iconv command to recode it to UTF-8.
+	* man/man1/lexgrog.man1 (SYNOPSIS, OPTIONS): Document --encoding.
+	* src/straycats.c (check_for_stray): Guess the page's encoding from
+	  its filesystem location, and add an iconv command to recode it to
+	  UTF-8.
+	* src/whatis.c (simple_convert): New function to simplify iconv
+	  handling.
+	  (display): Convert output from UTF-8 to locale charset.
+	  (main): Initialise iconv descriptor.
+	* include/manconfig.h.in (find_name): Update prototype.
+	  (lang_dir): Add prototype.
+	* configure.ac: Call AM_ICONV.
+	* src/Makefile.in (mandb, lexgrog): Add encodings.o.
+	* src/Makefile.in (whatis, apropos): Add encodings.o and
+	  $(LIBICONV).
+
+	* src/encodings.c (directory_table): Add Serbian -> ISO-8859-5.
+	* src/lexgrog.l (cs_name, hu_name): Expand character classes
+	  containing non-ASCII characters into the form (a|b|...); flex
+	  doesn't understand Unicode well enough to deal with them
+	  otherwise.
+	  (cs_name, ru_name): Add more possible translations.
+	  (ko_name, sk_name, sr_name, tr_name, zh_CN_name, zh_TW_name): Add.
+	  (find_name_decompressed): Ignore exit status from decompressor
+	  pipeline; iconv may exit non-zero on misencoded pages, but if we
+	  manage to extract a whatis from it anyway then it doesn't really
+	  matter.
+
+	* src/whatis.c (usage): Document -L/--locale.
+	* man/man1/apropos.man1 (SYNOPSIS, OPTIONS): Likewise.
+	* man/man1/whatis.man1 (SYNOPSIS, OPTIONS): Likewise.
+
+	* docs/NEWS: Document this.
+
 Sun Sep  2 01:21:11 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	Add limited character set aliasing support.

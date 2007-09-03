@@ -90,6 +90,7 @@ extern char *canonicalize_file_name __P ((__const char *__name));
 #include "lib/pipeline.h"
 #include "lib/decompress.h"
 #include "descriptions.h"
+#include "encodings.h"
 #include "manp.h"
 #include "security.h"
 
@@ -199,6 +200,7 @@ static int check_for_stray (void)
 			pipeline *decomp;
 			struct mandata *exists;
 			lexgrog lg;
+			char *lang, *page_encoding;
 			char *mandir_copy;
 			const char *mandir_base;
 			command *col_cmd;
@@ -240,6 +242,15 @@ static int check_for_stray (void)
 				error (0, errno, _("can't open %s"), catdir);
 				goto next_exists;
 			}
+
+			lang = lang_dir (mandir);
+			page_encoding = get_page_encoding (lang);
+			if (page_encoding && !STREQ (page_encoding, "UTF-8"))
+				pipeline_command_args (decomp, "iconv", "-c",
+						       "-f", page_encoding,
+						       "-t", "UTF-8", NULL);
+			free (page_encoding);
+			free (lang);
 
 			col_cmd = command_new_argstr
 				(get_def_user ("col", COL));
@@ -357,7 +368,7 @@ static int open_catdir (void)
 	return strays;
 }
 
-int straycats (char *manpath)
+int straycats (const char *manpath)
 {
 	char *catpath;
 	int strays;

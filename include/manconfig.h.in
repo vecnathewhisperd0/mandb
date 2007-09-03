@@ -362,12 +362,12 @@ extern struct compression *comp_info (const char *filename, int want_stem);
 extern struct compression *comp_file (const char *filename);
 
 /* straycats.c */
-extern int straycats (char *mandir);
+extern int straycats (const char *manpath);
 
 /* lexgrog.l */
 struct lexgrog;
 extern int find_name (const char *file, const char *filename,
-		      struct lexgrog *p_lg);
+		      struct lexgrog *p_lg, const char *encoding);
 extern int find_name_decompressed (struct pipeline *p, const char *filename,
 				   struct lexgrog *p_lg);
 
@@ -379,6 +379,7 @@ extern int do_system (struct pipeline *pl);
 extern char *escape_shell (const char *unesc);
 extern int remove_directory (const char *directory);
 extern char *trim_spaces (const char *s);
+extern char *lang_dir (const char *filename);
 
 #ifndef HAVE_BASENAME
 extern char *basename ();

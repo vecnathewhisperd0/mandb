@@ -13,6 +13,8 @@ lexgrog \- parse header information in man pages
 .B lexgrog
 .RB [\| \-m \||\| -c \|]
 .RB [\| \-fhwV \|]
+.RB [\| \-s
+.IR encoding \|]
 .I file
 \&.\|.\|.
 .SH DESCRIPTION
@@ -74,6 +76,10 @@ formatting with
 .B nroff
 or
 .BR troff .
+.TP
+\fB\-e\fP \fIencoding\fP, \fB\-\-encoding\fP \fIencoding\fP
+Override the guessed character set for the page to
+.IR encoding .
 .TP
 .B \-h, \-\-help
 Print a help message and exit.

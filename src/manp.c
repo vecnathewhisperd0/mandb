@@ -27,6 +27,14 @@
  * The University of Texas at Austin
  * Austin, Texas  78712
  *
+ * unpack_locale_bits is derived from _nl_explode_name in libintl:
+ * Copyright (C) 1995-1998, 2000-2001, 2003, 2005 Free Software Foundation,
+ * Inc.
+ * Contributed by Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1995.
+ * This was originally LGPL v2 or later, but I (Colin Watson) hereby
+ * exercise my option under section 3 of LGPL v2 to distribute it under the
+ * GPL v2 or later as above.
+ *
  * Wed May  4 15:44:47 BST 1994 Wilf. (G.Wilford@ee.surrey.ac.uk): changes
  * to get_dirlist() and manpath().
  *
@@ -44,6 +52,7 @@
 #include <sys/stat.h>
 #include <assert.h>
 #include <errno.h>
+#include <dirent.h>
 
 #if defined(STDC_HEADERS)
 #  include <stdlib.h>
@@ -75,6 +84,7 @@ extern int errno;
 #include "lib/getcwdalloc.h"
 #include "lib/cleanup.h"
 #include "security.h"
+#include "encodings.h"
 #include "manp.h"
 
 struct list {
@@ -353,30 +363,82 @@ char *cat_manpath (char *manp)
 }		
 
 static char *
-check_and_give (const char *path, const char *locale)
-{
-	char *result = NULL, *testdir;
-	int test;
-
-	testdir = strappend (NULL, path, "/", locale, NULL);
-	test = is_directory (testdir);
-
-	if (test == 1) {
-		debug ("check_and_give(): adding %s\n", testdir);
-
-		result = xstrdup (testdir);	/* I do not like side effects */
-	} else if (test == 0) 
-		gripe_not_directory (testdir);
-	
-	free (testdir);
-
-	return result;
-}
-
-static char *
 add_to_manpath (char *manpath, const char *path)
 {
 	return pathappend (manpath, path);
+}
+
+/* Unpack a glibc-style locale into its component parts.
+ *
+ * This function was inspired by _nl_explode_name in libintl; I've rewritten
+ * it here with extensive modifications in order not to require libintl or
+ * glibc internals, because this API is more convenient for man-db, and to
+ * be consistent with surrounding style. I also dropped the normalised
+ * codeset handling, which we don't need here.
+ */
+void unpack_locale_bits (const char *locale, struct locale_bits *bits)
+{
+	const char *p, *start;
+
+	bits->language = NULL;
+	bits->territory = NULL;
+	bits->codeset = NULL;
+	bits->modifier = NULL;
+
+	/* Now we determine the single parts of the locale name. First look
+	 * for the language. Termination symbols are '_', '.', and '@'.
+	 */
+	p = locale;
+	while (*p && *p != '_' && *p != '.' && *p != '@')
+		++p;
+	if (p == locale) {
+		/* This does not make sense: language has to be specified.
+		 * Use this entry as it is without exploding. Perhaps it is
+		 * an alias.
+		 */
+		bits->language = xstrdup (locale);
+		goto out;
+	}
+	bits->language = xstrndup (locale, p - locale);
+
+	if (*p == '_') {
+		/* Next is the territory. */
+		start = ++p;
+		while (*p && *p != '.' && *p != '@')
+			++p;
+		bits->territory = xstrndup (start, p - start);
+	}
+
+	if (*p == '.') {
+		/* Next is the codeset. */
+		start = ++p;
+		while (*p && *p != '@')
+			++p;
+		bits->codeset = xstrndup (start, p - start);
+	}
+
+	if (*p == '@')
+		/* Next is the modifier. */
+		bits->modifier = xstrdup (++p);
+
+out:
+	if (!bits->territory)
+		bits->territory = xstrdup ("");
+	if (!bits->codeset)
+		bits->codeset = xstrdup ("");
+	if (!bits->modifier)
+		bits->modifier = xstrdup ("");
+}
+
+/* Free the contents of a locale_bits structure populated by
+ * unpack_locale_bits. Does not free the pointer argument.
+ */
+void free_locale_bits (struct locale_bits *bits)
+{
+	free (bits->language);
+	free (bits->territory);
+	free (bits->codeset);
+	free (bits->modifier);
 }
 
 
@@ -385,7 +447,7 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 #ifdef HAVE_SETLOCALE
 	char *manpath = NULL;
 	char *path;
-	char *temp_locale;
+	struct locale_bits lbits;
 	char *omanpathlist = xstrdup (manpathlist);
 	char *manpathlist_ptr = manpathlist;
 
@@ -393,41 +455,49 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 
 	if (locale == NULL || *locale == '\0' || *locale == 'C')
 		return manpathlist;
-
-	temp_locale = xstrdup (locale);
+	unpack_locale_bits (locale, &lbits);
 
 	for (path = strsep (&manpathlist_ptr, ":"); path;
-	     path = strsep (&manpathlist_ptr, ":") ) {
+	     path = strsep (&manpathlist_ptr, ":")) {
+		DIR *mandir = opendir (path);
+		if (!mandir)
+			continue;
 
-		static char locale_delims[] = "@,._";
-		char *delim, *tempo;
-		char *testpath;
+		for (;;) {
+			struct dirent *mandirent = readdir (mandir);
+			const char *name;
+			struct locale_bits mbits;
+			char *fullpath;
 
-		strcpy (temp_locale, locale);
+			if (!mandirent)
+				break;
 
-		testpath = check_and_give (path, temp_locale);
-		if (testpath) {
-			manpath = add_to_manpath (manpath, testpath);
-			free (testpath);
-		}
-		for (delim = locale_delims; *delim != '\0'; ++delim) {
-			tempo = strchr (temp_locale, *delim);
-			if (tempo) {
-				/* Strip out the rest of the line */
-				*tempo = '\0';
-				testpath = check_and_give (path, temp_locale);
-				if (testpath) {
-					manpath = add_to_manpath (manpath,
-								  testpath);
-					free (testpath);
-				}
+			name = mandirent->d_name;
+			if (STREQ (name, ".") || STREQ (name, ".."))
+				continue;
+			if (STRNEQ (name, "man", 3))
+				continue;
+			fullpath = strappend (NULL, path, "/", name, NULL);
+			if (is_directory (fullpath) != 1) {
+				free (fullpath);
+				continue;
 			}
+
+			unpack_locale_bits (name, &mbits);
+			if (STREQ (lbits.language, mbits.language) &&
+			    (!*mbits.territory ||
+			     STREQ (lbits.territory, mbits.territory)))
+				manpath = add_to_manpath (manpath, fullpath);
+			free_locale_bits (&mbits);
+			free (fullpath);
 		}
 	}
+
+	free_locale_bits (&lbits);
+
 	/* After doing all the locale stuff we add the manpath to the *END*
 	 * so the locale dirs are checked first on each section */
 	manpath = add_to_manpath (manpath, omanpathlist);
-	free (temp_locale);
 	free (omanpathlist);
 
 	free (manpathlist);
