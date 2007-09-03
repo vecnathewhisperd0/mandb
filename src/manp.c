@@ -453,9 +453,13 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 
 	debug ("add_nls_manpath(): processing %s\n", manpathlist);
 
-	if (locale == NULL || *locale == '\0' || *locale == 'C')
+	if (locale == NULL || *locale == '\0')
 		return manpathlist;
 	unpack_locale_bits (locale, &lbits);
+	if (STREQ (lbits.language, "C") || STREQ (lbits.language, "POSIX")) {
+		free_locale_bits (&lbits);
+		return manpathlist;
+	}
 
 	for (path = strsep (&manpathlist_ptr, ":"); path;
 	     path = strsep (&manpathlist_ptr, ":")) {
