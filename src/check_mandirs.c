@@ -120,11 +120,12 @@ static void gripe_rwopen_failed (void)
 	}
 }
 
-/* take absolute filename and path (for ult_src) and do sanity checks on 
-   file. Also check that file is non-zero in length and is not already in
-   the db. If not, find its ult_src() and see if we have the whatis cached, 
-   otherwise cache it in case we trace another manpage back to it. Next,
-   store it in the db along with any references found in the whatis. */
+/* Take absolute filename and path (for ult_src) and do sanity checks on
+ * file. Also check that file is non-zero in length and is not already in
+ * the db. If not, find its ult_src() and see if we have the whatis cached,
+ * otherwise cache it in case we trace another manpage back to it. Next,
+ * store it in the db along with any references found in the whatis.
+ */
 void test_manfile (const char *file, const char *path)
 {
 	char *base_name;
@@ -158,14 +159,16 @@ void test_manfile (const char *file, const char *path)
 		return;
 	}
 
-	/* see if we already have it, before going any further, this will
-	   save both an ult_src() a find_name(), amongst other time wastes */
+	/* See if we already have it, before going any further. This will
+	 * save both an ult_src() and a find_name(), amongst other wastes of
+	 * time.
+	 */
 	exists = dblookup_exact (base_name, info.ext, 1);
 
-	/* Ensure we really have the actual page. Gzip keeps the mtime
-	   the same when it compresses, so we have to compare comp 
-	   extensions also */
-
+	/* Ensure we really have the actual page. Gzip keeps the mtime the
+	 * same when it compresses, so we have to compare compression
+	 * extensions as well.
+	 */
 	if (exists) {
 		if (strcmp (exists->comp, info.comp ? info.comp : "-") == 0) {
 			if (exists->_st_mtime == info._st_mtime 
@@ -199,8 +202,9 @@ void test_manfile (const char *file, const char *path)
 	}
 
 	/* Check if it happens to be a symlink/hardlink to something already
-	   in our cache. This just does some extra checks to avoid scanning
-	   links quite so many times. */
+	 * in our cache. This just does some extra checks to avoid scanning
+	 * links quite so many times.
+	 */
 	{
 		/* Avoid too much noise in debug output */
 		int save_debug = debug_level;
@@ -224,10 +228,10 @@ void test_manfile (const char *file, const char *path)
 			debug ("\ntest_manfile(): link not in cache:\n"
 			       " source = %s\n"
 			       " target = %s\n", file, ult);
-		/* Trace the file to its ultimate source, else we'll be
-		   looking for whatis info in files containing only
-		   '.so manx/foo.x', which will give us an unobtainable
-		   whatis for the entry. */
+		/* Trace the file to its ultimate source, otherwise we'll be
+		 * looking for whatis info in files containing only '.so
+		 * manx/foo.x', which will give us an unobtainable whatis
+		 * for the entry. */
 		ult = ult_src (file, path, &buf,
 			       SO_LINK | SOFT_LINK | HARD_LINK);
 	}
