@@ -1,0 +1,162 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.\" Man page for %apropos%
+.\"
+.\" Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
+.\"
+.\" You may distribute under the terms of the GNU General Public
+.\" License as specified in the file COPYING that comes with the 
+.\" man-db distribution.
+.\"
+.\" Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+.\" 
+.pc ""
+.TH %thapropos% 1 %date% %version% "Utilitaires de l'afficheur des pages de manuel"
+.SH NOM
+%apropos% \- cherche le nom et la description des pages de manuel
+.SH SYNOPSIS
+\fB%apropos%\fP [\|\fB\-dhV\fP\|] [\|\fB\-e\fP\||\|\fB\-w\fP\||\|\fB\-r\fP\|] [\|\fB\-s\fP 
+\fIsection\fP\|] [\|\fB\-m\fP \fIsystème\fP\|[\|,.\|.\|.\|]\|] [\|\fB\-M\fP \fIchemin\fP\|] 
+[\|\fB\-C\fP \fIfichier\fP\|] \fImot\-clé\fP \&.\|.\|.
+.SH DESCRIPTION
+Chaque page de manuel comporte une courte description. \fB%apropos%\fP 
+recherche et affiche cette description pour chaque page correspondant à 
+\fImot\-clé\fP.
+
+\fImot\-clé\fP est, par défaut, considéré en tant qu'expression rationnelle, 
+comme avec l'option \fB\-r\fP, mais peut aussi contenir des jokers (wildcards) 
+avec l'option \fB\-w\fP, ou rechercher une correspondance exacte avec le mot\-clé 
+grâce à l'option \fB\-e\fP. Avec ces options, il peut être nécessaire de placer 
+\fImot\-clé\fP entre guillemets (simples ou doubles) ou d'«\ échapper\ » avec «\ \\\ » les caractères spéciaux afin d'empêcher l'interpréteur de commandes de 
+les interpréter.
+
+Les règles standard permettent de faire des recherches sur le nom des pages 
+ainsi que sur des mots de la description.
+.SH OPTIONS
+.TP
+\fB\-d, \-\-debug\fP
+Affiche les informations de mise au point.
+.TP
+\fB\-v, \-\-verbose\fP
+Affiche des messages d'avertissement étendus.
+.TP
+\fB\-r, \-\-regex\fP
+Interprète chaque mot\-clé comme une expression rationnelle. C'est le 
+comportement par défaut. Chaque mot\-clé sera indépendamment comparé avec le 
+nom des pages et avec leur description. Il peut correspondre à n'importe 
+quelle partie de l'un ou l'autre. La recherche n'est pas limitée aux 
+frontières de mot.
+.TP
+\fB\-w, \-\-wildcard\fP
+Interprète chaque mot\-clé comme un motif contenant des jokers (wildcards) 
+compréhensibles par l'interpréteur de commandes. Chaque motif sera comparé 
+indépendamment avec le nom des pages et avec leur description. Si \fB\-\-exact\fP 
+est employé, la recherche n'aboutira que si le motif correspond au nom 
+complet de la page ou à la totalité de la description. Sinon, les 
+correspondances entre le motif et des mots complets de la description seront 
+également recherchées.
+.TP
+\fB\-e, \-\-exact\fP
+Chaque mot\-clé est comparé exactement avec le nom des pages et avec leur 
+description.
+.TP
+\fB\-s\fP \fIsection\fP, \fB\-\-section\fP \fIsection\fP
+La recherche est limitée à la section de manuel indiquée. Si \fIsection\fP est 
+une section simple, par exemple «\ 3\ », alors la liste des descriptions 
+affichées inclura les pages des sections «\ 3\ », «\ 3perl\ », «\ 3x\ », et 
+ainsi de suite. Par contre, si \fIsection\fP est plus précis, par exemple «\ 3perl\ », alors la liste inclura seulement les pages de cette partie de 
+section.
+.\"
+.\" Due to the rather silly limit of 6 args per request in some `native'
+.\" *roff compilers, we have do the following to get the two-line
+.\" hanging tag on one line. .PP to begin a new paragraph, then the
+.\" tag, then .RS (start relative indent), the text, finally .RE
+.\" (end relative indent).
+.\"
+.PP
+\fB\-m\fP \fIsystème\fP\|[\|,.\|.\|.\|]\|\fB,\fP 
+\fB\-\-systems=\fP\fIsystème\fP\|[\|,.\|.\|.\|]
+.RS
+Si le système a accès aux pages de manuel d'autres systèmes d'exploitation, 
+elles peuvent être recherchées en utilisant cette option. Pour rechercher la 
+description des pages de manuel de NewOS, il faut employer l'option \fB\-m\fP 
+\fBNewOS\fP.
+
+Le \fIsystème\fP indiqué peut être une suite de noms de systèmes 
+d'exploitation, séparés par des virgules. Pour inclure une recherche sur le 
+\fBwhatis\fP du système natif, il faut inclure le nom système «\ \fBman\fP\ » dans 
+la chaîne fournie en argument. Cette option remplacera la variable 
+d'environnement $\fBSYSTEM\fP.
+.RE
+.TP
+\fB\-M\ \fP\fIliste_de_chemins\fP\fB,\ \-\-manpath=\fP\fIliste_de_chemins\fP
+Indique une liste de structures hiérarchiques de pages de manuel, délimitées 
+par des «\ :\ », à utiliser lors des recherches. Par défaut, \fB%apropos%\fP 
+utilise la variable d'environnement $\fBMANPATH\fP, à moins qu'elle ne soit 
+vide ou ait été supprimée. Dans ce cas, il détermine la liste appropriée des 
+chemins d'accès aux pages de manuel, en se basant sur la variable 
+d'environnement $\fBPATH\fP. Cette option remplace le contenu de $\fBMANPATH\fP.
+.TP
+\fB\-C\ \fP\fIfichier\fP\fB,\ \-\-config\-file=\fP\fIfichier\fP
+Utilise le fichier de configuration indiqué au lieu du fichier par défaut 
+\fI~/.manpath\fP.
+.TP
+\fB\-h, \-\-help\fP
+Affiche un message d'aide et s'arrête.
+.TP
+\fB\-V, \-\-version\fP
+Affiche le numéro de version.
+.SH "VALEUR DE RETOUR"
+.TP
+\fB0\fP
+Programme exécuté sans erreur.
+.TP
+\fB1\fP
+Erreur d'utilisation, de syntaxe ou de fichier de configuration.
+.TP
+\fB2\fP
+Erreur d'exécution.
+.TP
+\fB16\fP
+Rien n'a été trouvé selon les critères indiqués.
+.SH ENVIRONNEMENT
+.TP
+\fBSYSTEM\fP
+Si $\fBSYSTEM\fP est définie, l'effet sera le même que si on l'avait indiqué 
+comme argument de l'option \fB\-m\fP.
+.TP
+\fBMANPATH\fP
+Si $\fBMANPATH\fP est définie, sa valeur est interprétée comme une liste 
+d'éléments, séparés par «\ :\ », représentant les chemins d'accès aux 
+structures hiérarchiques de pages de manuel.
+.TP
+\fBPOSIXLY_CORRECT\fP
+Si $\fBPOSIXLY_CORRECT\fP est définie, même avec une valeur nulle, \fB%apropos%\fP 
+fera, par défaut, une recherche selon une expression rationnelle, comme si 
+l'option «\ \fB\-r\fP\ » avait été spécifiée. Il s'agit actuellement du 
+comportement par défaut.
+.SH FICHIERS
+.TP
+\fI/usr/share/man/index.(bt|db|dir|pag)\fP
+\fBBase de données d'indexation\fP globale habituelle.
+.TP
+\fI/var/cache/man/index.(bt|db|dir|pag)\fP
+\fBBase de données d'indexation\fP globale de remplacement ou conforme à FHS.
+.TP
+\fI/usr/share/man/\|.\|.\|.\|/whatis\fP
+Base de données texte \fBwhatis\fP traditionnelle.
+.SH "VOIR AUSSI"
+\fB%whatis%\fP(1), \fB%man%\fP(1).
+.SH AUTEUR
+.nf
+Wilf. (G.Wilford@ee.surrey.ac.uk).
+Fabrizio Polacco (fpolacco@debian.org).
+.fi
+.SH TRADUCTION
+Valéry Perrin <valery.perrin.debian@free.fr> le 2 janvier 2006.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable via la commande  «\ man -L en nom_de_la_page\ ».
+
+N'hésitez pas à signaler à l'auteur ou au traducteur, selon le cas, toute erreur dans cette page de manuel.

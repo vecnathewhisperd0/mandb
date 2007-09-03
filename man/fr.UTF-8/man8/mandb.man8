@@ -1,0 +1,190 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+'\" t
+.\" Man page for mandb
+.\"
+.\" Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
+.\"
+.\" You may distribute under the terms of the GNU General Public
+.\" License as specified in the file COPYING that comes with the
+.\" man-db distribution.
+.\" 
+.\" Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+.\"
+.pc ""
+.TH %thmandb% 8 %date% %version% "Utilitaires de l'afficheur des pages de manuel"
+.SH NOM
+%mandb% \- crée ou met à jour les \fBbases de données d'indexation\fP des pages 
+de manuel.
+.SH SYNOPSIS
+\fB%mandb%\fP [\|\fB\-dqsucp\fP\||\|\fB\-h\fP\||\|\fB\-V\fP\|] [\|\fB\-C\fP \fIfichier\fP\|] 
+[\|\fIchemin_de_man\fP\|]
+.br
+\fB%mandb%\fP [\|\fB\-dqsu\fP\|] [\|\fB\-C\fP \fIfichier\fP\|] \fB\-f\fP \fInom_de_fichier\fP\ \&.\|.\|.
+.SH DESCRIPTION
+\fB%mandb%\fP est employé pour initialiser ou mettre à jour manuellement les 
+\fBbases de données d'indexation\fP qui sont habituellement exploitées par 
+\fB%man%\fP. Ces bases de données forment un «\ cache\ » du système de fichiers 
+qui contient les pages de manuel. Elles contiennent l'état actuel du système 
+de pages de manuel ainsi que les informations qui y sont stockées. Elles 
+sont exploitées par les utilitaires de man\-db pour accroître leur vitesse et 
+leurs fonctionnalités.
+
+Lors de la création ou de la mise à jour d'une \fBbase de données 
+d'indexation\fP, \fB%mandb%\fP avertira des mauvaises requêtes ROFF .so, des noms 
+de fichier erronés et des pages de manuel depuis lesquelles la partie 
+\fBwhatis\fP ne peut pas être analysée.
+
+On peut préciser à \fB%mandb%\fP une liste de structures hiérarchiques de pages 
+de manuel. Les éléments de la liste sont délimités par «\ :\ ». Cette liste 
+remplacera celle du système, déterminée à partir des informations trouvées 
+dans le fichier de configuration de man\-db.
+.SH "BASE DE DONNÉES D'INDEXATION"
+\fB%mandb%\fP peut être compilé pour supporter un des types suivants de bases 
+de données.
+
+.TS
+tab (@);
+l l l l.
+Nom@Type@Async@Nom de Fichier
+_
+Berkeley db@Arbre Binaire@Oui@\fIindex.bt\fP
+GNU gdbm v >= 1.6@Hachage@Oui@\fIindex.db\fP
+GNU gdbm v < 1.6@Hachage@Non@\fIindex.db\fP
+UNIX ndbm@Hachage@Non@\fIindex.(dir|pag)\fP
+.TE
+
+Les moteurs de bases de données qui gèrent les mises à jour asynchrones 
+accroissent la vitesse au prix d'un risque de corruption en cas d'arrêt 
+anormal. Dans le cas, peu probable, où cela se produirait, il serait 
+nécessaire de réexécuter \fB%mandb%\fP avec l'option \fB\-c\fP pour recréer les 
+bases de données à partir de zéro.
+.SH OPTIONS
+.TP
+\fB\-d, \-\-debug\fP
+Génère des informations de mise au point.
+.TP
+\fB\-q, \-\-quiet\fP
+Ne génère pas d'avertissement.
+.TP
+\fB\-s, \-\-no\-straycats\fP
+Évite de perdre du temps à rechercher ou à ajouter, aux bases de données, 
+des informations concernant les fichiers «\ cat\ » parasites.
+.TP
+\fB\-p, \-\-no\-purge\fP
+Évite de perdre du temps à vérifier les pages de manuel supprimées et à les 
+purger des bases de données.
+.TP
+\fB\-c, \-\-create\fP
+Par défaut, \fB%mandb%\fP essaiera de mettre à jour les bases de données 
+précédemment créées. Si une base de données n'existe pas, elle sera 
+crée. Cette option force \fB%mandb%\fP à supprimer les bases de données 
+existantes et à les recréer à partir de zéro. Cette option entraîne l'option 
+\fB\-\-no\-purge\fP. Cela peut être nécessaire si une base de données est 
+corrompue ou si un nouveau système de gestion de base de données est 
+implanté à l'avenir.
+.TP
+\fB\-u, \-\-user\-db\fP
+Crée seulement des bases de données «\ utilisateur\ », même si on possède 
+les permissions d'écriture nécessaires pour créer des bases de données «\ système\ ».
+.TP
+\fB\-t, \-\-test\fP
+Exécute les contrôles de validité des pages de manuel de la liste des 
+structures hiérarchiques du chemin de recherche. Avec cette option, 
+\fB%mandb%\fP ne modifie pas les bases de données existantes.
+.TP
+\fB\-f, \-\-nom_de_fichier\fP
+Met à jour seulement les entrées correspondant au nom du fichier 
+donné. Cette option n'est pas d'un usage courant. Elle est utilisée par 
+\fB%man%\fP, lorsqu'il a été compilée avec l'option \fBMAN_DB_UPDATES\fP, et qu'il 
+constate qu'une page n'est pas à jour. Cette option induit l'option \fB\-p\fP et 
+annule les options \fB\-c\fP et \fB\-s\fP.
+.TP
+\fB\-C\ \fP\fIfichier\fP\fB,\ \-\-config\-file=\fP\fIfichier\fP
+Utilise le fichier de configuration indiqué au lieu du fichier par défaut 
+\fI~/.manpath\fP.
+.TP
+\fB\-h, \-\-help\fP
+Affiche un mode d'emploi puis s'arrête.
+.TP
+\fB\-V, \-\-version\fP
+Affiche la version puis s'arrête.
+.SH "VALEUR DE RETOUR"
+.TP
+\fB0\fP
+Programme exécuté sans erreur.
+.TP
+\fB1\fP
+Erreur d'utilisation, de syntaxe ou de fichier de configuration
+.TP
+\fB2\fP
+Erreur d'exécution.
+.TP
+\fB3\fP
+Un processus fils a échoué.
+.SH DIAGNOSTICS
+Les messages d'avertissement suivants peuvent être générés pendant la 
+construction de la base de données.
+.TP
+\fB<nom_de_fichier>: whatis parse for page(sec) failed\fP
+L'extraction de la/des ligne(s) de whatis à partir du 
+<nom_de_fichier> indiqué a échoué. Ceci est habituellement dû à une 
+page de manuel mal écrite, mais si beaucoup de messages de ce type sont 
+émis, il est probable que le système contienne des pages de manuel non 
+standard, incompatibles avec l'analyseur de whatis de man\-db. Consultez la 
+section \fBANALYSE WHATIS\fP de \fBlexgrog\fP(1) pour plus d'informations.
+.TP
+\fB<nom_de_fichier>: is a dangling symlink\fP
+<nom_de_fichier> n'existe pas mais est pointé par un lien 
+symbolique. Des informations complémentaires sont habituellement émises pour 
+identifier le <nom_de_fichier> du lien «\ en l'air\ ».
+.TP
+\fB<nom_de_fichier>: bad symlink or ROFF `.so' request\fP
+<nom_de_fichier> est un lien symbolique, ou contient une requête 
+ROFF, vers un fichier inexistant.
+.TP
+\fB<nom_de_fichier>: ignoring bogus filename\fP
+Le <nom_de_fichier> peut être ou non une page de manuel correcte, 
+mais son nom est invalide. Cela est habituellement dû à une page de manuel 
+appartenant à une section <x> stockée dans la section <y> 
+des pages de manuel.
+.TP
+\fB<nom_de_fichier_générique>: competing extensions\fP
+Le <nom_de_fichier_générique> n'a pas de correspondance unique. Ceci 
+est habituellement provoqué par l'existence d'une version compressée et 
+d'une version non compressée de la même page de manuel. Seul le plus récent 
+des fichiers correspondant au <nom_de_fichier_générique> sera 
+exploité.
+.SH FICHIERS
+.TP
+\fI%manpath_config_file%\fP
+Fichier de configuration de man\-db.
+.TP
+\fI/usr/man/index.(bt|db|dir|pag)\fP
+\fBBase de données d'indexation\fP globale habituelle.
+.TP
+\fI/var/catman/index.(bt|db|dir|pag)\fP
+\fBBase de données d'indexation\fP globale de remplacement ou conforme à 
+FSSTND.
+.TP
+\fI/var/cache/man/index.(bt|db|dir|pag)\fP
+\fBBase de données d'indexation\fP globale, conforme à FHS.
+.SH "VOIR AUSSI"
+\fB%man%\fP(1), \fBlexgrog\fP(1), \fBmanpath\fP(5), \fB%catman%\fP(8).
+.PP
+La section \fBANALYSE WHATIS\fP autrefois incluse dans cette page de manuel est 
+maintenant incorporée à \fBlexgrog\fP(1).
+.SH AUTEUR
+.nf
+Wilf. (G.Wilford@ee.surrey.ac.uk).
+Fabrizio Polacco (fpolacco@debian.org).
+Colin Watson (cjwatson@debian.org).
+.fi
+.SH TRADUCTION
+Valéry Perrin <valery.perrin.debian@free.fr> le 2 janvier 2006.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable via la commande  «\ man -L en nom_de_la_page\ ».
+
+N'hésitez pas à signaler à l'auteur ou au traducteur, selon le cas, toute erreur dans cette page de manuel.

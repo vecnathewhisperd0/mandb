@@ -21,9 +21,9 @@ include ../include/Defines
 
 ifeq ($(USE_NLS),yes)
   ifeq ($(strip $(LINGUAS)),)
-    NLS := $(wildcard $(srcdir)/*_*)
+    NLS := $(wildcard $(srcdir)/*.UTF-8)
   else
-    NLS := $(foreach lingua, $(LINGUAS), $(wildcard $(srcdir)/$(lingua)_*))
+    NLS := $(foreach lingua, $(LINGUAS), $(wildcard $(srcdir)/$(lingua)*.UTF-8))
   endif
   NLS := $(shell for x in $(NLS); do [ -e $$x/man1/man.man1 ] && echo $$x; done)
 endif
