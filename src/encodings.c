@@ -105,6 +105,7 @@ static struct directory_entry directory_table[] = {
 	/* These languages require a patched version of groff with the
 	 * ascii8 and nippon devices.
 	 */
+	{ "bg",		"CP1251",	"CP1251"		}, /* Bulgarian */
 	{ "cs",		"ISO-8859-2",	"ISO-8859-2"		}, /* Czech */
 	{ "hr",		"ISO-8859-2",	"ISO-8859-2"		}, /* Croatian */
 	{ "hu",		"ISO-8859-2",	"ISO-8859-2"		}, /* Hungarian */
@@ -115,6 +116,7 @@ static struct directory_entry directory_table[] = {
 	{ "sk",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovak */
 	{ "sr",		"ISO-8859-5",	"ISO-8859-5"		}, /* Serbian */
 	{ "tr",		"ISO-8859-9",	"ISO-8859-9"		}, /* Turkish */
+	{ "vi",		"TCVN5712-1",	"TCVN5712-1"		}, /* Vietnamese */
 	{ "zh_CN",	"EUC-CN",	"EUC-CN"		}, /* Simplified Chinese */
 	{ "zh_HK",	"BIG5HKSCS",	"BIG5HKSCS"		}, /* Traditional Chinese, Hong Kong */
 	{ "zh_TW",	"BIG5",		"BIG5"			}, /* Traditional Chinese */

@@ -168,6 +168,7 @@ comment		['.]\\{dbl_quote}
   * including non-ASCII characters must be written out as (a|b|c|d) rather
   * than [abcd].
   */
+bg_name		ИМЕ
 cs_name		(J[Mm](É|é|\\\('[Ee]|E|e)[Nn][Oo]|N(Á|á)[Zz][Ee][Vv])
 da_name		N[Aa][Vv][Nn]
 de_name		B[Ee][Zz][Ee][Ii][Cc][Hh][Nn][Uu][Nn][Gg]
@@ -189,9 +190,10 @@ sk_name		M[Ee][Nn][Oo]
 sr_name		НАЗИВ
 sv_name		N[Aa][Mm][Nn]
 tr_name		(İ|i)S(İ|i)M  
+vi_name		TÊN
 zh_CN_name	名{blank}?称{blank}?.*
 zh_TW_name	(名{blank}?稱|命令名){blank}?.*
-name		({cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{ko_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sk_name}|{sr_name}|{sv_name}|{tr_name}|{zh_CN_name}|{zh_TW_name})
+name		({bg_name}|{cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{ko_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sk_name}|{sr_name}|{sv_name}|{tr_name}|{vi_name}|{zh_CN_name}|{zh_TW_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */
