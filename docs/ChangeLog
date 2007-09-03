@@ -53,8 +53,9 @@
 	* src/straycats.c (check_for_stray): Guess the page's encoding from
 	  its filesystem location, and add an iconv command to recode it to
 	  UTF-8.
-	* src/whatis.c (display): Convert output from UTF-8 to locale
-	  charset.
+	* src/whatis.c (simple_convert): New function to simplify iconv
+	  handling.
+	  (display): Convert output from UTF-8 to locale charset.
 	  (main): Initialise iconv descriptor.
 	* include/manconfig.h.in (find_name): Update prototype.
 	  (lang_dir): Add prototype.

@@ -109,7 +109,7 @@ MYDBM_FILE dbf;
 int quiet = 1;
 
 #ifdef HAVE_ICONV
-iconv_t conv;
+iconv_t conv_to_locale;
 #endif /* HAVE_ICONV */
 
 #if defined(POSIX_REGEX) || defined(BSD_REGEX)
@@ -218,6 +218,37 @@ static void usage (int status)
 	exit (status);
 }
 #endif
+
+static char *simple_convert (iconv_t conv, char *string)
+{
+#ifdef HAVE_ICONV
+	if (conv != (iconv_t) -1) {
+		size_t string_conv_alloc = strlen (string) + 1;
+		char *string_conv = xmalloc (string_conv_alloc);
+		for (;;) {
+			char *inptr = string, *outptr = string_conv;
+			size_t inleft = strlen (string);
+			size_t outleft = string_conv_alloc - 1;
+			if (iconv (conv, (ICONV_CONST char **) &inptr, &inleft,
+				   &outptr, &outleft) == (size_t) -1 &&
+			    errno == E2BIG) {
+				string_conv_alloc <<= 1;
+				string_conv = xrealloc (string_conv,
+							string_conv_alloc);
+			} else {
+				/* Either we succeeded, or we've done our
+				 * best; go ahead and print what we've got.
+				 */
+				string_conv[string_conv_alloc - 1 - outleft] =
+					'\0';
+				break;
+			}
+		}
+		return string_conv;
+	} else
+#endif /* HAVE_ICONV */
+		return xstrdup (string);
+}
 
 /* do the old thing, if we cannot find the relevant database */
 static __inline__ int use_grep (char *page, char *manpath)
@@ -366,36 +397,11 @@ static void display (struct mandata *info, char *page)
 	} else
 		string = strappend (string, whatis, "\n", NULL);
 
-#ifdef HAVE_ICONV
-	if (conv != (iconv_t) -1) {
-		size_t string_conv_alloc = strlen (string) + 1;
-		string_conv = xmalloc (string_conv_alloc);
-		for (;;) {
-			char *inptr = string, *outptr = string_conv;
-			size_t inleft = strlen (string);
-			size_t outleft = string_conv_alloc - 1;
-			if (iconv (conv, (ICONV_CONST char **) &inptr, &inleft,
-				   &outptr, &outleft) == (size_t) -1 &&
-			    errno == E2BIG) {
-				string_conv_alloc <<= 1;
-				string_conv = xrealloc (string_conv,
-							string_conv_alloc);
-			} else {
-				/* Either we succeeded, or we've done our
-				 * best; go ahead and print what we've got.
-				 */
-				free (string);
-				string = string_conv;
-				string[string_conv_alloc - 1 - outleft] = '\0';
-				break;
-			}
-		}
-	}
-#endif /* HAVE_ICONV */
-
-	fputs (string, stdout);
+	string_conv = simple_convert (conv_to_locale, string);
+	fputs (string_conv, stdout);
 
 	free (whatis);
+	free (string_conv);
 	free (string);
 }
 
@@ -897,7 +903,7 @@ int main (int argc, char *argv[])
 #ifdef HAVE_ICONV
 	locale_charset = strappend (NULL, get_locale_charset (), "//IGNORE",
 				    NULL);
-	conv = iconv_open (locale_charset, "UTF-8");
+	conv_to_locale = iconv_open (locale_charset, "UTF-8");
 	free (locale_charset);
 #endif /* HAVE_ICONV */
 
@@ -933,8 +939,8 @@ int main (int argc, char *argv[])
 	}
 
 #ifdef HAVE_ICONV
-	if (conv != (iconv_t) -1)
-		iconv_close (conv);
+	if (conv_to_locale != (iconv_t) -1)
+		iconv_close (conv_to_locale);
 #endif /* HAVE_ICONV */
 	hash_free (apropos_seen);
 	free_pathlist (manpathlist);
