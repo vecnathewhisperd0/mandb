@@ -213,34 +213,56 @@ page for further and more specific information.
 .\".q "Native Language Support"
 .\"manual pages.
 .\".lp
-NLS manual pages should be put in NLS subdirectories of a standard manual
-page hierarchy.
-A table illustrating the concept is reproduced from the
-.q "Filesystem Hierarchy Standard"\**
-.(f
-\** written and maintained by Daniel Quinlan <quinlan@pathname.com>
-.)f
-(\*F) manual from which further information may be obtained.
+NLS manual pages should be installed in NLS subdirectories of a standard
+manual page hierarchy.
+The subdirectory names should be made up of language, territory, and
+character set components as necessary to specify the locale of the manual
+page.
+.lp
+The character set component describes the encoding of the manual page
+itself, and not the encoding in use by the user; a manual page installed
+under the
+.b fr.UTF-8
+subdirectory will be used in the
+.b fr_FR.ISO-8859-1
+locale as well as
+.b fr_FR.UTF-8 ,
+and converted between encodings as necessary.
+If no character set is specified in the subdirectory name, a default
+appropriate for the language will be used; note that, for compatibility
+reasons, this will typically be a legacy language-specific character set
+rather than UTF-8.
+.lp
+The territory should normally be omitted unless it is necessary to describe
+the manual page text.
+For example, Brazilian Portuguese is quite distinct from Portuguese and so
+should be installed under the
+.b pt_BR.UTF-8
+subdirectory, but a single German manual page will typically suffice in
+Austria as well as in Germany and so should be installed under the
+.b de.UTF-8
+subdirectory.
+.lp
+The following table gives some examples.
 
 .TS
 center box tab(@);
 l | l | l | l.
 Language@Territory@Character Set@Directory
 _
-English@\*-@ASCII@/usr/share/man/en
-English@United Kingdom@ASCII@/usr/share/man/en_GB
-English@United States@ASCII@/usr/share/man/en_US
+French@any@ISO-8859-1@/usr/share/man/fr
 French@Canada@ISO 8859-1@/usr/share/man/fr_CA
-French@France@ISO 8859-1@/usr/share/man/fr_FR
-German@Germany@ISO 646@/usr/share/man/de_DE.646
-German@Germany@ISO 6937@/usr/share/man/de_DE.6937
-German@Germany@ISO 8859-1@/usr/share/man/de_DE.88591
-German@Switzerland@ISO 646@/usr/share/man/de_CH.646
-Japanese@Japan@JIS@/usr/share/man/ja_JP.jis
-Japanese@Japan@SJIS@/usr/share/man/ja_JP.sjis
-Japanese@Japan@UJIS (or EUC\-J)@/usr/share/man/ja_JP.ujis
+French@any@UTF-8@/usr/share/man/fr.UTF-8
+German@Germany@UTF-8@/usr/share/man/de_DE.UTF-8
+German@Switzerland@ISO 8859-1@/usr/share/man/de_CH.ISO-8859-1
+Japanese@Japan@EUC-JP@/usr/share/man/ja_JP.EUC-JP
+Japanese@any@UTF-8@/usr/share/man/ja.UTF-8
 .TE
 
+On systems supporting UTF-8, it is recommended that all manual pages be
+encoded using UTF-8 where possible, in order to simplify the task of editing
+a variety of pages without reconfiguring editors and terminals and the like.
+.lp
 Each of these directories are then interpreted as manual page hierarchies
 themselves and may
 contain the usual section subdirectories.
@@ -273,22 +295,30 @@ would produce the following internal \*M manpath elements
 .i
 .nf
 /usr/local/man/userix/de_DE
+/usr/local/man/userix/de
 /usr/local/man/userix
 /usr/share/man/userix/de_DE
+/usr/share/man/userix/de
 /usr/share/man/userix
 /usr/X11R6/man/userix/de_DE
+/usr/X11R6/man/userix/de
 /usr/X11R6/man/userix
 /usr/local/man/de_DE
+/usr/local/man/de
 /usr/local/man
 /usr/share/man/de_DE
+/usr/share/man/de
 /usr/share/man
 /usr/X11R6/man/de_DE
+/usr/X11R6/man/de
 /usr/X11R6/man
 .fi
 .r
 .lp
 .b foobar
 would be searched for in the order of manual page hierarchies listed.
+Additional directories corresponding to manual pages encoded in different
+character sets would be used if present.
 .BS 3 "ISO 8859-1 (latin1) manual pages"
 .lp
 By default \*N will format manual pages into a form suitable
