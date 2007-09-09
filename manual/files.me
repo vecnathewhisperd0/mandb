@@ -338,44 +338,23 @@ to
 where DEVICE
 is the suitable and supported output format, in this case
 .b latin1 .
-.BS 3 "Displaying latin1 characters on a \*L virtual terminal"
+.BS 3 "Displaying non-ASCII characters on a \*L virtual terminal"
 .lp
-To enable console based viewing of latin1 characters on a \*L system, you
-must have the kbd\** package installed.
+To view non-ASCII characters at the \*L console, you must have one of the
+kbd\** and console\-tools packages installed.
 .(f
 \** written and maintained by Andries Brouwer <aeb@cwi.nl>.
-Version 0.90 and above does not require the use of
-.b mapscrn
-as illustrated in the script.
 .)f
-The following commands included within an initialisation file such as
-.i /etc/rc.d/rc.local
-will enable the display of latin1 fonts on the first 5 virtual terminals.
-.nf  \" no fill
-.ft CR
-
----< part of /etc/rc.d/rc.local >---
-# sort out the vt font
-if [ \-x /bin/setfont ]; then
-        /bin/setfont /etc/kbd/consolefonts/lat1\-16.psf
-fi
-
-# load the keymap transformation to do when activating new font
-if [ \-x /bin/mapscrn ]; then
-        /bin/mapscrn /etc/kbd/consoletrans/trivial
-fi
-
-# enable new font
-for t in 1 2 3 4 5; do
-   echo \-n \-e "\\033(K" > /dev/tty$t
-done
----< part of /etc/rc.d/rc.local >---
-
-.ft P
-.fi  \" fill (default)
+If your system does not come with suitable configuration already, then
+please see the documentation in the kbd or console\-tools package for
+details on how to configure the console for your locale.
+On modern systems, the best choice is likely to be to use the UTF-8 encoding
+with a font suitable for your language.
+Make sure that your locale environment variables match the encoding
+displayed by the console.
 For display under the
 .q "X Window System",
-a suitable 8 bit clean terminal emulator is required.
+a suitable 8-bit-clean terminal emulator is required.
 .BS 3 "Viewing ASCII pages formatted for latin1 output device"
 .lp
 When formatting an ASCII manual page for a latin1 output device,
