@@ -313,7 +313,7 @@ dnl
 dnl Internationalization support.
 dnl
 AM_GNU_GETTEXT
-AM_GNU_GETTEXT_VERSION([0.15])
+AM_GNU_GETTEXT_VERSION([0.16.1])
 AC_SUBST(LINGUAS)dnl
 AM_ICONV
 dnl
