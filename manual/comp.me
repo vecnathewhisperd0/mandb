@@ -1,5 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
-.\" Copyright (c) 2002 Colin Watson.
+.\" Copyright (c) 2002, 2007 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -11,11 +11,8 @@
 .BS 2 "Compressed manual pages"
 .lp
 It is possible to maintain a system of compressed manual pages.
-The use of
-this feature is not recommended for systems that have adequate disk space to
-store their manual pages uncompressed.
-Subsequent decompression of these manual pages will
-cause several bottlenecks in the formatting process.
+This imposes a small overhead on the formatting process, but is nevertheless
+usually reasonable in order to avoid unnecessary consumption of disk space.
 .lp
 Presently, the compression extension/decompressor pairs must be known at
 compile time although any number may be defined and used.
