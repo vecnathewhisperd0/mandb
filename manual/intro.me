@@ -1,5 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
-.\" Copyright (c) 2001, 2002 Colin Watson.
+.\" Copyright (c) 2001, 2002, 2003, 2007 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -118,7 +118,7 @@ search times.
 The simplest manual page system will have a single manual page hierarchy.
 This will typically be
 .ip
-.i /usr/man
+.i /usr/share/man
 .lp
 beneath which will be several subdirectories of the form
 .i man<sec>
@@ -141,7 +141,7 @@ manual.
 Others may exist and they are not restricted to single
 character names. eg.
 .ip
-.i /usr/man/manfoo
+.i /usr/share/man/manfoo
 .lp
 is a valid section subdirectory.
 Other common sections include
@@ -155,7 +155,7 @@ and
 Within these section subdirectories reside the manual pages themselves. Their
 filenames follow the pattern
 .ip
-.i /usr/man/man<sec>/<name>.<sec><ext>
+.i /usr/share/man/man<sec>/<name>.<sec><ext>
 .lp
 where in most cases
 .i <ext>
@@ -163,7 +163,7 @@ is an empty string.
 An example is manual page
 .b cp
 .ip
-.i /usr/man/man1/cp.1
+.i /usr/share/man/man1/cp.1
 .lp
 which resides in
 .i section

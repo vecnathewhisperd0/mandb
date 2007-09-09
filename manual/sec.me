@@ -1,5 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
-.\" Copyright (c) 2002 Colin Watson.
+.\" Copyright (c) 2002, 2007 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -17,7 +17,7 @@ An example might be package
 .b foo
 that has its own section
 .ip
-.i /usr/man/manfoo
+.i /usr/share/man/manfoo
 .lp
 which contains manual pages
 describing its programs, the library routines it offers and the format of
@@ -46,11 +46,11 @@ Create a separate manual page hierarchy for the package's manual pages such as
 Install the pages in their relevant sections, with a unique extension
 appended to the filename such that
 .(l
-.i /usr/man/manfoo/exit.foo
+.i /usr/share/man/manfoo/exit.foo
 .)l
 would instead be installed as
 .(l
-.i /usr/man/man1/exit.1foo
+.i /usr/share/man/man1/exit.1foo
 .)l
 .lp
 Only (2) offers a complete

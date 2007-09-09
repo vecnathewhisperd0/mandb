@@ -1,5 +1,5 @@
 .\" Copyright (C), 1995, Graeme W. Wilford. (Wilf.)
-.\" Copyright (c) 2002 Colin Watson.
+.\" Copyright (c) 2002, 2007 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -59,7 +59,7 @@ displays the manual page located within
 .lp
 rather than within
 .ip
-.i /usr/man
+.i /usr/share/man
 .lp
 To ensure correct order, the program
 .b manpath
@@ -168,9 +168,9 @@ center box tab(@);
 l | l.
 System@Manual page hierarchy
 _
-<local>@/usr/man
-newOS@/usr/man/newOS
-userix@/usr/man/userix
+<local>@/usr/share/man
+newOS@/usr/share/man/newOS
+userix@/usr/share/man/userix
 <local>@/usr/local/man
 newOS@/usr/local/man/newOS
 userix@/usr/local/man/userix
@@ -260,7 +260,7 @@ If a user's
 .EV MANPATH
 consists of or is determined as
 .ip
-.i /usr/local/man:/usr/man:/usr/X11R6/man
+.i /usr/local/man:/usr/share/man:/usr/X11R6/man
 .lp
 and their locale is set to
 .b de_DE ,
@@ -274,14 +274,14 @@ would produce the following internal \*M manpath elements
 .nf
 /usr/local/man/userix/de_DE
 /usr/local/man/userix
-/usr/man/userix/de_DE
-/usr/man/userix
+/usr/share/man/userix/de_DE
+/usr/share/man/userix
 /usr/X11R6/man/userix/de_DE
 /usr/X11R6/man/userix
 /usr/local/man/de_DE
 /usr/local/man
-/usr/man/de_DE
-/usr/man
+/usr/share/man/de_DE
+/usr/share/man
 /usr/X11R6/man/de_DE
 /usr/X11R6/man
 .fi
