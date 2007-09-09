@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.4-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2007-05-26 10:57+0100\n"
+"POT-Creation-Date: 2007-09-08 23:06+0100\n"
 "PO-Revision-Date: 2007-05-29 17:58+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -17,73 +17,79 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: LocFactoryEditor 1.6.3b1\n"
 
-#: lib/pipeline.c:218 lib/pipeline.c:230
+#: lib/pipeline.c:228 lib/pipeline.c:240
 #, c-format
 msgid "badly formed configuration directive: '%s'"
 msgstr "chỉ thị cấu hình dạng sai: « %s »"
 
-#: lib/pipeline.c:440
+#: lib/pipeline.c:597
 msgid "pipeline input not open"
 msgstr "chưa mở thiết bị nhập ống dẫn"
 
-#: lib/pipeline.c:453
+#: lib/pipeline.c:610
 msgid "pipeline output not open"
 msgstr "chưa mở thiết bị xuất qua ống dẫn"
 
-#: lib/pipeline.c:598 lib/pipeline.c:611
+#: lib/pipeline.c:754 lib/pipeline.c:773
 msgid "pipe failed"
 msgstr "ống dẫn bị lỗi"
 
-#: lib/pipeline.c:631 src/catman.c:182
+#: lib/pipeline.c:762 src/lexgrog.l:469 src/straycats.c:242 src/ult_src.c:316
+#: src/ult_src.c:326
+#, c-format
+msgid "can't open %s"
+msgstr "không thể mở %s"
+
+#: lib/pipeline.c:802 src/catman.c:182
 msgid "fork failed"
 msgstr "việc tạo tiến trình con bị lỗi"
 
-#: lib/pipeline.c:639 lib/pipeline.c:648
+#: lib/pipeline.c:810 lib/pipeline.c:819
 msgid "dup2 failed"
 msgstr "việc dup2 bị lỗi"
 
-#: lib/pipeline.c:642 lib/pipeline.c:651 lib/pipeline.c:658 lib/pipeline.c:667
-#: lib/pipeline.c:696 lib/pipeline.c:700
+#: lib/pipeline.c:813 lib/pipeline.c:822 lib/pipeline.c:829 lib/pipeline.c:838
+#: lib/pipeline.c:894 lib/pipeline.c:898
 msgid "close failed"
 msgstr "việc đóng bị lỗi"
 
-#: lib/pipeline.c:690
+#: lib/pipeline.c:888
 #, c-format
 msgid "can't execute %s"
 msgstr "không thể thực hiện %s"
 
-#: lib/pipeline.c:788
+#: lib/pipeline.c:990
 msgid "closing pipeline input stream failed"
 msgstr "việc đóng luồng nhập vào ống dẫn bị lỗi"
 
-#: lib/pipeline.c:793
+#: lib/pipeline.c:995 lib/pipeline.c:1256
 msgid "closing pipeline input failed"
 msgstr "việc đóng thiết bị nhập vào ống dẫn bị lỗi"
 
-#: lib/pipeline.c:800
+#: lib/pipeline.c:1002
 msgid "closing pipeline output stream failed"
 msgstr "việc đóng luồng xuất ống dẫn bị lỗi"
 
-#: lib/pipeline.c:805
+#: lib/pipeline.c:1009 lib/pipeline.c:1281
 msgid "closing pipeline output failed"
 msgstr "việc đóng thiết bị xuất ống dẫn bị lỗi"
 
-#: lib/pipeline.c:846
+#: lib/pipeline.c:1057
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr "%s: %s (lõi bị đổ)"
 
 # Variable: do not translate/ biến: đừng dịch
-#: lib/pipeline.c:851
+#: lib/pipeline.c:1062
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: lib/pipeline.c:876
+#: lib/pipeline.c:1087
 msgid "waitpid failed"
 msgstr "việc « waitpid » (đời số nhận biết tiến trình) bị lỗi"
 
-#: lib/pipeline.c:931
+#: lib/pipeline.c:1145
 msgid "can't install SIGCHLD handler"
 msgstr "không thể cài đặt bộ quản lý « SIGCHLD » (tín hiệu con)"
 
@@ -232,60 +238,56 @@ msgstr "không thể cập nhật %s"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "cảnh báo: « %s/man%s/%s.%s* »: phần mở rộng xung đột với nhau"
 
-#: src/check_mandirs.c:118 src/check_mandirs.c:446
+#: src/check_mandirs.c:118 src/check_mandirs.c:436
 #, c-format
 msgid "can't update index cache %s"
 msgstr "không thể cập nhật bộ nhớ tạm chỉ mục %s"
 
-#: src/check_mandirs.c:237
+#: src/check_mandirs.c:242
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
 msgstr "cảnh báo: %s: liên kết tượng trưng sai, hoặc yêu cầu « .so » ROFF sai"
 
-#: src/check_mandirs.c:305
+#: src/check_mandirs.c:295
 #, c-format
 msgid "warning: %s: ignoring empty file"
 msgstr "cảnh báo: %s: đang bỏ qua tập tin rỗng"
 
-#: src/check_mandirs.c:309 src/straycats.c:322
+#: src/check_mandirs.c:299 src/straycats.c:309
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr ""
 "cảnh báo: %s: việc phân tách kiểu « whatis » (là gì?) cho « %s(%s) » bị lỗi"
 
-#: src/check_mandirs.c:335 src/check_mandirs.c:370 src/straycats.c:113
-#: src/straycats.c:360 src/ult_src.c:125
+#: src/check_mandirs.c:325 src/check_mandirs.c:360 src/mandb.c:661
+#: src/straycats.c:114 src/straycats.c:338 src/ult_src.c:128
 #, c-format
 msgid "can't search directory %s"
 msgstr "không thể tìm kiếm trong danh mục %s"
 
-#: src/check_mandirs.c:406
+#: src/check_mandirs.c:396
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Đang cập nhật bộ nhớ tạm chỉ mục cho đường dẫn « %s/%s ». Hãy đời..."
 
-#: src/check_mandirs.c:508
+#: src/check_mandirs.c:505
+#, fuzzy, c-format
+msgid "can't create index cache directory %s"
+msgstr "không thể tạo bộ nhớ tạm chỉ mục %s"
+
+#: src/check_mandirs.c:530
 #, c-format
 msgid "can't create index cache %s"
 msgstr "không thể tạo bộ nhớ tạm chỉ mục %s"
 
-#: src/check_mandirs.c:522 src/check_mandirs.c:562
+#: src/check_mandirs.c:544 src/check_mandirs.c:587
 msgid "done.\n"
 msgstr "hoàn toàn.\n"
 
-#: src/check_mandirs.c:794
+#: src/check_mandirs.c:824
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Đang tẩy các mục nhập cơ sở dữ liệu cũ ra %s...\n"
-
-#: src/compression.c:78 src/man.c:1414
-msgid "can't create a temporary filename"
-msgstr "không thể tạo tên tập tin tạm"
-
-#: src/compression.c:200
-#, c-format
-msgid "command '%s' failed with exit status %d"
-msgstr "lệnh « %s » đã thất bại với trạng thái thoát là %d"
 
 #: src/convert_name.c:57
 #, c-format
@@ -301,7 +303,7 @@ msgstr "cảnh báo: việc lưu trữ mục nhập cho « %s(%s) » bị lỗi"
 msgid "can't get passwd structure for uid 0"
 msgstr "không thể lnày cấu trúc « passwd » (mật khẩu) cho UID 0"
 
-#: src/filenames.c:56 src/straycats.c:145 src/straycats.c:174
+#: src/filenames.c:56 src/straycats.c:146 src/straycats.c:175
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "cảnh báo: %s: đang bỏ qua tên tập tin giả"
@@ -329,30 +331,26 @@ msgstr ""
 "-V, --version               \thiển thị thông tin _phiên bản_.\n"
 "-h, --help                  \thiển thị _trợ giúp_ này.\n"
 
-#: src/lexgrog.l:357
+#: src/lexgrog.l:389
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr ""
 "cảnh báo: thông tin « whatis » (là gì?) cho %s vượt trội %d byte nên đang "
 "cắt bớt nó."
 
-#: src/lexgrog.l:444 src/straycats.c:262 src/ult_src.c:327 src/ult_src.c:334
-#, c-format
-msgid "can't open %s"
-msgstr "không thể mở %s"
-
-#: src/lexgrog.l:506
-#, c-format
-msgid "usage: %s [-mcwfhV] file ...\n"
+#: src/lexgrog.l:551
+#, fuzzy, c-format
+msgid "usage: %s [-mcwfhV] [-E encoding] file ...\n"
 msgstr "cách sử dụng: %s [-mcwfhV] tập_tin ...\n"
 
-#: src/lexgrog.l:508
-#, c-format
+#: src/lexgrog.l:553
+#, fuzzy, c-format
 msgid ""
 "-m, --man                   parse as man page.\n"
 "-c, --cat                   parse as cat page.\n"
 "-w, --whatis                show whatis information.\n"
 "-f, --filters               show guessed series of preprocessing filters.\n"
+"-E, --encoding encoding     override character set.\n"
 "-V, --version               show version.\n"
 "-h, --help                  show this usage message.\n"
 "\n"
@@ -367,16 +365,16 @@ msgstr ""
 "\n"
 "Tùy chọn mặc định là « --man » và « --whatis ».\n"
 
-#: src/lexgrog.l:557
+#: src/lexgrog.l:607
 msgid "-m -c: incompatible options"
 msgstr "hai tùy chọn « -m » và « -c » không tương thích với nhau"
 
-#: src/man.c:263
+#: src/man.c:202
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "lệnh đã thoát với trạng thái %d: %s"
 
-#: src/man.c:401
+#: src/man.c:341
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w|-tZT device] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -388,7 +386,7 @@ msgstr ""
 "\t\t[-Psắp_xếp_trang] [-Ctập_tin] [-Sdanh_sách] [-mhệ_thống] [-pchuỗi]\n"
 "\t\t[-Lmiền_địa_phương] [-ephần_mở_rộng] [phần] trang ...\n"
 
-#: src/man.c:407
+#: src/man.c:347
 #, c-format
 msgid ""
 "usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -399,7 +397,7 @@ msgstr ""
 "\t\t[-Psắp_xếp_trang] [-Ctập_tin] [-Sdanh_sách] [-mhệ_thống]\n"
 "\t\t[-pchuỗi] [-Lmiền_địa_phương] [-ephần_mở_rộng] [phần] trang ...\n"
 
-#: src/man.c:414
+#: src/man.c:354
 msgid ""
 "-a, --all                   find all matching manual pages.\n"
 "-d, --debug                 emit debugging messages.\n"
@@ -447,7 +445,7 @@ msgstr ""
 "-E, --encoding mã_ký_tự     sử dụng thiết bị « nroff » đã chọn\n"
 "\t\t\t\t\t\t\tvà hiển thị bằng bộ sắp xếp trang."
 
-#: src/man.c:432
+#: src/man.c:372
 #, c-format
 msgid ""
 "-t, --troff                 use %s to format pages.\n"
@@ -456,7 +454,7 @@ msgstr ""
 "-t, --troff                 \t\tsử dụng %s để định dạng các trang.\n"
 "-T, --troff-device thiết_bị   \tsử dụng %s với thiết bị này.\n"
 
-#: src/man.c:436
+#: src/man.c:376
 msgid ""
 "-H, --html                  use lynx or argument to display html output.\n"
 "-Z, --ditroff               use groff and force it to produce ditroff.\n"
@@ -470,7 +468,7 @@ msgstr ""
 "» (X11):\n"
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 
-#: src/man.c:444
+#: src/man.c:384
 msgid ""
 "-D, --default               reset all options to their default values.\n"
 "-C, --config-file file      use this user configuration file.\n"
@@ -508,115 +506,101 @@ msgstr ""
 "-V, --version               \t\t\thiển thị thông tin _phiên bản_.\n"
 "-h, --help                  \t\t\thiển thị _trợ giúp_ này."
 
-#: src/man.c:467 src/man.c:587
+#: src/man.c:407 src/man.c:479
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "Không có mục nhập hướng dẫn cho %s\n"
 
-#: src/man.c:469
+#: src/man.c:409
 #, fuzzy, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "Bạn có muốn trang hướng dẫn nào từ phần %s?\n"
 
-#: src/man.c:473
+#: src/man.c:413
 msgid "What manual page do you want?\n"
 msgstr "Bạn có muốn trang hướng dẫn nào?\n"
 
-#: src/man.c:584
+#: src/man.c:476
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Không có mục nhập hướng dẫn cho %s trong phần %s\n"
 
-#: src/man.c:592
+#: src/man.c:484
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Hãy xem « %s » để tìm trợ giúp khi trang hướng dẫn không sẵn sàng.\n"
 
-#: src/man.c:758 src/man.c:2374
+#: src/man.c:646 src/man.c:2141
 #, c-format
 msgid "can't chdir to %s"
 msgstr "không thể chdir (chuyển đổi danh mục) sang %s"
 
-#: src/man.c:950
+#: src/man.c:825
 msgid " Manual page "
 msgstr " Trang hướng dẫn "
 
-#: src/man.c:1020 src/man.c:3114
+#: src/man.c:895 src/man.c:2976
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr ""
 "lệnh « mandb » (cơ sở dữ liệu hướng dẫn) đã thất bại với trạng thái thoát là "
 "%d"
 
-#: src/man.c:1291
+#: src/man.c:1166
 msgid ": incompatible options"
 msgstr ": tùy chọn không tương thích với nhau"
 
-#: src/man.c:1472
-msgid "error trying to read from stdin"
-msgstr "gặp lỗi khi cố đọc từ thiết bị nhập chuẩn"
-
-#: src/man.c:1486
-#, c-format
-msgid "error writing to temporary file %s"
-msgstr "gặp lỗi khi ghi vào tập tin tạm %s"
-
-#: src/man.c:1731
+#: src/man.c:1496
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "đang bỏ qua bộ xử lý trước lạ « %c »"
 
-#: src/man.c:2010 src/mandb.c:272
+#: src/man.c:1778 src/mandb.c:278
 #, c-format
 msgid "can't chown %s"
 msgstr "không thể « chown » (thay đổi quyền sở hữu) %s"
 
-#: src/man.c:2022 src/mandb.c:236
+#: src/man.c:1790 src/mandb.c:242
 #, c-format
 msgid "can't chmod %s"
 msgstr "không thể « chmod » (thay đổi chế độ) %s"
 
-#: src/man.c:2033 src/mandb.c:179
+#: src/man.c:1801 src/mandb.c:185
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "không thể thay đổi tên %s thành %s"
 
-#: src/man.c:2052
+#: src/man.c:1820
 #, c-format
 msgid "can't set times on %s"
 msgstr "không thể lập thời gian trên %s"
 
-#: src/man.c:2061
+#: src/man.c:1829
 #, c-format
 msgid "can't unlink %s"
 msgstr "không thể bỏ liên kết ra %s"
 
-#: src/man.c:2096
+#: src/man.c:1862
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "không thể tạo « cat » tạm cho %s"
 
-#: src/man.c:2195
-#, c-format
-msgid "Still saving the page, please wait...\n"
-msgstr "Vẫn còn đang lưu trang này nên hãy đời một chút nữa...\n"
-
-#: src/man.c:2248 src/man.c:2269 src/man.c:2298
+#: src/man.c:1990 src/man.c:2033 src/man.c:2063
 #, c-format
 msgid "can't change to directory %s"
 msgstr "không thể chuyển đổi sang thư mục %s"
 
-#: src/man.c:2262
+#: src/man.c:2004
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "không thể mở tập tin tạm %s"
 
-#: src/man.c:2275 src/man.c:2303
+#: src/man.c:2039 src/man.c:2068
 #, c-format
 msgid "can't remove directory %s"
 msgstr "không thể gỡ bỏ thư mục %s"
 
-#: src/man.c:2507
+#: src/man.c:2273
 #, c-format
 msgid ""
 "\n"
@@ -625,29 +609,29 @@ msgstr ""
 "\n"
 "không thể ghi vào %s trong chế độ « catman »"
 
-#: src/man.c:2965
+#: src/man.c:2830
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: nhờ các « ref » (tham chiếu) của lệnh « whatis » bị phản đối\n"
 
-#: src/man.c:3308
+#: src/man.c:3170
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "lỗi nội bộ: kiểu ứng cử %d ở ngoại phạm vị"
 
-#: src/man.c:3427
+#: src/man.c:3289
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- kế: %s [ xem (return) | nhảy (Ctrl-D) | thoát (Ctrl-C) ]\n"
 
-#: src/mandb.c:149
+#: src/mandb.c:155
 #, c-format
 msgid "usage: %s [-dqspuct|-h|-V] [-C file] [-f filename] [manpath]\n"
 msgstr ""
 "cách sử dụng: %s [-dqspuct|-h|-V] [-C tập_tin] [-f tên_tập_tin] "
 "[đường_dẫn_hướng_dẫn]\n"
 
-#: src/mandb.c:152
+#: src/mandb.c:158
 #, c-format
 msgid ""
 "-d, --debug                 produce debugging info.\n"
@@ -677,39 +661,39 @@ msgstr ""
 "-V, --version               \thiển thị thông tin _phiên bản_.\n"
 "-h, --help                  \thiển thị _trợ giúp_ này.\n"
 
-#: src/mandb.c:172 src/security.c:225
+#: src/mandb.c:178 src/security.c:219
 #, c-format
 msgid "can't remove %s"
 msgstr "không thể gỡ bỏ %s"
 
-#: src/mandb.c:213
+#: src/mandb.c:219
 #, c-format
 msgid "can't write to %s"
 msgstr "không thể ghi vào %s"
 
-#: src/mandb.c:218
+#: src/mandb.c:224
 #, c-format
 msgid "can't read from %s"
 msgstr "không thể đọc từ %s"
 
-#: src/mandb.c:379
+#: src/mandb.c:402
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Đang xử lý các trang hướng dẫn dưới %s...\n"
 
-#: src/mandb.c:523 src/security.c:147
+#: src/mandb.c:603 src/security.c:147
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "không có người dùng hướng dẫn « setuid » « %s »"
 
-#: src/mandb.c:551
+#: src/mandb.c:631
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "cảnh báo: không có chỉ thi « MANDB_MAP » trong «%s» nên sẽ dùng đường dẫn "
 "hướng dẫn của bạn."
 
-#: src/mandb.c:630
+#: src/mandb.c:695
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -718,99 +702,99 @@ msgstr ""
 "%d thư muc con hướng dẫn chứa trang hướng dẫn mới hơn.\n"
 "%d trang hướng dẫn đã được thêm.\n"
 
-#: src/mandb.c:634
+#: src/mandb.c:699
 #, c-format
 msgid "%d stray cats were added.\n"
 msgstr "%d trang « cat » rải rác đã được thêm.\n"
 
-#: src/mandb.c:636
+#: src/mandb.c:701
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr "%d mục nhập cơ sở dữ liệu cũ bị tẩy.\n"
 
-#: src/mandb.c:650
+#: src/mandb.c:715
 #, fuzzy, c-format
 msgid "No databases created."
 msgstr "Chưa cập nhật cơ sở dữ liệu nào."
 
-#: src/manp.c:316
+#: src/manp.c:327
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "không thể hiểu tập tin cấu hình đường dẫn hướng dẫn %s"
 
-#: src/manp.c:322
+#: src/manp.c:333
 #, c-format
 msgid "warning: %s"
 msgstr "cảnh báo: %s"
 
-#: src/manp.c:328
+#: src/manp.c:339
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "cảnh báo: %s không phải là thư mục"
 
-#: src/manp.c:333
+#: src/manp.c:344
 msgid "manpath list too long"
 msgstr "danh sách các đường dẫn hướng dẫn quá dài"
 
-#: src/manp.c:537
+#: src/manp.c:612
 msgid "warning: $PATH not set"
 msgstr ""
 "cảnh báo: chưa lập biến môi trường « $PATH »\n"
 "(đường dẫn thư mục chứa chương trình chạy được)"
 
-#: src/manp.c:544
+#: src/manp.c:619
 msgid "warning: empty $PATH"
 msgstr "cảnh báo: biến môi trường « $PATH » (đường dẫn) rỗng"
 
-#: src/manp.c:572
+#: src/manp.c:647
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr ""
 "cảnh báo: « $MANPATH » (đường dẫn hướng dẫn) được lập thì đang thêm %s vào "
 "đầu"
 
-#: src/manp.c:583
+#: src/manp.c:658
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr ""
 "cảnh báo: « $MANPATH » (đường dẫn hướng dẫn) được lập thì đang phụ thêm %s"
 
-#: src/manp.c:595
+#: src/manp.c:670
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "cảnh báo: « $MANPATH » (đường dẫn hướng dẫn) được lập thì đang chèn %s"
 
-#: src/manp.c:608
+#: src/manp.c:683
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr ""
 "cảnh báo: « $MANPATH » (đường dẫn hướng dẫn) được lập thì đang bỏ qua %s"
 
-#: src/manp.c:641 src/manp.c:668
+#: src/manp.c:716 src/manp.c:743
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "cảnh báo: không thể tạo catdir (thư mục « cat ») %s"
 
-#: src/manp.c:728
+#: src/manp.c:805
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "không thể phân tách danh sách thư muc « %s »"
 
-#: src/manp.c:775
+#: src/manp.c:852
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "không thể mở tập tin cấu hình đường dẫn hướng dẫn %s"
 
-#: src/manp.c:804
+#: src/manp.c:881
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "cảnh báo: không có thư mục bắt buộc %s"
 
-#: src/manp.c:1010
+#: src/manp.c:1087
 msgid "can't determine current directory"
 msgstr "không thể tháo gỡ thư mục hiện có"
 
-#: src/manp.c:1130
+#: src/manp.c:1207
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "cảnh báo: %s không phải bắt đầu bằng %s"
@@ -852,41 +836,31 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "không thể lập UID hữu hiệu"
 
-#: src/security.c:266
+#: src/security.c:260
 msgid "can't fork"
 msgstr "không thể tạo xử lý con (fork)"
 
-#: src/straycats.c:276
-#, c-format
-msgid "can't open %s for writing"
-msgstr "không thể mở %s để đọc"
-
-#: src/straycats.c:285 src/straycats.c:294 src/ult_src.c:170 src/ult_src.c:250
+#: src/straycats.c:265 src/straycats.c:274 src/ult_src.c:175 src/ult_src.c:258
 #, c-format
 msgid "can't resolve %s"
 msgstr "không thể tháo gỡ %s"
 
-#: src/straycats.c:291 src/ult_src.c:167
+#: src/straycats.c:271 src/ult_src.c:172
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "cảnh báo: %s là liên kết tượng trưng lủng lẳng"
 
-#: src/straycats.c:365
+#: src/straycats.c:343
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "Đang kiểm tra có trang « cat » rải rác dưới %s...\n"
 
-#: src/straycats.c:404
-#, c-format
-msgid "warning: can't create temp file %s"
-msgstr "cảnh báo: không thể tạo tập tin tạm %s"
-
-#: src/straycats.c:418
+#: src/straycats.c:382
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "cảnh báo: không thể cập nhật bộ nhớ tạm chỉ mục %s"
 
-#: src/ult_src.c:286
+#: src/ult_src.c:296
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s có thể tham khảo chính nó"
@@ -896,27 +870,29 @@ msgstr "%s có thể tham khảo chính nó"
 msgid "%s, version %s, %s\n"
 msgstr "%s, phiên bản %s, %s\n"
 
-#: src/whatis.c:151
-#, c-format
+#: src/whatis.c:179
+#, fuzzy, c-format
 msgid ""
-"usage: %s [-dhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath] [-C "
-"file]\n"
-"               keyword ...\n"
+"usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
+"               [-L locale] [-C file] keyword ...\n"
 msgstr ""
 "cách sử dụng: %s [-dhV] [-r|-w|-e] [-s phần] [-m hệ_thống]\n"
 "\t[-M đường_dẫn_hướng_dẫn] [-C tập_tin] từ_khóa ...\n"
 
-#: src/whatis.c:154
-#, c-format
+#: src/whatis.c:182
+#, fuzzy, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
 "-r, --regex                interpret each keyword as a regex (default).\n"
 "-e, --exact                search each keyword for exact match.\n"
 "-w, --wildcard             the keyword(s) contain wildcards.\n"
+"-a, --and                  require all keywords to match.\n"
+"-l, --long                 do not trim output to terminal width.\n"
 "-s, --section section      search only this section.\n"
 "-m, --systems system       include alternate systems' man pages.\n"
 "-M, --manpath path         set search path for manual pages to `path'.\n"
+"-L, --locale locale        define the locale for this search.\n"
 "-C, --config-file file     use this user configuration file.\n"
 "-V, --version              show version.\n"
 "-h, --help                 show this usage message.\n"
@@ -937,25 +913,27 @@ msgstr ""
 "-V, --version           \thiển thị thông tin _phiên bản_.\n"
 "-h, --help                 \thiển thị _trợ giúp_ này.\n"
 
-#: src/whatis.c:171
-#, c-format
+#: src/whatis.c:202
+#, fuzzy, c-format
 msgid ""
-"usage: %s [-dhV] [-r|-w] [-s section] [-m systems] [-M manpath] [-C file]\n"
-"              keyword ...\n"
+"usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath]\n"
+"              [-L locale] [-C file] keyword ...\n"
 msgstr ""
 "cách sử dụng: %s [-dhV] [-r|-w|-e]  [-s phần] [-m hệ_thống]\n"
 "[-M đường_dẫn_hướng_dẫn] [-C tập_tin] từ_khóa ...\n"
 
-#: src/whatis.c:174
-#, c-format
+#: src/whatis.c:205
+#, fuzzy, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
 "-r, --regex                interpret each keyword as a regex.\n"
 "-w, --wildcard             the keyword(s) contain wildcards.\n"
+"-l, --long                 do not trim output to terminal width.\n"
 "-s, --section section      search only this section.\n"
 "-m, --systems system       include alternate systems' man pages.\n"
 "-M, --manpath path         set search path for manual pages to `path'.\n"
+"-L, --locale locale        define the locale for this search.\n"
 "-C, --config-file file     use this user configuration file.\n"
 "-V, --version              show version.\n"
 "-h, --help                 show this usage message.\n"
@@ -974,33 +952,33 @@ msgstr ""
 "-V, --version           \thiển thị thông tin _phiên bản_.\n"
 "-h, --help                 \thiển thị _trợ giúp_ này.\n"
 
-#: src/whatis.c:250 src/whatis.c:277 src/whatis.c:289
+#: src/whatis.c:314 src/whatis.c:341 src/whatis.c:353
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "cảnh báo: %s chứa một vòng lặp trỏ (pointer loop)"
 
-#: src/whatis.c:252 src/whatis.c:265 src/whatis.c:280 src/whatis.c:290
+#: src/whatis.c:316 src/whatis.c:329 src/whatis.c:344 src/whatis.c:354
 msgid "(unknown subject)"
 msgstr "(không biết chủ đề)"
 
-#: src/whatis.c:505
+#: src/whatis.c:591
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr ""
 "Cơ sở dữ liêu %s bị hỏng; hãy xây dụng lại bằng lệnh « mandb -- create »\n"
 "(cơ sở dữ liệu hướng dẫn: tạo)"
 
-#: src/whatis.c:621
+#: src/whatis.c:730
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: không có gì thích hợp.\n"
 
-#: src/whatis.c:735
+#: src/whatis.c:867
 #, c-format
 msgid "%s what?\n"
 msgstr "%s gì vậy?\n"
 
-#: src/whatis.c:760 src/whatis.c:769
+#: src/whatis.c:921 src/whatis.c:930
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "nghiệm trong: biểu thức chính quy %s: %s"
@@ -1014,6 +992,27 @@ msgstr "Chưa biết nên chạy chương trình này vì >%s<\n"
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: việc « su » thành người dùng %s bị lỗi\n"
+
+#~ msgid "can't create a temporary filename"
+#~ msgstr "không thể tạo tên tập tin tạm"
+
+#~ msgid "command '%s' failed with exit status %d"
+#~ msgstr "lệnh « %s » đã thất bại với trạng thái thoát là %d"
+
+#~ msgid "error trying to read from stdin"
+#~ msgstr "gặp lỗi khi cố đọc từ thiết bị nhập chuẩn"
+
+#~ msgid "error writing to temporary file %s"
+#~ msgstr "gặp lỗi khi ghi vào tập tin tạm %s"
+
+#~ msgid "Still saving the page, please wait...\n"
+#~ msgstr "Vẫn còn đang lưu trang này nên hãy đời một chút nữa...\n"
+
+#~ msgid "can't open %s for writing"
+#~ msgstr "không thể mở %s để đọc"
+
+#~ msgid "warning: can't create temp file %s"
+#~ msgstr "cảnh báo: không thể tạo tập tin tạm %s"
 
 #~ msgid "warning: can't read the fallback whatis text database."
 #~ msgstr ""
