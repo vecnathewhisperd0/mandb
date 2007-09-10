@@ -8,9 +8,13 @@
 #
 # Thu Sep 21 16:53:26 BST 1995  Wilf. (G.Wilford@ee.surrey.ac.uk) 
 
+top_srcdir = @top_srcdir@
+
 manual := man_db
 
 SOELIM = soelim
+
+include ../include/Defines
 
 .PHONY: dvi ps tps cat html
 
@@ -24,7 +28,10 @@ html: $(manual).html
 
 SRCS := $(wildcard *.me)
 
-postpro: $(SRCS)
+version: $(top_srcdir)/configure.ac
+	echo '.ds V $(subst -,\-,$(version))' > $@
+
+postpro: $(SRCS) version
 	$(SOELIM) $(manual).me | tbl > $@
 	
 $(manual).dvi: postpro
@@ -51,7 +58,7 @@ mostlyclean:
 	rm -f *~ *.bak
 
 clean: mostlyclean
-	rm -f postpro
+	rm -f postpro version
 
 realclean distclean: clean
 	rm -f $(manual).dvi $(manual).ps $(manual).cat $(manual).tps \

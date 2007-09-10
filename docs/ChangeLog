@@ -1,3 +1,16 @@
+Mon Sep 10 10:17:43 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* manual/Makefile: Rename to ...
+	* manual/Makefile.in: ... this. Write out a version file with the
+	  current version of man-db.
+	* manual/man_db.me: Use the automatically-generated version file
+	  rather than hardcoding the version. Set the manual version to
+	  simply the version of man-db.
+	* configure.ac (AC_CONFIG_FILES): Add manual/Makefile.
+	* GNUmakefile.in (_manual): Distribute manual/Makefile.in rather
+	  than manual/Makefile.
+	* .bzrignore: Update.
+
 Mon Sep 10 09:17:17 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.5.0-pre1. I mistakenly used version 2.4.5-pre1 earlier.

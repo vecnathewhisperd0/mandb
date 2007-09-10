@@ -489,6 +489,7 @@ AC_CONFIG_FILES(GNUmakefile
 	src/Makefile
 	src/man_db.conf
 	man/Makefile
+	manual/Makefile
 	libdb/Makefile
 	include/Defines
 	include/comp_src.h
