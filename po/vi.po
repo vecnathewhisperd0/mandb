@@ -5,17 +5,17 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.4.4-pre1\n"
+"Project-Id-Version: man-db 2.4.5-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2007-09-08 23:06+0100\n"
-"PO-Revision-Date: 2007-05-29 17:58+0930\n"
+"PO-Revision-Date: 2007-09-10 17:25+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: LocFactoryEditor 1.6.3b1\n"
+"X-Generator: LocFactoryEditor 1.7b1\n"
 
 #: lib/pipeline.c:228 lib/pipeline.c:240
 #, c-format
@@ -271,9 +271,9 @@ msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Đang cập nhật bộ nhớ tạm chỉ mục cho đường dẫn « %s/%s ». Hãy đời..."
 
 #: src/check_mandirs.c:505
-#, fuzzy, c-format
+#, c-format
 msgid "can't create index cache directory %s"
-msgstr "không thể tạo bộ nhớ tạm chỉ mục %s"
+msgstr "không thể tạo thư mục nhớ tạm chỉ mục %s"
 
 #: src/check_mandirs.c:530
 #, c-format
@@ -339,12 +339,12 @@ msgstr ""
 "cắt bớt nó."
 
 #: src/lexgrog.l:551
-#, fuzzy, c-format
+#, c-format
 msgid "usage: %s [-mcwfhV] [-E encoding] file ...\n"
-msgstr "cách sử dụng: %s [-mcwfhV] tập_tin ...\n"
+msgstr "sử dụng: %s [-mcwfhV] [-E bảng_mã] tập_tin ...\n"
 
 #: src/lexgrog.l:553
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "-m, --man                   parse as man page.\n"
 "-c, --cat                   parse as cat page.\n"
@@ -360,6 +360,7 @@ msgstr ""
 "-c, --cat                   \tphân tách dạng trang _nói chuỗi_ (cat page).\n"
 "-w, --whatis                \thiển thị thông tin _là gì?_.\n"
 "-f, --filters               \thiển thị dây bộ lọc xử lý trước đã đoán.\n"
+"-E, --encoding bảng_mã     có quyền cao hơn bộ ký tự.\n"
 "-V, --version               \thiển thị thông tin _phiên bản_.\n"
 "-h, --help                  \thiển thị _trợ giúp_ này.\n"
 "\n"
@@ -512,9 +513,9 @@ msgid "No manual entry for %s\n"
 msgstr "Không có mục nhập hướng dẫn cho %s\n"
 
 #: src/man.c:409
-#, fuzzy, c-format
+#, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
-msgstr "Bạn có muốn trang hướng dẫn nào từ phần %s?\n"
+msgstr "(Thay vì vậy, bạn có muốn trang hướng dẫn nào từ phần %s?)\n"
 
 #: src/man.c:413
 msgid "What manual page do you want?\n"
@@ -713,9 +714,9 @@ msgid "%d old database entries were purged.\n"
 msgstr "%d mục nhập cơ sở dữ liệu cũ bị tẩy.\n"
 
 #: src/mandb.c:715
-#, fuzzy, c-format
+#, c-format
 msgid "No databases created."
-msgstr "Chưa cập nhật cơ sở dữ liệu nào."
+msgstr "Chưa tạo cơ sở dữ liệu."
 
 #: src/manp.c:327
 #, c-format
@@ -871,16 +872,16 @@ msgid "%s, version %s, %s\n"
 msgstr "%s, phiên bản %s, %s\n"
 
 #: src/whatis.c:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
 "               [-L locale] [-C file] keyword ...\n"
 msgstr ""
-"cách sử dụng: %s [-dhV] [-r|-w|-e] [-s phần] [-m hệ_thống]\n"
-"\t[-M đường_dẫn_hướng_dẫn] [-C tập_tin] từ_khóa ...\n"
+"sử dụng: %s [-dalhV] [-r|-w|-e] [-s phần] [-m hệ_thống] [-M đường_dẫn_man]\n"
+"               [-L miền_địa_phương] [-C tập_tin] từ_khoá ...\n"
 
 #: src/whatis.c:182
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
@@ -903,27 +904,32 @@ msgstr ""
 "(mặc định).\n"
 "-e, --exact                \ttìm kiếm mỗi từ khóa khớp _chính xác_.\n"
 "-w, --wildcard             \tnhững từ khóa chứa _ký tự đại diện_.\n"
+"-a, --and                  mọi từ khoá bắt buộc phải khớp.\n"
+"-l, --long                 đừng xén kết xuất thành chiều rộng của thiết bị "
+"cuối\n"
 "-s, --section phần      \t\ttìm kiếm trong chỉ _phần_ này thôi.\n"
 "-m, --systems hệ_thông\n"
 " \t\t\t\t\t\tbao gồm các trang hướng dẫn của hệ thống khác này.\n"
 "-M, --manpath đương_dẫn\n"
 " \t\t\t\t\t\t\tlập đường dẫn này là _đường dẫn_ tìm kiếm trang _hướng dẫn_.\n"
+"-L, --locale miền_địa_phương\txác định miền địa phương cho việc tìm kiếm "
+"này\n"
 "-C, --config-file tập_tin\n"
 "   \t\t\t\t\t\tsử dụng _tập tin cấu hình_ người dùng này.\n"
 "-V, --version           \thiển thị thông tin _phiên bản_.\n"
 "-h, --help                 \thiển thị _trợ giúp_ này.\n"
 
 #: src/whatis.c:202
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath]\n"
 "              [-L locale] [-C file] keyword ...\n"
 msgstr ""
-"cách sử dụng: %s [-dhV] [-r|-w|-e]  [-s phần] [-m hệ_thống]\n"
-"[-M đường_dẫn_hướng_dẫn] [-C tập_tin] từ_khóa ...\n"
+"sử dụng: %s [-dlhV] [-r|-w] [-s phần] [-m hệ_thống] [-M đường_dẫn_man]\n"
+"              [-L miền_địa_phương] [-C tập_tin] từ_khoá ...\n"
 
 #: src/whatis.c:205
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "-d, --debug                produce debugging info.\n"
 "-v, --verbose              print verbose warning messages.\n"
@@ -942,11 +948,15 @@ msgstr ""
 "-v, --verbose              \tin ra thông điệp cảnh báo _chi tiết_.\n"
 "-r, --regex               \tgiải dich mỗi từ khóa là _biểu thức chính quy_.\n"
 "-w, --wildcard             \tnhững từ khóa chứa _ký tự đại diện_.\n"
+"-l, --long                 đừng xén kết xuất thành chiều rộng của thiết bị "
+"cuối\n"
 "-s, --section phần      \t\ttìm kiếm trong chỉ _phần_ này thôi.\n"
 "-m, --systems hệ_thông\n"
 " \t\t\t\t\t\tbao gồm các trang hướng dẫn của hệ thống khác này.\n"
 "-M, --manpath đương_dẫn\n"
 " \t\t\t\t\t\t\tlập đường dẫn này là _đường dẫn_ tìm kiếm trang _hướng dẫn_.\n"
+"-L, --locale miền_địa_phương\txác định miền địa phương cho việc tìm kiếm "
+"này\n"
 "-C, --config-file tập_tin\n"
 "   \t\t\t\t\t\tsử dụng _tập tin cấu hình_ người dùng này.\n"
 "-V, --version           \thiển thị thông tin _phiên bản_.\n"
