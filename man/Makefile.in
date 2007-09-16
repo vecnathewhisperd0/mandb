@@ -74,16 +74,15 @@ sed -e 's,%pager%,$(pager),g' \
 $< > $@
 endef
 
-man1 = man manpath apropos whatis zsoelim
+man1 = man manpath apropos whatis zsoelim lexgrog manconv
 man5 = manpath
 man8 = mandb catman accessdb
 
-man1files = $(addprefix $(path)/man1/, $(addsuffix .1, $(man1)))
-man5files = $(addprefix $(path)/man5/, $(addsuffix .5, $(man5)))
-man8files = $(addprefix $(path)/man8/, $(addsuffix .8, $(man8)))
+man1files = $(addprefix $(path)/man1/, $(addsuffix .man1, $(man1)))
+man5files = $(addprefix $(path)/man5/, $(addsuffix .man5, $(man5)))
+man8files = $(addprefix $(path)/man8/, $(addsuffix .man8, $(man8)))
 
-allmanpages := $(foreach path, . $(NLS), $(man1files) $(man5files) $(man8files))
-allmanpages := $(allmanpages) ./man1/lexgrog.1 ./man1/manconv.1
+allmanpages := $(foreach file, $(foreach path, . $(NLS), $(man1files) $(man5files) $(man8files)), $(subst .man,.,$(wildcard $(file))))
 
 # NB manpath.5 is not expanded
 man.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(man)$(man1ext)
