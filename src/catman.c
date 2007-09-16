@@ -396,8 +396,6 @@ int main (int argc, char *argv[])
 	char **mp;
 	const char **sections, **sp;
 
-	int option_index; /* not used, but required by getopt_long() */
-
 	program_name = xstrdup (basename (argv[0]));
 
 	/* initialise the locale */
@@ -412,7 +410,7 @@ int main (int argc, char *argv[])
 	textdomain (PACKAGE);
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != EOF) {
+				 long_options, NULL)) != EOF) {
 		switch (c) {
 
 			case 'd':

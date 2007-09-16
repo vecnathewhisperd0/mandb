@@ -1009,11 +1009,11 @@ int main (int argc, char *argv[])
 /* parse the arguments contained in *argv[] and set appropriate vars */
 static void man_getopt (int argc, char *argv[])
 {
-	int c, option_index; /* not used, but required by getopt_long() */
+	int c;
 	static int apropos, whatis; /* retain values between calls */
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != EOF) {
+				 long_options, NULL)) != EOF) {
 
 		switch (c) {
 

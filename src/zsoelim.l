@@ -362,12 +362,12 @@ static void parse_file (void)
 
 int main (int argc, char *argv[])
 {
-	int c, option_index;
+	int c;
 
 	program_name = xstrdup (basename (argv[0]));
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != EOF) {
+				 long_options, NULL)) != EOF) {
 		switch (c) {
 			case 'V':
 				ver ();

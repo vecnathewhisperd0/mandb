@@ -452,14 +452,14 @@ static void usage (int status)
 
 int main (int argc, char **argv)
 {
-	int c, option_index;
+	int c;
 	int i;
 	int match_case = 0;
 
 	program_name = xstrdup (basename (argv[0]));
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != -1) {
+				 long_options, NULL)) != -1) {
 		switch (c) {
 			case 'd':
 				debug_level = 1;

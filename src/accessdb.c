@@ -92,7 +92,7 @@ static void usage (int status)
 
 int main (int argc, char *argv[])
 {
-	int c, option_index;
+	int c;
 	datum key;
 
 	program_name = xstrdup (basename (argv[0]));
@@ -102,7 +102,7 @@ int main (int argc, char *argv[])
 		cat_root = CAT_ROOT;
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != -1) {
+				 long_options, NULL)) != -1) {
 		switch (c) {
 			case 'h':
 				usage (OK);

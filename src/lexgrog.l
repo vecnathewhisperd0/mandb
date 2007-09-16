@@ -565,7 +565,7 @@ static void usage (int status)
 
 int main (int argc, char **argv)
 {
-	int c, option_index;
+	int c;
 	int type = 0;
 	int parse_man = 0, parse_cat = 0, show_whatis = 0, show_filters = 0;
 	const char *encoding = NULL;
@@ -574,7 +574,7 @@ int main (int argc, char **argv)
 	program_name = xstrdup (basename (argv[0]));
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != -1) {
+				 long_options, NULL)) != -1) {
 		switch (c) {
 			case 'm':
 				parse_man = 1;

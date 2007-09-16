@@ -518,8 +518,6 @@ int main (int argc, char *argv[])
 	int quiet_temp = 0;
 	char **mp;
 
-	int option_index; /* not used, but required by getopt_long() */
-
 #ifdef __profile__
 	char *cwd;
 #endif /* __profile__ */
@@ -535,7 +533,7 @@ int main (int argc, char *argv[])
 	textdomain (PACKAGE);
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != EOF) {
+				 long_options, NULL)) != EOF) {
 		switch (c) {
 			case 'd':
 				debug_level = 1;

@@ -743,7 +743,6 @@ int main (int argc, char *argv[])
 #ifdef HAVE_ICONV
 	char *locale_charset;
 #endif
-	int option_index;
 	int status = OK;
 
 	program_name = xstrdup (basename (argv[0]));
@@ -768,7 +767,7 @@ int main (int argc, char *argv[])
 	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != EOF) {
+				 long_options, NULL)) != EOF) {
 		switch (c) {
 
 			case 'd':

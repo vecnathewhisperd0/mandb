@@ -118,7 +118,6 @@ int main (int argc, char *argv[])
 	int c, global = 0, cat = 0;
 	const char *alt_system = "";
 	char *path_string;
-	int option_index; /* not used, but required by getopt_long() */
 
 	program_name = xstrdup (basename (argv[0]));
 	/* initialise the locale */
@@ -130,7 +129,7 @@ int main (int argc, char *argv[])
 	textdomain (PACKAGE);
 
 	while ((c = getopt_long (argc, argv, args,
-				 long_options, &option_index)) != EOF) {
+				 long_options, NULL)) != EOF) {
 		switch (c) {
 
 			case 'c':
