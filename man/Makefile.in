@@ -36,6 +36,7 @@ apropos := $(apropos)
 catman := $(catman)
 manpath := $(manpath)
 zsoelim := $(zsoelim)
+manconv := $(manconv)
 
 # capitalized variants for .TH lines
 thman := $(shell echo '$(man)' | tr '[:lower:]' '[:upper:]')
@@ -45,6 +46,7 @@ thapropos := $(shell echo '$(apropos)' | tr '[:lower:]' '[:upper:]')
 thcatman := $(shell echo '$(catman)' | tr '[:lower:]' '[:upper:]')
 thmanpath := $(shell echo '$(manpath)' | tr '[:lower:]' '[:upper:]')
 thzsoelim := $(shell echo '$(zsoelim)' | tr '[:lower:]' '[:upper:]')
+thmanconv := $(shell echo '$(manconv)' | tr '[:lower:]' '[:upper:]')
 
 # looks like a nice place to define a `canned' command sequence.
 define process_manpage
@@ -59,6 +61,7 @@ sed -e 's,%pager%,$(pager),g' \
     -e 's,%catman%,$(catman),g' \
     -e 's,%apropos%,$(apropos),g' \
     -e 's,%whatis%,$(whatis),g' \
+    -e 's,%manconv%,$(manconv),g' \
     -e 's,%thzsoelim%,$(thzsoelim),g' \
     -e 's,%thman%,$(thman),g' \
     -e 's,%thmandb%,$(thmandb),g' \
@@ -66,6 +69,7 @@ sed -e 's,%pager%,$(pager),g' \
     -e 's,%thcatman%,$(thcatman),g' \
     -e 's,%thapropos%,$(thapropos),g' \
     -e 's,%thwhatis%,$(thwhatis),g' \
+    -e 's,%thmanconv%,$(thmanconv),g' \
     -e 's,%manpath_config_file%,$(config_file),g' \
 $< > $@
 endef
@@ -79,7 +83,7 @@ man5files = $(addprefix $(path)/man5/, $(addsuffix .5, $(man5)))
 man8files = $(addprefix $(path)/man8/, $(addsuffix .8, $(man8)))
 
 allmanpages := $(foreach path, . $(NLS), $(man1files) $(man5files) $(man8files))
-allmanpages := $(allmanpages) ./man1/lexgrog.1
+allmanpages := $(allmanpages) ./man1/lexgrog.1 ./man1/manconv.1
 
 # NB manpath.5 is not expanded
 man.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(man)$(man1ext)
@@ -88,6 +92,7 @@ apropos.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(apropos)$(man1ext)
 whatis.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(whatis)$(man1ext)
 zsoelim.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(zsoelim)$(man1ext)
 lexgrog.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/lexgrog$(man1ext)
+manconv.1 = $(DESTDIR)$(manroot)/$(nlspath)/$(man1dir)/$(manconv)$(man1ext)
 manpath.5 = $(DESTDIR)$(manroot)/$(nlspath)/$(man5dir)/manpath$(man5ext)
 mandb.8 = $(DESTDIR)$(manroot)/$(nlspath)/$(man8dir)/$(mandb)$(man8ext)
 catman.8 = $(DESTDIR)$(manroot)/$(nlspath)/$(man8dir)/$(catman)$(man8ext)
@@ -124,14 +129,16 @@ nlsinstall:
 	$(INSTALL_DATA) $(nlspath)/man1/whatis.1 $(whatis.1)
 	$(INSTALL_DATA) $(nlspath)/man1/zsoelim.1 $(zsoelim.1)
 	-$(INSTALL_DATA) $(nlspath)/man1/lexgrog.1 $(lexgrog.1)
+	-$(INSTALL_DATA) $(nlspath)/man1/manconv.1 $(manconv.1)
 	$(INSTALL_DATA) $(nlspath)/man5/manpath.5 $(manpath.5)
 	$(INSTALL_DATA) $(nlspath)/man8/mandb.8 $(mandb.8)
 	$(INSTALL_DATA) $(nlspath)/man8/catman.8 $(catman.8)
 	$(INSTALL_DATA) $(nlspath)/man8/accessdb.8 $(accessdb.8)
 
 nlsuninstall:
-	rm -f $(man.1) $(manpath.1) $(apropos.1) $(whatis.1) $(zsoelim.1)
-	rm -f $(lexgrog.1) $(manpath.5) $(mandb.8) $(catman.8) $(accessdb.8)
+	rm -f $(man.1) $(manpath.1) $(apropos.1) $(whatis.1) $(zsoelim.1) \
+	      $(lexgrog.1) $(manconv.1) \
+	      $(manpath.5) $(mandb.8) $(catman.8) $(accessdb.8)
 
 # The standard targets
 install: all

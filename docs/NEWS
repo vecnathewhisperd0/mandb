@@ -24,6 +24,11 @@ Major changes since man-db 2.4.4:
 	  specify the character set but not the country, and so a full
 	  locale name is inconvenient.
 
+	o There is a new "manconv" program which can try multiple possible
+	  encodings for a file, thus allowing UTF-8 manual pages to be
+	  installed in any directory even without an explicit encoding
+	  declaration.
+
 	o A decompression library is now in place. This allows man-db to use
 	  zlib to decompress gzipped files, and allows most of its uses of
 	  temporary files to be removed. The only remaining exceptions are

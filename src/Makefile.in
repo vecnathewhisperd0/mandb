@@ -54,7 +54,7 @@ endif
 
 PROGS = man manpath mandb apropos whatis catman lexgrog zsoelim
 PUBTOOLS = accessdb
-PRIVTOOLS = globbing
+PRIVTOOLS = globbing manconv
 TOOLS = $(PUBTOOLS) $(PRIVTOOLS) wrapper
 
 # Special definitions for some compilations
@@ -65,6 +65,7 @@ DEFS_man.o = -DWHATIS=\"$(bindir)/$(whatis)\" \
 DEFS_catman.o = -DMAN=\"$(bindir)/$(man)\"
 DEFS_whatis.o = -DWHATIS
 DEFS_apropos.o = -DAPROPOS
+DEFS_encodings.o = -DMANCONV=\"$(libdir)/man-db/$(manconv)\"
 
 DEFS_.depend_man.d = $(DEFS_man.o)
 DEFS_.depend_catman.d = $(DEFS_catman.o)
@@ -77,7 +78,7 @@ DEFS_whatis = $(DEFS_whatis.o)
 DEFS_apropos = $(DEFS_apropos.o)
 
 # The default programs to build 
-all: $(PROGS) $(PUBTOOLS) wrapper man_db.conf
+all: $(PROGS) $(PUBTOOLS) manconv wrapper man_db.conf
 
 #--------------------#
 # some general rules #

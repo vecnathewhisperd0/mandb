@@ -42,6 +42,7 @@
 
 #include "manconfig.h"
 #include "lib/pathsearch.h"
+#include "lib/pipeline.h"
 #include "encodings.h"
 
 
@@ -630,4 +631,19 @@ const char *get_less_charset (const char *locale_charset)
 			return entry->less_charset;
 
 	return fallback_less_charset;
+}
+
+void add_manconv (pipeline *p, const char *source, const char *target)
+{
+	if (STREQ (source, "UTF-8")) {
+		if (STREQ (target, "UTF-8"))
+			return;
+		pipeline_command_args (p, "iconv", "-f", source, "-t", target,
+				       NULL);
+	} else {
+		char *sources = strappend (NULL, "UTF-8:", source, NULL);
+		pipeline_command_args (p, MANCONV, "-f", sources, "-t", target,
+				       NULL);
+		free (sources);
+	}
 }

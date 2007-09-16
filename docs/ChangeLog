@@ -1,3 +1,36 @@
+Sun Sep 16 20:25:24 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Add more intelligent guessing of manual page encodings. Thanks to
+	Adam Borowski for discussion leading to this.
+
+	* src/manconv.c: New program.
+	* man/man1/manconv.man1: Document it.
+	* .bzrignore: Ignore src/manconv.
+	* include/Defines.in (manconv): Add.
+	* man/Makefile.in (manconv, thmanconv, manconv.1): Add.
+	  (process_manpage): Add manconv and thmanconv.
+	  (allmanpages): Add ./man1/manconv.1.
+	  (nlsinstall): Install manconv.1.
+	  (nlsuninstall): Uninstall manconv.1.
+	* src/Makefile.in (PRIVTOOLS, all): Add manconv.
+	* po/POTFILES.in: Add src/manconv.c.
+	* po/man-db.pot, po/*.po: Update.
+
+	* src/man.c (PP_COOKIE): Move to ...
+	* include/manconfig.h.in (PP_COOKIE): ... here.
+
+	* src/encodings.c (add_manconv): New function to use manconv instead
+	  of iconv where appropriate.
+	* src/encodings.h (add_manconv): Add prototype.
+	* src/lexgrog.l (find_name): Use it.
+	* src/man.c (make_roff_command): Use it. Remove coding: preprocessor
+	  string handling, as manconv deals with that now.
+	* src/straycats.c (check_for_stray): Use it.
+	* src/Makefile.in (DEFS_encodings.o): Add, defining location of
+	  manconv.
+
+	* docs/NEWS: Document this.
+
 Sun Sep 16 12:41:05 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/catman.c (main), src/globbing.c (main), src/lexgrog.l (main),

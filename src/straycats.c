@@ -245,10 +245,8 @@ static int check_for_stray (void)
 
 			lang = lang_dir (mandir);
 			page_encoding = get_page_encoding (lang);
-			if (page_encoding && !STREQ (page_encoding, "UTF-8"))
-				pipeline_command_args (decomp, "iconv", "-c",
-						       "-f", page_encoding,
-						       "-t", "UTF-8", NULL);
+			if (page_encoding)
+				add_manconv (decomp, page_encoding, "UTF-8");
 			free (page_encoding);
 			free (lang);
 

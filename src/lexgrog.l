@@ -445,8 +445,6 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	pipeline *p;
 	char *page_encoding = NULL;
 
-	/* TODO: handle coding: preprocessor declarations */
-
 	if (strcmp (file, "-") == 0) {
 		p = decompress_fdopen (dup (fileno (stdin)));
 	} else {
@@ -480,9 +478,8 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	}
 	if (!page_encoding && encoding)
 		page_encoding = xstrdup (encoding);
-	if (page_encoding && !STREQ (page_encoding, "UTF-8"))
-		pipeline_command_args (p, "iconv", "-c", "-f", page_encoding,
-				       "-t", "UTF-8", NULL);
+	if (page_encoding)
+		add_manconv (p, page_encoding, "UTF-8");
 	free (page_encoding);
 	pipeline_start (p);
 

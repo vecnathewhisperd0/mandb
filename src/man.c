@@ -149,9 +149,6 @@ extern uid_t ruid;
 extern uid_t euid;
 #endif /* SECURE_MAN_UID */
 
-/* the magic cookie to request preprocessing */
-#define PP_COOKIE "'\\\" "
-
 /* the default preprocessor sequence */
 #ifndef DEFAULT_MANROFFSEQ
 #  define DEFAULT_MANROFFSEQ ""
@@ -1319,30 +1316,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		/* we don't have an external formatter script */
 		int using_tbl = 0;
 		const char *output_encoding = NULL, *locale_charset = NULL;
-		char *pp_encoding = NULL;
 
 		pipeline_command_argstr (p, get_def ("soelim", SOELIM));
-
-		if (strstr (pp_string, "-*-")) {
-			const char *pp_search = strstr (pp_string, "-*-") + 3;
-			while (*pp_search == ' ')
-				++pp_search;
-			if (STRNEQ (pp_search, "coding:", 7)) {
-				const char *pp_encoding_end;
-				pp_search += 7;
-				while (*pp_search == ' ')
-					++pp_search;
-				pp_encoding_end = strchr (pp_search, ' ');
-				if (pp_encoding_end)
-					pp_encoding = xstrndup
-						(pp_search,
-						 pp_encoding_end - pp_search);
-				else
-					pp_encoding = xstrdup (pp_search);
-				debug ("preprocessor encoding: %s\n",
-				       pp_encoding);
-			}
-		}
 
 		/* Load the roff_device value dependent on the language dir
 		 * in the path.
@@ -1355,10 +1330,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
 
-			if (pp_encoding) {
-				page_encoding = xstrdup (pp_encoding);
-			} else
-				page_encoding = get_page_encoding (lang);
+			page_encoding = get_page_encoding (lang);
 			source_encoding = get_source_encoding (lang);
 			debug ("page_encoding = %s\n", page_encoding);
 			debug ("source_encoding = %s\n", source_encoding);
@@ -1401,16 +1373,15 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			 * input to a safe escaped form.
 			 */
 			groff_preconv = get_groff_preconv ();
-			if (groff_preconv)
+			if (groff_preconv) {
+				add_manconv (p, page_encoding, page_encoding);
 				pipeline_command_args
 					(p, groff_preconv, "-e", page_encoding,
 					 NULL);
-			else if (roff_encoding &&
-			    !STREQ (page_encoding, roff_encoding))
-				pipeline_command_args (p, "iconv", "-c",
-						       "-f", page_encoding,
-						       "-t", roff_encoding,
-						       NULL);
+			} else if (roff_encoding)
+				add_manconv (p, page_encoding, roff_encoding);
+			else
+				add_manconv (p, page_encoding, page_encoding);
 
 			output_encoding = get_output_encoding (roff_device);
 			if (!output_encoding)
@@ -1556,8 +1527,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				pipeline_command_args (p, COL, NULL);
 #endif /* GNU_NROFF */
 		}
-
-		free (pp_encoding);
 	} else {
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
