@@ -1,3 +1,8 @@
+Mon Sep 17 00:11:38 UTC 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_start): Break after execvp, otherwise we
+	  segfault if execvp fails.
+
 Sun Sep 16 23:15:27 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.5.0-pre2.
