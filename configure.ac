@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 dnl
 dnl Initialise and check we're in the correct directory.
 dnl
-AC_INIT(man-db, 2.5.0-pre1)
+AC_INIT(man-db, 2.5.0-pre2)
 AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR(src/man.c)
 AC_CONFIG_AUX_DIR(tools)
@@ -12,7 +12,7 @@ AC_ARG_PROGRAM
 dnl
 dnl Define below date and version information to be put into man pages etc.
 dnl
-datemark=20070910
+datemark=20070916
 date=`LANG=C date -d $datemark +'%Y-%m-%d'`
 AC_SUBST(date)dnl
 dnl
