@@ -118,7 +118,7 @@ static struct directory_entry directory_table[] = {
 	{ "sr",		"ISO-8859-5",	"ISO-8859-5"		}, /* Serbian */
 	{ "tr",		"ISO-8859-9",	"ISO-8859-9"		}, /* Turkish */
 	{ "vi",		"TCVN5712-1",	"TCVN5712-1"		}, /* Vietnamese */
-	{ "zh_CN",	"EUC-CN",	"EUC-CN"		}, /* Simplified Chinese */
+	{ "zh_CN",	"GBK",		"GBK"			}, /* Simplified Chinese */
 	{ "zh_HK",	"BIG5HKSCS",	"BIG5HKSCS"		}, /* Traditional Chinese, Hong Kong */
 	{ "zh_TW",	"BIG5",		"BIG5"			}, /* Traditional Chinese */
 #endif /* MULTIBYTE_GROFF */
