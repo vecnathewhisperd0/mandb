@@ -342,9 +342,9 @@ based format:
 .RI < version >\|]\|]\|]
 
 If the desired page is available in your
-.IR locale,
-it will be displayed in lieu of the standard (usually American English)
-page.
+.IR locale ,
+it will be displayed in lieu of the standard
+(usually American English) page.
 
 Support for international message catalogues is also featured in this
 package and can be activated in the same way, again if available.
@@ -443,7 +443,7 @@ or both, are not harmful.
 For options that require an argument, each duplication will override the
 previous argument value.
 .TP
-.B \-l, \-\-local\-file
+.if !'po4a'hide' .B \-l, \-\-local\-file
 Activate `local' mode.
 Format and display local manual files instead of searching through the
 system's manual collection.
@@ -476,7 +476,7 @@ begins.
 Output such as the help message will always be displayed in the initially
 determined locale.
 .TP
-.B \-D, \-\-default
+.if !'po4a'hide' .B \-D, \-\-default
 This option is normally issued as the very first option and resets
 .B %man%'s
 behaviour to its default.
@@ -591,7 +591,7 @@ prompt string processing completely, use the
 .RB $ MANLESS
 environment variable described below.
 .TP
-.B \-7, \-\-ascii
+.if !'po4a'hide' .B \-7, \-\-ascii
 When viewing a pure
 .IR ascii (7)
 manual page on a 7 bit terminal or terminal emulator, some characters may
@@ -668,7 +668,7 @@ This option overrides the
 .RB $ MANSECT
 environment variable.
 .TP
-.B \-a, \-\-all
+.if !'po4a'hide' .B \-a, \-\-all
 By default,
 .B %man%
 will exit after displaying the most suitable manual page it finds.
@@ -676,12 +676,12 @@ Using this option forces
 .B %man%
 to display all the manual pages with names that match the search criteria.
 .TP
-.B \-c, \-\-catman
+.if !'po4a'hide' .B \-c, \-\-catman
 This option is not for general use and should only be used by the
 .B %catman%
 program.
 .TP
-.B \-d, \-\-debug
+.if !'po4a'hide' .B \-d, \-\-debug
 Print lots of debugging information.
 .TP
 .BI \-e\  sub-extension ,\ \-\-extension= sub-extension
@@ -718,24 +718,24 @@ to
 will restrict the search to pages having an extension of
 .BR *tcl .
 .TP
-.B \-f, \-\-whatis
+.if !'po4a'hide' .B \-f, \-\-whatis
 Equivalent to
 .BR %whatis% .
 Display a short description from the manual page, if available. See
 .BR %whatis% (1)
 for details.
 .TP
-.B \-h, \-\-help
+.if !'po4a'hide' .B \-h, \-\-help
 Print a help message and exit.
 .TP
-.B \-i, \-\-ignore\-case
+.if !'po4a'hide' .B \-i, \-\-ignore\-case
 Ignore case when searching for manual pages.
 This is the default.
 .TP
-.B \-I, \-\-match\-case
+.if !'po4a'hide' .B \-I, \-\-match\-case
 Search for manual pages case-sensitively.
 .TP
-.B \-k, \-\-apropos
+.if !'po4a'hide' .B \-k, \-\-apropos
 Equivalent to
 .BR %apropos% .
 Search the short manual page descriptions for keywords and display any
@@ -795,7 +795,7 @@ environment variable.
 .B %zsoelim%
 is always run as the very first preprocessor.
 .TP
-.B \-u, \-\-update
+.if !'po4a'hide' .B \-u, \-\-update
 This option causes
 .B %man%
 to perform an `inode level' consistency check on its database caches to
@@ -804,7 +804,7 @@ It will only have a useful effect if
 .B %man%
 is installed with the setuid bit set.
 .TP
-.B \-t, \-\-troff
+.if !'po4a'hide' .B \-t, \-\-troff
 Use
 .I %troff%
 to format the manual page to stdout.
@@ -840,7 +840,7 @@ This option implies
 .B \-T
 with the X75, X75-12, X100, or X100-12 device respectively.
 .TP
-.B \-Z, \-\-ditroff
+.if !'po4a'hide' .B \-Z, \-\-ditroff
 .B groff
 will run
 .B troff
@@ -881,55 +881,55 @@ is currently designed, the argument to this function must be an
 device such as
 .BR ascii ", " latin1 ", or " utf8 .
 .TP
-.B \-w, \-\-where, \-\-location
+.if !'po4a'hide' .B \-w, \-\-where, \-\-location
 Don't actually display the manual pages, but do print the location(s) of
 the source nroff files that would be formatted.
 .TP
-.B \-W, \-\-where\-cat, \-\-location\-cat
+.if !'po4a'hide' .B \-W, \-\-where\-cat, \-\-location\-cat
 Don't actually display the manual pages, but do print the location(s) of
 the cat files that would be displayed.
 If \-w and \-W are both specified, print both separated by a space.
 .TP
-.B \-V, \-\-version
+.if !'po4a'hide' .B \-V, \-\-version
 Display version information.
 .SH "EXIT STATUS"
 .TP
-.B 0
+.if !'po4a'hide' .B 0
 Successful program execution.
 .TP
-.B 1
+.if !'po4a'hide' .B 1
 Usage, syntax or configuration file error.
 .TP
-.B 2
+.if !'po4a'hide' .B 2
 Operational error.
 .TP
-.B 3
+.if !'po4a'hide' .B 3
 A child process returned a non-zero exit status.
 .TP
-.B 16
+.if !'po4a'hide' .B 16
 At least one of the pages/files/keywords didn't exist or wasn't matched.
 .SH ENVIRONMENT
 .\".TP \w'MANROFFSEQ\ \ 'u
 .TP
-.B MANPATH
+.if !'po4a'hide' .B MANPATH
 If
 .RB $ MANPATH
 is set, its value is used as the path to search for manual pages.
 .TP
-.B MANROFFSEQ
+.if !'po4a'hide' .B MANROFFSEQ
 If
 .RB $ MANROFFSEQ
 is set, its value is used to determine the set of preprocessors to pass
 each manual page through.
 The default preprocessor list is system dependent.
 .TP
-.B MANSECT
+.if !'po4a'hide' .B MANSECT
 If
 .RB $ MANSECT
 is set, its value is a colon-delimited list of sections and it is used to
 determine which manual sections to search and in what order.
 .TP
-.BR MANPAGER , " PAGER"
+.if !'po4a'hide' .BR MANPAGER , " PAGER"
 If
 .RB $ MANPAGER
 or
@@ -942,7 +942,7 @@ By default,
 .B %pager%
 is used.
 .TP
-.B MANLESS
+.if !'po4a'hide' .B MANLESS
 If
 .RB $ MANLESS
 is set,
@@ -961,7 +961,7 @@ For example, if you want to set the prompt string unconditionally to
 to
 .RB \(oq \-Psmy\ prompt\ string \(cq.
 .TP
-.B BROWSER
+.if !'po4a'hide' .B BROWSER
 If
 .RB $ BROWSER
 is set, its value is a colon-delimited list of commands, each of which in
@@ -977,7 +977,7 @@ is replaced by a single percent sign (%), and
 .I %c
 is replaced by a colon (:).
 .TP
-.B SYSTEM
+.if !'po4a'hide' .B SYSTEM
 If
 .RB $ SYSTEM
 is set, it will have the same effect as option
@@ -986,7 +986,7 @@ where string will be taken as
 .RB $ SYSTEM 's
 contents.
 .TP
-.B MANOPT
+.if !'po4a'hide' .B MANOPT
 If
 .RB $ MANOPT
 is set, it will be parsed prior to
@@ -1001,7 +1001,7 @@ it is expected that they will become obsolete.
 N.B. All spaces that should be interpreted as part of an option's argument
 must be escaped.
 .TP
-.B MANWIDTH
+.if !'po4a'hide' .B MANWIDTH
 If
 .RB $ MANWIDTH
 is set, its value is used as the line length for which manual pages should
@@ -1015,7 +1015,7 @@ or falling back to 80 characters if neither is available).
 Cat pages will only be saved when the default formatting can be used, that
 is when the terminal line length is between 66 and 80 characters.
 .TP
-.B MAN_KEEP_FORMATTING
+.if !'po4a'hide' .B MAN_KEEP_FORMATTING
 Normally, when output is not being directed to a terminal (such as to a file
 or a pipe), formatting characters are discarded to make it easier to read
 the result without special tools.
@@ -1026,7 +1026,7 @@ This may be useful for wrappers around
 .B %man%
 that can interpret formatting characters.
 .TP
-.BR LANG , " LC_MESSAGES"
+.if !'po4a'hide' .BR LANG , " LC_MESSAGES"
 Depending on system and implementation, either or both of
 .RB $ LANG
 and
@@ -1039,18 +1039,18 @@ See
 for precise details.
 .SH FILES
 .TP
-.I %manpath_config_file%
+.if !'po4a'hide' .I %manpath_config_file%
 man-db configuration file.
 .TP
-.I /usr/share/man
+.if !'po4a'hide' .I /usr/share/man
 A global manual page hierarchy.
 .TP
-.I /usr/share/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /usr/share/man/index.(bt|db|dir|pag)
 A traditional global
 .I index
 database cache.
 .TP
-.I /var/cache/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /var/cache/man/index.(bt|db|dir|pag)
 An alternate or FHS
 compliant global
 .I index

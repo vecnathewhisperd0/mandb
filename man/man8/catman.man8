@@ -54,7 +54,7 @@ database cache associated with each hierarchy to determine which files
 need to be formatted.
 .SH OPTIONS
 .TP
-.B \-d, \-\-debug
+.if !'po4a'hide' .B \-d, \-\-debug
 Print debugging information.
 .TP
 .BI \-M\  path ,\ \-\-manpath= path
@@ -66,45 +66,45 @@ in the man-db configuration file.
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
-.B \-h, \-\-help
+.if !'po4a'hide' .B \-h, \-\-help
 Print a help message and exit.
 .TP
-.B \-V, \-\-version
+.if !'po4a'hide' .B \-V, \-\-version
 Display version information.
 .SH ENVIRONMENT
 .TP
-.B MANSECT
+.if !'po4a'hide' .B MANSECT
 If
 .RB $ MANSECT
 is set, its value is a colon-delimited list of sections and it is used to
 determine which manual sections to search and in what order.
 .TP
-.B MANPATH
+.if !'po4a'hide' .B MANPATH
 If
 .RB $ MANPATH
 is set, its value is interpreted as the colon-delimited manual page
 hierarchy search path to use.
 .SH FILES
 .TP
-.I %manpath_config_file%
+.if !'po4a'hide' .I %manpath_config_file%
 man-db configuration file.
 .TP
-.I /usr/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /usr/man/index.(bt|db|dir|pag)
 A traditional global
 .I index
 database cache.
 .TP
-.I /var/catman/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /var/catman/index.(bt|db|dir|pag)
 An alternate or FSSTND
 compliant global
 .I index
 database cache.
 .SH "SEE ALSO"
-.BR %man% (1),
-.BR manpath (5), 
-.BR %mandb% (8).
+.if !'po4a'hide' .BR %man% (1),
+.if !'po4a'hide' .BR manpath (5), 
+.if !'po4a'hide' .BR %mandb% (8).
 .SH AUTHOR
 .nf
-Wilf. (G.Wilford@ee.surrey.ac.uk).
-Fabrizio Polacco (fpolacco@debian.org).
+.if !'po4a'hide' Wilf. (G.Wilford@ee.surrey.ac.uk).
+.if !'po4a'hide' Fabrizio Polacco (fpolacco@debian.org).
 .fi

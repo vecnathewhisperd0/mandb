@@ -74,21 +74,21 @@ with the
 option to re-create the databases from scratch. 
 .SH OPTIONS
 .TP
-.B \-d, \-\-debug
+.if !'po4a'hide' .B \-d, \-\-debug
 Produce debugging information.
 .TP
-.B \-q, \-\-quiet
+.if !'po4a'hide' .B \-q, \-\-quiet
 Produce no warnings.
 .TP
-.B \-s, \-\-no-straycats
+.if !'po4a'hide' .B \-s, \-\-no-straycats
 Do not spend time looking for or adding information to the databases
 regarding stray cats.
 .TP
-.B \-p, \-\-no-purge
+.if !'po4a'hide' .B \-p, \-\-no-purge
 Do not spend time checking for deleted manual pages and purging them from
 the databases.
 .TP
-.B \-c, \-\-create
+.if !'po4a'hide' .B \-c, \-\-create
 By default, 
 .B %mandb%
 will try to update any previously created databases.
@@ -100,17 +100,17 @@ to delete previous databases and re-create them from scratch, and implies
 This may be necessary if a database becomes corrupt or if a new database
 storage scheme is introduced in the future.
 .TP
-.B \-u, \-\-user-db
+.if !'po4a'hide' .B \-u, \-\-user-db
 Create user databases only, even with write permissions necessary to create
 system databases.
 .TP
-.B \-t, \-\-test
+.if !'po4a'hide' .B \-t, \-\-test
 Perform correctness checks on manual pages in the hierarchy search path.
 With this option,
 .B %mandb%
 will not alter existing databases.
 .TP
-.B \-f, \-\-filename
+.if !'po4a'hide' .B \-f, \-\-filename
 Update only the entries for the given filename.
 This option is not for general use; it is used internally by
 .B %man%
@@ -128,23 +128,23 @@ and
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
-.B \-h, \-\-help
+.if !'po4a'hide' .B \-h, \-\-help
 Show the usage message, then exit.
 .TP
-.B \-V, \-\-version
+.if !'po4a'hide' .B \-V, \-\-version
 Show the version, then exit.
 .SH "EXIT STATUS"
 .TP
-.B 0
+.if !'po4a'hide' .B 0
 Successful program execution.
 .TP
-.B 1
+.if !'po4a'hide' .B 1
 Usage, syntax, or configuration file error.
 .TP
-.B 2
+.if !'po4a'hide' .B 2
 Operational error.
 .TP
-.B 3
+.if !'po4a'hide' .B 3
 A child process failed.
 .SH DIAGNOSTICS
 The following warning messages can be emitted during database building.
@@ -182,29 +182,29 @@ uncompressed version of the same manual page.
 All but the most recent are ignored.
 .SH FILES
 .TP
-.I %manpath_config_file%
+.if !'po4a'hide' .I %manpath_config_file%
 man-db configuration file.
 .TP
-.I /usr/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /usr/man/index.(bt|db|dir|pag)
 A traditional global
 .I index
 database cache.
 .TP
-.I /var/catman/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /var/catman/index.(bt|db|dir|pag)
 An alternate or FSSTND
 compliant global
 .I index
 database cache.
 .TP
-.I /var/cache/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /var/cache/man/index.(bt|db|dir|pag)
 An FHS compliant global
 .I index
 database cache.
 .SH "SEE ALSO"
-.BR %man% (1),
-.BR lexgrog (1),
-.BR manpath (5),
-.BR %catman% (8).
+.if !'po4a'hide' .BR %man% (1),
+.if !'po4a'hide' .BR lexgrog (1),
+.if !'po4a'hide' .BR manpath (5),
+.if !'po4a'hide' .BR %catman% (8).
 .PP
 The
 .B "WHATIS PARSING"
@@ -212,7 +212,7 @@ section formerly in this manual page is now part of
 .BR lexgrog (1).
 .SH AUTHOR
 .nf
-Wilf. (G.Wilford@ee.surrey.ac.uk).
-Fabrizio Polacco (fpolacco@debian.org).
-Colin Watson (cjwatson@debian.org).
+.if !'po4a'hide' Wilf. (G.Wilford@ee.surrey.ac.uk).
+.if !'po4a'hide' Fabrizio Polacco (fpolacco@debian.org).
+.if !'po4a'hide' Colin Watson (cjwatson@debian.org).
 .fi

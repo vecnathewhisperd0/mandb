@@ -44,7 +44,7 @@ input files is \(lq\-\(rq, it will read from standard input; if any input
 file is compressed, a decompressed version will be read automatically.
 .SH OPTIONS
 .TP
-.B \-m, \-\-man
+.if !'po4a'hide' .B \-m, \-\-man
 Parse input as man page source files.
 This is the default if neither
 .B \-\-man
@@ -52,14 +52,14 @@ nor
 .B \-\-cat
 is given.
 .TP
-.B \-c, \-\-cat
+.if !'po4a'hide' .B \-c, \-\-cat
 Parse input as preformatted man pages (\(lqcat pages\(rq).
 .B \-\-man
 and
 .B \-\-cat
 may not be given simultaneously.
 .TP
-.B \-w, \-\-whatis
+.if !'po4a'hide' .B \-w, \-\-whatis
 Display the name and description from the man page's header, as used by
 .B apropos
 and
@@ -70,7 +70,7 @@ nor
 .B \-\-filters
 is given.
 .TP
-.B \-f, \-\-filters
+.if !'po4a'hide' .B \-f, \-\-filters
 Display the list of filters needed to preprocess the man page before
 formatting with
 .B nroff
@@ -81,20 +81,20 @@ or
 Override the guessed character set for the page to
 .IR encoding .
 .TP
-.B \-h, \-\-help
+.if !'po4a'hide' .B \-h, \-\-help
 Print a help message and exit.
 .TP
-.B \-V, \-\-version
+.if !'po4a'hide' .B \-V, \-\-version
 Display version information.
 .SH "EXIT STATUS"
 .TP
-.B 0
+.if !'po4a'hide' .B 0
 Successful program execution.
 .TP
-.B 1
+.if !'po4a'hide' .B 1
 Usage error.
 .TP
-.B 2
+.if !'po4a'hide' .B 2
 .B lexgrog
 failed to parse one or more of its input files.
 .SH EXAMPLES
@@ -189,10 +189,10 @@ Sometimes authors include a NAME section, but place free-form text there
 rather than \(oqname \e\- description\(cq.
 However, any syntax resembling the above should be accepted.
 .SH "SEE ALSO"
-.IR man (1),
-.IR mandb (8),
-.IR apropos (1),
-.IR whatis (1).
+.if !'po4a'hide' .IR man (1),
+.if !'po4a'hide' .IR mandb (8),
+.if !'po4a'hide' .IR apropos (1),
+.if !'po4a'hide' .IR whatis (1).
 .SH NOTES
 .B lexgrog
 attempts to parse files containing .so requests, but will only be able
@@ -204,9 +204,9 @@ The code used by
 to scan man pages was written by:
 .PP
 .nf
-Wilf. (G.Wilford@ee.surrey.ac.uk).
-Fabrizio Polacco (fpolacco@debian.org).
-Colin Watson (cjwatson@debian.org).
+.if !'po4a'hide' Wilf. (G.Wilford@ee.surrey.ac.uk).
+.if !'po4a'hide' Fabrizio Polacco (fpolacco@debian.org).
+.if !'po4a'hide' Colin Watson (cjwatson@debian.org).
 .fi
 .PP
 Colin Watson wrote the current incarnation of the command-line

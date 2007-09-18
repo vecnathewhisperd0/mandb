@@ -60,13 +60,13 @@ Depending on your installation, this may be run by a periodic cron job, or
 may need to be run manually after new manual pages have been installed.
 .SH OPTIONS
 .TP
-.B \-d, \-\-debug
+.if !'po4a'hide' .B \-d, \-\-debug
 Print debugging information.
 .TP
-.B \-v, \-\-verbose
+.if !'po4a'hide' .B \-v, \-\-verbose
 Print verbose warning messages.
 .TP
-.B \-r, \-\-regex
+.if !'po4a'hide' .B \-r, \-\-regex
 Interpret each keyword as a regular expression.
 This is the default behaviour.
 Each keyword will be matched against the page names and the descriptions
@@ -74,7 +74,7 @@ independently.
 It can match any part of either.
 The match is not limited to word boundaries.
 .TP
-.B \-w, \-\-wildcard
+.if !'po4a'hide' .B \-w, \-\-wildcard
 Interpret each keyword as a pattern containing shell style wildcards.
 Each keyword will be matched against the page names and the descriptions
 independently.
@@ -86,15 +86,15 @@ description or page name.
 Otherwise the keyword is also allowed to match on word boundaries in the
 description.
 .TP
-.B \-e, \-\-exact
+.if !'po4a'hide' .B \-e, \-\-exact
 Each keyword will be exactly matched against the page names and the
 descriptions.
 .TP
-.B \-a, \-\-and
+.if !'po4a'hide' .B \-a, \-\-and
 Only display items that match all the supplied keywords.
 The default is to display items that match any keyword.
 .TP
-.B \-l, \-\-long
+.if !'po4a'hide' .B \-l, \-\-long
 Do not trim output to the terminal width.
 Normally, output will be truncated to the terminal width to avoid ugly
 results from poorly-written
@@ -179,27 +179,27 @@ determined locale.
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
-.B \-h, \-\-help
+.if !'po4a'hide' .B \-h, \-\-help
 Print a help message and exit.
 .TP
-.B \-V, \-\-version
+.if !'po4a'hide' .B \-V, \-\-version
 Display version information.
 .SH "EXIT STATUS"
 .TP
-.B 0
+.if !'po4a'hide' .B 0
 Successful program execution.
 .TP
-.B 1
+.if !'po4a'hide' .B 1
 Usage, syntax or configuration file error.
 .TP
-.B 2
+.if !'po4a'hide' .B 2
 Operational error.
 .TP
-.B 16
+.if !'po4a'hide' .B 16
 Nothing was found that matched the criteria specified.
 .SH ENVIRONMENT
 .TP
-.B SYSTEM
+.if !'po4a'hide' .B SYSTEM
 If
 .RB $ SYSTEM
 is set, it will have the same effect as if it had been specified as the
@@ -207,13 +207,13 @@ argument to the
 .B \-m
 option.
 .TP
-.B MANPATH
+.if !'po4a'hide' .B MANPATH
 If
 .RB $ MANPATH
 is set, its value is interpreted as the colon-delimited manual page
 hierarchy search path to use.
 .TP
-.B MANWIDTH
+.if !'po4a'hide' .B MANWIDTH
 If
 .RB $ MANWIDTH
 is set, its value is used as the terminal width (see the
@@ -225,7 +225,7 @@ if available, the value of
 .RB $ COLUMNS ,
 or falling back to 80 characters if all else fails.
 .TP
-.B POSIXLY_CORRECT
+.if !'po4a'hide' .B POSIXLY_CORRECT
 If 
 .RB $ POSIXLY_CORRECT
 is set, even to a null value, the default 
@@ -235,27 +235,27 @@ search will be as an extended regex
 Nowadays, this is the default behaviour anyway.
 .SH FILES
 .TP
-.I /usr/share/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /usr/share/man/index.(bt|db|dir|pag)
 A traditional global
 .I index
 database cache.
 .TP
-.I /var/cache/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /var/cache/man/index.(bt|db|dir|pag)
 An alternate or FHS
 compliant global
 .I index
 database cache.
 .TP
-.I /usr/share/man/\|.\|.\|.\|/whatis
+.if !'po4a'hide' .I /usr/share/man/\|.\|.\|.\|/whatis
 A traditional 
 .B whatis
 text database.
 .SH "SEE ALSO"
-.BR %whatis% (1),
-.BR %man% (1),
-.BR %mandb% (8).
+.if !'po4a'hide' .BR %whatis% (1),
+.if !'po4a'hide' .BR %man% (1),
+.if !'po4a'hide' .BR %mandb% (8).
 .SH AUTHOR
 .nf
-Wilf. (G.Wilford@ee.surrey.ac.uk).
-Fabrizio Polacco (fpolacco@debian.org).
+.if !'po4a'hide' Wilf. (G.Wilford@ee.surrey.ac.uk).
+.if !'po4a'hide' Fabrizio Polacco (fpolacco@debian.org).
 .fi
