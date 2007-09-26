@@ -306,7 +306,7 @@ static int match_in_directory (const char *path, const char *pattern,
 	return 0;
 }
 
-char **look_for_file (const char *unesc_hier, const char *sec,
+char **look_for_file (const char *hier, const char *sec,
 		      const char *unesc_name, int cat, int match_case)
 {
 	char *pattern = NULL, *path = NULL;
@@ -314,7 +314,7 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 	static int cleanup_installed = 0;
 	int status = 1;
 	static int layout = -1;
-	char *hier, *name;
+	char *name;
 
 	if (!cleanup_installed) {
 		/* appease valgrind */
@@ -330,7 +330,6 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 		debug ("Layout is %s (%d)\n", mandir_layout, layout);
 	}
 
-	hier = escape_shell (unesc_hier);
 	name = escape_shell (unesc_name);
 
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
@@ -424,7 +423,6 @@ char **look_for_file (const char *unesc_hier, const char *sec,
 	}
 
 	free (name);
-	free (hier);
 	free (path);
 	free (pattern);
 

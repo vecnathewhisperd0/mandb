@@ -21,5 +21,5 @@
  */
 
 /* globbing.c */
-extern char **look_for_file (const char *unesc_hier, const char *sec,
+extern char **look_for_file (const char *hier, const char *sec,
 			     const char *unesc_name, int cat, int match_case);
