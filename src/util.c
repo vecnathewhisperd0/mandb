@@ -165,7 +165,7 @@ char *escape_shell (const char *unesc)
 		if ((*unescp >= '0' && *unescp <= '9') ||
 		    (*unescp >= 'A' && *unescp <= 'Z') ||
 		    (*unescp >= 'a' && *unescp <= 'z') ||
-		    strchr (",-./:=@_", *unescp))
+		    strchr (",-./:@_", *unescp))
 			*escp++ = *unescp;
 		else {
 			*escp++ = '\\';
