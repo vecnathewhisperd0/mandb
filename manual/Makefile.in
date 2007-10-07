@@ -63,6 +63,7 @@ clean: mostlyclean
 realclean distclean: clean
 	rm -f $(manual).dvi $(manual).ps $(manual).cat $(manual).tps \
 	      $(manual).html $(manual)-*.png
+	rm -f Makefile
 
 TAGS:
 	$(MKTAGS) $(SRCS)
