@@ -121,7 +121,7 @@ static char **add_dir_to_path_list (char **mphead, char **mp, const char *p);
 
 static void add_to_list (const char *key, const char *cont, int flag)
 {
-	struct list *list = (struct list *) malloc (sizeof (struct list));
+	struct list *list = (struct list *) xmalloc (sizeof (struct list));
 	list->key = xstrdup (key);
 	list->cont = xstrdup (cont);
 	list->flag = flag;

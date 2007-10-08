@@ -2639,7 +2639,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	if (!insert_found)
 		insert = prev;
 
-	candp = (struct candidate *) malloc (sizeof (struct candidate));
+	candp = (struct candidate *) xmalloc (sizeof (struct candidate));
 	candp->req_name = req_name;
 	candp->from_db = from_db;
 	candp->cat = cat;

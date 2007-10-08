@@ -103,7 +103,7 @@ popen (const char *cmd, const char *type)
 
 	/* extend fd2pid up to index fd if necessary */
 	if (fd > max_fd) {
-		pid_t *new = malloc ((fd + 1) * sizeof (pid_t));
+		pid_t *new = xmalloc ((fd + 1) * sizeof (pid_t));
 		if (new) {
 			/* copy old entries */
 			memcpy (new, fd2pid, (max_fd + 1) * sizeof (pid_t));
