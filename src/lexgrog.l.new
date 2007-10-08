@@ -303,7 +303,7 @@ char *find_name(char *file, char *filename, short catfile)
 		/* wipe out any initial spaces */
 		for (p_name = newname; *p_name == ' '; p_name++);
 		/* prepend filters to whatis */
-		return strappend( 0, "§", filters, "§", p_name, 0);
+		return appendstr( 0, "§", filters, "§", p_name, 0);
 	}
 }
 

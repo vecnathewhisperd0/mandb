@@ -299,7 +299,7 @@ static char *pathappend (char *oldpath, const char *appendage)
 				} else if (*terminator == ':') {
 					char *newapp;
 					*search = 0;
-					newapp = strappend (NULL, app_dedup,
+					newapp = appendstr (NULL, app_dedup,
 							    terminator + 1,
 							    NULL);
 					free (app_dedup);
@@ -314,7 +314,7 @@ static char *pathappend (char *oldpath, const char *appendage)
 			       oldpath, appendage,
 			       oldpath, *app_dedup ? ":" : "", app_dedup);
 		if (*app_dedup)
-			oldpath = strappend (oldpath, ":", app_dedup, NULL);
+			oldpath = appendstr (oldpath, ":", app_dedup, NULL);
 		free (app_dedup);
 		return oldpath;
 	} else
@@ -481,7 +481,7 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 				continue;
 			if (STRNEQ (name, "man", 3))
 				continue;
-			fullpath = strappend (NULL, path, "/", name, NULL);
+			fullpath = appendstr (NULL, path, "/", name, NULL);
 			if (is_directory (fullpath) != 1) {
 				free (fullpath);
 				continue;
@@ -547,7 +547,7 @@ static char *add_system_manpath (const char *systems, const char *manpathlist)
 					++next;
 				} else
 					element = xstrdup (path);
-				newdir = strappend (newdir, element, "/",
+				newdir = appendstr (newdir, element, "/",
 						    one_system, NULL);
 				free (element);
 
@@ -647,7 +647,7 @@ char *get_manpath (const char *systems)
 				       _("warning: $MANPATH set, "
 					 "prepending %s"),
 				       CONFIG_FILE);
-			manpathlist = strappend (NULL,
+			manpathlist = appendstr (NULL,
 						 guess_manpath (systems),
 						 add_system_manpath
 							(systems, manpathlist),
@@ -658,7 +658,7 @@ char *get_manpath (const char *systems)
 				       _("warning: $MANPATH set, "
 					 "appending %s"),
 				       CONFIG_FILE);
-			manpathlist = strappend (NULL,
+			manpathlist = appendstr (NULL,
 						 add_system_manpath
 							(systems, manpathlist),
 						 guess_manpath (systems),
@@ -670,7 +670,7 @@ char *get_manpath (const char *systems)
 				       _("warning: $MANPATH set, "
 					 "inserting %s"),
 				       CONFIG_FILE);
-			manpathlist = strappend (NULL,
+			manpathlist = appendstr (NULL,
 						 add_system_manpath
 							(systems, manpathlist),
 						 ":", guess_manpath (systems),
@@ -726,8 +726,8 @@ mkcatdirs (const char *mandir, const char *catdir)
 			drop_effective_privs ();
 		}
 		/* then the hierarchy */
-		catname = strappend (NULL, catdir, "/cat1", NULL);
-		manname = strappend (NULL, mandir, "/man1", NULL);
+		catname = appendstr (NULL, catdir, "/cat1", NULL);
+		manname = appendstr (NULL, mandir, "/man1", NULL);
 		if (is_directory (catdir) == 1) {
 			int j;
 			regain_effective_privs ();
@@ -834,7 +834,7 @@ void read_config_file(void)
 	if (home) {
 		char *dotmanpath;
 		if (!user_config_file)
-			dotmanpath = strappend (home, "/.manpath", NULL);
+			dotmanpath = appendstr (home, "/.manpath", NULL);
 		else
 			dotmanpath = xstrdup (user_config_file);
 		config = fopen (dotmanpath, "r");
@@ -1054,7 +1054,7 @@ static __inline__ char *has_mandir (const char *path)
 			*newpath = '\0';
 	}
 
-	newpath = strappend (newpath, path, "/man", NULL);
+	newpath = appendstr (newpath, path, "/man", NULL);
 
 	if (is_directory (newpath) == 1)
 		return newpath;
@@ -1085,7 +1085,7 @@ static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
 			if (!cwd)
 				error (FATAL, errno,
 				       _("can't determine current directory"));
-			*mp = strappend (cwd, "/", p, NULL);
+			*mp = appendstr (cwd, "/", p, NULL);
 		} else 
 			*mp = xstrdup (p);
 
@@ -1164,15 +1164,15 @@ char *get_catpath (const char *name, int cattype)
 
 				if (*suffix == '/') {
 					++suffix;
-					catpath = strappend (catpath, "/",
+					catpath = appendstr (catpath, "/",
 							     NULL);
 				}
 				if (STRNEQ (suffix, "man", 3)) {
 					suffix += 3;
-					catpath = strappend (catpath, "cat",
+					catpath = appendstr (catpath, "cat",
 							     NULL);
 				}
-				catpath = strappend (catpath, suffix, NULL);
+				catpath = appendstr (catpath, suffix, NULL);
 			  	return catpath;
 			}
 		}

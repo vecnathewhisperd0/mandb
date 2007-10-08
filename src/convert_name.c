@@ -86,7 +86,7 @@ char *convert_name (const char *name, int fsstnd)
 
 #ifdef COMP_CAT
 	/* TODO: BSD layout requires .0. */
-	to_name = strappend (NULL, namestem, "." COMPRESS_EXT, NULL);
+	to_name = appendstr (NULL, namestem, "." COMPRESS_EXT, NULL);
 #else /* !COMP_CAT */
 	to_name = xstrdup (namestem);
 #endif /* COMP_CAT */

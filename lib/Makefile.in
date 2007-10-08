@@ -34,7 +34,7 @@ MANCPPFLAGS = -I../include -I$(top_srcdir) -I$(srcdir)
 
 ALLSRCS = alloca.c basename.c cleanup.c error.c fnmatch.c getopt.c getopt1.c \
 	  glob.c memcmp.c putenv.c realpath.c rename.c setenv.c \
-	  strappend.c strcspn.c strsep.c strspn.c strstr.c strnlen.c \
+	  appendstr.c strcspn.c strsep.c strspn.c strstr.c strnlen.c \
 	  unsetenv.c xmalloc.c xstrdup.c xstrndup.c \
 	  waitpid.c tempfile.c mkdtemp.c mkstemp.c tempname.c hashtable.c \
 	  xstrsignal.c xsigaction.c pipeline.c getcwdalloc.c pathsearch.c \
@@ -44,7 +44,7 @@ ALLOBJS = $(ALLSRCS:.c=.o)
 
 XOBJS = xstrdup.o xstrndup.o xmalloc.o error.o xstrsignal.o xsigaction.o
 
-ALL = @LIBOBJS@ @ALLOCA@ $(libobjects) cleanup.o strappend.o tempfile.o \
+ALL = @LIBOBJS@ @ALLOCA@ $(libobjects) cleanup.o appendstr.o tempfile.o \
       hashtable.o pipeline.o getcwdalloc.o pathsearch.o debug.o linelength.o \
       decompress.o \
       $(XOBJS)

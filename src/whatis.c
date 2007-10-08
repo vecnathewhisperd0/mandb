@@ -253,7 +253,7 @@ static char *simple_convert (iconv_t conv, char *string)
 /* do the old thing, if we cannot find the relevant database */
 static __inline__ int use_grep (char *page, char *manpath)
 {
-	char *whatis_file = strappend (NULL, manpath, "/whatis", NULL);
+	char *whatis_file = appendstr (NULL, manpath, "/whatis", NULL);
 	int status;
 
 	if (access (whatis_file, R_OK) == 0) {
@@ -264,7 +264,7 @@ static __inline__ int use_grep (char *page, char *manpath)
 
 #if defined(WHATIS)
 		flags = get_def_user ("whatis_grep_flags", WHATIS_GREP_FLAGS);
-		anchored_page = strappend (NULL, "^", page, NULL);
+		anchored_page = appendstr (NULL, "^", page, NULL);
 #elif defined(APROPOS)
 #ifdef REGEX
 		if (regex)
@@ -374,12 +374,12 @@ static void display (struct mandata *info, char *page)
 
 	if (strlen (page_name) > (size_t) (line_len / 2)) {
 		string = xstrndup (page_name, line_len / 2 - 3);
-		string = strappend (string, "...", NULL);
+		string = appendstr (string, "...", NULL);
 	} else
 		string = xstrdup (page_name);
-	string = strappend (string, " (", info->ext, ")", NULL);
+	string = appendstr (string, " (", info->ext, ")", NULL);
 	if (!STREQ (info->pointer, "-") && !STREQ (info->pointer, page))
-		string = strappend (string, " [", info->pointer, "]", NULL);
+		string = appendstr (string, " [", info->pointer, "]", NULL);
 
 	if (strlen (string) < (size_t) 20) {
 		int i;
@@ -388,14 +388,14 @@ static void display (struct mandata *info, char *page)
 			string[i] = ' ';
 		string[i] = '\0';
 	}
-	string = strappend (string, " - ", NULL);
+	string = appendstr (string, " - ", NULL);
 
 	rest = line_len - strlen (string);
 	if (!long_output && strlen (whatis) > (size_t) rest) {
 		whatis[rest - 3] = '\0';
-		string = strappend (string, whatis, "...\n", NULL);
+		string = appendstr (string, whatis, "...\n", NULL);
 	} else
-		string = strappend (string, whatis, "\n", NULL);
+		string = appendstr (string, whatis, "\n", NULL);
 
 	string_conv = simple_convert (conv_to_locale, string);
 	fputs (string_conv, stdout);
@@ -619,7 +619,7 @@ static int apropos (char *page, char *lowpage)
 			seen_key = xstrdup (info.name);
 		else
 			seen_key = xstrdup (MYDBM_DPTR (key));
-		seen_key = strappend (seen_key, " (", info.ext, ")", NULL);
+		seen_key = appendstr (seen_key, " (", info.ext, ")", NULL);
 		seen_count = hash_lookup (apropos_seen, seen_key,
 					  strlen (seen_key));
 		if (seen_count && !require_all)
@@ -900,7 +900,7 @@ int main (int argc, char *argv[])
 	apropos_seen = hash_create (&plain_hash_free);
 
 #ifdef HAVE_ICONV
-	locale_charset = strappend (NULL, get_locale_charset (), "//IGNORE",
+	locale_charset = appendstr (NULL, get_locale_charset (), "//IGNORE",
 				    NULL);
 	conv_to_locale = iconv_open (locale_charset, "UTF-8");
 	free (locale_charset);

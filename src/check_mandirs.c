@@ -312,7 +312,7 @@ static __inline__ void add_dir_entries (const char *path, char *infile)
 	struct dirent *newdir;
 	DIR *dir;
 
-	manpage = strappend (NULL, path, "/", infile, "/", NULL);
+	manpage = appendstr (NULL, path, "/", infile, "/", NULL);
 	len = strlen (manpage);
 
 	/*
@@ -332,7 +332,7 @@ static __inline__ void add_dir_entries (const char *path, char *infile)
 	while ( (newdir = readdir (dir)) )
 		if (!(*newdir->d_name == '.' && 
 		      strlen (newdir->d_name) < (size_t) 3)) {
-			manpage = strappend (manpage, newdir->d_name, NULL);
+			manpage = appendstr (manpage, newdir->d_name, NULL);
 			test_manfile (manpage, path);
 			*(manpage + len) = '\0';
 		}

@@ -1153,7 +1153,7 @@ static void man_getopt (int argc, char *argv[])
 	if (troff + whatis + apropos + catman +
 	    (print_where || print_where_cat) > 1) {
 		error (0, 0,
-		       strappend (NULL,
+		       appendstr (NULL,
 				  troff ? "-[tTZH] " : "",
 				  whatis ? "-f " : "",
 				  apropos ? "-k " : "",
@@ -1281,7 +1281,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 		/* If we have an alternate catpath */
 		if (catpath) {
-			fmt_prog = strappend (catpath, "/",
+			fmt_prog = appendstr (catpath, "/",
 					      troff ? TFMT_PROG : NFMT_PROG, 
 					      NULL);
 			if (access (fmt_prog, X_OK)) {
@@ -1392,7 +1392,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				const char *less_charset =
 					get_less_charset (locale_charset);
 				debug ("less_charset = %s\n", less_charset);
-				putenv (strappend (NULL, "LESSCHARSET=",
+				putenv (appendstr (NULL, "LESSCHARSET=",
 						   less_charset, NULL));
 			}
 
@@ -1471,13 +1471,13 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 			if (wants_dev) {
 				if (roff_device) {
-					char *tmpdev = strappend (NULL, "-T",
+					char *tmpdev = appendstr (NULL, "-T",
 								  roff_device,
 								  NULL);
 					command_arg (cmd, tmpdev);
 					free (tmpdev);
 				} else if (gxditview) {
-					char *tmpdev = strappend (NULL, "-TX",
+					char *tmpdev = appendstr (NULL, "-TX",
 								  gxditview,
 								  NULL);
 					command_arg (cmd, tmpdev);
@@ -1567,14 +1567,14 @@ static pipeline *make_browser (const char *pattern, const char *file)
 		switch (*(percent + 1)) {
 			case '\0':
 			case '%':
-				browser = strappend (browser, "%", NULL);
+				browser = appendstr (browser, "%", NULL);
 				break;
 			case 'c':
-				browser = strappend (browser, ":", NULL);
+				browser = appendstr (browser, ":", NULL);
 				break;
 			case 's':
 				esc_file = escape_shell (file);
-				browser = strappend (browser, esc_file, NULL);
+				browser = appendstr (browser, esc_file, NULL);
 				free (esc_file);
 				found_percent_s = 1;
 				break;
@@ -1590,10 +1590,10 @@ static pipeline *make_browser (const char *pattern, const char *file)
 			pattern = percent + 1;
 		percent = strchr (pattern, '%');
 	}
-	browser = strappend (browser, pattern, NULL);
+	browser = appendstr (browser, pattern, NULL);
 	if (!found_percent_s) {
 		esc_file = escape_shell (file);
-		browser = strappend (browser, " ", esc_file, NULL);
+		browser = appendstr (browser, " ", esc_file, NULL);
 		free (esc_file);
 	}
 
@@ -1619,7 +1619,7 @@ static void setenv_less (const char *title)
 	less_opts = xmalloc (strlen (LESS_OPTS) +
 			     strlen (prompt_string) * 2 + 1);
 	sprintf (less_opts, LESS_OPTS, prompt_string, prompt_string);
-	less_opts = strappend (less_opts, less, NULL);
+	less_opts = appendstr (less_opts, less, NULL);
 	man_pn = strstr (less_opts, MAN_PN);
 	while (man_pn) {
 		char *subst_opts =
@@ -1715,7 +1715,7 @@ static char *tmp_cat_filename (const char *cat_file)
 			*(slash + 1) = '\0';
 		else
 			*name = '\0';
-		name = strappend (name, "catXXXXXX", NULL);
+		name = appendstr (name, "catXXXXXX", NULL);
 		tmp_cat_fd = mkstemp (name);
 	}
 
@@ -1964,7 +1964,7 @@ static void format_display (pipeline *decomp,
 		if (man_ext)
 			*man_ext = '\0';
 		htmlfile = xstrdup (htmldir);
-		htmlfile = strappend (htmlfile, "/", man_base, ".html", NULL);
+		htmlfile = appendstr (htmlfile, "/", man_base, ".html", NULL);
 		free (man_file_copy);
 		format_cmd->want_out = open (htmlfile,
 					     O_CREAT | O_EXCL | O_WRONLY,
@@ -2727,7 +2727,7 @@ static int display_filesystem (struct candidate *candp)
 	char *filename = make_filename (candp->path, NULL, candp->source,
 					candp->cat ? "cat" : "man");
 	/* source->name is never NULL thanks to add_candidate() */
-	char *title = strappend (NULL, candp->source->name,
+	char *title = appendstr (NULL, candp->source->name,
 				 "(", candp->source->ext, ")", NULL);
 	if (candp->cat) {
 		if (troff || different_encoding)
@@ -2798,7 +2798,7 @@ static int display_database (struct candidate *candp)
 	if (in->id == WHATIS_MAN || in->id == WHATIS_CAT)
 		debug (_("%s: relying on whatis refs is deprecated\n"), name);
 
-	title = strappend (NULL, name, "(", in->ext, ")", NULL);
+	title = appendstr (NULL, name, "(", in->ext, ")", NULL);
 
 #ifndef NROFF_MISSING /* #ifdef NROFF */
 	/*

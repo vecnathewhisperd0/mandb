@@ -641,7 +641,7 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 		pipeline_command_args (p, "iconv", "-f", source, "-t", target,
 				       NULL);
 	} else {
-		char *sources = strappend (NULL, "UTF-8:", source, NULL);
+		char *sources = appendstr (NULL, "UTF-8:", source, NULL);
 		pipeline_command_args (p, MANCONV, "-f", sources, "-t", target,
 				       NULL);
 		free (sources);

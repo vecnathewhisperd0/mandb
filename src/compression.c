@@ -116,13 +116,13 @@ struct compression *comp_file (const char *filename)
 	char *compfile;
 	struct compression *comp;
 
-	compfile = strappend (NULL, filename, ".", NULL);
+	compfile = appendstr (NULL, filename, ".", NULL);
 	len = strlen (compfile);
 	
 	for (comp = comp_list; comp->ext; comp++) {
 		struct stat buf;
 		
-		compfile = strappend (compfile, comp->ext, NULL);
+		compfile = appendstr (compfile, comp->ext, NULL);
 
 		if (stat (compfile, &buf) == 0) {
 			comp->stem = compfile;

@@ -1,3 +1,24 @@
+Mon Oct  8 02:09:55 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	The strappend function is in the namespace reserved by C99
+	7.26.10/7.26.11; rename it to appendstr.
+
+	* lib/strappend.c: Rename to ...
+	* lib/appendstr.c: ... this. Rename function.
+	* lib/Makefile.in (ALLSRCS, ALL): Build appendstr instead of
+	  strappend.
+	* lib/README: Update credit.
+	* include/manconfig.h.in: Update prototype.
+	* lib/decompress.c, lib/pathsearch.c, lib/pipeline.c,
+	  lib/tempfile.c, libdb/db_delete.c, src/accessdb.c, src/catman.c,
+	  src/check_mandirs.c, src/compression.c, src/convert_name.c,
+	  src/encodings.c, src/filenames.c, src/globbing.c,
+	  src/lexgrog.l.new, src/man.c, src/manconv.c, src/mandb.c,
+	  src/manp.c, src/straycats.c, src/ult_src.c, src/util.c,
+	  src/whatis.c, src/zsoelim.l: Update all callers.
+	* docs/HACKING: Update reference.
+	* docs/TODO: Remove item for this.
+
 Mon Oct  8 01:21:10 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* GNUmakefile.in (_man): Ship po4a files.

@@ -358,7 +358,7 @@ int main (int argc, char *argv[])
 		usage (FAIL);
 	}
 	if (!strstr (to_code, "//"))
-		to_code = strappend (to_code, "//TRANSLIT", NULL);
+		to_code = appendstr (to_code, "//TRANSLIT", NULL);
 
 	pipeline_install_sigchld ();
 

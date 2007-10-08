@@ -120,7 +120,7 @@ int main (int argc, char *argv[])
 	else if (argc - optind == 1) 
 		database = argv[1];
 	else
-		database = strappend (NULL, cat_root, MAN_DB, NULL);
+		database = appendstr (NULL, cat_root, MAN_DB, NULL);
 		
 	dbf = MYDBM_RDOPEN (database);
 	if (dbf && dbver_rd (dbf)) {

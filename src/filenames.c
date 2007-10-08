@@ -73,7 +73,7 @@ char *make_filename (const char *path, const char *name,
 			path, type, in->sec, name, in->ext);
 
 	if (in->comp && *in->comp != '-')	/* Is there an extension? */
-		file = strappend (file, ".", in->comp, NULL);
+		file = appendstr (file, ".", in->comp, NULL);
 
 	return file;
 }

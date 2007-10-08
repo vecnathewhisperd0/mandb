@@ -94,7 +94,7 @@ pipeline *decompress_open (const char *filename)
 	filename_len = strlen (filename);
 	if (filename_len > 3 && STREQ (filename + filename_len - 3, ".gz")) {
 		/* informational only; no shell quoting concerns */
-		char *name = strappend (NULL, "zcat < ", filename, NULL);
+		char *name = appendstr (NULL, "zcat < ", filename, NULL);
 		cmd = command_new_function (name, &decompress_zlib, NULL);
 		free (name);
 		p = pipeline_new_commands (cmd, NULL);

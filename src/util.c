@@ -187,7 +187,7 @@ int remove_directory (const char *directory)
 	while (entry) {
 		struct stat st;
 		char *path = xstrdup (directory);
-		path = strappend (path, "/", entry->d_name, NULL);
+		path = appendstr (path, "/", entry->d_name, NULL);
 		if (stat (path, &st) == -1) {
 			free (path);
 			return -1;

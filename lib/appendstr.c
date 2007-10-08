@@ -1,4 +1,4 @@
-/* strappend.c -- append to a dynamically allocated string
+/* appendstr.c -- append to a dynamically allocated string
    Copyright (C) 1994 Markus Armbruster
 
    This program is free software; you can redistribute it and/or
@@ -43,9 +43,9 @@ extern char *strcpy();
 /* append strings to first argument, which is realloced to the correct size 
    first arg may be NULL */
 #ifdef __STDC__
-char *strappend (char *str, ...)
+char *appendstr (char *str, ...)
 #else
-char *strappend (str, va_alist)
+char *appendstr (str, va_alist)
      char *str;
      va_dcl
 #endif

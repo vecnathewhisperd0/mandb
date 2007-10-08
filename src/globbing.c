@@ -97,9 +97,9 @@ static const char args[] = "de:iIhV";
 static __inline__ char *end_pattern (char *pattern, const char *sec)
 {
 	if (extension)
-		pattern = strappend (pattern, ".*", extension, "*", NULL);
+		pattern = appendstr (pattern, ".*", extension, "*", NULL);
 	else
-		pattern = strappend (pattern, ".", sec, "*", NULL);
+		pattern = appendstr (pattern, ".", sec, "*", NULL);
 
 	return pattern;
 }
@@ -291,7 +291,7 @@ static int match_in_directory (const char *path, const char *pattern,
 				pglob->gl_pathv, allocated * sizeof (char *));
 		}
 		pglob->gl_pathv[pglob->gl_pathc++] =
-			strappend (NULL, path, "/", cache->names[i], NULL);
+			appendstr (NULL, path, "/", cache->names[i], NULL);
 	}
 
 	free (pattern_start.pattern);
@@ -335,10 +335,10 @@ char **look_for_file (const char *hier, const char *sec,
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
 
 	if ((layout & LAYOUT_GNU) && CTYPE (isdigit, *sec) && sec[1] != '\0') {
-		path = strappend (path, hier, cat ? "/cat" : "/man", "\t",
+		path = appendstr (path, hier, cat ? "/cat" : "/man", "\t",
 				  NULL);
 		*strrchr (path, '\t') = *sec;
-		pattern = end_pattern (strappend (pattern, name, NULL), sec);
+		pattern = end_pattern (appendstr (pattern, name, NULL), sec);
 
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
@@ -353,9 +353,9 @@ char **look_for_file (const char *hier, const char *sec,
 			*path = '\0';
 		if (pattern)
 			*pattern = '\0';
-		path = strappend (path, hier, cat ? "/cat" : "/man", sec,
+		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
 				  NULL);
-		pattern = end_pattern (strappend (pattern, name, NULL), sec);
+		pattern = end_pattern (appendstr (pattern, name, NULL), sec);
 
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
@@ -367,9 +367,9 @@ char **look_for_file (const char *hier, const char *sec,
 			*path = '\0';
 		if (pattern)
 			*pattern = '\0';
-		path = strappend (path, hier, cat ? "/cat" : "/man",
+		path = appendstr (path, hier, cat ? "/cat" : "/man",
 				  sec, ".Z", NULL);
-		pattern = end_pattern (strappend (pattern, name, NULL), sec);
+		pattern = end_pattern (appendstr (pattern, name, NULL), sec);
 
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
@@ -381,9 +381,9 @@ char **look_for_file (const char *hier, const char *sec,
 			*path = '\0';
 		if (pattern)
 			*pattern = '\0';
-		path = strappend (path, hier, cat ? "/cat" : "/man", sec,
+		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
 				  NULL);
-		pattern = strappend (pattern, name, ".*", NULL);
+		pattern = appendstr (pattern, name, ".*", NULL);
 
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
@@ -396,9 +396,9 @@ char **look_for_file (const char *hier, const char *sec,
 		if (pattern)
 			*pattern = '\0';
 		/* TODO: This needs to be man/sec*, not just man/sec. */
-		path = strappend (path, hier, cat ? "/cat" : "/man", sec,
+		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
 				  NULL);
-		pattern = end_pattern (strappend (pattern, name, NULL), sec);
+		pattern = end_pattern (appendstr (pattern, name, NULL), sec);
 
 		status = match_in_directory (path, pattern, !match_case,
 					     &gbuf);
@@ -411,11 +411,11 @@ char **look_for_file (const char *hier, const char *sec,
 		if (pattern)
 			*pattern = '\0';
 		if (cat) {
-			path = strappend (path, hier, "/cat", sec, NULL);
-			pattern = strappend (pattern, name, ".0*", NULL);
+			path = appendstr (path, hier, "/cat", sec, NULL);
+			pattern = appendstr (pattern, name, ".0*", NULL);
 		} else {
-			path = strappend (path, hier, "/man", sec, NULL);
-			pattern = end_pattern (strappend (pattern, name, NULL),
+			path = appendstr (path, hier, "/man", sec, NULL);
+			pattern = end_pattern (appendstr (pattern, name, NULL),
 					       sec);
 		}
 		status = match_in_directory (path, pattern, !match_case,

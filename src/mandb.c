@@ -396,15 +396,15 @@ static short mandb (const char *catpath, const char *manpath)
 
 	dbname = mkdbname (catpath);
 	sprintf (pid, "%d", getpid ());
-	database = strappend (NULL, catpath, "/", pid, NULL);
+	database = appendstr (NULL, catpath, "/", pid, NULL);
 	
 	if (!quiet) 
 		printf (_("Processing manual pages under %s...\n"), manpath);
 #ifdef NDBM
 #  ifdef BERKELEY_DB
-	dbfile = strappend (NULL, dbname, ".db", NULL);
+	dbfile = appendstr (NULL, dbname, ".db", NULL);
 	free (dbname);
-	tmpdbfile = strappend (NULL, database, ".db", NULL);
+	tmpdbfile = appendstr (NULL, database, ".db", NULL);
 	if (create || force_rescan || opt_test) {
 		xremove (tmpdbfile);
 		amount = create_db (manpath);
@@ -414,11 +414,11 @@ static short mandb (const char *catpath, const char *manpath)
 		amount = update_db_wrapper (manpath);
 	}
 #  else /* !BERKELEY_DB NDBM */
-	dirfile = strappend (NULL, dbname, ".dir", NULL);
-	pagfile = strappend (NULL, dbname, ".pag", NULL);
+	dirfile = appendstr (NULL, dbname, ".dir", NULL);
+	pagfile = appendstr (NULL, dbname, ".pag", NULL);
 	free (dbname);
-	tmpdirfile = strappend (NULL, database, ".dir", NULL);
-	tmppagfile = strappend (NULL, database, ".pag", NULL);
+	tmpdirfile = appendstr (NULL, database, ".dir", NULL);
+	tmppagfile = appendstr (NULL, database, ".pag", NULL);
 	if (create || force_rescan || opt_test) {
 		xremove (tmpdirfile);
 		xremove (tmppagfile);
@@ -475,7 +475,7 @@ static short process_manpath (const char *manpath, int global_manpath)
 		/* The file might be in a per-locale subdirectory that we
 		 * aren't processing right now.
 		 */
-		char *manpath_prefix = strappend (NULL, manpath, "/man", NULL);
+		char *manpath_prefix = appendstr (NULL, manpath, "/man", NULL);
 		if (STRNEQ (manpath_prefix, single_filename,
 		    strlen (manpath_prefix)))
 			amount += mandb (catpath, manpath);
@@ -670,7 +670,7 @@ int main (int argc, char *argv[])
 			if (STRNEQ (subdirent->d_name, "man", 3))
 				continue;
 
-			subdirpath = strappend (NULL, *mp, "/",
+			subdirpath = appendstr (NULL, *mp, "/",
 						subdirent->d_name, NULL);
 			if (stat (subdirpath, &st) == 0 &&
 			    S_ISDIR (st.st_mode))

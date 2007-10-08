@@ -76,7 +76,7 @@ static int pathsearch (const char *name, const mode_t bits)
 			element = cwd;
 		}
 
-		filename = strappend (NULL, element, "/", name, NULL);
+		filename = appendstr (NULL, element, "/", name, NULL);
 		if (stat (filename, &st) == -1) {
 			free (filename);
 			continue;

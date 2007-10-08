@@ -150,7 +150,7 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 		return NULL;
 	}
 
-	ret = strappend (NULL, dir, "/", base, NULL);
+	ret = appendstr (NULL, dir, "/", base, NULL);
 	free (dir);
 	free (base);
 	return ret;
@@ -343,7 +343,7 @@ const char *ult_src (const char *name, const char *path,
 				 * outside the mantree.
 				 */
 				free (base);
-				base = strappend (NULL, path, "/", include,
+				base = appendstr (NULL, path, "/", include,
 						  NULL);
 				free (include);
 

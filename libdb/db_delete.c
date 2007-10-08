@@ -140,7 +140,7 @@ int dbdelete (const char *name, struct mandata *info)
 		/* create our new multi content */
 		for (j = 0; j < refs; ++j)
 			if (i != j)
-				multi_content = strappend (multi_content,
+				multi_content = appendstr (multi_content,
 							   "\t", names[j],
 							   "\t", ext[j], NULL);
 

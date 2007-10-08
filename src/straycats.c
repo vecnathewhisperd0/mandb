@@ -115,8 +115,8 @@ static int check_for_stray (void)
 		return 0;
 	}
 
-	mandir = strappend (mandir, "/", NULL);
-	catdir = strappend (catdir, "/", NULL);
+	mandir = appendstr (mandir, "/", NULL);
+	catdir = appendstr (catdir, "/", NULL);
 	lenman = strlen (mandir);
 	lencat = strlen (catdir);
 
@@ -136,8 +136,8 @@ static int check_for_stray (void)
 			continue;
 
 		*(mandir + lenman) = *(catdir + lencat) = '\0';
-		mandir = strappend (mandir, catlist->d_name, NULL);
-		catdir = strappend (catdir, catlist->d_name, NULL);
+		mandir = appendstr (mandir, catlist->d_name, NULL);
+		catdir = appendstr (catdir, catlist->d_name, NULL);
 
 		ext = strrchr (mandir, '.');
 		if (!ext) {
@@ -340,8 +340,8 @@ static int open_catdir (void)
 	if (!quiet)
 		printf (_("Checking for stray cats under %s...\n"), catdir);
 
-	catdir = strappend (catdir, "/", NULL);
-	mandir = strappend (mandir, "/", NULL);
+	catdir = appendstr (catdir, "/", NULL);
+	mandir = appendstr (mandir, "/", NULL);
 	catlen = strlen (catdir);
 	manlen = strlen (mandir);
 
@@ -352,8 +352,8 @@ static int open_catdir (void)
 		if (strncmp (catlist->d_name, "cat", 3) != 0)
 			continue;
 
-		catdir = strappend (catdir, catlist->d_name, NULL);
-		mandir = strappend (mandir, catlist->d_name, NULL);
+		catdir = appendstr (catdir, catlist->d_name, NULL);
+		mandir = appendstr (mandir, catlist->d_name, NULL);
 
 		*(t1 = mandir + manlen) = 'm';
 		*(t1 + 2) = 'n';
@@ -397,8 +397,8 @@ int straycats (const char *manpath)
 		
 	if (catpath && strcmp (catpath, manpath) != 0) {
 		*mandir = *catdir = '\0';
-		mandir = strappend (mandir, manpath, NULL);
-		catdir = strappend (catdir, catpath, NULL);
+		mandir = appendstr (mandir, manpath, NULL);
+		catdir = appendstr (catdir, catpath, NULL);
 		strays += open_catdir ();
 	}
 

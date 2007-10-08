@@ -513,7 +513,7 @@ int main (int argc, char *argv[])
 		
 		for (sp = sections; *sp; sp++) {
 			*(catpath + len) = '\0';
-			catpath = strappend (catpath, "/cat", *sp, NULL);
+			catpath = appendstr (catpath, "/cat", *sp, NULL);
 			if (is_directory (catpath) != 1)
 				continue;
 			if (check_access (catpath))

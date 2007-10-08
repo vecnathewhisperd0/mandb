@@ -417,11 +417,11 @@ static int open_file (const char *filename)
 			NAME = xstrdup (filename);
 		else {
 			struct compression *comp;
-			char *compfile = strappend (NULL, filename, ".", NULL);
+			char *compfile = appendstr (NULL, filename, ".", NULL);
 			size_t len = strlen (compfile);
 
 			for (comp = comp_list; comp->ext; ++comp) {
-				compfile = strappend (compfile, comp->ext,
+				compfile = appendstr (compfile, comp->ext,
 						      NULL);
 				decomp = decompress_open (compfile);
 				if (decomp) {
