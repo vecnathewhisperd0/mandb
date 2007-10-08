@@ -1,3 +1,14 @@
+Mon Oct  8 01:16:07 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Build the manual automatically. This avoids problems trying to do a
+	distclean (distclean at the top level runs ./config.status --recheck
+	and regenerates manual/Makefile, but manual/Makefile requires
+	include/Defines to exist, so there is no way to distclean both the
+	top level and manual/).
+
+	* GNUmakefile.in (EVERYTHING, ALL): Add manual.
+	  (_subdirs): Remove manual, now included in $(EVERYTHING).
+
 Sun Oct  7 17:05:54 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.5.0.
