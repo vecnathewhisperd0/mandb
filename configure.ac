@@ -502,7 +502,6 @@ AC_CONFIG_FILES(Makefile
 	libdb/Makefile
 	docs/Makefile
 	tools/Makefile
-	include/Defines
 	include/comp_src.h
 	include/manconfig.h
 	intl/Makefile

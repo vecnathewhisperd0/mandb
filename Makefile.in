@@ -36,7 +36,6 @@ subdir = .
 DIST_COMMON = README $(am__configure_deps) $(dist_noinst_DATA) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/config.h.in $(top_srcdir)/configure \
-	$(top_srcdir)/include/Defines.in \
 	$(top_srcdir)/include/comp_src.h.in \
 	$(top_srcdir)/include/manconfig.h.in \
 	$(top_srcdir)/intl/Makefile.in ABOUT-NLS
@@ -71,8 +70,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = include/Defines include/comp_src.h \
-	include/manconfig.h intl/Makefile
+CONFIG_CLEAN_FILES = include/comp_src.h include/manconfig.h \
+	intl/Makefile
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -343,8 +342,6 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
-include/Defines: $(top_builddir)/config.status $(top_srcdir)/include/Defines.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 include/comp_src.h: $(top_builddir)/config.status $(top_srcdir)/include/comp_src.h.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 include/manconfig.h: $(top_builddir)/config.status $(top_srcdir)/include/manconfig.h.in
