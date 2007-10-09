@@ -3,27 +3,20 @@ dnl
 dnl Initialise and check we're in the correct directory.
 dnl
 AC_INIT(man-db, 2.5.0)
+AC_CONFIG_AUX_DIR(tools)
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR(src/man.c)
-AC_CONFIG_AUX_DIR(tools)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
-AC_ARG_PROGRAM
 dnl
 dnl Define below date and version information to be put into man pages etc.
 dnl
 datemark=20071007
 date=`LANG=C date -d $datemark +'%Y-%m-%d'`
 AC_SUBST(date)dnl
-dnl
-PACKAGE=AC_PACKAGE_NAME
-VERSION=AC_PACKAGE_VERSION
-AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE",
-		   [Define to the name of the distribution.])
-AC_DEFINE_UNQUOTED(VERSION, "$VERSION",
-		   [Define to the version of the distribution.])
-AC_SUBST(PACKAGE)dnl
-AC_SUBST(VERSION)dnl
+roff_version=`echo AC_PACKAGE_VERSION | sed 's/-/\\-/g'`
+AC_SUBST(roff_version)dnl
 dnl
 dnl We have to be a bit naughty here and supply options.
 dnl The autoconf literature states that only features that can be 
@@ -40,17 +33,17 @@ AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 	   if test "$enableval" = "no" 
 	   then
 		man_owner=
-		man_install_flags="-m 755"
+		man_mode="755"
 		AC_MSG_NOTICE([Man will not be installed setuid])
 	   else
 		man_owner=$enableval
-		man_install_flags="-m 4755 -o $man_owner"
+		man_mode="4755"
 		AC_MSG_NOTICE([Man will be installed setuid $enableval])
 	   	AC_DEFINE_UNQUOTED(SECURE_MAN_UID, "$man_owner",
 				   [Define as the setuid owner of man or undefine if not installing setuid.])
 	   fi],
 	  [man_owner=man
-	   man_install_flags="-m 4755 -o man"
+	   man_mode="4755"
 	   AC_DEFINE_UNQUOTED(SECURE_MAN_UID, "$man_owner")])
 AC_ARG_ENABLE(undoc,
 [AS_HELP_STRING([--enable-undoc=COMMAND], [suggest COMMAND for missing manual pages])],
@@ -101,7 +94,8 @@ AC_ARG_WITH(config-file,
 dnl
 dnl Finish the argument parsing
 dnl
-AC_SUBST(man_install_flags)dnl
+AC_SUBST(man_owner)dnl
+AC_SUBST(man_mode)dnl
 AC_SUBST(config_file)dnl
 AC_SUBST(config_file_basename)dnl
 dnl
@@ -468,7 +462,13 @@ AC_CHECK_FUNC(getopt_long,
 	      [AC_DEFINE(HAVE_GETOPT_H, 1, [Define if using <getopt.h> rather than "lib/getopt.h".])],
 	      [AC_LIBOBJ([getopt])
 	       AC_LIBOBJ([getopt1])])
-AC_REPLACE_FUNCS(flock putenv realpath rename basename waitpid strstr strsep strcspn strspn strnlen mkdtemp mkstemp)
+AC_REPLACE_FUNCS(flock putenv realpath rename basename waitpid strstr strsep strcspn strspn strnlen)
+AC_CHECK_FUNCS(mkdtemp, ,
+	       [AC_LIBOBJ([mkdtemp])
+	        AC_LIBOBJ([tempname])])
+AC_CHECK_FUNCS(mkstemp, ,
+	       [AC_LIBOBJ([mkstemp])
+	        AC_LIBOBJ([tempname])])
 gt_FUNC_SETENV
 gl_FUNC_GEN_TEMPNAME
 dnl
@@ -482,15 +482,26 @@ MAN_ECHO_VAR(CFLAGS)
 MAN_ECHO_VAR(LDFLAGS)
 MAN_ECHO_VAR(LIBS)
 MAN_ECHO_VAR(DBLIBS)
+dnl Transformed versions of program names for use in Automake variables.
+MAN_TRANS_SUBST(apropos)
+MAN_TRANS_SUBST(catman)
+MAN_TRANS_SUBST(lexgrog)
+MAN_TRANS_SUBST(man)
+MAN_TRANS_SUBST(manconv)
+MAN_TRANS_SUBST(mandb)
+MAN_TRANS_SUBST(manpath)
+MAN_TRANS_SUBST(whatis)
+MAN_TRANS_SUBST(zsoelim)
 
-AC_CONFIG_FILES(GNUmakefile
-	makefile
+AC_CONFIG_FILES(Makefile
 	lib/Makefile
 	src/Makefile
 	src/man_db.conf
 	man/Makefile
 	manual/Makefile
 	libdb/Makefile
+	docs/Makefile
+	tools/Makefile
 	include/Defines
 	include/comp_src.h
 	include/manconfig.h

@@ -130,7 +130,7 @@ extern void regfree();
 
 static int wildcard;
 
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 static int require_all;
 #endif
 
@@ -140,11 +140,11 @@ static const char *section;
 
 static struct hashtable *apropos_seen = NULL;
 
-#if !defined(APROPOS) && !defined(WHATIS)
-#  error #define WHATIS or APROPOS, so I know who I am
+#if !defined(BUILD_APROPOS) && !defined(BUILD_WHATIS)
+#  error #define BUILD_WHATIS or BUILD_APROPOS, so I know who I am
 #endif
 
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 static const char args[] = "dvrewas:lhVm:M:fkL:C:";
 #else
 static const char args[] = "dvrews:lhVm:M:fkL:C:";
@@ -157,7 +157,7 @@ static const struct option long_options[] =
 	{"regex",	no_argument,		0, 'r'},
 	{"exact",	no_argument,		0, 'e'},
 	{"wildcard",	no_argument,		0, 'w'},
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 	{"and",		no_argument,		0, 'a'},
 #endif
 	{"long",	no_argument,		0, 'l'},
@@ -173,7 +173,7 @@ static const struct option long_options[] =
 	{0, 0, 0, 0}
 };
 
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 static void usage (int status)
 {
 	printf (_("usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
@@ -262,10 +262,10 @@ static __inline__ int use_grep (char *page, char *manpath)
 		const char *flags;
 		char *anchored_page = NULL;
 
-#if defined(WHATIS)
+#if defined(BUILD_WHATIS)
 		flags = get_def_user ("whatis_grep_flags", WHATIS_GREP_FLAGS);
 		anchored_page = appendstr (NULL, "^", page, NULL);
-#elif defined(APROPOS)
+#elif defined(BUILD_APROPOS)
 #ifdef REGEX
 		if (regex)
 			flags = get_def_user ("apropos_regex_grep_flags",
@@ -423,7 +423,7 @@ static char *lower (char *s)
 	return low;
 }
 
-#ifdef WHATIS
+#ifdef BUILD_WHATIS
 /* lookup the page and display the results */
 static __inline__ int whatis (char *page)
 {
@@ -443,7 +443,7 @@ static __inline__ int whatis (char *page)
 	}
 	return count;
 }
-#endif /* WHATIS */
+#endif /* BUILD_WHATIS */
 
 /* return 1 if page matches name, else 0 */
 static int parse_name (char *page, char *dbname)
@@ -457,7 +457,7 @@ static int parse_name (char *page, char *dbname)
 #  endif
 #endif /* REGEX */
 
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 	if (!wildcard) {
 		char *lowdbname = lower (dbname);
 		int ret = STREQ (lowdbname, page);
@@ -469,7 +469,7 @@ static int parse_name (char *page, char *dbname)
 	return (fnmatch (page, dbname, 0) == 0);
 }
 
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 /* return 1 on word match */
 static int match (char *lowpage, char *whatis)
 {
@@ -543,7 +543,7 @@ static int parse_whatis (char *page, char *lowpage, char *whatis)
 
 	return match (lowpage, whatis);
 }
-#endif /* APROPOS */
+#endif /* BUILD_APROPOS */
 
 /* cjwatson: Optimized functions don't seem to be correct in some
  * circumstances; disabled for now.
@@ -571,7 +571,7 @@ static int apropos (char *page, char *lowpage)
 		char *tab;
 		int got_match;
 		struct mandata info;
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 		char *whatis;
 		char *seen_key;
 		int *seen_count;
@@ -614,7 +614,7 @@ static int apropos (char *page, char *lowpage)
 		if (tab) 
 			 *tab = '\0';
 
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 		if (info.name)
 			seen_key = xstrdup (info.name);
 		else
@@ -629,11 +629,11 @@ static int apropos (char *page, char *lowpage)
 		if (!got_match && whatis)
 			got_match = parse_whatis (page, lowpage, whatis);
 		free (whatis);
-#else /* WHATIS */
+#else /* BUILD_WHATIS */
 		got_match = parse_name (page, MYDBM_DPTR (key));
-#endif /* APROPOS */
+#endif /* BUILD_APROPOS */
 		if (got_match) {
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 			if (!seen_count) {
 				seen_count = xmalloc (sizeof *seen_count);
 				*seen_count = 0;
@@ -649,7 +649,7 @@ static int apropos (char *page, char *lowpage)
 
 		found += got_match;
 
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 		free (seen_key);
 nextpage_tab:
 #endif
@@ -670,7 +670,7 @@ nextpage:
 		free_mandata_elements (&info);
 	}
 
-#ifndef APROPOS
+#ifndef BUILD_APROPOS
 	lowpage = lowpage; /* not used in whatis */
 #endif
 
@@ -707,7 +707,7 @@ static int search (char *page)
 			continue;
 		}
 
-#ifdef WHATIS
+#ifdef BUILD_WHATIS
 # ifdef REGEX
 		if (regex || wildcard) {
 # else /* !REGEX */
@@ -716,9 +716,9 @@ static int search (char *page)
 			found += apropos (page, lowpage);
 		} else
 			found += whatis (page);
-#else /* APROPOS */
+#else /* BUILD_APROPOS */
 		found += apropos (page, lowpage);
-#endif /* WHATIS */
+#endif /* BUILD_WHATIS */
 		free (database);
 		database = NULL;
 		MYDBM_CLOSE (dbf);
@@ -802,7 +802,7 @@ int main (int argc, char *argv[])
 #endif
 				wildcard = 1;
 				break;
-#ifdef APROPOS
+#ifdef BUILD_APROPOS
 			case 'a':
 				require_all = 1;
 				break;
@@ -853,7 +853,7 @@ int main (int argc, char *argv[])
 
 	pipeline_install_sigchld ();
 
-#if defined(REGEX) && defined(APROPOS)
+#if defined(REGEX) && defined(BUILD_APROPOS)
 	/* Become it even if it's null - GNU standards */
 	/* if (getenv ("POSIXLY_CORRECT")) */
 	if (!exact && !wildcard)

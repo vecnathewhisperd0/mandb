@@ -32,9 +32,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = manual
-DIST_COMMON = README $(dist_noinst_DATA) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+subdir = docs
+DIST_COMMON = $(dist_noinst_DATA) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in COPYING COPYING.LIB ChangeLog NEWS TODO
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/codeset.m4 \
 	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/glibc2.m4 \
@@ -256,28 +256,21 @@ troff = @troff@
 uncompress = @uncompress@
 vgrind = @vgrind@
 dist_noinst_DATA = \
-	README \
-	man_db.cat \
-	man_db.dvi \
-	man_db.ps
+	HACKING \
+	NEWS \
+	TODO \
+	manpage.example \
+	manpage.example.mdoc \
+	manpage.example.pod \
+	manpage.example.sgml
 
-ME_FILES = \
-	comp.me \
-	db.me \
-	files.me \
-	format.me \
-	glossary.me \
-	intro.me \
-	leader.me \
-	man_db.me \
-	misc.me \
-	sec.me
+EXTRA_DIST = \
+	INSTALL.autoconf \
+	INSTALL.quick
 
-SOELIM = soelim
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cat .dvi .html .pp .ps .tdvi .tps
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -287,9 +280,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  manual/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  docs/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  manual/Makefile
+	  $(AUTOMAKE) --foreign  docs/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -378,11 +371,9 @@ distclean-am: clean-am distclean-generic
 
 dvi: dvi-am
 
-dvi-am: dvi-local
+dvi-am:
 
 html: html-am
-
-html-am: html-local
 
 info: info-am
 
@@ -420,56 +411,22 @@ pdf-am:
 
 ps: ps-am
 
-ps-am: ps-local
+ps-am:
 
 uninstall-am:
 
 .MAKE: install-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic distclean \
-	distclean-generic distdir dvi dvi-am dvi-local html html-am \
-	html-local info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am ps-local uninstall uninstall-am
+	distclean-generic distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic pdf pdf-am ps ps-am uninstall uninstall-am
 
-
-version: $(top_srcdir)/configure.ac
-	echo '.ds V $(roff_version)' > $@
-
-man_db.pp: $(ME_FILES) version
-	$(SOELIM) man_db.me | tbl > $@
-
-.pp.dvi:
-	groff -me -Tdvi $< > $@
-
-.pp.ps:
-	groff -me -Tdvi $< > $@
-
-.pp.tdvi:
-	troff -me -Tdvi $< | grodvi -d > $@
-
-.tdvi.tps:
-	dvips -f -t a4 $< > $@
-
-.pp.cat:
-	nroff -me $< > $@
-
-.pp.html:
-	groff -me -Thtml -P-I$* $< > $@
-
-# Automake defines these targets already, so we need to use -local.
-dvi-local: man_db.dvi
-ps-local: man_db.ps
-html-local: man_db.html
-
-# These are all ours.
-cat: man_db.cat
-tps: man_db.tps
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
