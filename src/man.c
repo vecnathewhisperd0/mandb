@@ -2147,9 +2147,12 @@ static int display (const char *dir, const char *man_file,
 				return 0;
 			}
 			drop_effective_privs ();
-			pipeline_connect (decomp, format_cmd, NULL);
-			pipeline_pump (decomp, format_cmd, NULL);
-			pipeline_wait (decomp);
+			if (decomp) {
+				pipeline_connect (decomp, format_cmd, NULL);
+				pipeline_pump (decomp, format_cmd, NULL);
+				pipeline_wait (decomp);
+			} else
+				pipeline_start (format_cmd);
 			status = pipeline_wait (format_cmd);
 			regain_effective_privs ();
 			if (status != 0)
