@@ -201,18 +201,6 @@ static __inline__ void gripe_system (pipeline *p, int status)
 }
 
 
-static int checked_system (pipeline *p)
-{
-	int status;
-
-	status = do_system_drop_privs (p);
-	if (status != 0)
-		gripe_system (p, status);
-
-	return status;
-}
-
-
 static char *manpathlist[MAXDIRS];
 
 /* globals */
@@ -2153,11 +2141,19 @@ static int display (const char *dir, const char *man_file,
 		else
 			found = !access (man_file, R_OK);
 		if (found) {
+			int status;
 			if (prompt && do_prompt (title)) {
 				pipeline_free (decomp);
 				return 0;
 			}
-			checked_system (format_cmd);
+			drop_effective_privs ();
+			pipeline_connect (decomp, format_cmd, NULL);
+			pipeline_pump (decomp, format_cmd, NULL);
+			pipeline_wait (decomp);
+			status = pipeline_wait (format_cmd);
+			regain_effective_privs ();
+			if (status != 0)
+				gripe_system (format_cmd, status);
 		}
 	} else {
 		int format = 1;
