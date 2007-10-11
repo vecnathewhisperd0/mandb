@@ -739,7 +739,8 @@ int main (int argc, char *argv[])
 	int c;
 	char *manp = NULL;
 	const char *alt_systems = "";
-	char *multiple_locale = NULL, *locale = NULL, *internal_locale;
+	char *multiple_locale = NULL, *internal_locale;
+	const char *locale = NULL;
 #ifdef HAVE_ICONV
 	char *locale_charset;
 #endif
@@ -864,7 +865,7 @@ int main (int argc, char *argv[])
 	num_keywords = argc - optind;
 	if (!num_keywords) {
 		printf (_("%s what?\n"), program_name);
-		free (locale);
+		free (internal_locale);
 		free (program_name);
 		return 0;
 	}
@@ -944,7 +945,7 @@ int main (int argc, char *argv[])
 	hash_free (apropos_seen);
 	free_pathlist (manpathlist);
 	free (manp);
-	free (locale);
+	free (internal_locale);
 	free (program_name);
 	exit (status);
 }
