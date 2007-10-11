@@ -70,8 +70,10 @@ accessdb_SOURCES = \
 	version.c
 apropos_SOURCES = \
 	encodings.c \
+	encodings.h \
 	fake_security.c \
 	manp.c \
+	manp.h \
 	util.c \
 	version.c \
 	whatis.c
@@ -79,31 +81,45 @@ catman_SOURCES = \
 	catman.c \
 	fake_security.c \
 	manp.c \
+	manp.h \
 	util.c \
 	version.c
 globbing_SOURCES = \
 	globbing.c \
+	globbing.h \
 	util.c \
 	version.c
 lexgrog_SOURCES = \
 	compression.c \
 	descriptions.c \
+	descriptions.h \
 	encodings.c \
+	encodings.h \
 	fake_security.c \
 	lexgrog.l \
+	security.h \
 	ult_src.c \
+	ult_src.h \
 	util.c \
 	version.c
 man_SOURCES = \
 	compression.c \
 	convert_name.c \
+	convert_name.h \
 	encodings.c \
+	encodings.h \
 	filenames.c \
+	filenames.h \
 	globbing.c \
+	globbing.h \
 	man.c \
+	man.h \
 	manp.c \
+	manp.h \
 	security.c \
+	security.h \
 	ult_src.c \
+	ult_src.h \
 	util.c \
 	version.c
 manconv_SOURCES = \
@@ -111,30 +127,41 @@ manconv_SOURCES = \
 	version.c
 mandb_SOURCES = \
 	check_mandirs.c \
+	check_mandirs.h \
 	compression.c \
 	descriptions.c \
+	descriptions.h \
 	descriptions_store.c \
 	encodings.c \
+	encodings.h \
 	filenames.c \
+	filenames.h \
 	globbing.c \
+	globbing.h \
 	lexgrog.l \
 	mandb.c \
 	manp.c \
+	manp.h \
 	security.c \
+	security.h \
 	straycats.c \
 	ult_src.c \
+	ult_src.h \
 	util.c \
 	version.c
 manpath_SOURCES = \
 	fake_security.c \
 	manp.c \
+	manp.h \
 	manpath.c \
 	util.c \
 	version.c
 whatis_SOURCES = \
 	encodings.c \
+	encodings.h \
 	fake_security.c \
 	manp.c \
+	manp.h \
 	util.c \
 	version.c \
 	whatis.c

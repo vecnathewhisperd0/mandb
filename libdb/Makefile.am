@@ -30,5 +30,7 @@ libmandb_a_SOURCES = \
 	db_gdbm.c \
 	db_lookup.c \
 	db_ndbm.c \
+	db_storage.h \
 	db_store.c \
-	db_ver.c
+	db_ver.c \
+	mydbm.h

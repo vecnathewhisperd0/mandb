@@ -67,7 +67,7 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 SOURCES =
 DIST_SOURCES =
-DATA = $(dist_noinst_DATA)
+DATA = $(dist_noinst_DATA) $(noinst_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
@@ -255,12 +255,6 @@ tr = @tr@
 troff = @troff@
 uncompress = @uncompress@
 vgrind = @vgrind@
-dist_noinst_DATA = \
-	README \
-	man_db.cat \
-	man_db.dvi \
-	man_db.ps
-
 ME_FILES = \
 	comp.me \
 	db.me \
@@ -272,6 +266,15 @@ ME_FILES = \
 	man_db.me \
 	misc.me \
 	sec.me
+
+dist_noinst_DATA = \
+	README \
+	$(ME_FILES)
+
+noinst_DATA = \
+	man_db.cat \
+	man_db.dvi \
+	man_db.ps
 
 SOELIM = soelim
 all: all-am

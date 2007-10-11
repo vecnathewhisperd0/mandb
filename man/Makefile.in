@@ -547,6 +547,9 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	$(MAKE) $(AM_MAKEFLAGS) \
+	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
+	  dist-hook
 check-am: all-am
 check: check-am
 all-am: Makefile $(MANS)
@@ -636,9 +639,9 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 
 .MAKE: install-am install-strip
 
-.PHONY: all all-am check check-am clean clean-generic distclean \
-	distclean-generic distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am \
+.PHONY: all all-am check check-am clean clean-generic dist-hook \
+	distclean distclean-generic distdir dvi dvi-am html html-am \
+	info info-am install install-am install-data install-data-am \
 	install-data-local install-dvi install-dvi-am install-exec \
 	install-exec-am install-html install-html-am install-info \
 	install-info-am install-man install-man1 install-man5 \
@@ -707,6 +710,20 @@ uninstall-local:
 
 mostlyclean-local:
 	rm -f index.* */index.*
+
+dist-hook:
+	@list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
+	dist_files=`for file in $$list; do \
+			echo $$file | sed 's/\.\([0-9]\)/.man\1/'; \
+		    done`; \
+	$(MKDIR_P) `echo "$$dist_files" | \
+		    sed 's|^|$(distdir)/|;s,/[^/]*$$,,' | \
+		    sort -u`; \
+	for file in $$dist_files; do \
+		test -f $(distdir)/$$file \
+		|| cp -p ./$$file $(distdir)/$$file \
+		|| exit 1; \
+	done
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

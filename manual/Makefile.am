@@ -19,12 +19,6 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-dist_noinst_DATA = \
-	README \
-	man_db.cat \
-	man_db.dvi \
-	man_db.ps
-
 ME_FILES = \
 	comp.me \
 	db.me \
@@ -36,6 +30,14 @@ ME_FILES = \
 	man_db.me \
 	misc.me \
 	sec.me
+
+dist_noinst_DATA = \
+	README \
+	$(ME_FILES)
+noinst_DATA = \
+	man_db.cat \
+	man_db.dvi \
+	man_db.ps
 
 SOELIM = soelim
 

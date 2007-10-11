@@ -162,3 +162,17 @@ uninstall-local:
 
 mostlyclean-local:
 	rm -f index.* */index.*
+
+dist-hook:
+	@list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
+	dist_files=`for file in $$list; do \
+			echo $$file | sed 's/\.\([0-9]\)/.man\1/'; \
+		    done`; \
+	$(MKDIR_P) `echo "$$dist_files" | \
+		    sed 's|^|$(distdir)/|;s,/[^/]*$$,,' | \
+		    sort -u`; \
+	for file in $$dist_files; do \
+		test -f $(distdir)/$$file \
+		|| cp -p ./$$file $(distdir)/$$file \
+		|| exit 1; \
+	done

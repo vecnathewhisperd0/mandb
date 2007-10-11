@@ -25,21 +25,39 @@ dist_noinst_DATA = README
 libman_a_CPPFLAGS = -I$(top_srcdir)/include
 
 libman_a_SOURCES = \
+	ansidecl.h \
 	appendstr.c \
 	cleanup.c \
+	cleanup.h \
 	debug.c \
 	decompress.c \
+	decompress.h \
 	error.c \
+	error.h \
 	getcwdalloc.c \
+	getcwdalloc.h \
 	hashtable.c \
+	hashtable.h \
 	linelength.c \
+	linelength.h \
 	pathsearch.c \
+	pathsearch.h \
 	pipeline.c \
+	pipeline.h \
 	tempfile.c \
 	xmalloc.c \
 	xsigaction.c \
 	xstrdup.c \
 	xstrndup.c \
 	xstrsignal.c
+
+## Headers that are used conditionally. Automake can't detect these itself.
+libman_a_SOURCES += \
+	flock.h \
+	fnmatch.h \
+	getopt.h \
+	gettext.h \
+	glob.h \
+	setenv.h
 
 libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
