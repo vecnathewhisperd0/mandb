@@ -2143,6 +2143,7 @@ static int display (const char *dir, const char *man_file,
 		if (found) {
 			int status;
 			if (prompt && do_prompt (title)) {
+				pipeline_free (format_cmd);
 				pipeline_free (decomp);
 				return 0;
 			}
@@ -2284,6 +2285,7 @@ static int display (const char *dir, const char *man_file,
 			pipeline *decomp_cat;
 
 			if (prompt && do_prompt (title)) {
+				pipeline_free (format_cmd);
 				pipeline_free (decomp);
 				return 0;
 			}
