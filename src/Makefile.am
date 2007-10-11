@@ -44,7 +44,6 @@ AM_CPPFLAGS = \
 	-DSOELIM=\"$(bindir)/$(TRANS_SOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 apropos_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_APROPOS
-globbing_CPPFLAGS = $(AM_CPPFLAGS) -DTEST
 whatis_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_WHATIS
 
 LIBMAN = ../lib/libman.a
@@ -86,6 +85,7 @@ catman_SOURCES = \
 globbing_SOURCES = \
 	globbing.c \
 	globbing.h \
+	globbing_test.c \
 	util.c \
 	version.c
 lexgrog_SOURCES = \

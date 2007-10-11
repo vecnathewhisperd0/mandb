@@ -96,8 +96,8 @@ am_catman_OBJECTS = catman.$(OBJEXT) fake_security.$(OBJEXT) \
 	manp.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT)
 catman_OBJECTS = $(am_catman_OBJECTS)
 catman_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
-am_globbing_OBJECTS = globbing-globbing.$(OBJEXT) \
-	globbing-util.$(OBJEXT) globbing-version.$(OBJEXT)
+am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT) \
+	util.$(OBJEXT) version.$(OBJEXT)
 globbing_OBJECTS = $(am_globbing_OBJECTS)
 globbing_DEPENDENCIES = $(LIBMAN)
 am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
@@ -361,7 +361,6 @@ AM_CPPFLAGS = \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 
 apropos_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_APROPOS
-globbing_CPPFLAGS = $(AM_CPPFLAGS) -DTEST
 whatis_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_WHATIS
 LIBMAN = ../lib/libman.a
 LIBMANDB = ../libdb/libmandb.a $(DBLIBS)
@@ -403,6 +402,7 @@ catman_SOURCES = \
 globbing_SOURCES = \
 	globbing.c \
 	globbing.h \
+	globbing_test.c \
 	util.c \
 	version.c
 
@@ -670,10 +670,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encodings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fake_security.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filenames.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing-globbing.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing-util.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing-version.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/man.Po@am__quote@
@@ -792,48 +790,6 @@ apropos-whatis.obj: whatis.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='whatis.c' object='apropos-whatis.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-whatis.obj `if test -f 'whatis.c'; then $(CYGPATH_W) 'whatis.c'; else $(CYGPATH_W) '$(srcdir)/whatis.c'; fi`
-
-globbing-globbing.o: globbing.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT globbing-globbing.o -MD -MP -MF $(DEPDIR)/globbing-globbing.Tpo -c -o globbing-globbing.o `test -f 'globbing.c' || echo '$(srcdir)/'`globbing.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/globbing-globbing.Tpo $(DEPDIR)/globbing-globbing.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='globbing.c' object='globbing-globbing.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o globbing-globbing.o `test -f 'globbing.c' || echo '$(srcdir)/'`globbing.c
-
-globbing-globbing.obj: globbing.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT globbing-globbing.obj -MD -MP -MF $(DEPDIR)/globbing-globbing.Tpo -c -o globbing-globbing.obj `if test -f 'globbing.c'; then $(CYGPATH_W) 'globbing.c'; else $(CYGPATH_W) '$(srcdir)/globbing.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/globbing-globbing.Tpo $(DEPDIR)/globbing-globbing.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='globbing.c' object='globbing-globbing.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o globbing-globbing.obj `if test -f 'globbing.c'; then $(CYGPATH_W) 'globbing.c'; else $(CYGPATH_W) '$(srcdir)/globbing.c'; fi`
-
-globbing-util.o: util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT globbing-util.o -MD -MP -MF $(DEPDIR)/globbing-util.Tpo -c -o globbing-util.o `test -f 'util.c' || echo '$(srcdir)/'`util.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/globbing-util.Tpo $(DEPDIR)/globbing-util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util.c' object='globbing-util.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o globbing-util.o `test -f 'util.c' || echo '$(srcdir)/'`util.c
-
-globbing-util.obj: util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT globbing-util.obj -MD -MP -MF $(DEPDIR)/globbing-util.Tpo -c -o globbing-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/globbing-util.Tpo $(DEPDIR)/globbing-util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util.c' object='globbing-util.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o globbing-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
-
-globbing-version.o: version.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT globbing-version.o -MD -MP -MF $(DEPDIR)/globbing-version.Tpo -c -o globbing-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/globbing-version.Tpo $(DEPDIR)/globbing-version.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='globbing-version.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o globbing-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
-
-globbing-version.obj: version.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT globbing-version.obj -MD -MP -MF $(DEPDIR)/globbing-version.Tpo -c -o globbing-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/globbing-version.Tpo $(DEPDIR)/globbing-version.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='globbing-version.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o globbing-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
 
 whatis-encodings.o: encodings.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-encodings.o -MD -MP -MF $(DEPDIR)/whatis-encodings.Tpo -c -o whatis-encodings.o `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
