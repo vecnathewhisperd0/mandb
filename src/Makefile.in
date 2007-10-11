@@ -15,6 +15,7 @@
 @SET_MAKE@
 
 
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -33,8 +34,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = apropos$(EXEEXT) catman$(EXEEXT) lexgrog$(EXEEXT) \
-	man$(EXEEXT) mandb$(EXEEXT) manpath$(EXEEXT) whatis$(EXEEXT) \
+bin_PROGRAMS = catman$(EXEEXT) lexgrog$(EXEEXT) man$(EXEEXT) \
+	mandb$(EXEEXT) manpath$(EXEEXT) whatis$(EXEEXT) \
 	zsoelim$(EXEEXT)
 sbin_PROGRAMS = accessdb$(EXEEXT)
 pkglib_PROGRAMS = globbing$(EXEEXT) manconv$(EXEEXT)
@@ -73,7 +74,7 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES = man_db.conf
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibdir)" \
-	"$(DESTDIR)$(sbindir)"
+	"$(DESTDIR)$(sbindir)" "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 pkglibPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 sbinPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
@@ -85,13 +86,6 @@ accessdb_OBJECTS = $(am_accessdb_OBJECTS)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 = ../libdb/libmandb.a $(am__DEPENDENCIES_1)
 accessdb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
-am_apropos_OBJECTS = apropos-encodings.$(OBJEXT) \
-	apropos-fake_security.$(OBJEXT) apropos-manp.$(OBJEXT) \
-	apropos-util.$(OBJEXT) apropos-version.$(OBJEXT) \
-	apropos-whatis.$(OBJEXT)
-apropos_OBJECTS = $(am_apropos_OBJECTS)
-apropos_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
-	$(am__DEPENDENCIES_1)
 am_catman_OBJECTS = catman.$(OBJEXT) fake_security.$(OBJEXT) \
 	manp.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT)
 catman_OBJECTS = $(am_catman_OBJECTS)
@@ -127,10 +121,9 @@ am_manpath_OBJECTS = fake_security.$(OBJEXT) manp.$(OBJEXT) \
 	manpath.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT)
 manpath_OBJECTS = $(am_manpath_OBJECTS)
 manpath_DEPENDENCIES = $(LIBMAN)
-am_whatis_OBJECTS = whatis-encodings.$(OBJEXT) \
-	whatis-fake_security.$(OBJEXT) whatis-manp.$(OBJEXT) \
-	whatis-util.$(OBJEXT) whatis-version.$(OBJEXT) \
-	whatis-whatis.$(OBJEXT)
+am_whatis_OBJECTS = encodings.$(OBJEXT) fake_security.$(OBJEXT) \
+	manp.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT) \
+	whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
 whatis_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 	$(am__DEPENDENCIES_1)
@@ -140,6 +133,8 @@ wrapper_DEPENDENCIES = $(LIBMAN)
 am_zsoelim_OBJECTS = version.$(OBJEXT) zsoelim.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
 zsoelim_DEPENDENCIES = $(LIBMAN)
+binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
+SCRIPTS = $(bin_SCRIPTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
 am__depfiles_maybe = depfiles
@@ -149,15 +144,14 @@ CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 LEXCOMPILE = $(LEX) $(LFLAGS) $(AM_LFLAGS)
 YLWRAP = $(top_srcdir)/tools/ylwrap
-SOURCES = $(accessdb_SOURCES) $(apropos_SOURCES) $(catman_SOURCES) \
+SOURCES = $(accessdb_SOURCES) $(catman_SOURCES) $(globbing_SOURCES) \
+	$(lexgrog_SOURCES) $(man_SOURCES) $(manconv_SOURCES) \
+	$(mandb_SOURCES) $(manpath_SOURCES) $(whatis_SOURCES) \
+	$(wrapper_SOURCES) $(zsoelim_SOURCES)
+DIST_SOURCES = $(accessdb_SOURCES) $(catman_SOURCES) \
 	$(globbing_SOURCES) $(lexgrog_SOURCES) $(man_SOURCES) \
 	$(manconv_SOURCES) $(mandb_SOURCES) $(manpath_SOURCES) \
 	$(whatis_SOURCES) $(wrapper_SOURCES) $(zsoelim_SOURCES)
-DIST_SOURCES = $(accessdb_SOURCES) $(apropos_SOURCES) \
-	$(catman_SOURCES) $(globbing_SOURCES) $(lexgrog_SOURCES) \
-	$(man_SOURCES) $(manconv_SOURCES) $(mandb_SOURCES) \
-	$(manpath_SOURCES) $(whatis_SOURCES) $(wrapper_SOURCES) \
-	$(zsoelim_SOURCES)
 DATA = $(noinst_DATA)
 ETAGS = etags
 CTAGS = ctags
@@ -221,6 +215,7 @@ LIBPTH = @LIBPTH@
 LIBS = @LIBS@
 LIBTHREAD = @LIBTHREAD@
 LINGUAS = @LINGUAS@
+LN_S = @LN_S@
 LTLIBICONV = @LTLIBICONV@
 LTLIBINTL = @LTLIBINTL@
 LTLIBMULTITHREAD = @LTLIBMULTITHREAD@
@@ -348,24 +343,23 @@ tr = @tr@
 troff = @troff@
 uncompress = @uncompress@
 vgrind = @vgrind@
+bin_SCRIPTS = apropos
 noinst_DATA = man_db.conf
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-DCONFIG_FILE=\"$(config_file)\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \
+	-DAPROPOS_NAME=\"$(TRANS_APROPOS)\" \
 	-DMAN=\"$(bindir)/$(TRANS_MAN)\" \
 	-DMANCONV=\"$(pkglibdir)/$(TRANS_MANCONV)\" \
 	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
 	-DSOELIM=\"$(bindir)/$(TRANS_SOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 
-apropos_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_APROPOS
-whatis_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_WHATIS
 LIBMAN = ../lib/libman.a
 LIBMANDB = ../libdb/libmandb.a $(DBLIBS)
 accessdb_LDADD = $(LIBMANDB) $(LIBMAN)
-apropos_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV)
 catman_LDADD = $(LIBMANDB) $(LIBMAN)
 globbing_LDADD = $(LIBMAN)
 lexgrog_LDADD = $(LIBMAN)
@@ -380,16 +374,6 @@ accessdb_SOURCES = \
 	accessdb.c \
 	util.c \
 	version.c
-
-apropos_SOURCES = \
-	encodings.c \
-	encodings.h \
-	fake_security.c \
-	manp.c \
-	manp.h \
-	util.c \
-	version.c \
-	whatis.c
 
 catman_SOURCES = \
 	catman.c \
@@ -497,6 +481,7 @@ zsoelim_SOURCES = \
 	version.c \
 	zsoelim.l
 
+CLEANFILES = apropos
 EXTRA_DIST = \
 	README.lexgrog \
 	README.zsoelim \
@@ -614,9 +599,6 @@ clean-sbinPROGRAMS:
 accessdb$(EXEEXT): $(accessdb_OBJECTS) $(accessdb_DEPENDENCIES) 
 	@rm -f accessdb$(EXEEXT)
 	$(LINK) $(accessdb_OBJECTS) $(accessdb_LDADD) $(LIBS)
-apropos$(EXEEXT): $(apropos_OBJECTS) $(apropos_DEPENDENCIES) 
-	@rm -f apropos$(EXEEXT)
-	$(LINK) $(apropos_OBJECTS) $(apropos_LDADD) $(LIBS)
 catman$(EXEEXT): $(catman_OBJECTS) $(catman_DEPENDENCIES) 
 	@rm -f catman$(EXEEXT)
 	$(LINK) $(catman_OBJECTS) $(catman_LDADD) $(LIBS)
@@ -647,6 +629,25 @@ wrapper$(EXEEXT): $(wrapper_OBJECTS) $(wrapper_DEPENDENCIES)
 zsoelim$(EXEEXT): $(zsoelim_OBJECTS) $(zsoelim_DEPENDENCIES) 
 	@rm -f zsoelim$(EXEEXT)
 	$(LINK) $(zsoelim_OBJECTS) $(zsoelim_LDADD) $(LIBS)
+install-binSCRIPTS: $(bin_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  if test -f $$d$$p; then \
+	    f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
+	    echo " $(binSCRIPT_INSTALL) '$$d$$p' '$(DESTDIR)$(bindir)/$$f'"; \
+	    $(binSCRIPT_INSTALL) "$$d$$p" "$(DESTDIR)$(bindir)/$$f"; \
+	  else :; fi; \
+	done
+
+uninstall-binSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
+	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
+	done
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -655,12 +656,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/accessdb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/apropos-encodings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/apropos-fake_security.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/apropos-manp.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/apropos-util.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/apropos-version.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/apropos-whatis.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/catman.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_mandirs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/compression.Po@am__quote@
@@ -684,12 +679,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ult_src.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/version.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis-encodings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis-fake_security.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis-manp.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis-util.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis-version.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis-whatis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wrapper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim.Po@am__quote@
 
@@ -706,174 +696,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-apropos-encodings.o: encodings.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-encodings.o -MD -MP -MF $(DEPDIR)/apropos-encodings.Tpo -c -o apropos-encodings.o `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-encodings.Tpo $(DEPDIR)/apropos-encodings.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='encodings.c' object='apropos-encodings.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-encodings.o `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
-
-apropos-encodings.obj: encodings.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-encodings.obj -MD -MP -MF $(DEPDIR)/apropos-encodings.Tpo -c -o apropos-encodings.obj `if test -f 'encodings.c'; then $(CYGPATH_W) 'encodings.c'; else $(CYGPATH_W) '$(srcdir)/encodings.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-encodings.Tpo $(DEPDIR)/apropos-encodings.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='encodings.c' object='apropos-encodings.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-encodings.obj `if test -f 'encodings.c'; then $(CYGPATH_W) 'encodings.c'; else $(CYGPATH_W) '$(srcdir)/encodings.c'; fi`
-
-apropos-fake_security.o: fake_security.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-fake_security.o -MD -MP -MF $(DEPDIR)/apropos-fake_security.Tpo -c -o apropos-fake_security.o `test -f 'fake_security.c' || echo '$(srcdir)/'`fake_security.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-fake_security.Tpo $(DEPDIR)/apropos-fake_security.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fake_security.c' object='apropos-fake_security.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-fake_security.o `test -f 'fake_security.c' || echo '$(srcdir)/'`fake_security.c
-
-apropos-fake_security.obj: fake_security.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-fake_security.obj -MD -MP -MF $(DEPDIR)/apropos-fake_security.Tpo -c -o apropos-fake_security.obj `if test -f 'fake_security.c'; then $(CYGPATH_W) 'fake_security.c'; else $(CYGPATH_W) '$(srcdir)/fake_security.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-fake_security.Tpo $(DEPDIR)/apropos-fake_security.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fake_security.c' object='apropos-fake_security.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-fake_security.obj `if test -f 'fake_security.c'; then $(CYGPATH_W) 'fake_security.c'; else $(CYGPATH_W) '$(srcdir)/fake_security.c'; fi`
-
-apropos-manp.o: manp.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-manp.o -MD -MP -MF $(DEPDIR)/apropos-manp.Tpo -c -o apropos-manp.o `test -f 'manp.c' || echo '$(srcdir)/'`manp.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-manp.Tpo $(DEPDIR)/apropos-manp.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='manp.c' object='apropos-manp.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-manp.o `test -f 'manp.c' || echo '$(srcdir)/'`manp.c
-
-apropos-manp.obj: manp.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-manp.obj -MD -MP -MF $(DEPDIR)/apropos-manp.Tpo -c -o apropos-manp.obj `if test -f 'manp.c'; then $(CYGPATH_W) 'manp.c'; else $(CYGPATH_W) '$(srcdir)/manp.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-manp.Tpo $(DEPDIR)/apropos-manp.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='manp.c' object='apropos-manp.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-manp.obj `if test -f 'manp.c'; then $(CYGPATH_W) 'manp.c'; else $(CYGPATH_W) '$(srcdir)/manp.c'; fi`
-
-apropos-util.o: util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-util.o -MD -MP -MF $(DEPDIR)/apropos-util.Tpo -c -o apropos-util.o `test -f 'util.c' || echo '$(srcdir)/'`util.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-util.Tpo $(DEPDIR)/apropos-util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util.c' object='apropos-util.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-util.o `test -f 'util.c' || echo '$(srcdir)/'`util.c
-
-apropos-util.obj: util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-util.obj -MD -MP -MF $(DEPDIR)/apropos-util.Tpo -c -o apropos-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-util.Tpo $(DEPDIR)/apropos-util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util.c' object='apropos-util.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
-
-apropos-version.o: version.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-version.o -MD -MP -MF $(DEPDIR)/apropos-version.Tpo -c -o apropos-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-version.Tpo $(DEPDIR)/apropos-version.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='apropos-version.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
-
-apropos-version.obj: version.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-version.obj -MD -MP -MF $(DEPDIR)/apropos-version.Tpo -c -o apropos-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-version.Tpo $(DEPDIR)/apropos-version.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='apropos-version.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
-
-apropos-whatis.o: whatis.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-whatis.o -MD -MP -MF $(DEPDIR)/apropos-whatis.Tpo -c -o apropos-whatis.o `test -f 'whatis.c' || echo '$(srcdir)/'`whatis.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-whatis.Tpo $(DEPDIR)/apropos-whatis.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='whatis.c' object='apropos-whatis.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-whatis.o `test -f 'whatis.c' || echo '$(srcdir)/'`whatis.c
-
-apropos-whatis.obj: whatis.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT apropos-whatis.obj -MD -MP -MF $(DEPDIR)/apropos-whatis.Tpo -c -o apropos-whatis.obj `if test -f 'whatis.c'; then $(CYGPATH_W) 'whatis.c'; else $(CYGPATH_W) '$(srcdir)/whatis.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/apropos-whatis.Tpo $(DEPDIR)/apropos-whatis.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='whatis.c' object='apropos-whatis.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(apropos_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o apropos-whatis.obj `if test -f 'whatis.c'; then $(CYGPATH_W) 'whatis.c'; else $(CYGPATH_W) '$(srcdir)/whatis.c'; fi`
-
-whatis-encodings.o: encodings.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-encodings.o -MD -MP -MF $(DEPDIR)/whatis-encodings.Tpo -c -o whatis-encodings.o `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-encodings.Tpo $(DEPDIR)/whatis-encodings.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='encodings.c' object='whatis-encodings.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-encodings.o `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
-
-whatis-encodings.obj: encodings.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-encodings.obj -MD -MP -MF $(DEPDIR)/whatis-encodings.Tpo -c -o whatis-encodings.obj `if test -f 'encodings.c'; then $(CYGPATH_W) 'encodings.c'; else $(CYGPATH_W) '$(srcdir)/encodings.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-encodings.Tpo $(DEPDIR)/whatis-encodings.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='encodings.c' object='whatis-encodings.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-encodings.obj `if test -f 'encodings.c'; then $(CYGPATH_W) 'encodings.c'; else $(CYGPATH_W) '$(srcdir)/encodings.c'; fi`
-
-whatis-fake_security.o: fake_security.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-fake_security.o -MD -MP -MF $(DEPDIR)/whatis-fake_security.Tpo -c -o whatis-fake_security.o `test -f 'fake_security.c' || echo '$(srcdir)/'`fake_security.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-fake_security.Tpo $(DEPDIR)/whatis-fake_security.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fake_security.c' object='whatis-fake_security.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-fake_security.o `test -f 'fake_security.c' || echo '$(srcdir)/'`fake_security.c
-
-whatis-fake_security.obj: fake_security.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-fake_security.obj -MD -MP -MF $(DEPDIR)/whatis-fake_security.Tpo -c -o whatis-fake_security.obj `if test -f 'fake_security.c'; then $(CYGPATH_W) 'fake_security.c'; else $(CYGPATH_W) '$(srcdir)/fake_security.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-fake_security.Tpo $(DEPDIR)/whatis-fake_security.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fake_security.c' object='whatis-fake_security.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-fake_security.obj `if test -f 'fake_security.c'; then $(CYGPATH_W) 'fake_security.c'; else $(CYGPATH_W) '$(srcdir)/fake_security.c'; fi`
-
-whatis-manp.o: manp.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-manp.o -MD -MP -MF $(DEPDIR)/whatis-manp.Tpo -c -o whatis-manp.o `test -f 'manp.c' || echo '$(srcdir)/'`manp.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-manp.Tpo $(DEPDIR)/whatis-manp.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='manp.c' object='whatis-manp.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-manp.o `test -f 'manp.c' || echo '$(srcdir)/'`manp.c
-
-whatis-manp.obj: manp.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-manp.obj -MD -MP -MF $(DEPDIR)/whatis-manp.Tpo -c -o whatis-manp.obj `if test -f 'manp.c'; then $(CYGPATH_W) 'manp.c'; else $(CYGPATH_W) '$(srcdir)/manp.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-manp.Tpo $(DEPDIR)/whatis-manp.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='manp.c' object='whatis-manp.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-manp.obj `if test -f 'manp.c'; then $(CYGPATH_W) 'manp.c'; else $(CYGPATH_W) '$(srcdir)/manp.c'; fi`
-
-whatis-util.o: util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-util.o -MD -MP -MF $(DEPDIR)/whatis-util.Tpo -c -o whatis-util.o `test -f 'util.c' || echo '$(srcdir)/'`util.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-util.Tpo $(DEPDIR)/whatis-util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util.c' object='whatis-util.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-util.o `test -f 'util.c' || echo '$(srcdir)/'`util.c
-
-whatis-util.obj: util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-util.obj -MD -MP -MF $(DEPDIR)/whatis-util.Tpo -c -o whatis-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-util.Tpo $(DEPDIR)/whatis-util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util.c' object='whatis-util.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
-
-whatis-version.o: version.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-version.o -MD -MP -MF $(DEPDIR)/whatis-version.Tpo -c -o whatis-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-version.Tpo $(DEPDIR)/whatis-version.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='whatis-version.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
-
-whatis-version.obj: version.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-version.obj -MD -MP -MF $(DEPDIR)/whatis-version.Tpo -c -o whatis-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-version.Tpo $(DEPDIR)/whatis-version.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='whatis-version.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
-
-whatis-whatis.o: whatis.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-whatis.o -MD -MP -MF $(DEPDIR)/whatis-whatis.Tpo -c -o whatis-whatis.o `test -f 'whatis.c' || echo '$(srcdir)/'`whatis.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-whatis.Tpo $(DEPDIR)/whatis-whatis.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='whatis.c' object='whatis-whatis.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-whatis.o `test -f 'whatis.c' || echo '$(srcdir)/'`whatis.c
-
-whatis-whatis.obj: whatis.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-whatis.obj -MD -MP -MF $(DEPDIR)/whatis-whatis.Tpo -c -o whatis-whatis.obj `if test -f 'whatis.c'; then $(CYGPATH_W) 'whatis.c'; else $(CYGPATH_W) '$(srcdir)/whatis.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/whatis-whatis.Tpo $(DEPDIR)/whatis-whatis.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='whatis.c' object='whatis-whatis.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o whatis-whatis.obj `if test -f 'whatis.c'; then $(CYGPATH_W) 'whatis.c'; else $(CYGPATH_W) '$(srcdir)/whatis.c'; fi`
 
 .l.c:
 	$(am__skiplex) $(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
@@ -954,9 +776,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS) $(DATA)
+all-am: Makefile $(PROGRAMS) $(SCRIPTS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibdir)" "$(DESTDIR)$(sbindir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibdir)" "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -976,6 +798,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -1012,8 +835,8 @@ install-data-am:
 
 install-dvi: install-dvi-am
 
-install-exec-am: install-binPROGRAMS install-pkglibPROGRAMS \
-	install-sbinPROGRAMS
+install-exec-am: install-binPROGRAMS install-binSCRIPTS \
+	install-pkglibPROGRAMS install-sbinPROGRAMS
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 
@@ -1046,8 +869,8 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-pkglibPROGRAMS \
-	uninstall-sbinPROGRAMS
+uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
+	uninstall-pkglibPROGRAMS uninstall-sbinPROGRAMS
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
 
@@ -1059,17 +882,21 @@ uninstall-am: uninstall-binPROGRAMS uninstall-pkglibPROGRAMS \
 	clean-sbinPROGRAMS ctags distclean distclean-compile \
 	distclean-generic distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-data-hook install-dvi \
-	install-dvi-am install-exec install-exec-am install-exec-hook \
-	install-html install-html-am install-info install-info-am \
-	install-man install-pdf install-pdf-am install-pkglibPROGRAMS \
-	install-ps install-ps-am install-sbinPROGRAMS install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	install-binSCRIPTS install-data install-data-am \
+	install-data-hook install-dvi install-dvi-am install-exec \
+	install-exec-am install-exec-hook install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-pkglibPROGRAMS install-ps install-ps-am \
+	install-sbinPROGRAMS install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-hook \
-	uninstall-pkglibPROGRAMS uninstall-sbinPROGRAMS
+	uninstall-am uninstall-binPROGRAMS uninstall-binSCRIPTS \
+	uninstall-hook uninstall-pkglibPROGRAMS uninstall-sbinPROGRAMS
 
+
+apropos$(EXEEXT): whatis$(EXEEXT)
+	$(LN_S) $< $@
 
 install-exec-hook:
 	test -z "$(man_owner)" || \

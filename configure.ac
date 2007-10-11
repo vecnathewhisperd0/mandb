@@ -111,6 +111,7 @@ then
 fi
 AC_PROG_INSTALL
 AC_PROG_RANLIB
+AC_PROG_LN_S
 AC_CHECK_PROGS(cat, cat)
 MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx])
 test -n "$browser" && browser="exec $browser"

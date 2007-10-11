@@ -20,7 +20,6 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 bin_PROGRAMS = \
-	apropos \
 	catman \
 	lexgrog \
 	man \
@@ -28,6 +27,7 @@ bin_PROGRAMS = \
 	manpath \
 	whatis \
 	zsoelim
+bin_SCRIPTS = apropos
 sbin_PROGRAMS = accessdb
 pkglib_PROGRAMS = globbing manconv
 noinst_PROGRAMS = wrapper
@@ -38,19 +38,17 @@ AM_CPPFLAGS = \
 	-DCONFIG_FILE=\"$(config_file)\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \
+	-DAPROPOS_NAME=\"$(TRANS_APROPOS)\" \
 	-DMAN=\"$(bindir)/$(TRANS_MAN)\" \
 	-DMANCONV=\"$(pkglibdir)/$(TRANS_MANCONV)\" \
 	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
 	-DSOELIM=\"$(bindir)/$(TRANS_SOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
-apropos_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_APROPOS
-whatis_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_WHATIS
 
 LIBMAN = ../lib/libman.a
 LIBMANDB = ../libdb/libmandb.a $(DBLIBS)
 
 accessdb_LDADD = $(LIBMANDB) $(LIBMAN)
-apropos_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV)
 catman_LDADD = $(LIBMANDB) $(LIBMAN)
 globbing_LDADD = $(LIBMAN)
 lexgrog_LDADD = $(LIBMAN)
@@ -66,15 +64,6 @@ accessdb_SOURCES = \
 	accessdb.c \
 	util.c \
 	version.c
-apropos_SOURCES = \
-	encodings.c \
-	encodings.h \
-	fake_security.c \
-	manp.c \
-	manp.h \
-	util.c \
-	version.c \
-	whatis.c
 catman_SOURCES = \
 	catman.c \
 	fake_security.c \
@@ -172,12 +161,17 @@ zsoelim_SOURCES = \
 	version.c \
 	zsoelim.l
 
+CLEANFILES = apropos
+
 EXTRA_DIST = \
 	README.lexgrog \
 	README.zsoelim \
 	lexgrog.l-2.3.8 \
 	lexgrog.l-2.4a \
 	lexgrog.l.new
+
+apropos$(EXEEXT): whatis$(EXEEXT)
+	$(LN_S) $< $@
 
 install-exec-hook:
 	test -z "$(man_owner)" || \

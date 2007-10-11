@@ -104,6 +104,7 @@ extern int optind, opterr, optopt;
 static int num_keywords;
 
 char *program_name;
+int am_apropos;
 char *database;
 MYDBM_FILE dbf;
 int quiet = 1;
@@ -130,9 +131,7 @@ extern void regfree();
 
 static int wildcard;
 
-#ifdef BUILD_APROPOS
 static int require_all;
-#endif
 
 static int long_output;
 
@@ -140,15 +139,7 @@ static const char *section;
 
 static struct hashtable *apropos_seen = NULL;
 
-#if !defined(BUILD_APROPOS) && !defined(BUILD_WHATIS)
-#  error #define BUILD_WHATIS or BUILD_APROPOS, so I know who I am
-#endif
-
-#ifdef BUILD_APROPOS
 static const char args[] = "dvrewas:lhVm:M:fkL:C:";
-#else
-static const char args[] = "dvrews:lhVm:M:fkL:C:";
-#endif
 
 static const struct option long_options[] =
 {
@@ -157,9 +148,7 @@ static const struct option long_options[] =
 	{"regex",	no_argument,		0, 'r'},
 	{"exact",	no_argument,		0, 'e'},
 	{"wildcard",	no_argument,		0, 'w'},
-#ifdef BUILD_APROPOS
-	{"and",		no_argument,		0, 'a'},
-#endif
+	{"and",		no_argument,		0, 'a'}, /* apropos only */
 	{"long",	no_argument,		0, 'l'},
 	{"section",	required_argument,	0, 's'},
 	{"help",	no_argument,		0, 'h'},
@@ -173,8 +162,7 @@ static const struct option long_options[] =
 	{0, 0, 0, 0}
 };
 
-#ifdef BUILD_APROPOS
-static void usage (int status)
+static void apropos_usage (int status)
 {
 	printf (_("usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
 		  "               [-L locale] [-C file] keyword ...\n"), program_name);
@@ -196,8 +184,8 @@ static void usage (int status)
 
 	exit (status);
 }
-#else	
-static void usage (int status)
+
+static void whatis_usage (int status)
 {
 	printf (_("usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath]\n"
 		  "              [-L locale] [-C file] keyword ...\n"), program_name);
@@ -217,7 +205,14 @@ static void usage (int status)
 
 	exit (status);
 }
-#endif
+
+static void usage (int status)
+{
+	if (am_apropos)
+		apropos_usage (status);
+	else
+		whatis_usage (status);
+}
 
 static char *simple_convert (iconv_t conv, char *string)
 {
@@ -262,20 +257,22 @@ static __inline__ int use_grep (char *page, char *manpath)
 		const char *flags;
 		char *anchored_page = NULL;
 
-#if defined(BUILD_WHATIS)
-		flags = get_def_user ("whatis_grep_flags", WHATIS_GREP_FLAGS);
-		anchored_page = appendstr (NULL, "^", page, NULL);
-#elif defined(BUILD_APROPOS)
+		if (am_apropos) {
 #ifdef REGEX
-		if (regex)
-			flags = get_def_user ("apropos_regex_grep_flags",
-					      APROPOS_REGEX_GREP_FLAGS);
-		else
+			if (regex)
+				flags = get_def_user (
+					"apropos_regex_grep_flags",
+					APROPOS_REGEX_GREP_FLAGS);
+			else
 #endif
-			flags = get_def_user ("apropos_grep_flags",
-					      APROPOS_GREP_FLAGS);
-		anchored_page = xstrdup (page);
-#endif 	
+				flags = get_def_user ("apropos_grep_flags",
+						      APROPOS_GREP_FLAGS);
+			anchored_page = xstrdup (page);
+		} else {
+			flags = get_def_user ("whatis_grep_flags",
+					      WHATIS_GREP_FLAGS);
+			anchored_page = appendstr (NULL, "^", page, NULL);
+		}
 
 		grep_cmd = command_new_argstr (get_def_user ("grep", GREP));
 		command_argstr (grep_cmd, flags);
@@ -423,9 +420,8 @@ static char *lower (char *s)
 	return low;
 }
 
-#ifdef BUILD_WHATIS
 /* lookup the page and display the results */
-static __inline__ int whatis (char *page)
+static __inline__ int do_whatis (char *page)
 {
 	struct mandata *info;
 	int count = 0;
@@ -443,7 +439,6 @@ static __inline__ int whatis (char *page)
 	}
 	return count;
 }
-#endif /* BUILD_WHATIS */
 
 /* return 1 if page matches name, else 0 */
 static int parse_name (char *page, char *dbname)
@@ -457,19 +452,16 @@ static int parse_name (char *page, char *dbname)
 #  endif
 #endif /* REGEX */
 
-#ifdef BUILD_APROPOS
-	if (!wildcard) {
+	if (am_apropos && !wildcard) {
 		char *lowdbname = lower (dbname);
 		int ret = STREQ (lowdbname, page);
 		free (lowdbname);
 		return ret;
 	}
-#endif
 
 	return (fnmatch (page, dbname, 0) == 0);
 }
 
-#ifdef BUILD_APROPOS
 /* return 1 on word match */
 static int match (char *lowpage, char *whatis)
 {
@@ -543,7 +535,6 @@ static int parse_whatis (char *page, char *lowpage, char *whatis)
 
 	return match (lowpage, whatis);
 }
-#endif /* BUILD_APROPOS */
 
 /* cjwatson: Optimized functions don't seem to be correct in some
  * circumstances; disabled for now.
@@ -551,7 +542,7 @@ static int parse_whatis (char *page, char *lowpage, char *whatis)
 #undef BTREE
 
 /* scan for the page, print any matches */
-static int apropos (char *page, char *lowpage)
+static int do_apropos (char *page, char *lowpage)
 {
 	datum key, cont;
 	int found = 0;
@@ -571,11 +562,6 @@ static int apropos (char *page, char *lowpage)
 		char *tab;
 		int got_match;
 		struct mandata info;
-#ifdef BUILD_APROPOS
-		char *whatis;
-		char *seen_key;
-		int *seen_count;
-#endif
 
 		memset (&info, 0, sizeof (info));
 
@@ -614,45 +600,52 @@ static int apropos (char *page, char *lowpage)
 		if (tab) 
 			 *tab = '\0';
 
-#ifdef BUILD_APROPOS
-		if (info.name)
-			seen_key = xstrdup (info.name);
-		else
-			seen_key = xstrdup (MYDBM_DPTR (key));
-		seen_key = appendstr (seen_key, " (", info.ext, ")", NULL);
-		seen_count = hash_lookup (apropos_seen, seen_key,
-					  strlen (seen_key));
-		if (seen_count && !require_all)
-			goto nextpage_tab;
-		got_match = parse_name (lowpage, MYDBM_DPTR (key));
-		whatis = xstrdup (info.whatis);
-		if (!got_match && whatis)
-			got_match = parse_whatis (page, lowpage, whatis);
-		free (whatis);
-#else /* BUILD_WHATIS */
-		got_match = parse_name (page, MYDBM_DPTR (key));
-#endif /* BUILD_APROPOS */
-		if (got_match) {
-#ifdef BUILD_APROPOS
-			if (!seen_count) {
-				seen_count = xmalloc (sizeof *seen_count);
-				*seen_count = 0;
-				hash_install (apropos_seen, seen_key,
-					      strlen (seen_key), seen_count);
+		if (am_apropos) {
+			char *whatis;
+			char *seen_key;
+			int *seen_count;
+
+			if (info.name)
+				seen_key = xstrdup (info.name);
+			else
+				seen_key = xstrdup (MYDBM_DPTR (key));
+			seen_key = appendstr (seen_key, " (", info.ext, ")",
+					      NULL);
+			seen_count = hash_lookup (apropos_seen, seen_key,
+						  strlen (seen_key));
+			if (seen_count && !require_all)
+				goto nextpage_tab;
+			got_match = parse_name (lowpage, MYDBM_DPTR (key));
+			whatis = xstrdup (info.whatis);
+			if (!got_match && whatis)
+				got_match = parse_whatis (page, lowpage,
+							  whatis);
+			free (whatis);
+			if (got_match) {
+				if (!seen_count) {
+					seen_count = xmalloc
+						(sizeof *seen_count);
+					*seen_count = 0;
+					hash_install (apropos_seen, seen_key,
+						      strlen (seen_key),
+						      seen_count);
+				}
+				++(*seen_count);
+				if (!require_all ||
+				    *seen_count == num_keywords)
+					display (&info, MYDBM_DPTR (key));
 			}
-			++(*seen_count);
-			if (!require_all || *seen_count == num_keywords)
-#endif
-			    display (&info, MYDBM_DPTR (key));
+			free (seen_key);
 			found++;
+		} else {
+			got_match = parse_name (page, MYDBM_DPTR (key));
+			if (got_match)
+				display (&info, MYDBM_DPTR (key));
 		}
 
 		found += got_match;
 
-#ifdef BUILD_APROPOS
-		free (seen_key);
 nextpage_tab:
-#endif
 		if (tab)
 			*tab = '\t';
 nextpage:
@@ -669,10 +662,6 @@ nextpage:
 		info.addr = NULL; /* == MYDBM_DPTR (cont), freed above */
 		free_mandata_elements (&info);
 	}
-
-#ifndef BUILD_APROPOS
-	lowpage = lowpage; /* not used in whatis */
-#endif
 
 	return found;
 }
@@ -707,18 +696,18 @@ static int search (char *page)
 			continue;
 		}
 
-#ifdef BUILD_WHATIS
+		if (am_apropos)
+			found += do_apropos (page, lowpage);
+		else {
 # ifdef REGEX
-		if (regex || wildcard) {
+			if (regex || wildcard) {
 # else /* !REGEX */
-		if (wildcard) {
+			if (wildcard) {
 # endif /* REGEX */
-			found += apropos (page, lowpage);
-		} else
-			found += whatis (page);
-#else /* BUILD_APROPOS */
-		found += apropos (page, lowpage);
-#endif /* BUILD_WHATIS */
+				found += do_apropos (page, lowpage);
+			} else
+				found += do_whatis (page);
+		}
 		free (database);
 		database = NULL;
 		MYDBM_CLOSE (dbf);
@@ -746,6 +735,10 @@ int main (int argc, char *argv[])
 	int status = OK;
 
 	program_name = xstrdup (basename (argv[0]));
+	if (STREQ (program_name, APROPOS_NAME))
+		am_apropos = 1;
+	else
+		am_apropos = 0;
 
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, ""))
@@ -802,11 +795,12 @@ int main (int argc, char *argv[])
 #endif
 				wildcard = 1;
 				break;
-#ifdef BUILD_APROPOS
 			case 'a':
-				require_all = 1;
+				if (am_apropos)
+					require_all = 1;
+				else
+					usage (FAIL);
 				break;
-#endif
 			case 'l':
 				long_output = 1;
 				break;
@@ -853,10 +847,10 @@ int main (int argc, char *argv[])
 
 	pipeline_install_sigchld ();
 
-#if defined(REGEX) && defined(BUILD_APROPOS)
+#if defined(REGEX)
 	/* Become it even if it's null - GNU standards */
 	/* if (getenv ("POSIXLY_CORRECT")) */
-	if (!exact && !wildcard)
+	if (am_apropos && !exact && !wildcard)
 		regex = 1;
 #endif
 
