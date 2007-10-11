@@ -100,11 +100,10 @@ am_globbing_OBJECTS = globbing-globbing.$(OBJEXT) \
 	globbing-util.$(OBJEXT) globbing-version.$(OBJEXT)
 globbing_OBJECTS = $(am_globbing_OBJECTS)
 globbing_DEPENDENCIES = $(LIBMAN)
-am_lexgrog_OBJECTS = lexgrog-compression.$(OBJEXT) \
-	lexgrog-descriptions.$(OBJEXT) lexgrog-encodings.$(OBJEXT) \
-	lexgrog-fake_security.$(OBJEXT) lexgrog-lexgrog.$(OBJEXT) \
-	lexgrog-ult_src.$(OBJEXT) lexgrog-util.$(OBJEXT) \
-	lexgrog-version.$(OBJEXT)
+am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
+	encodings.$(OBJEXT) fake_security.$(OBJEXT) lexgrog.$(OBJEXT) \
+	lexgrog_test.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT) \
+	version.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
 lexgrog_DEPENDENCIES = $(LIBMAN)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
@@ -363,7 +362,6 @@ AM_CPPFLAGS = \
 
 apropos_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_APROPOS
 globbing_CPPFLAGS = $(AM_CPPFLAGS) -DTEST
-lexgrog_CPPFLAGS = $(AM_CPPFLAGS) -DTEST
 whatis_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_WHATIS
 LIBMAN = ../lib/libman.a
 LIBMANDB = ../libdb/libmandb.a $(DBLIBS)
@@ -416,6 +414,7 @@ lexgrog_SOURCES = \
 	encodings.h \
 	fake_security.c \
 	lexgrog.l \
+	lexgrog_test.c \
 	security.h \
 	ult_src.c \
 	ult_src.h \
@@ -675,15 +674,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing-util.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing-version.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog-compression.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog-descriptions.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog-encodings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog-fake_security.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog-lexgrog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog-ult_src.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog-util.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog-version.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/man.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manconv.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mandb.Po@am__quote@
@@ -842,118 +834,6 @@ globbing-version.obj: version.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='globbing-version.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(globbing_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o globbing-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
-
-lexgrog-compression.o: compression.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-compression.o -MD -MP -MF $(DEPDIR)/lexgrog-compression.Tpo -c -o lexgrog-compression.o `test -f 'compression.c' || echo '$(srcdir)/'`compression.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-compression.Tpo $(DEPDIR)/lexgrog-compression.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='compression.c' object='lexgrog-compression.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-compression.o `test -f 'compression.c' || echo '$(srcdir)/'`compression.c
-
-lexgrog-compression.obj: compression.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-compression.obj -MD -MP -MF $(DEPDIR)/lexgrog-compression.Tpo -c -o lexgrog-compression.obj `if test -f 'compression.c'; then $(CYGPATH_W) 'compression.c'; else $(CYGPATH_W) '$(srcdir)/compression.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-compression.Tpo $(DEPDIR)/lexgrog-compression.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='compression.c' object='lexgrog-compression.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-compression.obj `if test -f 'compression.c'; then $(CYGPATH_W) 'compression.c'; else $(CYGPATH_W) '$(srcdir)/compression.c'; fi`
-
-lexgrog-descriptions.o: descriptions.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-descriptions.o -MD -MP -MF $(DEPDIR)/lexgrog-descriptions.Tpo -c -o lexgrog-descriptions.o `test -f 'descriptions.c' || echo '$(srcdir)/'`descriptions.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-descriptions.Tpo $(DEPDIR)/lexgrog-descriptions.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='descriptions.c' object='lexgrog-descriptions.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-descriptions.o `test -f 'descriptions.c' || echo '$(srcdir)/'`descriptions.c
-
-lexgrog-descriptions.obj: descriptions.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-descriptions.obj -MD -MP -MF $(DEPDIR)/lexgrog-descriptions.Tpo -c -o lexgrog-descriptions.obj `if test -f 'descriptions.c'; then $(CYGPATH_W) 'descriptions.c'; else $(CYGPATH_W) '$(srcdir)/descriptions.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-descriptions.Tpo $(DEPDIR)/lexgrog-descriptions.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='descriptions.c' object='lexgrog-descriptions.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-descriptions.obj `if test -f 'descriptions.c'; then $(CYGPATH_W) 'descriptions.c'; else $(CYGPATH_W) '$(srcdir)/descriptions.c'; fi`
-
-lexgrog-encodings.o: encodings.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-encodings.o -MD -MP -MF $(DEPDIR)/lexgrog-encodings.Tpo -c -o lexgrog-encodings.o `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-encodings.Tpo $(DEPDIR)/lexgrog-encodings.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='encodings.c' object='lexgrog-encodings.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-encodings.o `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
-
-lexgrog-encodings.obj: encodings.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-encodings.obj -MD -MP -MF $(DEPDIR)/lexgrog-encodings.Tpo -c -o lexgrog-encodings.obj `if test -f 'encodings.c'; then $(CYGPATH_W) 'encodings.c'; else $(CYGPATH_W) '$(srcdir)/encodings.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-encodings.Tpo $(DEPDIR)/lexgrog-encodings.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='encodings.c' object='lexgrog-encodings.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-encodings.obj `if test -f 'encodings.c'; then $(CYGPATH_W) 'encodings.c'; else $(CYGPATH_W) '$(srcdir)/encodings.c'; fi`
-
-lexgrog-fake_security.o: fake_security.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-fake_security.o -MD -MP -MF $(DEPDIR)/lexgrog-fake_security.Tpo -c -o lexgrog-fake_security.o `test -f 'fake_security.c' || echo '$(srcdir)/'`fake_security.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-fake_security.Tpo $(DEPDIR)/lexgrog-fake_security.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fake_security.c' object='lexgrog-fake_security.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-fake_security.o `test -f 'fake_security.c' || echo '$(srcdir)/'`fake_security.c
-
-lexgrog-fake_security.obj: fake_security.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-fake_security.obj -MD -MP -MF $(DEPDIR)/lexgrog-fake_security.Tpo -c -o lexgrog-fake_security.obj `if test -f 'fake_security.c'; then $(CYGPATH_W) 'fake_security.c'; else $(CYGPATH_W) '$(srcdir)/fake_security.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-fake_security.Tpo $(DEPDIR)/lexgrog-fake_security.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fake_security.c' object='lexgrog-fake_security.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-fake_security.obj `if test -f 'fake_security.c'; then $(CYGPATH_W) 'fake_security.c'; else $(CYGPATH_W) '$(srcdir)/fake_security.c'; fi`
-
-lexgrog-lexgrog.o: lexgrog.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-lexgrog.o -MD -MP -MF $(DEPDIR)/lexgrog-lexgrog.Tpo -c -o lexgrog-lexgrog.o `test -f 'lexgrog.c' || echo '$(srcdir)/'`lexgrog.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-lexgrog.Tpo $(DEPDIR)/lexgrog-lexgrog.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lexgrog.c' object='lexgrog-lexgrog.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-lexgrog.o `test -f 'lexgrog.c' || echo '$(srcdir)/'`lexgrog.c
-
-lexgrog-lexgrog.obj: lexgrog.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-lexgrog.obj -MD -MP -MF $(DEPDIR)/lexgrog-lexgrog.Tpo -c -o lexgrog-lexgrog.obj `if test -f 'lexgrog.c'; then $(CYGPATH_W) 'lexgrog.c'; else $(CYGPATH_W) '$(srcdir)/lexgrog.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-lexgrog.Tpo $(DEPDIR)/lexgrog-lexgrog.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lexgrog.c' object='lexgrog-lexgrog.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-lexgrog.obj `if test -f 'lexgrog.c'; then $(CYGPATH_W) 'lexgrog.c'; else $(CYGPATH_W) '$(srcdir)/lexgrog.c'; fi`
-
-lexgrog-ult_src.o: ult_src.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-ult_src.o -MD -MP -MF $(DEPDIR)/lexgrog-ult_src.Tpo -c -o lexgrog-ult_src.o `test -f 'ult_src.c' || echo '$(srcdir)/'`ult_src.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-ult_src.Tpo $(DEPDIR)/lexgrog-ult_src.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ult_src.c' object='lexgrog-ult_src.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-ult_src.o `test -f 'ult_src.c' || echo '$(srcdir)/'`ult_src.c
-
-lexgrog-ult_src.obj: ult_src.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-ult_src.obj -MD -MP -MF $(DEPDIR)/lexgrog-ult_src.Tpo -c -o lexgrog-ult_src.obj `if test -f 'ult_src.c'; then $(CYGPATH_W) 'ult_src.c'; else $(CYGPATH_W) '$(srcdir)/ult_src.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-ult_src.Tpo $(DEPDIR)/lexgrog-ult_src.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ult_src.c' object='lexgrog-ult_src.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-ult_src.obj `if test -f 'ult_src.c'; then $(CYGPATH_W) 'ult_src.c'; else $(CYGPATH_W) '$(srcdir)/ult_src.c'; fi`
-
-lexgrog-util.o: util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-util.o -MD -MP -MF $(DEPDIR)/lexgrog-util.Tpo -c -o lexgrog-util.o `test -f 'util.c' || echo '$(srcdir)/'`util.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-util.Tpo $(DEPDIR)/lexgrog-util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util.c' object='lexgrog-util.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-util.o `test -f 'util.c' || echo '$(srcdir)/'`util.c
-
-lexgrog-util.obj: util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-util.obj -MD -MP -MF $(DEPDIR)/lexgrog-util.Tpo -c -o lexgrog-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-util.Tpo $(DEPDIR)/lexgrog-util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util.c' object='lexgrog-util.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
-
-lexgrog-version.o: version.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-version.o -MD -MP -MF $(DEPDIR)/lexgrog-version.Tpo -c -o lexgrog-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-version.Tpo $(DEPDIR)/lexgrog-version.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='lexgrog-version.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
-
-lexgrog-version.obj: version.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lexgrog-version.obj -MD -MP -MF $(DEPDIR)/lexgrog-version.Tpo -c -o lexgrog-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/lexgrog-version.Tpo $(DEPDIR)/lexgrog-version.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='version.c' object='lexgrog-version.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lexgrog_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lexgrog-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
 
 whatis-encodings.o: encodings.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(whatis_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT whatis-encodings.o -MD -MP -MF $(DEPDIR)/whatis-encodings.Tpo -c -o whatis-encodings.o `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c

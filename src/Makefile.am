@@ -45,7 +45,6 @@ AM_CPPFLAGS = \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 apropos_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_APROPOS
 globbing_CPPFLAGS = $(AM_CPPFLAGS) -DTEST
-lexgrog_CPPFLAGS = $(AM_CPPFLAGS) -DTEST
 whatis_CPPFLAGS = $(AM_CPPFLAGS) -DBUILD_WHATIS
 
 LIBMAN = ../lib/libman.a
@@ -97,6 +96,7 @@ lexgrog_SOURCES = \
 	encodings.h \
 	fake_security.c \
 	lexgrog.l \
+	lexgrog_test.c \
 	security.h \
 	ult_src.c \
 	ult_src.h \
