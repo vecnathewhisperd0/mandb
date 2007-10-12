@@ -1894,7 +1894,8 @@ static int format_display_and_save (pipeline *decomp,
 	if (global_manpath)
 		drop_effective_privs ();
 
-	discard_stderr (format_cmd);
+	if (isatty (fileno (stdout)))
+		discard_stderr (format_cmd);
 
 	pipeline_connect (decomp, format_cmd, NULL);
 	if (sav_p) {
@@ -1930,7 +1931,7 @@ static void format_display (pipeline *decomp,
 	char *old_cwd = NULL;
 	char *htmldir = NULL, *htmlfile = NULL;
 
-	if (format_cmd)
+	if (format_cmd && isatty (fileno (stdout)))
 		discard_stderr (format_cmd);
 
 	drop_effective_privs ();
@@ -2050,7 +2051,8 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 				 get_def ("compressor", COMPRESSOR));
 #endif /* COMP_CAT */
 
-	discard_stderr (format_cmd);
+	if (isatty (fileno (stdout)))
+		discard_stderr (format_cmd);
 	format_cmd->want_out = tmp_cat_fd;
 
 	push_cleanup ((cleanup_fun) unlink, tmpcat, 1);
