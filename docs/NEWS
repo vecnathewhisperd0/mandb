@@ -1,3 +1,33 @@
+man-db 2.5.1
+============
+
+Major changes since man-db 2.5.0:
+
+	Fixes:
+	------
+
+	o The manual is now built automatically, avoiding some ordering
+	  problems on 'make distclean'.
+
+	o Manual pages are converted to the proper input encoding for troff
+	  output as well as nroff output.
+
+	o The -t, -T, -X, and -Z options to man work again; in 2.5.0, they
+	  read input from stdin rather than from the manual page.
+
+	o apropos and whatis no longer segfault when given an explicit
+	  locale using -L.
+
+	o man now understands that groff's ascii device takes ASCII input,
+	  not ISO-8859-1.
+
+	o man no longer discards stderr when writing to a file or a pipe;
+	  this was broken by an overenthusiastic change in 2.5.0.
+
+	o manconv now falls back to the next encoding in its list if any
+	  characters in an entire 64KB block fail to decode using the
+	  current encoding, as was originally intended.
+
 man-db 2.5.0 (7 October 2007)
 =============================
 
