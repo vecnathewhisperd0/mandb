@@ -191,7 +191,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 	iconv_t cd;
 	int ret = 0;
 
-	debug ("trying encoding %s\n", try_from_code);
+	debug ("trying encoding %s -> %s\n", try_from_code, to_code);
 
 	cd = iconv_open (to_code, try_from_code);
 	if (cd == (iconv_t) -1) {
