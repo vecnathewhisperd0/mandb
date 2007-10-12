@@ -1,3 +1,11 @@
+Fri Oct 12 01:32:52 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (device_table): groff's ascii device only supports
+	  ASCII input, not ISO-8859-1.
+	  (compatible_encodings): If the output is ASCII, this is probably
+	  because the caller explicitly asked for it, so allow recoding to
+	  it unconditionally.
+
 Fri Oct 12 00:48:42 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/whatis.c (main): locale is a constant pointer; free

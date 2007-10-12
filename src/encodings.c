@@ -238,16 +238,16 @@ struct device_entry {
 };
 
 static struct device_entry device_table[] = {
-	{ "ascii",	"ISO-8859-1",	"ANSI_X3.4-1968"	},
-	{ "latin1",	"ISO-8859-1",	"ISO-8859-1"		},
-	{ "utf8",	"ISO-8859-1",	"UTF-8"			},
+	{ "ascii",	"ANSI_X3.4-1968",	"ANSI_X3.4-1968"	},
+	{ "latin1",	"ISO-8859-1",		"ISO-8859-1"		},
+	{ "utf8",	"ISO-8859-1",		"UTF-8"			},
 
 #ifdef MULTIBYTE_GROFF
-	{ "ascii8",	NULL,		NULL			},
-	{ "nippon",	NULL,		NULL			},
+	{ "ascii8",	NULL,			NULL			},
+	{ "nippon",	NULL,			NULL			},
 #endif /* MULTIBYTE_GROFF */
 
-	{ NULL,		NULL,		NULL			}
+	{ NULL,		NULL,			NULL			}
 };
 
 static const char *fallback_roff_encoding = "ISO-8859-1";
@@ -516,6 +516,12 @@ static int compatible_encodings (const char *input, const char *output)
 	 * do. We might as well try it for now.
 	 */
 	if (STREQ (input, "UTF-8"))
+		return 1;
+
+	/* If the output is ASCII, this is probably because the caller
+	 * explicitly asked for it, so we have little choice but to try.
+	 */
+	if (STREQ (output, "ANSI_X3.4-1968"))
 		return 1;
 
 #ifdef MULTIBYTE_GROFF
