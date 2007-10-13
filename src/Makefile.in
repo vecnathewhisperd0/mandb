@@ -293,6 +293,7 @@ compress_ext = @compress_ext@
 compressor = @compressor@
 config_file = @config_file@
 config_file_basename = @config_file_basename@
+config_file_dirname = @config_file_dirname@
 datadir = @datadir@
 datarootdir = @datarootdir@
 date = @date@
@@ -485,7 +486,7 @@ zsoelim_SOURCES = \
 	version.c \
 	zsoelim.l
 
-CLEANFILES = apropos
+CLEANFILES = apropos man_db.conf
 EXTRA_DIST = \
 	README.lexgrog \
 	README.zsoelim \
@@ -903,7 +904,7 @@ apropos$(EXEEXT): whatis$(EXEEXT)
 	$(LN_S) $< $@
 
 install-exec-hook:
-	test -z "$(man_owner)" || \
+	-test -z "$(man_owner)" || \
 	chown $(man_owner) \
 		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
 		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
@@ -912,8 +913,7 @@ install-exec-hook:
 		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
 
 install-data-hook:
-	config_dir=`basename $(config_file)`; \
-	test -z "$$config_dir" || $(MKDIR_P) "$(DESTDIR)$$config_dir"
+	test -z "$(config_file_dirname)" || $(MKDIR_P) "$(DESTDIR)$(config_file_dirname)"
 	$(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file)
 
 uninstall-hook:

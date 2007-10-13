@@ -87,10 +87,10 @@ AC_ARG_WITH(config-file,
 		AC_MSG_ERROR(--with-config-file requires an argument)
 	 else
 		config_file=$withval
-		config_file_basename=${withval##*/}
 	 fi],
-	 : ${config_file=\$\{sysconfdir\}/man_db.conf}
-	 : ${config_file_basename=man_db.conf})
+	 : ${config_file=\$\{sysconfdir\}/man_db.conf})
+config_file_basename=${withval##*/}
+config_file_dirname=`AS_DIRNAME(["$config_file"])`
 AC_ARG_WITH(sections,
 [AS_HELP_STRING([--with-sections=SECTIONS], [use manual page sections SECTIONS @<:@1 n l 8 3 2 5 4 9 6 7@:>@])],
 	[if test "$withval" = "yes" || test "$withval" = "no"
@@ -107,6 +107,7 @@ AC_SUBST(man_owner)dnl
 AC_SUBST(man_mode)dnl
 AC_SUBST(config_file)dnl
 AC_SUBST(config_file_basename)dnl
+AC_SUBST(config_file_dirname)dnl
 AC_SUBST(sections)dnl
 dnl
 dnl Check $PATH for the following progs and append suitable options.

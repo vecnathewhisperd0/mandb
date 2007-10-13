@@ -67,7 +67,7 @@ install-data-local:
 		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
 	done; \
 	list='$(man5_MANS)'; \
-	for i in $$list; do
+	for i in $$list; do \
 		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
 		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
 	done
@@ -83,13 +83,16 @@ uninstall-local:
 		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
 	done; \
 	list='$(man5_MANS)'; \
-	for i in $$list; do
+	for i in $$list; do \
 		echo " rm -f '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
 		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
 	done
 
 mostlyclean-local:
-	rm -f index.*
+	-rm -f index.*
+
+clean-local:
+	-rm -rf man1 man5 man8
 
 dist-hook:
 	@list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
@@ -101,6 +104,6 @@ dist-hook:
 		    sort -u`; \
 	for file in $$dist_files; do \
 		test -f $(distdir)/$$file \
-		|| cp -p ./$$file $(distdir)/$$file \
+		|| cp -p $(srcdir)/$$file $(distdir)/$$file \
 		|| exit 1; \
 	done

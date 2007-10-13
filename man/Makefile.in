@@ -222,6 +222,7 @@ compress_ext = @compress_ext@
 compressor = @compressor@
 config_file = @config_file@
 config_file_basename = @config_file_basename@
+config_file_dirname = @config_file_dirname@
 datadir = @datadir@
 datarootdir = @datarootdir@
 date = @date@
@@ -698,7 +699,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic mostlyclean-am
+clean-am: clean-generic clean-local mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f Makefile
@@ -756,8 +757,8 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 	install-strip
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
-	all all-am check check-am clean clean-generic ctags \
-	ctags-recursive dist-hook distclean distclean-generic \
+	all all-am check check-am clean clean-generic clean-local \
+	ctags ctags-recursive dist-hook distclean distclean-generic \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am \
 	install-data-local install-dvi install-dvi-am install-exec \
@@ -797,7 +798,7 @@ install-data-local:
 		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
 	done; \
 	list='$(man5_MANS)'; \
-	for i in $$list; do
+	for i in $$list; do \
 		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
 		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
 	done
@@ -813,13 +814,16 @@ uninstall-local:
 		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
 	done; \
 	list='$(man5_MANS)'; \
-	for i in $$list; do
+	for i in $$list; do \
 		echo " rm -f '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
 		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
 	done
 
 mostlyclean-local:
-	rm -f index.*
+	-rm -f index.*
+
+clean-local:
+	-rm -rf man1 man5 man8
 
 dist-hook:
 	@list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
@@ -831,7 +835,7 @@ dist-hook:
 		    sort -u`; \
 	for file in $$dist_files; do \
 		test -f $(distdir)/$$file \
-		|| cp -p ./$$file $(distdir)/$$file \
+		|| cp -p $(srcdir)/$$file $(distdir)/$$file \
 		|| exit 1; \
 	done
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
