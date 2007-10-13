@@ -34,7 +34,7 @@ noinst_PROGRAMS = wrapper
 noinst_DATA = man_db.conf
 
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/include \
+	-I$(top_builddir)/include \
 	-DCONFIG_FILE=\"$(config_file)\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \

@@ -22,7 +22,7 @@
 noinst_LIBRARIES = libman.a
 dist_noinst_DATA = README
 
-libman_a_CPPFLAGS = -I$(top_srcdir)/include
+libman_a_CPPFLAGS = -I$(top_builddir)/include
 
 libman_a_SOURCES = \
 	ansidecl.h \

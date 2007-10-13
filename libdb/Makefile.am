@@ -22,7 +22,7 @@
 noinst_LIBRARIES = libmandb.a
 dist_noinst_DATA = README
 
-libmandb_a_CPPFLAGS = -I$(top_srcdir)/include
+libmandb_a_CPPFLAGS = -I$(top_builddir)/include
 
 libmandb_a_SOURCES = \
 	db_btree.c \
