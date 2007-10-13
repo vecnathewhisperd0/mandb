@@ -344,7 +344,6 @@ AC_FUNC_STRCOLL
 AC_FUNC_VFORK
 AC_FUNC_VPRINTF
 MAN_FUNC_ANSI_SPRINTF
-MAN_FUNC_PCLOSE
 MAN_FUNC_STRSIGNAL
 dnl
 dnl Find a suitable database interface header and library
