@@ -31,20 +31,30 @@ ME_FILES = \
 	misc.me \
 	sec.me
 
+MANUAL = man_db
+
 dist_noinst_DATA = \
 	README \
 	$(ME_FILES)
 noinst_DATA = \
-	man_db.cat \
-	man_db.dvi \
-	man_db.ps
+	$(MANUAL).cat \
+	$(MANUAL).dvi \
+	$(MANUAL).ps
+
+CLEANFILES = \
+	$(noinst_DATA) \
+	$(MANUAL).html \
+	$(MANUAL).pp \
+	$(MANUAL).tdvi \
+	$(MANUAL).tps \
+	version
 
 SOELIM = soelim
 
 version: $(top_srcdir)/configure.ac
 	echo '.ds V $(roff_version)' > $@
 
-man_db.pp: $(ME_FILES) version
+$(MANUAL).pp: $(ME_FILES) version
 	$(SOELIM) man_db.me | tbl > $@
 
 .pp.dvi:
@@ -66,10 +76,13 @@ man_db.pp: $(ME_FILES) version
 	groff -me -Thtml -P-I$* $< > $@
 
 # Automake defines these targets already, so we need to use -local.
-dvi-local: man_db.dvi
-ps-local: man_db.ps
-html-local: man_db.html
+dvi-local: $(MANUAL).dvi
+ps-local: $(MANUAL).ps
+html-local: $(MANUAL).html
 
 # These are all ours.
-cat: man_db.cat
-tps: man_db.tps
+cat: $(MANUAL).cat
+tps: $(MANUAL).tps
+
+clean-local:
+	-rm -f $(MANUAL)-*.png

@@ -523,5 +523,3 @@ AC_CONFIG_FILES(Makefile
 	intl/Makefile
 	po/Makefile.in)
 AC_OUTPUT
-
-date > stamp-h
