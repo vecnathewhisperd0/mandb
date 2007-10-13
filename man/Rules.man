@@ -91,9 +91,6 @@ uninstall-local:
 mostlyclean-local:
 	-rm -f index.*
 
-clean-local:
-	-rm -rf man1 man5 man8
-
 dist-hook:
 	@list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
 	dist_files=`for file in $$list; do \
