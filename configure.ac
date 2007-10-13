@@ -91,6 +91,15 @@ AC_ARG_WITH(config-file,
 	 fi],
 	 : ${config_file=\$\{sysconfdir\}/man_db.conf}
 	 : ${config_file_basename=man_db.conf})
+AC_ARG_WITH(sections,
+[AS_HELP_STRING([--with-sections=SECTIONS], [use manual page sections SECTIONS @<:@1 n l 8 3 2 5 4 9 6 7@:>@])],
+	[if test "$withval" = "yes" || test "$withval" = "no"
+	 then
+		AC_MSG_ERROR(--with-sections requires an argument)
+	 else
+		sections="$withval"
+	 fi],
+	[: ${sections=1 n l 8 3 2 5 4 9 6 7}])
 dnl
 dnl Finish the argument parsing
 dnl
@@ -98,6 +107,7 @@ AC_SUBST(man_owner)dnl
 AC_SUBST(man_mode)dnl
 AC_SUBST(config_file)dnl
 AC_SUBST(config_file_basename)dnl
+AC_SUBST(sections)dnl
 dnl
 dnl Check $PATH for the following progs and append suitable options.
 dnl 

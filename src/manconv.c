@@ -191,7 +191,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 	iconv_t cd;
 	int ret = 0;
 
-	debug ("trying encoding %s\n", try_from_code);
+	debug ("trying encoding %s -> %s\n", try_from_code, to_code);
 
 	cd = iconv_open (to_code, try_from_code);
 	if (cd == (iconv_t) -1) {
@@ -227,6 +227,16 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 		if (n == (size_t) -1 &&
 		    errno == EILSEQ && strstr (to_code, "//IGNORE"))
 			errno = 0;
+
+		/* If we need to try the next encoding, do that before
+		 * writing anything.
+		 */
+		if (!last && n == (size_t) -1 &&
+		    ((errno == EILSEQ && !strstr (to_code, "//IGNORE")) ||
+		     (errno == EINVAL && input_size < buf_size))) {
+			ret = -1;
+			break;
+		}
 
 		if (outptr != output) {
 			/* We have something to write out. */
@@ -265,23 +275,13 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 				errno = errno_save;
 			}
 		} else {
-			if (errno == EILSEQ && !strstr (to_code, "//IGNORE")) {
-				if (last)
-					error (FATAL, errno, "iconv");
-				else {
-					ret = -1;
-					break;
-				}
-			} else if (errno == EINVAL && input_size < buf_size) {
-				if (last)
-					error (FATAL, 0,
-					       _("iconv: incomplete character "
-						 "at end of buffer"));
-				else {
-					ret = -1;
-					break;
-				}
-			}
+			/* !last case handled above */
+			if (errno == EILSEQ && !strstr (to_code, "//IGNORE"))
+				error (FATAL, errno, "iconv");
+			else if (errno == EINVAL && input_size < buf_size)
+				error (FATAL, 0,
+				       _("iconv: incomplete character "
+					 "at end of buffer"));
 		}
 
 		if (input_size < buf_size)

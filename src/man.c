@@ -201,18 +201,6 @@ static __inline__ void gripe_system (pipeline *p, int status)
 }
 
 
-static int checked_system (pipeline *p)
-{
-	int status;
-
-	status = do_system_drop_privs (p);
-	if (status != 0)
-		gripe_system (p, status);
-
-	return status;
-}
-
-
 static char *manpathlist[MAXDIRS];
 
 /* globals */
@@ -1315,25 +1303,25 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	if (!fmt_prog) {
 		/* we don't have an external formatter script */
 		int using_tbl = 0;
-		const char *output_encoding = NULL, *locale_charset = NULL;
+		char *page_encoding;
+		const char *source_encoding, *roff_encoding;
+		const char *output_encoding = NULL;
+		char *cat_charset = NULL;
+		const char *locale_charset = NULL;
+		const char *groff_preconv;
 
 		pipeline_command_argstr (p, get_def ("soelim", SOELIM));
+
+		page_encoding = get_page_encoding (lang);
+		source_encoding = get_source_encoding (lang);
+		debug ("page_encoding = %s\n", page_encoding);
+		debug ("source_encoding = %s\n", source_encoding);
 
 		/* Load the roff_device value dependent on the language dir
 		 * in the path.
 		 */
 		if (!troff) {
-			char *page_encoding;
-			const char *source_encoding, *roff_encoding;
-			char *cat_charset;
-			const char *groff_preconv;
-
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
-
-			page_encoding = get_page_encoding (lang);
-			source_encoding = get_source_encoding (lang);
-			debug ("page_encoding = %s\n", page_encoding);
-			debug ("source_encoding = %s\n", source_encoding);
 
 			cat_charset = get_standard_output_encoding (lang);
 			locale_charset = get_locale_charset ();
@@ -1361,28 +1349,30 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				debug ("roff_device (locale) = %s\n",
 				       STRC (roff_device, "NULL"));
 			}
+		}
 
-			roff_encoding = get_roff_encoding (roff_device,
-							   source_encoding);
-			debug ("roff_encoding = %s\n", roff_encoding);
+		roff_encoding = get_roff_encoding (roff_device,
+						   source_encoding);
+		debug ("roff_encoding = %s\n", roff_encoding);
 
-			/* We may need to recode:
-			 *   from page_encoding to roff_encoding on input;
-			 *   from output_encoding to locale_charset on output.
-			 * If we have preconv, then use it to recode the
-			 * input to a safe escaped form.
-			 */
-			groff_preconv = get_groff_preconv ();
-			if (groff_preconv) {
-				add_manconv (p, page_encoding, page_encoding);
-				pipeline_command_args
-					(p, groff_preconv, "-e", page_encoding,
-					 NULL);
-			} else if (roff_encoding)
-				add_manconv (p, page_encoding, roff_encoding);
-			else
-				add_manconv (p, page_encoding, page_encoding);
+		/* We may need to recode:
+		 *   from page_encoding to roff_encoding on input;
+		 *   from output_encoding to locale_charset on output
+		 *     (if not troff).
+		 * If we have preconv, then use it to recode the
+		 * input to a safe escaped form.
+		 */
+		groff_preconv = get_groff_preconv ();
+		if (groff_preconv) {
+			add_manconv (p, page_encoding, page_encoding);
+			pipeline_command_args
+				(p, groff_preconv, "-e", page_encoding, NULL);
+		} else if (roff_encoding)
+			add_manconv (p, page_encoding, roff_encoding);
+		else
+			add_manconv (p, page_encoding, page_encoding);
 
+		if (!troff) {
 			output_encoding = get_output_encoding (roff_device);
 			if (!output_encoding)
 				output_encoding = source_encoding;
@@ -1395,10 +1385,10 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				putenv (appendstr (NULL, "LESSCHARSET=",
 						   less_charset, NULL));
 			}
-
-			free (page_encoding);
-			free (cat_charset);
 		}
+
+		free (page_encoding);
+		free (cat_charset);
 
 		do {
 			int wants_dev = 0; /* filter wants a dev argument */
@@ -1904,7 +1894,8 @@ static int format_display_and_save (pipeline *decomp,
 	if (global_manpath)
 		drop_effective_privs ();
 
-	discard_stderr (format_cmd);
+	if (isatty (fileno (stdout)))
+		discard_stderr (format_cmd);
 
 	pipeline_connect (decomp, format_cmd, NULL);
 	if (sav_p) {
@@ -1940,7 +1931,7 @@ static void format_display (pipeline *decomp,
 	char *old_cwd = NULL;
 	char *htmldir = NULL, *htmlfile = NULL;
 
-	if (format_cmd)
+	if (format_cmd && isatty (fileno (stdout)))
 		discard_stderr (format_cmd);
 
 	drop_effective_privs ();
@@ -2060,7 +2051,8 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 				 get_def ("compressor", COMPRESSOR));
 #endif /* COMP_CAT */
 
-	discard_stderr (format_cmd);
+	if (isatty (fileno (stdout)))
+		discard_stderr (format_cmd);
 	format_cmd->want_out = tmp_cat_fd;
 
 	push_cleanup ((cleanup_fun) unlink, tmpcat, 1);
@@ -2151,11 +2143,23 @@ static int display (const char *dir, const char *man_file,
 		else
 			found = !access (man_file, R_OK);
 		if (found) {
+			int status;
 			if (prompt && do_prompt (title)) {
+				pipeline_free (format_cmd);
 				pipeline_free (decomp);
 				return 0;
 			}
-			checked_system (format_cmd);
+			drop_effective_privs ();
+			if (decomp) {
+				pipeline_connect (decomp, format_cmd, NULL);
+				pipeline_pump (decomp, format_cmd, NULL);
+				pipeline_wait (decomp);
+			} else
+				pipeline_start (format_cmd);
+			status = pipeline_wait (format_cmd);
+			regain_effective_privs ();
+			if (status != 0)
+				gripe_system (format_cmd, status);
 		}
 	} else {
 		int format = 1;
@@ -2283,6 +2287,7 @@ static int display (const char *dir, const char *man_file,
 			pipeline *decomp_cat;
 
 			if (prompt && do_prompt (title)) {
+				pipeline_free (format_cmd);
 				pipeline_free (decomp);
 				return 0;
 			}
