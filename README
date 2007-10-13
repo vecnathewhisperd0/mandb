@@ -16,13 +16,7 @@ Read docs/NEWS for visible changes since the last public release.
 Read docs/ChangeLog for details of recent source code changes.
 Read docs/TODO for future plans.
 
-This package _requires_ GNU make version 3.68 or newer to be used. 
-Other vendors' make programs will not work with the Makefiles in this 
-package due to extensive utilization of GNU make features.
-
-The C source requires an ANSI C compiler. To generate dependencies (only
-necessary if developing or source level debugging), a cpp that understands
--M is required.
+The C source requires an ANSI C compiler.
 
 
 Notice to users of man-db version 2.2 or 2.2.1 
@@ -157,15 +151,7 @@ Install the package.
 
 	o (gain superuser privileges for the rest of the steps)
 
-	o RUN `make install' to install the utilities and English manual 
-	  pages.
-
-The following command is required if you elected to compile the package
-without support for message catalogues but would like to install native
-language manual page translations.
-
-	o RUN `make man targets=install LINGUAS=<your_choice>' to install
-	  translations of the standard English manual pages 
+	o RUN `make install' to install the utilities and manual pages.
 
 Initialise the `index' databases for all manpaths marked as global in the
 man-db configuration file.
@@ -222,9 +208,8 @@ Makefile targets and variables
 
 The standard GNU Makefile targets: all, install, uninstall, mostlyclean,
 clean, distclean, realclean and TAGS are available in every Makefile-
-supported directory.  In addition, the master Makefile has the targets:
-update (update any configuration files whose source has changed) and dist
-(create a compressed and tarred distribution file).
+supported directory.  In addition, the master Makefile has the dist target
+to create a compressed and tarred distribution file.
 
 During the configuration process, `configure' sets the installation
 variables, `prefix' and `exec_prefix'.  These are then used to form other
