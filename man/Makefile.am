@@ -82,6 +82,8 @@ man8_MANS = \
 	ja.UTF-8/man8/catman.8 \
 	ja.UTF-8/man8/mandb.8
 
+CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS)
+
 SED_ARGS = \
 	-e 's,%pager%,$(pager),g' \
         -e 's,%troff%,$(troff),g' \
