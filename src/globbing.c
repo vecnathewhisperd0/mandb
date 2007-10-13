@@ -40,8 +40,8 @@ extern char *strrchr();
 
 #include <ctype.h>
 
-#include "glob.h"
-#include "fnmatch.h"
+#include <glob.h>
+#include <fnmatch.h>
 
 #include <sys/types.h>
 #include <dirent.h>

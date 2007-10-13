@@ -34,7 +34,7 @@
 #include "gettext.h"
 #define _(String) gettext (String)
 
-#include "getopt.h"
+#include <getopt.h>
 
 #include "manconfig.h"
 #include "globbing.h"

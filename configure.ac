@@ -467,12 +467,18 @@ AC_CHECK_FUNC(regcomp, [AC_DEFINE(POSIX_REGEX, 1, [Define if you have the regcom
     [AC_MSG_WARN(no regex routines found, whatis/apropos will ignore -r)])])
 MAN_FUNC_FNMATCH
 AC_CHECK_FUNC(globfree,
-	      [AC_DEFINE(HAVE_GLOB_H, 1, [Define if using <glob.h> rather than "lib/glob.h".])],
-	      [AC_LIBOBJ([glob])])
+	      [AC_DEFINE(HAVE_GLOB_H, 1, [Define if using <glob.h> rather than "lib/glob.h".])
+	       GLOB_H=],
+	      [AC_LIBOBJ([glob])
+	       GLOB_H=glob.h])
+AC_SUBST([GLOB_H])
 AC_CHECK_FUNC(getopt_long,
-	      [AC_DEFINE(HAVE_GETOPT_H, 1, [Define if using <getopt.h> rather than "lib/getopt.h".])],
+	      [AC_DEFINE(HAVE_GETOPT_H, 1, [Define if using <getopt.h> rather than "lib/getopt.h".])
+	       GETOPT_H=],
 	      [AC_LIBOBJ([getopt])
-	       AC_LIBOBJ([getopt1])])
+	       AC_LIBOBJ([getopt1])
+	       GETOPT_H=getopt.h])
+AC_SUBST([GETOPT_H])
 AC_REPLACE_FUNCS(flock putenv realpath rename basename waitpid strstr strsep strcspn strspn strnlen)
 AC_CHECK_FUNCS(mkdtemp, ,
 	       [AC_LIBOBJ([mkdtemp])

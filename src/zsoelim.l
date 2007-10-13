@@ -75,7 +75,7 @@ extern int errno;
 #define LINE	so_line[so_stack_ptr]
 #define PIPE	so_pipe[so_stack_ptr]
 
-#include "getopt.h"
+#include <getopt.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)

@@ -54,10 +54,30 @@ libman_a_SOURCES = \
 ## Headers that are used conditionally. Automake can't detect these itself.
 libman_a_SOURCES += \
 	flock.h \
-	fnmatch.h \
-	getopt.h \
 	gettext.h \
-	glob.h \
 	setenv.h
 
 libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
+
+# Provide header files missing from this system. (This should eventually be
+# replaced with use of Gnulib, which has modules for all of these.)
+
+BUILT_SOURCES = $(FNMATCH_H) $(GETOPT_H) $(GLOB_H)
+MOSTLYCLEANFILES = fnmatch.h fnmatch.h-t getopt.h getopt.h-t glob.h glob.h-t
+EXTRA_DIST = fnmatch_.h getopt_.h glob_.h
+
+fnmatch.h: fnmatch_.h
+	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+	  cat $<; \
+	} > $@-t
+	mv -f $@-t $@
+getopt.h: getopt_.h
+	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+	  cat $<; \
+	} > $@-t
+	mv -f $@-t $@
+glob.h: glob_.h
+	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+	  cat $<; \
+	} > $@-t
+	mv -f $@-t $@

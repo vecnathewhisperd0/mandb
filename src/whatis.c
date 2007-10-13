@@ -73,9 +73,9 @@ extern char *strrchr();
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include "fnmatch.h"
+#include <fnmatch.h>
 
-#include "getopt.h"
+#include <getopt.h>
 
 #include "manconfig.h"
 

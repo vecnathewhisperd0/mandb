@@ -19,9 +19,10 @@ AC_CACHE_CHECK([for fnmatch with FNM_CASEFOLD], [man_cv_func_fnmatch],
 if test "$man_cv_func_fnmatch" = "yes"
 then
 	AC_DEFINE([HAVE_FNMATCH_H], 1, [Define if using <fnmatch.h> rather than "lib/fnmatch.h".])
-fi
-if test "$man_cv_func_fnmatch" = "no"
-then
+	FNMATCH_H=
+else
 	AC_LIBOBJ([fnmatch])
+	FNMATCH_H=fnmatch.h
 fi
+AC_SUBST([FNMATCH_H])
 ])

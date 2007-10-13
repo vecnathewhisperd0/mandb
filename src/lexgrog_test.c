@@ -42,7 +42,7 @@
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include "getopt.h"
+#include <getopt.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)
