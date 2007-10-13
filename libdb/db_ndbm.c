@@ -48,7 +48,9 @@
 #endif /* HAVE_UNISTD_H */
 
 #include "manconfig.h"
-#include "lib/flock.h"
+
+#include "flock.h"
+
 #include "mydbm.h"
 #include "db_storage.h"
 

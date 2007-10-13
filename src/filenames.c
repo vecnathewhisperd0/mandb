@@ -42,12 +42,15 @@ extern char *strrchr();
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "libdb/db_storage.h"
-#include "lib/error.h"
+
+#include "error.h"
+
+#include "db_storage.h"
+
 #include "filenames.h"
 
 static void gripe_bogus_manpage (const char *manpage)

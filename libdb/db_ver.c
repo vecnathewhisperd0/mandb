@@ -36,11 +36,13 @@
 #include <strings.h>
 #endif /* STDC_HEADERS */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
+
+#include "error.h"
+
 #include "mydbm.h"
 
 int dbver_rd (MYDBM_FILE dbfile)

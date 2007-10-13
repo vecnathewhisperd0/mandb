@@ -36,12 +36,14 @@ extern int errno;
 
 #include <sys/types.h>
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/pipeline.h"
+
+#include "error.h"
+#include "pipeline.h"
+
 #include "security.h"
 
 uid_t ruid, euid, uid;

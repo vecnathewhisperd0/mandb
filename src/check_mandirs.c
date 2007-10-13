@@ -76,14 +76,17 @@ extern int errno;
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "libdb/mydbm.h"
-#include "libdb/db_storage.h"
-#include "lib/error.h"
-#include "lib/hashtable.h"
+
+#include "error.h"
+#include "hashtable.h"
+
+#include "mydbm.h"
+#include "db_storage.h"
+
 #include "descriptions.h"
 #include "filenames.h"
 #include "globbing.h"

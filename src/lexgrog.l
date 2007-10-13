@@ -51,21 +51,17 @@ extern int errno;
 #  include <strings.h>
 #endif /* HAVE_STRING_H */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
-
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/pipeline.h"
-#include "lib/decompress.h"
-#include "descriptions.h"
+
+#include "error.h"
+#include "pipeline.h"
+#include "decompress.h"
+
 #include "security.h"
 #include "encodings.h"
-#include "ult_src.h"
 
 #define YY_READ_BUF_SIZE	1024
 #define MAX_NAME		2048
@@ -100,34 +96,6 @@ static pipeline *decomp;
 	} else \
 		result = YY_NULL; \
 }
-
-#ifdef TEST
-
-#include <stdio.h>
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#else /* !HAVE_GETOPT_H */
-#  include "lib/getopt.h"
-#endif /* HAVE_GETOPT_H */
-
-char *program_name;
-int quiet = 1;
-
-static const struct option long_options[] =
-{
-	{"man",		no_argument,		0,	'm'},
-	{"cat",		no_argument,		0,	'c'},
-	{"whatis",	no_argument,		0,	'w'},
-	{"filters",	no_argument,		0,	'f'},
-	{"encoding",	required_argument,	0,	'E'},
-	{"help",	no_argument,		0,	'h'},
-	{"version",	no_argument,		0,	'V'},
-	{0, 0, 0, 0}
-};
-
-static const char args[] = "mcwfE:hV";
-
-#endif /* TEST */
 %}
 
 %option ecs meta-ecs
@@ -540,151 +508,6 @@ int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
 		return p_name[0];
 	}
 }
-
-#ifdef TEST
-
-static void usage (int status)
-{
-	printf (_("usage: %s [-mcwfhV] [-E encoding] file ...\n"), program_name);
-	printf (_(
-		"-m, --man                   parse as man page.\n"
-		"-c, --cat                   parse as cat page.\n"
-		"-w, --whatis                show whatis information.\n"
-		"-f, --filters               show guessed series of "
-					    "preprocessing filters.\n"
-		"-E, --encoding encoding     override character set.\n"
-		"-V, --version               show version.\n"
-		"-h, --help                  show this usage message.\n"
-		"\n"
-		"The defaults are --man and --whatis.\n"));
-	exit (status);
-}
-
-int main (int argc, char **argv)
-{
-	int c;
-	int type = 0;
-	int parse_man = 0, parse_cat = 0, show_whatis = 0, show_filters = 0;
-	const char *encoding = NULL;
-	int some_failed = 0;
-
-	program_name = xstrdup (basename (argv[0]));
-
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != -1) {
-		switch (c) {
-			case 'm':
-				parse_man = 1;
-				break;
-			case 'c':
-				parse_cat = 1;
-				break;
-			case 'w':
-				show_whatis = 1;
-				break;
-			case 'f':
-				show_filters = 1;
-				break;
-			case 'E':
-				encoding = optarg;
-				break;
-			case 'V':
-				ver ();
-				break;
-			case 'h':
-				usage (OK);
-				break;
-			default:
-				usage (FAIL);
-				break;
-		}
-	}
-	if (parse_man) {
-		if (parse_cat) {
-			error (0, 0, _("-m -c: incompatible options"));
-			usage (FAIL);
-		} else
-			type = 0;
-	} else {
-		if (parse_cat)
-			type = 1;
-		else
-			type = 0;	/* default = man */
-	}
-	if (!show_whatis && !show_filters)
-		show_whatis = 1;
-
-	pipeline_install_sigchld ();
-
-	while (optind != argc) {
-		lexgrog lg;
-		const char *file;
-		int found = 0;
-
-		lg.type = type;
-
-		if (STREQ (argv[optind], "-"))
-			file = argv[optind];
-		else {
-			char *path, *pathend;
-			struct stat statbuf;
-
-			path = xstrdup (argv[optind]);
-			pathend = strrchr (path, '/');
-			if (pathend) {
-				*pathend = '\0';
-				pathend = strrchr (path, '/');
-				if (pathend && STRNEQ (pathend + 1, "man", 3))
-					*pathend = '\0';
-				else {
-					free (path);
-					path = NULL;
-				}
-			} else {
-				free (path);
-				path = NULL;
-			}
-
-			file = ult_src (argv[optind], path ? path : ".",
-					&statbuf, SO_LINK);
-			if (path)
-				free (path);
-		}
-
-		if (file && find_name (file, "-", &lg, encoding)) {
-			struct page_description *descs =
-				parse_descriptions (NULL, lg.whatis);
-			const struct page_description *desc;
-			for (desc = descs; desc; desc = desc->next) {
-				if (!desc->name || !desc->whatis)
-					continue;
-				found = 1;
-				printf ("%s", argv[optind]);
-				if (show_filters)
-					printf (" (%s)", lg.filters);
-				if (show_whatis)
-					printf (": \"%s - %s\"",
-						desc->name, desc->whatis);
-				printf ("\n");
-			}
-			free_descriptions (descs);
-		}
-
-		if (!found) {
-			printf ("%s: parse failed\n", argv[optind]);
-			some_failed = 1;
-		}
-
-		++optind;
-	}
-
-	if (some_failed)
-		return FATAL;
-	else
-		return OK;
-}
-
-#endif /* TEST */
 
 #ifdef PROFILE
 void rule_profile (void)

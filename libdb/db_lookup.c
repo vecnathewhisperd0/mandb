@@ -51,11 +51,13 @@ extern char *strsep();
 extern int errno;
 #endif /* not STDC_HEADERS */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
+
+#include "error.h"
+
 #include "mydbm.h"
 #include "db_storage.h"
 

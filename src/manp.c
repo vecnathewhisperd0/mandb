@@ -76,13 +76,15 @@ extern char *getenv();
 extern int errno;
 #endif
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/getcwdalloc.h"
-#include "lib/cleanup.h"
+
+#include "error.h"
+#include "getcwdalloc.h"
+#include "cleanup.h"
+
 #include "security.h"
 #include "encodings.h"
 #include "manp.h"

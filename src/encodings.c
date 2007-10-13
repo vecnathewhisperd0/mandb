@@ -33,7 +33,7 @@
 #  include <strings.h>
 #endif /* STDC_HEADERS */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #include <locale.h>
 #ifdef HAVE_LANGINFO_CODESET
 #  include <langinfo.h>
@@ -41,8 +41,10 @@
 #include <ctype.h>
 
 #include "manconfig.h"
-#include "lib/pathsearch.h"
-#include "lib/pipeline.h"
+
+#include "pathsearch.h"
+#include "pipeline.h"
+
 #include "encodings.h"
 
 

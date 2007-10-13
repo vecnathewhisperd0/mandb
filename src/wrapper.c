@@ -37,7 +37,7 @@
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #include <locale.h>
 #define _(Text) gettext (Text)
 

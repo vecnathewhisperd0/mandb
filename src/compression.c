@@ -53,14 +53,15 @@ extern int errno;
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
 #ifdef COMP_SRC /* must come after manconfig.h */
 
-#include "lib/error.h"
-#include "lib/pipeline.h"
+#include "error.h"
+#include "pipeline.h"
+
 #include "security.h"
 
 /* Take filename as arg, return structure containing decompressor 

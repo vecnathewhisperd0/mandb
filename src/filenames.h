@@ -20,7 +20,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "libdb/db_storage.h"
+#include "db_storage.h"
 
 extern char *make_filename (const char *path, const char *name,
 			    struct mandata *in, const char *type);

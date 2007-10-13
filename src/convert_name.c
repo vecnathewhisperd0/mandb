@@ -44,11 +44,13 @@
 
 #include <stdio.h>
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
+
+#include "error.h"
+
 #include "manp.h"
 #include "convert_name.h"
 

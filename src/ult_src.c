@@ -97,13 +97,15 @@ extern char *realpath();
 #  endif /* _POSIX_VERSION */
 #endif /* !PATH_MAX */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/pipeline.h"
-#include "lib/decompress.h"
+
+#include "error.h"
+#include "pipeline.h"
+#include "decompress.h"
+
 #include "security.h"
 #include "ult_src.h"
 

@@ -1,5 +1,5 @@
 ./ABOUT-NLS
-./GNUmakefile
+./Makefile
 ./aclocal.m4
 ./autom4te.cache
 ./config.h*
@@ -7,13 +7,16 @@
 ./config.status
 ./config.status.lineno
 ./configure
-./makefile
 ./stamp-h*
-include/Defines
+docs/Makefile
 include/*.h
 intl/*
+lib/.deps
 lib/Makefile
-libdb/.depend
+lib/fnmatch.h
+lib/getopt.h
+lib/glob.h
+libdb/.deps
 libdb/Makefile
 m4/lib-ld.m4
 m4/lib-link.m4
@@ -46,6 +49,7 @@ m4/wchar_t.m4
 m4/wint_t.m4
 m4/xsize.m4
 man/Makefile
+man/*.UTF-8/Makefile
 man/*.UTF-8/man1/*.1
 man/*.UTF-8/man5/*.5
 man/*.UTF-8/man8/*.8
@@ -56,9 +60,9 @@ manual/Makefile
 manual/man_db.cat
 manual/man_db.dvi
 manual/man_db.html
+manual/man_db.pp
 manual/man_db.ps
 manual/man_db.tps
-manual/postpro
 manual/version
 po/ChangeLog
 po/Makefile
@@ -76,7 +80,7 @@ po/quot.sed
 po/remove-potcdate.*
 po/stamp-po
 po/*.gmo
-src/.depend
+src/.deps
 src/Makefile
 src/accessdb
 src/apropos
@@ -93,5 +97,9 @@ src/whatis
 src/wrapper
 src/zsoelim
 src/zsoelim.c
+tools/Makefile
 tools/config.rpath
+tools/depcomp
+tools/missing
 tools/mkinstalldirs
+tools/ylwrap

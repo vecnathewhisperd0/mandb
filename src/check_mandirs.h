@@ -20,7 +20,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "libdb/db_storage.h"
+#include "db_storage.h"
 
 /* check_mandirs.c */
 extern void test_manfile (const char *file, const char *path);

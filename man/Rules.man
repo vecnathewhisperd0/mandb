@@ -1,0 +1,109 @@
+## Copyright (C) 1994, 1995 Graeme Wilford.
+## Copyright (C) 2001, 2002, 2003, 2007 Colin Watson.
+##
+## This file is part of man-db.
+##
+## man-db is free software; you can redistribute it and/or modify it
+## under the terms of the GNU General Public License as published by
+## the Free Software Foundation; either version 2 of the License, or
+## (at your option) any later version.
+##
+## man-db is distributed in the hope that it will be useful, but
+## WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with man-db; if not, write to the Free Software Foundation,
+## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS)
+
+SED_ARGS = \
+	-e 's,%pager%,$(pager),g' \
+        -e 's,%troff%,$(troff),g' \
+        -e 's,%date%,$(date),g' \
+        -e 's,%version%,$(VERSION),g' \
+        -e 's,%zsoelim%,$(TRANS_ZSOELIM),g' \
+        -e 's,%man%,$(TRANS_MAN),g' \
+        -e 's,%mandb%,$(TRANS_MANDB),g' \
+        -e 's,%manpath%,$(TRANS_MANPATH),g' \
+        -e 's,%catman%,$(TRANS_CATMAN),g' \
+        -e 's,%apropos%,$(TRANS_APROPOS),g' \
+        -e 's,%whatis%,$(TRANS_WHATIS),g' \
+        -e 's,%manconv%,$(TRANS_MANCONV),g' \
+        -e 's,%thzsoelim%,$(TRANS_ZSOELIM_UPPER),g' \
+        -e 's,%thman%,$(TRANS_MAN_UPPER),g' \
+        -e 's,%thmandb%,$(TRANS_MANDB_UPPER),g' \
+        -e 's,%thmanpath%,$(TRANS_MANPATH_UPPER),g' \
+        -e 's,%thcatman%,$(TRANS_CATMAN_UPPER),g' \
+        -e 's,%thapropos%,$(TRANS_APROPOS_UPPER),g' \
+        -e 's,%thwhatis%,$(TRANS_WHATIS_UPPER),g' \
+        -e 's,%thmanconv%,$(TRANS_MANCONV_UPPER),g' \
+        -e 's,%manpath_config_file%,$(config_file),g'
+
+.man1.1:
+	mkdir -p man1
+	sed $(SED_ARGS) $< > $@
+.man5.5:
+	mkdir -p man5
+	sed $(SED_ARGS) $< > $@
+.man8.8:
+	mkdir -p man8
+	sed $(SED_ARGS) $< > $@
+
+install-data-local:
+	@set -e; \
+	for s in 1 5 8; do \
+		test -z "$(mandir)" || $(MKDIR_P) "$(DESTDIR)$(mandir)/$(LANGUAGE)/man$$s"; \
+	done; \
+	list='$(man1_MANS) $(man8_MANS)'; \
+	for i in $$list; do \
+		ext=`echo $$i | sed -e 's/^.*\\.//'`; \
+		inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
+		inst=`echo $$inst | sed -e 's/^.*\///'`; \
+		inst=`echo $$inst | sed '$(transform)'`.$$ext; \
+		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst'"; \
+		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
+	done; \
+	list='$(man5_MANS)'; \
+	for i in $$list; do \
+		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
+		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
+	done
+
+uninstall-local:
+	@list='$(man1_MANS) $(man8_MANS)'; \
+	for i in $$list; do \
+		ext=`echo $$i | sed -e 's/^.*\\.//'`; \
+		inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
+		inst=`echo $$inst | sed -e 's/^.*\///'`; \
+		inst=`echo $$inst | sed '$(transform)'`.$$ext; \
+		echo " rm -f '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst'"; \
+		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
+	done; \
+	list='$(man5_MANS)'; \
+	for i in $$list; do \
+		echo " rm -f '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
+		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
+	done
+
+mostlyclean-local:
+	-rm -f index.*
+
+clean-local:
+	-rm -rf man1 man5 man8
+
+dist-hook:
+	@list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
+	dist_files=`for file in $$list; do \
+			echo $$file | sed 's/\.\([0-9]\)/.man\1/'; \
+		    done`; \
+	$(MKDIR_P) `echo "$$dist_files" | \
+		    sed 's|^|$(distdir)/|;s,/[^/]*$$,,' | \
+		    sort -u`; \
+	for file in $$dist_files; do \
+		test -f $(distdir)/$$file \
+		|| cp -p $(srcdir)/$$file $(distdir)/$$file \
+		|| exit 1; \
+	done

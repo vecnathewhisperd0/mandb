@@ -112,28 +112,27 @@ extern int errno;
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#else /* !HAVE_GETOPT_H */
-#  include "lib/getopt.h"
-#endif /* HAVE_GETOPT_H */
+#include <getopt.h>
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "libdb/mydbm.h"
-#include "libdb/db_storage.h"
-#include "lib/error.h"
-#include "lib/cleanup.h"
-#include "lib/setenv.h"
-#include "lib/hashtable.h"
-#include "lib/pipeline.h"
-#include "lib/getcwdalloc.h"
-#include "lib/pathsearch.h"
-#include "lib/linelength.h"
-#include "lib/decompress.h"
+
+#include "error.h"
+#include "cleanup.h"
+#include "setenv.h"
+#include "hashtable.h"
+#include "pipeline.h"
+#include "getcwdalloc.h"
+#include "pathsearch.h"
+#include "linelength.h"
+#include "decompress.h"
+
+#include "mydbm.h"
+#include "db_storage.h"
+
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "globbing.h"

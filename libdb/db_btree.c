@@ -53,9 +53,11 @@
 #endif /* HAVE_UNISTD_H */
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/flock.h"
-#include "lib/hashtable.h"
+
+#include "error.h"
+#include "flock.h"
+#include "hashtable.h"
+
 #include "mydbm.h"
 #include "db_storage.h"
 

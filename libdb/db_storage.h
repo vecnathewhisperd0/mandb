@@ -47,7 +47,7 @@
 
 #include "sys/time.h"	/* for time_t */
 
-#include "libdb/mydbm.h"
+#include "mydbm.h"
 
 struct mandata {
 	struct mandata *next;		/* ptr to next structure, if any */

@@ -2,7 +2,7 @@
  * globbing.c: interface to the POSIX glob routines
  *  
  * Copyright (C) 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2006, 2007 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -27,8 +27,6 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdio.h>
-
 #if defined(STDC_HEADERS)
 #  include <string.h>
 #  include <stdlib.h>
@@ -42,57 +40,22 @@ extern char *strrchr();
 
 #include <ctype.h>
 
-#ifdef HAVE_GLOB_H
-#  include <glob.h>
-#else 
-#  include "lib/glob.h"
-#endif
-
-#ifdef HAVE_FNMATCH_H
-#  include <fnmatch.h>
-#else
-#  include "lib/fnmatch.h"
-#endif
+#include <glob.h>
+#include <fnmatch.h>
 
 #include <sys/types.h>
 #include <dirent.h>
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/hashtable.h"
-#include "lib/cleanup.h"
+
+#include "error.h"
+#include "hashtable.h"
+#include "cleanup.h"
+
 #include "globbing.h"
 
 const char *extension;
 static const char *mandir_layout = MANDIR_LAYOUT;
-
-#ifdef TEST
-
-#  include "lib/gettext.h"
-#  define _(String) gettext (String)
-
-#  ifdef HAVE_GETOPT_H
-#    include <getopt.h>
-#  else /* !HAVE_GETOPT_H */
-#    include "lib/getopt.h"
-#  endif /* HAVE_GETOPT_H */
-
-char *program_name;
-
-static const struct option long_options[] =
-{
-	{"debug",	no_argument,		0,	'd'},
-	{"extension",	required_argument,	0,	'e'},
-	{"ignore-case",	no_argument,		0,	'i'},
-	{"match-case",	no_argument,		0,	'I'},
-	{"help",	no_argument,		0,	'h'},
-	{"version",	no_argument,		0,	'V'},
-	{0, 0, 0, 0}
-};
-
-static const char args[] = "de:iIhV";
-
-#endif /* TEST */
 
 static __inline__ char *end_pattern (char *pattern, const char *sec)
 {
@@ -430,72 +393,4 @@ char **look_for_file (const char *hier, const char *sec,
 		return NULL;
 	else
 		return gbuf.gl_pathv;
-}		
-
-#ifdef TEST
-
-static void usage (int status)
-{
-	printf (_("usage: %s [-deiIhV] path section name\n"), program_name);
-	printf (_(
-		"-d, --debug                 emit debugging messages.\n"
-		"-e, --extension             limit search to extension type `extension'.\n"
-		"-i, --ignore-case           look for pages case-insensitively (default).\n"
-		"-I, --match-case            look for pages case-sensitively.\n"
-		"-V, --version               show version.\n"
-		"-h, --help                  show this usage message.\n"));
-
-	exit (status);
 }
-
-int main (int argc, char **argv)
-{
-	int c;
-	int i;
-	int match_case = 0;
-
-	program_name = xstrdup (basename (argv[0]));
-
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != -1) {
-		switch (c) {
-			case 'd':
-				debug_level = 1;
-				break;
-			case 'e':
-				extension = optarg;
-				break;
-			case 'i':
-				match_case = 0;
-				break;
-			case 'I':
-				match_case = 1;
-				break;
-			case 'V':
-				ver ();
-				break;
-			case 'h':
-				usage (OK);
-				break;
-			default:
-				usage (FAIL);
-				break;
-		}
-	}
-
-	if (argc - optind != 3)
-		usage (FAIL);
-
-	for (i = 0; i <= 1; i++) {
-		char **files;
-
-		files = look_for_file (argv[optind], argv[optind + 1],
-				       argv[optind + 2], i, match_case);
-		if (files)
-			while (*files)
-				printf ("%s\n", *files++);
-	}
-	return 0;
-}
-
-#endif /* TEST */

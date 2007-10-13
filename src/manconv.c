@@ -56,20 +56,18 @@
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#else /* !HAVE_GETOPT_H */
-#  include "lib/getopt.h"
-#endif /* HAVE_GETOPT_H */
+#include <getopt.h>
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/pipeline.h"
-#include "lib/decompress.h"
+
+#include "error.h"
+#include "pipeline.h"
+#include "decompress.h"
+
 #include "encodings.h"
 
 char *program_name;

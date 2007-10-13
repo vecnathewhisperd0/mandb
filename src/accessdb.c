@@ -49,18 +49,16 @@ extern char *strchr();
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include "lib/gettext.h"
+#include <getopt.h>
+
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "libdb/mydbm.h"
-#include "lib/error.h"
 
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#else /* !HAVE_GETOPT_H */
-#  include "lib/getopt.h"
-#endif /* HAVE_GETOPT_H */
+#include "error.h"
+
+#include "mydbm.h"
 
 char *program_name;
 const char *cat_root;

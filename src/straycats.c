@@ -80,15 +80,18 @@ extern char *strrchr();
 extern char *canonicalize_file_name __P ((__const char *__name));
 #endif
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "libdb/mydbm.h"
-#include "libdb/db_storage.h"
-#include "lib/error.h"
-#include "lib/pipeline.h"
-#include "lib/decompress.h"
+
+#include "error.h"
+#include "pipeline.h"
+#include "decompress.h"
+
+#include "mydbm.h"
+#include "db_storage.h"
+
 #include "descriptions.h"
 #include "encodings.h"
 #include "manp.h"

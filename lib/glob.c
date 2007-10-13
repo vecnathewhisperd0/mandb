@@ -183,11 +183,7 @@ extern char *alloca ();
 #undef	FNM_PATHNAME
 #undef	FNM_NOESCAPE
 #undef	FNM_PERIOD
-#ifdef HAVE_FNMATCH_H
-#  include <fnmatch.h>
-#else
-#  include "fnmatch.h"
-#endif
+#include "fnmatch.h"
 
 /* Some system header files erroneously define these.
    We want our own definitions from <glob.h> to take precedence.  */
