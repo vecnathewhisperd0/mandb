@@ -64,22 +64,21 @@ extern int errno;
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#else /* !HAVE_GETOPT_H */
-#  include "lib/getopt.h"
-#endif /* HAVE_GETOPT_H */
+#include "getopt.h"
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "libdb/mydbm.h"
-#include "lib/error.h"
-#include "lib/cleanup.h"
-#include "lib/pipeline.h"
-#include "lib/getcwdalloc.h"
+
+#include "error.h"
+#include "cleanup.h"
+#include "pipeline.h"
+#include "getcwdalloc.h"
+
+#include "mydbm.h"
+
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "manp.h"

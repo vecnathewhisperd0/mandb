@@ -23,7 +23,7 @@
 #ifndef MAN_DECOMPRESS_H
 #define MAN_DECOMPRESS_H
 
-#include "lib/pipeline.h"
+#include "pipeline.h"
 
 struct decompress;
 

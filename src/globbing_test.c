@@ -31,14 +31,10 @@
 #  include <stdlib.h>
 #endif /* STDC_HEADERS */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#else /* !HAVE_GETOPT_H */
-#  include "lib/getopt.h"
-#endif /* HAVE_GETOPT_H */
+#include "getopt.h"
 
 #include "manconfig.h"
 #include "globbing.h"

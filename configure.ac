@@ -509,6 +509,11 @@ AC_CONFIG_FILES(Makefile
 	src/Makefile
 	src/man_db.conf
 	man/Makefile
+	man/de.UTF-8/Makefile
+	man/es.UTF-8/Makefile
+	man/fr.UTF-8/Makefile
+	man/it.UTF-8/Makefile
+	man/ja.UTF-8/Makefile
 	manual/Makefile
 	libdb/Makefile
 	docs/Makefile

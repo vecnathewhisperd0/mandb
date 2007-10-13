@@ -56,7 +56,7 @@ extern int errno;
 extern char *strrchr();
 #endif /* no string(s) header */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
 
@@ -73,26 +73,21 @@ extern char *strrchr();
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#ifdef HAVE_FNMATCH_H
-#  include <fnmatch.h>
-#else /* !HAVE_FNMATCH_H */
-#  include "lib/fnmatch.h"
-#endif /* HAVE_FNMATCH_H */
+#include "fnmatch.h"
 
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#else /* !HAVE_GETOPT_H */
-#  include "lib/getopt.h"
-#endif /* HAVE_GETOPT_H */
+#include "getopt.h"
 
 #include "manconfig.h"
-#include "libdb/mydbm.h"
-#include "libdb/db_storage.h"
-#include "lib/error.h"
-#include "lib/setenv.h"
-#include "lib/pipeline.h"
-#include "lib/linelength.h"
-#include "lib/hashtable.h"
+
+#include "error.h"
+#include "setenv.h"
+#include "pipeline.h"
+#include "linelength.h"
+#include "hashtable.h"
+
+#include "mydbm.h"
+#include "db_storage.h"
+
 #include "encodings.h"
 #include "manp.h"
 

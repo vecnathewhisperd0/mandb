@@ -37,12 +37,15 @@
 extern char *strchr();
 #endif /* no string(s) header */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "libdb/db_storage.h"
-#include "lib/error.h"
+
+#include "error.h"
+
+#include "db_storage.h"
+
 #include "descriptions.h"
 
 static void gripe_bad_store (const char *name, const char *ext)

@@ -84,7 +84,8 @@ am_accessdb_OBJECTS = accessdb.$(OBJEXT) util.$(OBJEXT) \
 	version.$(OBJEXT)
 accessdb_OBJECTS = $(am_accessdb_OBJECTS)
 am__DEPENDENCIES_1 =
-am__DEPENDENCIES_2 = ../libdb/libmandb.a $(am__DEPENDENCIES_1)
+am__DEPENDENCIES_2 = $(top_builddir)/libdb/libmandb.a \
+	$(am__DEPENDENCIES_1)
 accessdb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
 am_catman_OBJECTS = catman.$(OBJEXT) fake_security.$(OBJEXT) \
 	manp.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT)
@@ -348,6 +349,8 @@ bin_SCRIPTS = apropos
 noinst_DATA = man_db.conf
 AM_CPPFLAGS = \
 	-I$(top_builddir)/include \
+	-I$(top_srcdir)/lib \
+	-I$(top_srcdir)/libdb \
 	-DCONFIG_FILE=\"$(config_file)\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \
@@ -358,8 +361,8 @@ AM_CPPFLAGS = \
 	-DSOELIM=\"$(bindir)/$(TRANS_SOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 
-LIBMAN = ../lib/libman.a
-LIBMANDB = ../libdb/libmandb.a $(DBLIBS)
+LIBMAN = $(top_builddir)/lib/libman.a
+LIBMANDB = $(top_builddir)/libdb/libmandb.a $(DBLIBS)
 accessdb_LDADD = $(LIBMANDB) $(LIBMAN)
 catman_LDADD = $(LIBMANDB) $(LIBMAN)
 globbing_LDADD = $(LIBMAN)

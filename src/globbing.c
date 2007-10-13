@@ -40,25 +40,18 @@ extern char *strrchr();
 
 #include <ctype.h>
 
-#ifdef HAVE_GLOB_H
-#  include <glob.h>
-#else 
-#  include "lib/glob.h"
-#endif
-
-#ifdef HAVE_FNMATCH_H
-#  include <fnmatch.h>
-#else
-#  include "lib/fnmatch.h"
-#endif
+#include "glob.h"
+#include "fnmatch.h"
 
 #include <sys/types.h>
 #include <dirent.h>
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/hashtable.h"
-#include "lib/cleanup.h"
+
+#include "error.h"
+#include "hashtable.h"
+#include "cleanup.h"
+
 #include "globbing.h"
 
 const char *extension;

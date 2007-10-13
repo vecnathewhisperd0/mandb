@@ -36,8 +36,10 @@
 #endif /* STDC_HEADERS */
 
 #include "manconfig.h"
-#include "lib/hashtable.h"
-#include "lib/cleanup.h"
+
+#include "hashtable.h"
+#include "cleanup.h"
+
 #include "mydbm.h"
 
 static struct hashtable *parent_sortkey_hash;

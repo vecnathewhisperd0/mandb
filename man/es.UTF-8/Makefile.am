@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 ## Copyright (C) 1994, 1995 Graeme Wilford.
-## Copyright (C) 2001, 2003, 2005, 2006, 2007 Colin Watson.
+## Copyright (C) 2001, 2002, 2003, 2007 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -19,20 +19,19 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-noinst_LIBRARIES = libmandb.a
-dist_noinst_DATA = README
+LANGUAGE = es.UTF-8
 
-libmandb_a_CPPFLAGS = \
-	-I$(top_builddir)/include \
-	-I$(top_srcdir)/lib
+man1_MANS = \
+	man1/apropos.1 \
+	man1/man.1 \
+	man1/manpath.1 \
+	man1/whatis.1 \
+	man1/zsoelim.1
+man5_MANS = \
+	man5/manpath.5
+man8_MANS = \
+	man8/accessdb.8 \
+	man8/catman.8 \
+	man8/mandb.8
 
-libmandb_a_SOURCES = \
-	db_btree.c \
-	db_delete.c \
-	db_gdbm.c \
-	db_lookup.c \
-	db_ndbm.c \
-	db_storage.h \
-	db_store.c \
-	db_ver.c \
-	mydbm.h
+include $(top_srcdir)/man/Rules.man

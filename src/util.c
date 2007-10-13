@@ -59,8 +59,10 @@ extern char *strcpy();
 #endif /* HAVE_UNISTD_H */
 
 #include "manconfig.h"
-#include "libdb/mydbm.h" /* for full definition of MAN_DB */
-#include "lib/pipeline.h"
+
+#include "pipeline.h"
+
+#include "mydbm.h" /* for full definition of MAN_DB */
 
 #undef MAX
 #define MAX(a,b)	((a)>(b)?a:b)

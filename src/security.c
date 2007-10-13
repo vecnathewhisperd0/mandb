@@ -50,13 +50,15 @@ extern int errno;
 #  include <sys/wait.h>
 #endif
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/cleanup.h"
-#include "lib/pipeline.h"
+
+#include "error.h"
+#include "cleanup.h"
+#include "pipeline.h"
+
 #include "security.h"
 
 #ifdef SECURE_MAN_UID

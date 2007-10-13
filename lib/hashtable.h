@@ -26,9 +26,6 @@
 #ifndef _HASHTABLE_H
 #define _HASHTABLE_H
 
-#include "libdb/mydbm.h"
-#include "libdb/db_storage.h" 
-
 typedef void (*hash_free_ptr) (void *defn);
 
 struct hashtable {
