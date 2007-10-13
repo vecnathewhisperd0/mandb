@@ -46,11 +46,12 @@ extern int errno;
 #  include <strings.h>
 #endif /* HAVE_STRING_H */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
+
+#include "error.h"
 
 #define YY_READ_BUF_SIZE	1024
 #define MAX_NAME		2048

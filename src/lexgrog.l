@@ -51,13 +51,15 @@ extern int errno;
 #  include <strings.h>
 #endif /* HAVE_STRING_H */
 
-#include "lib/gettext.h"
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/pipeline.h"
-#include "lib/decompress.h"
+
+#include "error.h"
+#include "pipeline.h"
+#include "decompress.h"
+
 #include "security.h"
 #include "encodings.h"
 

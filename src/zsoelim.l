@@ -75,19 +75,16 @@ extern int errno;
 #define LINE	so_line[so_stack_ptr]
 #define PIPE	so_pipe[so_stack_ptr]
 
-#include "lib/gettext.h"
+#include "getopt.h"
+
+#include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
-#include "lib/error.h"
-#include "lib/pipeline.h"
-#include "lib/decompress.h"
 
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#else /* !HAVE_GETOPT_H */
-#  include "lib/getopt.h"
-#endif /* HAVE_GETOPT_H */
+#include "error.h"
+#include "pipeline.h"
+#include "decompress.h"
 
 static int open_file (const char *filename);
 
