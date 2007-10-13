@@ -2,6 +2,7 @@ dist_noinst_DATA = \
 	HACKING \
 	NEWS \
 	TODO \
+	man-db.lsm \
 	manpage.example \
 	manpage.example.mdoc \
 	manpage.example.pod \

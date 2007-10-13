@@ -21,7 +21,7 @@
 
 SUBDIRS = docs intl lib libdb src man manual po tools
 
-dist_noinst_DATA = README man-db.lsm include/README
+dist_noinst_DATA = README include/README
 
 EXTRA_DIST = autogen.sh
 
