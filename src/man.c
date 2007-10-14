@@ -114,6 +114,8 @@ extern int errno;
 
 #include <getopt.h>
 
+#include <xgetcwd.h>
+
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
@@ -125,7 +127,6 @@ extern int errno;
 #include "setenv.h"
 #include "hashtable.h"
 #include "pipeline.h"
-#include "getcwdalloc.h"
 #include "pathsearch.h"
 #include "linelength.h"
 #include "decompress.h"
@@ -722,7 +723,7 @@ int main (int argc, char *argv[])
 
 	/* This will enable us to do some profiling and know
 	where gmon.out will end up. Must chdir(cwd) before we return */
-	cwd = getcwd_allocated ();
+	cwd = xgetcwd ();
 	if (!cwd) {
 		cwd = xmalloc (1);
 		cwd[0] = '\0';
@@ -1938,7 +1939,7 @@ static void format_display (pipeline *decomp,
 	if (format_cmd && htmlout) {
 		char *man_file_copy, *man_base, *man_ext;
 
-		old_cwd = getcwd_allocated ();
+		old_cwd = xgetcwd ();
 		if (!old_cwd) {
 			old_cwd = xmalloc (1);
 			old_cwd[0] = '\0';

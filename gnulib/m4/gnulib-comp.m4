@@ -41,11 +41,15 @@ AC_DEFUN([gl_INIT],
   gl_ltlibdeps=
   gl_source_base='gnulib/lib'
   gl_FUNC_ALLOCA
+  gl_CHECK_TYPE_STRUCT_DIRENT_D_INO
   gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
+  gl_FUNC_DIRFD
   gl_ERROR
   gl_EXITFAIL
   # No macro. You should also use one of fnmatch-posix or fnmatch-gnu.
   gl_FUNC_FNMATCH_GNU
+  gl_FUNC_GETCWD
+  gl_UNISTD_MODULE_INDICATOR([getcwd])
   gl_GETLOGIN_R
   gl_UNISTD_MODULE_INDICATOR([getlogin_r])
   gl_GETOPT
@@ -86,6 +90,7 @@ AC_DEFUN([gl_INIT],
   gl_WCHAR_H
   gl_WCTYPE_H
   gl_XALLOC
+  gl_XGETCWD
   gl_XSTRNDUP
   LIBGNU_LIBDEPS="$gl_libdeps"
   AC_SUBST([LIBGNU_LIBDEPS])
@@ -131,6 +136,8 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/link-warning.h
   lib/alloca.c
   lib/alloca_.h
+  lib/dirfd.c
+  lib/dirfd.h
   lib/error.c
   lib/error.h
   lib/exitfail.c
@@ -138,6 +145,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fnmatch.c
   lib/fnmatch_.h
   lib/fnmatch_loop.c
+  lib/getcwd.c
   lib/getlogin_r.c
   lib/getopt.c
   lib/getopt1.c
@@ -176,17 +184,24 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/wctype_.h
   lib/xalloc-die.c
   lib/xalloc.h
+  lib/xgetcwd.c
+  lib/xgetcwd.h
   lib/xmalloc.c
   lib/xstrndup.c
   lib/xstrndup.h
   m4/absolute-header.m4
   m4/alloca.m4
+  m4/d-ino.m4
   m4/d-type.m4
+  m4/dirfd.m4
   m4/eealloc.m4
   m4/error.m4
   m4/exitfail.m4
   m4/extensions.m4
   m4/fnmatch.m4
+  m4/getcwd-abort-bug.m4
+  m4/getcwd-path-max.m4
+  m4/getcwd.m4
   m4/getlogin_r.m4
   m4/getopt.m4
   m4/gettimeofday.m4
@@ -221,5 +236,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/wctype.m4
   m4/wint_t.m4
   m4/xalloc.m4
+  m4/xgetcwd.m4
   m4/xstrndup.m4
 ])

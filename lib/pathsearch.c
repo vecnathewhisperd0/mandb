@@ -39,8 +39,9 @@
 #  include <unistd.h>
 #endif /* HAVE_UNISTD_H */
 
+#include <xgetcwd.h>
+
 #include "manconfig.h"
-#include "getcwdalloc.h"
 #include "pathsearch.h"
 
 static int pathsearch (const char *name, const mode_t bits)
@@ -72,7 +73,7 @@ static int pathsearch (const char *name, const mode_t bits)
 
 		if (!*element) {
 			if (!cwd)
-				cwd = getcwd_allocated ();
+				cwd = xgetcwd ();
 			element = cwd;
 		}
 

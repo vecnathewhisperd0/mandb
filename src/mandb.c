@@ -66,6 +66,8 @@ extern int errno;
 
 #include <getopt.h>
 
+#include <xgetcwd.h>
+
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
@@ -75,7 +77,6 @@ extern int errno;
 #include "error.h"
 #include "cleanup.h"
 #include "pipeline.h"
-#include "getcwdalloc.h"
 
 #include "mydbm.h"
 
@@ -579,7 +580,7 @@ int main (int argc, char *argv[])
 
 
 #ifdef __profile__
-	cwd = getcwd_allocated ();
+	cwd = xgetcwd ();
 	if (!cwd) {
 		cwd = xmalloc (1);
 		cwd[0] = '\0';

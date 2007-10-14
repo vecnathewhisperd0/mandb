@@ -39,12 +39,17 @@ DIST_COMMON = README $(dist_noinst_DATA) $(srcdir)/Makefile.am \
 	realpath.c rename.c strsep.c strspn.c strstr.c waitpid.c
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
+	$(top_srcdir)/gnulib/m4/d-ino.m4 \
 	$(top_srcdir)/gnulib/m4/d-type.m4 \
+	$(top_srcdir)/gnulib/m4/dirfd.m4 \
 	$(top_srcdir)/gnulib/m4/eealloc.m4 \
 	$(top_srcdir)/gnulib/m4/error.m4 \
 	$(top_srcdir)/gnulib/m4/exitfail.m4 \
 	$(top_srcdir)/gnulib/m4/extensions.m4 \
 	$(top_srcdir)/gnulib/m4/fnmatch.m4 \
+	$(top_srcdir)/gnulib/m4/getcwd-abort-bug.m4 \
+	$(top_srcdir)/gnulib/m4/getcwd-path-max.m4 \
+	$(top_srcdir)/gnulib/m4/getcwd.m4 \
 	$(top_srcdir)/gnulib/m4/getlogin_r.m4 \
 	$(top_srcdir)/gnulib/m4/getopt.m4 \
 	$(top_srcdir)/gnulib/m4/gettimeofday.m4 \
@@ -76,6 +81,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/wchar.m4 \
 	$(top_srcdir)/gnulib/m4/wctype.m4 \
 	$(top_srcdir)/gnulib/m4/xalloc.m4 \
+	$(top_srcdir)/gnulib/m4/xgetcwd.m4 \
 	$(top_srcdir)/gnulib/m4/xstrndup.m4 \
 	$(top_srcdir)/m4/codeset.m4 $(top_srcdir)/m4/gettext.m4 \
 	$(top_srcdir)/m4/glibc2.m4 $(top_srcdir)/m4/glibc21.m4 \
@@ -110,11 +116,10 @@ libman_a_AR = $(AR) $(ARFLAGS)
 libman_a_DEPENDENCIES = $(LIBOBJS) $(ALLOCA)
 am_libman_a_OBJECTS = libman_a-appendstr.$(OBJEXT) \
 	libman_a-cleanup.$(OBJEXT) libman_a-debug.$(OBJEXT) \
-	libman_a-decompress.$(OBJEXT) libman_a-getcwdalloc.$(OBJEXT) \
-	libman_a-hashtable.$(OBJEXT) libman_a-linelength.$(OBJEXT) \
-	libman_a-pathsearch.$(OBJEXT) libman_a-pipeline.$(OBJEXT) \
-	libman_a-tempfile.$(OBJEXT) libman_a-xsigaction.$(OBJEXT) \
-	libman_a-xstrsignal.$(OBJEXT)
+	libman_a-decompress.$(OBJEXT) libman_a-hashtable.$(OBJEXT) \
+	libman_a-linelength.$(OBJEXT) libman_a-pathsearch.$(OBJEXT) \
+	libman_a-pipeline.$(OBJEXT) libman_a-tempfile.$(OBJEXT) \
+	libman_a-xsigaction.$(OBJEXT) libman_a-xstrsignal.$(OBJEXT)
 libman_a_OBJECTS = $(am_libman_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
@@ -460,10 +465,9 @@ libman_a_CPPFLAGS = \
 	-I$(top_builddir)/gnulib/lib
 
 libman_a_SOURCES = ansidecl.h appendstr.c cleanup.c cleanup.h debug.c \
-	decompress.c decompress.h getcwdalloc.c getcwdalloc.h \
-	hashtable.c hashtable.h linelength.c linelength.h pathsearch.c \
-	pathsearch.h pipeline.c pipeline.h tempfile.c xsigaction.c \
-	xstrsignal.c flock.h gettext.h
+	decompress.c decompress.h hashtable.c hashtable.h linelength.c \
+	linelength.h pathsearch.c pathsearch.h pipeline.c pipeline.h \
+	tempfile.c xsigaction.c xstrsignal.c flock.h gettext.h
 libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
 all: all-am
 
@@ -526,7 +530,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-cleanup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-decompress.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-getcwdalloc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-hashtable.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-linelength.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-pathsearch.Po@am__quote@
@@ -604,20 +607,6 @@ libman_a-decompress.obj: decompress.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='decompress.c' object='libman_a-decompress.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-decompress.obj `if test -f 'decompress.c'; then $(CYGPATH_W) 'decompress.c'; else $(CYGPATH_W) '$(srcdir)/decompress.c'; fi`
-
-libman_a-getcwdalloc.o: getcwdalloc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-getcwdalloc.o -MD -MP -MF $(DEPDIR)/libman_a-getcwdalloc.Tpo -c -o libman_a-getcwdalloc.o `test -f 'getcwdalloc.c' || echo '$(srcdir)/'`getcwdalloc.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-getcwdalloc.Tpo $(DEPDIR)/libman_a-getcwdalloc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='getcwdalloc.c' object='libman_a-getcwdalloc.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-getcwdalloc.o `test -f 'getcwdalloc.c' || echo '$(srcdir)/'`getcwdalloc.c
-
-libman_a-getcwdalloc.obj: getcwdalloc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-getcwdalloc.obj -MD -MP -MF $(DEPDIR)/libman_a-getcwdalloc.Tpo -c -o libman_a-getcwdalloc.obj `if test -f 'getcwdalloc.c'; then $(CYGPATH_W) 'getcwdalloc.c'; else $(CYGPATH_W) '$(srcdir)/getcwdalloc.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-getcwdalloc.Tpo $(DEPDIR)/libman_a-getcwdalloc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='getcwdalloc.c' object='libman_a-getcwdalloc.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-getcwdalloc.obj `if test -f 'getcwdalloc.c'; then $(CYGPATH_W) 'getcwdalloc.c'; else $(CYGPATH_W) '$(srcdir)/getcwdalloc.c'; fi`
 
 libman_a-hashtable.o: hashtable.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-hashtable.o -MD -MP -MF $(DEPDIR)/libman_a-hashtable.Tpo -c -o libman_a-hashtable.o `test -f 'hashtable.c' || echo '$(srcdir)/'`hashtable.c

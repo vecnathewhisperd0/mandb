@@ -76,13 +76,14 @@ extern char *getenv();
 extern int errno;
 #endif
 
+#include <xgetcwd.h>
+
 #include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
 
 #include "error.h"
-#include "getcwdalloc.h"
 #include "cleanup.h"
 
 #include "security.h"
@@ -1083,7 +1084,7 @@ static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
 		/* deal with relative paths */
 
 		if (*p != '/') {
-			cwd = getcwd_allocated ();
+			cwd = xgetcwd ();
 			if (!cwd)
 				error (FATAL, errno,
 				       _("can't determine current directory"));

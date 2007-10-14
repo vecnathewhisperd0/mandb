@@ -6958,6 +6958,9 @@ fi
 rm -f conftest.l $LEX_OUTPUT_ROOT.c
 
 fi
+# Work around an infinite recursion bug in Gnulib's getcwd module (reported
+# to bug-gnulib). This should be removed as soon as this bug is fixed.
+gl_cv_func_getcwd_path_max=no
 # The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 { echo "$as_me:$LINENO: checking for working alloca.h" >&5
@@ -7983,6 +7986,146 @@ done
   REPLACE_GETCWD=0;
   REPLACE_LCHOWN=0;
   REPLACE_LSEEK=0;
+
+
+   { echo "$as_me:$LINENO: checking whether getcwd (NULL, 0) allocates memory for result" >&5
+echo $ECHO_N "checking whether getcwd (NULL, 0) allocates memory for result... $ECHO_C" >&6; }
+if test "${gl_cv_func_getcwd_null+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test "$cross_compiling" = yes; then
+  gl_cv_func_getcwd_null=no
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#	 include <stdlib.h>
+#	 include <unistd.h>
+#	 ifndef getcwd
+	 char *getcwd ();
+#	 endif
+	 int
+	 main ()
+	 {
+	   if (chdir ("/") != 0)
+	     exit (1);
+	   else
+	     {
+	       char *f = getcwd (NULL, 0);
+	       exit (! (f && f[0] == '/' && !f[1]));
+	     }
+	 }
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  gl_cv_func_getcwd_null=yes
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+gl_cv_func_getcwd_null=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_func_getcwd_null" >&5
+echo "${ECHO_T}$gl_cv_func_getcwd_null" >&6; }
+
+
+      { echo "$as_me:$LINENO: checking whether getcwd is declared" >&5
+echo $ECHO_N "checking whether getcwd is declared... $ECHO_C" >&6; }
+if test "${ac_cv_have_decl_getcwd+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+#ifndef getcwd
+  (void) getcwd;
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_cv_have_decl_getcwd=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_have_decl_getcwd=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_have_decl_getcwd" >&5
+echo "${ECHO_T}$ac_cv_have_decl_getcwd" >&6; }
+if test $ac_cv_have_decl_getcwd = yes; then
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GETCWD 1
+_ACEOF
+
+
+else
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GETCWD 0
+_ACEOF
+
+
+fi
+
+
 
 
 
@@ -10537,6 +10680,85 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
+  { echo "$as_me:$LINENO: checking for d_ino member in directory struct" >&5
+echo $ECHO_N "checking for d_ino member in directory struct... $ECHO_C" >&6; }
+if test "${gl_cv_struct_dirent_d_ino+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test "$cross_compiling" = yes; then
+  gl_cv_struct_dirent_d_ino=no
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/types.h>
+	     #include <sys/stat.h>
+	     #include <dirent.h>
+
+int
+main ()
+{
+DIR *dp = opendir (".");
+	     struct dirent *e;
+	     struct stat st;
+	     if (! dp)
+	       return 1;
+	     e = readdir (dp);
+	     return ! (e
+		       && stat (e->d_name, &st) == 0
+		       && e->d_ino == st.st_ino);
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  gl_cv_struct_dirent_d_ino=yes
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+gl_cv_struct_dirent_d_ino=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_struct_dirent_d_ino" >&5
+echo "${ECHO_T}$gl_cv_struct_dirent_d_ino" >&6; }
+   if test $gl_cv_struct_dirent_d_ino = yes; then
+
+cat >>confdefs.h <<\_ACEOF
+#define D_INO_IN_DIRENT 1
+_ACEOF
+
+   fi
+
+
   { echo "$as_me:$LINENO: checking for d_type member in directory struct" >&5
 echo $ECHO_N "checking for d_type member in directory struct... $ECHO_C" >&6; }
 if test "${jm_cv_struct_dirent_d_type+set}" = set; then
@@ -10601,6 +10823,379 @@ _ACEOF
 
    fi
 
+
+
+
+
+
+for ac_func in dirfd
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6; }
+if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $ac_func innocuous_$ac_func
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $ac_func
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $ac_func ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined __stub_$ac_func || defined __stub___$ac_func
+choke me
+#endif
+
+int
+main ()
+{
+return $ac_func ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_var=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+ac_res=`eval echo '${'$as_ac_var'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
+  { echo "$as_me:$LINENO: checking whether dirfd is declared" >&5
+echo $ECHO_N "checking whether dirfd is declared... $ECHO_C" >&6; }
+if test "${ac_cv_have_decl_dirfd+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/types.h>
+     #include <dirent.h>
+
+int
+main ()
+{
+#ifndef dirfd
+  (void) dirfd;
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_cv_have_decl_dirfd=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_have_decl_dirfd=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_have_decl_dirfd" >&5
+echo "${ECHO_T}$ac_cv_have_decl_dirfd" >&6; }
+if test $ac_cv_have_decl_dirfd = yes; then
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_DIRFD 1
+_ACEOF
+
+
+else
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_DIRFD 0
+_ACEOF
+
+
+fi
+
+
+
+  { echo "$as_me:$LINENO: checking whether dirfd is a macro" >&5
+echo $ECHO_N "checking whether dirfd is a macro... $ECHO_C" >&6; }
+if test "${gl_cv_func_dirfd_macro+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <sys/types.h>
+#include <dirent.h>
+#ifdef dirfd
+ dirent_header_defines_dirfd
+#endif
+_ACEOF
+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+  $EGREP "dirent_header_defines_dirfd" >/dev/null 2>&1; then
+  gl_cv_func_dirfd_macro=yes
+else
+  gl_cv_func_dirfd_macro=no
+fi
+rm -f conftest*
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_func_dirfd_macro" >&5
+echo "${ECHO_T}$gl_cv_func_dirfd_macro" >&6; }
+
+  # Use the replacement only if we have no function, macro,
+  # or declaration with that name.
+  if test $ac_cv_func_dirfd,$ac_cv_have_decl_dirfd,$gl_cv_func_dirfd_macro \
+      = no,no,no; then
+
+for ac_func in dirfd
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6; }
+if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $ac_func innocuous_$ac_func
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $ac_func
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $ac_func ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined __stub_$ac_func || defined __stub___$ac_func
+choke me
+#endif
+
+int
+main ()
+{
+return $ac_func ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_var=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+ac_res=`eval echo '${'$as_ac_var'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+else
+  gl_LIBOBJS="$gl_LIBOBJS $ac_func.$ac_objext"
+fi
+done
+
+    { echo "$as_me:$LINENO: checking how to get the file descriptor associated with an open DIR*" >&5
+echo $ECHO_N "checking how to get the file descriptor associated with an open DIR*... $ECHO_C" >&6; }
+if test "${gl_cv_sys_dir_fd_member_name+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+	dirfd_save_CFLAGS=$CFLAGS
+	for ac_expr in d_fd dd_fd; do
+
+	  CFLAGS="$CFLAGS -DDIR_FD_MEMBER_NAME=$ac_expr"
+	  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/types.h>
+	     #include <dirent.h>
+int
+main ()
+{
+DIR *dir_p = opendir("."); (void) dir_p->DIR_FD_MEMBER_NAME;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  dir_fd_found=yes
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+	  CFLAGS=$dirfd_save_CFLAGS
+	  test "$dir_fd_found" = yes && break
+	done
+	test "$dir_fd_found" = yes || ac_expr=no_such_member
+
+	gl_cv_sys_dir_fd_member_name=$ac_expr
+
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_sys_dir_fd_member_name" >&5
+echo "${ECHO_T}$gl_cv_sys_dir_fd_member_name" >&6; }
+    if test $gl_cv_sys_dir_fd_member_name != no_such_member; then
+
+cat >>confdefs.h <<_ACEOF
+#define DIR_FD_MEMBER_NAME $gl_cv_sys_dir_fd_member_name
+_ACEOF
+
+    fi
+
+
+  fi
 
 
   { echo "$as_me:$LINENO: checking for error_at_line" >&5
@@ -10895,6 +11490,493 @@ _ACEOF
 
   fi
 
+
+
+
+
+
+  gl_abort_bug=no
+  case $gl_cv_func_getcwd_null in
+  yes)
+
+
+  :
+
+
+
+
+
+
+  { echo "$as_me:$LINENO: checking whether getcwd handles long file names properly" >&5
+echo $ECHO_N "checking whether getcwd handles long file names properly... $ECHO_C" >&6; }
+if test "${gl_cv_func_getcwd_path_max+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  # Arrange for deletion of the temporary directory this test creates.
+     ac_clean_files="$ac_clean_files confdir3"
+     if test "$cross_compiling" = yes; then
+  gl_cv_func_getcwd_path_max=no
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <errno.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <limits.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+
+#ifndef AT_FDCWD
+# define AT_FDCWD 0
+#endif
+#ifdef ENAMETOOLONG
+# define is_ENAMETOOLONG(x) ((x) == ENAMETOOLONG)
+#else
+# define is_ENAMETOOLONG(x) 0
+#endif
+
+/* Don't get link errors because mkdir is redefined to rpl_mkdir.  */
+#undef mkdir
+
+#ifndef S_IRWXU
+# define S_IRWXU 0700
+#endif
+
+/* The length of this name must be 8.  */
+#define DIR_NAME "confdir3"
+#define DIR_NAME_LEN 8
+#define DIR_NAME_SIZE (DIR_NAME_LEN + 1)
+
+/* The length of "../".  */
+#define DOTDOTSLASH_LEN 3
+
+/* Leftover bytes in the buffer, to work around library or OS bugs.  */
+#define BUF_SLOP 20
+
+int
+main ()
+{
+#ifndef PATH_MAX
+  /* The Hurd doesn't define this, so getcwd can't exhibit the bug --
+     at least not on a local file system.  And if we were to start worrying
+     about remote file systems, we'd have to enable the wrapper function
+     all of the time, just to be safe.  That's not worth the cost.  */
+  exit (0);
+#elif ((INT_MAX / (DIR_NAME_SIZE / DOTDOTSLASH_LEN + 1) \
+        - DIR_NAME_SIZE - BUF_SLOP) \
+       <= PATH_MAX)
+  /* FIXME: Assuming there's a system for which this is true,
+     this should be done in a compile test.  */
+  exit (0);
+#else
+  char buf[PATH_MAX * (DIR_NAME_SIZE / DOTDOTSLASH_LEN + 1)
+	   + DIR_NAME_SIZE + BUF_SLOP];
+  char *cwd = getcwd (buf, PATH_MAX);
+  size_t initial_cwd_len;
+  size_t cwd_len;
+  int fail = 0;
+  size_t n_chdirs = 0;
+
+  if (cwd == NULL)
+    exit (1);
+
+  cwd_len = initial_cwd_len = strlen (cwd);
+
+  while (1)
+    {
+      size_t dotdot_max = PATH_MAX * (DIR_NAME_SIZE / DOTDOTSLASH_LEN);
+      char *c = NULL;
+
+      cwd_len += DIR_NAME_SIZE;
+      /* If mkdir or chdir fails, it could be that this system cannot create
+	 any file with an absolute name longer than PATH_MAX, such as cygwin.
+	 If so, leave fail as 0, because the current working directory can't
+	 be too long for getcwd if it can't even be created.  For other
+	 errors, be pessimistic and consider that as a failure, too.  */
+      if (mkdir (DIR_NAME, S_IRWXU) < 0 || chdir (DIR_NAME) < 0)
+	{
+	  if (! (errno == ERANGE || is_ENAMETOOLONG (errno)))
+	    fail = 2;
+	  break;
+	}
+
+      if (PATH_MAX <= cwd_len && cwd_len < PATH_MAX + DIR_NAME_SIZE)
+	{
+	  c = getcwd (buf, PATH_MAX);
+	  if (!c && errno == ENOENT)
+	    {
+	      fail = 1;
+	      break;
+	    }
+	  if (c || ! (errno == ERANGE || is_ENAMETOOLONG (errno)))
+	    {
+	      fail = 2;
+	      break;
+	    }
+	}
+
+      if (dotdot_max <= cwd_len - initial_cwd_len)
+	{
+	  if (dotdot_max + DIR_NAME_SIZE < cwd_len - initial_cwd_len)
+	    break;
+	  c = getcwd (buf, cwd_len + 1);
+	  if (!c)
+	    {
+	      if (! (errno == ERANGE || errno == ENOENT
+		     || is_ENAMETOOLONG (errno)))
+		{
+		  fail = 2;
+		  break;
+		}
+	      if (AT_FDCWD || errno == ERANGE || errno == ENOENT)
+		{
+		  fail = 1;
+		  break;
+		}
+	    }
+	}
+
+      if (c && strlen (c) != cwd_len)
+	{
+	  fail = 2;
+	  break;
+	}
+      ++n_chdirs;
+    }
+
+  /* Leaving behind such a deep directory is not polite.
+     So clean up here, right away, even though the driving
+     shell script would also clean up.  */
+  {
+    size_t i;
+
+    /* Try rmdir first, in case the chdir failed.  */
+    rmdir (DIR_NAME);
+    for (i = 0; i <= n_chdirs; i++)
+      {
+	if (chdir ("..") < 0)
+	  break;
+	if (rmdir (DIR_NAME) != 0)
+	  break;
+      }
+  }
+
+  exit (fail);
+#endif
+}
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  gl_cv_func_getcwd_path_max=yes
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+case $? in
+     1) gl_cv_func_getcwd_path_max='no, but it is partly working';;
+     *) gl_cv_func_getcwd_path_max=no;;
+     esac
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_func_getcwd_path_max" >&5
+echo "${ECHO_T}$gl_cv_func_getcwd_path_max" >&6; }
+  case $gl_cv_func_getcwd_path_max in
+  no,*)
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PARTLY_WORKING_GETCWD 1
+_ACEOF
+;;
+  esac
+
+
+
+  :
+
+
+
+
+
+
+for ac_func in getpagesize
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6; }
+if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $ac_func innocuous_$ac_func
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $ac_func
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $ac_func ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined __stub_$ac_func || defined __stub___$ac_func
+choke me
+#endif
+
+int
+main ()
+{
+return $ac_func ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_var=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+ac_res=`eval echo '${'$as_ac_var'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
+  { echo "$as_me:$LINENO: checking whether getcwd aborts when 4k < cwd_length < 16k" >&5
+echo $ECHO_N "checking whether getcwd aborts when 4k < cwd_length < 16k... $ECHO_C" >&6; }
+if test "${gl_cv_func_getcwd_abort_bug+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  # Remove any remnants of a previous test.
+     rm -rf confdir-14B---
+     # Arrange for deletion of the temporary directory this test creates.
+     ac_clean_files="$ac_clean_files confdir-14B---"
+     if test "$cross_compiling" = yes; then
+  gl_cv_func_getcwd_abort_bug=yes
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <limits.h>
+#include <string.h>
+#include <sys/stat.h>
+
+/* Don't get link errors because mkdir is redefined to rpl_mkdir.  */
+#undef mkdir
+
+#ifndef S_IRWXU
+# define S_IRWXU 0700
+#endif
+
+/* FIXME: skip the run-test altogether on systems without getpagesize.  */
+#if ! HAVE_GETPAGESIZE
+# define getpagesize() 0
+#endif
+
+/* This size is chosen to be larger than PATH_MAX (4k), yet smaller than
+   the 16kB pagesize on ia64 linux.  Those conditions make the code below
+   trigger a bug in glibc's getcwd implementation before 2.4.90-10.  */
+#define TARGET_LEN (5 * 1024)
+
+int
+main ()
+{
+  char const *dir_name = "confdir-14B---";
+  char *cwd;
+  size_t initial_cwd_len;
+  int fail = 0;
+  size_t desired_depth;
+  size_t d;
+
+  /* The bug is triggered when PATH_MAX < getpagesize (), so skip
+     this relative expensive and invasive test if that's not true.  */
+  if (getpagesize () <= PATH_MAX)
+    return 0;
+
+  cwd = getcwd (NULL, 0);
+  if (cwd == NULL)
+    return 0;
+
+  initial_cwd_len = strlen (cwd);
+  free (cwd);
+  desired_depth = ((TARGET_LEN - 1 - initial_cwd_len)
+		   / (1 + strlen (dir_name)));
+  for (d = 0; d < desired_depth; d++)
+    {
+      if (mkdir (dir_name, S_IRWXU) < 0 || chdir (dir_name) < 0)
+	{
+	  fail = 3; /* Unable to construct deep hierarchy.  */
+	  break;
+	}
+    }
+
+  /* If libc has the bug in question, this invocation of getcwd
+     results in a failed assertion.  */
+  cwd = getcwd (NULL, 0);
+  if (cwd == NULL)
+    fail = 4; /* getcwd failed.  This is ok, and expected.  */
+  free (cwd);
+
+  /* Call rmdir first, in case the above chdir failed.  */
+  rmdir (dir_name);
+  while (0 < d--)
+    {
+      if (chdir ("..") < 0)
+	break;
+      rmdir (dir_name);
+    }
+
+  return 0;
+}
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  gl_cv_func_getcwd_abort_bug=no
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+gl_cv_func_getcwd_abort_bug=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_func_getcwd_abort_bug" >&5
+echo "${ECHO_T}$gl_cv_func_getcwd_abort_bug" >&6; }
+  if test $gl_cv_func_getcwd_abort_bug = yes; then
+  gl_abort_bug=yes
+fi
+
+;;
+  esac
+
+  case $gl_cv_func_getcwd_null,$gl_cv_func_getcwd_path_max,$gl_abort_bug in
+  yes,yes,no) ;;
+  *)
+    REPLACE_GETCWD=1
+    gl_LIBOBJS="$gl_LIBOBJS getcwd.$ac_objext"
+
+
+
+  :
+;;
+  esac
+
+
+
+  GNULIB_GETCWD=1
 
 
 
@@ -15287,6 +16369,11 @@ echo "${ECHO_T}$gl_cv_next_wctype_h" >&6; }
 
 
   :
+
+
+
+  gl_LIBOBJS="$gl_LIBOBJS xgetcwd.$ac_objext"
+
 
 
 
@@ -26646,8 +27733,7 @@ echo "$as_me: error: Fatal: $db: unsupported database library" >&2;}
 fi
 
 
-
-for ac_func in getcwd getwd
+for ac_func in getcwd
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $ac_func" >&5

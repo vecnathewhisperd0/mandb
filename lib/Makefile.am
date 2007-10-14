@@ -35,8 +35,6 @@ libman_a_SOURCES = \
 	debug.c \
 	decompress.c \
 	decompress.h \
-	getcwdalloc.c \
-	getcwdalloc.h \
 	hashtable.c \
 	hashtable.h \
 	linelength.c \
