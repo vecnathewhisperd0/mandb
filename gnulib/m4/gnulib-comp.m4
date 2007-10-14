@@ -40,12 +40,16 @@ AC_DEFUN([gl_INIT],
   gl_libdeps=
   gl_ltlibdeps=
   gl_source_base='gnulib/lib'
+  gl_FUNC_ALLOCA
   gl_ERROR
   gl_FUNC_GETTIMEOFDAY
+  gl_MALLOCA
   gt_FUNC_MKDTEMP
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
   gl_FUNC_MKSTEMP
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
+  gl_FUNC_SETENV
+  gl_FUNC_UNSETENV
   gl_STDINT_H
   gl_STDLIB_H
   gl_HEADER_SYS_STAT_H
@@ -97,12 +101,17 @@ AC_DEFUN([gl_LIBSOURCES],
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/link-warning.h
-  lib/dummy.c
+  lib/alloca_.h
   lib/error.c
   lib/error.h
   lib/gettimeofday.c
+  lib/malloca.c
+  lib/malloca.h
+  lib/malloca.valgrind
   lib/mkdtemp.c
   lib/mkstemp.c
+  lib/setenv.c
+  lib/setenv.h
   lib/stdint_.h
   lib/stdlib_.h
   lib/sys_stat_.h
@@ -110,17 +119,22 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/tempname.c
   lib/tempname.h
   lib/unistd_.h
+  lib/unsetenv.c
   lib/wchar_.h
   m4/absolute-header.m4
+  m4/alloca.m4
+  m4/eealloc.m4
   m4/error.m4
   m4/extensions.m4
   m4/gettimeofday.m4
   m4/gnulib-common.m4
   m4/include_next.m4
   m4/longlong.m4
+  m4/malloca.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
   m4/onceonly_2_57.m4
+  m4/setenv.m4
   m4/stdint.m4
   m4/stdlib_h.m4
   m4/sys_stat_h.m4
