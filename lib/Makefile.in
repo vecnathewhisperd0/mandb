@@ -35,30 +35,33 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = lib
 DIST_COMMON = README $(dist_noinst_DATA) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in alloca.c basename.c flock.c fnmatch.c \
-	getopt.c getopt1.c glob.c memcmp.c putenv.c realpath.c \
-	rename.c strcspn.c strnlen.c strsep.c strspn.c strstr.c \
-	waitpid.c
+	$(srcdir)/Makefile.in alloca.c basename.c flock.c getopt.c \
+	getopt1.c glob.c memcmp.c putenv.c realpath.c rename.c \
+	strcspn.c strnlen.c strsep.c strspn.c strstr.c waitpid.c
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/eealloc.m4 \
 	$(top_srcdir)/gnulib/m4/error.m4 \
 	$(top_srcdir)/gnulib/m4/extensions.m4 \
+	$(top_srcdir)/gnulib/m4/fnmatch.m4 \
 	$(top_srcdir)/gnulib/m4/gettimeofday.m4 \
 	$(top_srcdir)/gnulib/m4/gnulib-comp.m4 \
 	$(top_srcdir)/gnulib/m4/include_next.m4 \
 	$(top_srcdir)/gnulib/m4/malloca.m4 \
+	$(top_srcdir)/gnulib/m4/mbstate_t.m4 \
 	$(top_srcdir)/gnulib/m4/mkdtemp.m4 \
 	$(top_srcdir)/gnulib/m4/mkstemp.m4 \
 	$(top_srcdir)/gnulib/m4/onceonly_2_57.m4 \
 	$(top_srcdir)/gnulib/m4/setenv.m4 \
+	$(top_srcdir)/gnulib/m4/stdbool.m4 \
 	$(top_srcdir)/gnulib/m4/stdint.m4 \
 	$(top_srcdir)/gnulib/m4/stdlib_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_stat_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_time_h.m4 \
 	$(top_srcdir)/gnulib/m4/tempname.m4 \
 	$(top_srcdir)/gnulib/m4/unistd_h.m4 \
-	$(top_srcdir)/gnulib/m4/wchar.m4 $(top_srcdir)/m4/codeset.m4 \
+	$(top_srcdir)/gnulib/m4/wchar.m4 \
+	$(top_srcdir)/gnulib/m4/wctype.m4 $(top_srcdir)/m4/codeset.m4 \
 	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/glibc2.m4 \
 	$(top_srcdir)/m4/glibc21.m4 $(top_srcdir)/m4/iconv.m4 \
 	$(top_srcdir)/m4/intdiv0.m4 $(top_srcdir)/m4/intl.m4 \
@@ -70,7 +73,6 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/m4/man-ansi-sprintf.m4 \
 	$(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/m4/man-check-progs.m4 \
-	$(top_srcdir)/m4/man-fnmatch.m4 \
 	$(top_srcdir)/m4/man-gnu-nroff.m4 \
 	$(top_srcdir)/m4/man-strsignal.m4 \
 	$(top_srcdir)/m4/man-trans-subst.m4 $(top_srcdir)/m4/nls.m4 \
@@ -179,6 +181,7 @@ HAVE_FTRUNCATE = @HAVE_FTRUNCATE@
 HAVE_GETSUBOPT = @HAVE_GETSUBOPT@
 HAVE_INTTYPES_H = @HAVE_INTTYPES_H@
 HAVE_IO_H = @HAVE_IO_H@
+HAVE_ISWCNTRL = @HAVE_ISWCNTRL@
 HAVE_LONG_LONG_INT = @HAVE_LONG_LONG_INT@
 HAVE_LSTAT = @HAVE_LSTAT@
 HAVE_MALLOC_POSIX = @HAVE_MALLOC_POSIX@
@@ -201,7 +204,10 @@ HAVE_UNISTD_H = @HAVE_UNISTD_H@
 HAVE_UNSIGNED_LONG_LONG_INT = @HAVE_UNSIGNED_LONG_LONG_INT@
 HAVE_VISIBILITY = @HAVE_VISIBILITY@
 HAVE_WCHAR_H = @HAVE_WCHAR_H@
+HAVE_WCTYPE_H = @HAVE_WCTYPE_H@
+HAVE_WINT_T = @HAVE_WINT_T@
 HAVE_WPRINTF = @HAVE_WPRINTF@
+HAVE__BOOL = @HAVE__BOOL@
 INCLUDE_NEXT = @INCLUDE_NEXT@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
@@ -246,6 +252,7 @@ NEXT_SYS_STAT_H = @NEXT_SYS_STAT_H@
 NEXT_SYS_TIME_H = @NEXT_SYS_TIME_H@
 NEXT_UNISTD_H = @NEXT_UNISTD_H@
 NEXT_WCHAR_H = @NEXT_WCHAR_H@
+NEXT_WCTYPE_H = @NEXT_WCTYPE_H@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -270,6 +277,7 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SIG_ATOMIC_T_SUFFIX = @SIG_ATOMIC_T_SUFFIX@
 SIZE_T_SUFFIX = @SIZE_T_SUFFIX@
+STDBOOL_H = @STDBOOL_H@
 STDINT_H = @STDINT_H@
 STRIP = @STRIP@
 SYS_STAT_H = @SYS_STAT_H@
@@ -297,6 +305,7 @@ USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 WCHAR_H = @WCHAR_H@
 WCHAR_T_SUFFIX = @WCHAR_T_SUFFIX@
+WCTYPE_H = @WCTYPE_H@
 WINT_T_SUFFIX = @WINT_T_SUFFIX@
 WOE32DLL = @WOE32DLL@
 XGETTEXT = @XGETTEXT@
@@ -400,9 +409,9 @@ libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
 
 # Provide header files missing from this system. (This should eventually be
 # replaced with use of Gnulib, which has modules for all of these.)
-BUILT_SOURCES = $(FNMATCH_H) $(GETOPT_H) $(GLOB_H)
-MOSTLYCLEANFILES = fnmatch.h fnmatch.h-t getopt.h getopt.h-t glob.h glob.h-t
-EXTRA_DIST = fnmatch_.h getopt_.h glob_.h
+BUILT_SOURCES = $(GETOPT_H) $(GLOB_H)
+MOSTLYCLEANFILES = getopt.h getopt.h-t glob.h glob.h-t
+EXTRA_DIST = getopt_.h glob_.h
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -454,7 +463,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/alloca.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/basename.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/flock.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/fnmatch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/getopt.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/getopt1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/glob.Po@am__quote@
@@ -887,11 +895,6 @@ uninstall-am:
 	uninstall-am
 
 
-fnmatch.h: fnmatch_.h
-	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
-	  cat $<; \
-	} > $@-t
-	mv -f $@-t $@
 getopt.h: getopt_.h
 	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
 	  cat $<; \

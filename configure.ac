@@ -465,7 +465,6 @@ dnl
 AC_CHECK_FUNC(regcomp, [AC_DEFINE(POSIX_REGEX, 1, [Define if you have the regcomp and regexec POSIX regex routines.])],
   [AC_CHECK_FUNC(re_comp, [AC_DEFINE(BSD_REGEX, 1, [Define if you have the re_comp and re_exec BSD regex routines.])],
     [AC_MSG_WARN(no regex routines found, whatis/apropos will ignore -r)])])
-MAN_FUNC_FNMATCH
 AC_CHECK_FUNC(globfree,
 	      [AC_DEFINE(HAVE_GLOB_H, 1, [Define if using <glob.h> rather than "lib/glob.h".])
 	       GLOB_H=],
