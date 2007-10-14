@@ -47,6 +47,9 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_FNMATCH_GNU
   gl_GETLOGIN_R
   gl_UNISTD_MODULE_INDICATOR([getlogin_r])
+  gl_GETOPT
+  AC_SUBST([LIBINTL])
+  AC_SUBST([LTLIBINTL])
   gl_FUNC_GETTIMEOFDAY
   gl_GLOB
   gl_FUNC_MALLOC_POSIX
@@ -124,6 +127,11 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fnmatch_.h
   lib/fnmatch_loop.c
   lib/getlogin_r.c
+  lib/getopt.c
+  lib/getopt1.c
+  lib/getopt_.h
+  lib/getopt_int.h
+  lib/gettext.h
   lib/gettimeofday.c
   lib/glob-libc.h
   lib/glob.c
@@ -158,6 +166,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/extensions.m4
   m4/fnmatch.m4
   m4/getlogin_r.m4
+  m4/getopt.m4
   m4/gettimeofday.m4
   m4/glob.m4
   m4/gnulib-common.m4
