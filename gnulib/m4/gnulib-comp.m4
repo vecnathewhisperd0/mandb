@@ -91,6 +91,10 @@ AC_DEFUN([gl_INIT],
   gl_STRING_MODULE_INDICATOR([strndup])
   gl_FUNC_STRNLEN
   gl_STRING_MODULE_INDICATOR([strnlen])
+  gl_FUNC_STRPBRK
+  gl_STRING_MODULE_INDICATOR([strpbrk])
+  gl_FUNC_STRSEP
+  gl_STRING_MODULE_INDICATOR([strsep])
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_TIME_H
@@ -201,6 +205,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stripslash.c
   lib/strndup.c
   lib/strnlen.c
+  lib/strpbrk.c
+  lib/strsep.c
   lib/sys_stat_.h
   lib/sys_time_.h
   lib/tempname.c
@@ -263,6 +269,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/string_h.m4
   m4/strndup.m4
   m4/strnlen.m4
+  m4/strpbrk.m4
+  m4/strsep.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
   m4/tempname.m4
