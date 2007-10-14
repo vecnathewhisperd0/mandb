@@ -40,11 +40,14 @@ DIST_COMMON = README $(dist_noinst_DATA) $(srcdir)/Makefile.am \
 	putenv.c realpath.c rename.c setenv.c strcspn.c strnlen.c \
 	strsep.c strspn.c strstr.c tempname.c unsetenv.c waitpid.c
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/codeset.m4 \
-	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/glibc2.m4 \
-	$(top_srcdir)/m4/glibc21.m4 $(top_srcdir)/m4/iconv.m4 \
-	$(top_srcdir)/m4/intdiv0.m4 $(top_srcdir)/m4/intl.m4 \
-	$(top_srcdir)/m4/intmax.m4 $(top_srcdir)/m4/inttypes-pri.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/error.m4 \
+	$(top_srcdir)/gnulib/m4/gnulib-comp.m4 \
+	$(top_srcdir)/gnulib/m4/onceonly_2_57.m4 \
+	$(top_srcdir)/m4/codeset.m4 $(top_srcdir)/m4/gettext.m4 \
+	$(top_srcdir)/m4/glibc2.m4 $(top_srcdir)/m4/glibc21.m4 \
+	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/intdiv0.m4 \
+	$(top_srcdir)/m4/intl.m4 $(top_srcdir)/m4/intmax.m4 \
+	$(top_srcdir)/m4/inttypes-pri.m4 \
 	$(top_srcdir)/m4/inttypes_h.m4 $(top_srcdir)/m4/lcmessage.m4 \
 	$(top_srcdir)/m4/lib-ld.m4 $(top_srcdir)/m4/lib-link.m4 \
 	$(top_srcdir)/m4/lib-prefix.m4 $(top_srcdir)/m4/lock.m4 \
@@ -75,13 +78,12 @@ libman_a_AR = $(AR) $(ARFLAGS)
 libman_a_DEPENDENCIES = $(LIBOBJS) $(ALLOCA)
 am_libman_a_OBJECTS = libman_a-appendstr.$(OBJEXT) \
 	libman_a-cleanup.$(OBJEXT) libman_a-debug.$(OBJEXT) \
-	libman_a-decompress.$(OBJEXT) libman_a-error.$(OBJEXT) \
-	libman_a-getcwdalloc.$(OBJEXT) libman_a-hashtable.$(OBJEXT) \
-	libman_a-linelength.$(OBJEXT) libman_a-pathsearch.$(OBJEXT) \
-	libman_a-pipeline.$(OBJEXT) libman_a-tempfile.$(OBJEXT) \
-	libman_a-xmalloc.$(OBJEXT) libman_a-xsigaction.$(OBJEXT) \
-	libman_a-xstrdup.$(OBJEXT) libman_a-xstrndup.$(OBJEXT) \
-	libman_a-xstrsignal.$(OBJEXT)
+	libman_a-decompress.$(OBJEXT) libman_a-getcwdalloc.$(OBJEXT) \
+	libman_a-hashtable.$(OBJEXT) libman_a-linelength.$(OBJEXT) \
+	libman_a-pathsearch.$(OBJEXT) libman_a-pipeline.$(OBJEXT) \
+	libman_a-tempfile.$(OBJEXT) libman_a-xmalloc.$(OBJEXT) \
+	libman_a-xsigaction.$(OBJEXT) libman_a-xstrdup.$(OBJEXT) \
+	libman_a-xstrndup.$(OBJEXT) libman_a-xstrsignal.$(OBJEXT)
 libman_a_OBJECTS = $(am_libman_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
@@ -150,6 +152,8 @@ LDFLAGS = @LDFLAGS@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
 LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
+LIBGNU_LIBDEPS = @LIBGNU_LIBDEPS@
+LIBGNU_LTLIBDEPS = @LIBGNU_LTLIBDEPS@
 LIBICONV = @LIBICONV@
 LIBINTL = @LIBINTL@
 LIBMULTITHREAD = @LIBMULTITHREAD@
@@ -243,6 +247,8 @@ docdir = @docdir@
 dvidir = @dvidir@
 eqn = @eqn@
 exec_prefix = @exec_prefix@
+gl_LIBOBJS = @gl_LIBOBJS@
+gl_LTLIBOBJS = @gl_LTLIBOBJS@
 grap = @grap@
 grep = @grep@
 gunzip = @gunzip@
@@ -290,13 +296,17 @@ uncompress = @uncompress@
 vgrind = @vgrind@
 noinst_LIBRARIES = libman.a
 dist_noinst_DATA = README
-libman_a_CPPFLAGS = -I$(top_builddir)/include
+libman_a_CPPFLAGS = \
+	-I$(top_builddir)/include \
+	-I$(top_srcdir)/gnulib/lib \
+	-I$(top_builddir)/gnulib/lib
+
 libman_a_SOURCES = ansidecl.h appendstr.c cleanup.c cleanup.h debug.c \
-	decompress.c decompress.h error.c error.h getcwdalloc.c \
-	getcwdalloc.h hashtable.c hashtable.h linelength.c \
-	linelength.h pathsearch.c pathsearch.h pipeline.c pipeline.h \
-	tempfile.c xmalloc.c xsigaction.c xstrdup.c xstrndup.c \
-	xstrsignal.c flock.h gettext.h setenv.h
+	decompress.c decompress.h getcwdalloc.c getcwdalloc.h \
+	hashtable.c hashtable.h linelength.c linelength.h pathsearch.c \
+	pathsearch.h pipeline.c pipeline.h tempfile.c xmalloc.c \
+	xsigaction.c xstrdup.c xstrndup.c xstrsignal.c flock.h \
+	gettext.h setenv.h
 libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
 
 # Provide header files missing from this system. (This should eventually be
@@ -378,7 +388,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-cleanup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-decompress.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-error.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-getcwdalloc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-hashtable.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-linelength.Po@am__quote@
@@ -460,20 +469,6 @@ libman_a-decompress.obj: decompress.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='decompress.c' object='libman_a-decompress.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-decompress.obj `if test -f 'decompress.c'; then $(CYGPATH_W) 'decompress.c'; else $(CYGPATH_W) '$(srcdir)/decompress.c'; fi`
-
-libman_a-error.o: error.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-error.o -MD -MP -MF $(DEPDIR)/libman_a-error.Tpo -c -o libman_a-error.o `test -f 'error.c' || echo '$(srcdir)/'`error.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-error.Tpo $(DEPDIR)/libman_a-error.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='error.c' object='libman_a-error.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-error.o `test -f 'error.c' || echo '$(srcdir)/'`error.c
-
-libman_a-error.obj: error.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-error.obj -MD -MP -MF $(DEPDIR)/libman_a-error.Tpo -c -o libman_a-error.obj `if test -f 'error.c'; then $(CYGPATH_W) 'error.c'; else $(CYGPATH_W) '$(srcdir)/error.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-error.Tpo $(DEPDIR)/libman_a-error.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='error.c' object='libman_a-error.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-error.obj `if test -f 'error.c'; then $(CYGPATH_W) 'error.c'; else $(CYGPATH_W) '$(srcdir)/error.c'; fi`
 
 libman_a-getcwdalloc.o: getcwdalloc.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-getcwdalloc.o -MD -MP -MF $(DEPDIR)/libman_a-getcwdalloc.Tpo -c -o libman_a-getcwdalloc.o `test -f 'getcwdalloc.c' || echo '$(srcdir)/'`getcwdalloc.c

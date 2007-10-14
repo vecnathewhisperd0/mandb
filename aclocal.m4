@@ -860,6 +860,9 @@ AC_SUBST([am__tar])
 AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
+m4_include([gnulib/m4/error.m4])
+m4_include([gnulib/m4/gnulib-comp.m4])
+m4_include([gnulib/m4/onceonly_2_57.m4])
 m4_include([m4/codeset.m4])
 m4_include([m4/gettext.m4])
 m4_include([m4/glibc2.m4])

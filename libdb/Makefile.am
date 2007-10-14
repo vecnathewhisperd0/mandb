@@ -24,6 +24,8 @@ dist_noinst_DATA = README
 
 libmandb_a_CPPFLAGS = \
 	-I$(top_builddir)/include \
+	-I$(top_srcdir)/gnulib/lib \
+	-I$(top_builddir)/gnulib/lib \
 	-I$(top_srcdir)/lib
 
 libmandb_a_SOURCES = \

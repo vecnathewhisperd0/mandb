@@ -22,7 +22,10 @@
 noinst_LIBRARIES = libman.a
 dist_noinst_DATA = README
 
-libman_a_CPPFLAGS = -I$(top_builddir)/include
+libman_a_CPPFLAGS = \
+	-I$(top_builddir)/include \
+	-I$(top_srcdir)/gnulib/lib \
+	-I$(top_builddir)/gnulib/lib
 
 libman_a_SOURCES = \
 	ansidecl.h \
@@ -32,8 +35,6 @@ libman_a_SOURCES = \
 	debug.c \
 	decompress.c \
 	decompress.h \
-	error.c \
-	error.h \
 	getcwdalloc.c \
 	getcwdalloc.h \
 	hashtable.c \

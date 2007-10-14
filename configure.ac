@@ -114,6 +114,7 @@ dnl Check $PATH for the following progs and append suitable options.
 dnl 
 AC_GNU_SOURCE
 AC_PROG_CC
+gl_EARLY
 AC_PROG_CPP
 CFLAGS="$CFLAGS -Wall"
 if test "$GCC" = yes
@@ -310,6 +311,7 @@ AC_MINIX
 AC_ISC_POSIX
 dnl AC_PROG_LEX calls AC_TRY_LINK: must come after above 3
 AC_PROG_LEX
+gl_INIT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT
@@ -511,6 +513,7 @@ MAN_TRANS_SUBST(whatis)
 MAN_TRANS_SUBST(zsoelim)
 
 AC_CONFIG_FILES(Makefile
+	gnulib/lib/Makefile
 	lib/Makefile
 	src/Makefile
 	src/man_db.conf
