@@ -44,7 +44,7 @@ AM_CPPFLAGS = \
 	-DMAN=\"$(bindir)/$(TRANS_MAN)\" \
 	-DMANCONV=\"$(pkglibdir)/$(TRANS_MANCONV)\" \
 	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
-	-DSOELIM=\"$(bindir)/$(TRANS_SOELIM)\" \
+	-DSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 
 LIBMAN = $(top_builddir)/lib/libman.a
