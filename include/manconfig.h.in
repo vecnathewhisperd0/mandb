@@ -337,8 +337,7 @@ extern struct compression comp_list[];
 /* some library function declarations */
 #include <stddef.h>	/* for size_t */
 #include "xalloc.h"
-extern __inline__ char *xstrndup (const char *string, size_t size) 
-	ATTRIBUTE_MALLOC;
+#include "xstrndup.h"
 extern const char *xstrsignal (int signum);
 struct sigaction;
 extern int xsigaction (int signum, const struct sigaction *act,

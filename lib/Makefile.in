@@ -36,8 +36,8 @@ host_triplet = @host@
 subdir = lib
 DIST_COMMON = README $(dist_noinst_DATA) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in alloca.c basename.c flock.c memcmp.c \
-	putenv.c realpath.c rename.c strcspn.c strnlen.c strsep.c \
-	strspn.c strstr.c waitpid.c
+	putenv.c realpath.c rename.c strcspn.c strsep.c strspn.c \
+	strstr.c waitpid.c
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/d-type.m4 \
@@ -66,17 +66,21 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/stdlib_h.m4 \
 	$(top_srcdir)/gnulib/m4/strdup.m4 \
 	$(top_srcdir)/gnulib/m4/string_h.m4 \
+	$(top_srcdir)/gnulib/m4/strndup.m4 \
+	$(top_srcdir)/gnulib/m4/strnlen.m4 \
 	$(top_srcdir)/gnulib/m4/sys_stat_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_time_h.m4 \
 	$(top_srcdir)/gnulib/m4/tempname.m4 \
 	$(top_srcdir)/gnulib/m4/unistd_h.m4 \
 	$(top_srcdir)/gnulib/m4/wchar.m4 \
 	$(top_srcdir)/gnulib/m4/wctype.m4 \
-	$(top_srcdir)/gnulib/m4/xalloc.m4 $(top_srcdir)/m4/codeset.m4 \
-	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/glibc2.m4 \
-	$(top_srcdir)/m4/glibc21.m4 $(top_srcdir)/m4/iconv.m4 \
-	$(top_srcdir)/m4/intdiv0.m4 $(top_srcdir)/m4/intl.m4 \
-	$(top_srcdir)/m4/intmax.m4 $(top_srcdir)/m4/inttypes-pri.m4 \
+	$(top_srcdir)/gnulib/m4/xalloc.m4 \
+	$(top_srcdir)/gnulib/m4/xstrndup.m4 \
+	$(top_srcdir)/m4/codeset.m4 $(top_srcdir)/m4/gettext.m4 \
+	$(top_srcdir)/m4/glibc2.m4 $(top_srcdir)/m4/glibc21.m4 \
+	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/intdiv0.m4 \
+	$(top_srcdir)/m4/intl.m4 $(top_srcdir)/m4/intmax.m4 \
+	$(top_srcdir)/m4/inttypes-pri.m4 \
 	$(top_srcdir)/m4/inttypes_h.m4 $(top_srcdir)/m4/lcmessage.m4 \
 	$(top_srcdir)/m4/lib-ld.m4 $(top_srcdir)/m4/lib-link.m4 \
 	$(top_srcdir)/m4/lib-prefix.m4 $(top_srcdir)/m4/lock.m4 \
@@ -109,7 +113,7 @@ am_libman_a_OBJECTS = libman_a-appendstr.$(OBJEXT) \
 	libman_a-hashtable.$(OBJEXT) libman_a-linelength.$(OBJEXT) \
 	libman_a-pathsearch.$(OBJEXT) libman_a-pipeline.$(OBJEXT) \
 	libman_a-tempfile.$(OBJEXT) libman_a-xsigaction.$(OBJEXT) \
-	libman_a-xstrndup.$(OBJEXT) libman_a-xstrsignal.$(OBJEXT)
+	libman_a-xstrsignal.$(OBJEXT)
 libman_a_OBJECTS = $(am_libman_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
@@ -458,7 +462,7 @@ libman_a_SOURCES = ansidecl.h appendstr.c cleanup.c cleanup.h debug.c \
 	decompress.c decompress.h getcwdalloc.c getcwdalloc.h \
 	hashtable.c hashtable.h linelength.c linelength.h pathsearch.c \
 	pathsearch.h pipeline.c pipeline.h tempfile.c xsigaction.c \
-	xstrndup.c xstrsignal.c flock.h gettext.h
+	xstrsignal.c flock.h gettext.h
 libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
 all: all-am
 
@@ -515,7 +519,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/realpath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rename.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/strcspn.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/strnlen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/strsep.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/strspn.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/strstr.Po@am__quote@
@@ -531,7 +534,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-pipeline.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-tempfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xsigaction.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xstrndup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xstrsignal.Po@am__quote@
 
 .c.o:
@@ -701,20 +703,6 @@ libman_a-xsigaction.obj: xsigaction.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xsigaction.c' object='libman_a-xsigaction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xsigaction.obj `if test -f 'xsigaction.c'; then $(CYGPATH_W) 'xsigaction.c'; else $(CYGPATH_W) '$(srcdir)/xsigaction.c'; fi`
-
-libman_a-xstrndup.o: xstrndup.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xstrndup.o -MD -MP -MF $(DEPDIR)/libman_a-xstrndup.Tpo -c -o libman_a-xstrndup.o `test -f 'xstrndup.c' || echo '$(srcdir)/'`xstrndup.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xstrndup.Tpo $(DEPDIR)/libman_a-xstrndup.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xstrndup.c' object='libman_a-xstrndup.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xstrndup.o `test -f 'xstrndup.c' || echo '$(srcdir)/'`xstrndup.c
-
-libman_a-xstrndup.obj: xstrndup.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xstrndup.obj -MD -MP -MF $(DEPDIR)/libman_a-xstrndup.Tpo -c -o libman_a-xstrndup.obj `if test -f 'xstrndup.c'; then $(CYGPATH_W) 'xstrndup.c'; else $(CYGPATH_W) '$(srcdir)/xstrndup.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xstrndup.Tpo $(DEPDIR)/libman_a-xstrndup.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xstrndup.c' object='libman_a-xstrndup.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xstrndup.obj `if test -f 'xstrndup.c'; then $(CYGPATH_W) 'xstrndup.c'; else $(CYGPATH_W) '$(srcdir)/xstrndup.c'; fi`
 
 libman_a-xstrsignal.o: xstrsignal.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xstrsignal.o -MD -MP -MF $(DEPDIR)/libman_a-xstrsignal.Tpo -c -o libman_a-xstrsignal.o `test -f 'xstrsignal.c' || echo '$(srcdir)/'`xstrsignal.c

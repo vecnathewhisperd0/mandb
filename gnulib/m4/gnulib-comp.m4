@@ -71,6 +71,10 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_STRDUP
   gl_STRING_MODULE_INDICATOR([strdup])
   gl_HEADER_STRING_H
+  gl_FUNC_STRNDUP
+  gl_STRING_MODULE_INDICATOR([strndup])
+  gl_FUNC_STRNLEN
+  gl_STRING_MODULE_INDICATOR([strnlen])
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_TIME_H
@@ -80,6 +84,7 @@ AC_DEFUN([gl_INIT],
   gl_WCHAR_H
   gl_WCTYPE_H
   gl_XALLOC
+  gl_XSTRNDUP
   LIBGNU_LIBDEPS="$gl_libdeps"
   AC_SUBST([LIBGNU_LIBDEPS])
   LIBGNU_LTLIBDEPS="$gl_ltlibdeps"
@@ -155,6 +160,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdlib_.h
   lib/strdup.c
   lib/string_.h
+  lib/strndup.c
+  lib/strnlen.c
   lib/sys_stat_.h
   lib/sys_time_.h
   lib/tempname.c
@@ -166,6 +173,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xalloc-die.c
   lib/xalloc.h
   lib/xmalloc.c
+  lib/xstrndup.c
+  lib/xstrndup.h
   m4/absolute-header.m4
   m4/alloca.m4
   m4/d-type.m4
@@ -195,6 +204,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdlib_h.m4
   m4/strdup.m4
   m4/string_h.m4
+  m4/strndup.m4
+  m4/strnlen.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
   m4/tempname.m4
@@ -204,4 +215,5 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/wctype.m4
   m4/wint_t.m4
   m4/xalloc.m4
+  m4/xstrndup.m4
 ])
