@@ -76,6 +76,7 @@ AC_DEFUN([gl_INIT],
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
   gl_FUNC_READLINK
   gl_UNISTD_MODULE_INDICATOR([readlink])
+  gl_FUNC_RENAME
   gl_FUNC_SETENV
   gl_FUNC_UNSETENV
   gt_TYPE_SSIZE_T
@@ -187,6 +188,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mkstemp.c
   lib/pathmax.h
   lib/readlink.c
+  lib/rename.c
   lib/same-inode.h
   lib/setenv.c
   lib/setenv.h
@@ -250,6 +252,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mkstemp.m4
   m4/onceonly_2_57.m4
   m4/readlink.m4
+  m4/rename.m4
   m4/setenv.m4
   m4/ssize_t.m4
   m4/stdbool.m4
