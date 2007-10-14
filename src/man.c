@@ -451,7 +451,7 @@ static __inline__ void gripe_no_man (const char *name, const char *sec)
 	/* On AIX and IRIX, fall back to the vendor supplied browser. */
 #if defined _AIX || defined __sgi
 	if (!troff) {
-		putenv ("MANPATH=");  /* reset the MANPATH variable */
+		unsetenv ("MANPATH");
 		execv ("/usr/bin/man", global_argv);
 	}
 #endif
@@ -1381,8 +1381,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				const char *less_charset =
 					get_less_charset (locale_charset);
 				debug ("less_charset = %s\n", less_charset);
-				putenv (appendstr (NULL, "LESSCHARSET=",
-						   less_charset, NULL));
+				setenv ("LESSCHARSET", less_charset, 1);
 			}
 		}
 
