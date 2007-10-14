@@ -41,11 +41,19 @@ AC_DEFUN([gl_INIT],
   gl_ltlibdeps=
   gl_source_base='gnulib/lib'
   gl_FUNC_ALLOCA
+  gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
   gl_ERROR
   # No macro. You should also use one of fnmatch-posix or fnmatch-gnu.
   gl_FUNC_FNMATCH_GNU
+  gl_GETLOGIN_R
+  gl_UNISTD_MODULE_INDICATOR([getlogin_r])
   gl_FUNC_GETTIMEOFDAY
+  gl_GLOB
+  gl_FUNC_MALLOC_POSIX
+  gl_STDLIB_MODULE_INDICATOR([malloc-posix])
   gl_MALLOCA
+  gl_FUNC_MEMPCPY
+  gl_STRING_MODULE_INDICATOR([mempcpy])
   gt_FUNC_MKDTEMP
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
   gl_FUNC_MKSTEMP
@@ -55,6 +63,9 @@ AC_DEFUN([gl_INIT],
   AM_STDBOOL_H
   gl_STDINT_H
   gl_STDLIB_H
+  gl_FUNC_STRDUP
+  gl_STRING_MODULE_INDICATOR([strdup])
+  gl_HEADER_STRING_H
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_TIME_H
@@ -112,10 +123,16 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fnmatch.c
   lib/fnmatch_.h
   lib/fnmatch_loop.c
+  lib/getlogin_r.c
   lib/gettimeofday.c
+  lib/glob-libc.h
+  lib/glob.c
+  lib/glob_.h
+  lib/malloc.c
   lib/malloca.c
   lib/malloca.h
   lib/malloca.valgrind
+  lib/mempcpy.c
   lib/mkdtemp.c
   lib/mkstemp.c
   lib/setenv.c
@@ -123,6 +140,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdbool_.h
   lib/stdint_.h
   lib/stdlib_.h
+  lib/strdup.c
+  lib/string_.h
   lib/sys_stat_.h
   lib/sys_time_.h
   lib/tempname.c
@@ -133,16 +152,21 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/wctype_.h
   m4/absolute-header.m4
   m4/alloca.m4
+  m4/d-type.m4
   m4/eealloc.m4
   m4/error.m4
   m4/extensions.m4
   m4/fnmatch.m4
+  m4/getlogin_r.m4
   m4/gettimeofday.m4
+  m4/glob.m4
   m4/gnulib-common.m4
   m4/include_next.m4
   m4/longlong.m4
+  m4/malloc.m4
   m4/malloca.m4
   m4/mbstate_t.m4
+  m4/mempcpy.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
   m4/onceonly_2_57.m4
@@ -150,6 +174,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdbool.m4
   m4/stdint.m4
   m4/stdlib_h.m4
+  m4/strdup.m4
+  m4/string_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
   m4/tempname.m4

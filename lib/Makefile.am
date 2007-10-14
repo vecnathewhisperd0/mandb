@@ -62,16 +62,11 @@ libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
 # Provide header files missing from this system. (This should eventually be
 # replaced with use of Gnulib, which has modules for all of these.)
 
-BUILT_SOURCES = $(GETOPT_H) $(GLOB_H)
-MOSTLYCLEANFILES = getopt.h getopt.h-t glob.h glob.h-t
-EXTRA_DIST = getopt_.h glob_.h
+BUILT_SOURCES = $(GETOPT_H)
+MOSTLYCLEANFILES = getopt.h getopt.h-t
+EXTRA_DIST = getopt_.h
 
 getopt.h: getopt_.h
-	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
-	  cat $<; \
-	} > $@-t
-	mv -f $@-t $@
-glob.h: glob_.h
 	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
 	  cat $<; \
 	} > $@-t

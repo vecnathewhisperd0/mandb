@@ -131,6 +131,14 @@
    don't. */
 #undef HAVE_DECL_GETC_UNLOCKED
 
+/* Define to 1 if you have the declaration of `getlogin', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETLOGIN
+
+/* Define to 1 if you have the declaration of `getlogin_r', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETLOGIN_R
+
 /* Define to 1 if you have the declaration of `isblank', and to 0 if you
    don't. */
 #undef HAVE_DECL_ISBLANK
@@ -138,6 +146,10 @@
 /* Define to 1 if you have the declaration of `mkdir', and to 0 if you don't.
    */
 #undef HAVE_DECL_MKDIR
+
+/* Define to 1 if you have the declaration of `strdup', and to 0 if you don't.
+   */
+#undef HAVE_DECL_STRDUP
 
 /* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
    don't. */
@@ -198,11 +210,17 @@
 /* Define to 1 if you have the `getgid' function. */
 #undef HAVE_GETGID
 
+/* Define to 1 if you have the `getlogin_r' function. */
+#undef HAVE_GETLOGIN_R
+
 /* Define if using <getopt.h> rather than "lib/getopt.h". */
 #undef HAVE_GETOPT_H
 
 /* Define to 1 if you have the `getpagesize' function. */
 #undef HAVE_GETPAGESIZE
+
+/* Define to 1 if you have the `getpwnam_r' function. */
+#undef HAVE_GETPWNAM_R
 
 /* Define if the GNU gettext() function is already present or preinstalled. */
 #undef HAVE_GETTEXT
@@ -216,7 +234,7 @@
 /* Define to 1 if you have the `getwd' function. */
 #undef HAVE_GETWD
 
-/* Define if using <glob.h> rather than "lib/glob.h". */
+/* Define to 1 if you have the <glob.h> header file. */
 #undef HAVE_GLOB_H
 
 /* Define if you have grap. */
@@ -276,6 +294,9 @@
 
 /* Define to 1 if you have the `lstat' function. */
 #undef HAVE_LSTAT
+
+/* Define if the 'malloc' function is POSIX compliant. */
+#undef HAVE_MALLOC_POSIX
 
 /* Define to 1 if you have the `mbsrtowcs' function. */
 #undef HAVE_MBSRTOWCS
@@ -436,8 +457,15 @@
 /* Define to 1 if you have the `strtoul' function. */
 #undef HAVE_STRTOUL
 
+/* Define if there is a member named d_type in the struct describing directory
+   headers. */
+#undef HAVE_STRUCT_DIRENT_D_TYPE
+
 /* Define to 1 if you have the <sys/bitypes.h> header file. */
 #undef HAVE_SYS_BITYPES_H
+
+/* Define to 1 if you have the <sys/cdefs.h> header file. */
+#undef HAVE_SYS_CDEFS_H
 
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
