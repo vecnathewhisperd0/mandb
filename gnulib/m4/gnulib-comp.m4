@@ -57,6 +57,7 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
   gl_MALLOCA
+  gl_FUNC_MEMCMP
   gl_FUNC_MEMPCPY
   gl_STRING_MODULE_INDICATOR([mempcpy])
   gt_FUNC_MKDTEMP
@@ -151,6 +152,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/malloca.c
   lib/malloca.h
   lib/malloca.valgrind
+  lib/memcmp.c
   lib/mempcpy.c
   lib/mkdtemp.c
   lib/mkstemp.c
@@ -196,6 +198,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/malloc.m4
   m4/malloca.m4
   m4/mbstate_t.m4
+  m4/memcmp.m4
   m4/mempcpy.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
