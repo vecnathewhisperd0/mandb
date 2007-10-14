@@ -76,9 +76,7 @@ extern char *strrchr();
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#ifdef HAVE_CANONICALIZE_FILE_NAME
-extern char *canonicalize_file_name __P ((__const char *__name));
-#endif
+#include <canonicalize.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -105,12 +103,6 @@ static int check_for_stray (void)
 	struct dirent *catlist;
 	size_t lenman, lencat;
 	int strays = 0;
-#ifdef HAVE_CANONICALIZE_FILE_NAME
-	/* no PATH_MAX then */
-	char *fullpath;
-#else
-	char fullpath[PATH_MAX];
-#endif
 
 	cdir = opendir (catdir);
 	if (!cdir) {
@@ -207,6 +199,7 @@ static int check_for_stray (void)
 			char *mandir_copy;
 			const char *mandir_base;
 			command *col_cmd;
+			char *fullpath;
 
 			/* we have a straycat. Need to filter it and get
 			   its whatis (if necessary)  */
@@ -258,32 +251,21 @@ static int check_for_stray (void)
 			command_arg (col_cmd, "-bx");
 			pipeline_command (decomp, col_cmd);
 
-#ifdef HAVE_CANONICALIZE_FILE_NAME
 			fullpath = canonicalize_file_name (catdir);
 			if (!fullpath) {
-				if (quiet < 2)
-					error (0, errno,
-					       _("can't resolve %s"), catdir);
-			} else
-#else
-			if (realpath (catdir, fullpath) == NULL) {
 				if (quiet < 2) {
 					if (errno == ENOENT)
 						error (0, 0, _("warning: %s is a dangling symlink"), fullpath);
 					else
 						error (0, errno,
 						       _("can't resolve %s"),
-						       fullpath);
+						       catdir);
 				}
-			} else 
-#endif
-			{
+			} else {
 				char *catdir_copy;
 				const char *catdir_base;
 
-#ifdef HAVE_CANONICALIZE_FILE_NAME
 				free (fullpath);
-#endif
 				drop_effective_privs ();
 				pipeline_start (decomp);
 				regain_effective_privs ();

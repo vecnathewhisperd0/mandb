@@ -41,11 +41,17 @@ AC_DEFUN([gl_INIT],
   gl_ltlibdeps=
   gl_source_base='gnulib/lib'
   gl_FUNC_ALLOCA
+  AC_FUNC_CANONICALIZE_FILE_NAME
+  gl_MODULE_INDICATOR([canonicalize])
+  gl_CYCLE_CHECK
   gl_CHECK_TYPE_STRUCT_DIRENT_D_INO
   gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
   gl_FUNC_DIRFD
+  gl_DIRNAME
+  gl_DOUBLE_SLASH_ROOT
   gl_ERROR
   gl_EXITFAIL
+  gl_FILE_NAME_CONCAT
   # No macro. You should also use one of fnmatch-posix or fnmatch-gnu.
   gl_FUNC_FNMATCH_GNU
   gl_FUNC_GETCWD
@@ -68,8 +74,11 @@ AC_DEFUN([gl_INIT],
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
   gl_FUNC_MKSTEMP
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
+  gl_FUNC_READLINK
+  gl_UNISTD_MODULE_INDICATOR([readlink])
   gl_FUNC_SETENV
   gl_FUNC_UNSETENV
+  gt_TYPE_SSIZE_T
   AM_STDBOOL_H
   gl_STDINT_H
   gl_STDLIB_H
@@ -136,12 +145,24 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/link-warning.h
   lib/alloca.c
   lib/alloca_.h
+  lib/areadlink-with-size.c
+  lib/areadlink.h
+  lib/basename.c
+  lib/canonicalize.c
+  lib/canonicalize.h
+  lib/cycle-check.c
+  lib/cycle-check.h
+  lib/dev-ino.h
   lib/dirfd.c
   lib/dirfd.h
+  lib/dirname.c
+  lib/dirname.h
   lib/error.c
   lib/error.h
   lib/exitfail.c
   lib/exitfail.h
+  lib/filenamecat.c
+  lib/filenamecat.h
   lib/fnmatch.c
   lib/fnmatch_.h
   lib/fnmatch_loop.c
@@ -164,6 +185,9 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mempcpy.c
   lib/mkdtemp.c
   lib/mkstemp.c
+  lib/pathmax.h
+  lib/readlink.c
+  lib/same-inode.h
   lib/setenv.c
   lib/setenv.h
   lib/stdbool_.h
@@ -172,6 +196,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strcspn.c
   lib/strdup.c
   lib/string_.h
+  lib/stripslash.c
   lib/strndup.c
   lib/strnlen.c
   lib/sys_stat_.h
@@ -191,13 +216,19 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xstrndup.h
   m4/absolute-header.m4
   m4/alloca.m4
+  m4/canonicalize.m4
+  m4/cycle-check.m4
   m4/d-ino.m4
   m4/d-type.m4
   m4/dirfd.m4
+  m4/dirname.m4
+  m4/dos.m4
+  m4/double-slash-root.m4
   m4/eealloc.m4
   m4/error.m4
   m4/exitfail.m4
   m4/extensions.m4
+  m4/filenamecat.m4
   m4/fnmatch.m4
   m4/getcwd-abort-bug.m4
   m4/getcwd-path-max.m4
@@ -218,7 +249,9 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mkdtemp.m4
   m4/mkstemp.m4
   m4/onceonly_2_57.m4
+  m4/readlink.m4
   m4/setenv.m4
+  m4/ssize_t.m4
   m4/stdbool.m4
   m4/stdint.m4
   m4/stdlib_h.m4

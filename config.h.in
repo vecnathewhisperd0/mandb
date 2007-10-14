@@ -52,6 +52,9 @@
 #endif
 
 
+/* Define to 1 if // is a file system root distinct from /. */
+#undef DOUBLE_SLASH_IS_DISTINCT_ROOT
+
 /* Define if struct dirent has a member d_ino that actually works. */
 #undef D_INO_IN_DIRENT
 
@@ -59,11 +62,27 @@
    language is requested. */
 #undef ENABLE_NLS
 
+/* Define on systems for which file names may have a so-called `drive letter'
+   prefix, define this to compute the length of that prefix, including the
+   colon. */
+#undef FILE_SYSTEM_ACCEPTS_DRIVE_LETTER_PREFIX
+
+/* Define if the backslash character may also serve as a file name component
+   separator. */
+#undef FILE_SYSTEM_BACKSLASH_IS_FILE_NAME_SEPARATOR
+
+/* Define if a drive letter prefix denotes a relative path if it is not
+   followed by a file name component separator. */
+#undef FILE_SYSTEM_DRIVE_PREFIX_CAN_BE_RELATIVE
+
 /* Define if you have, and want to use, gdbm interface routines. */
 #undef GDBM
 
 /* Define if gettimeofday clobbers the localtime buffer. */
 #undef GETTIMEOFDAY_CLOBBERS_LOCALTIME
+
+/* Define to 1 when using the gnulib module canonicalize. */
+#undef GNULIB_CANONICALIZE
 
 /* Define if nroff is GNU nroff. */
 #undef GNU_NROFF
@@ -131,6 +150,10 @@
 /* Define if the GNU dcgettext() function is already present or preinstalled.
    */
 #undef HAVE_DCGETTEXT
+
+/* Define to 1 if you have the declaration of `canonicalize_file_name', and to
+   0 if you don't. */
+#undef HAVE_DECL_CANONICALIZE_FILE_NAME
 
 /* Define to 1 if you have the declaration of `dirfd', and to 0 if you don't.
    */
@@ -400,8 +423,8 @@
 /* Define to 1 if you have the `putenv' function. */
 #undef HAVE_PUTENV
 
-/* Define to 1 if you have the `realpath' function. */
-#undef HAVE_REALPATH
+/* Define to 1 if you have the `readlink' function. */
+#undef HAVE_READLINK
 
 /* Define if you have refer. */
 #undef HAVE_REFER
@@ -411,6 +434,9 @@
 
 /* Define to 1 if you have the `rename' function. */
 #undef HAVE_RENAME
+
+/* Define to 1 if you have the `resolvepath' function. */
+#undef HAVE_RESOLVEPATH
 
 /* Define to 1 if you have the <search.h> header file. */
 #undef HAVE_SEARCH_H
@@ -631,6 +657,12 @@
 /* Define if integer division by zero raises signal SIGFPE. */
 #undef INTDIV0_RAISES_SIGFPE
 
+#if FILE_SYSTEM_BACKSLASH_IS_FILE_NAME_SEPARATOR
+# define ISSLASH(C) ((C) == '/' || (C) == '\\')
+#else
+# define ISSLASH(C) ((C) == '/')
+#endif
+
 /* If malloc(0) is != NULL, define this to 1. Otherwise define this to 0. */
 #undef MALLOC_0_IS_NONNULL
 
@@ -848,6 +880,9 @@
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t
+
+/* Define as a signed type of the same size as size_t. */
+#undef ssize_t
 
 /* Define to rpl_strnlen if the replacement function should be used. */
 #undef strnlen
