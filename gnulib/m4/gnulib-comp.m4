@@ -68,6 +68,7 @@ AC_DEFUN([gl_INIT],
   AM_STDBOOL_H
   gl_STDINT_H
   gl_STDLIB_H
+  gl_FUNC_STRCSPN
   gl_FUNC_STRDUP
   gl_STRING_MODULE_INDICATOR([strdup])
   gl_HEADER_STRING_H
@@ -158,6 +159,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdbool_.h
   lib/stdint_.h
   lib/stdlib_.h
+  lib/strcspn.c
   lib/strdup.c
   lib/string_.h
   lib/strndup.c
@@ -202,6 +204,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdbool.m4
   m4/stdint.m4
   m4/stdlib_h.m4
+  m4/strcspn.m4
   m4/strdup.m4
   m4/string_h.m4
   m4/strndup.m4
