@@ -306,8 +306,6 @@ AC_ARG_ENABLE(mandirs,
 dnl
 dnl check for various header files and associated libraries.
 dnl
-AC_AIX
-AC_MINIX
 AC_ISC_POSIX
 dnl AC_PROG_LEX calls AC_TRY_LINK: must come after above 3
 AC_PROG_LEX
@@ -482,14 +480,7 @@ AC_CHECK_FUNC(getopt_long,
 	       GETOPT_H=getopt.h])
 AC_SUBST([GETOPT_H])
 AC_REPLACE_FUNCS(flock putenv realpath rename basename waitpid strstr strsep strcspn strspn strnlen)
-AC_CHECK_FUNCS(mkdtemp, ,
-	       [AC_LIBOBJ([mkdtemp])
-	        AC_LIBOBJ([tempname])])
-AC_CHECK_FUNCS(mkstemp, ,
-	       [AC_LIBOBJ([mkstemp])
-	        AC_LIBOBJ([tempname])])
 gt_FUNC_SETENV
-gl_FUNC_GEN_TEMPNAME
 dnl
 dnl MAN_ECHO_VAR(ENV-VARIABLE)
 define(MAN_ECHO_VAR, [AC_MSG_NOTICE([default $1 = "$$1"])])dnl

@@ -25,6 +25,7 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LIBOBJS$])dnl a variable
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([AC_PROG_RANLIB])
+  AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
 ])
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -40,6 +41,20 @@ AC_DEFUN([gl_INIT],
   gl_ltlibdeps=
   gl_source_base='gnulib/lib'
   gl_ERROR
+  gl_FUNC_GETTIMEOFDAY
+  gt_FUNC_MKDTEMP
+  gl_STDLIB_MODULE_INDICATOR([mkdtemp])
+  gl_FUNC_MKSTEMP
+  gl_STDLIB_MODULE_INDICATOR([mkstemp])
+  gl_STDINT_H
+  gl_STDLIB_H
+  gl_HEADER_SYS_STAT_H
+  AC_PROG_MKDIR_P
+  gl_HEADER_SYS_TIME_H
+  AC_PROG_MKDIR_P
+  gl_FUNC_GEN_TEMPNAME
+  gl_UNISTD_H
+  gl_WCHAR_H
   LIBGNU_LIBDEPS="$gl_libdeps"
   AC_SUBST([LIBGNU_LIBDEPS])
   LIBGNU_LTLIBDEPS="$gl_ltlibdeps"
@@ -81,10 +96,37 @@ AC_DEFUN([gl_LIBSOURCES],
 # This macro records the list of files which have been installed by
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
+  build-aux/link-warning.h
   lib/dummy.c
   lib/error.c
   lib/error.h
+  lib/gettimeofday.c
+  lib/mkdtemp.c
+  lib/mkstemp.c
+  lib/stdint_.h
+  lib/stdlib_.h
+  lib/sys_stat_.h
+  lib/sys_time_.h
+  lib/tempname.c
+  lib/tempname.h
+  lib/unistd_.h
+  lib/wchar_.h
+  m4/absolute-header.m4
   m4/error.m4
+  m4/extensions.m4
+  m4/gettimeofday.m4
   m4/gnulib-common.m4
+  m4/include_next.m4
+  m4/longlong.m4
+  m4/mkdtemp.m4
+  m4/mkstemp.m4
   m4/onceonly_2_57.m4
+  m4/stdint.m4
+  m4/stdlib_h.m4
+  m4/sys_stat_h.m4
+  m4/sys_time_h.m4
+  m4/tempname.m4
+  m4/ulonglong.m4
+  m4/unistd_h.m4
+  m4/wchar.m4
 ])

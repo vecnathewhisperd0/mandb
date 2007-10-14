@@ -1,23 +1,28 @@
-/* Copyright (C) 1991-1999, 2000, 2001 Free Software Foundation, Inc.
-   This file is part of the GNU C Library.
+/* tempname.c - generate the name of a temporary file.
 
-   The GNU C Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
+   Copyright (C) 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+   2000, 2001, 2002, 2003, 2005, 2006, 2007 Free Software Foundation,
+   Inc.
 
-   The GNU C Library is distributed in the hope that it will be useful,
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-   You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, write to the Free
-   Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-   02110-1301 USA.  */
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
 
-#if HAVE_CONFIG_H
-# include "config.h"
+/* Extracted from glibc sysdeps/posix/tempname.c.  See also tmpdir.c.  */
+
+#if !_LIBC
+# include <config.h>
+# include "tempname.h"
 #endif
 
 #include <sys/types.h>
@@ -42,65 +47,31 @@
 # define __GT_NOCREATE	3
 #endif
 
-#if STDC_HEADERS || _LIBC
-# include <stddef.h>
-# include <stdlib.h>
-# include <string.h>
-#endif
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
-#if HAVE_FCNTL_H || _LIBC
-# include <fcntl.h>
-#endif
-
-#if HAVE_SYS_TIME_H || _LIBC
-# include <sys/time.h>
-#endif
-
-#if HAVE_STDINT_H || _LIBC
-# include <stdint.h>
-#endif
-
-#if HAVE_UNISTD_H || _LIBC
-# include <unistd.h>
-#endif
+#include <fcntl.h>
+#include <sys/time.h>
+#include <stdint.h>
+#include <unistd.h>
 
 #include <sys/stat.h>
-#if STAT_MACROS_BROKEN
-# undef S_ISDIR
-#endif
-#if !defined S_ISDIR && defined S_IFDIR
-# define S_ISDIR(mode) (((mode) & S_IFMT) == S_IFDIR)
-#endif
-#if !S_IRUSR && S_IREAD
-# define S_IRUSR S_IREAD
-#endif
-#if !S_IRUSR
-# define S_IRUSR 00400
-#endif
-#if !S_IWUSR && S_IWRITE
-# define S_IWUSR S_IWRITE
-#endif
-#if !S_IWUSR
-# define S_IWUSR 00200
-#endif
-#if !S_IXUSR && S_IEXEC
-# define S_IXUSR S_IEXEC
-#endif
-#if !S_IXUSR
-# define S_IXUSR 00100
-#endif
 
 #if _LIBC
 # define struct_stat64 struct stat64
+# define small_open __open
+# define large_open __open64
 #else
 # define struct_stat64 struct stat
+# define small_open open
+# define large_open open
+# define __gen_tempname gen_tempname
 # define __getpid getpid
 # define __gettimeofday gettimeofday
 # define __mkdir mkdir
-# define __open open
-# define __open64 open
-# define __lxstat64(version, path, buf) lstat (path, buf)
-# define __xstat64(version, path, buf) stat (path, buf)
+# define __lxstat64(version, file, buf) lstat (file, buf)
+# define __xstat64(version, file, buf) stat (file, buf)
 #endif
 
 #if ! (HAVE___SECURE_GETENV || _LIBC)
@@ -135,6 +106,7 @@
 # define uint64_t uintmax_t
 #endif
 
+#if _LIBC
 /* Return nonzero if DIR is an existent directory.  */
 static int
 direxists (const char *dir)
@@ -205,8 +177,9 @@ __path_search (char *tmpl, size_t tmpl_len, const char *dir, const char *pfx,
   sprintf (tmpl, "%.*s/%.*sXXXXXX", (int) dlen, dir, (int) plen, pfx);
   return 0;
 }
+#endif /* _LIBC */
 
-/* These are the characters used in temporary filenames.  */
+/* These are the characters used in temporary file names.  */
 static const char letters[] =
 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -231,9 +204,26 @@ __gen_tempname (char *tmpl, int kind)
   char *XXXXXX;
   static uint64_t value;
   uint64_t random_time_bits;
-  int count, fd = -1;
+  unsigned int count;
+  int fd = -1;
   int save_errno = errno;
   struct_stat64 st;
+
+  /* A lower bound on the number of temporary files to attempt to
+     generate.  The maximum total number of temporary file names that
+     can exist for a given template is 62**6.  It should never be
+     necessary to try all these combinations.  Instead if a reasonable
+     number of names is tried (we define reasonable as 62**3) fail to
+     give the system administrator the chance to remove the problems.  */
+#define ATTEMPTS_MIN (62 * 62 * 62)
+
+  /* The number of times to attempt to generate a temporary file.  To
+     conform to POSIX, this must be no smaller than TMP_MAX.  */
+#if ATTEMPTS_MIN < TMP_MAX
+  unsigned int attempts = TMP_MAX;
+#else
+  unsigned int attempts = ATTEMPTS_MIN;
+#endif
 
   len = strlen (tmpl);
   if (len < 6 || strcmp (&tmpl[len - 6], "XXXXXX"))
@@ -249,19 +239,15 @@ __gen_tempname (char *tmpl, int kind)
 #ifdef RANDOM_BITS
   RANDOM_BITS (random_time_bits);
 #else
-# if HAVE_GETTIMEOFDAY || _LIBC
   {
     struct timeval tv;
     __gettimeofday (&tv, NULL);
     random_time_bits = ((uint64_t) tv.tv_usec << 16) ^ tv.tv_sec;
   }
-# else
-  random_time_bits = time (NULL);
-# endif
 #endif
   value += random_time_bits ^ __getpid ();
 
-  for (count = 0; count < TMP_MAX; value += 7777, ++count)
+  for (count = 0; count < attempts; value += 7777, ++count)
     {
       uint64_t v = value;
 
@@ -281,11 +267,11 @@ __gen_tempname (char *tmpl, int kind)
       switch (kind)
 	{
 	case __GT_FILE:
-	  fd = __open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+	  fd = small_open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
 	  break;
 
 	case __GT_BIGFILE:
-	  fd = __open64 (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+	  fd = large_open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
 	  break;
 
 	case __GT_DIR:
