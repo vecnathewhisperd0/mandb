@@ -43,6 +43,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/d-type.m4 \
 	$(top_srcdir)/gnulib/m4/eealloc.m4 \
 	$(top_srcdir)/gnulib/m4/error.m4 \
+	$(top_srcdir)/gnulib/m4/exitfail.m4 \
 	$(top_srcdir)/gnulib/m4/extensions.m4 \
 	$(top_srcdir)/gnulib/m4/fnmatch.m4 \
 	$(top_srcdir)/gnulib/m4/getlogin_r.m4 \
@@ -51,6 +52,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/glob.m4 \
 	$(top_srcdir)/gnulib/m4/gnulib-comp.m4 \
 	$(top_srcdir)/gnulib/m4/include_next.m4 \
+	$(top_srcdir)/gnulib/m4/inline.m4 \
 	$(top_srcdir)/gnulib/m4/malloc.m4 \
 	$(top_srcdir)/gnulib/m4/malloca.m4 \
 	$(top_srcdir)/gnulib/m4/mbstate_t.m4 \
@@ -69,7 +71,8 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/tempname.m4 \
 	$(top_srcdir)/gnulib/m4/unistd_h.m4 \
 	$(top_srcdir)/gnulib/m4/wchar.m4 \
-	$(top_srcdir)/gnulib/m4/wctype.m4 $(top_srcdir)/m4/codeset.m4 \
+	$(top_srcdir)/gnulib/m4/wctype.m4 \
+	$(top_srcdir)/gnulib/m4/xalloc.m4 $(top_srcdir)/m4/codeset.m4 \
 	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/glibc2.m4 \
 	$(top_srcdir)/m4/glibc21.m4 $(top_srcdir)/m4/iconv.m4 \
 	$(top_srcdir)/m4/intdiv0.m4 $(top_srcdir)/m4/intl.m4 \
@@ -105,8 +108,7 @@ am_libman_a_OBJECTS = libman_a-appendstr.$(OBJEXT) \
 	libman_a-decompress.$(OBJEXT) libman_a-getcwdalloc.$(OBJEXT) \
 	libman_a-hashtable.$(OBJEXT) libman_a-linelength.$(OBJEXT) \
 	libman_a-pathsearch.$(OBJEXT) libman_a-pipeline.$(OBJEXT) \
-	libman_a-tempfile.$(OBJEXT) libman_a-xmalloc.$(OBJEXT) \
-	libman_a-xsigaction.$(OBJEXT) libman_a-xstrdup.$(OBJEXT) \
+	libman_a-tempfile.$(OBJEXT) libman_a-xsigaction.$(OBJEXT) \
 	libman_a-xstrndup.$(OBJEXT) libman_a-xstrsignal.$(OBJEXT)
 libman_a_OBJECTS = $(am_libman_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
@@ -455,9 +457,8 @@ libman_a_CPPFLAGS = \
 libman_a_SOURCES = ansidecl.h appendstr.c cleanup.c cleanup.h debug.c \
 	decompress.c decompress.h getcwdalloc.c getcwdalloc.h \
 	hashtable.c hashtable.h linelength.c linelength.h pathsearch.c \
-	pathsearch.h pipeline.c pipeline.h tempfile.c xmalloc.c \
-	xsigaction.c xstrdup.c xstrndup.c xstrsignal.c flock.h \
-	gettext.h
+	pathsearch.h pipeline.c pipeline.h tempfile.c xsigaction.c \
+	xstrndup.c xstrsignal.c flock.h gettext.h
 libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
 all: all-am
 
@@ -529,9 +530,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-pathsearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-pipeline.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-tempfile.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xmalloc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xsigaction.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xstrdup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xstrndup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xstrsignal.Po@am__quote@
 
@@ -689,20 +688,6 @@ libman_a-tempfile.obj: tempfile.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-tempfile.obj `if test -f 'tempfile.c'; then $(CYGPATH_W) 'tempfile.c'; else $(CYGPATH_W) '$(srcdir)/tempfile.c'; fi`
 
-libman_a-xmalloc.o: xmalloc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xmalloc.o -MD -MP -MF $(DEPDIR)/libman_a-xmalloc.Tpo -c -o libman_a-xmalloc.o `test -f 'xmalloc.c' || echo '$(srcdir)/'`xmalloc.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xmalloc.Tpo $(DEPDIR)/libman_a-xmalloc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xmalloc.c' object='libman_a-xmalloc.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xmalloc.o `test -f 'xmalloc.c' || echo '$(srcdir)/'`xmalloc.c
-
-libman_a-xmalloc.obj: xmalloc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xmalloc.obj -MD -MP -MF $(DEPDIR)/libman_a-xmalloc.Tpo -c -o libman_a-xmalloc.obj `if test -f 'xmalloc.c'; then $(CYGPATH_W) 'xmalloc.c'; else $(CYGPATH_W) '$(srcdir)/xmalloc.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xmalloc.Tpo $(DEPDIR)/libman_a-xmalloc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xmalloc.c' object='libman_a-xmalloc.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xmalloc.obj `if test -f 'xmalloc.c'; then $(CYGPATH_W) 'xmalloc.c'; else $(CYGPATH_W) '$(srcdir)/xmalloc.c'; fi`
-
 libman_a-xsigaction.o: xsigaction.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xsigaction.o -MD -MP -MF $(DEPDIR)/libman_a-xsigaction.Tpo -c -o libman_a-xsigaction.o `test -f 'xsigaction.c' || echo '$(srcdir)/'`xsigaction.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xsigaction.Tpo $(DEPDIR)/libman_a-xsigaction.Po
@@ -716,20 +701,6 @@ libman_a-xsigaction.obj: xsigaction.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xsigaction.c' object='libman_a-xsigaction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xsigaction.obj `if test -f 'xsigaction.c'; then $(CYGPATH_W) 'xsigaction.c'; else $(CYGPATH_W) '$(srcdir)/xsigaction.c'; fi`
-
-libman_a-xstrdup.o: xstrdup.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xstrdup.o -MD -MP -MF $(DEPDIR)/libman_a-xstrdup.Tpo -c -o libman_a-xstrdup.o `test -f 'xstrdup.c' || echo '$(srcdir)/'`xstrdup.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xstrdup.Tpo $(DEPDIR)/libman_a-xstrdup.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xstrdup.c' object='libman_a-xstrdup.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xstrdup.o `test -f 'xstrdup.c' || echo '$(srcdir)/'`xstrdup.c
-
-libman_a-xstrdup.obj: xstrdup.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xstrdup.obj -MD -MP -MF $(DEPDIR)/libman_a-xstrdup.Tpo -c -o libman_a-xstrdup.obj `if test -f 'xstrdup.c'; then $(CYGPATH_W) 'xstrdup.c'; else $(CYGPATH_W) '$(srcdir)/xstrdup.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xstrdup.Tpo $(DEPDIR)/libman_a-xstrdup.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xstrdup.c' object='libman_a-xstrdup.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xstrdup.obj `if test -f 'xstrdup.c'; then $(CYGPATH_W) 'xstrdup.c'; else $(CYGPATH_W) '$(srcdir)/xstrdup.c'; fi`
 
 libman_a-xstrndup.o: xstrndup.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xstrndup.o -MD -MP -MF $(DEPDIR)/libman_a-xstrndup.Tpo -c -o libman_a-xstrndup.o `test -f 'xstrndup.c' || echo '$(srcdir)/'`xstrndup.c

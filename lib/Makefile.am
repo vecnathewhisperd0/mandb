@@ -46,9 +46,7 @@ libman_a_SOURCES = \
 	pipeline.c \
 	pipeline.h \
 	tempfile.c \
-	xmalloc.c \
 	xsigaction.c \
-	xstrdup.c \
 	xstrndup.c \
 	xstrsignal.c
 

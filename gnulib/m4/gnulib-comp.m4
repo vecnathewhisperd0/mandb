@@ -43,6 +43,7 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_ALLOCA
   gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
   gl_ERROR
+  gl_EXITFAIL
   # No macro. You should also use one of fnmatch-posix or fnmatch-gnu.
   gl_FUNC_FNMATCH_GNU
   gl_GETLOGIN_R
@@ -52,6 +53,7 @@ AC_DEFUN([gl_INIT],
   AC_SUBST([LTLIBINTL])
   gl_FUNC_GETTIMEOFDAY
   gl_GLOB
+  gl_INLINE
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
   gl_MALLOCA
@@ -77,6 +79,7 @@ AC_DEFUN([gl_INIT],
   gl_UNISTD_H
   gl_WCHAR_H
   gl_WCTYPE_H
+  gl_XALLOC
   LIBGNU_LIBDEPS="$gl_libdeps"
   AC_SUBST([LIBGNU_LIBDEPS])
   LIBGNU_LTLIBDEPS="$gl_ltlibdeps"
@@ -123,6 +126,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/alloca_.h
   lib/error.c
   lib/error.h
+  lib/exitfail.c
+  lib/exitfail.h
   lib/fnmatch.c
   lib/fnmatch_.h
   lib/fnmatch_loop.c
@@ -158,11 +163,15 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/unsetenv.c
   lib/wchar_.h
   lib/wctype_.h
+  lib/xalloc-die.c
+  lib/xalloc.h
+  lib/xmalloc.c
   m4/absolute-header.m4
   m4/alloca.m4
   m4/d-type.m4
   m4/eealloc.m4
   m4/error.m4
+  m4/exitfail.m4
   m4/extensions.m4
   m4/fnmatch.m4
   m4/getlogin_r.m4
@@ -171,6 +180,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/glob.m4
   m4/gnulib-common.m4
   m4/include_next.m4
+  m4/inline.m4
   m4/longlong.m4
   m4/malloc.m4
   m4/malloca.m4
@@ -193,4 +203,5 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/wchar.m4
   m4/wctype.m4
   m4/wint_t.m4
+  m4/xalloc.m4
 ])
