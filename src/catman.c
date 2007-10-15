@@ -33,25 +33,12 @@
 #include <assert.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 
 #if HAVE_SYS_WAIT_H
 #  include <sys/wait.h>
 #endif /* HAVE_SYS_WAIT_H */
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-#endif /* STDC_HEADERS */
-
-#ifndef STDC_HEADERS
-extern char *getenv();
-extern int errno;
-#endif
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>

@@ -27,9 +27,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
-#ifdef STDC_HEADERS
 #include <stdlib.h>
-#endif
 
 #include "gettext.h"
 #define _(String) gettext (String)

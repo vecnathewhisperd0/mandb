@@ -36,20 +36,11 @@
 
 #include <sys/stat.h>
 #include <errno.h>
-
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
+#include <string.h>
 
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 #endif /* HAVE_UNISTD_H */
-
-#ifdef HAVE_STRING_H
-#  include <string.h>
-#elif defined (HAVE_STRINGS_H)
-#  include <strings.h>
-#endif /* HAVE_STRING_H */
 
 #include "gettext.h"
 #define _(String) gettext (String)

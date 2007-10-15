@@ -29,21 +29,8 @@
 
 #include <stdio.h>
 #include <errno.h>
-
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strchr();
-#endif /* STDC_HEADERS */
+#include <string.h>
+#include <stdlib.h>
 
 #ifdef HAVE_LIBGEN_H
 #  include <libgen.h>

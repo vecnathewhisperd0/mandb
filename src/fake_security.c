@@ -30,10 +30,6 @@
 #include <stdio.h>
 #include <errno.h>
 
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
 #include <sys/types.h>
 
 #include "gettext.h"

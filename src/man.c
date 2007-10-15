@@ -39,21 +39,12 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
 #include <termios.h>
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strchr(), *strcat();
-#endif /* STDC_HEADERS */
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>
@@ -101,11 +92,6 @@ static char *cwd;
 
 #if HAVE_SYS_WAIT_H
 #  include <sys/wait.h>
-#endif
-
-#ifndef STDC_HEADERS
-extern char *getenv();
-extern int errno;
 #endif
 
 #ifdef HAVE_LIBGEN_H

@@ -31,16 +31,14 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <assert.h>
-
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
 
 #ifndef S_ISLNK /* losing sys/stat.h */
 #  if defined(S_IFMT) && defined(S_IFLNK)
@@ -62,17 +60,6 @@ extern int errno;
 #    include <ndir.h>
 #  endif /* HAVE_NDIR_H */
 #endif /* HAVE_DIRENT_H  */
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strrchr();
-#endif /* no string(s) header */
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>

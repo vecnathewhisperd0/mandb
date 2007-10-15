@@ -20,35 +20,14 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strcpy();
-#endif /* STDC_HEADERS */
-
-#ifdef __STDC__
-#  include <stdarg.h>
-#  define VA_START	va_start (ap, str)
-#else
-#  include <varargs.h>
-#  define VA_START	va_start (ap)
-#endif
+#include <string.h>
+#include <stdarg.h>
 
 #include "manconfig.h"
 
 /* append strings to first argument, which is realloced to the correct size 
    first arg may be NULL */
-#ifdef __STDC__
 char *appendstr (char *str, ...)
-#else
-char *appendstr (str, va_alist)
-     char *str;
-     va_dcl
-#endif
 {
       va_list ap;
       int len, newlen;
@@ -56,7 +35,7 @@ char *appendstr (str, va_alist)
 
       len = str ? strlen (str) : 0;
 
-      VA_START;
+      va_start (ap, str);
       newlen = len + 1;
       while ((next = va_arg (ap, char *)))
               newlen += strlen (next);
@@ -65,7 +44,7 @@ char *appendstr (str, va_alist)
       str = xrealloc (str, newlen);
       end = str + len;
 
-      VA_START;
+      va_start (ap, str);
       while ((next = va_arg (ap, char *))) {
               strcpy (end, next);
               end += strlen (next);

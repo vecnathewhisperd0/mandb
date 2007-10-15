@@ -26,17 +26,10 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include <sys/stat.h>
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#endif /* STDC_HEADERS */
 
 #ifdef HAVE_LIBGEN_H
 #  include <libgen.h>

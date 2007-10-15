@@ -26,17 +26,8 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strrchr();
-#endif /* no string(s) header */
+#include <string.h>
+#include <stdlib.h>
 
 #ifdef HAVE_LIBGEN_H
 #  include <libgen.h>

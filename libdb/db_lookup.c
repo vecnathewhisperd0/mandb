@@ -29,27 +29,12 @@
 #include <assert.h>
 #include <errno.h>
 #include <ctype.h>
-
-#if defined(STDC_HEADERS)
 #include <string.h>
 #include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#include <strings.h>
-#else /* no string(s) header file */
-extern char *strsep();
-#endif /* STDC_HEADERS */
 
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 #endif /* HAVE_UNISTD_H */
-
-#ifndef STDC_HEADERS
-extern long atol();
-extern char *strsep();
-extern int errno;
-#endif /* not STDC_HEADERS */
 
 #include "gettext.h"
 #define _(String) gettext (String)

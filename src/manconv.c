@@ -35,15 +35,8 @@
 
 #include <stdio.h>
 #include <errno.h>
-
-#if defined(STDC_HEADERS)
-#  include <stdlib.h>
-#  include <string.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#endif
+#include <stdlib.h>
+#include <string.h>
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>

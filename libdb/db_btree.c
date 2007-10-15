@@ -30,12 +30,7 @@
 
 #include <stdio.h>
 #include <errno.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#include <strings.h>
-#endif /* STDC_HEADERS */
 
 #if HAVE_SYS_FILE_H
 #  include <sys/file.h> /* for flock() */

@@ -33,28 +33,15 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
 
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 #endif /* HAVE_UNISTD_H */
-
-#if defined(STDC_HEADERS)
-#  include <stdlib.h>
-#  include <string.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else
-extern char *strrchr();
-#endif /* no string(s) header */
 
 #include "gettext.h"
 #include <locale.h>

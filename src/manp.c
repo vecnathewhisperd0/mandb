@@ -54,27 +54,12 @@
 #include <errno.h>
 #include <dirent.h>
 
-#if defined(STDC_HEADERS)
-#  include <stdlib.h>
-#  include <string.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strtok();
-extern char *strchr();
-extern char *strstr();
-#endif
+#include <stdlib.h>
+#include <string.h>
 
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>
 #endif /* HAVE_UNISTD_H */
-
-#ifndef STDC_HEADERS
-extern char *getenv();
-extern int errno;
-#endif
 
 #include <xgetcwd.h>
 

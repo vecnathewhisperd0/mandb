@@ -30,6 +30,8 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -55,22 +57,6 @@
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 #endif /* HAVE_UNISTD_H */
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strchr(), *strrchr(), *strstr(), *strpbrk();
-#endif /* no string(s) header */
-
-#ifndef STDC_HEADERS
-extern time_t time();
-extern int errno;
-#endif
 
 #ifdef HAVE_LIBGEN_H
 #  include <libgen.h>

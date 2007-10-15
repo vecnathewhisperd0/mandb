@@ -35,20 +35,9 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strrchr();
-extern char *strcat();
-extern char *strcpy();
-#endif /* STDC_HEADERS */
 
 #include <sys/types.h>
 #include <sys/stat.h>
