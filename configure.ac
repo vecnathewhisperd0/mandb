@@ -314,7 +314,6 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT
 AC_CHECK_HEADERS(unistd.h memory.h fcntl.h limits.h sys/file.h regex.h libgen.h)
-AC_CHECK_HEADERS(string.h strings.h, break)
 dnl
 dnl Internationalization support.
 dnl
