@@ -309,9 +309,6 @@ dnl
 AC_ISC_POSIX
 dnl AC_PROG_LEX calls AC_TRY_LINK: must come after above 3
 AC_PROG_LEX
-# Work around an infinite recursion bug in Gnulib's getcwd module (reported
-# to bug-gnulib). This should be removed as soon as this bug is fixed.
-gl_cv_func_getcwd_path_max=no
 gl_INIT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
