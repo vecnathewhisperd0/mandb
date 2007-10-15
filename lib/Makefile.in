@@ -35,8 +35,7 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = lib
 DIST_COMMON = README $(dist_noinst_DATA) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in alloca.c basename.c flock.c memcmp.c \
-	waitpid.c
+	$(srcdir)/Makefile.in basename.c flock.c waitpid.c
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/canonicalize.m4 \
@@ -125,7 +124,7 @@ LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
 ARFLAGS = cru
 libman_a_AR = $(AR) $(ARFLAGS)
-libman_a_DEPENDENCIES = $(LIBOBJS) $(ALLOCA)
+libman_a_DEPENDENCIES = $(LIBOBJS)
 am_libman_a_OBJECTS = libman_a-appendstr.$(OBJEXT) \
 	libman_a-cleanup.$(OBJEXT) libman_a-debug.$(OBJEXT) \
 	libman_a-decompress.$(OBJEXT) libman_a-hashtable.$(OBJEXT) \
@@ -480,7 +479,7 @@ libman_a_SOURCES = ansidecl.h appendstr.c cleanup.c cleanup.h debug.c \
 	decompress.c decompress.h hashtable.c hashtable.h linelength.c \
 	linelength.h pathsearch.c pathsearch.h pipeline.c pipeline.h \
 	tempfile.c xsigaction.c xstrsignal.c flock.h gettext.h
-libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
+libman_a_LIBADD = $(LIBOBJS)
 all: all-am
 
 .SUFFIXES:
@@ -528,10 +527,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/alloca.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/basename.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/flock.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/memcmp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/waitpid.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-appendstr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-cleanup.Po@am__quote@

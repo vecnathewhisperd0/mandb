@@ -52,4 +52,4 @@ libman_a_SOURCES += \
 	flock.h \
 	gettext.h
 
-libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
+libman_a_LIBADD = $(LIBOBJS)
