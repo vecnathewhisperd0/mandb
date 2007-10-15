@@ -99,6 +99,10 @@ AC_DEFUN([gl_INIT],
   gl_STRING_MODULE_INDICATOR([strpbrk])
   gl_FUNC_STRSEP
   gl_STRING_MODULE_INDICATOR([strsep])
+  gl_HEADER_SYS_SELECT
+  AC_PROG_MKDIR_P
+  gl_HEADER_SYS_SOCKET
+  AC_PROG_MKDIR_P
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_TIME_H
@@ -223,6 +227,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strnlen.c
   lib/strpbrk.c
   lib/strsep.c
+  lib/sys_select_.h
+  lib/sys_socket_.h
   lib/sys_stat_.h
   lib/sys_time_.h
   lib/tempname.c
@@ -281,6 +287,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/regex.m4
   m4/rename.m4
   m4/setenv.m4
+  m4/sockpfaf.m4
   m4/ssize_t.m4
   m4/stdbool.m4
   m4/stdint.m4
@@ -292,6 +299,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strnlen.m4
   m4/strpbrk.m4
   m4/strsep.m4
+  m4/sys_select_h.m4
+  m4/sys_socket_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
   m4/tempname.m4

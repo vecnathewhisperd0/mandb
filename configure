@@ -856,6 +856,14 @@ WINT_T_SUFFIX
 STDINT_H
 NEXT_STDLIB_H
 NEXT_STRING_H
+NEXT_SYS_SELECT_H
+HAVE_SYS_SELECT_H
+SYS_SELECT_H
+NEXT_SYS_SOCKET_H
+HAVE_SYS_SOCKET_H
+HAVE_WINSOCK2_H
+HAVE_WS2TCPIP_H
+SYS_SOCKET_H
 HAVE_LSTAT
 HAVE_DECL_MKDIR
 HAVE_IO_H
@@ -1971,6 +1979,8 @@ gl_header_list="$gl_header_list stdint.h"
 gl_header_list="$gl_header_list wchar.h"
 gl_header_list="$gl_header_list stdlib.h"
 gl_header_list="$gl_header_list string.h"
+gl_header_list="$gl_header_list sys/select.h"
+gl_header_list="$gl_header_list sys/socket.h"
 gl_func_list="$gl_func_list lstat"
 gl_header_list="$gl_header_list sys/stat.h"
 gl_func_list="$gl_func_list iswcntrl"
@@ -10939,6 +10949,18 @@ fi
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 { echo "$as_me:$LINENO: checking whether stat file-mode macros are broken" >&5
 echo $ECHO_N "checking whether stat file-mode macros are broken... $ECHO_C" >&6; }
 if test "${ac_cv_header_stat_broken+set}" = set; then
@@ -17406,6 +17428,474 @@ done
 
 
   GNULIB_STRSEP=1
+
+
+  { echo "$as_me:$LINENO: checking whether <sys/select.h> is self-contained" >&5
+echo $ECHO_N "checking whether <sys/select.h> is self-contained... $ECHO_C" >&6; }
+if test "${gl_cv_header_sys_select_h_selfcontained+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+      cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/select.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  gl_cv_header_sys_select_h_selfcontained=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	gl_cv_header_sys_select_h_selfcontained=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_header_sys_select_h_selfcontained" >&5
+echo "${ECHO_T}$gl_cv_header_sys_select_h_selfcontained" >&6; }
+  if test $gl_cv_header_sys_select_h_selfcontained = yes; then
+    SYS_SELECT_H=''
+  else
+    SYS_SELECT_H='sys/select.h'
+
+
+
+  :
+
+
+
+
+
+
+
+     if test $gl_cv_have_include_next = yes; then
+       gl_cv_next_sys_select_h='<'sys/select.h'>'
+     else
+       { echo "$as_me:$LINENO: checking absolute name of <sys/select.h>" >&5
+echo $ECHO_N "checking absolute name of <sys/select.h>... $ECHO_C" >&6; }
+if test "${gl_cv_next_sys_select_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+	  if test $ac_cv_header_sys_select_h = yes; then
+	    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/select.h>
+
+_ACEOF
+	    	    	    	    gl_cv_next_sys_select_h='"'`(eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+	       sed -n '\#/sys/select.h#{
+		 s#.*"\(.*/sys/select.h\)".*#\1#
+		 s#^/[^/]#//&#
+		 p
+		 q
+	       }'`'"'
+	  else
+	    gl_cv_next_sys_select_h='<'sys/select.h'>'
+	  fi
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_next_sys_select_h" >&5
+echo "${ECHO_T}$gl_cv_next_sys_select_h" >&6; }
+     fi
+     NEXT_SYS_SELECT_H=$gl_cv_next_sys_select_h
+
+
+
+    if test $ac_cv_header_sys_select_h = yes; then
+      HAVE_SYS_SELECT_H=1
+    else
+      HAVE_SYS_SELECT_H=0
+    fi
+
+  fi
+
+
+  { echo "$as_me:$LINENO: checking for a thread-safe mkdir -p" >&5
+echo $ECHO_N "checking for a thread-safe mkdir -p... $ECHO_C" >&6; }
+if test -z "$MKDIR_P"; then
+  if test "${ac_cv_path_mkdir+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH$PATH_SEPARATOR/opt/sfw/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_prog in mkdir gmkdir; do
+	 for ac_exec_ext in '' $ac_executable_extensions; do
+	   { test -f "$as_dir/$ac_prog$ac_exec_ext" && $as_test_x "$as_dir/$ac_prog$ac_exec_ext"; } || continue
+	   case `"$as_dir/$ac_prog$ac_exec_ext" --version 2>&1` in #(
+	     'mkdir (GNU coreutils) '* | \
+	     'mkdir (coreutils) '* | \
+	     'mkdir (fileutils) '4.1*)
+	       ac_cv_path_mkdir=$as_dir/$ac_prog$ac_exec_ext
+	       break 3;;
+	   esac
+	 done
+       done
+done
+IFS=$as_save_IFS
+
+fi
+
+  if test "${ac_cv_path_mkdir+set}" = set; then
+    MKDIR_P="$ac_cv_path_mkdir -p"
+  else
+    # As a last resort, use the slow shell script.  Don't cache a
+    # value for MKDIR_P within a source directory, because that will
+    # break other packages using the cache if that directory is
+    # removed, or if the value is a relative name.
+    test -d ./--version && rmdir ./--version
+    MKDIR_P="$ac_install_sh -d"
+  fi
+fi
+{ echo "$as_me:$LINENO: result: $MKDIR_P" >&5
+echo "${ECHO_T}$MKDIR_P" >&6; }
+
+
+  { echo "$as_me:$LINENO: checking whether <sys/socket.h> is self-contained" >&5
+echo $ECHO_N "checking whether <sys/socket.h> is self-contained... $ECHO_C" >&6; }
+if test "${gl_cv_header_sys_socket_h_selfcontained+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+      cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/socket.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  gl_cv_header_sys_socket_h_selfcontained=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	gl_cv_header_sys_socket_h_selfcontained=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_header_sys_socket_h_selfcontained" >&5
+echo "${ECHO_T}$gl_cv_header_sys_socket_h_selfcontained" >&6; }
+  if test $gl_cv_header_sys_socket_h_selfcontained = yes; then
+    SYS_SOCKET_H=''
+  else
+    SYS_SOCKET_H='sys/socket.h'
+
+
+
+
+  :
+
+
+
+
+
+
+
+     if test $gl_cv_have_include_next = yes; then
+       gl_cv_next_sys_socket_h='<'sys/socket.h'>'
+     else
+       { echo "$as_me:$LINENO: checking absolute name of <sys/socket.h>" >&5
+echo $ECHO_N "checking absolute name of <sys/socket.h>... $ECHO_C" >&6; }
+if test "${gl_cv_next_sys_socket_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+	  if test $ac_cv_header_sys_socket_h = yes; then
+	    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/socket.h>
+
+_ACEOF
+	    	    	    	    gl_cv_next_sys_socket_h='"'`(eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+	       sed -n '\#/sys/socket.h#{
+		 s#.*"\(.*/sys/socket.h\)".*#\1#
+		 s#^/[^/]#//&#
+		 p
+		 q
+	       }'`'"'
+	  else
+	    gl_cv_next_sys_socket_h='<'sys/socket.h'>'
+	  fi
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_next_sys_socket_h" >&5
+echo "${ECHO_T}$gl_cv_next_sys_socket_h" >&6; }
+     fi
+     NEXT_SYS_SOCKET_H=$gl_cv_next_sys_socket_h
+
+
+
+    if test $ac_cv_header_sys_socket_h = yes; then
+      HAVE_SYS_SOCKET_H=1
+      HAVE_WINSOCK2_H=0
+      HAVE_WS2TCPIP_H=0
+    else
+      HAVE_SYS_SOCKET_H=0
+
+
+for ac_header in winsock2.h ws2tcpip.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  { echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+ac_res=`eval echo '${'$as_ac_Header'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+else
+  # Is the header compilable?
+{ echo "$as_me:$LINENO: checking $ac_header usability" >&5
+echo $ECHO_N "checking $ac_header usability... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_header_compiler=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6; }
+
+# Is the header present?
+{ echo "$as_me:$LINENO: checking $ac_header presence" >&5
+echo $ECHO_N "checking $ac_header presence... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <$ac_header>
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+
+rm -f conftest.err conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6; }
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
+echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
+
+    ;;
+esac
+{ echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  eval "$as_ac_Header=\$ac_header_preproc"
+fi
+ac_res=`eval echo '${'$as_ac_Header'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+
+fi
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+      if test $ac_cv_header_winsock2_h = yes; then
+        HAVE_WINSOCK2_H=1
+      else
+        HAVE_WINSOCK2_H=0
+      fi
+      if test $ac_cv_header_ws2tcpip_h = yes; then
+        HAVE_WS2TCPIP_H=1
+      else
+        HAVE_WS2TCPIP_H=0
+      fi
+    fi
+
+
+
+  fi
+
+
+  { echo "$as_me:$LINENO: checking for a thread-safe mkdir -p" >&5
+echo $ECHO_N "checking for a thread-safe mkdir -p... $ECHO_C" >&6; }
+if test -z "$MKDIR_P"; then
+  if test "${ac_cv_path_mkdir+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH$PATH_SEPARATOR/opt/sfw/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_prog in mkdir gmkdir; do
+	 for ac_exec_ext in '' $ac_executable_extensions; do
+	   { test -f "$as_dir/$ac_prog$ac_exec_ext" && $as_test_x "$as_dir/$ac_prog$ac_exec_ext"; } || continue
+	   case `"$as_dir/$ac_prog$ac_exec_ext" --version 2>&1` in #(
+	     'mkdir (GNU coreutils) '* | \
+	     'mkdir (coreutils) '* | \
+	     'mkdir (fileutils) '4.1*)
+	       ac_cv_path_mkdir=$as_dir/$ac_prog$ac_exec_ext
+	       break 3;;
+	   esac
+	 done
+       done
+done
+IFS=$as_save_IFS
+
+fi
+
+  if test "${ac_cv_path_mkdir+set}" = set; then
+    MKDIR_P="$ac_cv_path_mkdir -p"
+  else
+    # As a last resort, use the slow shell script.  Don't cache a
+    # value for MKDIR_P within a source directory, because that will
+    # break other packages using the cache if that directory is
+    # removed, or if the value is a relative name.
+    test -d ./--version && rmdir ./--version
+    MKDIR_P="$ac_install_sh -d"
+  fi
+fi
+{ echo "$as_me:$LINENO: result: $MKDIR_P" >&5
+echo "${ECHO_T}$MKDIR_P" >&6; }
 
 
 
@@ -30020,6 +30510,14 @@ WINT_T_SUFFIX!$WINT_T_SUFFIX$ac_delim
 STDINT_H!$STDINT_H$ac_delim
 NEXT_STDLIB_H!$NEXT_STDLIB_H$ac_delim
 NEXT_STRING_H!$NEXT_STRING_H$ac_delim
+NEXT_SYS_SELECT_H!$NEXT_SYS_SELECT_H$ac_delim
+HAVE_SYS_SELECT_H!$HAVE_SYS_SELECT_H$ac_delim
+SYS_SELECT_H!$SYS_SELECT_H$ac_delim
+NEXT_SYS_SOCKET_H!$NEXT_SYS_SOCKET_H$ac_delim
+HAVE_SYS_SOCKET_H!$HAVE_SYS_SOCKET_H$ac_delim
+HAVE_WINSOCK2_H!$HAVE_WINSOCK2_H$ac_delim
+HAVE_WS2TCPIP_H!$HAVE_WS2TCPIP_H$ac_delim
+SYS_SOCKET_H!$SYS_SOCKET_H$ac_delim
 HAVE_LSTAT!$HAVE_LSTAT$ac_delim
 HAVE_DECL_MKDIR!$HAVE_DECL_MKDIR$ac_delim
 HAVE_IO_H!$HAVE_IO_H$ac_delim
@@ -30063,14 +30561,6 @@ LTLIBICONV!$LTLIBICONV$ac_delim
 INTLBISON!$INTLBISON$ac_delim
 INTL_MACOSX_LIBS!$INTL_MACOSX_LIBS$ac_delim
 HAVE_POSIX_PRINTF!$HAVE_POSIX_PRINTF$ac_delim
-HAVE_ASPRINTF!$HAVE_ASPRINTF$ac_delim
-HAVE_SNPRINTF!$HAVE_SNPRINTF$ac_delim
-HAVE_WPRINTF!$HAVE_WPRINTF$ac_delim
-WOE32DLL!$WOE32DLL$ac_delim
-BUILD_INCLUDED_LIBINTL!$BUILD_INCLUDED_LIBINTL$ac_delim
-USE_INCLUDED_LIBINTL!$USE_INCLUDED_LIBINTL$ac_delim
-CATOBJEXT!$CATOBJEXT$ac_delim
-DATADIRNAME!$DATADIRNAME$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -30112,6 +30602,14 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+HAVE_ASPRINTF!$HAVE_ASPRINTF$ac_delim
+HAVE_SNPRINTF!$HAVE_SNPRINTF$ac_delim
+HAVE_WPRINTF!$HAVE_WPRINTF$ac_delim
+WOE32DLL!$WOE32DLL$ac_delim
+BUILD_INCLUDED_LIBINTL!$BUILD_INCLUDED_LIBINTL$ac_delim
+USE_INCLUDED_LIBINTL!$USE_INCLUDED_LIBINTL$ac_delim
+CATOBJEXT!$CATOBJEXT$ac_delim
+DATADIRNAME!$DATADIRNAME$ac_delim
 INSTOBJEXT!$INSTOBJEXT$ac_delim
 GENCAT!$GENCAT$ac_delim
 INTLOBJS!$INTLOBJS$ac_delim
@@ -30144,7 +30642,7 @@ gl_LIBOBJS!$gl_LIBOBJS$ac_delim
 gl_LTLIBOBJS!$gl_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 30; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 38; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
