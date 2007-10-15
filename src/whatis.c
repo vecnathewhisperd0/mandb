@@ -60,9 +60,9 @@
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include <fnmatch.h>
-
 #include <getopt.h>
+
+#include "fnmatch.h"
 
 #include "manconfig.h"
 

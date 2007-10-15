@@ -31,9 +31,10 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <glob.h>
-#include <fnmatch.h>
 #include <sys/types.h>
 #include <dirent.h>
+
+#include "fnmatch.h"
 
 #include "manconfig.h"
 

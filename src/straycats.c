@@ -63,7 +63,7 @@
 #  include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
-#include <canonicalize.h>
+#include "canonicalize.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
