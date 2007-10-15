@@ -49,10 +49,7 @@
 #if defined(HAVE_UNISTD_H)
 #  include <unistd.h>
 #else
-extern pid_t vfork();
 #  define R_OK		4
-#  define STDOUT_FILENO	1
-#  define STDIN_FILENO	0
 #endif /* HAVE_UNISTD_H */
 
 #if defined(HAVE_LIMITS_H)
