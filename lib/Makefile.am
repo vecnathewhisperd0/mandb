@@ -28,7 +28,6 @@ libman_a_CPPFLAGS = \
 	-I$(top_builddir)/gnulib/lib
 
 libman_a_SOURCES = \
-	ansidecl.h \
 	appendstr.c \
 	cleanup.c \
 	cleanup.h \
