@@ -861,6 +861,7 @@ AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
 m4_include([gnulib/m4/alloca.m4])
+m4_include([gnulib/m4/atexit.m4])
 m4_include([gnulib/m4/canonicalize.m4])
 m4_include([gnulib/m4/cycle-check.m4])
 m4_include([gnulib/m4/d-ino.m4])

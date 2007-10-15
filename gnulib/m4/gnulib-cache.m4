@@ -15,11 +15,11 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gnulib/lib --m4-base=gnulib/m4 --doc-base=doc --aux-dir=tools --no-libtool --macro-prefix=gl canonicalize error fnmatch-gnu getopt glob memcmp mkdtemp mkstemp rename setenv strcspn strsep xalloc xgetcwd xstrndup
+#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gnulib/lib --m4-base=gnulib/m4 --doc-base=doc --aux-dir=tools --no-libtool --macro-prefix=gl atexit canonicalize error fnmatch-gnu getopt glob memcmp mkdtemp mkstemp rename setenv strcspn strsep xalloc xgetcwd xstrndup
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
-gl_MODULES([canonicalize error fnmatch-gnu getopt glob memcmp mkdtemp mkstemp rename setenv strcspn strsep xalloc xgetcwd xstrndup])
+gl_MODULES([atexit canonicalize error fnmatch-gnu getopt glob memcmp mkdtemp mkstemp rename setenv strcspn strsep xalloc xgetcwd xstrndup])
 gl_AVOID([])
 gl_SOURCE_BASE([gnulib/lib])
 gl_M4_BASE([gnulib/m4])

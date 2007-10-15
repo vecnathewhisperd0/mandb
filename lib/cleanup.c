@@ -35,16 +35,6 @@
 #include "cleanup.h"
 
 
-#ifndef HAVE_ATEXIT
-#  ifdef HAVE_ON_EXIT
-#    define atexit(fun) (on_exit ((void (*)())fun, NULL))
-#  else
-#    error need either atexit() or on_exit()
-/* If necessary we could dummify the whole module in this case */
-#  endif
-#endif
-
-
 
 /* Dealing with signals */
 

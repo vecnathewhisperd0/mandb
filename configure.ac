@@ -449,7 +449,6 @@ dnl
 dnl Check for available functions.
 dnl
 AC_CHECK_FUNCS(getcwd, break)
-AC_CHECK_FUNCS(atexit on_exit, break)
 AC_CHECK_FUNCS(seteuid setreuid setresuid strerror)
 AC_CHECK_FUNCS(setlocale)
 dnl

@@ -41,6 +41,7 @@ AC_DEFUN([gl_INIT],
   gl_ltlibdeps=
   gl_source_base='gnulib/lib'
   gl_FUNC_ALLOCA
+  gl_FUNC_ATEXIT
   AC_FUNC_CANONICALIZE_FILE_NAME
   gl_MODULE_INDICATOR([canonicalize])
   gl_CYCLE_CHECK
@@ -152,6 +153,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/alloca_.h
   lib/areadlink-with-size.c
   lib/areadlink.h
+  lib/atexit.c
   lib/basename.c
   lib/canonicalize.c
   lib/canonicalize.h
@@ -224,6 +226,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xstrndup.h
   m4/absolute-header.m4
   m4/alloca.m4
+  m4/atexit.m4
   m4/canonicalize.m4
   m4/cycle-check.m4
   m4/d-ino.m4
