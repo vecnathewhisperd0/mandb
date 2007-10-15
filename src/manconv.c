@@ -162,17 +162,17 @@ static char *check_preprocessor_encoding (pipeline *p)
 		while (*pp_search == ' ')
 			++pp_search;
 		if (STRNEQ (pp_search, "coding:", 7)) {
-			const char *pp_encoding_end;
+			const char *pp_encoding_allow;
+			size_t pp_encoding_len;
 			pp_search += 7;
 			while (*pp_search == ' ')
 				++pp_search;
-			pp_encoding_end = strchr (pp_search, ' ');
-			if (pp_encoding_end)
-				pp_encoding = xstrndup
-					(pp_search,
-					 pp_encoding_end - pp_search);
-			else
-				pp_encoding = xstrdup (pp_search);
+			pp_encoding_allow = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+					    "abcdefghijklmnopqrstuvwxyz"
+					    "0123456789-_/:.()";
+			pp_encoding_len = strspn (pp_search,
+						  pp_encoding_allow);
+			pp_encoding = xstrndup (pp_search, pp_encoding_len);
 			debug ("preprocessor encoding: %s\n", pp_encoding);
 		}
 	}
@@ -194,7 +194,8 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 
 	cd = iconv_open (to_code, try_from_code);
 	if (cd == (iconv_t) -1) {
-		error (0, errno, "iconv_open");
+		error (0, errno, "iconv_open (\"%s\", \"%s\")",
+		       to_code, try_from_code);
 		return -1;
 	}
 

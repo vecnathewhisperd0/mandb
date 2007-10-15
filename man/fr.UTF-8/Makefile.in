@@ -801,13 +801,13 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 
 
 .man1.1:
-	mkdir -p man1
+	$(MKDIR_P) man1
 	sed $(SED_ARGS) $< > $@
 .man5.5:
-	mkdir -p man5
+	$(MKDIR_P) man5
 	sed $(SED_ARGS) $< > $@
 .man8.8:
-	mkdir -p man8
+	$(MKDIR_P) man8
 	sed $(SED_ARGS) $< > $@
 
 install-data-local:

@@ -1,3 +1,23 @@
+Mon Oct 15 10:15:48 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* docs/NEWS: Document previous change.
+
+Mon Oct 15 10:13:57 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* src/manconv.c (check_preprocessor_encoding): Allow only
+	  alphanumerics and "-_/:.()" in encoding names (Debian bug
+	  #446055). This matches everything in 'iconv --list' on my system.
+	  (try_iconv): Include encoding names in error message if iconv_open
+	  fails.
+
+Mon Oct 15 10:06:51 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* man/Rules.man (.man1.1, .man5.5, .man8.8): Use $(MKDIR_P) rather
+	  than hardcoding mkdir -p.
+	* man/Makefile.in, man/de.UTF-8/Makefile.in,
+	  man/es.UTF-8/Makefile.in, man/fr.UTF-8/Makefile.in,
+	  man/it.UTF-8/Makefile.in, man/ja.UTF-8/Makefile.in: Regenerate.
+
 Sun Oct 14 02:39:43 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/Makefile.am (AM_CPPFLAGS): Fix SOELIM definition.
