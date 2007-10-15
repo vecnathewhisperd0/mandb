@@ -313,7 +313,7 @@ gl_INIT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(unistd.h memory.h fcntl.h limits.h sys/file.h regex.h libgen.h)
+AC_CHECK_HEADERS(unistd.h memory.h fcntl.h limits.h sys/file.h libgen.h)
 dnl
 dnl Internationalization support.
 dnl
@@ -451,13 +451,6 @@ dnl
 AC_CHECK_FUNCS(getcwd, break)
 AC_CHECK_FUNCS(seteuid setreuid setresuid strerror)
 AC_CHECK_FUNCS(setlocale)
-dnl
-dnl I think it's reasonable to assume that the system has the following 
-dnl headers if the (POSIXy) functions exist.
-dnl 
-AC_CHECK_FUNC(regcomp, [AC_DEFINE(POSIX_REGEX, 1, [Define if you have the regcomp and regexec POSIX regex routines.])],
-  [AC_CHECK_FUNC(re_comp, [AC_DEFINE(BSD_REGEX, 1, [Define if you have the re_comp and re_exec BSD regex routines.])],
-    [AC_MSG_WARN(no regex routines found, whatis/apropos will ignore -r)])])
 AC_REPLACE_FUNCS(flock basename waitpid)
 dnl
 dnl MAN_ECHO_VAR(ENV-VARIABLE)

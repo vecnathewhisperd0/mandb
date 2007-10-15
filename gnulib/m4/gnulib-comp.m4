@@ -65,6 +65,8 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_GETTIMEOFDAY
   gl_GLOB
   gl_INLINE
+  gl_LOCALCHARSET
+  AC_FUNC_MALLOC
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
   gl_MALLOCA
@@ -77,6 +79,7 @@ AC_DEFUN([gl_INIT],
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
   gl_FUNC_READLINK
   gl_UNISTD_MODULE_INDICATOR([readlink])
+  gl_REGEX
   gl_FUNC_RENAME
   gl_FUNC_SETENV
   gl_FUNC_UNSETENV
@@ -157,6 +160,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/basename.c
   lib/canonicalize.c
   lib/canonicalize.h
+  lib/config.charset
   lib/cycle-check.c
   lib/cycle-check.h
   lib/dev-ino.h
@@ -184,6 +188,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/glob-libc.h
   lib/glob.c
   lib/glob_.h
+  lib/localcharset.c
+  lib/localcharset.h
   lib/malloc.c
   lib/malloca.c
   lib/malloca.h
@@ -194,6 +200,14 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mkstemp.c
   lib/pathmax.h
   lib/readlink.c
+  lib/ref-add.sin
+  lib/ref-del.sin
+  lib/regcomp.c
+  lib/regex.c
+  lib/regex.h
+  lib/regex_internal.c
+  lib/regex_internal.h
+  lib/regexec.c
   lib/rename.c
   lib/same-inode.h
   lib/setenv.c
@@ -228,6 +242,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/alloca.m4
   m4/atexit.m4
   m4/canonicalize.m4
+  m4/codeset.m4
   m4/cycle-check.m4
   m4/d-ino.m4
   m4/d-type.m4
@@ -247,10 +262,12 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/getlogin_r.m4
   m4/getopt.m4
   m4/gettimeofday.m4
+  m4/glibc21.m4
   m4/glob.m4
   m4/gnulib-common.m4
   m4/include_next.m4
   m4/inline.m4
+  m4/localcharset.m4
   m4/longlong.m4
   m4/malloc.m4
   m4/malloca.m4
@@ -261,6 +278,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mkstemp.m4
   m4/onceonly_2_57.m4
   m4/readlink.m4
+  m4/regex.m4
   m4/rename.m4
   m4/setenv.m4
   m4/ssize_t.m4
