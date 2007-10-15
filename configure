@@ -6642,8 +6642,8 @@ fi
 
 # Check whether --enable-mandirs was given.
 if test "${enable_mandirs+set}" = set; then
-  enableval=$enable_mandirs; { echo "$as_me:$LINENO: Using hierarchy organization(s) $enableval" >&5
-echo "$as_me: Using hierarchy organization(s) $enableval" >&6;}
+  enableval=$enable_mandirs; { echo "$as_me:$LINENO: Using $enableval hierarchy organization(s)" >&5
+echo "$as_me: Using $enableval hierarchy organization(s)" >&6;}
 
 cat >>confdefs.h <<_ACEOF
 #define MANDIR_LAYOUT "$enableval"
@@ -6659,8 +6659,8 @@ else
 		*)              mandirs=;;
 	 esac
 	 if test -n "$mandirs"; then
-		{ echo "$as_me:$LINENO: Using hierarchy organization $mandirs" >&5
-echo "$as_me: Using hierarchy organization $mandirs" >&6;}
+		{ echo "$as_me:$LINENO: Using $mandirs hierarchy organization" >&5
+echo "$as_me: Using $mandirs hierarchy organization" >&6;}
 		cat >>confdefs.h <<_ACEOF
 #define MANDIR_LAYOUT "$mandirs"
 _ACEOF

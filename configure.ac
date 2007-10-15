@@ -285,7 +285,7 @@ dnl Work out which manual page hierarchy scheme might be in use.
 dnl
 AC_ARG_ENABLE(mandirs,
 [AS_HELP_STRING([--enable-mandirs=OS], [select manual page hierarchy organization (GNU, HPUX, IRIX, Solaris, BSD)])],
-	[AC_MSG_NOTICE([Using hierarchy organization(s) $enableval])
+	[AC_MSG_NOTICE([Using $enableval hierarchy organization(s)])
 	 AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$enableval",
 			    [Define to the manual page hierarchy organization(s) in use.])],
 	[case $host in
@@ -297,7 +297,7 @@ AC_ARG_ENABLE(mandirs,
 		*)              mandirs=;;
 	 esac
 	 if test -n "$mandirs"; then
-		AC_MSG_NOTICE([Using hierarchy organization $mandirs])
+		AC_MSG_NOTICE([Using $mandirs hierarchy organization])
 		AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$mandirs")
 	 else
 		AC_MSG_NOTICE([Allowing any hierarchy organization])
