@@ -70,9 +70,7 @@
 #  endif /* _POSIX_VERSION */
 #endif /* !ARG_MAX */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -382,7 +380,7 @@ int main (int argc, char *argv[])
 	char **mp;
 	const char **sections, **sp;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	/* initialise the locale */
 	locale = xstrdup (setlocale (LC_ALL, ""));

@@ -91,9 +91,7 @@ static char *cwd;
 #  include <sys/wait.h>
 #endif
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -635,15 +633,14 @@ static int local_man_loop (const char *argv)
 		}
 
 		if (exit_status == OK) {
-			char *argv_copy = xstrdup (argv);
+			char *argv_base = base_name (argv);
 			lang = lang_dir (argv);
-			if (!display (NULL, argv, NULL, basename (argv_copy),
-				      NULL)) {
+			if (!display (NULL, argv, NULL, argv_base, NULL)) {
 				if (local_mf)
 					error (0, errno, "%s", argv);
 				exit_status = NOT_FOUND;
 			}
-			free (argv_copy);
+			free (argv_base);
 		}
 	}
 	local_man_file = local_mf;
@@ -664,7 +661,7 @@ int main (int argc, char *argv[])
 	const char *tmp;
 	char *multiple_locale = NULL;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	umask (022);
 	/* initialise the locale */
@@ -1920,7 +1917,7 @@ static void format_display (pipeline *decomp,
 
 #ifdef TROFF_IS_GROFF
 	if (format_cmd && htmlout) {
-		char *man_file_copy, *man_base, *man_ext;
+		char *man_base, *man_ext;
 
 		old_cwd = xgetcwd ();
 		if (!old_cwd) {
@@ -1931,14 +1928,13 @@ static void format_display (pipeline *decomp,
 		if (chdir (htmldir) == -1)
 			error (FATAL, errno, _("can't change to directory %s"),
 			       htmldir);
-		man_file_copy = xstrdup (man_file);
-		man_base = basename (man_file_copy);
+		man_base = base_name (man_file);
 		man_ext = strchr (man_base, '.');
 		if (man_ext)
 			*man_ext = '\0';
 		htmlfile = xstrdup (htmldir);
 		htmlfile = appendstr (htmlfile, "/", man_base, ".html", NULL);
-		free (man_file_copy);
+		free (man_base);
 		format_cmd->want_out = open (htmlfile,
 					     O_CREAT | O_EXCL | O_WRONLY,
 					     0644);

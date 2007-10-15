@@ -58,9 +58,7 @@
 #  include <unistd.h>
 #endif /* HAVE_UNISTD_H */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -117,7 +115,7 @@ static void gripe_rwopen_failed (void)
  */
 void test_manfile (const char *file, const char *path)
 {
-	char *base_name;
+	char *manpage_base;
 	const char *ult;
 	struct lexgrog lg;
 	char *manpage;
@@ -131,7 +129,7 @@ void test_manfile (const char *file, const char *path)
 	manpage = filename_info (file, &info, NULL);
 	if (!manpage)
 		return;
-	base_name = manpage + strlen (manpage) + 1;
+	manpage_base = manpage + strlen (manpage) + 1;
 
 	len  = strlen (manpage) + 1;		/* skip over directory name */
 	len += strlen (manpage + len) + 1;	/* skip over base name */
@@ -152,7 +150,7 @@ void test_manfile (const char *file, const char *path)
 	 * save both an ult_src() and a find_name(), amongst other wastes of
 	 * time.
 	 */
-	exists = dblookup_exact (base_name, info.ext, 1);
+	exists = dblookup_exact (manpage_base, info.ext, 1);
 
 	/* Ensure we really have the actual page. Gzip keeps the mtime the
 	 * same when it compresses, so we have to compare compression
@@ -178,10 +176,11 @@ void test_manfile (const char *file, const char *path)
 			debug ("test_manfile(): stat %s\n", abs_filename);
 			if (stat (abs_filename, &physical) == -1) {
 				if (!opt_test)
-					dbdelete (base_name, exists);
+					dbdelete (manpage_base, exists);
 			} else {
 				gripe_multi_extensions (path, exists->sec,
-							base_name, exists->ext);
+							manpage_base,
+							exists->ext);
 				free_mandata_struct (exists);
 				free (manpage);
 				return;
@@ -253,12 +252,12 @@ void test_manfile (const char *file, const char *path)
 
 	if (!lg.whatis) {	/* cache miss */
 		/* go get the whatis info in its raw state */
-		char *file_copy = xstrdup (file);
+		char *file_base = base_name (file);
 
 		lg.type = MANPAGE;
 		drop_effective_privs ();
-		find_name (ult, basename (file_copy), &lg, NULL);
-		free (file_copy);
+		find_name (ult, file_base, &lg, NULL);
+		free (file_base);
 		regain_effective_privs ();
 
 		hash_install (whatis_hash, ult, strlen (ult),
@@ -272,10 +271,11 @@ void test_manfile (const char *file, const char *path)
 	info.filter = lg.filters;
 	if (lg.whatis) {
 		struct page_description *descs =
-			parse_descriptions (base_name, lg.whatis);
+			parse_descriptions (manpage_base, lg.whatis);
 		if (descs) {
 			if (!opt_test)
-				store_descriptions (descs, &info, base_name);
+				store_descriptions (descs, &info,
+						    manpage_base);
 			free_descriptions (descs);
 		}
 	} else if (quiet < 2) {
@@ -286,7 +286,7 @@ void test_manfile (const char *file, const char *path)
 		else
 			error (0, 0,
 			       _("warning: %s: whatis parse for %s(%s) failed"),
-			       ult, base_name, info.ext);
+			       ult, manpage_base, info.ext);
 	}
 
 	free (manpage);
@@ -477,14 +477,13 @@ void reset_db_time (void)
  */
 int make_database_directory (const char *db)
 {
-	char *dbcopy, *dbdir;
+	char *dbdir;
 	struct stat st;
 
 	if (!strchr (db, '/'))
 		return 0;
 
-	dbcopy = xstrdup (db);
-	dbdir = dirname (dbcopy);
+	dbdir = dir_name (db);
 	if (stat (dbdir, &st) == 0)
 		goto success;
 	if (errno != ENOENT)
@@ -495,7 +494,7 @@ int make_database_directory (const char *db)
 		return 1;
 	}
 success:
-	free (dbcopy);
+	free (dbdir);
 	return 0;
 }
 

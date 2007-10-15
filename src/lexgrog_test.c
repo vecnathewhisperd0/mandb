@@ -31,9 +31,7 @@
 
 #include <sys/stat.h>
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -90,7 +88,7 @@ int main (int argc, char **argv)
 	const char *encoding = NULL;
 	int some_failed = 0;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, NULL)) != -1) {

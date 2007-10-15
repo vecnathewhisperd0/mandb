@@ -33,9 +33,7 @@
 
 #include "config.h"
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include "gettext.h"
 #include <locale.h>
@@ -80,7 +78,7 @@ int main (int argc, char **argv)
 	textdomain (PACKAGE);
 
 	/* this wrapper can be run as "man" or as "mandb" */
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	ruid = getuid ();
 	fakeroot = getenv ("FAKEROOTKEY");

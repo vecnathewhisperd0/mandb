@@ -44,9 +44,7 @@
 #  include <sys/param.h>
 #endif
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -110,7 +108,7 @@ int main (int argc, char *argv[])
 	const char *alt_system = "";
 	char *path_string;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, ""))
 		/* Obviously can't translate this. */

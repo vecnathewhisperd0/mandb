@@ -54,12 +54,9 @@
 #include <sys/types.h>
 #include "regex.h"
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
-
 #include <getopt.h>
 
+#include "dirname.h"
 #include "fnmatch.h"
 
 #include "manconfig.h"
@@ -685,7 +682,7 @@ int main (int argc, char *argv[])
 #endif
 	int status = OK;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 	if (STREQ (program_name, APROPOS_NAME))
 		am_apropos = 1;
 	else

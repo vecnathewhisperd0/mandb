@@ -52,9 +52,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #define STATIC_VER	/* zsoelim has a static ver() */
 
@@ -348,7 +346,7 @@ int main (int argc, char *argv[])
 {
 	int c;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, NULL)) != EOF) {

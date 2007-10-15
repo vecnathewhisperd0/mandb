@@ -48,9 +48,7 @@
 #  include <pwd.h>
 #endif /* SECURE_MAN_UID */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -510,7 +508,7 @@ int main (int argc, char *argv[])
 	char *cwd;
 #endif /* __profile__ */
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, ""))

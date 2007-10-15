@@ -313,7 +313,7 @@ gl_INIT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(unistd.h memory.h fcntl.h limits.h sys/file.h libgen.h)
+AC_CHECK_HEADERS(unistd.h memory.h fcntl.h limits.h sys/file.h)
 dnl
 dnl Internationalization support.
 dnl
@@ -451,7 +451,7 @@ dnl
 AC_CHECK_FUNCS(getcwd, break)
 AC_CHECK_FUNCS(seteuid setreuid setresuid strerror)
 AC_CHECK_FUNCS(setlocale)
-AC_REPLACE_FUNCS(flock basename waitpid)
+AC_REPLACE_FUNCS(flock waitpid)
 dnl
 dnl MAN_ECHO_VAR(ENV-VARIABLE)
 define(MAN_ECHO_VAR, [AC_MSG_NOTICE([default $1 = "$$1"])])dnl

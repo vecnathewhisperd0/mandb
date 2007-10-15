@@ -59,11 +59,8 @@
 #  include <fcntl.h>
 #endif /* HAVE_FCNTL_H */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
-
 #include "canonicalize.h"
+#include "dirname.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -183,8 +180,7 @@ static int check_for_stray (void)
 			struct mandata *exists;
 			lexgrog lg;
 			char *lang, *page_encoding;
-			char *mandir_copy;
-			const char *mandir_base;
+			char *mandir_base;
 			command *col_cmd;
 			char *fullpath;
 
@@ -197,8 +193,7 @@ static int check_for_stray (void)
 
 			/* see if we already have it, before going any 
 			   further */
-			mandir_copy = xstrdup (mandir);
-			mandir_base = basename (mandir_copy);
+			mandir_base = base_name (mandir);
 			exists = dblookup_exact (mandir_base, info.ext, 1);
 #ifndef FAVOUR_STRAYCATS
 			if (exists && exists->id != WHATIS_CAT)
@@ -249,8 +244,7 @@ static int check_for_stray (void)
 						       catdir);
 				}
 			} else {
-				char *catdir_copy;
-				const char *catdir_base;
+				char *catdir_base;
 
 				free (fullpath);
 				drop_effective_privs ();
@@ -260,8 +254,7 @@ static int check_for_stray (void)
 				strays++;
 
 				lg.type = CATPAGE;
-				catdir_copy = xstrdup (catdir);
-				catdir_base = basename (catdir_copy);
+				catdir_base = base_name (catdir);
 				if (find_name_decompressed (decomp,
 							    catdir_base,
 							    &lg)) {
@@ -278,8 +271,7 @@ static int check_for_stray (void)
 				} else if (quiet < 2)
 					error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
 					       catdir, mandir_base, info.sec);
-				free (catdir_copy);
-
+				free (catdir_base);
 			}
 
 			if (lg.whatis)
@@ -287,7 +279,7 @@ static int check_for_stray (void)
 			pipeline_free (decomp);
 next_exists:
 			free_mandata_struct (exists);
-			free (mandir_copy);
+			free (mandir_base);
 		}
 next_section:
 		free (section);

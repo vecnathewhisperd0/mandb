@@ -46,9 +46,7 @@
 #  include <iconv.h>
 #endif /* HAVE_ICONV */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -303,7 +301,7 @@ int main (int argc, char *argv[])
 	char *pp_encoding;
 	char **try_from_code;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	if (!setlocale (LC_ALL, ""))
 		/* Obviously can't translate this. */

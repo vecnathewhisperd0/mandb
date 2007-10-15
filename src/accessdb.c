@@ -32,9 +32,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -80,7 +78,7 @@ int main (int argc, char *argv[])
 	int c;
 	datum key;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 	if (is_directory (FHS_CAT_ROOT) == 1)
 		cat_root = FHS_CAT_ROOT;
 	else if (is_directory (CAT_ROOT) == 1)

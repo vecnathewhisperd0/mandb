@@ -29,10 +29,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
-
 #include "gettext.h"
 #define _(String) gettext (String)
 
