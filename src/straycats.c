@@ -32,13 +32,9 @@
 #include <stdio.h>
 #include <signal.h>
 #include <errno.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #ifdef HAVE_DIRENT_H
 #  include <dirent.h>

@@ -33,10 +33,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <termios.h>
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #if defined(HAVE_LIMITS_H)
 #  include <limits.h>

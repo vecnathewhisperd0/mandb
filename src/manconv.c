@@ -37,10 +37,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #ifdef HAVE_ICONV
 #  include <iconv.h>

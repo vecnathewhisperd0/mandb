@@ -32,11 +32,7 @@
 #include <signal.h>
 #include <string.h>
 #include <stdlib.h>
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

@@ -54,9 +54,7 @@
 #  endif /* HAVE_NDIR_H */
 #endif /* HAVE_DIRENT_H  */
 
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #include "dirname.h"
 

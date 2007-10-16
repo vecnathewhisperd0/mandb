@@ -40,9 +40,7 @@
 #  include <sys/wait.h>
 #endif /* HAVE_SYS_WAIT_H */
 
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #if defined(HAVE_LIMITS_H) && defined(_POSIX_VERSION)
 #  include <limits.h>  

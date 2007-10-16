@@ -45,12 +45,12 @@
 #include <assert.h>
 #include <errno.h>
 #include <termios.h>
+#include <unistd.h>
 
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#else
+#ifndef R_OK
 #  define R_OK		4
-#endif /* HAVE_UNISTD_H */
+#  define X_OK		1
+#endif /* !R_OK */
 
 #if defined(HAVE_LIMITS_H)
 #  include <limits.h>

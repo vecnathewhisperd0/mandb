@@ -61,9 +61,7 @@
 #  endif /* HAVE_NDIR_H */
 #endif /* HAVE_DIRENT_H  */
 
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #include "canonicalize.h"
 

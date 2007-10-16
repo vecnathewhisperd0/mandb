@@ -53,13 +53,9 @@
 #include <assert.h>
 #include <errno.h>
 #include <dirent.h>
-
 #include <stdlib.h>
 #include <string.h>
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #include <xgetcwd.h>
 

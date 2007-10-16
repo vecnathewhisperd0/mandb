@@ -27,9 +27,7 @@
 #include <stdio.h>		/* SunOS's loosing assert.h needs it */
 #include <assert.h>
 #include <signal.h>
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif
+#include <unistd.h>
 
 #include "manconfig.h"		/* for FATAL */
 #include "cleanup.h"

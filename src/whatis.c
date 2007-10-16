@@ -38,10 +38,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
-
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #include "gettext.h"
 #include <locale.h>

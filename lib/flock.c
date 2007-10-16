@@ -27,9 +27,7 @@ Cambridge, MA 02139, USA.  */
 #include "flock.h"
 #include <errno.h>
 
-#if HAVE_UNISTD_H
-#  include <unistd.h>
-#endif
+#include <unistd.h>
 #if HAVE_FCNTL_H
 #  include <fcntl.h>
 #endif

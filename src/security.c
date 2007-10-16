@@ -59,19 +59,17 @@
     * they live in are writeable by this user.
     */
 
-#  ifdef HAVE_UNISTD_H
-#    include <unistd.h> 			/* for _POSIX_SAVED_IDS */
-#    if defined(_POSIX_SAVED_IDS)
-#      if defined(__ultrix__)
-         /* Ultrix pretends to have saved uids, but hasn't unless: */
-#        if defined(POSIX) || defined(SYSTEM_FIVE)
-#          define POSIX_SAVED_IDS
-#        endif /* POSIX || SYSTEM_FIVE */
-#      else /* !ultrix */
+#  include <unistd.h> 			/* for _POSIX_SAVED_IDS */
+#  if defined(_POSIX_SAVED_IDS)
+#    if defined(__ultrix__)
+       /* Ultrix pretends to have saved uids, but hasn't unless: */
+#      if defined(POSIX) || defined(SYSTEM_FIVE)
 #        define POSIX_SAVED_IDS
-#      endif /* ultrix */
-#    endif /* _POSIX_SAVED_IDS */
-#  endif /* HAVE_UNISTD_H */
+#      endif /* POSIX || SYSTEM_FIVE */
+#    else /* !ultrix */
+#      define POSIX_SAVED_IDS
+#    endif /* ultrix */
+#  endif /* _POSIX_SAVED_IDS */
 
 /* Sort out the function to use to set the euid.  Used if we have suid */
   

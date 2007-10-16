@@ -37,12 +37,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>	/* for chmod() */
 #include <dirent.h>
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#else
-#  define W_OK	2
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #ifdef SECURE_MAN_UID
 #  include <pwd.h>

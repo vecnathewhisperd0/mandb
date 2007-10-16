@@ -31,10 +31,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)
