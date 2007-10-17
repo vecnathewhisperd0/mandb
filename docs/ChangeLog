@@ -1,3 +1,132 @@
+Wed Oct 17 21:05:50 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Use the Gnulib portability library.
+
+	* lib/alloca.c, lib/basename.c, lib/error.c, lib/error.h,
+	  lib/fnmatch.c, lib/fnmatch_.h, lib/getcwdalloc.c,
+	  lib/getcwdalloc.h, lib/getopt.c, lib/getopt1.c, lib/getopt_.h,
+	  lib/glob.c, lib/glob_.h, lib/memcmp.c, lib/mkdtemp.c,
+	  lib/mkstemp.c, lib/putenv.c, lib/realpath.c, lib/rename.c,
+	  lib/setenv.c, lib/setenv.h, lib/strcspn.c, lib/strnlen.c,
+	  lib/strsep.c, lib/tempname.c, lib/unsetenv.c, lib/xmalloc.c,
+	  lib/xstrdup.c, lib/xstrndup.c, m4/man-fnmatch.m4, m4/setenv.m4,
+	  m4/tempname.m4: Remove.
+	* gnulib/*, tools/link-warning.h: Import atexit, canonicalize,
+	  dirname, error, fnmatch-gnu, getopt, glob, memcmp, mkdtemp,
+	  mkstemp, regex, rename, setenv, strcspn, strsep, sys_select,
+	  xalloc, xgetcwd, and xstrndup modules.
+	* .bzrignore: Update.
+	* Makefile.am (SUBDIRS): Build gnulib/lib.
+	  (ACLOCAL_AMFLAGS): Add -I gnulib/m4.
+	* autogen.sh: Add gnulib-tool --update.
+	* configure.ac: Call gl_EARLY and gl_INIT.
+	  Remove calls to AC_AIX and AC_MINIX.
+	  Stop checking for unistd.h, regex.h, libgen.h, string.h, and
+	  strings.h headers.
+	  Stop checking for alloca, memcmp, strcoll, vprintf, getwd, atexit,
+	  on_exit, canonicalize_file_name, regcomp, re_comp, globfree,
+	  getopt_long, putenv, realpath, rename, basename, strsep, strcspn,
+	  strnlen, mkdtemp, mkstemp, setenv, and __gen_tempname functions.
+	  Generate gnulib/lib/Makefile.
+	* docs/HACKING: Document policy on generated files in revision
+	  control.
+	* include/manconfig.h.in: Replace xmalloc, xrealloc, xstrdup, and
+	  xstrndup declarations with inclusions of xalloc.h and xstrndup.h.
+	  Stop defining basename, strsep, and getcwd.
+	* lib/Makefile.am (libman_a_CPPFLAGS): Include headers from
+	  gnulib/lib.
+	  (libman_a_SOURCES): Remove error.c, error.h, getcwdalloc.c,
+	  getcwdalloc.h, setenv.h, xmalloc.c, xstrdup.c, and xstrndup.c.
+	  (libman_a_LIBADD): Remove $(ALLOCA).
+	  (BUILT_SOURCES, MOSTLYCLEANFILES, EXTRA_DIST, fnmatch.h, getopt.h,
+	  glob.h): Remove; replaced by Gnulib.
+	* lib/README: Alphabetise, update file list, and update authors.
+	* libdb/Makefile.am (libmandb_a_CPPFLAGS): Include headers from
+	  gnulib/lib.
+	* src/Makefile.am (AM_CPPFLAGS): Include headers from gnulib/lib.
+	  (LIBMAN): Link with gnulib/lib/libgnu.a.
+
+	* lib/cleanup.c: Assume <unistd.h> and atexit.
+	* lib/decompress.c, lib/flock.c: Assume <unistd.h>.
+	* lib/pathsearch.c: Assume <unistd.h>.
+	  (pathsearch): Use xgetcwd.
+	* lib/pipeline.c: Assume <sys/select.h> and <unistd.h>. Remove
+	  duplicate <fcntl.h> inclusion.
+	  (command_new): Use base_name.
+	* lib/tempfile.c, lib/xstrsignal.h: Assume <unistd.h>.
+	* libdb/db_btree.c: Assume <unistd.h>.
+	* libdb/db_btree.c, libdb/db_lookup.c: Assume <unistd.h> and strsep.
+	* libdb/db_ndbm.c: Assume <unistd.h>.
+	* libdb/db_store.c: Assume <unistd.h> and strsep.
+	* src/accessdb.c (main): Use base_name.
+	* src/catman.c: Assume <unistd.h>.
+	  (main): Use base_name.
+	* src/check_mandirs.c: Assume <unistd.h>, strpbrk, and time.
+	  (test_manfile): Use base_name. Rename existing base_name variable
+	  to manpage_base.
+	  (reset_db_time): Use dir_name.
+	* src/compression.c, src/convert_name.c: Assume <unistd.h>.
+	* src/filenames.c: Remove unused <libgen.h> inclusion.
+	* src/globbing_test.c (main): Use base_name.
+	* src/lexgrog.l, src/lexgrog.l-2.3.8, src/lexgrog.l-2.4a,
+	  src/lexgrog.l.new: Assume <unistd.h>.
+	* src/lexgrog_test.c (main): Use base_name.
+	* src/man.c: Assume <unistd.h>.
+	  (gripe_no_man): Use unsetenv rather than putenv.
+	  (local_man_loop): Use base_name.
+	  (main): Use base_name and xgetcwd.
+	  (make_roff_command): Use setenv rather than putenv.
+	  (format_display): Use xgetcwd and base_name.
+	* src/manconv.c: Assume <unistd.h>.
+	  (main): Use base_name.
+	* src/mandb.c: Assume <unistd.h>.
+	  (main): Use base_name and xgetcwd.
+	* src/manp.c: Assume <unistd.h>.
+	  (add_dir_to_path_list): Use xgetcwd.
+	* src/manpath.c: Assume <unistd.h>.
+	  (main): Use base_name.
+	* src/security.c: Assume <unistd.h>.
+	* src/straycats.c: Assume <unistd.h>.
+	  (check_for_stray): Use base_name. Assume canonicalize_file_name.
+	* src/ult_src.c: Assume <unistd.h>.
+	  (ult_softlink): Use canonicalize_file_name.
+	* src/ult_src.c: Assume <unistd.h>.
+	* src/whatis.c: Assume <unistd.h> and <sys/types.h>.
+	  (use_grep, parse_name, parse_whatis, search, main): Assume POSIX
+	  regex functions (provided by Gnulib's regex module).
+	  (main): Use base_name.
+	* src/wrapper.c (main): Use base_name.
+	* src/zsoelim.l: Assume <unistd.h>.
+	  (main): Use base_name.
+
+	* docs/NEWS: Document this.
+
+	Drop remaining bits of pre-C89 compatibility.
+
+	* lib/ansidecl.h, lib/strspn.c, lib/strstr.c: Remove.
+	* configure.ac: Stop checking for strstr and strspn.
+	* include/manconfig.h.in: Remove VOID definition.
+	* lib/Makefile.am (libman_a_SOURCES): Remove ansidecl.h.
+	* lib/appendstr.c, lib/decompress.c, lib/flock.c, lib/hashtable.c,
+	  lib/pathsearch.c, lib/tempfile.c, libdb/db_btree.c,
+	  libdb/db_delete.c, libdb/db_gdbm.c, libdb/db_lookup.c,
+	  libdb/db_ndbm.c, libdb/db_store.c, libdb/db_ver.c, src/accessdb.c,
+	  src/catman.c, src/check_mandirs.c, src/compression.c,
+	  src/convert_name.c, src/descriptions.c, src/descriptions_store.c,
+	  src/encodings.c, src/fake_security.c, src/filenames.c,
+	  src/globbing.c, src/globbing_test.c, src/lexgrog.l,
+	  src/lexgrog.l-2.3.8, src/lexgrog.l-2.4a, src/lexgrog.l.new,
+	  src/lexgrog_test.c, src/man.c, src/manconv.c, src/mandb.c,
+	  src/manp.c, src/manpath.c, src/security.c, src/straycats.c,
+	  src/ult_src.c, src/util.c, src/version.c, src/whatis.c,
+	  src/zsoelim.l: Assume C89 declaration syntax, headers, and
+	  functions.
+	* docs/NEWS: Document this.
+
+	* configure.ac (--enable-mandirs): Improve grammar.
+
+	Regenerate all build system files using autogen.sh.
+
 Mon Oct 15 10:15:48 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Document previous change.

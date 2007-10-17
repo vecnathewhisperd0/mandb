@@ -31,16 +31,14 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <assert.h>
-
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
 
 #ifndef S_ISLNK /* losing sys/stat.h */
 #  if defined(S_IFMT) && defined(S_IFLNK)
@@ -63,39 +61,9 @@ extern int errno;
 #  endif /* HAVE_NDIR_H */
 #endif /* HAVE_DIRENT_H  */
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strrchr();
-extern char *realpath();
-#endif /* no string(s) header */
+#include <unistd.h>
 
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-
-#if defined(HAVE_LIMITS_H) && defined(_POSIX_VERSION)
-#  include <limits.h>                     /* for PATH_MAX */
-#else /* !(HAVE_LIMITS_H && _POSIX_VERSION) */
-#  include <sys/param.h>                  /* for MAXPATHLEN */
-#endif /* HAVE_LIMITS_H */
-
-#ifndef PATH_MAX
-#  if defined(_POSIX_VERSION) && defined(_POSIX_PATH_MAX)
-#    define PATH_MAX _POSIX_PATH_MAX
-#  else /* !_POSIX_VERSION */
-#    ifdef MAXPATHLEN
-#      define PATH_MAX MAXPATHLEN
-#    else /* !MAXPATHLEN */
-#      define PATH_MAX 1024
-#    endif /* MAXPATHLEN */
-#  endif /* _POSIX_VERSION */
-#endif /* !PATH_MAX */
+#include "canonicalize.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -159,14 +127,15 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 }
 
 #ifdef S_ISLNK
-/* Use realpath() to resolve all sym links within 'fullpath'.
+/* Resolve all symbolic links within 'fullpath'.
  * Returns a newly allocated string.
  */
 static char *ult_softlink (const char *fullpath)
 {
-	char resolved_path[PATH_MAX];
+	char *resolved_path;
 
-	if (realpath (fullpath, resolved_path) == NULL) {
+	resolved_path = canonicalize_file_name (fullpath);
+	if (!resolved_path) {
 		/* discard the unresolved path */
 		if (quiet < 2) {
 			if (errno == ENOENT)
@@ -182,7 +151,7 @@ static char *ult_softlink (const char *fullpath)
 
 	debug ("ult_softlink: (%s)\n", resolved_path);
 
-	return xstrdup (resolved_path);
+	return resolved_path;
 }
 #endif /* S_ISLNK */
 

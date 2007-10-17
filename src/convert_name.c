@@ -28,21 +28,10 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-#endif /* STDC_HEADERS */
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)

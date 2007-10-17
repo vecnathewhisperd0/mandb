@@ -29,25 +29,10 @@
 
 #include <stdio.h>
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strchr();
-#endif /* STDC_HEADERS */
-
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -93,7 +78,7 @@ int main (int argc, char *argv[])
 	int c;
 	datum key;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 	if (is_directory (FHS_CAT_ROOT) == 1)
 		cat_root = FHS_CAT_ROOT;
 	else if (is_directory (CAT_ROOT) == 1)

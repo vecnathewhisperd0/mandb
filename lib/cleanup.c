@@ -27,22 +27,10 @@
 #include <stdio.h>		/* SunOS's loosing assert.h needs it */
 #include <assert.h>
 #include <signal.h>
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif
+#include <unistd.h>
 
 #include "manconfig.h"		/* for FATAL */
 #include "cleanup.h"
-
-
-#ifndef HAVE_ATEXIT
-#  ifdef HAVE_ON_EXIT
-#    define atexit(fun) (on_exit ((void (*)())fun, NULL))
-#  else
-#    error need either atexit() or on_exit()
-/* If necessary we could dummify the whole module in this case */
-#  endif
-#endif
 
 
 

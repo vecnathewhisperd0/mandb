@@ -39,30 +39,18 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
 #include <termios.h>
+#include <unistd.h>
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strchr(), *strcat();
-#endif /* STDC_HEADERS */
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#else
-extern pid_t vfork();
+#ifndef R_OK
 #  define R_OK		4
-#  define STDOUT_FILENO	1
-#  define STDIN_FILENO	0
-#endif /* HAVE_UNISTD_H */
+#  define X_OK		1
+#endif /* !R_OK */
 
 #if defined(HAVE_LIMITS_H)
 #  include <limits.h>
@@ -103,16 +91,11 @@ static char *cwd;
 #  include <sys/wait.h>
 #endif
 
-#ifndef STDC_HEADERS
-extern char *getenv();
-extern int errno;
-#endif
-
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
+
+#include <xgetcwd.h>
 
 #include "gettext.h"
 #include <locale.h>
@@ -125,7 +108,6 @@ extern int errno;
 #include "setenv.h"
 #include "hashtable.h"
 #include "pipeline.h"
-#include "getcwdalloc.h"
 #include "pathsearch.h"
 #include "linelength.h"
 #include "decompress.h"
@@ -451,7 +433,7 @@ static __inline__ void gripe_no_man (const char *name, const char *sec)
 	/* On AIX and IRIX, fall back to the vendor supplied browser. */
 #if defined _AIX || defined __sgi
 	if (!troff) {
-		putenv ("MANPATH=");  /* reset the MANPATH variable */
+		unsetenv ("MANPATH");
 		execv ("/usr/bin/man", global_argv);
 	}
 #endif
@@ -651,15 +633,14 @@ static int local_man_loop (const char *argv)
 		}
 
 		if (exit_status == OK) {
-			char *argv_copy = xstrdup (argv);
+			char *argv_base = base_name (argv);
 			lang = lang_dir (argv);
-			if (!display (NULL, argv, NULL, basename (argv_copy),
-				      NULL)) {
+			if (!display (NULL, argv, NULL, argv_base, NULL)) {
 				if (local_mf)
 					error (0, errno, "%s", argv);
 				exit_status = NOT_FOUND;
 			}
-			free (argv_copy);
+			free (argv_base);
 		}
 	}
 	local_man_file = local_mf;
@@ -680,7 +661,7 @@ int main (int argc, char *argv[])
 	const char *tmp;
 	char *multiple_locale = NULL;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	umask (022);
 	/* initialise the locale */
@@ -722,7 +703,7 @@ int main (int argc, char *argv[])
 
 	/* This will enable us to do some profiling and know
 	where gmon.out will end up. Must chdir(cwd) before we return */
-	cwd = getcwd_allocated ();
+	cwd = xgetcwd ();
 	if (!cwd) {
 		cwd = xmalloc (1);
 		cwd[0] = '\0';
@@ -1381,8 +1362,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				const char *less_charset =
 					get_less_charset (locale_charset);
 				debug ("less_charset = %s\n", less_charset);
-				putenv (appendstr (NULL, "LESSCHARSET=",
-						   less_charset, NULL));
+				setenv ("LESSCHARSET", less_charset, 1);
 			}
 		}
 
@@ -1937,9 +1917,9 @@ static void format_display (pipeline *decomp,
 
 #ifdef TROFF_IS_GROFF
 	if (format_cmd && htmlout) {
-		char *man_file_copy, *man_base, *man_ext;
+		char *man_base, *man_ext;
 
-		old_cwd = getcwd_allocated ();
+		old_cwd = xgetcwd ();
 		if (!old_cwd) {
 			old_cwd = xmalloc (1);
 			old_cwd[0] = '\0';
@@ -1948,14 +1928,13 @@ static void format_display (pipeline *decomp,
 		if (chdir (htmldir) == -1)
 			error (FATAL, errno, _("can't change to directory %s"),
 			       htmldir);
-		man_file_copy = xstrdup (man_file);
-		man_base = basename (man_file_copy);
+		man_base = base_name (man_file);
 		man_ext = strchr (man_base, '.');
 		if (man_ext)
 			*man_ext = '\0';
 		htmlfile = xstrdup (htmldir);
 		htmlfile = appendstr (htmlfile, "/", man_base, ".html", NULL);
-		free (man_file_copy);
+		free (man_base);
 		format_cmd->want_out = open (htmlfile,
 					     O_CREAT | O_EXCL | O_WRONLY,
 					     0644);

@@ -19,10 +19,10 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-SUBDIRS = docs intl lib libdb src man manual po tools
+SUBDIRS = docs intl gnulib/lib lib libdb src man manual po tools
 
 dist_noinst_DATA = README include/README
 
 EXTRA_DIST = autogen.sh
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 -I gnulib/m4

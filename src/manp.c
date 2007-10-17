@@ -53,28 +53,11 @@
 #include <assert.h>
 #include <errno.h>
 #include <dirent.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-#if defined(STDC_HEADERS)
-#  include <stdlib.h>
-#  include <string.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strtok();
-extern char *strchr();
-extern char *strstr();
-#endif
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-
-#ifndef STDC_HEADERS
-extern char *getenv();
-extern int errno;
-#endif
+#include <xgetcwd.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -82,7 +65,6 @@ extern int errno;
 #include "manconfig.h"
 
 #include "error.h"
-#include "getcwdalloc.h"
 #include "cleanup.h"
 
 #include "security.h"
@@ -1083,7 +1065,7 @@ static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
 		/* deal with relative paths */
 
 		if (*p != '/') {
-			cwd = getcwd_allocated ();
+			cwd = xgetcwd ();
 			if (!cwd)
 				error (FATAL, errno,
 				       _("can't determine current directory"));

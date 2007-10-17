@@ -40,34 +40,15 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-extern char *strchr(), *strcat();
-extern int strncmp();
-#endif /* STDC_HEADERS */
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
 
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #define STATIC_VER	/* zsoelim has a static ver() */
 
@@ -361,7 +342,7 @@ int main (int argc, char *argv[])
 {
 	int c;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, NULL)) != EOF) {

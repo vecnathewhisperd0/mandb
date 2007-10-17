@@ -22,20 +22,18 @@
 noinst_LIBRARIES = libman.a
 dist_noinst_DATA = README
 
-libman_a_CPPFLAGS = -I$(top_builddir)/include
+libman_a_CPPFLAGS = \
+	-I$(top_builddir)/include \
+	-I$(top_srcdir)/gnulib/lib \
+	-I$(top_builddir)/gnulib/lib
 
 libman_a_SOURCES = \
-	ansidecl.h \
 	appendstr.c \
 	cleanup.c \
 	cleanup.h \
 	debug.c \
 	decompress.c \
 	decompress.h \
-	error.c \
-	error.h \
-	getcwdalloc.c \
-	getcwdalloc.h \
 	hashtable.c \
 	hashtable.h \
 	linelength.c \
@@ -45,39 +43,12 @@ libman_a_SOURCES = \
 	pipeline.c \
 	pipeline.h \
 	tempfile.c \
-	xmalloc.c \
 	xsigaction.c \
-	xstrdup.c \
-	xstrndup.c \
 	xstrsignal.c
 
 ## Headers that are used conditionally. Automake can't detect these itself.
 libman_a_SOURCES += \
 	flock.h \
-	gettext.h \
-	setenv.h
+	gettext.h
 
-libman_a_LIBADD = $(LIBOBJS) $(ALLOCA)
-
-# Provide header files missing from this system. (This should eventually be
-# replaced with use of Gnulib, which has modules for all of these.)
-
-BUILT_SOURCES = $(FNMATCH_H) $(GETOPT_H) $(GLOB_H)
-MOSTLYCLEANFILES = fnmatch.h fnmatch.h-t getopt.h getopt.h-t glob.h glob.h-t
-EXTRA_DIST = fnmatch_.h getopt_.h glob_.h
-
-fnmatch.h: fnmatch_.h
-	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
-	  cat $<; \
-	} > $@-t
-	mv -f $@-t $@
-getopt.h: getopt_.h
-	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
-	  cat $<; \
-	} > $@-t
-	mv -f $@-t $@
-glob.h: glob_.h
-	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
-	  cat $<; \
-	} > $@-t
-	mv -f $@-t $@
+libman_a_LIBADD = $(LIBOBJS)

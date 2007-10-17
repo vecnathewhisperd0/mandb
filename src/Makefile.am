@@ -35,6 +35,8 @@ noinst_DATA = man_db.conf
 
 AM_CPPFLAGS = \
 	-I$(top_builddir)/include \
+	-I$(top_builddir)/gnulib/lib \
+	-I$(top_srcdir)/gnulib/lib \
 	-I$(top_srcdir)/lib \
 	-I$(top_srcdir)/libdb \
 	-DCONFIG_FILE=\"$(config_file)\" \
@@ -47,7 +49,7 @@ AM_CPPFLAGS = \
 	-DSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 
-LIBMAN = $(top_builddir)/lib/libman.a
+LIBMAN = $(top_builddir)/lib/libman.a $(top_builddir)/gnulib/lib/libgnu.a
 LIBMANDB = $(top_builddir)/libdb/libmandb.a $(DBLIBS)
 
 accessdb_LDADD = $(LIBMANDB) $(LIBMAN)

@@ -29,42 +29,25 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>	/* for chmod() */
 #include <dirent.h>
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-#endif /* STDC_HEADERS */
-
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#else
-#  define W_OK	2
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #ifdef SECURE_MAN_UID
 #  include <pwd.h>
 #endif /* SECURE_MAN_UID */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
+
+#include <xgetcwd.h>
 
 #include "gettext.h"
 #include <locale.h>
@@ -75,7 +58,6 @@ extern int errno;
 #include "error.h"
 #include "cleanup.h"
 #include "pipeline.h"
-#include "getcwdalloc.h"
 
 #include "mydbm.h"
 
@@ -521,7 +503,7 @@ int main (int argc, char *argv[])
 	char *cwd;
 #endif /* __profile__ */
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, ""))
@@ -579,7 +561,7 @@ int main (int argc, char *argv[])
 
 
 #ifdef __profile__
-	cwd = getcwd_allocated ();
+	cwd = xgetcwd ();
 	if (!cwd) {
 		cwd = xmalloc (1);
 		cwd[0] = '\0';

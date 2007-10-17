@@ -26,15 +26,8 @@
 #endif
 
 #include <stdio.h>
-
-#if defined(STDC_HEADERS)
 #include <string.h>
 #include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#include <strings.h>
-#endif /* STDC_HEADERS */
 
 #include "gettext.h"
 #define _(String) gettext (String)

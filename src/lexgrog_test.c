@@ -26,21 +26,12 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include <sys/stat.h>
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#endif /* STDC_HEADERS */
-
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -97,7 +88,7 @@ int main (int argc, char **argv)
 	const char *encoding = NULL;
 	int some_failed = 0;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, NULL)) != -1) {

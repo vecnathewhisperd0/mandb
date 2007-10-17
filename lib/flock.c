@@ -24,17 +24,10 @@ Cambridge, MA 02139, USA.  */
 #  include "config.h"
 #endif
 
-#include "ansidecl.h"
 #include "flock.h"
 #include <errno.h>
 
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
-#if HAVE_UNISTD_H
-#  include <unistd.h>
-#endif
+#include <unistd.h>
 #if HAVE_FCNTL_H
 #  include <fcntl.h>
 #endif
@@ -45,7 +38,7 @@ extern int errno;
 /* Apply or remove an advisory lock, according to OPERATION,
    on the file FD refers to.  */
 int
-DEFUN(flock, (fd, operation), int fd AND int operation)
+flock (int fd, int operation)
 {
   struct flock lbuf;
 

@@ -26,6 +26,7 @@
 
 #ifdef NDBM
 
+#include <stdlib.h>
 #include <stdio.h>
 
 #if HAVE_SYS_FILE_H
@@ -39,13 +40,7 @@
 #  include <fcntl.h>
 #endif
 
-#ifdef STDC_HEADERS
-#include <stdlib.h>
-#endif /* STDC_HEADERS */
-
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #include "manconfig.h"
 

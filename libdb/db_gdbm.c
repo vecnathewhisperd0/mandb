@@ -26,14 +26,8 @@
 
 #ifdef GDBM
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#endif /* STDC_HEADERS */
+#include <string.h>
+#include <stdlib.h>
 
 #include "manconfig.h"
 

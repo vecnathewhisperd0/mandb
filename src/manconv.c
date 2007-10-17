@@ -34,27 +34,16 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
-
-#if defined(STDC_HEADERS)
-#  include <stdlib.h>
-#  include <string.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#endif
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #ifdef HAVE_ICONV
 #  include <iconv.h>
 #endif /* HAVE_ICONV */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -309,7 +298,7 @@ int main (int argc, char *argv[])
 	char *pp_encoding;
 	char **try_from_code;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	if (!setlocale (LC_ALL, ""))
 		/* Obviously can't translate this. */

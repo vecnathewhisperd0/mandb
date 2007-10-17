@@ -1,9 +1,9 @@
 /*
- * version.c: the ver() and atexit()/on_exit() routines.
+ * version.c: print version information
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 1996, 2000 Fabrizio Polacco.
- * Copyright (C) 2001 Colin Watson.
+ * Copyright (C) 2001, 2006, 2007 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -27,9 +27,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
-#ifdef STDC_HEADERS
 #include <stdlib.h>
-#endif
 
 #include "gettext.h"
 #define _(String) gettext (String)

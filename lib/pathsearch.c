@@ -24,23 +24,16 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#endif /* STDC_HEADERS */
+#include <string.h>
+#include <stdlib.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
+
+#include <xgetcwd.h>
 
 #include "manconfig.h"
-#include "getcwdalloc.h"
 #include "pathsearch.h"
 
 static int pathsearch (const char *name, const mode_t bits)
@@ -72,7 +65,7 @@ static int pathsearch (const char *name, const mode_t bits)
 
 		if (!*element) {
 			if (!cwd)
-				cwd = getcwd_allocated ();
+				cwd = xgetcwd ();
 			element = cwd;
 		}
 

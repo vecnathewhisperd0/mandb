@@ -25,13 +25,8 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
-
-#ifdef STDC_HEADERS
-#  include <stdlib.h>
-#endif /* STDC_HEADERS */
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <stdlib.h>
+#include <unistd.h>
 
 #include "manconfig.h"
 

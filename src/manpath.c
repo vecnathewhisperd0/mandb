@@ -27,23 +27,13 @@
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
 #include <termios.h>
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#endif /* STDC_HEADERS */
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #if defined(HAVE_LIMITS_H)
 #  include <limits.h>
@@ -51,9 +41,7 @@
 #  include <sys/param.h>
 #endif
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -117,7 +105,7 @@ int main (int argc, char *argv[])
 	const char *alt_system = "";
 	char *path_string;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, ""))
 		/* Obviously can't translate this. */

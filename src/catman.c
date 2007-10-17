@@ -33,29 +33,14 @@
 #include <assert.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 
 #if HAVE_SYS_WAIT_H
 #  include <sys/wait.h>
 #endif /* HAVE_SYS_WAIT_H */
 
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-#endif /* STDC_HEADERS */
-
-#ifndef STDC_HEADERS
-extern char *getenv();
-extern int errno;
-#endif
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
+#include <unistd.h>
 
 #if defined(HAVE_LIMITS_H) && defined(_POSIX_VERSION)
 #  include <limits.h>  
@@ -83,9 +68,7 @@ extern int errno;
 #  endif /* _POSIX_VERSION */
 #endif /* !ARG_MAX */
 
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
+#include "dirname.h"
 
 #include <getopt.h>
 
@@ -395,7 +378,7 @@ int main (int argc, char *argv[])
 	char **mp;
 	const char **sections, **sp;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	/* initialise the locale */
 	locale = xstrdup (setlocale (LC_ALL, ""));

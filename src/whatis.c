@@ -33,28 +33,12 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
-
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-
-#if defined(STDC_HEADERS)
-#  include <stdlib.h>
-#  include <string.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else
-extern char *strrchr();
-#endif /* no string(s) header */
+#include <unistd.h>
 
 #include "gettext.h"
 #include <locale.h>
@@ -64,18 +48,13 @@ extern char *strrchr();
 #  include <iconv.h>
 #endif /* HAVE_ICONV */
 
-#ifdef HAVE_REGEX_H
-#  include <sys/types.h>
-#  include <regex.h>
-#endif /* HAVE_REGEX_H */
-
-#ifdef HAVE_LIBGEN_H
-#  include <libgen.h>
-#endif /* HAVE_LIBGEN_H */
-
-#include <fnmatch.h>
+#include <sys/types.h>
+#include "regex.h"
 
 #include <getopt.h>
+
+#include "dirname.h"
+#include "fnmatch.h"
 
 #include "manconfig.h"
 
@@ -108,21 +87,9 @@ int quiet = 1;
 iconv_t conv_to_locale;
 #endif /* HAVE_ICONV */
 
-#if defined(POSIX_REGEX) || defined(BSD_REGEX)
-#  define REGEX
-#endif
-
-#ifdef REGEX
-#  if defined(POSIX_REGEX)
 static regex_t preg;  
-#  endif
 static int regex;
 static int exact;
-#  ifndef HAVE_REGEX_H
-extern char *re_comp();
-extern void regfree();
-#  endif
-#endif
 
 static int wildcard;
 
@@ -253,13 +220,11 @@ static __inline__ int use_grep (char *page, char *manpath)
 		char *anchored_page = NULL;
 
 		if (am_apropos) {
-#ifdef REGEX
 			if (regex)
 				flags = get_def_user (
 					"apropos_regex_grep_flags",
 					APROPOS_REGEX_GREP_FLAGS);
 			else
-#endif
 				flags = get_def_user ("apropos_grep_flags",
 						      APROPOS_GREP_FLAGS);
 			anchored_page = xstrdup (page);
@@ -438,14 +403,8 @@ static __inline__ int do_whatis (char *page)
 /* return 1 if page matches name, else 0 */
 static int parse_name (char *page, char *dbname)
 { 
-#ifdef REGEX
 	if (regex)
-#  if defined(POSIX_REGEX)
 		return (regexec (&preg, dbname, 0, (regmatch_t *) 0, 0) == 0);
-#  elif defined(BSD_REGEX)
-		return re_exec (dbname);
-#  endif
-#endif /* REGEX */
 
 	if (am_apropos && !wildcard) {
 		char *lowdbname = lower (dbname);
@@ -512,14 +471,8 @@ static int word_fnmatch (char *lowpage, char *whatis)
 /* return 1 if page matches whatis, else 0 */
 static int parse_whatis (char *page, char *lowpage, char *whatis)
 { 
-#ifdef REGEX
 	if (regex) 
-#  if defined(POSIX_REGEX)
 		return (regexec (&preg, whatis, 0, (regmatch_t *) 0, 0) == 0);
-#  elif defined(BSD_REGEX)
-		return re_exec (whatis);
-#  endif
-#endif /* REGEX */
 
 	if (wildcard) {
 		if (exact)
@@ -694,11 +647,7 @@ static int search (char *page)
 		if (am_apropos)
 			found += do_apropos (page, lowpage);
 		else {
-# ifdef REGEX
 			if (regex || wildcard) {
-# else /* !REGEX */
-			if (wildcard) {
-# endif /* REGEX */
 				found += do_apropos (page, lowpage);
 			} else
 				found += do_whatis (page);
@@ -730,7 +679,7 @@ int main (int argc, char *argv[])
 #endif
 	int status = OK;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 	if (STREQ (program_name, APROPOS_NAME))
 		am_apropos = 1;
 	else
@@ -775,20 +724,14 @@ int main (int argc, char *argv[])
 				manp = xstrdup (optarg);
 				break;
 			case 'e':
-#ifdef REGEX
 				regex = 0;
 				exact = 1;
-#endif
 				break;
 			case 'r':
-#ifdef REGEX
 				regex = 1;
-#endif
 				break;
 			case 'w':
-#ifdef REGEX
 				regex = 0;
-#endif
 				wildcard = 1;
 				break;
 			case 'a':
@@ -843,12 +786,10 @@ int main (int argc, char *argv[])
 
 	pipeline_install_sigchld ();
 
-#if defined(REGEX)
 	/* Become it even if it's null - GNU standards */
 	/* if (getenv ("POSIXLY_CORRECT")) */
 	if (am_apropos && !exact && !wildcard)
 		regex = 1;
-#endif
 
 	/* Make sure that we have a keyword! */
 	num_keywords = argc - optind;
@@ -897,7 +838,6 @@ int main (int argc, char *argv[])
 #endif /* HAVE_ICONV */
 
 	while (optind < argc) {
-#if defined(POSIX_REGEX)		
 		if (regex) {
 			int errcode = regcomp (&preg, argv[optind], 
 					       REG_EXTENDED |
@@ -911,20 +851,9 @@ int main (int argc, char *argv[])
 				       argv[optind], error_string);
 			}
 		}
-#elif defined(BSD_REGEX)
-		if (regex) {
-			/* How to set type of regex ...? */
-			char *error_string = re_comp (argv[optind]);
-			if (error_string)
-				error (FAIL, 0, _("fatal: regex `%s': %s"),
-				       argv[optind], error_string);
-		}
-#endif /* REGEX */
 		if (!search (argv[optind++]))
 			status = NOT_FOUND;
-#ifdef POSIX_REGEX
 		regfree (&preg);
-#endif /* POSIX_REGEX */
 	}
 
 #ifdef HAVE_ICONV

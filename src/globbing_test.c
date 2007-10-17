@@ -26,10 +26,9 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
+#include <stdlib.h>
 
-#ifdef STDC_HEADERS
-#  include <stdlib.h>
-#endif /* STDC_HEADERS */
+#include "dirname.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -76,7 +75,7 @@ int main (int argc, char **argv)
 	int i;
 	int match_case = 0;
 
-	program_name = xstrdup (basename (argv[0]));
+	program_name = base_name (argv[0]);
 
 	while ((c = getopt_long (argc, argv, args,
 				 long_options, NULL)) != -1) {

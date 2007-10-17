@@ -114,6 +114,7 @@ dnl Check $PATH for the following progs and append suitable options.
 dnl 
 AC_GNU_SOURCE
 AC_PROG_CC
+gl_EARLY
 AC_PROG_CPP
 CFLAGS="$CFLAGS -Wall"
 if test "$GCC" = yes
@@ -284,7 +285,7 @@ dnl Work out which manual page hierarchy scheme might be in use.
 dnl
 AC_ARG_ENABLE(mandirs,
 [AS_HELP_STRING([--enable-mandirs=OS], [select manual page hierarchy organization (GNU, HPUX, IRIX, Solaris, BSD)])],
-	[AC_MSG_NOTICE([Using hierarchy organization(s) $enableval])
+	[AC_MSG_NOTICE([Using $enableval hierarchy organization(s)])
 	 AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$enableval",
 			    [Define to the manual page hierarchy organization(s) in use.])],
 	[case $host in
@@ -296,7 +297,7 @@ AC_ARG_ENABLE(mandirs,
 		*)              mandirs=;;
 	 esac
 	 if test -n "$mandirs"; then
-		AC_MSG_NOTICE([Using hierarchy organization $mandirs])
+		AC_MSG_NOTICE([Using $mandirs hierarchy organization])
 		AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$mandirs")
 	 else
 		AC_MSG_NOTICE([Allowing any hierarchy organization])
@@ -305,16 +306,14 @@ AC_ARG_ENABLE(mandirs,
 dnl
 dnl check for various header files and associated libraries.
 dnl
-AC_AIX
-AC_MINIX
 AC_ISC_POSIX
 dnl AC_PROG_LEX calls AC_TRY_LINK: must come after above 3
 AC_PROG_LEX
+gl_INIT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(unistd.h memory.h fcntl.h limits.h sys/file.h regex.h libgen.h)
-AC_CHECK_HEADERS(string.h strings.h, break)
+AC_CHECK_HEADERS(memory.h fcntl.h limits.h sys/file.h)
 dnl
 dnl Internationalization support.
 dnl
@@ -333,12 +332,8 @@ AC_TYPE_SIZE_T
 dnl
 dnl Checks for functions.
 dnl
-AC_FUNC_ALLOCA
-AC_FUNC_MEMCMP
 AC_TYPE_SIGNAL
-AC_FUNC_STRCOLL
 AC_FUNC_VFORK
-AC_FUNC_VPRINTF
 MAN_FUNC_ANSI_SPRINTF
 MAN_FUNC_STRSIGNAL
 dnl
@@ -453,41 +448,10 @@ AC_SUBST(DBLIBS)
 dnl
 dnl Check for available functions.
 dnl
-AC_CHECK_FUNCS(getcwd getwd, break)
-AC_CHECK_FUNCS(atexit on_exit, break)
+AC_CHECK_FUNCS(getcwd, break)
 AC_CHECK_FUNCS(seteuid setreuid setresuid strerror)
-AC_CHECK_FUNCS(canonicalize_file_name)
 AC_CHECK_FUNCS(setlocale)
-dnl
-dnl I think it's reasonable to assume that the system has the following 
-dnl headers if the (POSIXy) functions exist.
-dnl 
-AC_CHECK_FUNC(regcomp, [AC_DEFINE(POSIX_REGEX, 1, [Define if you have the regcomp and regexec POSIX regex routines.])],
-  [AC_CHECK_FUNC(re_comp, [AC_DEFINE(BSD_REGEX, 1, [Define if you have the re_comp and re_exec BSD regex routines.])],
-    [AC_MSG_WARN(no regex routines found, whatis/apropos will ignore -r)])])
-MAN_FUNC_FNMATCH
-AC_CHECK_FUNC(globfree,
-	      [AC_DEFINE(HAVE_GLOB_H, 1, [Define if using <glob.h> rather than "lib/glob.h".])
-	       GLOB_H=],
-	      [AC_LIBOBJ([glob])
-	       GLOB_H=glob.h])
-AC_SUBST([GLOB_H])
-AC_CHECK_FUNC(getopt_long,
-	      [AC_DEFINE(HAVE_GETOPT_H, 1, [Define if using <getopt.h> rather than "lib/getopt.h".])
-	       GETOPT_H=],
-	      [AC_LIBOBJ([getopt])
-	       AC_LIBOBJ([getopt1])
-	       GETOPT_H=getopt.h])
-AC_SUBST([GETOPT_H])
-AC_REPLACE_FUNCS(flock putenv realpath rename basename waitpid strstr strsep strcspn strspn strnlen)
-AC_CHECK_FUNCS(mkdtemp, ,
-	       [AC_LIBOBJ([mkdtemp])
-	        AC_LIBOBJ([tempname])])
-AC_CHECK_FUNCS(mkstemp, ,
-	       [AC_LIBOBJ([mkstemp])
-	        AC_LIBOBJ([tempname])])
-gt_FUNC_SETENV
-gl_FUNC_GEN_TEMPNAME
+AC_REPLACE_FUNCS(flock waitpid)
 dnl
 dnl MAN_ECHO_VAR(ENV-VARIABLE)
 define(MAN_ECHO_VAR, [AC_MSG_NOTICE([default $1 = "$$1"])])dnl
@@ -511,6 +475,7 @@ MAN_TRANS_SUBST(whatis)
 MAN_TRANS_SUBST(zsoelim)
 
 AC_CONFIG_FILES(Makefile
+	gnulib/lib/Makefile
 	lib/Makefile
 	src/Makefile
 	src/man_db.conf

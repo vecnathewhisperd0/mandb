@@ -30,25 +30,9 @@
 #include <stdio.h>
 #include <errno.h>
 #include <signal.h>
-
-#if defined(STDC_HEADERS)
-#  include <string.h>
-#  include <stdlib.h>
-#elif defined(HAVE_STRING_H)
-#  include <string.h>
-#elif defined(HAVE_STRINGS_H)
-#  include <strings.h>
-#else /* no string(s) header */
-#endif /* STDC_HEADERS */
-
-#ifndef STDC_HEADERS
-extern int errno;
-#endif
-
-#if defined(HAVE_UNISTD_H)
-#  include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
