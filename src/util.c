@@ -49,9 +49,6 @@
 
 #include "mydbm.h" /* for full definition of MAN_DB */
 
-#undef MAX
-#define MAX(a,b)	((a)>(b)?a:b)
-
 /* take path, add db name and return */
 char *mkdbname (const char *path)
 {

@@ -73,6 +73,7 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_MEMCMP
   gl_FUNC_MEMPCPY
   gl_STRING_MODULE_INDICATOR([mempcpy])
+  gl_MINMAX
   gt_FUNC_MKDTEMP
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
   gl_FUNC_MKSTEMP
@@ -201,6 +202,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/malloca.valgrind
   lib/memcmp.c
   lib/mempcpy.c
+  lib/minmax.h
   lib/mkdtemp.c
   lib/mkstemp.c
   lib/pathmax.h
@@ -282,6 +284,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mbstate_t.m4
   m4/memcmp.m4
   m4/mempcpy.m4
+  m4/minmax.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
   m4/onceonly_2_57.m4

@@ -92,6 +92,7 @@ static char *cwd;
 #endif
 
 #include "dirname.h"
+#include "minmax.h"
 
 #include <getopt.h>
 
@@ -2391,14 +2392,12 @@ static int duplicate_candidates (struct mandata *source, const char *path,
 	/* Figure out if we've had a sufficiently similar candidate for this
 	 * language already.
 	 */
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
 	slash1 = strrchr (path, '/');
 	slash2 = strrchr (search->path, '/');
 	if (!slash1 || !slash2 ||
 	    !STRNEQ (path, search->path,
 		     MAX (slash1 - path, slash2 - search->path)))
 		return 0; /* different path base */
-#undef MAX
 
 	unpack_locale_bits (++slash1, &bits1);
 	unpack_locale_bits (++slash2, &bits2);
