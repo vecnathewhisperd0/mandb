@@ -90,6 +90,7 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_STRCSPN
   gl_FUNC_STRDUP
   gl_STRING_MODULE_INDICATOR([strdup])
+  gl_FUNC_STRERROR
   gl_HEADER_STRING_H
   gl_FUNC_STRNDUP
   gl_STRING_MODULE_INDICATOR([strndup])
@@ -221,6 +222,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdlib_.h
   lib/strcspn.c
   lib/strdup.c
+  lib/strerror.c
   lib/string_.h
   lib/stripslash.c
   lib/strndup.c
@@ -294,6 +296,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdlib_h.m4
   m4/strcspn.m4
   m4/strdup.m4
+  m4/strerror.m4
   m4/string_h.m4
   m4/strndup.m4
   m4/strnlen.m4

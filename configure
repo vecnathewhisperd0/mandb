@@ -1978,6 +1978,7 @@ gl_func_list="$gl_func_list setenv"
 gl_header_list="$gl_header_list stdint.h"
 gl_header_list="$gl_header_list wchar.h"
 gl_header_list="$gl_header_list stdlib.h"
+gl_func_list="$gl_func_list strerror"
 gl_header_list="$gl_header_list string.h"
 gl_header_list="$gl_header_list sys/select.h"
 gl_header_list="$gl_header_list sys/socket.h"
@@ -10756,6 +10757,12 @@ fi
 
 
 
+
+
+
+
+
+
   :
 
 
@@ -16893,6 +16900,21 @@ done
 
 
   GNULIB_STRDUP=1
+
+
+
+  :
+
+
+
+
+
+  if test $ac_cv_func_strerror = no; then
+    gl_LIBOBJS="$gl_LIBOBJS strerror.$ac_objext"
+
+  :
+
+  fi
 
 
 
