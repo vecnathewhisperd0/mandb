@@ -43,11 +43,10 @@
 #  include <pwd.h>
 #endif /* SECURE_MAN_UID */
 
-#include "dirname.h"
-
 #include <getopt.h>
 
-#include <xgetcwd.h>
+#include "dirname.h"
+#include "xgetcwd.h"
 
 #include "gettext.h"
 #include <locale.h>

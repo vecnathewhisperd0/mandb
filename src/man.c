@@ -79,12 +79,11 @@ static char *cwd;
 #  include <sys/wait.h>
 #endif
 
-#include "dirname.h"
-#include "minmax.h"
-
 #include <getopt.h>
 
-#include <xgetcwd.h>
+#include "dirname.h"
+#include "minmax.h"
+#include "xgetcwd.h"
 
 #include "gettext.h"
 #include <locale.h>

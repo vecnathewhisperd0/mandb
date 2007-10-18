@@ -57,7 +57,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <xgetcwd.h>
+#include "xgetcwd.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
