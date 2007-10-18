@@ -21,6 +21,10 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /* HAVE_CONFIG_H */
+
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -30,8 +34,6 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "config.h"
 
 #include "dirname.h"
 
