@@ -60,18 +60,6 @@
 
 static char *cwd;
 
-#ifndef PIPE_BUF
-#  if defined(_POSIX_VERSION) && defined(_POSIX_PIPE_MAX)
-#    define PIPE_MAX _POSIX_PIPE_MAX
-#  else /* !_POSIX_PIPE_MAX */
-#    if defined(PIPE_MAX) && (PIPE_MAX != INT_MAX)
-#      define PIPE_BUF PIPE_MAX
-#    else /* !PIPE_MAX */
-#      define PIPE_BUF 512
-#    endif /* PIPE_MAX */
-#  endif /* _POSIX_PIPE_MAX */
-#endif /* PIPE_BUF */
-
 #ifdef HAVE_SYS_FILE
 #  include <sys/file.h>
 #endif /* HAVE_SYS_FILE */
