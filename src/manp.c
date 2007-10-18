@@ -339,8 +339,8 @@ char *cat_manpath (char *manp)
 		catdir = get_from_list (path, MANDB_MAP_USER);
 		if (!catdir)
 			catdir = get_from_list (path, MANDB_MAP);
-		catp = catdir ? pathappend(catp, catdir) 
-			      : pathappend(catp, path);
+		catp = catdir ? pathappend (catp, catdir) 
+			      : pathappend (catp, path);
 	}
 
 	return catp;
