@@ -1,0 +1,18 @@
+=== modified file 'gnulib/lib/xmalloc.c'
+--- gnulib/lib/xmalloc.c	2007-10-14 02:09:24 +0000
++++ gnulib/lib/xmalloc.c	2007-10-20 17:21:14 +0000
+@@ -114,10 +114,12 @@
+   return memcpy (xmalloc (s), p, s);
+ }
+ 
+-/* Clone STRING.  */
++/* If STRING is NULL, return NULL.  Otherwise, clone STRING.  */
+ 
+ char *
+ xstrdup (char const *string)
+ {
++  if (!string)
++    return NULL;
+   return xmemdup (string, strlen (string) + 1);
+ }
+
