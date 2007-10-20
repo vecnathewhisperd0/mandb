@@ -448,7 +448,6 @@ AC_SUBST(DBLIBS)
 dnl
 dnl Check for available functions.
 dnl
-AC_CHECK_FUNCS(getcwd, break)
 AC_CHECK_FUNCS(seteuid setreuid setresuid strerror)
 AC_CHECK_FUNCS(setlocale)
 AC_REPLACE_FUNCS(flock waitpid)
