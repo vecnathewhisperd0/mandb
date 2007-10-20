@@ -1,3 +1,43 @@
+Sat Oct 20 18:20:07 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	* gnulib/lib/asnprintf.c, gnulib/lib/asprintf.c,
+	  gnulib/lib/float+.h, gnulib/lib/float_.h,
+	  gnulib/lib/printf-args.c, gnulib/lib/printf-args.h,
+	  gnulib/lib/printf-parse.c, gnulib/lib/printf-parse.h,
+	  gnulib/lib/size_max.h, gnulib/lib/stdio_.h,
+	  gnulib/lib/vasnprintf.c, gnulib/lib/vasnprintf.h,
+	  gnulib/lib/vasprintf.c, gnulib/lib/xasprintf.c,
+	  gnulib/lib/xsize.h, gnulib/lib/xvasprintf.c,
+	  gnulib/lib/xvasprintf.h, gnulib/m4/eoverflow.m4,
+	  gnulib/m4/float_h.m4, gnulib/m4/intmax_t.m4,
+	  gnulib/m4/inttypes_h.m4, gnulib/m4/size_max.m4,
+	  gnulib/m4/stdarg.m4, gnulib/m4/stdint_h.m4, gnulib/m4/stdio_h.m4,
+	  gnulib/m4/vasnprintf.m4, gnulib/m4/vasprintf.m4,
+	  gnulib/m4/wchar_t.m4, gnulib/m4/xsize.m4, gnulib/m4/xvasprintf.m4:
+	  Import the Gnulib xvasprintf module.
+	* .bzrignore: Update.
+
+	* libdb/mydbm.h: Add MYDBM_RESET_DSIZE and MYDBM_SET convenience
+	  macros, to obsolete most direct uses of MYDBM_SET_DPTR and
+	  MYDBM_DSIZE. Code that just wants to put a string in a datum
+	  should use MYDBM_SET.
+	* libdb/db_btree.c (dbstore), libdb/db_delete.c (dbdelete): Use
+	  MYDBM_SET.
+	* libdb/db_lookup.c (make_multi_key): Use MYDBM_SET and xasprintf.
+	  (make_content): Likewise. Collapse ANSI_SPRINTF #ifdef, no longer
+	  needed.
+	  (dblookup): Use MYDBM_SET.
+	* libdb/db_ndbm.c (ndbm_flopen): Use xasprintf.
+	* libdb/db_store.c (dbstore): Use MYDBM_SET and xasprintf.
+	* libdb/db_ver.c (dbver_rd, dbver_wr): Use MYDBM_SET.
+	* src/check_mandirs.c (update_db_time): Use MYDBM_SET and xasprintf.
+	  (reset_db_time, update_db): Use MYDBM_SET.
+	* src/filenames.c (make_filename): Use xasprintf.
+	* src/man.c (setenv_less): Use xasprintf.
+
+	* m4/man-ansi-sprintf.m4, configure.ac (MAN_FUNC_ANSI_SPRINTF):
+	  Remove.
+
 Sat Oct 20 14:30:44 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Remove redundant check for getcwd.

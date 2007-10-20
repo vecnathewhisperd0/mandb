@@ -44,8 +44,7 @@ int dbver_rd (MYDBM_FILE dbfile)
 
 	memset (&key, 0, sizeof key);
 
-	MYDBM_SET_DPTR (key, xstrdup (VER_KEY));
-	MYDBM_DSIZE (key) = sizeof VER_KEY;
+	MYDBM_SET (key, xstrdup (VER_KEY));
 
 	content = MYDBM_FETCH (dbfile, key);
 
@@ -72,10 +71,8 @@ void dbver_wr (MYDBM_FILE dbfile)
 	memset (&key, 0, sizeof key);
 	memset (&content, 0, sizeof content);
 
-	MYDBM_SET_DPTR (key, xstrdup (VER_KEY));
-	MYDBM_DSIZE (key) = sizeof VER_KEY;
-	MYDBM_SET_DPTR (content, xstrdup (VER_ID));
-	MYDBM_DSIZE (content) = sizeof VER_ID;
+	MYDBM_SET (key, xstrdup (VER_KEY));
+	MYDBM_SET (content, xstrdup (VER_ID));
 
 	if (MYDBM_INSERT (dbfile, key, content) != 0)
 		error (FATAL, 0,

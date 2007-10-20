@@ -285,14 +285,11 @@ int dbstore (struct mandata *in, char *basename)
 	memset (&key, 0, sizeof key);
 	memset (&cont, 0, sizeof cont);
 
- 	MYDBM_DSIZE (key) = strlen (basename) + 1;
-
- 	if (MYDBM_DSIZE (key) == 1) {
+	MYDBM_SET (key, basename);
+ 	if (!*basename) {
 		dbprintf (in);
  		return 2;
  	}
-
-	MYDBM_SET_DPTR (key, basename);
 
 	/* initialise the cursor to (possibly) our key/cont */
 	status = (dbf->seq) (dbf, (DBT *) &key, (DBT *) &cont, R_CURSOR);
@@ -303,8 +300,7 @@ int dbstore (struct mandata *in, char *basename)
 	/* either nothing was found or the key was not an exact match */
 	else if (status == 1 || !STREQ (MYDBM_DPTR (key), basename)) {
 		cont = make_content (in);
-		MYDBM_SET_DPTR (key, basename);
-		MYDBM_DSIZE (key) = strlen (basename) + 1;
+		MYDBM_SET (key, basename);
 		test_insert (__LINE__, key, cont);
 		status = (dbf->put) (dbf, (DBT *) &key, (DBT *) &cont, 0);
 		free (MYDBM_DPTR (cont));
@@ -331,8 +327,7 @@ int dbstore (struct mandata *in, char *basename)
 			status = (dbf->seq) (dbf, (DBT *) &key, (DBT *) &cont,
 					     R_NEXT);
 			if (!STREQ (MYDBM_DPTR (key), basename)) {
-				MYDBM_SET_DPTR (key, basename);
-				MYDBM_DSIZE (key) = strlen (basename) + 1;
+				MYDBM_SET (key, basename);
 				cont = make_content (in);
 				test_insert (__LINE__, key, cont);
 				status = (dbf->put) (dbf, (DBT *) &key,
@@ -356,8 +351,7 @@ static struct mandata *dblookup (char *page, char *section, int flags)
 	memset (&key, 0, sizeof key);
 	memset (&cont, 0, sizeof cont);
 
-	MYDBM_SET_DPTR (key, page);
-	MYDBM_DSIZE (key) = strlen (page) + 1;
+	MYDBM_SET (key, page);
 
 	/* initialise the cursor to (possibly) our key/cont */
 	status = (dbf->seq) (dbf, (DBT *) &key, (DBT *) &cont, R_CURSOR);

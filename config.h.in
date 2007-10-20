@@ -1,8 +1,5 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
-/* Define if your sprintf function returns a count of converted characters. */
-#undef ANSI_SPRINTF
-
 /* Define if you have, and want to use, Berkeley database header files. */
 #undef BDB_H
 
@@ -58,6 +55,9 @@
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #undef ENABLE_NLS
+
+/* Define as good substitute value for EOVERFLOW. */
+#undef EOVERFLOW
 
 /* Define on systems for which file names may have a so-called `drive letter'
    prefix, define this to compute the length of that prefix, including the
@@ -234,6 +234,9 @@
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
 
+/* Define to 1 if you have the <float.h> header file. */
+#undef HAVE_FLOAT_H
+
 /* Define to 1 if you have the `flock' function. */
 #undef HAVE_FLOCK
 
@@ -345,6 +348,9 @@
 /* Define if you have the 'long double' type. */
 #undef HAVE_LONG_DOUBLE
 
+/* Define if you have the 'long long' type. */
+#undef HAVE_LONG_LONG
+
 /* Define to 1 if the system has the type `long long int'. */
 #undef HAVE_LONG_LONG_INT
 
@@ -422,6 +428,9 @@
 /* Define if the POSIX multithreading library has read/write locks. */
 #undef HAVE_PTHREAD_RWLOCK
 
+/* Define to 1 if the system has the type `ptrdiff_t'. */
+#undef HAVE_PTRDIFF_T
+
 /* Define to 1 if you have the `putenv' function. */
 #undef HAVE_PUTENV
 
@@ -476,6 +485,9 @@
 /* Define if <stdint.h> exists, doesn't clash with <sys/types.h>, and declares
    uintmax_t. */
 #undef HAVE_STDINT_H_WITH_UINTMAX
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
@@ -587,6 +599,12 @@
 
 /* Define to 1 if the system has the type `unsigned long long int'. */
 #undef HAVE_UNSIGNED_LONG_LONG_INT
+
+/* Define to 1 if you have the `vasnprintf' function. */
+#undef HAVE_VASNPRINTF
+
+/* Define to 1 if you have the `vasprintf' function. */
+#undef HAVE_VASPRINTF
 
 /* Define to 1 if you have the `vfork' function. */
 #undef HAVE_VFORK
@@ -713,6 +731,9 @@
 /* Define if rename does not work for source file names with a trailing slash,
    like the one from SunOS 4.1.1_U1. */
 #undef RENAME_TRAILING_SLASH_BUG
+
+/* Define if vasnprintf exists but is overridden by gnulib. */
+#undef REPLACE_VASNPRINTF
 
 /* Define as the return type of signal handlers (`int' or `void'). */
 #undef RETSIGTYPE
@@ -857,6 +878,9 @@
 /* Define to `int' if <sys/types.h> doesn't define. */
 #undef gid_t
 
+/* A replacement for va_copy, if needed.  */
+#define gl_va_copy(a,b) ((a) = (b))
+
 /* Define to rpl_gmtime if the replacement function should be used. */
 #undef gmtime
 
@@ -865,6 +889,9 @@
 #ifndef __cplusplus
 #undef inline
 #endif
+
+/* Define to long or long long if <stdint.h> and <inttypes.h> don't define. */
+#undef intmax_t
 
 /* Define to rpl_localtime if the replacement function should be used. */
 #undef localtime
@@ -952,6 +979,9 @@
 /* Define to unsigned long or unsigned long long if <stdint.h> and
    <inttypes.h> don't define. */
 #undef uintmax_t
+
+/* Define as a macro for copying va_list variables. */
+#undef va_copy
 
 /* Define as `fork' if `vfork' does not work. */
 #undef vfork

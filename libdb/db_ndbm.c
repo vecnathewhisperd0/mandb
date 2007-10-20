@@ -42,6 +42,8 @@
 
 #include <unistd.h>
 
+#include "xvasprintf.h"
+
 #include "manconfig.h"
 
 #include "flock.h"
@@ -78,8 +80,7 @@ DBM* ndbm_flopen (char *filename, int flags, int mode)
 
 		dbf = NULL;
 		lock_failed = 1;
-		dir_fname = xmalloc (strlen (filename) + 5);
-		sprintf (dir_fname, "%s.dir", filename);
+		dir_fname = xasprintf ("%s.dir", filename);
 		dir_fd = open (dir_fname, flags & ~O_TRUNC, mode);
 		free (dir_fname);
 		if (dir_fd != -1) {

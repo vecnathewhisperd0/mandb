@@ -168,6 +168,9 @@ extern __inline__ int btree_nextkeydata(DB *db, datum *key, datum *cont);
 #  error Define either GDBM, NDBM or BTREE before including mydbm.h
 # endif /* not GDBM or NDBM or BTREE */
 
+#define MYDBM_RESET_DSIZE(d)		(MYDBM_DSIZE(d) = strlen(MYDBM_DPTR(d)) + 1)
+#define MYDBM_SET(d, value)		do { MYDBM_SET_DPTR(d, value); MYDBM_RESET_DSIZE(d); } while (0)
+
 extern char *database;
 extern MYDBM_FILE dbf;
 

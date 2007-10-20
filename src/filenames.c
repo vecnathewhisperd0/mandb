@@ -29,6 +29,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "xvasprintf.h"
+
 #include "gettext.h"
 #define _(String) gettext (String)
 
@@ -55,12 +57,7 @@ char *make_filename (const char *path, const char *name,
 	if (!name)
 		name = in->name;    /* comes from dblookup(), so non-NULL */
 
-	file = (char *) xrealloc (file, sizeof "//." + strlen (path) + 
-				  strlen (type) + strlen (in->sec) +
-				  strlen (name) + strlen (in->ext));
-				   
-	(void) sprintf (file, "%s/%s%s/%s.%s",
-			path, type, in->sec, name, in->ext);
+	file = xasprintf ("%s/%s%s/%s.%s", path, type, in->sec, name, in->ext);
 
 	if (in->comp && *in->comp != '-')	/* Is there an extension? */
 		file = appendstr (file, ".", in->comp, NULL);

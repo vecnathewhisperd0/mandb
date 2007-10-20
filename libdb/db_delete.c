@@ -65,8 +65,7 @@ int dbdelete (const char *name, struct mandata *info)
 
 	debug ("Attempting delete of %s(%s) entry.\n", name, info->ext);
 
-	MYDBM_SET_DPTR (key, name_to_key (name));
-	MYDBM_DSIZE (key) = strlen (MYDBM_DPTR (key)) + 1;
+	MYDBM_SET (key, name_to_key (name));
 	cont = MYDBM_FETCH (dbf, key);
 
 	if (!MYDBM_DPTR (cont)) {			/* 0 entries */
@@ -135,8 +134,7 @@ int dbdelete (const char *name, struct mandata *info)
 		   the gdbm db file does not shrink any after a deletion
 		   anyway */
 
-		MYDBM_SET_DPTR (cont, multi_content);
-		MYDBM_DSIZE (cont) = strlen (MYDBM_DPTR (cont)) + 1;
+		MYDBM_SET (cont, multi_content);
 
 		if (MYDBM_REPLACE (dbf, key, cont))
 			gripe_replace_key (MYDBM_DPTR (key));

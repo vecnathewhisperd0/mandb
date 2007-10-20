@@ -334,7 +334,6 @@ dnl Checks for functions.
 dnl
 AC_TYPE_SIGNAL
 AC_FUNC_VFORK
-MAN_FUNC_ANSI_SPRINTF
 MAN_FUNC_STRSIGNAL
 dnl
 dnl Find a suitable database interface header and library

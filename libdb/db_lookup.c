@@ -33,6 +33,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "xvasprintf.h"
+
 #include "gettext.h"
 #define _(String) gettext (String)
 
@@ -121,9 +123,7 @@ datum make_multi_key (const char *page, const char *ext)
 	datum key;
 
 	memset (&key, 0, sizeof key);
-	MYDBM_DSIZE (key) = strlen (page) + strlen (ext) + 2;
-	MYDBM_SET_DPTR (key, xmalloc (MYDBM_DSIZE (key)));
-	sprintf (MYDBM_DPTR (key), "%s\t%s", page, ext);
+	MYDBM_SET (key, xasprintf ("%s\t%s", page, ext));
 	return key;
 }
 
@@ -243,19 +243,7 @@ datum make_content (struct mandata *in)
 	if (!in->whatis)
 		in->whatis = dash + 1;
 
-	MYDBM_DSIZE (cont) =
-		strlen (dash_if_unset (in->name)) + 1 +
-		strlen (in->ext) + 1 +
-		strlen (in->sec) + 1 +
-		/* strlen (in->_st_mtime) + */ 10 + 1 +
-		/* strlen (in->id) + */ 1 + 1 +
-		strlen (in->pointer) + 1 +
-		strlen (in->filter) + 1 +
-		strlen (in->comp) + 1 +
-		strlen (in->whatis) + 1;
-	MYDBM_SET_DPTR (cont, xmalloc (MYDBM_DSIZE (cont)));
-#ifdef ANSI_SPRINTF
-	MYDBM_DSIZE (cont) = 1 + sprintf (MYDBM_DPTR (cont),
+	MYDBM_SET (cont, xasprintf (
 		"%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
 		dash_if_unset (in->name),
 		in->ext,
@@ -265,24 +253,7 @@ datum make_content (struct mandata *in)
 		in->pointer,
 		in->filter,
 		in->comp,
-		in->whatis);
-
-	assert (strlen (MYDBM_DPTR (cont)) + 1 == (size_t) MYDBM_DSIZE (cont));
-#else /* !ANSI_SPRINTF */
-	sprintf (MYDBM_DPTR (cont), "%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
-		 dash_if_unset (in->name),
-		 in->ext,
-		 in->sec,
-		 (long)in->_st_mtime,
-		 in->id,
-		 in->pointer,
-		 in->filter,
-		 in->comp,
-		 in->whatis);
-
-	/* to be sure (st_mtime) */
-	MYDBM_DSIZE (cont) = strlen (MYDBM_DPTR (cont)) + 1;
-#endif /* ANSI_SPRINTF */
+		in->whatis));
 
 #ifdef NDBM
 	/* limit of 4096 bytes of data using ndbm */
@@ -348,8 +319,7 @@ static struct mandata *dblookup (const char *page, const char *section,
 	memset (&key, 0, sizeof key);
 	memset (&cont, 0, sizeof cont);
 
-	MYDBM_SET_DPTR (key, name_to_key (page));
-	MYDBM_DSIZE (key) = strlen (MYDBM_DPTR (key)) + 1;
+	MYDBM_SET (key, name_to_key (page));
 	cont = MYDBM_FETCH (dbf, key);
 	free (MYDBM_DPTR (key));
 

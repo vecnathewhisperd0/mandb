@@ -27,6 +27,11 @@ AC_DEFUN([gl_EARLY],
   AC_REQUIRE([AC_PROG_RANLIB])
   AC_REQUIRE([AC_GNU_SOURCE])
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
+  dnl Some compilers (e.g., AIX 5.3 cc) need to be in c99 mode
+  dnl for the builtin va_copy to work.  With Autoconf 2.60 or later,
+  dnl AC_PROG_CC_STDC arranges for this.  With older Autoconf AC_PROG_CC_STDC
+  dnl shouldn't hurt, though installers are on their own to set c99 mode.
+  AC_REQUIRE([AC_PROG_CC_STDC])
 ])
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -54,6 +59,7 @@ AC_DEFUN([gl_INIT],
   gl_ERROR
   gl_EXITFAIL
   gl_FILE_NAME_CONCAT
+  gl_FLOAT_H
   # No macro. You should also use one of fnmatch-posix or fnmatch-gnu.
   gl_FUNC_FNMATCH_GNU
   gl_FUNC_GETCWD
@@ -85,9 +91,12 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_RENAME
   gl_FUNC_SETENV
   gl_FUNC_UNSETENV
+  gl_SIZE_MAX
   gt_TYPE_SSIZE_T
+  gl_STDARG_H
   AM_STDBOOL_H
   gl_STDINT_H
+  gl_STDIO_H
   gl_STDLIB_H
   gl_FUNC_STRCSPN
   gl_FUNC_STRDUP
@@ -112,11 +121,16 @@ AC_DEFUN([gl_INIT],
   AC_PROG_MKDIR_P
   gl_FUNC_GEN_TEMPNAME
   gl_UNISTD_H
+  gl_FUNC_VASNPRINTF
+  gl_FUNC_VASPRINTF
+  gl_STDIO_MODULE_INDICATOR([vasprintf])
   gl_WCHAR_H
   gl_WCTYPE_H
   gl_XALLOC
   gl_XGETCWD
+  gl_XSIZE
   gl_XSTRNDUP
+  gl_XVASPRINTF
   LIBGNU_LIBDEPS="$gl_libdeps"
   AC_SUBST([LIBGNU_LIBDEPS])
   LIBGNU_LTLIBDEPS="$gl_ltlibdeps"
@@ -163,6 +177,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/alloca_.h
   lib/areadlink-with-size.c
   lib/areadlink.h
+  lib/asnprintf.c
+  lib/asprintf.c
   lib/atexit.c
   lib/basename.c
   lib/canonicalize.c
@@ -181,6 +197,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/exitfail.h
   lib/filenamecat.c
   lib/filenamecat.h
+  lib/float+.h
+  lib/float_.h
   lib/fnmatch.c
   lib/fnmatch_.h
   lib/fnmatch_loop.c
@@ -207,6 +225,10 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mkdtemp.c
   lib/mkstemp.c
   lib/pathmax.h
+  lib/printf-args.c
+  lib/printf-args.h
+  lib/printf-parse.c
+  lib/printf-parse.h
   lib/readlink.c
   lib/ref-add.sin
   lib/ref-del.sin
@@ -220,8 +242,10 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/same-inode.h
   lib/setenv.c
   lib/setenv.h
+  lib/size_max.h
   lib/stdbool_.h
   lib/stdint_.h
+  lib/stdio_.h
   lib/stdlib_.h
   lib/strcspn.c
   lib/strdup.c
@@ -240,15 +264,22 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/tempname.h
   lib/unistd_.h
   lib/unsetenv.c
+  lib/vasnprintf.c
+  lib/vasnprintf.h
+  lib/vasprintf.c
   lib/wchar_.h
   lib/wctype_.h
   lib/xalloc-die.c
   lib/xalloc.h
+  lib/xasprintf.c
   lib/xgetcwd.c
   lib/xgetcwd.h
   lib/xmalloc.c
+  lib/xsize.h
   lib/xstrndup.c
   lib/xstrndup.h
+  lib/xvasprintf.c
+  lib/xvasprintf.h
   m4/absolute-header.m4
   m4/alloca.m4
   m4/atexit.m4
@@ -262,10 +293,12 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/dos.m4
   m4/double-slash-root.m4
   m4/eealloc.m4
+  m4/eoverflow.m4
   m4/error.m4
   m4/exitfail.m4
   m4/extensions.m4
   m4/filenamecat.m4
+  m4/float_h.m4
   m4/fnmatch.m4
   m4/getcwd-abort-bug.m4
   m4/getcwd-path-max.m4
@@ -278,6 +311,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/gnulib-common.m4
   m4/include_next.m4
   m4/inline.m4
+  m4/intmax_t.m4
+  m4/inttypes_h.m4
   m4/localcharset.m4
   m4/longlong.m4
   m4/malloc.m4
@@ -293,10 +328,14 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/regex.m4
   m4/rename.m4
   m4/setenv.m4
+  m4/size_max.m4
   m4/sockpfaf.m4
   m4/ssize_t.m4
+  m4/stdarg.m4
   m4/stdbool.m4
   m4/stdint.m4
+  m4/stdint_h.m4
+  m4/stdio_h.m4
   m4/stdlib_h.m4
   m4/strcspn.m4
   m4/strdup.m4
@@ -313,10 +352,15 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/tempname.m4
   m4/ulonglong.m4
   m4/unistd_h.m4
+  m4/vasnprintf.m4
+  m4/vasprintf.m4
   m4/wchar.m4
+  m4/wchar_t.m4
   m4/wctype.m4
   m4/wint_t.m4
   m4/xalloc.m4
   m4/xgetcwd.m4
+  m4/xsize.m4
   m4/xstrndup.m4
+  m4/xvasprintf.m4
 ])

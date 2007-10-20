@@ -57,6 +57,7 @@
 #include <unistd.h>
 
 #include "dirname.h"
+#include "xvasprintf.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -407,11 +408,8 @@ void update_db_time (void)
 	memset (&content1, 0, sizeof content);
 #endif
 
-	MYDBM_SET_DPTR (key, xstrdup (KEY));
-	MYDBM_DSIZE (key) = sizeof KEY;
-	MYDBM_SET_DPTR (content, xmalloc (16)); /* 11 is max long with '\0' */
-	sprintf (MYDBM_DPTR (content), "%ld", (long) time (NULL));
-	MYDBM_DSIZE (content) = strlen (MYDBM_DPTR (content)) + 1;
+	MYDBM_SET (key, xstrdup (KEY));
+	MYDBM_SET (content, xasprintf ("%ld", (long) time (NULL)));
 
 	/* Open the db in RW to store the $mtime$ ID */
 	/* we know that this should succeed because we just updated the db! */
@@ -428,8 +426,7 @@ void update_db_time (void)
 #ifndef FAST_BTREE
 	MYDBM_REPLACE (dbf, key, content);
 #else /* FAST_BTREE */
-	MYDBM_SET_DPTR (key1, KEY);
-	MYDBM_DSIZE (key1) = sizeof KEY;
+	MYDBM_SET (key1, KEY);
 
 	(dbf->seq) (dbf, (DBT *) &key1, (DBT *) &content1, R_CURSOR);
 	
@@ -452,8 +449,7 @@ void reset_db_time (void)
 
 	memset (&key, 0, sizeof key);
 
-	MYDBM_SET_DPTR (key, xstrdup (KEY));
-	MYDBM_DSIZE (key) = sizeof KEY;
+	MYDBM_SET (key, xstrdup (KEY));
 
 	/* we don't really care if we can't open it RW - it's not fatal */
 	dbf = MYDBM_RWOPEN (database);
@@ -552,8 +548,7 @@ short update_db (const char *manpath)
 		memset (&key, 0, sizeof key);
 		memset (&content, 0, sizeof content);
 
-		MYDBM_SET_DPTR (key, xstrdup (KEY));
-		MYDBM_DSIZE (key) = sizeof KEY;
+		MYDBM_SET (key, xstrdup (KEY));
 		content = MYDBM_FETCH (dbf, key);
 		MYDBM_CLOSE (dbf);
 		free (MYDBM_DPTR (key));

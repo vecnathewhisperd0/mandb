@@ -83,6 +83,7 @@ static char *cwd;
 
 #include "dirname.h"
 #include "minmax.h"
+#include "xvasprintf.h"
 #include "xgetcwd.h"
 
 #include "gettext.h"
@@ -1573,9 +1574,7 @@ static void setenv_less (const char *title)
 	}
 
 	esc_title = escape_less (title);
-	less_opts = xmalloc (strlen (LESS_OPTS) +
-			     strlen (prompt_string) * 2 + 1);
-	sprintf (less_opts, LESS_OPTS, prompt_string, prompt_string);
+	less_opts = xasprintf (LESS_OPTS, prompt_string, prompt_string);
 	less_opts = appendstr (less_opts, less, NULL);
 	man_pn = strstr (less_opts, MAN_PN);
 	while (man_pn) {
