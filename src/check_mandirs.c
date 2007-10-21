@@ -828,8 +828,12 @@ short purge_missing (const char *manpath, const char *catpath)
 		}
 
 		content = MYDBM_FETCH (dbf, key);
-		if (!MYDBM_DPTR (content))
-			return count;
+		if (!MYDBM_DPTR (content)) {
+			nextkey = MYDBM_NEXTKEY (dbf, key);
+			MYDBM_FREE (MYDBM_DPTR (key));
+			key = nextkey;
+			continue;
+		}
 
 		/* Get just the name. */
 		nicekey = xstrdup (MYDBM_DPTR (key));
