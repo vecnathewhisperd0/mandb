@@ -1,4 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
+m4_pattern_forbid([^MAN_])
 
 # Initialise and check we're in the correct directory.
 AC_INIT([man-db], [2.5.0], [cjwatson@debian.org])
