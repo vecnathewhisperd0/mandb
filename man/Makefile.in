@@ -32,7 +32,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/Rules.man THANKS
+	$(srcdir)/Rules.man $(srcdir)/replace.sin THANKS
 subdir = man
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
@@ -131,7 +131,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = replace.sed
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -547,29 +547,6 @@ man8_MANS = \
 	man8/mandb.8
 
 CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS)
-SED_ARGS = \
-	-e 's,%pager%,$(pager),g' \
-        -e 's,%troff%,$(troff),g' \
-        -e 's,%date%,$(date),g' \
-        -e 's,%version%,$(VERSION),g' \
-        -e 's,%zsoelim%,$(TRANS_ZSOELIM),g' \
-        -e 's,%man%,$(TRANS_MAN),g' \
-        -e 's,%mandb%,$(TRANS_MANDB),g' \
-        -e 's,%manpath%,$(TRANS_MANPATH),g' \
-        -e 's,%catman%,$(TRANS_CATMAN),g' \
-        -e 's,%apropos%,$(TRANS_APROPOS),g' \
-        -e 's,%whatis%,$(TRANS_WHATIS),g' \
-        -e 's,%manconv%,$(TRANS_MANCONV),g' \
-        -e 's,%thzsoelim%,$(TRANS_ZSOELIM_UPPER),g' \
-        -e 's,%thman%,$(TRANS_MAN_UPPER),g' \
-        -e 's,%thmandb%,$(TRANS_MANDB_UPPER),g' \
-        -e 's,%thmanpath%,$(TRANS_MANPATH_UPPER),g' \
-        -e 's,%thcatman%,$(TRANS_CATMAN_UPPER),g' \
-        -e 's,%thapropos%,$(TRANS_APROPOS_UPPER),g' \
-        -e 's,%thwhatis%,$(TRANS_WHATIS_UPPER),g' \
-        -e 's,%thmanconv%,$(TRANS_MANCONV_UPPER),g' \
-        -e 's,%manpath_config_file%,$(config_file),g'
-
 all: all-recursive
 
 .SUFFIXES:
@@ -603,6 +580,8 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+replace.sed: $(top_builddir)/config.status $(srcdir)/replace.sin
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-man1: $(man1_MANS) $(man_MANS)
 	@$(NORMAL_INSTALL)
 	test -z "$(man1dir)" || $(MKDIR_P) "$(DESTDIR)$(man1dir)"
@@ -1025,15 +1004,15 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 	uninstall-man1 uninstall-man5 uninstall-man8
 
 
-.man1.1:
+.man1.1: $(top_srcdir)/man/replace.sed
 	$(MKDIR_P) man1
-	sed $(SED_ARGS) $< > $@
-.man5.5:
+	sed -f $(top_srcdir)/man/replace.sed $< > $@
+.man5.5: $(top_srcdir)/man/replace.sed
 	$(MKDIR_P) man5
-	sed $(SED_ARGS) $< > $@
-.man8.8:
+	sed -f $(top_srcdir)/man/replace.sed $< > $@
+.man8.8: $(top_srcdir)/man/replace.sed
 	$(MKDIR_P) man8
-	sed $(SED_ARGS) $< > $@
+	sed -f $(top_srcdir)/man/replace.sed $< > $@
 
 install-data-local:
 	@set -e; \

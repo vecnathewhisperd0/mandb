@@ -533,29 +533,6 @@ man8_MANS = \
 	man8/mandb.8
 
 CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS)
-SED_ARGS = \
-	-e 's,%pager%,$(pager),g' \
-        -e 's,%troff%,$(troff),g' \
-        -e 's,%date%,$(date),g' \
-        -e 's,%version%,$(VERSION),g' \
-        -e 's,%zsoelim%,$(TRANS_ZSOELIM),g' \
-        -e 's,%man%,$(TRANS_MAN),g' \
-        -e 's,%mandb%,$(TRANS_MANDB),g' \
-        -e 's,%manpath%,$(TRANS_MANPATH),g' \
-        -e 's,%catman%,$(TRANS_CATMAN),g' \
-        -e 's,%apropos%,$(TRANS_APROPOS),g' \
-        -e 's,%whatis%,$(TRANS_WHATIS),g' \
-        -e 's,%manconv%,$(TRANS_MANCONV),g' \
-        -e 's,%thzsoelim%,$(TRANS_ZSOELIM_UPPER),g' \
-        -e 's,%thman%,$(TRANS_MAN_UPPER),g' \
-        -e 's,%thmandb%,$(TRANS_MANDB_UPPER),g' \
-        -e 's,%thmanpath%,$(TRANS_MANPATH_UPPER),g' \
-        -e 's,%thcatman%,$(TRANS_CATMAN_UPPER),g' \
-        -e 's,%thapropos%,$(TRANS_APROPOS_UPPER),g' \
-        -e 's,%thwhatis%,$(TRANS_WHATIS_UPPER),g' \
-        -e 's,%thmanconv%,$(TRANS_MANCONV_UPPER),g' \
-        -e 's,%manpath_config_file%,$(config_file),g'
-
 all: all-am
 
 .SUFFIXES:
@@ -864,15 +841,15 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 	uninstall-man1 uninstall-man5 uninstall-man8
 
 
-.man1.1:
+.man1.1: $(top_srcdir)/man/replace.sed
 	$(MKDIR_P) man1
-	sed $(SED_ARGS) $< > $@
-.man5.5:
+	sed -f $(top_srcdir)/man/replace.sed $< > $@
+.man5.5: $(top_srcdir)/man/replace.sed
 	$(MKDIR_P) man5
-	sed $(SED_ARGS) $< > $@
-.man8.8:
+	sed -f $(top_srcdir)/man/replace.sed $< > $@
+.man8.8: $(top_srcdir)/man/replace.sed
 	$(MKDIR_P) man8
-	sed $(SED_ARGS) $< > $@
+	sed -f $(top_srcdir)/man/replace.sed $< > $@
 
 install-data-local:
 	@set -e; \

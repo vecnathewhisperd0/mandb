@@ -481,6 +481,7 @@ AC_CONFIG_FILES(Makefile
 	src/Makefile
 	src/man_db.conf
 	man/Makefile
+	man/replace.sed:man/replace.sin
 	man/de.UTF-8/Makefile
 	man/es.UTF-8/Makefile
 	man/fr.UTF-8/Makefile
