@@ -30509,9 +30509,10 @@ fi
 
       if test "$db" = "yes"
       then
+        man_save_LIBS="$LIBS"
+        LIBS="$LIBS $DBLIBS"
 
-
-for ac_func in gdbm_exists gdbm_setopt
+for ac_func in gdbm_exists
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $ac_func" >&5
@@ -30604,6 +30605,7 @@ _ACEOF
 fi
 done
 
+        LIBS="$man_save_LIBS"
         break
       fi
     done

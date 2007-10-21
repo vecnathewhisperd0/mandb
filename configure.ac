@@ -414,7 +414,10 @@ then
       then
 dnl Need to explicitly check for some routines, rather than using 
 dnl version info extracted from gdbm.h
-        AC_CHECK_FUNCS(gdbm_exists gdbm_setopt)
+        man_save_LIBS="$LIBS"
+        LIBS="$LIBS $DBLIBS"
+        AC_CHECK_FUNCS(gdbm_exists)
+        LIBS="$man_save_LIBS"
         break
       fi
     done], db=no)
