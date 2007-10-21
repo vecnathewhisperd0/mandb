@@ -1010,11 +1010,11 @@ static void man_getopt (int argc, char *argv[])
 				break;
 		    	case 'f':
 				external = WHATIS;
-				apropos = 1;
+				whatis = 1;
 				break;
 		    	case 'k':
 				external = APROPOS;
-				whatis = 1;
+				apropos = 1;
 				break;
 		    	case 'm':
 				alt_system_name = optarg;
