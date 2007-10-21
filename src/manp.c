@@ -428,7 +428,6 @@ void free_locale_bits (struct locale_bits *bits)
 
 char *add_nls_manpath (char *manpathlist, const char *locale)
 {
-#ifdef HAVE_SETLOCALE
 	char *manpath = NULL;
 	char *path;
 	struct locale_bits lbits;
@@ -490,10 +489,6 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 
 	free (manpathlist);
 	return manpath;
-
-#else /* !HAVE_SETLOCALE */
-	return manpathlist;
-#endif /* HAVE_SETLOCALE */
 }
 
 static char *add_system_manpath (const char *systems, const char *manpathlist)

@@ -421,7 +421,6 @@ AC_SUBST(DBLIBS)
 
 # Check for available functions.
 AC_CHECK_FUNCS(seteuid setreuid setresuid strerror)
-AC_CHECK_FUNCS(setlocale)
 AC_REPLACE_FUNCS(flock waitpid)
 
 dnl MAN_ECHO_VAR(ENV-VARIABLE)

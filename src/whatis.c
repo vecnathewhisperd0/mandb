@@ -764,7 +764,6 @@ int main (int argc, char *argv[])
 		}
 	}
 
-#ifdef HAVE_SETLOCALE
 	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
 	if (locale) {
@@ -782,7 +781,6 @@ int main (int argc, char *argv[])
 			multiple_locale = NULL;
 		}
 	}
-#endif /* HAVE_SETLOCALE */
 
 	pipeline_install_sigchld ();
 

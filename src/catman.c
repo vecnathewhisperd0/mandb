@@ -104,9 +104,7 @@ static const struct option long_options[] =
 
 static const char args[] = "dM:C:hV";
 
-#ifdef HAVE_SETLOCALE
 static char *locale;
-#endif /* HAVE_SETLOCALE */
 
 static char *manpathlist[MAXDIRS];
 
@@ -249,7 +247,6 @@ static int parse_for_sec (const char *manpath, const char *section)
 		
 	argp[arg_no++] = xstrdup ("man"); 	/* Name of program */
 
-#ifdef HAVE_SETLOCALE
 	/* As we supply a NULL environment to save precious execve() space,
 	   we must also supply a locale if necessary */
 	if (locale) {
@@ -258,8 +255,6 @@ static int parse_for_sec (const char *manpath, const char *section)
 		initial_bit += sizeof "-L" + strlen (locale) + 1;
 	} else
 		initial_bit = 0;
-
-#endif /* HAVE_SETLOCALE */
 
 	argp[arg_no++] = xstrdup ("-caM");	/* options */
 	argp[arg_no++] = xstrdup (manpath);	/* particular manpath */

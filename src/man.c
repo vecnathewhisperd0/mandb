@@ -729,7 +729,6 @@ int main (int argc, char *argv[])
 	debug ("real user = %d; effective user = %d\n", ruid, euid);
 #endif /* SECURE_MAN_UID */
 
-#ifdef HAVE_SETLOCALE
 	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
 	if (locale) {
@@ -747,8 +746,6 @@ int main (int argc, char *argv[])
 			multiple_locale = NULL;
 		}
 	}
-
-#endif /* HAVE_SETLOCALE */
 
 #ifdef TROFF_IS_GROFF
 	if (htmlout) {

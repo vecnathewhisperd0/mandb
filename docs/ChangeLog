@@ -1,3 +1,15 @@
+Mon Oct 22 00:04:45 BST 2007  Colin Watson  <cjwatson@debian.org>
+
+	Bruno Haible notes in
+	http://lists.gnu.org/archive/html/groff/2005-12/msg00061.html that
+	setlocale is supported on all known systems, and it is in C89. Use
+	it unconditionally.
+
+	* configure.ac: Don't check for setlocale.
+	* src/catman.c (parse_for_sec), src/man.c (main), src/manp.c
+	  (add_nls_manpath), src/whatis.c (main): Remove HAVE_SETLOCALE
+	  conditionals.
+
 Sun Oct 21 21:56:02 BST 2007  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Forbid output tokens beginning with "MAN_".
