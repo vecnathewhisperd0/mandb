@@ -477,6 +477,7 @@ MAN_TRANS_SUBST(zsoelim)
 
 AC_CONFIG_FILES(Makefile
 	gnulib/lib/Makefile
+	gnulib/po/Makefile.in
 	lib/Makefile
 	src/Makefile
 	src/man_db.conf

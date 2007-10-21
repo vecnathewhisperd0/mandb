@@ -19,7 +19,7 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-SUBDIRS = docs intl gnulib/lib lib libdb src man manual po tools
+SUBDIRS = docs intl gnulib/lib gnulib/po lib libdb src man manual po tools
 
 dist_noinst_DATA = README include/README
 
