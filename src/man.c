@@ -1109,7 +1109,7 @@ static void man_getopt (int argc, char *argv[])
 	/* check for incompatible options */
 	if (troff + whatis + apropos + catman +
 	    (print_where || print_where_cat) > 1) {
-		error (0, 0,
+		error (0, 0, "%s",
 		       appendstr (NULL,
 				  troff ? "-[tTZH] " : "",
 				  whatis ? "-f " : "",
