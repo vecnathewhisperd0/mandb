@@ -88,7 +88,7 @@ iconv_t conv_to_locale;
 #endif /* HAVE_ICONV */
 
 static regex_t preg;  
-static int regex;
+static int regex_opt;
 static int exact;
 
 static int wildcard;
@@ -220,7 +220,7 @@ static __inline__ int use_grep (char *page, char *manpath)
 		char *anchored_page = NULL;
 
 		if (am_apropos) {
-			if (regex)
+			if (regex_opt)
 				flags = get_def_user (
 					"apropos_regex_grep_flags",
 					APROPOS_REGEX_GREP_FLAGS);
@@ -403,7 +403,7 @@ static __inline__ int do_whatis (char *page)
 /* return 1 if page matches name, else 0 */
 static int parse_name (char *page, char *dbname)
 { 
-	if (regex)
+	if (regex_opt)
 		return (regexec (&preg, dbname, 0, (regmatch_t *) 0, 0) == 0);
 
 	if (am_apropos && !wildcard) {
@@ -471,7 +471,7 @@ static int word_fnmatch (char *lowpage, char *whatis)
 /* return 1 if page matches whatis, else 0 */
 static int parse_whatis (char *page, char *lowpage, char *whatis)
 { 
-	if (regex) 
+	if (regex_opt) 
 		return (regexec (&preg, whatis, 0, (regmatch_t *) 0, 0) == 0);
 
 	if (wildcard) {
@@ -647,7 +647,7 @@ static int search (char *page)
 		if (am_apropos)
 			found += do_apropos (page, lowpage);
 		else {
-			if (regex || wildcard) {
+			if (regex_opt || wildcard) {
 				found += do_apropos (page, lowpage);
 			} else
 				found += do_whatis (page);
@@ -724,14 +724,14 @@ int main (int argc, char *argv[])
 				manp = xstrdup (optarg);
 				break;
 			case 'e':
-				regex = 0;
+				regex_opt = 0;
 				exact = 1;
 				break;
 			case 'r':
-				regex = 1;
+				regex_opt = 1;
 				break;
 			case 'w':
-				regex = 0;
+				regex_opt = 0;
 				wildcard = 1;
 				break;
 			case 'a':
@@ -787,7 +787,7 @@ int main (int argc, char *argv[])
 	/* Become it even if it's null - GNU standards */
 	/* if (getenv ("POSIXLY_CORRECT")) */
 	if (am_apropos && !exact && !wildcard)
-		regex = 1;
+		regex_opt = 1;
 
 	/* Make sure that we have a keyword! */
 	num_keywords = argc - optind;
@@ -836,7 +836,7 @@ int main (int argc, char *argv[])
 #endif /* HAVE_ICONV */
 
 	while (optind < argc) {
-		if (regex) {
+		if (regex_opt) {
 			int errcode = regcomp (&preg, argv[optind], 
 					       REG_EXTENDED |
 					       REG_NOSUB |
