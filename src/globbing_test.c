@@ -28,12 +28,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "argp.h"
 #include "dirname.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
-
-#include <getopt.h>
+#define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
 #include "globbing.h"
@@ -41,77 +41,68 @@
 char *program_name;
 
 extern const char *extension;
+static int match_case = 0;
+static char **remaining_args;
 
-static const struct option long_options[] =
-{
-	{"debug",	no_argument,		0,	'd'},
-	{"extension",	required_argument,	0,	'e'},
-	{"ignore-case",	no_argument,		0,	'i'},
-	{"match-case",	no_argument,		0,	'I'},
-	{"help",	no_argument,		0,	'h'},
-	{"version",	no_argument,		0,	'V'},
-	{0, 0, 0, 0}
+const char *argp_program_version = "globbing " PACKAGE_VERSION;
+const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+error_t argp_err_exit_status = FAIL;
+
+static const char args_doc[] = N_("path section name");
+
+static struct argp_option options[] = {
+	{ "debug",		'd',	0,			0,	N_("emit debugging messages") },
+	{ "extension",		'e',	N_("EXTENSION"),	0,	N_("limit search to extension type EXTENSION") },
+	{ "ignore-case",	'i',	0,			0,	N_("look for pages case-insensitively (default)") },
+	{ "match-case",		'I',	0,			0,	N_("look for pages case-sensitively") },
+	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	{ 0 }
 };
 
-static const char args[] = "de:iIhV";
-
-static void usage (int status)
+static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
-	printf (_("usage: %s [-deiIhV] path section name\n"), program_name);
-	printf (_(
-		"-d, --debug                 emit debugging messages.\n"
-		"-e, --extension             limit search to extension type `extension'.\n"
-		"-i, --ignore-case           look for pages case-insensitively (default).\n"
-		"-I, --match-case            look for pages case-sensitively.\n"
-		"-V, --version               show version.\n"
-		"-h, --help                  show this usage message.\n"));
-
-	exit (status);
+	switch (key) {
+		case 'd':
+			debug_level = 1;
+			return 0;
+		case 'e':
+			extension = arg;
+			return 0;
+		case 'i':
+			match_case = 0;
+			return 0;
+		case 'I':
+			match_case = 1;
+			return 0;
+		case 'h':
+			argp_state_help (state, state->out_stream,
+					 ARGP_HELP_STD_HELP);
+			break;
+		case ARGP_KEY_ARGS:
+			if (state->argc - state->next != 3)
+				argp_usage (state);
+			remaining_args = state->argv + state->next;
+			return 0;
+	}
+	return ARGP_ERR_UNKNOWN;
 }
+
+static struct argp argp = { options, parse_opt, args_doc };
 
 int main (int argc, char **argv)
 {
-	int c;
 	int i;
-	int match_case = 0;
 
 	program_name = base_name (argv[0]);
 
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != -1) {
-		switch (c) {
-			case 'd':
-				debug_level = 1;
-				break;
-			case 'e':
-				extension = optarg;
-				break;
-			case 'i':
-				match_case = 0;
-				break;
-			case 'I':
-				match_case = 1;
-				break;
-			case 'V':
-				ver ();
-				break;
-			case 'h':
-				usage (OK);
-				break;
-			default:
-				usage (FAIL);
-				break;
-		}
-	}
-
-	if (argc - optind != 3)
-		usage (FAIL);
+	if (argp_parse (&argp, argc, argv, 0, 0, 0))
+		exit (FAIL);
 
 	for (i = 0; i <= 1; i++) {
 		char **files;
 
-		files = look_for_file (argv[optind], argv[optind + 1],
-				       argv[optind + 2], i, match_case);
+		files = look_for_file (remaining_args[0], remaining_args[1],
+				       remaining_args[2], i, match_case);
 		if (files)
 			while (*files)
 				printf ("%s\n", *files++);

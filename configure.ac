@@ -114,7 +114,12 @@ AC_PROG_CPP
 CFLAGS="$CFLAGS -Wall"
 if test "$GCC" = yes
 then
-	CFLAGS="$CFLAGS -W -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wshadow -Wformat-security"
+	CFLAGS="$CFLAGS -W -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wshadow -Wformat-security -Wno-missing-field-initializers"
+	# Use -fgnu89-inline if possible, since otherwise GCC spews warnings
+	# about argp.h.
+	man_save_CFLAGS="$CFLAGS"
+	CFLAGS="$CFLAGS -fgnu89-inline"
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [], [CFLAGS="$man_save_CFLAGS"])
 fi
 AC_PROG_INSTALL
 AC_PROG_RANLIB

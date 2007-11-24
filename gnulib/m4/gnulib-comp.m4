@@ -27,6 +27,7 @@ AC_DEFUN([gl_EARLY],
   AC_REQUIRE([AC_PROG_RANLIB])
   AC_REQUIRE([AC_GNU_SOURCE])
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
+  AC_REQUIRE([gl_LOCK_EARLY])
   dnl Some compilers (e.g., AIX 5.3 cc) need to be in c99 mode
   dnl for the builtin va_copy to work.  With Autoconf 2.60 or later,
   dnl AC_PROG_CC_STDC arranges for this.  With older Autoconf AC_PROG_CC_STDC
@@ -47,6 +48,7 @@ AC_DEFUN([gl_INIT],
   gl_ltlibdeps=
   gl_source_base='gnulib/lib'
   gl_FUNC_ALLOCA
+  gl_ARGP
   gl_FUNC_ATEXIT
   AC_FUNC_CANONICALIZE_FILE_NAME
   gl_MODULE_INDICATOR([canonicalize])
@@ -73,6 +75,7 @@ AC_DEFUN([gl_INIT],
   gl_GLOB
   gl_INLINE
   gl_LOCALCHARSET
+  gl_LOCK
   AC_FUNC_MALLOC
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
@@ -92,12 +95,17 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_SETENV
   gl_FUNC_UNSETENV
   gl_SIZE_MAX
+  gl_FUNC_SLEEP
+  gl_UNISTD_MODULE_INDICATOR([sleep])
   gt_TYPE_SSIZE_T
   gl_STDARG_H
   AM_STDBOOL_H
   gl_STDINT_H
   gl_STDIO_H
   gl_STDLIB_H
+  gl_STRCASE
+  gl_FUNC_STRCHRNUL
+  gl_STRING_MODULE_INDICATOR([strchrnul])
   gl_FUNC_STRCSPN
   gl_FUNC_STRDUP
   gl_STRING_MODULE_INDICATOR([strdup])
@@ -119,11 +127,14 @@ AC_DEFUN([gl_INIT],
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_TIME_H
   AC_PROG_MKDIR_P
+  gl_SYSEXITS
   gl_FUNC_GEN_TEMPNAME
   gl_UNISTD_H
   gl_FUNC_VASNPRINTF
   gl_FUNC_VASPRINTF
   gl_STDIO_MODULE_INDICATOR([vasprintf])
+  gl_FUNC_VSNPRINTF
+  gl_STDIO_MODULE_INDICATOR([vsnprintf])
   gl_WCHAR_H
   gl_WCTYPE_H
   gl_XALLOC
@@ -172,11 +183,25 @@ AC_DEFUN([gl_LIBSOURCES],
 # This macro records the list of files which have been installed by
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
+  build-aux/config.rpath
   build-aux/link-warning.h
   lib/alloca.c
   lib/alloca_.h
   lib/areadlink-with-size.c
   lib/areadlink.h
+  lib/argp-ba.c
+  lib/argp-eexst.c
+  lib/argp-fmtstream.c
+  lib/argp-fmtstream.h
+  lib/argp-fs-xinl.c
+  lib/argp-help.c
+  lib/argp-namefrob.h
+  lib/argp-parse.c
+  lib/argp-pin.c
+  lib/argp-pv.c
+  lib/argp-pvh.c
+  lib/argp-xinl.c
+  lib/argp.h
   lib/asnprintf.c
   lib/asprintf.c
   lib/atexit.c
@@ -215,6 +240,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/glob_.h
   lib/localcharset.c
   lib/localcharset.h
+  lib/lock.c
+  lib/lock.h
   lib/malloc.c
   lib/malloca.c
   lib/malloca.h
@@ -243,15 +270,19 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/setenv.c
   lib/setenv.h
   lib/size_max.h
+  lib/sleep.c
   lib/stdbool_.h
   lib/stdint_.h
   lib/stdio_.h
   lib/stdlib_.h
+  lib/strcasecmp.c
+  lib/strchrnul.c
   lib/strcspn.c
   lib/strdup.c
   lib/strerror.c
   lib/string_.h
   lib/stripslash.c
+  lib/strncasecmp.c
   lib/strndup.c
   lib/strnlen.c
   lib/strpbrk.c
@@ -260,6 +291,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/sys_socket_.h
   lib/sys_stat_.h
   lib/sys_time_.h
+  lib/sysexits_.h
   lib/tempname.c
   lib/tempname.h
   lib/unistd_.h
@@ -267,6 +299,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/vasnprintf.c
   lib/vasnprintf.h
   lib/vasprintf.c
+  lib/vsnprintf.c
   lib/wchar_.h
   lib/wctype_.h
   lib/xalloc-die.c
@@ -282,6 +315,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xvasprintf.h
   m4/absolute-header.m4
   m4/alloca.m4
+  m4/argp.m4
   m4/atexit.m4
   m4/canonicalize.m4
   m4/codeset.m4
@@ -313,7 +347,11 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/inline.m4
   m4/intmax_t.m4
   m4/inttypes_h.m4
+  m4/lib-ld.m4
+  m4/lib-link.m4
+  m4/lib-prefix.m4
   m4/localcharset.m4
+  m4/lock.m4
   m4/longlong.m4
   m4/malloc.m4
   m4/malloca.m4
@@ -329,6 +367,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/rename.m4
   m4/setenv.m4
   m4/size_max.m4
+  m4/sleep.m4
   m4/sockpfaf.m4
   m4/ssize_t.m4
   m4/stdarg.m4
@@ -337,6 +376,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdint_h.m4
   m4/stdio_h.m4
   m4/stdlib_h.m4
+  m4/strcase.m4
+  m4/strchrnul.m4
   m4/strcspn.m4
   m4/strdup.m4
   m4/strerror.m4
@@ -349,11 +390,13 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/sys_socket_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
+  m4/sysexits.m4
   m4/tempname.m4
   m4/ulonglong.m4
   m4/unistd_h.m4
   m4/vasnprintf.m4
   m4/vasprintf.m4
+  m4/vsnprintf.m4
   m4/wchar.m4
   m4/wchar_t.m4
   m4/wctype.m4

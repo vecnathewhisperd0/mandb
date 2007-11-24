@@ -68,13 +68,13 @@
 #  endif /* _POSIX_VERSION */
 #endif /* !ARG_MAX */
 
+#include "argp.h"
 #include "dirname.h"
-
-#include <getopt.h>
 
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
+#define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
 
@@ -90,42 +90,84 @@ char *program_name;
 int quiet = 1;
 MYDBM_FILE dbf;
 char *manp;
+extern char *user_config_file;
 char *database;
+const char **sections;
 
-static const struct option long_options[] =
-{
-    {"debug",		no_argument,	    0, 'd'},
-    {"manpath",		required_argument,  0, 'M'},
-    {"config-file",	required_argument,  0, 'C'},
-    {"help",		no_argument,	    0, 'h'},
-    {"version",		no_argument,	    0, 'V'},
-    {0, 0, 0, 0}
+const char *argp_program_version = "catman " PACKAGE_VERSION;
+const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+error_t argp_err_exit_status = FAIL;
+
+static const char args_doc[] = N_("[section...]");
+
+static struct argp_option options[] = {
+	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
+	{ "manpath",		'M',	N_("PATH"),	0,	N_("set search path for manual pages to PATH") },
+	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },
+	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	{ 0 }
 };
 
-static const char args[] = "dM:C:hV";
+static error_t parse_opt (int key, char *arg, struct argp_state *state)
+{
+	char *mansect;
+
+	switch (key) {
+		case 'd':
+			debug_level = 1;
+			return 0;
+		case 'M':
+			manp = arg;
+			return 0;
+		case 'C':
+			user_config_file = arg;
+			return 0;
+		case 'h':
+			argp_state_help (state, state->out_stream,
+					 ARGP_HELP_STD_HELP);
+			break;
+		case ARGP_KEY_ARGS:
+			sections = xmalloc ((state->argc - state->next + 1) *
+					    sizeof *sections);
+			memcpy (sections, state->argv + state->next,
+				(state->argc - state->next) *
+				sizeof *sections);
+			sections[state->argc - state->next] = NULL;
+			return 0;
+		case ARGP_KEY_NO_ARGS:
+			mansect = getenv ("MANSECT");
+			if (mansect && *mansect) {
+				/* MANSECT contains sections */
+				const char *sec;
+				int i = 0;
+
+				mansect = xstrdup (mansect);
+				sections = NULL;
+				for (sec = strtok (mansect, ":"); sec;
+				     sec = strtok (NULL, ":")) {
+					sections = xrealloc (sections,
+							     (i + 2) *
+							     sizeof *sections);
+					sections[i++] = sec;
+				}
+				sections[i] = NULL;
+				free (mansect);
+			} else {
+				/* use default sections */
+				static const char *std_sections[] =
+					STD_SECTIONS;
+				sections = std_sections;
+			}
+			return 0;
+	}
+	return ARGP_ERR_UNKNOWN;
+}
+
+static struct argp argp = { options, parse_opt, args_doc };
 
 static char *locale;
 
 static char *manpathlist[MAXDIRS];
-
-extern char *optarg;
-extern int optind, opterr, optopt;
-extern char *user_config_file;
-
-static void usage (int status)
-{
-	printf (_("usage: %s [-dhV] [-C file] [-M manpath] [section] ...\n"),
-		program_name);
-	printf (_(
-		"-d, --debug                 produce debugging info.\n"
-		"-M, --manpath path          set search path for manual pages "
-					    "to `path'.\n"
-		"-C, --config-file file      use this user configuration file.\n"
-		"-V, --version               show version.\n"
-		"-h, --help                  show this usage message.\n"));
-
-	exit (status);
-}
 
 /* open db for reading, return 0 for success, errcode for failure */
 static int rdopen_db (void)
@@ -140,7 +182,7 @@ static int rdopen_db (void)
 
 /* fork() and execve() man with the appropriate catman args. 
    If we __inline__ this function, gcc v2.6.2 gives us `clobber' warnings ?? */
-static void catman (char *argp[])
+static void catman (char *args[])
 {
 	pid_t child;
 	int status;
@@ -151,7 +193,7 @@ static void catman (char *argp[])
 		char **p;
 
 		fputs ("man command =", stderr);
-		for (p = argp; *p; p++)
+		for (p = args; *p; p++)
 			fprintf (stderr, " %s", *p);
 		putc ('\n', stderr);
 		return;
@@ -163,7 +205,7 @@ static void catman (char *argp[])
 	else if (child == 0) {
 		char *const envp[] = { NULL };
 
-		execve (MAN, argp, envp);
+		execve (MAN, args, envp);
 		_exit (127);
 	} 
 
@@ -197,14 +239,14 @@ static __inline__ int add_arg (datum key, char **argument)
 }
 
 /* simply close db, tidy up, call catman() and then free() the array */
-static void do_catman (char *argp[], int arg_no, int first_arg)
+static void do_catman (char *args[], int arg_no, int first_arg)
 {
 	MYDBM_CLOSE (dbf);
 
 	/* The last argument must be NULL */
-	argp[arg_no] = NULL;
+	args[arg_no] = NULL;
 
-	catman (argp);
+	catman (args);
 
 	/* don't free the last entry, it's NULL */
 	/* don't free the last but one entry, it's our nextkey */
@@ -212,7 +254,7 @@ static void do_catman (char *argp[], int arg_no, int first_arg)
 
 	while (arg_no >= first_arg)
 		/* all db methods now free() */	
-		MYDBM_FREE (argp[arg_no--]);
+		MYDBM_FREE (args[arg_no--]);
 }
 
 #ifdef BTREE
@@ -237,7 +279,7 @@ static __inline__ void reset_cursor (datum key)
    ultimate source files. */
 static int parse_for_sec (const char *manpath, const char *section)
 {
-	char *argp[MAX_ARGS];
+	char *args[MAX_ARGS];
 	datum key;
 	size_t arg_size, initial_bit;
 	int arg_no = 0, message = 1, first_arg;
@@ -245,20 +287,20 @@ static int parse_for_sec (const char *manpath, const char *section)
 	if (rdopen_db () || dbver_rd (dbf))
 		return 1;
 		
-	argp[arg_no++] = xstrdup ("man"); 	/* Name of program */
+	args[arg_no++] = xstrdup ("man"); 	/* Name of program */
 
 	/* As we supply a NULL environment to save precious execve() space,
 	   we must also supply a locale if necessary */
 	if (locale) {
-		argp[arg_no++] = xstrdup ("-L");	/* locale option */
-		argp[arg_no++] = xstrdup (locale);	/* The locale */
+		args[arg_no++] = xstrdup ("-L");	/* locale option */
+		args[arg_no++] = xstrdup (locale);	/* The locale */
 		initial_bit += sizeof "-L" + strlen (locale) + 1;
 	} else
 		initial_bit = 0;
 
-	argp[arg_no++] = xstrdup ("-caM");	/* options */
-	argp[arg_no++] = xstrdup (manpath);	/* particular manpath */
-	argp[arg_no++] = xstrdup (section);	/* particular section */
+	args[arg_no++] = xstrdup ("-caM");	/* options */
+	args[arg_no++] = xstrdup (manpath);	/* particular manpath */
+	args[arg_no++] = xstrdup (section);	/* particular section */
 
 	first_arg = arg_no;		/* first pagename argument */
 	
@@ -300,8 +342,8 @@ static int parse_for_sec (const char *manpath, const char *section)
 					}
 
 					free_key = add_arg (key,
-							    &(argp[arg_no]));
-					arg_size += strlen (argp[arg_no++]) + 1;
+							    &(args[arg_no]));
+					arg_size += strlen (args[arg_no++]) + 1;
 
 					debug ("arg space free: %d bytes\n",
 					       ARG_MAX - arg_size);
@@ -312,7 +354,7 @@ static int parse_for_sec (const char *manpath, const char *section)
 					   space too */ 
 				    	if (arg_size >= ARG_MAX - NAME_MAX ||
 				    	    arg_no == MAX_ARGS - 1) {
-				    		do_catman (argp, arg_no,
+				    		do_catman (args, arg_no,
 							   first_arg);
 
 				    		/* reopen db and tidy up */
@@ -347,11 +389,11 @@ static int parse_for_sec (const char *manpath, const char *section)
 	}
 
 	if (arg_no > first_arg)
-		do_catman (argp, arg_no, first_arg);
+		do_catman (args, arg_no, first_arg);
 
 	arg_no = first_arg - 1;
 	while (arg_no >= 0)
-		free (argp[arg_no--]);
+		free (args[arg_no--]);
 
 	return 0;
 }
@@ -368,10 +410,9 @@ static __inline__ int check_access (const char *directory)
 		
 int main (int argc, char *argv[])
 {
-	int c;
 	char *sys_manp;
 	char **mp;
-	const char **sections, **sp;
+	const char **sp;
 
 	program_name = base_name (argv[0]);
 
@@ -386,66 +427,8 @@ int main (int argc, char *argv[])
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != EOF) {
-		switch (c) {
-
-			case 'd':
-				debug_level = 1;
-				break;
-			case 'M':
-				manp = optarg;
-				break;
-			case 'C':
-				user_config_file = optarg;
-				break;
-			case 'V':
-				ver ();
-				break;
-			case 'h':
-				usage (OK);
-				break;
-			default:
-				usage (FAIL);
-				break;
-		}
-	}
-
-	/* Deal with the sections */
-
-	/* If we were supplied sections: sort them out */
-	if (optind != argc) {
-		sections = sp = xmalloc ((argc - optind + 1) *
-					 sizeof *sections);
-		while (optind != argc)
-			*sp++ = argv[optind++];
-		*sp = NULL;
-	} else {
-		char *mansect;
-
-		mansect = getenv ("MANSECT");
-		if (mansect && *mansect) {
-			/* MANSECT contains sections */
-			const char *sec;
-			int i = 0;
-
-			mansect = xstrdup (mansect);
-			sections = NULL;
-			for (sec = strtok (mansect, ":"); sec; 
-			     sec = strtok (NULL, ":")) {
-			     	sections = xrealloc (sections,
-						     (i + 2) *
-						     sizeof *sections);
-				sections[i++] = sec;
-			}
-			sections[i] = NULL;
-			free (mansect);
-		} else {
-			/* use default sections */ 
-			static const char *std_sections[] = STD_SECTIONS;
-			sections = std_sections;
-		}
-	}
+	if (argp_parse (&argp, argc, argv, 0, 0, 0))
+		exit (FAIL);
 
 	for (sp = sections; *sp; sp++)
 		debug ("sections: %s\n", *sp);

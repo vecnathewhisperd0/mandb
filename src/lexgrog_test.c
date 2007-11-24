@@ -31,12 +31,12 @@
 
 #include <sys/stat.h>
 
+#include "argp.h"
 #include "dirname.h"
-
-#include <getopt.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)
+#define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
 
@@ -49,107 +49,106 @@
 char *program_name;
 int quiet = 1;
 
-static const struct option long_options[] =
-{
-	{"man",		no_argument,		0,	'm'},
-	{"cat",		no_argument,		0,	'c'},
-	{"whatis",	no_argument,		0,	'w'},
-	{"filters",	no_argument,		0,	'f'},
-	{"encoding",	required_argument,	0,	'E'},
-	{"help",	no_argument,		0,	'h'},
-	{"version",	no_argument,		0,	'V'},
-	{0, 0, 0, 0}
+static int parse_man = 0, parse_cat = 0, show_whatis = 0, show_filters = 0;
+static const char *encoding = NULL;
+static char **files;
+static int num_files;
+
+const char *argp_program_version = "lexgrog " PACKAGE_VERSION;
+const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+error_t argp_err_exit_status = FAIL;
+
+static const char args_doc[] = N_("file...");
+static const char doc[] = "\v" N_("The defaults are --man and --whatis.");
+
+static struct argp_option options[] = {
+	{ "man",	'm',	0,		0,	N_("parse as man page") },
+	{ "cat",	'c',	0,		0,	N_("parse as cat page") },
+	{ "whatis",	'w',	0,		0,	N_("show whatis information"),				1 },
+	{ "filters",	'f',	0,		0,	N_("show guessed series of preprocessing filters"),	1 },
+	{ "encoding",	'E',	N_("ENCODING"),	0,	N_("override character set"),				2 },
+	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	{ 0 }
 };
 
-static const char args[] = "mcwfE:hV";
-
-static void usage (int status)
+static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
-	printf (_("usage: %s [-mcwfhV] [-E encoding] file ...\n"), program_name);
-	printf (_(
-		"-m, --man                   parse as man page.\n"
-		"-c, --cat                   parse as cat page.\n"
-		"-w, --whatis                show whatis information.\n"
-		"-f, --filters               show guessed series of "
-					    "preprocessing filters.\n"
-		"-E, --encoding encoding     override character set.\n"
-		"-V, --version               show version.\n"
-		"-h, --help                  show this usage message.\n"
-		"\n"
-		"The defaults are --man and --whatis.\n"));
-	exit (status);
+	switch (key) {
+		case 'm':
+			parse_man = 1;
+			return 0;
+		case 'c':
+			parse_cat = 1;
+			return 0;
+		case 'w':
+			show_whatis = 1;
+			return 0;
+		case 'f':
+			show_filters = 1;
+			return 0;
+		case 'E':
+			encoding = arg;
+			return 0;
+		case 'h':
+			argp_state_help (state, state->out_stream,
+					 ARGP_HELP_STD_HELP);
+			break;
+		case ARGP_KEY_ARGS:
+			files = state->argv + state->next;
+			num_files = state->argc - state->next;
+			return 0;
+		case ARGP_KEY_NO_ARGS:
+			argp_usage (state);
+			break;
+		case ARGP_KEY_SUCCESS:
+			if (parse_man && parse_cat) {
+				error (0, 0, _("-m -c: incompatible options"));
+				argp_usage (state);
+			}
+			/* defaults: --man, --whatis */
+			if (!parse_man && !parse_cat)
+				parse_man = 1;
+			if (!show_whatis && !show_filters)
+				show_whatis = 1;
+			return 0;
+	}
+	return ARGP_ERR_UNKNOWN;
 }
+
+static struct argp argp = { options, parse_opt, args_doc, doc };
 
 int main (int argc, char **argv)
 {
-	int c;
 	int type = 0;
-	int parse_man = 0, parse_cat = 0, show_whatis = 0, show_filters = 0;
-	const char *encoding = NULL;
+	int i;
 	int some_failed = 0;
 
 	program_name = base_name (argv[0]);
 
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != -1) {
-		switch (c) {
-			case 'm':
-				parse_man = 1;
-				break;
-			case 'c':
-				parse_cat = 1;
-				break;
-			case 'w':
-				show_whatis = 1;
-				break;
-			case 'f':
-				show_filters = 1;
-				break;
-			case 'E':
-				encoding = optarg;
-				break;
-			case 'V':
-				ver ();
-				break;
-			case 'h':
-				usage (OK);
-				break;
-			default:
-				usage (FAIL);
-				break;
-		}
-	}
-	if (parse_man) {
-		if (parse_cat) {
-			error (0, 0, _("-m -c: incompatible options"));
-			usage (FAIL);
-		} else
-			type = 0;
-	} else {
-		if (parse_cat)
-			type = 1;
-		else
-			type = 0;	/* default = man */
-	}
-	if (!show_whatis && !show_filters)
-		show_whatis = 1;
+	if (argp_parse (&argp, argc, argv, 0, 0, 0))
+		exit (FAIL);
+
+	if (parse_man)
+		type = 0;
+	else
+		type = 1;
 
 	pipeline_install_sigchld ();
 
-	while (optind != argc) {
+	for (i = 0; i < num_files; ++i) {
 		lexgrog lg;
 		const char *file;
 		int found = 0;
 
 		lg.type = type;
 
-		if (STREQ (argv[optind], "-"))
-			file = argv[optind];
+		if (STREQ (files[i], "-"))
+			file = files[i];
 		else {
 			char *path, *pathend;
 			struct stat statbuf;
 
-			path = xstrdup (argv[optind]);
+			path = xstrdup (files[i]);
 			pathend = strrchr (path, '/');
 			if (pathend) {
 				*pathend = '\0';
@@ -165,7 +164,7 @@ int main (int argc, char **argv)
 				path = NULL;
 			}
 
-			file = ult_src (argv[optind], path ? path : ".",
+			file = ult_src (files[i], path ? path : ".",
 					&statbuf, SO_LINK);
 			if (path)
 				free (path);
@@ -179,7 +178,7 @@ int main (int argc, char **argv)
 				if (!desc->name || !desc->whatis)
 					continue;
 				found = 1;
-				printf ("%s", argv[optind]);
+				printf ("%s", files[i]);
 				if (show_filters)
 					printf (" (%s)", lg.filters);
 				if (show_whatis)
@@ -191,11 +190,9 @@ int main (int argc, char **argv)
 		}
 
 		if (!found) {
-			printf ("%s: parse failed\n", argv[optind]);
+			printf ("%s: parse failed\n", files[i]);
 			some_failed = 1;
 		}
-
-		++optind;
 	}
 
 	if (some_failed)

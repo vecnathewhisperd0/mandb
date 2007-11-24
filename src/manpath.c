@@ -41,13 +41,13 @@
 #  include <sys/param.h>
 #endif
 
+#include "argp.h"
 #include "dirname.h"
-
-#include <getopt.h>
 
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
+#define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
 
@@ -55,54 +55,66 @@
 
 #include "manp.h"
 
-extern char *optarg;
-extern int optind, opterr, optopt;
-
 char *program_name;
 int quiet = 0;
 
+static int cat = 0;
+static int global = 0;
+static const char *alt_system = "";
 extern char *user_config_file;
 
-static const struct option long_options[] =
-{
-    {"catpath",	    no_argument, 	0, 'c'},
-    {"global",	    no_argument,	0, 'g'},
-    {"debug",	    no_argument, 	0, 'd'},
-    {"help",	    no_argument, 	0, 'h'},
-    {"quiet",	    no_argument, 	0, 'q'},
-    {"version",	    no_argument, 	0, 'V'},
-    {"config-file", required_argument,	0, 'C'},
-    {"systems",	    required_argument, 	0, 'm'},
-    {0, 0, 0, 0}
+const char *argp_program_version = "manpath " PACKAGE_VERSION;
+const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+error_t argp_err_exit_status = FAIL;
+
+static struct argp_option options[] = {
+	{ "catpath",		'c',	0,		0,	N_("show relative catpaths") },
+	{ "global",		'g',	0,		0,	N_("show the entire global manpath") },
+	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
+	{ "quiet",		'q',	0,		0,	N_("produce fewer warnings") },
+	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },
+	{ "systems",		'm',	N_("SYSTEM"),	0,	N_("express which `systems' to use") },
+	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	{ 0 }
 };
 
-static const char args[] = "cgdhqVC:m:";
-
-static void usage (int status)
+static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
-	printf (_( 
-		"usage: %s [[-gcdq] [-C file] [-m system]] | [-V] | [-h]\n"),
-		program_name);
-	printf (_(
-		"-c, --catpath               show relative catpaths.\n"
-		"-g, --global                show the entire global manpath.\n"
-	        "-d, --debug                 produce debugging info.\n"
-	        "-q, --quiet                 produce fewer warnings.\n"
-		"-C, --config-file file      use this user configuration file.\n"
-	        "-m, --systems system        express which `systems' to use.\n"
-	        "-V, --version               show version.\n"
-	        "-h, --help                  show this usage message.\n"));
-
-	exit (status);
+	switch (key) {
+		case 'c':
+			cat = 1;
+			return 0;
+		case 'g':
+			global = 1;
+			quiet = 1;
+			return 0;
+		case 'd':
+			debug_level = 1;
+			return 0;
+		case 'q':
+			quiet = 1;
+			return 0;
+		case 'C':
+			user_config_file = arg;
+			return 0;
+		case 'm':
+			alt_system = arg;
+			return 0;
+		case 'h':
+			argp_state_help (state, state->out_stream,
+					 ARGP_HELP_STD_HELP);
+			break;
+	}
+	return ARGP_ERR_UNKNOWN;
 }
+
+static struct argp argp = { options, parse_opt };
 
 /*
  * Examine user's PATH and print a reasonable MANPATH.
  */
 int main (int argc, char *argv[])
 {
-	int c, global = 0, cat = 0;
-	const char *alt_system = "";
 	char *path_string;
 
 	program_name = base_name (argv[0]);
@@ -114,41 +126,9 @@ int main (int argc, char *argv[])
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != EOF) {
-		switch (c) {
+	if (argp_parse (&argp, argc, argv, 0, 0, 0))
+		exit (FAIL);
 
-			case 'c':
-				cat = 1;
-				break;
-			case 'd':
-			    	debug_level = 1;
-			    	break;
-		    	case 'q':
-			    	quiet = 1;
-			    	break;
-			case 'C':
-				user_config_file = optarg;
-				break;
-			case 'm':
-				alt_system = optarg;
-				break;
-			case 'g':
-				global = 1;
-			    	quiet = 1;
-				break;
-			case 'V':
-				ver();
-				break;
-		    	case 'h':
-		    		usage(OK);
-		    		break;
-		    	default:
-		    		usage(FAIL);
-		    		break;
-		}
-	}
-	
 	path_string = get_manpath (alt_system);
 
 	if (global) {

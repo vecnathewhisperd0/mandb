@@ -43,6 +43,7 @@
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
+#define N_(String) gettext_noop (String)
 
 #ifdef HAVE_ICONV
 #  include <iconv.h>
@@ -51,8 +52,7 @@
 #include <sys/types.h>
 #include "regex.h"
 
-#include <getopt.h>
-
+#include "argp.h"
 #include "dirname.h"
 #include "fnmatch.h"
 
@@ -73,8 +73,7 @@
 static char *manpathlist[MAXDIRS];
 
 extern char *user_config_file;
-extern char *optarg;
-extern int optind, opterr, optopt;
+static char **keywords;
 static int num_keywords;
 
 char *program_name;
@@ -99,82 +98,111 @@ static int long_output;
 
 static const char *section;
 
+static char *manp = NULL;
+static const char *alt_systems = "";
+static const char *locale = NULL;
+
 static struct hashtable *apropos_seen = NULL;
 
-static const char args[] = "dvrewas:lhVm:M:fkL:C:";
+const char *argp_program_version; /* initialised in main */
+const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+error_t argp_err_exit_status = FAIL;
 
-static const struct option long_options[] =
-{
-	{"debug",	no_argument,		0, 'd'},
-	{"verbose",	no_argument,		0, 'v'},
-	{"regex",	no_argument,		0, 'r'},
-	{"exact",	no_argument,		0, 'e'},
-	{"wildcard",	no_argument,		0, 'w'},
-	{"and",		no_argument,		0, 'a'}, /* apropos only */
-	{"long",	no_argument,		0, 'l'},
-	{"section",	required_argument,	0, 's'},
-	{"help",	no_argument,		0, 'h'},
-	{"version",	no_argument,		0, 'V'},
-	{"systems",	required_argument,	0, 'm'},
-	{"manpath",	required_argument,	0, 'M'},
-	{"whatis",	no_argument,		0, 'f'},
-	{"apropos",	no_argument,		0, 'k'},
-	{"locale",	required_argument,	0, 'L'},
-	{"config-file",	required_argument,	0, 'C'},
-	{0, 0, 0, 0}
+static const char args_doc[] = N_("keyword...");
+static const char apropos_doc[] = "\v" N_("The --regex option is enabled by default.");
+
+static struct argp_option options[] = {
+	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
+	{ "verbose",		'v',	0,		0,	N_("print verbose warning messages") },
+	{ "regex",		'r',	0,		0,	N_("interpret each keyword as a regex"),	10 },
+	{ "exact",		'e',	0,		0,	N_("search each keyword for exact match") },
+	{ "wildcard",		'w',	0,		0,	N_("the keyword(s) contain wildcards") },
+	{ "and",		'a',	0,		0,	N_("require all keywords to match"),			20 }, /* apropos only */
+	{ "long",		'l',	0,		0,	N_("do not trim output to terminal width"),		30 },
+	{ "section",		's',	N_("SECTION"),	0,	N_("search only this section"),				40 },
+	{ "systems",		'm',	N_("SYSTEM"),	0,	N_("include alternate systems' man pages") },
+	{ "manpath",		'M',	N_("PATH"),	0,	N_("set search path for manual pages to PATH") },
+	{ "locale",		'L',	N_("LOCALE"),	0,	N_("define the locale for this search") },
+	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },
+	{ "whatis",		'f',	0,		OPTION_HIDDEN,	0 },
+	{ "apropos",		'k',	0,		OPTION_HIDDEN,	0 },
+	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	{ 0 }
 };
 
-static void apropos_usage (int status)
+static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
-	printf (_("usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
-		  "               [-L locale] [-C file] keyword ...\n"), program_name);
-	printf (_(
-		"-d, --debug                produce debugging info.\n"
-		"-v, --verbose              print verbose warning messages.\n"
-		"-r, --regex                interpret each keyword as a regex (default).\n"
-		"-e, --exact                search each keyword for exact match.\n"
-		"-w, --wildcard             the keyword(s) contain wildcards.\n"
-		"-a, --and                  require all keywords to match.\n"
-		"-l, --long                 do not trim output to terminal width.\n"
-		"-s, --section section      search only this section.\n"
-		"-m, --systems system       include alternate systems' man pages.\n"
-		"-M, --manpath path         set search path for manual pages to `path'.\n"
-		"-L, --locale locale        define the locale for this search.\n"
-		"-C, --config-file file     use this user configuration file.\n"
-		"-V, --version              show version.\n"
-		"-h, --help                 show this usage message.\n"));
-
-	exit (status);
+	switch (key) {
+		case 'd':
+			debug_level = 1;
+			return 0;
+		case 'v':
+			quiet = 0;
+			return 0;
+		case 'r':
+			regex = 1;
+			return 0;
+		case 'e':
+			/* Only makes sense for apropos, but has
+			 * historically been accepted by whatis anyway.
+			 */
+			regex = 0;
+			exact = 1;
+			return 0;
+		case 'w':
+			regex = 0;
+			wildcard = 1;
+			return 0;
+		case 'a':
+			if (am_apropos)
+				require_all = 1;
+			else
+				argp_usage (state);
+			return 0;
+		case 'l':
+			long_output = 1;
+			return 0;
+		case 's':
+			section = arg;
+			return 0;
+		case 'm':
+			alt_systems = arg;
+			return 0;
+		case 'M':
+			manp = xstrdup (arg);
+			return 0;
+		case 'L':
+			locale = arg;
+			return 0;
+		case 'C':
+			user_config_file = arg;
+			return 0;
+		case 'f':
+		case 'k':
+			/* ignore, may be passed by man */
+			return 0;
+		case 'h':
+			argp_state_help (state, state->out_stream,
+					 ARGP_HELP_STD_HELP);
+			break;
+		case ARGP_KEY_ARGS:
+			keywords = state->argv + state->next;
+			num_keywords = state->argc - state->next;
+			return 0;
+		case ARGP_KEY_NO_ARGS:
+			/* Make sure that we have a keyword! */
+			printf (_("%s what?\n"), program_name);
+			exit (FAIL);
+		case ARGP_KEY_SUCCESS:
+			if (am_apropos && !exact && !wildcard)
+				regex = 1;
+			return 0;
+	}
+	return ARGP_ERR_UNKNOWN;
 }
 
-static void whatis_usage (int status)
-{
-	printf (_("usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath]\n"
-		  "              [-L locale] [-C file] keyword ...\n"), program_name);
-	printf (_(
-		"-d, --debug                produce debugging info.\n"
-		"-v, --verbose              print verbose warning messages.\n"
-		"-r, --regex                interpret each keyword as a regex.\n"
-		"-w, --wildcard             the keyword(s) contain wildcards.\n"
-		"-l, --long                 do not trim output to terminal width.\n"
-		"-s, --section section      search only this section.\n"
-		"-m, --systems system       include alternate systems' man pages.\n"
-		"-M, --manpath path         set search path for manual pages to `path'.\n"
-		"-L, --locale locale        define the locale for this search.\n"
-		"-C, --config-file file     use this user configuration file.\n"
-		"-V, --version              show version.\n"
-		"-h, --help                 show this usage message.\n"));
-
-	exit (status);
-}
-
-static void usage (int status)
-{
-	if (am_apropos)
-		apropos_usage (status);
-	else
-		whatis_usage (status);
-}
+static struct argp apropos_argp = { options, parse_opt, args_doc, apropos_doc };
+static struct argp whatis_argp = { options, parse_opt, args_doc };
 
 static char *simple_convert (iconv_t conv, char *string)
 {
@@ -669,21 +697,32 @@ static int search (char *page)
 
 int main (int argc, char *argv[])
 {
-	int c;
-	char *manp = NULL;
-	const char *alt_systems = "";
 	char *multiple_locale = NULL, *internal_locale;
-	const char *locale = NULL;
 #ifdef HAVE_ICONV
 	char *locale_charset;
 #endif
+	int i;
 	int status = OK;
 
 	program_name = base_name (argv[0]);
-	if (STREQ (program_name, APROPOS_NAME))
+	if (STREQ (program_name, APROPOS_NAME)) {
 		am_apropos = 1;
-	else
+		argp_program_version = "apropos " PACKAGE_VERSION;
+	} else {
+		struct argp_option *optionp;
 		am_apropos = 0;
+		argp_program_version = "whatis " PACKAGE_VERSION;
+		for (optionp = (struct argp_option *) whatis_argp.options;
+		     optionp->name || optionp->key || optionp->arg ||
+		     optionp->flags || optionp->doc || optionp->group;
+		     ++optionp) {
+			if (!optionp->name)
+				continue;
+			if (STREQ (optionp->name, "exact") ||
+			    STREQ (optionp->name, "and"))
+				optionp->flags |= OPTION_HIDDEN;
+		}
+	}
 
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, ""))
@@ -704,65 +743,9 @@ int main (int argc, char *argv[])
 	}
 	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
 
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != EOF) {
-		switch (c) {
-
-			case 'd':
-				debug_level = 1;
-				break;
-			case 'v':
-				quiet = 0;
-				break;
-			case 'L':
-				locale = optarg;
-				break;
-			case 'm':
-				alt_systems = optarg;
-				break;
-			case 'M':
-				manp = xstrdup (optarg);
-				break;
-			case 'e':
-				regex = 0;
-				exact = 1;
-				break;
-			case 'r':
-				regex = 1;
-				break;
-			case 'w':
-				regex = 0;
-				wildcard = 1;
-				break;
-			case 'a':
-				if (am_apropos)
-					require_all = 1;
-				else
-					usage (FAIL);
-				break;
-			case 'l':
-				long_output = 1;
-				break;
-			case 's':
-				section = optarg;
-				break;
-			case 'f': /* fall through */
-			case 'k': /* ignore, may be passed by man */
-				break;
-			case 'C':
-				user_config_file = optarg;
-				break;
-			case 'V':
-				ver ();
-				break;
-			case 'h':
-				usage (OK);
-				break;
-			default:
-				usage (FAIL);
-				break;
-		}
-	}
+	if (argp_parse (am_apropos ? &apropos_argp : &whatis_argp, argc, argv,
+			0, 0, 0))
+		exit (FAIL);
 
 	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
@@ -783,20 +766,6 @@ int main (int argc, char *argv[])
 	}
 
 	pipeline_install_sigchld ();
-
-	/* Become it even if it's null - GNU standards */
-	/* if (getenv ("POSIXLY_CORRECT")) */
-	if (am_apropos && !exact && !wildcard)
-		regex = 1;
-
-	/* Make sure that we have a keyword! */
-	num_keywords = argc - optind;
-	if (!num_keywords) {
-		printf (_("%s what?\n"), program_name);
-		free (internal_locale);
-		free (program_name);
-		return 0;
-	}
 
 	/* sort out the internal manpath */
 	if (manp == NULL) {
@@ -835,9 +804,9 @@ int main (int argc, char *argv[])
 	free (locale_charset);
 #endif /* HAVE_ICONV */
 
-	while (optind < argc) {
+	for (i = 0; i < num_keywords; ++i) {
 		if (regex) {
-			int errcode = regcomp (&preg, argv[optind], 
+			int errcode = regcomp (&preg, keywords[i],
 					       REG_EXTENDED |
 					       REG_NOSUB |
 					       REG_ICASE);
@@ -846,10 +815,10 @@ int main (int argc, char *argv[])
 				char error_string[64];
 				regerror (errcode, &preg, error_string, 64);
 				error (FAIL, 0, _("fatal: regex `%s': %s"),
-				       argv[optind], error_string);
+				       keywords[i], error_string);
 			}
 		}
-		if (!search (argv[optind++]))
+		if (!search (keywords[i]))
 			status = NOT_FOUND;
 		regfree (&preg);
 	}
