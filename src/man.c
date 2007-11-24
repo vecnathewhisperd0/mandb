@@ -1217,6 +1217,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				    pipeline *decomp, const char *dbfilters)
 {
 	const char *pp_string;
+	const char *roff_opt;
 	char *fmt_prog;
 	pipeline *p = pipeline_new ();
 	command *cmd;
@@ -1226,6 +1227,10 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #endif
 
 	pp_string = get_preprocessors (decomp, dbfilters);
+
+	roff_opt = getenv ("MANROFFOPT");
+	if (!roff_opt)
+		roff_opt = "";
 
 #ifdef ALT_EXT_FORMAT
 	/* Check both external formatter locations */
@@ -1410,6 +1415,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				else if (!troff)
 					add_roff_line_length (cmd, &save_cat);
 #endif
+
+				command_argstr (cmd, roff_opt);
 
 				wants_dev = 1;
 				wants_post = 1;
