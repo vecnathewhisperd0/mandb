@@ -2608,6 +2608,13 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 
 
+
+if test ! -f gnulib/po/Makefile.in.in; then
+	{ { echo "$as_me:$LINENO: error: you must run ./autogen.sh before ./configure when building from revision control" >&5
+echo "$as_me: error: you must run ./autogen.sh before ./configure when building from revision control" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 ac_config_headers="$ac_config_headers config.h"
 
 # Make sure we can run config.sub.

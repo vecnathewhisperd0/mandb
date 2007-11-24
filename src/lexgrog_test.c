@@ -35,6 +35,7 @@
 #include "dirname.h"
 
 #include "gettext.h"
+#include <locale.h>
 #define _(String) gettext (String)
 #define N_(String) gettext_noop (String)
 
@@ -124,6 +125,13 @@ int main (int argc, char **argv)
 	int some_failed = 0;
 
 	program_name = base_name (argv[0]);
+
+	if (!setlocale (LC_ALL, ""))
+		/* Obviously can't translate this. */
+		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
+			     "are correct");
+	bindtextdomain (PACKAGE, LOCALEDIR);
+	textdomain (PACKAGE);
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);

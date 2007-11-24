@@ -4,9 +4,14 @@ m4_pattern_forbid([^MAN_])
 # Initialise and check we're in the correct directory.
 AC_INIT([man-db], [2.5.0], [cjwatson@debian.org])
 AC_CONFIG_AUX_DIR(tools)
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign])
 AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR(src/man.c)
+
+if test ! -f gnulib/po/Makefile.in.in; then
+	AC_MSG_ERROR([you must run ./autogen.sh before ./configure when building from revision control])
+fi
+
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
 

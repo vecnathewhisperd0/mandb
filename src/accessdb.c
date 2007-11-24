@@ -37,6 +37,7 @@
 #include "xvasprintf.h"
 
 #include "gettext.h"
+#include <locale.h>
 #define _(String) gettext (String)
 #define N_(String) gettext_noop (String)
 
@@ -103,6 +104,14 @@ int main (int argc, char *argv[])
 	datum key;
 
 	program_name = base_name (argv[0]);
+
+	if (!setlocale (LC_ALL, ""))
+		/* Obviously can't translate this. */
+		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
+			     "are correct");
+	bindtextdomain (PACKAGE, LOCALEDIR);
+	textdomain (PACKAGE);
+
 	if (is_directory (FHS_CAT_ROOT) == 1)
 		cat_root = FHS_CAT_ROOT;
 	else if (is_directory (CAT_ROOT) == 1)
