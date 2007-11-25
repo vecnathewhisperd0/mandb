@@ -1004,15 +1004,15 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 	uninstall-man1 uninstall-man5 uninstall-man8
 
 
-.man1.1: $(top_srcdir)/man/replace.sed
+.man1.1: $(top_builddir)/man/replace.sed
 	$(MKDIR_P) man1
-	sed -f $(top_srcdir)/man/replace.sed $< > $@
-.man5.5: $(top_srcdir)/man/replace.sed
+	sed -f $(top_builddir)/man/replace.sed $< > $@
+.man5.5: $(top_builddir)/man/replace.sed
 	$(MKDIR_P) man5
-	sed -f $(top_srcdir)/man/replace.sed $< > $@
-.man8.8: $(top_srcdir)/man/replace.sed
+	sed -f $(top_builddir)/man/replace.sed $< > $@
+.man8.8: $(top_builddir)/man/replace.sed
 	$(MKDIR_P) man8
-	sed -f $(top_srcdir)/man/replace.sed $< > $@
+	sed -f $(top_builddir)/man/replace.sed $< > $@
 
 install-data-local:
 	@set -e; \
