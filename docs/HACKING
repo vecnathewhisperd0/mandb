@@ -49,12 +49,16 @@ a little tight with the deep indent; think of it as a useful discipline to
 stop indentation levels getting out of hand. :-)
 
 
-Utility functions to use
-------------------------
+Facilities and portability
+--------------------------
 
-The lib/ directory provides various functions beginning with 'x' which check
-the return values from the system's memory allocation calls. Please use them
-instead of their non-'x' siblings.
+man-db uses Gnulib to provide portability support and utility functions
+common to many GNU packages (although man-db is not itself a GNU package),
+while the lib/ directory provides some other utility functions specific to
+man-db. Please make use of these facilities where available. In particular,
+there are various functions beginning with 'x' which check the return values
+from the system's memory allocation calls, which you should use instead of
+their non-'x' siblings.
 
 appendstr() provides manageable string concatenation. Use it where
 appropriate. Remember to terminate its argument list with a NULL.
@@ -62,6 +66,10 @@ appropriate. Remember to terminate its argument list with a NULL.
 If you're calling any of the is*() or to*() functions in <ctype.h>, please
 do so via the CTYPE() macro in include/manconfig.h to ensure that the
 argument type is correct.
+
+You may assume C89 (e.g. no need to support K&R-style function definitions),
+but please do not assume C99 (e.g. do not use nested functions or //
+comments).
 
 
 Testing
