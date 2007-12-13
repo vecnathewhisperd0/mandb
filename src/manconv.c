@@ -98,7 +98,7 @@ const char *argp_program_version = "manconv " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("-f CODE:... -t CODE [filename]");
+static const char args_doc[] = N_("-f CODE:... -t CODE [FILENAME]");
 
 static struct argp_option options[] = {
 	{ "from-code",	'f',	N_("CODE:..."),	0,	N_("possible encodings of original text") },

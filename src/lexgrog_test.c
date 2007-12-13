@@ -59,7 +59,7 @@ const char *argp_program_version = "lexgrog " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("file...");
+static const char args_doc[] = N_("FILE...");
 static const char doc[] = "\v" N_("The defaults are --man and --whatis.");
 
 static struct argp_option options[] = {

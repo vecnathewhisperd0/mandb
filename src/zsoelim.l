@@ -87,7 +87,7 @@ const char *argp_program_version = "zsoelim " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("file...");
+static const char args_doc[] = N_("FILE...");
 
 static struct argp_option options[] = {
 	{ "compatible",	'C',	0,	0,	N_("emit debugging messages") },

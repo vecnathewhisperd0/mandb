@@ -233,7 +233,7 @@ const char *argp_program_version = "man " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("[section] page...");
+static const char args_doc[] = N_("[SECTION] PAGE...");
 
 /* Please keep these options in the same order as in parse_opt below. */
 static struct argp_option options[] = {

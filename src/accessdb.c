@@ -58,7 +58,7 @@ const char *argp_program_version = "accessdb " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("[man database]");
+static const char args_doc[] = N_("[MAN DATABASE]");
 static const char doc[] = "\v" N_("The man database defaults to %s%s.");
 
 static struct argp_option options[] = {

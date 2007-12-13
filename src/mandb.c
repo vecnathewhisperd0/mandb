@@ -91,7 +91,7 @@ const char *argp_program_version = "mandb " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("[manpath]");
+static const char args_doc[] = N_("[MANPATH]");
 
 static struct argp_option options[] = {
 	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },

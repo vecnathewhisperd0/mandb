@@ -108,7 +108,7 @@ const char *argp_program_version; /* initialised in main */
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("keyword...");
+static const char args_doc[] = N_("KEYWORD...");
 static const char apropos_doc[] = "\v" N_("The --regex option is enabled by default.");
 
 static struct argp_option options[] = {
