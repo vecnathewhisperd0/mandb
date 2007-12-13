@@ -78,11 +78,8 @@ void plain_hash_free (void *defn)
 /* Create a hashtable. */
 struct hashtable *hash_create (hash_free_ptr free_defn)
 {
-	struct hashtable *ht =
-		(struct hashtable *) xmalloc (sizeof (struct hashtable));
-	ht->hashtab =
-		(struct nlist **) xmalloc (HASHSIZE * sizeof (struct nlist *));
-	memset (ht->hashtab, 0, HASHSIZE * sizeof (struct nlist *));
+	struct hashtable *ht = XMALLOC (struct hashtable);
+	ht->hashtab = XCALLOC (HASHSIZE, struct nlist *);
 	ht->unique = 0;
 	ht->identical = 0;
 	ht->free_defn = free_defn;
@@ -114,7 +111,7 @@ struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
 	} else {
 		unsigned int hashval;
 
-		np = (struct nlist *) xmalloc (sizeof (struct nlist));
+		np = XMALLOC (struct nlist);
 		np->name = xstrndup (name, len);
 		hashval = hash (name, len);
 

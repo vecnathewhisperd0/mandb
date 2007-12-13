@@ -577,11 +577,13 @@ const char *get_roff_encoding (const char *device, const char *source_encoding)
 	int found = 0;
 	const char *roff_encoding = NULL;
 
-	for (entry = device_table; entry->roff_device; ++entry) {
-		if (STREQ (entry->roff_device, device)) {
-			found = 1;
-			roff_encoding = entry->roff_encoding;
-			break;
+	if (device) {
+		for (entry = device_table; entry->roff_device; ++entry) {
+			if (STREQ (entry->roff_device, device)) {
+				found = 1;
+				roff_encoding = entry->roff_encoding;
+				break;
+			}
 		}
 	}
 
@@ -595,7 +597,7 @@ const char *get_roff_encoding (const char *device, const char *source_encoding)
 	 * This is evil, but there's not much that can be done about it
 	 * apart from waiting for groff 2.0.
 	 */
-	if (STREQ (device, "utf8") && !get_groff_preconv ()) {
+	if (device && STREQ (device, "utf8") && !get_groff_preconv ()) {
 		const char *ctype = setlocale (LC_CTYPE, NULL);
 		if (STREQ (ctype, "ja_JP.UTF-8") ||
 		    STREQ (ctype, "zh_CN.UTF-8") ||

@@ -1,21 +1,20 @@
 /* Word-wrapping and line-truncating streams.
-   Copyright (C) 1997, 2006 Free Software Foundation, Inc.
+   Copyright (C) 1997, 2006-2007 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Written by Miles Bader <miles@gnu.ai.mit.edu>.
 
-   This program is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* This package emulates glibc `line_wrap_stream' semantics for systems that
    don't have that.  If the system does have it, it is just a wrapper for
@@ -135,6 +134,7 @@ extern ssize_t argp_fmtstream_printf (argp_fmtstream_t __fs,
 				      const char *__fmt, ...)
      __attribute__ ((__format__ (printf, 2, 3)));
 
+#if _LIBC || !defined __OPTIMIZE__
 extern int __argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
 extern int argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
 
@@ -145,6 +145,7 @@ extern size_t __argp_fmtstream_write (argp_fmtstream_t __fs,
 				      const char *__str, size_t __len);
 extern size_t argp_fmtstream_write (argp_fmtstream_t __fs,
 				    const char *__str, size_t __len);
+#endif
 
 /* Access macros for various bits of state.  */
 #define argp_fmtstream_lmargin(__fs) ((__fs)->lmargin)
@@ -154,6 +155,7 @@ extern size_t argp_fmtstream_write (argp_fmtstream_t __fs,
 #define __argp_fmtstream_rmargin argp_fmtstream_rmargin
 #define __argp_fmtstream_wmargin argp_fmtstream_wmargin
 
+#if _LIBC || !defined __OPTIMIZE__
 /* Set __FS's left margin to LMARGIN and return the old value.  */
 extern size_t argp_fmtstream_set_lmargin (argp_fmtstream_t __fs,
 					  size_t __lmargin);
@@ -175,6 +177,7 @@ extern size_t __argp_fmtstream_set_wmargin (argp_fmtstream_t __fs,
 /* Return the column number of the current output point in __FS.  */
 extern size_t argp_fmtstream_point (argp_fmtstream_t __fs);
 extern size_t __argp_fmtstream_point (argp_fmtstream_t __fs);
+#endif
 
 /* Internal routines.  */
 extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
@@ -198,7 +201,28 @@ extern int __argp_fmtstream_ensure (argp_fmtstream_t __fs, size_t __amount);
 #endif
 
 #ifndef ARGP_FS_EI
-#define ARGP_FS_EI extern inline
+# ifdef __GNUC__
+   /* GCC 4.3 and above with -std=c99 or -std=gnu99 implements ISO C99
+      inline semantics, unless -fgnu89-inline is used.  It defines a macro
+      __GNUC_STDC_INLINE__ to indicate this situation or a macro
+      __GNUC_GNU_INLINE__ to indicate the opposite situation.
+      GCC 4.2 with -std=c99 or -std=gnu99 implements the GNU C inline
+      semantics but warns, unless -fgnu89-inline is used:
+        warning: C99 inline functions are not supported; using GNU89
+        warning: to disable this warning use -fgnu89-inline or the gnu_inline function attribute
+      It defines a macro __GNUC_GNU_INLINE__ to indicate this situation.  */
+#  if defined __GNUC_STDC_INLINE__
+#   define ARGP_FS_EI inline
+#  elif defined __GNUC_GNU_INLINE__
+#   define ARGP_FS_EI extern inline __attribute__ ((__gnu_inline__))
+#  else
+#   define ARGP_FS_EI extern inline
+#  endif
+# else
+   /* With other compilers, assume the ISO C99 meaning of 'inline', if
+      the compiler supports 'inline' at all.  */
+#  define ARGP_FS_EI inline
+# endif
 #endif
 
 ARGP_FS_EI size_t

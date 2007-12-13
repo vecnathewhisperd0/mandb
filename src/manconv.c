@@ -70,25 +70,23 @@ static char **split_codes (const char *codestr)
 	char *codestrtok = xstrdup (codestr);
 	char *codestrtok_ptr = codestrtok;
 	char *tok;
-	int codearray_cur = 0, codearray_alloc = 4;
-	char **codearray = xmalloc (codearray_alloc * sizeof *codearray);
+	size_t codearray_cur = 0, codearray_alloc = 0;
+	char **codearray = NULL;
 
 	for (tok = strsep (&codestrtok_ptr, ":"); tok;
 	     tok = strsep (&codestrtok_ptr, ":")) {
 		if (!*tok)
 			continue;	/* ignore empty fields */
-		if (codearray_cur >= codearray_alloc) {
-			codearray_alloc <<= 1;
-			codearray = xrealloc
+		if (codearray_cur >= codearray_alloc)
+			codearray = x2nrealloc
 				(codearray,
-				 codearray_alloc * sizeof *codearray);
-		}
+				 &codearray_alloc, sizeof *codearray);
 		codearray[codearray_cur++] = xstrdup (tok);
 	}
 
 	if (codearray_cur >= codearray_alloc)
-		codearray = xrealloc (codearray,
-				      (++codearray_alloc) * sizeof *codearray);
+		codearray = x2nrealloc (codearray,
+					&codearray_alloc, sizeof *codearray);
 	codearray[codearray_cur] = NULL;
 
 	free (codestrtok);

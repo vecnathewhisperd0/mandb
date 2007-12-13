@@ -114,13 +114,13 @@ datum man_gdbm_firstkey (man_gdbm_wrapper wrap)
 	int i;
 
 	/* Build the raw list of keys and sort it. */
-	keys = xmalloc (maxkeys * sizeof *keys);
+	keys = xnmalloc (maxkeys, sizeof *keys);
 	keys[0] = xmalloc (sizeof **keys);
 	keys[0]->key = gdbm_firstkey (wrap->file);
 	while (MYDBM_DPTR (keys[numkeys]->key)) {
 		if (++numkeys >= maxkeys) {
 			maxkeys *= 2;
-			keys = xrealloc (keys, maxkeys * sizeof *keys);
+			keys = xnrealloc (keys, maxkeys, sizeof *keys);
 		}
 		keys[numkeys] = xmalloc (sizeof **keys);
 		keys[numkeys]->key =

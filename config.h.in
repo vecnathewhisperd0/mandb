@@ -21,6 +21,12 @@
 /* Define if you have, and want to use, the Berkeley database library. */
 #undef BTREE
 
+/* Define if chown is not POSIX compliant regarding IDs of -1. */
+#undef CHOWN_FAILS_TO_HONOR_ID_OF_NEGATIVE_ONE
+
+/* Define if chown modifies symlinks. */
+#undef CHOWN_MODIFIES_SYMLINK
+
 /* Define if you have compressors and want to support compressed cat files. */
 #undef COMP_CAT
 
@@ -59,6 +65,9 @@
 /* Define as good substitute value for EOVERFLOW. */
 #undef EOVERFLOW
 
+/* Define if gnulib's fchdir() replacement is used. */
+#undef FCHDIR_REPLACEMENT
+
 /* Define on systems for which file names may have a so-called `drive letter'
    prefix, define this to compute the length of that prefix, including the
    colon. */
@@ -80,6 +89,12 @@
 
 /* Define to 1 when using the gnulib module canonicalize. */
 #undef GNULIB_CANONICALIZE
+
+/* Define to 1 when using the gnulib module fcntl-safer. */
+#undef GNULIB_FCNTL_SAFER
+
+/* Define to indicate the 'malloc' module. */
+#undef GNULIB_MALLOC_GNU
 
 /* Define to 1 to add extern declaration of program_invocation_name to argp.h
    */
@@ -143,6 +158,9 @@
 /* Define to 1 if you have the MacOS X function CFPreferencesCopyAppValue in
    the CoreFoundation framework. */
 #undef HAVE_CFPREFERENCESCOPYAPPVALUE
+
+/* Define to 1 if your system has a working `chown' function. */
+#undef HAVE_CHOWN
 
 /* Define if you have col. */
 #undef HAVE_COL
@@ -226,6 +244,10 @@
    don't. */
 #undef HAVE_DECL_ISBLANK
 
+/* Define to 1 if you have the declaration of `memrchr', and to 0 if you
+   don't. */
+#undef HAVE_DECL_MEMRCHR
+
 /* Define to 1 if you have the declaration of `mkdir', and to 0 if you don't.
    */
 #undef HAVE_DECL_MKDIR
@@ -247,6 +269,10 @@
 /* Define to 1 if you have the declaration of `strdup', and to 0 if you don't.
    */
 #undef HAVE_DECL_STRDUP
+
+/* Define to 1 if you have the declaration of `strerror', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRERROR
 
 /* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
    don't. */
@@ -287,14 +313,26 @@
 /* Define to 1 if you have the `dirfd' function. */
 #undef HAVE_DIRFD
 
+/* Define to 1 if you have the `dup2' function. */
+#undef HAVE_DUP2
+
 /* Define if you have the declaration of environ. */
 #undef HAVE_ENVIRON_DECL
 
 /* Define if you have eqn. */
 #undef HAVE_EQN
 
+/* Define to 1 if you have the `fchdir' function. */
+#undef HAVE_FCHDIR
+
+/* Define to 1 if you have the `fchmodat' function. */
+#undef HAVE_FCHMODAT
+
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
+
+/* Define to 1 if you have the `fdopendir' function. */
+#undef HAVE_FDOPENDIR
 
 /* Define to 1 if you have the <features.h> header file. */
 #undef HAVE_FEATURES_H
@@ -365,7 +403,7 @@
 /* Define if you have gzip. */
 #undef HAVE_GZIP
 
-/* Define if you have the iconv() function. */
+/* Define if you have the iconv() function and it works. */
 #undef HAVE_ICONV
 
 /* Define if your compiler supports the #include_next directive. */
@@ -401,6 +439,12 @@
 /* Define if you have <langinfo.h> and nl_langinfo(CODESET). */
 #undef HAVE_LANGINFO_CODESET
 
+/* Define to 1 if you have the `lchmod' function. */
+#undef HAVE_LCHMOD
+
+/* Define to 1 if you have the `lchown' function. */
+#undef HAVE_LCHOWN
+
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 #undef HAVE_LC_MESSAGES
 
@@ -416,11 +460,8 @@
 /* Define to 1 if you have the <locale.h> header file. */
 #undef HAVE_LOCALE_H
 
-/* Define if you have the 'long double' type. */
-#undef HAVE_LONG_DOUBLE
-
-/* Define if you have the 'long long' type. */
-#undef HAVE_LONG_LONG
+/* Define to 1 if you support file names longer than 14 characters. */
+#undef HAVE_LONG_FILE_NAMES
 
 /* Define to 1 if the system has the type `long long int'. */
 #undef HAVE_LONG_LONG_INT
@@ -450,11 +491,17 @@
 /* Define to 1 if you have the `mempcpy' function. */
 #undef HAVE_MEMPCPY
 
+/* Define to 1 if you have the `memrchr' function. */
+#undef HAVE_MEMRCHR
+
 /* Define to 1 if <limits.h> defines the MIN and MAX macros. */
 #undef HAVE_MINMAX_IN_LIMITS_H
 
 /* Define to 1 if <sys/param.h> defines the MIN and MAX macros. */
 #undef HAVE_MINMAX_IN_SYS_PARAM_H
+
+/* Define to 1 if you have the `mkdirat' function. */
+#undef HAVE_MKDIRAT
 
 /* Define to 1 if you have the `mkdtemp' function. */
 #undef HAVE_MKDTEMP
@@ -478,6 +525,9 @@
 /* Define if you have nroff. */
 #undef HAVE_NROFF
 
+/* Define to 1 if you have the `openat' function. */
+#undef HAVE_OPENAT
+
 /* Define if you have pager. */
 #undef HAVE_PAGER
 
@@ -487,8 +537,14 @@
    */
 #undef HAVE_PARTLY_WORKING_GETCWD
 
+/* Define to 1 if you have the `pathconf' function. */
+#undef HAVE_PATHCONF
+
 /* Define if you have pic. */
 #undef HAVE_PIC
+
+/* Define to 1 if you have the `pipe' function. */
+#undef HAVE_PIPE
 
 /* Define if your printf() function supports format strings with positions. */
 #undef HAVE_POSIX_PRINTF
@@ -504,9 +560,6 @@
 
 /* Define if the POSIX multithreading library has read/write locks. */
 #undef HAVE_PTHREAD_RWLOCK
-
-/* Define to 1 if the system has the type `ptrdiff_t'. */
-#undef HAVE_PTRDIFF_T
 
 /* Define to 1 if you have the `putenv' function. */
 #undef HAVE_PUTENV
@@ -683,9 +736,6 @@
 /* Define to 1 if you have the `unsetenv' function. */
 #undef HAVE_UNSETENV
 
-/* Define if you have the 'unsigned long long' type. */
-#undef HAVE_UNSIGNED_LONG_LONG
-
 /* Define to 1 if the system has the type `unsigned long long int'. */
 #undef HAVE_UNSIGNED_LONG_LONG_INT
 
@@ -750,6 +800,12 @@
 /* Define to 1 if `fork' works. */
 #undef HAVE_WORKING_FORK
 
+/* Define to 1 if O_NOATIME works. */
+#undef HAVE_WORKING_O_NOATIME
+
+/* Define to 1 if O_NOFOLLOW works. */
+#undef HAVE_WORKING_O_NOFOLLOW
+
 /* Define to 1 if `vfork' works. */
 #undef HAVE_WORKING_VFORK
 
@@ -776,6 +832,10 @@
 #else
 # define ISSLASH(C) ((C) == '/')
 #endif
+
+/* Define to 1 if `lstat' dereferences a symlink specified with a trailing
+   slash. */
+#undef LSTAT_FOLLOWS_SLASHED_SYMLINK
 
 /* If malloc(0) is != NULL, define this to 1. Otherwise define this to 0. */
 #undef MALLOC_0_IS_NONNULL
@@ -823,6 +883,9 @@
 /* Define if rename does not work for source file names with a trailing slash,
    like the one from SunOS 4.1.1_U1. */
 #undef RENAME_TRAILING_SLASH_BUG
+
+/* Define this to 1 if strerror is broken. */
+#undef REPLACE_STRERROR
 
 /* Define if vasnprintf exists but is overridden by gnulib. */
 #undef REPLACE_VASNPRINTF
@@ -961,8 +1024,14 @@
    used. */
 #undef __GETOPT_PREFIX
 
+/* Define to rpl_ if the openat replacement function should be used. */
+#undef __OPENAT_PREFIX
+
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
+
+/* Define to rpl_fchownat if the replacement function should be used. */
+#undef fchownat
 
 /* Define to a replacement function name for fnmatch(). */
 #undef fnmatch
@@ -1037,6 +1106,9 @@
 /* Define to rpl_re_syntax_options if the replacement should be used. */
 #undef re_syntax_options
 
+/* Define to a replacement function name for realpath(). */
+#undef realpath
+
 /* Define to rpl_regcomp if the replacement should be used. */
 #undef regcomp
 
@@ -1052,9 +1124,18 @@
 /* Define to rpl_rename if the replacement function should be used. */
 #undef rename
 
-/* Define to equivalent of C99 restrict keyword, or to nothing if this is not
-   supported. Do not define if restrict is supported directly. */
+/* Define to the equivalent of the C99 'restrict' keyword, or to
+   nothing if this is not supported.  Do not define if restrict is
+   supported directly.  */
 #undef restrict
+/* Work around a bug in Sun C++: it does not support _Restrict, even
+   though the corresponding Sun C compiler does, which causes
+   "#define restrict _Restrict" in the previous line.  Perhaps some future
+   version of Sun C++ will work with _Restrict; if so, it'll probably
+   define __RESTRICT, just as Sun C does.  */
+#if defined __SUNPRO_CC && !defined __RESTRICT
+# define _Restrict
+#endif
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t

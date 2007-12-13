@@ -130,9 +130,7 @@ datum make_multi_key (const char *page, const char *ext)
 /* allocate a mandata structure */
 struct mandata *infoalloc (void)
 {
-	struct mandata *info = xmalloc (sizeof (struct mandata));
-	memset (info, 0, sizeof *info);
-	return info;
+	return XZALLOC (struct mandata);
 }
 
 /* Free allocated elements of a mandata structure, but not the structure
@@ -277,8 +275,8 @@ int list_extensions (char *data, char ***names, char ***ext)
 	int count = 0;
 	int bound = 4;	/* most multi keys will have fewer than this */
 
-	*names = xmalloc (bound * sizeof **names);
-	*ext   = xmalloc (bound * sizeof **ext);
+	*names = xnmalloc (bound, sizeof **names);
+	*ext   = xnmalloc (bound, sizeof **ext);
 	while (((*names)[count] = strsep (&data, "\t")) != NULL) {
 		(*ext)[count] = strsep (&data, "\t");
 		if ((*ext)[count])
@@ -288,8 +286,8 @@ int list_extensions (char *data, char ***names, char ***ext)
 
 		if (count >= bound) {
 			bound *= 2;
-			*names = xrealloc (*names, bound * sizeof **names);
-			*ext   = xrealloc (*ext,   bound * sizeof **ext);
+			*names = xnrealloc (*names, bound, sizeof **names);
+			*ext   = xnrealloc (*ext,   bound, sizeof **ext);
 		}
 	}
 

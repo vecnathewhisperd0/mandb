@@ -206,9 +206,9 @@ push_cleanup (cleanup_fun fun, void *arg, int sigsafe)
     slot *new_stack;
 
     if (stack) {
-      new_stack = xrealloc (stack, (nslots+1)*sizeof(slot));
+      new_stack = xnrealloc (stack, nslots+1, sizeof (slot));
     } else {
-      new_stack = xmalloc ((nslots+1)*sizeof(slot));
+      new_stack = xnmalloc (nslots+1, sizeof (slot));
     }
       
     if (!new_stack) return -1;
