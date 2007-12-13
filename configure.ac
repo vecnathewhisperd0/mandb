@@ -308,7 +308,7 @@ AC_CHECK_HEADERS(memory.h fcntl.h limits.h sys/file.h)
 
 # Internationalization support.
 AM_GNU_GETTEXT
-AM_GNU_GETTEXT_VERSION([0.16.1])
+AM_GNU_GETTEXT_VERSION([0.17])
 AC_SUBST(LINGUAS)
 AM_ICONV
 

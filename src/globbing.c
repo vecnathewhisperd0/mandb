@@ -143,10 +143,10 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 		return NULL;
 	}
 
-	cache = xmalloc (sizeof (struct dirent_hashent));
+	cache = XMALLOC (struct dirent_hashent);
 	cache->names_len = 0;
 	cache->names_max = 1024;
-	cache->names = xmalloc (sizeof (char *) * cache->names_max);
+	cache->names = XNMALLOC (cache->names_max, char *);
 
 	/* Dump all the entries into cache->names, resizing if necessary. */
 	for (entry = readdir (dir); entry; entry = readdir (dir)) {
@@ -207,7 +207,7 @@ static int match_in_directory (const char *path, const char *pattern,
 
 	debug ("globbing pattern in %s: %s\n", path, pattern);
 
-	pglob->gl_pathv = xmalloc (allocated * sizeof (char *));
+	pglob->gl_pathv = XNMALLOC (allocated, char *);
 	flags = ignore_case ? FNM_CASEFOLD : 0;
 
 	pattern_start.pattern = xstrndup (pattern,
@@ -240,8 +240,8 @@ static int match_in_directory (const char *path, const char *pattern,
 
 		if (pglob->gl_pathc >= allocated) {
 			allocated *= 2;
-			pglob->gl_pathv = xrealloc (
-				pglob->gl_pathv, allocated * sizeof (char *));
+			pglob->gl_pathv = xnrealloc (
+				pglob->gl_pathv, allocated, sizeof (char *));
 		}
 		pglob->gl_pathv[pglob->gl_pathc++] =
 			appendstr (NULL, path, "/", cache->names[i], NULL);
@@ -251,8 +251,8 @@ static int match_in_directory (const char *path, const char *pattern,
 
 	if (pglob->gl_pathc >= allocated) {
 		allocated *= 2;
-		pglob->gl_pathv = xrealloc (pglob->gl_pathv,
-					    allocated * sizeof (char *));
+		pglob->gl_pathv = xnrealloc (pglob->gl_pathv,
+					     allocated, sizeof (char *));
 	}
 	pglob->gl_pathv[pglob->gl_pathc] = NULL;
 

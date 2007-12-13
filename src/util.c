@@ -55,9 +55,9 @@ char *mkdbname (const char *path)
 	char *name;
 	size_t len = strlen (path);
 
-	name = (char *) xmalloc (sizeof MAN_DB + len);
-	(void) strcpy (name, path);
-	(void) strcpy (name + len, MAN_DB);
+	name = xmalloc (sizeof MAN_DB + len);
+	strcpy (name, path);
+	strcpy (name + len, MAN_DB);
 
 	return name;
 }
@@ -144,7 +144,7 @@ char *escape_shell (const char *unesc)
 	if (!unesc)
 		return NULL;
 
-	escp = esc = (char *) xmalloc (strlen (unesc) * 2 + 1);
+	escp = esc = xmalloc (strlen (unesc) * 2 + 1);
 	for (unescp = unesc; *unescp; unescp++)
 		if ((*unescp >= '0' && *unescp <= '9') ||
 		    (*unescp >= 'A' && *unescp <= 'Z') ||

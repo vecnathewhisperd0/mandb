@@ -367,7 +367,7 @@ static char *lower (char *s)
 {
 	char *low, *p;
 
-	p = low = (char *) xmalloc (strlen (s) +1);
+	p = low = xmalloc (strlen (s) + 1);
 
 	while (*s) {
 		if (CTYPE (isupper, *s))

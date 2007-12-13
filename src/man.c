@@ -481,7 +481,7 @@ static __inline__ char **manopt_to_env (int *argc)
 
 	/* allocate space for the program name */
 	*argc = 0;
-	argv = (char **) xmalloc ((*argc + 3) * sizeof (char *));
+	argv = XNMALLOC (*argc + 3, char *);
 	argv[(*argc)++] = program_name;
 	
 	/* for each [ \t]+ delimited string, allocate an array space and fill
@@ -492,9 +492,8 @@ static __inline__ char **manopt_to_env (int *argc)
 			case '\t':
 				if (manopt != opt_start) {
 					*manopt = '\0';
-					argv = (char **) 
-					       xrealloc (argv, (*argc + 3) * 
-							 sizeof (char *));
+					argv = xnrealloc (argv, *argc + 3,
+							  sizeof (char *));
 					argv[(*argc)++] = opt_start;
 				}
 				while (CTYPE (isspace, *(manopt + 1)))
@@ -525,8 +524,8 @@ static __inline__ const char *escape_less (const char *string)
 	char *ptr;
 
 	/* 2*strlen will always be long enough to hold the escaped string */
-	ptr = escaped_string = (char *) xrealloc (escaped_string, 
-						  2 * strlen (string) + 1);
+	ptr = escaped_string = xrealloc (escaped_string, 
+					 2 * strlen (string) + 1);
 	
 	while (*string) {
 		if (*string == '?' ||
@@ -2611,7 +2610,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	if (!insert_found)
 		insert = prev;
 
-	candp = (struct candidate *) xmalloc (sizeof (struct candidate));
+	candp = XMALLOC (struct candidate);
 	candp->req_name = req_name;
 	candp->from_db = from_db;
 	candp->cat = cat;
@@ -3200,7 +3199,7 @@ static const char **get_section_list (void)
 
 	for (sec = strtok (colon_sep_section_list, ":"); sec; 
 	     sec = strtok (NULL, ":")) {
-		sections = xrealloc (sections, (i + 2) * sizeof *sections);
+		sections = xnrealloc (sections, i + 2, sizeof *sections);
  		sections[i++] = sec;
  	}
 

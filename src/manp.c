@@ -105,7 +105,7 @@ static char **add_dir_to_path_list (char **mphead, char **mp, const char *p);
 
 static void add_to_list (const char *key, const char *cont, int flag)
 {
-	struct list *list = (struct list *) xmalloc (sizeof (struct list));
+	struct list *list = XMALLOC (struct list);
 	list->key = xstrdup (key);
 	list->cont = xstrdup (cont);
 	list->flag = flag;
@@ -187,7 +187,7 @@ const char **get_sections (void)
 	for (list = namestore; list; list = list->next)
 		if (list->flag == SECTION)
 			length++;
-	sections = xmalloc ((length + 1) * sizeof *sections);
+	sections = xnmalloc (length + 1, sizeof *sections);
 	sectionp = sections;
 	for (list = namestore; list; list = list->next)
 		if (list->flag == SECTION)
@@ -957,7 +957,7 @@ static __inline__ char *get_manpath_from_path (const char *path)
 	}
 
 	assert (len);
-	manpathlist = (char *) xmalloc (len);
+	manpathlist = xmalloc (len);
 	*manpathlist = '\0';
 
 	lp = tmplist;
@@ -1190,7 +1190,7 @@ static __inline__ char *fsstnd (const char *path)
 	/* get rid of initial "/usr" */
 	path += sizeof MAN_ROOT - 1;
 	manpath = xstrdup (path);
-	catpath = (char *) xmalloc (strlen (path) + sizeof CAT_ROOT - 3);
+	catpath = xmalloc (strlen (path) + sizeof CAT_ROOT - 3);
 
 	/* start with CAT_ROOT */ 
 	(void) strcpy (catpath, CAT_ROOT);
