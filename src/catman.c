@@ -92,7 +92,7 @@ MYDBM_FILE dbf;
 char *manp;
 extern char *user_config_file;
 char *database;
-const char **sections;
+static const char **sections;
 
 const char *argp_program_version = "catman " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
