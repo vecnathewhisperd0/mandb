@@ -96,6 +96,14 @@
 /* Define to indicate the 'malloc' module. */
 #undef GNULIB_MALLOC_GNU
 
+/* Define to 1 to add extern declaration of program_invocation_name to argp.h
+   */
+#undef GNULIB_PROGRAM_INVOCATION_NAME
+
+/* Define to 1 to add extern declaration of program_invocation_short_name to
+   argp.h */
+#undef GNULIB_PROGRAM_INVOCATION_SHORT_NAME
+
 /* Define if nroff is GNU nroff. */
 #undef GNU_NROFF
 
@@ -168,6 +176,10 @@
    0 if you don't. */
 #undef HAVE_DECL_CANONICALIZE_FILE_NAME
 
+/* Define to 1 if you have the declaration of `clearerr_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_CLEARERR_UNLOCKED
+
 /* Define to 1 if you have the declaration of `dirfd', and to 0 if you don't.
    */
 #undef HAVE_DECL_DIRFD
@@ -176,9 +188,37 @@
    don't. */
 #undef HAVE_DECL_FEOF_UNLOCKED
 
+/* Define to 1 if you have the declaration of `ferror_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_FERROR_UNLOCKED
+
+/* Define to 1 if you have the declaration of `fflush_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_FFLUSH_UNLOCKED
+
 /* Define to 1 if you have the declaration of `fgets_unlocked', and to 0 if
    you don't. */
 #undef HAVE_DECL_FGETS_UNLOCKED
+
+/* Define to 1 if you have the declaration of `fputc_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_FPUTC_UNLOCKED
+
+/* Define to 1 if you have the declaration of `fputs_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_FPUTS_UNLOCKED
+
+/* Define to 1 if you have the declaration of `fread_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_FREAD_UNLOCKED
+
+/* Define to 1 if you have the declaration of `fwrite_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_FWRITE_UNLOCKED
+
+/* Define to 1 if you have the declaration of `getchar_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_GETCHAR_UNLOCKED
 
 /* Define to 1 if you have the declaration of `getcwd', and to 0 if you don't.
    */
@@ -212,6 +252,20 @@
    */
 #undef HAVE_DECL_MKDIR
 
+/* Define if program_invocation_name is declared */
+#undef HAVE_DECL_PROGRAM_INVOCATION_NAME
+
+/* Define if program_invocation_short_name is declared */
+#undef HAVE_DECL_PROGRAM_INVOCATION_SHORT_NAME
+
+/* Define to 1 if you have the declaration of `putchar_unlocked', and to 0 if
+   you don't. */
+#undef HAVE_DECL_PUTCHAR_UNLOCKED
+
+/* Define to 1 if you have the declaration of `putc_unlocked', and to 0 if you
+   don't. */
+#undef HAVE_DECL_PUTC_UNLOCKED
+
 /* Define to 1 if you have the declaration of `strdup', and to 0 if you don't.
    */
 #undef HAVE_DECL_STRDUP
@@ -224,6 +278,10 @@
    don't. */
 #undef HAVE_DECL_STRERROR_R
 
+/* Define to 1 if you have the declaration of `strncasecmp', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRNCASECMP
+
 /* Define to 1 if you have the declaration of `strndup', and to 0 if you
    don't. */
 #undef HAVE_DECL_STRNDUP
@@ -235,6 +293,10 @@
 /* Define to 1 if you have the declaration of `sys_siglist', and to 0 if you
    don't. */
 #undef HAVE_DECL_SYS_SIGLIST
+
+/* Define to 1 if you have the declaration of `vsnprintf', and to 0 if you
+   don't. */
+#undef HAVE_DECL_VSNPRINTF
 
 /* Define to 1 if you have the declaration of `_snprintf', and to 0 if you
    don't. */
@@ -272,14 +334,23 @@
 /* Define to 1 if you have the `fdopendir' function. */
 #undef HAVE_FDOPENDIR
 
+/* Define to 1 if you have the <features.h> header file. */
+#undef HAVE_FEATURES_H
+
 /* Define to 1 if you have the <float.h> header file. */
 #undef HAVE_FLOAT_H
 
 /* Define to 1 if you have the `flock' function. */
 #undef HAVE_FLOCK
 
+/* Define to 1 if you have the `flockfile' function. */
+#undef HAVE_FLOCKFILE
+
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
+
+/* Define to 1 if you have the `funlockfile' function. */
+#undef HAVE_FUNLOCKFILE
 
 /* Define to 1 if you have the `fwprintf' function. */
 #undef HAVE_FWPRINTF
@@ -383,6 +454,9 @@
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
+/* Define to 1 if you have the <linewrap.h> header file. */
+#undef HAVE_LINEWRAP_H
+
 /* Define to 1 if you have the <locale.h> header file. */
 #undef HAVE_LOCALE_H
 
@@ -475,6 +549,12 @@
 /* Define if your printf() function supports format strings with positions. */
 #undef HAVE_POSIX_PRINTF
 
+/* Define if program_invocation_name is defined */
+#undef HAVE_PROGRAM_INVOCATION_NAME
+
+/* Define if program_invocation_short_name is defined */
+#undef HAVE_PROGRAM_INVOCATION_SHORT_NAME
+
 /* Define if the <pthread.h> defines PTHREAD_MUTEX_RECURSIVE. */
 #undef HAVE_PTHREAD_MUTEX_RECURSIVE
 
@@ -520,6 +600,9 @@
 /* Define to 1 if 'wint_t' is a signed integer type. */
 #undef HAVE_SIGNED_WINT_T
 
+/* Define to 1 if you have the `sleep' function. */
+#undef HAVE_SLEEP
+
 /* Define to 1 if you have the `snprintf' function. */
 #undef HAVE_SNPRINTF
 
@@ -548,6 +631,9 @@
 /* Define to 1 if you have the `strcasecmp' function. */
 #undef HAVE_STRCASECMP
 
+/* Define to 1 if you have the `strchrnul' function. */
+#undef HAVE_STRCHRNUL
+
 /* Define to 1 if you have the `strcspn' function. */
 #undef HAVE_STRCSPN
 
@@ -565,6 +651,9 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strncasecmp' function. */
+#undef HAVE_STRNCASECMP
 
 /* Define if you have the strndup() function and it works. */
 #undef HAVE_STRNDUP
@@ -584,6 +673,9 @@
 /* Define if there is a member named d_type in the struct describing directory
    headers. */
 #undef HAVE_STRUCT_DIRENT_D_TYPE
+
+/* Define to 1 if you have the <sysexits.h> header file. */
+#undef HAVE_SYSEXITS_H
 
 /* Define to 1 if you have the <sys/bitypes.h> header file. */
 #undef HAVE_SYS_BITYPES_H
@@ -665,6 +757,9 @@
 /* Define to 1 or 0, depending whether the compiler supports simple visibility
    declarations. */
 #undef HAVE_VISIBILITY
+
+/* Define to 1 if you have the `vsnprintf' function. */
+#undef HAVE_VSNPRINTF
 
 /* Define to 1 if you have the `waitpid' function. */
 #undef HAVE_WAITPID

@@ -119,7 +119,7 @@ AC_PROG_CPP
 CFLAGS="$CFLAGS -Wall"
 if test "$GCC" = yes
 then
-	CFLAGS="$CFLAGS -W -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wshadow -Wformat-security"
+	CFLAGS="$CFLAGS -W -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wshadow -Wformat-security -Wno-missing-field-initializers"
 fi
 AC_PROG_INSTALL
 AC_PROG_RANLIB

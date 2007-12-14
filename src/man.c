@@ -79,8 +79,7 @@ static char *cwd;
 #  include <sys/wait.h>
 #endif
 
-#include <getopt.h>
-
+#include "argp.h"
 #include "dirname.h"
 #include "minmax.h"
 #include "xvasprintf.h"
@@ -89,6 +88,7 @@ static char *cwd;
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
+#define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
 
@@ -181,7 +181,6 @@ MYDBM_FILE dbf;
 extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
 extern int disable_cache;
-extern int optind;
 
 /* locals */
 static const char *alt_system_name;
@@ -212,6 +211,8 @@ static int ascii;		/* insert tr in the output pipe */
 static int save_cat; 		/* security breach? Can we save the cat? */
 static int different_encoding;	/* was an explicit encoding specified? */
 
+static int first_arg;
+
 static int found_a_stray;		/* found a straycat */
 
 #ifdef MAN_CATS
@@ -221,49 +222,6 @@ static int created_tmp_cat;			/* dto. */
 static int man_modtime;		/* modtime of man page, for commit_tmp_cat() */
 #endif
 
-static const struct option long_options[] =
-{
-    {"local-file", no_argument, 	0, 'l'},
-    {"manpath", required_argument, 	0, 'M'},
-    {"pager", required_argument, 	0, 'P'},
-    {"sections", required_argument, 	0, 'S'},
-    {"all", no_argument, 		0, 'a'},
-    {"debug", no_argument, 		0, 'd'},
-    {"whatis", no_argument, 		0, 'f'},
-    {"help", no_argument, 		0, 'h'},
-    {"apropos", no_argument, 		0, 'k'},
-    {"version", no_argument, 		0, 'V'},
-    {"systems", required_argument, 	0, 'm'},
-    {"preprocessor", required_argument,	0, 'p'},
-    {"location", no_argument, 		0, 'w'},
-    {"where", no_argument,		0, 'w'},
-    {"location-cat", no_argument,	0, 'W'},
-    {"where-cat", no_argument,		0, 'W'},
-    {"locale", required_argument,	0, 'L'},
-    {"extension", required_argument,	0, 'e'},
-    {"update", no_argument, 		0, 'u'},
-    {"prompt", required_argument,	0, 'r'},
-    {"default", no_argument,		0, 'D'},
-    {"ascii", no_argument,		0, '7'},
-    {"catman", no_argument, 		0, 'c'},
-    {"encoding", required_argument,	0, 'E'},
-    {"ignore-case", no_argument,	0, 'i'},
-    {"match-case", no_argument,		0, 'I'},
-    {"config-file", required_argument,	0, 'C'},
-
-#ifdef HAS_TROFF
-    {"troff", no_argument, 		0, 't'},
-    {"troff-device", optional_argument,	0, 'T'},
-# ifdef TROFF_IS_GROFF
-    {"ditroff", no_argument, 		0, 'Z'},
-    {"gxditview", optional_argument,	0, 'X'},
-    {"html", optional_argument,		0, 'H'},
-# endif
-    {0, 0, 0, 0}
-};
-
-static const char args[] = "7DlM:P:S:adfhH::kVum:p:tT::wWe:L:Zcr:X::E:iIC:";
-
 # ifdef TROFF_IS_GROFF
 static int ditroff;
 static const char *gxditview;
@@ -271,86 +229,257 @@ static int htmlout;
 static const char *html_pager;
 # endif /* TROFF_IS_GROFF */
 
-#else /* !HAS_TROFF */
+const char *argp_program_version = "man " PACKAGE_VERSION;
+const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+error_t argp_err_exit_status = FAIL;
 
-    {0, 0, 0, 0}
+static const char args_doc[] = N_("[SECTION] PAGE...");
+
+/* Please keep these options in the same order as in parse_opt below. */
+static struct argp_option options[] = {
+	{ "config-file",	'C',	N_("FILE"),	0,		N_("use this user configuration file") },
+	{ "debug",		'd',	0,		0,		N_("emit debugging messages") },
+	{ "default",		'D',	0,		0,		N_("reset all options to their default values") },
+
+	{ 0,			0,	0,		0,		N_("Main modes of operation:"),					10 },
+	{ "whatis",		'f',	0,		0,		N_("equivalent to whatis") },
+	{ "apropos",		'k',	0,		0,		N_("equivalent to apropos") },
+	{ "where",		'w',	0,		0,		N_("print physical location of man page(s)") },
+	{ "location",		0,	0,		OPTION_ALIAS },
+	{ "where-cat",		'W',	0,		0,		N_("print physical location of cat file(s)") },
+	{ "location-cat",	0,	0,		OPTION_ALIAS },
+	{ "local-file",		'l',	0,		0,		N_("interpret PAGE argument(s) as local filename(s)") },
+	{ "catman",		'c',	0,		0,		N_("used by catman to reformat out of date cat pages"),		11 },
+
+	{ 0,			0,	0,		0,		N_("Finding manual pages:"),					20 },
+	{ "manpath",		'M',	N_("PATH"),	0,		N_("set search path for manual pages to PATH") },
+	{ "locale",		'L',	N_("LOCALE"),	0,		N_("define the locale for this particular man search") },
+	{ "systems",		'm',	N_("SYSTEM"),	0,		N_("search for man pages from other unix system(s)") },
+	{ "sections",		'S',	N_("LIST"),	0,		N_("use colon separated section list") },
+	{ "extension",		'e',	N_("EXTENSION"),
+							0,		N_("limit search to extension type EXTENSION") },
+	{ "ignore-case",	'i',	0,		0,		N_("look for pages case-insensitively (default)"),		21 },
+	{ "match-case",		'I',	0,		0,		N_("look for pages case-sensitively") },
+	{ "all",		'a',	0,		0,		N_("find all matching manual pages"),				22 },
+	{ "update",		'u',	0,		0,		N_("force a cache consistency check") },
+
+	{ 0,			0,	0,		0,		N_("Controlling formatted output:"),				30 },
+	{ "pager",		'P',	N_("PAGER"),	0,		N_("use program PAGER to display output") },
+	{ "prompt",		'r',	N_("STRING"),	0,		N_("provide the `less' pager with a prompt") },
+	{ "ascii",		'7',	0,		0,		N_("display ASCII translation of certain latin1 chars"),	31 },
+	{ "encoding",		'E',	N_("ENCODING"),	0,		N_("use the selected nroff device and display in pager") },
+	{ "preprocessor",	'p',	N_("STRING"),	0,		N_("STRING indicates which preprocessors to run:\n"
+									   "e - [n]eqn, p - pic, t - tbl,\n"
+									   "g - grap, r - refer, v - vgrind") },
+#ifdef HAS_TROFF
+	{ "troff",		't',	0,		0,		N_("use %s to format pages"),					32 },
+	{ "troff-device",	'T',	N_("DEVICE"),	OPTION_ARG_OPTIONAL,
+									N_("use %s with selected device") },
+# ifdef TROFF_IS_GROFF
+#  define MAYBE_HIDDEN 0
+# else
+#  define MAYBE_HIDDEN OPTION_HIDDEN
+# endif
+	{ "html",		'H',	N_("BROWSER"),	MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
+									N_("use %s or BROWSER to display HTML output") },
+	{ "ditroff",		'Z',	0,		MAYBE_HIDDEN,	N_("use groff and force it to produce ditroff") },
+	{ "gxditview",		'X',	N_("RESOLUTION"),
+							MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
+									N_("use groff and display through gxditview (X11):\n"
+									   "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12") },
+#endif /* HAS_TROFF */
+
+	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	{ 0 }
 };
 
-static const char args[] = "7DlM:P:S:adfhkVum:p:wWe:L:cr:E:iIC:";
+static error_t parse_opt (int key, char *arg, struct argp_state *state)
+{
+	static int apropos, whatis; /* retain values between calls */
 
+	/* Please keep these keys in the same order as in options above. */
+	switch (key) {
+		case 'C':
+			user_config_file = arg;
+			return 0;
+		case 'd':
+			debug_level = 1;
+			return 0;
+		case 'D':
+			/* discard all preset options */
+			local_man_file = findall = update = catman =
+				debug_level = troff =
+				print_where = print_where_cat =
+				ascii = different_encoding =
+				match_case = 0;
+#ifdef TROFF_IS_GROFF
+			ditroff = 0;
+			gxditview = NULL;
+			htmlout = 0;
+			html_pager = NULL;
+#endif
+			roff_device = extension = pager = locale =
+				alt_system_name = external =
+				preprocessors = NULL;
+			colon_sep_section_list = manp = NULL;
+			return 0;
+
+		case 'f':
+			external = WHATIS;
+			whatis = 1;
+			return 0;
+		case 'k':
+			external = APROPOS;
+			apropos = 1;
+			return 0;
+		case 'w':
+			print_where = 1;
+			return 0;
+		case 'W':
+			print_where_cat = 1;
+			return 0;
+		case 'l':
+			local_man_file = 1;
+			return 0;
+		case 'c':
+			catman = 1;
+			return 0;
+
+		case 'M':
+			manp = arg;
+			return 0;
+		case 'L':
+			locale = arg;
+			return 0;
+		case 'm':
+			alt_system_name = arg;
+			return 0;
+		case 'S':
+			if (*arg)
+				colon_sep_section_list = arg;
+			return 0;
+		case 'e':
+			extension = arg;
+			return 0;
+		case 'i':
+			match_case = 0;
+			return 0;
+		case 'I':
+			match_case = 1;
+			return 0;
+		case 'a':
+			findall = 1;
+			return 0;
+		case 'u':
+			update = 1;
+			return 0;
+
+		case 'P':
+			pager = arg;
+			return 0;
+		case 'r':
+			prompt_string = arg;
+			return 0;
+		case '7':
+			ascii = 1;
+			return 0;
+		case 'E':
+			roff_device = arg;
+			different_encoding = 1;
+			return 0;
+		case 'p':
+			preprocessors = arg;
+			return 0;
+#ifdef HAS_TROFF
+		case 't':
+			troff = 1;
+			return 0;
+		case 'T':
+			/* Traditional nroff knows -T; troff does not (gets
+			 * ignored). All incarnations of groff know it. Why
+			 * does -T imply -t?
+			 */
+			roff_device = (arg ? arg : "ps");
+			troff = 1;
+			return 0;
+		case 'H':
+# ifdef TROFF_IS_GROFF
+			html_pager = arg; /* may be NULL */
+			htmlout = 1;
+			troff = 1;
+			roff_device = "html";
+# endif /* TROFF_IS_GROFF */
+			return 0;
+		case 'Z':
+# ifdef TROFF_IS_GROFF
+			ditroff = 1;
+			troff = 1;
+# endif /* TROFF_IS_GROFF */
+			return 0;
+		case 'X':
+# ifdef TROFF_IS_GROFF
+			troff = 1;
+			gxditview = (arg ? arg : "75");
+# endif /* TROFF_IS_GROFF */
+			return 0;
 #endif /* HAS_TROFF */
 
-/* issue a usage message, then exit with the given status */
-static void usage (int status)
+		case 'h':
+			argp_state_help (state, state->out_stream,
+					 ARGP_HELP_STD_HELP);
+			break;
+		case ARGP_KEY_SUCCESS:
+			/* check for incompatible options */
+			if (troff + whatis + apropos + catman +
+			    (print_where || print_where_cat) > 1) {
+				error (0, 0, "%s",
+				       appendstr (NULL,
+						  troff ? "-[tTZH] " : "",
+						  whatis ? "-f " : "",
+						  apropos ? "-k " : "",
+						  catman ? "-c " : "",
+						  print_where ? "-w " : "",
+						  print_where_cat ? "-W " : "",
+						  _(": incompatible options"),
+						  NULL));
+				argp_usage (state);
+			}
+			return 0;
+	}
+	return ARGP_ERR_UNKNOWN;
+}
+
+static char *help_filter (int key, const char *text,
+			  void *input ATTRIBUTE_UNUSED)
 {
 #ifdef HAS_TROFF
-#  ifdef TROFF_IS_GROFF
-	const char formatter[] = "groff";
-#  else
-	const char formatter[] = "troff";
-#  endif /* TROFF_IS_GROFF */
-#endif /* HAS_TROFF */
-	
-#ifdef HAS_TROFF
-	printf (_(
-		"usage: %s [-c|-f|-k|-w|-tZT device] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
-		"           [-Cfile] [-Slist] [-msystem] [-pstring] [-Llocale] [-eextension]\n"
-		"           [section] page ...\n"),
-		program_name);
-#else
-	printf (_(
-		"usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
-		"           [-Cfile] [-Slist] [-msystem] [-pstring] [-Llocale] [-eextension]\n"
-		"           [section] page ...\n"),
-		program_name);
-#endif
-
-	puts (_(
-		"-a, --all                   find all matching manual pages.\n"
-		"-d, --debug                 emit debugging messages.\n"
-		"-e, --extension             limit search to extension type `extension'.\n"
-		"-f, --whatis                equivalent to whatis.\n"
-		"-k, --apropos               equivalent to apropos.\n"
-		"-w, --where, --location     print physical location of man page(s).\n"
-		"-W, --where-cat,\n"
-		"    --location-cat          print physical location of cat file(s).\n"
-		"-l, --local-file            interpret `page' argument(s) as local filename(s).\n"
-		"-u, --update                force a cache consistency check.\n"
-		"-i, --ignore-case           look for pages case-insensitively (default).\n"
-		"-I, --match-case            look for pages case-sensitively.\n"
-		"-r, --prompt string         provide the `less' pager with a prompt\n"
-		"-c, --catman                used by catman to reformat out of date cat pages.\n"
-		"-7, --ascii                 display ASCII translation of certain latin1 chars.\n"
-		"-E, --encoding encoding     use the selected nroff device and display in pager."));
-#ifdef HAS_TROFF
-	printf (_(
-		"-t, --troff                 use %s to format pages.\n"
-		"-T, --troff-device device   use %s with selected device.\n"),
-		formatter, formatter);
 # ifdef TROFF_IS_GROFF
-	puts (_("-H, --html                  use lynx or argument to display html output.\n"
-		"-Z, --ditroff               use groff and force it to produce ditroff.\n"
-		"-X, --gxditview             use groff and display through gxditview (X11):\n"
-		"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."));
+	static const char formatter[] = "groff";
+	const char *browser;
+# else
+	static const char formatter[] = "troff";
 # endif /* TROFF_IS_GROFF */
 #endif /* HAS_TROFF */
 
-	puts (_(
-		"-D, --default               reset all options to their default values.\n"
-		"-C, --config-file file      use this user configuration file.\n"
-		"-M, --manpath path          set search path for manual pages to `path'.\n"
-		"-P, --pager pager           use program `pager' to display output.\n"
-		"-S, --sections list         use colon separated section list.\n"
-		"-m, --systems system        search for man pages from other unix system(s).\n"
-		"-L, --locale locale         define the locale for this particular man search.\n"
-		"-p, --preprocessor string   string indicates which preprocessors to run.\n"
-		"                             e - [n]eqn   p - pic    t - tbl\n"
-		"                             g - grap     r - refer  v - vgrind\n"
-		"-V, --version               show version.\n"
-		"-h, --help                  show this usage message."));
-
-	exit (status);
+	switch (key) {
+#ifdef HAS_TROFF
+		case 't':
+		case 'T':
+			return xasprintf (text, formatter);
+# ifdef TROFF_IS_GROFF
+		case 'H':
+			browser = html_pager;
+			if (STRNEQ (browser, "exec ", 5))
+				browser += 5;
+			return xasprintf (text, browser);
+# endif /* TROFF_IS_GROFF */
+#endif /* HAS_TROFF */
+		default:
+			return (char *) text;
+	}
 }
+
+static struct argp argp = { options, parse_opt, args_doc, 0, 0, help_filter };
 
 /*
  * changed these messages from stdout to stderr,
@@ -459,8 +588,8 @@ static void do_extern (int argc, char *argv[])
 		command_args (cmd, "-L", locale, NULL);
 	if (user_config_file)
 		command_args (cmd, "-C", user_config_file, NULL);
-	while (optind < argc)
-		command_arg (cmd, argv[optind++]);
+	while (first_arg < argc)
+		command_arg (cmd, argv[first_arg++]);
 	p = pipeline_new_commands (cmd, NULL);
 
 	/* privs are already dropped */
@@ -468,7 +597,7 @@ static void do_extern (int argc, char *argv[])
 	exit (pipeline_wait (p));
 }
 
-/* lookup $MANOPT and if available, put in *argv[] format for getopt() */
+/* lookup $MANOPT and if available, put in *argv[] format for argp */
 static __inline__ char **manopt_to_env (int *argc)
 {
 	char *manopt, *opt_start, **argv;
@@ -697,16 +826,25 @@ int main (int argc, char *argv[])
 		cwd[0] = '\0';
 	}
 
-	/* First of all, find out if $MANOPT is set. If so, put it in 
-	   *argv[] format for getopt to play with. */
-	argv_env = manopt_to_env (&argc_env);
-	if (argv_env) {
-		man_getopt (argc_env, argv_env);
-		optind = 0;
+#ifdef TROFF_IS_GROFF
+	/* used in --help, so initialise early */
+	if (!html_pager) {
+		html_pager = getenv ("BROWSER");
+		if (!html_pager)
+			html_pager = WEB_BROWSER;
 	}
+#endif /* TROFF_IS_GROFF */
 
-	/* give the actual program args to getopt */
-	man_getopt (argc, argv);
+	/* First of all, find out if $MANOPT is set. If so, put it in 
+	   *argv[] format for argp to play with. */
+	argv_env = manopt_to_env (&argc_env);
+	if (argv_env)
+		if (argp_parse (&argp, argc_env, argv_env, ARGP_NO_ARGS, 0, 0))
+			exit (FAIL);
+
+	/* parse the actual program args */
+	if (argp_parse (&argp, argc, argv, ARGP_NO_ARGS, &first_arg, 0))
+		exit (FAIL);
 
 #ifdef SECURE_MAN_UID
 	/* record who we are and drop effective privs for later use */
@@ -747,15 +885,9 @@ int main (int argc, char *argv[])
 	}
 
 #ifdef TROFF_IS_GROFF
-	if (htmlout) {
-		if (!html_pager) {
-			html_pager = getenv ("BROWSER");
-			if (!html_pager)
-				html_pager = WEB_BROWSER;
-		}
+	if (htmlout)
 		pager = html_pager;
-	}
-#endif
+#endif /* TROFF_IS_GROFF */
 	if (pager == NULL) {
 		pager = getenv ("MANPAGER");
 		if (pager == NULL) {
@@ -787,14 +919,14 @@ int main (int argc, char *argv[])
 
 	debug ("\nusing %s as pager\n", pager);
 
-	if (optind == argc)
+	if (first_arg == argc)
 		gripe_no_name (NULL);
 
 	/* man issued with `-l' option */
 	if (local_man_file) {
-		while (optind < argc) {
-			exit_status = local_man_loop (argv[optind]);
-			optind++;
+		while (first_arg < argc) {
+			exit_status = local_man_loop (argv[first_arg]);
+			++first_arg;
 		}
 		free (cwd);
 		free (internal_locale);
@@ -847,11 +979,11 @@ int main (int argc, char *argv[])
 	}
 #endif /* MAN_DB_UPDATES */
 
-	while (optind < argc) {
+	while (first_arg < argc) {
 		int status = OK;
 		int found = 0;
 		static int maybe_section = 0;
-		const char *nextarg = argv[optind++];
+		const char *nextarg = argv[first_arg++];
 
 		/*
      		 * See if this argument is a valid section name.  If not,
@@ -865,9 +997,9 @@ int main (int argc, char *argv[])
 		}
 
 		if (maybe_section) {
-			if (optind < argc)
+			if (first_arg < argc)
 				/* e.g. 'man 3perl Shell' */
-				nextarg = argv[optind++];
+				nextarg = argv[first_arg++];
 			else
 				/* e.g. 'man 9wm' */
 				section = NULL;
@@ -905,7 +1037,7 @@ int main (int argc, char *argv[])
 					 * null section.
 					 */
 					nextarg = tmp;
-					--optind;
+					--first_arg;
 				} else
 					/* No go, it really was a section. */
 					section = tmp;
@@ -929,7 +1061,7 @@ int main (int argc, char *argv[])
 				printf ("%s", nextarg);
 				if (section)
 					printf ("(%s)", section);
-				if (optind != argc)
+				if (first_arg != argc)
 					fputs (", ", stdout);
 				else
 					fputs (".\n", stdout);
@@ -954,168 +1086,6 @@ int main (int argc, char *argv[])
 	free (internal_locale);
 	free (program_name);
 	exit (exit_status);
-}
-
-/* parse the arguments contained in *argv[] and set appropriate vars */
-static void man_getopt (int argc, char *argv[])
-{
-	int c;
-	static int apropos, whatis; /* retain values between calls */
-
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != EOF) {
-
-		switch (c) {
-
-			case 'l':
-				local_man_file = 1;
-				break;
-			case 'e':
-				extension = optarg;
-				break;
-			case 'M':
-				manp = optarg;
-				break;
-		    	case 'P':
-				pager = optarg;
-				break;
-		    	case 'S':
-				if (*optarg)
-					colon_sep_section_list = optarg;
-				break;
-			case 'V':
-				ver();
-				break;
-		    	case 'a':
-				findall = 1; 
-				break;
-			case 'u':
-				update = 1;
-				break;
-			case 'i':
-				match_case = 0;
-				break;
-			case 'I':
-				match_case = 1;
-				break;
-			case 'c':
-				catman = 1;
-				break;
-		    	case 'd':
-				debug_level = 1;
-				break;
-		    	case 'f':
-				external = WHATIS;
-				whatis = 1;
-				break;
-		    	case 'k':
-				external = APROPOS;
-				apropos = 1;
-				break;
-		    	case 'm':
-				alt_system_name = optarg;
-				break;
-			case 'L':
-				locale = optarg;
-				break;
-		    	case 'p':
-				preprocessors = optarg;
-				break;
-			case '7':
-				ascii = 1;
-				break;
-			case 'E':
-				roff_device = optarg;
-				different_encoding = 1;
-				break;
-#ifdef HAS_TROFF
-		    	case 't':
-				troff = 1;
-				break;
-
-			case 'T':
-				/* @@@ traditional nroff knows -T,
-				   troff does not (gets ignored).
-				   All incarnations of groff know it.
-				   Why does -T imply -t? */
-				/* as this is an optional argument */
-				roff_device = (optarg ? optarg : "ps");
-				troff = 1;
-				break;
-			case 'X':
-#ifdef TROFF_IS_GROFF
-				troff = 1;
-				gxditview = (optarg ? optarg : "75");
-#endif /* TROFF_IS_GROFF */
-				break;
-			case 'H':
-#ifdef TROFF_IS_GROFF
-				html_pager = (optarg ? optarg : NULL);
-				htmlout = 1;
-				troff = 1;
-				roff_device = "html";
-#endif /* TROFF_IS_GROFF */
-				break;
-			case 'Z':
-#ifdef TROFF_IS_GROFF
-				ditroff = 1;
-				troff = 1;
-#endif /* TROFF_IS_GROFF */
-				break;
-#endif /* HAS_TROFF */
-		    	case 'w':
-				print_where = 1;
-				break;
-			case 'W':
-				print_where_cat = 1;
-				break;
-			case 'r':
-				prompt_string = optarg;
-				break;
-			case 'C':
-				user_config_file = optarg;
-				break;
-			case 'D':
-		    		/* discard all preset options */
-		    		local_man_file = findall = update = catman =
-					debug_level = troff =
-					print_where = print_where_cat =
-					ascii = different_encoding =
-					match_case = 0;
-#ifdef TROFF_IS_GROFF
-				ditroff = 0;
-				gxditview = NULL;
-				htmlout = 0;
-				html_pager = NULL;
-#endif
-		    		roff_device = extension = pager = locale
-		    			     = alt_system_name = external
-		    			     = preprocessors = NULL;
-				colon_sep_section_list = manp = NULL;
-		    		break;
-		    	case 'h':
-		    		usage(OK);
-		    		break;
-		    	default:
-				usage(FAIL);
-				break;
-		}
-	}
-
-	/* check for incompatible options */
-	if (troff + whatis + apropos + catman +
-	    (print_where || print_where_cat) > 1) {
-		error (0, 0, "%s",
-		       appendstr (NULL,
-				  troff ? "-[tTZH] " : "",
-				  whatis ? "-f " : "",
-				  apropos ? "-k " : "",
-				  catman ? "-c " : "",
-				  print_where ? "-w " : "",
-				  print_where_cat ? "-W " : "",
-				  _(": incompatible options"), NULL));
-		usage (FAIL);
-	}
 }
 
 /*

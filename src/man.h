@@ -22,7 +22,6 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-static void man_getopt (int argc, char *argv[]);
 static __inline__ const char *is_section (const char *name);
 static const char **get_section_list (void);
 static int man (const char *name, int *found);

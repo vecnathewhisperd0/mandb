@@ -36,6 +36,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 subdir = man
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
+	$(top_srcdir)/gnulib/m4/argp.m4 \
 	$(top_srcdir)/gnulib/m4/atexit.m4 \
 	$(top_srcdir)/gnulib/m4/canonicalize-lgpl.m4 \
 	$(top_srcdir)/gnulib/m4/canonicalize.m4 \
@@ -93,16 +94,20 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/same.m4 \
 	$(top_srcdir)/gnulib/m4/save-cwd.m4 \
 	$(top_srcdir)/gnulib/m4/setenv.m4 \
+	$(top_srcdir)/gnulib/m4/sleep.m4 \
 	$(top_srcdir)/gnulib/m4/ssize_t.m4 \
 	$(top_srcdir)/gnulib/m4/stdarg.m4 \
 	$(top_srcdir)/gnulib/m4/stdbool.m4 \
 	$(top_srcdir)/gnulib/m4/stdint.m4 \
 	$(top_srcdir)/gnulib/m4/stdio_h.m4 \
 	$(top_srcdir)/gnulib/m4/stdlib_h.m4 \
+	$(top_srcdir)/gnulib/m4/strcase.m4 \
+	$(top_srcdir)/gnulib/m4/strchrnul.m4 \
 	$(top_srcdir)/gnulib/m4/strcspn.m4 \
 	$(top_srcdir)/gnulib/m4/strdup.m4 \
 	$(top_srcdir)/gnulib/m4/strerror.m4 \
 	$(top_srcdir)/gnulib/m4/string_h.m4 \
+	$(top_srcdir)/gnulib/m4/strings_h.m4 \
 	$(top_srcdir)/gnulib/m4/strndup.m4 \
 	$(top_srcdir)/gnulib/m4/strnlen.m4 \
 	$(top_srcdir)/gnulib/m4/strpbrk.m4 \
@@ -111,11 +116,13 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/sys_socket_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_stat_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_time_h.m4 \
+	$(top_srcdir)/gnulib/m4/sysexits.m4 \
 	$(top_srcdir)/gnulib/m4/tempname.m4 \
 	$(top_srcdir)/gnulib/m4/unistd-safer.m4 \
 	$(top_srcdir)/gnulib/m4/unistd_h.m4 \
 	$(top_srcdir)/gnulib/m4/vasnprintf.m4 \
 	$(top_srcdir)/gnulib/m4/vasprintf.m4 \
+	$(top_srcdir)/gnulib/m4/vsnprintf.m4 \
 	$(top_srcdir)/gnulib/m4/wchar.m4 \
 	$(top_srcdir)/gnulib/m4/wctype.m4 \
 	$(top_srcdir)/gnulib/m4/xalloc.m4 \
@@ -290,6 +297,7 @@ HAVE_DECL_MKDIR = @HAVE_DECL_MKDIR@
 HAVE_DECL_SNPRINTF = @HAVE_DECL_SNPRINTF@
 HAVE_DECL_STRDUP = @HAVE_DECL_STRDUP@
 HAVE_DECL_STRERROR = @HAVE_DECL_STRERROR@
+HAVE_DECL_STRNCASECMP = @HAVE_DECL_STRNCASECMP@
 HAVE_DECL_STRNDUP = @HAVE_DECL_STRNDUP@
 HAVE_DECL_STRNLEN = @HAVE_DECL_STRNLEN@
 HAVE_DECL_STRTOK_R = @HAVE_DECL_STRTOK_R@
@@ -321,12 +329,14 @@ HAVE_SNPRINTF = @HAVE_SNPRINTF@
 HAVE_STDINT_H = @HAVE_STDINT_H@
 HAVE_STPCPY = @HAVE_STPCPY@
 HAVE_STPNCPY = @HAVE_STPNCPY@
+HAVE_STRCASECMP = @HAVE_STRCASECMP@
 HAVE_STRCASESTR = @HAVE_STRCASESTR@
 HAVE_STRCHRNUL = @HAVE_STRCHRNUL@
 HAVE_STRNDUP = @HAVE_STRNDUP@
 HAVE_STRPBRK = @HAVE_STRPBRK@
 HAVE_STRSEP = @HAVE_STRSEP@
 HAVE_STRUCT_TIMEVAL = @HAVE_STRUCT_TIMEVAL@
+HAVE_SYSEXITS_H = @HAVE_SYSEXITS_H@
 HAVE_SYS_BITYPES_H = @HAVE_SYS_BITYPES_H@
 HAVE_SYS_CDEFS_H = @HAVE_SYS_CDEFS_H@
 HAVE_SYS_INTTYPES_H = @HAVE_SYS_INTTYPES_H@
@@ -392,7 +402,9 @@ NEXT_FLOAT_H = @NEXT_FLOAT_H@
 NEXT_STDINT_H = @NEXT_STDINT_H@
 NEXT_STDIO_H = @NEXT_STDIO_H@
 NEXT_STDLIB_H = @NEXT_STDLIB_H@
+NEXT_STRINGS_H = @NEXT_STRINGS_H@
 NEXT_STRING_H = @NEXT_STRING_H@
+NEXT_SYSEXITS_H = @NEXT_SYSEXITS_H@
 NEXT_SYS_SELECT_H = @NEXT_SYS_SELECT_H@
 NEXT_SYS_SOCKET_H = @NEXT_SYS_SOCKET_H@
 NEXT_SYS_STAT_H = @NEXT_SYS_STAT_H@
@@ -447,6 +459,7 @@ SIZE_T_SUFFIX = @SIZE_T_SUFFIX@
 STDBOOL_H = @STDBOOL_H@
 STDINT_H = @STDINT_H@
 STRIP = @STRIP@
+SYSEXITS_H = @SYSEXITS_H@
 SYS_SELECT_H = @SYS_SELECT_H@
 SYS_SOCKET_H = @SYS_SOCKET_H@
 SYS_STAT_H = @SYS_STAT_H@

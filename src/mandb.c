@@ -43,14 +43,14 @@
 #  include <pwd.h>
 #endif /* SECURE_MAN_UID */
 
-#include <getopt.h>
-
+#include "argp.h"
 #include "dirname.h"
 #include "xgetcwd.h"
 
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
+#define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
 
@@ -81,28 +81,90 @@ struct passwd *man_owner;
 static int purged = 0;
 static int strays = 0;
 
-/* default options */
-static const struct option long_options[] =
-{
-    {"create", 		no_argument,		0, 'c'},
-    {"debug",		no_argument,		0, 'd'},
-    {"filename",	required_argument,	0, 'f'},
-    {"help",		no_argument,		0, 'h'},
-    {"no-purge",	no_argument,		0, 'p'},
-    {"quiet",		no_argument,		0, 'q'},
-    {"user-db",		no_argument,		0, 'u'},
-    {"no-straycats",    no_argument,		0, 's'},
-    {"test",		no_argument,		0, 't'},
-    {"config-file",	required_argument,	0, 'C'},
-    {"version",		no_argument,		0, 'V'},
-    {0, 0, 0, 0}
-};
-
-static const char args[] = "cdf:hpqstuC:V";
 static int check_for_strays = 1;
 static int purge = 1;
 static int user;
 static int create;
+static const char *arg_manp;
+
+const char *argp_program_version = "mandb " PACKAGE_VERSION;
+const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+error_t argp_err_exit_status = FAIL;
+
+static const char args_doc[] = N_("[MANPATH]");
+
+static struct argp_option options[] = {
+	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
+	{ "quiet",		'q',	0,		0,	N_("work quietly, except for 'bogus' warning") },
+	{ "no-straycats",	's',	0,		0,	N_("don't look for or add stray cats to the dbs") },
+	{ "no-purge",		'p',	0,		0,	N_("don't purge obsolete entries from the dbs") },
+	{ "user-db",		'u',	0,		0,	N_("produce user databases only") },
+	{ "create",		'c',	0,		0,	N_("create dbs from scratch, rather than updating") },
+	{ "test",		't',	0,		0,	N_("check manual pages for correctness") },
+	{ "filename",		'f',	N_("FILENAME"),	0,	N_("update just the entry for this filename") },
+	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },
+	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	{ 0 }
+};
+
+static error_t parse_opt (int key, char *arg, struct argp_state *state)
+{
+	static int quiet_temp = 0;
+
+	switch (key) {
+		case 'd':
+			debug_level = 1;
+			return 0;
+		case 'q':
+			++quiet_temp;
+			return 0;
+		case 's':
+			check_for_strays = 0;
+			return 0;
+		case 'p':
+			purge = 0;
+			return 0;
+		case 'u':
+			user = 1;
+			return 0;
+		case 'c':
+			create = 1;
+			purge = 0;
+			return 0;
+		case 't':
+			opt_test = 1;
+			return 0;
+		case 'f':
+			single_filename = arg;
+			create = 0;
+			purge = 0;
+			check_for_strays = 0;
+			return 0;
+		case 'C':
+			user_config_file = arg;
+			return 0;
+		case 'h':
+			argp_state_help (state, state->out_stream,
+					 ARGP_HELP_STD_HELP);
+			break;
+		case ARGP_KEY_ARG:
+			if (arg_manp)
+				argp_usage (state);
+			arg_manp = arg;
+			return 0;
+		case ARGP_KEY_SUCCESS:
+			if (opt_test && !debug_level)
+				quiet = 1;
+			else if (quiet_temp == 1)
+				quiet = 2;
+			else
+				quiet = quiet_temp;
+			return 0;
+	}
+	return ARGP_ERR_UNKNOWN;
+}
+
+static struct argp argp = { options, parse_opt, args_doc };
 
 #ifdef NDBM
 #  ifdef BERKELEY_DB
@@ -126,30 +188,7 @@ extern uid_t euid;
 
 static char *manpathlist[MAXDIRS];
 
-extern char *optarg;
-extern int optind, opterr, optopt;
 extern int pages;
-
-static void usage (int status)
-{
-	printf (_("usage: %s [-dqspuct|-h|-V] [-C file] [-f filename] [manpath]\n"),
-		program_name);
-	printf (_(
-		"-d, --debug                 produce debugging info.\n"
-		"-q, --quiet                 work quietly, except for 'bogus' warning.\n"
-		"-s, --no-straycats          don't look for or add stray cats to the dbs.\n"
-		"-p, --no-purge              don't purge obsolete entries from the dbs.\n"
-		"-u, --user-db               produce user databases only.\n"
-		"-c, --create                create dbs from scratch, rather than updating.\n"
-		"-t, --test                  check manual pages for correctness.\n"
-		"-f, --filename              update just the entry for this filename.\n"
-		"-C, --config-file           use this user configuration file.\n"
-		"-V, --version               show version.\n"
-		"-h, --help                  show this usage message.\n")
-	);
-
-	exit (status);
-}
 
 /* remove() with error checking */
 static __inline__ void xremove (const char *path)
@@ -492,10 +531,8 @@ static short process_manpath (const char *manpath, int global_manpath)
 
 int main (int argc, char *argv[])
 {
-	int c;
 	char *sys_manp;
 	short amount = 0;
-	int quiet_temp = 0;
 	char **mp;
 
 #ifdef __profile__
@@ -512,52 +549,8 @@ int main (int argc, char *argv[])
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);
 
-	while ((c = getopt_long (argc, argv, args,
-				 long_options, NULL)) != EOF) {
-		switch (c) {
-			case 'd':
-				debug_level = 1;
-				break;
-			case 'q':
-				quiet_temp++;
-				break;
-			case 'u':
-				user = 1;
-				break;
-			case 'c':
-				create = 1;
-				purge = 0;
-				break;
-			case 'p':
-				purge = 0;
-				break;
-			case 's':
-				check_for_strays = 0;
-				break;
-			case 't':
-				opt_test = 1;
-				break;
-			case 'f':
-				single_filename = optarg;
-				create = 0;
-				purge = 0;
-				check_for_strays = 0;
-				break;
-			case 'C':
-				user_config_file = optarg;
-				break;
-			case 'V':
-				ver ();
-				break;
-			case 'h':
-				usage (OK);
-				break;
-			default:
-				usage (FAIL);
-				break;
-		}
-	}
-
+	if (argp_parse (&argp, argc, argv, 0, 0, 0))
+		exit (FAIL);
 
 #ifdef __profile__
 	cwd = xgetcwd ();
@@ -588,17 +581,10 @@ int main (int argc, char *argv[])
 	/* This is required for get_catpath(), regardless */
 	manp = get_manpath (NULL);	/* also calls read_config_file() */
 
-	if (opt_test && !debug_level)
-		quiet = 1;
-	else if (quiet_temp == 1)
-		quiet = 2;
-	else
-		quiet = quiet_temp;
-
 	/* pick up the system manpath or use the supplied one */
-	if (argc != optind) {
+	if (arg_manp) {
 		free (manp);
-		manp = xstrdup (argv[optind]);
+		manp = xstrdup (arg_manp);
 	} else if (!user) {
 		sys_manp = get_mandb_manpath ();
 		if (sys_manp) {

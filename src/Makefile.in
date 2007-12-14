@@ -45,6 +45,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/man_db.conf.in lexgrog.c zsoelim.c
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
+	$(top_srcdir)/gnulib/m4/argp.m4 \
 	$(top_srcdir)/gnulib/m4/atexit.m4 \
 	$(top_srcdir)/gnulib/m4/canonicalize-lgpl.m4 \
 	$(top_srcdir)/gnulib/m4/canonicalize.m4 \
@@ -102,16 +103,20 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/same.m4 \
 	$(top_srcdir)/gnulib/m4/save-cwd.m4 \
 	$(top_srcdir)/gnulib/m4/setenv.m4 \
+	$(top_srcdir)/gnulib/m4/sleep.m4 \
 	$(top_srcdir)/gnulib/m4/ssize_t.m4 \
 	$(top_srcdir)/gnulib/m4/stdarg.m4 \
 	$(top_srcdir)/gnulib/m4/stdbool.m4 \
 	$(top_srcdir)/gnulib/m4/stdint.m4 \
 	$(top_srcdir)/gnulib/m4/stdio_h.m4 \
 	$(top_srcdir)/gnulib/m4/stdlib_h.m4 \
+	$(top_srcdir)/gnulib/m4/strcase.m4 \
+	$(top_srcdir)/gnulib/m4/strchrnul.m4 \
 	$(top_srcdir)/gnulib/m4/strcspn.m4 \
 	$(top_srcdir)/gnulib/m4/strdup.m4 \
 	$(top_srcdir)/gnulib/m4/strerror.m4 \
 	$(top_srcdir)/gnulib/m4/string_h.m4 \
+	$(top_srcdir)/gnulib/m4/strings_h.m4 \
 	$(top_srcdir)/gnulib/m4/strndup.m4 \
 	$(top_srcdir)/gnulib/m4/strnlen.m4 \
 	$(top_srcdir)/gnulib/m4/strpbrk.m4 \
@@ -120,11 +125,13 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/sys_socket_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_stat_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_time_h.m4 \
+	$(top_srcdir)/gnulib/m4/sysexits.m4 \
 	$(top_srcdir)/gnulib/m4/tempname.m4 \
 	$(top_srcdir)/gnulib/m4/unistd-safer.m4 \
 	$(top_srcdir)/gnulib/m4/unistd_h.m4 \
 	$(top_srcdir)/gnulib/m4/vasnprintf.m4 \
 	$(top_srcdir)/gnulib/m4/vasprintf.m4 \
+	$(top_srcdir)/gnulib/m4/vsnprintf.m4 \
 	$(top_srcdir)/gnulib/m4/wchar.m4 \
 	$(top_srcdir)/gnulib/m4/wctype.m4 \
 	$(top_srcdir)/gnulib/m4/xalloc.m4 \
@@ -162,34 +169,32 @@ pkglibPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 sbinPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS) $(pkglib_PROGRAMS) \
 	$(sbin_PROGRAMS)
-am_accessdb_OBJECTS = accessdb.$(OBJEXT) util.$(OBJEXT) \
-	version.$(OBJEXT)
+am_accessdb_OBJECTS = accessdb.$(OBJEXT) util.$(OBJEXT)
 accessdb_OBJECTS = $(am_accessdb_OBJECTS)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 = $(top_builddir)/libdb/libmandb.a \
 	$(am__DEPENDENCIES_1)
 accessdb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
 am_catman_OBJECTS = catman.$(OBJEXT) fake_security.$(OBJEXT) \
-	manp.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT)
+	manp.$(OBJEXT) util.$(OBJEXT)
 catman_OBJECTS = $(am_catman_OBJECTS)
 catman_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
 am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT) \
-	util.$(OBJEXT) version.$(OBJEXT)
+	util.$(OBJEXT)
 globbing_OBJECTS = $(am_globbing_OBJECTS)
 globbing_DEPENDENCIES = $(LIBMAN)
 am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
 	encodings.$(OBJEXT) fake_security.$(OBJEXT) lexgrog.$(OBJEXT) \
-	lexgrog_test.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT) \
-	version.$(OBJEXT)
+	lexgrog_test.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
 lexgrog_DEPENDENCIES = $(LIBMAN)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
 	man.$(OBJEXT) manp.$(OBJEXT) security.$(OBJEXT) \
-	ult_src.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT)
+	ult_src.$(OBJEXT) util.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
 man_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
-am_manconv_OBJECTS = manconv.$(OBJEXT) version.$(OBJEXT)
+am_manconv_OBJECTS = manconv.$(OBJEXT)
 manconv_OBJECTS = $(am_manconv_OBJECTS)
 manconv_DEPENDENCIES = $(LIBMAN)
 am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
@@ -197,23 +202,22 @@ am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
 	lexgrog.$(OBJEXT) mandb.$(OBJEXT) manp.$(OBJEXT) \
 	security.$(OBJEXT) straycats.$(OBJEXT) ult_src.$(OBJEXT) \
-	util.$(OBJEXT) version.$(OBJEXT)
+	util.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
 mandb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
 am_manpath_OBJECTS = fake_security.$(OBJEXT) manp.$(OBJEXT) \
-	manpath.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT)
+	manpath.$(OBJEXT) util.$(OBJEXT)
 manpath_OBJECTS = $(am_manpath_OBJECTS)
 manpath_DEPENDENCIES = $(LIBMAN)
 am_whatis_OBJECTS = encodings.$(OBJEXT) fake_security.$(OBJEXT) \
-	manp.$(OBJEXT) util.$(OBJEXT) version.$(OBJEXT) \
-	whatis.$(OBJEXT)
+	manp.$(OBJEXT) util.$(OBJEXT) whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
 whatis_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 	$(am__DEPENDENCIES_1)
-am_wrapper_OBJECTS = version.$(OBJEXT) wrapper.$(OBJEXT)
+am_wrapper_OBJECTS = wrapper.$(OBJEXT)
 wrapper_OBJECTS = $(am_wrapper_OBJECTS)
 wrapper_DEPENDENCIES = $(LIBMAN)
-am_zsoelim_OBJECTS = version.$(OBJEXT) zsoelim.$(OBJEXT)
+am_zsoelim_OBJECTS = zsoelim.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
 zsoelim_DEPENDENCIES = $(LIBMAN)
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
@@ -361,6 +365,7 @@ HAVE_DECL_MKDIR = @HAVE_DECL_MKDIR@
 HAVE_DECL_SNPRINTF = @HAVE_DECL_SNPRINTF@
 HAVE_DECL_STRDUP = @HAVE_DECL_STRDUP@
 HAVE_DECL_STRERROR = @HAVE_DECL_STRERROR@
+HAVE_DECL_STRNCASECMP = @HAVE_DECL_STRNCASECMP@
 HAVE_DECL_STRNDUP = @HAVE_DECL_STRNDUP@
 HAVE_DECL_STRNLEN = @HAVE_DECL_STRNLEN@
 HAVE_DECL_STRTOK_R = @HAVE_DECL_STRTOK_R@
@@ -392,12 +397,14 @@ HAVE_SNPRINTF = @HAVE_SNPRINTF@
 HAVE_STDINT_H = @HAVE_STDINT_H@
 HAVE_STPCPY = @HAVE_STPCPY@
 HAVE_STPNCPY = @HAVE_STPNCPY@
+HAVE_STRCASECMP = @HAVE_STRCASECMP@
 HAVE_STRCASESTR = @HAVE_STRCASESTR@
 HAVE_STRCHRNUL = @HAVE_STRCHRNUL@
 HAVE_STRNDUP = @HAVE_STRNDUP@
 HAVE_STRPBRK = @HAVE_STRPBRK@
 HAVE_STRSEP = @HAVE_STRSEP@
 HAVE_STRUCT_TIMEVAL = @HAVE_STRUCT_TIMEVAL@
+HAVE_SYSEXITS_H = @HAVE_SYSEXITS_H@
 HAVE_SYS_BITYPES_H = @HAVE_SYS_BITYPES_H@
 HAVE_SYS_CDEFS_H = @HAVE_SYS_CDEFS_H@
 HAVE_SYS_INTTYPES_H = @HAVE_SYS_INTTYPES_H@
@@ -463,7 +470,9 @@ NEXT_FLOAT_H = @NEXT_FLOAT_H@
 NEXT_STDINT_H = @NEXT_STDINT_H@
 NEXT_STDIO_H = @NEXT_STDIO_H@
 NEXT_STDLIB_H = @NEXT_STDLIB_H@
+NEXT_STRINGS_H = @NEXT_STRINGS_H@
 NEXT_STRING_H = @NEXT_STRING_H@
+NEXT_SYSEXITS_H = @NEXT_SYSEXITS_H@
 NEXT_SYS_SELECT_H = @NEXT_SYS_SELECT_H@
 NEXT_SYS_SOCKET_H = @NEXT_SYS_SOCKET_H@
 NEXT_SYS_STAT_H = @NEXT_SYS_STAT_H@
@@ -518,6 +527,7 @@ SIZE_T_SUFFIX = @SIZE_T_SUFFIX@
 STDBOOL_H = @STDBOOL_H@
 STDINT_H = @STDINT_H@
 STRIP = @STRIP@
+SYSEXITS_H = @SYSEXITS_H@
 SYS_SELECT_H = @SYS_SELECT_H@
 SYS_SOCKET_H = @SYS_SOCKET_H@
 SYS_STAT_H = @SYS_STAT_H@
@@ -668,23 +678,20 @@ wrapper_LDADD = $(LIBMAN)
 zsoelim_LDADD = $(LIBMAN)
 accessdb_SOURCES = \
 	accessdb.c \
-	util.c \
-	version.c
+	util.c
 
 catman_SOURCES = \
 	catman.c \
 	fake_security.c \
 	manp.c \
 	manp.h \
-	util.c \
-	version.c
+	util.c
 
 globbing_SOURCES = \
 	globbing.c \
 	globbing.h \
 	globbing_test.c \
-	util.c \
-	version.c
+	util.c
 
 lexgrog_SOURCES = \
 	compression.c \
@@ -698,8 +705,7 @@ lexgrog_SOURCES = \
 	security.h \
 	ult_src.c \
 	ult_src.h \
-	util.c \
-	version.c
+	util.c
 
 man_SOURCES = \
 	compression.c \
@@ -719,12 +725,10 @@ man_SOURCES = \
 	security.h \
 	ult_src.c \
 	ult_src.h \
-	util.c \
-	version.c
+	util.c
 
 manconv_SOURCES = \
-	manconv.c \
-	version.c
+	manconv.c
 
 mandb_SOURCES = \
 	check_mandirs.c \
@@ -748,16 +752,14 @@ mandb_SOURCES = \
 	straycats.c \
 	ult_src.c \
 	ult_src.h \
-	util.c \
-	version.c
+	util.c
 
 manpath_SOURCES = \
 	fake_security.c \
 	manp.c \
 	manp.h \
 	manpath.c \
-	util.c \
-	version.c
+	util.c
 
 whatis_SOURCES = \
 	encodings.c \
@@ -766,15 +768,12 @@ whatis_SOURCES = \
 	manp.c \
 	manp.h \
 	util.c \
-	version.c \
 	whatis.c
 
 wrapper_SOURCES = \
-	version.c \
 	wrapper.c
 
 zsoelim_SOURCES = \
-	version.c \
 	zsoelim.l
 
 CLEANFILES = apropos man_db.conf
@@ -974,7 +973,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/straycats.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ult_src.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/version.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wrapper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim.Po@am__quote@

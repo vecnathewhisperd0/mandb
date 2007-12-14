@@ -27,6 +27,7 @@ AC_DEFUN([gl_EARLY],
   AC_REQUIRE([AC_PROG_RANLIB])
   AC_REQUIRE([AC_GNU_SOURCE])
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
+  AC_REQUIRE([gl_LOCK_EARLY])
   dnl Some compilers (e.g., AIX 5.3 cc) need to be in c99 mode
   dnl for the builtin va_copy to work.  With Autoconf 2.60 or later,
   dnl AC_PROG_CC_STDC arranges for this.  With older Autoconf AC_PROG_CC_STDC
@@ -47,6 +48,7 @@ AC_DEFUN([gl_INIT],
   gl_ltlibdeps=
   gl_source_base='gnulib/lib'
   gl_FUNC_ALLOCA
+  gl_ARGP
   gl_FUNC_ATEXIT
   AC_FUNC_CANONICALIZE_FILE_NAME
   gl_MODULE_INDICATOR([canonicalize])
@@ -89,6 +91,7 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_LCHOWN
   gl_UNISTD_MODULE_INDICATOR([lchown])
   gl_LOCALCHARSET
+  gl_LOCK
   gl_FUNC_LSTAT
   AC_FUNC_MALLOC
   AC_DEFINE([GNULIB_MALLOC_GNU], 1, [Define to indicate the 'malloc' module.])
@@ -116,18 +119,24 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_SETENV
   gl_FUNC_UNSETENV
   gl_SIZE_MAX
+  gl_FUNC_SLEEP
+  gl_UNISTD_MODULE_INDICATOR([sleep])
   gt_TYPE_SSIZE_T
   gl_STDARG_H
   AM_STDBOOL_H
   gl_STDINT_H
   gl_STDIO_H
   gl_STDLIB_H
+  gl_STRCASE
+  gl_FUNC_STRCHRNUL
+  gl_STRING_MODULE_INDICATOR([strchrnul])
   gl_FUNC_STRCSPN
   gl_FUNC_STRDUP
   gl_STRING_MODULE_INDICATOR([strdup])
   gl_FUNC_STRERROR
   gl_STRING_MODULE_INDICATOR([strerror])
   gl_HEADER_STRING_H
+  gl_HEADER_STRINGS_H
   gl_FUNC_STRNDUP
   gl_STRING_MODULE_INDICATOR([strndup])
   gl_FUNC_STRNLEN
@@ -144,6 +153,7 @@ AC_DEFUN([gl_INIT],
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_TIME_H
   AC_PROG_MKDIR_P
+  gl_SYSEXITS
   gl_FUNC_GEN_TEMPNAME
   gl_UNISTD_H
   gl_UNISTD_SAFER
@@ -153,6 +163,8 @@ AC_DEFUN([gl_INIT],
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_XGETTEXT_OPTION([--flag=asprintf:2:c-format])
      AM_XGETTEXT_OPTION([--flag=vasprintf:2:c-format])])
+  gl_FUNC_VSNPRINTF
+  gl_STDIO_MODULE_INDICATOR([vsnprintf])
   gl_WCHAR_H
   gl_WCTYPE_H
   gl_XALLOC
@@ -216,11 +228,25 @@ AC_DEFUN([gl_LIBSOURCES], [
 # This macro records the list of files which have been installed by
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
+  build-aux/config.rpath
   build-aux/link-warning.h
   lib/alloca.c
   lib/alloca.in.h
   lib/areadlink-with-size.c
   lib/areadlink.h
+  lib/argp-ba.c
+  lib/argp-eexst.c
+  lib/argp-fmtstream.c
+  lib/argp-fmtstream.h
+  lib/argp-fs-xinl.c
+  lib/argp-help.c
+  lib/argp-namefrob.h
+  lib/argp-parse.c
+  lib/argp-pin.c
+  lib/argp-pv.c
+  lib/argp-pvh.c
+  lib/argp-xinl.c
+  lib/argp.h
   lib/asnprintf.c
   lib/asprintf.c
   lib/at-func.c
@@ -284,6 +310,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/lchown.c
   lib/localcharset.c
   lib/localcharset.h
+  lib/lock.c
+  lib/lock.h
   lib/lstat.c
   lib/lstat.h
   lib/malloc.c
@@ -327,15 +355,20 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/setenv.c
   lib/setenv.h
   lib/size_max.h
+  lib/sleep.c
   lib/stdbool.in.h
   lib/stdint.in.h
   lib/stdio.in.h
   lib/stdlib.in.h
+  lib/strcasecmp.c
+  lib/strchrnul.c
   lib/strcspn.c
   lib/strdup.c
   lib/strerror.c
   lib/string.in.h
+  lib/strings.in.h
   lib/stripslash.c
+  lib/strncasecmp.c
   lib/strndup.c
   lib/strnlen.c
   lib/strpbrk.c
@@ -344,6 +377,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/sys_socket.in.h
   lib/sys_stat.in.h
   lib/sys_time.in.h
+  lib/sysexits.in.h
   lib/tempname.c
   lib/tempname.h
   lib/unistd--.h
@@ -353,6 +387,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/vasnprintf.c
   lib/vasnprintf.h
   lib/vasprintf.c
+  lib/vsnprintf.c
   lib/wchar.in.h
   lib/wctype.in.h
   lib/xalloc-die.c
@@ -368,6 +403,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xvasprintf.h
   m4/absolute-header.m4
   m4/alloca.m4
+  m4/argp.m4
   m4/atexit.m4
   m4/canonicalize-lgpl.m4
   m4/canonicalize.m4
@@ -407,7 +443,11 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/intmax_t.m4
   m4/inttypes_h.m4
   m4/lchown.m4
+  m4/lib-ld.m4
+  m4/lib-link.m4
+  m4/lib-prefix.m4
   m4/localcharset.m4
+  m4/lock.m4
   m4/longlong.m4
   m4/lstat.m4
   m4/malloc.m4
@@ -429,6 +469,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/save-cwd.m4
   m4/setenv.m4
   m4/size_max.m4
+  m4/sleep.m4
   m4/sockpfaf.m4
   m4/ssize_t.m4
   m4/stdarg.m4
@@ -437,10 +478,13 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdint_h.m4
   m4/stdio_h.m4
   m4/stdlib_h.m4
+  m4/strcase.m4
+  m4/strchrnul.m4
   m4/strcspn.m4
   m4/strdup.m4
   m4/strerror.m4
   m4/string_h.m4
+  m4/strings_h.m4
   m4/strndup.m4
   m4/strnlen.m4
   m4/strpbrk.m4
@@ -449,11 +493,13 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/sys_socket_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
+  m4/sysexits.m4
   m4/tempname.m4
   m4/unistd-safer.m4
   m4/unistd_h.m4
   m4/vasnprintf.m4
   m4/vasprintf.m4
+  m4/vsnprintf.m4
   m4/wchar.m4
   m4/wchar_t.m4
   m4/wctype.m4

@@ -66,21 +66,18 @@ zsoelim_LDADD = $(LIBMAN)
 
 accessdb_SOURCES = \
 	accessdb.c \
-	util.c \
-	version.c
+	util.c
 catman_SOURCES = \
 	catman.c \
 	fake_security.c \
 	manp.c \
 	manp.h \
-	util.c \
-	version.c
+	util.c
 globbing_SOURCES = \
 	globbing.c \
 	globbing.h \
 	globbing_test.c \
-	util.c \
-	version.c
+	util.c
 lexgrog_SOURCES = \
 	compression.c \
 	descriptions.c \
@@ -93,8 +90,7 @@ lexgrog_SOURCES = \
 	security.h \
 	ult_src.c \
 	ult_src.h \
-	util.c \
-	version.c
+	util.c
 man_SOURCES = \
 	compression.c \
 	convert_name.c \
@@ -113,11 +109,9 @@ man_SOURCES = \
 	security.h \
 	ult_src.c \
 	ult_src.h \
-	util.c \
-	version.c
+	util.c
 manconv_SOURCES = \
-	manconv.c \
-	version.c
+	manconv.c
 mandb_SOURCES = \
 	check_mandirs.c \
 	check_mandirs.h \
@@ -140,15 +134,13 @@ mandb_SOURCES = \
 	straycats.c \
 	ult_src.c \
 	ult_src.h \
-	util.c \
-	version.c
+	util.c
 manpath_SOURCES = \
 	fake_security.c \
 	manp.c \
 	manp.h \
 	manpath.c \
-	util.c \
-	version.c
+	util.c
 whatis_SOURCES = \
 	encodings.c \
 	encodings.h \
@@ -156,13 +148,10 @@ whatis_SOURCES = \
 	manp.c \
 	manp.h \
 	util.c \
-	version.c \
 	whatis.c
 wrapper_SOURCES = \
-	version.c \
 	wrapper.c
 zsoelim_SOURCES = \
-	version.c \
 	zsoelim.l
 
 CLEANFILES = apropos man_db.conf

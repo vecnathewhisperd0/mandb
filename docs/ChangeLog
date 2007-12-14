@@ -1,3 +1,78 @@
+Fri Dec 14 09:39:06 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	Convert from getopt to argp for option parsing. This invalidates
+	many translations, but this should be the last time; in future, a
+	changes in a single option will only affect translations of the help
+	strings for that option, not the program's entire help string.
+
+	* gnulib: Import the argp and lock modules.
+	* autogen.sh: Hack around a tools/config.rpath clash between Gnulib
+	  and gettext.
+	* configure.ac (CFLAGS): Add -Wno-missing-field-initializers for
+	  GCC.
+	* .bzrignore: Add gnulib/lib/strings.h, po/remove-potcdate.sed, and
+	  tools/config.rpath.*.
+
+	* src/version.c: Remove in favour of argp's --version handling.
+	* po/POTFILES.in: Remove src/version.c.
+	* src/Makefile.am (accessdb_SOURCES, catman_SOURCES,
+	  globbing_SOURCES, lexgrog_SOURCES, man_SOURCES, manconv_SOURCES,
+	  mandb_SOURCES, manpath_SOURCES, whatis_SOURCES, wrapper_SOURCES,
+	  zsoelim_SOURCES): Remove version.c.
+
+	* src/accessdb.c (long_options, args, usage): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, doc, options, parse_opt,
+	  help_filter, argp): Add.
+	  (main): Switch from getopt_long to argp_parse. Use error (FATAL)
+	  for database read errors rather than error (0); usage (FAIL).
+	* src/catman.c (long_options, args, usage): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, options, parse_opt, argp): Add.
+	  (catman, do_catman, parse_for_sec): Rename argp to args.
+	  (main): Switch from getopt_long to argp_parse.
+	* src/globbing_test.c (long_options, args, usage): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, options, parse_opt, argp): Add.
+	  (main): Switch from getopt_long to argp_parse.
+	* src/lexgrog_test.c (long_options, args, usage): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, doc, options, parse_opt, argp):
+	  Add.
+	  (main): Switch from getopt_long to argp_parse.
+	* src/man.c (long_options, args, usage, man_getopt): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, options, parse_opt, help_filter,
+	  argp): Add.
+	  (do_extern): Adjust iteration over arguments.
+	  (main): Switch from getopt_long to argp_parse. Initialise
+	  html_pager early for use in --help.
+	* src/man.h (man_getopt): Remove prototype.
+	* src/manconv.c (long_options, args, usage): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, options, parse_opt, argp): Add.
+	  (main): Switch from getopt_long to argp_parse.
+	* src/mandb.c (long_options, args, usage): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, options, parse_opt, argp): Add.
+	  (main): Switch from getopt_long to argp_parse.
+	* src/manpath.c (long_options, args, usage): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, options, parse_opt, argp): Add.
+	  (main): Switch from getopt_long to argp_parse.
+	* src/whatis.c (long_options, args, apropos_usage, whatis_usage,
+	  usage): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, apropos_doc, options, parse_opt,
+	  apropos_argp, whatis_argp): Add.
+	  (main): Switch from getopt_long to argp_parse. Suppress --exact
+	  and --and options in the whatis case.
+	* src/zsoelim.l (long_options, args, usage, ver): Remove.
+	  (argp_program_version, argp_program_bug_address,
+	  argp_err_exit_status, args_doc, options, parse_opt, argp): Add.
+	  (main): Switch from getopt_long to argp_parse.
+	* po/POTFILES.in: Add zsoelim.l.
+
 Thu Dec 13 17:20:51 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* autogen.sh: Permit gnulib-tool to be missing; in that case, just
