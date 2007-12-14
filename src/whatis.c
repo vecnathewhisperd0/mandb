@@ -115,7 +115,7 @@ static struct argp_option options[] = {
 	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
 	{ "verbose",		'v',	0,		0,	N_("print verbose warning messages") },
 	{ "regex",		'r',	0,		0,	N_("interpret each keyword as a regex"),	10 },
-	{ "exact",		'e',	0,		0,	N_("search each keyword for exact match") },
+	{ "exact",		'e',	0,		0,	N_("search each keyword for exact match") }, /* apropos only */
 	{ "wildcard",		'w',	0,		0,	N_("the keyword(s) contain wildcards") },
 	{ "and",		'a',	0,		0,	N_("require all keywords to match"),			20 }, /* apropos only */
 	{ "long",		'l',	0,		0,	N_("do not trim output to terminal width"),		30 },
