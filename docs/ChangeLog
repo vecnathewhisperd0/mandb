@@ -1,3 +1,12 @@
+Mon Dec 31 17:00:19 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/hashtable.c (hash_lookup_structure): New function; same as
+	  previous hash_lookup but returns a struct nlist * rather than the
+	  value.
+	  (hash_lookup): Rewrite in terms of hash_lookup_structure.
+	  (hash_install): Use hash_lookup_structure rather than hash_lookup
+	  (thanks, Ivan Shmakov; should fix Debian bug #374708).
+
 Mon Dec 31 16:15:26 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* lib/hashtable.c (hash_install): Fix head comment to match reality
