@@ -98,7 +98,7 @@ void *hash_lookup (const struct hashtable *ht, const char *s, size_t len)
 	return NULL;
 }
 
-/* Return structure containing defn, or NULL if unable to store. */
+/* Return structure containing definition (never NULL). */
 struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
 			    void *defn)
 {
