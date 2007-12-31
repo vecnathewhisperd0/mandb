@@ -234,9 +234,6 @@
 /* know what you are doing.						 */
 /*-----------------------------------------------------------------------*/
 
-#define VERSION	"@VERSION@"
-#define DATE	"@date@"
-
 #ifdef inline
 /* autoconf #defines inline to be either "__inline", "__inline__" 
    or "" if the compiler doesn't like inline */
@@ -343,11 +340,6 @@ extern void debug_error (const char *message, ...)
 	ATTRIBUTE_FORMAT_PRINTF(1, 2);
 
 struct pipeline;
-
-/* ver.c */
-#ifndef STATIC_VER
-extern __inline__ void ver (void);
-#endif /* !STATIC_VER */
 
 /* compression.c */
 extern struct compression *comp_info (const char *filename, int want_stem);

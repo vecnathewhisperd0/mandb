@@ -50,8 +50,6 @@
 
 #include "dirname.h"
 
-#define STATIC_VER	/* zsoelim has a static ver() */
-
 #define NAME	so_name[so_stack_ptr]
 #define LINE	so_line[so_stack_ptr]
 #define PIPE	so_pipe[so_stack_ptr]
