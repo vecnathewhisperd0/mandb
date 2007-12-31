@@ -216,10 +216,16 @@ char *lang_dir (const char *filename)
 		return ld;
 
 	/* Check whether filename is in a man page hierarchy. */
-	fm = strstr (filename, "/man/");
+	if (STRNEQ (filename, "man/", 4))
+		fm = filename;
+	else {
+		fm = strstr (filename, "/man/");
+		if (fm)
+			++fm;
+	}
 	if (!fm)
 		return ld;
-	sm = strstr (fm + 3, "/man");
+	sm = strstr (fm + 2, "/man");
 	if (!sm)
 		return ld;
 	if (sm[5] != '/')
@@ -228,11 +234,11 @@ char *lang_dir (const char *filename)
 		return ld;
 
 	/* If there's no lang dir element, it's an English man page. */
-	if (sm == fm + 4)
+	if (sm == fm + 3)
 		return xstrdup ("C");
 
 	/* found a lang dir */
-	fm += 5;
+	fm += 4;
 	sm = strchr (fm, '/');
 	if (!sm)
 		return ld;

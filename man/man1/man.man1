@@ -890,6 +890,18 @@ Don't actually display the manual pages, but do print the location(s) of
 the cat files that would be displayed.
 If \-w and \-W are both specified, print both separated by a space.
 .TP
+.BI \-R\  encoding\fR,\ \fI \-\-recode\fR=\fIencoding
+Instead of formatting the manual page in the usual way, output its source
+converted to the specified
+.IR encoding .
+If you already know the encoding of the source file, you can also use
+.BR %manconv% (1)
+directly.
+However, this option allows you to convert several manual pages to a single
+encoding without having to explicitly state the encoding of each, provided
+that they were already installed in a structure similar to a manual page
+hierarchy.
+.TP
 .if !'po4a'hide' .B \-V, \-\-version
 Display version information.
 .SH "EXIT STATUS"

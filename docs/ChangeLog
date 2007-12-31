@@ -1,3 +1,22 @@
+Mon Dec 31 10:02:28 GMT 2007  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (passthrough): New helper function.
+	  (pipeline_connect): Add special (kludge) handling for zero-command
+	  sinks.
+	  (pipeline_pump): Add minor commentary.
+	* src/man.c (options, parse_opt): New -R/--recode option.
+	  (make_roff_command): If --recode is used, suppress external
+	  formatters and all processing filters, and force the output
+	  encoding to the argument to --recode.
+	  (display): If --recode is used, force display to stdout and
+	  suppress cat pages.
+	  (try_section, display_filesystem, display_database): Don't show
+	  cat pages or follow .so links for --recode.
+	* src/util.c (lang_dir): Handle relative filenames starting with
+	  "man/".
+	* man/man1/man.man1 (OPTIONS): Document --recode.
+	* docs/NEWS: Document this.
+
 Fri Dec 14 10:06:21 GMT 2007  Colin Watson  <cjwatson@debian.org>
 
 	* src/whatis.c (options): Note that --exact is for apropos only.

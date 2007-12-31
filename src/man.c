@@ -206,6 +206,8 @@ static int local_man_file;
 static int findall;
 static int update;
 static int match_case;
+static int ult_flags = SO_LINK | SOFT_LINK | HARD_LINK;
+static const char *recode = NULL;
 
 static int ascii;		/* insert tr in the output pipe */
 static int save_cat; 		/* security breach? Can we save the cat? */
@@ -250,6 +252,7 @@ static struct argp_option options[] = {
 	{ "location-cat",	0,	0,		OPTION_ALIAS },
 	{ "local-file",		'l',	0,		0,		N_("interpret PAGE argument(s) as local filename(s)") },
 	{ "catman",		'c',	0,		0,		N_("used by catman to reformat out of date cat pages"),		11 },
+	{ "recode",		'R',	N_("CODE"),	0,		N_("output source page encoded in CODE") },
 
 	{ 0,			0,	0,		0,		N_("Finding manual pages:"),					20 },
 	{ "manpath",		'M',	N_("PATH"),	0,		N_("set search path for manual pages to PATH") },
@@ -343,6 +346,10 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'c':
 			catman = 1;
+			return 0;
+		case 'R':
+			recode = arg;
+			ult_flags &= ~SO_LINK;
 			return 0;
 
 		case 'M':
@@ -1190,6 +1197,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	char *fmt_prog;
 	pipeline *p = pipeline_new ();
 	command *cmd;
+	const char *output_encoding = NULL;
+	const char *locale_charset = NULL;
 
 #ifndef ALT_EXT_FORMAT
 	dir = dir; /* not used unless looking for formatters in catdir */
@@ -1203,7 +1212,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 #ifdef ALT_EXT_FORMAT
 	/* Check both external formatter locations */
-	if (dir) {
+	if (dir && !recode) {
 		char *catpath = get_catpath
 			(dir, global_manpath ? SYSTEM_CAT : USER_CAT);
 
@@ -1242,15 +1251,14 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				
 	if (!fmt_prog) {
 		/* we don't have an external formatter script */
-		int using_tbl = 0;
 		char *page_encoding;
 		const char *source_encoding, *roff_encoding;
-		const char *output_encoding = NULL;
 		char *cat_charset = NULL;
-		const char *locale_charset = NULL;
 		const char *groff_preconv;
 
-		pipeline_command_argstr (p, get_def ("soelim", SOELIM));
+		if (!recode)
+			pipeline_command_argstr (p, get_def ("soelim",
+							     SOELIM));
 
 		page_encoding = get_page_encoding (lang);
 		source_encoding = get_source_encoding (lang);
@@ -1301,9 +1309,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		 *     (if not troff).
 		 * If we have preconv, then use it to recode the
 		 * input to a safe escaped form.
+		 * The --recode option overrides everything else.
 		 */
 		groff_preconv = get_groff_preconv ();
-		if (groff_preconv) {
+		if (recode)
+			add_manconv (p, page_encoding, recode);
+		else if (groff_preconv) {
 			add_manconv (p, page_encoding, page_encoding);
 			pipeline_command_args
 				(p, groff_preconv, "-e", page_encoding, NULL);
@@ -1312,7 +1323,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		else
 			add_manconv (p, page_encoding, page_encoding);
 
-		if (!troff) {
+		if (!troff && !recode) {
 			output_encoding = get_output_encoding (roff_device);
 			if (!output_encoding)
 				output_encoding = source_encoding;
@@ -1328,6 +1339,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 		free (page_encoding);
 		free (cat_charset);
+	}
+
+	if (recode)
+		;
+	else if (!fmt_prog) {
+		int using_tbl = 0;
 
 		do {
 			int wants_dev = 0; /* filter wants a dev argument */
@@ -2071,6 +2088,8 @@ static int display (const char *dir, const char *man_file,
 	if (htmlout)
 		display_to_stdout = 0;
 #endif
+	if (recode)
+		display_to_stdout = 1;
 
 	if (display_to_stdout) {
 		/* If we're reading stdin via '-l -', man_file is "". See
@@ -2116,6 +2135,7 @@ static int display (const char *dir, const char *man_file,
 		    || htmlout
 #endif
 		    || local_man_file
+		    || recode
 		    || disable_cache)
 			save_cat = 0;
 
@@ -2625,7 +2645,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 		if (catman)
 			return 1;
 
-		if (!troff && !different_encoding) {
+		if (!troff && !different_encoding && !recode) {
 			names = look_for_file (path, sec, name, 1, match_case);
 			cat = 1;
 		}
@@ -2643,8 +2663,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 		 * must be either ULT_MAN or SO_MAN. ult_src() can tell us
 		 * which.
 		 */
-		ult = ult_src (*np, path, NULL,
-			       SO_LINK | SOFT_LINK | HARD_LINK);
+		ult = ult_src (*np, path, NULL, ult_flags);
 		if (!ult) {
 			/* already warned */
 			debug ("try_section(): bad link %s\n", *np);
@@ -2671,7 +2690,7 @@ static int display_filesystem (struct candidate *candp)
 	char *title = appendstr (NULL, candp->source->name,
 				 "(", candp->source->ext, ")", NULL);
 	if (candp->cat) {
-		if (troff || different_encoding)
+		if (troff || different_encoding || recode)
 			return 0;
 		return display (candp->path, NULL, filename, title, NULL);
 	} else {
@@ -2679,8 +2698,7 @@ static int display_filesystem (struct candidate *candp)
 		char *cat_file;
 		int found;
 
-		man_file = ult_src (filename, candp->path, NULL,
-				    SO_LINK | SOFT_LINK | HARD_LINK);
+		man_file = ult_src (filename, candp->path, NULL, ult_flags);
 		if (man_file == NULL) {
 			free (title);
 			return 0;
@@ -2755,7 +2773,7 @@ static int display_database (struct candidate *candp)
 			char *cat_file;
 
 			man_file = ult_src (file, candp->path, NULL,
-					    SO_LINK | SOFT_LINK | HARD_LINK);
+					    ult_flags);
 			if (man_file == NULL) {
 				free (title);
 				return found; /* zero */
@@ -2789,7 +2807,7 @@ static int display_database (struct candidate *candp)
 		/* If explicitly asked for troff or a different encoding,
 		 * don't show a stray cat.
 		 */
-		if (troff || different_encoding) {
+		if (troff || different_encoding || recode) {
 			free (title);
 			return found;
 		}
