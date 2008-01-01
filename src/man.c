@@ -259,6 +259,7 @@ static struct argp_option options[] = {
 	{ "locale",		'L',	N_("LOCALE"),	0,		N_("define the locale for this particular man search") },
 	{ "systems",		'm',	N_("SYSTEM"),	0,		N_("search for man pages from other unix system(s)") },
 	{ "sections",		'S',	N_("LIST"),	0,		N_("use colon separated section list") },
+	{ 0,			's',	0,		OPTION_ALIAS },
 	{ "extension",		'e',	N_("EXTENSION"),
 							0,		N_("limit search to extension type EXTENSION") },
 	{ "ignore-case",	'i',	0,		0,		N_("look for pages case-insensitively (default)"),		21 },
@@ -362,6 +363,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			alt_system_name = arg;
 			return 0;
 		case 'S':
+		case 's':
 			if (*arg)
 				colon_sep_section_list = arg;
 			return 0;
@@ -3185,8 +3187,12 @@ static const char **get_section_list (void)
 	if (colon_sep_section_list == NULL || *colon_sep_section_list == '\0')
 		return config_sections;
 
-	for (sec = strtok (colon_sep_section_list, ":"); sec; 
-	     sec = strtok (NULL, ":")) {
+	/* Although this is documented as colon-separated, at least Solaris
+	 * man's -s option takes a comma-separated list, so we accept that
+	 * too for compatibility.
+	 */
+	for (sec = strtok (colon_sep_section_list, ":,"); sec; 
+	     sec = strtok (NULL, ":,")) {
 		sections = xnrealloc (sections, i + 2, sizeof *sections);
  		sections[i++] = sec;
  	}

@@ -662,11 +662,15 @@ and may be useless for
 other than
 .BR GNU's .
 .TP
-.BI \-S\  list ,\ \-\-sections= list
-List is a colon-separated list of `order specific' manual sections to search.
+.BI \-S\  list ,\ \-s\  list ,\ \-\-sections= list
+List is a colon- or comma-separated list of `order specific' manual sections
+to search.
 This option overrides the
 .RB $ MANSECT
 environment variable.
+(The
+.B \-s
+spelling is for compatibility with System V.)
 .TP
 .if !'po4a'hide' .B \-a, \-\-all
 By default,
