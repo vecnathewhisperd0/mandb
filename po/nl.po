@@ -1,0 +1,974 @@
+# Translation of man-db-2.5.0-pre2 to Dutch.
+# Copyright (C) 2007 Colin Watson
+#
+# Benno Schulenberg <benno@vertaalt.nl>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: man-db-2.5.0-pre2\n"
+"Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
+"POT-Creation-Date: 2007-09-16 20:20+0100\n"
+"PO-Revision-Date: 2007-11-17 15:15+0100\n"
+"Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
+"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: lib/pipeline.c:228 lib/pipeline.c:240
+#, c-format
+msgid "badly formed configuration directive: '%s'"
+msgstr "syntaxfout in configuratieopdracht: '%s'"
+
+#: lib/pipeline.c:597
+msgid "pipeline input not open"
+msgstr "pijpinvoer is niet open"
+
+#: lib/pipeline.c:610
+msgid "pipeline output not open"
+msgstr "pijpuitvoer is niet open"
+
+#: lib/pipeline.c:754 lib/pipeline.c:773
+msgid "pipe failed"
+msgstr "aanmaken van pijp is mislukt"
+
+#: lib/pipeline.c:762 src/lexgrog.l:467 src/manconv.c:370 src/straycats.c:242
+#: src/ult_src.c:316 src/ult_src.c:326
+#, c-format
+msgid "can't open %s"
+msgstr "kan %s niet openen"
+
+#: lib/pipeline.c:802 src/catman.c:182
+msgid "fork failed"
+msgstr "starten van nieuw proces is mislukt"
+
+#: lib/pipeline.c:810 lib/pipeline.c:819
+msgid "dup2 failed"
+msgstr "dup2() is mislukt"
+
+#: lib/pipeline.c:813 lib/pipeline.c:822 lib/pipeline.c:829 lib/pipeline.c:838
+#: lib/pipeline.c:894 lib/pipeline.c:898
+msgid "close failed"
+msgstr "sluiten is mislukt"
+
+#: lib/pipeline.c:888
+#, c-format
+msgid "can't execute %s"
+msgstr "kan %s niet uitvoeren"
+
+#: lib/pipeline.c:990
+msgid "closing pipeline input stream failed"
+msgstr "sluiten van pijpinvoerstroom is mislukt"
+
+#: lib/pipeline.c:995 lib/pipeline.c:1256
+msgid "closing pipeline input failed"
+msgstr "sluiten van pijpinvoer is mislukt"
+
+#: lib/pipeline.c:1002
+msgid "closing pipeline output stream failed"
+msgstr "sluiten van pijpuitvoerstroom is mislukt"
+
+#: lib/pipeline.c:1009 lib/pipeline.c:1281
+msgid "closing pipeline output failed"
+msgstr "sluiten van pijpuitvoer is mislukt"
+
+#: lib/pipeline.c:1057
+#, c-format
+msgid "%s: %s (core dumped)"
+msgstr "%s: %s (geheugendump gemaakt)"
+
+#: lib/pipeline.c:1062
+#, c-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: lib/pipeline.c:1087
+msgid "waitpid failed"
+msgstr "waitpid() is mislukt"
+
+#: lib/pipeline.c:1145
+msgid "can't install SIGCHLD handler"
+msgstr "kan geen SIGCHLD-verwerker instellen"
+
+#: libdb/db_delete.c:120
+#, c-format
+msgid "multi key %s does not exist"
+msgstr "multisleutel %s bestaat niet"
+
+#: libdb/db_lookup.c:81
+#, c-format
+msgid "can't lock index cache %s"
+msgstr "kan index-cache %s niet vergrendelen"
+
+#: libdb/db_lookup.c:88
+#, c-format
+msgid "index cache %s corrupt"
+msgstr "index-cache %s is beschadigd"
+
+#: libdb/db_lookup.c:94
+#, c-format
+msgid "cannot replace key %s"
+msgstr "kan sleutel %s niet vervangen"
+
+#: libdb/db_lookup.c:205 libdb/db_lookup.c:215
+#, c-format
+msgid "only %d fields in content"
+msgstr "slechts %d velden in de inhoud"
+
+#: libdb/db_lookup.c:425
+#, c-format
+msgid "bad fetch on multi key %s"
+msgstr "onjuiste treffer voor multisleutel %s"
+
+#: libdb/db_store.c:62
+#, c-format
+msgid "cannot insert unused key %s"
+msgstr "kan ongebruikte sleutel %s niet invoegen"
+
+#: libdb/db_ver.c:60
+#, c-format
+msgid "warning: %s has no version identifier\n"
+msgstr "waarschuwing: %s heeft geen versie-indicatie\n"
+
+#: libdb/db_ver.c:63
+#, c-format
+msgid "warning: %s is version %s, expecting %s\n"
+msgstr "waarschuwing: %s heeft versie %s, terwijl %s verwacht wordt\n"
+
+#: libdb/db_ver.c:87
+#, c-format
+msgid "fatal: unable to insert version identifier into %s"
+msgstr "fatale fout: kan geen versie-indicatie invoegen in %s"
+
+#: src/accessdb.c:83
+#, c-format
+msgid "usage: %s [-hV] [man database]\n"
+msgstr "Gebruik:  %s [-hV] [man-gegevensbank]\n"
+
+#: src/accessdb.c:85
+#, c-format
+msgid ""
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
+"\n"
+"The man database defaults to %s%s.\n"
+msgstr ""
+"-V, --version    versie-informatie tonen\n"
+"-h, --help       deze hulptekst tonen\n"
+"\n"
+"De standaard man-gegevensbank is %s%s.\n"
+
+#: src/accessdb.c:131
+#, c-format
+msgid "can't open %s for reading"
+msgstr "kan %s niet openen om te lezen"
+
+#: src/catman.c:137
+#, c-format
+msgid "usage: %s [-dhV] [-C file] [-M manpath] [section] ...\n"
+msgstr "Gebruik:  %s [-dhV] [-C bestand] [-M man-pad] [sectie]...\n"
+
+#: src/catman.c:140
+#, c-format
+msgid ""
+"-d, --debug                 produce debugging info.\n"
+"-M, --manpath path          set search path for manual pages to `path'.\n"
+"-C, --config-file file      use this user configuration file.\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
+msgstr ""
+"-d, --debug                 debug-uitvoer produceren\n"
+"-M, --manpath PAD           pad waarin naar man-pagina's gezocht moet worden\n"
+"-C, --config-file BESTAND   te gebruiken configuratiebestand\n"
+"-V, --version               versie-informatie tonen\n"
+"-h, --help                  deze hulptekst tonen\n"
+
+#: src/catman.c:155
+#, c-format
+msgid "cannot read database %s"
+msgstr "kan gegevensbank %s niet lezen"
+
+#: src/catman.c:194
+msgid "can't get man command's exit status"
+msgstr "kan afsluitwaarde van 'man' niet bepalen"
+
+#: src/catman.c:197
+#, c-format
+msgid "man command failed with exit status %d"
+msgstr "'man' is mislukt met afsluitwaarde %d"
+
+#: src/catman.c:250
+#, c-format
+msgid "unable to reset cursor position in %s"
+msgstr "kan cursorpositie niet herstellen in %s"
+
+#: src/catman.c:305
+#, c-format
+msgid "NULL content for key: %s"
+msgstr "NULL-inhoud voor sleutel %s"
+
+#: src/catman.c:320
+#, c-format
+msgid ""
+"\n"
+"Updating cat files for section %s of man hierarchy %s\n"
+msgstr ""
+"\n"
+"Bijwerken van cat-bestanden voor sectie %s van man-hiërachie %s\n"
+
+#: src/catman.c:385
+#, c-format
+msgid "cannot write within %s"
+msgstr "kan in %s niet schrijven"
+
+#: src/catman.c:522
+#, c-format
+msgid "unable to update %s"
+msgstr "kan %s niet bijwerken"
+
+#: src/check_mandirs.c:106
+#, c-format
+msgid "warning: %s/man%s/%s.%s*: competing extensions"
+msgstr "waarschuwing: botsende extensies in %s/man%s/%s.%s*"
+
+#: src/check_mandirs.c:118 src/check_mandirs.c:436
+#, c-format
+msgid "can't update index cache %s"
+msgstr "kan index-cache %s niet bijwerken"
+
+#: src/check_mandirs.c:242
+#, c-format
+msgid "warning: %s: bad symlink or ROFF `.so' request"
+msgstr "waarschuwing: %s: onjuiste symbolische koppeling of onjuist ROFF-'.so'-verzoek"
+
+#: src/check_mandirs.c:295
+#, c-format
+msgid "warning: %s: ignoring empty file"
+msgstr "waarschuwing: %s: leeg bestand wordt genegeerd"
+
+#: src/check_mandirs.c:299 src/straycats.c:307
+#, c-format
+msgid "warning: %s: whatis parse for %s(%s) failed"
+msgstr "waarschuwing: %s: ontleden van %s(%s) voor 'whatis' is mislukt"
+
+#: src/check_mandirs.c:325 src/check_mandirs.c:360 src/mandb.c:659
+#: src/straycats.c:114 src/straycats.c:336 src/ult_src.c:128
+#, c-format
+msgid "can't search directory %s"
+msgstr "kan map %s niet doorzoeken"
+
+#: src/check_mandirs.c:396
+#, c-format
+msgid "Updating index cache for path `%s/%s'. Wait..."
+msgstr "Bijwerken van index-cache voor pad '%s/%s'.  Even geduld..."
+
+#: src/check_mandirs.c:505
+#, c-format
+msgid "can't create index cache directory %s"
+msgstr "kan index-cache-map %s niet aanmaken"
+
+#: src/check_mandirs.c:530
+#, c-format
+msgid "can't create index cache %s"
+msgstr "kan index-cache %s niet aanmaken"
+
+#: src/check_mandirs.c:544 src/check_mandirs.c:587
+msgid "done.\n"
+msgstr "voltooid.\n"
+
+#: src/check_mandirs.c:824
+#, c-format
+msgid "Purging old database entries in %s...\n"
+msgstr "Verwijderen van oude gegevensbankitems uit %s...\n"
+
+#: src/convert_name.c:57
+#, c-format
+msgid "Can't convert %s to cat name"
+msgstr "Kan %s niet omzetten naar een cat-naam"
+
+#: src/descriptions_store.c:51
+#, c-format
+msgid "warning: failed to store entry for %s(%s)"
+msgstr "waarschuwing: opslaan van item voor %s(%s) is mislukt"
+
+#: src/fake_security.c:59
+msgid "can't get passwd structure for uid 0"
+msgstr "Kan geen gegevens verkrijgen over UID 0: getpwuid() is mislukt"
+
+#: src/filenames.c:56 src/straycats.c:146 src/straycats.c:175
+#, c-format
+msgid "warning: %s: ignoring bogus filename"
+msgstr "waarschuwing: %s: onjuiste bestandsnaam wordt genegeerd"
+
+#: src/globbing.c:441
+#, c-format
+msgid "usage: %s [-deiIhV] path section name\n"
+msgstr "Gebruik:  %s [-deiIhV] pad sectie naam\n"
+
+#: src/globbing.c:443
+#, c-format
+msgid ""
+"-d, --debug                 emit debugging messages.\n"
+"-e, --extension             limit search to extension type `extension'.\n"
+"-i, --ignore-case           look for pages case-insensitively (default).\n"
+"-I, --match-case            look for pages case-sensitively.\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
+msgstr ""
+"-d, --debug                 debug-uitvoer produceren\n"
+"-e, --extension SUBSECTIE   het zoeken beperken tot deze subsectie\n"
+"-i, --ignore-case           hoofdletterongevoelig naar pagina's zoeken\n"
+"-I, --match-case            hoofdlettergevoelig naar pagina's zoeken\n"
+"-V, --version               versie-informatie tonen\n"
+"-h, --help                  deze hulptekst tonen\n"
+
+#: src/lexgrog.l:389
+#, c-format
+msgid "warning: whatis for %s exceeds %d bytes, truncating."
+msgstr "waarschuwing: de 'whatis' voor %s is meer dan %d bytes -- afgekapt"
+
+#: src/lexgrog.l:548
+#, c-format
+msgid "usage: %s [-mcwfhV] [-E encoding] file ...\n"
+msgstr "Gebruik:  %s [-mcwfhV] [-E codering] bestand...\n"
+
+#: src/lexgrog.l:550
+#, c-format
+msgid ""
+"-m, --man                   parse as man page.\n"
+"-c, --cat                   parse as cat page.\n"
+"-w, --whatis                show whatis information.\n"
+"-f, --filters               show guessed series of preprocessing filters.\n"
+"-E, --encoding encoding     override character set.\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
+"\n"
+"The defaults are --man and --whatis.\n"
+msgstr ""
+"-m, --man                   argumenten interpreteren als een 'man'-pagina\n"
+"-c, --cat                   argumenten interpreteren als een 'cat'-pagina\n"
+"-w, --whatis                'whatis'-informatie tonen\n"
+"-f, --filters               de gegokte reeks voorbewerkingsfilters tonen\n"
+"-E, --encoding CODERING     uitvoer in deze codering produceren\n"
+"-V, --version               versie-informatie tonen\n"
+"-h, --help                  deze hulptekst tonen\n"
+"\n"
+"Standaard zijn de opties '--man' en '--whatis'.\n"
+
+#: src/lexgrog.l:604
+msgid "-m -c: incompatible options"
+msgstr "Opties '-m' en '-c' gaan niet samen"
+
+#: src/man.c:199
+#, c-format
+msgid "command exited with status %d: %s"
+msgstr "opdracht eindigde met afsluitwaarde %d: %s"
+
+#: src/man.c:338
+#, c-format
+msgid ""
+"usage: %s [-c|-f|-k|-w|-tZT device] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
+"           [-Cfile] [-Slist] [-msystem] [-pstring] [-Llocale] [-eextension]\n"
+"           [section] page ...\n"
+msgstr ""
+"Gebruik:  %s [-c|-f|-k|-w|-t|-Z|-T apparaat] [-i|-I] [-adlhu7V]\n"
+"              [-Cbestand] [-Llocale] [-Mpad] [-Pprogramma] [-Slijst]\n"
+"              [-esubsectie] [-msysteemnaam] [-pletters] [sectie] pagina...\n"
+
+#: src/man.c:344
+#, c-format
+msgid ""
+"usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
+"           [-Cfile] [-Slist] [-msystem] [-pstring] [-Llocale] [-eextension]\n"
+"           [section] page ...\n"
+msgstr ""
+"Gebruik:  %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V]\n"
+"              [-Cbestand] [-Llocale] [-Mpad] [-Pprogramma] [-Slijst]\n"
+"              [-esubsectie] [-msysteemnaam] [-pletters] [sectie] pagina...\n"
+
+#: src/man.c:351
+msgid ""
+"-a, --all                   find all matching manual pages.\n"
+"-d, --debug                 emit debugging messages.\n"
+"-e, --extension             limit search to extension type `extension'.\n"
+"-f, --whatis                equivalent to whatis.\n"
+"-k, --apropos               equivalent to apropos.\n"
+"-w, --where, --location     print physical location of man page(s).\n"
+"-W, --where-cat,\n"
+"    --location-cat          print physical location of cat file(s).\n"
+"-l, --local-file            interpret `page' argument(s) as local filename(s).\n"
+"-u, --update                force a cache consistency check.\n"
+"-i, --ignore-case           look for pages case-insensitively (default).\n"
+"-I, --match-case            look for pages case-sensitively.\n"
+"-r, --prompt string         provide the `less' pager with a prompt\n"
+"-c, --catman                used by catman to reformat out of date cat pages.\n"
+"-7, --ascii                 display ASCII translation of certain latin1 chars.\n"
+"-E, --encoding encoding     use the selected nroff device and display in pager."
+msgstr ""
+"-a, --all                   alle passende pagina's vinden, niet alleen eerte\n"
+"-d, --debug                 debug-uitvoer produceren\n"
+"-e, --extension SUBSECTIE   het zoeken beperken tot deze subsectie\n"
+"-f, --whatis                als 'whatis' fungeren\n"
+"-k, --apropos               als 'apropos' fungeren\n"
+"-w, --where, --location          de locatie van man-pagina's tonen\n"
+"-W, --where-cat, --location-cat  de locatie van cat-bestanden tonen\n"
+"-l, --local-file            paginanaam als lokale bestandsnaam begrijpen\n"
+"-u, --update                een cache-consistentiecontrole afdwingen\n"
+"-i, --ignore-case           hoofdletterongevoelig naar pagina's zoeken\n"
+"-I, --match-case            hoofdlettergevoelig naar pagina's zoeken\n"
+"-r, --prompt TEKENREEKS     deze tekens als prompt van 'less' gebruiken\n"
+"-c, --catman                (gebruikt door 'catman' bij heropmaken)\n"
+"-7, --ascii                 een ASCII-versie van sommige Latin1-tekens tonen\n"
+"-E, --encoding CODERING     uitvoer in deze codering produceren"
+
+#: src/man.c:369
+#, c-format
+msgid ""
+"-t, --troff                 use %s to format pages.\n"
+"-T, --troff-device device   use %s with selected device.\n"
+msgstr ""
+"-t, --troff                   '%s' gebruiken om pagina's op te maken\n"
+"-T, --troff-device APPARAAT   '%s' gebruiken met dit apparaat\n"
+
+#: src/man.c:373
+msgid ""
+"-H, --html                  use lynx or argument to display html output.\n"
+"-Z, --ditroff               use groff and force it to produce ditroff.\n"
+"-X, --gxditview             use groff and display through gxditview (X11):\n"
+"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
+msgstr ""
+"-H, --html [PROGRAMMA]      'lynx' of PROGRAMMA gebruiken voor HTML-uitvoer\n"
+"-Z, --ditroff               'groff' gebruiken en \"ditroff\" laten uitvoeren\n"
+"-X, --gxditview             'groff' gebruiken en uitvoer tonen via 'gxditview';\n"
+"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
+
+#: src/man.c:381
+msgid ""
+"-D, --default               reset all options to their default values.\n"
+"-C, --config-file file      use this user configuration file.\n"
+"-M, --manpath path          set search path for manual pages to `path'.\n"
+"-P, --pager pager           use program `pager' to display output.\n"
+"-S, --sections list         use colon separated section list.\n"
+"-m, --systems system        search for man pages from other unix system(s).\n"
+"-L, --locale locale         define the locale for this particular man search.\n"
+"-p, --preprocessor string   string indicates which preprocessors to run.\n"
+"                             e - [n]eqn   p - pic    t - tbl\n"
+"                             g - grap     r - refer  v - vgrind\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message."
+msgstr ""
+"-D, --default               alle opties op hun standaardwaarden terugzetten\n"
+"-S, --sections LIJST        te doorzoeken secties (scheiden met dubbele punten)\n"
+"-m, --systems SYSTEEMNAAM   naar man-pagina's van dit Unix-systeem zoeken\n"
+"-M, --manpath PAD           pad waarin naar man-pagina's gezocht moet worden\n"
+"-L, --locale LOCALE         te gebruiken locale voor deze zoekopdracht\n"
+"-p, --preprocessor LETTERS  uit te voeren voorverwerkingsprogramma's:\n"
+"                              e - [n]eqn   p - pic    t - tbl\n"
+"                              g - grap     r - refer  v - vgrind\n"
+"-P, --pager PROGRAMMA       dit programma gebruiken om de uitvoer te tonen\n"
+"-C, --config-file BESTAND   te gebruiken configuratiebestand\n"
+"-V, --version               versie-informatie tonen\n"
+"-h, --help                  deze hulptekst tonen"
+
+#: src/man.c:404 src/man.c:476
+#, c-format
+msgid "No manual entry for %s\n"
+msgstr "Er is geen pagina over %s\n"
+
+#: src/man.c:406
+#, c-format
+msgid "(Alternatively, what manual page do you want from section %s?)\n"
+msgstr "(Of anders, welke man-pagina wilt u zien uit sectie %s?)\n"
+
+#: src/man.c:410
+msgid "What manual page do you want?\n"
+msgstr "Welke man-pagina wilt u zien?\n"
+
+#: src/man.c:473
+#, c-format
+msgid "No manual entry for %s in section %s\n"
+msgstr "Er is geen pagina over %s in sectie %s\n"
+
+#: src/man.c:481
+#, c-format
+msgid "See '%s' for help when manual pages are not available.\n"
+msgstr "Zie '%s' voor hulp als man-pagina's niet beschikbaar zijn.\n"
+
+#: src/man.c:643 src/man.c:2110
+#, c-format
+msgid "can't chdir to %s"
+msgstr "kan niet naar map %s gaan"
+
+#: src/man.c:822
+msgid " Manual page "
+msgstr " Handleidingspagina "
+
+#: src/man.c:892 src/man.c:2945
+#, c-format
+msgid "mandb command failed with exit status %d"
+msgstr "'mandb' is mislukt met afsluitwaarde %d"
+
+#: src/man.c:1163
+msgid ": incompatible options"
+msgstr ": opties gaan niet samen"
+
+#: src/man.c:1467
+#, c-format
+msgid "ignoring unknown preprocessor `%c'"
+msgstr "onbekende preprocessor '%c' wordt genegeerd"
+
+#: src/man.c:1747 src/mandb.c:278
+#, c-format
+msgid "can't chown %s"
+msgstr "kan eigenaar van %s niet wijzigen"
+
+#: src/man.c:1759 src/mandb.c:242
+#, c-format
+msgid "can't chmod %s"
+msgstr "kan de toegangsrechten van %s niet wijzigen"
+
+#: src/man.c:1770 src/mandb.c:185
+#, c-format
+msgid "can't rename %s to %s"
+msgstr "kan %s niet hernoemen naar %s"
+
+#: src/man.c:1789
+#, c-format
+msgid "can't set times on %s"
+msgstr "kan tijdsstempels van %s niet zetten"
+
+#: src/man.c:1798
+#, c-format
+msgid "can't unlink %s"
+msgstr "kan %s niet verwijderen"
+
+#: src/man.c:1831
+#, c-format
+msgid "can't create temporary cat for %s"
+msgstr "kan geen tijdelijk cat-bestand aanmaken voor %s"
+
+#: src/man.c:1959 src/man.c:2002 src/man.c:2032
+#, c-format
+msgid "can't change to directory %s"
+msgstr "kan niet naar map %s gaan"
+
+#: src/man.c:1973
+#, c-format
+msgid "can't open temporary file %s"
+msgstr "kan tijdelijk bestand %s niet openen"
+
+#: src/man.c:2008 src/man.c:2037
+#, c-format
+msgid "can't remove directory %s"
+msgstr "kan map %s niet verwijderen"
+
+#: src/man.c:2242
+#, c-format
+msgid ""
+"\n"
+"cannot write to %s in catman mode"
+msgstr ""
+"\n"
+"kan niet naar %s schrijven in 'catman'-modus"
+
+#: src/man.c:2799
+#, c-format
+msgid "%s: relying on whatis refs is deprecated\n"
+msgstr "%s: vertrouwen op 'whatis'-referenties wordt ontraden\n"
+
+#: src/man.c:3139
+#, c-format
+msgid "internal error: candidate type %d out of range"
+msgstr "**interne fout**: kandidaattype %d valt buiten bereik"
+
+#: src/man.c:3258
+#, c-format
+msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
+msgstr "--Man-- volgende: %s [ Enter=zien | Ctrl-D=overslaan | Ctrl-C=afsluiten ]\n"
+
+#: src/manconv.c:96
+#, c-format
+msgid "usage: %s -f FROM-CODE:... -t TO-CODE [-d] [filename]\n"
+msgstr "Gebruik:  %s -f BRONCODERING:... -t DOELCODERING [-d] [bestandsnaam]\n"
+
+#: src/manconv.c:99
+#, c-format
+msgid ""
+"-f, --from-code     possible encodings of original text.\n"
+"-t, --to-code       encoding for output.\n"
+"-d, --debug         emit debugging messages.\n"
+"-V, --version       show version.\n"
+"-h, --help          show this usage message.\n"
+msgstr ""
+"-f, --from-code     mogelijke codering(en) van originele tekst\n"
+"-t, --to-code       codering van de uitvoer\n"
+"-d, --debug         debug-uitvoer produceren\n"
+"-V, --version       versie-informatie tonen\n"
+"-h, --help          deze hulptekst tonen\n"
+
+#: src/manconv.c:238 src/manconv.c:263
+msgid "can't write to standard output"
+msgstr "kan niet naar standaarduitvoer schrijven"
+
+#: src/manconv.c:278
+msgid "iconv: incomplete character at end of buffer"
+msgstr "iconv: onvolledig teken aan eind van buffer"
+
+#: src/manconv.c:347 src/manconv.c:357
+msgid "must specify an input encoding"
+msgstr "specificatie van een invoercodering ontbreekt"
+
+#: src/manconv.c:351
+msgid "must specify an output encoding"
+msgstr "specificatie van een uitvoercodering ontbreekt"
+
+#: src/mandb.c:155
+#, c-format
+msgid "usage: %s [-dqspuct|-h|-V] [-C file] [-f filename] [manpath]\n"
+msgstr "Gebruik:  %s [-dqspuct|-h|-V] [-C bestand] [-f bestandsnaam] [man-pad]\n"
+
+#: src/mandb.c:158
+#, c-format
+msgid ""
+"-d, --debug                 produce debugging info.\n"
+"-q, --quiet                 work quietly, except for 'bogus' warning.\n"
+"-s, --no-straycats          don't look for or add stray cats to the dbs.\n"
+"-p, --no-purge              don't purge obsolete entries from the dbs.\n"
+"-u, --user-db               produce user databases only.\n"
+"-c, --create                create dbs from scratch, rather than updating.\n"
+"-t, --test                  check manual pages for correctness.\n"
+"-f, --filename              update just the entry for this filename.\n"
+"-C, --config-file           use this user configuration file.\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
+msgstr ""
+"-d, --debug                 debug-uitvoer produceren\n"
+"-q, --quiet                 minder waarschuwingen produceren\n"
+"-s, --no-straycats          geen losse cat-bestanden aan gegevensbank toevoegen\n"
+"-p, --no-purge              verouderde items niet uit gegevensbank verwijderen\n"
+"-u, --user-db               alleen gebruikersgegevensbanken produceren\n"
+"-c, --create                gegevensbank niet bijwerken maar opnieuw aanmaken\n"
+"-t, --test                  de man-pagina's op correctheid controleren\n"
+"-f, --filename BESTAND      alleen het item voor dit bestand bijwerken\n"
+"-C, --config-file BESTAND   te gebruiken configuratiebestand\n"
+"-V, --version               versie-informatie tonen\n"
+"-h, --help                  deze hulptekst tonen\n"
+
+#: src/mandb.c:178 src/security.c:219
+#, c-format
+msgid "can't remove %s"
+msgstr "kan %s niet verwijderen"
+
+#: src/mandb.c:219
+#, c-format
+msgid "can't write to %s"
+msgstr "kan niet naar %s schrijven"
+
+#: src/mandb.c:224
+#, c-format
+msgid "can't read from %s"
+msgstr "kan niet uit %s lezen"
+
+#: src/mandb.c:402
+#, c-format
+msgid "Processing manual pages under %s...\n"
+msgstr "Verwerken van pagina's onder %s...\n"
+
+#: src/mandb.c:601 src/security.c:147
+#, c-format
+msgid "the setuid man user \"%s\" does not exist"
+msgstr "de SETUID-gebruiker '%s' bestaat niet"
+
+#: src/mandb.c:629
+#, c-format
+msgid "warning: no MANDB_MAP directives in %s, using your manpath"
+msgstr "waarschuwing: geen 'MANDB_MAP'-opdrachten in %s; uw man-pad wordt gebruikt"
+
+#: src/mandb.c:693
+#, c-format
+msgid ""
+"%d man subdirectories contained newer manual pages.\n"
+"%d manual pages were added.\n"
+msgstr ""
+"In %d man-mappen werden nieuwere pagina's gevonden.\n"
+"%d man-pagina's werden toegevoegd.\n"
+
+#: src/mandb.c:697
+#, c-format
+msgid "%d stray cats were added.\n"
+msgstr "%d losse cat-bestanden werden toegevoegd.\n"
+
+#: src/mandb.c:699
+#, c-format
+msgid "%d old database entries were purged.\n"
+msgstr "%d verouderde gegevensbankitems werden verwijderd.\n"
+
+#: src/mandb.c:713
+#, c-format
+msgid "No databases created."
+msgstr "Geen gegevensbanken aangemaakt."
+
+#: src/manp.c:327
+#, c-format
+msgid "can't make sense of the manpath configuration file %s"
+msgstr "de inhoud van man-pad-configuratiebestand %s is onbegrijpelijk"
+
+#: src/manp.c:333
+#, c-format
+msgid "warning: %s"
+msgstr "waarschuwing: %s"
+
+#: src/manp.c:339
+#, c-format
+msgid "warning: %s isn't a directory"
+msgstr "waarschuwing: %s is geen map"
+
+#: src/manp.c:344
+msgid "manpath list too long"
+msgstr "man-pad-lijst is te lang"
+
+#: src/manp.c:612
+msgid "warning: $PATH not set"
+msgstr "waarschuwing: $PATH is niet ingesteld"
+
+#: src/manp.c:619
+msgid "warning: empty $PATH"
+msgstr "waarschuwing: $PATH is leeg"
+
+#: src/manp.c:647
+#, c-format
+msgid "warning: $MANPATH set, prepending %s"
+msgstr "waarschuwing: $MANPATH is ingesteld -- %s wordt voorgevoegd"
+
+#: src/manp.c:658
+#, c-format
+msgid "warning: $MANPATH set, appending %s"
+msgstr "waarschuwing: $MANPATH is ingesteld -- %s wordt achtergevoegd"
+
+#: src/manp.c:670
+#, c-format
+msgid "warning: $MANPATH set, inserting %s"
+msgstr "waarschuwing: $MANPATH is ingesteld -- %s wordt ingevoegd"
+
+#: src/manp.c:683
+#, c-format
+msgid "warning: $MANPATH set, ignoring %s"
+msgstr "waarschuwing: $MANPATH is ingesteld -- %s wordt genegeerd"
+
+#: src/manp.c:716 src/manp.c:743
+#, c-format
+msgid "warning: cannot create catdir %s"
+msgstr "waarschuwing: kan cat-map %s niet aanmaken"
+
+#: src/manp.c:805
+#, c-format
+msgid "can't parse directory list `%s'"
+msgstr "kan mappenlijst '%s' niet ontleden"
+
+#: src/manp.c:852
+#, c-format
+msgid "can't open the manpath configuration file %s"
+msgstr "kan man-pad-configuratiebestand %s niet openen"
+
+#: src/manp.c:881
+#, c-format
+msgid "warning: mandatory directory %s doesn't exist"
+msgstr "waarschuwing: vereiste map %s bestaat niet"
+
+#: src/manp.c:1087
+msgid "can't determine current directory"
+msgstr "kan huidige map niet bepalen"
+
+#: src/manp.c:1207
+#, c-format
+msgid "warning: %s does not begin with %s"
+msgstr "waarschuwing: %s begint niet met %s"
+
+#: src/manpath.c:98
+#, c-format
+msgid "usage: %s [[-gcdq] [-C file] [-m system]] | [-V] | [-h]\n"
+msgstr "Gebruik:  %s [-hV] [-cgdq] [-C bestand] [-m systeemnaam]\n"
+
+#: src/manpath.c:101
+#, c-format
+msgid ""
+"-c, --catpath               show relative catpaths.\n"
+"-g, --global                show the entire global manpath.\n"
+"-d, --debug                 produce debugging info.\n"
+"-q, --quiet                 produce fewer warnings.\n"
+"-C, --config-file file      use this user configuration file.\n"
+"-m, --systems system        express which `systems' to use.\n"
+"-V, --version               show version.\n"
+"-h, --help                  show this usage message.\n"
+msgstr ""
+"-c, --catpath               de relatieve cat-paden weergeven\n"
+"-g, --global                het volledige globale man-pad weergeven\n"
+"-d, --debug                 debug-uitvoer produceren\n"
+"-q, --quiet                 minder waarschuwingen produceren\n"
+"-m, --systems SYSTEEMNAAM   naar man-pagina's van dit Unix-systeem zoeken\n"
+"-C, --config-file BESTAND   te gebruiken configuratiebestand\n"
+"-V, --version               versie-informatie tonen\n"
+"-h, --help                  deze hulptekst tonen\n"
+
+#: src/manpath.c:172
+#, c-format
+msgid "warning: no global manpaths set in config file %s"
+msgstr "waarschuwing: geen algemeen man-pad ingesteld in configuratiebestand %s"
+
+#: src/security.c:125
+msgid "can't set effective uid"
+msgstr "kan de effectieve UID niet instellen"
+
+#: src/security.c:260
+msgid "can't fork"
+msgstr "kan geen nieuw proces starten"
+
+#: src/straycats.c:263 src/straycats.c:272 src/ult_src.c:175 src/ult_src.c:258
+#, c-format
+msgid "can't resolve %s"
+msgstr "kan %s niet herleiden"
+
+#: src/straycats.c:269 src/ult_src.c:172
+#, c-format
+msgid "warning: %s is a dangling symlink"
+msgstr "waarschuwing: %s is een doelloze symbolische koppeling"
+
+#: src/straycats.c:341
+#, c-format
+msgid "Checking for stray cats under %s...\n"
+msgstr "Zoeken naar losse cat-bestanden onder %s...\n"
+
+#: src/straycats.c:380
+#, c-format
+msgid "warning: can't update index cache %s"
+msgstr "waarschuwing: kan index-cache %s niet bijwerken"
+
+#: src/ult_src.c:296
+#, c-format
+msgid "%s is self referencing"
+msgstr "%s refereert aan zichzelf"
+
+#: src/version.c:43
+#, c-format
+msgid "%s, version %s, %s\n"
+msgstr "%s, versie %s, %s\n"
+
+#: src/whatis.c:179
+#, c-format
+msgid ""
+"usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
+"               [-L locale] [-C file] keyword ...\n"
+msgstr ""
+"Gebruik:  %s [-dalhV] [-r|-w|-e] [-s sectie] [-m systeemnaam] [-M man-pad]\n"
+"                 [-L locale] [-C bestand] sleutelwoord...\n"
+
+#: src/whatis.c:182
+#, c-format
+msgid ""
+"-d, --debug                produce debugging info.\n"
+"-v, --verbose              print verbose warning messages.\n"
+"-r, --regex                interpret each keyword as a regex (default).\n"
+"-e, --exact                search each keyword for exact match.\n"
+"-w, --wildcard             the keyword(s) contain wildcards.\n"
+"-a, --and                  require all keywords to match.\n"
+"-l, --long                 do not trim output to terminal width.\n"
+"-s, --section section      search only this section.\n"
+"-m, --systems system       include alternate systems' man pages.\n"
+"-M, --manpath path         set search path for manual pages to `path'.\n"
+"-L, --locale locale        define the locale for this search.\n"
+"-C, --config-file file     use this user configuration file.\n"
+"-V, --version              show version.\n"
+"-h, --help                 show this usage message.\n"
+msgstr ""
+"-d, --debug                 debug-uitvoer produceren\n"
+"-v, --verbose               breedsprakige waarschuwingen produceren\n"
+"-r, --regex                 sleutelwoorden als reguliere expressies begrijpen\n"
+"-e, --exact                 sleutelwoorden moeten exact overeenkomen\n"
+"-w, --wildcard              de sleutelwoorden bevatten jokertekens\n"
+"-a, --and                   alle sleutelwoorden moeten gevonden worden\n"
+"-l, --long                  de uitvoer niet aan de terminalbreedte aanpassen\n"
+"-s, --section SECTIE        alleen in deze sectie zoeken\n"
+"-m, --systems SYSTEEMNAAM   naar man-pagina's van dit ander Unix-systeem zoeken\n"
+"-M, --manpath PAD           pad waarin naar man-pagina's gezocht moet worden\n"
+"-L, --locale LOCALE         te gebruiken locale voor deze zoekopdracht\n"
+"-C, --config-file BESTAND   te gebruiken configuratiebestand\n"
+"-V, --version               versie-informatie tonen\n"
+"-h, --help                  deze hulptekst tonen\n"
+
+#: src/whatis.c:202
+#, c-format
+msgid ""
+"usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath]\n"
+"              [-L locale] [-C file] keyword ...\n"
+msgstr ""
+"Gebruik:  %s [-dlhV] [-r|-w] [-s sectie] [-m systeemnaam] [-M man-pad]\n"
+"                 [-L locale] [-C bestand] sleutelwoord...\n"
+
+#: src/whatis.c:205
+#, c-format
+msgid ""
+"-d, --debug                produce debugging info.\n"
+"-v, --verbose              print verbose warning messages.\n"
+"-r, --regex                interpret each keyword as a regex.\n"
+"-w, --wildcard             the keyword(s) contain wildcards.\n"
+"-l, --long                 do not trim output to terminal width.\n"
+"-s, --section section      search only this section.\n"
+"-m, --systems system       include alternate systems' man pages.\n"
+"-M, --manpath path         set search path for manual pages to `path'.\n"
+"-L, --locale locale        define the locale for this search.\n"
+"-C, --config-file file     use this user configuration file.\n"
+"-V, --version              show version.\n"
+"-h, --help                 show this usage message.\n"
+msgstr ""
+"-d, --debug                 debug-uitvoer produceren\n"
+"-v, --verbose               breedsprakige waarschuwingen produceren\n"
+"-r, --regex                 sleutelwoorden als reguliere expressies begrijpen\n"
+"-w, --wildcard              de sleutelwoorden bevatten jokertekens\n"
+"-l, --long                  de uitvoer niet aan de terminalbreedte aanpassen\n"
+"-s, --section SECTIE        alleen in deze sectie zoeken\n"
+"-m, --systems SYSTEEMNAAM   naar man-pagina's van dit ander Unix-systeem zoeken\n"
+"-M, --manpath PAD           pad waarin naar man-pagina's gezocht moet worden\n"
+"-L, --locale LOCALE         te gebruiken locale voor deze zoekopdracht\n"
+"-C, --config-file BESTAND   te gebruiken configuratiebestand\n"
+"-V, --version               versie-informatie tonen\n"
+"-h, --help                  deze hulptekst tonen\n"
+
+#: src/whatis.c:314 src/whatis.c:341 src/whatis.c:353
+#, c-format
+msgid "warning: %s contains a pointer loop"
+msgstr "waarschuwing: %s bevat een pointer-lus"
+
+#: src/whatis.c:316 src/whatis.c:329 src/whatis.c:344 src/whatis.c:354
+msgid "(unknown subject)"
+msgstr "(onderwerp onbekend)"
+
+#: src/whatis.c:591
+#, c-format
+msgid "Database %s corrupted; rebuild with mandb --create"
+msgstr "Gegevensbank %s is beschadigd; maak deze opnieuw aan met 'mandb --create'"
+
+#: src/whatis.c:730
+#, c-format
+msgid "%s: nothing appropriate.\n"
+msgstr "%s: niets gevonden.\n"
+
+#: src/whatis.c:866
+#, c-format
+msgid "%s what?\n"
+msgstr "%s wat?\n"
+
+#: src/whatis.c:920 src/whatis.c:929
+#, c-format
+msgid "fatal: regex `%s': %s"
+msgstr "fataal: reguliere expressie '%s': %s"
+
+#: src/wrapper.c:98
+#, c-format
+msgid "Don't know which program should I run being >%s<\n"
+msgstr "Weet niet welk programma te starten wanneer aangeroepen als '%s'.\n"
+
+#: src/wrapper.c:116 src/wrapper.c:121 src/wrapper.c:126 src/wrapper.c:131
+#, c-format
+msgid "%s: Failed su to user %s\n"
+msgstr "%s: 'su' naar gebruiker %s is mislukt\n"
