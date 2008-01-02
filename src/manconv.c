@@ -348,7 +348,7 @@ int main (int argc, char *argv[])
 		if (!p)
 			error (FAIL, 0, _("can't open %s"), argv[optind]);
 	} else
-		p = decompress_fdopen (dup (fileno (stdin)));
+		p = decompress_fdopen (dup (STDIN_FILENO));
 	pipeline_start (p);
 
 	pp_encoding = check_preprocessor_encoding (p);

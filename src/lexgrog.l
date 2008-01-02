@@ -402,7 +402,7 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	char *page_encoding = NULL;
 
 	if (strcmp (file, "-") == 0) {
-		p = decompress_fdopen (dup (fileno (stdin)));
+		p = decompress_fdopen (dup (STDIN_FILENO));
 	} else {
 		struct stat st;
 		char *lang;

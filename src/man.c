@@ -514,14 +514,14 @@ static int tms_set = 0;
 static void set_term (void)
 {
 	if (tms_set)
-		tcsetattr (fileno (stdin), TCSANOW, &tms);
+		tcsetattr (STDIN_FILENO, TCSANOW, &tms);
 }
 
 static void get_term (void)
 {
-	if (isatty (fileno (stdout))) {
+	if (isatty (STDOUT_FILENO)) {
 		debug ("is a tty\n");
-		tcgetattr (fileno (stdin), &tms);
+		tcgetattr (STDIN_FILENO, &tms);
 		if (!tms_set++)
 			atexit (set_term);
 	}
@@ -817,14 +817,14 @@ int main (int argc, char *argv[])
 
 	{ /* opens base streams in case someone like "info" closed them */
 		struct stat buf;
-		if (fileno (stdin) < 0 ||
-		    ((fstat (fileno (stdin), &buf) < 0) && (errno == EBADF))) 
+		if (STDIN_FILENO < 0 ||
+		    ((fstat (STDIN_FILENO, &buf) < 0) && (errno == EBADF))) 
 			freopen ("/dev/null", "r", stdin);
-		if (fileno (stdout) < 0 ||
-		    ((fstat (fileno (stdout), &buf) < 0) && (errno == EBADF)))
+		if (STDOUT_FILENO < 0 ||
+		    ((fstat (STDOUT_FILENO, &buf) < 0) && (errno == EBADF)))
 			freopen ("/dev/null", "w", stdout);
-		if (fileno (stderr) < 0 ||
-		    ((fstat (fileno (stderr), &buf) < 0) && (errno == EBADF)))
+		if (STDERR_FILENO < 0 ||
+		    ((fstat (STDERR_FILENO, &buf) < 0) && (errno == EBADF)))
 			freopen ("/dev/null", "w", stderr);
 	}
 
@@ -1466,7 +1466,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			const char *man_keep_formatting =
 				getenv ("MAN_KEEP_FORMATTING");
 			if ((!man_keep_formatting || !*man_keep_formatting) &&
-			    !isatty (fileno (stdout))) {
+			    !isatty (STDOUT_FILENO)) {
 				save_cat = 0;
 				setenv ("GROFF_NO_SGR", "1", 1);
 				pipeline_command_args (p, COL,
@@ -1853,7 +1853,7 @@ static int format_display_and_save (pipeline *decomp,
 	if (global_manpath)
 		drop_effective_privs ();
 
-	if (isatty (fileno (stdout)))
+	if (isatty (STDOUT_FILENO))
 		discard_stderr (format_cmd);
 
 	pipeline_connect (decomp, format_cmd, NULL);
@@ -1890,7 +1890,7 @@ static void format_display (pipeline *decomp,
 	char *old_cwd = NULL;
 	char *htmldir = NULL, *htmlfile = NULL;
 
-	if (format_cmd && isatty (fileno (stdout)))
+	if (format_cmd && isatty (STDOUT_FILENO))
 		discard_stderr (format_cmd);
 
 	drop_effective_privs ();
@@ -2009,7 +2009,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 				 get_def ("compressor", COMPRESSOR));
 #endif /* COMP_CAT */
 
-	if (isatty (fileno (stdout)))
+	if (isatty (STDOUT_FILENO))
 		discard_stderr (format_cmd);
 	format_cmd->want_out = tmp_cat_fd;
 
@@ -2067,7 +2067,7 @@ static int display (const char *dir, const char *man_file,
 		if (*man_file)
 			decomp = decompress_open (man_file);
 		else
-			decomp = decompress_fdopen (dup (fileno (stdin)));
+			decomp = decompress_fdopen (dup (STDIN_FILENO));
 	}
 
 	if (decomp) {

@@ -385,7 +385,7 @@ static int open_file (const char *filename)
 	pipeline *decomp;
 
 	if (strcmp (filename, "-") == 0) {
-		decomp = decompress_fdopen (dup (fileno (stdin)));
+		decomp = decompress_fdopen (dup (STDIN_FILENO));
 		NAME = xstrdup (filename);
 	} else {
 		decomp = decompress_open (filename);

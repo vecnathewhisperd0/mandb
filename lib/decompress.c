@@ -47,7 +47,7 @@ static void decompress_zlib (void *data ATTRIBUTE_UNUSED)
 {
 	gzFile zlibfile;
 
-	zlibfile = gzdopen (dup (fileno (stdin)), "r");
+	zlibfile = gzdopen (dup (STDIN_FILENO), "r");
 	if (!zlibfile)
 		return;
 
