@@ -110,6 +110,7 @@ int main (int argc, char *argv[])
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
 	bindtextdomain (PACKAGE, LOCALEDIR);
+	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
 	textdomain (PACKAGE);
 
 	if (is_directory (FHS_CAT_ROOT) == 1)

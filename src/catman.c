@@ -425,6 +425,7 @@ int main (int argc, char *argv[])
 		locale = xstrdup ("C");
 	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
+	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
 	textdomain (PACKAGE);
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))

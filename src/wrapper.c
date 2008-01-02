@@ -77,6 +77,7 @@ int main (int argc, char **argv)
 	 */
 	setlocale (LC_ALL, "");
 	bindtextdomain (PACKAGE, LOCALEDIR);
+	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
 	textdomain (PACKAGE);
 
 	/* this wrapper can be run as "man" or as "mandb" */

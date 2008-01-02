@@ -730,6 +730,7 @@ int main (int argc, char *argv[])
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
 	bindtextdomain (PACKAGE, LOCALEDIR);
+	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
 	textdomain (PACKAGE);
 
 	internal_locale = setlocale (LC_MESSAGES, NULL);
