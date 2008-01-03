@@ -19814,6 +19814,86 @@ done
   GNULIB_LCHOWN=1
 
 
+  { echo "$as_me:$LINENO: checking for flag to ignore unused libraries" >&5
+echo $ECHO_N "checking for flag to ignore unused libraries... $ECHO_C" >&6; }
+if test "${gl_cv_ignore_unused_libraries+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  gl_cv_ignore_unused_libraries=none
+     gl_saved_ldflags=$LDFLAGS
+     gl_saved_libs=$LIBS
+     # Link with -lm to detect binutils 2.16 bug with --as-needed; see
+     # <http://lists.gnu.org/archive/html/bug-gnulib/2006-06/msg00131.html>.
+     LIBS="$LIBS -lm"
+     # Use long option sequences like '-z ignore' to test for the feature,
+     # to forestall problems with linkers that have -z, -i, -g, -n, etc. flags.
+     # GCC + binutils likes '-Wl,--as-needed'.
+     # GCC + Solaris ld likes '-Wl,-z,ignore'.
+     # Sun C likes '-z ignore'.
+     # Don't try bare '--as-needed'; nothing likes it and the HP-UX 11.11
+     # native cc issues annoying warnings and then ignores it,
+     # which would cause us to incorrectly conclude that it worked.
+     for gl_flags in \
+	'-Wl,--as-needed' \
+	'-Wl,-z,ignore' \
+	'-z ignore'
+     do
+       LDFLAGS="$gl_flags $LDFLAGS"
+       cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  gl_cv_ignore_unused_libraries=$gl_flags
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+       LDFLAGS=$gl_saved_ldflags
+       test "$gl_cv_ignore_unused_libraries" != none && break
+     done
+     LIBS=$gl_saved_libs
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_ignore_unused_libraries" >&5
+echo "${ECHO_T}$gl_cv_ignore_unused_libraries" >&6; }
+
+  test "$gl_cv_ignore_unused_libraries" != none &&
+    LDFLAGS="$LDFLAGS $gl_cv_ignore_unused_libraries"
+
+
 
 
   :

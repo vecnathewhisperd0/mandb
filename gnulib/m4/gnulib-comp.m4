@@ -90,6 +90,7 @@ AC_DEFUN([gl_INIT],
   gl_INLINE
   gl_FUNC_LCHOWN
   gl_UNISTD_MODULE_INDICATOR([lchown])
+  gl_IGNORE_UNUSED_LIBRARIES
   gl_LOCALCHARSET
   gl_LOCK
   gl_FUNC_LSTAT
@@ -443,6 +444,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/intmax_t.m4
   m4/inttypes_h.m4
   m4/lchown.m4
+  m4/lib-ignore.m4
   m4/lib-ld.m4
   m4/lib-link.m4
   m4/lib-prefix.m4
