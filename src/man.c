@@ -2198,8 +2198,10 @@ static int display (const char *dir, const char *man_file,
 				if (printed)
 					putchar (' ');
 				printf ("%s", cat_file);
+				printed = 1;
 			}
-			putchar ('\n');
+			if (printed)
+				putchar ('\n');
 		} else if (catman) {
 			if (format) {
 				if (!save_cat)
