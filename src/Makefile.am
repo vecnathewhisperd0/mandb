@@ -19,6 +19,8 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+pkglibexecdir = $(libexecdir)/@PACKAGE@
+
 bin_PROGRAMS = \
 	catman \
 	lexgrog \
@@ -29,7 +31,7 @@ bin_PROGRAMS = \
 	zsoelim
 bin_SCRIPTS = apropos
 sbin_PROGRAMS = accessdb
-pkglib_PROGRAMS = globbing manconv
+pkglibexec_PROGRAMS = globbing manconv
 noinst_PROGRAMS = wrapper
 noinst_DATA = man_db.conf
 
@@ -44,7 +46,7 @@ AM_CPPFLAGS = \
 	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \
 	-DAPROPOS_NAME=\"$(TRANS_APROPOS)\" \
 	-DMAN=\"$(bindir)/$(TRANS_MAN)\" \
-	-DMANCONV=\"$(pkglibdir)/$(TRANS_MANCONV)\" \
+	-DMANCONV=\"$(pkglibexecdir)/$(TRANS_MANCONV)\" \
 	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
 	-DSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
