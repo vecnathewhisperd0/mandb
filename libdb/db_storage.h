@@ -76,7 +76,7 @@ extern __inline__ struct mandata *dblookup_all (const char *page,
 extern __inline__ struct mandata *dblookup_exact (const char *page,
 						  const char *section,
 						  int match_case);
-extern int dbstore (struct mandata *in, const char *basename);
+extern int dbstore (struct mandata *in, const char *base);
 extern int dbdelete (const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);
 extern void free_mandata_elements (struct mandata *pinfo);

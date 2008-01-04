@@ -1,3 +1,12 @@
+Fri Jan  4 12:44:34 GMT 2008  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* libdb/db_btree.c (dbstore): Rename basename argument to base to
+	  avoid clashing with the function of the same name.
+	* libdb/db_storage.h (dbstore): Update prototype.
+	* libdb/mydbm.h (dbver_wr, dbver_rd), src/security.h
+	  (do_system_drop_privs): Update prototype argument names to match
+	  definition.
+
 Fri Jan  4 11:52:22 GMT 2008  Peter Breitenlohner  <peb@mppmu.mpg.de>
 
 	* src/man.c: Make prompt_string const. Avoids "discards qualifier"

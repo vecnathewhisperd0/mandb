@@ -277,7 +277,7 @@ void gripe_get (int lineno)
 }
 
 /* the simplified storage routine */
-int dbstore (struct mandata *in, char *basename)
+int dbstore (struct mandata *in, char *base)
 {
 	datum key, cont;
 	int status;
@@ -285,8 +285,8 @@ int dbstore (struct mandata *in, char *basename)
 	memset (&key, 0, sizeof key);
 	memset (&cont, 0, sizeof cont);
 
-	MYDBM_SET (key, basename);
- 	if (!*basename) {
+	MYDBM_SET (key, base);
+ 	if (!*base) {
 		dbprintf (in);
  		return 2;
  	}
@@ -298,9 +298,9 @@ int dbstore (struct mandata *in, char *basename)
 		gripe_get (__LINE__);
 
 	/* either nothing was found or the key was not an exact match */
-	else if (status == 1 || !STREQ (MYDBM_DPTR (key), basename)) {
+	else if (status == 1 || !STREQ (MYDBM_DPTR (key), base)) {
 		cont = make_content (in);
-		MYDBM_SET (key, basename);
+		MYDBM_SET (key, base);
 		test_insert (__LINE__, key, cont);
 		status = (dbf->put) (dbf, (DBT *) &key, (DBT *) &cont, 0);
 		free (MYDBM_DPTR (cont));
@@ -326,8 +326,8 @@ int dbstore (struct mandata *in, char *basename)
 			free_mandata_elements (&old);
 			status = (dbf->seq) (dbf, (DBT *) &key, (DBT *) &cont,
 					     R_NEXT);
-			if (!STREQ (MYDBM_DPTR (key), basename)) {
-				MYDBM_SET (key, basename);
+			if (!STREQ (MYDBM_DPTR (key), base)) {
+				MYDBM_SET (key, base);
 				cont = make_content (in);
 				test_insert (__LINE__, key, cont);
 				status = (dbf->put) (dbf, (DBT *) &key,

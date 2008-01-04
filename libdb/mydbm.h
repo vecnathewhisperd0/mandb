@@ -178,7 +178,7 @@ extern MYDBM_FILE dbf;
 extern datum copy_datum (datum dat);
 
 /* db_ver.c */
-extern void dbver_wr(MYDBM_FILE dbf);
-extern int dbver_rd(MYDBM_FILE dbf);
+extern void dbver_wr(MYDBM_FILE dbfile);
+extern int dbver_rd(MYDBM_FILE dbfile);
 
 #endif /* MYDBM_H */
