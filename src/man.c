@@ -191,7 +191,7 @@ static const char *preprocessors;
 static const char *pager;
 static const char *locale;
 static char *internal_locale;
-static char *prompt_string;
+static const char *prompt_string;
 static char *less;
 static const char *std_sections[] = STD_SECTIONS;
 static char *manp;
