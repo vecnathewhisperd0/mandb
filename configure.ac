@@ -8,7 +8,7 @@ AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign])
 AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR(src/man.c)
 
-if test ! -f gnulib/po/Makefile.in.in; then
+if test ! -f "$srcdir/gnulib/po/Makefile.in.in"; then
 	AC_MSG_ERROR([you must run ./autogen.sh before ./configure when building from revision control])
 fi
 
