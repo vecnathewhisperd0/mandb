@@ -119,7 +119,13 @@ AC_PROG_CPP
 CFLAGS="$CFLAGS -Wall"
 if test "$GCC" = yes
 then
-	CFLAGS="$CFLAGS -W -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wshadow -Wformat-security -Wno-missing-field-initializers"
+	MAN_GCC_WARNING([]) # -W
+	MAN_GCC_WARNING([pointer-arith])
+	MAN_GCC_WARNING([write-strings])
+	MAN_GCC_WARNING([strict-prototypes])
+	MAN_GCC_WARNING([shadow])
+	MAN_GCC_WARNING([format-security])
+	MAN_GCC_WARNING([no-missing-field-initializers])
 fi
 AC_PROG_INSTALL
 AC_PROG_RANLIB
