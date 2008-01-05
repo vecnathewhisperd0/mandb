@@ -19,7 +19,9 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+if NLS
 SUBDIRS = de.UTF-8 es.UTF-8 fr.UTF-8 it.UTF-8 ja.UTF-8
+endif
 
 LANGUAGE = .
 

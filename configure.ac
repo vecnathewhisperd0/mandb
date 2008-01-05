@@ -317,6 +317,7 @@ AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION([0.17])
 AC_SUBST(LINGUAS)
 AM_ICONV
+AM_CONDITIONAL([NLS], [test "$USE_NLS" = yes])
 
 # Checks for structures and compiler characteristics.
 AC_C_CONST

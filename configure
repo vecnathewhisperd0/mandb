@@ -995,6 +995,8 @@ INTL_LIBTOOL_SUFFIX_PREFIX
 INTLLIBS
 POSUB
 LINGUAS
+NLS_TRUE
+NLS_FALSE
 DBLIBS
 LIBOBJS
 TRANS_APROPOS
@@ -33976,6 +33978,14 @@ _ACEOF
 
   fi
 
+ if test "$USE_NLS" = yes; then
+  NLS_TRUE=
+  NLS_FALSE='#'
+else
+  NLS_TRUE='#'
+  NLS_FALSE=
+fi
+
 
 # Checks for structures and compiler characteristics.
 { echo "$as_me:$LINENO: checking for an ANSI C-conforming const" >&5
@@ -36917,6 +36927,13 @@ fi
     gl_LTLIBOBJS=$gl_ltlibobjs
 
 
+if test -z "${NLS_TRUE}" && test -z "${NLS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"NLS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"NLS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
@@ -37977,6 +37994,8 @@ INTL_LIBTOOL_SUFFIX_PREFIX!$INTL_LIBTOOL_SUFFIX_PREFIX$ac_delim
 INTLLIBS!$INTLLIBS$ac_delim
 POSUB!$POSUB$ac_delim
 LINGUAS!$LINGUAS$ac_delim
+NLS_TRUE!$NLS_TRUE$ac_delim
+NLS_FALSE!$NLS_FALSE$ac_delim
 DBLIBS!$DBLIBS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 TRANS_APROPOS!$TRANS_APROPOS$ac_delim
@@ -37986,8 +38005,6 @@ TRANS_CATMAN_UPPER!$TRANS_CATMAN_UPPER$ac_delim
 TRANS_LEXGROG!$TRANS_LEXGROG$ac_delim
 TRANS_LEXGROG_UPPER!$TRANS_LEXGROG_UPPER$ac_delim
 TRANS_MAN!$TRANS_MAN$ac_delim
-TRANS_MAN_UPPER!$TRANS_MAN_UPPER$ac_delim
-TRANS_MANCONV!$TRANS_MANCONV$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -38029,6 +38046,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+TRANS_MAN_UPPER!$TRANS_MAN_UPPER$ac_delim
+TRANS_MANCONV!$TRANS_MANCONV$ac_delim
 TRANS_MANCONV_UPPER!$TRANS_MANCONV_UPPER$ac_delim
 TRANS_MANDB!$TRANS_MANDB$ac_delim
 TRANS_MANDB_UPPER!$TRANS_MANDB_UPPER$ac_delim
@@ -38043,7 +38062,7 @@ gl_LIBOBJS!$gl_LIBOBJS$ac_delim
 gl_LTLIBOBJS!$gl_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 12; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 14; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
