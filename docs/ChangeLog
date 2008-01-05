@@ -1,3 +1,17 @@
+Sat Jan  5 22:54:05 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* man/Makefile.am, man/de.UTF-8/Makefile.am,
+	  man/es.UTF-8/Makefile.am, man/fr.UTF-8/Makefile.am,
+	  man/it.UTF-8/Makefile.am, man/ja.UTF-8/Makefile.am: Declare
+	  man*_files rather than man*_MANS. Using the MANS primary causes
+	  Automake's incorrect manual page rules to be used.
+	* man/Rules.man (CLEANFILES, install-data-local, uninstall-local,
+	  dist-hook): Expect man*_files rather than man*_MANS.
+	  (all-am): Depend on $(man*_files).
+
+	* man/Rules.man (install-data-local, uninstall-local): Stop
+	  stripping leading "man*/" from install location.
+
 Sat Jan  5 21:49:40 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* m4/man-gcc-warning.m4: New file.

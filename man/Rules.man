@@ -19,7 +19,10 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS)
+## This whole thing is a horrible hack due to the fact that Automake
+## can't yet cope with translated manual pages.
+
+CLEANFILES = $(man1_files) $(man5_files) $(man8_files)
 
 .man1.1: $(top_builddir)/man/replace.sed
 	$(MKDIR_P) man1
@@ -31,37 +34,37 @@ CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS)
 	$(MKDIR_P) man8
 	sed -f $(top_builddir)/man/replace.sed $< > $@
 
+all-am: $(man1_files) $(man5_files) $(man8_files)
+
 install-data-local:
 	@set -e; \
 	for s in 1 5 8; do \
 		test -z "$(mandir)" || $(MKDIR_P) "$(DESTDIR)$(mandir)/$(LANGUAGE)/man$$s"; \
 	done; \
-	list='$(man1_MANS) $(man8_MANS)'; \
+	list='$(man1_files) $(man8_files)'; \
 	for i in $$list; do \
 		ext=`echo $$i | sed -e 's/^.*\\.//'`; \
 		inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
-		inst=`echo $$inst | sed -e 's/^.*\///'`; \
 		inst=`echo $$inst | sed '$(transform)'`.$$ext; \
 		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst'"; \
 		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
 	done; \
-	list='$(man5_MANS)'; \
+	list='$(man5_files)'; \
 	for i in $$list; do \
 		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
 		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
 	done
 
 uninstall-local:
-	@list='$(man1_MANS) $(man8_MANS)'; \
+	@list='$(man1_files) $(man8_files)'; \
 	for i in $$list; do \
 		ext=`echo $$i | sed -e 's/^.*\\.//'`; \
 		inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
-		inst=`echo $$inst | sed -e 's/^.*\///'`; \
 		inst=`echo $$inst | sed '$(transform)'`.$$ext; \
 		echo " rm -f '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst'"; \
 		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
 	done; \
-	list='$(man5_MANS)'; \
+	list='$(man5_files)'; \
 	for i in $$list; do \
 		echo " rm -f '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
 		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
@@ -71,7 +74,7 @@ mostlyclean-local:
 	-rm -f index.*
 
 dist-hook:
-	@list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
+	@list='$(man1_files) $(man5_files) $(man8_files)'; \
 	dist_files=`for file in $$list; do \
 			echo $$file | sed 's/\.\([0-9]\)/.man\1/'; \
 		    done`; \
