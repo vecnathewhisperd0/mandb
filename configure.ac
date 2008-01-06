@@ -465,11 +465,11 @@ AC_CONFIG_FILES(Makefile
 	src/man_db.conf
 	man/Makefile
 	man/replace.sed:man/replace.sin
-	man/de.UTF-8/Makefile
-	man/es.UTF-8/Makefile
-	man/fr.UTF-8/Makefile
-	man/it.UTF-8/Makefile
-	man/ja.UTF-8/Makefile
+	man/de/Makefile
+	man/es/Makefile
+	man/fr/Makefile
+	man/it/Makefile
+	man/ja/Makefile
 	manual/Makefile
 	libdb/Makefile
 	docs/Makefile

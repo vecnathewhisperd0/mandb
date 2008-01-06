@@ -33,7 +33,7 @@ build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/man/Rules.man
-subdir = man/ja.UTF-8
+subdir = man/fr
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/argp.m4 \
@@ -570,9 +570,10 @@ tr = @tr@
 troff = @troff@
 uncompress = @uncompress@
 vgrind = @vgrind@
-LANGUAGE = ja.UTF-8
+LANGUAGE = fr
 man1_files = \
 	man1/apropos.1 \
+	man1/lexgrog.1 \
 	man1/man.1 \
 	man1/manpath.1 \
 	man1/whatis.1 \
@@ -600,9 +601,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/man/Rules.man $(am__
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  man/ja.UTF-8/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  man/fr/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  man/ja.UTF-8/Makefile
+	  $(AUTOMAKE) --foreign  man/fr/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

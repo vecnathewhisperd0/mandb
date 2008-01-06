@@ -19,7 +19,7 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-LANGUAGE = es.UTF-8
+LANGUAGE = de
 
 man1_files = \
 	man1/apropos.1 \

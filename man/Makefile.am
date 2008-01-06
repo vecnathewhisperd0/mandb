@@ -20,7 +20,7 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 if NLS
-SUBDIRS = de.UTF-8 es.UTF-8 fr.UTF-8 it.UTF-8 ja.UTF-8
+SUBDIRS = de es fr it ja
 endif
 
 LANGUAGE = .
