@@ -94,7 +94,6 @@ static char *cwd;
 
 #include "error.h"
 #include "cleanup.h"
-#include "setenv.h"
 #include "hashtable.h"
 #include "pipeline.h"
 #include "pathsearch.h"

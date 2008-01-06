@@ -29,6 +29,14 @@
 
 #include <fcntl.h> /* For AT_FDCWD on Solaris 9.  */
 
+/* If this host provides the openat function, then enable
+   code below to make getcwd more efficient and robust.  */
+#ifdef HAVE_OPENAT
+# define HAVE_OPENAT_SUPPORT 1
+#else
+# define HAVE_OPENAT_SUPPORT 0
+#endif
+
 #ifndef __set_errno
 # define __set_errno(val) (errno = (val))
 #endif
@@ -122,7 +130,7 @@ __getcwd (char *buf, size_t size)
       DEEP_NESTING = 100
     };
 
-#ifdef AT_FDCWD
+#if HAVE_OPENAT_SUPPORT
   int fd = AT_FDCWD;
   bool fd_needs_closing = false;
 #else
@@ -203,7 +211,7 @@ __getcwd (char *buf, size_t size)
       bool use_d_ino = true;
 
       /* Look at the parent directory.  */
-#ifdef AT_FDCWD
+#if HAVE_OPENAT_SUPPORT
       fd = openat (fd, "..", O_RDONLY);
       if (fd < 0)
 	goto lose;
@@ -230,7 +238,7 @@ __getcwd (char *buf, size_t size)
       mount_point = dotdev != thisdev;
 
       /* Search for the last directory.  */
-#ifdef AT_FDCWD
+#if HAVE_OPENAT_SUPPORT
       dirstream = fdopendir (fd);
       if (dirstream == NULL)
 	goto lose;
@@ -286,7 +294,7 @@ __getcwd (char *buf, size_t size)
 
 	  {
 	    int entry_status;
-#ifdef AT_FDCWD
+#if HAVE_OPENAT_SUPPORT
 	    entry_status = fstatat (fd, d->d_name, &st, AT_SYMLINK_NOFOLLOW);
 #else
 	    /* Compute size needed for this file name, or for the file
@@ -382,7 +390,7 @@ __getcwd (char *buf, size_t size)
   if (dirp == &dir[allocated - 1])
     *--dirp = '/';
 
-#ifndef AT_FDCWD
+#if ! HAVE_OPENAT_SUPPORT
   if (dotlist != dots)
     free (dotlist);
 #endif
@@ -408,7 +416,7 @@ __getcwd (char *buf, size_t size)
     int save = errno;
     if (dirstream)
       __closedir (dirstream);
-#ifdef AT_FDCWD
+#if HAVE_OPENAT_SUPPORT
     if (fd_needs_closing)
       close (fd);
 #else

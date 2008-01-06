@@ -59,7 +59,6 @@
 #include "manconfig.h"
 
 #include "error.h"
-#include "setenv.h"
 #include "pipeline.h"
 #include "linelength.h"
 #include "hashtable.h"
