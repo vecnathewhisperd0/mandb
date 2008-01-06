@@ -43,7 +43,6 @@ libman_a_SOURCES = \
 	pipeline.c \
 	pipeline.h \
 	tempfile.c \
-	xsigaction.c \
 	xstrsignal.c
 
 ## Headers that are used conditionally. Automake can't detect these itself.

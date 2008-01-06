@@ -1,3 +1,18 @@
+Sun Jan  6 15:01:08 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	sigaction is specified as non-interruptible; there is no need to
+	wrap it with EINTR detection.
+
+	* lib/xsigaction.c: Remove.
+	* include/manconfig.h.in (xsigaction): Remove prototype.
+	* lib/Makefile.am (libman_a_SOURCES): Remove xsigaction.c.
+	* lib/README: Remove xsigaction.c.
+	* lib/cleanup.c (sighandler, trap_signal, untrap_signal): Call
+	  sigaction rather than xsigaction.
+	* lib/pipeline.c (pipeline_start, pipeline_wait,
+	  pipeline_install_sigchld, pipeline_pump): Call sigaction rather
+	  than xsigaction.
+
 Sun Jan  6 14:46:36 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* po/nl.po: Update with msgmerge.
