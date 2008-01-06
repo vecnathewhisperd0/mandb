@@ -570,7 +570,7 @@ tr = @tr@
 troff = @troff@
 uncompress = @uncompress@
 vgrind = @vgrind@
-LANGUAGE = ja
+LINGUA = ja
 man1_files = \
 	man1/apropos.1 \
 	man1/man.1 \
@@ -769,20 +769,20 @@ all-am: $(man1_files) $(man5_files) $(man8_files)
 install-data-local:
 	@set -e; \
 	for s in 1 5 8; do \
-		test -z "$(mandir)" || $(MKDIR_P) "$(DESTDIR)$(mandir)/$(LANGUAGE)/man$$s"; \
+		test -z "$(mandir)" || $(MKDIR_P) "$(DESTDIR)$(mandir)/$(LINGUA)/man$$s"; \
 	done; \
 	list='$(man1_files) $(man8_files)'; \
 	for i in $$list; do \
 		ext=`echo $$i | sed -e 's/^.*\\.//'`; \
 		inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
 		inst=`echo $$inst | sed '$(transform)'`.$$ext; \
-		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst'"; \
-		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
+		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LINGUA)/$$inst'"; \
+		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LINGUA)/$$inst"; \
 	done; \
 	list='$(man5_files)'; \
 	for i in $$list; do \
-		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
-		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
+		echo " $(INSTALL_DATA) '$$i' '$(DESTDIR)$(mandir)/$(LINGUA)/$$i'"; \
+		$(INSTALL_DATA) "$$i" "$(DESTDIR)$(mandir)/$(LINGUA)/$$i"; \
 	done
 
 uninstall-local:
@@ -791,13 +791,13 @@ uninstall-local:
 		ext=`echo $$i | sed -e 's/^.*\\.//'`; \
 		inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
 		inst=`echo $$inst | sed '$(transform)'`.$$ext; \
-		echo " rm -f '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst'"; \
-		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$inst"; \
+		echo " rm -f '$(DESTDIR)$(mandir)/$(LINGUA)/$$inst'"; \
+		rm -f "$(DESTDIR)$(mandir)/$(LINGUA)/$$inst"; \
 	done; \
 	list='$(man5_files)'; \
 	for i in $$list; do \
-		echo " rm -f '$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i'"; \
-		rm -f "$(DESTDIR)$(mandir)/$(LANGUAGE)/$$i"; \
+		echo " rm -f '$(DESTDIR)$(mandir)/$(LINGUA)/$$i'"; \
+		rm -f "$(DESTDIR)$(mandir)/$(LINGUA)/$$i"; \
 	done
 
 mostlyclean-local:

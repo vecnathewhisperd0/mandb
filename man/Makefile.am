@@ -23,7 +23,7 @@ if NLS
 SUBDIRS = de es fr it ja
 endif
 
-LANGUAGE = .
+LINGUA = .
 
 man1_files = \
 	man1/apropos.1 \
