@@ -593,7 +593,7 @@ man8_MANS = \
 	man8/catman.8 \
 	man8/mandb.8
 
-CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS)
+CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS) replace.sed
 all: all-am
 
 .SUFFIXES:
@@ -901,15 +901,21 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 	uninstall-man uninstall-man1 uninstall-man5 uninstall-man8
 
 
-.man1.1: $(top_builddir)/man/replace.sed
+replace.sed: $(top_builddir)/man/replace.sin
+	sed -e 's,%REPLACE_CONFIG_FILE%,$(config_file),g' $< > $@
+
+.man1.1: replace.sed
 	$(MKDIR_P) man1
-	sed -f $(top_builddir)/man/replace.sed $< > $@
-.man5.5: $(top_builddir)/man/replace.sed
+	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
+	sed -f replace.sed $< > $@
+.man5.5: replace.sed
 	$(MKDIR_P) man5
-	sed -f $(top_builddir)/man/replace.sed $< > $@
-.man8.8: $(top_builddir)/man/replace.sed
+	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
+	sed -f replace.sed $< > $@
+.man8.8: replace.sed
 	$(MKDIR_P) man8
-	sed -f $(top_builddir)/man/replace.sed $< > $@
+	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
+	sed -f replace.sed $< > $@
 
 mostlyclean-local:
 	-rm -f index.*

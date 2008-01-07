@@ -1,3 +1,14 @@
+Mon Jan  7 11:38:19 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* man/replace.sin: Rename to ...
+	* man/replace.sin.in: ... this.
+	* configure.ac (AC_CONFIG_FILES): Generate man/replace.sin.
+	* man/Rules.man (CLEANFILES, replace.sed, .man1.1, .man5.5,
+	  .man8.8): Generate replace.sed at 'make' time so that
+	  $(config_file) is substituted properly. Reported by Peter
+	  Breitenlohner.
+	* .bzrignore: Update.
+
 Mon Jan  7 11:14:04 GMT 2008  Peter Breitenlohner  <peb@mppmu.mpg.de>
 
 	* manual/Makefile.am: Use soelim with -I$(srcdir).

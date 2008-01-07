@@ -480,7 +480,7 @@ AC_CONFIG_FILES(Makefile
 	src/Makefile
 	src/man_db.conf
 	man/Makefile
-	man/replace.sed:man/replace.sin
+	man/replace.sin
 	man/de/Makefile
 	man/es/Makefile
 	man/fr/Makefile
