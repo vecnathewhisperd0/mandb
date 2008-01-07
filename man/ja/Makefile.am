@@ -21,15 +21,15 @@
 
 LINGUA = ja
 
-man1_files = \
+man1_MANS = \
 	man1/apropos.1 \
 	man1/man.1 \
 	man1/manpath.1 \
 	man1/whatis.1 \
 	man1/zsoelim.1
-man5_files = \
+man5_MANS = \
 	man5/manpath.5
-man8_files = \
+man8_MANS = \
 	man8/accessdb.8 \
 	man8/catman.8 \
 	man8/mandb.8

@@ -15,7 +15,6 @@
 @SET_MAKE@
 
 
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -165,7 +164,7 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES = man_db.conf
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" \
-	"$(DESTDIR)$(sbindir)" "$(DESTDIR)$(bindir)"
+	"$(DESTDIR)$(sbindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 pkglibexecPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 sbinPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
@@ -222,8 +221,6 @@ wrapper_DEPENDENCIES = $(LIBMAN)
 am_zsoelim_OBJECTS = zsoelim.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
 zsoelim_DEPENDENCIES = $(LIBMAN)
-binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
-SCRIPTS = $(bin_SCRIPTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
 am__depfiles_maybe = depfiles
@@ -658,7 +655,6 @@ troff = @troff@
 uncompress = @uncompress@
 vgrind = @vgrind@
 pkglibexecdir = $(libexecdir)/@PACKAGE@
-bin_SCRIPTS = apropos
 noinst_DATA = man_db.conf
 AM_CPPFLAGS = \
 	-I$(top_builddir)/include \
@@ -937,25 +933,6 @@ wrapper$(EXEEXT): $(wrapper_OBJECTS) $(wrapper_DEPENDENCIES)
 zsoelim$(EXEEXT): $(zsoelim_OBJECTS) $(zsoelim_DEPENDENCIES) 
 	@rm -f zsoelim$(EXEEXT)
 	$(LINK) $(zsoelim_OBJECTS) $(zsoelim_LDADD) $(LIBS)
-install-binSCRIPTS: $(bin_SCRIPTS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
-	@list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  if test -f $$d$$p; then \
-	    f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
-	    echo " $(binSCRIPT_INSTALL) '$$d$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	    $(binSCRIPT_INSTALL) "$$d$$p" "$(DESTDIR)$(bindir)/$$f"; \
-	  else :; fi; \
-	done
-
-uninstall-binSCRIPTS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
-	done
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -1083,9 +1060,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS) $(SCRIPTS) $(DATA)
+all-am: Makefile $(PROGRAMS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(bindir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" "$(DESTDIR)$(sbindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -1142,8 +1119,8 @@ install-data-am:
 
 install-dvi: install-dvi-am
 
-install-exec-am: install-binPROGRAMS install-binSCRIPTS \
-	install-pkglibexecPROGRAMS install-sbinPROGRAMS
+install-exec-am: install-binPROGRAMS install-pkglibexecPROGRAMS \
+	install-sbinPROGRAMS
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 
@@ -1176,8 +1153,8 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
-	uninstall-pkglibexecPROGRAMS uninstall-sbinPROGRAMS
+uninstall-am: uninstall-binPROGRAMS uninstall-pkglibexecPROGRAMS \
+	uninstall-sbinPROGRAMS
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
 
@@ -1189,22 +1166,23 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	clean-sbinPROGRAMS ctags distclean distclean-compile \
 	distclean-generic distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-binPROGRAMS \
-	install-binSCRIPTS install-data install-data-am \
-	install-data-hook install-dvi install-dvi-am install-exec \
-	install-exec-am install-exec-hook install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pkglibexecPROGRAMS install-ps \
-	install-ps-am install-sbinPROGRAMS install-strip installcheck \
+	install-data install-data-am install-data-hook install-dvi \
+	install-dvi-am install-exec install-exec-am install-exec-hook \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am \
+	install-pkglibexecPROGRAMS install-ps install-ps-am \
+	install-sbinPROGRAMS install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-binSCRIPTS \
-	uninstall-hook uninstall-pkglibexecPROGRAMS \
-	uninstall-sbinPROGRAMS
+	uninstall-am uninstall-binPROGRAMS uninstall-hook \
+	uninstall-pkglibexecPROGRAMS uninstall-sbinPROGRAMS
 
 
 apropos$(EXEEXT): whatis$(EXEEXT)
 	$(LN_S) $< $@
+
+all-am: apropos$(EXEEXT)
 
 install-exec-hook:
 	-test -z "$(man_owner)" || \
@@ -1214,12 +1192,20 @@ install-exec-hook:
 	chmod $(man_mode) \
 		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
 		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
+	cd $(DESTDIR)$(bindir) && rm -f $(TRANS_APROPOS)$(EXEEXT) && \
+		$(LN_S) $(TRANS_WHATIS)$(EXEEXT) $(TRANS_APROPOS)$(EXEEXT)
 
 install-data-hook:
-	test -z "$(config_file_dirname)" || $(MKDIR_P) "$(DESTDIR)$(config_file_dirname)"
-	$(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file)
+	@if test -f $(DESTDIR)$(config_file); then \
+		echo "$(DESTDIR)$(config_file) already exists; overwrite manually if necessary"; \
+	else \
+		test -z "$(config_file_dirname)" || $(MKDIR_P) "$(DESTDIR)$(config_file_dirname)"; \
+		echo " $(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file)"; \
+		$(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file); \
+	fi
 
 uninstall-hook:
+	rm -f $(DESTDIR)$(bindir)/$(TRANS_APROPOS)$(EXEEXT)
 	@echo "Please remove $(DESTDIR)$(config_file) manually if necessary"
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

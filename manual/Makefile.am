@@ -55,13 +55,13 @@ version: $(top_srcdir)/configure.ac
 	echo '.ds V $(roff_version)' > $@
 
 $(MANUAL).pp: $(ME_FILES) version
-	$(SOELIM) man_db.me | tbl > $@
+	$(SOELIM) -I$(srcdir) man_db.me | tbl > $@
 
 .pp.dvi:
 	groff -me -Tdvi $< > $@
 
 .pp.ps:
-	groff -me -Tdvi $< > $@
+	groff -me -Tps $< > $@
 
 .pp.tdvi:
 	troff -me -Tdvi $< | grodvi -d > $@

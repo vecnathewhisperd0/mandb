@@ -29,7 +29,6 @@ bin_PROGRAMS = \
 	manpath \
 	whatis \
 	zsoelim
-bin_SCRIPTS = apropos
 sbin_PROGRAMS = accessdb
 pkglibexec_PROGRAMS = globbing manconv
 noinst_PROGRAMS = wrapper
@@ -168,6 +167,8 @@ EXTRA_DIST = \
 apropos$(EXEEXT): whatis$(EXEEXT)
 	$(LN_S) $< $@
 
+all-am: apropos$(EXEEXT)
+
 install-exec-hook:
 	-test -z "$(man_owner)" || \
 	chown $(man_owner) \
@@ -176,10 +177,18 @@ install-exec-hook:
 	chmod $(man_mode) \
 		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
 		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
+	cd $(DESTDIR)$(bindir) && rm -f $(TRANS_APROPOS)$(EXEEXT) && \
+		$(LN_S) $(TRANS_WHATIS)$(EXEEXT) $(TRANS_APROPOS)$(EXEEXT)
 
 install-data-hook:
-	test -z "$(config_file_dirname)" || $(MKDIR_P) "$(DESTDIR)$(config_file_dirname)"
-	$(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file)
+	@if test -f $(DESTDIR)$(config_file); then \
+		echo "$(DESTDIR)$(config_file) already exists; overwrite manually if necessary"; \
+	else \
+		test -z "$(config_file_dirname)" || $(MKDIR_P) "$(DESTDIR)$(config_file_dirname)"; \
+		echo " $(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file)"; \
+		$(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file); \
+	fi
 
 uninstall-hook:
+	rm -f $(DESTDIR)$(bindir)/$(TRANS_APROPOS)$(EXEEXT)
 	@echo "Please remove $(DESTDIR)$(config_file) manually if necessary"
