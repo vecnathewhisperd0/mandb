@@ -1622,12 +1622,12 @@ Optional Features:
   --enable-setuid=ARG     install man setuid to user ARG [ARG=man]
   --disable-setuid        don't install man setuid
   --enable-undoc=COMMAND  suggest COMMAND for missing manual pages
-  --enable-mb-groff       expect groff with Debian multibyte patch
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --enable-threads={posix|solaris|pth|win32}
                           specify multithreading API
   --disable-threads       build without multithread safety
+  --enable-mb-groff       expect groff with Debian multibyte patch
   --enable-mandirs=OS     select manual page hierarchy organization (GNU,
                           HPUX, IRIX, Solaris, BSD)
   --disable-rpath         do not hardcode runtime library paths
@@ -2802,20 +2802,6 @@ echo "$as_me: Suggesting '$enableval' for missing manual pages" >&6;}
 
 cat >>confdefs.h <<_ACEOF
 #define UNDOC_COMMAND "$enableval"
-_ACEOF
-
-	 fi
-fi
-
-# Check whether --enable-mb-groff was given.
-if test "${enable_mb_groff+set}" = set; then
-  enableval=$enable_mb_groff; if test "$enableval" = "yes"
-	 then
-		 { echo "$as_me:$LINENO: Including support for groff with Debian multibyte patch" >&5
-echo "$as_me: Including support for groff with Debian multibyte patch" >&6;}
-
-cat >>confdefs.h <<\_ACEOF
-#define MULTIBYTE_GROFF 1
 _ACEOF
 
 	 fi
@@ -6631,6 +6617,7 @@ done
 
 if test -n "$troff"
 then
+	troff_is_groff=yes
 
 cat >>confdefs.h <<\_ACEOF
 #define TROFF_IS_GROFF 1
@@ -6638,6 +6625,7 @@ _ACEOF
 
 	TROFF=groff
 else
+	troff_is_groff=no
 	for ac_prog in troff gtroff
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -6722,6 +6710,36 @@ echo "$as_me: WARNING: please edit include/manconfig.h and add troff definition"
 	fi
 else
 	troff="(troff not installed)"
+fi
+
+{ echo "$as_me:$LINENO: checking for groff with Debian multibyte patch" >&5
+echo $ECHO_N "checking for groff with Debian multibyte patch... $ECHO_C" >&6; }
+man_mb_groff=no
+# Check whether --enable-mb-groff was given.
+if test "${enable_mb_groff+set}" = set; then
+  enableval=$enable_mb_groff; if test "$enableval" = "yes"
+	 then
+		man_mb_groff=yes
+	 fi
+else
+  if test -n "$troff" && test "$troff_is_groff" = "yes"
+	 then
+		if $troff -Tnippon </dev/null >/dev/null 2>&1
+		then
+			man_mb_groff=yes
+		fi
+	 fi
+fi
+
+{ echo "$as_me:$LINENO: result: $man_mb_groff" >&5
+echo "${ECHO_T}$man_mb_groff" >&6; }
+if test "$man_mb_groff" = "yes"
+then
+
+cat >>confdefs.h <<\_ACEOF
+#define MULTIBYTE_GROFF 1
+_ACEOF
+
 fi
 
 

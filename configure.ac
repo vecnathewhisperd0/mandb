@@ -57,14 +57,6 @@ AC_ARG_ENABLE(undoc,
 		AC_DEFINE_UNQUOTED(UNDOC_COMMAND, "$enableval",
 				   [Define as the name of a command you want to suggest when a non-existent page is requested.])
 	 fi])
-AC_ARG_ENABLE(mb-groff,
-[AS_HELP_STRING([--enable-mb-groff], [expect groff with Debian multibyte patch])],
-	[if test "$enableval" = "yes"
-	 then
-		 AC_MSG_NOTICE([Including support for groff with Debian multibyte patch])
-		 AC_DEFINE(MULTIBYTE_GROFF, 1,
-			   [Define if your groff installation has the Debian multibyte patch.])
-	 fi])
 AC_ARG_WITH(device,
 [AS_HELP_STRING([--with-device=DEVICE], [use nroff with the output device DEVICE])],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
@@ -192,9 +184,11 @@ dnl TROFF_IS_GROFF?
 AC_CHECK_PROGS(troff, groff)
 if test -n "$troff"
 then
+	troff_is_groff=yes
 	AC_DEFINE(TROFF_IS_GROFF, 1, [Define if you are using groff as troff.])
 	TROFF=groff
 else
+	troff_is_groff=no
 	AC_CHECK_PROGS(troff, troff gtroff)
 	TROFF=troff
 fi
@@ -225,6 +219,28 @@ then
 	fi
 else
 	troff="(troff not installed)"
+fi
+
+AC_MSG_CHECKING([for groff with Debian multibyte patch])
+man_mb_groff=no
+AC_ARG_ENABLE(mb-groff,
+[AS_HELP_STRING([--enable-mb-groff], [expect groff with Debian multibyte patch])],
+	[if test "$enableval" = "yes"
+	 then
+		man_mb_groff=yes
+	 fi],
+	[if test -n "$troff" && test "$troff_is_groff" = "yes"
+	 then
+		if $troff -Tnippon </dev/null >/dev/null 2>&1
+		then
+			man_mb_groff=yes
+		fi
+	 fi])
+AC_MSG_RESULT([$man_mb_groff])
+if test "$man_mb_groff" = "yes"
+then
+	AC_DEFINE(MULTIBYTE_GROFF, 1,
+		  [Define if your groff installation has the Debian multibyte patch.])
 fi
 
 MAN_CHECK_PROGS([eqn], [EQN], [use EQN to preprocess equations], [eqn geqn])
