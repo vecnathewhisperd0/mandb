@@ -1,3 +1,9 @@
+For historical reasons, man-db relies on being able to pass NULL
+pointers to xstrdup. This patch was rejected by the Gnulib maintainers
+on the basis that xfoo should only add out-of-memory checking to foo,
+not other things. Accordingly, at some point we should migrate away from
+this requirement and remove this patch.
+
 === modified file 'gnulib/lib/xmalloc.c'
 --- gnulib/lib/xmalloc.c	2007-10-14 02:09:24 +0000
 +++ gnulib/lib/xmalloc.c	2007-10-20 17:21:14 +0000
