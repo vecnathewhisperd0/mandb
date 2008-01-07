@@ -5,7 +5,7 @@
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 1997 Fabrizio Polacco.
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -88,7 +88,7 @@ error_t argp_err_exit_status = FAIL;
 static const char args_doc[] = N_("FILE...");
 
 static struct argp_option options[] = {
-	{ "compatible",	'C',	0,	0,	N_("emit debugging messages") },
+	{ "compatible",	'C',	0,	0,	N_("compatibility switch (ignored)") },
 	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
 	{ 0 }
 };
