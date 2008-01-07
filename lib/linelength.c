@@ -60,7 +60,7 @@ int get_line_length (void)
 		struct winsize wsz;
 
 		if (ioctl (STDIN_FILENO, TIOCGWINSZ, &wsz))
-			perror ("TIOCGWINSZ failed\n");
+			perror ("TIOCGWINSZ failed");
 		else if (wsz.ws_col)
 			return line_length = wsz.ws_col;
 	}

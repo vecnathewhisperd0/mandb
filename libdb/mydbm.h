@@ -127,10 +127,8 @@ extern int ndbm_flclose(DBM *dbf);
 
 #  include <sys/types.h>
 #  include <fcntl.h>
+#  include <limits.h>
 #  include BDB_H
-#  ifdef HAVE_LIMITS_H
-#   include <limits.h>
-#  endif
 
 typedef DBT datum;
 

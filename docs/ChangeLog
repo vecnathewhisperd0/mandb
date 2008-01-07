@@ -1,3 +1,25 @@
+Mon Jan  7 09:54:12 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Stop checking for memory.h (not used) and limits.h
+	  (guaranteed by C89).
+	* lib/hashtable.c, libdb/db_ver.c, src/convert_name.c,
+	  src/descriptions.c, src/filenames.c: Remove unnecessary #include
+	  <stdio.h>.
+	* libdb/db_delete.c, libdb/db_lookup.c, libdb/db_store.c,
+	  src/manpath.c: Remove unnecessary #include <assert.h>.
+	* libdb/mydbm.h, src/catman.c, src/man.c, src/manpath.c: Include
+	  <limits.h> unconditionally.
+	* src/convert_name.c: Remove unnecessary #include <unistd.h>.
+	* src/man.c: Remove unnecessary #include <sys/file.h> and
+	  <sys/wait.h>.
+	* src/manpath.c: Remove unnecessary #include <termios.h>.
+	* src/straycats.c: Remove unnecessary #include <fcntl.h>.
+	* src/ult_src.c: Remove S_ISLNK conditionals; Gnulib's <sys/stat.h>
+	  wrapper deals with this.
+
+	* lib/linelength.c (get_line_length): Remove trailing newline from
+	  message passed to perror.
+
 Mon Jan  7 03:21:49 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* lib/gettext.h: Remove; now provided by Gnulib.

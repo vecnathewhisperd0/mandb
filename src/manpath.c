@@ -30,16 +30,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 #include <errno.h>
-#include <termios.h>
 #include <unistd.h>
-
-#if defined(HAVE_LIMITS_H)
-#  include <limits.h>
-#elif defined(HAVE_SYS_PARAM_H)
-#  include <sys/param.h>
-#endif
+#include <limits.h>
 
 #include "argp.h"
 #include "dirname.h"

@@ -41,12 +41,7 @@
 #endif /* HAVE_SYS_WAIT_H */
 
 #include <unistd.h>
-
-#if defined(HAVE_LIMITS_H) && defined(_POSIX_VERSION)
-#  include <limits.h>  
-#else /* !(HAVE_LIMITS_H && _POSIX_VERSION) */
-#  include <sys/param.h> 
-#endif /* HAVE_LIMITS_H */
+#include <limits.h>  
 
 #ifndef NAME_MAX
 #  if defined(_POSIX_VERSION) && defined(_POSIX_NAME_MAX)

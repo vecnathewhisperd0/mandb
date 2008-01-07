@@ -52,17 +52,9 @@
 #  define X_OK		1
 #endif /* !R_OK */
 
-#if defined(HAVE_LIMITS_H)
-#  include <limits.h>
-#elif defined(HAVE_SYS_PARAM_H)
-#  include <sys/param.h>
-#endif
+#include <limits.h>
 
 static char *cwd;
-
-#ifdef HAVE_SYS_FILE
-#  include <sys/file.h>
-#endif /* HAVE_SYS_FILE */
 
 #if HAVE_FCNTL_H
 #  include <fcntl.h>
@@ -74,10 +66,6 @@ static char *cwd;
 #include <utime.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#if HAVE_SYS_WAIT_H
-#  include <sys/wait.h>
-#endif
 
 #include "argp.h"
 #include "dirname.h"

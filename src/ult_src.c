@@ -40,12 +40,6 @@
 #include <errno.h>
 #include <assert.h>
 
-#ifndef S_ISLNK /* losing sys/stat.h */
-#  if defined(S_IFMT) && defined(S_IFLNK)
-#    define S_ISLNK(mode) (((mode) & S_IFMT) == S_IFLNK)
-#  endif
-#endif
-
 #ifdef HAVE_DIRENT_H
 #  include <dirent.h>
 #else /* not HAVE_DIRENT_H */
@@ -126,7 +120,6 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 	return ret;
 }
 
-#ifdef S_ISLNK
 /* Resolve all symbolic links within 'fullpath'.
  * Returns a newly allocated string.
  */
@@ -153,7 +146,6 @@ static char *ult_softlink (const char *fullpath)
 
 	return resolved_path;
 }
-#endif /* S_ISLNK */
 
 /* Test 'buffer' to see if it contains a .so include. If so and it's not an 
  * absolute filename, return newly allocated string whose contents are the
@@ -232,7 +224,6 @@ const char *ult_src (const char *name, const char *path,
 			}
 		}
 
-#ifdef S_ISLNK
 		/* Permit semi local (inter-tree) soft links */
 		if (flags & SOFT_LINK) {
 			if (S_ISLNK (buf->st_mode)) {
@@ -245,7 +236,6 @@ const char *ult_src (const char *name, const char *path,
 					return NULL;
 			}
 		}
-#endif /* S_ISLNK */
 
 		/* Only deal with local (inter-dir) HARD links */
 		if (flags & HARD_LINK) {

@@ -33,7 +33,6 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdio.h>	/* only for printf() */
 #include <string.h>
 #include <stdlib.h>
 

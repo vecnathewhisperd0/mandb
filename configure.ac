@@ -326,7 +326,7 @@ gl_INIT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(memory.h fcntl.h limits.h sys/file.h)
+AC_CHECK_HEADERS(fcntl.h sys/file.h)
 
 # Internationalization support.
 AM_GNU_GETTEXT

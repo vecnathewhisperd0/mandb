@@ -30,8 +30,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -113,4 +111,3 @@ char *convert_name (const char *name, int fsstnd)
 
 	return to_name;
 }
-
