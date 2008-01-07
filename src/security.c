@@ -109,7 +109,7 @@ static struct passwd *man_owner;
  */
 static int priv_drop_count = 0;
 
-static __inline__ void gripe_set_euid (void)
+static inline void gripe_set_euid (void)
 {
 	error (FATAL, errno, _("can't set effective uid"));
 }

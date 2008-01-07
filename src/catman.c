@@ -181,7 +181,7 @@ static int rdopen_db (void)
 }
 
 /* fork() and execve() man with the appropriate catman args. 
-   If we __inline__ this function, gcc v2.6.2 gives us `clobber' warnings ?? */
+   If we inline this function, gcc v2.6.2 gives us `clobber' warnings ?? */
 static void catman (char *args[])
 {
 	pid_t child;
@@ -221,7 +221,7 @@ static void catman (char *args[])
 
 /* accept key and a pointer to the array address that needs to be filled in,
    fill in address and return 1 if MYDBM_DPTR (key) can be freed otherwise 0 */
-static __inline__ int add_arg (datum key, char **argument)
+static inline int add_arg (datum key, char **argument)
 {
     	char *tab;
 
@@ -259,7 +259,7 @@ static void do_catman (char *args[], int arg_no, int first_arg)
 
 #ifdef BTREE
 /* we need to reset the cursor position after a reopen */
-static __inline__ void reset_cursor (datum key)
+static inline void reset_cursor (datum key)
 {
 	int status;
 	DBT content; /* dummy */
@@ -398,7 +398,7 @@ static int parse_for_sec (const char *manpath, const char *section)
 	return 0;
 }
 
-static __inline__ int check_access (const char *directory)
+static inline int check_access (const char *directory)
 {
 	if (access (directory, W_OK)) {
 		error (0, errno, _("cannot write within %s"), directory);

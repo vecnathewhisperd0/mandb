@@ -196,7 +196,7 @@ int btree_exists (DB *db, datum key)
 }
 
 /* initiate a sequential access */
-static __inline__ datum btree_findkey (DB *db, u_int flags)
+static inline datum btree_findkey (DB *db, u_int flags)
 {
 	datum key, data;
 

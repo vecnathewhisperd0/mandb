@@ -235,7 +235,7 @@ static char *simple_convert (iconv_t conv, char *string)
 }
 
 /* do the old thing, if we cannot find the relevant database */
-static __inline__ int use_grep (char *page, char *manpath)
+static inline int use_grep (char *page, char *manpath)
 {
 	char *whatis_file = appendstr (NULL, manpath, "/whatis", NULL);
 	int status;
@@ -408,7 +408,7 @@ static char *lower (char *s)
 }
 
 /* lookup the page and display the results */
-static __inline__ int do_whatis (char *page)
+static inline int do_whatis (char *page)
 {
 	struct mandata *info;
 	int count = 0;

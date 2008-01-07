@@ -163,7 +163,7 @@ struct candidate {
 #define CANDIDATE_FILESYSTEM 0
 #define CANDIDATE_DATABASE   1
 
-static __inline__ void gripe_system (pipeline *p, int status)
+static inline void gripe_system (pipeline *p, int status)
 {
 	error (CHILD_FAIL, 0, _("command exited with status %d: %s"),
 	       status, pipeline_tostring (p));
@@ -554,7 +554,7 @@ static void add_roff_line_length (command *cmd, int *save_cat_p)
 	}
 }
 
-static __inline__ void gripe_no_man (const char *name, const char *sec)
+static inline void gripe_no_man (const char *name, const char *sec)
 {
 	/* On AIX and IRIX, fall back to the vendor supplied browser. */
 #if defined _AIX || defined __sgi
@@ -606,7 +606,7 @@ static void do_extern (int argc, char *argv[])
 }
 
 /* lookup $MANOPT and if available, put in *argv[] format for argp */
-static __inline__ char **manopt_to_env (int *argc)
+static inline char **manopt_to_env (int *argc)
 {
 	char *manopt, *opt_start, **argv;
 
@@ -655,7 +655,7 @@ static __inline__ char **manopt_to_env (int *argc)
 }
 
 /* Return char array with 'less' special chars escaped. Uses static storage. */
-static __inline__ const char *escape_less (const char *string)
+static inline const char *escape_less (const char *string)
 {
 	static char *escaped_string; 
 	char *ptr;
@@ -1104,7 +1104,7 @@ int main (int argc, char *argv[])
  * The list of sections in config.h simply allows us to specify oddly
  * named directories like .../man3f.  Yuk.
  */
-static __inline__ const char *is_section (const char *name)
+static inline const char *is_section (const char *name)
 {
 	const char **vs;
 
@@ -3213,7 +3213,7 @@ static const char **get_section_list (void)
    return 1 to skip
    return 0 to view
  */
-static __inline__ int do_prompt (const char *name)
+static inline int do_prompt (const char *name)
 {
 	int ch;
 

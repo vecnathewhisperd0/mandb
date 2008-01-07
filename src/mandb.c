@@ -191,14 +191,14 @@ static char *manpathlist[MAXDIRS];
 extern int pages;
 
 /* remove() with error checking */
-static __inline__ void xremove (const char *path)
+static inline void xremove (const char *path)
 {
 	if (remove (path) == -1 && errno != ENOENT)
 		error (0, errno, _("can't remove %s"), path);
 }
 
 /* rename() with error checking */
-static __inline__ void xrename (const char *from, const char *to)
+static inline void xrename (const char *from, const char *to)
 {
 	if (rename (from, to) == -1 && errno != ENOENT) {
 		error (0, errno, _("can't rename %s to %s"), from, to);
@@ -255,7 +255,7 @@ static int xcopy (const char *from, const char *to)
 }
 
 /* chmod() with error checking */
-static __inline__ void xchmod (const char *path, mode_t mode)
+static inline void xchmod (const char *path, mode_t mode)
 {
 	if (chmod (path, mode) == -1) {
 		error (0, errno, _("can't chmod %s"), path);
@@ -264,7 +264,7 @@ static __inline__ void xchmod (const char *path, mode_t mode)
 }
 
 /* rename and chmod the database */
-static __inline__ void finish_up (void)
+static inline void finish_up (void)
 {
 #ifdef NDBM
 #  ifdef BERKELEY_DB
@@ -291,7 +291,7 @@ static __inline__ void finish_up (void)
 
 #ifdef SECURE_MAN_UID
 /* chown() with error checking */
-static __inline__ void xchown (const char *path, uid_t owner, uid_t group)
+static inline void xchown (const char *path, uid_t owner, uid_t group)
 {
 	if (chown (path, owner, group) == -1) {
 		error (0, errno, _("can't chown %s"), path);
@@ -300,7 +300,7 @@ static __inline__ void xchown (const char *path, uid_t owner, uid_t group)
 }
 
 /* change the owner of global man databases */
-static __inline__ void do_chown (uid_t uid)
+static inline void do_chown (uid_t uid)
 {
 #  ifdef NDBM
 #    ifdef BERKELEY_DB
@@ -340,7 +340,7 @@ static short update_one_file (const char *manpath, const char *filename)
 }
 
 /* dont actually create any dbs, just do an update */
-static __inline__ short update_db_wrapper (const char *manpath)
+static inline short update_db_wrapper (const char *manpath)
 {
 	short amount;
 

@@ -234,13 +234,6 @@
 /* know what you are doing.						 */
 /*-----------------------------------------------------------------------*/
 
-#ifdef inline
-/* autoconf #defines inline to be either "__inline", "__inline__" 
-   or "" if the compiler doesn't like inline */
-#  define __inline__	inline
-#  define __inline	inline
-#endif /* inline */
-
 /* my gcc specs file is hacked to define __profile__ if I compile with
    the -p or -pg flag, to do this manually (needed if you want to know where
    gmon.out ended up), uncomment the following line */

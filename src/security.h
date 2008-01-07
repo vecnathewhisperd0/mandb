@@ -25,8 +25,8 @@
 #include <pwd.h>
 
 /* security.c */
-extern __inline__ void drop_effective_privs (void);
-extern __inline__ void regain_effective_privs (void);
+extern inline void drop_effective_privs (void);
+extern inline void regain_effective_privs (void);
 extern int do_system_drop_privs (struct pipeline *p);
 extern int remove_with_dropped_privs (const char *filename);
 extern void init_security (void);

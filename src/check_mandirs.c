@@ -293,7 +293,7 @@ void test_manfile (const char *file, const char *path)
 		free (lg.whatis);
 }
 
-static __inline__ void add_dir_entries (const char *path, char *infile)
+static inline void add_dir_entries (const char *path, char *infile)
 {
 	char *manpage;
 	int len;

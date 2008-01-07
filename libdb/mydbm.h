@@ -42,7 +42,7 @@
 #  include <gdbm.h>
 
 #  ifndef HAVE_GDBM_EXISTS
-extern __inline__ int gdbm_exists(GDBM_FILE dbf, datum key);
+extern inline int gdbm_exists(GDBM_FILE dbf, datum key);
 #  endif /* !HAVE_GDBM_EXISTS */
 
 /* gdbm_nextkey() is not lexicographically sorted, so we need to keep the
@@ -135,14 +135,14 @@ extern int ndbm_flclose(DBM *dbf);
 typedef DBT datum;
 
 extern DB *btree_flopen(char *filename, int flags, int mode);
-extern __inline__ int btree_close(DB *db);
-extern __inline__ int btree_exists(DB *db, datum key);
-extern __inline__ datum btree_fetch(DB *db, datum key);
+extern inline int btree_close(DB *db);
+extern inline int btree_exists(DB *db, datum key);
+extern inline datum btree_fetch(DB *db, datum key);
 extern int btree_insert(DB *db, datum key, datum cont);
-extern __inline__ datum btree_firstkey(DB *db);
-extern __inline__ datum btree_nextkey(DB *db);
-extern __inline__ int btree_replace(DB *db, datum key, datum content);
-extern __inline__ int btree_nextkeydata(DB *db, datum *key, datum *cont);
+extern inline datum btree_firstkey(DB *db);
+extern inline datum btree_nextkey(DB *db);
+extern inline int btree_replace(DB *db, datum key, datum content);
+extern inline int btree_nextkeydata(DB *db, datum *key, datum *cont);
 
 #  define DB_EXT			".bt"
 #  define MYDBM_FILE			DB*

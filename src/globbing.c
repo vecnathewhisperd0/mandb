@@ -47,7 +47,7 @@
 const char *extension;
 static const char *mandir_layout = MANDIR_LAYOUT;
 
-static __inline__ char *end_pattern (char *pattern, const char *sec)
+static inline char *end_pattern (char *pattern, const char *sec)
 {
 	if (extension)
 		pattern = appendstr (pattern, ".*", extension, "*", NULL);

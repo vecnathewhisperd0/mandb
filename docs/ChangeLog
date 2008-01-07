@@ -1,3 +1,13 @@
+Mon Jan  7 02:27:59 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_btree.c, libdb/db_storage.h, libdb/mydbm.h, src/catman.c,
+	  src/check_mandirs.c, src/convert_name.c, src/globbing.c,
+	  src/man.c, src/man.h, src/mandb.c, src/manp.c, src/security.c,
+	  src/security.h, src/whatis.c: Replace __inline__ with inline
+	  everywhere. Autoconf's handling of the latter is sufficient.
+	* include/manconfig.h.in: Remove __inline and __inline__
+	  definitions.
+
 Mon Jan  7 02:12:26 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Automatically detect the Debian multibyte patch to
