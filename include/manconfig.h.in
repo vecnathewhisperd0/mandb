@@ -104,6 +104,7 @@
 
 /* The name of the databases. DB_EXT depends on the database type in use */
 #define MAN_DB		"/index" DB_EXT
+#define mkdbname(path) appendstr (NULL, path, MAN_DB, NULL)
 
 /* The locations of the following files were determined by ../configure so
    some of them may be incorrect. Edit as necessary */
@@ -346,7 +347,6 @@ extern int find_name_decompressed (struct pipeline *p, const char *filename,
 				   struct lexgrog *p_lg);
 
 /* util.c */
-extern char *mkdbname (const char *path);
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);
 extern int do_system (struct pipeline *pl);

@@ -47,21 +47,6 @@
 
 #include "pipeline.h"
 
-#include "mydbm.h" /* for full definition of MAN_DB */
-
-/* take path, add db name and return */
-char *mkdbname (const char *path)
-{
-	char *name;
-	size_t len = strlen (path);
-
-	name = xmalloc (sizeof MAN_DB + len);
-	strcpy (name, path);
-	strcpy (name + len, MAN_DB);
-
-	return name;
-}
-
 /*
  * Does file a have a different timestamp to file b?
  *
