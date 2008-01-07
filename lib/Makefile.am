@@ -47,7 +47,6 @@ libman_a_SOURCES = \
 
 ## Headers that are used conditionally. Automake can't detect these itself.
 libman_a_SOURCES += \
-	flock.h \
-	gettext.h
+	flock.h
 
 libman_a_LIBADD = $(LIBOBJS)
