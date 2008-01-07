@@ -88,7 +88,8 @@ error_t argp_err_exit_status = FAIL;
 static const char args_doc[] = N_("FILE...");
 
 static struct argp_option options[] = {
-	{ "compatible",	'C',	0,	0,	N_("compatibility switch (ignored)") },
+	{ "debug",	'd',	0,	0,	N_("emit debugging messages") },
+	{ "compatible",	'C',	0,	0,	N_("compatibility switch (ignored)"),	1 },
 	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
 	{ 0 }
 };
@@ -97,6 +98,9 @@ static error_t parse_opt (int key, char *arg ATTRIBUTE_UNUSED,
 			  struct argp_state *state)
 {
 	switch (key) {
+		case 'd':
+			debug_level = 1;
+			return 0;
 		case 'C':
 			return 0; /* compatibility with GNU soelim */
 		case 'h':

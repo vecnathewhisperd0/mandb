@@ -63,11 +63,12 @@ static const char args_doc[] = N_("FILE...");
 static const char doc[] = "\v" N_("The defaults are --man and --whatis.");
 
 static struct argp_option options[] = {
-	{ "man",	'm',	0,		0,	N_("parse as man page") },
+	{ "debug",	'd',	0,		0,	N_("emit debugging messages") },
+	{ "man",	'm',	0,		0,	N_("parse as man page"),				1 },
 	{ "cat",	'c',	0,		0,	N_("parse as cat page") },
-	{ "whatis",	'w',	0,		0,	N_("show whatis information"),				1 },
-	{ "filters",	'f',	0,		0,	N_("show guessed series of preprocessing filters"),	1 },
-	{ "encoding",	'E',	N_("ENCODING"),	0,	N_("override character set"),				2 },
+	{ "whatis",	'w',	0,		0,	N_("show whatis information"),				2 },
+	{ "filters",	'f',	0,		0,	N_("show guessed series of preprocessing filters") },
+	{ "encoding",	'E',	N_("ENCODING"),	0,	N_("override character set"),				3 },
 	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
 	{ 0 }
 };
@@ -75,6 +76,9 @@ static struct argp_option options[] = {
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
 	switch (key) {
+		case 'd':
+			debug_level = 1;
+			return 0;
 		case 'm':
 			parse_man = 1;
 			return 0;
