@@ -747,7 +747,19 @@ static int local_man_loop (const char *argv)
 
 		if (exit_status == OK) {
 			char *argv_base = base_name (argv);
-			lang = lang_dir (argv);
+			char *argv_abs;
+			if (argv[0] == '/')
+				argv_abs = xstrdup (argv);
+			else {
+				argv_abs = xgetcwd ();
+				if (argv_abs)
+					argv_abs = appendstr (argv_abs, "/",
+							      argv, NULL);
+				else
+					argv_abs = xstrdup (argv);
+			}
+			lang = lang_dir (argv_abs);
+			free (argv_abs);
 			if (!display (NULL, argv, NULL, argv_base, NULL)) {
 				if (local_mf)
 					error (0, errno, "%s", argv);
