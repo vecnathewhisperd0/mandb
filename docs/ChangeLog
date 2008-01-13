@@ -1,3 +1,14 @@
+Sun Jan 13 23:35:27 GMT 2008  Ivan Shmakov  <oneingray@gmail.com>
+
+	Add a command-line option to man to enable groff warnings.
+
+	* src/man.c (enum opts, struct string_llist): New types.
+	  (default_roff_warnings, roff_warnings): Set defaults.
+	  (options, parse_opt): Accept --warnings.
+	  (make_roff_command): Add warnings to groff command line.
+	* man/man1/man.man1 (SYNOPSIS, OPTIONS): Document --warnings.
+	* docs/NEWS: Document this.
+
 Thu Jan 10 09:24:19 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (local_man_loop): Guess language based on absolute path

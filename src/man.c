@@ -157,6 +157,17 @@ static inline void gripe_system (pipeline *p, int status)
 	       status, pipeline_tostring (p));
 }
 
+enum opts {
+	OPT_WARNINGS = 256,
+	OPT_MAX
+};
+
+struct string_llist;
+struct string_llist {
+	const char *name;
+	struct string_llist *next;
+};
+
 
 static char *manpathlist[MAXDIRS];
 
@@ -187,6 +198,10 @@ static struct hashtable *db_hash = NULL;
 
 static int troff;
 static const char *roff_device = NULL;
+#ifdef TROFF_IS_GROFF
+static const char *const default_roff_warnings = "mac";
+static struct string_llist *roff_warnings = NULL;
+#endif /* TROFF_IS_GROFF */
 static int print_where, print_where_cat;
 static int catman;
 static int local_man_file;
@@ -229,6 +244,10 @@ static struct argp_option options[] = {
 	{ "config-file",	'C',	N_("FILE"),	0,		N_("use this user configuration file") },
 	{ "debug",		'd',	0,		0,		N_("emit debugging messages") },
 	{ "default",		'D',	0,		0,		N_("reset all options to their default values") },
+#ifdef TROFF_IS_GROFF
+	{ "warnings",  OPT_WARNINGS,    N_("WARNINGS"), OPTION_ARG_OPTIONAL,
+									N_("enable warnings from groff") },
+#endif /* TROFF_IS_GROFF */
 
 	{ 0,			0,	0,		0,		N_("Main modes of operation:"),					10 },
 	{ "whatis",		'f',	0,		0,		N_("equivalent to whatis") },
@@ -314,6 +333,27 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				preprocessors = NULL;
 			colon_sep_section_list = manp = NULL;
 			return 0;
+
+#ifdef TROFF_IS_GROFF
+		case OPT_WARNINGS:
+			{
+				char *s = xstrdup
+					(arg ? arg : default_roff_warnings);
+				const char *warning;
+
+				for (warning = strtok (s, ","); warning;
+				     warning = strtok (NULL, ",")) {
+					struct string_llist *new;
+					new = xmalloc (sizeof *new);
+					new->name = xstrdup (warning);
+					new->next = roff_warnings;
+					roff_warnings = new;
+				}
+
+				free (s);
+			}
+			return 0;
+#endif /* TROFF_IS_GROFF */
 
 		case 'f':
 			external = WHATIS;
@@ -1349,6 +1389,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		int using_tbl = 0;
 
 		do {
+#ifdef TROFF_IS_GROFF
+			struct string_llist *cur;
+#endif /* TROFF_IS_GROFF */
 			int wants_dev = 0; /* filter wants a dev argument */
 			int wants_post = 0; /* postprocessor arguments */
 
@@ -1402,7 +1445,15 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 					command_arg (cmd, "-Z");
 				else if (!troff)
 					add_roff_line_length (cmd, &save_cat);
-#endif
+
+				for (cur = roff_warnings; cur;
+				     cur = cur->next) {
+					char *arg = xasprintf
+						("-w%s", cur->name);
+					command_arg (cmd, arg);
+					free (arg);
+				}
+#endif /* TROFF_IS_GROFF */
 
 				command_argstr (cmd, roff_opt);
 

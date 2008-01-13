@@ -44,6 +44,8 @@
 .IR list \|]
 .RB [\| \-e
 .IR extension \|]
+.RB [\| \-\-warnings
+.RI [\| warnings \|]\|]
 .RI [\|[\| section \|]
 .IR page \ .\|.\|.\|]\ .\|.\|.
 .\" The --local command line
@@ -64,6 +66,8 @@
 .IR pager \|]
 .RB [\| \-r
 .IR prompt \|]
+.RB [\| \-\-warnings \|\c
+.RI [\| warnings \|]\|]
 .I file
 \&.\|.\|.
 .\" The apropos command line
@@ -489,6 +493,15 @@ will have their usual effect.
 .BI \-C\  file ,\ \-\-config\-file= file
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
+.TP
+\fB\-\-warnings\fP[=\fIwarnings\fP]
+Enable warnings from
+.IR groff .
+This may be used to perform sanity checks on the source text of manual
+pages.
+.I warnings
+is a comma-separated list of warning names; if it is not supplied, the
+default is "mac".
 .TP
 .BI \-M\  path ,\ \-\-manpath= path
 Specify an alternate manpath to use.
