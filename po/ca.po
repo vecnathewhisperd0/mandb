@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.3-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2007-12-31 15:23+0000\n"
+"POT-Creation-Date: 2008-01-14 00:15+0000\n"
 "PO-Revision-Date: 2005-06-21 14:00+0200\n"
 "Last-Translator: Jordi Mallach <jordi@gnu.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -35,13 +35,13 @@ msgstr "l'eixida del conducte no està oberta"
 msgid "pipe failed"
 msgstr "«pipe» ha fallat"
 
-#: lib/pipeline.c:780 src/lexgrog.l:423 src/manconv.c:348 src/straycats.c:216
-#: src/ult_src.c:287 src/ult_src.c:297 src/zsoelim.l:417
+#: lib/pipeline.c:780 src/lexgrog.l:423 src/manconv.c:347 src/straycats.c:212
+#: src/ult_src.c:277 src/ult_src.c:287 src/zsoelim.l:420
 #, c-format
 msgid "can't open %s"
 msgstr "no es pot obrir %s"
 
-#: lib/pipeline.c:820 src/catman.c:204
+#: lib/pipeline.c:820 src/catman.c:199
 #, c-format
 msgid "fork failed"
 msgstr "«fork» ha fallat"
@@ -102,7 +102,7 @@ msgstr "«waitpid» ha fallat"
 msgid "can't install SIGCHLD handler"
 msgstr "no es pot instal·lar el gestor de SIGCHLD"
 
-#: libdb/db_delete.c:104
+#: libdb/db_delete.c:103
 #, c-format
 msgid "multi key %s does not exist"
 msgstr "la clau múltiple %s no existeix"
@@ -110,29 +110,29 @@ msgstr "la clau múltiple %s no existeix"
 # Potser «%s» és de la cache i no de l'índex, aleshores seria:
 # «no es pot blocar la cache d'índexs %s» o semblant.  ivb
 # Després de consultar-ho, tens raó. jm
-#: libdb/db_lookup.c:67
+#: libdb/db_lookup.c:66
 #, c-format
 msgid "can't lock index cache %s"
 msgstr "no es pot blocar la memòria cau d'índex %s"
 
-#: libdb/db_lookup.c:74
+#: libdb/db_lookup.c:73
 #, c-format
 msgid "index cache %s corrupt"
 msgstr "la memòria cau d'índex %s està corrompuda"
 
-#: libdb/db_lookup.c:80
+#: libdb/db_lookup.c:79
 #, c-format
 msgid "cannot replace key %s"
 msgstr "no es pot reemplaçar la clau %s"
 
 # I què tal «només hi ha...».  ivb
 # yep. jm
-#: libdb/db_lookup.c:187 libdb/db_lookup.c:197
+#: libdb/db_lookup.c:186 libdb/db_lookup.c:196
 #, c-format
 msgid "only %d fields in content"
 msgstr "només hi ha %d camps en el contingut"
 
-#: libdb/db_lookup.c:377
+#: libdb/db_lookup.c:376
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "recepció errònia en clau múltiple %s"
@@ -140,22 +140,22 @@ msgstr "recepció errònia en clau múltiple %s"
 # Em sembla que és «inserir» però no ho puc comprovar ara.  ivb
 # Crec que "insertar" i "inserir" son vàlides, però per unificar,
 # ho canvie a "inserir". jm
-#: libdb/db_store.c:49
+#: libdb/db_store.c:48
 #, c-format
 msgid "cannot insert unused key %s"
 msgstr "no es pot inserir la clau no utilitzada %s"
 
-#: libdb/db_ver.c:54
+#: libdb/db_ver.c:53
 #, c-format
 msgid "warning: %s has no version identifier\n"
 msgstr "avís: %s no té un identificador de versió\n"
 
-#: libdb/db_ver.c:57
+#: libdb/db_ver.c:56
 #, c-format
 msgid "warning: %s is version %s, expecting %s\n"
 msgstr "avís: %s té versió %s, s'espera %s\n"
 
-#: libdb/db_ver.c:79
+#: libdb/db_ver.c:78
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "fatal: no s'ha pogut inserir un identificador de versió en %s"
@@ -169,68 +169,69 @@ msgstr ""
 msgid "The man database defaults to %s%s."
 msgstr ""
 
-#: src/accessdb.c:129
+#: src/accessdb.c:65 src/catman.c:99 src/globbing_test.c:57
+#: src/lexgrog_test.c:66 src/man.c:245 src/manconv.c:106 src/mandb.c:97
+#: src/manpath.c:66 src/whatis.c:114 src/zsoelim.l:91
+msgid "emit debugging messages"
+msgstr ""
+
+#: src/accessdb.c:134
 #, c-format
 msgid "can't open %s for reading"
 msgstr "no es pot obrir %s per a lectura"
 
-#: src/catman.c:101
+#: src/catman.c:96
 msgid "[SECTION...]"
 msgstr ""
 
-#: src/catman.c:104 src/globbing_test.c:57 src/man.c:243 src/manconv.c:106
-#: src/mandb.c:97 src/manpath.c:73 src/whatis.c:115 src/zsoelim.l:93
-msgid "emit debugging messages"
-msgstr ""
-
-#: src/catman.c:105 src/man.c:258 src/whatis.c:124
+#: src/catman.c:100 src/man.c:264 src/whatis.c:123
 msgid "PATH"
 msgstr ""
 
-#: src/catman.c:105 src/man.c:258 src/whatis.c:124
+#: src/catman.c:100 src/man.c:264 src/whatis.c:123
 msgid "set search path for manual pages to PATH"
 msgstr ""
 
-#: src/catman.c:106 src/man.c:242 src/mandb.c:105 src/manpath.c:75
-#: src/whatis.c:126
+#: src/catman.c:101 src/man.c:244 src/mandb.c:105 src/manpath.c:68
+#: src/whatis.c:125
 msgid "FILE"
 msgstr ""
 
-#: src/catman.c:106 src/man.c:242 src/mandb.c:105 src/manpath.c:75
-#: src/whatis.c:126
+#: src/catman.c:101 src/man.c:244 src/mandb.c:105 src/manpath.c:68
+#: src/whatis.c:125
 #, fuzzy
 msgid "use this user configuration file"
 msgstr "no es pot obrir el fitxer de configuració del camí de man %s"
 
-#: src/catman.c:177
+#: src/catman.c:172
 #, c-format
 msgid "cannot read database %s"
 msgstr "no es pot llegir la base de dades %s"
 
 # «obtenir»?  ivb
-#: src/catman.c:216
+#: src/catman.c:211
 #, c-format
 msgid "can't get man command's exit status"
 msgstr "no es pot obtenir l'estat d'eixida de l'ordre de man"
 
-#: src/catman.c:219
+#: src/catman.c:214
 #, c-format
 msgid "man command failed with exit status %d"
 msgstr "l'ordre de man ha fallat amb l'estat d'eixida %d"
 
-#: src/catman.c:272
+#: src/catman.c:267
 #, c-format
 msgid "unable to reset cursor position in %s"
 msgstr "no s'ha pogut reiniciar la posició del cursor en %s"
 
 # Potser siga només «per», en tot cas crec que «de» és més adequat.  ivb
-#: src/catman.c:324
+#: src/catman.c:319
 #, c-format
 msgid "NULL content for key: %s"
 msgstr "contingut NUL de la clau: %s"
 
 # Alguna guia d'estil proposava «S'estan actualitzant...».  ivb
-#: src/catman.c:339
+#: src/catman.c:334
 #, c-format
 msgid ""
 "\n"
@@ -240,12 +241,12 @@ msgstr ""
 "S'estan actualitzant els fitxers cat per a la secció %s de la jerarquia de "
 "man %s\n"
 
-#: src/catman.c:404
+#: src/catman.c:399
 #, c-format
 msgid "cannot write within %s"
 msgstr "no es pot escriure en %s"
 
-#: src/catman.c:482
+#: src/catman.c:478
 #, c-format
 msgid "unable to update %s"
 msgstr "no es pot actualitzar %s"
@@ -271,13 +272,13 @@ msgstr "avís: %s: enllaç simbòlic o petició ROFF «.so» incorrecte"
 msgid "warning: %s: ignoring empty file"
 msgstr "avís: %s: es descarta un fitxer buit"
 
-#: src/check_mandirs.c:287 src/straycats.c:268
+#: src/check_mandirs.c:287 src/straycats.c:264
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "avís: %s: l'anàlisi de whatis per a %s(%s) ha fallat"
 
-#: src/check_mandirs.c:313 src/check_mandirs.c:348 src/mandb.c:625
-#: src/straycats.c:89 src/straycats.c:296 src/ult_src.c:98
+#: src/check_mandirs.c:313 src/check_mandirs.c:348 src/mandb.c:626
+#: src/straycats.c:85 src/straycats.c:292 src/ult_src.c:92
 #, c-format
 msgid "can't search directory %s"
 msgstr "no es pot cercar el directori %s"
@@ -308,7 +309,7 @@ msgstr "fet.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "S'estan purgant entrades antigues de la base de dades en %s...\n"
 
-#: src/convert_name.c:48
+#: src/convert_name.c:46
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "No es pot convertir %s a nom cat"
@@ -325,7 +326,7 @@ msgstr "No es pot obtindre l'estructura de contrasenya per a l'uid 0"
 
 # Aquesta accepció d'«ignorar» és un anglicisme. Descartar?  ivb
 # Sí, de fet ho volia haver marcat amb "jm". jm
-#: src/filenames.c:48 src/straycats.c:121 src/straycats.c:150
+#: src/filenames.c:47 src/straycats.c:117 src/straycats.c:146
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "avís: %s: s'ha descartat un nom de fitxer erroni"
@@ -334,19 +335,19 @@ msgstr "avís: %s: s'ha descartat un nom de fitxer erroni"
 msgid "PATH SECTION NAME"
 msgstr ""
 
-#: src/globbing_test.c:58 src/man.c:262
+#: src/globbing_test.c:58 src/man.c:269
 msgid "EXTENSION"
 msgstr ""
 
-#: src/globbing_test.c:58 src/man.c:263
+#: src/globbing_test.c:58 src/man.c:270
 msgid "limit search to extension type EXTENSION"
 msgstr ""
 
-#: src/globbing_test.c:59 src/man.c:264
+#: src/globbing_test.c:59 src/man.c:271
 msgid "look for pages case-insensitively (default)"
 msgstr ""
 
-#: src/globbing_test.c:60 src/man.c:265
+#: src/globbing_test.c:60 src/man.c:272
 msgid "look for pages case-sensitively"
 msgstr ""
 
@@ -356,7 +357,7 @@ msgstr ""
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "avís: el whatis per a %s s'excedeix en %d bytes, es truncarà."
 
-#: src/lexgrog_test.c:62 src/zsoelim.l:90
+#: src/lexgrog_test.c:62 src/zsoelim.l:88
 msgid "FILE..."
 msgstr ""
 
@@ -364,191 +365,199 @@ msgstr ""
 msgid "The defaults are --man and --whatis."
 msgstr ""
 
-#: src/lexgrog_test.c:66
+#: src/lexgrog_test.c:67
 msgid "parse as man page"
 msgstr ""
 
-#: src/lexgrog_test.c:67
+#: src/lexgrog_test.c:68
 msgid "parse as cat page"
 msgstr ""
 
-#: src/lexgrog_test.c:68
+#: src/lexgrog_test.c:69
 msgid "show whatis information"
 msgstr ""
 
-#: src/lexgrog_test.c:69
+#: src/lexgrog_test.c:70
 msgid "show guessed series of preprocessing filters"
 msgstr ""
 
-#: src/lexgrog_test.c:70 src/man.c:273
+#: src/lexgrog_test.c:71 src/man.c:280
 msgid "ENCODING"
 msgstr ""
 
-#: src/lexgrog_test.c:70
+#: src/lexgrog_test.c:71
 msgid "override character set"
 msgstr ""
 
 # Frase completa: «les opcions són incompatibles»  ivb
-#: src/lexgrog_test.c:106
-#, c-format
-msgid "-m -c: incompatible options"
-msgstr "-m -c: les opcions són incompatibles"
+#: src/lexgrog_test.c:114 src/man.c:481
+#, fuzzy, c-format
+msgid "%s: incompatible options"
+msgstr ": les opcions són incompatibles"
 
-#: src/man.c:169
+#: src/man.c:156
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "l'ordre ha finalitzat amb l'estat %d: %s"
 
-#: src/man.c:238
+#: src/man.c:240
 msgid "[SECTION] PAGE..."
 msgstr ""
 
-#: src/man.c:244
+#: src/man.c:246
 msgid "reset all options to their default values"
 msgstr ""
 
-#: src/man.c:246
-msgid "Main modes of operation:"
-msgstr ""
-
-#: src/man.c:247
-msgid "equivalent to whatis"
-msgstr ""
-
 #: src/man.c:248
-msgid "equivalent to apropos"
+msgid "WARNINGS"
 msgstr ""
 
 #: src/man.c:249
-msgid "print physical location of man page(s)"
+msgid "enable warnings from groff"
 msgstr ""
 
-#: src/man.c:251
-msgid "print physical location of cat file(s)"
+#: src/man.c:252
+msgid "Main modes of operation:"
 msgstr ""
 
 #: src/man.c:253
-msgid "interpret PAGE argument(s) as local filename(s)"
+msgid "equivalent to whatis"
 msgstr ""
 
 #: src/man.c:254
-msgid "used by catman to reformat out of date cat pages"
-msgstr ""
-
-#: src/man.c:255 src/manconv.c:105
-msgid "CODE"
+msgid "equivalent to apropos"
 msgstr ""
 
 #: src/man.c:255
-msgid "output source page encoded in CODE"
+msgid "print physical location of man page(s)"
 msgstr ""
 
 #: src/man.c:257
+msgid "print physical location of cat file(s)"
+msgstr ""
+
+#: src/man.c:259
+msgid "interpret PAGE argument(s) as local filename(s)"
+msgstr ""
+
+#: src/man.c:260
+msgid "used by catman to reformat out of date cat pages"
+msgstr ""
+
+#: src/man.c:261 src/manconv.c:105
+msgid "CODE"
+msgstr ""
+
+#: src/man.c:261
+msgid "output source page encoded in CODE"
+msgstr ""
+
+#: src/man.c:263
 #, fuzzy
 msgid "Finding manual pages:"
 msgstr " Pàgina de manual "
 
-#: src/man.c:259 src/whatis.c:125
+#: src/man.c:265 src/whatis.c:124
 msgid "LOCALE"
 msgstr ""
 
-#: src/man.c:259
+#: src/man.c:265
 msgid "define the locale for this particular man search"
 msgstr ""
 
-#: src/man.c:260 src/manpath.c:76 src/whatis.c:123
+#: src/man.c:266 src/manpath.c:69 src/whatis.c:122
 msgid "SYSTEM"
 msgstr ""
 
-#: src/man.c:260
+#: src/man.c:266
 msgid "search for man pages from other unix system(s)"
 msgstr ""
 
-#: src/man.c:261
+#: src/man.c:267
 msgid "LIST"
 msgstr ""
 
-#: src/man.c:261
+#: src/man.c:267
 msgid "use colon separated section list"
 msgstr ""
 
-#: src/man.c:266
+#: src/man.c:273
 msgid "find all matching manual pages"
 msgstr ""
 
-#: src/man.c:267
+#: src/man.c:274
 msgid "force a cache consistency check"
 msgstr ""
 
-#: src/man.c:269
+#: src/man.c:276
 msgid "Controlling formatted output:"
 msgstr ""
 
-#: src/man.c:270
+#: src/man.c:277
 msgid "PAGER"
 msgstr ""
 
-#: src/man.c:270
+#: src/man.c:277
 msgid "use program PAGER to display output"
 msgstr ""
 
-#: src/man.c:271 src/man.c:274
+#: src/man.c:278 src/man.c:281
 msgid "STRING"
 msgstr ""
 
-#: src/man.c:271
+#: src/man.c:278
 msgid "provide the `less' pager with a prompt"
 msgstr ""
 
-#: src/man.c:272
+#: src/man.c:279
 msgid "display ASCII translation of certain latin1 chars"
 msgstr ""
 
-#: src/man.c:273
+#: src/man.c:280
 msgid "use the selected nroff device and display in pager"
 msgstr ""
 
-#: src/man.c:274
+#: src/man.c:281
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 msgstr ""
 
-#: src/man.c:278
+#: src/man.c:285
 #, c-format
 msgid "use %s to format pages"
 msgstr ""
 
-#: src/man.c:279
-msgid "DEVICE"
-msgstr ""
-
-#: src/man.c:280
-#, c-format
-msgid "use %s with selected device"
-msgstr ""
-
 #: src/man.c:286
-msgid "BROWSER"
+msgid "DEVICE"
 msgstr ""
 
 #: src/man.c:287
 #, c-format
+msgid "use %s with selected device"
+msgstr ""
+
+#: src/man.c:293
+msgid "BROWSER"
+msgstr ""
+
+#: src/man.c:294
+#, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr ""
 
-#: src/man.c:288
+#: src/man.c:295
 #, fuzzy
 msgid "use groff and force it to produce ditroff"
 msgstr ""
 "-Z, --ditroff               utilitza groff i força la producció de ditroff."
 
-#: src/man.c:289
+#: src/man.c:296
 msgid "RESOLUTION"
 msgstr ""
 
-#: src/man.c:291
+#: src/man.c:298
 #, fuzzy
 msgid ""
 "use groff and display through gxditview (X11):\n"
@@ -556,70 +565,65 @@ msgid ""
 msgstr ""
 "                           -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
 
-# Frase completa: «les opcions són incompatibles»  ivb
-#: src/man.c:450
-msgid ": incompatible options"
-msgstr ": les opcions són incompatibles"
-
 # per/per a/de?  ivb
-#: src/man.c:498 src/man.c:570
+#: src/man.c:528 src/man.c:600
 #, fuzzy, c-format
 msgid "No manual entry for %s\n"
 msgstr "No hi ha una entrada de manual de %s"
 
-#: src/man.c:500
+#: src/man.c:530
 #, fuzzy, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "Quina pàgina de manual voleu de la secció %s?\n"
 
-#: src/man.c:504
+#: src/man.c:534
 msgid "What manual page do you want?\n"
 msgstr "Quina pàgina de manual voleu?\n"
 
 # per/per a/de?  ivb
-#: src/man.c:567
+#: src/man.c:597
 #, fuzzy, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "No hi ha una entrada de manual de %s"
 
-#: src/man.c:575
+#: src/man.c:605
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 "Vegeu «%s» per a obtindre ajuda quan les pàgines de manual no són "
 "disponibles.\n"
 
-#: src/man.c:736 src/man.c:2057
+#: src/man.c:766 src/man.c:2111
 #, c-format
 msgid "can't chdir to %s"
 msgstr "no es pot canviar de directori a %s"
 
-#: src/man.c:914
+#: src/man.c:957
 msgid " Manual page "
 msgstr " Pàgina de manual "
 
-#: src/man.c:984 src/man.c:2904
+#: src/man.c:1027 src/man.c:2960
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "l'ordre de mandb ha fallat amb l'estat d'eixida %d"
 
 # «es descarta el...»  ivb
-#: src/man.c:1415
+#: src/man.c:1469
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "es descarta el preprocessador desconegut «%c»"
 
-#: src/man.c:1693 src/mandb.c:297
+#: src/man.c:1747 src/mandb.c:297
 #, c-format
 msgid "can't chown %s"
 msgstr "no es pot fer «chown» a %s"
 
-#: src/man.c:1705 src/mandb.c:261
+#: src/man.c:1759 src/mandb.c:261
 #, c-format
 msgid "can't chmod %s"
 msgstr "no es pot fer «chmod» a %s"
 
-#: src/man.c:1716 src/mandb.c:204
+#: src/man.c:1770 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "no es pot reanomenar %s a %s"
@@ -627,37 +631,37 @@ msgstr "no es pot reanomenar %s a %s"
 # Segurament es referirà a l'{a,m,c}time; hores/dates?  ivb
 # I en eixe cas, què sugereixes? jm
 # Allò que s'use majoritàriament pel cas, només era per assegurar-me.  ivb
-#: src/man.c:1735
+#: src/man.c:1789
 #, c-format
 msgid "can't set times on %s"
 msgstr "no es poden establir les hores en %s"
 
-#: src/man.c:1744
+#: src/man.c:1798
 #, c-format
 msgid "can't unlink %s"
 msgstr "no es pot desenllaçar %s"
 
-#: src/man.c:1777
+#: src/man.c:1831
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "no es pot crear un fitxer cat temporal per a %s"
 
-#: src/man.c:1906 src/man.c:1948 src/man.c:1978
+#: src/man.c:1960 src/man.c:2002 src/man.c:2032
 #, c-format
 msgid "can't change to directory %s"
 msgstr "no es pot canviar al directori %s"
 
-#: src/man.c:1919
+#: src/man.c:1973
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "no es pot obrir el fitxer temporal %s"
 
-#: src/man.c:1954 src/man.c:1983
+#: src/man.c:2008 src/man.c:2037
 #, c-format
 msgid "can't remove directory %s"
 msgstr "no es pot eliminar el directori %s"
 
-#: src/man.c:2204
+#: src/man.c:2260
 #, c-format
 msgid ""
 "\n"
@@ -667,18 +671,18 @@ msgstr ""
 "no es pot escriure a %s en el mode catman"
 
 # Lo de sempre, deprecated? jm
-#: src/man.c:2758
+#: src/man.c:2814
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: basar-se en referències whatis està desaconsellat\n"
 
-#: src/man.c:3098
+#: src/man.c:3154
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 "s'ha produït un error intern: el candidat de tipus %d està fora de rang"
 
-#: src/man.c:3217
+#: src/man.c:3277
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -700,22 +704,20 @@ msgstr ""
 msgid "encoding for output"
 msgstr ""
 
-#: src/manconv.c:138 src/manconv.c:148
-#, c-format
+#: src/manconv.c:138 src/manconv.c:147
 msgid "must specify an input encoding"
 msgstr ""
 
-#: src/manconv.c:143
-#, c-format
+#: src/manconv.c:142
 msgid "must specify an output encoding"
 msgstr ""
 
-#: src/manconv.c:267 src/manconv.c:292
+#: src/manconv.c:265 src/manconv.c:290
 #, fuzzy, c-format
 msgid "can't write to standard output"
 msgstr "no es pot escriure en %s"
 
-#: src/manconv.c:302
+#: src/manconv.c:300
 #, c-format
 msgid "iconv: incomplete character at end of buffer"
 msgstr ""
@@ -777,19 +779,19 @@ msgstr "no es pot llegir de %s"
 msgid "Processing manual pages under %s...\n"
 msgstr "Processant pàgines de manual sota %s...\n"
 
-#: src/mandb.c:574 src/security.c:136
+#: src/mandb.c:575 src/security.c:136
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "l'usuari man setuid «%s» no existeix"
 
 # s'està utilitzant/s'utilitza/s'utilitzarà  ivb
-#: src/mandb.c:595
+#: src/mandb.c:596
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "avís: no hi ha directives MANDB_MAP en %s, s'utilitzarà el vostre camí de man"
 
-#: src/mandb.c:659
+#: src/mandb.c:660
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -798,18 +800,18 @@ msgstr ""
 "%d subdirectoris de man contenien pàgines de manual més noves.\n"
 "S'han afegit %d pàgines de manual.\n"
 
-#: src/mandb.c:663
+#: src/mandb.c:664
 #, c-format
 msgid "%d stray cats were added.\n"
 msgstr "S'han afegit %d cats orfes.\n"
 
 # "la base de dades", o "bases de dades"? jm
-#: src/mandb.c:665
+#: src/mandb.c:666
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr "S'han purgat %d entrades velles de la base de dades.\n"
 
-#: src/mandb.c:679
+#: src/mandb.c:680
 #, fuzzy, c-format
 msgid "No databases created."
 msgstr "No s'ha actualitzat cap base de dades."
@@ -899,23 +901,23 @@ msgstr "no es pot determinar el directori actual"
 msgid "warning: %s does not begin with %s"
 msgstr "avís: %s no comença amb %s"
 
-#: src/manpath.c:71
+#: src/manpath.c:64
 msgid "show relative catpaths"
 msgstr ""
 
-#: src/manpath.c:72
+#: src/manpath.c:65
 msgid "show the entire global manpath"
 msgstr ""
 
-#: src/manpath.c:74
+#: src/manpath.c:67
 msgid "produce fewer warnings"
 msgstr ""
 
-#: src/manpath.c:76
+#: src/manpath.c:69
 msgid "express which `systems' to use"
 msgstr ""
 
-#: src/manpath.c:138
+#: src/manpath.c:132
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
 msgstr ""
@@ -931,88 +933,88 @@ msgstr "no es pot establir l'uid efectiu"
 msgid "can't fork"
 msgstr "no es pot fer «fork»"
 
-#: src/straycats.c:236 src/ult_src.c:143
+#: src/straycats.c:232 src/ult_src.c:136
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "avís: %s és un enllaç simbòlic trencat"
 
-#: src/straycats.c:239 src/ult_src.c:146 src/ult_src.c:229
+#: src/straycats.c:235 src/ult_src.c:139 src/ult_src.c:221
 #, c-format
 msgid "can't resolve %s"
 msgstr "no es pot resoldre %s"
 
 # S'estan...  ivb
-#: src/straycats.c:301
+#: src/straycats.c:297
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "S'estan cercant cats orfes sota %s...\n"
 
-#: src/straycats.c:340
+#: src/straycats.c:336
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "no es pot actualitzar la memòria cau d'índex %s"
 
-#: src/ult_src.c:267
+#: src/ult_src.c:257
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s es referència a ell mateix"
 
-#: src/whatis.c:111
+#: src/whatis.c:110
 msgid "KEYWORD..."
 msgstr ""
 
-#: src/whatis.c:112
+#: src/whatis.c:111
 msgid "The --regex option is enabled by default."
 msgstr ""
 
-#: src/whatis.c:116
+#: src/whatis.c:115
 msgid "print verbose warning messages"
 msgstr ""
 
-#: src/whatis.c:117
+#: src/whatis.c:116
 msgid "interpret each keyword as a regex"
 msgstr ""
 
-#: src/whatis.c:118
+#: src/whatis.c:117
 msgid "search each keyword for exact match"
 msgstr ""
 
-#: src/whatis.c:119
+#: src/whatis.c:118
 msgid "the keyword(s) contain wildcards"
 msgstr ""
 
-#: src/whatis.c:120
+#: src/whatis.c:119
 msgid "require all keywords to match"
 msgstr ""
 
-#: src/whatis.c:121
+#: src/whatis.c:120
 msgid "do not trim output to terminal width"
 msgstr ""
 
-#: src/whatis.c:122
+#: src/whatis.c:121
 msgid "SECTION"
 msgstr ""
 
-#: src/whatis.c:122
+#: src/whatis.c:121
 msgid "search only this section"
 msgstr ""
 
-#: src/whatis.c:123
+#: src/whatis.c:122
 msgid "include alternate systems' man pages"
 msgstr ""
 
-#: src/whatis.c:125
+#: src/whatis.c:124
 msgid "define the locale for this search"
 msgstr ""
 
 # «comor?»  ivb
 # «el que tu has dit entendre no he pogut» yoda
-#: src/whatis.c:194
+#: src/whatis.c:193
 #, c-format
 msgid "%s what?\n"
 msgstr "%s què?\n"
 
-#: src/whatis.c:299 src/whatis.c:326 src/whatis.c:338
+#: src/whatis.c:298 src/whatis.c:325 src/whatis.c:337
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "avís: %s conté un bucle de punters"
@@ -1021,17 +1023,17 @@ msgstr "avís: %s conté un bucle de punters"
 # Gènere? Nombre? És bo posar-ne un comentari.  ivb
 # Pareix que es refereix al resultat d'un whois. «whois desconegut?» jm
 # Arreglat en 2.4.0pre. jm
-#: src/whatis.c:301 src/whatis.c:314 src/whatis.c:329 src/whatis.c:339
+#: src/whatis.c:300 src/whatis.c:313 src/whatis.c:328 src/whatis.c:338
 msgid "(unknown subject)"
 msgstr "(assumpte desconegut)"
 
-#: src/whatis.c:553
+#: src/whatis.c:552
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "La base de dades %s està corrompuda; reconstruïu-la amb mandb --create"
 
 # «res d'apropiat»?  ivb
-#: src/whatis.c:691
+#: src/whatis.c:690
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: res d'apropiat.\n"
@@ -1041,45 +1043,53 @@ msgstr "%s: res d'apropiat.\n"
 msgid "fatal: regex `%s': %s"
 msgstr "fatal: expreg «%s»: %s"
 
-#: src/wrapper.c:98
+#: src/wrapper.c:99
 #, c-format
 msgid "Don't know which program should I run being >%s<\n"
 msgstr "No es sap quin programa s'hauria d'executar com a «%s»\n"
 
-#: src/wrapper.c:116 src/wrapper.c:121 src/wrapper.c:126 src/wrapper.c:131
+#: src/wrapper.c:117 src/wrapper.c:122 src/wrapper.c:127 src/wrapper.c:132
 #, c-format
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Ha fallat el su a l'usuari %s\n"
 
-#: src/zsoelim.l:200
+#: src/zsoelim.l:92
+msgid "compatibility switch (ignored)"
+msgstr ""
+
+#: src/zsoelim.l:202
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr ""
 
-#: src/zsoelim.l:214
+#: src/zsoelim.l:216
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr ""
 
-#: src/zsoelim.l:236
+#: src/zsoelim.l:238
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr ""
 
-#: src/zsoelim.l:289
+#: src/zsoelim.l:291
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr ""
 
-#: src/zsoelim.l:299
+#: src/zsoelim.l:301
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr ""
 
-#: src/zsoelim.l:339
+#: src/zsoelim.l:341
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr ""
+
+# Frase completa: «les opcions són incompatibles»  ivb
+#~ msgid "-m -c: incompatible options"
+#~ msgstr "-m -c: les opcions són incompatibles"
 
 #~ msgid "usage: %s [-hV] [man database]\n"
 #~ msgstr "forma d'ús: %s [-hV] [base de dades de man]\n"
