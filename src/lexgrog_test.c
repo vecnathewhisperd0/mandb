@@ -106,10 +106,13 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			argp_usage (state);
 			break;
 		case ARGP_KEY_SUCCESS:
-			if (parse_man && parse_cat) {
-				error (0, 0, _("-m -c: incompatible options"));
-				argp_usage (state);
-			}
+			if (parse_man && parse_cat)
+				/* This slightly odd construction allows us
+				 * to reuse a translation.
+				 */
+				argp_error (state,
+					    _("%s: incompatible options"),
+					    "-m -c");
 			/* defaults: --man, --whatis */
 			if (!parse_man && !parse_cat)
 				parse_man = 1;

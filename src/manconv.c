@@ -133,21 +133,19 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			filename = arg;
 			return 0;
 		case ARGP_KEY_SUCCESS:
-			if (!from_codes) {
-				error (0, 0,
-				       _("must specify an input encoding"));
-				argp_usage (state);
-			}
-			if (!to_code) {
-				error (0, 0,
-				       _("must specify an output encoding"));
-				argp_usage (state);
-			}
+			if (!from_codes)
+				argp_error (state,
+					    _("must specify an input "
+					      "encoding"));
+			if (!to_code)
+				argp_error (state,
+					    _("must specify an output "
+					      "encoding"));
 			from_code = split_codes (from_codes);
-			if (!from_code || !*from_code) {
-				error (0, 0, _("must specify an input encoding"));
-				argp_usage (state);
-			}
+			if (!from_code || !*from_code)
+				argp_error (state,
+					    _("must specify an input "
+					      "encoding"));
 			return 0;
 	}
 	return ARGP_ERR_UNKNOWN;

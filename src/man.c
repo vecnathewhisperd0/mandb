@@ -468,17 +468,18 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			/* check for incompatible options */
 			if (troff + whatis + apropos + catman +
 			    (print_where || print_where_cat) > 1) {
-				error (0, 0, "%s",
-				       appendstr (NULL,
-						  troff ? "-[tTZH] " : "",
-						  whatis ? "-f " : "",
-						  apropos ? "-k " : "",
-						  catman ? "-c " : "",
-						  print_where ? "-w " : "",
-						  print_where_cat ? "-W " : "",
-						  _(": incompatible options"),
-						  NULL));
-				argp_usage (state);
+				char *badopts = appendstr
+					(NULL,
+					 troff ? "-[tTZH] " : "",
+					 whatis ? "-f " : "",
+					 apropos ? "-k " : "",
+					 catman ? "-c " : "",
+					 print_where ? "-w " : "",
+					 print_where_cat ? "-W " : "",
+					 NULL);
+				argp_error (state,
+					    _("%s: incompatible options"),
+					    badopts);
 			}
 			return 0;
 	}
