@@ -206,6 +206,15 @@ static inline void xrename (const char *from, const char *to)
 	}
 }
 
+/* chmod() with error checking */
+static inline void xchmod (const char *path, mode_t mode)
+{
+	if (chmod (path, mode) == -1) {
+		error (0, errno, _("can't chmod %s"), path);
+		xremove (path);
+	}
+}
+
 /* CPhipps 2000/02/24 - Copy a file. */
 static int xcopy (const char *from, const char *to)
 {
@@ -250,17 +259,10 @@ static int xcopy (const char *from, const char *to)
 
 	if (ret < 0)
 		xremove (to);
+	else
+		xchmod (to, DBMODE);
 
 	return ret;
-}
-
-/* chmod() with error checking */
-static inline void xchmod (const char *path, mode_t mode)
-{
-	if (chmod (path, mode) == -1) {
-		error (0, errno, _("can't chmod %s"), path);
-		xremove (path);
-	}
 }
 
 /* rename and chmod the database */
