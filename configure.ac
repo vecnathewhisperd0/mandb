@@ -349,56 +349,18 @@ MAN_FUNC_STRSIGNAL
 # Find a suitable database interface header and library.
 #
 # Check for Berkeley db routines (first version API).
-if test "$db" = "no" || test "$db" = "db4" || test "$db" = "db"; then
-MAN_CHECK_BDB([db4/db_185.h db_185.h], [db4 db-4],
-              [AC_DEFINE_UNQUOTED([BDB_H], [<$head>],
-				  [Define if you have, and want to use, Berkeley database header files.])
-               AC_DEFINE_UNQUOTED([BTREE], [$lib],
-				  [Define if you have, and want to use, the Berkeley database library.])
-              ])
-fi
-if test "$db" = "no" || test "$db" = "db3" || test "$db" = "db"; then
-MAN_CHECK_BDB([db3/db_185.h db_185.h], [db3],
-              [AC_DEFINE_UNQUOTED([BDB_H], [<$head>],
-				  [Define if you have, and want to use, Berkeley database header files.])
-               AC_DEFINE_UNQUOTED([BTREE], [$lib],
-				  [Define if you have, and want to use, the Berkeley database library.])
-              ])
-fi
-if test "$db" = "no" || test "$db" = "db2" || test "$db" = "db"; then
-MAN_CHECK_BDB([db_185.h db2/db_185.h db2_185.h], [db2 db],
-              [AC_DEFINE_UNQUOTED([BDB_H], [<$head>])
-               AC_DEFINE_UNQUOTED([BTREE], [$lib])
-              ])
-fi
-if test "$db" = "no" || test "$db" = "db1" || test "$db" = "db"; then
-MAN_CHECK_BDB([db/db.h db.h db1/db.h], [db db1],
-              [AC_DEFINE_UNQUOTED([BDB_H], [<$head>])
-               AC_DEFINE_UNQUOTED([BTREE], [$lib])
-              ])
-fi
+MAN_CHECK_BDB([db4 db], [db4/db_185.h db_185.h], [db4 db-4])
+MAN_CHECK_BDB([db3 db], [db3/db_185.h db_185.h], [db3])
+MAN_CHECK_BDB([db2 db], [db_185.h db2/db_185.h db2_185.h], [db2 db])
+MAN_CHECK_BDB([db1 db], [db/db.h db.h db1/db.h], [db db1])
 
-dnl if test "$db" = "no" || test "$db" = "db2"; then
-dnl MAN_CHECK_BDB([db2_185.h], [db2 db c],
-dnl               [AC_DEFINE(BTREE, 2)
-dnl                AC_DEFINE(DB_ON_LIBC)
-dnl               ])
-dnl fi
-dnl if test "$db" = "no" || test "$db" = "db2"; then
-dnl MAN_CHECK_BDB([db2/db_185.h], [db2 db c], [AC_DEFINE(BTREE, 2)])
-dnl fi
+dnl MAN_CHECK_BDB([db2], [db2_185.h], [db2 db c], [AC_DEFINE(DB_ON_LIBC)])
+dnl MAN_CHECK_BDB([db2], [db2/db_185.h], [db2 db c])
 dnl # from package libdb1-dev
-dnl if test "$db" = "no" || test "$db" = "db"; then
-dnl MAN_CHECK_BDB([db/db.h], [db c], [AC_DEFINE(BTREE, 1)])
-dnl fi
+dnl MAN_CHECK_BDB([db], [db/db.h], [db c])
 dnl # from package libc6-dev
 dnl # ########## statically linked #####
-dnl if test "$db" = "no" || test "$db" = "db"; then
-dnl MAN_CHECK_BDB([db1/db.h], [db c],
-dnl               [AC_DEFINE(BTREE, 1)
-dnl                AC_DEFINE(DB_ON_LIBC)
-dnl               ])
-dnl fi
+dnl MAN_CHECK_BDB([db], [db1/db.h], [db c], [AC_DEFINE(DB_ON_LIBC)])
 
 # Check for GNU dbm routines.
 if test "$db" = "no" || test "$db" = "gdbm"

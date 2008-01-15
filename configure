@@ -34916,9 +34916,18 @@ fi
 # Find a suitable database interface header and library.
 #
 # Check for Berkeley db routines (first version API).
-if test "$db" = "no" || test "$db" = "db4" || test "$db" = "db"; then
-for head in db4/db_185.h db_185.h
+man_bdb_requested=no
+for trydb in db4 db
 do
+  if test "$db" = "$trydb"
+  then
+    man_bdb_requested=yes
+  fi
+done
+if test "$db" = no || test "$man_bdb_requested" = yes
+then
+  for head in db4/db_185.h db_185.h
+  do
 
 for ac_header in $head
 do
@@ -35066,14 +35075,14 @@ fi
 
 done
 
-  if test "$got" = "yes"
-  then
-    for lib in db4 db-4
-    do
-      as_man_tr_bdb=`echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
-      man_saved_LIBS="$LIBS"
-      LIBS="$LIBS -l$lib"
-      { echo "$as_me:$LINENO: checking for dbopen from <${head}> in -l${lib}" >&5
+    if test "$got" = "yes"
+    then
+      for lib in db4 db-4
+      do
+        as_man_tr_bdb=`echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
+        man_saved_LIBS="$LIBS"
+        LIBS="$LIBS -l$lib"
+        { echo "$as_me:$LINENO: checking for dbopen from <${head}> in -l${lib}" >&5
 echo $ECHO_N "checking for dbopen from <${head}> in -l${lib}... $ECHO_C" >&6; }
 if { as_var=$as_man_tr_bdb; eval "test \"\${$as_var+set}\" = set"; }; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -35126,7 +35135,8 @@ fi
 ac_res=`eval echo '${'$as_man_tr_bdb'}'`
 	       { echo "$as_me:$LINENO: result: $ac_res" >&5
 echo "${ECHO_T}$ac_res" >&6; }
-      if test `eval echo '${'$as_man_tr_bdb'}'` = yes; then
+        if test `eval echo '${'$as_man_tr_bdb'}'` = yes; then
+
 
 cat >>confdefs.h <<_ACEOF
 #define BDB_H <$head>
@@ -35134,26 +35144,34 @@ _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define BTREE $lib
+#define BTREE 1
 _ACEOF
 
-
-             DBLIBS="-l$lib"
-             db=yes
+               DBLIBS="-l$lib"
+               db=yes
 else
   db=no
 fi
 
-      LIBS="$man_saved_LIBS"
-            test "$db" = "yes" && break
-    done
-  fi
-  test "$db" = "yes" && break
-done
+        LIBS="$man_saved_LIBS"
+                test "$db" = "yes" && break
+      done
+    fi
+    test "$db" = "yes" && break
+  done
 fi
-if test "$db" = "no" || test "$db" = "db3" || test "$db" = "db"; then
-for head in db3/db_185.h db_185.h
+man_bdb_requested=no
+for trydb in db3 db
 do
+  if test "$db" = "$trydb"
+  then
+    man_bdb_requested=yes
+  fi
+done
+if test "$db" = no || test "$man_bdb_requested" = yes
+then
+  for head in db3/db_185.h db_185.h
+  do
 
 for ac_header in $head
 do
@@ -35301,14 +35319,14 @@ fi
 
 done
 
-  if test "$got" = "yes"
-  then
-    for lib in db3
-    do
-      as_man_tr_bdb=`echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
-      man_saved_LIBS="$LIBS"
-      LIBS="$LIBS -l$lib"
-      { echo "$as_me:$LINENO: checking for dbopen from <${head}> in -l${lib}" >&5
+    if test "$got" = "yes"
+    then
+      for lib in db3
+      do
+        as_man_tr_bdb=`echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
+        man_saved_LIBS="$LIBS"
+        LIBS="$LIBS -l$lib"
+        { echo "$as_me:$LINENO: checking for dbopen from <${head}> in -l${lib}" >&5
 echo $ECHO_N "checking for dbopen from <${head}> in -l${lib}... $ECHO_C" >&6; }
 if { as_var=$as_man_tr_bdb; eval "test \"\${$as_var+set}\" = set"; }; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -35361,7 +35379,8 @@ fi
 ac_res=`eval echo '${'$as_man_tr_bdb'}'`
 	       { echo "$as_me:$LINENO: result: $ac_res" >&5
 echo "${ECHO_T}$ac_res" >&6; }
-      if test `eval echo '${'$as_man_tr_bdb'}'` = yes; then
+        if test `eval echo '${'$as_man_tr_bdb'}'` = yes; then
+
 
 cat >>confdefs.h <<_ACEOF
 #define BDB_H <$head>
@@ -35369,26 +35388,34 @@ _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define BTREE $lib
+#define BTREE 1
 _ACEOF
 
-
-             DBLIBS="-l$lib"
-             db=yes
+               DBLIBS="-l$lib"
+               db=yes
 else
   db=no
 fi
 
-      LIBS="$man_saved_LIBS"
-            test "$db" = "yes" && break
-    done
-  fi
-  test "$db" = "yes" && break
-done
+        LIBS="$man_saved_LIBS"
+                test "$db" = "yes" && break
+      done
+    fi
+    test "$db" = "yes" && break
+  done
 fi
-if test "$db" = "no" || test "$db" = "db2" || test "$db" = "db"; then
-for head in db_185.h db2/db_185.h db2_185.h
+man_bdb_requested=no
+for trydb in db2 db
 do
+  if test "$db" = "$trydb"
+  then
+    man_bdb_requested=yes
+  fi
+done
+if test "$db" = no || test "$man_bdb_requested" = yes
+then
+  for head in db_185.h db2/db_185.h db2_185.h
+  do
 
 for ac_header in $head
 do
@@ -35536,14 +35563,14 @@ fi
 
 done
 
-  if test "$got" = "yes"
-  then
-    for lib in db2 db
-    do
-      as_man_tr_bdb=`echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
-      man_saved_LIBS="$LIBS"
-      LIBS="$LIBS -l$lib"
-      { echo "$as_me:$LINENO: checking for dbopen from <${head}> in -l${lib}" >&5
+    if test "$got" = "yes"
+    then
+      for lib in db2 db
+      do
+        as_man_tr_bdb=`echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
+        man_saved_LIBS="$LIBS"
+        LIBS="$LIBS -l$lib"
+        { echo "$as_me:$LINENO: checking for dbopen from <${head}> in -l${lib}" >&5
 echo $ECHO_N "checking for dbopen from <${head}> in -l${lib}... $ECHO_C" >&6; }
 if { as_var=$as_man_tr_bdb; eval "test \"\${$as_var+set}\" = set"; }; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -35596,32 +35623,43 @@ fi
 ac_res=`eval echo '${'$as_man_tr_bdb'}'`
 	       { echo "$as_me:$LINENO: result: $ac_res" >&5
 echo "${ECHO_T}$ac_res" >&6; }
-      if test `eval echo '${'$as_man_tr_bdb'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
+        if test `eval echo '${'$as_man_tr_bdb'}'` = yes; then
+
+
+cat >>confdefs.h <<_ACEOF
 #define BDB_H <$head>
 _ACEOF
 
-               cat >>confdefs.h <<_ACEOF
-#define BTREE $lib
+
+cat >>confdefs.h <<_ACEOF
+#define BTREE 1
 _ACEOF
 
-
-             DBLIBS="-l$lib"
-             db=yes
+               DBLIBS="-l$lib"
+               db=yes
 else
   db=no
 fi
 
-      LIBS="$man_saved_LIBS"
-            test "$db" = "yes" && break
-    done
-  fi
-  test "$db" = "yes" && break
-done
+        LIBS="$man_saved_LIBS"
+                test "$db" = "yes" && break
+      done
+    fi
+    test "$db" = "yes" && break
+  done
 fi
-if test "$db" = "no" || test "$db" = "db1" || test "$db" = "db"; then
-for head in db/db.h db.h db1/db.h
+man_bdb_requested=no
+for trydb in db1 db
 do
+  if test "$db" = "$trydb"
+  then
+    man_bdb_requested=yes
+  fi
+done
+if test "$db" = no || test "$man_bdb_requested" = yes
+then
+  for head in db/db.h db.h db1/db.h
+  do
 
 for ac_header in $head
 do
@@ -35769,14 +35807,14 @@ fi
 
 done
 
-  if test "$got" = "yes"
-  then
-    for lib in db db1
-    do
-      as_man_tr_bdb=`echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
-      man_saved_LIBS="$LIBS"
-      LIBS="$LIBS -l$lib"
-      { echo "$as_me:$LINENO: checking for dbopen from <${head}> in -l${lib}" >&5
+    if test "$got" = "yes"
+    then
+      for lib in db db1
+      do
+        as_man_tr_bdb=`echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
+        man_saved_LIBS="$LIBS"
+        LIBS="$LIBS -l$lib"
+        { echo "$as_me:$LINENO: checking for dbopen from <${head}> in -l${lib}" >&5
 echo $ECHO_N "checking for dbopen from <${head}> in -l${lib}... $ECHO_C" >&6; }
 if { as_var=$as_man_tr_bdb; eval "test \"\${$as_var+set}\" = set"; }; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -35829,28 +35867,30 @@ fi
 ac_res=`eval echo '${'$as_man_tr_bdb'}'`
 	       { echo "$as_me:$LINENO: result: $ac_res" >&5
 echo "${ECHO_T}$ac_res" >&6; }
-      if test `eval echo '${'$as_man_tr_bdb'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
+        if test `eval echo '${'$as_man_tr_bdb'}'` = yes; then
+
+
+cat >>confdefs.h <<_ACEOF
 #define BDB_H <$head>
 _ACEOF
 
-               cat >>confdefs.h <<_ACEOF
-#define BTREE $lib
+
+cat >>confdefs.h <<_ACEOF
+#define BTREE 1
 _ACEOF
 
-
-             DBLIBS="-l$lib"
-             db=yes
+               DBLIBS="-l$lib"
+               db=yes
 else
   db=no
 fi
 
-      LIBS="$man_saved_LIBS"
-            test "$db" = "yes" && break
-    done
-  fi
-  test "$db" = "yes" && break
-done
+        LIBS="$man_saved_LIBS"
+                test "$db" = "yes" && break
+      done
+    fi
+    test "$db" = "yes" && break
+  done
 fi
 
 
