@@ -293,7 +293,7 @@ AC_SUBST(compress_ext)
 AC_SUBST(gunzip)
 AC_SUBST(uncompress)
 AC_SUBST(bunzip2)
-AC_CHECK_LIB(z, gzopen)
+MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
 
 # Work out which manual page hierarchy scheme might be in use.

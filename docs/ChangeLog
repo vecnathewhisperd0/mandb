@@ -1,3 +1,11 @@
+Tue Jan 15 00:01:39 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* m4/man-compress-lib.m4: New function, MAN_COMPRESS_LIB: like
+	  AC_CHECK_LIB but adds the library to LIBCOMPRESS rather than LIBS.
+	* configure.ac: Use it for -lz.
+	* src/Makefile.am (lexgrog_LDADD, man_LDADD, manconv_LDADD,
+	  mandb_LDADD, zsoelim_LDADD): Add $(LIBCOMPRESS).
+
 Mon Jan 14 15:29:55 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Don't check for strerror; Gnulib supplies a

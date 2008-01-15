@@ -737,6 +737,7 @@ compress_ext
 gunzip
 uncompress
 bunzip2
+LIBCOMPRESS
 LEX
 LEX_OUTPUT_ROOT
 LEXLIB
@@ -7526,7 +7527,6 @@ fi
 
 
 
-
 { echo "$as_me:$LINENO: checking for gzopen in -lz" >&5
 echo $ECHO_N "checking for gzopen in -lz... $ECHO_C" >&6; }
 if test "${ac_cv_lib_z_gzopen+set}" = set; then
@@ -7589,13 +7589,15 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_lib_z_gzopen" >&5
 echo "${ECHO_T}$ac_cv_lib_z_gzopen" >&6; }
 if test $ac_cv_lib_z_gzopen = yes; then
-  cat >>confdefs.h <<_ACEOF
+
+cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBZ 1
 _ACEOF
 
-  LIBS="-lz $LIBS"
-
+   LIBCOMPRESS="-lz $LIBCOMPRESS"
 fi
+
+
 
 
 # Work out which manual page hierarchy scheme might be in use.
@@ -37733,6 +37735,7 @@ compress_ext!$compress_ext$ac_delim
 gunzip!$gunzip$ac_delim
 uncompress!$uncompress$ac_delim
 bunzip2!$bunzip2$ac_delim
+LIBCOMPRESS!$LIBCOMPRESS$ac_delim
 LEX!$LEX$ac_delim
 LEX_OUTPUT_ROOT!$LEX_OUTPUT_ROOT$ac_delim
 LEXLIB!$LEXLIB$ac_delim
@@ -37807,7 +37810,6 @@ GNULIB_PUTENV!$GNULIB_PUTENV$ac_delim
 GNULIB_SETENV!$GNULIB_SETENV$ac_delim
 GNULIB_UNSETENV!$GNULIB_UNSETENV$ac_delim
 HAVE_CALLOC_POSIX!$HAVE_CALLOC_POSIX$ac_delim
-HAVE_GETSUBOPT!$HAVE_GETSUBOPT$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -37849,6 +37851,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+HAVE_GETSUBOPT!$HAVE_GETSUBOPT$ac_delim
 HAVE_MKDTEMP!$HAVE_MKDTEMP$ac_delim
 HAVE_REALLOC_POSIX!$HAVE_REALLOC_POSIX$ac_delim
 HAVE_SETENV!$HAVE_SETENV$ac_delim
@@ -37945,7 +37948,6 @@ REPLACE_FPRINTF!$REPLACE_FPRINTF$ac_delim
 REPLACE_VFPRINTF!$REPLACE_VFPRINTF$ac_delim
 REPLACE_PRINTF!$REPLACE_PRINTF$ac_delim
 REPLACE_VPRINTF!$REPLACE_VPRINTF$ac_delim
-REPLACE_SNPRINTF!$REPLACE_SNPRINTF$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -37987,6 +37989,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+REPLACE_SNPRINTF!$REPLACE_SNPRINTF$ac_delim
 HAVE_DECL_SNPRINTF!$HAVE_DECL_SNPRINTF$ac_delim
 REPLACE_VSNPRINTF!$REPLACE_VSNPRINTF$ac_delim
 HAVE_DECL_VSNPRINTF!$HAVE_DECL_VSNPRINTF$ac_delim
@@ -38083,7 +38086,6 @@ POSUB!$POSUB$ac_delim
 LINGUAS!$LINGUAS$ac_delim
 NLS_TRUE!$NLS_TRUE$ac_delim
 NLS_FALSE!$NLS_FALSE$ac_delim
-DBLIBS!$DBLIBS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -38125,6 +38127,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+DBLIBS!$DBLIBS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 TRANS_APROPOS!$TRANS_APROPOS$ac_delim
 TRANS_APROPOS_UPPER!$TRANS_APROPOS_UPPER$ac_delim
@@ -38151,7 +38154,7 @@ gltests_LIBOBJS!$gltests_LIBOBJS$ac_delim
 gltests_LTLIBOBJS!$gltests_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 24; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 25; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

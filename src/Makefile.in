@@ -148,6 +148,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/m4/lib-prefix.m4 $(top_srcdir)/m4/lock.m4 \
 	$(top_srcdir)/m4/longlong.m4 $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/m4/man-check-progs.m4 \
+	$(top_srcdir)/m4/man-compress-lib.m4 \
 	$(top_srcdir)/m4/man-gcc-warning.m4 \
 	$(top_srcdir)/m4/man-gnu-nroff.m4 \
 	$(top_srcdir)/m4/man-strsignal.m4 \
@@ -188,16 +189,17 @@ am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
 	encodings.$(OBJEXT) fake_security.$(OBJEXT) lexgrog.$(OBJEXT) \
 	lexgrog_test.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
-lexgrog_DEPENDENCIES = $(LIBMAN)
+lexgrog_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
 	man.$(OBJEXT) manp.$(OBJEXT) security.$(OBJEXT) \
 	ult_src.$(OBJEXT) util.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
-man_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
+man_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
+	$(am__DEPENDENCIES_1)
 am_manconv_OBJECTS = manconv.$(OBJEXT)
 manconv_OBJECTS = $(am_manconv_OBJECTS)
-manconv_DEPENDENCIES = $(LIBMAN)
+manconv_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	descriptions.$(OBJEXT) descriptions_store.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
@@ -205,7 +207,8 @@ am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	security.$(OBJEXT) straycats.$(OBJEXT) ult_src.$(OBJEXT) \
 	util.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
-mandb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
+mandb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
+	$(am__DEPENDENCIES_1)
 am_manpath_OBJECTS = fake_security.$(OBJEXT) manp.$(OBJEXT) \
 	manpath.$(OBJEXT) util.$(OBJEXT)
 manpath_OBJECTS = $(am_manpath_OBJECTS)
@@ -220,7 +223,7 @@ wrapper_OBJECTS = $(am_wrapper_OBJECTS)
 wrapper_DEPENDENCIES = $(LIBMAN)
 am_zsoelim_OBJECTS = zsoelim.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
-zsoelim_DEPENDENCIES = $(LIBMAN)
+zsoelim_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
 am__depfiles_maybe = depfiles
@@ -443,6 +446,7 @@ LDFLAGS = @LDFLAGS@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
 LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
+LIBCOMPRESS = @LIBCOMPRESS@
 LIBGNU_LIBDEPS = @LIBGNU_LIBDEPS@
 LIBGNU_LTLIBDEPS = @LIBGNU_LTLIBDEPS@
 LIBICONV = @LIBICONV@
@@ -677,14 +681,14 @@ LIBMANDB = $(top_builddir)/libdb/libmandb.a $(DBLIBS)
 accessdb_LDADD = $(LIBMANDB) $(LIBMAN)
 catman_LDADD = $(LIBMANDB) $(LIBMAN)
 globbing_LDADD = $(LIBMAN)
-lexgrog_LDADD = $(LIBMAN)
-man_LDADD = $(LIBMANDB) $(LIBMAN)
-manconv_LDADD = $(LIBMAN)
-mandb_LDADD = $(LIBMANDB) $(LIBMAN)
+lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS)
+man_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS)
+manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS)
+mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS)
 manpath_LDADD = $(LIBMAN)
 whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV)
 wrapper_LDADD = $(LIBMAN)
-zsoelim_LDADD = $(LIBMAN)
+zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS)
 accessdb_SOURCES = \
 	accessdb.c \
 	util.c
