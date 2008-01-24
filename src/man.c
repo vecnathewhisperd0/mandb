@@ -814,12 +814,6 @@ static int local_man_loop (const char *argv)
 	return exit_status;
 }
 
-static void int_handler (int signo)
-{
-	debug ("\ninterrupt signal %d handler\n", signo);
-	exit (INTERRUPTED);
-}
-
 int main (int argc, char *argv[])
 {
 	int argc_env, exit_status = OK;
@@ -900,8 +894,6 @@ int main (int argc, char *argv[])
 	/* record who we are and drop effective privs for later use */
 	init_security ();
 #endif /* SECURE_MAN_UID */
-
-	signal (SIGINT, int_handler);
 
 	pipeline_install_sigchld ();
 
