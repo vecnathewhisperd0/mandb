@@ -1,3 +1,19 @@
+Sun Jan 27 13:37:17 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.h (struct pipeline): Add ignore_signals member.
+	* lib/pipeline.c (pipeline_new): Initialise ignore_signals to 1.
+	  (pipeline_join): Set ignore_signals if either input pipeline has
+	  it set.
+	  (pipeline_start): Only ignore SIGINT and SIGQUIT if ignore_signals
+	  is set.
+	  (pipeline_wait): Only restore SIGINT and SIGQUIT if ignore_signals
+	  is set.
+	* lib/decompress.c (decompress_open, decompress_fdopen): Set
+	  ignore_signals to 0 so that SIGINT and SIGQUIT are not ignored
+	  just because a decompression process is running (Debian bug
+	  #462276).
+	* docs/NEWS: Document this.
+
 Thu Jan 24 17:12:24 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* include/manconfig.h.in (INTERRUPTED): Remove.

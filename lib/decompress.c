@@ -1,7 +1,7 @@
 /*
  * decompress.c: decompression abstraction layer
  *
- * Copyright (C) 2007 Colin Watson.
+ * Copyright (C) 2007, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -123,6 +123,7 @@ pipeline *decompress_open (const char *filename)
 got_pipeline:
 	p->want_infile = filename;
 	p->want_out = -1;
+	p->ignore_signals = 0;
 	return p;
 }
 
@@ -142,5 +143,6 @@ pipeline *decompress_fdopen (int fd)
 
 	p->want_in = fd;
 	p->want_out = -1;
+	p->ignore_signals = 0;
 	return p;
 }
