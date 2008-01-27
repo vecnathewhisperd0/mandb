@@ -1,3 +1,11 @@
+Sun Jan 27 22:48:32 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Support Korean when configured with support for the multibyte groff
+	patch (thanks, Hansun Lee; Ubuntu bug #176896).
+
+	* src/encodings.c (compatible_encodings): Allow EUC-KR -> UTF-8.
+	  (get_roff_encoding): Handle ko_KR.UTF-8 via devutf8.
+
 Sun Jan 27 13:42:31 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_join): Initialise source, buffer, buflen,

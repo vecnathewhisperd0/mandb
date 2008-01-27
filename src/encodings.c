@@ -527,7 +527,8 @@ static int compatible_encodings (const char *input, const char *output)
 	 */
 	if ((STREQ (input, "BIG5") || STREQ (input, "BIG5HKSCS") ||
 	     STREQ (input, "EUC-JP") ||
-	     STREQ (input, "EUC-CN") || STREQ (input, "GBK")) &&
+	     STREQ (input, "EUC-CN") || STREQ (input, "GBK") ||
+	     STREQ (input, "EUC-KR")) &&
 	    STREQ (output, "UTF-8"))
 		return 1;
 #endif /* MULTIBYTE_GROFF */
@@ -600,6 +601,7 @@ const char *get_roff_encoding (const char *device, const char *source_encoding)
 	if (device && STREQ (device, "utf8") && !get_groff_preconv ()) {
 		const char *ctype = setlocale (LC_CTYPE, NULL);
 		if (STREQ (ctype, "ja_JP.UTF-8") ||
+		    STREQ (ctype, "ko_KR.UTF-8") ||
 		    STREQ (ctype, "zh_CN.UTF-8") ||
 		    STREQ (ctype, "zh_HK.UTF-8") ||
 		    STREQ (ctype, "zh_SG.UTF-8") ||
