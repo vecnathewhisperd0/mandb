@@ -831,6 +831,7 @@ GNULIB_STRNDUP
 GNULIB_STRNLEN
 GNULIB_STRPBRK
 GNULIB_STRSEP
+GNULIB_STRSTR
 GNULIB_STRCASESTR
 GNULIB_STRTOK_R
 GNULIB_MBSLEN
@@ -848,6 +849,7 @@ GNULIB_MBSSPN
 GNULIB_MBSSEP
 GNULIB_MBSTOK_R
 GNULIB_STRERROR
+GNULIB_STRSIGNAL
 HAVE_DECL_MEMMEM
 HAVE_MEMPCPY
 HAVE_DECL_MEMRCHR
@@ -863,8 +865,12 @@ HAVE_STRSEP
 HAVE_STRCASESTR
 HAVE_DECL_STRTOK_R
 HAVE_DECL_STRERROR
+HAVE_DECL_STRSIGNAL
 REPLACE_STRERROR
+REPLACE_STRSIGNAL
 REPLACE_MEMMEM
+REPLACE_STRCASESTR
+REPLACE_STRSTR
 HAVE_LONG_LONG_INT
 HAVE_UNSIGNED_LONG_LONG_INT
 HAVE_INTTYPES_H
@@ -931,9 +937,9 @@ HAVE_DECL_GETLINE
 REPLACE_GETLINE
 NEXT_STDIO_H
 NEXT_STDLIB_H
-NEXT_STRING_H
 HAVE_STRCASECMP
 HAVE_DECL_STRNCASECMP
+NEXT_STRING_H
 NEXT_STRINGS_H
 NEXT_SYS_SELECT_H
 HAVE_SYS_SELECT_H
@@ -9682,6 +9688,9 @@ done
 
 
 
+  XGETTEXT_EXTRA_OPTIONS=
+
+
 
 
 
@@ -10642,9 +10651,6 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 fi
-
-
-  XGETTEXT_EXTRA_OPTIONS=
 
 
 
@@ -13970,6 +13976,7 @@ _ACEOF
   GNULIB_STRNLEN=0;
   GNULIB_STRPBRK=0;
   GNULIB_STRSEP=0;
+  GNULIB_STRSTR=0;
   GNULIB_STRCASESTR=0;
   GNULIB_STRTOK_R=0;
   GNULIB_MBSLEN=0;
@@ -13987,6 +13994,7 @@ _ACEOF
   GNULIB_MBSSEP=0;
   GNULIB_MBSTOK_R=0;
   GNULIB_STRERROR=0;
+  GNULIB_STRSIGNAL=0;
     HAVE_DECL_MEMMEM=1;
   HAVE_MEMPCPY=1;
   HAVE_DECL_MEMRCHR=1;
@@ -14002,8 +14010,12 @@ _ACEOF
   HAVE_STRCASESTR=1;
   HAVE_DECL_STRTOK_R=1;
   HAVE_DECL_STRERROR=1;
+  HAVE_DECL_STRSIGNAL=1;
   REPLACE_STRERROR=0;
+  REPLACE_STRSIGNAL=0;
   REPLACE_MEMMEM=0;
+  REPLACE_STRCASESTR=0;
+  REPLACE_STRSTR=0;
 
 
       { echo "$as_me:$LINENO: checking whether memrchr is declared" >&5
@@ -14783,6 +14795,10 @@ _ACEOF
 
 
 
+    HAVE_STRCASECMP=1;
+  HAVE_DECL_STRNCASECMP=1;
+
+
       { echo "$as_me:$LINENO: checking whether strdup is declared" >&5
 echo $ECHO_N "checking whether strdup is declared... $ECHO_C" >&6; }
 if test "${ac_cv_have_decl_strdup+set}" = set; then
@@ -15087,10 +15103,6 @@ echo "${ECHO_T}$gl_cv_next_string_h" >&6; }
 
 
 
-
-
-    HAVE_STRCASECMP=1;
-  HAVE_DECL_STRNCASECMP=1;
 
 
 
@@ -16354,12 +16366,6 @@ _ACEOF
 
 
 
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_ALLOCA_H 1
-_ACEOF
-
-
-
 
 
 
@@ -16754,6 +16760,14 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
+
+
+
+  XGETTEXT_EXTRA_OPTIONS="$XGETTEXT_EXTRA_OPTIONS --flag=argp_error:2:c-format"
+
+
+
+  XGETTEXT_EXTRA_OPTIONS="$XGETTEXT_EXTRA_OPTIONS --flag=argp_failure:4:c-format"
 
 
 
@@ -37736,6 +37750,7 @@ GNULIB_STRNDUP!$GNULIB_STRNDUP$ac_delim
 GNULIB_STRNLEN!$GNULIB_STRNLEN$ac_delim
 GNULIB_STRPBRK!$GNULIB_STRPBRK$ac_delim
 GNULIB_STRSEP!$GNULIB_STRSEP$ac_delim
+GNULIB_STRSTR!$GNULIB_STRSTR$ac_delim
 GNULIB_STRCASESTR!$GNULIB_STRCASESTR$ac_delim
 GNULIB_STRTOK_R!$GNULIB_STRTOK_R$ac_delim
 GNULIB_MBSLEN!$GNULIB_MBSLEN$ac_delim
@@ -37753,6 +37768,7 @@ GNULIB_MBSSPN!$GNULIB_MBSSPN$ac_delim
 GNULIB_MBSSEP!$GNULIB_MBSSEP$ac_delim
 GNULIB_MBSTOK_R!$GNULIB_MBSTOK_R$ac_delim
 GNULIB_STRERROR!$GNULIB_STRERROR$ac_delim
+GNULIB_STRSIGNAL!$GNULIB_STRSIGNAL$ac_delim
 HAVE_DECL_MEMMEM!$HAVE_DECL_MEMMEM$ac_delim
 HAVE_MEMPCPY!$HAVE_MEMPCPY$ac_delim
 HAVE_DECL_MEMRCHR!$HAVE_DECL_MEMRCHR$ac_delim
@@ -37768,8 +37784,12 @@ HAVE_STRSEP!$HAVE_STRSEP$ac_delim
 HAVE_STRCASESTR!$HAVE_STRCASESTR$ac_delim
 HAVE_DECL_STRTOK_R!$HAVE_DECL_STRTOK_R$ac_delim
 HAVE_DECL_STRERROR!$HAVE_DECL_STRERROR$ac_delim
+HAVE_DECL_STRSIGNAL!$HAVE_DECL_STRSIGNAL$ac_delim
 REPLACE_STRERROR!$REPLACE_STRERROR$ac_delim
+REPLACE_STRSIGNAL!$REPLACE_STRSIGNAL$ac_delim
 REPLACE_MEMMEM!$REPLACE_MEMMEM$ac_delim
+REPLACE_STRCASESTR!$REPLACE_STRCASESTR$ac_delim
+REPLACE_STRSTR!$REPLACE_STRSTR$ac_delim
 HAVE_LONG_LONG_INT!$HAVE_LONG_LONG_INT$ac_delim
 HAVE_UNSIGNED_LONG_LONG_INT!$HAVE_UNSIGNED_LONG_LONG_INT$ac_delim
 HAVE_INTTYPES_H!$HAVE_INTTYPES_H$ac_delim
@@ -37808,12 +37828,6 @@ GNULIB_FSEEKO!$GNULIB_FSEEKO$ac_delim
 GNULIB_FTELL!$GNULIB_FTELL$ac_delim
 GNULIB_FTELLO!$GNULIB_FTELLO$ac_delim
 GNULIB_FFLUSH!$GNULIB_FFLUSH$ac_delim
-GNULIB_GETDELIM!$GNULIB_GETDELIM$ac_delim
-GNULIB_GETLINE!$GNULIB_GETLINE$ac_delim
-REPLACE_FPRINTF!$REPLACE_FPRINTF$ac_delim
-REPLACE_VFPRINTF!$REPLACE_VFPRINTF$ac_delim
-REPLACE_PRINTF!$REPLACE_PRINTF$ac_delim
-REPLACE_VPRINTF!$REPLACE_VPRINTF$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -37855,6 +37869,12 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+GNULIB_GETDELIM!$GNULIB_GETDELIM$ac_delim
+GNULIB_GETLINE!$GNULIB_GETLINE$ac_delim
+REPLACE_FPRINTF!$REPLACE_FPRINTF$ac_delim
+REPLACE_VFPRINTF!$REPLACE_VFPRINTF$ac_delim
+REPLACE_PRINTF!$REPLACE_PRINTF$ac_delim
+REPLACE_VPRINTF!$REPLACE_VPRINTF$ac_delim
 REPLACE_SNPRINTF!$REPLACE_SNPRINTF$ac_delim
 HAVE_DECL_SNPRINTF!$HAVE_DECL_SNPRINTF$ac_delim
 REPLACE_VSNPRINTF!$REPLACE_VSNPRINTF$ac_delim
@@ -37877,9 +37897,9 @@ HAVE_DECL_GETLINE!$HAVE_DECL_GETLINE$ac_delim
 REPLACE_GETLINE!$REPLACE_GETLINE$ac_delim
 NEXT_STDIO_H!$NEXT_STDIO_H$ac_delim
 NEXT_STDLIB_H!$NEXT_STDLIB_H$ac_delim
-NEXT_STRING_H!$NEXT_STRING_H$ac_delim
 HAVE_STRCASECMP!$HAVE_STRCASECMP$ac_delim
 HAVE_DECL_STRNCASECMP!$HAVE_DECL_STRNCASECMP$ac_delim
+NEXT_STRING_H!$NEXT_STRING_H$ac_delim
 NEXT_STRINGS_H!$NEXT_STRINGS_H$ac_delim
 NEXT_SYS_SELECT_H!$NEXT_SYS_SELECT_H$ac_delim
 HAVE_SYS_SELECT_H!$HAVE_SYS_SELECT_H$ac_delim
@@ -37946,12 +37966,6 @@ DATADIRNAME!$DATADIRNAME$ac_delim
 INSTOBJEXT!$INSTOBJEXT$ac_delim
 GENCAT!$GENCAT$ac_delim
 INTLOBJS!$INTLOBJS$ac_delim
-INTL_LIBTOOL_SUFFIX_PREFIX!$INTL_LIBTOOL_SUFFIX_PREFIX$ac_delim
-INTLLIBS!$INTLLIBS$ac_delim
-POSUB!$POSUB$ac_delim
-LINGUAS!$LINGUAS$ac_delim
-NLS_TRUE!$NLS_TRUE$ac_delim
-NLS_FALSE!$NLS_FALSE$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -37993,6 +38007,12 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+INTL_LIBTOOL_SUFFIX_PREFIX!$INTL_LIBTOOL_SUFFIX_PREFIX$ac_delim
+INTLLIBS!$INTLLIBS$ac_delim
+POSUB!$POSUB$ac_delim
+LINGUAS!$LINGUAS$ac_delim
+NLS_TRUE!$NLS_TRUE$ac_delim
+NLS_FALSE!$NLS_FALSE$ac_delim
 DBLIBS!$DBLIBS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 TRANS_APROPOS!$TRANS_APROPOS$ac_delim
@@ -38020,7 +38040,7 @@ gltests_LIBOBJS!$gltests_LIBOBJS$ac_delim
 gltests_LTLIBOBJS!$gltests_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 25; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 31; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -38421,21 +38441,22 @@ echo "$as_me: $ac_file is unchanged" >&6;}
   fi
   rm -f "$tmp/out12"
 # Compute $ac_file's index in $config_headers.
+_am_arg=$ac_file
 _am_stamp_count=1
 for _am_header in $config_headers :; do
   case $_am_header in
-    $ac_file | $ac_file:* )
+    $_am_arg | $_am_arg:* )
       break ;;
     * )
       _am_stamp_count=`expr $_am_stamp_count + 1` ;;
   esac
 done
-echo "timestamp for $ac_file" >`$as_dirname -- $ac_file ||
-$as_expr X$ac_file : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X$ac_file : 'X\(//\)[^/]' \| \
-	 X$ac_file : 'X\(//\)$' \| \
-	 X$ac_file : 'X\(/\)' \| . 2>/dev/null ||
-echo X$ac_file |
+echo "timestamp for $_am_arg" >`$as_dirname -- "$_am_arg" ||
+$as_expr X"$_am_arg" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$_am_arg" : 'X\(//\)[^/]' \| \
+	 X"$_am_arg" : 'X\(//\)$' \| \
+	 X"$_am_arg" : 'X\(/\)' \| . 2>/dev/null ||
+echo X"$_am_arg" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
 	    q
@@ -38472,7 +38493,7 @@ echo "$as_me: executing $ac_file commands" >&6;}
   # each Makefile.in and add a new line on top of each file to say so.
   # Grep'ing the whole file is not good either: AIX grep has a line
   # limit of 2048, but all sed's we know have understand at least 4000.
-  if sed 10q "$mf" | grep '^#.*generated by automake' > /dev/null 2>&1; then
+  if sed -n 's,^#.*generated by automake.*,X,p' "$mf" | grep X >/dev/null 2>&1; then
     dirpart=`$as_dirname -- "$mf" ||
 $as_expr X"$mf" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$mf" : 'X\(//\)[^/]' \| \

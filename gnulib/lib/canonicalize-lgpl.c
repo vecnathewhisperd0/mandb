@@ -1,5 +1,5 @@
 /* Return the canonical absolute name of a given file.
-   Copyright (C) 1996-2003, 2005-2007 Free Software Foundation, Inc.
+   Copyright (C) 1996-2003, 2005-2008 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    This program is free software: you can redistribute it and/or modify
@@ -78,7 +78,7 @@
 # endif
 # define __readlink readlink
   /* On systems without symbolic links, call stat() instead of lstat().  */
-# if !defined S_ISNLK && !HAVE_READLINK
+# if !defined S_ISLNK && !HAVE_READLINK
 #  define lstat stat
 # endif
 #endif

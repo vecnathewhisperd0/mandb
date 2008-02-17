@@ -49,6 +49,9 @@ AC_DEFUN([gl_INIT],
   gl_source_base='gnulib/lib'
   gl_FUNC_ALLOCA
   gl_ARGP
+  m4_ifdef([AM_XGETTEXT_OPTION],
+    [AM_XGETTEXT_OPTION([--flag=argp_error:2:c-format])
+     AM_XGETTEXT_OPTION([--flag=argp_failure:4:c-format])])
   gl_FUNC_ATEXIT
   AC_FUNC_CANONICALIZE_FILE_NAME
   gl_MODULE_INDICATOR([canonicalize])
