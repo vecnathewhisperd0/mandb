@@ -344,7 +344,6 @@ AC_TYPE_SIZE_T
 # Checks for functions.
 AC_TYPE_SIGNAL
 AC_FUNC_VFORK
-MAN_FUNC_STRSIGNAL
 
 # Find a suitable database interface header and library.
 #

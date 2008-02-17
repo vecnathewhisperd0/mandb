@@ -42,8 +42,7 @@ libman_a_SOURCES = \
 	pathsearch.h \
 	pipeline.c \
 	pipeline.h \
-	tempfile.c \
-	xstrsignal.c
+	tempfile.c
 
 ## Headers that are used conditionally. Automake can't detect these itself.
 libman_a_SOURCES += \

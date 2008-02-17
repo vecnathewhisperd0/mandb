@@ -109,6 +109,7 @@ AC_DEFUN([gl_INIT],
   gl_STRING_MODULE_INDICATOR([mempcpy])
   gl_FUNC_MEMRCHR
   gl_STRING_MODULE_INDICATOR([memrchr])
+  gl_FUNC_MEMSET
   gl_MINMAX
   gt_FUNC_MKDTEMP
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
@@ -127,6 +128,8 @@ AC_DEFUN([gl_INIT],
   gl_SIZE_MAX
   gl_FUNC_SLEEP
   gl_UNISTD_MODULE_INDICATOR([sleep])
+  gl_FUNC_SNPRINTF
+  gl_STDIO_MODULE_INDICATOR([snprintf])
   gt_TYPE_SSIZE_T
   gl_STDARG_H
   AM_STDBOOL_H
@@ -151,6 +154,8 @@ AC_DEFUN([gl_INIT],
   gl_STRING_MODULE_INDICATOR([strpbrk])
   gl_FUNC_STRSEP
   gl_STRING_MODULE_INDICATOR([strsep])
+  gl_FUNC_STRSIGNAL
+  gl_STRING_MODULE_INDICATOR([strsignal])
   gl_HEADER_SYS_SELECT
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_SOCKET
@@ -161,6 +166,7 @@ AC_DEFUN([gl_INIT],
   AC_PROG_MKDIR_P
   gl_SYSEXITS
   gl_FUNC_GEN_TEMPNAME
+  gl_TLS
   gl_UNISTD_H
   gl_UNISTD_SAFER
   gl_FUNC_UNSETENV
@@ -394,6 +400,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/memcmp.c
   lib/mempcpy.c
   lib/memrchr.c
+  lib/memset.c
   lib/minmax.h
   lib/mkdirat.c
   lib/mkdtemp.c
@@ -426,8 +433,10 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/save-cwd.c
   lib/save-cwd.h
   lib/setenv.c
+  lib/siglist.h
   lib/size_max.h
   lib/sleep.c
+  lib/snprintf.c
   lib/stdbool.in.h
   lib/stdint.in.h
   lib/stdio.in.h
@@ -445,6 +454,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strnlen.c
   lib/strpbrk.c
   lib/strsep.c
+  lib/strsignal.c
   lib/sys_select.in.h
   lib/sys_socket.in.h
   lib/sys_stat.in.h
@@ -452,6 +462,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/sysexits.in.h
   lib/tempname.c
   lib/tempname.h
+  lib/tls.c
+  lib/tls.h
   lib/unistd--.h
   lib/unistd-safer.h
   lib/unistd.in.h
@@ -529,6 +541,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/memcmp.m4
   m4/mempcpy.m4
   m4/memrchr.m4
+  m4/memset.m4
   m4/minmax.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
@@ -543,6 +556,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/setenv.m4
   m4/size_max.m4
   m4/sleep.m4
+  m4/snprintf.m4
   m4/sockpfaf.m4
   m4/ssize_t.m4
   m4/stdarg.m4
@@ -562,12 +576,14 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strnlen.m4
   m4/strpbrk.m4
   m4/strsep.m4
+  m4/strsignal.m4
   m4/sys_select_h.m4
   m4/sys_socket_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
   m4/sysexits.m4
   m4/tempname.m4
+  m4/tls.m4
   m4/unistd-safer.m4
   m4/unistd_h.m4
   m4/vasnprintf.m4

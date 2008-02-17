@@ -1,3 +1,14 @@
+Sun Feb 17 17:13:55 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* gnulib: Import the strsignal module.
+	* lib/pipeline.c (pipeline_wait): Call strsignal rather than
+	  xstrsignal.
+	* lib/xstrsignal.c: Remove.
+	* lib/README (xstrsignal): Remove.
+	* lib/Makefile.am (libman_a_SOURCES): Remove xstrsignal.c.
+	* m4/man-strsignal.m4: Remove.
+	* configure.ac (MAN_FUNC_STRSIGNAL): Remove.
+
 Sun Feb 17 16:59:22 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* Makefile.in, aclocal.m4, config.h.in, configure, docs/Makefile.in,

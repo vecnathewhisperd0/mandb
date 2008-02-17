@@ -85,6 +85,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/memcmp.m4 \
 	$(top_srcdir)/gnulib/m4/mempcpy.m4 \
 	$(top_srcdir)/gnulib/m4/memrchr.m4 \
+	$(top_srcdir)/gnulib/m4/memset.m4 \
 	$(top_srcdir)/gnulib/m4/minmax.m4 \
 	$(top_srcdir)/gnulib/m4/mkdtemp.m4 \
 	$(top_srcdir)/gnulib/m4/mkstemp.m4 \
@@ -98,6 +99,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/save-cwd.m4 \
 	$(top_srcdir)/gnulib/m4/setenv.m4 \
 	$(top_srcdir)/gnulib/m4/sleep.m4 \
+	$(top_srcdir)/gnulib/m4/snprintf.m4 \
 	$(top_srcdir)/gnulib/m4/ssize_t.m4 \
 	$(top_srcdir)/gnulib/m4/stdarg.m4 \
 	$(top_srcdir)/gnulib/m4/stdbool.m4 \
@@ -115,12 +117,14 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/strnlen.m4 \
 	$(top_srcdir)/gnulib/m4/strpbrk.m4 \
 	$(top_srcdir)/gnulib/m4/strsep.m4 \
+	$(top_srcdir)/gnulib/m4/strsignal.m4 \
 	$(top_srcdir)/gnulib/m4/sys_select_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_socket_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_stat_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_time_h.m4 \
 	$(top_srcdir)/gnulib/m4/sysexits.m4 \
 	$(top_srcdir)/gnulib/m4/tempname.m4 \
+	$(top_srcdir)/gnulib/m4/tls.m4 \
 	$(top_srcdir)/gnulib/m4/unistd-safer.m4 \
 	$(top_srcdir)/gnulib/m4/unistd_h.m4 \
 	$(top_srcdir)/gnulib/m4/vasnprintf.m4 \
@@ -145,7 +149,6 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/m4/man-compress-lib.m4 \
 	$(top_srcdir)/m4/man-gcc-warning.m4 \
 	$(top_srcdir)/m4/man-gnu-nroff.m4 \
-	$(top_srcdir)/m4/man-strsignal.m4 \
 	$(top_srcdir)/m4/man-trans-subst.m4 $(top_srcdir)/m4/nls.m4 \
 	$(top_srcdir)/m4/po.m4 $(top_srcdir)/m4/printf-posix.m4 \
 	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/m4/size_max.m4 \
@@ -167,8 +170,7 @@ am_libman_a_OBJECTS = libman_a-appendstr.$(OBJEXT) \
 	libman_a-cleanup.$(OBJEXT) libman_a-debug.$(OBJEXT) \
 	libman_a-decompress.$(OBJEXT) libman_a-hashtable.$(OBJEXT) \
 	libman_a-linelength.$(OBJEXT) libman_a-pathsearch.$(OBJEXT) \
-	libman_a-pipeline.$(OBJEXT) libman_a-tempfile.$(OBJEXT) \
-	libman_a-xstrsignal.$(OBJEXT)
+	libman_a-pipeline.$(OBJEXT) libman_a-tempfile.$(OBJEXT)
 libman_a_OBJECTS = $(am_libman_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
@@ -612,7 +614,7 @@ libman_a_CPPFLAGS = \
 libman_a_SOURCES = appendstr.c cleanup.c cleanup.h debug.c \
 	decompress.c decompress.h hashtable.c hashtable.h linelength.c \
 	linelength.h pathsearch.c pathsearch.h pipeline.c pipeline.h \
-	tempfile.c xstrsignal.c flock.h
+	tempfile.c flock.h
 libman_a_LIBADD = $(LIBOBJS)
 all: all-am
 
@@ -672,7 +674,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-pathsearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-pipeline.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-tempfile.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xstrsignal.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -813,20 +814,6 @@ libman_a-tempfile.obj: tempfile.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tempfile.c' object='libman_a-tempfile.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-tempfile.obj `if test -f 'tempfile.c'; then $(CYGPATH_W) 'tempfile.c'; else $(CYGPATH_W) '$(srcdir)/tempfile.c'; fi`
-
-libman_a-xstrsignal.o: xstrsignal.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xstrsignal.o -MD -MP -MF $(DEPDIR)/libman_a-xstrsignal.Tpo -c -o libman_a-xstrsignal.o `test -f 'xstrsignal.c' || echo '$(srcdir)/'`xstrsignal.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xstrsignal.Tpo $(DEPDIR)/libman_a-xstrsignal.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xstrsignal.c' object='libman_a-xstrsignal.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xstrsignal.o `test -f 'xstrsignal.c' || echo '$(srcdir)/'`xstrsignal.c
-
-libman_a-xstrsignal.obj: xstrsignal.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xstrsignal.obj -MD -MP -MF $(DEPDIR)/libman_a-xstrsignal.Tpo -c -o libman_a-xstrsignal.obj `if test -f 'xstrsignal.c'; then $(CYGPATH_W) 'xstrsignal.c'; else $(CYGPATH_W) '$(srcdir)/xstrsignal.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xstrsignal.Tpo $(DEPDIR)/libman_a-xstrsignal.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xstrsignal.c' object='libman_a-xstrsignal.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xstrsignal.obj `if test -f 'xstrsignal.c'; then $(CYGPATH_W) 'xstrsignal.c'; else $(CYGPATH_W) '$(srcdir)/xstrsignal.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
