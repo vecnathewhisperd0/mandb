@@ -861,7 +861,7 @@ static char *def_path (int flag)
 					 "doesn't exist"), list->key);
 			else if (status == 1)
 				manpath = pathappend (manpath, list->key);
-	}
+		}
 
 	/* If we have complete config file failure... */
 	if (!manpath)
