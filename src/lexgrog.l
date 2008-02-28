@@ -216,6 +216,7 @@ vgrind_request	\.vS
 <MAN_NAME>{bol}\.sp{blank}*		|	/* vertical spacing */
 <MAN_NAME>{bol}\.ig{blank}*		|	/* block comment */
 <MAN_NAME>{bol}\.de[1i]?{blank}*	|	/* macro definition */
+<MAN_NAME>{bol}\.i[ef]{blank}*		|	/* conditional */
 <MAN_NAME>{empty}{bol}.+		|
 <MAN_NAME><<EOF>>		{	/* terminate the string */
 					*p_name = '\0';
