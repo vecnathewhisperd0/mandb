@@ -11,4 +11,4 @@ if type gnulib-tool >/dev/null 2>&1; then
 	fi
 	patch -s -p0 < gnulib/lib/xmalloc.patch
 fi
-autoreconf -i "$@"
+autoreconf -fi "$@"
