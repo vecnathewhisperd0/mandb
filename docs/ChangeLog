@@ -1,3 +1,9 @@
+Sat Mar  1 22:14:43 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (get_roff_encoding): In the CJK UTF-8 special
+	  case, check the canonicalised encoding in order that locale
+	  specifications such as "zh_CN.utf8" work (Debian bug #467249).
+
 Fri Feb 29 09:59:23 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* autogen.sh: Run autoreconf with -f.

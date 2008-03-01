@@ -598,14 +598,15 @@ const char *get_roff_encoding (const char *device, const char *source_encoding)
 	 * This is evil, but there's not much that can be done about it
 	 * apart from waiting for groff 2.0.
 	 */
-	if (device && STREQ (device, "utf8") && !get_groff_preconv ()) {
+	if (device && STREQ (device, "utf8") && !get_groff_preconv () &&
+	    STREQ (get_locale_charset (), "UTF-8")) {
 		const char *ctype = setlocale (LC_CTYPE, NULL);
-		if (STREQ (ctype, "ja_JP.UTF-8") ||
-		    STREQ (ctype, "ko_KR.UTF-8") ||
-		    STREQ (ctype, "zh_CN.UTF-8") ||
-		    STREQ (ctype, "zh_HK.UTF-8") ||
-		    STREQ (ctype, "zh_SG.UTF-8") ||
-		    STREQ (ctype, "zh_TW.UTF-8"))
+		if (STRNEQ (ctype, "ja_JP", 5) ||
+		    STRNEQ (ctype, "ko_KR", 5) ||
+		    STRNEQ (ctype, "zh_CN", 5) ||
+		    STRNEQ (ctype, "zh_HK", 5) ||
+		    STRNEQ (ctype, "zh_SG", 5) ||
+		    STRNEQ (ctype, "zh_TW", 5))
 			roff_encoding = "UTF-8";
 	}
 #endif /* MULTIBYTE_GROFF */
