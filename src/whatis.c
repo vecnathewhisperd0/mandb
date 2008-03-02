@@ -119,7 +119,7 @@ static struct argp_option options[] = {
 	{ "and",		'a',	0,		0,	N_("require all keywords to match"),			20 }, /* apropos only */
 	{ "long",		'l',	0,		0,	N_("do not trim output to terminal width"),		30 },
 	{ "section",		's',	N_("SECTION"),	0,	N_("search only this section"),				40 },
-	{ "systems",		'm',	N_("SYSTEM"),	0,	N_("include alternate systems' man pages") },
+	{ "systems",		'm',	N_("SYSTEM"),	0,	N_("use manual pages from other systems") },
 	{ "manpath",		'M',	N_("PATH"),	0,	N_("set search path for manual pages to PATH") },
 	{ "locale",		'L',	N_("LOCALE"),	0,	N_("define the locale for this search") },
 	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },

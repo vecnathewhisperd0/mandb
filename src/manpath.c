@@ -66,7 +66,7 @@ static struct argp_option options[] = {
 	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
 	{ "quiet",		'q',	0,		0,	N_("produce fewer warnings") },
 	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },
-	{ "systems",		'm',	N_("SYSTEM"),	0,	N_("express which `systems' to use") },
+	{ "systems",		'm',	N_("SYSTEM"),	0,	N_("use manual pages from other systems") },
 	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
 	{ 0 }
 };

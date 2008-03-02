@@ -262,7 +262,7 @@ static struct argp_option options[] = {
 
 	{ 0,			0,	0,		0,		N_("Finding manual pages:"),					20 },
 	{ "locale",		'L',	N_("LOCALE"),	0,		N_("define the locale for this particular man search") },
-	{ "systems",		'm',	N_("SYSTEM"),	0,		N_("search for man pages from other unix system(s)") },
+	{ "systems",		'm',	N_("SYSTEM"),	0,		N_("use manual pages from other systems") },
 	{ "manpath",		'M',	N_("PATH"),	0,		N_("set search path for manual pages to PATH") },
 	{ "sections",		'S',	N_("LIST"),	0,		N_("use colon separated section list"),				21 },
 	{ 0,			's',	0,		OPTION_ALIAS },
