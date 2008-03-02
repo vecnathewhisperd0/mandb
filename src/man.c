@@ -261,16 +261,16 @@ static struct argp_option options[] = {
 	{ "recode",		'R',	N_("CODE"),	0,		N_("output source page encoded in CODE") },
 
 	{ 0,			0,	0,		0,		N_("Finding manual pages:"),					20 },
-	{ "manpath",		'M',	N_("PATH"),	0,		N_("set search path for manual pages to PATH") },
 	{ "locale",		'L',	N_("LOCALE"),	0,		N_("define the locale for this particular man search") },
 	{ "systems",		'm',	N_("SYSTEM"),	0,		N_("search for man pages from other unix system(s)") },
-	{ "sections",		'S',	N_("LIST"),	0,		N_("use colon separated section list") },
+	{ "manpath",		'M',	N_("PATH"),	0,		N_("set search path for manual pages to PATH") },
+	{ "sections",		'S',	N_("LIST"),	0,		N_("use colon separated section list"),				21 },
 	{ 0,			's',	0,		OPTION_ALIAS },
 	{ "extension",		'e',	N_("EXTENSION"),
 							0,		N_("limit search to extension type EXTENSION") },
-	{ "ignore-case",	'i',	0,		0,		N_("look for pages case-insensitively (default)"),		21 },
+	{ "ignore-case",	'i',	0,		0,		N_("look for pages case-insensitively (default)"),		22 },
 	{ "match-case",		'I',	0,		0,		N_("look for pages case-sensitively") },
-	{ "all",		'a',	0,		0,		N_("find all matching manual pages"),				22 },
+	{ "all",		'a',	0,		0,		N_("find all matching manual pages"),				23 },
 	{ "update",		'u',	0,		0,		N_("force a cache consistency check") },
 
 	{ 0,			0,	0,		0,		N_("Controlling formatted output:"),				30 },
@@ -291,12 +291,12 @@ static struct argp_option options[] = {
 #  define MAYBE_HIDDEN OPTION_HIDDEN
 # endif
 	{ "html",		'H',	N_("BROWSER"),	MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
-									N_("use %s or BROWSER to display HTML output") },
-	{ "ditroff",		'Z',	0,		MAYBE_HIDDEN,	N_("use groff and force it to produce ditroff") },
+									N_("use %s or BROWSER to display HTML output"),			33 },
 	{ "gxditview",		'X',	N_("RESOLUTION"),
 							MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
 									N_("use groff and display through gxditview (X11):\n"
 									   "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12") },
+	{ "ditroff",		'Z',	0,		MAYBE_HIDDEN,	N_("use groff and force it to produce ditroff") },
 #endif /* HAS_TROFF */
 
 	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
@@ -379,14 +379,14 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			ult_flags &= ~SO_LINK;
 			return 0;
 
-		case 'M':
-			manp = arg;
-			return 0;
 		case 'L':
 			locale = arg;
 			return 0;
 		case 'm':
 			alt_system_name = arg;
+			return 0;
+		case 'M':
+			manp = arg;
 			return 0;
 		case 'S':
 		case 's':
@@ -446,16 +446,16 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			roff_device = "html";
 # endif /* TROFF_IS_GROFF */
 			return 0;
-		case 'Z':
-# ifdef TROFF_IS_GROFF
-			ditroff = 1;
-			troff = 1;
-# endif /* TROFF_IS_GROFF */
-			return 0;
 		case 'X':
 # ifdef TROFF_IS_GROFF
 			troff = 1;
 			gxditview = (arg ? arg : "75");
+# endif /* TROFF_IS_GROFF */
+			return 0;
+		case 'Z':
+# ifdef TROFF_IS_GROFF
+			ditroff = 1;
+			troff = 1;
 # endif /* TROFF_IS_GROFF */
 			return 0;
 #endif /* HAS_TROFF */

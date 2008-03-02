@@ -447,6 +447,50 @@ Non argument options that are duplicated either on the command line, in
 or both, are not harmful.
 For options that require an argument, each duplication will override the
 previous argument value.
+.SS "General options"
+.TP
+.BI \-C\  file ,\ \-\-config\-file= file
+Use this user configuration file rather than the default of
+.IR ~/.manpath .
+.TP
+.if !'po4a'hide' .B \-d, \-\-debug
+Print lots of debugging information.
+.TP
+.if !'po4a'hide' .B \-D, \-\-default
+This option is normally issued as the very first option and resets
+.B %man%'s
+behaviour to its default.
+Its use is to reset those options that may have been set in
+.RB $ MANOPT .
+Any options that follow
+.B \-D
+will have their usual effect.
+.TP
+\fB\-\-warnings\fP[=\fIwarnings\fP]
+Enable warnings from
+.IR groff .
+This may be used to perform sanity checks on the source text of manual
+pages.
+.I warnings
+is a comma-separated list of warning names; if it is not supplied, the
+default is "mac".
+.SS "Main modes of operation"
+.TP
+.if !'po4a'hide' .B \-f, \-\-whatis
+Equivalent to
+.BR %whatis% .
+Display a short description from the manual page, if available. See
+.BR %whatis% (1)
+for details.
+.TP
+.if !'po4a'hide' .B \-k, \-\-apropos
+Equivalent to
+.BR %apropos% .
+Search the short manual page descriptions for keywords and display any
+matches.
+See
+.BR %apropos% (1)
+for details.
 .TP
 .if !'po4a'hide' .B \-l, \-\-local\-file
 Activate `local' mode.
@@ -464,6 +508,33 @@ before displaying the error message, it attempts to act as if this
 option was supplied, using the name as a filename and looking for an
 exact match.
 .TP
+.if !'po4a'hide' .B \-w, \-\-where, \-\-location
+Don't actually display the manual pages, but do print the location(s) of
+the source nroff files that would be formatted.
+.TP
+.if !'po4a'hide' .B \-W, \-\-where\-cat, \-\-location\-cat
+Don't actually display the manual pages, but do print the location(s) of
+the cat files that would be displayed.
+If \-w and \-W are both specified, print both separated by a space.
+.TP
+.if !'po4a'hide' .B \-c, \-\-catman
+This option is not for general use and should only be used by the
+.B %catman%
+program.
+.TP
+.BI \-R\  encoding\fR,\ \fI \-\-recode\fR=\fIencoding
+Instead of formatting the manual page in the usual way, output its source
+converted to the specified
+.IR encoding .
+If you already know the encoding of the source file, you can also use
+.BR %manconv% (1)
+directly.
+However, this option allows you to convert several manual pages to a single
+encoding without having to explicitly state the encoding of each, provided
+that they were already installed in a structure similar to a manual page
+hierarchy.
+.SS "Finding manual pages"
+.TP
 .BI \-L\  locale ,\ \-\-locale= locale
 .B %man%
 will normally determine your current locale by a call to the C function
@@ -480,29 +551,38 @@ Note that it will not take effect until the search for pages actually
 begins.
 Output such as the help message will always be displayed in the initially
 determined locale.
-.TP
-.if !'po4a'hide' .B \-D, \-\-default
-This option is normally issued as the very first option and resets
-.B %man%'s
-behaviour to its default.
-Its use is to reset those options that may have been set in
-.RB $ MANOPT .
-Any options that follow
-.B \-D
-will have their usual effect.
-.TP
-.BI \-C\  file ,\ \-\-config\-file= file
-Use this user configuration file rather than the default of
-.IR ~/.manpath .
-.TP
-\fB\-\-warnings\fP[=\fIwarnings\fP]
-Enable warnings from
-.IR groff .
-This may be used to perform sanity checks on the source text of manual
-pages.
-.I warnings
-is a comma-separated list of warning names; if it is not supplied, the
-default is "mac".
+.\"
+.\" Due to the rather silly limit of 6 args per request in some `native'
+.\" *roff compilers, we have do the following to get the two-line
+.\" hanging tag on one line. .PP to begin a new paragraph, then the
+.\" tag, then .RS (start relative indent), the text, finally .RE
+.\" (end relative indent).
+.\"
+.PP
+.B \-m
+.I system\c
+.RB \|[\|,.\|.\|.\|]\| ,
+.BI \-\-systems= system\c
+\|[\|,.\|.\|.\|]
+.RS
+If this system has access to other operating system's manual pages, they can
+be accessed using this option.
+To search for a manual page from NewOS's manual page collection,
+use the option
+.B \-m
+.BR NewOS .
+
+The
+.I system
+specified can be a combination of comma delimited operating system names.
+To include a search of the native operating system's manual pages,
+include the system name
+.B man
+in the argument string.
+This option will override the
+.RB $ SYSTEM
+environment variable.
+.RE
 .TP
 .BI \-M\  path ,\ \-\-manpath= path
 Specify an alternate manpath to use.
@@ -523,6 +603,75 @@ manual page system").
 To view manual pages outside such hierarchies, see the
 .B \-l
 option.
+.TP
+.BI \-S\  list ,\ \-s\  list ,\ \-\-sections= list
+List is a colon- or comma-separated list of `order specific' manual sections
+to search.
+This option overrides the
+.RB $ MANSECT
+environment variable.
+(The
+.B \-s
+spelling is for compatibility with System V.)
+.TP
+.BI \-e\  sub-extension ,\ \-\-extension= sub-extension
+Some systems incorporate large packages of manual pages, such as those that
+accompany the
+.B Tcl
+package, into the main manual page hierarchy.
+To get around the problem of having two manual pages with the same name
+such as
+.BR exit (3),
+the
+.B Tcl
+pages were usually all assigned to section
+.BR l .
+As this is unfortunate, it is now possible to put the pages in the correct
+section, and to assign a specific `extension' to them, in this case,
+.BR exit (3tcl).
+Under normal operation,
+.B %man%
+will display
+.BR exit (3)
+in preference to
+.BR exit (3tcl).
+To negotiate this situation and to avoid having to know which section the
+page you require resides in, it is now possible to give
+.B %man%
+a
+.I sub-extension
+string indicating which package the page must belong to.
+Using the above example, supplying the option
+.B \-e\ tcl
+to
+.B %man%
+will restrict the search to pages having an extension of
+.BR *tcl .
+.TP
+.if !'po4a'hide' .B \-i, \-\-ignore\-case
+Ignore case when searching for manual pages.
+This is the default.
+.TP
+.if !'po4a'hide' .B \-I, \-\-match\-case
+Search for manual pages case-sensitively.
+.TP
+.if !'po4a'hide' .B \-a, \-\-all
+By default,
+.B %man%
+will exit after displaying the most suitable manual page it finds.
+Using this option forces
+.B %man%
+to display all the manual pages with names that match the search criteria.
+.TP
+.if !'po4a'hide' .B \-u, \-\-update
+This option causes
+.B %man%
+to perform an `inode level' consistency check on its database caches to
+ensure that they are an accurate representation of the filesystem.
+It will only have a useful effect if
+.B %man%
+is installed with the setuid bit set.
+.SS "Controlling formatted output"
 .TP
 .BI \-P\  pager ,\ \-\-pager= pager
 Specify which output pager to use.
@@ -676,123 +825,16 @@ and may be useless for
 other than
 .BR GNU's .
 .TP
-.BI \-S\  list ,\ \-s\  list ,\ \-\-sections= list
-List is a colon- or comma-separated list of `order specific' manual sections
-to search.
-This option overrides the
-.RB $ MANSECT
-environment variable.
-(The
-.B \-s
-spelling is for compatibility with System V.)
-.TP
-.if !'po4a'hide' .B \-a, \-\-all
-By default,
-.B %man%
-will exit after displaying the most suitable manual page it finds.
-Using this option forces
-.B %man%
-to display all the manual pages with names that match the search criteria.
-.TP
-.if !'po4a'hide' .B \-c, \-\-catman
-This option is not for general use and should only be used by the
-.B %catman%
-program.
-.TP
-.if !'po4a'hide' .B \-d, \-\-debug
-Print lots of debugging information.
-.TP
-.BI \-e\  sub-extension ,\ \-\-extension= sub-extension
-Some systems incorporate large packages of manual pages, such as those that
-accompany the
-.B Tcl
-package, into the main manual page hierarchy.
-To get around the problem of having two manual pages with the same name
-such as
-.BR exit (3),
-the
-.B Tcl
-pages were usually all assigned to section
-.BR l .
-As this is unfortunate, it is now possible to put the pages in the correct
-section, and to assign a specific `extension' to them, in this case,
-.BR exit (3tcl).
-Under normal operation,
-.B %man%
-will display
-.BR exit (3)
-in preference to
-.BR exit (3tcl).
-To negotiate this situation and to avoid having to know which section the
-page you require resides in, it is now possible to give
-.B %man%
-a
-.I sub-extension
-string indicating which package the page must belong to.
-Using the above example, supplying the option
-.B \-e\ tcl
-to
-.B %man%
-will restrict the search to pages having an extension of
-.BR *tcl .
-.TP
-.if !'po4a'hide' .B \-f, \-\-whatis
-Equivalent to
-.BR %whatis% .
-Display a short description from the manual page, if available. See
-.BR %whatis% (1)
-for details.
-.TP
-.if !'po4a'hide' .B \-h, \-\-help
-Print a help message and exit.
-.TP
-.if !'po4a'hide' .B \-i, \-\-ignore\-case
-Ignore case when searching for manual pages.
-This is the default.
-.TP
-.if !'po4a'hide' .B \-I, \-\-match\-case
-Search for manual pages case-sensitively.
-.TP
-.if !'po4a'hide' .B \-k, \-\-apropos
-Equivalent to
-.BR %apropos% .
-Search the short manual page descriptions for keywords and display any
-matches.
-See
-.BR %apropos% (1)
-for details.
-.\"
-.\" Due to the rather silly limit of 6 args per request in some `native'
-.\" *roff compilers, we have do the following to get the two-line
-.\" hanging tag on one line. .PP to begin a new paragraph, then the
-.\" tag, then .RS (start relative indent), the text, finally .RE
-.\" (end relative indent).
-.\"
-.PP
-.B \-m
-.I system\c
-.RB \|[\|,.\|.\|.\|]\| ,
-.BI \-\-systems= system\c
-\|[\|,.\|.\|.\|]
-.RS
-If this system has access to other operating system's manual pages, they can
-be accessed using this option.
-To search for a manual page from NewOS's manual page collection,
-use the option
-.B \-m
-.BR NewOS .
-
-The
-.I system
-specified can be a combination of comma delimited operating system names.
-To include a search of the native operating system's manual pages,
-include the system name
-.B man
-in the argument string.
-This option will override the
-.RB $ SYSTEM
-environment variable.
-.RE
+.BI \-E\  encoding\fR,\ \fI \-\-encoding\fR=\fIencoding
+Generate output for a character encoding other than the default.
+For backward compatibility,
+.I encoding
+may be an
+.B nroff
+device such as
+.BR ascii ", " latin1 ", or " utf8
+as well as a true character encoding such as
+.BR UTF\-8 .
 .TP
 .BI \-p\  string ,\ \-\-preprocessor= string
 Specify the sequence of preprocessors to run before
@@ -812,15 +854,6 @@ This option overrides the
 environment variable.
 .B %zsoelim%
 is always run as the very first preprocessor.
-.TP
-.if !'po4a'hide' .B \-u, \-\-update
-This option causes
-.B %man%
-to perform an `inode level' consistency check on its database caches to
-ensure that they are an accurate representation of the filesystem.
-It will only have a useful effect if
-.B %man%
-is installed with the setuid bit set.
 .TP
 .if !'po4a'hide' .B \-t, \-\-troff
 Use
@@ -843,6 +876,22 @@ It implies
 Examples (provided with Groff-1.17) include
 .BR dvi ", " latin1 ", " ps ", " utf8 ,
 .BR X75 " and " X100 .
+.TP
+\fB\-H\fP[\fIbrowser\fP], \fB\-\-html\fP[=\fIbrowser\fP]
+This option will cause
+.B groff
+to produce HTML output, and will display that output in a web browser.
+The choice of browser is determined by the optional
+.I browser
+argument if one is provided, by the
+.RB $ BROWSER
+environment variable, or by a compile-time default if that is unset (usually
+.BR lynx ).
+This option implies
+.BR \-t ,
+and will only work with
+.B GNU
+.BR troff .
 .TP
 \fB\-X\fP[\fIdpi\fP], \fB\-\-gxditview\fP[=\fIdpi\fP]
 This option displays the output of
@@ -873,54 +922,10 @@ this option is passed to
 and will suppress the use of a post-processor.
 It implies
 .BR \-t .
+.SS "Getting help"
 .TP
-\fB\-H\fP[\fIbrowser\fP], \fB\-\-html\fP[=\fIbrowser\fP]
-This option will cause
-.B groff
-to produce HTML output, and will display that output in a web browser.
-The choice of browser is determined by the optional
-.I browser
-argument if one is provided, by the
-.RB $ BROWSER
-environment variable, or by a compile-time default if that is unset (usually
-.BR lynx ).
-This option implies
-.BR \-t ,
-and will only work with
-.B GNU
-.BR troff .
-.TP
-.BI \-E\  encoding\fR,\ \fI \-\-encoding\fR=\fIencoding
-Generate output for a character encoding other than the default.
-For backward compatibility,
-.I encoding
-may be an
-.B nroff
-device such as
-.BR ascii ", " latin1 ", or " utf8
-as well as a true character encoding such as
-.BR UTF\-8 .
-.TP
-.if !'po4a'hide' .B \-w, \-\-where, \-\-location
-Don't actually display the manual pages, but do print the location(s) of
-the source nroff files that would be formatted.
-.TP
-.if !'po4a'hide' .B \-W, \-\-where\-cat, \-\-location\-cat
-Don't actually display the manual pages, but do print the location(s) of
-the cat files that would be displayed.
-If \-w and \-W are both specified, print both separated by a space.
-.TP
-.BI \-R\  encoding\fR,\ \fI \-\-recode\fR=\fIencoding
-Instead of formatting the manual page in the usual way, output its source
-converted to the specified
-.IR encoding .
-If you already know the encoding of the source file, you can also use
-.BR %manconv% (1)
-directly.
-However, this option allows you to convert several manual pages to a single
-encoding without having to explicitly state the encoding of each, provided
-that they were already installed in a structure similar to a manual page
-hierarchy.
+.if !'po4a'hide' .B \-h, \-\-help
+Print a help message and exit.
 .TP
 .if !'po4a'hide' .B \-V, \-\-version
 Display version information.
