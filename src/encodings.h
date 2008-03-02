@@ -1,7 +1,7 @@
 /*
  * encodings.h: Interface to locale and encoding handling for man
  *
- * Copyright (C) 2003, 2004, 2006, 2007 Colin Watson.
+ * Copyright (C) 2003, 2004, 2006, 2007, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
