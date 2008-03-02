@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-2.5.1-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2008-01-27 16:58+0000\n"
+"POT-Creation-Date: 2008-03-02 12:38+0000\n"
 "PO-Revision-Date: 2008-01-14 23:58+0100\n"
 "Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -37,7 +37,7 @@ msgstr "pijpuitvoer is niet open"
 msgid "pipe failed"
 msgstr "aanmaken van pijp is mislukt"
 
-#: lib/pipeline.c:787 src/lexgrog.l:423 src/manconv.c:347 src/straycats.c:212
+#: lib/pipeline.c:787 src/lexgrog.l:424 src/manconv.c:348 src/straycats.c:212
 #: src/ult_src.c:277 src/ult_src.c:287 src/zsoelim.l:420
 #, c-format
 msgid "can't open %s"
@@ -164,7 +164,7 @@ msgid "The man database defaults to %s%s."
 msgstr "De standaard man-gegevensbank is %s%s."
 
 #: src/accessdb.c:65 src/catman.c:99 src/globbing_test.c:57
-#: src/lexgrog_test.c:66 src/man.c:245 src/manconv.c:106 src/mandb.c:97
+#: src/lexgrog_test.c:66 src/man.c:245 src/manconv.c:107 src/mandb.c:97
 #: src/manpath.c:66 src/whatis.c:114 src/zsoelim.l:91
 msgid "emit debugging messages"
 msgstr "debug-uitvoer produceren"
@@ -178,11 +178,11 @@ msgstr "kan %s niet openen om te lezen"
 msgid "[SECTION...]"
 msgstr "[SECTIE...]"
 
-#: src/catman.c:100 src/man.c:264 src/whatis.c:123
+#: src/catman.c:100 src/man.c:266 src/whatis.c:123
 msgid "PATH"
 msgstr "PAD"
 
-#: src/catman.c:100 src/man.c:264 src/whatis.c:123
+#: src/catman.c:100 src/man.c:266 src/whatis.c:123
 msgid "set search path for manual pages to PATH"
 msgstr "pad waarin naar man-pagina's gezocht moet worden"
 
@@ -337,7 +337,7 @@ msgstr "hoofdletterongevoelig naar pagina's zoeken"
 msgid "look for pages case-sensitively"
 msgstr "hoofdlettergevoelig naar pagina's zoeken"
 
-#: src/lexgrog.l:345
+#: src/lexgrog.l:346
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "waarschuwing: de 'whatis' voor %s is meer dan %d bytes -- afgekapt"
@@ -366,13 +366,14 @@ msgstr "'whatis'-informatie tonen"
 msgid "show guessed series of preprocessing filters"
 msgstr "de gegokte reeks voorbewerkingsfilters tonen"
 
-#: src/lexgrog_test.c:71 src/man.c:280
+#: src/lexgrog_test.c:71 src/man.c:261 src/man.c:280
 msgid "ENCODING"
 msgstr "CODERING"
 
-#: src/lexgrog_test.c:71
-msgid "override character set"
-msgstr "uitvoer in deze codering produceren"
+#: src/lexgrog_test.c:71 src/man.c:280
+#, fuzzy
+msgid "use selected output encoding"
+msgstr "specificatie van een uitvoercodering ontbreekt"
 
 #: src/lexgrog_test.c:114 src/man.c:481
 #, c-format
@@ -428,32 +429,30 @@ msgstr "paginanaam als lokale bestandsnaam begrijpen"
 msgid "used by catman to reformat out of date cat pages"
 msgstr "(gebruikt door 'catman' bij heropmaken)"
 
-#: src/man.c:261 src/manconv.c:105
-msgid "CODE"
-msgstr "CODERING"
-
 #: src/man.c:261
-msgid "output source page encoded in CODE"
+#, fuzzy
+msgid "output source page encoded in ENCODING"
 msgstr "uitvoer in deze codering produceren"
 
 #: src/man.c:263
 msgid "Finding manual pages:"
 msgstr "Gevonden man-pagina's:"
 
-#: src/man.c:265 src/whatis.c:124
+#: src/man.c:264 src/whatis.c:124
 msgid "LOCALE"
 msgstr "LOCALE"
 
-#: src/man.c:265
+#: src/man.c:264
 msgid "define the locale for this particular man search"
 msgstr "te gebruiken locale voor deze zoekopdracht"
 
-#: src/man.c:266 src/manpath.c:69 src/whatis.c:122
+#: src/man.c:265 src/manpath.c:69 src/whatis.c:122
 msgid "SYSTEM"
 msgstr "SYSTEEMNAAM"
 
-#: src/man.c:266
-msgid "search for man pages from other unix system(s)"
+#: src/man.c:265 src/manpath.c:69 src/whatis.c:122
+#, fuzzy
+msgid "use manual pages from other systems"
 msgstr "naar man-pagina's van dit ander Unix-systeem zoeken"
 
 #: src/man.c:267
@@ -496,10 +495,6 @@ msgstr "deze tekens als prompt van 'less' gebruiken"
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "een ASCII-versie van sommige Latin1-tekens tonen"
 
-#: src/man.c:280
-msgid "use the selected nroff device and display in pager"
-msgstr "uitvoer (via 'nroff') in deze codering produceren"
-
 #: src/man.c:281
 msgid ""
 "STRING indicates which preprocessors to run:\n"
@@ -534,20 +529,20 @@ msgid "use %s or BROWSER to display HTML output"
 msgstr "'%s' of PROGRAMMA gebruiken voor HTML-uitvoer"
 
 #: src/man.c:295
-msgid "use groff and force it to produce ditroff"
-msgstr "'groff' gebruiken en \"ditroff\" laten produceren"
-
-#: src/man.c:296
 msgid "RESOLUTION"
 msgstr "RESOLUTIE"
 
-#: src/man.c:298
+#: src/man.c:297
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 msgstr ""
 "'groff' gebruiken en uitvoer tonen via 'gxditview';\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
+
+#: src/man.c:299
+msgid "use groff and force it to produce ditroff"
+msgstr "'groff' gebruiken en \"ditroff\" laten produceren"
 
 #: src/man.c:528 src/man.c:600
 #, c-format
@@ -573,7 +568,7 @@ msgstr "Er is geen pagina over %s in sectie %s\n"
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Zie '%s' voor hulp als man-pagina's niet beschikbaar zijn.\n"
 
-#: src/man.c:766 src/man.c:2103
+#: src/man.c:766 src/man.c:2107
 #, c-format
 msgid "can't chdir to %s"
 msgstr "kan niet naar map %s gaan"
@@ -582,62 +577,62 @@ msgstr "kan niet naar map %s gaan"
 msgid " Manual page "
 msgstr " Handleidingspagina "
 
-#: src/man.c:1019 src/man.c:2952
+#: src/man.c:1019 src/man.c:2956
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "'mandb' is mislukt met afsluitwaarde %d"
 
-#: src/man.c:1461
+#: src/man.c:1464
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "onbekende preprocessor '%c' wordt genegeerd"
 
-#: src/man.c:1739 src/mandb.c:299
+#: src/man.c:1743 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "kan eigenaar van %s niet wijzigen"
 
-#: src/man.c:1751 src/mandb.c:213
+#: src/man.c:1755 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "kan de toegangsrechten van %s niet wijzigen"
 
-#: src/man.c:1762 src/mandb.c:204
+#: src/man.c:1766 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "kan %s niet hernoemen naar %s"
 
-#: src/man.c:1781
+#: src/man.c:1785
 #, c-format
 msgid "can't set times on %s"
 msgstr "kan tijdsstempels van %s niet zetten"
 
-#: src/man.c:1790
+#: src/man.c:1794
 #, c-format
 msgid "can't unlink %s"
 msgstr "kan %s niet verwijderen"
 
-#: src/man.c:1823
+#: src/man.c:1827
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "kan geen tijdelijk cat-bestand aanmaken voor %s"
 
-#: src/man.c:1952 src/man.c:1994 src/man.c:2024
+#: src/man.c:1956 src/man.c:1998 src/man.c:2028
 #, c-format
 msgid "can't change to directory %s"
 msgstr "kan niet naar map %s gaan"
 
-#: src/man.c:1965
+#: src/man.c:1969
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "kan tijdelijk bestand %s niet openen"
 
-#: src/man.c:2000 src/man.c:2029
+#: src/man.c:2004 src/man.c:2033
 #, c-format
 msgid "can't remove directory %s"
 msgstr "kan map %s niet verwijderen"
 
-#: src/man.c:2252
+#: src/man.c:2256
 #, c-format
 msgid ""
 "\n"
@@ -646,52 +641,60 @@ msgstr ""
 "\n"
 "kan niet naar %s schrijven in 'catman'-modus"
 
-#: src/man.c:2806
+#: src/man.c:2810
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: vertrouwen op 'whatis'-referenties wordt ontraden\n"
 
-#: src/man.c:3146
+#: src/man.c:3150
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "**interne fout**: kandidaattype %d valt buiten bereik"
 
-#: src/man.c:3269
+#: src/man.c:3273
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- volgende: %s [ Enter=zien | Ctrl-D=overslaan | Ctrl-C=afsluiten ]\n"
 
 #: src/manconv.c:101
-msgid "-f CODE:... -t CODE [FILENAME]"
+#, fuzzy
+msgid "-f CODE[:...] -t CODE [FILENAME]"
 msgstr "-f CODE[:...] -t CODE [BESTANDSNAAM]"
 
 #: src/manconv.c:104
-msgid "CODE:..."
+#, fuzzy
+msgid "CODE[:...]"
 msgstr "CODE[:...]"
 
-#: src/manconv.c:104
+#: src/manconv.c:105
 msgid "possible encodings of original text"
 msgstr "mogelijke codering(en) van originele tekst"
 
-#: src/manconv.c:105
+#: src/manconv.c:106
+msgid "CODE"
+msgstr "CODERING"
+
+#: src/manconv.c:106
 msgid "encoding for output"
 msgstr "codering van de uitvoer"
 
-#: src/manconv.c:138 src/manconv.c:147
+#: src/manconv.c:139 src/manconv.c:148
+#, c-format
 msgid "must specify an input encoding"
 msgstr "specificatie van een invoercodering ontbreekt"
 
-#: src/manconv.c:142
+#: src/manconv.c:143
+#, c-format
 msgid "must specify an output encoding"
 msgstr "specificatie van een uitvoercodering ontbreekt"
 
-#: src/manconv.c:265 src/manconv.c:290
+#: src/manconv.c:266 src/manconv.c:291
 #, c-format
 msgid "can't write to standard output"
 msgstr "kan niet naar standaarduitvoer schrijven"
 
-#: src/manconv.c:300
+#: src/manconv.c:301
 #, c-format
 msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv: onvolledig teken aan eind van buffer"
@@ -879,10 +882,6 @@ msgstr "het volledige globale man-pad weergeven"
 msgid "produce fewer warnings"
 msgstr "minder waarschuwingen produceren"
 
-#: src/manpath.c:69
-msgid "express which `systems' to use"
-msgstr "naar man-pagina's van deze Unix-systemen zoeken"
-
 #: src/manpath.c:132
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
@@ -964,10 +963,6 @@ msgstr "SECTIE"
 msgid "search only this section"
 msgstr "alleen in deze sectie zoeken"
 
-#: src/whatis.c:122
-msgid "include alternate systems' man pages"
-msgstr "naar man-pagina's van dit ander Unix-systeem zoeken"
-
 #: src/whatis.c:124
 msgid "define the locale for this search"
 msgstr "te gebruiken locale voor deze zoekopdracht"
@@ -1045,3 +1040,15 @@ msgstr "%s:%d: waarschuwing: regeleindeteken in '.lf'-verzoek -- genegeerd"
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: onafgesloten aanhaling in 'roff'-verzoek"
+
+#~ msgid "override character set"
+#~ msgstr "uitvoer in deze codering produceren"
+
+#~ msgid "use the selected nroff device and display in pager"
+#~ msgstr "uitvoer (via 'nroff') in deze codering produceren"
+
+#~ msgid "express which `systems' to use"
+#~ msgstr "naar man-pagina's van deze Unix-systemen zoeken"
+
+#~ msgid "include alternate systems' man pages"
+#~ msgstr "naar man-pagina's van dit ander Unix-systeem zoeken"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.3-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2008-01-27 16:58+0000\n"
+"POT-Creation-Date: 2008-03-02 12:38+0000\n"
 "PO-Revision-Date: 2005-06-21 14:00+0200\n"
 "Last-Translator: Jordi Mallach <jordi@gnu.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -35,7 +35,7 @@ msgstr "l'eixida del conducte no està oberta"
 msgid "pipe failed"
 msgstr "«pipe» ha fallat"
 
-#: lib/pipeline.c:787 src/lexgrog.l:423 src/manconv.c:347 src/straycats.c:212
+#: lib/pipeline.c:787 src/lexgrog.l:424 src/manconv.c:348 src/straycats.c:212
 #: src/ult_src.c:277 src/ult_src.c:287 src/zsoelim.l:420
 #, c-format
 msgid "can't open %s"
@@ -170,7 +170,7 @@ msgid "The man database defaults to %s%s."
 msgstr ""
 
 #: src/accessdb.c:65 src/catman.c:99 src/globbing_test.c:57
-#: src/lexgrog_test.c:66 src/man.c:245 src/manconv.c:106 src/mandb.c:97
+#: src/lexgrog_test.c:66 src/man.c:245 src/manconv.c:107 src/mandb.c:97
 #: src/manpath.c:66 src/whatis.c:114 src/zsoelim.l:91
 msgid "emit debugging messages"
 msgstr ""
@@ -184,11 +184,11 @@ msgstr "no es pot obrir %s per a lectura"
 msgid "[SECTION...]"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:264 src/whatis.c:123
+#: src/catman.c:100 src/man.c:266 src/whatis.c:123
 msgid "PATH"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:264 src/whatis.c:123
+#: src/catman.c:100 src/man.c:266 src/whatis.c:123
 msgid "set search path for manual pages to PATH"
 msgstr ""
 
@@ -352,7 +352,7 @@ msgid "look for pages case-sensitively"
 msgstr ""
 
 # Es trunca, es truncarà?  ivb
-#: src/lexgrog.l:345
+#: src/lexgrog.l:346
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "avís: el whatis per a %s s'excedeix en %d bytes, es truncarà."
@@ -381,12 +381,12 @@ msgstr ""
 msgid "show guessed series of preprocessing filters"
 msgstr ""
 
-#: src/lexgrog_test.c:71 src/man.c:280
+#: src/lexgrog_test.c:71 src/man.c:261 src/man.c:280
 msgid "ENCODING"
 msgstr ""
 
-#: src/lexgrog_test.c:71
-msgid "override character set"
+#: src/lexgrog_test.c:71 src/man.c:280
+msgid "use selected output encoding"
 msgstr ""
 
 # Frase completa: «les opcions són incompatibles»  ivb
@@ -444,12 +444,8 @@ msgstr ""
 msgid "used by catman to reformat out of date cat pages"
 msgstr ""
 
-#: src/man.c:261 src/manconv.c:105
-msgid "CODE"
-msgstr ""
-
 #: src/man.c:261
-msgid "output source page encoded in CODE"
+msgid "output source page encoded in ENCODING"
 msgstr ""
 
 #: src/man.c:263
@@ -457,20 +453,20 @@ msgstr ""
 msgid "Finding manual pages:"
 msgstr " Pàgina de manual "
 
-#: src/man.c:265 src/whatis.c:124
+#: src/man.c:264 src/whatis.c:124
 msgid "LOCALE"
 msgstr ""
 
-#: src/man.c:265
+#: src/man.c:264
 msgid "define the locale for this particular man search"
 msgstr ""
 
-#: src/man.c:266 src/manpath.c:69 src/whatis.c:122
+#: src/man.c:265 src/manpath.c:69 src/whatis.c:122
 msgid "SYSTEM"
 msgstr ""
 
-#: src/man.c:266
-msgid "search for man pages from other unix system(s)"
+#: src/man.c:265 src/manpath.c:69 src/whatis.c:122
+msgid "use manual pages from other systems"
 msgstr ""
 
 #: src/man.c:267
@@ -513,10 +509,6 @@ msgstr ""
 msgid "display ASCII translation of certain latin1 chars"
 msgstr ""
 
-#: src/man.c:280
-msgid "use the selected nroff device and display in pager"
-msgstr ""
-
 #: src/man.c:281
 msgid ""
 "STRING indicates which preprocessors to run:\n"
@@ -548,22 +540,22 @@ msgid "use %s or BROWSER to display HTML output"
 msgstr ""
 
 #: src/man.c:295
-#, fuzzy
-msgid "use groff and force it to produce ditroff"
-msgstr ""
-"-Z, --ditroff               utilitza groff i força la producció de ditroff."
-
-#: src/man.c:296
 msgid "RESOLUTION"
 msgstr ""
 
-#: src/man.c:298
+#: src/man.c:297
 #, fuzzy
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 msgstr ""
 "                           -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
+
+#: src/man.c:299
+#, fuzzy
+msgid "use groff and force it to produce ditroff"
+msgstr ""
+"-Z, --ditroff               utilitza groff i força la producció de ditroff."
 
 # per/per a/de?  ivb
 #: src/man.c:528 src/man.c:600
@@ -593,7 +585,7 @@ msgstr ""
 "Vegeu «%s» per a obtindre ajuda quan les pàgines de manual no són "
 "disponibles.\n"
 
-#: src/man.c:766 src/man.c:2103
+#: src/man.c:766 src/man.c:2107
 #, c-format
 msgid "can't chdir to %s"
 msgstr "no es pot canviar de directori a %s"
@@ -602,28 +594,28 @@ msgstr "no es pot canviar de directori a %s"
 msgid " Manual page "
 msgstr " Pàgina de manual "
 
-#: src/man.c:1019 src/man.c:2952
+#: src/man.c:1019 src/man.c:2956
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "l'ordre de mandb ha fallat amb l'estat d'eixida %d"
 
 # «es descarta el...»  ivb
-#: src/man.c:1461
+#: src/man.c:1464
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "es descarta el preprocessador desconegut «%c»"
 
-#: src/man.c:1739 src/mandb.c:299
+#: src/man.c:1743 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "no es pot fer «chown» a %s"
 
-#: src/man.c:1751 src/mandb.c:213
+#: src/man.c:1755 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "no es pot fer «chmod» a %s"
 
-#: src/man.c:1762 src/mandb.c:204
+#: src/man.c:1766 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "no es pot reanomenar %s a %s"
@@ -631,37 +623,37 @@ msgstr "no es pot reanomenar %s a %s"
 # Segurament es referirà a l'{a,m,c}time; hores/dates?  ivb
 # I en eixe cas, què sugereixes? jm
 # Allò que s'use majoritàriament pel cas, només era per assegurar-me.  ivb
-#: src/man.c:1781
+#: src/man.c:1785
 #, c-format
 msgid "can't set times on %s"
 msgstr "no es poden establir les hores en %s"
 
-#: src/man.c:1790
+#: src/man.c:1794
 #, c-format
 msgid "can't unlink %s"
 msgstr "no es pot desenllaçar %s"
 
-#: src/man.c:1823
+#: src/man.c:1827
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "no es pot crear un fitxer cat temporal per a %s"
 
-#: src/man.c:1952 src/man.c:1994 src/man.c:2024
+#: src/man.c:1956 src/man.c:1998 src/man.c:2028
 #, c-format
 msgid "can't change to directory %s"
 msgstr "no es pot canviar al directori %s"
 
-#: src/man.c:1965
+#: src/man.c:1969
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "no es pot obrir el fitxer temporal %s"
 
-#: src/man.c:2000 src/man.c:2029
+#: src/man.c:2004 src/man.c:2033
 #, c-format
 msgid "can't remove directory %s"
 msgstr "no es pot eliminar el directori %s"
 
-#: src/man.c:2252
+#: src/man.c:2256
 #, c-format
 msgid ""
 "\n"
@@ -671,53 +663,59 @@ msgstr ""
 "no es pot escriure a %s en el mode catman"
 
 # Lo de sempre, deprecated? jm
-#: src/man.c:2806
+#: src/man.c:2810
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: basar-se en referències whatis està desaconsellat\n"
 
-#: src/man.c:3146
+#: src/man.c:3150
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 "s'ha produït un error intern: el candidat de tipus %d està fora de rang"
 
-#: src/man.c:3269
+#: src/man.c:3273
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- següent: %s [ visualitza (retorn) | omet (Ctrl-D) | surt (Ctrl-C ]\n"
 
 #: src/manconv.c:101
-msgid "-f CODE:... -t CODE [FILENAME]"
+msgid "-f CODE[:...] -t CODE [FILENAME]"
 msgstr ""
 
 #: src/manconv.c:104
-msgid "CODE:..."
-msgstr ""
-
-#: src/manconv.c:104
-msgid "possible encodings of original text"
+msgid "CODE[:...]"
 msgstr ""
 
 #: src/manconv.c:105
+msgid "possible encodings of original text"
+msgstr ""
+
+#: src/manconv.c:106
+msgid "CODE"
+msgstr ""
+
+#: src/manconv.c:106
 msgid "encoding for output"
 msgstr ""
 
-#: src/manconv.c:138 src/manconv.c:147
+#: src/manconv.c:139 src/manconv.c:148
+#, c-format
 msgid "must specify an input encoding"
 msgstr ""
 
-#: src/manconv.c:142
+#: src/manconv.c:143
+#, c-format
 msgid "must specify an output encoding"
 msgstr ""
 
-#: src/manconv.c:265 src/manconv.c:290
+#: src/manconv.c:266 src/manconv.c:291
 #, fuzzy, c-format
 msgid "can't write to standard output"
 msgstr "no es pot escriure en %s"
 
-#: src/manconv.c:300
+#: src/manconv.c:301
 #, c-format
 msgid "iconv: incomplete character at end of buffer"
 msgstr ""
@@ -913,10 +911,6 @@ msgstr ""
 msgid "produce fewer warnings"
 msgstr ""
 
-#: src/manpath.c:69
-msgid "express which `systems' to use"
-msgstr ""
-
 #: src/manpath.c:132
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
@@ -997,10 +991,6 @@ msgstr ""
 
 #: src/whatis.c:121
 msgid "search only this section"
-msgstr ""
-
-#: src/whatis.c:122
-msgid "include alternate systems' man pages"
 msgstr ""
 
 #: src/whatis.c:124

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.1-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2008-01-27 16:58+0000\n"
+"POT-Creation-Date: 2008-03-02 12:38+0000\n"
 "PO-Revision-Date: 2008-01-15 16:46+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -38,7 +38,7 @@ msgstr "chưa mở thiết bị xuất qua ống dẫn"
 msgid "pipe failed"
 msgstr "ống dẫn bị lỗi"
 
-#: lib/pipeline.c:787 src/lexgrog.l:423 src/manconv.c:347 src/straycats.c:212
+#: lib/pipeline.c:787 src/lexgrog.l:424 src/manconv.c:348 src/straycats.c:212
 #: src/ult_src.c:277 src/ult_src.c:287 src/zsoelim.l:420
 #, c-format
 msgid "can't open %s"
@@ -166,7 +166,7 @@ msgid "The man database defaults to %s%s."
 msgstr "Cơ sở dữ liệu chính có giá trị mặc định là %s%s."
 
 #: src/accessdb.c:65 src/catman.c:99 src/globbing_test.c:57
-#: src/lexgrog_test.c:66 src/man.c:245 src/manconv.c:106 src/mandb.c:97
+#: src/lexgrog_test.c:66 src/man.c:245 src/manconv.c:107 src/mandb.c:97
 #: src/manpath.c:66 src/whatis.c:114 src/zsoelim.l:91
 msgid "emit debugging messages"
 msgstr "xuất thông điệp gỡ lỗi"
@@ -180,11 +180,11 @@ msgstr "không thể mở được %s để đọc"
 msgid "[SECTION...]"
 msgstr "[PHẦN...]"
 
-#: src/catman.c:100 src/man.c:264 src/whatis.c:123
+#: src/catman.c:100 src/man.c:266 src/whatis.c:123
 msgid "PATH"
 msgstr "ĐƯỜNG DẪN"
 
-#: src/catman.c:100 src/man.c:264 src/whatis.c:123
+#: src/catman.c:100 src/man.c:266 src/whatis.c:123
 msgid "set search path for manual pages to PATH"
 msgstr "đặt thành ĐƯỜNG DẪN đường dẫn tìm kiếm các trang hướng dẫn"
 
@@ -338,7 +338,7 @@ msgstr "tìm trang thì không phân biệt chữ hoa/thường (mặc định)"
 msgid "look for pages case-sensitively"
 msgstr "tìm trang thì phân biệt chữ hoa/thường"
 
-#: src/lexgrog.l:345
+#: src/lexgrog.l:346
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr ""
@@ -369,13 +369,14 @@ msgstr "hiển thị thông tin whatis (là gì)"
 msgid "show guessed series of preprocessing filters"
 msgstr "hiển thị dãy bộ lọc tiền xử lý đã đoán"
 
-#: src/lexgrog_test.c:71 src/man.c:280
+#: src/lexgrog_test.c:71 src/man.c:261 src/man.c:280
 msgid "ENCODING"
 msgstr "BẢNG MÃ"
 
-#: src/lexgrog_test.c:71
-msgid "override character set"
-msgstr "ghi đè lên bộ ký tự"
+#: src/lexgrog_test.c:71 src/man.c:280
+#, fuzzy
+msgid "use selected output encoding"
+msgstr "phải ghi rõ bảng mã xuất ra"
 
 #: src/lexgrog_test.c:114 src/man.c:481
 #, c-format
@@ -431,32 +432,30 @@ msgstr "giải thích mỗi đối số TRANG là tên tập tin cục bộ"
 msgid "used by catman to reformat out of date cat pages"
 msgstr "được catman dùng để định dạng lại các trang cat cũ"
 
-#: src/man.c:261 src/manconv.c:105
-msgid "CODE"
-msgstr "MÃ"
-
 #: src/man.c:261
-msgid "output source page encoded in CODE"
+#, fuzzy
+msgid "output source page encoded in ENCODING"
 msgstr "trang mã nguồn xuất đã mã hoá bằng MÃ"
 
 #: src/man.c:263
 msgid "Finding manual pages:"
 msgstr "Đang tìm trang hướng dẫn:"
 
-#: src/man.c:265 src/whatis.c:124
+#: src/man.c:264 src/whatis.c:124
 msgid "LOCALE"
 msgstr "MIỀN ĐỊA PHƯƠNG"
 
-#: src/man.c:265
+#: src/man.c:264
 msgid "define the locale for this particular man search"
 msgstr "xác định miền địa phương cho việc tìm kiếm man này"
 
-#: src/man.c:266 src/manpath.c:69 src/whatis.c:122
+#: src/man.c:265 src/manpath.c:69 src/whatis.c:122
 msgid "SYSTEM"
 msgstr "HỆ THỐNG"
 
-#: src/man.c:266
-msgid "search for man pages from other unix system(s)"
+#: src/man.c:265 src/manpath.c:69 src/whatis.c:122
+#, fuzzy
+msgid "use manual pages from other systems"
 msgstr "tìm kiếm trang man từ hệ thống UNIX khác"
 
 #: src/man.c:267
@@ -499,10 +498,6 @@ msgstr "cung cấp một dấu nhắc cho bộ dàn trang « less »"
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "hiển thị bản dịch ASCII cua một số ký tự Latin-1 nào đó"
 
-#: src/man.c:280
-msgid "use the selected nroff device and display in pager"
-msgstr "dùng thiết bị nroff đã chọn, và hiển thị trong bộ dàn trang"
-
 #: src/man.c:281
 msgid ""
 "STRING indicates which preprocessors to run:\n"
@@ -537,20 +532,20 @@ msgid "use %s or BROWSER to display HTML output"
 msgstr "dùng %s hay TRÌNH DUYỆT để hiển thị kết xuất HTML"
 
 #: src/man.c:295
-msgid "use groff and force it to produce ditroff"
-msgstr "dùng groff và ép buộc nó xuất ditroff"
-
-#: src/man.c:296
 msgid "RESOLUTION"
 msgstr "ĐỘ PHÂN GIẢI"
 
-#: src/man.c:298
+#: src/man.c:297
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 msgstr ""
 "dùng groff và hiển thị thông qua gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
+
+#: src/man.c:299
+msgid "use groff and force it to produce ditroff"
+msgstr "dùng groff và ép buộc nó xuất ditroff"
 
 #: src/man.c:528 src/man.c:600
 #, c-format
@@ -576,7 +571,7 @@ msgstr "Không có mục nhập hướng dẫn cho %s trong phần %s\n"
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Hãy xem « %s » để tìm trợ giúp khi trang hướng dẫn không sẵn sàng.\n"
 
-#: src/man.c:766 src/man.c:2103
+#: src/man.c:766 src/man.c:2107
 #, c-format
 msgid "can't chdir to %s"
 msgstr "không thể chdir (chuyển đổi danh mục) sang %s"
@@ -585,64 +580,64 @@ msgstr "không thể chdir (chuyển đổi danh mục) sang %s"
 msgid " Manual page "
 msgstr " Trang hướng dẫn "
 
-#: src/man.c:1019 src/man.c:2952
+#: src/man.c:1019 src/man.c:2956
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr ""
 "lệnh « mandb » (cơ sở dữ liệu hướng dẫn) đã thất bại với trạng thái thoát là %"
 "d"
 
-#: src/man.c:1461
+#: src/man.c:1464
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "đang bỏ qua bộ xử lý trước lạ « %c »"
 
-#: src/man.c:1739 src/mandb.c:299
+#: src/man.c:1743 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "không thể « chown » (thay đổi quyền sở hữu) %s"
 
-#: src/man.c:1751 src/mandb.c:213
+#: src/man.c:1755 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "không thể « chmod » (thay đổi chế độ) %s"
 
-#: src/man.c:1762 src/mandb.c:204
+#: src/man.c:1766 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "không thể thay đổi tên %s thành %s"
 
-#: src/man.c:1781
+#: src/man.c:1785
 #, c-format
 msgid "can't set times on %s"
 msgstr "không thể lập thời gian trên %s"
 
-#: src/man.c:1790
+#: src/man.c:1794
 #, c-format
 msgid "can't unlink %s"
 msgstr "không thể bỏ liên kết ra %s"
 
-#: src/man.c:1823
+#: src/man.c:1827
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "không thể tạo « cat » tạm cho %s"
 
-#: src/man.c:1952 src/man.c:1994 src/man.c:2024
+#: src/man.c:1956 src/man.c:1998 src/man.c:2028
 #, c-format
 msgid "can't change to directory %s"
 msgstr "không thể chuyển đổi sang thư mục %s"
 
-#: src/man.c:1965
+#: src/man.c:1969
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "không thể mở tập tin tạm %s"
 
-#: src/man.c:2000 src/man.c:2029
+#: src/man.c:2004 src/man.c:2033
 #, c-format
 msgid "can't remove directory %s"
 msgstr "không thể gỡ bỏ thư mục %s"
 
-#: src/man.c:2252
+#: src/man.c:2256
 #, c-format
 msgid ""
 "\n"
@@ -651,51 +646,59 @@ msgstr ""
 "\n"
 "không thể ghi vào %s trong chế độ « catman »"
 
-#: src/man.c:2806
+#: src/man.c:2810
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: nhờ các « ref » (tham chiếu) của lệnh « whatis » bị phản đối\n"
 
-#: src/man.c:3146
+#: src/man.c:3150
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "lỗi nội bộ: kiểu ứng cử %d ở ngoại phạm vị"
 
-#: src/man.c:3269
+#: src/man.c:3273
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- kế: %s [ xem (return) | nhảy (Ctrl-D) | thoát (Ctrl-C) ]\n"
 
 #: src/manconv.c:101
-msgid "-f CODE:... -t CODE [FILENAME]"
+#, fuzzy
+msgid "-f CODE[:...] -t CODE [FILENAME]"
 msgstr "-f MÃ:... -t MÃ [TÊN TẬP TIN]"
 
 #: src/manconv.c:104
-msgid "CODE:..."
+#, fuzzy
+msgid "CODE[:...]"
 msgstr "MÃ:..."
 
-#: src/manconv.c:104
+#: src/manconv.c:105
 msgid "possible encodings of original text"
 msgstr "bảng mã có thể của văn bản gốc"
 
-#: src/manconv.c:105
+#: src/manconv.c:106
+msgid "CODE"
+msgstr "MÃ"
+
+#: src/manconv.c:106
 msgid "encoding for output"
 msgstr "bảng mã cho kết xuất"
 
-#: src/manconv.c:138 src/manconv.c:147
+#: src/manconv.c:139 src/manconv.c:148
+#, c-format
 msgid "must specify an input encoding"
 msgstr "phải ghi rõ bảng mã nhập vào"
 
-#: src/manconv.c:142
+#: src/manconv.c:143
+#, c-format
 msgid "must specify an output encoding"
 msgstr "phải ghi rõ bảng mã xuất ra"
 
-#: src/manconv.c:265 src/manconv.c:290
+#: src/manconv.c:266 src/manconv.c:291
 #, c-format
 msgid "can't write to standard output"
 msgstr "không thể ghi vào thiết bị xuất chuẩn"
 
-#: src/manconv.c:300
+#: src/manconv.c:301
 #, c-format
 msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv: gặp ký tự không hoàn thành ở kết thúc của vùng đệm"
@@ -889,10 +892,6 @@ msgstr "hiển thị toàn đường dẫn toàn cục"
 msgid "produce fewer warnings"
 msgstr "xuất ít cảnh báo hơn"
 
-#: src/manpath.c:69
-msgid "express which `systems' to use"
-msgstr "ghi rõ có nên dùng những « hệ thống » nào"
-
 #: src/manpath.c:132
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
@@ -974,10 +973,6 @@ msgstr "PHẦN"
 msgid "search only this section"
 msgstr "tìm kiếm chỉ trong phần này"
 
-#: src/whatis.c:122
-msgid "include alternate systems' man pages"
-msgstr "bao gồm những trang man của các hệ thống xen kẽ"
-
 #: src/whatis.c:124
 msgid "define the locale for this search"
 msgstr "xác định miền địa phương cho việc tìm kiếm này"
@@ -1056,3 +1051,15 @@ msgstr "%s:%d: cảnh báo: yêu cầu « .lf » chứa ký tự dòng mới nê
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: yêu cầu roff chứa đoạn trích dẫn chưa chấm dứt"
+
+#~ msgid "override character set"
+#~ msgstr "ghi đè lên bộ ký tự"
+
+#~ msgid "use the selected nroff device and display in pager"
+#~ msgstr "dùng thiết bị nroff đã chọn, và hiển thị trong bộ dàn trang"
+
+#~ msgid "express which `systems' to use"
+#~ msgstr "ghi rõ có nên dùng những « hệ thống » nào"
+
+#~ msgid "include alternate systems' man pages"
+#~ msgstr "bao gồm những trang man của các hệ thống xen kẽ"
