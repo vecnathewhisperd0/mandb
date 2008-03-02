@@ -258,7 +258,7 @@ static struct argp_option options[] = {
 	{ "location-cat",	0,	0,		OPTION_ALIAS },
 	{ "local-file",		'l',	0,		0,		N_("interpret PAGE argument(s) as local filename(s)") },
 	{ "catman",		'c',	0,		0,		N_("used by catman to reformat out of date cat pages"),		11 },
-	{ "recode",		'R',	N_("CODE"),	0,		N_("output source page encoded in CODE") },
+	{ "recode",		'R',	N_("ENCODING"),	0,		N_("output source page encoded in ENCODING") },
 
 	{ 0,			0,	0,		0,		N_("Finding manual pages:"),					20 },
 	{ "locale",		'L',	N_("LOCALE"),	0,		N_("define the locale for this particular man search") },
