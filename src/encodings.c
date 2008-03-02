@@ -234,6 +234,7 @@ struct device_entry {
 };
 
 static struct device_entry device_table[] = {
+	/* nroff devices */
 	{ "ascii",	"ANSI_X3.4-1968",	"ANSI_X3.4-1968"	},
 	{ "latin1",	"ISO-8859-1",		"ISO-8859-1"		},
 	{ "utf8",	"ISO-8859-1",		"UTF-8"			},
@@ -242,6 +243,17 @@ static struct device_entry device_table[] = {
 	{ "ascii8",	NULL,			NULL			},
 	{ "nippon",	NULL,			NULL			},
 #endif /* MULTIBYTE_GROFF */
+
+	/* troff devices */
+	{ "X75",	NULL,			NULL			},
+	{ "X75-12",	NULL,			NULL			},
+	{ "X100",	NULL,			NULL			},
+	{ "X100-12",	NULL,			NULL			},
+	{ "dvi",	NULL,			NULL			},
+	{ "html",	NULL,			NULL			},
+	{ "lbp",	NULL,			NULL			},
+	{ "lj4",	NULL,			NULL			},
+	{ "ps",		NULL,			NULL			},
 
 	{ NULL,		NULL,			NULL			}
 };
@@ -567,6 +579,19 @@ const char *get_default_device (const char *locale_charset,
 	}
 
 	return fallback_default_device;
+}
+
+/* Is this a known *roff device name? */
+int is_roff_device (const char *device)
+{
+	const struct device_entry *entry;
+
+	for (entry = device_table; entry->roff_device; ++entry) {
+		if (STREQ (entry->roff_device, device))
+			return 1;
+	}
+
+	return 0;
 }
 
 /* Find the input encoding expected by groff, and set the LESSCHARSET

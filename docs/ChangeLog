@@ -1,3 +1,30 @@
+Sun Mar  2 11:03:21 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Improve 'man -E' to allow overriding the output encoding explicitly,
+	rather than implicitly (and unreliably) by changing the *roff device
+	(Debian bug #466396).
+
+	* src/encodings.c (device_table): Add stub entries for troff
+	  devices.
+	  (is_roff_device): New function.
+	* src/encodings.h (is_roff_device): Add prototype.
+	* src/man.c (options): Change description of -E to allow general
+	  encoding selection.
+	  (parse_opt): Only assign the argument of -E to roff_device if it
+	  is actually a *roff device; otherwise it is presumed to be a true
+	  character encoding and stored in want_encoding. Remove
+	  different_encoding, since testing whether want_encoding is set
+	  supersedes that.
+	  (make_roff_command): If want_encoding is set and is not a *roff
+	  device, recode to it rather than to the locale's encoding.
+	  (display, try_section, display_filesystem, display_database): Test
+	  want_encoding rather than different_encoding.
+	* man/man1/man.man1 (OPTIONS): Adjust documentation of -E.
+	* docs/NEWS: Document this.
+
+	* src/lexgrog_test.c (options): Bring description of -E into sync
+	  with man.
+
 Sat Mar  1 22:14:43 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* src/encodings.c (get_roff_encoding): In the CJK UTF-8 special

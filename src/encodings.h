@@ -28,6 +28,7 @@ const char *get_canonical_charset_name (const char *charset);
 const char *get_locale_charset (void);
 const char *get_default_device (const char *locale_charset,
 				const char *source_encoding);
+int is_roff_device (const char *device);
 const char *get_roff_encoding (const char *device,
 			       const char *source_encoding);
 const char *get_output_encoding (const char *device);

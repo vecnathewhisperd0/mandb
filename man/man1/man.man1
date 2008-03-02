@@ -889,14 +889,16 @@ and will only work with
 .B GNU
 .BR troff .
 .TP
-.BI \-E\  device\fR,\ \fI \-\-encoding\fR=\fIdevice
+.BI \-E\  encoding\fR,\ \fI \-\-encoding\fR=\fIencoding
 Generate output for a character encoding other than the default.
-Due to the way
-.B nroff
-is currently designed, the argument to this function must be an
+For backward compatibility,
+.I encoding
+may be an
 .B nroff
 device such as
-.BR ascii ", " latin1 ", or " utf8 .
+.BR ascii ", " latin1 ", or " utf8
+as well as a true character encoding such as
+.BR UTF\-8 .
 .TP
 .if !'po4a'hide' .B \-w, \-\-where, \-\-location
 Don't actually display the manual pages, but do print the location(s) of
