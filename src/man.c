@@ -267,10 +267,10 @@ static struct argp_option options[] = {
 	{ "sections",		'S',	N_("LIST"),	0,		N_("use colon separated section list"),				21 },
 	{ 0,			's',	0,		OPTION_ALIAS },
 	{ "extension",		'e',	N_("EXTENSION"),
-							0,		N_("limit search to extension type EXTENSION") },
-	{ "ignore-case",	'i',	0,		0,		N_("look for pages case-insensitively (default)"),		22 },
+							0,		N_("limit search to extension type EXTENSION"),			22 },
+	{ "ignore-case",	'i',	0,		0,		N_("look for pages case-insensitively (default)"),		23 },
 	{ "match-case",		'I',	0,		0,		N_("look for pages case-sensitively") },
-	{ "all",		'a',	0,		0,		N_("find all matching manual pages"),				23 },
+	{ "all",		'a',	0,		0,		N_("find all matching manual pages"),				24 },
 	{ "update",		'u',	0,		0,		N_("force a cache consistency check") },
 
 	{ 0,			0,	0,		0,		N_("Controlling formatted output:"),				30 },
