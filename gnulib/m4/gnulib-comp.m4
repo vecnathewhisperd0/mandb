@@ -66,6 +66,8 @@ AC_DEFUN([gl_INIT],
   gl_DOUBLE_SLASH_ROOT
   gl_FUNC_DUP2
   gl_UNISTD_MODULE_INDICATOR([dup2])
+  gl_ENVIRON
+  gl_UNISTD_MODULE_INDICATOR([environ])
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
@@ -502,6 +504,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/double-slash-root.m4
   m4/dup2.m4
   m4/eealloc.m4
+  m4/environ.m4
   m4/eoverflow.m4
   m4/error.m4
   m4/exitfail.m4

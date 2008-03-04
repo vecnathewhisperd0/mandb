@@ -748,6 +748,7 @@ ALLOCA_H
 GETOPT_H
 GNULIB_CHOWN
 GNULIB_DUP2
+GNULIB_ENVIRON
 GNULIB_FCHDIR
 GNULIB_FTRUNCATE
 GNULIB_GETCWD
@@ -762,6 +763,7 @@ HAVE_FTRUNCATE
 HAVE_GETPAGESIZE
 HAVE_READLINK
 HAVE_SLEEP
+HAVE_DECL_ENVIRON
 HAVE_DECL_GETLOGIN_R
 HAVE_OS_H
 HAVE_SYS_PARAM_H
@@ -9799,6 +9801,7 @@ fi
 
   GNULIB_CHOWN=0;
   GNULIB_DUP2=0;
+  GNULIB_ENVIRON=0;
   GNULIB_FCHDIR=0;
   GNULIB_FTRUNCATE=0;
   GNULIB_GETCWD=0;
@@ -9813,6 +9816,7 @@ fi
   HAVE_GETPAGESIZE=1;
   HAVE_READLINK=1;
   HAVE_SLEEP=1;
+  HAVE_DECL_ENVIRON=1;
   HAVE_DECL_GETLOGIN_R=1;
   HAVE_OS_H=0;
   HAVE_SYS_PARAM_H=0;
@@ -16779,14 +16783,14 @@ main ()
   return 0;
 }
 _ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
 case "(($ac_try" in
   *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
   *) ac_try_echo=$ac_try;;
 esac
 eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
+  (eval "$ac_link") 2>conftest.er1
   ac_status=$?
   grep -v '^ *+' conftest.er1 >conftest.err
   rm -f conftest.er1
@@ -16795,13 +16799,14 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
   (exit $ac_status); } && {
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_PROGRAM_INVOCATION_NAME 1
 _ACEOF
 
-                   { echo "$as_me:$LINENO: result: yes" >&5
+                 { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
 else
   echo "$as_me: failed program was:" >&5
@@ -16811,7 +16816,8 @@ sed 's/^/| /' conftest.$ac_ext >&5
 echo "${ECHO_T}no" >&6; }
 fi
 
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
 
   { echo "$as_me:$LINENO: checking whether program_invocation_short_name is defined" >&5
 echo $ECHO_N "checking whether program_invocation_short_name is defined... $ECHO_C" >&6; }
@@ -16830,14 +16836,14 @@ main ()
   return 0;
 }
 _ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
 case "(($ac_try" in
   *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
   *) ac_try_echo=$ac_try;;
 esac
 eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
+  (eval "$ac_link") 2>conftest.er1
   ac_status=$?
   grep -v '^ *+' conftest.er1 >conftest.err
   rm -f conftest.er1
@@ -16846,13 +16852,14 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
   (exit $ac_status); } && {
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_PROGRAM_INVOCATION_SHORT_NAME 1
 _ACEOF
 
-                   { echo "$as_me:$LINENO: result: yes" >&5
+                 { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
 else
   echo "$as_me: failed program was:" >&5
@@ -16862,7 +16869,8 @@ sed 's/^/| /' conftest.$ac_ext >&5
 echo "${ECHO_T}no" >&6; }
 fi
 
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
 
 
   :
@@ -17996,6 +18004,80 @@ _ACEOF
 
 
   GNULIB_DUP2=1
+
+
+
+
+
+
+  { echo "$as_me:$LINENO: checking if environ is properly declared" >&5
+echo $ECHO_N "checking if environ is properly declared... $ECHO_C" >&6; }
+  if test "${gt_cv_var_environ_declaration+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <unistd.h>
+      extern struct { int foo; } environ;
+int
+main ()
+{
+environ.foo = 1;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  gt_cv_var_environ_declaration=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	gt_cv_var_environ_declaration=yes
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+
+  { echo "$as_me:$LINENO: result: $gt_cv_var_environ_declaration" >&5
+echo "${ECHO_T}$gt_cv_var_environ_declaration" >&6; }
+  if test $gt_cv_var_environ_declaration = yes; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_ENVIRON_DECL 1
+_ACEOF
+
+  fi
+
+
+  if test $gt_cv_var_environ_declaration != yes; then
+    HAVE_DECL_ENVIRON=0
+  fi
+
+
+
+  GNULIB_ENVIRON=1
 
 
 
@@ -22589,6 +22671,7 @@ _ACEOF
 
 
 
+
   :
 
 
@@ -22833,68 +22916,6 @@ _ACEOF
 
 fi
 done
-
-
-
-  { echo "$as_me:$LINENO: checking if environ is properly declared" >&5
-echo $ECHO_N "checking if environ is properly declared... $ECHO_C" >&6; }
-  if test "${gt_cv_var_environ_declaration+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <unistd.h>
-      extern struct { int foo; } environ;
-int
-main ()
-{
-environ.foo = 1;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  gt_cv_var_environ_declaration=no
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	gt_cv_var_environ_declaration=yes
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-
-  { echo "$as_me:$LINENO: result: $gt_cv_var_environ_declaration" >&5
-echo "${ECHO_T}$gt_cv_var_environ_declaration" >&6; }
-  if test $gt_cv_var_environ_declaration = yes; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_ENVIRON_DECL 1
-_ACEOF
-
-  fi
 
 
   fi
@@ -27966,73 +27987,12 @@ done
 
 
 
+
   :
 
 
 
 
-
-
-
-  { echo "$as_me:$LINENO: checking if environ is properly declared" >&5
-echo $ECHO_N "checking if environ is properly declared... $ECHO_C" >&6; }
-  if test "${gt_cv_var_environ_declaration+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <unistd.h>
-      extern struct { int foo; } environ;
-int
-main ()
-{
-environ.foo = 1;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  gt_cv_var_environ_declaration=no
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	gt_cv_var_environ_declaration=yes
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-
-  { echo "$as_me:$LINENO: result: $gt_cv_var_environ_declaration" >&5
-echo "${ECHO_T}$gt_cv_var_environ_declaration" >&6; }
-  if test $gt_cv_var_environ_declaration = yes; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_ENVIRON_DECL 1
-_ACEOF
-
-  fi
 
 
   else
@@ -38145,6 +38105,7 @@ ALLOCA_H!$ALLOCA_H$ac_delim
 GETOPT_H!$GETOPT_H$ac_delim
 GNULIB_CHOWN!$GNULIB_CHOWN$ac_delim
 GNULIB_DUP2!$GNULIB_DUP2$ac_delim
+GNULIB_ENVIRON!$GNULIB_ENVIRON$ac_delim
 GNULIB_FCHDIR!$GNULIB_FCHDIR$ac_delim
 GNULIB_FTRUNCATE!$GNULIB_FTRUNCATE$ac_delim
 GNULIB_GETCWD!$GNULIB_GETCWD$ac_delim
@@ -38159,6 +38120,7 @@ HAVE_FTRUNCATE!$HAVE_FTRUNCATE$ac_delim
 HAVE_GETPAGESIZE!$HAVE_GETPAGESIZE$ac_delim
 HAVE_READLINK!$HAVE_READLINK$ac_delim
 HAVE_SLEEP!$HAVE_SLEEP$ac_delim
+HAVE_DECL_ENVIRON!$HAVE_DECL_ENVIRON$ac_delim
 HAVE_DECL_GETLOGIN_R!$HAVE_DECL_GETLOGIN_R$ac_delim
 HAVE_OS_H!$HAVE_OS_H$ac_delim
 HAVE_SYS_PARAM_H!$HAVE_SYS_PARAM_H$ac_delim
@@ -38207,8 +38169,6 @@ GNULIB_MKDTEMP!$GNULIB_MKDTEMP$ac_delim
 GNULIB_MKSTEMP!$GNULIB_MKSTEMP$ac_delim
 GNULIB_PUTENV!$GNULIB_PUTENV$ac_delim
 GNULIB_SETENV!$GNULIB_SETENV$ac_delim
-GNULIB_UNSETENV!$GNULIB_UNSETENV$ac_delim
-HAVE_CALLOC_POSIX!$HAVE_CALLOC_POSIX$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -38250,6 +38210,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+GNULIB_UNSETENV!$GNULIB_UNSETENV$ac_delim
+HAVE_CALLOC_POSIX!$HAVE_CALLOC_POSIX$ac_delim
 HAVE_GETSUBOPT!$HAVE_GETSUBOPT$ac_delim
 HAVE_MKDTEMP!$HAVE_MKDTEMP$ac_delim
 HAVE_REALLOC_POSIX!$HAVE_REALLOC_POSIX$ac_delim
@@ -38345,8 +38307,6 @@ HAVE_FSEEKO!$HAVE_FSEEKO$ac_delim
 REPLACE_FSEEKO!$REPLACE_FSEEKO$ac_delim
 REPLACE_FSEEK!$REPLACE_FSEEK$ac_delim
 HAVE_FTELLO!$HAVE_FTELLO$ac_delim
-REPLACE_FTELLO!$REPLACE_FTELLO$ac_delim
-REPLACE_FTELL!$REPLACE_FTELL$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -38388,6 +38348,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+REPLACE_FTELLO!$REPLACE_FTELLO$ac_delim
+REPLACE_FTELL!$REPLACE_FTELL$ac_delim
 REPLACE_FFLUSH!$REPLACE_FFLUSH$ac_delim
 HAVE_DECL_GETDELIM!$HAVE_DECL_GETDELIM$ac_delim
 HAVE_DECL_GETLINE!$HAVE_DECL_GETLINE$ac_delim
@@ -38483,8 +38445,6 @@ USE_INCLUDED_LIBINTL!$USE_INCLUDED_LIBINTL$ac_delim
 CATOBJEXT!$CATOBJEXT$ac_delim
 DATADIRNAME!$DATADIRNAME$ac_delim
 INSTOBJEXT!$INSTOBJEXT$ac_delim
-GENCAT!$GENCAT$ac_delim
-INTLOBJS!$INTLOBJS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -38526,6 +38486,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+GENCAT!$GENCAT$ac_delim
+INTLOBJS!$INTLOBJS$ac_delim
 INTL_LIBTOOL_SUFFIX_PREFIX!$INTL_LIBTOOL_SUFFIX_PREFIX$ac_delim
 INTLLIBS!$INTLLIBS$ac_delim
 POSUB!$POSUB$ac_delim
@@ -38559,7 +38521,7 @@ gltests_LIBOBJS!$gltests_LIBOBJS$ac_delim
 gltests_LTLIBOBJS!$gltests_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 31; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 33; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

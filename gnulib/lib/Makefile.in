@@ -64,6 +64,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/double-slash-root.m4 \
 	$(top_srcdir)/gnulib/m4/dup2.m4 \
 	$(top_srcdir)/gnulib/m4/eealloc.m4 \
+	$(top_srcdir)/gnulib/m4/environ.m4 \
 	$(top_srcdir)/gnulib/m4/eoverflow.m4 \
 	$(top_srcdir)/gnulib/m4/error.m4 \
 	$(top_srcdir)/gnulib/m4/exitfail.m4 \
@@ -249,6 +250,7 @@ GMSGFMT_015 = @GMSGFMT_015@
 GNULIB_CALLOC_POSIX = @GNULIB_CALLOC_POSIX@
 GNULIB_CHOWN = @GNULIB_CHOWN@
 GNULIB_DUP2 = @GNULIB_DUP2@
+GNULIB_ENVIRON = @GNULIB_ENVIRON@
 GNULIB_FCHDIR = @GNULIB_FCHDIR@
 GNULIB_FFLUSH = @GNULIB_FFLUSH@
 GNULIB_FOPEN = @GNULIB_FOPEN@
@@ -319,6 +321,7 @@ GNULIB_WCWIDTH = @GNULIB_WCWIDTH@
 GREP = @GREP@
 HAVE_ASPRINTF = @HAVE_ASPRINTF@
 HAVE_CALLOC_POSIX = @HAVE_CALLOC_POSIX@
+HAVE_DECL_ENVIRON = @HAVE_DECL_ENVIRON@
 HAVE_DECL_GETDELIM = @HAVE_DECL_GETDELIM@
 HAVE_DECL_GETLINE = @HAVE_DECL_GETLINE@
 HAVE_DECL_GETLOGIN_R = @HAVE_DECL_GETLOGIN_R@
@@ -1512,6 +1515,7 @@ unistd.h: unistd.in.h
 	      -e 's|@''NEXT_UNISTD_H''@|$(NEXT_UNISTD_H)|g' \
 	      -e 's|@''GNULIB_CHOWN''@|$(GNULIB_CHOWN)|g' \
 	      -e 's|@''GNULIB_DUP2''@|$(GNULIB_DUP2)|g' \
+	      -e 's|@''GNULIB_ENVIRON''@|$(GNULIB_ENVIRON)|g' \
 	      -e 's|@''GNULIB_FCHDIR''@|$(GNULIB_FCHDIR)|g' \
 	      -e 's|@''GNULIB_FTRUNCATE''@|$(GNULIB_FTRUNCATE)|g' \
 	      -e 's|@''GNULIB_GETCWD''@|$(GNULIB_GETCWD)|g' \
@@ -1526,6 +1530,7 @@ unistd.h: unistd.in.h
 	      -e 's|@''HAVE_GETPAGESIZE''@|$(HAVE_GETPAGESIZE)|g' \
 	      -e 's|@''HAVE_READLINK''@|$(HAVE_READLINK)|g' \
 	      -e 's|@''HAVE_SLEEP''@|$(HAVE_SLEEP)|g' \
+	      -e 's|@''HAVE_DECL_ENVIRON''@|$(HAVE_DECL_ENVIRON)|g' \
 	      -e 's|@''HAVE_DECL_GETLOGIN_R''@|$(HAVE_DECL_GETLOGIN_R)|g' \
 	      -e 's|@''HAVE_OS_H''@|$(HAVE_OS_H)|g' \
 	      -e 's|@''HAVE_SYS_PARAM_H''@|$(HAVE_SYS_PARAM_H)|g' \
