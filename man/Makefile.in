@@ -1084,7 +1084,8 @@ replace.sed: $(top_builddir)/man/replace.sin
 .man1.1: replace.sed
 	$(MKDIR_P) man1
 	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
-	sed -f replace.sed $< > $@
+	program=`echo '$@' | sed -e 's/\.1//' -e 's,.*/,,' -e '$(program_transform_name)'`; \
+	sed -f replace.sed -e "s,%program%,$$program,g" $< > $@
 .man5.5: replace.sed
 	$(MKDIR_P) man5
 	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
@@ -1092,7 +1093,8 @@ replace.sed: $(top_builddir)/man/replace.sin
 .man8.8: replace.sed
 	$(MKDIR_P) man8
 	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
-	sed -f replace.sed $< > $@
+	program=`echo '$@' | sed -e 's/\.8//' -e 's,.*/,,' -e '$(program_transform_name)'`; \
+	sed -f replace.sed -e "s,%program%,$$program,g" $< > $@
 
 mostlyclean-local:
 	-rm -f index.*
