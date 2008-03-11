@@ -441,6 +441,7 @@ AC_CONFIG_FILES(Makefile
 	src/man_db.conf
 	man/Makefile
 	man/replace.sin
+	man/po4a/Makefile
 	man/de/Makefile
 	man/es/Makefile
 	man/fr/Makefile

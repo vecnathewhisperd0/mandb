@@ -1,7 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ##
-## Copyright (C) 1994, 1995 Graeme Wilford.
-## Copyright (C) 2001, 2002, 2003, 2007 Colin Watson.
+## Copyright (C) 2008 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -19,25 +18,4 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-if NLS
-SUBDIRS = po4a de es fr it ja
-endif
-
-LINGUA = .
-
-man1_MANS = \
-	man1/apropos.1 \
-	man1/lexgrog.1 \
-	man1/man.1 \
-	man1/manconv.1 \
-	man1/manpath.1 \
-	man1/whatis.1 \
-	man1/zsoelim.1
-man5_MANS = \
-	man5/manpath.5
-man8_MANS = \
-	man8/accessdb.8 \
-	man8/catman.8 \
-	man8/mandb.8
-
-include $(srcdir)/Rules.man
+EXTRA_DIST = po4a.cfg po/man-db-manpages.pot
