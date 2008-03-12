@@ -19,3 +19,6 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 EXTRA_DIST = po4a.cfg po/man-db-manpages.pot
+
+update-po:
+	po4a po4a.cfg
