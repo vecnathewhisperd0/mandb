@@ -333,6 +333,9 @@ AM_GNU_GETTEXT_VERSION([0.17])
 AC_SUBST(LINGUAS)
 AM_ICONV
 AM_CONDITIONAL([NLS], [test "$USE_NLS" = yes])
+AC_CHECK_PROGS([PO4A], [po4a])
+AC_SUBST([PO4A])
+AM_CONDITIONAL([PO4A], [test -n "$PO4A"])
 
 # Checks for structures and compiler characteristics.
 AC_C_CONST

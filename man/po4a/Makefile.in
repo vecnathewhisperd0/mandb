@@ -418,6 +418,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PO4A = @PO4A@
 POSUB = @POSUB@
 PRI_MACROS_BROKEN = @PRI_MACROS_BROKEN@
 PTRDIFF_T_SUFFIX = @PTRDIFF_T_SUFFIX@
@@ -745,7 +746,7 @@ uninstall-am:
 
 
 update-po:
-	po4a po4a.cfg
+	$(PO4A) po4a.cfg
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

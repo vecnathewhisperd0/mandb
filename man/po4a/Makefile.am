@@ -21,4 +21,4 @@
 EXTRA_DIST = po4a.cfg po/man-db-manpages.pot
 
 update-po:
-	po4a po4a.cfg
+	$(PO4A) po4a.cfg

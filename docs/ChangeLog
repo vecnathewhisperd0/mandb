@@ -1,3 +1,11 @@
+Wed Mar 12 12:20:50 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Check for po4a. Define an Automake conditional based
+	  on whether it is present.
+	* man/Makefile.am (SUBDIRS): Add the po4a subdirectory only if the
+	  po4a program is present.
+	* man/po4a/Makefile.am (update-po): Use PO4A variable.
+
 Wed Mar 12 08:53:48 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* man/po4a/Makefile.am (update-po): New target.
