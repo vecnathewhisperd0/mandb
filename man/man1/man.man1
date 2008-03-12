@@ -454,7 +454,7 @@ Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
 .if !'po4a'hide' .B \-d, \-\-debug
-Print lots of debugging information.
+Print debugging information.
 .TP
 .if !'po4a'hide' .B \-D, \-\-default
 This option is normally issued as the very first option and resets
@@ -1028,11 +1028,10 @@ is replaced by a colon (:).
 .if !'po4a'hide' .B SYSTEM
 If
 .RB $ SYSTEM
-is set, it will have the same effect as option
-.B \-m "string"
-where string will be taken as
-.RB $ SYSTEM 's
-contents.
+is set, it will have the same effect as if it had been specified as the
+argument to the
+.B \-m
+option.
 .TP
 .if !'po4a'hide' .B MANOPT
 If
@@ -1099,7 +1098,7 @@ A traditional global
 database cache.
 .TP
 .if !'po4a'hide' .I /var/cache/man/index.(bt|db|dir|pag)
-An alternate or FHS
+An FHS
 compliant global
 .I index
 database cache.

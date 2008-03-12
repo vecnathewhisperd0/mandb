@@ -2,12 +2,12 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-03-10 00:53+0000\n"
+"POT-Creation-Date: 2008-03-12 08:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgid "OPTIONS"
 msgstr ""
 
 # type: Plain text
-#: ../man1/apropos.man1:65 ../man1/whatis.man1:75 ../man8/catman.man8:59
+#: ../man1/apropos.man1:65 ../man1/man.man1:458 ../man1/manconv.man1:63 ../man1/manpath.man1:44 ../man1/whatis.man1:75 ../man8/catman.man8:59 ../man8/mandb.man8:79
 msgid "Print debugging information."
 msgstr ""
 
@@ -212,10 +212,10 @@ msgid "B<-M\\ >I<path>B<,\\ --manpath=>I<path>"
 msgstr ""
 
 # type: Plain text
-#: ../man1/apropos.man1:160
+#: ../man1/apropos.man1:160 ../man1/whatis.man1:164
 msgid ""
 "Specify an alternate set of colon-delimited manual page hierarchies to "
-"search.  By default, B<%apropos%> uses the $B<MANPATH> environment variable, "
+"search.  By default, B<%program%> uses the $B<MANPATH> environment variable, "
 "unless it is empty or unset, in which case it will determine an appropriate "
 "manpath based on your $B<PATH> environment variable.  This option overrides "
 "the contents of $B<MANPATH>."
@@ -282,7 +282,7 @@ msgid "Operational error."
 msgstr ""
 
 # type: Plain text
-#: ../man1/apropos.man1:200
+#: ../man1/apropos.man1:200 ../man1/whatis.man1:204
 msgid "Nothing was found that matched the criteria specified."
 msgstr ""
 
@@ -293,7 +293,7 @@ msgid "ENVIRONMENT"
 msgstr ""
 
 # type: Plain text
-#: ../man1/apropos.man1:209 ../man1/manpath.man1:121 ../man1/whatis.man1:213
+#: ../man1/apropos.man1:209 ../man1/man.man1:1035 ../man1/manpath.man1:121 ../man1/whatis.man1:213
 msgid ""
 "If $B<SYSTEM> is set, it will have the same effect as if it had been "
 "specified as the argument to the B<-m> option."
@@ -324,19 +324,19 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../man1/apropos.man1:236 ../man1/man.man1:1088 ../man1/manpath.man1:121 ../man1/whatis.man1:231 ../man8/catman.man8:87 ../man8/mandb.man8:183
+#: ../man1/apropos.man1:236 ../man1/man.man1:1087 ../man1/manpath.man1:121 ../man1/whatis.man1:231 ../man8/catman.man8:87 ../man8/mandb.man8:183
 #, no-wrap
 msgid "FILES"
 msgstr ""
 
 # type: Plain text
-#: ../man1/apropos.man1:242 ../man1/man.man1:1100 ../man1/whatis.man1:237 ../man8/catman.man8:96 ../man8/mandb.man8:192
+#: ../man1/apropos.man1:242 ../man1/man.man1:1099 ../man1/whatis.man1:237 ../man8/catman.man8:96 ../man8/mandb.man8:192
 msgid "A traditional global I<index> database cache."
 msgstr ""
 
 # type: Plain text
-#: ../man1/apropos.man1:248 ../man1/man.man1:1106
-msgid "An alternate or FHS compliant global I<index> database cache."
+#: ../man1/apropos.man1:248 ../man1/man.man1:1105 ../man1/whatis.man1:243 ../man8/mandb.man8:203
+msgid "An FHS compliant global I<index> database cache."
 msgstr ""
 
 # type: Plain text
@@ -345,7 +345,7 @@ msgid "A traditional B<whatis> text database."
 msgstr ""
 
 # type: SH
-#: ../man1/apropos.man1:253 ../man1/lexgrog.man1:191 ../man1/man.man1:1106 ../man1/manconv.man1:69 ../man1/manpath.man1:125 ../man1/whatis.man1:248 ../man1/zsoelim.man1:70 ../man8/catman.man8:102 ../man8/mandb.man8:203
+#: ../man1/apropos.man1:253 ../man1/lexgrog.man1:191 ../man1/man.man1:1105 ../man1/manconv.man1:69 ../man1/manpath.man1:125 ../man1/whatis.man1:248 ../man1/zsoelim.man1:70 ../man8/catman.man8:102 ../man8/mandb.man8:203
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -1085,11 +1085,6 @@ msgid "General options"
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:458
-msgid "Print lots of debugging information."
-msgstr ""
-
-# type: Plain text
 #: ../man1/man.man1:468
 msgid ""
 "This option is normally issued as the very first option and resets "
@@ -1621,14 +1616,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1036
-msgid ""
-"If $B<SYSTEM> is set, it will have the same effect as option B<-m string> "
-"where string will be taken as $B<SYSTEM>'s contents."
-msgstr ""
-
-# type: Plain text
-#: ../man1/man.man1:1051
+#: ../man1/man.man1:1050
 msgid ""
 "If $B<MANOPT> is set, it will be parsed prior to B<%man%'s> command line and "
 "is expected to be in a similar format.  As all of the other B<%man%> "
@@ -1639,7 +1627,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1065
+#: ../man1/man.man1:1064
 msgid ""
 "If $B<MANWIDTH> is set, its value is used as the line length for which "
 "manual pages should be formatted.  If it is not set, manual pages will be "
@@ -1651,7 +1639,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1076
+#: ../man1/man.man1:1075
 msgid ""
 "Normally, when output is not being directed to a terminal (such as to a file "
 "or a pipe), formatting characters are discarded to make it easier to read "
@@ -1662,7 +1650,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1088
+#: ../man1/man.man1:1087
 msgid ""
 "Depending on system and implementation, either or both of $B<LANG> and "
 "$B<LC_MESSAGES> will be interrogated for the current message locale.  "
@@ -1671,17 +1659,17 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1092 ../man8/catman.man8:91 ../man8/mandb.man8:187
+#: ../man1/man.man1:1091 ../man1/manpath.man1:125 ../man8/catman.man8:91 ../man8/mandb.man8:187
 msgid "man-db configuration file."
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1095
+#: ../man1/man.man1:1094
 msgid "A global manual page hierarchy."
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1124
+#: ../man1/man.man1:1123
 msgid ""
 "B<%mandb%>(8), B<%manpath%>(1), B<manpath>(5), B<%apropos%>(1), "
 "B<%whatis%>(1), B<%catman%>(8), B<less>(1), B<nroff>(1), B<troff>(1), "
@@ -1690,25 +1678,25 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../man1/man.man1:1124
+#: ../man1/man.man1:1123
 #, no-wrap
 msgid "HISTORY"
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1126
+#: ../man1/man.man1:1125
 msgid "1990, 1991 - Originally written by John W. Eaton (jwe@che.utexas.edu)."
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1129
+#: ../man1/man.man1:1128
 msgid ""
 "Dec 23 1992: Rik Faith (faith@cs.unc.edu) applied bug fixes supplied by "
 "Willem Kasdorp (wkasdo@nikhefk.nikef.nl)."
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1133
+#: ../man1/man.man1:1132
 msgid ""
 "30th April 1994 - 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk)  has "
 "been developing and maintaining this package with the help of a few "
@@ -1716,7 +1704,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1137
+#: ../man1/man.man1:1136
 msgid ""
 "30th October 1996 - 30th March 2001: Fabrizio Polacco "
 "E<lt>fpolacco@debian.orgE<gt> maintained and enhanced this package for the "
@@ -1724,7 +1712,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../man1/man.man1:1139
+#: ../man1/man.man1:1138
 msgid ""
 "31st March 2001 - present day: Colin Watson E<lt>cjwatson@debian.orgE<gt> is "
 "now developing and maintaining man-db."
@@ -1793,11 +1781,6 @@ msgstr ""
 # type: Plain text
 #: ../man1/manconv.man1:60
 msgid "Convert the manual page to I<encoding>."
-msgstr ""
-
-# type: Plain text
-#: ../man1/manconv.man1:63 ../man1/manpath.man1:44 ../man8/mandb.man8:79
-msgid "Produce debugging information."
 msgstr ""
 
 # type: TH
@@ -1889,11 +1872,6 @@ msgid ""
 "two colons."
 msgstr ""
 
-# type: Plain text
-#: ../man1/manpath.man1:125
-msgid "System configuration file."
-msgstr ""
-
 # type: TH
 #: ../man1/whatis.man1:12
 #, no-wrap
@@ -1982,26 +1960,6 @@ msgid ""
 "system names.  To include a search of the native operating system's manual "
 "page names, include the system name B<man> in the argument string.  This "
 "option will override the $B<SYSTEM> environment variable."
-msgstr ""
-
-# type: Plain text
-#: ../man1/whatis.man1:164
-msgid ""
-"Specify an alternate set of colon-delimited manual page hierarchies to "
-"search.  By default, B<%whatis%> uses the $B<MANPATH> environment variable, "
-"unless it is empty or unset, in which case it will determine an appropriate "
-"manpath based on your $B<PATH> environment variable.  This option overrides "
-"the contents of $B<MANPATH>."
-msgstr ""
-
-# type: Plain text
-#: ../man1/whatis.man1:204
-msgid "No manual pages were found that matched the criteria specified."
-msgstr ""
-
-# type: Plain text
-#: ../man1/whatis.man1:243 ../man8/catman.man8:102 ../man8/mandb.man8:198
-msgid "An alternate or FSSTND compliant global I<index> database cache."
 msgstr ""
 
 # type: TH
@@ -2345,6 +2303,11 @@ msgid ""
 "configuration file."
 msgstr ""
 
+# type: Plain text
+#: ../man8/catman.man8:102 ../man8/mandb.man8:198
+msgid "An alternate or FSSTND compliant global I<index> database cache."
+msgstr ""
+
 # type: TH
 #: ../man8/mandb.man8:13
 #, no-wrap
@@ -2601,11 +2564,6 @@ msgid ""
 "The wildcard E<lt>filename_maskE<gt> is not unique.  This is usually caused "
 "by the existence of both a compressed and uncompressed version of the same "
 "manual page.  All but the most recent are ignored."
-msgstr ""
-
-# type: Plain text
-#: ../man8/mandb.man8:203
-msgid "An FHS compliant global I<index> database cache."
 msgstr ""
 
 # type: Plain text
