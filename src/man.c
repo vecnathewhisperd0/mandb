@@ -440,7 +440,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'H':
 # ifdef TROFF_IS_GROFF
-			html_pager = arg; /* may be NULL */
+			if (arg)
+				html_pager = arg;
 			htmlout = 1;
 			troff = 1;
 			roff_device = "html";
