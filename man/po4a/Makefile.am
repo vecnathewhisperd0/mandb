@@ -18,7 +18,15 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-EXTRA_DIST = po4a.cfg po/man-db-manpages.pot
+POFILES = po/pl.po
+
+EXTRA_DIST = po4a.cfg po/man-db-manpages.pot $(POFILES)
+
+all-local:
+	$(PO4A) po4a.cfg
 
 update-po:
-	$(PO4A) po4a.cfg
+	$(PO4A) --no-translations po4a.cfg
+
+clean-local:
+	$(PO4A) --rm-translations po4a.cfg

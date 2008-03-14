@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 ## Copyright (C) 1994, 1995 Graeme Wilford.
-## Copyright (C) 2001, 2002, 2003, 2007 Colin Watson.
+## Copyright (C) 2001, 2002, 2003, 2007, 2008 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -19,15 +19,7 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-if NLS
-if PO4A
-MAYBE_PO4A = po4a
-MAYBE_PO4A_LINGUAS = pl
-endif
-SUBDIRS = $(MAYBE_PO4A) de es fr it ja $(MAYBE_PO4A_LINGUAS)
-endif
-
-LINGUA = .
+LINGUA = pl
 
 man1_MANS = \
 	man1/apropos.1 \
@@ -44,4 +36,5 @@ man8_MANS = \
 	man8/catman.8 \
 	man8/mandb.8
 
-include $(srcdir)/Rules.man
+include $(top_srcdir)/man/Rules.man
+
