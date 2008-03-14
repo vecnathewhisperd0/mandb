@@ -1,3 +1,24 @@
+Fri Mar 14 14:24:58 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Persuade 'make distcheck' to pass again.
+
+	* man/po4a/po4a.cfg: Use paths relative to $(srcdir) and
+	  $(builddir).
+	* man/po4a/Makefile.am (PO4A_ARGS): Define srcdir and builddir
+	  variables.
+	  (all-local, update-po, clean-local): Pass $(PO4A_ARGS) to $(PO4A).
+	  Read po4a.cfg from $(srcdir).
+	* man/po4a/*.pl.add: Consolidate into ...
+	* man/pl/translator.add: ... this.
+	* man/Rules.man (dist-hook): Only do anything if PO4A_LINGUA is not
+	  set to yes.
+	  (distclean-hook): Remove man1, man5, and man8 if PO4A_LINGUA is
+	  set to yes.
+	* man/pl/Makefile.am (PO4A_LINGUA): Set to yes.
+	  (EXTRA_DIST): Distribute translator.add.
+	* .bzrignore: Ignore man/pl/man1, man/pl/man5, and man/pl/man8,
+	  rather than just some files within those directories.
+
 Fri Mar 14 01:06:42 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (Controlling formatted output): Change

@@ -938,18 +938,25 @@ mostlyclean-local:
 	-rm -f index.*
 
 dist-hook:
-	@list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
-	dist_files=`for file in $$list; do \
-			echo $$file | sed 's/\.\([0-9]\)/.man\1/'; \
-		    done`; \
-	$(MKDIR_P) `echo "$$dist_files" | \
-		    sed 's|^|$(distdir)/|;s,/[^/]*$$,,' | \
-		    sort -u`; \
-	for file in $$dist_files; do \
-		test -f $(distdir)/$$file \
-		|| cp -p $(srcdir)/$$file $(distdir)/$$file \
-		|| exit 1; \
-	done
+	@if [ "x$(PO4A_LINGUA)" != xyes ]; then \
+		list='$(man1_MANS) $(man5_MANS) $(man8_MANS)'; \
+		dist_files=`for file in $$list; do \
+				echo $$file | sed 's/\.\([0-9]\)/.man\1/'; \
+			    done`; \
+		$(MKDIR_P) `echo "$$dist_files" | \
+			    sed 's|^|$(distdir)/|;s,/[^/]*$$,,' | \
+			    sort -u`; \
+		for file in $$dist_files; do \
+			test -f $(distdir)/$$file \
+			|| cp -p $(srcdir)/$$file $(distdir)/$$file \
+			|| exit 1; \
+		done; \
+	fi
+
+distclean-hook:
+	@if [ "x$(PO4A_LINGUA)" = xyes ]; then \
+		-rm -rf man1 man5 man8; \
+	fi
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

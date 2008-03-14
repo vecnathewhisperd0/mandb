@@ -20,6 +20,9 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 LINGUA = pl
+PO4A_LINGUA = yes
+
+EXTRA_DIST = translator.add
 
 man1_MANS = \
 	man1/apropos.1 \

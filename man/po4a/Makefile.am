@@ -22,11 +22,14 @@ POFILES = po/pl.po
 
 EXTRA_DIST = po4a.cfg po/man-db-manpages.pot $(POFILES)
 
+PO4A_ARGS = --variable srcdir=$(top_srcdir)/man \
+	    --variable builddir=$(top_builddir)/man
+
 all-local:
-	$(PO4A) po4a.cfg
+	$(PO4A) $(PO4A_ARGS) $(srcdir)/po4a.cfg
 
 update-po:
-	$(PO4A) --no-translations po4a.cfg
+	$(PO4A) $(PO4A_ARGS) --no-translations $(srcdir)/po4a.cfg
 
 clean-local:
-	$(PO4A) --rm-translations po4a.cfg
+	$(PO4A) $(PO4A_ARGS) --rm-translations $(srcdir)/po4a.cfg
