@@ -1,3 +1,14 @@
+Sun Apr 27 00:54:05 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/manconv.c (options, parse_opt): Accept -q/--quiet.
+	  (try_iconv): Suppress iconv errors under --quiet.
+	* man/man1/manconv.man1 (SYNOPSIS, OPTIONS): Document --quiet.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/pl.po: Update.
+	* po/man-db.pot, po/*.po: Update.
+
+	* src/encoding.c (add_manconv): Pass -q to manconv if this is mandb
+	  in quiet mode.
+
 Sat Apr 26 14:34:26 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (DESCRIPTION): Bring list of conventional

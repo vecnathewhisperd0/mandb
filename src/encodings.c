@@ -667,15 +667,20 @@ const char *get_less_charset (const char *locale_charset)
 
 void add_manconv (pipeline *p, const char *source, const char *target)
 {
+	command *cmd;
+
 	if (STREQ (source, "UTF-8")) {
 		if (STREQ (target, "UTF-8"))
 			return;
-		pipeline_command_args (p, "iconv", "-f", source, "-t", target,
-				       NULL);
+		cmd = command_new_args ("iconv", "-f", source, "-t", target,
+					NULL);
 	} else {
 		char *sources = appendstr (NULL, "UTF-8:", source, NULL);
-		pipeline_command_args (p, MANCONV, "-f", sources, "-t", target,
-				       NULL);
+		cmd = command_new_args (MANCONV, "-f", sources, "-t", target,
+					NULL);
 		free (sources);
+		if (quiet >= 2)
+			command_arg (cmd, "-q");
 	}
+	pipeline_command (p, cmd);
 }
