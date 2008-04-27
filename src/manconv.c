@@ -207,6 +207,7 @@ static char *check_preprocessor_encoding (pipeline *p)
 
 static int try_iconv (pipeline *p, const char *try_from_code, int last)
 {
+	char *try_to_code = xstrdup (to_code);
 	static const size_t buf_size = 65536;
 	size_t input_size = buf_size;
 	const char *input;
@@ -214,12 +215,19 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 	iconv_t cd;
 	int ret = 0;
 
-	debug ("trying encoding %s -> %s\n", try_from_code, to_code);
+	/* Only handle //IGNORE for the last encoding. */
+	if (!last) {
+		char *ignore = strstr (try_to_code, "//IGNORE");
+		if (ignore)
+			*ignore = '\0';
+	}
+	debug ("trying encoding %s -> %s\n", try_from_code, try_to_code);
 
-	cd = iconv_open (to_code, try_from_code);
+	cd = iconv_open (try_to_code, try_from_code);
 	if (cd == (iconv_t) -1) {
 		error (0, errno, "iconv_open (\"%s\", \"%s\")",
-		       to_code, try_from_code);
+		       try_to_code, try_from_code);
+		free (try_to_code);
 		return -1;
 	}
 
@@ -249,14 +257,14 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 			   &outptr, &outleft);
 
 		if (n == (size_t) -1 &&
-		    errno == EILSEQ && strstr (to_code, "//IGNORE"))
+		    errno == EILSEQ && strstr (try_to_code, "//IGNORE"))
 			errno = 0;
 
 		/* If we need to try the next encoding, do that before
 		 * writing anything.
 		 */
 		if (!last && n == (size_t) -1 &&
-		    ((errno == EILSEQ && !strstr (to_code, "//IGNORE")) ||
+		    ((errno == EILSEQ && !strstr (try_to_code, "//IGNORE")) ||
 		     (errno == EINVAL && input_size < buf_size))) {
 			ret = -1;
 			break;
@@ -300,7 +308,8 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 			}
 		} else {
 			/* !last case handled above */
-			if (errno == EILSEQ && !strstr (to_code, "//IGNORE")) {
+			if (errno == EILSEQ &&
+			    !strstr (try_to_code, "//IGNORE")) {
 				if (!quiet)
 					error (0, errno, "iconv");
 				exit (FATAL);
@@ -328,6 +337,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 	}
 
 	iconv_close (cd);
+	free (try_to_code);
 
 	return ret;
 }

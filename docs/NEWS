@@ -25,6 +25,12 @@ Major changes since man-db 2.5.1:
 
 	o man(1)'s OPTIONS section is ordered more comprehensibly.
 
+	o apropos, lexgrog, man, mandb, and whatis ignore encoding
+	  conversion errors for the last possible encoding of the source
+	  page. This helps, for example, with pages including misencoded
+	  non-ASCII names of authors; it usually seems better to allow these
+	  pages to pass with small errors than to break them entirely.
+
 man-db 2.5.1 (28 January 2008)
 ==============================
 

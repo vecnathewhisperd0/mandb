@@ -1,3 +1,11 @@
+Sun Apr 27 01:31:47 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/manconv.c (try_iconv): Don't handle //IGNORE unless this is
+	  the last encoding to be tried.
+	* src/encodings.c (add_manconv): Append //IGNORE to the target
+	  encoding.
+	* docs/NEWS: Document this.
+
 Sun Apr 27 00:54:05 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	Don't emit encoding conversion errors in man-db's quiet mode (Debian
