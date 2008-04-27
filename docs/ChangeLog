@@ -1,5 +1,8 @@
 Sun Apr 27 00:54:05 BST 2008  Colin Watson  <cjwatson@debian.org>
 
+	Don't emit encoding conversion errors in man-db's quiet mode (Debian
+	bug #473862).
+
 	* src/manconv.c (options, parse_opt): Accept -q/--quiet.
 	  (try_iconv): Suppress iconv errors under --quiet.
 	* man/man1/manconv.man1 (SYNOPSIS, OPTIONS): Document --quiet.
