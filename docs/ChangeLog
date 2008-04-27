@@ -1,3 +1,10 @@
+Sun Apr 27 11:24:24 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_sigchld): assert is not
+	  async-signal-safe, so avoid calling it in a signal handler and use
+	  an if guard instead (Ubuntu bug #221635, although exactly why the
+	  assertion is failing there is unclear).
+
 Sun Apr 27 01:40:32 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* gnulib: Upgrade to 20080401.
