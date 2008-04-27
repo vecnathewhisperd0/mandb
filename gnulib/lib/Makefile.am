@@ -1,6 +1,6 @@
 ## DO NOT EDIT! GENERATED AUTOMATICALLY!
 ## Process this file with automake to produce Makefile.in.
-# Copyright (C) 2004-2007 Free Software Foundation, Inc.
+# Copyright (C) 2002-2008 Free Software Foundation, Inc.
 #
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
@@ -35,15 +35,6 @@ libgnu_a_DEPENDENCIES = $(gl_LIBOBJS)
 EXTRA_libgnu_a_SOURCES =
 
 AM_CPPFLAGS += -DDEFAULT_TEXT_DOMAIN=\"man-db-gnulib\"
-
-## begin gnulib module absolute-header
-
-# Use this preprocessor expression to decide whether #include_next works.
-# Do not rely on a 'configure'-time test for this, since the expression
-# might appear in an installed header, which is used by some other compiler.
-HAVE_INCLUDE_NEXT = (__GNUC__ || 60000000 <= __DECC_VER)
-
-## end   gnulib module absolute-header
 
 ## begin gnulib module alloca
 
@@ -87,10 +78,6 @@ libgnu_a_SOURCES += argp.h argp-ba.c argp-eexst.c \
            argp-fmtstream.c argp-fmtstream.h argp-fs-xinl.c argp-help.c \
            argp-namefrob.h argp-parse.c argp-pin.c argp-pv.c argp-pvh.c \
            argp-xinl.c
-
-EXTRA_DIST += argp-namefrob.h argp-parse.c argp-pin.c argp-pv.c argp-pvh.c argp-xinl.c
-
-EXTRA_libgnu_a_SOURCES += argp-parse.c argp-pin.c argp-pv.c argp-pvh.c argp-xinl.c
 
 ## end   gnulib module argp
 
@@ -744,6 +731,26 @@ EXTRA_libgnu_a_SOURCES += snprintf.c
 
 ## end   gnulib module snprintf
 
+## begin gnulib module stdarg
+
+BUILT_SOURCES += $(STDARG_H)
+
+# We need the following in order to create <stdarg.h> when the system
+# doesn't have one that works with the given compiler.
+stdarg.h: stdarg.in.h
+	rm -f $@-t $@
+	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */' && \
+	  sed -e 's/@''INCLUDE_NEXT''@/$(INCLUDE_NEXT)/g' \
+	      -e 's|@''NEXT_STDARG_H''@|$(NEXT_STDARG_H)|g' \
+	      < $(srcdir)/stdarg.in.h; \
+	} > $@-t
+	mv $@-t $@
+MOSTLYCLEANFILES += stdarg.h stdarg.h-t
+
+EXTRA_DIST += stdarg.in.h
+
+## end   gnulib module stdarg
+
 ## begin gnulib module stdbool
 
 BUILT_SOURCES += $(STDBOOL_H)
@@ -882,6 +889,7 @@ stdlib.h: stdlib.in.h
 	      -e 's|@''GNULIB_MKSTEMP''@|$(GNULIB_MKSTEMP)|g' \
 	      -e 's|@''GNULIB_PUTENV''@|$(GNULIB_PUTENV)|g' \
 	      -e 's|@''GNULIB_SETENV''@|$(GNULIB_SETENV)|g' \
+	      -e 's|@''GNULIB_STRTOD''@|$(GNULIB_STRTOD)|g' \
 	      -e 's|@''GNULIB_UNSETENV''@|$(GNULIB_UNSETENV)|g' \
 	      -e 's|@''HAVE_CALLOC_POSIX''@|$(HAVE_CALLOC_POSIX)|g' \
 	      -e 's|@''HAVE_GETSUBOPT''@|$(HAVE_GETSUBOPT)|g' \
@@ -889,9 +897,11 @@ stdlib.h: stdlib.in.h
 	      -e 's|@''HAVE_MKDTEMP''@|$(HAVE_MKDTEMP)|g' \
 	      -e 's|@''HAVE_REALLOC_POSIX''@|$(HAVE_REALLOC_POSIX)|g' \
 	      -e 's|@''HAVE_SETENV''@|$(HAVE_SETENV)|g' \
+	      -e 's|@''HAVE_STRTOD''@|$(HAVE_STRTOD)|g' \
 	      -e 's|@''HAVE_UNSETENV''@|$(HAVE_UNSETENV)|g' \
 	      -e 's|@''REPLACE_MKSTEMP''@|$(REPLACE_MKSTEMP)|g' \
 	      -e 's|@''REPLACE_PUTENV''@|$(REPLACE_PUTENV)|g' \
+	      -e 's|@''REPLACE_STRTOD''@|$(REPLACE_STRTOD)|g' \
 	      -e 's|@''VOID_UNSETENV''@|$(VOID_UNSETENV)|g' \
 	      -e '/definition of GL_LINK_WARNING/r $(LINK_WARNING_H)' \
 	      < $(srcdir)/stdlib.in.h; \

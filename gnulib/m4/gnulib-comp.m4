@@ -1,5 +1,5 @@
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2004-2007 Free Software Foundation, Inc.
+# Copyright (C) 2002-2008 Free Software Foundation, Inc.
 #
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
@@ -47,6 +47,7 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([AC_REPLACE_FUNCS], m4_defn([gl_REPLACE_FUNCS]))
   m4_pushdef([AC_LIBSOURCES], m4_defn([gl_LIBSOURCES]))
   gl_source_base='gnulib/lib'
+  gl_EOVERFLOW
   gl_FUNC_ALLOCA
   gl_ARGP
   m4_ifdef([AM_XGETTEXT_OPTION],
@@ -439,6 +440,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/size_max.h
   lib/sleep.c
   lib/snprintf.c
+  lib/stdarg.in.h
   lib/stdbool.in.h
   lib/stdint.in.h
   lib/stdio.in.h
@@ -487,7 +489,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xstrndup.h
   lib/xvasprintf.c
   lib/xvasprintf.h
-  m4/absolute-header.m4
   m4/alloca.m4
   m4/argp.m4
   m4/atexit.m4
@@ -548,7 +549,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/minmax.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
-  m4/onceonly_2_57.m4
+  m4/onceonly.m4
   m4/openat.m4
   m4/pathmax.m4
   m4/readlink.m4
