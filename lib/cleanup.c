@@ -53,6 +53,7 @@ sighandler (int signo)
   do_cleanups_sigsafe (1);
 
   /* set default signal action */
+  memset (&act, 0, sizeof act);
   act.sa_handler = SIG_DFL;
   sigemptyset (&act.sa_mask);
   act.sa_flags = 0;
@@ -88,6 +89,7 @@ trap_signal (int signo, struct sigaction *oldact)
   if (oldact->sa_handler == SIG_DFL) {
     struct sigaction act;
 
+    memset (&act, 0, sizeof act);
     act.sa_handler = sighandler;
     sigemptyset (&act.sa_mask);
     act.sa_flags = 0;

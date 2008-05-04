@@ -1,3 +1,10 @@
+Sun May  4 23:16:59 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* lib/cleanup.c (sighandler, trap_signal), lib/pipeline.c
+	  (pipeline_start, pipeline_pump): Zero sigaction structures before
+	  using them. (I believe we set all required fields anyway; this is
+	  just an extra safety catch.)
+
 Mon Apr 28 09:54:48 BST 2008  Clytie Siddall  <clytie@riverland.net.au>
 
 	* po/vi.po: Update from Translation Project.
