@@ -90,6 +90,9 @@
 /* Define to 1 when using the gnulib module canonicalize. */
 #undef GNULIB_CANONICALIZE
 
+/* Define to 1 when using the gnulib module canonicalize-lgpl. */
+#undef GNULIB_CANONICALIZE_LGPL
+
 /* Define to 1 when using the gnulib module fcntl-safer. */
 #undef GNULIB_FCNTL_SAFER
 
@@ -248,10 +251,6 @@
    don't. */
 #undef HAVE_DECL_MEMRCHR
 
-/* Define to 1 if you have the declaration of `mkdir', and to 0 if you don't.
-   */
-#undef HAVE_DECL_MKDIR
-
 /* Define if program_invocation_name is declared */
 #undef HAVE_DECL_PROGRAM_INVOCATION_NAME
 
@@ -313,6 +312,10 @@
 /* Define to 1 if you have the declaration of `_snwprintf', and to 0 if you
    don't. */
 #undef HAVE_DECL__SNWPRINTF
+
+/* Define to 1 if you have the declaration of `_sys_siglist', and to 0 if you
+   don't. */
+#undef HAVE_DECL__SYS_SIGLIST
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
@@ -435,9 +438,6 @@
    declares uintmax_t. */
 #undef HAVE_INTTYPES_H_WITH_UINTMAX
 
-/* Define to 1 if you have the <io.h> header file. */
-#undef HAVE_IO_H
-
 /* Define to 1 if you have the `isblank' function. */
 #undef HAVE_ISBLANK
 
@@ -458,6 +458,9 @@
 
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 #undef HAVE_LC_MESSAGES
+
+/* Define to 1 if you have the <libintl.h> header file. */
+#undef HAVE_LIBINTL_H
 
 /* Define to 1 if you have the `z' library (-lz). */
 #undef HAVE_LIBZ
@@ -578,6 +581,9 @@
 /* Define to 1 if you have the `putenv' function. */
 #undef HAVE_PUTENV
 
+/* Define to 1 if you have the `rawmemchr' function. */
+#undef HAVE_RAWMEMCHR
+
 /* Define to 1 if you have the `readlink' function. */
 #undef HAVE_READLINK
 
@@ -604,6 +610,9 @@
 
 /* Define to 1 if you have the `setreuid' function. */
 #undef HAVE_SETREUID
+
+/* Define to 1 if you have the `shutdown' function. */
+#undef HAVE_SHUTDOWN
 
 /* Define to 1 if 'sig_atomic_t' is a signed integer type. */
 #undef HAVE_SIGNED_SIG_ATOMIC_T
@@ -1065,6 +1074,16 @@
 /* Define to long or long long if <stdint.h> and <inttypes.h> don't define. */
 #undef intmax_t
 
+/* Work around a bug in Apple GCC 4.0.1 build 5465: In C99 mode, it supports
+   the ISO C 99 semantics of 'extern inline' (unlike the GNU C semantics of
+   earlier versions), but does not display it by setting __GNUC_STDC_INLINE__.
+   __APPLE__ && __MACH__ test for MacOS X.
+   __APPLE_CC__ tests for the Apple compiler and its version.
+   __STDC_VERSION__ tests for the C99 mode.  */
+#if defined __APPLE__ && defined __MACH__ && __APPLE_CC__ >= 5465 && !defined __cplusplus && __STDC_VERSION__ >= 199901L && !defined __GNUC_STDC_INLINE__
+# define __GNUC_STDC_INLINE__ 1
+#endif
+
 /* Define to rpl_localtime if the replacement function should be used. */
 #undef localtime
 
@@ -1076,6 +1095,9 @@
 
 /* Define to rpl_memcmp if the replacement function should be used. */
 #undef memcmp
+
+/* Define to the type of st_nlink in struct stat, or a supertype. */
+#undef nlink_t
 
 /* Define to `int' if <sys/types.h> does not define. */
 #undef pid_t

@@ -46,6 +46,7 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([AC_LIBOBJ], m4_defn([gl_LIBOBJ]))
   m4_pushdef([AC_REPLACE_FUNCS], m4_defn([gl_REPLACE_FUNCS]))
   m4_pushdef([AC_LIBSOURCES], m4_defn([gl_LIBSOURCES]))
+  gl_COMMON
   gl_source_base='gnulib/lib'
   gl_EOVERFLOW
   gl_FUNC_ALLOCA
@@ -57,6 +58,7 @@ AC_DEFUN([gl_INIT],
   AC_FUNC_CANONICALIZE_FILE_NAME
   gl_MODULE_INDICATOR([canonicalize])
   gl_CANONICALIZE_LGPL
+  gl_MODULE_INDICATOR([canonicalize-lgpl])
   gl_FUNC_CHDIR_LONG
   gl_FUNC_CHOWN
   gl_UNISTD_MODULE_INDICATOR([chown])
@@ -120,6 +122,8 @@ AC_DEFUN([gl_INIT],
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
   gl_FUNC_OPENAT
   gl_PATHMAX
+  gl_FUNC_RAWMEMCHR
+  gl_STRING_MODULE_INDICATOR([rawmemchr])
   gl_FUNC_READLINK
   gl_UNISTD_MODULE_INDICATOR([readlink])
   gl_REGEX
@@ -213,6 +217,7 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([AC_LIBOBJ], m4_defn([gltests_LIBOBJ]))
   m4_pushdef([AC_REPLACE_FUNCS], m4_defn([gltests_REPLACE_FUNCS]))
   m4_pushdef([AC_LIBSOURCES], m4_defn([gltests_LIBSOURCES]))
+  gl_COMMON
   gl_source_base='tests'
   m4_popdef([AC_LIBSOURCES])
   m4_popdef([AC_REPLACE_FUNCS])
@@ -420,6 +425,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/printf-args.h
   lib/printf-parse.c
   lib/printf-parse.h
+  lib/rawmemchr.c
+  lib/rawmemchr.valgrind
   lib/readlink.c
   lib/ref-add.sin
   lib/ref-del.sin
@@ -447,6 +454,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdlib.in.h
   lib/strcasecmp.c
   lib/strchrnul.c
+  lib/strchrnul.valgrind
   lib/strcspn.c
   lib/strdup.c
   lib/strerror.c
@@ -552,6 +560,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/onceonly.m4
   m4/openat.m4
   m4/pathmax.m4
+  m4/printf.m4
+  m4/rawmemchr.m4
   m4/readlink.m4
   m4/regex.m4
   m4/rename.m4

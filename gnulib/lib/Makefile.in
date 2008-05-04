@@ -105,6 +105,8 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/onceonly.m4 \
 	$(top_srcdir)/gnulib/m4/openat.m4 \
 	$(top_srcdir)/gnulib/m4/pathmax.m4 \
+	$(top_srcdir)/gnulib/m4/printf.m4 \
+	$(top_srcdir)/gnulib/m4/rawmemchr.m4 \
 	$(top_srcdir)/gnulib/m4/readlink.m4 \
 	$(top_srcdir)/gnulib/m4/regex.m4 \
 	$(top_srcdir)/gnulib/m4/rename.m4 \
@@ -292,8 +294,10 @@ GNULIB_MKSTEMP = @GNULIB_MKSTEMP@
 GNULIB_OPEN = @GNULIB_OPEN@
 GNULIB_PRINTF_POSIX = @GNULIB_PRINTF_POSIX@
 GNULIB_PUTENV = @GNULIB_PUTENV@
+GNULIB_RAWMEMCHR = @GNULIB_RAWMEMCHR@
 GNULIB_READLINK = @GNULIB_READLINK@
 GNULIB_REALLOC_POSIX = @GNULIB_REALLOC_POSIX@
+GNULIB_RPMATCH = @GNULIB_RPMATCH@
 GNULIB_SETENV = @GNULIB_SETENV@
 GNULIB_SLEEP = @GNULIB_SLEEP@
 GNULIB_SNPRINTF = @GNULIB_SNPRINTF@
@@ -328,7 +332,6 @@ HAVE_DECL_GETLINE = @HAVE_DECL_GETLINE@
 HAVE_DECL_GETLOGIN_R = @HAVE_DECL_GETLOGIN_R@
 HAVE_DECL_MEMMEM = @HAVE_DECL_MEMMEM@
 HAVE_DECL_MEMRCHR = @HAVE_DECL_MEMRCHR@
-HAVE_DECL_MKDIR = @HAVE_DECL_MKDIR@
 HAVE_DECL_SNPRINTF = @HAVE_DECL_SNPRINTF@
 HAVE_DECL_STRDUP = @HAVE_DECL_STRDUP@
 HAVE_DECL_STRERROR = @HAVE_DECL_STRERROR@
@@ -346,7 +349,6 @@ HAVE_FTRUNCATE = @HAVE_FTRUNCATE@
 HAVE_GETPAGESIZE = @HAVE_GETPAGESIZE@
 HAVE_GETSUBOPT = @HAVE_GETSUBOPT@
 HAVE_INTTYPES_H = @HAVE_INTTYPES_H@
-HAVE_IO_H = @HAVE_IO_H@
 HAVE_ISWCNTRL = @HAVE_ISWCNTRL@
 HAVE_LONG_LONG_INT = @HAVE_LONG_LONG_INT@
 HAVE_LSTAT = @HAVE_LSTAT@
@@ -355,8 +357,10 @@ HAVE_MEMPCPY = @HAVE_MEMPCPY@
 HAVE_MKDTEMP = @HAVE_MKDTEMP@
 HAVE_OS_H = @HAVE_OS_H@
 HAVE_POSIX_PRINTF = @HAVE_POSIX_PRINTF@
+HAVE_RAWMEMCHR = @HAVE_RAWMEMCHR@
 HAVE_READLINK = @HAVE_READLINK@
 HAVE_REALLOC_POSIX = @HAVE_REALLOC_POSIX@
+HAVE_RPMATCH = @HAVE_RPMATCH@
 HAVE_SETENV = @HAVE_SETENV@
 HAVE_SIGNED_SIG_ATOMIC_T = @HAVE_SIGNED_SIG_ATOMIC_T@
 HAVE_SIGNED_WCHAR_T = @HAVE_SIGNED_WCHAR_T@
@@ -481,9 +485,11 @@ REPLACE_GETCWD = @REPLACE_GETCWD@
 REPLACE_GETLINE = @REPLACE_GETLINE@
 REPLACE_GETPAGESIZE = @REPLACE_GETPAGESIZE@
 REPLACE_GETTIMEOFDAY = @REPLACE_GETTIMEOFDAY@
+REPLACE_ISWCNTRL = @REPLACE_ISWCNTRL@
 REPLACE_LCHOWN = @REPLACE_LCHOWN@
 REPLACE_LSEEK = @REPLACE_LSEEK@
 REPLACE_MEMMEM = @REPLACE_MEMMEM@
+REPLACE_MKDIR = @REPLACE_MKDIR@
 REPLACE_MKSTEMP = @REPLACE_MKSTEMP@
 REPLACE_OPEN = @REPLACE_OPEN@
 REPLACE_PRINTF = @REPLACE_PRINTF@
@@ -650,12 +656,13 @@ EXTRA_DIST = alloca.c alloca.in.h areadlink.h atexit.c canonicalize.c \
 	malloc.c malloc.c malloca.h malloca.valgrind memcmp.c \
 	mempcpy.c memrchr.c memset.c mkdtemp.c mkstemp.c at-func.c \
 	fchmodat.c fchownat.c fstatat.c mkdirat.c openat-priv.h \
-	openat-proc.c openat.c openat.h pathmax.h readlink.c regcomp.c \
-	regex.c regex.h regex_internal.c regex_internal.h regexec.c \
-	rename.c same.c same.h same-inode.h save-cwd.c save-cwd.h \
-	setenv.c sleep.c snprintf.c stdarg.in.h stdbool.in.h \
-	stdint.in.h stdio.in.h stdlib.in.h strcasecmp.c strncasecmp.c \
-	strchrnul.c strcspn.c strdup.c strerror.c string.in.h \
+	openat-proc.c openat.c openat.h pathmax.h rawmemchr.c \
+	rawmemchr.valgrind readlink.c regcomp.c regex.c regex.h \
+	regex_internal.c regex_internal.h regexec.c rename.c same.c \
+	same.h same-inode.h save-cwd.c save-cwd.h setenv.c sleep.c \
+	snprintf.c stdarg.in.h stdbool.in.h stdint.in.h stdio.in.h \
+	stdlib.in.h strcasecmp.c strncasecmp.c strchrnul.c \
+	strchrnul.valgrind strcspn.c strdup.c strerror.c string.in.h \
 	strings.in.h strndup.c strnlen.c strpbrk.c strsep.c siglist.h \
 	strsignal.c sys_select.in.h sys_socket.in.h sys_stat.in.h \
 	sys_time.in.h sysexits.in.h tempname.c tempname.h unistd.in.h \
@@ -703,12 +710,12 @@ EXTRA_libgnu_a_SOURCES = alloca.c atexit.c canonicalize.c \
 	gettimeofday.c glob.c hash.c lchown.c lstat.c malloc.c \
 	malloc.c memcmp.c mempcpy.c memrchr.c memset.c mkdtemp.c \
 	mkstemp.c at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c \
-	openat-proc.c openat.c readlink.c regcomp.c regex.c \
-	regex_internal.c regexec.c rename.c same.c save-cwd.c setenv.c \
-	sleep.c snprintf.c strcasecmp.c strncasecmp.c strchrnul.c \
-	strcspn.c strdup.c strerror.c strndup.c strnlen.c strpbrk.c \
-	strsep.c strsignal.c tempname.c dup-safer.c fd-safer.c \
-	pipe-safer.c unsetenv.c asnprintf.c printf-args.c \
+	openat-proc.c openat.c rawmemchr.c readlink.c regcomp.c \
+	regex.c regex_internal.c regexec.c rename.c same.c save-cwd.c \
+	setenv.c sleep.c snprintf.c strcasecmp.c strncasecmp.c \
+	strchrnul.c strcspn.c strdup.c strerror.c strndup.c strnlen.c \
+	strpbrk.c strsep.c strsignal.c tempname.c dup-safer.c \
+	fd-safer.c pipe-safer.c unsetenv.c asnprintf.c printf-args.c \
 	printf-parse.c vasnprintf.c asprintf.c vasprintf.c vsnprintf.c \
 	xmalloc.c xgetcwd.c
 LINK_WARNING_H = $(top_srcdir)/tools/link-warning.h
@@ -839,6 +846,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pipe-safer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/printf-args.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/printf-parse.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rawmemchr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readlink.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regcomp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regex.Po@am__quote@
@@ -1352,6 +1360,7 @@ stdlib.h: stdlib.in.h
 	      -e 's|@''GNULIB_MKDTEMP''@|$(GNULIB_MKDTEMP)|g' \
 	      -e 's|@''GNULIB_MKSTEMP''@|$(GNULIB_MKSTEMP)|g' \
 	      -e 's|@''GNULIB_PUTENV''@|$(GNULIB_PUTENV)|g' \
+	      -e 's|@''GNULIB_RPMATCH''@|$(GNULIB_RPMATCH)|g' \
 	      -e 's|@''GNULIB_SETENV''@|$(GNULIB_SETENV)|g' \
 	      -e 's|@''GNULIB_STRTOD''@|$(GNULIB_STRTOD)|g' \
 	      -e 's|@''GNULIB_UNSETENV''@|$(GNULIB_UNSETENV)|g' \
@@ -1360,6 +1369,7 @@ stdlib.h: stdlib.in.h
 	      -e 's|@''HAVE_MALLOC_POSIX''@|$(HAVE_MALLOC_POSIX)|g' \
 	      -e 's|@''HAVE_MKDTEMP''@|$(HAVE_MKDTEMP)|g' \
 	      -e 's|@''HAVE_REALLOC_POSIX''@|$(HAVE_REALLOC_POSIX)|g' \
+	      -e 's|@''HAVE_RPMATCH''@|$(HAVE_RPMATCH)|g' \
 	      -e 's|@''HAVE_SETENV''@|$(HAVE_SETENV)|g' \
 	      -e 's|@''HAVE_STRTOD''@|$(HAVE_STRTOD)|g' \
 	      -e 's|@''HAVE_UNSETENV''@|$(HAVE_UNSETENV)|g' \
@@ -1396,6 +1406,7 @@ string.h: string.in.h
 	      -e 's|@''GNULIB_MEMMEM''@|$(GNULIB_MEMMEM)|g' \
 	      -e 's|@''GNULIB_MEMPCPY''@|$(GNULIB_MEMPCPY)|g' \
 	      -e 's|@''GNULIB_MEMRCHR''@|$(GNULIB_MEMRCHR)|g' \
+	      -e 's|@''GNULIB_RAWMEMCHR''@|$(GNULIB_RAWMEMCHR)|g' \
 	      -e 's|@''GNULIB_STPCPY''@|$(GNULIB_STPCPY)|g' \
 	      -e 's|@''GNULIB_STPNCPY''@|$(GNULIB_STPNCPY)|g' \
 	      -e 's|@''GNULIB_STRCHRNUL''@|$(GNULIB_STRCHRNUL)|g' \
@@ -1412,6 +1423,7 @@ string.h: string.in.h
 	      -e 's|@''HAVE_DECL_MEMMEM''@|$(HAVE_DECL_MEMMEM)|g' \
 	      -e 's|@''HAVE_MEMPCPY''@|$(HAVE_MEMPCPY)|g' \
 	      -e 's|@''HAVE_DECL_MEMRCHR''@|$(HAVE_DECL_MEMRCHR)|g' \
+	      -e 's|@''HAVE_RAWMEMCHR''@|$(HAVE_RAWMEMCHR)|g' \
 	      -e 's|@''HAVE_STPCPY''@|$(HAVE_STPCPY)|g' \
 	      -e 's|@''HAVE_STPNCPY''@|$(HAVE_STPNCPY)|g' \
 	      -e 's|@''HAVE_STRCHRNUL''@|$(HAVE_STRCHRNUL)|g' \
@@ -1484,9 +1496,8 @@ sys/stat.h: sys_stat.in.h
 	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
 	  sed -e 's/@''INCLUDE_NEXT''@/$(INCLUDE_NEXT)/g' \
 	      -e 's|@''NEXT_SYS_STAT_H''@|$(NEXT_SYS_STAT_H)|g' \
-	      -e 's|@''HAVE_IO_H''@|$(HAVE_IO_H)|g' \
 	      -e 's|@''HAVE_LSTAT''@|$(HAVE_LSTAT)|g' \
-	      -e 's|@''HAVE_DECL_MKDIR''@|$(HAVE_DECL_MKDIR)|g' \
+	      -e 's|@''REPLACE_MKDIR''@|$(REPLACE_MKDIR)|g' \
 	      < $(srcdir)/sys_stat.in.h; \
 	} > $@-t
 	mv $@-t $@
@@ -1582,6 +1593,7 @@ wctype.h: wctype.in.h
 	      -e 's|@''NEXT_WCTYPE_H''@|$(NEXT_WCTYPE_H)|g' \
 	      -e 's/@''HAVE_ISWCNTRL''@/$(HAVE_ISWCNTRL)/g' \
 	      -e 's/@''HAVE_WINT_T''@/$(HAVE_WINT_T)/g' \
+	      -e 's/@''REPLACE_ISWCNTRL''@/$(REPLACE_ISWCNTRL)/g' \
 	      < $(srcdir)/wctype.in.h; \
 	} > $@-t
 	mv $@-t $@
