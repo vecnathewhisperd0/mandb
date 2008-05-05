@@ -28,6 +28,7 @@
 #include <assert.h>
 #include <signal.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "manconfig.h"		/* for FATAL */
 #include "cleanup.h"
