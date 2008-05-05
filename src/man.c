@@ -1374,6 +1374,17 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				debug ("less_charset = %s\n", less_charset);
 				setenv ("LESSCHARSET", less_charset, 1);
 			}
+
+			if (!getenv ("JLESSCHARSET")) {
+				const char *jless_charset =
+					get_jless_charset (locale_charset);
+				if (jless_charset) {
+					debug ("jless_charset = %s\n",
+					       jless_charset);
+					setenv ("JLESSCHARSET",
+						jless_charset, 1);
+				}
+			}
 		}
 
 		free (page_encoding);

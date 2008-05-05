@@ -1,3 +1,15 @@
+Mon May  5 01:39:22 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	Fix jless support to avoid breaking less (Debian bug #217519).
+
+	* src/encodings.c (less_charset_table): Add jless_charset members.
+	  Move EUC-JP less_charset to jless_charset, falling back to iso8859
+	  for less. Use the more explicit japanese-ujis rather than ja.
+	* src/encodings.c (get_jless_charset): New function.
+	* src/encodings.h (get_jless_charset): Add prototype.
+	* src/man.c (make_roff_command): Set JLESSCHARSET to the return
+	  value of get_jless_charset if non-NULL.
+
 Mon May  5 01:06:56 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	Clean up some loose ends of Chinese support (thanks, Wu Songhai;

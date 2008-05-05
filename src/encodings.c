@@ -266,23 +266,26 @@ static const char *fallback_roff_encoding = "ISO-8859-1";
 /* Setting less_charset to iso8859 tells the less pager that characters
  * between 0xA0 and 0xFF are displayable, not that its input is encoded in
  * ISO-8859-*. TODO: Perhaps using LESSCHARDEF would be better.
+ *
+ * Character set names compatible only with jless go in jless_charset.
  */
 struct less_charset_entry {
 	const char *locale_charset;
 	const char *less_charset;
+	const char *jless_charset;
 };
 
 static struct less_charset_entry less_charset_table[] = {
-	{ "ANSI_X3.4-1968",	"ascii"		},
-	{ "ISO-8859-1",		"iso8859"	},
-	{ "UTF-8",		"utf-8"		},
+	{ "ANSI_X3.4-1968",	"ascii",	NULL		},
+	{ "ISO-8859-1",		"iso8859",	NULL		},
+	{ "UTF-8",		"utf-8",	NULL		},
 
 #ifdef MULTIBYTE_GROFF
-	{ "EUC-JP",		"ja"		},
-	{ "KOI8-R",		"koi8-r"	},
+	{ "EUC-JP",		"iso8859",	"japanese-ujis"	},
+	{ "KOI8-R",		"koi8-r",	NULL		},
 #endif /* MULTIBYTE_GROFF */
 
-	{ NULL,			NULL		}
+	{ NULL,			NULL,		NULL		}
 };
 
 static const char *fallback_less_charset = "iso8859";
@@ -667,6 +670,20 @@ const char *get_less_charset (const char *locale_charset)
 			return entry->less_charset;
 
 	return fallback_less_charset;
+}
+
+/* Return the value of JLESSCHARSET appropriate for this locale. May return
+ * NULL.
+ */
+const char *get_jless_charset (const char *locale_charset)
+{
+	const struct less_charset_entry *entry;
+
+	for (entry = less_charset_table; entry->locale_charset; ++entry)
+		if (STREQ (entry->locale_charset, locale_charset))
+			return entry->jless_charset;
+
+	return NULL;
 }
 
 void add_manconv (pipeline *p, const char *source, const char *target)
