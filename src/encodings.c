@@ -115,6 +115,7 @@ static struct directory_entry directory_table[] = {
 	{ "tr",		"ISO-8859-9",	"ISO-8859-9"		}, /* Turkish */
 	{ "vi",		"TCVN5712-1",	"TCVN5712-1"		}, /* Vietnamese */
 	{ "zh_CN",	"GBK",		"GBK"			}, /* Simplified Chinese */
+	{ "zh_SG",	"GBK",		"GBK"			}, /* Simplified Chinese, Singapore */
 	{ "zh_HK",	"BIG5HKSCS",	"BIG5HKSCS"		}, /* Traditional Chinese, Hong Kong */
 	{ "zh_TW",	"BIG5",		"BIG5"			}, /* Traditional Chinese */
 #endif /* MULTIBYTE_GROFF */
@@ -161,6 +162,7 @@ static struct charset_alias_entry charset_alias_table[] = {
 	{ "EUCCN",		"EUC-CN"		},
 	{ "EUCJP",		"EUC-JP"		},
 	{ "EUCKR",		"EUC-KR"		},
+	{ "EUCTW",		"EUC-TW"		},
 	{ "GB2312",		"EUC-CN"		},
 	{ "ISO8859-1",		"ISO-8859-1"		},
 	{ "ISO8859-2",		"ISO-8859-2"		},
@@ -205,6 +207,7 @@ static struct charset_entry charset_table[] = {
 	{ "BIG5HKSCS",		"nippon"	},
 	{ "EUC-CN",		"nippon"	},
 	{ "EUC-JP",		"nippon"	},
+	{ "EUC-TW",		"nippon"	},
 	{ "GBK",		"nippon"	},
 #endif /* MULTIBYTE_GROFF */
 
@@ -540,7 +543,8 @@ static int compatible_encodings (const char *input, const char *output)
 	if ((STREQ (input, "BIG5") || STREQ (input, "BIG5HKSCS") ||
 	     STREQ (input, "EUC-JP") ||
 	     STREQ (input, "EUC-CN") || STREQ (input, "GBK") ||
-	     STREQ (input, "EUC-KR")) &&
+	     STREQ (input, "EUC-KR") ||
+	     STREQ (input, "EUC-TW")) &&
 	    STREQ (output, "UTF-8"))
 		return 1;
 #endif /* MULTIBYTE_GROFF */
