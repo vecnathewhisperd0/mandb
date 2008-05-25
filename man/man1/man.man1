@@ -18,59 +18,46 @@
 .SH SYNOPSIS
 .\" The general command line
 .B %man%
-.RB [\| \-c \||\| \-w \||\| \-tZ \|]
-.RB [\| \-H \|\c
-.RI [\| browser \|]\|]
-.RB [\| \-T \|\c
-.RI [\| device \|]\|]
-.RB [\| \-X \|\c
-.RI [\| dpi \|]\|]
-.RB [\| \-adhu7V \|]
-.RB [\| \-i \||\| \-I \|]
-.RB [\| \-m
-.IR system \|[\|,.\|.\|.\|]\|]
-.RB [\| \-L
-.IR locale \|]
-.RB [\| \-p
-.IR string \|]
 .RB [\| \-C
 .IR file \|]
+.RB [\| \-d \|]
+.RB [\| \-D \|]
+.RB [\| \-\-warnings \|\c
+.RI [\|= warnings \|]\|]
+.RB [\| \-R
+.IR encoding \|]
+.RB [\| \-L
+.IR locale \|]
+.RB [\| \-m
+.IR system \|[\|,.\|.\|.\|]\|]
 .RB [\| \-M
 .IR path \|]
-.RB [\| \-P
-.IR pager \|]
-.RB [\| \-r
-.IR prompt \|]
 .RB [\| \-S
 .IR list \|]
 .RB [\| \-e
 .IR extension \|]
-.RB [\| \-\-warnings
-.RI [\| warnings \|]\|]
-.RI [\|[\| section \|]
-.IR page \ .\|.\|.\|]\ .\|.\|.
-.\" The --local command line
-.br
-.B %man%
-.B \-l
-.RB [\| \-7 \|]
-.RB [\| \-tZ \|]
-.RB [\| \-H \|\c
-.RI [\| browser \|]\|]
-.RB [\| \-T \|\c
-.RI [\| device \|]\|]
-.RB [\| \-X \|\c
-.RI [\| dpi \|]\|]
-.RB [\| \-p
-.IR string \|]
+.RB [\| \-i \||\| \-I \|]
+.RB [\| \-a \|]
+.RB [\| \-u \|]
 .RB [\| \-P
 .IR pager \|]
 .RB [\| \-r
 .IR prompt \|]
-.RB [\| \-\-warnings \|\c
-.RI [\| warnings \|]\|]
-.I file
-\&.\|.\|.
+.RB [\| \-7 \|]
+.RB [\| \-E
+.IR encoding \|]
+.RB [\| \-p
+.IR string \|]
+.RB [\| \-t \|]
+.RB [\| \-T \|\c
+.RI [\| device \|]\|]
+.RB [\| \-H \|\c
+.RI [\| browser \|]\|]
+.RB [\| \-X \|\c
+.RI [\| dpi \|]\|]
+.RB [\| \-Z \|]
+.RI [\|[\| section \|]
+.IR page \ .\|.\|.\|]\ .\|.\|.
 .\" The apropos command line
 .br
 .B %man%
@@ -87,6 +74,63 @@
 .IR options \|]
 .I page
 \&.\|.\|.
+.\" The --local command line
+.br
+.B %man%
+.B \-l
+.RB [\| \-C
+.IR file \|]
+.RB [\| \-d \|]
+.RB [\| \-D \|]
+.RB [\| \-\-warnings \|\c
+.RI [\|= warnings \|]\|]
+.RB [\| \-R
+.IR encoding \|]
+.RB [\| \-L
+.IR locale \|]
+.RB [\| \-P
+.IR pager \|]
+.RB [\| \-r
+.IR prompt \|]
+.RB [\| \-7 \|]
+.RB [\| \-E
+.IR encoding \|]
+.RB [\| \-p
+.IR string \|]
+.RB [\| \-t \|]
+.RB [\| \-T \|\c
+.RI [\| device \|]\|]
+.RB [\| \-H \|\c
+.RI [\| browser \|]\|]
+.RB [\| \-X \|\c
+.RI [\| dpi \|]\|]
+.RB [\| \-Z \|]
+.I file
+\&.\|.\|.
+.\" The --where/--where-cat command line
+.br
+.B %man%
+.B \-w \||\| \-W
+.RB [\| \-C
+.IR file \|]
+.RB [\| \-d \|]
+.RB [\| \-D \|]
+.I page
+\&.\|.\|.
+.\" The --catman command line
+.br
+.B %man%
+.B \-c
+.RB [\| \-C
+.IR file \|]
+.RB [\| \-d \|]
+.RB [\| \-D \|]
+.I page
+\&.\|.\|.
+.\" --help and --version
+.br
+.B %man%
+.RB [\| \-hV \|]
 .SH DESCRIPTION
 .B %man%
 is the system's manual pager. Each
