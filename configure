@@ -883,6 +883,8 @@ REPLACE_STRCASESTR
 REPLACE_STRSTR
 GNULIB_FPRINTF_POSIX
 GNULIB_PRINTF_POSIX
+GNULIB_OBSTACK_PRINTF
+GNULIB_OBSTACK_PRINTF_POSIX
 GNULIB_SNPRINTF
 GNULIB_SPRINTF_POSIX
 GNULIB_VFPRINTF_POSIX
@@ -923,6 +925,8 @@ REPLACE_FFLUSH
 HAVE_DECL_GETDELIM
 HAVE_DECL_GETLINE
 REPLACE_GETLINE
+HAVE_DECL_OBSTACK_PRINTF
+REPLACE_OBSTACK_PRINTF
 STDARG_H
 NEXT_STDARG_H
 HAVE_LONG_LONG_INT
@@ -14692,6 +14696,8 @@ fi
 
   GNULIB_FPRINTF_POSIX=0;
   GNULIB_PRINTF_POSIX=0;
+  GNULIB_OBSTACK_PRINTF=0;
+  GNULIB_OBSTACK_PRINTF_POSIX=0;
   GNULIB_SNPRINTF=0;
   GNULIB_SPRINTF_POSIX=0;
   GNULIB_VFPRINTF_POSIX=0;
@@ -14732,6 +14738,8 @@ fi
   HAVE_DECL_GETDELIM=1;
   HAVE_DECL_GETLINE=1;
   REPLACE_GETLINE=0;
+  HAVE_DECL_OBSTACK_PRINTF=1;
+  REPLACE_OBSTACK_PRINTF=0;
 
 
       { echo "$as_me:$LINENO: checking whether snprintf is declared" >&5
@@ -21861,6 +21869,127 @@ echo "${ECHO_T}$gl_cv_func_working_mkstemp" >&6; }
 
 
   GNULIB_MKSTEMP=1
+
+
+
+
+  case "$host_os" in
+    mingw* | pw*)
+      REPLACE_OPEN=1
+
+
+
+
+
+
+
+
+  gl_LIBOBJS="$gl_LIBOBJS open.$ac_objext"
+
+      ;;
+    *)
+                  { echo "$as_me:$LINENO: checking whether open recognizes a trailing slash" >&5
+echo $ECHO_N "checking whether open recognizes a trailing slash... $ECHO_C" >&6; }
+if test "${gl_cv_func_open_slash+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+          if test "$cross_compiling" = yes; then
+
+             case "$host_os" in
+               solaris2.[0-9]*) gl_cv_func_open_slash="guessing no" ;;
+               hpux*)           gl_cv_func_open_slash="guessing no" ;;
+               *)               gl_cv_func_open_slash="guessing yes" ;;
+             esac
+
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <fcntl.h>
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+int main ()
+{
+  return open ("conftest.sl/", O_CREAT, 0600) >= 0;
+}
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  gl_cv_func_open_slash=yes
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+gl_cv_func_open_slash=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+          rm -f conftest.sl
+
+fi
+{ echo "$as_me:$LINENO: result: $gl_cv_func_open_slash" >&5
+echo "${ECHO_T}$gl_cv_func_open_slash" >&6; }
+      case "$gl_cv_func_open_slash" in
+        *no)
+
+cat >>confdefs.h <<\_ACEOF
+#define OPEN_TRAILING_SLASH_BUG 1
+_ACEOF
+
+          REPLACE_OPEN=1
+
+
+
+
+
+
+
+
+  gl_LIBOBJS="$gl_LIBOBJS open.$ac_objext"
+
+          ;;
+      esac
+      ;;
+  esac
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define GNULIB_OPEN 1
+_ACEOF
+
+
+
+
+  GNULIB_OPEN=1
 
 
 
@@ -39202,6 +39331,8 @@ REPLACE_STRCASESTR!$REPLACE_STRCASESTR$ac_delim
 REPLACE_STRSTR!$REPLACE_STRSTR$ac_delim
 GNULIB_FPRINTF_POSIX!$GNULIB_FPRINTF_POSIX$ac_delim
 GNULIB_PRINTF_POSIX!$GNULIB_PRINTF_POSIX$ac_delim
+GNULIB_OBSTACK_PRINTF!$GNULIB_OBSTACK_PRINTF$ac_delim
+GNULIB_OBSTACK_PRINTF_POSIX!$GNULIB_OBSTACK_PRINTF_POSIX$ac_delim
 GNULIB_SNPRINTF!$GNULIB_SNPRINTF$ac_delim
 GNULIB_SPRINTF_POSIX!$GNULIB_SPRINTF_POSIX$ac_delim
 GNULIB_VFPRINTF_POSIX!$GNULIB_VFPRINTF_POSIX$ac_delim
@@ -39226,8 +39357,6 @@ REPLACE_SNPRINTF!$REPLACE_SNPRINTF$ac_delim
 HAVE_DECL_SNPRINTF!$HAVE_DECL_SNPRINTF$ac_delim
 REPLACE_VSNPRINTF!$REPLACE_VSNPRINTF$ac_delim
 HAVE_DECL_VSNPRINTF!$HAVE_DECL_VSNPRINTF$ac_delim
-REPLACE_SPRINTF!$REPLACE_SPRINTF$ac_delim
-REPLACE_VSPRINTF!$REPLACE_VSPRINTF$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -39269,6 +39398,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+REPLACE_SPRINTF!$REPLACE_SPRINTF$ac_delim
+REPLACE_VSPRINTF!$REPLACE_VSPRINTF$ac_delim
 HAVE_VASPRINTF!$HAVE_VASPRINTF$ac_delim
 REPLACE_VASPRINTF!$REPLACE_VASPRINTF$ac_delim
 REPLACE_FOPEN!$REPLACE_FOPEN$ac_delim
@@ -39283,6 +39414,8 @@ REPLACE_FFLUSH!$REPLACE_FFLUSH$ac_delim
 HAVE_DECL_GETDELIM!$HAVE_DECL_GETDELIM$ac_delim
 HAVE_DECL_GETLINE!$HAVE_DECL_GETLINE$ac_delim
 REPLACE_GETLINE!$REPLACE_GETLINE$ac_delim
+HAVE_DECL_OBSTACK_PRINTF!$HAVE_DECL_OBSTACK_PRINTF$ac_delim
+REPLACE_OBSTACK_PRINTF!$REPLACE_OBSTACK_PRINTF$ac_delim
 STDARG_H!$STDARG_H$ac_delim
 NEXT_STDARG_H!$NEXT_STDARG_H$ac_delim
 HAVE_LONG_LONG_INT!$HAVE_LONG_LONG_INT$ac_delim
@@ -39362,10 +39495,6 @@ LIBICONV!$LIBICONV$ac_delim
 LTLIBICONV!$LTLIBICONV$ac_delim
 INTLBISON!$INTLBISON$ac_delim
 INTL_MACOSX_LIBS!$INTL_MACOSX_LIBS$ac_delim
-HAVE_POSIX_PRINTF!$HAVE_POSIX_PRINTF$ac_delim
-HAVE_ASPRINTF!$HAVE_ASPRINTF$ac_delim
-HAVE_SNPRINTF!$HAVE_SNPRINTF$ac_delim
-HAVE_WPRINTF!$HAVE_WPRINTF$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -39407,6 +39536,10 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+HAVE_POSIX_PRINTF!$HAVE_POSIX_PRINTF$ac_delim
+HAVE_ASPRINTF!$HAVE_ASPRINTF$ac_delim
+HAVE_SNPRINTF!$HAVE_SNPRINTF$ac_delim
+HAVE_WPRINTF!$HAVE_WPRINTF$ac_delim
 WOE32DLL!$WOE32DLL$ac_delim
 WOE32!$WOE32$ac_delim
 WINDRES!$WINDRES$ac_delim
@@ -39454,7 +39587,7 @@ gltests_LIBOBJS!$gltests_LIBOBJS$ac_delim
 gltests_LTLIBOBJS!$gltests_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 45; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 49; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

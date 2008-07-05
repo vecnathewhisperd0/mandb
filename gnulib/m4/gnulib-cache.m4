@@ -19,7 +19,35 @@
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
-gl_MODULES([argp atexit canonicalize dirname error fnmatch-gnu getopt glob lib-ignore lock memcmp minmax mkdtemp mkstemp regex rename setenv strcspn strerror strsep strsignal sys_select unsetenv xalloc xgetcwd xstrndup xvasprintf])
+gl_MODULES([
+  argp
+  atexit
+  canonicalize
+  dirname
+  error
+  fnmatch-gnu
+  getopt
+  glob
+  lib-ignore
+  lock
+  memcmp
+  minmax
+  mkdtemp
+  mkstemp
+  regex
+  rename
+  setenv
+  strcspn
+  strerror
+  strsep
+  strsignal
+  sys_select
+  unsetenv
+  xalloc
+  xgetcwd
+  xstrndup
+  xvasprintf
+])
 gl_AVOID([])
 gl_SOURCE_BASE([gnulib/lib])
 gl_M4_BASE([gnulib/m4])

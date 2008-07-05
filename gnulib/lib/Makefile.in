@@ -103,6 +103,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/mkdtemp.m4 \
 	$(top_srcdir)/gnulib/m4/mkstemp.m4 \
 	$(top_srcdir)/gnulib/m4/onceonly.m4 \
+	$(top_srcdir)/gnulib/m4/open.m4 \
 	$(top_srcdir)/gnulib/m4/openat.m4 \
 	$(top_srcdir)/gnulib/m4/pathmax.m4 \
 	$(top_srcdir)/gnulib/m4/printf.m4 \
@@ -291,6 +292,8 @@ GNULIB_MEMPCPY = @GNULIB_MEMPCPY@
 GNULIB_MEMRCHR = @GNULIB_MEMRCHR@
 GNULIB_MKDTEMP = @GNULIB_MKDTEMP@
 GNULIB_MKSTEMP = @GNULIB_MKSTEMP@
+GNULIB_OBSTACK_PRINTF = @GNULIB_OBSTACK_PRINTF@
+GNULIB_OBSTACK_PRINTF_POSIX = @GNULIB_OBSTACK_PRINTF_POSIX@
 GNULIB_OPEN = @GNULIB_OPEN@
 GNULIB_PRINTF_POSIX = @GNULIB_PRINTF_POSIX@
 GNULIB_PUTENV = @GNULIB_PUTENV@
@@ -332,6 +335,7 @@ HAVE_DECL_GETLINE = @HAVE_DECL_GETLINE@
 HAVE_DECL_GETLOGIN_R = @HAVE_DECL_GETLOGIN_R@
 HAVE_DECL_MEMMEM = @HAVE_DECL_MEMMEM@
 HAVE_DECL_MEMRCHR = @HAVE_DECL_MEMRCHR@
+HAVE_DECL_OBSTACK_PRINTF = @HAVE_DECL_OBSTACK_PRINTF@
 HAVE_DECL_SNPRINTF = @HAVE_DECL_SNPRINTF@
 HAVE_DECL_STRDUP = @HAVE_DECL_STRDUP@
 HAVE_DECL_STRERROR = @HAVE_DECL_STRERROR@
@@ -491,6 +495,7 @@ REPLACE_LSEEK = @REPLACE_LSEEK@
 REPLACE_MEMMEM = @REPLACE_MEMMEM@
 REPLACE_MKDIR = @REPLACE_MKDIR@
 REPLACE_MKSTEMP = @REPLACE_MKSTEMP@
+REPLACE_OBSTACK_PRINTF = @REPLACE_OBSTACK_PRINTF@
 REPLACE_OPEN = @REPLACE_OPEN@
 REPLACE_PRINTF = @REPLACE_PRINTF@
 REPLACE_PUTENV = @REPLACE_PUTENV@
@@ -654,14 +659,14 @@ EXTRA_DIST = alloca.c alloca.in.h areadlink.h atexit.c canonicalize.c \
 	$(top_srcdir)/tools/link-warning.h config.charset ref-add.sin \
 	ref-del.sin $(top_srcdir)/tools/config.rpath lstat.c lstat.h \
 	malloc.c malloc.c malloca.h malloca.valgrind memcmp.c \
-	mempcpy.c memrchr.c memset.c mkdtemp.c mkstemp.c at-func.c \
-	fchmodat.c fchownat.c fstatat.c mkdirat.c openat-priv.h \
-	openat-proc.c openat.c openat.h pathmax.h rawmemchr.c \
-	rawmemchr.valgrind readlink.c regcomp.c regex.c regex.h \
-	regex_internal.c regex_internal.h regexec.c rename.c same.c \
-	same.h same-inode.h save-cwd.c save-cwd.h setenv.c sleep.c \
-	snprintf.c stdarg.in.h stdbool.in.h stdint.in.h stdio.in.h \
-	stdlib.in.h strcasecmp.c strncasecmp.c strchrnul.c \
+	mempcpy.c memrchr.c memset.c mkdtemp.c mkstemp.c open.c \
+	at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c \
+	openat-priv.h openat-proc.c openat.c openat.h pathmax.h \
+	rawmemchr.c rawmemchr.valgrind readlink.c regcomp.c regex.c \
+	regex.h regex_internal.c regex_internal.h regexec.c rename.c \
+	same.c same.h same-inode.h save-cwd.c save-cwd.h setenv.c \
+	sleep.c snprintf.c stdarg.in.h stdbool.in.h stdint.in.h \
+	stdio.in.h stdlib.in.h strcasecmp.c strncasecmp.c strchrnul.c \
 	strchrnul.valgrind strcspn.c strdup.c strerror.c string.in.h \
 	strings.in.h strndup.c strnlen.c strpbrk.c strsep.c siglist.h \
 	strsignal.c sys_select.in.h sys_socket.in.h sys_stat.in.h \
@@ -709,15 +714,15 @@ EXTRA_libgnu_a_SOURCES = alloca.c atexit.c canonicalize.c \
 	fnmatch_loop.c getcwd.c getlogin_r.c getopt.c getopt1.c \
 	gettimeofday.c glob.c hash.c lchown.c lstat.c malloc.c \
 	malloc.c memcmp.c mempcpy.c memrchr.c memset.c mkdtemp.c \
-	mkstemp.c at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c \
-	openat-proc.c openat.c rawmemchr.c readlink.c regcomp.c \
-	regex.c regex_internal.c regexec.c rename.c same.c save-cwd.c \
-	setenv.c sleep.c snprintf.c strcasecmp.c strncasecmp.c \
-	strchrnul.c strcspn.c strdup.c strerror.c strndup.c strnlen.c \
-	strpbrk.c strsep.c strsignal.c tempname.c dup-safer.c \
-	fd-safer.c pipe-safer.c unsetenv.c asnprintf.c printf-args.c \
-	printf-parse.c vasnprintf.c asprintf.c vasprintf.c vsnprintf.c \
-	xmalloc.c xgetcwd.c
+	mkstemp.c open.c at-func.c fchmodat.c fchownat.c fstatat.c \
+	mkdirat.c openat-proc.c openat.c rawmemchr.c readlink.c \
+	regcomp.c regex.c regex_internal.c regexec.c rename.c same.c \
+	save-cwd.c setenv.c sleep.c snprintf.c strcasecmp.c \
+	strncasecmp.c strchrnul.c strcspn.c strdup.c strerror.c \
+	strndup.c strnlen.c strpbrk.c strsep.c strsignal.c tempname.c \
+	dup-safer.c fd-safer.c pipe-safer.c unsetenv.c asnprintf.c \
+	printf-args.c printf-parse.c vasnprintf.c asprintf.c \
+	vasprintf.c vsnprintf.c xmalloc.c xgetcwd.c
 LINK_WARNING_H = $(top_srcdir)/tools/link-warning.h
 charset_alias = $(DESTDIR)$(libdir)/charset.alias
 charset_tmp = $(DESTDIR)$(libdir)/charset.tmp
@@ -840,6 +845,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mkdtemp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mkstemp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/open-safer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/open.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openat-die.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openat-proc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openat.Po@am__quote@
@@ -1303,6 +1309,8 @@ stdio.h: stdio.in.h
 	      -e 's|@''NEXT_STDIO_H''@|$(NEXT_STDIO_H)|g' \
 	      -e 's|@''GNULIB_FPRINTF_POSIX''@|$(GNULIB_FPRINTF_POSIX)|g' \
 	      -e 's|@''GNULIB_PRINTF_POSIX''@|$(GNULIB_PRINTF_POSIX)|g' \
+	      -e 's|@''GNULIB_OBSTACK_PRINTF''@|$(GNULIB_OBSTACK_PRINTF)|g' \
+	      -e 's|@''GNULIB_OBSTACK_PRINTF_POSIX''@|$(GNULIB_OBSTACK_PRINTF_POSIX)|g' \
 	      -e 's|@''GNULIB_SNPRINTF''@|$(GNULIB_SNPRINTF)|g' \
 	      -e 's|@''GNULIB_SPRINTF_POSIX''@|$(GNULIB_SPRINTF_POSIX)|g' \
 	      -e 's|@''GNULIB_VFPRINTF_POSIX''@|$(GNULIB_VFPRINTF_POSIX)|g' \
@@ -1341,6 +1349,8 @@ stdio.h: stdio.in.h
 	      -e 's|@''HAVE_DECL_GETDELIM''@|$(HAVE_DECL_GETDELIM)|g' \
 	      -e 's|@''HAVE_DECL_GETLINE''@|$(HAVE_DECL_GETLINE)|g' \
 	      -e 's|@''REPLACE_GETLINE''@|$(REPLACE_GETLINE)|g' \
+	      -e 's|@''HAVE_DECL_OBSTACK_PRINTF''@|$(HAVE_DECL_OBSTACK_PRINTF)|g' \
+	      -e 's|@''REPLACE_OBSTACK_PRINTF''@|$(REPLACE_OBSTACK_PRINTF)|g' \
 	      -e '/definition of GL_LINK_WARNING/r $(LINK_WARNING_H)' \
 	      < $(srcdir)/stdio.in.h; \
 	} > $@-t

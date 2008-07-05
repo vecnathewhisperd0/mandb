@@ -122,6 +122,9 @@ AC_DEFUN([gl_INIT],
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
   gl_FUNC_MKSTEMP
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
+  gl_FUNC_OPEN
+  gl_MODULE_INDICATOR([open])
+  gl_FCNTL_MODULE_INDICATOR([open])
   gl_FUNC_OPENAT
   gl_PATHMAX
   gl_FUNC_RAWMEMCHR
@@ -428,6 +431,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mkdtemp.c
   lib/mkstemp.c
   lib/open-safer.c
+  lib/open.c
   lib/openat-die.c
   lib/openat-priv.h
   lib/openat-proc.c
@@ -572,6 +576,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mkdtemp.m4
   m4/mkstemp.m4
   m4/onceonly.m4
+  m4/open.m4
   m4/openat.m4
   m4/pathmax.m4
   m4/printf.m4
