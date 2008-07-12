@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 m4_pattern_forbid([^MAN_])
 
 # Initialise and check we're in the correct directory.
-AC_INIT([man-db], [2.5.2], [cjwatson@debian.org])
+AC_INIT([man-db], [2.5.3-pre1], [cjwatson@debian.org])
 AC_CONFIG_AUX_DIR(tools)
 AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign])
 AC_PREREQ([2.59])
