@@ -486,12 +486,15 @@ static int word_fnmatch (char *lowpage, char *whatis)
 			begin++;
 		else {
 			*p = '\0';
-			if (fnmatch (lowpage, begin, 0) == 0)
+			if (fnmatch (lowpage, begin, 0) == 0) {
+				free (lowwhatis);
 				return 1;
+			}
 			begin = p + 1;
 		}
 	}
 
+	free (lowwhatis);
 	return 0;
 }
 
