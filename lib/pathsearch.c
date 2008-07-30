@@ -51,6 +51,7 @@ static int pathsearch (const char *name, const mode_t bits)
 
 	if (strchr (name, '/')) {
 		/* Qualified name; look directly. */
+		free (path);
 		if (stat (name, &st) == -1)
 			return 0;
 		if (S_ISREG (st.st_mode) && (st.st_mode & bits))
