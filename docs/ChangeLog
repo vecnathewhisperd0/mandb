@@ -1,3 +1,12 @@
+Thu Jul 31 01:41:17 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (add_nls_manpath): Copy manpathlist to omanpathlist
+	  after the initial locale checks, to avoid memory leaks (Coverity
+	  CID #20).
+	  (get_manpath): Free return value of add_system_manpath (Coverity
+	  CID #18) and guess_manpath (Coverity CID #19) when they're simply
+	  interpolated into another string.
+
 Thu Jul 31 01:18:59 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (display): Check for failure to open the preformatted

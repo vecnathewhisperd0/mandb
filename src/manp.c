@@ -431,7 +431,7 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 	char *manpath = NULL;
 	char *path;
 	struct locale_bits lbits;
-	char *omanpathlist = xstrdup (manpathlist);
+	char *omanpathlist;
 	char *manpathlist_ptr = manpathlist;
 
 	debug ("add_nls_manpath(): processing %s\n", manpathlist);
@@ -443,6 +443,8 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 		free_locale_bits (&lbits);
 		return manpathlist;
 	}
+
+	omanpathlist = xstrdup (manpathlist);
 
 	for (path = strsep (&manpathlist_ptr, ":"); path;
 	     path = strsep (&manpathlist_ptr, ":")) {
@@ -618,6 +620,7 @@ char *get_manpath (const char *systems)
 
 	manpathlist = getenv ("MANPATH");
 	if (manpathlist && *manpathlist) {
+		char *system1, *system2, *guessed;
 		char *pos;
 		/* This must be it. */
 		if (manpathlist[0] == ':') {
@@ -626,22 +629,22 @@ char *get_manpath (const char *systems)
 				       _("warning: $MANPATH set, "
 					 "prepending %s"),
 				       CONFIG_FILE);
-			manpathlist = appendstr (NULL,
-						 guess_manpath (systems),
-						 add_system_manpath
-							(systems, manpathlist),
-						 NULL);
+			system1 = add_system_manpath (systems, manpathlist);
+			guessed = guess_manpath (systems);
+			manpathlist = appendstr (NULL, guessed, system1, NULL);
+			free (guessed);
+			free (system1);
 		} else if (manpathlist[strlen (manpathlist) - 1] == ':') {
 			if (!quiet)
 				error (0, 0,
 				       _("warning: $MANPATH set, "
 					 "appending %s"),
 				       CONFIG_FILE);
-			manpathlist = appendstr (NULL,
-						 add_system_manpath
-							(systems, manpathlist),
-						 guess_manpath (systems),
-						 NULL);
+			system1 = add_system_manpath (systems, manpathlist);
+			guessed = guess_manpath (systems);
+			manpathlist = appendstr (NULL, system1, guessed, NULL);
+			free (guessed);
+			free (system1);
 		} else if ((pos = strstr (manpathlist,"::"))) {
 			*(pos++) = '\0';
 			if (!quiet)
@@ -649,13 +652,14 @@ char *get_manpath (const char *systems)
 				       _("warning: $MANPATH set, "
 					 "inserting %s"),
 				       CONFIG_FILE);
-			manpathlist = appendstr (NULL,
-						 add_system_manpath
-							(systems, manpathlist),
-						 ":", guess_manpath (systems),
-						 add_system_manpath
-							(systems, pos),
-						 NULL);
+			system1 = add_system_manpath (systems, manpathlist);
+			guessed = guess_manpath (systems);
+			system2 = add_system_manpath (systems, pos);
+			manpathlist = appendstr (NULL, system1, ":", guessed,
+						 system2, NULL);
+			free (system2);
+			free (guessed);
+			free (system1);
 		} else {
 			if (!quiet)
 				error (0, 0,
