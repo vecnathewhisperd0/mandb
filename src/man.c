@@ -3252,8 +3252,10 @@ static const char **get_section_list (void)
 	 * empty.
 	 */
 	config_sections = get_sections ();
-	if (!*config_sections)
+	if (!*config_sections) {
+		free (config_sections);
 		config_sections = std_sections;
+	}
 
 	if (colon_sep_section_list == NULL)
 		colon_sep_section_list = getenv ("MANSECT");

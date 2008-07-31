@@ -1,3 +1,9 @@
+Thu Jul 31 02:10:06 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (get_section_list): Fix leak of get_sections return
+	  value if the configuration file contains no SECTIONS directives
+	  (Coverity CID #21).
+
 Thu Jul 31 02:03:46 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (try_section): Free info and info_buffer if there is a
