@@ -2315,6 +2315,12 @@ static int display (const char *dir, const char *man_file,
 			}
 
 			decomp_cat = decompress_open (cat_file);
+			if (!decomp_cat) {
+				error (0, errno, _("can't open %s"), cat_file);
+				pipeline_free (format_cmd);
+				pipeline_free (decomp);
+				return 0;
+			}
 			disp_cmd = make_display_command (NULL, title);
 			format_display (decomp_cat, NULL, disp_cmd, man_file);
 			pipeline_free (disp_cmd);
