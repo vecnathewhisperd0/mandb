@@ -219,8 +219,10 @@ char *lang_dir (const char *filename)
 		return ld;
 
 	/* If there's no lang dir element, it's an English man page. */
-	if (sm == fm + 3)
+	if (sm == fm + 3) {
+		free (ld);
 		return xstrdup ("C");
+	}
 
 	/* found a lang dir */
 	fm += 4;
