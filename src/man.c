@@ -2725,8 +2725,10 @@ static int try_section (const char *path, const char *sec, const char *name,
 		struct mandata *info = infoalloc ();
 		char *info_buffer = filename_info (*np, info, name);
 		const char *ult;
-		if (!info_buffer)
+		if (!info_buffer) {
+			free_mandata_struct (info);
 			continue;
+		}
 		info->addr = info_buffer;
 
 		/* What kind of page is this? Since it's a real file, it
@@ -2737,6 +2739,9 @@ static int try_section (const char *path, const char *sec, const char *name,
 		if (!ult) {
 			/* already warned */
 			debug ("try_section(): bad link %s\n", *np);
+			free (info_buffer);
+			info->addr = NULL;
+			free_mandata_struct (info);
 			continue;
 		}
 		if (STREQ (ult, *np))
