@@ -126,12 +126,6 @@ datum make_multi_key (const char *page, const char *ext)
 	return key;
 }
 
-/* allocate a mandata structure */
-struct mandata *infoalloc (void)
-{
-	return XZALLOC (struct mandata);
-}
-
 /* Free allocated elements of a mandata structure, but not the structure
  * itself.
  */
