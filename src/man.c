@@ -638,13 +638,13 @@ static void do_extern (int argc, char *argv[])
 /* lookup $MANOPT and if available, put in *argv[] format for argp */
 static inline char **manopt_to_env (int *argc)
 {
-	char *manopt, *opt_start, **argv;
+	char *manopt, *manopt_copy, *opt_start, **argv;
 
 	manopt = getenv ("MANOPT");
 	if (manopt == NULL || *manopt == '\0')
 		return NULL;
 
-	opt_start = manopt = xstrdup (manopt);
+	opt_start = manopt = manopt_copy = xstrdup (manopt);
 
 	/* allocate space for the program name */
 	*argc = 0;
@@ -661,7 +661,7 @@ static inline char **manopt_to_env (int *argc)
 					*manopt = '\0';
 					argv = xnrealloc (argv, *argc + 3,
 							  sizeof (char *));
-					argv[(*argc)++] = opt_start;
+					argv[(*argc)++] = xstrdup (opt_start);
 				}
 				while (CTYPE (isspace, *(manopt + 1)))
 					*++manopt = '\0';
@@ -678,9 +678,10 @@ static inline char **manopt_to_env (int *argc)
 	}
 
 	if (*opt_start)
-		argv[(*argc)++] = opt_start;
+		argv[(*argc)++] = xstrdup (opt_start);
 	argv[*argc] = NULL;			
 
+	free (manopt_copy);
 	return argv;
 }
 

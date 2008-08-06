@@ -1,3 +1,9 @@
+Wed Aug  6 21:40:37 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (manopt_to_env): Duplicate options assigned to elements
+	  of argv, and free the copy of manopt before returning. This isn't
+	  really a bug as such, but it appeases Coverity CID #22.
+
 Thu Jul 31 02:10:06 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (get_section_list): Fix leak of get_sections return
