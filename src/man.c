@@ -2158,6 +2158,7 @@ static int display (const char *dir, const char *man_file,
 		/* If we're reading stdin via '-l -', man_file is "". See
 		 * below.
 		 */
+		assert (man_file);
 		if (*man_file == '\0')
 			found = 1;
 		else
