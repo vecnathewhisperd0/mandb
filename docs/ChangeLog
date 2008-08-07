@@ -1,3 +1,9 @@
+Thu Aug  7 02:12:09 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (display): If we fail to decompress man_file and it
+	  matters (i.e. we aren't just displaying a stray cat), then emit an
+	  error message and return early (Coverity CID #5, #6).
+
 Wed Aug  6 22:36:48 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_lookup.c (infoalloc): Move to ...

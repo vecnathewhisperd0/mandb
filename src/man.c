@@ -2111,6 +2111,7 @@ static int display (const char *dir, const char *man_file,
 	pipeline *format_cmd;	/* command to format man_file to stdout */
 	int display_to_stdout;
 	pipeline *decomp = NULL;
+	int decomp_errno = 0;
 
 	/* if dir is set chdir to it */
 	if (dir) {
@@ -2134,8 +2135,10 @@ static int display (const char *dir, const char *man_file,
 		pipeline_start (decomp);
 		format_cmd = make_roff_command (dir, man_file, decomp,
 						dbfilters);
-	} else
+	} else {
 		format_cmd = NULL;
+		decomp_errno = errno;
+	}
 
 	/* Get modification time, for commit_tmp_cat(). */
 	if (man_file && *man_file) {
@@ -2159,6 +2162,11 @@ static int display (const char *dir, const char *man_file,
 		 * below.
 		 */
 		assert (man_file);
+		if (!decomp) {
+			assert (!format_cmd); /* no need to free it */
+			error (0, decomp_errno, _("can't open %s"), man_file);
+			return 0;
+		}
 		if (*man_file == '\0')
 			found = 1;
 		else
@@ -2171,12 +2179,9 @@ static int display (const char *dir, const char *man_file,
 				return 0;
 			}
 			drop_effective_privs ();
-			if (decomp) {
-				pipeline_connect (decomp, format_cmd, NULL);
-				pipeline_pump (decomp, format_cmd, NULL);
-				pipeline_wait (decomp);
-			} else
-				pipeline_start (format_cmd);
+			pipeline_connect (decomp, format_cmd, NULL);
+			pipeline_pump (decomp, format_cmd, NULL);
+			pipeline_wait (decomp);
 			status = pipeline_wait (format_cmd);
 			regain_effective_privs ();
 			if (status != 0)
@@ -2227,6 +2232,17 @@ static int display (const char *dir, const char *man_file,
 			if (!save_cat)
 				debug ("cat dir %s does not exist\n", cat_dir);
 			free (cat_dir);
+		}
+
+		if (format && (!format_cmd || !decomp)) {
+			assert (man_file);
+			/* format_cmd is NULL iff decomp is NULL; no need to
+			 * free either of them.
+			 */
+			assert (!format_cmd);
+			assert (!decomp);
+			error (0, decomp_errno, _("can't open %s"), man_file);
+			return 0;
 		}
 
 		/* if we're trying to read stdin via '-l -' then man_file
