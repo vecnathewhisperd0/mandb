@@ -221,10 +221,10 @@ static int found_a_stray;		/* found a straycat */
 
 #ifdef MAN_CATS
 static char *tmp_cat_file;	/* for open_cat_stream(), close_cat_stream() */
-static int tmp_cat_fd;
 static int created_tmp_cat;			/* dto. */
-static int man_modtime;		/* modtime of man page, for commit_tmp_cat() */
 #endif
+static int tmp_cat_fd;
+static int man_modtime;		/* modtime of man page, for commit_tmp_cat() */
 
 # ifdef TROFF_IS_GROFF
 static int ditroff;
@@ -1810,6 +1810,17 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 	return status;
 }
 
+/* TODO: This should all be refactored after work on the decompression
+ * library is complete.
+ */
+void discard_stderr (pipeline *p)
+{
+	int i;
+
+	for (i = 0; i < p->ncommands; ++i)
+		p->commands[i]->discard_err = 1;
+}
+
 #ifdef MAN_CATS
 
 /* Return pipeline to write formatted manual page to for saving as cat file. */
@@ -1884,17 +1895,6 @@ static int close_cat_stream (pipeline *cat_p, const char *cat_file,
 	}
 	free (tmp_cat_file);
 	return status;
-}
-
-/* TODO: This should all be refactored after work on the decompression
- * library is complete.
- */
-void discard_stderr (pipeline *p)
-{
-	int i;
-
-	for (i = 0; i < p->ncommands; ++i)
-		p->commands[i]->discard_err = 1;
 }
 
 /*

@@ -1,3 +1,11 @@
+Sun Aug 17 00:27:07 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (tmp_cat_fd, man_modtime, discard_stderr): Move
+	  definitions outside MAN_CATS guard; these are needed by catman
+	  handling and (in the case of discard_stderr) manual page
+	  formatting functions as well as cat handling in man itself
+	  (Savannah bug #24044).
+
 Thu Aug  7 02:12:09 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (display): If we fail to decompress man_file and it
