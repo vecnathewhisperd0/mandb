@@ -415,10 +415,12 @@ int main (int argc, char *argv[])
 	locale = xstrdup (setlocale (LC_ALL, ""));
 	if (!locale) {
 		/* Obviously can't translate this. */
-		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
-			     "are correct");
+		if (!getenv ("MAN_NO_LOCALE_WARNING"))
+			error (0, 0, "can't set the locale; make sure $LC_* "
+				     "and $LANG are correct");
 		locale = xstrdup ("C");
 	}
+	setenv ("MAN_NO_LOCALE_WARNING", "1", 1);
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
 	textdomain (PACKAGE);

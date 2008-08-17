@@ -1,3 +1,11 @@
+Sun Aug 17 16:42:43 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/accessdb.c (main), src/catman.c (main), src/globbing_test.c
+	  (main), src/lexgrog_test.c (main), src/man.c (main), src/manconv.c
+	  (main), src/mandb.c (main), src/manpath.c (main), src/whatis.c
+	  (main), src/zsoelim.l (main): Suppress locale warning if being
+	  called by another man-db program (Debian bug #494989).
+
 Sun Aug 17 00:27:07 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (tmp_cat_fd, man_modtime, discard_stderr): Move
