@@ -688,25 +688,22 @@ const char *get_jless_charset (const char *locale_charset)
 
 void add_manconv (pipeline *p, const char *source, const char *target)
 {
+	char *sources, *target_ignore;
 	command *cmd;
-	char *target_ignore = appendstr (NULL, target, "//IGNORE", NULL);
 
-	if (STREQ (source, "UTF-8")) {
-		if (STREQ (target, "UTF-8")) {
-			free (target_ignore);
-			return;
-		}
-		cmd = command_new_args ("iconv", "-f", source,
-					"-t", target_ignore, NULL);
-	} else {
-		char *sources = appendstr (NULL, "UTF-8:", source, NULL);
-		cmd = command_new_args (MANCONV, "-f", sources,
-					"-t", target_ignore, NULL);
-		free (sources);
-		if (quiet >= 2)
-			command_arg (cmd, "-q");
-	}
-	pipeline_command (p, cmd);
+	if (STREQ (source, "UTF-8") && STREQ (target, "UTF-8"))
+		return;
 
+	if (STREQ (source, "UTF-8"))
+		sources = xstrdup (source);
+	else
+		sources = appendstr (NULL, "UTF-8:", source, NULL);
+	target_ignore = appendstr (NULL, target, "//IGNORE", NULL);
+	cmd = command_new_args (MANCONV, "-f", sources,
+				"-t", target_ignore, NULL);
 	free (target_ignore);
+	free (sources);
+	if (quiet >= 2)
+		command_arg (cmd, "-q");
+	pipeline_command (p, cmd);
 }

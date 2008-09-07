@@ -322,9 +322,6 @@ static int try_iconv (pipeline *p, const char *try_from_code, int last)
 			}
 		}
 
-		if (input_size < buf_size)
-			break;
-
 		input_size = buf_size;
 		input = pipeline_peek (p, &input_size);
 		while (input_size < buf_size) {

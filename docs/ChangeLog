@@ -1,3 +1,13 @@
+Sun Sep  7 15:26:25 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/manconv.c (try_iconv): Remove premature optimisation that
+	  sometimes caused us to write incomplete output.
+
+	* src/man.c (add_manconv): Always use manconv even if iconv could
+	  theoretically do the job, as manconv has slightly more permissive
+	  behaviour that is generally more suitable for converting manual
+	  page source (Debian bug #498082).
+
 Sun Aug 31 18:38:34 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Update.
