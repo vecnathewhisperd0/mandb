@@ -194,25 +194,26 @@ globbing_OBJECTS = $(am_globbing_OBJECTS)
 globbing_DEPENDENCIES = $(LIBMAN)
 am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
 	encodings.$(OBJEXT) fake_security.$(OBJEXT) lexgrog.$(OBJEXT) \
-	lexgrog_test.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
+	lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) ult_src.$(OBJEXT) \
+	util.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
 lexgrog_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
-	man.$(OBJEXT) manp.$(OBJEXT) security.$(OBJEXT) \
-	ult_src.$(OBJEXT) util.$(OBJEXT)
+	man.$(OBJEXT) manconv.$(OBJEXT) manp.$(OBJEXT) \
+	security.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
 man_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 	$(am__DEPENDENCIES_1)
-am_manconv_OBJECTS = manconv.$(OBJEXT)
+am_manconv_OBJECTS = manconv.$(OBJEXT) manconv_main.$(OBJEXT)
 manconv_OBJECTS = $(am_manconv_OBJECTS)
 manconv_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	descriptions.$(OBJEXT) descriptions_store.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
-	lexgrog.$(OBJEXT) mandb.$(OBJEXT) manp.$(OBJEXT) \
-	security.$(OBJEXT) straycats.$(OBJEXT) ult_src.$(OBJEXT) \
-	util.$(OBJEXT)
+	lexgrog.$(OBJEXT) manconv.$(OBJEXT) mandb.$(OBJEXT) \
+	manp.$(OBJEXT) security.$(OBJEXT) straycats.$(OBJEXT) \
+	ult_src.$(OBJEXT) util.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
 mandb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 	$(am__DEPENDENCIES_1)
@@ -221,10 +222,11 @@ am_manpath_OBJECTS = fake_security.$(OBJEXT) manp.$(OBJEXT) \
 manpath_OBJECTS = $(am_manpath_OBJECTS)
 manpath_DEPENDENCIES = $(LIBMAN)
 am_whatis_OBJECTS = encodings.$(OBJEXT) fake_security.$(OBJEXT) \
-	manp.$(OBJEXT) util.$(OBJEXT) whatis.$(OBJEXT)
+	manconv.$(OBJEXT) manp.$(OBJEXT) util.$(OBJEXT) \
+	whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
 whatis_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am_wrapper_OBJECTS = wrapper.$(OBJEXT)
 wrapper_OBJECTS = $(am_wrapper_OBJECTS)
 wrapper_DEPENDENCIES = $(LIBMAN)
@@ -715,7 +717,7 @@ man_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS)
 manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS)
 mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS)
 manpath_LDADD = $(LIBMAN)
-whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV)
+whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS)
 wrapper_LDADD = $(LIBMAN)
 zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS)
 accessdb_SOURCES = \
@@ -744,6 +746,8 @@ lexgrog_SOURCES = \
 	fake_security.c \
 	lexgrog.l \
 	lexgrog_test.c \
+	manconv.c \
+	manconv.h \
 	security.h \
 	ult_src.c \
 	ult_src.h \
@@ -761,6 +765,8 @@ man_SOURCES = \
 	globbing.h \
 	man.c \
 	man.h \
+	manconv.c \
+	manconv.h \
 	manp.c \
 	manp.h \
 	security.c \
@@ -770,7 +776,9 @@ man_SOURCES = \
 	util.c
 
 manconv_SOURCES = \
-	manconv.c
+	manconv.c \
+	manconv.h \
+	manconv_main.c
 
 mandb_SOURCES = \
 	check_mandirs.c \
@@ -786,6 +794,8 @@ mandb_SOURCES = \
 	globbing.c \
 	globbing.h \
 	lexgrog.l \
+	manconv.c \
+	manconv.h \
 	mandb.c \
 	manp.c \
 	manp.h \
@@ -807,6 +817,8 @@ whatis_SOURCES = \
 	encodings.c \
 	encodings.h \
 	fake_security.c \
+	manconv.c \
+	manconv.h \
 	manp.c \
 	manp.h \
 	util.c \
@@ -989,6 +1001,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/man.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manconv.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manconv_main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mandb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manpath.Po@am__quote@

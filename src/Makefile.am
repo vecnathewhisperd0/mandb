@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 ## Copyright (C) 1994, 1995 Graeme Wilford.
-## Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Colin Watson.
+## Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -61,7 +61,7 @@ man_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS)
 manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS)
 mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS)
 manpath_LDADD = $(LIBMAN)
-whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV)
+whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS)
 wrapper_LDADD = $(LIBMAN)
 zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS)
 
@@ -88,6 +88,8 @@ lexgrog_SOURCES = \
 	fake_security.c \
 	lexgrog.l \
 	lexgrog_test.c \
+	manconv.c \
+	manconv.h \
 	security.h \
 	ult_src.c \
 	ult_src.h \
@@ -104,6 +106,8 @@ man_SOURCES = \
 	globbing.h \
 	man.c \
 	man.h \
+	manconv.c \
+	manconv.h \
 	manp.c \
 	manp.h \
 	security.c \
@@ -112,7 +116,9 @@ man_SOURCES = \
 	ult_src.h \
 	util.c
 manconv_SOURCES = \
-	manconv.c
+	manconv.c \
+	manconv.h \
+	manconv_main.c
 mandb_SOURCES = \
 	check_mandirs.c \
 	check_mandirs.h \
@@ -127,6 +133,8 @@ mandb_SOURCES = \
 	globbing.c \
 	globbing.h \
 	lexgrog.l \
+	manconv.c \
+	manconv.h \
 	mandb.c \
 	manp.c \
 	manp.h \
@@ -146,6 +154,8 @@ whatis_SOURCES = \
 	encodings.c \
 	encodings.h \
 	fake_security.c \
+	manconv.c \
+	manconv.h \
 	manp.c \
 	manp.h \
 	util.c \

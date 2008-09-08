@@ -1,3 +1,24 @@
+Mon Sep  8 09:21:34 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	Call manconv as an internal function rather than as an external
+	process, to improve performance. Indirectly suggested by Dr. Werner
+	Fink in Savannah bug #24043.
+
+	* src/Makefile.am (whatis_LDADD): Add $(LIBCOMPRESS).
+	  (lexgrog_SOURCES, man_SOURCES, mandb_SOURCES, whatis_SOURCES): Add
+	  manconv.c and manconv.h.
+	  (manconv_SOURCES): Add manconv.h and manconv_main.c.
+	* src/encodings.c (manconv_stdin, free_manconv_codes): New
+	  functions.
+	  (add_manconv): Call manconv as an internal function.
+	* src/manconv.c (try_iconv): Take the target code as an argument
+	  rather than using a global variable.
+	  (manconv): New function, split out of main.
+	  (split_codes, parse_opt, main): Move to ...
+	* src/manconv_main.c: ... here. New file.
+	* src/manconv.h: New file.
+	* docs/NEWS: Document this.
+
 Mon Sep  8 09:09:06 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	Add support for freeing command_function data.
