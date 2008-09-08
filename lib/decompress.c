@@ -85,7 +85,8 @@ pipeline *decompress_open (const char *filename)
 	if (filename_len > 3 && STREQ (filename + filename_len - 3, ".gz")) {
 		/* informational only; no shell quoting concerns */
 		char *name = appendstr (NULL, "zcat < ", filename, NULL);
-		cmd = command_new_function (name, &decompress_zlib, NULL);
+		cmd = command_new_function (name, &decompress_zlib, NULL,
+					    NULL);
 		free (name);
 		p = pipeline_new_commands (cmd, NULL);
 		goto got_pipeline;
@@ -135,7 +136,7 @@ pipeline *decompress_fdopen (int fd)
 #endif /* HAVE_LIBZ */
 
 #ifdef HAVE_LIBZ
-	cmd = command_new_function ("zcat", &decompress_zlib, NULL);
+	cmd = command_new_function ("zcat", &decompress_zlib, NULL, NULL);
 	p = pipeline_new_commands (cmd, NULL);
 #else /* HAVE_LIBZ */
 	p = pipeline_new ();

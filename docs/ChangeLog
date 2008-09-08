@@ -1,3 +1,19 @@
+Mon Sep  8 09:09:06 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	Add support for freeing command_function data.
+
+	* lib/pipeline.c (command_new_function): Add free_func argument.
+	  (command_dup): Copy it.
+	  (pipeline_connect): Adjust command_new_function call.
+	  (pipeline_start): Free command_function data before exiting.
+	  (pipeline_wait): Free command_function data while cleaning up
+	  pipeline.
+	* lib/pipeline.h: Add command_function_free_type typedef.
+	  (struct command [struct command_function]): Add free_func member.
+	  (command_new_function): Update prototype.
+	* lib/decompress.c (decompress_open, decompress_fdopen): Adjust
+	  command_new_function calls.
+
 Sun Sep  7 15:26:25 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	* src/manconv.c (try_iconv): Remove premature optimisation that
