@@ -1,7 +1,7 @@
 %{
 
 /*
- * soelim.l: eliminate .so includes within *roff source
+ * zsoelim.l: eliminate .so includes within *roff source
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 1997 Fabrizio Polacco.
@@ -48,8 +48,6 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include "dirname.h"
-
 #define NAME	so_name[so_stack_ptr]
 #define LINE	so_line[so_stack_ptr]
 #define PIPE	so_pipe[so_stack_ptr]
@@ -57,9 +55,6 @@
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
-#define N_(String) gettext_noop (String)
-
-#include "argp.h"
 
 #include "manconfig.h"
 
@@ -67,7 +62,7 @@
 #include "pipeline.h"
 #include "decompress.h"
 
-static int open_file (const char *filename);
+int zsoelim_open_file (const char *filename);
 
 #ifdef ACCEPT_QUOTES
 #  define ZAP_QUOTES	zap_quotes ()
@@ -76,60 +71,12 @@ static void zap_quotes (void);
 #  define ZAP_QUOTES
 #endif
 
-char *program_name;
-
-static char **files;
-static int num_files;
-
-const char *argp_program_version = "zsoelim " PACKAGE_VERSION;
-const char *argp_program_bug_address = PACKAGE_BUGREPORT;
-error_t argp_err_exit_status = FAIL;
-
-static const char args_doc[] = N_("FILE...");
-
-static struct argp_option options[] = {
-	{ "debug",	'd',	0,	0,	N_("emit debugging messages") },
-	{ "compatible",	'C',	0,	0,	N_("compatibility switch (ignored)"),	1 },
-	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
-	{ 0 }
-};
-
-static error_t parse_opt (int key, char *arg ATTRIBUTE_UNUSED,
-			  struct argp_state *state)
-{
-	switch (key) {
-		case 'd':
-			debug_level = 1;
-			return 0;
-		case 'C':
-			return 0; /* compatibility with GNU soelim */
-		case 'h':
-			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
-			break;
-		case ARGP_KEY_NO_ARGS:
-			/* open stdin */
-			files = xmalloc (sizeof *files);
-			files[0] = xstrdup ("-");
-			num_files = 1;
-			return 0;
-		case ARGP_KEY_ARGS:
-			files = state->argv + state->next;
-			num_files = state->argc - state->next;
-			return 0;
-	}
-	return ARGP_ERR_UNKNOWN;
-}
-
-static struct argp argp = { options, parse_opt, args_doc };
-
 static YY_BUFFER_STATE so_stack[MAX_SO_DEPTH];
 static char *so_name[MAX_SO_DEPTH];
 static int so_line[MAX_SO_DEPTH];
 static pipeline *so_pipe[MAX_SO_DEPTH];
 static int so_stack_ptr;
 static int no_newline;
-static int status = OK;
 
 /* The flex documentation says that yyin is only used by YY_INPUT, so we
  * should safely be able to abuse it as a handy way to keep track of the
@@ -209,7 +156,7 @@ W	[ \t]
 
 			no_newline = 0;
 
-			if (open_file (yytext)) {
+			if (zsoelim_open_file (yytext)) {
 				--so_stack_ptr;
 #ifndef __alpha
 				error (OK, 0, 
@@ -345,7 +292,7 @@ static void zap_quotes (void)
 #endif
 
 /* initialise the stack and call the parser */
-static void parse_file (void)
+void zsoelim_parse_file (void)
 {
 	so_stack_ptr = 0;
 	printf (".lf 1 %s\n", NAME);
@@ -353,39 +300,9 @@ static void parse_file (void)
 	yylex ();
 }
 
-int main (int argc, char *argv[])
-{
-	int i;
-
-	program_name = base_name (argv[0]);
-
-	if (!setlocale (LC_ALL, "") && !getenv ("MAN_NO_LOCALE_WARNING"))
-		/* Obviously can't translate this. */
-		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
-			     "are correct");
-	setenv ("MAN_NO_LOCALE_WARNING", "1", 1);
-	bindtextdomain (PACKAGE, LOCALEDIR);
-	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
-	textdomain (PACKAGE);
-
-	if (argp_parse (&argp, argc, argv, 0, 0, 0))
-		exit (FAIL);
-
-	pipeline_install_sigchld ();
-
-	/* parse files in command line order */
-	for (i = 0; i < num_files; ++i) {
-		if (open_file (files[i]))
-			continue;
-		parse_file ();
-	}
-
-	return status;
-}
-
 /* This routine is used to open the specified file or uncompress a compressed
    version and open that instead */
-static int open_file (const char *filename)
+int zsoelim_open_file (const char *filename)
 {
 	pipeline *decomp;
 
@@ -429,4 +346,10 @@ static int open_file (const char *filename)
 	yyin = (FILE *) decomp;
 
 	return 0;
+}
+
+void zsoelim_stdin (void *data ATTRIBUTE_UNUSED)
+{
+	zsoelim_open_file ("-");
+	zsoelim_parse_file ();
 }

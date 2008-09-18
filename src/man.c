@@ -99,6 +99,7 @@ static char *cwd;
 #include "security.h"
 #include "encodings.h"
 #include "convert_name.h"
+#include "zsoelim.h"
 #include "man.h"
 
 #ifdef SECURE_MAN_UID
@@ -1294,9 +1295,11 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		char *cat_charset = NULL;
 		const char *groff_preconv;
 
-		if (!recode)
-			pipeline_command_argstr (p, get_def ("soelim",
-							     SOELIM));
+		if (!recode) {
+			cmd = command_new_function (SOELIM, &zsoelim_stdin,
+						    NULL, NULL);
+			pipeline_command (p, cmd);
+		}
 
 		page_encoding = get_page_encoding (lang);
 		source_encoding = get_source_encoding (lang);

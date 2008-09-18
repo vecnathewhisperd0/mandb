@@ -1,3 +1,24 @@
+Thu Sep 18 01:42:34 BST 2008  Colin Watson  <cjwatson@debian.org>
+
+	Call zsoelim as an internal function rather than as an external
+	process, to improve performance.
+
+	* src/Makefile.am (man_SOURCES): Add zsoelim.h and zsoelim.l.
+	  (zsoelim_SOURCES): Add zsoelim.h and zsoelim_main.c.
+	* src/man.c (make_roff_command): Call zsoelim_stdin as an internal
+	  function.
+	* src/zsoelim.l (open_file): Rename to ...
+	  (zsoelim_open_file): ... this. Make external. Update all callers.
+	  (parse_file): Rename to ...
+	  (zsoelim_parse_file): ... this. Make external. Update all callers.
+	  (zsoelim_stdin): New function.
+	  (parse_opt, main): Move to ...
+	* src/zsoelim_main.c: ... here. New file.
+	* src/zsoelim.h: New file.
+	* docs/NEWS: Document this.
+
+	* man/man1/zsoelim.man1 (AUTHOR): Add my name.
+
 Mon Sep  8 09:21:34 BST 2008  Colin Watson  <cjwatson@debian.org>
 
 	Call manconv as an internal function rather than as an external

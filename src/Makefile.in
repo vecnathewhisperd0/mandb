@@ -201,7 +201,8 @@ lexgrog_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
 	man.$(OBJEXT) manconv.$(OBJEXT) manp.$(OBJEXT) \
-	security.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
+	security.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT) \
+	zsoelim.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
 man_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 	$(am__DEPENDENCIES_1)
@@ -230,7 +231,7 @@ whatis_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 am_wrapper_OBJECTS = wrapper.$(OBJEXT)
 wrapper_OBJECTS = $(am_wrapper_OBJECTS)
 wrapper_DEPENDENCIES = $(LIBMAN)
-am_zsoelim_OBJECTS = zsoelim.$(OBJEXT)
+am_zsoelim_OBJECTS = zsoelim.$(OBJEXT) zsoelim_main.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
 zsoelim_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -773,7 +774,9 @@ man_SOURCES = \
 	security.h \
 	ult_src.c \
 	ult_src.h \
-	util.c
+	util.c \
+	zsoelim.h \
+	zsoelim.l
 
 manconv_SOURCES = \
 	manconv.c \
@@ -828,7 +831,9 @@ wrapper_SOURCES = \
 	wrapper.c
 
 zsoelim_SOURCES = \
-	zsoelim.l
+	zsoelim.h \
+	zsoelim.l \
+	zsoelim_main.c
 
 CLEANFILES = apropos man_db.conf
 EXTRA_DIST = \
@@ -1012,6 +1017,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wrapper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim_main.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

@@ -114,7 +114,9 @@ man_SOURCES = \
 	security.h \
 	ult_src.c \
 	ult_src.h \
-	util.c
+	util.c \
+	zsoelim.h \
+	zsoelim.l
 manconv_SOURCES = \
 	manconv.c \
 	manconv.h \
@@ -163,7 +165,9 @@ whatis_SOURCES = \
 wrapper_SOURCES = \
 	wrapper.c
 zsoelim_SOURCES = \
-	zsoelim.l
+	zsoelim.h \
+	zsoelim.l \
+	zsoelim_main.c
 
 CLEANFILES = apropos man_db.conf
 
