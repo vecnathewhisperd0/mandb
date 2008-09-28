@@ -275,16 +275,19 @@ with
 .b flock (2)
 based file locking by \*M.
 .lp
-As
+Berkeley DB initializes its databases very quickly, so
 .b btree
-is noticeably faster when doing
+may have some performance advantages when doing
 .b man
-searches, mainly due to the fast initialization of the databases, it is the
-preferred library interface.
+searches.
+However, it is quite heavyweight and its library SONAME and on-disk formats
+have changed a number of times to provide features considerably beyond what
+\*M needs, so the preferred library interface is now
+.b gdbm .
 .b configure
 will look for
-.b btree ,
-.b gdbm
+.b gdbm ,
+.b btree
 and then finally
 .b ndbm
 routines when configuring \*M.

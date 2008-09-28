@@ -24,6 +24,15 @@ Major changes since man-db 2.5.2:
 	o manconv and zsoelim are now called internally rather than by
 	  executing external programs, to improve performance.
 
+	o man-db now uses GDBM (--with-db=gdbm) in preference to Berkeley DB
+	  (--with-db=db or --with-db=dbN where N is 1, 2, 3, or 4) by
+	  default, since hardware improvements have rendered Berkeley DB's
+	  speed advantages negligible for our purposes and the relatively
+	  frequent SONAME and on-disk format changes are not worth the
+	  hassle. Distributors should note that if they follow this change
+	  then they will need to arrange for databases to be rebuilt on
+	  upgrade to this version.
+
 man-db 2.5.2 (5 May 2008)
 =========================
 
