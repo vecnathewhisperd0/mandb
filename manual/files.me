@@ -228,19 +228,23 @@ subdirectory will be used in the
 locale as well as
 .b fr_FR.UTF-8 ,
 and converted between encodings as necessary.
-If no character set is specified in the subdirectory name, a default
-appropriate for the language will be used; note that, for compatibility
-reasons, this will typically be a legacy language-specific character set
-rather than UTF-8.
+If no character set is specified in the subdirectory name, \*M will attempt
+to detect whether each page is encoded using UTF-8 or a legacy character set
+appropriate for the language.
+Accordingly, the recommended scheme for installing manual pages is to encode
+them in UTF-8 (or, if that is not practical, in the legacy character set)
+and install them in directories
+.i without
+a character set component in their names.
 .lp
 The territory should normally be omitted unless it is necessary to describe
 the manual page text.
 For example, Brazilian Portuguese is quite distinct from Portuguese and so
 should be installed under the
-.b pt_BR.UTF-8
+.b pt_BR
 subdirectory, but a single German manual page will typically suffice in
 Austria as well as in Germany and so should be installed under the
-.b de.UTF-8
+.b de
 subdirectory.
 .lp
 The following table gives some examples.
@@ -250,11 +254,12 @@ center box tab(@);
 l | l | l | l.
 Language@Territory@Character Set@Directory
 _
-French@any@ISO-8859-1@/usr/share/man/fr
+French@any@UTF-8 or ISO-8859-1@/usr/share/man/fr
 French@Canada@ISO 8859-1@/usr/share/man/fr_CA
 French@any@UTF-8@/usr/share/man/fr.UTF-8
 German@Germany@UTF-8@/usr/share/man/de_DE.UTF-8
 German@Switzerland@ISO 8859-1@/usr/share/man/de_CH.ISO-8859-1
+Japanese@Japan@UTF-8 or EUC-JP@/usr/share/man/ja_JP
 Japanese@Japan@EUC-JP@/usr/share/man/ja_JP.EUC-JP
 Japanese@any@UTF-8@/usr/share/man/ja.UTF-8
 .TE
