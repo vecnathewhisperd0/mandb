@@ -95,7 +95,9 @@ static struct directory_entry directory_table[] = {
 	{ "id",		"ISO-8859-1",	"ISO-8859-1"		}, /* Indonesian */
 	{ "is",		"ISO-8859-1",	"ISO-8859-1"		}, /* Icelandic */
 	{ "it",		"ISO-8859-1",	"ISO-8859-1"		}, /* Italian */
+	{ "nb",		"ISO-8859-1",	"ISO-8859-1"		}, /* Norwegian Bokmål */
 	{ "nl",		"ISO-8859-1",	"ISO-8859-1"		}, /* Dutch */
+	{ "nn",		"ISO-8859-1",	"ISO-8859-1"		}, /* Norwegian Nynorsk */
 	{ "no",		"ISO-8859-1",	"ISO-8859-1"		}, /* Norwegian */
 	{ "pt",		"ISO-8859-1",	"ISO-8859-1"		}, /* Portuguese */
 	{ "sv",		"ISO-8859-1",	"ISO-8859-1"		}, /* Swedish */
