@@ -19,8 +19,3 @@ Case-insensitive lookup transition:
 
 * Solaris layout is broken.
 * Need to make sure pointers trigger an exact-case lookup [done for whatis].
-
-Apparently db3's compatibility API is, er, less than compatible.
-(Specifically, it isn't possible to write correct error-handling code that
-works in the compatibility API, nor that works in both db2 and db3.) I
-suppose I have to write a db_newbdb.c now.
