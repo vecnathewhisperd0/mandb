@@ -1005,9 +1005,9 @@ int main (int argc, char *argv[])
 	} else
 		free (get_manpath (NULL));
 
-	create_pathlist (manp, manpathlist);
-
 	debug ("*manpath search path* = %s\n", manp);
+
+	create_pathlist (manp, manpathlist);
 
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -57,6 +57,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "canonicalize.h"
 #include "xgetcwd.h"
 
 #include "gettext.h"
@@ -1097,6 +1098,38 @@ void create_pathlist (const char *manp, char **mp)
 		}
 	}
 	*mp = NULL;
+
+	/* Eliminate duplicates due to symlinks. */
+	mp = mphead;
+	while (*mp) {
+		char *target;
+		char **dupcheck;
+		int found_dup = 0;
+
+		/* After resolving all symlinks, is the target also in the
+		 * manpath?
+		 */
+		target = canonicalize_file_name (*mp);
+		if (!target) {
+			++mp;
+			continue;
+		}
+		for (dupcheck = mphead; *dupcheck; ++dupcheck) {
+			if (mp == dupcheck || !STREQ (target, *dupcheck))
+				continue;
+			debug ("Removing duplicate manpath entry %s -> %s\n",
+			       *mp, target);
+			free (*mp);
+			for (dupcheck = mp; *(dupcheck + 1); ++dupcheck)
+				*dupcheck = *(dupcheck + 1);
+			*dupcheck = NULL;
+			found_dup = 1;
+			break;
+		}
+		free (target);
+		if (!found_dup)
+			++mp;
+	}
 }
 
 void free_pathlist (char **mp)

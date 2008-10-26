@@ -1,3 +1,11 @@
+Sun Oct 26 12:44:42 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (create_pathlist): Eliminate duplicates due to
+	  symlinks. Reported by Mike Frysinger.
+	* src/man.c (main): Emit "manpath search path" debugging message
+	  before calling create_pathlist.
+	* docs/NEWS: Document this.
+
 Sun Oct 26 11:58:37 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	Support LINGUAS environment variable to control installation of
