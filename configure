@@ -732,11 +732,13 @@ pic
 gzip
 compress
 bzip2
+lzma
 compressor
 compress_ext
 gunzip
 uncompress
 bunzip2
+unlzma
 LIBCOMPRESS
 LEX
 LEX_OUTPUT_ROOT
@@ -1685,6 +1687,8 @@ Optional Packages:
   --with-compress=COMPRESS
                           use COMPRESS as UNIX compression utility
   --with-bzip2=BZIP2      use BZIP2 as block-sorting compression utility
+  --with-lzma=LZMA        use LZMA as Lempel-Ziv-Markov chain-Algorithm
+                          compression utility
   --with-gnu-ld           assume the C compiler uses GNU ld default=no
   --with-libpth-prefix[=DIR]  search for libpth in DIR/include and DIR/lib
   --without-libpth-prefix     don't search for libpth in includedir and libdir
@@ -7534,7 +7538,78 @@ if test -n "$bzip2"
 then
 	bunzip2="$bzip2 -dc"
 fi
-if test -n "$gzip" || test -n "$compress" || test -n "$bzip2"
+
+# Check whether --with-lzma was given.
+if test "${with_lzma+set}" = set; then
+  withval=$with_lzma; if test "$withval" = yes || test "$withval" = no; then
+  { { echo "$as_me:$LINENO: error: --with-lzma requires an argument" >&5
+echo "$as_me: error: --with-lzma requires an argument" >&2;}
+   { (exit 1); exit 1; }; }
+else
+  { echo "$as_me:$LINENO: checking for lzma" >&5
+echo $ECHO_N "checking for lzma... $ECHO_C" >&6; }
+                     { echo "$as_me:$LINENO: result: $withval" >&5
+echo "${ECHO_T}$withval" >&6; }
+                     lzma="$withval"
+fi
+
+else
+  for ac_prog in lzma
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_prog_lzma+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$lzma"; then
+  ac_cv_prog_lzma="$lzma" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_lzma="$ac_prog"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+fi
+fi
+lzma=$ac_cv_prog_lzma
+if test -n "$lzma"; then
+  { echo "$as_me:$LINENO: result: $lzma" >&5
+echo "${ECHO_T}$lzma" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+  test -n "$lzma" && break
+done
+
+fi
+
+if test -n "$lzma"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LZMA 1
+_ACEOF
+
+fi
+if test -n "$lzma"
+then
+	unlzma="$lzma -dc"
+fi
+if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$lzma"
 then
 
 cat >>confdefs.h <<\_ACEOF
@@ -7547,6 +7622,7 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 fi
+
 
 
 
@@ -39139,11 +39215,13 @@ pic!$pic$ac_delim
 gzip!$gzip$ac_delim
 compress!$compress$ac_delim
 bzip2!$bzip2$ac_delim
+lzma!$lzma$ac_delim
 compressor!$compressor$ac_delim
 compress_ext!$compress_ext$ac_delim
 gunzip!$gunzip$ac_delim
 uncompress!$uncompress$ac_delim
 bunzip2!$bunzip2$ac_delim
+unlzma!$unlzma$ac_delim
 LIBCOMPRESS!$LIBCOMPRESS$ac_delim
 LEX!$LEX$ac_delim
 LEX_OUTPUT_ROOT!$LEX_OUTPUT_ROOT$ac_delim
@@ -39217,8 +39295,6 @@ GNULIB_REALLOC_POSIX!$GNULIB_REALLOC_POSIX$ac_delim
 GNULIB_CALLOC_POSIX!$GNULIB_CALLOC_POSIX$ac_delim
 GNULIB_GETSUBOPT!$GNULIB_GETSUBOPT$ac_delim
 GNULIB_MKDTEMP!$GNULIB_MKDTEMP$ac_delim
-GNULIB_MKSTEMP!$GNULIB_MKSTEMP$ac_delim
-GNULIB_PUTENV!$GNULIB_PUTENV$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -39260,6 +39336,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+GNULIB_MKSTEMP!$GNULIB_MKSTEMP$ac_delim
+GNULIB_PUTENV!$GNULIB_PUTENV$ac_delim
 GNULIB_RPMATCH!$GNULIB_RPMATCH$ac_delim
 GNULIB_SETENV!$GNULIB_SETENV$ac_delim
 GNULIB_STRTOD!$GNULIB_STRTOD$ac_delim
@@ -39355,8 +39433,6 @@ REPLACE_PRINTF!$REPLACE_PRINTF$ac_delim
 REPLACE_VPRINTF!$REPLACE_VPRINTF$ac_delim
 REPLACE_SNPRINTF!$REPLACE_SNPRINTF$ac_delim
 HAVE_DECL_SNPRINTF!$HAVE_DECL_SNPRINTF$ac_delim
-REPLACE_VSNPRINTF!$REPLACE_VSNPRINTF$ac_delim
-HAVE_DECL_VSNPRINTF!$HAVE_DECL_VSNPRINTF$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -39398,6 +39474,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+REPLACE_VSNPRINTF!$REPLACE_VSNPRINTF$ac_delim
+HAVE_DECL_VSNPRINTF!$HAVE_DECL_VSNPRINTF$ac_delim
 REPLACE_SPRINTF!$REPLACE_SPRINTF$ac_delim
 REPLACE_VSPRINTF!$REPLACE_VSPRINTF$ac_delim
 HAVE_VASPRINTF!$HAVE_VASPRINTF$ac_delim
@@ -39493,8 +39571,6 @@ HAVE_VISIBILITY!$HAVE_VISIBILITY$ac_delim
 PRI_MACROS_BROKEN!$PRI_MACROS_BROKEN$ac_delim
 LIBICONV!$LIBICONV$ac_delim
 LTLIBICONV!$LTLIBICONV$ac_delim
-INTLBISON!$INTLBISON$ac_delim
-INTL_MACOSX_LIBS!$INTL_MACOSX_LIBS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -39536,6 +39612,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+INTLBISON!$INTLBISON$ac_delim
+INTL_MACOSX_LIBS!$INTL_MACOSX_LIBS$ac_delim
 HAVE_POSIX_PRINTF!$HAVE_POSIX_PRINTF$ac_delim
 HAVE_ASPRINTF!$HAVE_ASPRINTF$ac_delim
 HAVE_SNPRINTF!$HAVE_SNPRINTF$ac_delim
@@ -39587,7 +39665,7 @@ gltests_LIBOBJS!$gltests_LIBOBJS$ac_delim
 gltests_LTLIBOBJS!$gltests_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 49; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 51; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

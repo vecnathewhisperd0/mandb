@@ -283,7 +283,12 @@ if test -n "$bzip2"
 then
 	bunzip2="$bzip2 -dc"
 fi
-if test -n "$gzip" || test -n "$compress" || test -n "$bzip2"
+MAN_CHECK_PROGS([lzma], [LZMA], [use LZMA as Lempel-Ziv-Markov chain-Algorithm compression utility], [lzma])
+if test -n "$lzma"
+then
+	unlzma="$lzma -dc"
+fi
+if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$lzma"
 then
 	AC_DEFINE(COMP_CAT, 1, [Define if you have compressors and want to support compressed cat files.])
 	AC_DEFINE(COMP_SRC, 1, [Define if you have compressors and want to support compressed manual source.])
@@ -293,6 +298,7 @@ AC_SUBST(compress_ext)
 AC_SUBST(gunzip)
 AC_SUBST(uncompress)
 AC_SUBST(bunzip2)
+AC_SUBST(unlzma)
 MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
 

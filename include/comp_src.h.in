@@ -62,6 +62,11 @@ struct compression comp_list[] = {
 	{BUNZIP2, "bz2", NULL},
 #endif /* HAVE_BZIP2 */
 
+/* If we have lzma, incorporate the following */
+#ifdef HAVE_LZMA
+	{UNLZMA, "lzma", NULL},
+#endif /* HAVE_LZMA */
+
 /*------------------------------------------------------*/
 /* Add your decompressor(s) and extension(s) below here */
 /*------------------------------------------------------*/
