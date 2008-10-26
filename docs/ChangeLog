@@ -1,3 +1,17 @@
+Sun Oct 26 11:58:37 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Support LINGUAS environment variable to control installation of
+	localised manual pages. Reported by Mike Frysinger.
+
+	* m4/man-po4a.m4, m4/man-linguas.m4: New files.
+	* configure.ac: Call MAN_PO4A instead of inline code. Remove NLS and
+	  PO4A Automake conditionals, no longer needed. Call MAN_LINGUAS.
+	* man/LINGUAS, man/LINGUAS.po4a: New files.
+	* man/Makefile.am (SUBDIRS): Set to $(MAN_SUBDIRS) rather than
+	  computing the list here.
+	  (DIST_SUBDIRS): Add, since we no longer use Automake conditionals.
+	* docs/NEWS: Document this.
+
 Sun Oct 26 01:53:36 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Check for lzma.

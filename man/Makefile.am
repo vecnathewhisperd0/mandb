@@ -19,13 +19,8 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-if NLS
-if PO4A
-MAYBE_PO4A = po4a
-MAYBE_PO4A_LINGUAS = pl ru
-endif
-SUBDIRS = $(MAYBE_PO4A) de es fr it ja $(MAYBE_PO4A_LINGUAS)
-endif
+SUBDIRS = $(MAN_SUBDIRS)
+DIST_SUBDIRS = po4a de es fr it ja pl ru
 
 LINGUA = .
 

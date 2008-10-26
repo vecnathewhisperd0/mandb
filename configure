@@ -1027,11 +1027,8 @@ INTL_LIBTOOL_SUFFIX_PREFIX
 INTLLIBS
 POSUB
 LINGUAS
-NLS_TRUE
-NLS_FALSE
 PO4A
-PO4A_TRUE
-PO4A_FALSE
+MAN_SUBDIRS
 DBLIBS
 LIBOBJS
 TRANS_APROPOS
@@ -35571,14 +35568,6 @@ _ACEOF
 
   fi
 
- if test "$USE_NLS" = yes; then
-  NLS_TRUE=
-  NLS_FALSE='#'
-else
-  NLS_TRUE='#'
-  NLS_FALSE=
-fi
-
 for ac_prog in po4a
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -35622,13 +35611,49 @@ fi
 done
 
 
- if test -n "$PO4A"; then
-  PO4A_TRUE=
-  PO4A_FALSE='#'
-else
-  PO4A_TRUE='#'
-  PO4A_FALSE=
-fi
+
+
+    if test "$USE_NLS" = yes; then
+    # The LINGUAS file contains the set of available languages.
+    man_all_linguas=
+    if test -n "$srcdir/man/LINGUAS"; then
+      man_all_linguas=`sed -e "/^#/d" -e "s/#.*//" "$srcdir/man/LINGUAS"`
+    fi
+    if test -n "$PO4A" && test -n "$srcdir/man/LINGUAS.po4a"; then
+      man_all_linguas_po4a=`sed -e "/^#/d" -e "s/#.*//" "$srcdir/man/LINGUAS.po4a"`
+      man_all_linguas="$man_all_linguas $man_all_linguas_po4a"
+    fi
+    man_inst_linguas=
+    for presentlang in $man_all_linguas; do
+      useit=no
+      if test -n "$LINGUAS"; then
+        desiredlanguages="$LINGUAS"
+      else
+        desiredlanguages="$man_all_linguas"
+      fi
+      for desiredlang in $desiredlanguages; do
+        # Use the presentlang catalog if desiredlang is
+        #   a. equal to presentlang, or
+        #   b. a variant of presentlang (because in this case,
+        #      presentlang can be used as a fallback for messages
+        #      which are not translated in the desiredlang catalog).
+        case "$desiredlang" in
+          "$presentlang"*) useit=yes;;
+        esac
+      done
+      if test $useit = yes; then
+        man_inst_linguas="$man_inst_linguas $presentlang"
+      fi
+    done
+    if test -n "$PO4A"; then
+      MAN_SUBDIRS="po4a $man_inst_linguas"
+    else
+      MAN_SUBDIRS="$man_inst_linguas"
+    fi
+  else
+    MAN_SUBDIRS=
+  fi
+
 
 
 # Checks for structures and compiler characteristics.
@@ -38483,20 +38508,6 @@ fi
     gltests_LTLIBOBJS=$gltests_ltlibobjs
 
 
-if test -z "${NLS_TRUE}" && test -z "${NLS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"NLS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"NLS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${PO4A_TRUE}" && test -z "${PO4A_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"PO4A\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"PO4A\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
@@ -39633,11 +39644,8 @@ INTL_LIBTOOL_SUFFIX_PREFIX!$INTL_LIBTOOL_SUFFIX_PREFIX$ac_delim
 INTLLIBS!$INTLLIBS$ac_delim
 POSUB!$POSUB$ac_delim
 LINGUAS!$LINGUAS$ac_delim
-NLS_TRUE!$NLS_TRUE$ac_delim
-NLS_FALSE!$NLS_FALSE$ac_delim
 PO4A!$PO4A$ac_delim
-PO4A_TRUE!$PO4A_TRUE$ac_delim
-PO4A_FALSE!$PO4A_FALSE$ac_delim
+MAN_SUBDIRS!$MAN_SUBDIRS$ac_delim
 DBLIBS!$DBLIBS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 TRANS_APROPOS!$TRANS_APROPOS$ac_delim
@@ -39665,7 +39673,7 @@ gltests_LIBOBJS!$gltests_LIBOBJS$ac_delim
 gltests_LTLIBOBJS!$gltests_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 51; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 48; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

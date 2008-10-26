@@ -151,6 +151,7 @@ am__aclocal_m4_deps = $(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/m4/man-compress-lib.m4 \
 	$(top_srcdir)/m4/man-gcc-warning.m4 \
 	$(top_srcdir)/m4/man-gnu-nroff.m4 \
+	$(top_srcdir)/m4/man-linguas.m4 $(top_srcdir)/m4/man-po4a.m4 \
 	$(top_srcdir)/m4/man-trans-subst.m4 $(top_srcdir)/m4/nls.m4 \
 	$(top_srcdir)/m4/po.m4 $(top_srcdir)/m4/printf-posix.m4 \
 	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/m4/size_max.m4 \
@@ -183,7 +184,6 @@ RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = po4a de es fr it ja pl ru
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
@@ -420,6 +420,7 @@ LTLIBOBJS = @LTLIBOBJS@
 LTLIBPTH = @LTLIBPTH@
 LTLIBTHREAD = @LTLIBTHREAD@
 MAKEINFO = @MAKEINFO@
+MAN_SUBDIRS = @MAN_SUBDIRS@
 MKDIR_P = @MKDIR_P@
 MSGFMT = @MSGFMT@
 MSGFMT_015 = @MSGFMT_015@
@@ -622,9 +623,8 @@ troff = @troff@
 uncompress = @uncompress@
 unlzma = @unlzma@
 vgrind = @vgrind@
-@NLS_TRUE@@PO4A_TRUE@MAYBE_PO4A = po4a
-@NLS_TRUE@@PO4A_TRUE@MAYBE_PO4A_LINGUAS = pl ru
-@NLS_TRUE@SUBDIRS = $(MAYBE_PO4A) de es fr it ja $(MAYBE_PO4A_LINGUAS)
+SUBDIRS = $(MAN_SUBDIRS)
+DIST_SUBDIRS = po4a de es fr it ja pl ru
 LINGUA = .
 man1_MANS = \
 	man1/apropos.1 \
