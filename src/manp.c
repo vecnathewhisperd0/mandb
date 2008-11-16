@@ -476,7 +476,9 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 			unpack_locale_bits (name, &mbits);
 			if (STREQ (lbits.language, mbits.language) &&
 			    (!*mbits.territory ||
-			     STREQ (lbits.territory, mbits.territory)))
+			     STREQ (lbits.territory, mbits.territory)) &&
+			    (!*mbits.modifier ||
+			     STREQ (lbits.modifier, mbits.modifier)))
 				manpath = add_to_manpath (manpath, fullpath);
 			free_locale_bits (&mbits);
 			free (fullpath);
