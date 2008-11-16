@@ -740,12 +740,16 @@ int main (int argc, char *argv[])
 	/* Use LANGUAGE only when LC_MESSAGES locale category is
 	 * neither "C" nor "POSIX". */
 	if (internal_locale && strcmp (internal_locale, "C") &&
-	    strcmp (internal_locale, "POSIX")) {
+	    strcmp (internal_locale, "POSIX"))
 		multiple_locale = getenv ("LANGUAGE");
-		if (multiple_locale && *multiple_locale)
-			internal_locale = multiple_locale;
-	}
-	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
+	if (multiple_locale && *multiple_locale) {
+		const char *colon = strchr (multiple_locale, ':');
+		internal_locale = colon ?
+			xstrndup (multiple_locale, colon - multiple_locale) :
+			xstrdup (multiple_locale);
+	} else
+		internal_locale = xstrdup (internal_locale ?
+					   internal_locale : "C");
 
 	if (argp_parse (am_apropos ? &apropos_argp : &whatis_argp, argc, argv,
 			0, 0, 0))
@@ -773,26 +777,19 @@ int main (int argc, char *argv[])
 
 	/* sort out the internal manpath */
 	if (manp == NULL) {
-		char tmp_locale[3];
-		int idx;
-
 		manp = add_nls_manpath (get_manpath (alt_systems),
 					internal_locale);
 		/* Handle multiple :-separated locales in LANGUAGE */
-		idx = multiple_locale ? strlen (multiple_locale) : 0;
-		while (idx) {
-			while (idx && multiple_locale[idx] != ':')
-				idx--;
-			if (multiple_locale[idx] == ':')
-				idx++;
-			tmp_locale[0] = multiple_locale[idx];
-			tmp_locale[1] = multiple_locale[idx + 1];
-			tmp_locale[2] = 0;
-			/* step back over preceding ':' */
-			if (idx) idx--;
-			if (idx) idx--;
-			debug ("checking for locale %s\n", tmp_locale);
-			manp = add_nls_manpath (manp, tmp_locale);
+		if (multiple_locale && *multiple_locale) {
+			char *localetok = xstrdup (multiple_locale), *tok;
+			char *localetok_ptr = localetok;
+			for (tok = strsep (&localetok_ptr, ":"); tok;
+			     tok = strsep (&localetok_ptr, ":")) {
+				if (!*tok)	/* ignore empty fields */
+					continue;
+				debug ("checking for locale %s\n", tok);
+				manp = add_nls_manpath (manp, tok);
+			}
 		}
 	} else
 		free (get_manpath (NULL));
