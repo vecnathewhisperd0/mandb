@@ -927,9 +927,8 @@ int main (int argc, char *argv[])
 		debug ("main(): locale = %s, internal_locale = %s\n",
 		       locale, internal_locale);
 		if (internal_locale) {
-			extern int _nl_msg_cat_cntr;
 			setenv ("LANGUAGE", internal_locale, 1);
-			++_nl_msg_cat_cntr;
+			locale_changed ();
 			multiple_locale = NULL;
 		}
 	}

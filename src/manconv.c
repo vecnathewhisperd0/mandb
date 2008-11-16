@@ -55,6 +55,8 @@
 
 #include "manconv.h"
 
+#ifdef HAVE_ICONV
+
 static char *check_preprocessor_encoding (pipeline *p)
 {
 	char *pp_encoding = NULL;
@@ -254,3 +256,23 @@ void manconv (pipeline *p, char * const *from, const char *to)
 	for (try_from_code = from; *try_from_code; ++try_from_code)
 		free (*try_from_code);
 }
+
+#else /* !HAVE_ICONV */
+
+/* If we don't have iconv, there isn't much we can do; just pass everything
+ * through unchanged.
+ */
+void manconv (pipeline *p, char * const *from ATTRIBUTE_UNUSED,
+	      const char *to ATTRIBUTE_UNUSED)
+{
+	for (;;) {
+		size_t len = 4096;
+		const char *buffer = pipeline_read (p, &len);
+		if (len == 0)
+			break;
+		if (fwrite (buffer, 1, len, stdout) < len || ferror (stdout))
+			error (FATAL, 0, _("can't write to standard output"));
+	}
+}
+
+#endif /* HAVE_ICONV */

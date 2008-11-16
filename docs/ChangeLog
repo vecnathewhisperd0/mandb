@@ -1,3 +1,18 @@
+Sun Nov 16 23:34:02 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Improve handling of systems without internationalisation support.
+	Reported by Mike Frysinger.
+
+	* include/manconfig.h.in (locale_changed): New macro.
+	* src/man.c (main), src/whatis.c (main): Use it.
+	* src/manconv.c (check_preprocessor_encoding, try_iconv): Declare
+	  only if HAVE_ICONV is defined.
+	  (manconv): If HAVE_ICONV is not defined, supply a replacement that
+	  just passes data straight through.
+	* src/whatis.c (simple_convert): Declare only if HAVE_ICONV is
+	  defined and supply a macro replacement otherwise, since in the
+	  latter case iconv_t is not defined.
+
 Sun Nov 16 18:40:09 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* manual/misc.me (Credits): Update with contributors of

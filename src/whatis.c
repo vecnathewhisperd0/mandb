@@ -203,9 +203,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 static struct argp apropos_argp = { options, parse_opt, args_doc, apropos_doc };
 static struct argp whatis_argp = { options, parse_opt, args_doc };
 
+#ifdef HAVE_ICONV
 static char *simple_convert (iconv_t conv, char *string)
 {
-#ifdef HAVE_ICONV
 	if (conv != (iconv_t) -1) {
 		size_t string_conv_alloc = strlen (string) + 1;
 		char *string_conv = xmalloc (string_conv_alloc);
@@ -230,9 +230,11 @@ static char *simple_convert (iconv_t conv, char *string)
 		}
 		return string_conv;
 	} else
-#endif /* HAVE_ICONV */
 		return xstrdup (string);
 }
+#else /* !HAVE_ICONV */
+#  define simple_convert(conv, string) xstrdup (string)
+#endif /* HAVE_ICONV */
 
 /* do the old thing, if we cannot find the relevant database */
 static inline int use_grep (char *page, char *manpath)
@@ -766,9 +768,8 @@ int main (int argc, char *argv[])
 		debug ("main(): locale = %s, internal_locale = %s\n",
 		       locale, internal_locale);
 		if (internal_locale) {
-			extern int _nl_msg_cat_cntr;
 			setenv ("LANGUAGE", internal_locale, 1);
-			++_nl_msg_cat_cntr;
+			locale_changed ();
 			multiple_locale = NULL;
 		}
 	}
