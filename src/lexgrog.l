@@ -143,13 +143,14 @@ nl_name		N[Aa][Aa][Mm]
 pl_name		N[Aa][Zz][Ww][Aa]
 ru_name         (ИМЯ|НАЗВАНИЕ|НАИМЕНОВАНИЕ)
 sk_name		M[Ee][Nn][Oo]
-sr_name		НАЗИВ
+sr_name		(ИМЕ|НАЗИВ)
+srlatin_name	(IME|NAZIV)
 sv_name		N[Aa][Mm][Nn]
 tr_name		(İ|i)S(İ|i)M  
 vi_name		TÊN
 zh_CN_name	名{blank}?称{blank}?.*
 zh_TW_name	(名{blank}?稱|命令名){blank}?.*
-name		({bg_name}|{cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{ko_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sk_name}|{sr_name}|{sv_name}|{tr_name}|{vi_name}|{zh_CN_name}|{zh_TW_name})
+name		({bg_name}|{cs_name}|{da_name}|{de_name}|{en_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{ko_name}|{latin_name}|{nl_name}|{pl_name}|{ru_name}|{sk_name}|{sr_name}|{srlatin_name}|{sv_name}|{tr_name}|{vi_name}|{zh_CN_name}|{zh_TW_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */

@@ -115,6 +115,8 @@ static struct directory_entry directory_table[] = {
 	{ "pl",		"ISO-8859-2",	"ISO-8859-2"		}, /* Polish */
 	{ "ru",		"KOI8-R",	"KOI8-R"		}, /* Russian */
 	{ "sk",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovak */
+	/* sr@latin must precede sr, due to top-down left-substring matching later */
+	{ "sr@latin",   "ISO-8859-2",   "ISO-8859-2"            }, /* Serbian Latin */
 	{ "sr",		"ISO-8859-5",	"ISO-8859-5"		}, /* Serbian */
 	{ "tr",		"ISO-8859-9",	"ISO-8859-9"		}, /* Turkish */
 	{ "vi",		"TCVN5712-1",	"TCVN5712-1"		}, /* Vietnamese */
