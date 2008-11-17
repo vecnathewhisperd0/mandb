@@ -90,10 +90,7 @@ extern void gripe_corrupt_data (void);
 extern datum make_multi_key (const char *page, const char *ext);
 
 /* allocate a mandata structure */
-inline struct mandata *infoalloc (void)
-{
-	return XZALLOC (struct mandata);
-}
+#define infoalloc() XZALLOC (struct mandata)
 
 extern char *name_to_key (const char *name);
 extern char **split_data (char *content, char *start[]);

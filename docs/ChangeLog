@@ -1,3 +1,9 @@
+Mon Nov 17 10:45:55 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_storage.h (infoalloc): Implement as a macro rather than
+	  as an inline function; seems to cause fewer problems when building
+	  without optimisation.
+
 Mon Nov 17 10:18:10 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* m4/longdouble.m4: Remove; gettext no longer installs this.
