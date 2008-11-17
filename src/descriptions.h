@@ -28,8 +28,8 @@ struct page_description {
 	struct page_description *next;
 };
 
-extern struct page_description *parse_descriptions (const char *base_name,
+extern struct page_description *parse_descriptions (const char *base,
 						    const char *whatis);
 extern void store_descriptions (const struct page_description *head,
-				struct mandata *info, const char *base_name);
+				struct mandata *info, const char *base);
 extern void free_descriptions (struct page_description *head);

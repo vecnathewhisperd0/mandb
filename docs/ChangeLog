@@ -1,3 +1,27 @@
+Mon Nov 17 17:55:35 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	FreeBSD build fixes.
+
+	* man/Rules.man (replace.sed): Spell out
+	  $(top_builddir)/man/replace.sin in full since $< is unspecified in
+	  target rules.
+	* src/Makefile.am (accessdb_LDADD, catman_LDADD, globbing_LDADD,
+	  lexgrog_LDADD, man_LDADD, manconv_LDADD, mandb_LDADD,
+	  manpath_LDADD, whatis_LDADD, wrapper_LDADD, zsoelim_LDADD): Add
+	  @LIBINTL@.
+	  (apropos$(EXEEXT)): Remove target before creating symlink. Spell
+	  out whatis$(EXEEXT) in full since $< is unspecified in target
+	  rules.
+
+	* src/check_mandirs.c (testmandirs): Cast time_t values to long
+	  before trying to print as %ld.
+	* src/descriptions.c (parse_descriptions): Rename base_name to base
+	  and seen_base_name to seen_base.
+	* src/descriptions_store.c (store_descriptions): Rename base_name to
+	  base.
+	* src/descriptions.h (parse_descriptions, store_descriptions):
+	  Update prototypes.
+
 Mon Nov 17 11:44:17 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.5.3.

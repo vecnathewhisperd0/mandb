@@ -50,18 +50,18 @@ static void gripe_bad_store (const char *name, const char *ext)
  * it into the database.
  */
 void store_descriptions (const struct page_description *head,
-			 struct mandata *info, const char *base_name)
+			 struct mandata *info, const char *base)
 {
 	const struct page_description *desc;
 	char save_id = info->id;
 
-	debug ("base_name = '%s'\n", base_name);
+	debug ("base = '%s'\n", base);
 
 	for (desc = head; desc; desc = desc->next) {
 		/* Either it's the real thing or merely a reference. Get the
 		 * id and pointer right in either case.
 		 */
-		if (STREQ (base_name, desc->name)) {
+		if (STREQ (base, desc->name)) {
 			info->id = save_id;
 			info->pointer = NULL;
 			info->whatis = desc->whatis;
@@ -70,7 +70,7 @@ void store_descriptions (const struct page_description *head,
 				info->id = WHATIS_MAN;
 			else
 				info->id = WHATIS_CAT;
-			info->pointer = base_name;
+			info->pointer = base;
 			/* Don't waste space storing the whatis in the db
 			 * more than once.
 			 */
@@ -79,7 +79,7 @@ void store_descriptions (const struct page_description *head,
 
 		debug ("name = '%s', id = %c\n", desc->name, info->id);
 		if (dbstore (info, desc->name) > 0) {
-			gripe_bad_store (base_name, info->ext);
+			gripe_bad_store (base, info->ext);
 			break;
 		}
 	}

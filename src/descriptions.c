@@ -33,12 +33,12 @@
 /* Parse the description in a whatis line returned by find_name() into a
  * sequence of names and whatis descriptions.
  */
-struct page_description *parse_descriptions (const char *base_name,
+struct page_description *parse_descriptions (const char *base,
 					     const char *whatis)
 {
 	const char *sep, *nextsep;
 	struct page_description *desc = NULL, *head = NULL;
-	int seen_base_name = 0;
+	int seen_base = 0;
 
 	if (!whatis)
 		return NULL;
@@ -97,8 +97,8 @@ struct page_description *parse_descriptions (const char *base_name,
 			desc->whatis = dash ? trim_spaces (dash + 3) : NULL;
 			desc->next   = NULL;
 
-			if (base_name && STREQ (base_name, desc->name))
-				seen_base_name = 1;
+			if (base && STREQ (base, desc->name))
+				seen_base = 1;
 		}
 
 		free (names);
@@ -106,10 +106,10 @@ struct page_description *parse_descriptions (const char *base_name,
 		sep = nextsep;
 	}
 
-	/* If it isn't there already, add the base_name onto the returned
+	/* If it isn't there already, add the base name onto the returned
 	 * list.
 	 */
-	if (base_name && !seen_base_name) {
+	if (base && !seen_base) {
 		if (head) {
 			desc->next = xmalloc (sizeof *desc);
 			desc = desc->next;
@@ -119,7 +119,7 @@ struct page_description *parse_descriptions (const char *base_name,
 			head = desc;
 			desc->whatis = NULL;
 		}
-		desc->name = xstrdup (base_name);
+		desc->name = xstrdup (base);
 		desc->next = NULL;
 	}
 

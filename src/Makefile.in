@@ -715,17 +715,17 @@ AM_CPPFLAGS = \
 
 LIBMAN = $(top_builddir)/lib/libman.a $(top_builddir)/gnulib/lib/libgnu.a
 LIBMANDB = $(top_builddir)/libdb/libmandb.a $(DBLIBS)
-accessdb_LDADD = $(LIBMANDB) $(LIBMAN)
-catman_LDADD = $(LIBMANDB) $(LIBMAN)
-globbing_LDADD = $(LIBMAN)
-lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS)
-man_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS)
-manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS)
-mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS)
-manpath_LDADD = $(LIBMAN)
-whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS)
-wrapper_LDADD = $(LIBMAN)
-zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS)
+accessdb_LDADD = $(LIBMANDB) $(LIBMAN) @LIBINTL@
+catman_LDADD = $(LIBMANDB) $(LIBMAN) @LIBINTL@
+globbing_LDADD = $(LIBMAN) @LIBINTL@
+lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
+man_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
+manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
+mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
+manpath_LDADD = $(LIBMAN) @LIBINTL@
+whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS) @LIBINTL@
+wrapper_LDADD = $(LIBMAN) @LIBINTL@
+zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
 accessdb_SOURCES = \
 	accessdb.c \
 	util.c
@@ -1239,7 +1239,8 @@ uninstall-am: uninstall-binPROGRAMS uninstall-pkglibexecPROGRAMS \
 
 
 apropos$(EXEEXT): whatis$(EXEEXT)
-	$(LN_S) $< $@
+	rm -f $@
+	$(LN_S) whatis$(EXEEXT) $@
 
 all-am: apropos$(EXEEXT)
 

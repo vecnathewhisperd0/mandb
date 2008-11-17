@@ -24,7 +24,7 @@ mandir = @mandir@/$(LINGUA)
 CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS) replace.sed
 
 replace.sed: $(top_builddir)/man/replace.sin
-	sed -e 's,%REPLACE_CONFIG_FILE%,$(config_file),g' $< > $@
+	sed -e 's,%REPLACE_CONFIG_FILE%,$(config_file),g' $(top_builddir)/man/replace.sin > $@
 
 .man1.1: replace.sed
 	$(MKDIR_P) man1

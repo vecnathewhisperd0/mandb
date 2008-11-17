@@ -364,7 +364,8 @@ static short testmandirs (const char *path, time_t last)
 		if (last && stbuf.st_mtime <= last) {
 			/* scanned already */
 			debug ("%s modified %ld, db modified %ld\n",
-			       mandir->d_name, stbuf.st_mtime, last);
+			       mandir->d_name, (long) stbuf.st_mtime,
+			       (long) last);
 			continue;
 		}
 
