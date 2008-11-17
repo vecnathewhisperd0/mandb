@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 m4_pattern_forbid([^MAN_])
 
 # Initialise and check we're in the correct directory.
-AC_INIT([man-db], [2.5.3-pre1], [cjwatson@debian.org])
+AC_INIT([man-db], [2.5.3], [cjwatson@debian.org])
 AC_CONFIG_AUX_DIR(tools)
 AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign])
 AC_PREREQ([2.59])
@@ -16,7 +16,7 @@ AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
 
 # Define below date and version information to be put into man pages etc.
-datemark=20080505
+datemark=20081117
 date=`LANG=C date -d $datemark +'%Y-%m-%d'`
 AC_SUBST(date)dnl
 roff_version=`echo AC_PACKAGE_VERSION | sed 's/-/\\-/g'`
