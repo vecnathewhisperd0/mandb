@@ -39,4 +39,6 @@ man8_MANS = \
 	man8/catman.8 \
 	man8/mandb.8
 
+EXTRA_DIST = LINGUAS LINGUAS.po4a
+
 include $(srcdir)/Rules.man
