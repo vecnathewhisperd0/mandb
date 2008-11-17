@@ -148,6 +148,7 @@ static struct argp argp = { options, parse_opt, args_doc };
 int main (int argc, char *argv[])
 {
 	pipeline *p;
+	char **try_from_code;
 
 	program_name = base_name (argv[0]);
 
@@ -175,6 +176,8 @@ int main (int argc, char *argv[])
 
 	manconv (p, from_code, to_code);
 
+	for (try_from_code = from_code; *try_from_code; ++try_from_code)
+		free (*try_from_code);
 	free (to_code);
 	free (from_code);
 

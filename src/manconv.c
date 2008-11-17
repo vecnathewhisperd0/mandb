@@ -252,9 +252,6 @@ void manconv (pipeline *p, char * const *from, const char *to)
 				       !*(try_from_code + 1)) == 0)
 				break;
 	}
-
-	for (try_from_code = from; *try_from_code; ++try_from_code)
-		free (*try_from_code);
 }
 
 #else /* !HAVE_ICONV */
