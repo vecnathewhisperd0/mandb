@@ -15,6 +15,14 @@ Major changes since man-db 2.5.2:
 	  configure, it now controls building and installation of localised
 	  manual pages as well as program translations.
 
+	o The LANGUAGE environment variable is now tokenised properly,
+	  rather than only taking the first two characters of each element.
+
+	o Fix build if --disable-nls is used or iconv is not available.
+
+	o man now correctly propagates the exit code of whatis or apropos
+	  when called with the -f or -k option respectively.
+
 	Improvements:
 	-------------
 
@@ -42,6 +50,14 @@ Major changes since man-db 2.5.2:
 
 	o Duplicate manual page hierarchies due to symlinks (e.g. /usr/man
 	  -> /usr/share/man) are detected and removed from the search order.
+
+	o A locale modifier (e.g. @latin) in a directory name must now match
+	  the locale if the former is set, in addition to the language and
+	  territory.
+
+	o Bare .so includes (e.g. ".so foo.1" rather than ".so man1/foo.1")
+	  now work, although only within the same manual page hierarchy for
+	  now.
 
 man-db 2.5.2 (5 May 2008)
 =========================
