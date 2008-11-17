@@ -1,3 +1,11 @@
+Mon Nov 17 19:26:50 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Now that we use the ISO 8601 date format rather than
+	  language-specific date variants, there's no reason to call out to
+	  date (using options specific to GNU date) to format the date
+	  string, so just hardcode it.
+	* docs/HACKING (Release process): datemark -> date.
+
 Mon Nov 17 17:55:35 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	FreeBSD build fixes.

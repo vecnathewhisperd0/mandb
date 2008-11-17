@@ -16,8 +16,7 @@ AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
 
 # Define below date and version information to be put into man pages etc.
-datemark=20081117
-date=`LANG=C date -d $datemark +'%Y-%m-%d'`
+date=2008-11-17
 AC_SUBST(date)dnl
 roff_version=`echo AC_PACKAGE_VERSION | sed 's/-/\\-/g'`
 AC_SUBST(roff_version)dnl
