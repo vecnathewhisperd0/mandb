@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.2-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2008-07-12 16:45+0100\n"
+"POT-Creation-Date: 2008-11-17 01:10+0000\n"
 "PO-Revision-Date: 2008-03-11 21:20+0300\n"
 "Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
@@ -24,84 +24,85 @@ msgstr ""
 msgid "badly formed configuration directive: '%s'"
 msgstr "неправильный формат директивы конфигурации: '%s'"
 
-#: lib/pipeline.c:622
+#: lib/pipeline.c:626
 #, c-format
 msgid "pipeline input not open"
 msgstr "ввод конвейера не открыт"
 
-#: lib/pipeline.c:635
+#: lib/pipeline.c:639
 #, c-format
 msgid "pipeline output not open"
 msgstr "вывод конвейера не открыт"
 
-#: lib/pipeline.c:780 lib/pipeline.c:799
+#: lib/pipeline.c:784 lib/pipeline.c:803
 #, c-format
 msgid "pipe failed"
 msgstr "функция pipe вернула ошибку"
 
-#: lib/pipeline.c:788 src/lexgrog.l:424 src/manconv.c:369 src/straycats.c:212
-#: src/ult_src.c:277 src/ult_src.c:287 src/zsoelim.l:420
+#: lib/pipeline.c:792 src/lexgrog.l:425 src/man.c:2167 src/man.c:2244
+#: src/man.c:2337 src/manconv_main.c:171 src/straycats.c:212 src/ult_src.c:277
+#: src/ult_src.c:287 src/zsoelim.l:373
 #, c-format
 msgid "can't open %s"
 msgstr "не удалось открыть %s"
 
-#: lib/pipeline.c:828 src/catman.c:199
+#: lib/pipeline.c:832 src/catman.c:199
 #, c-format
 msgid "fork failed"
 msgstr "функция fork вернула ошибку"
 
-#: lib/pipeline.c:836 lib/pipeline.c:845
+#: lib/pipeline.c:840 lib/pipeline.c:849
 #, c-format
 msgid "dup2 failed"
 msgstr "функция dup2 вернула ошибку"
 
-#: lib/pipeline.c:839 lib/pipeline.c:848 lib/pipeline.c:855 lib/pipeline.c:864
-#: lib/pipeline.c:923 lib/pipeline.c:927
+#: lib/pipeline.c:843 lib/pipeline.c:852 lib/pipeline.c:859 lib/pipeline.c:868
+#: lib/pipeline.c:931 lib/pipeline.c:935
 #, c-format
 msgid "close failed"
 msgstr "функция close вернула ошибку"
 
-#: lib/pipeline.c:917
+#: lib/pipeline.c:925
 #, c-format
 msgid "can't execute %s"
 msgstr "не удалось запустить %s"
 
-#: lib/pipeline.c:1019
+#: lib/pipeline.c:1027
 #, c-format
 msgid "closing pipeline input stream failed"
 msgstr "не удалось закрыть поток ввода конвейера"
 
-#: lib/pipeline.c:1024 lib/pipeline.c:1281
+#: lib/pipeline.c:1032 lib/pipeline.c:1300
 #, c-format
 msgid "closing pipeline input failed"
 msgstr "не удалось закрыть ввод конвейера"
 
-#: lib/pipeline.c:1031
+#: lib/pipeline.c:1039
 #, c-format
 msgid "closing pipeline output stream failed"
 msgstr "не удалось закрыть поток вывода конвейера"
 
-#: lib/pipeline.c:1038 lib/pipeline.c:1306
+#: lib/pipeline.c:1046 lib/pipeline.c:1325
 #, c-format
 msgid "closing pipeline output failed"
 msgstr "не удалось закрыть вывод конвейера"
 
-#: lib/pipeline.c:1086
+#: lib/pipeline.c:1094
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr "%s: %s (создан файл core)"
 
-#: lib/pipeline.c:1091
+#: lib/pipeline.c:1099
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: lib/pipeline.c:1116
+#: lib/pipeline.c:1135
 #, c-format
 msgid "waitpid failed"
 msgstr "функция waitpid вернула ошибку"
 
-#: lib/pipeline.c:1175
+#: lib/pipeline.c:1194
 #, c-format
 msgid "can't install SIGCHLD handler"
 msgstr "не удалось установить обработчик SIGCHLD"
@@ -126,12 +127,12 @@ msgstr "индексный кэш %s повреждён"
 msgid "cannot replace key %s"
 msgstr "не удалось заменить ключ %s"
 
-#: libdb/db_lookup.c:186 libdb/db_lookup.c:196
+#: libdb/db_lookup.c:180 libdb/db_lookup.c:190
 #, c-format
 msgid "only %d fields in content"
 msgstr "в содержимом только %d полей"
 
-#: libdb/db_lookup.c:376
+#: libdb/db_lookup.c:370
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "неверная выборка по многомерному ключу %s"
@@ -166,12 +167,12 @@ msgid "The man database defaults to %s%s."
 msgstr "По умолчанию база данных man расположена в %s%s."
 
 #: src/accessdb.c:65 src/catman.c:99 src/globbing_test.c:57
-#: src/lexgrog_test.c:66 src/man.c:245 src/manconv.c:109 src/mandb.c:97
-#: src/manpath.c:66 src/whatis.c:114 src/zsoelim.l:91
+#: src/lexgrog_test.c:66 src/man.c:246 src/manconv_main.c:94 src/mandb.c:97
+#: src/manpath.c:66 src/whatis.c:114 src/zsoelim_main.c:59
 msgid "emit debugging messages"
 msgstr "показывать сообщения отладки"
 
-#: src/accessdb.c:134
+#: src/accessdb.c:135
 #, c-format
 msgid "can't open %s for reading"
 msgstr "не удалось открыть %s на чтение"
@@ -180,20 +181,20 @@ msgstr "не удалось открыть %s на чтение"
 msgid "[SECTION...]"
 msgstr "[СЕКЦИЯ...]"
 
-#: src/catman.c:100 src/man.c:266 src/whatis.c:123
+#: src/catman.c:100 src/man.c:267 src/whatis.c:123
 msgid "PATH"
 msgstr "ПУТЬ"
 
-#: src/catman.c:100 src/man.c:266 src/whatis.c:123
+#: src/catman.c:100 src/man.c:267 src/whatis.c:123
 msgid "set search path for manual pages to PATH"
 msgstr "установить путь к страницам руководства в значение ПУТЬ"
 
-#: src/catman.c:101 src/man.c:244 src/mandb.c:105 src/manpath.c:68
+#: src/catman.c:101 src/man.c:245 src/mandb.c:105 src/manpath.c:68
 #: src/whatis.c:125
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: src/catman.c:101 src/man.c:244 src/mandb.c:105 src/manpath.c:68
+#: src/catman.c:101 src/man.c:245 src/mandb.c:105 src/manpath.c:68
 #: src/whatis.c:125
 msgid "use this user configuration file"
 msgstr "использовать указанный пользовательских файл настроек"
@@ -237,7 +238,7 @@ msgstr ""
 msgid "cannot write within %s"
 msgstr "не удалось записать в %s"
 
-#: src/catman.c:478
+#: src/catman.c:480
 #, c-format
 msgid "unable to update %s"
 msgstr "не удалось обновить %s"
@@ -268,7 +269,7 @@ msgstr "предупреждение: %s: игнорируется пустой 
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "предупреждение: %s: whatis анализ %s(%s) не удался"
 
-#: src/check_mandirs.c:313 src/check_mandirs.c:348 src/mandb.c:628
+#: src/check_mandirs.c:313 src/check_mandirs.c:348 src/mandb.c:629
 #: src/straycats.c:85 src/straycats.c:292 src/ult_src.c:92
 #, c-format
 msgid "can't search directory %s"
@@ -322,28 +323,28 @@ msgstr "предупреждение: %s: игнорируется фальши�
 msgid "PATH SECTION NAME"
 msgstr "ПУТЬ СЕКЦИЯ ИМЯ"
 
-#: src/globbing_test.c:58 src/man.c:269
+#: src/globbing_test.c:58 src/man.c:270
 msgid "EXTENSION"
 msgstr "РАСШИРЕНИЕ"
 
-#: src/globbing_test.c:58 src/man.c:270
+#: src/globbing_test.c:58 src/man.c:271
 msgid "limit search to extension type EXTENSION"
 msgstr "искать только с заданным РАСШИРЕНИЕМ"
 
-#: src/globbing_test.c:59 src/man.c:271
+#: src/globbing_test.c:59 src/man.c:272
 msgid "look for pages case-insensitively (default)"
 msgstr "не учитывать регистр при поиске (по умолчанию)"
 
-#: src/globbing_test.c:60 src/man.c:272
+#: src/globbing_test.c:60 src/man.c:273
 msgid "look for pages case-sensitively"
 msgstr "учитывать регистр при поиске"
 
-#: src/lexgrog.l:346
+#: src/lexgrog.l:347
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "предупреждение: результат whatis для %s превысил %d байт, обрезание."
 
-#: src/lexgrog_test.c:62 src/zsoelim.l:88
+#: src/lexgrog_test.c:62 src/zsoelim_main.c:56
 msgid "FILE..."
 msgstr "ФАЙЛ..."
 
@@ -367,133 +368,133 @@ msgstr "показать информацию whatis"
 msgid "show guessed series of preprocessing filters"
 msgstr "показать серию предположений фильтров предварительной обработки"
 
-#: src/lexgrog_test.c:71 src/man.c:261 src/man.c:280
+#: src/lexgrog_test.c:71 src/man.c:262 src/man.c:281
 msgid "ENCODING"
 msgstr "КОДИРОВКА"
 
-#: src/lexgrog_test.c:71 src/man.c:280
+#: src/lexgrog_test.c:71 src/man.c:281
 msgid "use selected output encoding"
 msgstr "использовать выбранную кодировку выходных данных"
 
-#: src/lexgrog_test.c:114 src/man.c:482
+#: src/lexgrog_test.c:114 src/man.c:483
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s: несовместимые параметры"
 
-#: src/man.c:156
+#: src/man.c:157
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "команда завершилась с кодом %d: %s"
 
-#: src/man.c:240
+#: src/man.c:241
 msgid "[SECTION] PAGE..."
 msgstr "[СЕКЦИЯ] СТРАНИЦА..."
 
-#: src/man.c:246
+#: src/man.c:247
 msgid "reset all options to their default values"
 msgstr "сбросить все параметры в значения по умолчанию"
 
-#: src/man.c:248
+#: src/man.c:249
 msgid "WARNINGS"
 msgstr "ПРЕДУПРЕЖДЕНИЯ"
 
-#: src/man.c:249
+#: src/man.c:250
 msgid "enable warnings from groff"
 msgstr "включить предупреждения от groff"
 
-#: src/man.c:252
+#: src/man.c:253
 msgid "Main modes of operation:"
 msgstr "Основные режимы работы:"
 
-#: src/man.c:253
+#: src/man.c:254
 msgid "equivalent to whatis"
 msgstr "эквивалентно whatis"
 
-#: src/man.c:254
+#: src/man.c:255
 msgid "equivalent to apropos"
 msgstr "эквивалентно apropos"
 
-#: src/man.c:255
+#: src/man.c:256
 msgid "print physical location of man page(s)"
 msgstr "показывать физическое расположение man страницы"
 
-#: src/man.c:257
+#: src/man.c:258
 msgid "print physical location of cat file(s)"
 msgstr "показывать физическое расположение cat файла(ов)"
 
-#: src/man.c:259
+#: src/man.c:260
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr "воспринимать аргумент(ы) СТРАНИЦА как имя файл(ов)"
 
-#: src/man.c:260
+#: src/man.c:261
 msgid "used by catman to reformat out of date cat pages"
 msgstr "используется catman для переформатирования устаревших cat страниц"
 
-#: src/man.c:261
+#: src/man.c:262
 msgid "output source page encoded in ENCODING"
 msgstr "вывести исходную страницу в КОДИРОВКЕ"
 
-#: src/man.c:263
+#: src/man.c:264
 msgid "Finding manual pages:"
 msgstr "Поиск страниц руководства:"
 
-#: src/man.c:264 src/whatis.c:124
+#: src/man.c:265 src/whatis.c:124
 msgid "LOCALE"
 msgstr "ЛОКАЛЬ"
 
-#: src/man.c:264
+#: src/man.c:265
 msgid "define the locale for this particular man search"
 msgstr "задать локаль для поиска"
 
-#: src/man.c:265 src/manpath.c:69 src/whatis.c:122
+#: src/man.c:266 src/manpath.c:69 src/whatis.c:122
 msgid "SYSTEM"
 msgstr "СИСТЕМА"
 
-#: src/man.c:265 src/manpath.c:69 src/whatis.c:122
+#: src/man.c:266 src/manpath.c:69 src/whatis.c:122
 msgid "use manual pages from other systems"
 msgstr "использовать страницы руководства от других систем"
 
-#: src/man.c:267
+#: src/man.c:268
 msgid "LIST"
 msgstr "СПИСОК"
 
-#: src/man.c:267
+#: src/man.c:268
 msgid "use colon separated section list"
 msgstr "использовать список секций, указанных через двоеточие"
 
-#: src/man.c:273
+#: src/man.c:274
 msgid "find all matching manual pages"
 msgstr "поиск всех подходящих страниц руководства"
 
-#: src/man.c:274
+#: src/man.c:275
 msgid "force a cache consistency check"
 msgstr "выполнить проверку целостности кэша"
 
-#: src/man.c:276
+#: src/man.c:277
 msgid "Controlling formatted output:"
 msgstr "Управление форматированием вывода:"
 
-#: src/man.c:277
+#: src/man.c:278
 msgid "PAGER"
 msgstr "ПЕЙДЖЕР"
 
-#: src/man.c:277
+#: src/man.c:278
 msgid "use program PAGER to display output"
 msgstr "использовать программу ПЕЙДЖЕР для вывода на экран"
 
-#: src/man.c:278 src/man.c:281
+#: src/man.c:279 src/man.c:282
 msgid "STRING"
 msgstr "СТРОКА"
 
-#: src/man.c:278
+#: src/man.c:279
 msgid "provide the `less' pager with a prompt"
 msgstr "использовать пейджер `less' с подсказкой"
 
-#: src/man.c:279
+#: src/man.c:280
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "показать трансляцию ASCII определённых символов latin1"
 
-#: src/man.c:281
+#: src/man.c:282
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
@@ -503,34 +504,34 @@ msgstr ""
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 
-#: src/man.c:285
+#: src/man.c:286
 #, c-format
 msgid "use %s to format pages"
 msgstr "использовать %s для форматирования страниц"
 
-#: src/man.c:286
+#: src/man.c:287
 msgid "DEVICE"
 msgstr "УСТРОЙСТВО"
 
-#: src/man.c:287
+#: src/man.c:288
 #, c-format
 msgid "use %s with selected device"
 msgstr "использовать %s на выбранном устройстве"
 
-#: src/man.c:293
+#: src/man.c:294
 msgid "BROWSER"
 msgstr "БРАУЗЕР"
 
-#: src/man.c:294
+#: src/man.c:295
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr "использовать %s или БРАУЗЕР для показа HTML"
 
-#: src/man.c:295
+#: src/man.c:296
 msgid "RESOLUTION"
 msgstr "РАЗРЕШЕНИЕ"
 
-#: src/man.c:297
+#: src/man.c:298
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
@@ -538,99 +539,99 @@ msgstr ""
 "использовать groff и показывать с помощью gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:299
+#: src/man.c:300
 msgid "use groff and force it to produce ditroff"
 msgstr "использовать groff и заставить его генерировать ditroff"
 
-#: src/man.c:529 src/man.c:601
+#: src/man.c:530 src/man.c:602
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "Нет справочного руководства для %s\n"
 
-#: src/man.c:531
+#: src/man.c:532
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "(Или же, какая страница руководства вам нужна из раздела %s?)\n"
 
-#: src/man.c:535
+#: src/man.c:536
 msgid "What manual page do you want?\n"
 msgstr "Какая страница руководства вам нужна?\n"
 
-#: src/man.c:598
+#: src/man.c:599
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Нет справочного руководства для %s в разделе %s\n"
 
-#: src/man.c:606
+#: src/man.c:607
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Смотрите '%s' в помощи, если недоступны страницы руководства.\n"
 
-#: src/man.c:767 src/man.c:2119
+#: src/man.c:769 src/man.c:2121
 #, c-format
 msgid "can't chdir to %s"
 msgstr "не удалось выполнить функцию chdir в %s"
 
-#: src/man.c:950
+#: src/man.c:956
 msgid " Manual page "
 msgstr " Страница руководства "
 
-#: src/man.c:1020 src/man.c:2968
+#: src/man.c:1019 src/man.c:2997
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "команда mandb завершилась неудачно (код выхода %d)"
 
-#: src/man.c:1476
+#: src/man.c:1477
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "игнорирование неизвестного препроцессора `%c'"
 
-#: src/man.c:1755 src/mandb.c:299
+#: src/man.c:1756 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "не удалось выполнить функцию chown %s"
 
-#: src/man.c:1767 src/mandb.c:213
+#: src/man.c:1768 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "не удалось выполнить функцию chmod %s"
 
-#: src/man.c:1778 src/mandb.c:204
+#: src/man.c:1779 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "не удалось переименовать %s в %s"
 
-#: src/man.c:1797
+#: src/man.c:1798
 #, c-format
 msgid "can't set times on %s"
 msgstr "не удалось установить время доступа для %s"
 
-#: src/man.c:1806
+#: src/man.c:1807
 #, c-format
 msgid "can't unlink %s"
 msgstr "не удалось выполнить функцию unlink %s"
 
-#: src/man.c:1839
+#: src/man.c:1851
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "не удалось создать временный cat файл %s"
 
-#: src/man.c:1968 src/man.c:2010 src/man.c:2040
+#: src/man.c:1969 src/man.c:2011 src/man.c:2041
 #, c-format
 msgid "can't change to directory %s"
 msgstr "не удалось сменить каталог на %s"
 
-#: src/man.c:1981
+#: src/man.c:1982
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "не удалось открыть временный файл %s"
 
-#: src/man.c:2016 src/man.c:2045
+#: src/man.c:2017 src/man.c:2046
 #, c-format
 msgid "can't remove directory %s"
 msgstr "не удалось удалить каталог %s"
 
-#: src/man.c:2268
+#: src/man.c:2286
 #, c-format
 msgid ""
 "\n"
@@ -639,65 +640,65 @@ msgstr ""
 "\n"
 "не удалось записать в %s в режиме catman"
 
-#: src/man.c:2822
+#: src/man.c:2851
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: полагаться на ссылки whatis настоятельно не рекомендуется\n"
 
-#: src/man.c:3162
+#: src/man.c:3191
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "внутренняя ошибка: тип кандидата %d вне диапазона"
 
-#: src/man.c:3285
+#: src/man.c:3316
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- след: %s [ просм (ввод) | пропуск (Ctrl-D) | выход (Ctrl-C) ]\n"
 
-#: src/manconv.c:103
-msgid "-f CODE[:...] -t CODE [FILENAME]"
-msgstr "-f КОДИРОВКА[:...] -t КОДИРОВКА [ИМЯ-ФАЙЛА]"
-
-#: src/manconv.c:106
-msgid "CODE[:...]"
-msgstr "КОДИРОВКА[:...]"
-
-#: src/manconv.c:107
-msgid "possible encodings of original text"
-msgstr "возможные кодировки исходного текста"
-
-#: src/manconv.c:108
-msgid "CODE"
-msgstr "КОДИРОВКА"
-
-#: src/manconv.c:108
-msgid "encoding for output"
-msgstr "кодировка вывода"
-
-#: src/manconv.c:110 src/manpath.c:67
-msgid "produce fewer warnings"
-msgstr "выводить некоторые предупреждения"
-
-#: src/manconv.c:145 src/manconv.c:154
-#, c-format
-msgid "must specify an input encoding"
-msgstr "должна быть указана кодировка входных данных"
-
-#: src/manconv.c:149
-#, c-format
-msgid "must specify an output encoding"
-msgstr "должна быть указана кодировка выходных данных"
-
-#: src/manconv.c:280 src/manconv.c:305
+#: src/manconv.c:178 src/manconv.c:203 src/manconv.c:274
 #, c-format
 msgid "can't write to standard output"
 msgstr "не удалось записать в стандартный выходной поток"
 
-#: src/manconv.c:319
+#: src/manconv.c:217
 #, c-format
 msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv: неполный символ в конце буфера"
+
+#: src/manconv_main.c:88
+msgid "-f CODE[:...] -t CODE [FILENAME]"
+msgstr "-f КОДИРОВКА[:...] -t КОДИРОВКА [ИМЯ-ФАЙЛА]"
+
+#: src/manconv_main.c:91
+msgid "CODE[:...]"
+msgstr "КОДИРОВКА[:...]"
+
+#: src/manconv_main.c:92
+msgid "possible encodings of original text"
+msgstr "возможные кодировки исходного текста"
+
+#: src/manconv_main.c:93
+msgid "CODE"
+msgstr "КОДИРОВКА"
+
+#: src/manconv_main.c:93
+msgid "encoding for output"
+msgstr "кодировка вывода"
+
+#: src/manconv_main.c:95 src/manpath.c:67
+msgid "produce fewer warnings"
+msgstr "выводить некоторые предупреждения"
+
+#: src/manconv_main.c:130 src/manconv_main.c:139
+#, c-format
+msgid "must specify an input encoding"
+msgstr "должна быть указана кодировка входных данных"
+
+#: src/manconv_main.c:134
+#, c-format
+msgid "must specify an output encoding"
+msgstr "должна быть указана кодировка выходных данных"
 
 #: src/mandb.c:94
 msgid "[MANPATH]"
@@ -755,17 +756,17 @@ msgstr "не удалось прочитать из %s"
 msgid "Processing manual pages under %s...\n"
 msgstr "Обработка страниц руководства в %s...\n"
 
-#: src/mandb.c:577 src/security.c:136
+#: src/mandb.c:578 src/security.c:136
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "setuid man пользователь \"%s\" не существует"
 
-#: src/mandb.c:598
+#: src/mandb.c:599
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "предупреждение: нет директивы MANDB_MAP в %s, используется ваш manpath"
 
-#: src/mandb.c:662
+#: src/mandb.c:663
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -774,99 +775,99 @@ msgstr ""
 "%d man подкаталоги содержат более новые страницы руководства.\n"
 "%d страниц руководства добавлено.\n"
 
-#: src/mandb.c:666
+#: src/mandb.c:667
 #, c-format
 msgid "%d stray cats were added.\n"
 msgstr "%d побочных cat добавлено.\n"
 
-#: src/mandb.c:668
+#: src/mandb.c:669
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr "%d старых записей базы данных вычищено.\n"
 
-#: src/mandb.c:682
+#: src/mandb.c:683
 #, c-format
 msgid "No databases created."
 msgstr "Базы данных не созданы."
 
-#: src/manp.c:311
+#: src/manp.c:312
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "нет правильного manpath файла настроек %s"
 
-#: src/manp.c:317
+#: src/manp.c:318
 #, c-format
 msgid "warning: %s"
 msgstr "предупреждение: %s"
 
-#: src/manp.c:323
+#: src/manp.c:324
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "предупреждение: %s не является каталогом"
 
-#: src/manp.c:328
+#: src/manp.c:329
 #, c-format
 msgid "manpath list too long"
 msgstr "список manpath слишком длинный"
 
-#: src/manp.c:591
+#: src/manp.c:596
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "предупреждение: переменная среды $PATH не установлена"
 
-#: src/manp.c:598
+#: src/manp.c:603
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "предупреждение: переменная среды $PATH пуста"
 
-#: src/manp.c:626
+#: src/manp.c:632
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr ""
 "предупреждение: найдена переменная среды $MANPATH, добавляется к началу %s"
 
-#: src/manp.c:637
+#: src/manp.c:643
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr ""
 "предупреждение: найдена переменная среды $MANPATH, добавляется в конец %s"
 
-#: src/manp.c:649
+#: src/manp.c:655
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "предупреждение: найдена переменная среды $MANPATH, вставляется в %s"
 
-#: src/manp.c:662
+#: src/manp.c:669
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "предупреждение: найдена переменная среды $MANPATH, игнорируется %s"
 
-#: src/manp.c:695 src/manp.c:722
+#: src/manp.c:702 src/manp.c:729
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "предупреждение: не удалось создать cat каталог %s"
 
-#: src/manp.c:784
+#: src/manp.c:791
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "не удалось разобрать список каталогов `%s'"
 
-#: src/manp.c:831
+#: src/manp.c:838
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "не удалось открыть manpath файл настроек %s"
 
-#: src/manp.c:860
+#: src/manp.c:867
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "предупреждение: обязательный каталог %s не существует"
 
-#: src/manp.c:1066
+#: src/manp.c:1073
 #, c-format
 msgid "can't determine current directory"
 msgstr "не удалось определить текущий каталог"
 
-#: src/manp.c:1186
+#: src/manp.c:1225
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "предупреждение: %s не начинается с %s"
@@ -879,7 +880,7 @@ msgstr "показать относительные catpath"
 msgid "show the entire global manpath"
 msgstr "показать весь глобальный manpath"
 
-#: src/manpath.c:132
+#: src/manpath.c:133
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
 msgstr "предупреждение: не установлены глобальные manpath в файле настроек %s"
@@ -968,26 +969,26 @@ msgstr "задать локаль для этого поиска"
 msgid "%s what?\n"
 msgstr "%s что?\n"
 
-#: src/whatis.c:298 src/whatis.c:325 src/whatis.c:337
+#: src/whatis.c:300 src/whatis.c:327 src/whatis.c:339
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "warning: %s содержит циклический указатель"
 
-#: src/whatis.c:300 src/whatis.c:313 src/whatis.c:328 src/whatis.c:338
+#: src/whatis.c:302 src/whatis.c:315 src/whatis.c:330 src/whatis.c:340
 msgid "(unknown subject)"
 msgstr "(неизвестный объект)"
 
-#: src/whatis.c:552
+#: src/whatis.c:557
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "База данных %s повреждена; пересборка командой mandb --create"
 
-#: src/whatis.c:690
+#: src/whatis.c:695
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ничего подходящего не найдено.\n"
 
-#: src/whatis.c:817
+#: src/whatis.c:819
 #, c-format
 msgid "fatal: regex `%s': %s"
 msgstr "неустранимая ошибка: regex `%s': %s"
@@ -1002,37 +1003,37 @@ msgstr "Неизвестно, какую программу нужно запу�
 msgid "%s: Failed su to user %s\n"
 msgstr "%s: Не удалось выполнить su в пользователя %s\n"
 
-#: src/zsoelim.l:92
-msgid "compatibility switch (ignored)"
-msgstr "для совместимости (игнорируется)"
-
-#: src/zsoelim.l:202
+#: src/zsoelim.l:153
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d: .so запрашивает слишком глубокую вложенность или это рекурсия"
 
-#: src/zsoelim.l:216
+#: src/zsoelim.l:167
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d: предупреждение: .so запрос завершился неудачно"
 
-#: src/zsoelim.l:238
+#: src/zsoelim.l:189
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d: предупреждение: новая строка в .so запросе, игнорируется"
 
-#: src/zsoelim.l:291
+#: src/zsoelim.l:242
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr ""
 "%s:%d: предупреждение: неправильно сформированный .lf запрос, игнорируется"
 
-#: src/zsoelim.l:301
+#: src/zsoelim.l:252
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d: предупреждение: новая строка в .lf запросе, игнорируется"
 
-#: src/zsoelim.l:341
+#: src/zsoelim.l:292
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: незакрытая кавычка в roff запросе"
+
+#: src/zsoelim_main.c:60
+msgid "compatibility switch (ignored)"
+msgstr "для совместимости (игнорируется)"
