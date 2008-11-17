@@ -232,7 +232,8 @@ whatis_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 am_wrapper_OBJECTS = wrapper.$(OBJEXT)
 wrapper_OBJECTS = $(am_wrapper_OBJECTS)
 wrapper_DEPENDENCIES = $(LIBMAN)
-am_zsoelim_OBJECTS = zsoelim.$(OBJEXT) zsoelim_main.$(OBJEXT)
+am_zsoelim_OBJECTS = globbing.$(OBJEXT) util.$(OBJEXT) \
+	zsoelim.$(OBJEXT) zsoelim_main.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
 zsoelim_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -835,6 +836,9 @@ wrapper_SOURCES = \
 	wrapper.c
 
 zsoelim_SOURCES = \
+	globbing.c \
+	globbing.h \
+	util.c \
 	zsoelim.h \
 	zsoelim.l \
 	zsoelim_main.c

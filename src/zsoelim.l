@@ -52,6 +52,8 @@
 #define LINE	so_line[so_stack_ptr]
 #define PIPE	so_pipe[so_stack_ptr]
 
+#include "xgetcwd.h"
+
 #include "gettext.h"
 #include <locale.h>
 #define _(String) gettext (String)
@@ -61,6 +63,8 @@
 #include "error.h"
 #include "pipeline.h"
 #include "decompress.h"
+
+#include "globbing.h"
 
 int zsoelim_open_file (const char *filename);
 
@@ -332,6 +336,37 @@ int zsoelim_open_file (const char *filename)
 
 			if (!decomp)
 				free (compfile);
+		}
+
+		/* This is insufficient, but we don't know the full search
+		 * path here so it's the best we can do for the time being;
+		 * with any luck it should cover most of the cases people
+		 * migrating from man to man-db need. See Debian bug
+		 * #503472.
+		 */
+		if (!decomp && !strchr (filename, '/') &&
+		    strchr (filename, '.')) {
+			char *pwd = xgetcwd ();
+			const char *dot = strchr (filename, '.');
+			char *name = xstrndup (filename, dot - filename);
+			const char *dot2 = dot ? strchr (dot + 1, '.') : NULL;
+			char *sec = dot2 ?
+				xstrndup (dot + 1, dot2 - (dot + 1)) :
+				xstrdup (dot + 1);
+			char **names = look_for_file (pwd, sec, name, 0, 1);
+			char **np;
+
+			for (np = names; np && *np; ++np) {
+				decomp = decompress_open (*np);
+				if (decomp) {
+					NAME = xstrdup (*np);
+					break;
+				}
+			}
+
+			free (sec);
+			free (name);
+			free (pwd);
 		}
 
 		if (!decomp) {

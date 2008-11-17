@@ -165,6 +165,9 @@ whatis_SOURCES = \
 wrapper_SOURCES = \
 	wrapper.c
 zsoelim_SOURCES = \
+	globbing.c \
+	globbing.h \
+	util.c \
 	zsoelim.h \
 	zsoelim.l \
 	zsoelim_main.c
