@@ -451,6 +451,7 @@ AC_CONFIG_FILES(Makefile
 	man/de/Makefile
 	man/es/Makefile
 	man/fr/Makefile
+	man/id/Makefile
 	man/it/Makefile
 	man/ja/Makefile
 	man/pl/Makefile
