@@ -42,7 +42,7 @@
 #  include <gdbm.h>
 
 #  ifndef HAVE_GDBM_EXISTS
-extern inline int gdbm_exists(GDBM_FILE dbf, datum key);
+extern inline int gdbm_exists(GDBM_FILE db, datum key);
 #  endif /* !HAVE_GDBM_EXISTS */
 
 /* gdbm_nextkey() is not lexicographically sorted, so we need to keep the
@@ -76,15 +76,15 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #  define MYDBM_RDOPEN(file)		man_gdbm_open_wrapper(file,\
 					  gdbm_open(file, BLK_SIZE,\
 					  GDBM_READER, DBMODE, 0))
-#  define MYDBM_INSERT(dbf, key, cont)	gdbm_store((dbf)->file, key, cont, GDBM_INSERT)
-#  define MYDBM_REPLACE(dbf, key, cont) 	gdbm_store((dbf)->file, key, cont, GDBM_REPLACE)
-#  define MYDBM_EXISTS(dbf, key)		gdbm_exists((dbf)->file, key)
-#  define MYDBM_DELETE(dbf, key)		gdbm_delete((dbf)->file, key)
-#  define MYDBM_FETCH(dbf, key)		gdbm_fetch((dbf)->file, key)
-#  define MYDBM_CLOSE(dbf)		man_gdbm_close(dbf)
-#  define MYDBM_FIRSTKEY(dbf)		man_gdbm_firstkey(dbf)
-#  define MYDBM_NEXTKEY(dbf, key)		man_gdbm_nextkey(dbf, key)
-#  define MYDBM_REORG(dbf)		gdbm_reorganize((dbf)->file)
+#  define MYDBM_INSERT(db, key, cont)	gdbm_store((db)->file, key, cont, GDBM_INSERT)
+#  define MYDBM_REPLACE(db, key, cont) 	gdbm_store((db)->file, key, cont, GDBM_REPLACE)
+#  define MYDBM_EXISTS(db, key)		gdbm_exists((db)->file, key)
+#  define MYDBM_DELETE(db, key)		gdbm_delete((db)->file, key)
+#  define MYDBM_FETCH(db, key)		gdbm_fetch((db)->file, key)
+#  define MYDBM_CLOSE(db)		man_gdbm_close(db)
+#  define MYDBM_FIRSTKEY(db)		man_gdbm_firstkey(db)
+#  define MYDBM_NEXTKEY(db, key)		man_gdbm_nextkey(db, key)
+#  define MYDBM_REORG(db)		gdbm_reorganize((db)->file)
 #  define MYDBM_FREE(x)			free(x)
 
 # elif defined(NDBM) && !defined(GDBM) && !defined(BTREE)
@@ -101,7 +101,7 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #  endif /* _DB_H_ */
 
 extern DBM *ndbm_flopen(char *file, int flags, int mode);
-extern int ndbm_flclose(DBM *dbf);
+extern int ndbm_flclose(DBM *db);
 
 #  define DB_EXT				""
 #  define MYDBM_FILE 			DBM*
@@ -112,15 +112,15 @@ extern int ndbm_flclose(DBM *dbf);
 #  define MYDBM_CRWOPEN(file)             ndbm_flopen(file, O_CREAT|O_RDWR, DBMODE)
 #  define MYDBM_RWOPEN(file)		ndbm_flopen(file, O_RDWR, DBMODE)
 #  define MYDBM_RDOPEN(file)		ndbm_flopen(file, O_RDONLY, DBMODE)
-#  define MYDBM_INSERT(dbf, key, cont)	dbm_store(dbf, key, cont, DBM_INSERT)
-#  define MYDBM_REPLACE(dbf, key, cont)   dbm_store(dbf, key, cont, DBM_REPLACE)
-#  define MYDBM_EXISTS(dbf, key)		(dbm_fetch(dbf, key).dptr != NULL)
-#  define MYDBM_DELETE(dbf, key)		dbm_delete(dbf, key)
-#  define MYDBM_FETCH(dbf, key) 		copy_datum(dbm_fetch(dbf, key))
-#  define MYDBM_CLOSE(dbf)		ndbm_flclose(dbf)
-#  define MYDBM_FIRSTKEY(dbf)		copy_datum(dbm_firstkey(dbf))
-#  define MYDBM_NEXTKEY(dbf, key)		copy_datum(dbm_nextkey(dbf))
-#  define MYDBM_REORG(dbf)		/* nothing - not implemented */
+#  define MYDBM_INSERT(db, key, cont)	dbm_store(db, key, cont, DBM_INSERT)
+#  define MYDBM_REPLACE(db, key, cont)   dbm_store(db, key, cont, DBM_REPLACE)
+#  define MYDBM_EXISTS(db, key)		(dbm_fetch(db, key).dptr != NULL)
+#  define MYDBM_DELETE(db, key)		dbm_delete(db, key)
+#  define MYDBM_FETCH(db, key) 		copy_datum(dbm_fetch(db, key))
+#  define MYDBM_CLOSE(db)		ndbm_flclose(db)
+#  define MYDBM_FIRSTKEY(db)		copy_datum(dbm_firstkey(db))
+#  define MYDBM_NEXTKEY(db, key)		copy_datum(dbm_nextkey(db))
+#  define MYDBM_REORG(db)		/* nothing - not implemented */
 #  define MYDBM_FREE(x)			free (x)
 
 # elif defined(BTREE) && !defined(NDBM) && !defined(GDBM)

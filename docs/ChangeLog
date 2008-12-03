@@ -1,3 +1,12 @@
+Wed Dec  3 10:54:53 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_lookup.c (make_content): Cast time_t value to long before
+	  trying to print as %ld.
+
+	* libdb/db_ndbm.c (ndbm_flclose, ndbm_flopen): Rename dbf to db to
+	  avoid shadowing a global variable.
+	* libdb/mydbm.h: Update prototypes and gdbm/ndbm macros likewise.
+
 Wed Dec  3 10:45:07 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* lib/Makefile.am (libman_a_CPPFLAGS), libdb/Makefile.am

@@ -52,17 +52,17 @@
 #include "db_storage.h"
 
 /* release the lock and close the database */
-int ndbm_flclose (DBM *dbf)
+int ndbm_flclose (DBM *db)
 {
-	flock (dbm_dirfno (dbf), LOCK_UN);
-	dbm_close (dbf);
+	flock (dbm_dirfno (db), LOCK_UN);
+	dbm_close (db);
 	return 0;
 }
 
 /* open a ndbm type database, with file locking. */
 DBM* ndbm_flopen (char *filename, int flags, int mode)
 {
-	DBM *dbf;
+	DBM *db;
 	int lock_op;
 	int lock_failed;
 
@@ -78,32 +78,32 @@ DBM* ndbm_flopen (char *filename, int flags, int mode)
 		char *dir_fname;
 		int dir_fd;
 
-		dbf = NULL;
+		db = NULL;
 		lock_failed = 1;
 		dir_fname = xasprintf ("%s.dir", filename);
 		dir_fd = open (dir_fname, flags & ~O_TRUNC, mode);
 		free (dir_fname);
 		if (dir_fd != -1) {
 			if (!(lock_failed = flock (dir_fd, lock_op)))
-				dbf = dbm_open (filename, flags, mode);
+				db = dbm_open (filename, flags, mode);
 			close (dir_fd);
 		}
 	} else {
-		dbf = dbm_open (filename, flags, mode);
-		if (dbf)
-			lock_failed = flock (dbm_dirfno (dbf), lock_op);
+		db = dbm_open (filename, flags, mode);
+		if (db)
+			lock_failed = flock (dbm_dirfno (db), lock_op);
 	}
 
-	if (!dbf)
+	if (!db)
 		return NULL;
 
 	if (lock_failed) {
 		gripe_lock (filename);
-		dbm_close (dbf);
+		dbm_close (db);
 		return NULL;
 	}
 
-	return dbf;
+	return db;
 }
 
 #endif /* NDBM */

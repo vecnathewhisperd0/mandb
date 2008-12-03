@@ -239,7 +239,7 @@ datum make_content (struct mandata *in)
 		dash_if_unset (in->name),
 		in->ext,
 		in->sec,
-		in->_st_mtime,
+		(long) in->_st_mtime,
 		in->id,
 		in->pointer,
 		in->filter,
