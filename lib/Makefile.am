@@ -24,6 +24,7 @@ dist_noinst_DATA = README
 
 libman_a_CPPFLAGS = \
 	-I$(top_builddir)/include \
+	-I$(top_builddir)/intl \
 	-I$(top_srcdir)/gnulib/lib \
 	-I$(top_builddir)/gnulib/lib
 
