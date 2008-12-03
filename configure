@@ -1028,6 +1028,8 @@ INTLLIBS
 POSUB
 LINGUAS
 PO4A
+PO4A_TRUE
+PO4A_FALSE
 MAN_SUBDIRS
 DBLIBS
 LIBOBJS
@@ -35610,6 +35612,14 @@ fi
 done
 
 
+  if test -n "$PO4A"; then
+  PO4A_TRUE=
+  PO4A_FALSE='#'
+else
+  PO4A_TRUE='#'
+  PO4A_FALSE=
+fi
+
 
 
     if test "$USE_NLS" = yes; then
@@ -38507,6 +38517,13 @@ fi
     gltests_LTLIBOBJS=$gltests_ltlibobjs
 
 
+if test -z "${PO4A_TRUE}" && test -z "${PO4A_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"PO4A\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"PO4A\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
@@ -39645,6 +39662,8 @@ INTLLIBS!$INTLLIBS$ac_delim
 POSUB!$POSUB$ac_delim
 LINGUAS!$LINGUAS$ac_delim
 PO4A!$PO4A$ac_delim
+PO4A_TRUE!$PO4A_TRUE$ac_delim
+PO4A_FALSE!$PO4A_FALSE$ac_delim
 MAN_SUBDIRS!$MAN_SUBDIRS$ac_delim
 DBLIBS!$DBLIBS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
@@ -39673,7 +39692,7 @@ gltests_LIBOBJS!$gltests_LIBOBJS$ac_delim
 gltests_LTLIBOBJS!$gltests_LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 48; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 50; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

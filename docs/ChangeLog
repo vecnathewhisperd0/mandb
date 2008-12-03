@@ -1,3 +1,11 @@
+Wed Dec  3 10:17:50 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* m4/man-po4a.m4 (MAN_PO4A): Define a PO4A Automake conditional
+	  (again).
+	* man/po4a/Makefile.am: Define all-local, update-po, and clean-local
+	  rules only if PO4A is set, so that (in particular) distclean works
+	  if po4a isn't installed.
+
 Tue Dec  2 16:25:53 GMT 2008  Arif E. Nugroho  <arif_endro@yahoo.com>
 
 	* man/po4a/po/id.po: Update from Translation Project (trivial).
