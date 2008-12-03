@@ -92,6 +92,8 @@ AC_DEFUN([gl_INIT],
   gl_GETLOGIN_R
   gl_UNISTD_MODULE_INDICATOR([getlogin_r])
   gl_GETOPT
+  dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
+  AM_GNU_GETTEXT_VERSION([0.17])
   AC_SUBST([LIBINTL])
   AC_SUBST([LTLIBINTL])
   gl_FUNC_GETTIMEOFDAY
@@ -547,16 +549,26 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/getcwd.m4
   m4/getlogin_r.m4
   m4/getopt.m4
+  m4/gettext.m4
   m4/gettimeofday.m4
+  m4/glibc2.m4
   m4/glibc21.m4
   m4/glob.m4
   m4/gnulib-common.m4
   m4/hash.m4
+  m4/iconv.m4
   m4/include_next.m4
   m4/inline.m4
+  m4/intdiv0.m4
+  m4/intl.m4
+  m4/intldir.m4
+  m4/intlmacosx.m4
+  m4/intmax.m4
   m4/intmax_t.m4
+  m4/inttypes-pri.m4
   m4/inttypes_h.m4
   m4/lchown.m4
+  m4/lcmessage.m4
   m4/lib-ignore.m4
   m4/lib-ld.m4
   m4/lib-link.m4
@@ -575,11 +587,15 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/minmax.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
+  m4/nls.m4
   m4/onceonly.m4
   m4/open.m4
   m4/openat.m4
   m4/pathmax.m4
+  m4/po.m4
+  m4/printf-posix.m4
   m4/printf.m4
+  m4/progtest.m4
   m4/rawmemchr.m4
   m4/readlink.m4
   m4/regex.m4
@@ -617,10 +633,12 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/sysexits.m4
   m4/tempname.m4
   m4/tls.m4
+  m4/uintmax_t.m4
   m4/unistd-safer.m4
   m4/unistd_h.m4
   m4/vasnprintf.m4
   m4/vasprintf.m4
+  m4/visibility.m4
   m4/vsnprintf.m4
   m4/wchar.m4
   m4/wchar_t.m4
