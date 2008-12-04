@@ -318,7 +318,7 @@ static inline void do_chown (uid_t uid)
 #endif /* SECURE_MAN_UID */
 
 /* Update a single file in an existing database. */
-static short update_one_file (const char *manpath, const char *filename)
+static int update_one_file (const char *manpath, const char *filename)
 {
 	dbf = MYDBM_RWOPEN (database);
 	if (dbf) {
@@ -342,9 +342,9 @@ static short update_one_file (const char *manpath, const char *filename)
 }
 
 /* dont actually create any dbs, just do an update */
-static inline short update_db_wrapper (const char *manpath)
+static inline int update_db_wrapper (const char *manpath)
 {
-	short amount;
+	int amount;
 
 	if (single_filename)
 		return update_one_file (manpath, single_filename);
@@ -409,10 +409,10 @@ static void cleanup (void *dummy)
 }
 
 /* sort out the database names */
-static short mandb (const char *catpath, const char *manpath)
+static int mandb (const char *catpath, const char *manpath)
 {
 	char pid[23];
-	short amount;
+	int ret, amount;
 	char *dbname;
 
 	dbname = mkdbname (catpath);
@@ -428,11 +428,18 @@ static short mandb (const char *catpath, const char *manpath)
 	tmpdbfile = appendstr (NULL, database, ".db", NULL);
 	if (create || force_rescan || opt_test) {
 		xremove (tmpdbfile);
-		amount = create_db (manpath);
+		ret = create_db (manpath);
+		if (ret < 0)
+			return ret;
+		amount = ret;
 	} else {
-		if (xcopy (dbfile, tmpdbfile) < 0)
-			return 0;
-		amount = update_db_wrapper (manpath);
+		ret = xcopy (dbfile, tmpdbfile);
+		if (ret < 0)
+			return ret;
+		ret = update_db_wrapper (manpath);
+		if (ret < 0)
+			return ret;
+		amount = ret;
 	}
 #  else /* !BERKELEY_DB NDBM */
 	dirfile = appendstr (NULL, dbname, ".dir", NULL);
@@ -443,13 +450,21 @@ static short mandb (const char *catpath, const char *manpath)
 	if (create || force_rescan || opt_test) {
 		xremove (tmpdirfile);
 		xremove (tmppagfile);
-		amount = create_db (manpath);
+		ret = create_db (manpath);
+		if (ret < 0)
+			return ret;
+		amount = ret;
 	} else {
-		if (xcopy (dirfile, tmpdirfile) < 0)
-			return 0;
-		if (xcopy (pagfile, tmppagfile) < 0)
-			return 0;
-		amount = update_db_wrapper (manpath);
+		ret = xcopy (dirfile, tmpdirfile);
+		if (ret < 0)
+			return ret;
+		ret = xcopy (pagfile, tmppagfile);
+		if (ret < 0)
+			return ret;
+		ret = update_db_wrapper (manpath);
+		if (ret < 0)
+			return ret;
+		amount = ret;
 	}
 #  endif /* BERKELEY_DB NDBM */
 #else /* !NDBM */
@@ -457,21 +472,28 @@ static short mandb (const char *catpath, const char *manpath)
 	xtmpfile = database;
 	if (create || force_rescan || opt_test) {
 		xremove (xtmpfile);
-		amount = create_db (manpath);
+		ret = create_db (manpath);
+		if (ret < 0)
+			return ret;
+		amount = ret;
 	} else {
-		if (xcopy (xfile, xtmpfile) < 0)
-			return 0;
-		amount = update_db_wrapper (manpath);
+		ret = xcopy (xfile, xtmpfile);
+		if (ret < 0)
+			return ret;
+		ret = update_db_wrapper (manpath);
+		if (ret < 0)
+			return ret;
+		amount = ret;
 	}
 #endif /* NDBM */
 
 	return amount;
 }
 
-static short process_manpath (const char *manpath, int global_manpath)
+static int process_manpath (const char *manpath, int global_manpath)
 {
 	char *catpath;
-	short amount = 0;
+	int amount = 0;
 
 	if (global_manpath) { 	/* system db */
 		catpath = get_catpath (manpath, SYSTEM_CAT);
@@ -498,12 +520,24 @@ static short process_manpath (const char *manpath, int global_manpath)
 		 */
 		char *manpath_prefix = appendstr (NULL, manpath, "/man", NULL);
 		if (STRNEQ (manpath_prefix, single_filename,
-		    strlen (manpath_prefix)))
-			amount += mandb (catpath, manpath);
+		    strlen (manpath_prefix))) {
+			int ret = mandb (catpath, manpath);
+			if (ret < 0) {
+				amount = ret;
+				goto out;
+			}
+			amount += ret;
+		}
 		free (manpath_prefix);
 		/* otherwise try the next manpath */
-	} else
-		amount += mandb (catpath, manpath);
+	} else {
+		int ret = mandb (catpath, manpath);
+		if (ret < 0) {
+			amount = ret;
+			goto out;
+		}
+		amount += ret;
+	}
 
 	if (!opt_test && amount) {
 		finish_up ();
@@ -512,6 +546,8 @@ static short process_manpath (const char *manpath, int global_manpath)
 			do_chown (man_owner->pw_uid);
 #endif /* SECURE_MAN_UID */
 	}
+
+out:
 	cleanup_sigsafe (NULL);
 	pop_cleanup ();
 	cleanup (NULL);
@@ -519,7 +555,7 @@ static short process_manpath (const char *manpath, int global_manpath)
 	free (database);
 	database = NULL;
 
-	if (check_for_strays && amount) {
+	if (check_for_strays && amount > 0) {
 		database = mkdbname (catpath);
 		strays += straycats (manpath);
 		free (database);
@@ -534,7 +570,7 @@ static short process_manpath (const char *manpath, int global_manpath)
 int main (int argc, char *argv[])
 {
 	char *sys_manp;
-	short amount = 0;
+	int amount = 0;
 	char **mp;
 
 #ifdef __profile__
@@ -611,6 +647,7 @@ int main (int argc, char *argv[])
 
 	for (mp = manpathlist; *mp; mp++) {
 		int global_manpath = is_global_mandir (*mp);
+		int ret;
 		DIR *dir;
 		struct dirent *subdirent;
 		struct stat st;
@@ -622,7 +659,10 @@ int main (int argc, char *argv[])
 			drop_effective_privs ();
 		}
 
-		amount += process_manpath (*mp, global_manpath);
+		ret = process_manpath (*mp, global_manpath);
+		if (ret < 0)
+			exit (FATAL);
+		amount += ret;
 
 		dir = opendir (*mp);
 		if (!dir) {
@@ -643,9 +683,13 @@ int main (int argc, char *argv[])
 			subdirpath = appendstr (NULL, *mp, "/",
 						subdirent->d_name, NULL);
 			if (stat (subdirpath, &st) == 0 &&
-			    S_ISDIR (st.st_mode))
-				amount += process_manpath (subdirpath,
-							   global_manpath);
+			    S_ISDIR (st.st_mode)) {
+				ret = process_manpath (subdirpath,
+						       global_manpath);
+				if (ret < 0)
+					exit (FATAL);
+				amount += ret;
+			}
 			free (subdirpath);
 		}
 
