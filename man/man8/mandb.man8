@@ -185,6 +185,13 @@ All but the most recent are ignored.
 .if !'po4a'hide' .I %manpath_config_file%
 man-db configuration file.
 .TP
+.if !'po4a'hide' .I /var/cache/man/index.(bt|db|dir|pag)
+An FHS compliant global
+.I index
+database cache.
+.PP
+Older locations for the database cache included:
+.TP
 .if !'po4a'hide' .I /usr/man/index.(bt|db|dir|pag)
 A traditional global
 .I index
@@ -193,11 +200,6 @@ database cache.
 .if !'po4a'hide' .I /var/catman/index.(bt|db|dir|pag)
 An alternate or FSSTND
 compliant global
-.I index
-database cache.
-.TP
-.if !'po4a'hide' .I /var/cache/man/index.(bt|db|dir|pag)
-An FHS compliant global
 .I index
 database cache.
 .SH "SEE ALSO"
