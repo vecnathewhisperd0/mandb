@@ -1,3 +1,14 @@
+Fri Dec  5 13:52:14 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Make it possible to override man's default of discarding stderr when
+	stdout is a terminal (Debian bug #480996).
+
+	* src/man.c (discard_stderr): Make static.
+	  (maybe_discard_stderr): New function, checking MAN_KEEP_STDERR.
+	  (format_display_and_save, format_display, display_catman): Use
+	  maybe_discard_stderr.
+	* man/man1/man.man1 (ENVIRONMENT): Document this.
+
 Thu Dec  4 15:03:08 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	Exit as soon as possible if database writes return ENOSPC (Debian

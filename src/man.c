@@ -1813,12 +1813,19 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 /* TODO: This should all be refactored after work on the decompression
  * library is complete.
  */
-void discard_stderr (pipeline *p)
+static void discard_stderr (pipeline *p)
 {
 	int i;
 
 	for (i = 0; i < p->ncommands; ++i)
 		p->commands[i]->discard_err = 1;
+}
+
+static void maybe_discard_stderr (pipeline *p)
+{
+	const char *man_keep_stderr = getenv ("MAN_KEEP_STDERR");
+	if ((!man_keep_stderr || !*man_keep_stderr) && isatty (STDOUT_FILENO))
+		discard_stderr (p);
 }
 
 #ifdef MAN_CATS
@@ -1913,8 +1920,7 @@ static int format_display_and_save (pipeline *decomp,
 	if (global_manpath)
 		drop_effective_privs ();
 
-	if (isatty (STDOUT_FILENO))
-		discard_stderr (format_cmd);
+	maybe_discard_stderr (format_cmd);
 
 	pipeline_connect (decomp, format_cmd, NULL);
 	if (sav_p) {
@@ -1950,8 +1956,8 @@ static void format_display (pipeline *decomp,
 	char *old_cwd = NULL;
 	char *htmldir = NULL, *htmlfile = NULL;
 
-	if (format_cmd && isatty (STDOUT_FILENO))
-		discard_stderr (format_cmd);
+	if (format_cmd)
+		maybe_discard_stderr (format_cmd);
 
 	drop_effective_privs ();
 
@@ -2069,8 +2075,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 				 get_def ("compressor", COMPRESSOR));
 #endif /* COMP_CAT */
 
-	if (isatty (STDOUT_FILENO))
-		discard_stderr (format_cmd);
+	maybe_discard_stderr (format_cmd);
 	format_cmd->want_out = tmp_cat_fd;
 
 	push_cleanup ((cleanup_fun) unlink, tmpcat, 1);
