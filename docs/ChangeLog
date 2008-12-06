@@ -1,3 +1,24 @@
+Sat Dec  6 22:57:14 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Reorganise lexgrog to stop on any unrecognised roff request, rather
+	than continuing and often littering the database with garbage
+	(Debian bug #271402). This also involved extending lexgrog to
+	recognise some additional requests.
+
+	* src/lexgrog.l (word): New definition.
+	  (typeface): Add .SB and .SM.
+	  (MAN_PRENAME): Go straight to MAN_REST on encountering a section
+	  request or EOF. Go to MAN_NAME on encountering roff requests that
+	  would ordinarily be processed and removed. Skip over any other
+	  roff requests, including spacing and comments.
+	  (MAN_NAME): Process .Tn and .Nm by handling their arguments as
+	  text. Process .At, .Bsx, .Bx, .Fx, .Nx, .Ox, and .Ux by inserting
+	  the appropriate text (introducing several new mini-scanners).
+	  Process .Dq by surrounding its arguments by double quotes. Go to
+	  MAN_REST on encountering any unrecognised roff request.
+	  (add_wordn_to_whatis, add_word_to_whatis, mdoc_text): New
+	  functions to support scanning of .At and friends.
+
 Fri Dec  5 22:27:03 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* man/man8/mandb.man8 (FILES): List FHS database cache location

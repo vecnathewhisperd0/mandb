@@ -62,6 +62,9 @@ static int ctr[YY_NUM_RULES];
 static void add_str_to_whatis (const char *string, size_t length);
 static void add_char_to_whatis (unsigned char c);
 static void add_separator_to_whatis (void);
+static void add_wordn_to_whatis (const char *string, size_t length);
+static void add_word_to_whatis (const char *string);
+static void mdoc_text (const char *string);
 static void newline_found (void);
 
 static char newname[MAX_NAME];
@@ -94,6 +97,14 @@ static pipeline *decomp;
 
 %x MAN_PRENAME
 %x MAN_NAME
+%x MAN_NAME_AT
+%x MAN_NAME_BSX
+%x MAN_NAME_BX
+%x MAN_NAME_BX_RELEASE
+%x MAN_NAME_DQ
+%x MAN_NAME_FX
+%x MAN_NAME_NX
+%x MAN_NAME_OX
 %x CAT_NAME
 %x CAT_FILE
 %x MAN_FILE
@@ -106,6 +117,7 @@ upper		[[:upper:]]
 alpha		[[:alpha:]]
 blank		[[:blank:]]
 blank_eol	[[:blank:]\r\n]
+word		[[:alnum:]][^[:blank:]\r\n]*
 eol		\r?\n
 bol		{eol}+
 next		{eol}*
@@ -115,7 +127,7 @@ dbl_quote	\"
 font_change	\\f([[:upper:]1-4]|\({upper}{2})
 size_change	\\s[+-]?{digit}
 style_change	({font_change}{size_change}?|{size_change}{font_change}?)
-typeface	\.(B[IR]?|I[BR]?|R[BI])
+typeface	\.(B[IR]?|I[BR]?|R[BI]|S[BM])
 sec_request	\.[Ss][HhYySs]
 comment		['.]\\{dbl_quote}
 
@@ -198,12 +210,29 @@ vgrind_request	\.vS
 					yyterminate ();
 				}
 
- /* Skip over initial spacing in NAME section. This is evil. */
-<MAN_PRENAME>{bol}\.sp{blank}*		|
-<MAN_PRENAME>{bol}\.br{blank}*		|
-<MAN_PRENAME>{bol}\.LP{blank}*		|
-<MAN_PRENAME>{bol}\.P[Pp]{blank}*	|
-<MAN_PRENAME>{bol}\.P{blank}*
+<MAN_PRENAME>{bol}{sec_request}{blank}*	|
+<MAN_PRENAME><<EOF>>		{	/* no NAME at all */
+					*p_name = '\0';
+					BEGIN (MAN_REST);
+				}
+
+ /* need to match whole string so that we beat the following roff catch-all,
+    so use yyless to push back the name */
+<MAN_PRENAME>{
+	{bol}{typeface}{blank}.*	|
+	{bol}\.Tn{blank}.*		|
+	{bol}\.ft{blank}.*		|
+	{bol}\.V[be]{blank}.*		|
+	{bol}\.IX{blank}.*		|
+	{bol}\.Nm{blank}.*		{
+						yyless (0);
+						BEGIN (MAN_NAME);
+					}
+}
+
+ /* Skip over initial roff requests in NAME section. The use of yyless here
+    is evil. */
+<MAN_PRENAME>{bol}['.].*
 
 <MAN_PRENAME>{empty}{eol}		yyless (1);
 
@@ -241,9 +270,11 @@ vgrind_request	\.vS
 					}
 
 	{bol}{typeface}{blank}+		|	/* type face commands */
+	{bol}\.Tn{blank}+		|	/* mdoc trade name */
 	{bol}\.ft{blank}.*		|	/* font change */
 	{bol}\.V[be]{blank}.*		|	/* pod2man, verbatim mode */
 	{bol}\.IX{blank}.*		|	/* .IX line */
+	{bol}\.Nm{blank}+		|	/* mdoc name */
 	{next}{comment}.*		{	/* per line comments */
 						newline_found ();
 					}
@@ -300,6 +331,136 @@ vgrind_request	\.vS
 	{next}\(\\\|\){blank}*		/* function() in hpux */
 }
 
+ /* some people rather ambitiously use non-trivial mdoc macros in NAME
+    sections; cope with those that have been seen in the wild, and a few
+    more */
+<MAN_NAME>{
+	{bol}\.At{blank}*		BEGIN (MAN_NAME_AT);
+	{bol}\.Bsx{blank}*		BEGIN (MAN_NAME_BSX);
+	{bol}\.Bx{blank}*		BEGIN (MAN_NAME_BX);
+	{bol}\.Fx{blank}*		BEGIN (MAN_NAME_FX);
+	{bol}\.Nx{blank}*		BEGIN (MAN_NAME_NX);
+	{bol}\.Ox{blank}*		BEGIN (MAN_NAME_OX);
+	{bol}\.Ux{blank}*		add_word_to_whatis ("UNIX");
+
+	{bol}\.Dq{blank}*	{
+					add_word_to_whatis ("\"");
+					BEGIN (MAN_NAME_DQ);
+				}
+}
+
+<MAN_NAME_AT>{
+	32v{blank}*		mdoc_text ("Version 32V AT&T UNIX");
+	v1{blank}*		mdoc_text ("Version 1 AT&T UNIX");
+	v2{blank}*		mdoc_text ("Version 2 AT&T UNIX");
+	v3{blank}*		mdoc_text ("Version 3 AT&T UNIX");
+	v4{blank}*		mdoc_text ("Version 4 AT&T UNIX");
+	v5{blank}*		mdoc_text ("Version 5 AT&T UNIX");
+	v6{blank}*		mdoc_text ("Version 6 AT&T UNIX");
+	v7{blank}*		mdoc_text ("Version 7 AT&T UNIX");
+	V{blank}*		mdoc_text ("AT&T System V UNIX");
+	V.1{blank}*		mdoc_text ("AT&T System V.1 UNIX");
+	V.2{blank}*		mdoc_text ("AT&T System V.2 UNIX");
+	V.3{blank}*		mdoc_text ("AT&T System V.3 UNIX");
+	V.4{blank}*		mdoc_text ("AT&T System V.4 UNIX");
+	.|{eol}		{
+				yyless (0);
+				mdoc_text ("AT&T UNIX");
+			}
+}
+
+<MAN_NAME_BSX>{
+	{word}		{
+				add_word_to_whatis ("BSD/OS");
+				add_wordn_to_whatis (yytext, yyleng);
+				BEGIN (MAN_NAME);
+			}
+	.|{eol}		{
+				yyless (0);
+				mdoc_text ("BSD/OS");
+			}
+}
+
+<MAN_NAME_BX>{
+	-alpha{blank}*		mdoc_text ("BSD (currently in alpha test)");
+	-beta{blank}*		mdoc_text ("BSD (currently in beta test)");
+	-devel{blank}*		mdoc_text ("BSD (currently under development");
+	{word}{blank}*	{
+				add_wordn_to_whatis (yytext, yyleng);
+				add_str_to_whatis ("BSD", 3);
+				BEGIN (MAN_NAME_BX_RELEASE);
+			}
+	.|{eol}		{
+				yyless (0);
+				mdoc_text ("BSD");
+			}
+}
+
+<MAN_NAME_BX_RELEASE>{
+	[Rr]eno{blank}*		{
+					add_str_to_whatis ("-Reno", 5);
+					BEGIN (MAN_NAME);
+				}
+	[Tt]ahoe{blank}*	{
+					add_str_to_whatis ("-Tahoe", 6);
+					BEGIN (MAN_NAME);
+				}
+	[Ll]ite{blank}*		{
+					add_str_to_whatis ("-Lite", 5);
+					BEGIN (MAN_NAME);
+				}
+	[Ll]ite2{blank}*	{
+					add_str_to_whatis ("-Lite2", 6);
+					BEGIN (MAN_NAME);
+				}
+	.|{eol}			{
+					yyless (0);
+					BEGIN (MAN_NAME);
+				}
+}
+
+<MAN_NAME_DQ>.*		{
+				add_str_to_whatis (yytext, yyleng);
+				add_char_to_whatis ('"');
+				BEGIN (MAN_NAME);
+			}
+
+<MAN_NAME_FX>{
+	{word}		{
+				add_word_to_whatis ("FreeBSD");
+				add_wordn_to_whatis (yytext, yyleng);
+				BEGIN (MAN_NAME);
+			}
+	.|{eol}		{
+				yyless (0);
+				mdoc_text ("FreeBSD");
+			}
+}
+
+<MAN_NAME_NX>{
+	{word}		{
+				add_word_to_whatis ("NetBSD");
+				add_wordn_to_whatis (yytext, yyleng);
+				BEGIN (MAN_NAME);
+			}
+	.|{eol}		{
+				yyless (0);
+				mdoc_text ("NetBSD");
+			}
+}
+
+<MAN_NAME_OX>{
+	{word}		{
+				add_word_to_whatis ("OpenBSD");
+				add_wordn_to_whatis (yytext, yyleng);
+				BEGIN (MAN_NAME);
+			}
+	.|{eol}		{
+				yyless (0);
+				mdoc_text ("OpenBSD");
+			}
+}
+
  /* collapse spaces, escaped spaces, tabs, newlines to a single space */
 <CAT_NAME>{next}((\\[ ])|{blank})*	add_char_to_whatis (' ');
 
@@ -317,9 +478,11 @@ vgrind_request	\.vS
 	{bol}\.RE{blank}.*		add_char_to_whatis ((char) 0x11);
 }
 
-<MAN_NAME>{bol}\.{alpha}{2}{blank}*  	{ /* very general roff requests */
-						newline_found ();
-					}
+ /* any other roff request we don't recognise terminates definitions */
+<MAN_NAME>{bol}['.]		{
+					*p_name = '\0';
+					BEGIN (MAN_REST);
+				}
 
  /* pass words as a chunk. speed optimization */
 <MAN_NAME>[[:alnum:]]*		add_str_to_whatis (yytext, yyleng);
@@ -380,6 +543,29 @@ static void add_separator_to_whatis (void)
 	if (p_name != newname && *(p_name - 1) != ' ')
 		add_char_to_whatis (' ');
 	add_str_to_whatis ("- ", 2);
+}
+
+/* append a word to newname if enough room, ensuring only necessary
+   surrounding space */
+static void add_wordn_to_whatis (const char *string, size_t length)
+{
+	if (p_name != newname && *(p_name - 1) != ' ')
+		add_char_to_whatis (' ');
+	while (length && string[length - 1] == ' ')
+		--length;
+	if (length)
+		add_str_to_whatis (string, length);
+}
+
+static void add_word_to_whatis (const char *string)
+{
+	add_wordn_to_whatis (string, strlen (string));
+}
+
+static void mdoc_text (const char *string)
+{
+	add_word_to_whatis (string);
+	BEGIN (MAN_NAME);
 }
 
 static void newline_found (void)
