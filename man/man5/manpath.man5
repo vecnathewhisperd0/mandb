@@ -1,6 +1,7 @@
 .\" Man page for format of the manpath.config data file
 .\"
-.\" Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
+.\" Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
+.\" Copyright (C) 2001, 2007, 2008 Colin Watson.
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
@@ -110,6 +111,35 @@ They include default paths to various programs (such as
 and
 .IR tbl ),
 and default sets of arguments to those programs.
+.TP
+\fBSECTION\fR \fIsection\fR .\|.\|.
+.RS
+Lines of this form define the order in which manual sections should be
+searched.
+If there are no
+.B SECTION
+directives in the configuration file, the default is:
+.PP
+.RS
+.nf
+.if !'po4a'hide' SECTION 1 n l 8 3 2 5 4 9 6 7
+.fi
+.RE
+.PP
+If multiple
+.B SECTION
+directives are given, their section lists will be concatenated.
+.PP
+If a particular extension is not in this list (say, 1mh) it will be
+displayed with the rest of the section it belongs to.
+The effect of this is that you only need to explicitly list extensions if
+you want to force a particular order.
+Sections with extensions should usually be adjacent to their main section
+(e.g. "1 1mh 8 ...").
+.PP
+.B SECTIONS
+is accepted as an alternative name for this directive.
+.RE
 .TP
 .if !'po4a'hide' .B NOCACHE
 This flag prevents

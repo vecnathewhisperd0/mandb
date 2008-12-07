@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.5.3-pre1\n"
-"POT-Creation-Date: 2008-12-06 11:39+0000\n"
+"POT-Creation-Date: 2008-12-07 17:13+0000\n"
 "PO-Revision-Date: 2008-11-09 11:14+0100\n"
 "Last-Translator: Robert Luberda <robert@debian.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -3055,22 +3055,53 @@ msgstr ""
 "(takich jak I<grep> i I<tbl>)  oraz domyślne argumenty wywołań tych "
 "programów."
 
+# type: TP
+#: ../../man/man5/manpath.man5:113
+#, no-wrap
+msgid "B<SECTION> I<section> .\\|.\\|."
+msgstr ""
+
 # type: Plain text
-#: ../../man/man5/manpath.man5:118
+#: ../../man/man5/manpath.man5:121
+msgid ""
+"Lines of this form define the order in which manual sections should be "
+"searched.  If there are no B<SECTION> directives in the configuration file, "
+"the default is:"
+msgstr ""
+
+# type: Plain text
+#: ../../man/man5/manpath.man5:131
+msgid ""
+"If multiple B<SECTION> directives are given, their section lists will be "
+"concatenated."
+msgstr ""
+
+# type: Plain text
+#: ../../man/man5/manpath.man5:138
+msgid ""
+"If a particular extension is not in this list (say, 1mh) it will be "
+"displayed with the rest of the section it belongs to.  The effect of this is "
+"that you only need to explicitly list extensions if you want to force a "
+"particular order.  Sections with extensions should usually be adjacent to "
+"their main section (e.g. \"1 1mh 8 ...\")."
+msgstr ""
+
+# type: Plain text
+#: ../../man/man5/manpath.man5:144
 msgid "This flag prevents B<%man%>(1)  from creating cat pages automatically."
 msgstr ""
 "Ta flaga zapobiega automatycznemu tworzeniu preformatowanych stron \"cat\" "
 "przez B<%man%>."
 
 # type: SH
-#: ../../man/man5/manpath.man5:118
+#: ../../man/man5/manpath.man5:144
 #, no-wrap
 msgid "BUGS"
 msgstr "BŁĘDY"
 
 # type: Plain text
 #
-#: ../../man/man5/manpath.man5:121
+#: ../../man/man5/manpath.man5:147
 msgid ""
 "Unless the rules above are followed and observed precisely, the manual pager "
 "utilities will not function as desired.  The rules are overly complicated."
