@@ -180,6 +180,7 @@ MYDBM_FILE dbf;
 extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
 extern int disable_cache;
+extern int min_cat_width, max_cat_width, cat_width;
 
 /* locals */
 static const char *alt_system_name;
@@ -559,7 +560,7 @@ static void get_term (void)
 
 static int get_roff_line_length (void)
 {
-	int line_length = get_line_length ();
+	int line_length = cat_width ? cat_width : get_line_length ();
 
 	/* groff >= 1.18 defaults to 78. */
 	if (!troff && line_length != 80) {
@@ -574,11 +575,28 @@ static int get_roff_line_length (void)
 
 static void add_roff_line_length (command *cmd, int *save_cat_p)
 {
-	int length = get_roff_line_length ();
+	int length;
+
+	if (!catman) {
+		int line_length = get_line_length ();
+		debug ("Terminal width %d\n", line_length);
+		if (line_length >= min_cat_width &&
+		    line_length <= max_cat_width)
+			debug ("Terminal width %d within cat page range "
+			       "[%d, %d]\n",
+			       line_length, min_cat_width, max_cat_width);
+		else {
+			debug ("Terminal width %d not within cat page range "
+			       "[%d, %d]\n",
+			       line_length, min_cat_width, max_cat_width);
+			*save_cat_p = 0;
+		}
+	}
+
+	length = get_roff_line_length ();
 	if (length) {
 		char optionll[32], optionlt[32];
 		debug ("Using %d-character lines\n", length);
-		*save_cat_p = 0;
 		sprintf (optionll, "-rLL=%dn", length);
 		sprintf (optionlt, "-rLT=%dn", length);
 		command_args (cmd, optionll, optionlt, NULL);
@@ -1442,10 +1460,11 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			case '-':
 			case 0:
 				/* done with preprocessors, now add roff */
-                                if (troff)
+				if (troff) {
 					cmd = command_new_argstr
 						(get_def ("troff", TROFF));
-                                else
+					save_cat = 0;
+				} else
 					cmd = command_new_argstr
 						(get_def ("nroff", NROFF));
 

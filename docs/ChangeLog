@@ -1,3 +1,22 @@
+Sun Dec  7 17:43:21 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Make handling of terminal widths for cat pages configurable (Debian
+	bug #121997).
+
+	* src/manp.c (add_to_dirlist): Recognise new MINCATWIDTH,
+	  MAXCATWIDTH, and CATWIDTH directives.
+	* src/man_db.conf.in: Add MINCATWIDTH, MAXCATWIDTH, and CATWIDTH.
+	* src/man.c (get_roff_line_length): Use CATWIDTH rather than the
+	  terminal width if the former is non-zero.
+	  (add_roff_line_length): Check the terminal width against
+	  MINCATWIDTH and MAXCATWIDTH rather than checking whether it
+	  differs from groff's default (via get_roff_line_length). Allow cat
+	  page saving regardless in catman mode.
+	  (make_roff_command): Forbid saving cat pages in troff mode here
+	  rather than via add_roff_line_length/get_roff_line_length.
+	* man/man5/manpath.man5 (FORMAT): Document MINCATWIDTH, MAXCATWIDTH,
+	  and CATWIDTH.
+
 Sun Dec  7 17:17:34 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* man/man5/manpath.man5 (FORMAT): Document SECTION.

@@ -94,6 +94,7 @@ static char *tmplist[MAXDIRS];
 
 char *user_config_file = NULL;
 int disable_cache;
+int min_cat_width = 80, max_cat_width = 80, cat_width = 0;
 
 static void mkcatdirs (const char *mandir, const char *catdir);
 static inline char *get_manpath_from_path (const char *path);
@@ -753,6 +754,7 @@ static void add_to_dirlist (FILE *config, int user)
 	char *bp;
 	char buf[BUFSIZ];
 	char key[50], cont[512];
+	int val;
 	int c;
 
 	while ((bp = fgets (buf, BUFSIZ, config))) {
@@ -787,6 +789,12 @@ static void add_to_dirlist (FILE *config, int user)
 		else if (sscanf (bp, "SECTIONS %511[^\n]", cont) == 1)
 			/* Since I keep getting it wrong ... */
 			add_sections (cont);
+		else if (sscanf (bp, "MINCATWIDTH %d", &val) == 1)
+			min_cat_width = val;
+		else if (sscanf (bp, "MAXCATWIDTH %d", &val) == 1)
+			max_cat_width = val;
+		else if (sscanf (bp, "CATWIDTH %d", &val) == 1)
+			cat_width = val;
 	 	else {
 			error (0, 0, _("can't parse directory list `%s'"), bp);
 			gripe_reading_mp_config (CONFIG_FILE);
