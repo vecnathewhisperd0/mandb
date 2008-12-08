@@ -82,7 +82,7 @@ extern void dbprintf (const struct mandata *info);
 extern void free_mandata_elements (struct mandata *pinfo);
 extern void free_mandata_struct (struct mandata *pinfo);
 extern void split_content (char *cont_ptr, struct mandata *pinfo);
-extern int compare_ids (char a, char b);
+extern int compare_ids (char a, char b, int promote_links);
 
 /* local to db routines */
 extern void gripe_lock (char *filename);

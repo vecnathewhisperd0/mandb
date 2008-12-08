@@ -2647,8 +2647,8 @@ out:
 			return cmp;
 	}
 
-	/* ULT_MAN comes first, etc. */
-	cmp = compare_ids (left->id, right->id);
+	/* ULT_MAN comes first, etc. Consider SO_MAN equivalent to ULT_MAN. */
+	cmp = compare_ids (left->id, right->id, 1);
 	if (cmp)
 		return cmp;
 

@@ -52,8 +52,11 @@ static void gripe_insert_unused (char *data)
 /* compare_ids(a,b) is true if id 'a' is preferred to id 'b', i.e. if 'a' is
  * a more canonical database entry than 'b'. This usually goes in comparison
  * order, but there's a special exception when FAVOUR_STRAYCATS is set.
+ *
+ * If promote_links is true, consider SO_MAN equivalent to ULT_MAN. This is
+ * appropriate when sorting candidate pages for display.
  */
-int compare_ids (char a, char b)
+int compare_ids (char a, char b, int promote_links)
 {
 #ifdef FAVOUR_STRAYCATS
 	if (a == WHATIS_MAN && b == STRAY_CAT)
@@ -61,6 +64,13 @@ int compare_ids (char a, char b)
 	else if (a == STRAY_CAT && b == WHATIS_MAN)
 		return -1;
 #endif
+
+	if (promote_links) {
+		if ((a == ULT_MAN && b == SO_MAN) ||
+		    (a == SO_MAN && b == ULT_MAN))
+			return 0;
+	}
+
 	if (a < b)
 		return -1;
 	else if (a > b)
@@ -77,7 +87,7 @@ static int replace_if_necessary (struct mandata *newdata,
 				 struct mandata *olddata,
 				 datum newkey, datum newcont)
 {
-	if (compare_ids (newdata->id, olddata->id) < 0)
+	if (compare_ids (newdata->id, olddata->id, 0) < 0)
 		if (MYDBM_REPLACE (dbf, newkey, newcont))
 			gripe_replace_key (MYDBM_DPTR (newkey));
 

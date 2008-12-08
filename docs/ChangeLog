@@ -1,3 +1,13 @@
+Mon Dec  8 13:08:22 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_store.c (compare_ids): If the promote_links argument is
+	  true, consider SO_MAN equivalent to ULT_MAN.
+	  (replace_if_necessary): Update call to compare_ids.
+	* libdb/db_storage.h (compare_ids): Update prototype.
+	* src/man.c (compare_candidates): Consider SO_MAN equivalent to
+	  ULT_MAN for the purposes of sorting candidate pages for display
+	  (Debian bug #384301).
+
 Mon Dec  8 10:08:45 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	Improve sorting and de-duplication of manual page candidates (Debian
