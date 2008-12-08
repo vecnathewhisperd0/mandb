@@ -145,6 +145,7 @@ struct candidate {
 	char from_db;
 	char cat;
 	const char *path;
+	char *ult;
 	struct mandata *source;
 	struct candidate *next;
 };
@@ -2458,27 +2459,25 @@ static char *find_cat_file (const char *path, const char *original,
 }
 
 /* Is this candidate substantially a duplicate of a previous one?
- * Returns 0 if it is distinct, 1 if source/path is no better than search,
- * and 2 if source/path is better than search.
+ * Returns non-zero if so, otherwise zero.
  */
 static int duplicate_candidates (struct mandata *source, const char *path,
-				 struct candidate *search)
+				 const char *ult, struct candidate *search)
 {
 	const char *slash1, *slash2;
-	char *locale_copy, *p;
-	struct locale_bits bits1, bits2, lbits;
-	const char *codeset1, *codeset2;
+	struct locale_bits bits1, bits2;
 	int ret;
+
+	if (ult && search->ult && STREQ (ult, search->ult))
+		return 1; /* same ultimate source file */
 
 	if (!STREQ (source->name, search->source->name) ||
 	    !STREQ (source->sec, search->source->sec) ||
 	    !STREQ (source->ext, search->source->ext))
 		return 0; /* different name/section/extension */
 
-	if (STREQ (path, search->path)) {
-		debug ("duplicate candidate\n");
-		return 1;
-	}
+	if (STREQ (path, search->path))
+		return 1; /* same path */
 
 	/* Figure out if we've had a sufficiently similar candidate for this
 	 * language already.
@@ -2493,98 +2492,30 @@ static int duplicate_candidates (struct mandata *source, const char *path,
 	unpack_locale_bits (++slash1, &bits1);
 	unpack_locale_bits (++slash2, &bits2);
 
-	if (!STREQ (bits1.language, bits2.language)) {
-		ret = 0; /* different language */
-		goto out;
-	}
-
-	/* From here on in we need the current locale as well. */
-	locale_copy = xstrdup (internal_locale);
-	p = strchr (locale_copy, ':');
-	if (p)
-		*p = '\0';
-	unpack_locale_bits (locale_copy, &lbits);
-	free (locale_copy);
-
-	/* For different territories, prefer one that matches the locale if
-	 * possible.
-	 */
-	if (*lbits.territory) {
-		if (STREQ (lbits.territory, bits1.territory)) {
-			if (!STREQ (lbits.territory, bits2.territory)) {
-				ret = 2;
-				goto out_locale;
-			}
-		} else {
-			if (STREQ (lbits.territory, bits2.territory)) {
-				ret = 1;
-				goto out_locale;
-			}
-		}
-	}
-	if (!STREQ (bits1.territory, bits2.territory)) {
-		ret = 0; /* different territories, no help from locale */
-		goto out_locale;
-	}
-
-	/* For different modifiers, prefer one that matches the locale if
-	 * possible.
-	 */
-	if (*lbits.modifier) {
-		if (STREQ (lbits.modifier, bits1.modifier)) {
-			if (!STREQ (lbits.modifier, bits2.modifier)) {
-				ret = 2;
-				goto out_locale;
-			}
-		} else {
-			if (STREQ (lbits.modifier, bits2.modifier)) {
-				ret = 1;
-				goto out_locale;
-			}
-		}
-	}
-	if (!STREQ (bits1.modifier, bits2.modifier)) {
-		ret = 0; /* different modifiers, no help from locale */
-		goto out_locale;
-	}
-
-	/* Prefer UTF-8 if available. Otherwise, the last one is probably
-	 * just as good as this one.
-	 */
-	codeset1 = get_canonical_charset_name (bits1.codeset);
-	codeset2 = get_canonical_charset_name (bits2.codeset);
-	if (STREQ (codeset1, "UTF-8")) {
-		if (!STREQ (codeset2, "UTF-8")) {
-			ret = 2;
-			goto out_locale;
-		}
-	} else {
-		/* Either codeset2 is UTF-8 or it's some other legacy
-		 * encoding; either way, we prefer it.
+	if (!STREQ (bits1.language, bits2.language) ||
+	    !STREQ (bits1.territory, bits2.territory) ||
+	    !STREQ (bits1.modifier, bits2.modifier))
+		ret = 0; /* different language/territory/modifier */
+	else
+		/* Everything seems to be the same; we can find nothing to
+		 * choose between them.
 		 */
 		ret = 1;
-		goto out_locale;
-	}
 
-	/* Everything seems to be the same; we can find nothing to choose
-	 * between them. Prefer the one that got there first.
-	 */
-	ret = 1;
-
-out_locale:
-	free_locale_bits (&lbits);
-out:
 	free_locale_bits (&bits1);
 	free_locale_bits (&bits2);
 	return ret;
 }
 
 static int compare_candidates (const struct mandata *left,
-			       const struct mandata *right,
+			       const char *path,
+			       const struct candidate *search,
 			       const char *req_name)
 {
+	const struct mandata *right = search->source;
 	int sec_left = 0, sec_right = 0;
 	int cmp;
+	const char *slash1, *slash2;
 
 	/* If one candidate matches the requested name exactly, sort it
 	 * first. This makes --ignore-case behave more sensibly.
@@ -2596,6 +2527,87 @@ static int compare_candidates (const struct mandata *left,
 	} else {
 		if (STREQ (right->name, req_name))
 			return 1;
+	}
+
+	/* Try comparing based on language. Assuming we've got the right
+	 * name, then it's better to display a page in the user's preferred
+	 * language than a page from a better section.
+	 */
+	slash1 = strrchr (path, '/');
+	slash2 = strrchr (search->path, '/');
+	if (slash1 && slash2) {
+		char *locale_copy, *p;
+		struct locale_bits bits1, bits2, lbits;
+		const char *codeset1, *codeset2;
+
+		unpack_locale_bits (++slash1, &bits1);
+		unpack_locale_bits (++slash2, &bits2);
+
+		cmp = strcmp (bits1.language, bits2.language);
+		if (cmp)
+			goto out;
+
+		/* From here on in we need the current locale as well. */
+		locale_copy = xstrdup (internal_locale);
+		p = strchr (locale_copy, ':');
+		if (p)
+			*p = '\0';
+		unpack_locale_bits (locale_copy, &lbits);
+		free (locale_copy);
+
+#define COMPARE_LOCALE_ELEMENTS(elt) do { \
+	/* For different elements, prefer one that matches the locale if
+	 * possible.
+	 */ \
+	if (*lbits.elt) { \
+		if (STREQ (lbits.elt, bits1.elt)) { \
+			if (!STREQ (lbits.elt, bits2.elt)) { \
+				cmp = -1; \
+				goto out_locale; \
+			} \
+		} else { \
+			if (STREQ (lbits.elt, bits2.elt)) { \
+				cmp = 1; \
+				goto out_locale; \
+			} \
+		} \
+	} \
+	cmp = strcmp (bits1.territory, bits2.territory); \
+	if (cmp) \
+		/* No help from locale; might as well sort lexically. */ \
+		goto out_locale; \
+} while (0)
+
+		COMPARE_LOCALE_ELEMENTS (language);
+		COMPARE_LOCALE_ELEMENTS (territory);
+		COMPARE_LOCALE_ELEMENTS (modifier);
+
+#undef COMPARE_LOCALE_ELEMENTS
+
+		/* Prefer UTF-8 if available. Otherwise, consider them
+		 * equal.
+		 */
+		codeset1 = get_canonical_charset_name (bits1.codeset);
+		codeset2 = get_canonical_charset_name (bits2.codeset);
+		if (STREQ (codeset1, "UTF-8")) {
+			if (!STREQ (codeset2, "UTF-8")) {
+				cmp = -1;
+				goto out_locale;
+			}
+		} else {
+			if (STREQ (codeset2, "UTF-8")) {
+				cmp = 1;
+				goto out_locale;
+			}
+		}
+
+out_locale:
+		free_locale_bits (&lbits);
+out:
+		free_locale_bits (&bits1);
+		free_locale_bits (&bits2);
+		if (cmp)
+			return cmp;
 	}
 
 	/* Compare pure sections first, then ids, then extensions.
@@ -2658,13 +2670,29 @@ static int compare_candidates (const struct mandata *left,
 /* Add an entry to the list of candidates. */
 static int add_candidate (struct candidate **head, char from_db, char cat,
 			  const char *req_name, const char *path,
-			  struct mandata *source)
+			  const char *ult, struct mandata *source)
 {
 	struct candidate *search, *prev, *insert, *candp;
 	int insert_found = 0;
 
-	debug ("candidate: %d %d %s %s %c %s %s %s\n",
-	       from_db, cat, req_name, path,
+	if (!ult) {
+		const char *name;
+		char *filename;
+
+		if (*source->pointer != '-')
+			name = source->pointer;
+		else if (source->name)
+			name = source->name;
+		else
+			name = req_name;
+
+		filename = make_filename (path, name, source, cat ? "cat" : "man");
+		ult = ult_src (filename, path, NULL, ult_flags);
+		free (filename);
+	}
+
+	debug ("candidate: %d %d %s %s %s %c %s %s %s\n",
+	       from_db, cat, req_name, path, ult,
 	       source->id, source->name ? source->name : "-",
 	       source->sec, source->ext);
 
@@ -2678,27 +2706,36 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	search = *head;
 	prev = NULL;
 	while (search) {
+		int dupcand = duplicate_candidates (source, path, ult, search);
+		int cmp = compare_candidates (source, path, search, req_name);
+
+		debug ("search: %d %d %s %s %s %c %s %s %s "
+		       "(dup: %d, cmp: %d)\n",
+		       search->from_db, search->cat, search->req_name,
+		       search->path, search->ult, search->source->id,
+		       search->source->name ? search->source->name : "-",
+		       search->source->sec, search->source->ext, dupcand, cmp);
+
 		/* Check for duplicates. */
-		int dupcand = duplicate_candidates (source, path, search);
-		if (dupcand == 1) {
-			debug ("duplicate candidate\n");
-			return 0;
-		} else if (dupcand == 2) {
-			debug ("superior duplicate candidate\n");
-			if (prev) {
-				prev->next = search->next;
-				free (search);
-				search = prev->next;
-			} else {
-				*head = search->next;
-				free (search);
-				search = *head;
+		if (dupcand) {
+			if (cmp >= 0)
+				return 0;
+			else {
+				if (prev) {
+					prev->next = search->next;
+					free (search);
+					search = prev->next;
+				} else {
+					*head = search->next;
+					free (search);
+					search = *head;
+				}
+				continue;
 			}
-			continue;
-		}
-		if (!insert_found &&
-		    compare_candidates (source, search->source,
-					req_name) < 0) {
+		} else if (cmp < 0) {
+			/* We insert the element at the latest position
+			 * where this holds.
+			 */
 			insert = prev;
 			insert_found = 1;
 		}
@@ -2717,6 +2754,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	candp->from_db = from_db;
 	candp->cat = cat;
 	candp->path = path;
+	candp->ult = xstrdup (ult);
 	candp->source = source;
 	candp->next = insert ? insert->next : *head;
 	if (insert)
@@ -2792,7 +2830,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 			info->id = SO_MAN;
 
 		found += add_candidate (cand_head, CANDIDATE_FILESYSTEM,
-					cat, name, path, info);
+					cat, name, path, ult, info);
 		/* Don't free info and info_buffer here. */
 	}
 
@@ -3137,7 +3175,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 		    (!extension || STREQ (extension, loc->ext)
 				|| STREQ (extension, loc->ext + strlen (sec))))
 			found += add_candidate (cand_head, CANDIDATE_DATABASE,
-						0, name, manpath, loc);
+						0, name, manpath, NULL, loc);
 
 	return found;
 }
