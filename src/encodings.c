@@ -88,6 +88,7 @@ static struct directory_entry directory_table[] = {
 	{ "de",		"ISO-8859-1",	"ISO-8859-1"		}, /* German */
 	{ "en",		"ISO-8859-1",	"ISO-8859-1"		}, /* English */
 	{ "es",		"ISO-8859-1",	"ISO-8859-1"		}, /* Spanish */
+	{ "et",		"ISO-8859-1",	"ISO-8859-1"		}, /* Estonian */
 	{ "fi",		"ISO-8859-1",	"ISO-8859-1"		}, /* Finnish */
 	{ "fr",		"ISO-8859-1",	"ISO-8859-1"		}, /* French */
 	{ "ga",		"ISO-8859-1",	"ISO-8859-1"		}, /* Irish */
@@ -106,19 +107,27 @@ static struct directory_entry directory_table[] = {
 	/* These languages require a patched version of groff with the
 	 * ascii8 and nippon devices.
 	 */
+	{ "be",		"CP1251",	"CP1251"		}, /* Belarusian */
 	{ "bg",		"CP1251",	"CP1251"		}, /* Bulgarian */
 	{ "cs",		"ISO-8859-2",	"ISO-8859-2"		}, /* Czech */
+	{ "el",		"ISO-8859-7",	"ISO-8859-7"		}, /* Greek */
 	{ "hr",		"ISO-8859-2",	"ISO-8859-2"		}, /* Croatian */
 	{ "hu",		"ISO-8859-2",	"ISO-8859-2"		}, /* Hungarian */
 	{ "ja",		"EUC-JP",	"EUC-JP"		}, /* Japanese */
 	{ "ko",		"EUC-KR",	"EUC-KR"		}, /* Korean */
+	{ "lt",		"ISO-8859-13",	"ISO-8859-13"		}, /* Lithuanian */
+	{ "lv",		"ISO-8859-13",	"ISO-8859-13"		}, /* Latvian */
+	{ "mk",		"ISO-8859-5",	"ISO-8859-5"		}, /* Macedonian */
 	{ "pl",		"ISO-8859-2",	"ISO-8859-2"		}, /* Polish */
+	{ "ro",		"ISO-8859-2",	"ISO-8859-2"		}, /* Romanian */
 	{ "ru",		"KOI8-R",	"KOI8-R"		}, /* Russian */
 	{ "sk",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovak */
+	{ "sl",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovenian */
 	/* sr@latin must precede sr, due to top-down left-substring matching later */
 	{ "sr@latin",   "ISO-8859-2",   "ISO-8859-2"            }, /* Serbian Latin */
 	{ "sr",		"ISO-8859-5",	"ISO-8859-5"		}, /* Serbian */
 	{ "tr",		"ISO-8859-9",	"ISO-8859-9"		}, /* Turkish */
+	{ "uk",		"KOI8-U",	"KOI8-U"		}, /* Ukrainian */
 	{ "vi",		"TCVN5712-1",	"TCVN5712-1"		}, /* Vietnamese */
 	{ "zh_CN",	"GBK",		"GBK"			}, /* Simplified Chinese */
 	{ "zh_SG",	"GBK",		"GBK"			}, /* Simplified Chinese, Singapore */
@@ -186,6 +195,7 @@ static struct charset_alias_entry charset_alias_table[] = {
 	{ "ISO8859-15",		"ISO-8859-15"		},
 	{ "ISO8859-16",		"ISO-8859-16"		},
 	{ "KOI8R",		"KOI8-R"		},
+	{ "KOI8U",		"KOI8-U"		},
 	{ "UJIS",		"EUC-JP"		},
 	{ "US-ASCII",		"ANSI_X3.4-1968"	},
 	{ "UTF8",		"UTF-8"			},
@@ -289,6 +299,8 @@ static struct less_charset_entry less_charset_table[] = {
 #ifdef MULTIBYTE_GROFF
 	{ "EUC-JP",		"iso8859",	"japanese-ujis"	},
 	{ "KOI8-R",		"koi8-r",	NULL		},
+	/* close enough? */
+	{ "KOI8-U",		"koi8-r",	NULL		},
 #endif /* MULTIBYTE_GROFF */
 
 	{ NULL,			NULL,		NULL		}

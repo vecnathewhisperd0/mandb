@@ -1,3 +1,18 @@
+Tue Dec 23 11:17:01 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Sync supported language list with Fedora's patch to man
+	(http://cvs.fedora.redhat.com/viewvc/rpms/man/F-10/man-1.6b-i18n_nroff.patch?view=markup,
+	with corrections based on /usr/share/i18n/SUPPORTED).
+
+	* src/encodings.c (directory_table): Add Estonian -> ISO-8859-1,
+	  Belarusian -> CP1251, Greek -> ISO-8859-7, Lithuanian ->
+	  ISO-8859-13, Latvian -> ISO-8859-13, Macedonian -> ISO-8859-5,
+	  Romanian -> ISO-8859-2, Slovenian -> ISO-8859-2, and Ukrainian ->
+	  KOI8-U.
+	  (charset_alias_table): Map KOI8U to KOI8-U.
+	  (less_charset_table): Map KOI8-U to koi8-r (possibly not quite
+	  right but with any luck good enough).
+
 Mon Dec  8 13:08:22 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_store.c (compare_ids): If the promote_links argument is
