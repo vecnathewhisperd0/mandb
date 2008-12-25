@@ -2,7 +2,7 @@
  * db_storage.h: define mandata structure, some macros and prototypes
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2002 Colin Watson.
+ * Copyright (C) 2002, 2003, 2007, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -76,6 +76,9 @@ extern struct mandata *dblookup_all (const char *page, const char *section,
 				     int match_case);
 extern struct mandata *dblookup_exact (const char *page, const char *section,
 				       int match_case);
+extern struct mandata *dblookup_pattern (const char *page, const char *section,
+					 int match_case, int pattern_regex,
+					 int try_descriptions);
 extern int dbstore (struct mandata *in, const char *base);
 extern int dbdelete (const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);

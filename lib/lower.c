@@ -1,7 +1,8 @@
 /*
- * globbing.h: Headers for glob routines
+ * lower.c: return lower-case copy of a string
  *
- * Copyright (C) 2001, 2002, 2007, 2008 Colin Watson.
+ * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
+ * Copyright (C) 2003, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -20,12 +21,27 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-enum look_for_file_opts {
-	LFF_MATCHCASE = 1,
-	LFF_REGEX = 2,
-	LFF_WILDCARD = 4
-};
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /* HAVE_CONFIG_H */
 
-/* globbing.c */
-extern char **look_for_file (const char *hier, const char *sec,
-			     const char *unesc_name, int cat, int opts);
+#include <string.h>
+#include <ctype.h>
+
+#include "manconfig.h"
+
+#include "lower.h"
+
+/* return lowered version of s */
+char *lower (const char *s)
+{
+	char *low, *p;
+
+	p = low = xmalloc (strlen (s) + 1);
+
+	while (*s)
+		*p++ = CTYPE (tolower, *s++);
+
+	*p = *s;
+	return low;
+}

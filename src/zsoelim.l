@@ -353,7 +353,8 @@ int zsoelim_open_file (const char *filename)
 			char *sec = dot2 ?
 				xstrndup (dot + 1, dot2 - (dot + 1)) :
 				xstrdup (dot + 1);
-			char **names = look_for_file (pwd, sec, name, 0, 1);
+			char **names = look_for_file (pwd, sec, name, 0,
+						      LFF_MATCHCASE);
 			char **np;
 
 			for (np = names; np && *np; ++np) {

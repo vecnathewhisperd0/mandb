@@ -2,7 +2,7 @@
  * db_lookup.c: low level database interface routines for man.
  *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008 Colin Watson.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,6 +32,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "fnmatch.h"
+#include "regex.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"
@@ -40,6 +42,9 @@
 #include "manconfig.h"
 
 #include "error.h"
+#include "lower.h"
+#include "wordfnmatch.h"
+#include "xregcomp.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -160,11 +165,7 @@ void free_mandata_struct (struct mandata *pinfo)
  */
 char *name_to_key (const char *name)
 {
-	char *key = xstrdup (name);
-	char *p;
-	for (p = key; *p; ++p)
-		*p = CTYPE (tolower, *p);
-	return key;
+	return lower (name);
 }
 
 /* return char ptr array to the data's fields */
@@ -402,4 +403,118 @@ struct mandata *dblookup_exact (const char *page, const char *section,
 				int match_case)
 {
 	return dblookup (page, section, EXACT | (match_case ? MATCH_CASE : 0));
+}
+
+struct mandata *dblookup_pattern (const char *pattern, const char *section,
+				  int match_case, int pattern_regex,
+				  int try_descriptions)
+{
+	struct mandata *ret = NULL, *tail = NULL;
+	datum key, cont;
+	regex_t preg;
+
+	if (pattern_regex)
+		xregcomp (&preg, pattern,
+			  REG_EXTENDED | REG_NOSUB |
+			  (match_case ? 0 : REG_ICASE));
+
+#ifndef BTREE
+	datum nextkey;
+
+	key = MYDBM_FIRSTKEY (dbf);
+	while (MYDBM_DPTR (key)) {
+		cont = MYDBM_FETCH (dbf, key);
+#else /* BTREE */
+	int end;
+
+	end = btree_nextkeydata (dbf, &key, &cont);
+	while (!end) {
+#endif /* !BTREE */
+		struct mandata info;
+		char *tab;
+		int got_match;
+
+		memset (&info, 0, sizeof (info));
+
+		if (!MYDBM_DPTR (cont))
+		{
+			debug ("key was %s\n", MYDBM_DPTR (key));
+			error (FATAL, 0,
+			       _("Database %s corrupted; rebuild with "
+				 "mandb --create"),
+			       database);
+		}
+
+		if (*MYDBM_DPTR (key) == '$')
+			goto nextpage;
+
+		if (*MYDBM_DPTR (cont) == '\t')
+			goto nextpage;
+
+		/* a real page */
+
+		split_content (MYDBM_DPTR (cont), &info);
+
+		/* If there's a section given, does it match either the
+		 * section or extension of this page?
+		 */
+		if (section &&
+		    (!STREQ (section, info.sec) && !STREQ (section, info.ext)))
+			goto nextpage;
+
+		tab = strrchr (MYDBM_DPTR (key), '\t');
+		if (tab) 
+			 *tab = '\0';
+
+		if (!info.name)
+			info.name = xstrdup (MYDBM_DPTR (key));
+
+		if (pattern_regex)
+			got_match = (regexec (&preg, info.name,
+					      0, NULL, 0) == 0);
+		else
+			got_match = fnmatch (pattern, info.name,
+					     match_case ? 0
+							: FNM_CASEFOLD) == 0;
+		if (try_descriptions && !got_match && info.whatis) {
+			if (pattern_regex)
+				got_match = (regexec (&preg, info.whatis,
+						      0, NULL, 0) == 0);
+			else
+				got_match = word_fnmatch (pattern,
+							  info.whatis);
+		}
+		if (!got_match)
+			goto nextpage_tab;
+
+		if (!ret)
+			ret = tail = infoalloc ();
+		else
+			tail = tail->next = infoalloc ();
+		memcpy (tail, &info, sizeof (info));
+		info.name = NULL; /* steal memory */
+		MYDBM_SET_DPTR (cont, NULL); /* == info.addr */
+
+nextpage_tab:
+		if (tab)
+			*tab = '\t';
+nextpage:
+#ifndef BTREE
+		nextkey = MYDBM_NEXTKEY (dbf, key);
+		MYDBM_FREE (MYDBM_DPTR (cont));
+		MYDBM_FREE (MYDBM_DPTR (key));
+		key = nextkey;
+#else /* BTREE */
+		MYDBM_FREE (MYDBM_DPTR (cont));
+		MYDBM_FREE (MYDBM_DPTR (key));
+		end = btree_nextkeydata (dbf, &key, &cont);
+#endif /* !BTREE */
+		info.addr = NULL;
+		free_mandata_elements (&info);
+	}
+
+	if (pattern_regex)
+		regfree (&preg);
+
+	return ret;
 }

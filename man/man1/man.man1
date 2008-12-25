@@ -37,6 +37,8 @@
 .RB [\| \-e
 .IR extension \|]
 .RB [\| \-i \||\| \-I \|]
+.RB [\| \-\-regex \||\| \-\-wildcard \|]
+.RB [\| \-\-names\-only \|]
 .RB [\| \-a \|]
 .RB [\| \-u \|]
 .RB [\| \-P
@@ -707,6 +709,40 @@ This is the default.
 .TP
 .if !'po4a'hide' .B \-I, \-\-match\-case
 Search for manual pages case-sensitively.
+.TP
+.if !'po4a'hide' .B \-\-regex
+Show all pages with any part of either their names or their descriptions
+matching each
+.I page
+argument as a regular expression, as with
+.BR apropos (1).
+Since there is usually no reasonable way to pick a "best" page when
+searching for a regular expression, this option implies
+.BR \-a .
+.TP
+.if !'po4a'hide' .B \-\-wildcard
+Show all pages with any part of either their names or their descriptions
+matching each
+.I page
+argument using shell-style wildcards, as with
+.BR apropos (1)
+.BR \-\-wildcard .
+The
+.I page
+argument must match the entire name or description, or match on word
+boundaries in the description.
+Since there is usually no reasonable way to pick a "best" page when
+searching for a wildcard, this option implies
+.BR \-a .
+.TP
+.if !'po4a'hide' .B \-\-names\-only
+If the
+.B \-\-regex
+or
+.B \-\-wildcard
+option is used, match only page names, not page descriptions, as with
+.BR whatis (1).
+Otherwise, no effect.
 .TP
 .if !'po4a'hide' .B \-a, \-\-all
 By default,

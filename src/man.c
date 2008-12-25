@@ -161,6 +161,9 @@ static inline void gripe_system (pipeline *p, int status)
 
 enum opts {
 	OPT_WARNINGS = 256,
+	OPT_REGEX,
+	OPT_WILDCARD,
+	OPT_NAMES,
 	OPT_MAX
 };
 
@@ -212,6 +215,9 @@ static int local_man_file;
 static int findall;
 static int update;
 static int match_case;
+static int regex_opt;
+static int wildcard;
+static int names_only;
 static int ult_flags = SO_LINK | SOFT_LINK | HARD_LINK;
 static const char *recode = NULL;
 
@@ -273,7 +279,11 @@ static struct argp_option options[] = {
 							0,		N_("limit search to extension type EXTENSION"),			22 },
 	{ "ignore-case",	'i',	0,		0,		N_("look for pages case-insensitively (default)"),		23 },
 	{ "match-case",		'I',	0,		0,		N_("look for pages case-sensitively") },
-	{ "all",		'a',	0,		0,		N_("find all matching manual pages"),				24 },
+	{ "regex",	  OPT_REGEX,	0,		0,		N_("show all pages matching regex"),				24 },
+	{ "wildcard",  OPT_WILDCARD,	0,		0,		N_("show all pages matching wildcard") },
+	{ "names-only",	  OPT_NAMES,	0,		0,		N_("make --regex and --wildcard match page names only, not "
+									   "descriptions"),						25 },
+	{ "all",		'a',	0,		0,		N_("find all matching manual pages"),				26 },
 	{ "update",		'u',	0,		0,		N_("force a cache consistency check") },
 
 	{ 0,			0,	0,		0,		N_("Controlling formatted output:"),				30 },
@@ -323,7 +333,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			local_man_file = findall = update = catman =
 				debug_level = troff =
 				print_where = print_where_cat =
-				ascii = match_case = 0;
+				ascii = match_case =
+				regex_opt = wildcard = names_only = 0;
 #ifdef TROFF_IS_GROFF
 			ditroff = 0;
 			gxditview = NULL;
@@ -405,6 +416,17 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 		case 'I':
 			match_case = 1;
 			return 0;
+		case OPT_REGEX:
+			regex_opt = 1;
+			findall = 1;
+			return 0;
+		case OPT_WILDCARD:
+			wildcard = 1;
+			findall = 1;
+			return 0;
+		case OPT_NAMES:
+			names_only = 1;
+			return 0;
 		case 'a':
 			findall = 1;
 			return 0;
@@ -480,6 +502,16 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 					 catman ? "-c " : "",
 					 print_where ? "-w " : "",
 					 print_where_cat ? "-W " : "",
+					 NULL);
+				argp_error (state,
+					    _("%s: incompatible options"),
+					    badopts);
+			}
+			if (regex_opt + wildcard > 1) {
+				char *badopts = appendstr
+					(NULL,
+					 regex_opt ? "--regex " : "",
+					 wildcard ? "--wildcard " : "",
 					 NULL);
 				argp_error (state,
 					    _("%s: incompatible options"),
@@ -2775,6 +2807,9 @@ static int try_section (const char *path, const char *sec, const char *name,
 	int found = 0;
 	char **names = NULL, **np;
 	char cat = 0;
+	int lff_opts = (match_case ? LFF_MATCHCASE : 0) |
+		       (regex_opt ? LFF_REGEX : 0) |
+		       (wildcard ? LFF_WILDCARD : 0);
 
 	debug ("trying section %s with globbing\n", sec);
 
@@ -2783,7 +2818,7 @@ static int try_section (const char *path, const char *sec, const char *name,
   	 * Look for man page source files.
   	 */
 
-	names = look_for_file (path, sec, name, 0, match_case);
+	names = look_for_file (path, sec, name, 0, lff_opts);
 	if (!names)
 		/*
     		 * No files match.  
@@ -2796,7 +2831,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 			return 1;
 
 		if (!troff && !want_encoding && !recode) {
-			names = look_for_file (path, sec, name, 1, match_case);
+			names = look_for_file (path, sec, name, 1, lff_opts);
 			cat = 1;
 		}
 	}
@@ -3113,7 +3148,13 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 
 			/* if section is set, only return those that match,
 			   otherwise NULL retrieves all available */
-			data = dblookup_all (name, section, match_case);
+			if (regex_opt || wildcard)
+				data = dblookup_pattern
+					(name, section, match_case,
+					 regex_opt, !names_only);
+			else
+				data = dblookup_all (name, section,
+						     match_case);
 			hash_install (db_hash, manpath, strlen (manpath),
 				      data);
 			MYDBM_CLOSE (dbf);

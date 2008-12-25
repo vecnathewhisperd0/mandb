@@ -1,3 +1,64 @@
+Thu Dec 25 22:09:01 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Add regular expression and shell wildcard search facilities to man
+	(Debian bug #461319).
+
+	* src/whatis.c (lower): Move to ...
+	* lib/lower.c: ... here, with optimisation from name_to_key. New
+	  file.
+	* lib/lower.h: New file.
+
+	* src/whatis.c (word_fnmatch): Move to ...
+	* lib/wordfnmatch.c: ... here, with more generic argument names. New
+	  file.
+	* lib/wordfnmatch.h: New file.
+
+	* src/whatis.c (main): Factor regcomp error handling out to ...
+	* lib/xregcomp.c: ... here. New file.
+	* lib/xregcomp.h: New file.
+
+	* lib/Makefile.am (libman_a_SOURCES): Add lower.c, lower.h,
+	  wordfnmatch.c, wordfnmatch.h, xregcomp.c, and xregcomp.h.
+	* po/POTFILES.in: Add lib/xregcomp.c; remove src/globbing.c.
+
+	* libdb/db_lookup.c (name_to_key): Use lower.
+	  (dblookup_pattern): New function.
+	* libdb/db_storage.h (dblookup_pattern): Add prototype.
+	* src/globbing.c (end_pattern): Rename to ...
+	  (make_pattern): ... this. Create the whole pattern rather than
+	  merely appending section or extension components. Handle regexes
+	  if the new opts argument has the LFF_REGEX bit set.
+	  (match_in_directory): Take an opts disjunction rather than a
+	  boolean ignore_case argument; ignore_case is replaced by the
+	  LFF_MATCHCASE bit being unset. Handle regexes if opts has the
+	  LFF_REGEX bit set.
+	  (look_for_file): Take an opts disjunction rather than a boolean
+	  match_case argument; match_case is replaced by the LFF_MATCHCASE
+	  bit being set. Handle regexes if opts has the LFF_REGEX bit set.
+	  Handle shell wildcards if opts has the LFF_WILDCARD bit set (which
+	  simply means not shell-escaping unesc_name). Call make_pattern
+	  rather than end_pattern (with appropriate adjustments).
+	* src/globbing.h (enum look_for_file_opts): New enumeration.
+	  (look_for_file): Update prototype.
+	* src/globbing_test.c (options, parse_opt): Accept -r/--regex and
+	  -w/--wildcard.
+	  (main): Update look_for_file arguments, including passing
+	  LFF_REGEX or LFF_WILDCARD if the corresponding options are used.
+	* src/check_mandirs.c (purge_whatis, purge_missing), src/zsoelim.l
+	  (zsoelim_open_file): Update look_for_file arguments.
+	* src/whatis.c (main): Only free preg if a regular expression was
+	  compiled into it in the first place.
+
+	* src/man.c (options, parse_opt): Accept --regex, --wildcard, and
+	  --names-only. Reset corresponding variables with -D. Refuse to
+	  accept both --regex and --wildcard.
+	  (try_section): Update look_for_file arguments, including passing
+	  LFF_REGEX or LFF_WILDCARD if the corresponding options are used.
+	  (try_db): Use dblookup_pattern if --regex or --wildcard is used,
+	  with corresponding options.
+	* man/man1/man.man1 (SYNOPSIS, Finding manual pages): Document
+	  --regex, --wildcard, and --names-only.
+
 Tue Dec 23 11:17:01 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	Sync supported language list with Fedora's patch to man

@@ -2,7 +2,7 @@
  * check_mandirs.c: used to auto-update the database caches
  *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2007, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -736,7 +736,7 @@ static int purge_whatis (const char *path, int cat, const char *name,
 		int save_debug = debug_level;
 		debug_level = 0;
 		real_found = look_for_file (path, info->ext,
-					    info->pointer, cat, 1);
+					    info->pointer, cat, LFF_MATCHCASE);
 		debug_level = save_debug;
 
 		if (count_glob_matches (info->pointer, info->ext, real_found))
@@ -863,12 +863,12 @@ int purge_missing (const char *manpath, const char *catpath)
 			found = look_for_file (manpath, entry.ext,
 					       entry.name ? entry.name
 							  : nicekey,
-					       0, 1);
+					       0, LFF_MATCHCASE);
 		else
 			found = look_for_file (catpath, entry.ext,
 					       entry.name ? entry.name
 							  : nicekey,
-					       1, 1);
+					       1, LFF_MATCHCASE);
 		debug_level = save_debug;
 
 		/* Now actually decide whether to purge, depending on the

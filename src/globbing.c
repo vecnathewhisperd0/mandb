@@ -2,7 +2,7 @@
  * globbing.c: interface to the POSIX glob routines
  *  
  * Copyright (C) 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2006, 2007 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -35,24 +35,43 @@
 #include <dirent.h>
 
 #include "fnmatch.h"
+#include "regex.h"
 
 #include "manconfig.h"
 
 #include "error.h"
 #include "hashtable.h"
 #include "cleanup.h"
+#include "xregcomp.h"
 
 #include "globbing.h"
 
 const char *extension;
 static const char *mandir_layout = MANDIR_LAYOUT;
 
-static inline char *end_pattern (char *pattern, const char *sec)
+static char *make_pattern (const char *name, const char *sec, int opts)
 {
-	if (extension)
-		pattern = appendstr (pattern, ".*", extension, "*", NULL);
-	else
-		pattern = appendstr (pattern, ".", sec, "*", NULL);
+	char *pattern = xstrdup (name);
+
+	if (opts & LFF_REGEX) {
+		if (extension) {
+			char *esc_ext = escape_shell (extension);
+			pattern = appendstr (pattern, "\\..*", esc_ext, ".*",
+					     NULL);
+			free (esc_ext);
+		} else {
+			char *esc_sec = escape_shell (sec);
+			pattern = appendstr (pattern, "\\.", esc_sec, ".*",
+					     NULL);
+			free (esc_sec);
+		}
+	} else {
+		if (extension)
+			pattern = appendstr (pattern, ".*", extension, "*",
+					     NULL);
+		else
+			pattern = appendstr (pattern, ".", sec, "*", NULL);
+	}
 
 	return pattern;
 }
@@ -180,12 +199,13 @@ static int pattern_compare (const void *a, const void *b)
 	return strncasecmp (key->pattern, memb, key->len);
 }
 
-static int match_in_directory (const char *path, const char *pattern,
-			       int ignore_case, glob_t *pglob)
+static int match_in_directory (const char *path, const char *pattern, int opts,
+			       glob_t *pglob)
 {
 	struct dirent_hashent *cache;
 	size_t allocated = 4;
 	int flags;
+	regex_t preg;
 	struct pattern_bsearch pattern_start;
 	char **bsearched;
 	size_t i;
@@ -208,33 +228,45 @@ static int match_in_directory (const char *path, const char *pattern,
 	debug ("globbing pattern in %s: %s\n", path, pattern);
 
 	pglob->gl_pathv = XNMALLOC (allocated, char *);
-	flags = ignore_case ? FNM_CASEFOLD : 0;
+	if (opts & LFF_REGEX)
+		flags = REG_EXTENDED | REG_NOSUB |
+			((opts & LFF_MATCHCASE) ? 0 : REG_ICASE);
+	else
+		flags = (opts & LFF_MATCHCASE) ? 0 : FNM_CASEFOLD;
 
-	pattern_start.pattern = xstrndup (pattern,
-					  strcspn (pattern, "?*{}\\"));
-	pattern_start.len = strlen (pattern_start.pattern);
-	bsearched = bsearch (&pattern_start, cache->names, cache->names_len,
-			     sizeof *cache->names, &pattern_compare);
-	if (!bsearched) {
-		free (pattern_start.pattern);
-		pglob->gl_pathv[0] = NULL;
-		return 0;
+	if (opts & LFF_REGEX) {
+		xregcomp (&preg, pattern, flags);
+		bsearched = cache->names;
+	} else {
+		pattern_start.pattern = xstrndup (pattern,
+						  strcspn (pattern, "?*{}\\"));
+		pattern_start.len = strlen (pattern_start.pattern);
+		bsearched = bsearch (&pattern_start, cache->names,
+				     cache->names_len, sizeof *cache->names,
+				     &pattern_compare);
+		if (!bsearched) {
+			free (pattern_start.pattern);
+			pglob->gl_pathv[0] = NULL;
+			return 0;
+		}
+		while (bsearched > cache->names &&
+		       !strncasecmp (pattern_start.pattern, *(bsearched - 1),
+				     pattern_start.len))
+			--bsearched;
 	}
-	while (bsearched > cache->names &&
-	       !strncasecmp (pattern_start.pattern, *(bsearched - 1),
-			     pattern_start.len))
-		--bsearched;
 
 	for (i = bsearched - cache->names; i < cache->names_len; ++i) {
-		int fnm;
+		if (opts & LFF_REGEX) {
+			if (regexec (&preg, cache->names[i], 0, NULL, 0) != 0)
+				continue;
+		} else {
+			if (strncasecmp (pattern_start.pattern,
+					 cache->names[i], pattern_start.len))
+				break;
 
-		if (strncasecmp (pattern_start.pattern, cache->names[i],
-				 pattern_start.len))
-			break;
-
-		fnm = fnmatch (pattern, cache->names[i], flags);
-		if (fnm)
-			continue;
+			if (fnmatch (pattern, cache->names[i], flags) != 0)
+				continue;
+		}
 
 		debug ("matched: %s/%s\n", path, cache->names[i]);
 
@@ -247,7 +279,10 @@ static int match_in_directory (const char *path, const char *pattern,
 			appendstr (NULL, path, "/", cache->names[i], NULL);
 	}
 
-	free (pattern_start.pattern);
+	if (opts & LFF_REGEX)
+		regfree (&preg);
+	else
+		free (pattern_start.pattern);
 
 	if (pglob->gl_pathc >= allocated) {
 		allocated *= 2;
@@ -260,9 +295,9 @@ static int match_in_directory (const char *path, const char *pattern,
 }
 
 char **look_for_file (const char *hier, const char *sec,
-		      const char *unesc_name, int cat, int match_case)
+		      const char *unesc_name, int cat, int opts)
 {
-	char *pattern = NULL, *path = NULL;
+	char *pattern, *path = NULL;
 	static glob_t gbuf;
 	static int cleanup_installed = 0;
 	int status = 1;
@@ -283,7 +318,10 @@ char **look_for_file (const char *hier, const char *sec,
 		debug ("Layout is %s (%d)\n", mandir_layout, layout);
 	}
 
-	name = escape_shell (unesc_name);
+	if (opts & (LFF_REGEX | LFF_WILDCARD))
+		name = xstrdup (unesc_name);
+	else
+		name = escape_shell (unesc_name);
 
 	/* allow lookups like "3x foo" to match "../man3/foo.3x" */
 
@@ -291,10 +329,10 @@ char **look_for_file (const char *hier, const char *sec,
 		path = appendstr (path, hier, cat ? "/cat" : "/man", "\t",
 				  NULL);
 		*strrchr (path, '\t') = *sec;
-		pattern = end_pattern (appendstr (pattern, name, NULL), sec);
+		pattern = make_pattern (name, sec, opts);
 
-		status = match_in_directory (path, pattern, !match_case,
-					     &gbuf);
+		status = match_in_directory (path, pattern, opts, &gbuf);
+		free (pattern);
 	}
 
 	/* AIX glob.h doesn't define GLOB_NOMATCH and the manpage is vague
@@ -304,80 +342,75 @@ char **look_for_file (const char *hier, const char *sec,
 	if ((layout & LAYOUT_GNU) && (status != 0 || gbuf.gl_pathc == 0)) {
 		if (path)
 			*path = '\0';
-		if (pattern)
-			*pattern = '\0';
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
 				  NULL);
-		pattern = end_pattern (appendstr (pattern, name, NULL), sec);
+		pattern = make_pattern (name, sec, opts);
 
-		status = match_in_directory (path, pattern, !match_case,
-					     &gbuf);
+		status = match_in_directory (path, pattern, opts, &gbuf);
+		free (pattern);
 	}
 
 	/* Try HPUX style compressed man pages */
 	if ((layout & LAYOUT_HPUX) && (status != 0 || gbuf.gl_pathc == 0)) {
 		if (path)
 			*path = '\0';
-		if (pattern)
-			*pattern = '\0';
 		path = appendstr (path, hier, cat ? "/cat" : "/man",
 				  sec, ".Z", NULL);
-		pattern = end_pattern (appendstr (pattern, name, NULL), sec);
+		pattern = make_pattern (name, sec, opts);
 
-		status = match_in_directory (path, pattern, !match_case,
-					     &gbuf);
+		status = match_in_directory (path, pattern, opts, &gbuf);
+		free (pattern);
 	}
 
 	/* Try man pages without the section extension --- IRIX man pages */
 	if ((layout & LAYOUT_IRIX) && (status != 0 || gbuf.gl_pathc == 0)) {
 		if (path)
 			*path = '\0';
-		if (pattern)
-			*pattern = '\0';
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
 				  NULL);
-		pattern = appendstr (pattern, name, ".*", NULL);
+		if (opts & LFF_REGEX)
+			pattern = appendstr (NULL, name, "\\..*", NULL);
+		else
+			pattern = appendstr (NULL, name, ".*", NULL);
 
-		status = match_in_directory (path, pattern, !match_case,
-					     &gbuf);
+		status = match_in_directory (path, pattern, opts, &gbuf);
+		free (pattern);
 	}
 
 	/* Try Solaris style man page directories */
 	if ((layout & LAYOUT_SOLARIS) && (status != 0 || gbuf.gl_pathc == 0)) {
 		if (path)
 			*path = '\0';
-		if (pattern)
-			*pattern = '\0';
 		/* TODO: This needs to be man/sec*, not just man/sec. */
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
 				  NULL);
-		pattern = end_pattern (appendstr (pattern, name, NULL), sec);
+		pattern = make_pattern (name, sec, opts);
 
-		status = match_in_directory (path, pattern, !match_case,
-					     &gbuf);
+		status = match_in_directory (path, pattern, opts, &gbuf);
+		free (pattern);
 	}
 
 	/* BSD cat pages take the extension .0 */
 	if ((layout & LAYOUT_BSD) && (status != 0 || gbuf.gl_pathc == 0)) {
 		if (path)
 			*path = '\0';
-		if (pattern)
-			*pattern = '\0';
 		if (cat) {
 			path = appendstr (path, hier, "/cat", sec, NULL);
-			pattern = appendstr (pattern, name, ".0*", NULL);
+			if (opts & LFF_REGEX)
+				pattern = appendstr (NULL, name, "\\.0.*",
+						     NULL);
+			else
+				pattern = appendstr (NULL, name, ".0*", NULL);
 		} else {
 			path = appendstr (path, hier, "/man", sec, NULL);
-			pattern = end_pattern (appendstr (pattern, name, NULL),
-					       sec);
+			pattern = make_pattern (name, sec, opts);
 		}
-		status = match_in_directory (path, pattern, !match_case,
-					     &gbuf);
+		status = match_in_directory (path, pattern, opts, &gbuf);
+		free (pattern);
 	}
 
 	free (name);
 	free (path);
-	free (pattern);
 
 	if (status != 0 || gbuf.gl_pathc == 0)
 		return NULL;

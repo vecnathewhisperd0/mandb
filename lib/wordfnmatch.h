@@ -1,7 +1,7 @@
 /*
- * globbing.h: Headers for glob routines
+ * wordfnmatch.h: interface to fnmatch on word boundaries
  *
- * Copyright (C) 2001, 2002, 2007, 2008 Colin Watson.
+ * Copyright (C) 2001, 2003, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -20,12 +20,4 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-enum look_for_file_opts {
-	LFF_MATCHCASE = 1,
-	LFF_REGEX = 2,
-	LFF_WILDCARD = 4
-};
-
-/* globbing.c */
-extern char **look_for_file (const char *hier, const char *sec,
-			     const char *unesc_name, int cat, int opts);
+int word_fnmatch (const char *lowpattern, const char *string);

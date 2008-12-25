@@ -1,7 +1,7 @@
 /*
- * globbing.h: Headers for glob routines
+ * xregcomp.c: regcomp with error checking
  *
- * Copyright (C) 2001, 2002, 2007, 2008 Colin Watson.
+ * Copyright (C) 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -20,12 +20,30 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-enum look_for_file_opts {
-	LFF_MATCHCASE = 1,
-	LFF_REGEX = 2,
-	LFF_WILDCARD = 4
-};
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /* HAVE_CONFIG_H */
 
-/* globbing.c */
-extern char **look_for_file (const char *hier, const char *sec,
-			     const char *unesc_name, int cat, int opts);
+#include "regex.h"
+
+#include "gettext.h"
+#include <locale.h>
+#define _(String) gettext (String)
+
+#include "manconfig.h"
+
+#include "error.h"
+#include "xregcomp.h"
+
+void xregcomp (regex_t *preg, const char *regex, int cflags)
+{
+	int err = regcomp (preg, regex, cflags);
+	if (err) {
+		size_t errstrsize;
+		char *errstr;
+		errstrsize = regerror (err, preg, NULL, 0);
+		errstr = xmalloc (errstrsize);
+		regerror (err, preg, errstr, errstrsize);
+		error (FATAL, 0, _("fatal: regex `%s': %s"), regex, errstr);
+	}
+}

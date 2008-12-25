@@ -174,8 +174,10 @@ libman_a_DEPENDENCIES = $(LIBOBJS)
 am_libman_a_OBJECTS = libman_a-appendstr.$(OBJEXT) \
 	libman_a-cleanup.$(OBJEXT) libman_a-debug.$(OBJEXT) \
 	libman_a-decompress.$(OBJEXT) libman_a-hashtable.$(OBJEXT) \
-	libman_a-linelength.$(OBJEXT) libman_a-pathsearch.$(OBJEXT) \
-	libman_a-pipeline.$(OBJEXT) libman_a-tempfile.$(OBJEXT)
+	libman_a-linelength.$(OBJEXT) libman_a-lower.$(OBJEXT) \
+	libman_a-pathsearch.$(OBJEXT) libman_a-pipeline.$(OBJEXT) \
+	libman_a-tempfile.$(OBJEXT) libman_a-wordfnmatch.$(OBJEXT) \
+	libman_a-xregcomp.$(OBJEXT)
 libman_a_OBJECTS = $(am_libman_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
@@ -638,8 +640,9 @@ libman_a_CPPFLAGS = \
 
 libman_a_SOURCES = appendstr.c cleanup.c cleanup.h debug.c \
 	decompress.c decompress.h hashtable.c hashtable.h linelength.c \
-	linelength.h pathsearch.c pathsearch.h pipeline.c pipeline.h \
-	tempfile.c flock.h
+	linelength.h lower.c lower.h pathsearch.c pathsearch.h \
+	pipeline.c pipeline.h tempfile.c wordfnmatch.c wordfnmatch.h \
+	xregcomp.c xregcomp.h flock.h
 libman_a_LIBADD = $(LIBOBJS)
 all: all-am
 
@@ -696,9 +699,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-decompress.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-hashtable.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-linelength.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-lower.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-pathsearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-pipeline.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-tempfile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-wordfnmatch.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_a-xregcomp.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -798,6 +804,20 @@ libman_a-linelength.obj: linelength.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-linelength.obj `if test -f 'linelength.c'; then $(CYGPATH_W) 'linelength.c'; else $(CYGPATH_W) '$(srcdir)/linelength.c'; fi`
 
+libman_a-lower.o: lower.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-lower.o -MD -MP -MF $(DEPDIR)/libman_a-lower.Tpo -c -o libman_a-lower.o `test -f 'lower.c' || echo '$(srcdir)/'`lower.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-lower.Tpo $(DEPDIR)/libman_a-lower.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lower.c' object='libman_a-lower.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-lower.o `test -f 'lower.c' || echo '$(srcdir)/'`lower.c
+
+libman_a-lower.obj: lower.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-lower.obj -MD -MP -MF $(DEPDIR)/libman_a-lower.Tpo -c -o libman_a-lower.obj `if test -f 'lower.c'; then $(CYGPATH_W) 'lower.c'; else $(CYGPATH_W) '$(srcdir)/lower.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-lower.Tpo $(DEPDIR)/libman_a-lower.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lower.c' object='libman_a-lower.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-lower.obj `if test -f 'lower.c'; then $(CYGPATH_W) 'lower.c'; else $(CYGPATH_W) '$(srcdir)/lower.c'; fi`
+
 libman_a-pathsearch.o: pathsearch.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-pathsearch.o -MD -MP -MF $(DEPDIR)/libman_a-pathsearch.Tpo -c -o libman_a-pathsearch.o `test -f 'pathsearch.c' || echo '$(srcdir)/'`pathsearch.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-pathsearch.Tpo $(DEPDIR)/libman_a-pathsearch.Po
@@ -839,6 +859,34 @@ libman_a-tempfile.obj: tempfile.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tempfile.c' object='libman_a-tempfile.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-tempfile.obj `if test -f 'tempfile.c'; then $(CYGPATH_W) 'tempfile.c'; else $(CYGPATH_W) '$(srcdir)/tempfile.c'; fi`
+
+libman_a-wordfnmatch.o: wordfnmatch.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-wordfnmatch.o -MD -MP -MF $(DEPDIR)/libman_a-wordfnmatch.Tpo -c -o libman_a-wordfnmatch.o `test -f 'wordfnmatch.c' || echo '$(srcdir)/'`wordfnmatch.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-wordfnmatch.Tpo $(DEPDIR)/libman_a-wordfnmatch.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='wordfnmatch.c' object='libman_a-wordfnmatch.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-wordfnmatch.o `test -f 'wordfnmatch.c' || echo '$(srcdir)/'`wordfnmatch.c
+
+libman_a-wordfnmatch.obj: wordfnmatch.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-wordfnmatch.obj -MD -MP -MF $(DEPDIR)/libman_a-wordfnmatch.Tpo -c -o libman_a-wordfnmatch.obj `if test -f 'wordfnmatch.c'; then $(CYGPATH_W) 'wordfnmatch.c'; else $(CYGPATH_W) '$(srcdir)/wordfnmatch.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-wordfnmatch.Tpo $(DEPDIR)/libman_a-wordfnmatch.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='wordfnmatch.c' object='libman_a-wordfnmatch.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-wordfnmatch.obj `if test -f 'wordfnmatch.c'; then $(CYGPATH_W) 'wordfnmatch.c'; else $(CYGPATH_W) '$(srcdir)/wordfnmatch.c'; fi`
+
+libman_a-xregcomp.o: xregcomp.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xregcomp.o -MD -MP -MF $(DEPDIR)/libman_a-xregcomp.Tpo -c -o libman_a-xregcomp.o `test -f 'xregcomp.c' || echo '$(srcdir)/'`xregcomp.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xregcomp.Tpo $(DEPDIR)/libman_a-xregcomp.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xregcomp.c' object='libman_a-xregcomp.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xregcomp.o `test -f 'xregcomp.c' || echo '$(srcdir)/'`xregcomp.c
+
+libman_a-xregcomp.obj: xregcomp.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_a-xregcomp.obj -MD -MP -MF $(DEPDIR)/libman_a-xregcomp.Tpo -c -o libman_a-xregcomp.obj `if test -f 'xregcomp.c'; then $(CYGPATH_W) 'xregcomp.c'; else $(CYGPATH_W) '$(srcdir)/xregcomp.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libman_a-xregcomp.Tpo $(DEPDIR)/libman_a-xregcomp.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='xregcomp.c' object='libman_a-xregcomp.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_a-xregcomp.obj `if test -f 'xregcomp.c'; then $(CYGPATH_W) 'xregcomp.c'; else $(CYGPATH_W) '$(srcdir)/xregcomp.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

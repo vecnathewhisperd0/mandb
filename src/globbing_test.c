@@ -1,8 +1,8 @@
 /*
- * globbing.c: interface to the POSIX glob routines
+ * globbing_test.c: test program for file-finding functions
  *  
  * Copyright (C) 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2006, 2007 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -45,6 +45,8 @@ char *program_name;
 
 extern const char *extension;
 static int match_case = 0;
+static int regex_opt = 0;
+static int wildcard = 0;
 static char **remaining_args;
 
 const char *argp_program_version = "globbing " PACKAGE_VERSION;
@@ -58,6 +60,8 @@ static struct argp_option options[] = {
 	{ "extension",		'e',	N_("EXTENSION"),	0,	N_("limit search to extension type EXTENSION") },
 	{ "ignore-case",	'i',	0,			0,	N_("look for pages case-insensitively (default)") },
 	{ "match-case",		'I',	0,			0,	N_("look for pages case-sensitively") },
+	{ "regex",		'r',	0,			0,	N_("interpret page name as a regex") },
+	{ "wildcard",		'w',	0,			0,	N_("the page name contains wildcards") },
 	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
 	{ 0 }
 };
@@ -76,6 +80,12 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'I':
 			match_case = 1;
+			return 0;
+		case 'r':
+			regex_opt = 1;
+			return 0;
+		case 'w':
+			wildcard = 1;
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
@@ -114,7 +124,10 @@ int main (int argc, char **argv)
 		char **files;
 
 		files = look_for_file (remaining_args[0], remaining_args[1],
-				       remaining_args[2], i, match_case);
+				       remaining_args[2], i,
+				       (match_case ? LFF_MATCHCASE : 0) |
+				       (regex_opt ? LFF_REGEX : 0) |
+				       (wildcard ? LFF_WILDCARD : 0));
 		if (files)
 			while (*files)
 				printf ("%s\n", *files++);
