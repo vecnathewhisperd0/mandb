@@ -1,3 +1,47 @@
+man-db 2.5.4
+============
+
+Major changes since man-db 2.5.3:
+
+	Fixes:
+	------
+
+	o Build fixes for systems without GNU Make, and for systems without
+	  gettext; this successfully covers at least FreeBSD.
+
+	o The distclean target now works if po4a isn't installed.
+
+	o Exit as soon as possible if database writes return ENOSPC.
+
+	o lexgrog now stops on any unrecognised roff request, rather than
+	  continuing and often littering the database with garbage.
+
+	Improvements:
+	-------------
+
+	o The MAN_KEEP_STDERR environment variable can now be used to
+	  override man's default of discarding stderr when stdout is a
+	  terminal.
+
+	o Handling of terminal widths for cat pages is now configurable,
+	  using the MINCATWIDTH, MAXCATWIDTH, and CATWIDTH configuration
+	  file directives.
+
+	o 'man -a' now detects duplicate manual page candidates more
+	  reliably, and sorts them better.
+
+	o Belarusian, Estonian, Greek, Latvian, Lithuanian, Macedonian,
+	  Romanian, Slovenian, and Ukrainian pages are now supported.
+
+	o man can now search for pages using regular expressions (with
+	  --regex) or shell wildcards (with --wildcard). By default this
+	  searches both page names and descriptions, like apropos, but if
+	  the --names-only option is used then it searches page names only,
+	  like whatis.
+
+	o man can now tell nroff to disable hyphenation if the
+	  --no-hyphenation option is used.
+
 man-db 2.5.3 (17 November 2008)
 ===============================
 
