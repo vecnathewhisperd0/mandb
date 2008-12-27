@@ -34,4 +34,6 @@ update-po:
 
 clean-local:
 	$(PO4A) $(PO4A_ARGS) --rm-translations $(srcdir)/po4a.cfg
+
+dist-hook: update-po
 endif
