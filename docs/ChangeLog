@@ -1,3 +1,15 @@
+Sat Dec 27 00:00:01 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Add option to disable hyphenation (Debian bug #166701).
+
+	* src/man.c (options, parse_opt): Accept --no-hyphenation. Reset
+	  corresponding variable with -D.
+	  (disable_hyphenation): New function.
+	  (display): Append disable_hyphenation to the decompressor pipeline
+	  if --no-hyphenation is used.
+	* man/man1/man.man1 (SYNOPSIS, Controlling formatted output):
+	  Document --no-hyphenation.
+
 Thu Dec 25 22:09:01 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	Add regular expression and shell wildcard search facilities to man

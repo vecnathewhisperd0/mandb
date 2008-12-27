@@ -164,6 +164,7 @@ enum opts {
 	OPT_REGEX,
 	OPT_WILDCARD,
 	OPT_NAMES,
+	OPT_NO_HYPHENATION,
 	OPT_MAX
 };
 
@@ -220,6 +221,7 @@ static int wildcard;
 static int names_only;
 static int ult_flags = SO_LINK | SOFT_LINK | HARD_LINK;
 static const char *recode = NULL;
+static int no_hyphenation;
 
 static int ascii;		/* insert tr in the output pipe */
 static int save_cat; 		/* security breach? Can we save the cat? */
@@ -291,6 +293,8 @@ static struct argp_option options[] = {
 	{ "prompt",		'r',	N_("STRING"),	0,		N_("provide the `less' pager with a prompt") },
 	{ "ascii",		'7',	0,		0,		N_("display ASCII translation of certain latin1 chars"),	31 },
 	{ "encoding",		'E',	N_("ENCODING"),	0,		N_("use selected output encoding") },
+	{ "no-hyphenation",
+		 OPT_NO_HYPHENATION,	0,		0,		N_("turn off hyphenation") },
 	{ "preprocessor",	'p',	N_("STRING"),	0,		N_("STRING indicates which preprocessors to run:\n"
 									   "e - [n]eqn, p - pic, t - tbl,\n"
 									   "g - grap, r - refer, v - vgrind") },
@@ -334,7 +338,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				debug_level = troff =
 				print_where = print_where_cat =
 				ascii = match_case =
-				regex_opt = wildcard = names_only = 0;
+				regex_opt = wildcard = names_only =
+				no_hyphenation = 0;
 #ifdef TROFF_IS_GROFF
 			ditroff = 0;
 			gxditview = NULL;
@@ -447,6 +452,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			want_encoding = arg;
 			if (is_roff_device (want_encoding))
 				roff_device = want_encoding;
+			return 0;
+		case OPT_NO_HYPHENATION:
+			no_hyphenation = 1;
 			return 0;
 		case 'p':
 			preprocessors = arg;
@@ -2152,6 +2160,28 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 	free (tmpcat);
 }
 
+/* TODO: This function would be more efficient if the disabling sequence
+ * were simply written in sequence before starting the decompressor.
+ * However, that requires a new COMMAND_SEQUENCE type in the pipeline
+ * library. If that is ever needed for another reason, then this function
+ * should be rewritten using it.
+ */
+static void disable_hyphenation (void *data ATTRIBUTE_UNUSED)
+{
+	fputs (".nh\n"
+	       ".de hy\n"
+	       "..\n", stdout);
+
+	for (;;) {
+		char buffer[4096];
+		int r = read (STDIN_FILENO, buffer, 4096);
+		if (r <= 0)
+			break;
+		if (fwrite (buffer, 1, (size_t) r, stdout) < (size_t) r)
+			break;
+	}
+}
+
 /*
  * optionally chdir to dir, if necessary update cat_file from man_file
  * and display it.  if man_file is NULL cat_file is a stray cat.  If
@@ -2186,6 +2216,13 @@ static int display (const char *dir, const char *man_file,
 			decomp = decompress_open (man_file);
 		else
 			decomp = decompress_fdopen (dup (STDIN_FILENO));
+
+		if (no_hyphenation) {
+			command *hcmd = command_new_function (
+				"(echo .nh && echo .de hy && echo .. && cat)",
+				disable_hyphenation, NULL, NULL);
+			pipeline_command (decomp, hcmd);
+		}
 	}
 
 	if (decomp) {

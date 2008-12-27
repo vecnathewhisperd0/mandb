@@ -48,6 +48,7 @@
 .RB [\| \-7 \|]
 .RB [\| \-E
 .IR encoding \|]
+.RB [\| \-\-no\-hyphenation \|]
 .RB [\| \-p
 .IR string \|]
 .RB [\| \-t \|]
@@ -924,6 +925,24 @@ device such as
 .BR ascii ", " latin1 ", or " utf8
 as well as a true character encoding such as
 .BR UTF\-8 .
+.TP
+.B \-\-no\-hyphenation
+Normally,
+.B nroff
+will automatically hyphenate text at line breaks even in words that do not
+contain hyphens, if it is necessary to do so to lay out words on a line
+without excessive spacing.
+This option disables automatic hyphenation, so words will only be hyphenated
+if they already contain hyphens.
+
+If you are writing a manual page and simply want to prevent
+.B nroff
+from hyphenating a word at an inappropriate point, do not use this option,
+but consult the
+.B nroff
+documentation instead; for instance, you can put "\e%" inside a word to
+indicate that it may be hyphenated at that point, or put "\e%" at the start
+of a word to prevent it from being hyphenated.
 .TP
 .BI \-p\  string ,\ \-\-preprocessor= string
 Specify the sequence of preprocessors to run before
