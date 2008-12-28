@@ -606,8 +606,12 @@ unlzma = @unlzma@
 vgrind = @vgrind@
 POFILES = po/id.po po/pl.po po/ru.po
 EXTRA_DIST = po4a.cfg po/man-db-manpages.pot $(POFILES)
+
+# Always generate output files even if poorly translated, since Automake's
+# generated rules will get upset otherwise.
 @PO4A_TRUE@PO4A_ARGS = --variable srcdir=$(top_srcdir)/man \
-@PO4A_TRUE@	    --variable builddir=$(top_builddir)/man
+@PO4A_TRUE@	    --variable builddir=$(top_builddir)/man \
+@PO4A_TRUE@	    --keep 0
 
 all: all-am
 
