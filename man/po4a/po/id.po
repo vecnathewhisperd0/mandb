@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.5.3-pre1\n"
+"Project-Id-Version: man-db-manpages 2.5.4-pre1\n"
 "POT-Creation-Date: 2008-12-27 23:36+0000\n"
-"PO-Revision-Date: 2008-12-02 23:30+0700\n"
+"PO-Revision-Date: 2008-12-30 12:00+0700\n"
 "Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -826,7 +826,6 @@ msgstr "%man% - sebuah antar-muka ke referensi manual online"
 #.  The general command line
 #.  The apropos command line
 #: ../../man/man1/man.man1:65
-#, fuzzy
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -843,11 +842,12 @@ msgstr ""
 "warnings>\\|[\\|=I<peringatan>\\|]\\|] [\\|B<-R> I<pengkodean>\\|] [\\|B<-L> "
 "I<lokal>\\|] [\\|B<-m> I<sistem>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<jalur>"
 "\\|] [\\|B<-S> I<daftar>\\|] [\\|B<-e> I<ekstensi>\\|] [\\|B<-i>\\||\\|B<-I>"
-"\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<-P> I<pager>\\|] [\\|B<-r> I<prompt>"
-"\\|] [\\|B<-7>\\|] [\\|B<-E> I<pengkodean>\\|] [\\|B<-p> I<string>\\|] [\\|"
-"B<-t>\\|] [\\|B<-T>\\|[\\|I<perangkat>\\|]\\|] [\\|B<-H>\\|[\\|I<browser>\\|]"
-"\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<bagian>\\|] "
-"I<halaman>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
+"\\|] [\\|B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--names-only>\\|] [\\|B<-a>"
+"\\|] [\\|B<-u>\\|] [\\|B<-P> I<pager>\\|] [\\|B<-r> I<prompt>\\|] [\\|B<-7>"
+"\\|] [\\|B<-E> I<pengkodean>\\|] [\\|B<--no-hyphenation>\\|] [\\|B<-p> "
+"I<string>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|I<perangkat>\\|]\\|] [\\|B<-H>\\|"
+"[\\|I<browser>\\|]\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|"
+"I<bagian>\\|] I<halaman>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
 
 # type: Plain text
 #.  The whatis command line
@@ -1762,6 +1762,11 @@ msgid ""
 "(1).  Since there is usually no reasonable way to pick a \"best\" page when "
 "searching for a regular expression, this option implies B<-a>."
 msgstr ""
+"Tampilkan seluruh halaman dengan bagian apapun baik namanya atau "
+"deskripsinya yang cocok dengan setiap argumen I<halaman> sebagai sebuah "
+"ekspresi regular, sama seperti dengan B<apropos>(1). Karena disana biasanya "
+"tidak ada cara yang masuk akal untuk memilih sebuah halaman \"terbaik\" "
+"ketika mencari untuk sebuah ekspresi regular, opsi ini mengimplikasi B<-a>."
 
 # type: Plain text
 #: ../../man/man1/man.man1:738
@@ -1773,6 +1778,13 @@ msgid ""
 "there is usually no reasonable way to pick a \"best\" page when searching "
 "for a wildcard, this option implies B<-a>."
 msgstr ""
+"Tampilkan seluruh halaman dengan bagian apapun baik dari namanya atau "
+"deskripsinya yang cocok untuk setiap argumen I<halaman> menggunakan wildcard "
+"gaya shell, sama seperti B<apropos>(1) B<--wildcard>. Argumen I<halaman> "
+"harus cocok dengan seluruh nama dan deskripsi, atau cocok di batas kata "
+"dalam deskripsi. Karena disana biasanya tidak ada cara yang masuk akal untuk "
+"mengambil sebuah halaman \"terbaik\" ketika mencari untuk sebuah wildcard, "
+"opsi ini mengimplikasikan -B<-a>."
 
 # type: Plain text
 #: ../../man/man1/man.man1:747
@@ -1780,6 +1792,9 @@ msgid ""
 "If the B<--regex> or B<--wildcard> option is used, match only page names, "
 "not page descriptions, as with B<whatis>(1).  Otherwise, no effect."
 msgstr ""
+"Jika opsi B<--regex> atau B<--wildcard> digunakan, hanya cocok nama halaman, "
+"bukan deskripsi halaman, sama dengan B<whatis>(1). Jika tidak, tidak ada "
+"efek."
 
 # type: Plain text
 #: ../../man/man1/man.man1:755
@@ -2030,6 +2045,11 @@ msgid ""
 "hyphenation, so words will only be hyphenated if they already contain "
 "hyphens."
 msgstr ""
+"Secara normal, B<nroff> akan secara otomatis hyphenate teks di potongan "
+"baris baik dalam kata yang tidak berisi hyphen, jika tidak dibutuhkan jadi "
+"untuk meletakan kata disebuah baris tanpa ruang yang berlebihan. Opsi ini "
+"menonaktifkan otomatis hyphenation, jadi kata hanya dihyphenated jika mereka "
+"telah berisi hyphens."
 
 # type: Plain text
 #: ../../man/man1/man.man1:946
@@ -2040,6 +2060,12 @@ msgid ""
 "\" inside a word to indicate that it may be hyphenated at that point, or put "
 "\"\\e%\" at the start of a word to prevent it from being hyphenated."
 msgstr ""
+"Jika anda menulis sebuah halaman manual dan hanya ingin menjaga B<nroff> "
+"dari hyphenating sebuah kata di titik yang tidak sesuai, jangan gunakan opsi "
+"ini, tetapi lebih baik konsultasikan ke dokumentasi B<nroff>; sebagai "
+"contoh, anda dapat meletakan \"\\e%\" didalam sebuah kata untuk "
+"mengindikasikan bahwa itu mungkin dihyphenasi di titik itu, atau meletakan "
+"\"\\e%\" diawal dari sebuah kata untuk menjaga itu dari hyphenasi."
 
 # type: TP
 #: ../../man/man1/man.man1:946
@@ -2312,6 +2338,15 @@ msgid ""
 "some users want to see them anyway, so, if $B<MAN_KEEP_STDERR> is set to any "
 "non-empty value, error output will be displayed as usual."
 msgstr ""
+"Secara normal, ketika keluaran telah diarahkan ke sebuah terminal (biasanya "
+"sebuah pager), keluaran error apapun dari perintah digunakan untuk "
+"menghasilkan versi tercetak dari halaman manual diabaikan untuk menghindari "
+"interferensi dari penampilan pager. Aplikasi seperti B<groff> sering "
+"menghasilkan pesan error minor mengenai masalah typographical seperti "
+"kesalahan alignmen, yang tidak terlihat dan secara umum membingungkan ketika "
+"ditampilkan dengan halaman manual. Akan tetapi, beberapa pengguna tetap "
+"ingin melihat itu, jadi, jika $B<MAN_KEEP_STDERR> diset untuk nilai apapun "
+"yang tidak kosong, keluaran error akan ditampilkan seperti biasa."
 
 # type: Plain text
 #: ../../man/man1/man.man1:1208
@@ -2996,7 +3031,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:114
 #, no-wrap
 msgid "B<SECTION> I<section> .\\|.\\|."
-msgstr ""
+msgstr "B<SECTION> I<section> .\\|.\\|."
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:122
@@ -3005,6 +3040,9 @@ msgid ""
 "searched.  If there are no B<SECTION> directives in the configuration file, "
 "the default is:"
 msgstr ""
+"Baris dari formulir ini mendefinisikan order dimana bagian manual seharusnya "
+"dicari. Jika disana tidak ada arah B<SECTION> dalam berkas konfigurasi, yang "
+"baku adalah:"
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:132
@@ -3012,6 +3050,8 @@ msgid ""
 "If multiple B<SECTION> directives are given, their section lists will be "
 "concatenated."
 msgstr ""
+"Jika multiple B<SECTION> direktif diberikan, daftar aksi mereka akan "
+"dipotong."
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:139
@@ -3022,17 +3062,23 @@ msgid ""
 "particular order.  Sections with extensions should usually be adjacent to "
 "their main section (e.g. \"1 1mh 8 ...\")."
 msgstr ""
+"Jika sebuah ekstensi partikular tidak dalam daftar ini (contoh, 1mh) ini "
+"akan ditampilkan dengan sisa bagian ini berada. Efek dari ini yang anda "
+"butuhkan untuk secara eksplisit daftar ekstensi jika anda ingin memaksa "
+"urutan tertentu. Bagian dari ekstensi seharusnya biasanya berurutan ke "
+"bagian utamanya (contoh \"1 1mh 8 ...\")."
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:142
 msgid "B<SECTIONS> is accepted as an alternative name for this directive."
 msgstr ""
+"B<SECTIONS> diterima sebagai sebuah nama alternatif untuk direktif ini."
 
 # type: TP
 #: ../../man/man5/manpath.man5:143
 #, no-wrap
 msgid "B<MINCATWIDTH>I<width>"
-msgstr ""
+msgstr "B<MINCATWIDTH>I<width>"
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:149
@@ -3040,12 +3086,14 @@ msgid ""
 "If the terminal width is less than I<width>, cat pages will not be created "
 "(if missing) or displayed.  The default is 80."
 msgstr ""
+"Jika lebar terminal lebih kecil dari I<width>, halaman cat tidak akan dibuat "
+"(jika hilan) atau ditampilkan. Baku adalah 80."
 
 # type: TP
 #: ../../man/man5/manpath.man5:149
 #, no-wrap
 msgid "B<MAXCATWIDTH>I<width>"
-msgstr ""
+msgstr "B<MAXCATWIDTH>I<width>"
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:155
@@ -3053,12 +3101,14 @@ msgid ""
 "If the terminal width is greater than I<width>, cat pages will not be "
 "created (if missing) or displayed.  The default is 80."
 msgstr ""
+"Jika lebar terminal lebih besar dari I<width>, halaman cat tidak akan dibuat "
+"(jika hilang) atau ditampilkan. Baku adalah 80."
 
 # type: TP
 #: ../../man/man5/manpath.man5:155
 #, no-wrap
 msgid "B<CATWIDTH>I<width>"
-msgstr ""
+msgstr "B<CATWIDTH>I<width>"
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:165
@@ -3068,6 +3118,10 @@ msgid ""
 "used.  This should generally be within the range set by B<MINCATWIDTH> and "
 "B<MAXCATWIDTH>."
 msgstr ""
+"Jika I<width> bukan-nol, halaman manual akan selalu diformat untuk sebuah "
+"terminal dari lebar yang diberikan, tidak perduli lebar dari terminal yang "
+"sedang digunakan. Ini seharusnya secara umum berada didalam jangkauan diset "
+"oleh B<MINCATWIDTH> dan B<MAXCATWIDTH>."
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:170
@@ -3557,7 +3611,7 @@ msgstr ""
 # type: Plain text
 #: ../../man/man8/mandb.man8:194
 msgid "Older locations for the database cache included:"
-msgstr ""
+msgstr "Lokasi lebih lama untuk basis data cache dimasukan:"
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:215
