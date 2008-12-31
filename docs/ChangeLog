@@ -1,3 +1,14 @@
+Wed Dec 31 12:28:55 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Trust the database if it tells us that a page is ULT_MAN (i.e. not a
+	hard link, symbolic link, or .so link), and avoid passing the
+	SO_LINK flag to ult_src which requires it to open the page to look
+	for .so links. Produces roughly a threefold speed improvement for
+	searches with thousands of results.
+
+	* src/man.c (get_ult_flags): New function.
+	  (add_candidate, display_database): Use it.
+
 Wed Dec 31 11:51:41 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	Sort manual page candidates in one go just before displaying them,

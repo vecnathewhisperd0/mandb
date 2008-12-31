@@ -2528,6 +2528,23 @@ static char *find_cat_file (const char *path, const char *original,
 	return cat_file;
 }
 
+static int get_ult_flags (char from_db, char id)
+{
+	if (!from_db)
+		return ult_flags;
+	else if (id == ULT_MAN)
+		/* Checking .so links is expensive, as we have to open the
+		 * file. Therefore, if the database lists it as ULT_MAN,
+		 * that's good enough for us and we won't recheck that. This
+		 * does mean that if a page changes from ULT_MAN to SO_MAN
+		 * then you might get duplicates until mandb is next run,
+		 * but that isn't a big deal.
+		 */
+		return ult_flags & ~SO_LINK;
+	else
+		return ult_flags;
+}
+
 /* Is this candidate substantially a duplicate of a previous one?
  * Returns non-zero if so, otherwise zero.
  */
@@ -2776,7 +2793,8 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 			name = req_name;
 
 		filename = make_filename (path, name, source, cat ? "cat" : "man");
-		ult = ult_src (filename, path, NULL, ult_flags);
+		ult = ult_src (filename, path, NULL,
+			       get_ult_flags (from_db, source->id));
 		free (filename);
 	}
 
@@ -3068,7 +3086,7 @@ static int display_database (struct candidate *candp)
 			char *cat_file;
 
 			man_file = ult_src (file, candp->path, NULL,
-					    ult_flags);
+					    get_ult_flags (1, in->id));
 			if (man_file == NULL) {
 				free (title);
 				return found; /* zero */
