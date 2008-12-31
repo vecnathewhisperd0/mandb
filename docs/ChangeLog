@@ -1,3 +1,25 @@
+Wed Dec 31 11:51:41 GMT 2008  Colin Watson  <cjwatson@debian.org>
+
+	Sort manual page candidates in one go just before displaying them,
+	rather than insertion-sorting them along the way. Produces, very
+	roughly, a 25% speed improvement for searches with many results
+	(e.g. with --regex).
+
+	* src/man.c (duplicate_candidates, compare_candidates): Simplify
+	  interface by passing 'struct candidate' for both sides.
+	  (compare_candidates): Explicitly stabilise the comparison as a
+	  last resort, using a new add_index member.
+	  (compare_candidates_qsort, free_candidate): New functions.
+	  (add_candidate): Adjust calls to duplicate_candidates and
+	  compare_candidates, requiring us to create the candidate structure
+	  earlier. Note that the search produces quadratic-time behaviour.
+	  Only compare candidates in cases of duplicates; otherwise just add
+	  them to the end of the list and defer sorting until later. Use
+	  free_candidate to free search->ult as well as search when freeing
+	  superseded duplicates.
+	  (sort_candidates): New function.
+	  (man): Sort candidates before displaying them.
+
 Tue Dec 30 13:08:35 GMT 2008  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.5.4-pre2.
