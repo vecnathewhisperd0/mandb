@@ -1,15 +1,16 @@
-# translation of man-db-2.5.2-pre1.ru.po to Russian
+# translation of man-db-2.5.4-pre1.ru.po to Russian
 # This file is distributed under the same license as the man-db package.
-# Copyright (C) YEAR Colin Watson <cjwatson@debian.org>.
+# Copyright (C) 2009 Colin Watson <cjwatson@debian.org>.
 #
 # Yuri Kozlov <yuray@id.ru>, 2004, 2005.
+# Yuri Kozlov <yuray@komyakino.ru>, 2008.
 # Yuri Kozlov <kozlov.y@gmail.com>, 2007, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.5.2-pre1\n"
+"Project-Id-Version: man-db 2.5.4-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2008-12-30 13:03+0000\n"
-"PO-Revision-Date: 2008-03-11 21:20+0300\n"
+"POT-Creation-Date: 2008-12-27 23:11+0000\n"
+"PO-Revision-Date: 2008-12-30 02:23+0300\n"
 "Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
 "MIME-Version: 1.0\n"
@@ -197,7 +198,7 @@ msgstr "ПУТЬ"
 
 #: src/catman.c:100 src/man.c:277 src/whatis.c:126
 msgid "set search path for manual pages to PATH"
-msgstr "установить путь к страницам руководства в значение ПУТЬ"
+msgstr "установить путь поиска справочных страниц в значение ПУТЬ"
 
 #: src/catman.c:101 src/man.c:255 src/mandb.c:105 src/manpath.c:68
 #: src/whatis.c:128
@@ -350,14 +351,12 @@ msgid "look for pages case-sensitively"
 msgstr "учитывать регистр при поиске"
 
 #: src/globbing_test.c:63
-#, fuzzy
 msgid "interpret page name as a regex"
-msgstr "считать каждый ключ регулярным выражением"
+msgstr "считать имя страницы регулярным выражением"
 
 #: src/globbing_test.c:64
-#, fuzzy
 msgid "the page name contains wildcards"
-msgstr "ключ(и) содержит групповые символы"
+msgstr "имя страницы содержит групповые символы"
 
 #: src/lexgrog.l:510
 #, c-format
@@ -456,7 +455,7 @@ msgstr "вывести исходную страницу в КОДИРОВКЕ"
 
 #: src/man.c:274
 msgid "Finding manual pages:"
-msgstr "Поиск страниц руководства:"
+msgstr "Поиск справочных страниц:"
 
 #: src/man.c:275 src/whatis.c:127
 msgid "LOCALE"
@@ -472,7 +471,7 @@ msgstr "СИСТЕМА"
 
 #: src/man.c:276 src/manpath.c:69 src/whatis.c:125
 msgid "use manual pages from other systems"
-msgstr "использовать страницы руководства от других систем"
+msgstr "использовать справочные страницы от других систем"
 
 #: src/man.c:278
 msgid "LIST"
@@ -484,19 +483,20 @@ msgstr "использовать список секций, указанных �
 
 #: src/man.c:284
 msgid "show all pages matching regex"
-msgstr ""
+msgstr "показать все страницы, удовлетворяющие регулярному выражению"
 
 #: src/man.c:285
 msgid "show all pages matching wildcard"
-msgstr ""
+msgstr "показать все страницы, удовлетворяющие групповым символам"
 
 #: src/man.c:286
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
+"искать совпадение --regex и --wildcard только в именах страниц, без описаний"
 
 #: src/man.c:288
 msgid "find all matching manual pages"
-msgstr "поиск всех подходящих страниц руководства"
+msgstr "поиск всех подходящих справочных страниц"
 
 #: src/man.c:289
 msgid "force a cache consistency check"
@@ -528,7 +528,7 @@ msgstr "показать трансляцию ASCII определённых с�
 
 #: src/man.c:297
 msgid "turn off hyphenation"
-msgstr ""
+msgstr "выключить перенос слов"
 
 #: src/man.c:298
 msgid ""
@@ -582,26 +582,26 @@ msgstr "использовать groff и заставить его генери
 #: src/man.c:572 src/man.c:661
 #, c-format
 msgid "No manual entry for %s\n"
-msgstr "Нет справочного руководства для %s\n"
+msgstr "Нет справочной страницы для %s\n"
 
 #: src/man.c:574
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
-msgstr "(Или же, какая страница руководства вам нужна из раздела %s?)\n"
+msgstr "(Или же, какая именно из справочных страниц раздела %s вам нужна?)\n"
 
 #: src/man.c:578
 msgid "What manual page do you want?\n"
-msgstr "Какая страница руководства вам нужна?\n"
+msgstr "Какая справочная страница вам нужна?\n"
 
 #: src/man.c:658
 #, c-format
 msgid "No manual entry for %s in section %s\n"
-msgstr "Нет справочного руководства для %s в разделе %s\n"
+msgstr "Нет справочной страницы для %s в разделе %s\n"
 
 #: src/man.c:666
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
-msgstr "Смотрите '%s' в помощи, если недоступны страницы руководства.\n"
+msgstr "Смотрите '%s' в справке, если недоступны справочные страницы.\n"
 
 #: src/man.c:828 src/man.c:2208
 #, c-format
@@ -610,7 +610,7 @@ msgstr "не удалось выполнить функцию chdir в %s"
 
 #: src/man.c:1015
 msgid " Manual page "
-msgstr " Страница руководства "
+msgstr " Справочная страница "
 
 #: src/man.c:1078 src/man.c:3131
 #, c-format
@@ -762,7 +762,7 @@ msgstr "создать dbs с нуля, а не обновлять"
 
 #: src/mandb.c:103
 msgid "check manual pages for correctness"
-msgstr "проверить страницы руководства на правильность"
+msgstr "проверить справочные страницы на правильность"
 
 #: src/mandb.c:104
 msgid "FILENAME"
@@ -790,7 +790,7 @@ msgstr "не удалось прочитать из %s"
 #: src/mandb.c:423
 #, c-format
 msgid "Processing manual pages under %s...\n"
-msgstr "Обработка страниц руководства в %s...\n"
+msgstr "Обработка справочных страниц в %s...\n"
 
 #: src/mandb.c:614 src/security.c:136
 #, c-format
@@ -808,8 +808,8 @@ msgid ""
 "%d man subdirectories contained newer manual pages.\n"
 "%d manual pages were added.\n"
 msgstr ""
-"%d man подкаталоги содержат более новые страницы руководства.\n"
-"%d страниц руководства добавлено.\n"
+"%d man подкаталоги содержат более новые справочные страницы.\n"
+"%d справочных страниц добавлено.\n"
 
 #: src/mandb.c:711
 #, c-format
