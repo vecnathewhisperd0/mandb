@@ -59,6 +59,7 @@
 
 #include "canonicalize.h"
 #include "xgetcwd.h"
+#include "xvasprintf.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -890,7 +891,8 @@ static char *def_path (int flag)
  * directories listed in the man_db.config file.  If so, and it is
  * not already in the manpath, add it.  If the directory is not listed
  * in the man_db.config file, see if there is a subdirectory `../man' or
- * `man'.  If so, and it is not already in the manpath, add it.
+ * `man', or, for FHS-compliance, `../share/man' or `share/man'.  If so,
+ * and it is not already in the manpath, add it.
  * Example:  user has $HOME/bin in his path and the directory
  * $HOME/man exists -- the directory $HOME/man will be added
  * to the manpath.
@@ -945,13 +947,15 @@ static inline char *get_manpath_from_path (const char *path)
 
 		 	t = has_mandir (p);
 		 	if (t) {
-				debug ("but does have a ../man or man "
+				debug ("but does have a ../man, man, "
+				       "../share/man, or share/man "
 				       "subdirectory\n");
 	
 				add_dir_to_list (tmplist, t);
 				free (t);
 		 	} else
-				debug ("and doesn't have ../man or man "
+				debug ("and doesn't have ../man, man, "
+				       "../share/man, or share/man "
 				       "subdirectories\n");
 		}
 	}
@@ -1026,34 +1030,41 @@ static void add_dir_to_list (char **lp, const char *dir)
 	}
 }
 
-/* path does not exist in config file: check to see if path/../man or 
-   path/man exist.  If so return it, if not return NULL. */
+/* path does not exist in config file: check to see if path/../man,
+   path/man, path/../share/man, or path/share/man exist.  If so return
+   it, if not return NULL. */
 static inline char *has_mandir (const char *path)
 {
-	char *newpath = NULL;
+	char *newpath;
 
 	/* don't assume anything about path, especially that it ends in 
 	   "bin" or even has a '/' in it! */
 	   
 	char *subdir = strrchr (path, '/');
 	if (subdir) {
-		const int prefix_len = subdir + 1 - path;
-		newpath = xmalloc (prefix_len + sizeof ("man") + 1);
-		strncpy (newpath, path, prefix_len);
-		strcpy (newpath + prefix_len, "man");
-
+		newpath = xasprintf ("%.*s/man", subdir - path, path);
 		if (is_directory (newpath) == 1)
 			return newpath;
-		else
-			*newpath = '\0';
+		free (newpath);
 	}
 
-	newpath = appendstr (newpath, path, "/man", NULL);
-
+	newpath = appendstr (NULL, path, "/man", NULL);
 	if (is_directory (newpath) == 1)
 		return newpath;
-
 	free (newpath);
+
+	if (subdir) {
+		newpath = xasprintf ("%.*s/share/man", subdir - path, path);
+		if (is_directory (newpath) == 1)
+			return newpath;
+		free (newpath);
+	}
+
+	newpath = appendstr (NULL, path, "/share/man", NULL);
+	if (is_directory (newpath) == 1)
+		return newpath;
+	free (newpath);
+
 	return NULL;
 }
 

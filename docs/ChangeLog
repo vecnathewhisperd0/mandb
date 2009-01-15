@@ -1,3 +1,16 @@
+Thu Jan 15 00:00:05 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	Update manual page search order to permit FHS-compliant installation
+	of packages in /opt. Reported by Matt Domsch.
+
+	* src/manp.c (has_mandir): Use xasprintf rather than clumsier
+	  xmalloc/strncpy/strcpy combination. Try ../share/man and share/man
+	  subdirectories too.
+	  (get_manpath_from_path): Update header comment and debug output.
+	* manual/files.me (Determination of the internal manpath): Update
+	  description of directory search order.
+	* docs/NEWS: Document this.
+
 Mon Jan  5 17:47:55 GMT 2009  Yuri Kozlov  <kozlov.y@gmail.com>
 
 	* po/ru.po, man/po4a/po/ru.po: Update from Translation Project.
