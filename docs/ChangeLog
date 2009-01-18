@@ -1,3 +1,9 @@
+Sun Jan 18 23:27:11 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* lib/linelength.c (get_line_length): Line length is a property of
+	  output, not input, so only check whether standard output is a
+	  terminal, not also standard input (Debian bug #512233).
+
 Thu Jan 15 16:04:01 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* po/Makevars (XGETTEXT_OPTIONS): Add --flag=debug:1:c-format
