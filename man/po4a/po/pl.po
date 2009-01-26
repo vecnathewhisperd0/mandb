@@ -8,9 +8,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.5.3-pre1\n"
-"POT-Creation-Date: 2008-12-30 12:53+0000\n"
-"PO-Revision-Date: 2008-11-09 11:14+0100\n"
+"Project-Id-Version: man-db-manpages 2.5.4-pre1\n"
+"POT-Creation-Date: 2008-12-27 23:36+0000\n"
+"PO-Revision-Date: 2009-01-17 18:20+0100\n"
 "Last-Translator: Robert Luberda <robert@debian.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -851,7 +851,6 @@ msgstr "%man% - interfejs stron podręcznika ekranowego"
 #.  The general command line
 #.  The apropos command line
 #: ../../man/man1/man.man1:65
-#, fuzzy
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -864,16 +863,17 @@ msgid ""
 "\\|]\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<section>\\|] "
 "I<page>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
 msgstr ""
-"B<%man%> [\\|B<-C> I<plik>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
+"B<%man%> [\\|B<-C> I<plik>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings> "
 "\\|[\\|=I<ostrzeżenia>\\|]\\|] [\\|B<-R> I<kodowanie_znaków>\\|] [\\|B<-L> "
-"I<ustawienia_językowe>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|"
-"B<-M> I<ścieżka>\\|] [\\|B<-S> I<lista>\\|] [\\|B<-e> I<rozszerzenie>\\|] "
-"[\\|B<-i>\\||\\|B<-I>\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<-P> I<pager>\\|] "
-"[\\|B<-r> I<linia_zachęty>\\|] [\\|B<-7>\\|] [\\|B<-E> I<kodowanie_znaków>"
-"\\|] [\\|B<-p> I<łańcuch_znaków>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|"
-"I<urządzenie>\\|]\\|] [\\|B<-H>\\|[\\|I<przeglądarka>\\|]\\|] [\\|B<-X>\\|"
-"[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<sekcja>\\|] I<strona>\\ .\\|.\\|."
-"\\|]\\ .\\|.\\|."
+"I<ustawienia_językowe> \\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|"
+"B<-M> I<ścieżka>\\|] [\\| B<-S> I<lista>\\|] [\\|B<-e> I<rozszerzenie>\\|] "
+"[\\|B<-i>\\||\\|B<-I>\\|] [\\| B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--"
+"names-only>\\|] [\\|B<-a>\\|] [\\| B<-u>\\|] [\\|B<-P> I<pager>\\|] [\\|B<-"
+"r> I<linia_zachęty>\\|] [\\|B<-7>\\|] [\\| B<-E> I<kodowanie_znaków> \\|] "
+"[\\|B<--no-hyphenation>\\|] [\\|B<-p> I<łańcuch_znaków>\\|]  [\\|B<-t>\\|] "
+"[\\|B<-T>\\|[\\|I<urządzenie>\\|]\\|] [\\|B<-H>\\|[\\|I<przeglądarka> \\|]"
+"\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<sekcja>\\|]  "
+"I<strona>\\ .\\|.\\|.\\|]\\ .\\|.\\|. "
 
 # type: Plain text
 #
@@ -1806,6 +1806,11 @@ msgid ""
 "(1).  Since there is usually no reasonable way to pick a \"best\" page when "
 "searching for a regular expression, this option implies B<-a>."
 msgstr ""
+"Wyświetla wszystkie strony, których jakakolwiek część nazwy lub opisu pasuje "
+"- jako wyrażenie regularne - do każdego podanego argumentu I<strona>, tak "
+"jak to robi B<apropos>(1). Ponieważ podczas wyszukiwania za pomocą wyrażeń "
+"regularnych zazwyczaj nie ma rozsądnego sposobu wydobycia\"najlepszej\" "
+"strony, opcja ta włącza B<-a>."
 
 # type: Plain text
 #: ../../man/man1/man.man1:738
@@ -1817,6 +1822,12 @@ msgid ""
 "there is usually no reasonable way to pick a \"best\" page when searching "
 "for a wildcard, this option implies B<-a>."
 msgstr ""
+"Wyświetla wszystkie strony, których jakakolwiek część nazwy lub opisu pasuje "
+"- jako wyrażenie zawierające  znaki dopasowania w stylu powłoki - do każdego "
+"podanego argumentu I<strona>, tak jak to robi B<apropos>(1) B<--wildcard>. "
+"Argument I<strona> musi pasować albo do całej nazwy lub całego opisu, albo "
+"do poszczególnych słów opisu. Ponieważ podczas wyszukiwania zazwyczaj nie ma "
+"rozsądnego sposobu wydobycia\"najlepszej\" strony, opcja ta włącza B<-a>."
 
 # type: Plain text
 #: ../../man/man1/man.man1:747
@@ -1824,6 +1835,9 @@ msgid ""
 "If the B<--regex> or B<--wildcard> option is used, match only page names, "
 "not page descriptions, as with B<whatis>(1).  Otherwise, no effect."
 msgstr ""
+"Jeżeli użyto opcji B<--regex> lub B<--wildcard>, dopasowywane będą tylko "
+"nazwy stron, bez opisów stron, tak jak to robi B<whatis>(1). W przeciwnym "
+"razie opcja ta nic nie robi."
 
 # type: Plain text
 #: ../../man/man1/man.man1:755
@@ -2081,6 +2095,11 @@ msgid ""
 "hyphenation, so words will only be hyphenated if they already contain "
 "hyphens."
 msgstr ""
+"Zazwyczaj B<nroff> automatycznie dzieli wyrazy przy przenoszeniu, jeśli jest "
+"to konieczne, aby wyrównać linię, tak żeby nie zawierała za dużo spacji, i "
+"robi to nawet wtedy, gdy wyrazy te nie zawierają znaków łącznika. Ta opcja "
+"wyłącza automatyczne dzielenie wyrazów, tak że słowa będą dzielone tylko, "
+"gdy zawierają łączniki."
 
 # type: Plain text
 #: ../../man/man1/man.man1:946
@@ -2091,6 +2110,12 @@ msgid ""
 "\" inside a word to indicate that it may be hyphenated at that point, or put "
 "\"\\e%\" at the start of a word to prevent it from being hyphenated."
 msgstr ""
+"Jeśli piszesz stronę podręcznika ekranowego, to aby powstrzymać B<nroff> "
+"przed przenoszeniem wyrazów do nowej linii w nieodpowiednim miejscu, należy "
+"zapoznać się z dokumentacją programu B<nroff>, zamiast używać tej opcji; na "
+"przykład można w słowie umieścić sekwencję \"\\e%\" wskazującą miejsce, w "
+"którym słowo może być podzielone przy przenoszeniu, albo umieścić \"\\e%\" "
+"na początku słowa, co zabroni jego dzielenia."
 
 # type: TP
 #: ../../man/man1/man.man1:946
@@ -2141,7 +2166,7 @@ msgid ""
 msgstr ""
 "Za pomocą tej opcji można zmienić wyjście programu B<groff> (lub być może "
 "B<troff>), tak aby było odpowiednie dla innego urządzenia niż domyślne. "
-"Włącza opcję B<-t>. Przykłady (dostarczane przez Groff-1.17) zawierają "
+"Włącza opcję B<-t>. Przykłady (dostarczane przez groff-1.17) zawierają "
 "B<dvi>, B<latin1>, B<ps>, B<utf8>, B<X75> oraz B<X100>."
 
 # type: TP
@@ -2363,6 +2388,7 @@ msgstr ""
 "potrafią zinterpretować znaki kontrolne."
 
 # type: Plain text
+# FIXME
 #: ../../man/man1/man.man1:1196
 msgid ""
 "Normally, when output is being directed to a terminal (usually to a pager), "
@@ -2374,6 +2400,16 @@ msgid ""
 "some users want to see them anyway, so, if $B<MAN_KEEP_STDERR> is set to any "
 "non-empty value, error output will be displayed as usual."
 msgstr ""
+"Zazwyczaj, jeśli wyjście jest skierowane na terminal (zazwyczaj do programu "
+"do stronicowania), to ignorowane są wszystkie komunikaty błędów generowane "
+"przez programy używane to sformatowania strony podręcznika, tak aby nie "
+"zakłócić wyjścia programu do stronicowania. Programy, takie jak B<groff> "
+"często tworzą komunikaty o relatywnie mało istotnych błędach typograficznych "
+"(dotyczących na przykład złego wyrównania) - wyświetlanie ich razem ze "
+"stroną podręcznika byłoby szpecące i mylące. Jednakżę niektórzy użytkownicy "
+"chcieliby zobaczyć te błędy, więc jeżeli ustawi się zmienną "
+"$B<MAN_KEEP_STDERR> na dowolną niepustą wartość, to wyjście błędów będzie "
+"normalnie wyświetlane."
 
 # type: Plain text
 #: ../../man/man1/man.man1:1208
@@ -3108,7 +3144,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:114
 #, no-wrap
 msgid "B<SECTION> I<section> .\\|.\\|."
-msgstr ""
+msgstr "B<SECTION> I<sekcja> .\\|.\\|."
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:122
@@ -3117,6 +3153,9 @@ msgid ""
 "searched.  If there are no B<SECTION> directives in the configuration file, "
 "the default is:"
 msgstr ""
+"Linie w tej postaci określają porządek przeszukiwania sekcji podręcznika "
+"ekranowego. Jeżeli plik konfiguracyjny nie zawiera żadnej dyrektywy "
+"B<SECTION>, to domyślny porządek przeszukiwania sekcji jest następujący:"
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:132
@@ -3124,6 +3163,7 @@ msgid ""
 "If multiple B<SECTION> directives are given, their section lists will be "
 "concatenated."
 msgstr ""
+"Jeśli podano wiele dyrektyw B<SECTION>, podane w nich sekcje będą połączone."
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:139
@@ -3134,17 +3174,22 @@ msgid ""
 "particular order.  Sections with extensions should usually be adjacent to "
 "their main section (e.g. \"1 1mh 8 ...\")."
 msgstr ""
+"Jeśli pewne rozszerzenie (na przykład 1mh) nie występuje w liście sekcji, to "
+"będzie wyświetlane z pozostałą częścią  sekcji, do której należy. Tak więc "
+"nie ma potrzeby wymieniać wszystkich sekcji w pliku konfiguracyjnym, aby "
+"wymusić określony porządek przeszukiwania sekcji. Sekcje z rozszerzeniami "
+"będą występować po głównej sekcji (np. \"1 1mh 8...\")."
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:142
 msgid "B<SECTIONS> is accepted as an alternative name for this directive."
-msgstr ""
+msgstr "Można użyć słowa B<SECTIONS> jako alternatywnej nazwy tej dyrektywy."
 
 # type: TP
 #: ../../man/man5/manpath.man5:143
 #, no-wrap
 msgid "B<MINCATWIDTH>I<\\ width>"
-msgstr ""
+msgstr "B<MINCATWIDTH>I<\\ szerokość>"
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:149
@@ -3152,12 +3197,15 @@ msgid ""
 "If the terminal width is less than I<width>, cat pages will not be created "
 "(if missing) or displayed.  The default is 80."
 msgstr ""
+"Jeżeli szerokość terminalu jest mniejsza niż I<szerokość>, to preformatowane "
+"strony podręcznika nie będą ani tworzone (jeśli ich nie ma), ani "
+"wyświetlane. Domyślną wartością jest 80."
 
 # type: TP
 #: ../../man/man5/manpath.man5:149
 #, no-wrap
 msgid "B<MAXCATWIDTH>I<\\ width>"
-msgstr ""
+msgstr "B<MAXCATWIDTH>I<\\ szerokość>"
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:155
@@ -3165,12 +3213,15 @@ msgid ""
 "If the terminal width is greater than I<width>, cat pages will not be "
 "created (if missing) or displayed.  The default is 80."
 msgstr ""
+"Jeżeli szerokość terminalu jest większa niż I<szerokość>, to preformatowane "
+"strony podręcznika nie będą ani tworzone (jeśli ich nie ma), ani "
+"wyświetlane. Domyślną wartością jest 80."
 
 # type: TP
 #: ../../man/man5/manpath.man5:155
 #, no-wrap
 msgid "B<CATWIDTH>I<\\ width>"
-msgstr ""
+msgstr "B<CATWIDTH>I<\\ szerokość>"
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:165
@@ -3180,6 +3231,10 @@ msgid ""
 "used.  This should generally be within the range set by B<MINCATWIDTH> and "
 "B<MAXCATWIDTH>."
 msgstr ""
+"Jeżeli I<szerokość> jest większa od zera, to zawsze będą tworzone "
+"preformatowane strony podręcznika dla terminalu o podanej szerokości, "
+"niezależnie od szerokości obecnie używanego terminalu. Wartość tego "
+"ustawienia powinna być w zakresie od B<MINCATWIDTH> do B<MAXCATWIDTH>."
 
 # type: Plain text
 #: ../../man/man5/manpath.man5:170
@@ -3706,7 +3761,7 @@ msgstr ""
 # type: Plain text
 #: ../../man/man8/mandb.man8:194
 msgid "Older locations for the database cache included:"
-msgstr ""
+msgstr "Poprzednie lokalizacje bufora bazy danych obejmowały między innymi:"
 
 # type: Plain text
 #
