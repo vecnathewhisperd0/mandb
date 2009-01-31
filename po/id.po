@@ -1,14 +1,14 @@
 # Pesan bahasa indonesia untuk man-db
 # Copyright (C) 2008 Colin Watson (msgids)
 # This file is distributed under the same license as the man-db package.
-# Arif E. Nugroho <arif_endro@yahoo.com>, 2008.
+# Arif E. Nugroho <arif_endro@yahoo.com>, 2008, 2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.5.4-pre1\n"
+"Project-Id-Version: man-db 2.5.4-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2008-12-30 13:03+0000\n"
-"PO-Revision-Date: 2008-12-30 12:00+0700\n"
+"PO-Revision-Date: 2009-01-31 16:40+0700\n"
 "Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,7 @@ msgstr "dup2 gagal"
 #: lib/pipeline.c:932 lib/pipeline.c:936
 #, c-format
 msgid "close failed"
-msgstr "tutup gagal"
+msgstr "gagal menutup"
 
 #: lib/pipeline.c:926
 #, c-format
@@ -66,27 +66,27 @@ msgstr "tidak dapat menjalankan %s"
 #: lib/pipeline.c:1028
 #, c-format
 msgid "closing pipeline input stream failed"
-msgstr "menutup baris pipa masukan stream gagal"
+msgstr "penutupan baris pipa masukan stream gagal"
 
 #: lib/pipeline.c:1033 lib/pipeline.c:1301
 #, c-format
 msgid "closing pipeline input failed"
-msgstr "menutup baris pipa masukan gagal"
+msgstr "penutupan baris pipa masukan gagal"
 
 #: lib/pipeline.c:1040
 #, c-format
 msgid "closing pipeline output stream failed"
-msgstr "menutup baris pipa keluaran stream gagal"
+msgstr "penutupan baris pipa keluaran stream gagal"
 
 #: lib/pipeline.c:1047 lib/pipeline.c:1326
 #, c-format
 msgid "closing pipeline output failed"
-msgstr "menutup baris pipa keluaran gagal"
+msgstr "penutupan baris pipa keluaran gagal"
 
 #: lib/pipeline.c:1095
 #, c-format
 msgid "%s: %s (core dumped)"
-msgstr "%s:  %s (core dumped)"
+msgstr "%s:  %s (core didump)"
 
 #: lib/pipeline.c:1100
 #, c-format
@@ -121,7 +121,7 @@ msgstr "tidak dapat mengunci cache indeks %s"
 #: libdb/db_lookup.c:78
 #, c-format
 msgid "index cache %s corrupt"
-msgstr "cache indeks %s korup"
+msgstr "cache indeks %s tidak lengkap"
 
 #: libdb/db_lookup.c:84
 #, c-format
@@ -131,7 +131,7 @@ msgstr "tidak dapat menggantikan kunci %s"
 #: libdb/db_lookup.c:181 libdb/db_lookup.c:191
 #, c-format
 msgid "only %d fields in content"
-msgstr "hanya %d field dalam isi"
+msgstr "hanya bagian %d dalam isi"
 
 #: libdb/db_lookup.c:371
 #, c-format
@@ -146,7 +146,7 @@ msgstr "Basis data %s terkorupsi; membuat kembali dengan mandb --create"
 #: libdb/db_store.c:48
 #, c-format
 msgid "cannot insert unused key %s"
-msgstr "tidak dapat memasukan kunci tidak digunakan %s"
+msgstr "tidak dapat memasukan kunci yang tidak digunakan %s"
 
 #: libdb/db_ver.c:53
 #, c-format
@@ -156,7 +156,7 @@ msgstr "peringatan: %s tidak memiliki pengidentifikasi versi\n"
 #: libdb/db_ver.c:56
 #, c-format
 msgid "warning: %s is version %s, expecting %s\n"
-msgstr "perintagan: %s  memiliki versi %s, diduga %s\n"
+msgstr "peringatan: %s  memiliki versi %s, diduga %s\n"
 
 #: libdb/db_ver.c:78
 #, c-format
@@ -237,7 +237,7 @@ msgid ""
 "Updating cat files for section %s of man hierarchy %s\n"
 msgstr ""
 "\n"
-"Mengupdate berkas cat untuk bagian %s dari struktur man %s\n"
+"Memperbarui berkas cat untuk bagian %s dari struktur man %s\n"
 
 #: src/catman.c:399
 #, c-format
@@ -283,7 +283,7 @@ msgstr "tidak dapat mencari direktori %s"
 #: src/check_mandirs.c:385
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
-msgstr "Mengupdate indeks cache untuk jalur `%s/%s'. Tunggu..."
+msgstr "Mengupdate indeks cache untuk jalur `%s/%s'. Mohon tunggu..."
 
 #: src/check_mandirs.c:488
 #, c-format
@@ -429,11 +429,11 @@ msgstr "sama dengan apropos"
 
 #: src/man.c:266
 msgid "print physical location of man page(s)"
-msgstr "tampilkan lokasi pisik dari halaman man"
+msgstr "tampilkan lokasi aktual dari halaman man"
 
 #: src/man.c:268
 msgid "print physical location of cat file(s)"
-msgstr "tampilkan lokasi pisik dari halaman cat"
+msgstr "tampilkan lokasi aktual dari halaman cat"
 
 #: src/man.c:270
 msgid "interpret PAGE argument(s) as local filename(s)"
@@ -616,7 +616,7 @@ msgstr "perintah mandb gagal dengan status keluar %d"
 #: src/man.c:1537
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
-msgstr "mengabaikan preprosesor `%c' tidak dikenal"
+msgstr "mengabaikan preprosesor tidak dikenal `%c'"
 
 #: src/man.c:1816 src/mandb.c:299
 #, c-format
@@ -755,7 +755,7 @@ msgstr "hanya menghasilkan basis data pengguna"
 
 #: src/mandb.c:102
 msgid "create dbs from scratch, rather than updating"
-msgstr "membuat basis data dari serpihan, daripada mengupdatenya"
+msgstr "membuat basis data dari serpihan, daripada memperbaruinya"
 
 #: src/mandb.c:103
 msgid "check manual pages for correctness"
@@ -1018,7 +1018,7 @@ msgstr "%s: tidak ada yang sesuai.\n"
 #: src/wrapper.c:99
 #, c-format
 msgid "Don't know which program should I run being >%s<\n"
-msgstr "Tidak tahui aplikasi mana yang harus saya jalankan sebagai >%s<\n"
+msgstr "Tidak tahu aplikasi mana yang harus saya jalankan sebagai >%s<\n"
 
 #: src/wrapper.c:117 src/wrapper.c:122 src/wrapper.c:127 src/wrapper.c:132
 #, c-format
