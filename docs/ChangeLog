@@ -1,3 +1,10 @@
+Sun Feb  1 16:36:01 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* lib/linelength.c (get_line_length): Use line length from standard
+	  input, but only if standard output is not a terminal; this allows
+	  commands such as 'MAN_KEEP_STDERR=1 man foo >/dev/null' to report
+	  errors based on the current line length.
+
 Sat Jan 31 12:20:42 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Update.

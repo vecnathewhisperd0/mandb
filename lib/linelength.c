@@ -41,6 +41,9 @@ int get_line_length (void)
 {
 	const char *columns;
 	int width;
+#ifdef TIOCGWINSZ
+	int stdin_tty, stdout_tty;
+#endif
 
 	if (line_length != -1)
 		return line_length;
@@ -55,11 +58,21 @@ int get_line_length (void)
 	}
 
 #ifdef TIOCGWINSZ
-	/* Jon Tombs */
-	if (isatty (STDOUT_FILENO)) {
+	/* Original TIOCGWINSZ approach was from Jon Tombs.
+	 * We don't require both stdin and stdout to be a tty, and line
+	 * length is primarily a property of output. However, if it happens
+	 * that stdin is connected to a terminal but stdout isn't, then that
+	 * may well be because the user is trying something like
+	 * 'MAN_KEEP_STDERR=1 man foo >/dev/null' to see just the error
+	 * messages, so use the window size from stdin as a fallback.
+	 */
+	stdin_tty = isatty (STDIN_FILENO);
+	stdout_tty = isatty (STDOUT_FILENO);
+	if (stdin_tty || stdout_tty) {
 		struct winsize wsz;
 
-		if (ioctl (STDOUT_FILENO, TIOCGWINSZ, &wsz))
+		if (ioctl (stdout_tty ? STDOUT_FILENO : STDIN_FILENO,
+			   TIOCGWINSZ, &wsz))
 			perror ("TIOCGWINSZ failed");
 		else if (wsz.ws_col)
 			return line_length = wsz.ws_col;
