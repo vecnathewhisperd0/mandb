@@ -169,7 +169,7 @@ int main (int argc, char *argv[])
 	if (filename) {
 		p = decompress_open (filename);
 		if (!p)
-			error (FAIL, 0, _("can't open %s"), argv[optind]);
+			error (FAIL, 0, _("can't open %s"), filename);
 	} else
 		p = decompress_fdopen (dup (STDIN_FILENO));
 	pipeline_start (p);
