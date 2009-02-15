@@ -1,3 +1,11 @@
+Sun Feb 15 23:48:51 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (compare_candidates): Remove obsolete first-pass
+	  language code comparison. Language codes are already handled by
+	  later code here, and this comparison caused English pages to be
+	  preferred over pages for languages whose names sort later than
+	  "man".
+
 Thu Feb 12 11:23:19 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/manconv_main.c (main): Correct error message if the given

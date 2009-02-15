@@ -2628,11 +2628,7 @@ static int compare_candidates (const struct candidate *left,
 		unpack_locale_bits (++slash1, &bits1);
 		unpack_locale_bits (++slash2, &bits2);
 
-		cmp = strcmp (bits1.language, bits2.language);
-		if (cmp)
-			goto out;
-
-		/* From here on in we need the current locale as well. */
+		/* We need the current locale as well. */
 		locale_copy = xstrdup (internal_locale);
 		p = strchr (locale_copy, ':');
 		if (p)
@@ -2648,19 +2644,19 @@ static int compare_candidates (const struct candidate *left,
 		if (STREQ (lbits.elt, bits1.elt)) { \
 			if (!STREQ (lbits.elt, bits2.elt)) { \
 				cmp = -1; \
-				goto out_locale; \
+				goto out; \
 			} \
 		} else { \
 			if (STREQ (lbits.elt, bits2.elt)) { \
 				cmp = 1; \
-				goto out_locale; \
+				goto out; \
 			} \
 		} \
 	} \
 	cmp = strcmp (bits1.territory, bits2.territory); \
 	if (cmp) \
 		/* No help from locale; might as well sort lexically. */ \
-		goto out_locale; \
+		goto out; \
 } while (0)
 
 		COMPARE_LOCALE_ELEMENTS (language);
@@ -2677,18 +2673,17 @@ static int compare_candidates (const struct candidate *left,
 		if (STREQ (codeset1, "UTF-8")) {
 			if (!STREQ (codeset2, "UTF-8")) {
 				cmp = -1;
-				goto out_locale;
+				goto out;
 			}
 		} else {
 			if (STREQ (codeset2, "UTF-8")) {
 				cmp = 1;
-				goto out_locale;
+				goto out;
 			}
 		}
 
-out_locale:
-		free_locale_bits (&lbits);
 out:
+		free_locale_bits (&lbits);
 		free_locale_bits (&bits1);
 		free_locale_bits (&bits2);
 		if (cmp)
