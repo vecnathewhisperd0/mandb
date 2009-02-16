@@ -1415,9 +1415,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		if (recode)
 			add_manconv (p, page_encoding, recode);
 		else if (groff_preconv) {
-			add_manconv (p, page_encoding, page_encoding);
+			add_manconv (p, page_encoding, "UTF-8");
 			pipeline_command_args
-				(p, groff_preconv, "-e", page_encoding, NULL);
+				(p, groff_preconv, "-e", "UTF-8", NULL);
 		} else if (roff_encoding)
 			add_manconv (p, page_encoding, roff_encoding);
 		else

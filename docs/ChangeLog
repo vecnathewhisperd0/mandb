@@ -1,3 +1,10 @@
+Mon Feb 16 00:49:47 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (make_roff_command): If we have preconv, it's silly to
+	  recode to the assumed page encoding and risk problems with
+	  characters unrepresentable in that encoding; we might as well just
+	  recode to UTF-8 and feed that to preconv.
+
 Mon Feb 16 00:39:22 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (make_roff_command): Append //TRANSLIT to iconv -t
