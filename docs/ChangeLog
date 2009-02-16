@@ -1,3 +1,10 @@
+Mon Feb 16 00:39:22 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (make_roff_command): Append //TRANSLIT to iconv -t
+	  argument (specifically, so that hyphens get properly
+	  transliterated when using preconv and groff -Tutf8 in a non-UTF-8
+	  locale; thanks, Matthew Burgess and Alexander Patrakov).
+
 Mon Feb 16 00:20:07 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Check for gpreconv/preconv, which is evidence of a

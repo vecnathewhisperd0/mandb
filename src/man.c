@@ -1575,10 +1575,15 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 		if ((!want_encoding || !is_roff_device (want_encoding)) &&
 		    output_encoding && locale_charset &&
-		    !STREQ (output_encoding, locale_charset))
+		    !STREQ (output_encoding, locale_charset)) {
+			char *locale_charset_translit =
+				xasprintf ("%s//TRANSLIT", locale_charset);
 			pipeline_command_args (p, "iconv", "-c",
 					       "-f", output_encoding,
-					       "-t", locale_charset, NULL);
+					       "-t", locale_charset_translit,
+					       NULL);
+			free (locale_charset_translit);
+		}
 
 		if (!troff && *COL) {
 			/* get rid of special characters if not writing to a
