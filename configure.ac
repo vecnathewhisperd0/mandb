@@ -220,15 +220,18 @@ else
 	troff="(troff not installed)"
 fi
 
-AC_MSG_CHECKING([for groff with Debian multibyte patch])
+AC_MSG_CHECKING([for groff with Debian multibyte patch or real Unicode support])
 man_mb_groff=no
 AC_ARG_ENABLE(mb-groff,
-[AS_HELP_STRING([--enable-mb-groff], [expect groff with Debian multibyte patch])],
+[AS_HELP_STRING([--enable-mb-groff], [expect groff with Debian multibyte patch or real Unicode support])],
 	[if test "$enableval" = "yes"
 	 then
 		man_mb_groff=yes
 	 fi],
-	[if test -n "$troff" && test "$troff_is_groff" = "yes"
+	[if which gpreconv >/dev/null 2>&1 || which preconv >/dev/null 2>&1
+	 then
+		man_mb_groff=yes
+	 elif test -n "$troff" && test "$troff_is_groff" = "yes"
 	 then
 		if $troff -Tnippon </dev/null >/dev/null 2>&1
 		then

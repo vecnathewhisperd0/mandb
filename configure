@@ -1653,7 +1653,8 @@ Optional Features:
   --enable-threads={posix|solaris|pth|win32}
                           specify multithreading API
   --disable-threads       build without multithread safety
-  --enable-mb-groff       expect groff with Debian multibyte patch
+  --enable-mb-groff       expect groff with Debian multibyte patch or real
+                          Unicode support
   --enable-mandirs=OS     select manual page hierarchy organization (GNU,
                           HPUX, IRIX, Solaris, BSD)
   --disable-rpath         do not hardcode runtime library paths
@@ -6740,8 +6741,8 @@ else
 	troff="(troff not installed)"
 fi
 
-{ echo "$as_me:$LINENO: checking for groff with Debian multibyte patch" >&5
-echo $ECHO_N "checking for groff with Debian multibyte patch... $ECHO_C" >&6; }
+{ echo "$as_me:$LINENO: checking for groff with Debian multibyte patch or real Unicode support" >&5
+echo $ECHO_N "checking for groff with Debian multibyte patch or real Unicode support... $ECHO_C" >&6; }
 man_mb_groff=no
 # Check whether --enable-mb-groff was given.
 if test "${enable_mb_groff+set}" = set; then
@@ -6750,7 +6751,10 @@ if test "${enable_mb_groff+set}" = set; then
 		man_mb_groff=yes
 	 fi
 else
-  if test -n "$troff" && test "$troff_is_groff" = "yes"
+  if which gpreconv >/dev/null 2>&1 || which preconv >/dev/null 2>&1
+	 then
+		man_mb_groff=yes
+	 elif test -n "$troff" && test "$troff_is_groff" = "yes"
 	 then
 		if $troff -Tnippon </dev/null >/dev/null 2>&1
 		then
