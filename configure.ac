@@ -220,6 +220,8 @@ else
 	troff="(troff not installed)"
 fi
 
+AC_CHECK_PROGS([preconv], [gpreconv preconv])
+
 AC_MSG_CHECKING([for groff with Debian multibyte patch or real Unicode support])
 man_mb_groff=no
 AC_ARG_ENABLE(mb-groff,
@@ -228,7 +230,7 @@ AC_ARG_ENABLE(mb-groff,
 	 then
 		man_mb_groff=yes
 	 fi],
-	[if which gpreconv >/dev/null 2>&1 || which preconv >/dev/null 2>&1
+	[if test -n "$preconv"
 	 then
 		man_mb_groff=yes
 	 elif test -n "$troff" && test "$troff_is_groff" = "yes"
