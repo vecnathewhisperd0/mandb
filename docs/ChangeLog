@@ -1,3 +1,9 @@
+Thu Feb 19 21:50:44 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (add_to_manpath): Remove; this just called pathappend
+	  with the same arguments and so is pointless cruft.
+	  (add_nls_manpath): Update all callers.
+
 Tue Feb 17 00:49:28 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Check for gpreconv/preconv properly, i.e. by using

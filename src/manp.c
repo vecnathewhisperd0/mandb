@@ -349,12 +349,6 @@ char *cat_manpath (char *manp)
 	return catp;
 }		
 
-static char *
-add_to_manpath (char *manpath, const char *path)
-{
-	return pathappend (manpath, path);
-}
-
 /* Unpack a glibc-style locale into its component parts.
  *
  * This function was inspired by _nl_explode_name in libintl; I've rewritten
@@ -481,7 +475,7 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 			     STREQ (lbits.territory, mbits.territory)) &&
 			    (!*mbits.modifier ||
 			     STREQ (lbits.modifier, mbits.modifier)))
-				manpath = add_to_manpath (manpath, fullpath);
+				manpath = pathappend (manpath, fullpath);
 			free_locale_bits (&mbits);
 			free (fullpath);
 		}
@@ -491,7 +485,7 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 
 	/* After doing all the locale stuff we add the manpath to the *END*
 	 * so the locale dirs are checked first on each section */
-	manpath = add_to_manpath (manpath, omanpathlist);
+	manpath = pathappend (manpath, omanpathlist);
 	free (omanpathlist);
 
 	free (manpathlist);
