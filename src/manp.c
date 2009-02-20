@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -423,40 +423,32 @@ void free_locale_bits (struct locale_bits *bits)
 }
 
 
-char *add_nls_manpath (char *manpathlist, const char *locale)
+static char *get_nls_manpath (const char *manpathlist, const char *locale)
 {
-	char *manpath = NULL;
-	char *path;
 	struct locale_bits lbits;
-	char *omanpathlist;
-	char *manpathlist_ptr = manpathlist;
+	char *manpath = NULL;
+	char *manpathlist_copy, *path, *manpathlist_ptr;
 
-	debug ("add_nls_manpath(): processing %s\n", manpathlist);
-
-	if (locale == NULL || *locale == '\0')
-		return manpathlist;
 	unpack_locale_bits (locale, &lbits);
 	if (STREQ (lbits.language, "C") || STREQ (lbits.language, "POSIX")) {
 		free_locale_bits (&lbits);
-		return manpathlist;
+		return xstrdup (manpathlist);
 	}
 
-	omanpathlist = xstrdup (manpathlist);
-
+	manpathlist_copy = xstrdup (manpathlist);
+	manpathlist_ptr = manpathlist_copy;
 	for (path = strsep (&manpathlist_ptr, ":"); path;
 	     path = strsep (&manpathlist_ptr, ":")) {
 		DIR *mandir = opendir (path);
+		struct dirent *mandirent;
+
 		if (!mandir)
 			continue;
 
-		for (;;) {
-			struct dirent *mandirent = readdir (mandir);
+		while ((mandirent = readdir (mandir)) != NULL) {
 			const char *name;
 			struct locale_bits mbits;
 			char *fullpath;
-
-			if (!mandirent)
-				break;
 
 			name = mandirent->d_name;
 			if (STREQ (name, ".") || STREQ (name, ".."))
@@ -479,16 +471,90 @@ char *add_nls_manpath (char *manpathlist, const char *locale)
 			free_locale_bits (&mbits);
 			free (fullpath);
 		}
+
+		if (STREQ (lbits.language, "en"))
+			/* For English, we look in the subdirectories as
+			 * above just in case there's something like
+			 * en_GB.UTF-8, but it's more probable that English
+			 * manual pages reside at the top level.
+			 */
+			manpath = pathappend (manpath, path);
 	}
 
 	free_locale_bits (&lbits);
+	return manpath;
+}
 
-	/* After doing all the locale stuff we add the manpath to the *END*
-	 * so the locale dirs are checked first on each section */
-	manpath = pathappend (manpath, omanpathlist);
-	free (omanpathlist);
+char *add_nls_manpaths (char *manpathlist, const char *locales)
+{
+	char *manpath = NULL;
+	char *locales_copy, *tok, *locales_ptr;
+	char *locale_manpath;
 
-	free (manpathlist);
+	debug ("add_nls_manpaths(): processing %s\n", manpathlist);
+
+	if (locales == NULL || *locales == '\0')
+		return manpathlist;
+
+	/* For each locale, we iterate over the manpath and find appropriate
+	 * locale directories for each item. We then concatenate the results
+	 * for all locales. In other words, LANGUAGE=fr:de and
+	 * manpath=/usr/share/man:/usr/local/share/man could result in
+	 * something like this list:
+	 *
+	 *   /usr/share/man/fr
+	 *   /usr/local/share/man/fr
+	 *   /usr/share/man/de
+	 *   /usr/local/share/man/de
+	 *   /usr/share/man
+	 *   /usr/local/share/man
+	 *
+	 * This assumes that it's more important to have documentation in
+	 * the preferred language than to have documentation for the correct
+	 * object (in the case where there are different versions of a
+	 * program in different hierarchies, for example). It is not
+	 * entirely obvious that this is the right assumption, but on the
+	 * other hand the other choice is not entirely obvious either. We
+	 * tie-break on "we've always done it this way", and people can use
+	 * 'man -a' or whatever in the occasional case where we get it
+	 * wrong.
+	 *
+	 * We go to no special effort to de-duplicate directories here.
+	 * create_pathlist will sort it out later; note that it preserves
+	 * order in that it keeps the first of any duplicate set in its
+	 * original position.
+	 */
+
+	locales_copy = xstrdup (locales);
+	locales_ptr = locales_copy;
+	for (tok = strsep (&locales_ptr, ":"); tok;
+	     tok = strsep (&locales_ptr, ":")) {
+		if (!*tok)	/* ignore empty fields */
+			continue;
+		debug ("checking for locale %s\n", tok);
+
+		locale_manpath = get_nls_manpath (manpathlist, tok);
+		if (locale_manpath) {
+			if (manpath)
+				manpath = appendstr (manpath, ":",
+						     locale_manpath, NULL);
+			else
+				manpath = xstrdup (locale_manpath);
+			free (locale_manpath);
+		}
+	}
+
+	/* Always try untranslated pages as a last resort. */
+	locale_manpath = get_nls_manpath (manpathlist, "C");
+	if (locale_manpath) {
+		if (manpath)
+			manpath = appendstr (manpath, ":",
+					     locale_manpath, NULL);
+		else
+			manpath = xstrdup (locale_manpath);
+		free (locale_manpath);
+	}
+
 	return manpath;
 }
 
@@ -1117,7 +1183,7 @@ void create_pathlist (const char *manp, char **mp)
 	/* Eliminate duplicates due to symlinks. */
 	mp = mphead;
 	while (*mp) {
-		char *target;
+		char *target, *oldmp = NULL;
 		char **dupcheck;
 		int found_dup = 0;
 
@@ -1125,15 +1191,21 @@ void create_pathlist (const char *manp, char **mp)
 		 * manpath?
 		 */
 		target = canonicalize_file_name (*mp);
-		if (!target) {
-			++mp;
-			continue;
+		if (target) {
+			oldmp = *mp;
+			*mp = target;
 		}
-		for (dupcheck = mphead; *dupcheck; ++dupcheck) {
-			if (mp == dupcheck || !STREQ (target, *dupcheck))
+		/* Only check up to the current list position, to keep item
+		 * order stable across deduplication.
+		 */
+		for (dupcheck = mphead; *dupcheck && dupcheck != mp;
+		     ++dupcheck) {
+			if (!STREQ (*mp, *dupcheck))
 				continue;
-			debug ("Removing duplicate manpath entry %s -> %s\n",
-			       *mp, target);
+			debug ("Removing duplicate manpath entry %s (%d) -> "
+			       "%s (%d)\n",
+			       oldmp, mp - mphead,
+			       *dupcheck, dupcheck - mphead);
 			free (*mp);
 			for (dupcheck = mp; *(dupcheck + 1); ++dupcheck)
 				*dupcheck = *(dupcheck + 1);
@@ -1141,9 +1213,24 @@ void create_pathlist (const char *manp, char **mp)
 			found_dup = 1;
 			break;
 		}
-		free (target);
+		if (oldmp)
+			free (oldmp);
 		if (!found_dup)
 			++mp;
+	}
+
+	if (debug_level) {
+		int first = 1;
+
+		debug ("final search path = ");
+		for (mp = mphead; *mp; ++mp) {
+			if (first) {
+				debug ("%s", *mp);
+				first = 0;
+			} else
+				debug (":%s", *mp);
+		}
+		debug ("\n");
 	}
 }
 

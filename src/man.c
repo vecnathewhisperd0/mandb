@@ -3,7 +3,8 @@
  *
  * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+ * Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -903,14 +904,7 @@ int main (int argc, char *argv[])
 	if (internal_locale && strcmp (internal_locale, "C") &&
 	    strcmp (internal_locale, "POSIX"))
 		multiple_locale = getenv ("LANGUAGE");
-	if (multiple_locale && *multiple_locale) {
-		const char *colon = strchr (multiple_locale, ':');
-		internal_locale = colon ?
-			xstrndup (multiple_locale, colon - multiple_locale) :
-			xstrdup (multiple_locale);
-	} else
-		internal_locale = xstrdup (internal_locale ?
-					   internal_locale : "C");
+	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
 
 /* export argv, it might be needed when invoking the vendor supplied browser */
 #if defined _AIX || defined __sgi
@@ -1044,24 +1038,29 @@ int main (int argc, char *argv[])
 	}
 
 	if (manp == NULL) {
-		manp = add_nls_manpath (get_manpath (alt_system_name),
-					internal_locale);
-		/* Handle multiple :-separated locales in LANGUAGE */
+		char *all_locales;
+
 		if (multiple_locale && *multiple_locale) {
-			char *localetok = xstrdup (multiple_locale), *tok;
-			char *localetok_ptr = localetok;
-			for (tok = strsep (&localetok_ptr, ":"); tok;
-			     tok = strsep (&localetok_ptr, ":")) {
-				if (!*tok)	/* ignore empty fields */
-					continue;
-				debug ("checking for locale %s\n", tok);
-				manp = add_nls_manpath (manp, tok);
-			}
+			if (internal_locale && *internal_locale)
+				all_locales = xasprintf ("%s:%s",
+							 multiple_locale,
+							 internal_locale);
+			else
+				all_locales = xstrdup (multiple_locale);
+		} else {
+			if (internal_locale && *internal_locale)
+				all_locales = xstrdup (internal_locale);
+			else
+				all_locales = NULL;
 		}
+
+		manp = add_nls_manpaths (get_manpath (alt_system_name),
+					 all_locales);
+		free (all_locales);
 	} else
 		free (get_manpath (NULL));
 
-	debug ("*manpath search path* = %s\n", manp);
+	debug ("manpath search path (with duplicates) = %s\n", manp);
 
 	create_pathlist (manp, manpathlist);
 

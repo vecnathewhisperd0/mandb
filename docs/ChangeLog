@@ -1,3 +1,33 @@
+Fri Feb 20 09:58:13 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	Partially rewrite building of manpath according to locale. The
+	previous code was completely wrong: as well as handling duplicates
+	rather oddly, it effectively handled LANGUAGE in reverse order
+	(Debian bug #516133).
+
+	* src/manp.c (add_nls_manpath): Rename to ...
+	  (get_nls_manpath): ... this. Some minor adjustments. Make
+	  manpathlist argument const and always return a freshly-allocated
+	  string. Explicitly add the top-level directory to the string in
+	  the case of English locales (although we still look for
+	  subdirectories in case of things like en_GB.UTF-8); C and POSIX
+	  already just return a copy of manpathlist.
+	  (add_nls_manpaths): New function to iterate over a colon-separated
+	  list of locales, concatenating the result of get_nls_manpath for
+	  each. Stop worrying about deduplication at this point as we used
+	  to; instead, we let create_pathlist sort that out.
+	  (create_pathlist): Keep the first of any set of duplicates rather
+	  than the last, in order to keep item order stable.
+	* src/manp.h (add_nls_manpath): Remove prototype.
+	  (add_nls_manpaths): Add prototype.
+	* src/man.c (main), src/whatis.c (main): Call add_nls_manpaths
+	  rather than add_nls_manpath, with appropriate adjustments.
+
+	* src/man.c (main), src/whatis.c (main): Don't set internal_locale
+	  to the first component of multiple_locale. We will account for
+	  this in search paths, but shouldn't forget about internal_locale
+	  entirely.
+
 Thu Feb 19 21:50:44 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c (add_to_manpath): Remove; this just called pathappend
