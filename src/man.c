@@ -2187,6 +2187,40 @@ static void disable_hyphenation (void *data ATTRIBUTE_UNUSED)
 	}
 }
 
+#ifdef TROFF_IS_GROFF
+/* TODO: This function would be more efficient if the macro requests were
+ * simply written in sequence before starting the decompressor. However,
+ * that requires a new COMMAND_SEQUENCE type in the pipeline library. If
+ * that is ever needed for another reason, then this function should be
+ * rewritten using it.
+ */
+static void locale_macros (void *data)
+{
+	printf (
+		/* If we're using groff >= 1.20.2 (for the 'file' warning
+		 * category):
+		 */
+		".if (\\n[.g] & ((\\n[.x] > 1) :"
+		" ((\\n[.x] == 1) & (\\n[.y] >= 20)) :"
+		" ((\\n[.x] == 1) & (\\n[.y] == 20) & (\\n[.Y] >= 2)))) \\{\n"
+		/*   disable warnings of category 'file' */
+		".  warn (\\n[.warn] -"
+		" (\\n[.warn] / 1048576 %% 2 * 1048576))\n"
+		/*   and load the appropriate per-locale macros */
+		".  mso %s.tmac\n"
+		".\\}\n", (const char *) data);
+
+	for (;;) {
+		char buffer[4096];
+		int r = read (STDIN_FILENO, buffer, 4096);
+		if (r <= 0)
+			break;
+		if (fwrite (buffer, 1, (size_t) r, stdout) < (size_t) r)
+			break;
+	}
+}
+#endif /* TROFF_IS_GROFF */
+
 /*
  * optionally chdir to dir, if necessary update cat_file from man_file
  * and display it.  if man_file is NULL cat_file is a stray cat.  If
@@ -2228,6 +2262,29 @@ static int display (const char *dir, const char *man_file,
 				disable_hyphenation, NULL, NULL);
 			pipeline_command (decomp, hcmd);
 		}
+
+#ifdef TROFF_IS_GROFF
+		if (*man_file) {
+			char *page_lang = lang_dir (man_file);
+
+			if (page_lang && *page_lang &&
+			    !STREQ (page_lang, "C")) {
+				struct locale_bits bits;
+				char *name;
+				command *lcmd;
+
+				unpack_locale_bits (page_lang, &bits);
+				name = xasprintf (
+					"(echo .mso %s.tmac && "
+					"cat)", bits.language);
+				lcmd = command_new_function (
+					name, locale_macros, free, page_lang);
+				pipeline_command (decomp, lcmd);
+				free (name);
+				free_locale_bits (&bits);
+			}
+		}
+#endif /* TROFF_IS_GROFF */
 	}
 
 	if (decomp) {

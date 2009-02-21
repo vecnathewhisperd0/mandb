@@ -1,3 +1,15 @@
+Sat Feb 21 12:01:55 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	Load per-locale groff macros if possible. This only works with groff
+	1.20.2 (as yet unreleased) or better, since that introduces
+	facilities to allow us to avoid an error message if there is no
+	macro file for the relevant locale.
+
+	* src/man.c (locale_macros): New function.
+	  (display): Check the page language, and add locale_macros to the
+	  formatting pipeline provided that the language is not empty or
+	  "C".
+
 Fri Feb 20 09:58:13 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	Partially rewrite building of manpath according to locale. The
