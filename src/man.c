@@ -2264,7 +2264,10 @@ static int display (const char *dir, const char *man_file,
 		}
 
 #ifdef TROFF_IS_GROFF
-		if (*man_file) {
+		/* This only works with preconv, since the per-locale macros
+		 * may change the assumed input encoding.
+		 */
+		if (*man_file && get_groff_preconv ()) {
 			char *page_lang = lang_dir (man_file);
 
 			if (page_lang && *page_lang &&
