@@ -20,6 +20,11 @@ Major changes since man-db 2.5.3:
 	  be terminals in order to use the terminal line length. The line
 	  length from standard output is preferred if available.
 
+	o The manpath was built completely wrongly when multiple entries
+	  were present in LANGUAGE: duplicates were handled strangely, and
+	  languages were effectively iterated in reverse order. It should be
+	  rather more sensible now.
+
 	Improvements:
 	-------------
 
@@ -55,6 +60,13 @@ Major changes since man-db 2.5.3:
 	  since 2.4.4, man-db's configure now detects its presence and
 	  infers that groff supports Unicode input using it; man also now
 	  takes slightly better advantage of preconv than before.
+
+	o Per-locale groff macros are now loaded if possible, allowing us to
+	  take advantage of such things as localised versions of predefined
+	  strings and language-aware hyphenation. This only works with Groff
+	  1.20.2 or better (not yet released), since earlier versions did
+	  not allow us to suppress warnings in the event that the
+	  appropriate macro file is not available.
 
 man-db 2.5.3 (17 November 2008)
 ===============================
