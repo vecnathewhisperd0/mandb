@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.2-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2008-12-30 13:03+0000\n"
+"POT-Creation-Date: 2009-02-23 22:42+0000\n"
 "PO-Revision-Date: 2003-09-15 22:39+0200\n"
 "Last-Translator: Byrial Ole Jensen <byrial@image.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -36,8 +36,8 @@ msgstr "Rørledningsudgang er ikke åben"
 msgid "pipe failed"
 msgstr "pipe-systemkald mislykkedes"
 
-#: lib/pipeline.c:793 src/lexgrog.l:611 src/man.c:2261 src/man.c:2338
-#: src/man.c:2431 src/manconv_main.c:172 src/straycats.c:212 src/ult_src.c:277
+#: lib/pipeline.c:793 src/lexgrog.l:611 src/man.c:2326 src/man.c:2403
+#: src/man.c:2496 src/manconv_main.c:172 src/straycats.c:212 src/ult_src.c:277
 #: src/ult_src.c:287 src/zsoelim.l:374
 #, c-format
 msgid "can't open %s"
@@ -139,7 +139,7 @@ msgstr "kun %d felter i indhold"
 msgid "bad fetch on multi key %s"
 msgstr "fejlagtig hentning på multinøgle %s"
 
-#: libdb/db_lookup.c:443 src/whatis.c:513
+#: libdb/db_lookup.c:443 src/whatis.c:514
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Databasen %s er beskadiget; genopbyg med mandb --create"
@@ -174,8 +174,8 @@ msgid "The man database defaults to %s%s."
 msgstr ""
 
 #: src/accessdb.c:65 src/catman.c:99 src/globbing_test.c:59
-#: src/lexgrog_test.c:66 src/man.c:256 src/manconv_main.c:94 src/mandb.c:97
-#: src/manpath.c:66 src/whatis.c:117 src/zsoelim_main.c:59
+#: src/lexgrog_test.c:66 src/man.c:258 src/manconv_main.c:94 src/mandb.c:97
+#: src/manpath.c:66 src/whatis.c:118 src/zsoelim_main.c:59
 msgid "emit debugging messages"
 msgstr ""
 
@@ -188,21 +188,21 @@ msgstr "kan ikke åbne %s for læsning"
 msgid "[SECTION...]"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:277 src/whatis.c:126
+#: src/catman.c:100 src/man.c:279 src/whatis.c:127
 msgid "PATH"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:277 src/whatis.c:126
+#: src/catman.c:100 src/man.c:279 src/whatis.c:127
 msgid "set search path for manual pages to PATH"
 msgstr ""
 
-#: src/catman.c:101 src/man.c:255 src/mandb.c:105 src/manpath.c:68
-#: src/whatis.c:128
+#: src/catman.c:101 src/man.c:257 src/mandb.c:105 src/manpath.c:68
+#: src/whatis.c:129
 msgid "FILE"
 msgstr ""
 
-#: src/catman.c:101 src/man.c:255 src/mandb.c:105 src/manpath.c:68
-#: src/whatis.c:128
+#: src/catman.c:101 src/man.c:257 src/mandb.c:105 src/manpath.c:68
+#: src/whatis.c:129
 #, fuzzy
 msgid "use this user configuration file"
 msgstr "kan ikke åbne konfigurationsfilen for manualsøgesti %s"
@@ -330,19 +330,19 @@ msgstr "advarsel: %s: ignorerer fejlagtigt filnavn"
 msgid "PATH SECTION NAME"
 msgstr ""
 
-#: src/globbing_test.c:60 src/man.c:280
+#: src/globbing_test.c:60 src/man.c:282
 msgid "EXTENSION"
 msgstr ""
 
-#: src/globbing_test.c:60 src/man.c:281
+#: src/globbing_test.c:60 src/man.c:283
 msgid "limit search to extension type EXTENSION"
 msgstr ""
 
-#: src/globbing_test.c:61 src/man.c:282
+#: src/globbing_test.c:61 src/man.c:284
 msgid "look for pages case-insensitively (default)"
 msgstr ""
 
-#: src/globbing_test.c:62 src/man.c:283
+#: src/globbing_test.c:62 src/man.c:285
 msgid "look for pages case-sensitively"
 msgstr ""
 
@@ -383,227 +383,227 @@ msgstr ""
 msgid "show guessed series of preprocessing filters"
 msgstr ""
 
-#: src/lexgrog_test.c:71 src/man.c:272 src/man.c:295
+#: src/lexgrog_test.c:71 src/man.c:274 src/man.c:297
 msgid "ENCODING"
 msgstr ""
 
-#: src/lexgrog_test.c:71 src/man.c:295
+#: src/lexgrog_test.c:71 src/man.c:297
 msgid "use selected output encoding"
 msgstr ""
 
-#: src/lexgrog_test.c:114 src/man.c:515 src/man.c:525
+#: src/lexgrog_test.c:114 src/man.c:517 src/man.c:527
 #, fuzzy, c-format
 msgid "%s: incompatible options"
 msgstr ": inkompatible flag"
 
-#: src/man.c:158
+#: src/man.c:160
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "kommandoen afsluttede med status %d: %s"
 
-#: src/man.c:251
+#: src/man.c:253
 msgid "[SECTION] PAGE..."
 msgstr ""
 
-#: src/man.c:257
+#: src/man.c:259
 msgid "reset all options to their default values"
 msgstr ""
 
-#: src/man.c:259
+#: src/man.c:261
 msgid "WARNINGS"
 msgstr ""
 
-#: src/man.c:260
+#: src/man.c:262
 msgid "enable warnings from groff"
 msgstr ""
 
-#: src/man.c:263
+#: src/man.c:265
 msgid "Main modes of operation:"
 msgstr ""
 
-#: src/man.c:264
+#: src/man.c:266
 msgid "equivalent to whatis"
 msgstr ""
 
-#: src/man.c:265
+#: src/man.c:267
 msgid "equivalent to apropos"
 msgstr ""
 
-#: src/man.c:266
+#: src/man.c:268
 msgid "print physical location of man page(s)"
 msgstr ""
 
-#: src/man.c:268
+#: src/man.c:270
 msgid "print physical location of cat file(s)"
 msgstr ""
 
-#: src/man.c:270
+#: src/man.c:272
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr ""
 
-#: src/man.c:271
+#: src/man.c:273
 msgid "used by catman to reformat out of date cat pages"
 msgstr ""
 
-#: src/man.c:272
+#: src/man.c:274
 msgid "output source page encoded in ENCODING"
 msgstr ""
 
-#: src/man.c:274
+#: src/man.c:276
 #, fuzzy
 msgid "Finding manual pages:"
 msgstr " Manualside "
 
-#: src/man.c:275 src/whatis.c:127
+#: src/man.c:277 src/whatis.c:128
 msgid "LOCALE"
 msgstr ""
 
-#: src/man.c:275
+#: src/man.c:277
 msgid "define the locale for this particular man search"
 msgstr ""
 
-#: src/man.c:276 src/manpath.c:69 src/whatis.c:125
+#: src/man.c:278 src/manpath.c:69 src/whatis.c:126
 msgid "SYSTEM"
 msgstr ""
 
-#: src/man.c:276 src/manpath.c:69 src/whatis.c:125
+#: src/man.c:278 src/manpath.c:69 src/whatis.c:126
 msgid "use manual pages from other systems"
 msgstr ""
 
-#: src/man.c:278
+#: src/man.c:280
 msgid "LIST"
 msgstr ""
 
-#: src/man.c:278
+#: src/man.c:280
 msgid "use colon separated section list"
 msgstr ""
 
-#: src/man.c:284
+#: src/man.c:286
 msgid "show all pages matching regex"
 msgstr ""
 
-#: src/man.c:285
+#: src/man.c:287
 msgid "show all pages matching wildcard"
 msgstr ""
 
-#: src/man.c:286
+#: src/man.c:288
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
 
-#: src/man.c:288
+#: src/man.c:290
 msgid "find all matching manual pages"
 msgstr ""
 
-#: src/man.c:289
+#: src/man.c:291
 msgid "force a cache consistency check"
 msgstr ""
 
-#: src/man.c:291
+#: src/man.c:293
 msgid "Controlling formatted output:"
 msgstr ""
 
-#: src/man.c:292
+#: src/man.c:294
 msgid "PAGER"
 msgstr ""
 
-#: src/man.c:292
+#: src/man.c:294
 msgid "use program PAGER to display output"
 msgstr ""
 
-#: src/man.c:293 src/man.c:298
+#: src/man.c:295 src/man.c:300
 msgid "STRING"
 msgstr ""
 
-#: src/man.c:293
+#: src/man.c:295
 msgid "provide the `less' pager with a prompt"
 msgstr ""
 
-#: src/man.c:294
+#: src/man.c:296
 msgid "display ASCII translation of certain latin1 chars"
 msgstr ""
 
-#: src/man.c:297
+#: src/man.c:299
 msgid "turn off hyphenation"
 msgstr ""
 
-#: src/man.c:298
+#: src/man.c:300
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 msgstr ""
 
-#: src/man.c:302
+#: src/man.c:304
 #, c-format
 msgid "use %s to format pages"
 msgstr ""
 
-#: src/man.c:303
+#: src/man.c:305
 msgid "DEVICE"
 msgstr ""
 
-#: src/man.c:304
+#: src/man.c:306
 #, c-format
 msgid "use %s with selected device"
 msgstr ""
 
-#: src/man.c:310
+#: src/man.c:312
 msgid "BROWSER"
 msgstr ""
 
-#: src/man.c:311
+#: src/man.c:313
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr ""
 
-#: src/man.c:312
+#: src/man.c:314
 msgid "RESOLUTION"
 msgstr ""
 
-#: src/man.c:314
+#: src/man.c:316
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 msgstr ""
 
-#: src/man.c:316
+#: src/man.c:318
 msgid "use groff and force it to produce ditroff"
 msgstr ""
 
-#: src/man.c:572 src/man.c:661
+#: src/man.c:574 src/man.c:663
 #, fuzzy, c-format
 msgid "No manual entry for %s\n"
 msgstr "Ingen manualindgang for %s"
 
-#: src/man.c:574
+#: src/man.c:576
 #, fuzzy, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "Hvilken manualside vil du have fra sektion %s?\n"
 
-#: src/man.c:578
+#: src/man.c:580
 msgid "What manual page do you want?\n"
 msgstr "Hvilken manualside vil du have?\n"
 
-#: src/man.c:658
+#: src/man.c:660
 #, fuzzy, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Ingen manualindgang for %s"
 
-#: src/man.c:666
+#: src/man.c:668
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Se \"%s\" for hjælp når manualsider ikke er tilgængelige.\n"
 
-#: src/man.c:828 src/man.c:2208
+#: src/man.c:830 src/man.c:2247
 #, c-format
 msgid "can't chdir to %s"
 msgstr "kan ikke skifte katalog til %s"
 
-#: src/man.c:1015
+#: src/man.c:1010
 msgid " Manual page "
 msgstr " Manualside "
 
-#: src/man.c:1078 src/man.c:3131
+#: src/man.c:1078 src/man.c:3276
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb-kommandoen mislykkedes med slutstatus %d"
@@ -613,52 +613,52 @@ msgstr "mandb-kommandoen mislykkedes med slutstatus %d"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ignorerer ukendt forbehandler \"%c\""
 
-#: src/man.c:1816 src/mandb.c:299
+#: src/man.c:1821 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "kan ikke skifte ejer på %s"
 
-#: src/man.c:1828 src/mandb.c:213
+#: src/man.c:1833 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "kan ikke ændre rettigheder på %s"
 
-#: src/man.c:1839 src/mandb.c:204
+#: src/man.c:1844 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "kan ikke omdøbe %s til %s"
 
-#: src/man.c:1858
+#: src/man.c:1863
 #, c-format
 msgid "can't set times on %s"
 msgstr "kan ikke sætte tider på %s"
 
-#: src/man.c:1867
+#: src/man.c:1872
 #, c-format
 msgid "can't unlink %s"
 msgstr "kan ikke aflænke %s"
 
-#: src/man.c:1918
+#: src/man.c:1923
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "kan ikke oprette midlertidigt filnavn"
 
-#: src/man.c:2035 src/man.c:2077 src/man.c:2107
+#: src/man.c:2040 src/man.c:2082 src/man.c:2112
 #, c-format
 msgid "can't change to directory %s"
 msgstr "kan ikke skifte til kataloget %s"
 
-#: src/man.c:2048
+#: src/man.c:2053
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "kan ikke åbne konfigurationsfilen for manualsøgesti %s"
 
-#: src/man.c:2083 src/man.c:2112
+#: src/man.c:2088 src/man.c:2117
 #, c-format
 msgid "can't remove directory %s"
 msgstr "kan ikke fjerne kataloget %s"
 
-#: src/man.c:2380
+#: src/man.c:2445
 #, c-format
 msgid ""
 "\n"
@@ -667,17 +667,17 @@ msgstr ""
 "\n"
 "kan ikke skrive til %s i catman-tilstand"
 
-#: src/man.c:2985
+#: src/man.c:3130
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: at stole på whatis-referencer er forældet\n"
 
-#: src/man.c:3331
+#: src/man.c:3476
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "Intern fejl: kandidattype %d uden for værdiområdet"
 
-#: src/man.c:3456
+#: src/man.c:3603
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -817,82 +817,82 @@ msgstr "%d gamle databaseindgange tømtes.\n"
 msgid "No databases created."
 msgstr "Ingen databaser er opdateret."
 
-#: src/manp.c:313
+#: src/manp.c:314
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "kan ikke forstå konfigurationsfilen for manualsøgesti %s"
 
-#: src/manp.c:319
+#: src/manp.c:320
 #, c-format
 msgid "warning: %s"
 msgstr "advarsel: %s"
 
-#: src/manp.c:325
+#: src/manp.c:326
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "advarsel: %s er ikke et katalog"
 
-#: src/manp.c:330
+#: src/manp.c:331
 #, c-format
 msgid "manpath list too long"
 msgstr "manualsøgesti-liste er for lang"
 
-#: src/manp.c:597
+#: src/manp.c:658
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "advarsel: $PATH er ikke sat"
 
-#: src/manp.c:604
+#: src/manp.c:665
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "advarsel: tom $PATH"
 
-#: src/manp.c:633
+#: src/manp.c:694
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "advarsel: $MANPATH er sat, tilføjer %s før"
 
-#: src/manp.c:644
+#: src/manp.c:705
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "advarsel: $MANPATH er sat, tilføjer %s efter"
 
-#: src/manp.c:656
+#: src/manp.c:717
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "advarsel: $MANPATH er sat, indsætter %s"
 
-#: src/manp.c:670
+#: src/manp.c:731
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "advarsel: $MANPATH er sat, ignorerer %s"
 
-#: src/manp.c:703 src/manp.c:730
+#: src/manp.c:764 src/manp.c:791
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "advarsel: kan ikke oprette cat-katalog %s"
 
-#: src/manp.c:799
+#: src/manp.c:860
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "kan ikke tolke katalogliste \"%s\""
 
-#: src/manp.c:846
+#: src/manp.c:907
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "kan ikke åbne konfigurationsfilen for manualsøgesti %s"
 
-#: src/manp.c:875
+#: src/manp.c:936
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "advarsel: det obligatoriske katalog %s findes ikke"
 
-#: src/manp.c:1081
+#: src/manp.c:1152
 #, c-format
 msgid "can't determine current directory"
 msgstr "kan ikke bestemme aktuelt katalog"
 
-#: src/manp.c:1233
+#: src/manp.c:1325
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "advarsel: %s begynder ikke med %s"
@@ -946,65 +946,65 @@ msgstr "advarsel: kan ikke opdatere indekscachen %s"
 msgid "%s is self referencing"
 msgstr "%s refererer til sig selv"
 
-#: src/whatis.c:113
+#: src/whatis.c:114
 msgid "KEYWORD..."
 msgstr ""
 
-#: src/whatis.c:114
+#: src/whatis.c:115
 msgid "The --regex option is enabled by default."
 msgstr ""
 
-#: src/whatis.c:118
+#: src/whatis.c:119
 msgid "print verbose warning messages"
 msgstr ""
 
-#: src/whatis.c:119
+#: src/whatis.c:120
 msgid "interpret each keyword as a regex"
 msgstr ""
 
-#: src/whatis.c:120
+#: src/whatis.c:121
 msgid "search each keyword for exact match"
 msgstr ""
 
-#: src/whatis.c:121
+#: src/whatis.c:122
 msgid "the keyword(s) contain wildcards"
 msgstr ""
 
-#: src/whatis.c:122
+#: src/whatis.c:123
 msgid "require all keywords to match"
 msgstr ""
 
-#: src/whatis.c:123
+#: src/whatis.c:124
 msgid "do not trim output to terminal width"
 msgstr ""
 
-#: src/whatis.c:124
+#: src/whatis.c:125
 msgid "SECTION"
 msgstr ""
 
-#: src/whatis.c:124
+#: src/whatis.c:125
 msgid "search only this section"
 msgstr ""
 
-#: src/whatis.c:127
+#: src/whatis.c:128
 msgid "define the locale for this search"
 msgstr ""
 
-#: src/whatis.c:196
+#: src/whatis.c:197
 #, c-format
 msgid "%s what?\n"
 msgstr "%s hvad?\n"
 
-#: src/whatis.c:303 src/whatis.c:330 src/whatis.c:342
+#: src/whatis.c:304 src/whatis.c:331 src/whatis.c:343
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "advarsel: %s indeholder en pegerløkke"
 
-#: src/whatis.c:305 src/whatis.c:318 src/whatis.c:333 src/whatis.c:343
+#: src/whatis.c:306 src/whatis.c:319 src/whatis.c:334 src/whatis.c:344
 msgid "(unknown subject)"
 msgstr "(ukendt emne)"
 
-#: src/whatis.c:651
+#: src/whatis.c:652
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ingenting egnet.\n"
