@@ -316,7 +316,7 @@ void zsoelim_parse_file (void)
 		pipeline_peek_skip ((pipeline *) yyin, strlen (line));
 		++linenum;
 	}
-#endif
+#endif /* PP_COOKIE */
 
 	printf (".lf %d %s\n", linenum, NAME);
 	LINE = 1;
