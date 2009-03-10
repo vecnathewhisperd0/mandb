@@ -298,8 +298,27 @@ static void zap_quotes (void)
 /* initialise the stack and call the parser */
 void zsoelim_parse_file (void)
 {
+#ifdef PP_COOKIE
+	const char *line;
+#endif /* PP_COOKIE */
+	int linenum = 1;
+
 	so_stack_ptr = 0;
-	printf (".lf 1 %s\n", NAME);
+
+#ifdef PP_COOKIE
+	/* Skip over the first line if it's something that manconv might
+	 * need to know about.
+	 */
+	line = pipeline_peekline ((pipeline *) yyin);
+	if (line &&
+	    (STRNEQ (line, PP_COOKIE, 4) || STRNEQ (line, ".\\\" ", 4))) {
+		fputs (line, stdout);
+		pipeline_peek_skip ((pipeline *) yyin, strlen (line));
+		++linenum;
+	}
+#endif
+
+	printf (".lf %d %s\n", linenum, NAME);
 	LINE = 1;
 	yylex ();
 }
