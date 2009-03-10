@@ -1291,6 +1291,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	char *fmt_prog;
 	pipeline *p = pipeline_new ();
 	command *cmd;
+	char *page_encoding;
 	const char *output_encoding = NULL;
 	const char *locale_charset = NULL;
 
@@ -1345,7 +1346,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				
 	if (!fmt_prog) {
 		/* we don't have an external formatter script */
-		char *page_encoding;
 		const char *source_encoding, *roff_encoding;
 		char *cat_charset = NULL;
 		const char *groff_preconv;
@@ -1356,8 +1356,13 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			pipeline_command (p, cmd);
 		}
 
-		page_encoding = get_page_encoding (lang);
-		source_encoding = get_source_encoding (lang);
+		page_encoding = check_preprocessor_encoding (decomp);
+		if (!page_encoding)
+			page_encoding = get_page_encoding (lang);
+		if (page_encoding && !STREQ (page_encoding, "UTF-8"))
+			source_encoding = page_encoding;
+		else
+			source_encoding = get_source_encoding (lang);
 		debug ("page_encoding = %s\n", page_encoding);
 		debug ("source_encoding = %s\n", source_encoding);
 
@@ -1447,7 +1452,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			}
 		}
 
-		free (page_encoding);
 		free (cat_charset);
 	}
 
@@ -1613,6 +1617,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		pipeline_command (p, cmd);
 	}
 
+	free (page_encoding);
 	return p;
 }
 

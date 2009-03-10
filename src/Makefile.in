@@ -207,7 +207,8 @@ am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 man_OBJECTS = $(am_man_OBJECTS)
 man_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 	$(am__DEPENDENCIES_1)
-am_manconv_OBJECTS = manconv.$(OBJEXT) manconv_main.$(OBJEXT)
+am_manconv_OBJECTS = encodings.$(OBJEXT) manconv.$(OBJEXT) \
+	manconv_main.$(OBJEXT)
 manconv_OBJECTS = $(am_manconv_OBJECTS)
 manconv_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
 am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
@@ -786,6 +787,7 @@ man_SOURCES = \
 	zsoelim.l
 
 manconv_SOURCES = \
+	encodings.c \
 	manconv.c \
 	manconv.h \
 	manconv_main.c

@@ -119,6 +119,7 @@ man_SOURCES = \
 	zsoelim.h \
 	zsoelim.l
 manconv_SOURCES = \
+	encodings.c \
 	manconv.c \
 	manconv.h \
 	manconv_main.c

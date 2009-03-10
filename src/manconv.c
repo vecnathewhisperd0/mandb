@@ -53,54 +53,10 @@
 #include "error.h"
 #include "pipeline.h"
 
+#include "encodings.h"
 #include "manconv.h"
 
 #ifdef HAVE_ICONV
-
-static char *check_preprocessor_encoding (pipeline *p)
-{
-	char *pp_encoding = NULL;
-
-#ifdef PP_COOKIE
-	const char *line = pipeline_peekline (p);
-	char *directive = NULL;
-
-	/* Some people use .\" incorrectly. We allow it for encoding
-	 * declarations but not for preprocessor declarations.
-	 */
-	if (line &&
-	    (STRNEQ (line, PP_COOKIE, 4) || STRNEQ (line, ".\\\" ", 4))) {
-		const char *newline = strchr (line, '\n');
-		if (newline)
-			directive = xstrndup (line + 4,
-					      newline - (line + 4));
-		else
-			directive = xstrdup (line + 4);
-	}
-
-	if (directive && strstr (directive, "-*-")) {
-		const char *pp_search = strstr (directive, "-*-") + 3;
-		while (*pp_search == ' ')
-			++pp_search;
-		if (STRNEQ (pp_search, "coding:", 7)) {
-			const char *pp_encoding_allow;
-			size_t pp_encoding_len;
-			pp_search += 7;
-			while (*pp_search == ' ')
-				++pp_search;
-			pp_encoding_allow = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-					    "abcdefghijklmnopqrstuvwxyz"
-					    "0123456789-_/:.()";
-			pp_encoding_len = strspn (pp_search,
-						  pp_encoding_allow);
-			pp_encoding = xstrndup (pp_search, pp_encoding_len);
-			debug ("preprocessor encoding: %s\n", pp_encoding);
-		}
-	}
-#endif /* PP_COOKIE */
-
-	return pp_encoding;
-}
 
 static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		      int last)

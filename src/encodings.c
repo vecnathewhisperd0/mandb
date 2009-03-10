@@ -215,7 +215,6 @@ struct charset_entry {
 static struct charset_entry charset_table[] = {
 	{ "ANSI_X3.4-1968",	"ascii"		},
 	{ "ISO-8859-1",		"latin1"	},
-	{ "ISO-8859-15",    	"latin1"	},
 	{ "UTF-8",		"utf8"		},
 
 #ifdef MULTIBYTE_GROFF
@@ -225,6 +224,13 @@ static struct charset_entry charset_table[] = {
 	{ "EUC-JP",		"nippon"	},
 	{ "EUC-TW",		"nippon"	},
 	{ "GBK",		"nippon"	},
+#else /* !MULTIBYTE_GROFF */
+	/* If we have a smarter version of groff, this is better dealt with
+	 * using either ascii8 (Debian multibyte patch) or preconv (as of
+	 * groff 1.20). This is a not-quite-right stopgap in case we have
+	 * neither.
+	 */
+	{ "ISO-8859-15",    	"latin1"	},
 #endif /* MULTIBYTE_GROFF */
 
 	{ NULL,			NULL		}
@@ -400,6 +406,12 @@ char *get_page_encoding (const char *lang)
  * first, although in practice it should recode directly from the page
  * encoding to the roff encoding.
  *
+ * You should normally only call this function if the page encoding is
+ * UTF-8, in which case older versions of groff that lack preconv need to
+ * have the page recoded to some legacy encoding). If the page is in a
+ * legacy encoding, then attempting to recode from that to some other legacy
+ * encoding will probably do more harm than good.
+ *
  * Here are a few concrete examples of why these distinctions are important:
  *
  *   /usr/share/man/en_GB.UTF-8, locale C
@@ -423,6 +435,13 @@ char *get_page_encoding (const char *lang)
  *     roff encoding = UTF-8
  *     output encoding = UTF-8
  *     EUC-JP -> iconv -> UTF-8 -> groff -Tutf8 -> UTF-8
+ *
+ *   /usr/share/man/en_GB.ISO-8859-15, locale en_GB.UTF-8
+ *     page encoding = ISO-8859-15
+ *     source encoding = ISO-8859-15
+ *     roff encoding = ISO-8859-15
+ *     output encoding = ISO-8859-15
+ *     ISO-8859-15 -> groff -Tascii8 -> ISO-8859-15 -> iconv -> UTF-8
  */
 const char *get_source_encoding (const char *lang)
 {
@@ -702,6 +721,54 @@ const char *get_jless_charset (const char *locale_charset)
 			return entry->jless_charset;
 
 	return NULL;
+}
+
+/* Inspect the first line of data in a pipeline for preprocessor encoding
+ * declarations.
+ */
+char *check_preprocessor_encoding (pipeline *p)
+{
+	char *pp_encoding = NULL;
+
+#ifdef PP_COOKIE
+	const char *line = pipeline_peekline (p);
+	char *directive = NULL;
+
+	/* Some people use .\" incorrectly. We allow it for encoding
+	 * declarations but not for preprocessor declarations.
+	 */
+	if (line &&
+	    (STRNEQ (line, PP_COOKIE, 4) || STRNEQ (line, ".\\\" ", 4))) {
+		const char *newline = strchr (line, '\n');
+		if (newline)
+			directive = xstrndup (line + 4,
+					      newline - (line + 4));
+		else
+			directive = xstrdup (line + 4);
+	}
+
+	if (directive && strstr (directive, "-*-")) {
+		const char *pp_search = strstr (directive, "-*-") + 3;
+		while (*pp_search == ' ')
+			++pp_search;
+		if (STRNEQ (pp_search, "coding:", 7)) {
+			const char *pp_encoding_allow;
+			size_t pp_encoding_len;
+			pp_search += 7;
+			while (*pp_search == ' ')
+				++pp_search;
+			pp_encoding_allow = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+					    "abcdefghijklmnopqrstuvwxyz"
+					    "0123456789-_/:.()";
+			pp_encoding_len = strspn (pp_search,
+						  pp_encoding_allow);
+			pp_encoding = xstrndup (pp_search, pp_encoding_len);
+			debug ("preprocessor encoding: %s\n", pp_encoding);
+		}
+	}
+#endif /* PP_COOKIE */
+
+	return pp_encoding;
 }
 
 struct manconv_codes {

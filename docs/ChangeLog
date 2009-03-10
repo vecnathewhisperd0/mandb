@@ -1,3 +1,24 @@
+Tue Mar 10 23:24:27 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	Fix handling of pages that declare a non-default encoding in their
+	preprocessor lines. Thanks to Hugo Herbelin for some of the ideas
+	here (Debian bug #519095).
+
+	* src/encodings.c (get_source_encoding): Note that this function
+	  should only be called if the page encoding is UTF-8. Add another
+	  example.
+	* src/manconv.c (check_preprocessor_encoding): Move to ...
+	* src/encodings.c (check_preprocessor_encoding): ... here.
+	* src/encodings.h (check_preprocessor_encoding): Add prototype.
+	* src/man.c (make_roff_command): Use preprocessor-declared encoding
+	  as page_encoding if known. Set source_encoding to page_encoding
+	  unless the latter is UTF-8.
+	* src/Makefile.am (manconv_SOURCES): Add encodings.c.
+
+	* src/encodings.c (charset_table): Use ISO-8859-15 -> latin1 entry
+	  only in the !MULTIBYTE_GROFF case; true ISO-8859-15 pages are
+	  better handled using ascii8 or preconv if possible.
+
 Tue Mar 10 14:11:14 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/zsoelim.l (zsoelim_parse_file): Put the initial .lf request
