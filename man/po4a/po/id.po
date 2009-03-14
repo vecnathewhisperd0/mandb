@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.5.4-pre2\n"
 "POT-Creation-Date: 2009-03-10 23:44+0000\n"
-"PO-Revision-Date: 2009-03-07 20:15+0700\n"
+"PO-Revision-Date: 2009-03-14 13:00+0700\n"
 "Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -287,7 +287,8 @@ msgstr ""
 "I<sistem> yang dispesifikasikan dapat berupa sebuah kombinasi dari nama "
 "sistem operasi dipisahkan oleh koma. Untuk memasukan sebuah pencarian dari "
 "deskripsi sistem operasi asal B<whatis>, masukan nama sistem B<man> dalam "
-"argumen string. Pilihan ini akan override variabel lingkungan $B<SYSTEM>."
+"argumen string. Pilihan ini akan mengesampingkan variabel lingkungan "
+"$B<SYSTEM>."
 
 # type: TP
 #: ../../man/man1/apropos.man1:146 ../../man/man1/man.man1:642
@@ -309,7 +310,7 @@ msgstr ""
 "dipisahkan oleh kolon ke pencarian. Secara Baku, B<%program%> menggunakan "
 "variabel lingkungan $B<MANPATH>, kecuali itu kosong atau tidak diset, dalam "
 "beberapa kasus itu akan menentukan sebuah jalur man yang sesuai di variabel "
-"lingkungan anda $B<PATH>. Pilihan ini override isi dari $B<MANPATH>."
+"lingkungan anda $B<PATH>. Pilihan ini mengesampingkan isi dari $B<MANPATH>."
 
 # type: TP
 #: ../../man/man1/apropos.man1:160 ../../man/man1/man.man1:593
@@ -471,18 +472,18 @@ msgstr "BERKAS"
 #: ../../man/man1/whatis.man1:237 ../../man/man8/catman.man8:96
 #: ../../man/man8/mandb.man8:199
 msgid "A traditional global I<index> database cache."
-msgstr "Sebuah tradisional global I<indeks> basis data cache."
+msgstr "Sebuah persediaan basis data I<indeks> menyeluruh tradisional."
 
 # type: Plain text
 #: ../../man/man1/apropos.man1:248 ../../man/man1/man.man1:1226
 #: ../../man/man1/whatis.man1:243 ../../man/man8/mandb.man8:192
 msgid "An FHS compliant global I<index> database cache."
-msgstr "Sebuah FHS komplian global I<indeks> basis data cache."
+msgstr "Sebuah persediaan basis data I<indeks> menyeluruh sesuai dengan FHS."
 
 # type: Plain text
 #: ../../man/man1/apropos.man1:253 ../../man/man1/whatis.man1:248
 msgid "A traditional B<whatis> text database."
-msgstr "Sebuah tradisional B<whatis> teks basis data."
+msgstr "Sebuah basis data teks B<whatis> tradisional."
 
 # type: SH
 #: ../../man/man1/apropos.man1:253 ../../man/man1/lexgrog.man1:191
@@ -649,7 +650,7 @@ msgstr ""
 #: ../../man/man1/lexgrog.man1:111
 #, no-wrap
 msgid "WHATIS PARSING"
-msgstr "WHATIS PARSING"
+msgstr "PENGAMBILAN WHATIS"
 
 # type: Plain text
 #: ../../man/man1/lexgrog.man1:122
@@ -1221,8 +1222,8 @@ msgstr ""
 "$B<MANOPT> ke string apapun dalam format baris perintah dengan eksepsi bahwa "
 "spasi apapun yang digunakan sebagai bagian dari sebuah pilihan argumen harus "
 "diberi karakter untuk keluar (diawali oleh sebuah backslash). B<%man%> akan "
-"parse $B<MANOPT>sebelum parsing baris perintahnya sendiri. Pilihan ini "
-"membutuhkan sebuah argumen yang akan di override dengan pilihan yang sama "
+"mengambil $B<MANOPT>sebelum parsing baris perintahnya sendiri. Pilihan ini "
+"membutuhkan sebuah argumen yang akan dikesampingkan dengan pilihan yang sama "
 "yang ditemukan di baris perintah. Untuk mereset seluruh set pilihan dalam "
 "$B<MANOPT>, B<-D> dapat dispesifikasikan sebagai pilihan baris perintah "
 "inisial. Ini akan mengijinkan %man% untuk `forget' mengenai pilihan yang "
@@ -1241,15 +1242,15 @@ msgid ""
 "manually run software to update traditional I<whatis> text databases."
 msgstr ""
 "Penggunaan halaman buku panduan dipaket sebagai B<man-db> membuat penggunaan "
-"ekstensif dari B<index> database caches. Cache ini berisi informasi seperti "
-"dimana setiap halaman buku panduan dapat ditemukan di sistem berkas dan "
-"apakah ini I<whatis> (deskripsi satu baris pendek dari halaman buku panduan) "
-"isi, dan mengijinkan B<man> untuk berjalan lebih cepat daripada jika iini "
-"harus mencaris sistem berkas setiap waktu untuk menemukan halaman buku "
-"panduan yang sesuai. Jika diminta menggunakan pilihan B<-u>, B<man> akan "
-"memastikan cache tetap konsisten, yang dapat mengobviate kebutuhan untuk "
-"menjalankan aplikasi secara buku panduan untuk mengupdate basis data teks "
-"tradisional I<whatis>."
+"ekstensif dari persediaan basis data B<index>. Persediaan ini berisi "
+"informasi seperti dimana setiap halaman buku panduan dapat ditemukan di "
+"sistem berkas dan apakah ini I<whatis> (deskripsi satu baris pendek dari "
+"halaman buku panduan) isi, dan mengijinkan B<man> untuk berjalan lebih cepat "
+"daripada jika ini harus mencaris sistem berkas setiap waktu untuk menemukan "
+"halaman buku panduan yang sesuai. Jika diminta menggunakan pilihan B<-u>, "
+"B<man> akan memastikan persediaan tetap konsisten, yang dapat meniadakan "
+"kebutuhan untuk menjalankan aplikasi secara manual buku panduan untuk "
+"memperbarui basis data teks I<whatis> tradisional."
 
 # type: Plain text
 #. `User' manual page hierarchies will have
@@ -1287,15 +1288,15 @@ msgstr ""
 "Utiliti ini mendukung kompressed berkas sumber nroff, secara baku, ekstensi "
 "dari B<.Z>, B<.z> dan B<.gz>. Ini memungkinkan untuk menghadapi dengan "
 "ekstensi kompresi apapun, tetapi informasi ini harus diketahui di waktu "
-"kompile. Juga, secara baku, halaman cat apapun dihasilkan adalah dikompress "
-"menggunakan B<gzip>. Setiap `global' halaman buku panduan hierarchy seperti "
-"I</usr/share/man> atau I</usr/X11R6/man> mungkin memiliki direktori apapun "
-"seperti struktur halaman cat nya. Secara tradisional halaman cat disimpan "
-"dibawah struktur yang sama seperti halaman buku panduan, tetapi untuk "
-"beberapa alasan seperti yang dispesifikasikan dalam B<Struktur Berkas "
-"Standar (FHS)>, ini mungkin lebih baik menyimpannya ditempat lain. Untuk "
-"lebih detailnya bagaimana melakukan ini, mohon baca B<manpath>(5). Untuk "
-"lebih detailnya kenapa melakukan hal ini, baca standar."
+"penyusunan. Juga, secara baku, halaman cat apapun dihasilkan adalah "
+"dikompress menggunakan B<gzip>. Setiap `global' halaman buku panduan "
+"hierarchy seperti I</usr/share/man> atau I</usr/X11R6/man> mungkin memiliki "
+"direktori apapun seperti struktur halaman cat nya. Secara tradisional "
+"halaman cat disimpan dibawah struktur yang sama seperti halaman buku "
+"panduan, tetapi untuk beberapa alasan seperti yang dispesifikasikan dalam "
+"B<Struktur Berkas Standar (FHS)>, ini mungkin lebih baik menyimpannya "
+"ditempat lain. Untuk lebih detailnya bagaimana melakukan ini, mohon baca "
+"B<manpath>(5). Untuk lebih detailnya kenapa melakukan hal ini, baca standar."
 
 # type: Plain text
 #: ../../man/man1/man.man1:393
@@ -1380,18 +1381,19 @@ msgid ""
 "would if no cache was present."
 msgstr ""
 "B<%man%> akan mencari untuk halaman buku panduan yang diinginkan didalam "
-"I<index> basis data cache. Jika pilihan B<-u> diberikan, sebuah pemeriksaan "
-"cache konsistensi dilakukan untuk memastikan basis data secara akurat "
-"merefleksi sistem berkas. Jika pilihan ini selalu diberikan, iti tidak "
-"secara umum diperlukan untuk menjalankan B<%mandb%>  setelah cache dibuat "
-"pada awalnya, kecuali sebuah cache menjadi terkorupsi. Akan tetapi, "
-"pemeriksaan cache konsistensi dapat menjadi lambat di sistem dengan banyak "
-"halaman buku panduan terpasang, jadi ini tidak dilakukan secara baku, dan "
-"sistem administrator mungkin akan menjalankan B<%mandb%> setiap minggu atau "
-"seperti itu untuk menjaga cache basis data segar. Untuk forestall masalah "
-"disebabkan oleh outdated caches, B<%man%> akan kembali ke berkas globbing "
-"jika sebuah pencarian cache gagal, hanya seperti itu jika tidak ada cache "
-"tetah ada."
+"persediaan basis data I<index>. Jika pilihan B<-u> diberikan, sebuah "
+"pemeriksaan konsistensi persediaan dilakukan untuk memastikan basis data "
+"secara akurat merefleksi sistem berkas. Jika pilihan ini selalu diberikan, "
+"iti tidak secara umum diperlukan untuk menjalankan B<%mandb%>  setelah "
+"persediaan dibuat pada awalnya, kecuali sebuah persediaan menjadi "
+"terkorupsi. Akan tetapi, pemeriksaan konsistensi persediaan dapat menjadi "
+"lambat di sistem dengan banyak halaman buku panduan terpasang, jadi ini "
+"tidak dilakukan secara baku, dan sistem administrator mungkin akan "
+"menjalankan B<%mandb%> setiap minggu atau seperti itu untuk menjaga "
+"persediaan basis data segar. Untuk mencegah masalah yang disebabkan oleh "
+"persediaan yang sudah tertinggal, B<%man%> akan kembali ke berkas globbing "
+"jika sebuah pencarian persediaan gagal, hanya seperti itu jika tidak ada "
+"persediaan yang ada."
 
 # type: Plain text
 #: ../../man/man1/man.man1:451
@@ -1437,7 +1439,7 @@ msgstr ""
 "Filter didechipered oleh sebuah angka dari rata rata. Pertama tama, pilihan "
 "baris perintah B<-p> atau variabel lingkungan $B<MANROFFSEQ> "
 "diinterogasikan. jika B<-p> belum digunakan dan variabel lingkungan tidak "
-"diset, baris inisial dari berkas nroff diparse untuk sebuah string "
+"diset, baris inisial dari berkas nroff diambil untuk sebuah string "
 "preprosesor. Untuk mengisi sebuah preprosesor string, baris pertama harus "
 "merepresentasikan"
 
@@ -1491,7 +1493,8 @@ msgid ""
 msgstr ""
 "Tidak ada pilihan argumen yang merupakan duplikasi baik di baris perintah, "
 "dalam $B<MANOPT>, atau baik, yang berbahaya. Untuk pilihan yang membutuhkan "
-"sebuah, argumen disetiap duplikasi akan override nilai argumen sebelumnya."
+"sebuah argumen, setiap penggandaan akan mengesampingkan nilai dari argumen "
+"sebelumnya."
 
 # type: SS
 #: ../../man/man1/man.man1:506
@@ -1663,7 +1666,8 @@ msgstr ""
 "I<sistem> yang dispesifikasikan dapat berupa sebuah kombinasi dari nama "
 "sistem operasi dipisahkan oleh koma. Untuk memasukan sebuah pencarian dari "
 "halaman buku panduan sistem operasi lkal, masukan nama sistem B<man> dalam "
-"string argumen. Pilihan ini akan override variabel lingkungan $B<SYSTEM>."
+"string argumen. Pilihan ini akan mengesampingkan variabel lingkungan "
+"$B<SYSTEM>."
 
 # type: Plain text
 #: ../../man/man1/man.man1:655
@@ -1674,8 +1678,8 @@ msgid ""
 msgstr ""
 "Spesifikasikan sebuah jalur man alternatif untuk digunakan. Secara baku, B<%"
 "man%> menggunakan B<%manpath%> kode turunan untuk menentukan jalur "
-"pencarian. Pilihan ini overrides variabel lingkungan $B<MANPATH> dan dapat "
-"menyebabkan pilihan B<-m> untuk diabaikan."
+"pencarian. Pilihan ini mengesampingkan variabel lingkungan $B<MANPATH> dan "
+"dapat menyebabkan pilihan B<-m> untuk diabaikan."
 
 # type: Plain text
 #: ../../man/man1/man.man1:662
@@ -1705,9 +1709,9 @@ msgid ""
 "(The B<-s> spelling is for compatibility with System V.)"
 msgstr ""
 "Daftar adalah sebuah kolon- atau daftar dipisahkan oleh koma dari daerah "
-"buku panduan `order specific' untuk mencari. Pilihan ini override variabel "
-"lingkungan $B<MANSECT> (Penyebutan B<-s> adalah untuk kompabilitas dengan "
-"Sistem V.)"
+"buku panduan `order specific' untuk mencari. Pilihan ini mengesampingkan "
+"variabel lingkungan $B<MANSECT> (Penyebutan B<-s> adalah untuk kompabilitas "
+"dengan Sistem V.)"
 
 # type: TP
 #: ../../man/man1/man.man1:672
@@ -1822,8 +1826,8 @@ msgid ""
 "with the setuid bit set."
 msgstr ""
 "Pilihan ini menyebabkan B<%man%> untuk melakukan sebuah pemeriksaan "
-"konsistensi `tingkat inode' di cache basis datanya untuk memastikan bahwa "
-"mereka adalah representasi akurat dari sistem berkas. Ini hanya akan "
+"konsistensi `tingkat inode' di persediaan basis datanya untuk memastikan "
+"bahwa mereka adalah representasi akurat dari sistem berkas. Ini hanya akan "
 "memiliki efek berguna jika B<%man%> dipasang dengan setuid bit diset."
 
 # type: SS
@@ -1847,9 +1851,9 @@ msgid ""
 "with B<-f> or B<-k>."
 msgstr ""
 "Spesifikasikan pager keluaran mana yang akan digunakan, Secara baku, B<%man%"
-"> menggunakan B<%pager%>. Pilihan ini override variabel lingkungan "
-"$B<MANPAGER>, yang jadinya mengoverrides variabel lingkungan $B<PAGER>. Ini "
-"tidak digunakan dengan konjungsi dengan B<-f> atau B<-k>."
+"> menggunakan B<%pager%>. Pilihan ini mengesampingkan variabel lingkungan "
+"$B<MANPAGER>, yang jadinya mengesampingkan variabel lingkungan $B<PAGER>. "
+"Ini tidak digunakan dengan konjungsi dengan B<-f> atau B<-k>."
 
 # type: TP
 #: ../../man/man1/man.man1:781
@@ -1899,10 +1903,10 @@ msgid ""
 "current manual page and its section name surrounded by `(' and `)'.  The "
 "string used to produce the default could be expressed as"
 msgstr ""
-"Memberikan B<-r> dengan sebuah string akan override baku ini. String mungkin "
-"berisi teks B<$MAN_PN> yang akan diekspan ke nama dari halama buku panduan "
-"sekarang dan nama bagiannya yang dilingkupi oleh `(' dan `)'. String "
-"digunakan untuk menghasilkan baku dapat diekspresikan sebagai"
+"Memberikan B<-r> dengan sebuah string akan mengesampingkan perilaku baku "
+"ini. String mungkin berisi teks B<$MAN_PN> yang akan diekspan ke nama dari "
+"halama buku panduan sekarang dan nama bagiannya yang dilingkupi oleh `(' dan "
+"`)'. String digunakan untuk menghasilkan baku dapat diekspresikan sebagai"
 
 # type: Plain text
 #: ../../man/man1/man.man1:823
@@ -1939,7 +1943,7 @@ msgid ""
 "If you want to override B<%man%>'s prompt string processing completely, use "
 "the $B<MANLESS> environment variable described below."
 msgstr ""
-"Jika anda ingin mengoverride pemrosesan prompt string B<%man%> secara "
+"Jika anda ingin mengesampingkan pemrosesan prompt string B<%man%> secara "
 "lengkap , gunakan variabel lingkunan $B<MANLESS> dijelaskan dibawah."
 
 # type: Plain text
@@ -2096,8 +2100,9 @@ msgstr ""
 "atau B<troff>/B<groff>. Tidak seluruh instalasi akan memiliki full set dari "
 "preprosesor. Beberapa preprosesor dan huruf digunakan untuk menggunakannya "
 "adalah: B<eqn> (B<e>), B<grap> (B<g>), B<pic> (B<p>), B<tbl> (B<t>), "
-"B<vgrind> (B<v>), B<refer> (B<r>). Pilihan ini override variabel lingkungan "
-"$B<MANROFFSEQ>. B<%zsoelim%> selalu berjalan sebagai preproses pertaman."
+"B<vgrind> (B<v>), B<refer> (B<r>). Pilihan ini mengesampingkan variabel "
+"lingkungan $B<MANROFFSEQ>. B<%zsoelim%> selalu berjalan sebagai preproses "
+"pertaman."
 
 # type: Plain text
 #: ../../man/man1/man.man1:975
@@ -2292,7 +2297,7 @@ msgid ""
 "they will become obsolete.  N.B. All spaces that should be interpreted as "
 "part of an option's argument must be escaped."
 msgstr ""
-"Jika $B<MANOPT> diset, ini akan diparse sebelum ke baris perintah B<%man%'s> "
+"Jika $B<MANOPT> diset, ini akan diambil sebelum ke baris perintah B<%man%'s> "
 "dan diduga dalam format serupa. Seperti dari yang lain B<%man%> variabel "
 "lingkungan spesifik dapat diekspresikan sebagai pilihan baris perintah, dan "
 "juga kandidat untuk dimasukan dalam $B<MANOPT> ini diduga bahwa mereka akan "
@@ -2626,7 +2631,7 @@ msgstr ""
 "I<sistem> spesifikasi dapat berupa sebuah kombinasi dari nama sistem operasi "
 "dipisahkan koma. Untuk memasukan hierarki halaman buku panduan sistem "
 "operasi native, nama sistem B<man> harus dimasukan dalam argumen string. "
-"Pilihan ini akan override variabel lingkungan $B<SYSTEM>."
+"Pilihan ini akan mengesampingkan variabel lingkungan $B<SYSTEM>."
 
 # type: Plain text
 #: ../../man/man1/manpath.man1:113
@@ -2688,9 +2693,9 @@ msgid ""
 "Using these options, it may be necessary to quote the I<name> or escape "
 "(\\e) the special characters to stop the shell from interpreting them."
 msgstr ""
-"I<name> mungkin berisi karakter bebas (B<-w>) atau berupa sebuah ekpresi "
+"I<nama> mungkin berisi karakter bebas (B<-w>) atau berupa sebuah ekpresi "
 "umum (B<-r>). Menggunakan pilihan ini, mungkin diperlukan untuk quote "
-"I<name> atau escape (\\e) karakter spesial untuk menghentikan shell dari "
+"I<nama> atau escape (\\e) karakter spesial untuk menghentikan shell dari "
 "mengintepretasikannya."
 
 # type: Plain text
@@ -2729,7 +2734,7 @@ msgid ""
 "to be somewhat slower due to the nature of database searches."
 msgstr ""
 "Intepretasikan setiap I<nama> sebagai sebuah ekspresi umum. Jika sebuah "
-"I<name> cocok dengan bagian apapu dari halaman buku panduan, sebuah "
+"I<nama> cocok dengan bagian apapun dari halaman buku panduan, sebuah "
 "pencocokan akan dibuat. Pilihan ini menyebabkan B<%whatis%> mungkin lebih "
 "lambat karena cara kerja pencarian basis data."
 
@@ -2768,7 +2773,7 @@ msgstr ""
 "I<sistem> spesifikasi dapat berupa sebuah kombinasi dari nama sistem operasi "
 "dipisahkan dengan koma. Untuk memasukan sebuah pencarian dari nama halaman "
 "buku panduan sistem operasi native, masukan nama sistem B<man> dalam argumen "
-"string. Pilihan ini akan override variabel lingkungan $B<SYSTEM>."
+"string. Pilihan ini akan mengesampingkan variabel lingkungan $B<SYSTEM>."
 
 # type: TH
 #: ../../man/man1/zsoelim.man1:12
@@ -2779,7 +2784,7 @@ msgstr "%thzsoelim%"
 # type: Plain text
 #: ../../man/man1/zsoelim.man1:15
 msgid "%zsoelim% - satisfy .so requests in roff input"
-msgstr "%zsoelim% - memuaskan permintaan .so dalam masukan roff"
+msgstr "%zsoelim% - memenuhi permintaan .so dalam masukan roff"
 
 # type: Plain text
 #: ../../man/man1/zsoelim.man1:20
@@ -2792,8 +2797,8 @@ msgid ""
 "B<%zsoelim%> parses I<file> arguments, or if none are specified, its "
 "standard input for lines of the form:"
 msgstr ""
-"B<%zsoelim%> parses argumen I<berkas>, atau jika none dispesifikasikan, "
-"standar masukannya untuk baris dari bentuk:"
+"B<%zsoelim%> mengambil argumen I<berkas>, atau jika tidak dispesifikasikan, "
+"standar masukannya seperti baris dari bentuk dibawah:"
 
 # type: Plain text
 #: ../../man/man1/zsoelim.man1:29
@@ -2826,10 +2831,10 @@ msgid ""
 "particular version was written to circumvent problems created by support for "
 "compressed manual pages."
 msgstr ""
-"Secara tradisional, aplikasi B<soelim> digunakan untuk mengijinkan "
-"preprosesor roff untuk dapat mempreproses berkas direferensi oleh "
-"permintaan. Versi ini telah ditulis untuk mengatasi masalah yang dibuat "
-"untuk mendukung halaman buku panduan terkompres."
+"Secara tradisional, aplikasi B<soelim> digunakan untuk mengijinkan pemroses "
+"awal roff untuk dapat mengawali pemrosesan berkas yang ditunjuk oleh "
+"permintaan. Versi ini telah ditulis untuk mengatasi masalah yang ada untuk "
+"mendukung halaman buku panduan terkompres."
 
 # type: Plain text
 #: ../../man/man1/zsoelim.man1:64
@@ -2840,7 +2845,7 @@ msgid ""
 msgstr ""
 "Pilihan ini tersedia untuk kompabilitas dengan aplikasi B<soelim> lain. Ini "
 "digunakan untuk mengaktifkan permintaan .so diikuti oleh sesuatu selain "
-"spasi. Seperti ini telah menjadi perilaku baku, ini diabaikan."
+"ruang kosong. Hal ini telah menjadi perilaku baku, ini diabaikan."
 
 # type: TH
 #: ../../man/man5/manpath.man5:13
@@ -3166,8 +3171,8 @@ msgstr "ACCESSDB"
 msgid ""
 "accessdb - dumps the content of a man-db database in a human readable format."
 msgstr ""
-"accessdb - dump isi dari sebuah basis data man-db dalam format yang mudah "
-"dibaca."
+"accessdb - keluarkan isi dari sebuah basis data man-db dalam format yang "
+"mudah dibaca."
 
 # type: Plain text
 #: ../../man/man8/accessdb.man8:20
@@ -3183,14 +3188,15 @@ msgid ""
 "database library in use."
 msgstr ""
 "B<accessdb> akan mengeluarkan data berisi dalam sebuah basis data man-db "
-"dalam sebuah bentuk yang mudah dibaca. Secara baku, ini akan dump data dari "
-"B</var/cache/man/index.E<lt>db-typeE<gt>,> dimana E<lt>db-typeE<gt> "
-"tergantung dari perpustakaan basis data yang digunakan."
+"dalam sebuah bentuk yang mudah dibaca. Secara baku, ini akan mengeluarkan "
+"data dari B</var/cache/man/index.E<lt>db-typeE<gt>,> dimana E<lt>db-"
+"typeE<gt> tergantung dari perpustakaan basis data yang digunakan."
 
 # type: Plain text
 #: ../../man/man8/accessdb.man8:29
 msgid "Supplying an argument to accessdb will override this default."
-msgstr "Memberikan sebuah argumen ke accessdb akan mengoverride baku ini."
+msgstr ""
+"Memberikan sebuah argumen ke accessdb akan mengesampingkan perilaku baku ini."
 
 # type: Plain text
 #: ../../man/man8/accessdb.man8:42
@@ -3213,7 +3219,7 @@ msgstr ""
 "apropos -E<gt> \"1 1 795981542 A - - cari nama halaman buku panduan dan deskripsinya\"\n"
 "catman -E<gt> \"8 8 795981544 A - - buat atau format halaman buku panduan sebelum terformat\"\n"
 "man -E<gt> \"1 1 795981542 A - - sebuah antarmuka ke referensi online buku panduan\"\n"
-"mandb -E<gt> \"8 8 795981544 A - - buat atau update halaman buku panduan index caches\"\n"
+"mandb -E<gt> \"8 8 795981544 A - - buat atau perbarui halaman buku panduan persediaan index\"\n"
 "manpath -E<gt> \" 1 5\"\n"
 "manpath~1 -E<gt> \"1 1 795981542 A - - tentukan jalur pencarian untuk halaman buku panduan\"\n"
 "manpath~5 -E<gt> \"5 5 795981543 A - - format dari /etc/man_db.config berkas\"\n"
@@ -3229,7 +3235,7 @@ msgstr "%thcatman%"
 # type: Plain text
 #: ../../man/man8/catman.man8:15
 msgid "%catman% - create or update the pre-formatted manual pages"
-msgstr "%catman% - buat atau update pre-formatted halaman buku panduan"
+msgstr "%catman% - buat atau perbarui pre-formatted halaman buku panduan"
 
 # type: Plain text
 #: ../../man/man8/catman.man8:24
@@ -3249,9 +3255,9 @@ msgid ""
 "decision to support cat pages is that of the local administrator, who must "
 "provide suitable directories to contain them."
 msgstr ""
-"B<%catman%> digunakan untuk membuat sebuah update set dari preformat halaman "
-"buku panduan dikenal sebagai halaman cat. Halaman cat secara umum lebih "
-"cepat untuk menampilkan daripada halaman buku panduan asli, tetapi "
+"B<%catman%> digunakan untuk membuat sebuah set terbaru dari preformat "
+"halaman buku panduan dikenal sebagai halaman cat. Halaman cat secara umum "
+"lebih cepat untuk ditampilkan daripada halaman buku panduan asli, tetapi "
 "membutuhkan ruang penyimpanan ekstra. Keputusan untuk mendukung halaman cat "
 "berada di administrator lokal, yang harus memberikan direktori yang sesuai "
 "untuk itu."
@@ -3270,9 +3276,10 @@ msgstr ""
 "Pilihan tersedia ke B<%catman%> adalah hierarki halaman buku panduan dan "
 "bagian untuk preformat. Hierarki baku yang dispesifikasikan sebagai hierarki "
 "sistem dalam berkas konfigurasi man-db, dan bagian baku baik isi dipisahkan "
-"kolon dari variabel lingkungan $B<MANSECT> atau set standar dikompile "
-"kedalam B<%man%> jika $B<MANSECT> tidak terdefinisi. Diberikan B<%catman%> "
-"dengan sebuah set dari bagian nama dipisahkan spasi override kedua diatas."
+"kolon dari variabel lingkungan $B<MANSECT> atau set standar disusun kedalam "
+"B<%man%> jika $B<MANSECT> tidak terdefinisi. Diberikan B<%catman%> dengan "
+"sebuah set dari bagian nama dipisahkan spasi akan mengesampingkan kedua "
+"diatas."
 
 # type: Plain text
 #: ../../man/man8/catman.man8:55
@@ -3280,9 +3287,9 @@ msgid ""
 "B<%catman%> makes use of the B<index> database cache associated with each "
 "hierarchy to determine which files need to be formatted."
 msgstr ""
-"B<%catman%> membuat penggunaan dari B<indeks> basis data cache diasosiasikan "
-"dengan setiap hierarki untuk menentukan berkas mana dibutuhkan untuk "
-"diformat."
+"B<%catman%> membuat penggunaan dari persediaan basis data B<indeks> "
+"diasosiasikan dengan setiap hierarki untuk menentukan berkas mana dibutuhkan "
+"untuk diformat."
 
 # type: Plain text
 #: ../../man/man8/catman.man8:64
@@ -3299,7 +3306,8 @@ msgstr ""
 #: ../../man/man8/catman.man8:102 ../../man/man8/mandb.man8:205
 msgid "An alternate or FSSTND compliant global I<index> database cache."
 msgstr ""
-"Sebuah alternatif atau FSSTND komplian global I<indeks> basis data cache."
+"Sebuah persediaan basis data I<indeks> menyeluruh alternatif atau sesuai "
+"dengan FSSTND."
 
 # type: TH
 #: ../../man/man8/mandb.man8:13
@@ -3310,7 +3318,7 @@ msgstr "%thmandb%"
 # type: Plain text
 #: ../../man/man8/mandb.man8:16
 msgid "%mandb% - create or update the manual page index caches"
-msgstr "%mandb% - buat atau update indeks cache halaman buku panduan"
+msgstr "%mandb% - buat atau perbarui indeks persediaan halaman buku panduan"
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:22
@@ -3339,11 +3347,11 @@ msgid ""
 "stored within them is used by the man-db utilities to enhance their speed "
 "and functionality."
 msgstr ""
-"B<%mandb%> digunakan untuk menginisialisasi atau secara manual mengupdate "
-"basis data cache B<indeks> yang biasanya dipelihara oleh B<%man%>. Cache "
-"berisi informasi relevan ke kondisi sekaran dari sistem halaman buku panduan "
-"dan informasi disimpan didalamanya digunakan oleh perangkat man-db untuk "
-"meningkatkan kecepatannya dan fungsionalitasnya."
+"B<%mandb%> digunakan untuk menginisialisasi atau secara manual memperbarui "
+"persediaan basis data B<indeks> yang biasanya dijaga oleh B<%man%>. "
+"Persediaan berisi informasi yang berhubungan ke kondisi sistem halaman buku "
+"panduan sekarang dan informasi yang disimpan didalamnya digunakan oleh man-"
+"db untuk meningkatkan kecepatan dan fungsionalitasnya."
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:46
@@ -3352,9 +3360,9 @@ msgid ""
 "requests, bogus manual page filenames and manual pages from which the "
 "B<whatis> cannot be parsed."
 msgstr ""
-"Ketika membuat atau mengupdate sebuah B<indeks>, B<%mandb%> akan "
+"Ketika membuat atau memperbarui sebuah B<indeks>, B<%mandb%> akan "
 "memperingatkan dari permintaan buruk .so ROFF, nama berkas halaman buku "
-"panduan palsu dan halaman buku panduan dari B<whatis> tidak dapat diparse."
+"panduan palsu dan halaman buku panduan dari B<whatis> tidak dapat diambil."
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:52
@@ -3363,15 +3371,16 @@ msgid ""
 "internal system manual page hierarchy search path, determined from "
 "information found within the man-db configuration file."
 msgstr ""
-"Memberikan B<%mandb%> dengan sebuah opsional jalur dipisahkan kolon akan "
-"memaksa jalur pencarian internal hierarki sistem halaman buku panduan, "
-"ditentukan dari informasi ditemukan didalam berkas konfigurasi man-db."
+"Memberikan B<%mandb%> dengan sebuah sebuah jalur alternatif dipisahkan "
+"dengan tanda titik dua akan memaksa jalur pencarian internal hierarki sistem "
+"halaman buku panduan, yang ditentukan dari informasi yang ditemukan dalam "
+"berkas konfigurasi man-db."
 
 # type: SH
 #: ../../man/man8/mandb.man8:52
 #, no-wrap
 msgid "DATABASE CACHES"
-msgstr "CACHE BASIS DATA"
+msgstr "PERSEDIAAN BASIS DATA"
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:55
@@ -3379,8 +3388,8 @@ msgid ""
 "B<%mandb%> can be compiled with support for any one of the following "
 "database types."
 msgstr ""
-"B<%mandb%> dapat dikompile dengan dukungan untuk tipe basis data apapun "
-"berikut ini."
+"B<%mandb%> dapat disusun dengan dukungan untuk tipe basis data apapun "
+"seperti berikut ini."
 
 # type: tbl table
 #: ../../man/man8/mandb.man8:59
@@ -3421,11 +3430,11 @@ msgid ""
 "necessary to rerun B<%mandb%> with the B<-c> option to re-create the "
 "databases from scratch."
 msgstr ""
-"Tipe basis data itu yang mendukung update asinkron memberikan kecepatan "
-"lebih dengan kemungkinan korupsi pada saat dari terminasi tidak biasa. Dalam "
-"kasus tidak bisa dimana ini telah terjadi, ini mungkin perlu untuk "
-"menjalankan ulan B<%mandb%> dengan pilihan B<-c> untuk membuat kembali basis "
-"data dari pecahan."
+"Tipe basis data itu yang mendukung pembaruan asinkron memberikan kecepatan "
+"lebih dengan kemungkinan korupsi pada saat terjadi terminasi yang tidak "
+"biasa. Dalam kasus yang tidak biasa dimana ini telah terjadi, mungkin perlu "
+"untuk menjalankan kembali B<%mandb%> dengan pilihan B<-c> untuk membuat "
+"kembali basis data dari awal."
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:82
@@ -3438,8 +3447,8 @@ msgid ""
 "Do not spend time looking for or adding information to the databases "
 "regarding stray cats."
 msgstr ""
-"Jangan habiskan waktu mencari untuk atau menambahkan informasi ke basis data "
-"mempertimbangkan stray cats."
+"Jangan habiskan waktu untuk mencari atau menambahkan informasi ke basis data "
+"mengenai berkas cat yang salah."
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:90
@@ -3447,7 +3456,7 @@ msgid ""
 "Do not spend time checking for deleted manual pages and purging them from "
 "the databases."
 msgstr ""
-"Jangan habiskan waktu memeriksa untuk halaman buku panduan terhapus dan "
+"Jangan habiskan waktu untuk memeriksa halaman buku panduan yang terhapus dan "
 "hapus mereka dari basis data."
 
 # type: Plain text
@@ -3459,12 +3468,12 @@ msgid ""
 "B<--no-purge.> This may be necessary if a database becomes corrupt or if a "
 "new database storage scheme is introduced in the future."
 msgstr ""
-"Secara baku, B<%mandb%> akan mencoba mengupdate basis data yang dibuat "
+"Secara baku, B<%mandb%> akan mencoba memperbarui basis data yang dibuat "
 "sebelumnya. Jika sebuah basis data tidak ada, ini akan dibuat. Pilihan ini "
 "memaksa B<%mandb%> untuk menghapus basis data sebelumnya dan membuat kembali "
-"dari pecahan, dan mengimplikasikan B<--no-purge.> Ini mungkin diperlukan "
-"jika sebuah basis data menjadi terkorupsi atau jika sebuah skema penyimpanan "
-"basis data baru dikenalkan dalam masa depan."
+"dari awal, dan mengimplikasikan B<--no-purge.> Ini mungkin diperlukan jika "
+"sebuah basis data telah terkorupsi atau jika sebuah skema penyimpanan basis "
+"data baru dikenalkan dalam masa depan."
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:106
@@ -3472,8 +3481,8 @@ msgid ""
 "Create user databases only, even with write permissions necessary to create "
 "system databases."
 msgstr ""
-"Buat basis dapat pengguna saja, walaupun dengan ijin tulis dibutuhkan untuk "
-"membuat basis data sistem."
+"Buat basis data untuk pengguna saja, baik dengan ijin tulis yang dibutuhkan "
+"untuk membuat basis data sistem."
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:112
@@ -3493,9 +3502,9 @@ msgid ""
 "with the B<MAN_DB_UPDATES> option and finds that a page is out of date.  It "
 "implies B<-p> and disables B<-c> and B<-s>."
 msgstr ""
-"Hanya update masukan dari nama berkas yang diberikan. Pilihan ini tidak "
+"Hanya perbarui masukan dari nama berkas yang diberikan. Pilihan ini tidak "
 "untuk penggunaan umum; ini digunakan secara internal oleh B<%man%> ketika "
-"ini telah dikompile dengan B<MAN_DB_UPDATES> pilihan dan menemukan bahwa "
+"ini telah disusun dengan B<MAN_DB_UPDATES> pilihan dan menemukan bahwa "
 "sebuah halaman telah kadaluarsa. Ini mengimplikasikan B<-p> dan "
 "menonaktifkan B<-c> dan B<-s>."
 
@@ -3535,7 +3544,7 @@ msgstr ""
 #: ../../man/man8/mandb.man8:151
 #, no-wrap
 msgid "B<E<lt>filenameE<gt>: whatis parse for page(sec) failed>"
-msgstr "B<E<lt>nama berkasE<gt>: whatis parse untuk halaman(sec) gagal>"
+msgstr "B<E<lt>nama berkasE<gt>: whatis pengambilan untuk halaman(sec) gagal>"
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:162
@@ -3550,8 +3559,8 @@ msgstr ""
 "yang diberikan gagal. Ini biasanya karena halaman buku panduan yang ditulis "
 "kurang lengkap, tetapi jika banyak pesan seperti itu yang dikeluarkan "
 "sepertinya sistem berisi halaman buku panduan yang tidak standar yang tidak "
-"kompatibel dengan man-db whatis parser. Lihat bagian B<WHATIS PARSING>  "
-"dalam B<lexgrog>(1) untuk informasi lebih lanjut."
+"sesuai dengan pengambil man-db whatis. Lihat bagian B<WHATIS PARSING>  dalam "
+"B<lexgrog>(1) untuk informasi lebih lanjut."
 
 # type: TP
 #: ../../man/man8/mandb.man8:162
@@ -3623,7 +3632,7 @@ msgstr ""
 # type: Plain text
 #: ../../man/man8/mandb.man8:194
 msgid "Older locations for the database cache included:"
-msgstr "Lokasi lebih lama untuk basis data cache dimasukan:"
+msgstr "Lokasi lebih lama untuk persediaan basis data dimasukan:"
 
 # type: Plain text
 #: ../../man/man8/mandb.man8:215
