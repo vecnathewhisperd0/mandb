@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.4.10\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2009-02-23 22:42+0000\n"
+"POT-Creation-Date: 2009-03-14 14:10+0000\n"
 "PO-Revision-Date: 2000-11-11 22:25+09:00\n"
 "Last-Translator: UCHIDA Norihiro <KY4N-UCD@asahi-net.or.jp>\n"
 "Language-Team: debian-doc <debian-doc@debian.or.jp>\n"
@@ -34,9 +34,9 @@ msgstr ""
 msgid "pipe failed"
 msgstr "fork に失敗しました"
 
-#: lib/pipeline.c:793 src/lexgrog.l:611 src/man.c:2326 src/man.c:2403
-#: src/man.c:2496 src/manconv_main.c:172 src/straycats.c:212 src/ult_src.c:277
-#: src/ult_src.c:287 src/zsoelim.l:374
+#: lib/pipeline.c:793 src/lexgrog.l:611 src/man.c:2331 src/man.c:2408
+#: src/man.c:2501 src/manconv_main.c:172 src/straycats.c:212 src/ult_src.c:277
+#: src/ult_src.c:287 src/zsoelim.l:393
 #, c-format
 msgid "can't open %s"
 msgstr "%s をオープンできません"
@@ -596,7 +596,7 @@ msgstr "マニュアル %s は登録されていません"
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 
-#: src/man.c:830 src/man.c:2247
+#: src/man.c:830 src/man.c:2252
 #, c-format
 msgid "can't chdir to %s"
 msgstr "%s にディレクトリを変更できません"
@@ -605,62 +605,62 @@ msgstr "%s にディレクトリを変更できません"
 msgid " Manual page "
 msgstr ""
 
-#: src/man.c:1078 src/man.c:3276
+#: src/man.c:1078 src/man.c:3281
 #, fuzzy, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "man コマンドが終了ステータス %d で失敗しました"
 
-#: src/man.c:1537
+#: src/man.c:1541
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "不明なプリプロセッサ `%c' を無視しています"
 
-#: src/man.c:1821 src/mandb.c:299
+#: src/man.c:1826 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "%s の所有者を変更できません"
 
-#: src/man.c:1833 src/mandb.c:213
+#: src/man.c:1838 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "%s の許可属性を変更できません"
 
-#: src/man.c:1844 src/mandb.c:204
+#: src/man.c:1849 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:1863
+#: src/man.c:1868
 #, fuzzy, c-format
 msgid "can't set times on %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:1872
+#: src/man.c:1877
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s を削除(unlink)できません"
 
-#: src/man.c:1923
+#: src/man.c:1928
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "一時的なファイル名を作成できません"
 
-#: src/man.c:2040 src/man.c:2082 src/man.c:2112
+#: src/man.c:2045 src/man.c:2087 src/man.c:2117
 #, fuzzy, c-format
 msgid "can't change to directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/man.c:2053
+#: src/man.c:2058
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "manpath 設定ファイル %s をオープンできません"
 
-#: src/man.c:2088 src/man.c:2117
+#: src/man.c:2093 src/man.c:2122
 #, fuzzy, c-format
 msgid "can't remove directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/man.c:2445
+#: src/man.c:2450
 #, c-format
 msgid ""
 "\n"
@@ -669,28 +669,28 @@ msgstr ""
 "\n"
 "catman モードで %s に書き込みできません"
 
-#: src/man.c:3130
+#: src/man.c:3135
 #, fuzzy, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
-#: src/man.c:3476
+#: src/man.c:3481
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 
-#: src/man.c:3603
+#: src/man.c:3608
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- 次は: %s [ 閲覧 (return) | スキップ (Ctrl-D) | 終了 (Ctrl-C) ]\n"
 
-#: src/manconv.c:178 src/manconv.c:203 src/manconv.c:271
+#: src/manconv.c:134 src/manconv.c:159 src/manconv.c:227
 #, fuzzy, c-format
 msgid "can't write to standard output"
 msgstr "%s に書き込めません"
 
-#: src/manconv.c:217
+#: src/manconv.c:173
 #, c-format
 msgid "iconv: incomplete character at end of buffer"
 msgstr ""
@@ -850,52 +850,52 @@ msgstr "警告: $PATH が設定されていません"
 msgid "warning: empty $PATH"
 msgstr "警告: $PATH が定義されていません"
 
-#: src/manp.c:694
+#: src/manp.c:693
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定に追加します"
 
-#: src/manp.c:705
+#: src/manp.c:704
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定を追加します"
 
-#: src/manp.c:717
+#: src/manp.c:716
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定を挿入します"
 
-#: src/manp.c:731
+#: src/manp.c:730
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "警告: $MANPATH が設定されています。%s を無視します"
 
-#: src/manp.c:764 src/manp.c:791
+#: src/manp.c:763 src/manp.c:790
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "警告: cat ディレクトリ %s を作成できません"
 
-#: src/manp.c:860
+#: src/manp.c:859
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "ディレクトリリスト `%s' を解析できません"
 
-#: src/manp.c:907
+#: src/manp.c:914
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "manpath 設定ファイル %s をオープンできません"
 
-#: src/manp.c:936
+#: src/manp.c:946
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "警告: 必要なディレクトリ %s が存在しません"
 
-#: src/manp.c:1152
+#: src/manp.c:1162
 #, c-format
 msgid "can't determine current directory"
 msgstr "カレントディレクトリを決定できません"
 
-#: src/manp.c:1325
+#: src/manp.c:1335
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "警告: %s は %s で始まっていません"

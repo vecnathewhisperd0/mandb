@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.1-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2009-02-23 22:42+0000\n"
+"POT-Creation-Date: 2009-03-14 14:10+0000\n"
 "PO-Revision-Date: 2008-01-16 17:49-0600\n"
 "Last-Translator: Ming Hua <minghua-guest@users.alioth.debian.org>\n"
 "Language-Team: Chinese (simplified) <translation-team-zh-cn@lists."
@@ -46,9 +46,9 @@ msgstr ""
 msgid "pipe failed"
 msgstr ""
 
-#: lib/pipeline.c:793 src/lexgrog.l:611 src/man.c:2326 src/man.c:2403
-#: src/man.c:2496 src/manconv_main.c:172 src/straycats.c:212 src/ult_src.c:277
-#: src/ult_src.c:287 src/zsoelim.l:374
+#: lib/pipeline.c:793 src/lexgrog.l:611 src/man.c:2331 src/man.c:2408
+#: src/man.c:2501 src/manconv_main.c:172 src/straycats.c:212 src/ult_src.c:277
+#: src/ult_src.c:287 src/zsoelim.l:393
 #, c-format
 msgid "can't open %s"
 msgstr "无法打开 %s"
@@ -624,7 +624,7 @@ msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "当没有手册页时，可以用 %s 命令来寻求帮助。\n"
 
 #  need-proofread
-#: src/man.c:830 src/man.c:2247
+#: src/man.c:830 src/man.c:2252
 #, c-format
 msgid "can't chdir to %s"
 msgstr "无法进入到 %s 目录中"
@@ -636,63 +636,63 @@ msgstr "无法进入到 %s 目录中"
 msgid " Manual page "
 msgstr " Manual page "
 
-#: src/man.c:1078 src/man.c:3276
+#: src/man.c:1078 src/man.c:3281
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb 命令失败，退出状态代码为 %d"
 
-#: src/man.c:1537
+#: src/man.c:1541
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "忽略未知的预处理器 `%c'"
 
-#: src/man.c:1821 src/mandb.c:299
+#: src/man.c:1826 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "无法 chown %s"
 
-#: src/man.c:1833 src/mandb.c:213
+#: src/man.c:1838 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "无法 chmod %s"
 
-#: src/man.c:1844 src/mandb.c:204
+#: src/man.c:1849 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "无法将 %s 改名为 %s"
 
 #  need-proofread
-#: src/man.c:1863
+#: src/man.c:1868
 #, c-format
 msgid "can't set times on %s"
 msgstr "无法设定 %s 文件的时间"
 
-#: src/man.c:1872
+#: src/man.c:1877
 #, c-format
 msgid "can't unlink %s"
 msgstr "无法删除 (unlink) %s"
 
-#: src/man.c:1923
+#: src/man.c:1928
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "无法为 %s 创建临时 cat 文件"
 
-#: src/man.c:2040 src/man.c:2082 src/man.c:2112
+#: src/man.c:2045 src/man.c:2087 src/man.c:2117
 #, c-format
 msgid "can't change to directory %s"
 msgstr "无法切换到目录 %s 中"
 
-#: src/man.c:2053
+#: src/man.c:2058
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "无法打开临时文件 %s"
 
-#: src/man.c:2088 src/man.c:2117
+#: src/man.c:2093 src/man.c:2122
 #, c-format
 msgid "can't remove directory %s"
 msgstr "无法移除目录 %s"
 
-#: src/man.c:2445
+#: src/man.c:2450
 #, c-format
 msgid ""
 "\n"
@@ -702,28 +702,28 @@ msgstr ""
 "无法在 catman 模式下对 %s 写入"
 
 #  need-proofread
-#: src/man.c:3130
+#: src/man.c:3135
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s：依赖于 whatis 引用是已被废弃的做法\n"
 
-#: src/man.c:3476
+#: src/man.c:3481
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "内部错误：候选类型 %d 超出正常范围"
 
-#: src/man.c:3603
+#: src/man.c:3608
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- 下一页: %s [ 查看 (return) | 跳过 (Ctrl-D) | 退出 (Ctrl-C) ]\n"
 
 #  need-proofread
-#: src/manconv.c:178 src/manconv.c:203 src/manconv.c:271
+#: src/manconv.c:134 src/manconv.c:159 src/manconv.c:227
 #, c-format
 msgid "can't write to standard output"
 msgstr "无法对标准输出写入"
 
-#: src/manconv.c:217
+#: src/manconv.c:173
 #, c-format
 msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv：在缓冲区末尾有不完全的字符"
@@ -885,52 +885,52 @@ msgstr "警告：没有设定 $PATH"
 msgid "warning: empty $PATH"
 msgstr "警告：$PATH 为空"
 
-#: src/manp.c:694
+#: src/manp.c:693
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "警告：已经设定了 $MANPATH，在前面加上 %s"
 
-#: src/manp.c:705
+#: src/manp.c:704
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "警告：已经设定了 $MANPATH，在后面加上 %s"
 
-#: src/manp.c:717
+#: src/manp.c:716
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "警告：已经设定了 $MANPATH，在其中插入 %s"
 
-#: src/manp.c:731
+#: src/manp.c:730
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "警告：已经设定了 $MANPATH，忽略 %s"
 
-#: src/manp.c:764 src/manp.c:791
+#: src/manp.c:763 src/manp.c:790
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "警告：无法创建 catdir %s"
 
-#: src/manp.c:860
+#: src/manp.c:859
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "无法解读目录列表 %s"
 
-#: src/manp.c:907
+#: src/manp.c:914
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "无法打开手册路径设置文件 %s"
 
-#: src/manp.c:936
+#: src/manp.c:946
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "警告：必需的目录 %s 不存在"
 
-#: src/manp.c:1152
+#: src/manp.c:1162
 #, c-format
 msgid "can't determine current directory"
 msgstr "无法确定当前目录"
 
-#: src/manp.c:1325
+#: src/manp.c:1335
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "警告：%s 并非以 %s 开始"
