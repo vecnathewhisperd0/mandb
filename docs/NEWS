@@ -1,3 +1,25 @@
+man-db 2.5.5
+============
+
+Major changes since man-db 2.5.4:
+
+	Fixes:
+	------
+
+	o Pages that declare a non-default encoding in their preprocessor
+	  lines are now handled correctly.
+
+	o Fix an uninitialised variable when sorting manual page candidates
+	  that could lead to excessive memory allocation and possible
+	  crashes.
+
+	Improvements:
+	-------------
+
+	o man-db's 'make check' now tests that all its own manual pages
+	  format without errors or warnings from groff, to ensure a
+	  better-quality release.
+
 man-db 2.5.4 (24 February 2009)
 ===============================
 
