@@ -2956,7 +2956,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 static void sort_candidates (struct candidate **candidates)
 {
 	struct candidate *cand, **allcands;
-	size_t count, i;
+	size_t count = 0, i;
 
 	for (cand = *candidates; cand; cand = cand->next)
 		++count;
