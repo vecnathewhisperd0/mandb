@@ -1,3 +1,18 @@
+Sat Mar 14 13:54:13 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* man/Makefile.am (EXTRA_DIST): Distribute check-man.
+
+	* src/manp.c (read_config_file): Add argument to control whether the
+	  main configuration file is optional. Use a static variable to
+	  track whether we've been called already.
+	  (get_manpath): read_config_file will keep track of whether it's
+	  been called already for itself. Pass new argument.
+	* src/manp.h (read_config_file): Update prototype.
+	* src/man.c (main): Treat the main configuration file as optional if
+	  -l was given, since in that case we can get by well enough without
+	  it. This makes it easier to run 'make check' without first running
+	  'make install'.
+
 Sat Mar 14 12:07:58 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Start 2.5.5.

@@ -959,7 +959,7 @@ int main (int argc, char *argv[])
 
 	pipeline_install_sigchld ();
 
-	read_config_file ();
+	read_config_file (local_man_file);
 
 	/* if the user wants whatis or apropos, give it to them... */
 	if (external)

@@ -680,8 +680,7 @@ char *get_manpath (const char *systems)
 	char *manpathlist;
 
 	/* need to read config file even if MANPATH set, for mandb(8) */
-	if (!namestore)
-		read_config_file ();
+	read_config_file (0);
 
 	manpathlist = getenv ("MANPATH");
 	if (manpathlist && *manpathlist) {
@@ -878,10 +877,14 @@ static void free_config_file (void *unused ATTRIBUTE_UNUSED)
 	namestore = tailstore = NULL;
 }
 
-void read_config_file(void)
+void read_config_file (int optional)
 {
+	static int done = 0;
 	char *home;
 	FILE *config;
+
+	if (done)
+		return;
 
 	push_cleanup (free_config_file, NULL, 0);
 
@@ -902,17 +905,24 @@ void read_config_file(void)
 	}
 
 	config = fopen (CONFIG_FILE, "r");
-	if (config == NULL)
-		error (FAIL, 0,
-		       _("can't open the manpath configuration file %s"),
-		       CONFIG_FILE);
+	if (config == NULL) {
+		if (optional)
+			debug ("can't open %s; continuing anyway\n",
+			       CONFIG_FILE);
+		else
+			error (FAIL, 0,
+			       _("can't open the manpath configuration file "
+				 "%s"), CONFIG_FILE);
+	} else {
+		debug ("From the config file %s:\n\n", CONFIG_FILE);
 
-	debug ("From the config file %s:\n\n", CONFIG_FILE);
-
-	add_to_dirlist (config, 0);
-	fclose (config);
+		add_to_dirlist (config, 0);
+		fclose (config);
+	}
 
 	print_list ();
+
+	done = 1;
 }
 
 
