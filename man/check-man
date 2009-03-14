@@ -23,11 +23,10 @@ errors="$(LC_ALL=C MANWIDTH=80 "$top_builddir/src/man" --warnings -E UTF-8 -l "$
 
 # Ignore wrapping failures for CJK manual pages; this should go away once
 # groff supports these natively.
-case $LINGUA in
-	ja|ko|zh)
-		errors="$(echo "$errors" | $EGREP -v "(cannot adjust line|can't break line)")" || true
-		;;
-esac
+# Indeed, even for other languages we're going to get "cannot adjust line"
+# if %manpath_config_file% expands to something long. Hmm. We'll just ignore
+# this across the board for now.
+errors="$(echo "$errors" | $EGREP -v "(cannot adjust line|can't break line)")" || true
 
 # Ignore tbl warnings from groff >= 1.20 for now. These parts of our manual
 # pages should probably be rewritten without tbl.
