@@ -129,6 +129,7 @@ AC_DEFUN([gl_INIT],
   gl_FCNTL_MODULE_INDICATOR([open])
   gl_FUNC_OPENAT
   gl_PATHMAX
+  AC_REPLACE_FUNCS(raise)
   gl_FUNC_RAWMEMCHR
   gl_STRING_MODULE_INDICATOR([rawmemchr])
   gl_FUNC_READLINK
@@ -139,6 +140,11 @@ AC_DEFUN([gl_INIT],
   gl_SAVE_CWD
   gl_FUNC_SETENV
   gl_STDLIB_MODULE_INDICATOR([setenv])
+  gl_SIGACTION
+  gl_SIGNAL_MODULE_INDICATOR([sigaction])
+  gl_SIGNAL_H
+  gl_SIGNALBLOCKING
+  gl_SIGNAL_MODULE_INDICATOR([sigprocmask])
   gl_SIZE_MAX
   gl_FUNC_SLEEP
   gl_UNISTD_MODULE_INDICATOR([sleep])
@@ -445,6 +451,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/printf-args.h
   lib/printf-parse.c
   lib/printf-parse.h
+  lib/raise.c
   lib/rawmemchr.c
   lib/rawmemchr.valgrind
   lib/readlink.c
@@ -463,7 +470,11 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/save-cwd.c
   lib/save-cwd.h
   lib/setenv.c
+  lib/sig-handler.h
+  lib/sigaction.c
   lib/siglist.h
+  lib/signal.in.h
+  lib/sigprocmask.c
   lib/size_max.h
   lib/sleep.c
   lib/snprintf.c
@@ -603,6 +614,9 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/same.m4
   m4/save-cwd.m4
   m4/setenv.m4
+  m4/sigaction.m4
+  m4/signal_h.m4
+  m4/signalblocking.m4
   m4/size_max.m4
   m4/sleep.m4
   m4/snprintf.m4
