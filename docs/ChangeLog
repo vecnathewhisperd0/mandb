@@ -1,3 +1,13 @@
+Sun Mar 15 13:13:40 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	Apparently some packages ship section 0 manual pages documenting C
+	library header files. See http://bugs.archlinux.org/task/13734 and
+	http://en.wikipedia.org/wiki/Manual_page_(Unix).
+
+	* configure.ac (--with-sections): Add section 0 between 3 and 2.
+	* man/man5/manpath.man5 (FORMAT): Update documentation of SECTION.
+	* src/man_db.conf.in (SECTION): Update documentation.
+
 Sun Mar 15 01:08:16 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* gnulib: Import the sigaction, signal, and sigprocmask modules.

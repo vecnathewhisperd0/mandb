@@ -85,7 +85,7 @@ AC_ARG_WITH(config-file,
 config_file_basename=${withval##*/}
 config_file_dirname=`AS_DIRNAME(["$config_file"])`
 AC_ARG_WITH(sections,
-[AS_HELP_STRING([--with-sections=SECTIONS], [use manual page sections SECTIONS @<:@1 n l 8 3 2 5 4 9 6 7@:>@])],
+[AS_HELP_STRING([--with-sections=SECTIONS], [use manual page sections SECTIONS @<:@1 n l 8 3 0 2 5 4 9 6 7@:>@])],
 	[if test "$withval" = "yes" || test "$withval" = "no"
 	 then
 		AC_MSG_ERROR(--with-sections requires an argument)
