@@ -23,6 +23,6 @@ SUBDIRS = docs intl gnulib/lib gnulib/po lib libdb src man manual po tools
 
 dist_noinst_DATA = README include/README
 
-EXTRA_DIST = autogen.sh
+EXTRA_DIST = autogen.sh gnulib/m4/gnulib-cache.m4
 
 ACLOCAL_AMFLAGS = -I m4 -I gnulib/m4
