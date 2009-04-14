@@ -615,6 +615,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
+gl_use_threads_default=
 gl_func_list=
 gl_header_list=
 gt_needs=
@@ -4997,14 +4998,19 @@ _ACEOF
 
 
 
-    # Check whether --enable-threads was given.
+
+  # Check whether --enable-threads was given.
 if test "${enable_threads+set}" = set; then
   enableval=$enable_threads; gl_use_threads=$enableval
 else
-  case "$host_os" in
-                            osf*) gl_use_threads=no ;;
-       *)    gl_use_threads=yes ;;
-     esac
+  if test -n "$gl_use_threads_default"; then
+       gl_use_threads="$gl_use_threads_default"
+     else
+       case "$host_os" in
+                                    osf*) gl_use_threads=no ;;
+         *)    gl_use_threads=yes ;;
+       esac
+     fi
 
 fi
 
@@ -13100,6 +13106,9 @@ else
 
 
 
+
+
+
     use_additional=yes
 
   acl_save_prefix="$prefix"
@@ -13530,6 +13539,11 @@ fi
       LTLIBPTH="${LTLIBPTH}${LTLIBPTH:+ }-R$found_dir"
     done
   fi
+
+
+
+
+
 
     ac_cv_libpth_libs="$LIBPTH"
     ac_cv_libpth_ltlibs="$LTLIBPTH"
@@ -13990,13 +14004,10 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-/* Test preprocessor.  */
-      #if ! (-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
-        error in preprocessor;
-      #endif
-      #if ! (18446744073709551615ULL <= -1ull)
-        error in preprocessor;
-      #endif
+/* For now, do not test the preprocessor; as of 2007 there are too many
+	 implementations with broken preprocessors.  Perhaps this can
+	 be revisited in 2012.  In the meantime, code should not expect
+	 #if to work with literals wider than 32 bits.  */
       /* Test literals.  */
       long long int ll = 9223372036854775807ll;
       long long int nll = -9223372036854775807LL;
@@ -14982,24 +14993,40 @@ if test "${ac_cv_type_unsigned_long_long_int+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
+
+  /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-unsigned long long int ull = 18446744073709551615ULL;
-	    typedef int a[(18446744073709551615ULL <= (unsigned long long int) -1
-			   ? 1 : -1)];
-	   int i = 63;
+/* For now, do not test the preprocessor; as of 2007 there are too many
+	 implementations with broken preprocessors.  Perhaps this can
+	 be revisited in 2012.  In the meantime, code should not expect
+	 #if to work with literals wider than 32 bits.  */
+      /* Test literals.  */
+      long long int ll = 9223372036854775807ll;
+      long long int nll = -9223372036854775807LL;
+      unsigned long long int ull = 18446744073709551615ULL;
+      /* Test constant expressions.   */
+      typedef int a[((-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
+		     ? 1 : -1)];
+      typedef int b[(18446744073709551615ULL <= (unsigned long long int) -1
+		     ? 1 : -1)];
+      int i = 63;
 int
 main ()
 {
-unsigned long long int ullmax = 18446744073709551615ull;
-	    return (ull << 63 | ull >> 63 | ull << i | ull >> i
-		    | ullmax / ull | ullmax % ull);
+/* Test availability of runtime routines for shift and division.  */
+      long long int llmax = 9223372036854775807ll;
+      unsigned long long int ullmax = 18446744073709551615ull;
+      return ((ll << 63) | (ll >> 63) | (ll < i) | (ll > i)
+	      | (llmax / ll) | (llmax % ll)
+	      | (ull << 63) | (ull >> 63) | (ull << i) | (ull >> i)
+	      | (ullmax / ull) | (ullmax % ull));
   ;
   return 0;
 }
+
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
 if { (ac_try="$ac_link"
@@ -32426,6 +32453,9 @@ _ACEOF
 
 
 
+
+
+
     use_additional=yes
 
   acl_save_prefix="$prefix"
@@ -32856,6 +32886,11 @@ fi
       LTLIBICONV="${LTLIBICONV}${LTLIBICONV:+ }-R$found_dir"
     done
   fi
+
+
+
+
+
 
 
 
@@ -35137,6 +35172,9 @@ echo "${ECHO_T}$ac_res" >&6; }
 
 
 
+
+
+
     use_additional=yes
 
   acl_save_prefix="$prefix"
@@ -35567,6 +35605,11 @@ fi
       LTLIBINTL="${LTLIBINTL}${LTLIBINTL:+ }-R$found_dir"
     done
   fi
+
+
+
+
+
 
           { echo "$as_me:$LINENO: checking for GNU gettext in libintl" >&5
 echo $ECHO_N "checking for GNU gettext in libintl... $ECHO_C" >&6; }
