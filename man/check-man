@@ -19,7 +19,7 @@ fi
 [ -x "$top_builddir/src/man" ] || exit 77
 
 code=0
-errors="$(LC_ALL=C MANWIDTH=80 "$top_builddir/src/man" --warnings -E UTF-8 -l "$1" 2>&1 >/dev/null)" || code=$?
+errors="$(LC_ALL=C MANWIDTH=80 MAN_KEEP_FORMATTING=1 "$top_builddir/src/man" --warnings -E UTF-8 -l "$1" 2>&1 >/dev/null)" || code=$?
 
 # Ignore wrapping failures for CJK manual pages; this should go away once
 # groff supports these natively.
