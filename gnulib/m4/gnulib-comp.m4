@@ -1,5 +1,5 @@
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2002-2008 Free Software Foundation, Inc.
+# Copyright (C) 2002-2009 Free Software Foundation, Inc.
 #
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
@@ -25,14 +25,14 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LIBOBJS$])dnl a variable
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([AC_PROG_RANLIB])
-  AC_REQUIRE([AC_GNU_SOURCE])
+  AC_REQUIRE([AM_PROG_CC_C_O])
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
-  AC_REQUIRE([gl_LOCK_EARLY])
   dnl Some compilers (e.g., AIX 5.3 cc) need to be in c99 mode
   dnl for the builtin va_copy to work.  With Autoconf 2.60 or later,
   dnl AC_PROG_CC_STDC arranges for this.  With older Autoconf AC_PROG_CC_STDC
   dnl shouldn't hurt, though installers are on their own to set c99 mode.
   AC_REQUIRE([AC_PROG_CC_STDC])
+  gl_THREADLIB_EARLY
 ])
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -50,13 +50,14 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='gnulib/lib'
-  gl_EOVERFLOW
   gl_FUNC_ALLOCA
   gl_ARGP
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_XGETTEXT_OPTION([--flag=argp_error:2:c-format])
      AM_XGETTEXT_OPTION([--flag=argp_failure:4:c-format])])
   gl_FUNC_ATEXIT
+  gl_FUNC_BTOWC
+  gl_WCHAR_MODULE_INDICATOR([btowc])
   AC_FUNC_CANONICALIZE_FILE_NAME
   gl_MODULE_INDICATOR([canonicalize])
   gl_CANONICALIZE_LGPL
@@ -64,15 +65,20 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_CHDIR_LONG
   gl_FUNC_CHOWN
   gl_UNISTD_MODULE_INDICATOR([chown])
+  gl_FUNC_CLOSE
+  gl_UNISTD_MODULE_INDICATOR([close])
   gl_CHECK_TYPE_STRUCT_DIRENT_D_INO
   gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
+  gl_DIRENT_H
   gl_FUNC_DIRFD
+  gl_DIRENT_MODULE_INDICATOR([dirfd])
   gl_DIRNAME
   gl_DOUBLE_SLASH_ROOT
   gl_FUNC_DUP2
   gl_UNISTD_MODULE_INDICATOR([dup2])
   gl_ENVIRON
   gl_UNISTD_MODULE_INDICATOR([environ])
+  AC_REQUIRE([gl_HEADER_ERRNO_H])
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
@@ -80,6 +86,8 @@ AC_DEFUN([gl_INIT],
   gl_EXITFAIL
   gl_FUNC_FCHDIR
   gl_UNISTD_MODULE_INDICATOR([fchdir])
+  gl_FUNC_FCLOSE
+  gl_STDIO_MODULE_INDICATOR([fclose])
   gl_FCNTL_H
   gl_FCNTL_SAFER
   gl_MODULE_INDICATOR([fcntl-safer])
@@ -108,28 +116,32 @@ AC_DEFUN([gl_INIT],
   AC_SUBST([LOCALCHARSET_TESTS_ENVIRONMENT])
   gl_LOCK
   gl_FUNC_LSTAT
+  gl_SYS_STAT_MODULE_INDICATOR([lstat])
   AC_FUNC_MALLOC
   AC_DEFINE([GNULIB_MALLOC_GNU], 1, [Define to indicate the 'malloc' module.])
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
   gl_MALLOCA
+  gl_FUNC_MBRTOWC
+  gl_WCHAR_MODULE_INDICATOR([mbrtowc])
+  gl_FUNC_MBSINIT
+  gl_WCHAR_MODULE_INDICATOR([mbsinit])
   gl_FUNC_MEMCMP
   gl_FUNC_MEMPCPY
   gl_STRING_MODULE_INDICATOR([mempcpy])
   gl_FUNC_MEMRCHR
   gl_STRING_MODULE_INDICATOR([memrchr])
-  gl_FUNC_MEMSET
   gl_MINMAX
   gt_FUNC_MKDTEMP
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
   gl_FUNC_MKSTEMP
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
+  AC_REQUIRE([gl_MULTIARCH])
   gl_FUNC_OPEN
   gl_MODULE_INDICATOR([open])
   gl_FCNTL_MODULE_INDICATOR([open])
   gl_FUNC_OPENAT
   gl_PATHMAX
-  AC_REPLACE_FUNCS(raise)
   gl_FUNC_RAWMEMCHR
   gl_STRING_MODULE_INDICATOR([rawmemchr])
   gl_FUNC_READLINK
@@ -160,8 +172,6 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_STRCHRNUL
   gl_STRING_MODULE_INDICATOR([strchrnul])
   gl_FUNC_STRCSPN
-  gl_FUNC_STRDUP
-  gl_STRING_MODULE_INDICATOR([strdup])
   gl_FUNC_STRERROR
   gl_STRING_MODULE_INDICATOR([strerror])
   gl_HEADER_STRING_H
@@ -170,8 +180,6 @@ AC_DEFUN([gl_INIT],
   gl_STRING_MODULE_INDICATOR([strndup])
   gl_FUNC_STRNLEN
   gl_STRING_MODULE_INDICATOR([strnlen])
-  gl_FUNC_STRPBRK
-  gl_STRING_MODULE_INDICATOR([strpbrk])
   gl_FUNC_STRSEP
   gl_STRING_MODULE_INDICATOR([strsep])
   gl_FUNC_STRSIGNAL
@@ -186,6 +194,7 @@ AC_DEFUN([gl_INIT],
   AC_PROG_MKDIR_P
   gl_SYSEXITS
   gl_FUNC_GEN_TEMPNAME
+  gl_THREADLIB
   gl_TLS
   gl_UNISTD_H
   gl_UNISTD_SAFER
@@ -200,6 +209,8 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_VSNPRINTF
   gl_STDIO_MODULE_INDICATOR([vsnprintf])
   gl_WCHAR_H
+  gl_FUNC_WCRTOMB
+  gl_WCHAR_MODULE_INDICATOR([wcrtomb])
   gl_WCTYPE_H
   gl_XALLOC
   gl_XGETCWD
@@ -364,21 +375,25 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/at-func.c
   lib/atexit.c
   lib/basename.c
+  lib/btowc.c
   lib/canonicalize-lgpl.c
   lib/canonicalize.c
   lib/canonicalize.h
   lib/chdir-long.c
   lib/chdir-long.h
   lib/chown.c
+  lib/close-hook.c
+  lib/close-hook.h
+  lib/close.c
   lib/config.charset
   lib/creat-safer.c
   lib/dirent.in.h
   lib/dirfd.c
-  lib/dirfd.h
   lib/dirname.c
   lib/dirname.h
   lib/dup-safer.c
   lib/dup2.c
+  lib/errno.in.h
   lib/error.c
   lib/error.h
   lib/exitfail.c
@@ -387,6 +402,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fchmodat.c
   lib/fchown-stub.c
   lib/fchownat.c
+  lib/fclose.c
   lib/fcntl--.h
   lib/fcntl-safer.h
   lib/fcntl.in.h
@@ -412,6 +428,11 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/glob-libc.h
   lib/glob.c
   lib/glob.in.h
+  lib/glthread/lock.c
+  lib/glthread/lock.h
+  lib/glthread/threadlib.c
+  lib/glthread/tls.c
+  lib/glthread/tls.h
   lib/hash-pjw.c
   lib/hash-pjw.h
   lib/hash-triple.c
@@ -422,18 +443,16 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/lchown.c
   lib/localcharset.c
   lib/localcharset.h
-  lib/lock.c
-  lib/lock.h
   lib/lstat.c
-  lib/lstat.h
   lib/malloc.c
   lib/malloca.c
   lib/malloca.h
   lib/malloca.valgrind
+  lib/mbrtowc.c
+  lib/mbsinit.c
   lib/memcmp.c
   lib/mempcpy.c
   lib/memrchr.c
-  lib/memset.c
   lib/minmax.h
   lib/mkdirat.c
   lib/mkdtemp.c
@@ -451,7 +470,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/printf-args.h
   lib/printf-parse.c
   lib/printf-parse.h
-  lib/raise.c
   lib/rawmemchr.c
   lib/rawmemchr.valgrind
   lib/readlink.c
@@ -481,13 +499,14 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdarg.in.h
   lib/stdbool.in.h
   lib/stdint.in.h
+  lib/stdio-write.c
   lib/stdio.in.h
   lib/stdlib.in.h
   lib/strcasecmp.c
   lib/strchrnul.c
   lib/strchrnul.valgrind
   lib/strcspn.c
-  lib/strdup.c
+  lib/streq.h
   lib/strerror.c
   lib/string.in.h
   lib/strings.in.h
@@ -495,7 +514,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strncasecmp.c
   lib/strndup.c
   lib/strnlen.c
-  lib/strpbrk.c
   lib/strsep.c
   lib/strsignal.c
   lib/sys_select.in.h
@@ -505,8 +523,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/sysexits.in.h
   lib/tempname.c
   lib/tempname.h
-  lib/tls.c
-  lib/tls.h
   lib/unistd--.h
   lib/unistd-safer.h
   lib/unistd.in.h
@@ -514,8 +530,10 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/vasnprintf.c
   lib/vasnprintf.h
   lib/vasprintf.c
+  lib/verify.h
   lib/vsnprintf.c
   lib/wchar.in.h
+  lib/wcrtomb.c
   lib/wctype.in.h
   lib/xalloc-die.c
   lib/xalloc.h
@@ -528,16 +546,20 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xstrndup.h
   lib/xvasprintf.c
   lib/xvasprintf.h
+  m4/00gnulib.m4
   m4/alloca.m4
   m4/argp.m4
   m4/atexit.m4
+  m4/btowc.m4
   m4/canonicalize-lgpl.m4
   m4/canonicalize.m4
   m4/chdir-long.m4
   m4/chown.m4
+  m4/close.m4
   m4/codeset.m4
   m4/d-ino.m4
   m4/d-type.m4
+  m4/dirent_h.m4
   m4/dirfd.m4
   m4/dirname.m4
   m4/dos.m4
@@ -545,11 +567,12 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/dup2.m4
   m4/eealloc.m4
   m4/environ.m4
-  m4/eoverflow.m4
+  m4/errno_h.m4
   m4/error.m4
   m4/exitfail.m4
   m4/extensions.m4
   m4/fchdir.m4
+  m4/fclose.m4
   m4/fcntl-safer.m4
   m4/fcntl_h.m4
   m4/filenamecat.m4
@@ -585,19 +608,24 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/lib-link.m4
   m4/lib-prefix.m4
   m4/localcharset.m4
+  m4/locale-fr.m4
+  m4/locale-ja.m4
+  m4/locale-zh.m4
   m4/lock.m4
   m4/longlong.m4
   m4/lstat.m4
   m4/malloc.m4
   m4/malloca.m4
+  m4/mbrtowc.m4
+  m4/mbsinit.m4
   m4/mbstate_t.m4
   m4/memcmp.m4
   m4/mempcpy.m4
   m4/memrchr.m4
-  m4/memset.m4
   m4/minmax.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
+  m4/multiarch.m4
   m4/nls.m4
   m4/onceonly.m4
   m4/open.m4
@@ -631,13 +659,11 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strcase.m4
   m4/strchrnul.m4
   m4/strcspn.m4
-  m4/strdup.m4
   m4/strerror.m4
   m4/string_h.m4
   m4/strings_h.m4
   m4/strndup.m4
   m4/strnlen.m4
-  m4/strpbrk.m4
   m4/strsep.m4
   m4/strsignal.m4
   m4/sys_select_h.m4
@@ -646,6 +672,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/sys_time_h.m4
   m4/sysexits.m4
   m4/tempname.m4
+  m4/threadlib.m4
   m4/tls.m4
   m4/uintmax_t.m4
   m4/unistd-safer.m4
@@ -656,6 +683,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/vsnprintf.m4
   m4/wchar.m4
   m4/wchar_t.m4
+  m4/wcrtomb.m4
   m4/wctype.m4
   m4/wint_t.m4
   m4/xalloc.m4

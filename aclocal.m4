@@ -1,4 +1,4 @@
-# generated automatically by aclocal 1.10.1 -*- Autoconf -*-
+# generated automatically by aclocal 1.10.2 -*- Autoconf -*-
 
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
 # 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
@@ -13,13 +13,13 @@
 
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
-m4_if(AC_AUTOCONF_VERSION, [2.61],,
-[m4_warning([this file was generated for autoconf 2.61.
+m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.63],,
+[m4_warning([this file was generated for autoconf 2.63.
 You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically `autoreconf'.])])
 
-# Copyright (C) 2002, 2003, 2005, 2006, 2007  Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -34,7 +34,7 @@ AC_DEFUN([AM_AUTOMAKE_VERSION],
 [am__api_version='1.10'
 dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
 dnl require some minimum version.  Point them to the right macro.
-m4_if([$1], [1.10.1], [],
+m4_if([$1], [1.10.2], [],
       [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
 ])
 
@@ -48,12 +48,12 @@ m4_define([_AM_AUTOCONF_VERSION], [])
 # AM_SET_CURRENT_AUTOMAKE_VERSION
 # -------------------------------
 # Call AM_AUTOMAKE_VERSION and AM_AUTOMAKE_VERSION so they can be traced.
-# This function is AC_REQUIREd by AC_INIT_AUTOMAKE.
+# This function is AC_REQUIREd by AM_INIT_AUTOMAKE.
 AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
-[AM_AUTOMAKE_VERSION([1.10.1])dnl
+[AM_AUTOMAKE_VERSION([1.10.2])dnl
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
-_AM_AUTOCONF_VERSION(AC_AUTOCONF_VERSION)])
+_AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
 
 # AM_AUX_DIR_EXPAND                                         -*- Autoconf -*-
 
@@ -303,19 +303,28 @@ _AM_SUBST_NOTMAKE([AMDEPBACKSLASH])dnl
 
 # Generate code to set up dependency tracking.              -*- Autoconf -*-
 
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2008
 # Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
-#serial 3
+#serial 4
 
 # _AM_OUTPUT_DEPENDENCY_COMMANDS
 # ------------------------------
 AC_DEFUN([_AM_OUTPUT_DEPENDENCY_COMMANDS],
-[for mf in $CONFIG_FILES; do
+[# Autoconf 2.62 quotes --file arguments for eval, but not when files
+# are listed without --file.  Let's play safe and only enable the eval
+# if we detect the quoting.
+case $CONFIG_FILES in
+*\'*) eval set x "$CONFIG_FILES" ;;
+*)   set x $CONFIG_FILES ;;
+esac
+shift
+for mf
+do
   # Strip MF so we end up with the name of the file.
   mf=`echo "$mf" | sed -e 's/:.*$//'`
   # Check whether this is an Automake generated Makefile or not.
@@ -583,6 +592,41 @@ AC_MSG_RESULT([$_am_result])
 rm -f confinc confmf
 ])
 
+# Copyright (C) 1999, 2000, 2001, 2003, 2004, 2005, 2008
+# Free Software Foundation, Inc.
+#
+# This file is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# serial 6
+
+# AM_PROG_CC_C_O
+# --------------
+# Like AC_PROG_CC_C_O, but changed for automake.
+AC_DEFUN([AM_PROG_CC_C_O],
+[AC_REQUIRE([AC_PROG_CC_C_O])dnl
+AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+AC_REQUIRE_AUX_FILE([compile])dnl
+# FIXME: we rely on the cache variable name because
+# there is no other way.
+set dummy $CC
+am_cc=`echo $[2] | sed ['s/[^a-zA-Z0-9_]/_/g;s/^[0-9]/_/']`
+eval am_t=\$ac_cv_prog_cc_${am_cc}_c_o
+if test "$am_t" != yes; then
+   # Losing compiler, so override with the script.
+   # FIXME: It is wrong to rewrite CC.
+   # But if we don't then we get into trouble of one sort or another.
+   # A longer-term fix would be to have automake use am__CC in this case,
+   # and then we could set am__CC="\$(top_srcdir)/compile \$(CC)"
+   CC="$am_aux_dir/compile $CC"
+fi
+dnl Make sure AC_PROG_CC is never called again, or it will override our
+dnl setting of CC.
+m4_define([AC_PROG_CC],
+          [m4_fatal([AC_PROG_CC cannot be called after AM_PROG_CC_C_O])])
+])
+
 # Fake the existence of programs that GNU maintainers use.  -*- Autoconf -*-
 
 # Copyright (C) 1997, 1999, 2000, 2001, 2003, 2004, 2005
@@ -647,13 +691,13 @@ esac
 
 # Helper functions for option handling.                     -*- Autoconf -*-
 
-# Copyright (C) 2001, 2002, 2003, 2005  Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2005, 2008  Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
-# serial 3
+# serial 4
 
 # _AM_MANGLE_OPTION(NAME)
 # -----------------------
@@ -670,7 +714,7 @@ AC_DEFUN([_AM_SET_OPTION],
 # ----------------------------------
 # OPTIONS is a space-separated list of Automake options.
 AC_DEFUN([_AM_SET_OPTIONS],
-[AC_FOREACH([_AM_Option], [$1], [_AM_SET_OPTION(_AM_Option)])])
+[m4_foreach_w([_AM_Option], [$1], [_AM_SET_OPTION(_AM_Option)])])
 
 # _AM_IF_OPTION(OPTION, IF-SET, [IF-NOT-SET])
 # -------------------------------------------
@@ -874,16 +918,20 @@ m4_include([m4/man-gnu-nroff.m4])
 m4_include([m4/man-linguas.m4])
 m4_include([m4/man-po4a.m4])
 m4_include([m4/man-trans-subst.m4])
+m4_include([gnulib/m4/00gnulib.m4])
 m4_include([gnulib/m4/alloca.m4])
 m4_include([gnulib/m4/argp.m4])
 m4_include([gnulib/m4/atexit.m4])
+m4_include([gnulib/m4/btowc.m4])
 m4_include([gnulib/m4/canonicalize-lgpl.m4])
 m4_include([gnulib/m4/canonicalize.m4])
 m4_include([gnulib/m4/chdir-long.m4])
 m4_include([gnulib/m4/chown.m4])
+m4_include([gnulib/m4/close.m4])
 m4_include([gnulib/m4/codeset.m4])
 m4_include([gnulib/m4/d-ino.m4])
 m4_include([gnulib/m4/d-type.m4])
+m4_include([gnulib/m4/dirent_h.m4])
 m4_include([gnulib/m4/dirfd.m4])
 m4_include([gnulib/m4/dirname.m4])
 m4_include([gnulib/m4/dos.m4])
@@ -891,11 +939,12 @@ m4_include([gnulib/m4/double-slash-root.m4])
 m4_include([gnulib/m4/dup2.m4])
 m4_include([gnulib/m4/eealloc.m4])
 m4_include([gnulib/m4/environ.m4])
-m4_include([gnulib/m4/eoverflow.m4])
+m4_include([gnulib/m4/errno_h.m4])
 m4_include([gnulib/m4/error.m4])
 m4_include([gnulib/m4/exitfail.m4])
 m4_include([gnulib/m4/extensions.m4])
 m4_include([gnulib/m4/fchdir.m4])
+m4_include([gnulib/m4/fclose.m4])
 m4_include([gnulib/m4/fcntl-safer.m4])
 m4_include([gnulib/m4/fcntl_h.m4])
 m4_include([gnulib/m4/filenamecat.m4])
@@ -931,19 +980,24 @@ m4_include([gnulib/m4/lib-ld.m4])
 m4_include([gnulib/m4/lib-link.m4])
 m4_include([gnulib/m4/lib-prefix.m4])
 m4_include([gnulib/m4/localcharset.m4])
+m4_include([gnulib/m4/locale-fr.m4])
+m4_include([gnulib/m4/locale-ja.m4])
+m4_include([gnulib/m4/locale-zh.m4])
 m4_include([gnulib/m4/lock.m4])
 m4_include([gnulib/m4/longlong.m4])
 m4_include([gnulib/m4/lstat.m4])
 m4_include([gnulib/m4/malloc.m4])
 m4_include([gnulib/m4/malloca.m4])
+m4_include([gnulib/m4/mbrtowc.m4])
+m4_include([gnulib/m4/mbsinit.m4])
 m4_include([gnulib/m4/mbstate_t.m4])
 m4_include([gnulib/m4/memcmp.m4])
 m4_include([gnulib/m4/mempcpy.m4])
 m4_include([gnulib/m4/memrchr.m4])
-m4_include([gnulib/m4/memset.m4])
 m4_include([gnulib/m4/minmax.m4])
 m4_include([gnulib/m4/mkdtemp.m4])
 m4_include([gnulib/m4/mkstemp.m4])
+m4_include([gnulib/m4/multiarch.m4])
 m4_include([gnulib/m4/nls.m4])
 m4_include([gnulib/m4/onceonly.m4])
 m4_include([gnulib/m4/open.m4])
@@ -976,13 +1030,11 @@ m4_include([gnulib/m4/stdlib_h.m4])
 m4_include([gnulib/m4/strcase.m4])
 m4_include([gnulib/m4/strchrnul.m4])
 m4_include([gnulib/m4/strcspn.m4])
-m4_include([gnulib/m4/strdup.m4])
 m4_include([gnulib/m4/strerror.m4])
 m4_include([gnulib/m4/string_h.m4])
 m4_include([gnulib/m4/strings_h.m4])
 m4_include([gnulib/m4/strndup.m4])
 m4_include([gnulib/m4/strnlen.m4])
-m4_include([gnulib/m4/strpbrk.m4])
 m4_include([gnulib/m4/strsep.m4])
 m4_include([gnulib/m4/strsignal.m4])
 m4_include([gnulib/m4/sys_select_h.m4])
@@ -991,6 +1043,7 @@ m4_include([gnulib/m4/sys_stat_h.m4])
 m4_include([gnulib/m4/sys_time_h.m4])
 m4_include([gnulib/m4/sysexits.m4])
 m4_include([gnulib/m4/tempname.m4])
+m4_include([gnulib/m4/threadlib.m4])
 m4_include([gnulib/m4/tls.m4])
 m4_include([gnulib/m4/uintmax_t.m4])
 m4_include([gnulib/m4/unistd-safer.m4])
@@ -1001,6 +1054,7 @@ m4_include([gnulib/m4/visibility.m4])
 m4_include([gnulib/m4/vsnprintf.m4])
 m4_include([gnulib/m4/wchar.m4])
 m4_include([gnulib/m4/wchar_t.m4])
+m4_include([gnulib/m4/wcrtomb.m4])
 m4_include([gnulib/m4/wctype.m4])
 m4_include([gnulib/m4/wint_t.m4])
 m4_include([gnulib/m4/xalloc.m4])

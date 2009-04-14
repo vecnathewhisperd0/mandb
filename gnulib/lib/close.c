@@ -1,5 +1,5 @@
-/* Declare dirfd, if necessary.
-   Copyright (C) 2001, 2002, 2006 Free Software Foundation, Inc.
+/* close replacement.
+   Copyright (C) 2008-2009 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -12,17 +12,31 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
-   Written by Jim Meyering.  */
+#include <config.h>
 
-#include <sys/types.h>
+/* Specification.  */
+#include <unistd.h>
 
-#include <dirent.h>
+#include "close-hook.h"
 
-#ifndef HAVE_DECL_DIRFD
-"this configure-time declaration test was not run"
+/* Override close() to call into other gnulib modules.  */
+
+int
+rpl_close (int fd)
+#undef close
+{
+#if WINDOWS_SOCKETS
+  int retval = execute_all_close_hooks (fd);
+#else
+  int retval = close (fd);
 #endif
-#if !HAVE_DECL_DIRFD && !defined dirfd
-int dirfd (DIR const *);
+
+#ifdef FCHDIR_REPLACEMENT
+  if (retval >= 0)
+    _gl_unregister_fd (fd);
 #endif
+
+  return retval;
+}

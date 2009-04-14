@@ -1,6 +1,6 @@
-/* Provide a non-threads replacement for the POSIX raise function.
-
-   Copyright (C) 2002, 2003, 2005, 2006 Free Software Foundation, Inc.
+/* Convert unibyte character to wide character.
+   Copyright (C) 2008 Free Software Foundation, Inc.
+   Written by Bruno Haible <bruno@clisp.org>, 2008.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,16 +15,24 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
-/* written by Jim Meyering */
-
 #include <config.h>
 
-#include <sys/types.h>
-#include <signal.h>
-#include <unistd.h>
+/* Specification.  */
+#include <wchar.h>
 
-int
-raise (int sig)
+#include <stdio.h>
+
+wint_t
+btowc (int c)
 {
-  return kill (getpid (), sig);
+  if (c != EOF)
+    {
+      char buf[1];
+      wchar_t wc;
+
+      buf[0] = c;
+      if (mbtowc (&wc, buf, 1) >= 0)
+	return wc;
+    }
+  return WEOF;
 }
