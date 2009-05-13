@@ -128,6 +128,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/malloca.m4 \
 	$(top_srcdir)/gnulib/m4/mbrtowc.m4 \
 	$(top_srcdir)/gnulib/m4/mbsinit.m4 \
+	$(top_srcdir)/gnulib/m4/mbsrtowcs.m4 \
 	$(top_srcdir)/gnulib/m4/mbstate_t.m4 \
 	$(top_srcdir)/gnulib/m4/memcmp.m4 \
 	$(top_srcdir)/gnulib/m4/mempcpy.m4 \
@@ -219,7 +220,7 @@ am_libgnu_a_OBJECTS = areadlink-with-size.$(OBJEXT) argp-ba.$(OBJEXT) \
 	argp-pvh.$(OBJEXT) argp-xinl.$(OBJEXT) close-hook.$(OBJEXT) \
 	file-set.$(OBJEXT) hash-pjw.$(OBJEXT) hash-triple.$(OBJEXT) \
 	localcharset.$(OBJEXT) glthread/lock.$(OBJEXT) \
-	malloca.$(OBJEXT) openat-die.$(OBJEXT) \
+	malloca.$(OBJEXT) openat-die.$(OBJEXT) strnlen1.$(OBJEXT) \
 	glthread/threadlib.$(OBJEXT) glthread/tls.$(OBJEXT) \
 	xalloc-die.$(OBJEXT) xstrndup.$(OBJEXT) xvasprintf.$(OBJEXT) \
 	xasprintf.$(OBJEXT)
@@ -845,20 +846,20 @@ EXTRA_DIST = alloca.c alloca.in.h areadlink.h atexit.c btowc.c \
 	hash-triple.h $(top_srcdir)/tools/config.rpath intprops.h \
 	lchown.c $(top_srcdir)/tools/link-warning.h config.charset \
 	ref-add.sin ref-del.sin lstat.c malloc.c malloc.c malloca.h \
-	malloca.valgrind mbrtowc.c mbsinit.c memcmp.c mempcpy.c \
-	memrchr.c mkdtemp.c mkstemp.c open.c at-func.c fchmodat.c \
-	fchownat.c fstatat.c mkdirat.c openat-priv.h openat-proc.c \
-	openat.c openat.h pathmax.h rawmemchr.c rawmemchr.valgrind \
-	readlink.c regcomp.c regex.c regex.h regex_internal.c \
-	regex_internal.h regexec.c rename.c same.c same.h same-inode.h \
-	save-cwd.c save-cwd.h setenv.c sig-handler.h sigaction.c \
-	signal.in.h sigprocmask.c sleep.c snprintf.c stdarg.in.h \
-	stdbool.in.h stdint.in.h stdio-write.c stdio.in.h stdlib.in.h \
-	strcasecmp.c strncasecmp.c strchrnul.c strchrnul.valgrind \
-	strcspn.c streq.h strerror.c string.in.h strings.in.h \
-	strndup.c strnlen.c strsep.c siglist.h strsignal.c \
-	sys_select.in.h sys_socket.in.h sys_stat.in.h sys_time.in.h \
-	sysexits.in.h tempname.c tempname.h \
+	malloca.valgrind mbrtowc.c mbsinit.c mbsrtowcs-state.c \
+	mbsrtowcs.c memcmp.c mempcpy.c memrchr.c mkdtemp.c mkstemp.c \
+	open.c at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c \
+	openat-priv.h openat-proc.c openat.c openat.h pathmax.h \
+	rawmemchr.c rawmemchr.valgrind readlink.c regcomp.c regex.c \
+	regex.h regex_internal.c regex_internal.h regexec.c rename.c \
+	same.c same.h same-inode.h save-cwd.c save-cwd.h setenv.c \
+	sig-handler.h sigaction.c signal.in.h sigprocmask.c sleep.c \
+	snprintf.c stdarg.in.h stdbool.in.h stdint.in.h stdio-write.c \
+	stdio.in.h stdlib.in.h strcasecmp.c strncasecmp.c strchrnul.c \
+	strchrnul.valgrind strcspn.c streq.h strerror.c string.in.h \
+	strings.in.h strndup.c strnlen.c strsep.c siglist.h \
+	strsignal.c sys_select.in.h sys_socket.in.h sys_stat.in.h \
+	sys_time.in.h sysexits.in.h tempname.c tempname.h \
 	$(top_srcdir)/tools/config.rpath unistd.in.h dup-safer.c \
 	fd-safer.c pipe-safer.c unistd--.h unistd-safer.h unsetenv.c \
 	asnprintf.c float+.h printf-args.c printf-args.h \
@@ -905,9 +906,10 @@ libgnu_a_SOURCES = areadlink-with-size.c argp.h argp-ba.c argp-eexst.c \
 	argp-xinl.c close-hook.c file-set.c gettext.h hash-pjw.h \
 	hash-pjw.c hash-triple.c localcharset.h localcharset.c \
 	glthread/lock.h glthread/lock.c malloca.c minmax.h \
-	openat-die.c size_max.h glthread/threadlib.c glthread/tls.h \
-	glthread/tls.c verify.h xalloc-die.c xsize.h xstrndup.h \
-	xstrndup.c xvasprintf.h xvasprintf.c xasprintf.c
+	openat-die.c size_max.h strnlen1.h strnlen1.c \
+	glthread/threadlib.c glthread/tls.h glthread/tls.c verify.h \
+	xalloc-die.c xsize.h xstrndup.h xstrndup.c xvasprintf.h \
+	xvasprintf.c xasprintf.c
 libgnu_a_LIBADD = $(gl_LIBOBJS) @ALLOCA@
 libgnu_a_DEPENDENCIES = $(gl_LIBOBJS) @ALLOCA@
 EXTRA_libgnu_a_SOURCES = alloca.c atexit.c btowc.c canonicalize.c \
@@ -916,17 +918,18 @@ EXTRA_libgnu_a_SOURCES = alloca.c atexit.c btowc.c canonicalize.c \
 	exitfail.c fchdir.c fclose.c creat-safer.c open-safer.c \
 	filenamecat.c fnmatch.c fnmatch_loop.c getcwd.c getlogin_r.c \
 	getopt.c getopt1.c gettimeofday.c glob.c hash.c lchown.c \
-	lstat.c malloc.c malloc.c mbrtowc.c mbsinit.c memcmp.c \
-	mempcpy.c memrchr.c mkdtemp.c mkstemp.c open.c at-func.c \
-	fchmodat.c fchownat.c fstatat.c mkdirat.c openat-proc.c \
-	openat.c rawmemchr.c readlink.c regcomp.c regex.c \
-	regex_internal.c regexec.c rename.c same.c save-cwd.c setenv.c \
-	sigaction.c sigprocmask.c sleep.c snprintf.c stdio-write.c \
-	strcasecmp.c strncasecmp.c strchrnul.c strcspn.c strerror.c \
-	strndup.c strnlen.c strsep.c strsignal.c tempname.c \
-	dup-safer.c fd-safer.c pipe-safer.c unsetenv.c asnprintf.c \
-	printf-args.c printf-parse.c vasnprintf.c asprintf.c \
-	vasprintf.c vsnprintf.c wcrtomb.c xmalloc.c xgetcwd.c
+	lstat.c malloc.c malloc.c mbrtowc.c mbsinit.c \
+	mbsrtowcs-state.c mbsrtowcs.c memcmp.c mempcpy.c memrchr.c \
+	mkdtemp.c mkstemp.c open.c at-func.c fchmodat.c fchownat.c \
+	fstatat.c mkdirat.c openat-proc.c openat.c rawmemchr.c \
+	readlink.c regcomp.c regex.c regex_internal.c regexec.c \
+	rename.c same.c save-cwd.c setenv.c sigaction.c sigprocmask.c \
+	sleep.c snprintf.c stdio-write.c strcasecmp.c strncasecmp.c \
+	strchrnul.c strcspn.c strerror.c strndup.c strnlen.c strsep.c \
+	strsignal.c tempname.c dup-safer.c fd-safer.c pipe-safer.c \
+	unsetenv.c asnprintf.c printf-args.c printf-parse.c \
+	vasnprintf.c asprintf.c vasprintf.c vsnprintf.c wcrtomb.c \
+	xmalloc.c xgetcwd.c
 LINK_WARNING_H = $(top_srcdir)/tools/link-warning.h
 charset_alias = $(DESTDIR)$(libdir)/charset.alias
 charset_tmp = $(DESTDIR)$(libdir)/charset.tmp
@@ -1061,6 +1064,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/malloca.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbrtowc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbsinit.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbsrtowcs-state.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbsrtowcs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memcmp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mempcpy.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memrchr.Po@am__quote@
@@ -1098,6 +1103,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strncasecmp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strndup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strnlen.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strnlen1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strsep.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strsignal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tempname.Po@am__quote@
@@ -1447,7 +1453,7 @@ alloca.h: alloca.in.h
 # The Automake-defined pkg* macros are appended, in the order
 # listed in the Automake 1.10a+ documentation.
 configmake.h: Makefile
-	rm -f $@-t $@
+	rm -f $@-t
 	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
 	  echo '#define PREFIX "$(prefix)"'; \
 	  echo '#define EXEC_PREFIX "$(exec_prefix)"'; \
@@ -1477,7 +1483,11 @@ configmake.h: Makefile
 	  echo '#define PKGLIBDIR "$(pkglibdir)"'; \
 	  echo '#define PKGLIBEXECDIR "$(pkglibexecdir)"'; \
 	} | sed '/""/d' > $@-t
-	mv $@-t $@
+	if test -f $@ && cmp $@-t $@ > /dev/null; then \
+	  rm -f $@-t; \
+	else \
+	  rm -f $@; mv $@-t $@; \
+	fi
 
 # We need the following in order to create <dirent.h> when the system
 # doesn't have one that works with the given compiler.

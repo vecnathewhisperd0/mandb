@@ -126,6 +126,8 @@ AC_DEFUN([gl_INIT],
   gl_WCHAR_MODULE_INDICATOR([mbrtowc])
   gl_FUNC_MBSINIT
   gl_WCHAR_MODULE_INDICATOR([mbsinit])
+  gl_FUNC_MBSRTOWCS
+  gl_WCHAR_MODULE_INDICATOR([mbsrtowcs])
   gl_FUNC_MEMCMP
   gl_FUNC_MEMPCPY
   gl_STRING_MODULE_INDICATOR([mempcpy])
@@ -450,6 +452,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/malloca.valgrind
   lib/mbrtowc.c
   lib/mbsinit.c
+  lib/mbsrtowcs-state.c
+  lib/mbsrtowcs.c
   lib/memcmp.c
   lib/mempcpy.c
   lib/memrchr.c
@@ -514,6 +518,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strncasecmp.c
   lib/strndup.c
   lib/strnlen.c
+  lib/strnlen1.c
+  lib/strnlen1.h
   lib/strsep.c
   lib/strsignal.c
   lib/sys_select.in.h
@@ -618,6 +624,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/malloca.m4
   m4/mbrtowc.m4
   m4/mbsinit.m4
+  m4/mbsrtowcs.m4
   m4/mbstate_t.m4
   m4/memcmp.m4
   m4/mempcpy.m4
