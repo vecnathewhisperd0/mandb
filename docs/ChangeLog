@@ -1,3 +1,14 @@
+Sat May 30 12:50:44 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_start): Check the return value of nice.
+
+	* include/manconfig.h.in (create_tempdir): Warn if the result is not
+	  used.
+	* lib/tempfile.c (create_tempdir): Check the return value of
+	  mkdtemp.
+	* src/man.c (format_display): Check the return value of
+	  create_tempdir.
+
 Sat May 30 13:37:58 CEST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (make_roff_command): Initialise page_encoding.

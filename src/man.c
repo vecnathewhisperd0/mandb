@@ -2041,6 +2041,9 @@ static void format_display (pipeline *decomp,
 			old_cwd[0] = '\0';
 		}
 		htmldir = create_tempdir ("hman");
+		if (!htmldir)
+			error (FATAL, errno,
+			       _("can't create temporary directory"));
 		if (chdir (htmldir) == -1)
 			error (FATAL, errno, _("can't change to directory %s"),
 			       htmldir);

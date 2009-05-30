@@ -75,6 +75,7 @@ char *create_tempdir (const char *template)
 	if (!dir)
 		return NULL;
 	created_dirname = appendstr (dir, "/", template, "XXXXXX", NULL);
-	mkdtemp (created_dirname);
+	if (!mkdtemp (created_dirname))
+		return NULL;
 	return created_dirname;
 }
