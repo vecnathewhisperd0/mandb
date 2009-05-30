@@ -1291,7 +1291,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	char *fmt_prog;
 	pipeline *p = pipeline_new ();
 	command *cmd;
-	char *page_encoding;
+	char *page_encoding = NULL;
 	const char *output_encoding = NULL;
 	const char *locale_charset = NULL;
 
