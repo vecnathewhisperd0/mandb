@@ -87,9 +87,11 @@ static int replace_if_necessary (struct mandata *newdata,
 				 struct mandata *olddata,
 				 datum newkey, datum newcont)
 {
-	if (compare_ids (newdata->id, olddata->id, 0) < 0)
+	if (compare_ids (newdata->id, olddata->id, 0) < 0) {
 		if (MYDBM_REPLACE (dbf, newkey, newcont))
 			gripe_replace_key (MYDBM_DPTR (newkey));
+		return 0;
+	}
 
 	/* TODO: name fields should be collated with the requested name */
 

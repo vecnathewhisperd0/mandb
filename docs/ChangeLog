@@ -1,3 +1,9 @@
+Sat Jun 20 21:26:02 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_store.c (replace_if_necessary): Prevent misleading
+	  debugging message: don't say "ignoring differing ids" if the new
+	  id was preferred and we attempted a replacement.
+
 Sat May 30 12:50:44 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_start): Check the return value of nice.
