@@ -361,11 +361,16 @@ static struct mandata *dblookup (const char *page, const char *section,
 			if ((flags & MATCH_CASE) && !STREQ (names[i], page))
 				continue;
 
-			if (section != NULL &&
-			    !STRNEQ (section, ext[i],
-				     flags & EXACT ? strlen (ext[i])
-						   : strlen (section)))
-				continue;
+			if (section != NULL) {
+				if (flags & EXACT) {
+					if (!STREQ (section, ext[i]))
+						continue;
+				} else {
+					if (!STRNEQ (section, ext[i],
+						     strlen (section)))
+						continue;
+				}
+			}
 
 			/* So the key is suitable ... */
 			key = make_multi_key (names[i], ext[i]);
