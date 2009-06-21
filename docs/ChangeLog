@@ -1,3 +1,9 @@
+Sun Jun 21 02:00:31 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/ult_src.c (ult_src): Keep a copy of base before passing it to
+	  decompress_open, as that function doesn't keep its own copy and we
+	  may change base later.
+
 Sat Jun 20 21:26:02 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_store.c (replace_if_necessary): Prevent misleading

@@ -260,6 +260,7 @@ const char *ult_src (const char *name, const char *path,
 
 	if (flags & SO_LINK) {
 		const char *buffer;
+		char *decomp_base;
 		pipeline *decomp;
 #ifdef COMP_SRC
 		struct stat st;
@@ -281,10 +282,15 @@ const char *ult_src (const char *name, const char *path,
 		}
 #endif
 
-		decomp = decompress_open (base);
+		/* base may change for recursive calls to ult_src, but
+		 * decompress_open doesn't keep its own copy.
+		 */
+		decomp_base = xstrdup (base);
+		decomp = decompress_open (decomp_base);
 		if (!decomp) {
 			if (quiet < 2)
 				error (0, errno, _("can't open %s"), base);
+			free (decomp_base);
 			return NULL;
 		}
 		pipeline_start (decomp);
@@ -316,12 +322,14 @@ const char *ult_src (const char *name, const char *path,
 
 				pipeline_wait (decomp);
 				pipeline_free (decomp);
+				free (decomp_base);
 				return ult;
 			}
 		}
 
 		pipeline_wait (decomp);
 		pipeline_free (decomp);
+		free (decomp_base);
 	}
 
 	/* We have the ultimate source */
