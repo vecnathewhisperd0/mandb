@@ -6,6 +6,11 @@ Major changes since man-db 2.5.5:
 	Fixes:
 	------
 
+	o Exact-section database lookups were incorrectly returning all
+	  database entries whose section names were prefixes of the
+	  requested section name. In some cases this could confuse mandb
+	  into never believing that the database was up to date.
+
 	Improvements:
 	-------------
 
