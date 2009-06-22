@@ -79,11 +79,15 @@ struct page_description *parse_descriptions (const char *base,
 
 		for (token = strtok (names, ","); token;
 		     token = strtok (NULL, ",")) {
+			char *name = trim_spaces (token);
+
 			/* Skip name tokens containing whitespace. They are
 			 * almost never useful as manual page names.
 			 */
-			if (strpbrk (token, " \t") != NULL)
+			if (strpbrk (name, " \t") != NULL) {
+				free (name);
 				continue;
+			}
 
 			/* Allocate new description node. */
 			if (head) {
@@ -93,7 +97,7 @@ struct page_description *parse_descriptions (const char *base,
 				desc = xmalloc (sizeof *desc);
 				head = desc;
 			}
-			desc->name   = trim_spaces (token);
+			desc->name   = name; /* steal memory */
 			desc->whatis = dash ? trim_spaces (dash + 3) : NULL;
 			desc->next   = NULL;
 
