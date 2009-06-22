@@ -1,7 +1,7 @@
 /*
  * descriptions.c: manipulate man page descriptions
  *
- * Copyright (C) 2002, 2003, 2006 Colin Watson.
+ * Copyright (C) 2002, 2003, 2006, 2007, 2008, 2009 Colin Watson.
  *
  * This file is part of man-db.
  *
