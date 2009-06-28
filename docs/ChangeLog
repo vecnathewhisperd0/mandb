@@ -1,3 +1,9 @@
+Sun Jun 28 01:40:24 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (get_line): Limit newline search to the data length
+	  returned by get_block, fixing an assertion failure.
+	* docs/NEWS: Document this.
+
 Mon Jun 22 08:02:55 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/descriptions.c (parse_descriptions): Strip leading and

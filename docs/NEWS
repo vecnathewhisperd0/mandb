@@ -15,6 +15,13 @@ Major changes since man-db 2.5.5:
 	  baz") in their NAME sections, broken by a change in 2.5.0 (!)
 	  to ignore manual page names containing spaces.
 
+	o Fixed a buffer overflow in the pipeline library's line-reading
+	  functions. I don't believe this to be exploitable: at worst we
+	  might believe that there's some garbage at the end of manual pages
+	  (whose contents are untrusted anyway) and this bug typically
+	  resulted in a failed assertion the next time anything tried to
+	  read a line.
+
 	Improvements:
 	-------------
 
