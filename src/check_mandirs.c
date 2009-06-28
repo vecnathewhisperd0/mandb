@@ -334,12 +334,14 @@ static inline void add_dir_entries (const char *path, char *infile)
  * any dirs of the tree that have been modified (ie added to) will then be
  * scanned for new files, which are then added to the db.
  */
-static int testmandirs (const char *path, time_t last)
+static int testmandirs (const char *path, const char *catpath, time_t last,
+			int create)
 {
 	DIR *dir;
 	struct dirent *mandir;
 	struct stat stbuf;
 	int amount = 0;
+	int created = 0;
 
 	debug ("Testing %s for new files\n", path);
 
@@ -372,7 +374,33 @@ static int testmandirs (const char *path, time_t last)
 		debug ("\tsubdirectory %s has been 'modified'\n",
 		       mandir->d_name);
 
-		dbf = MYDBM_RWOPEN(database);
+		if (create && !created) {
+			/* We seem to have something to do, so create the
+			 * database now.
+			 */
+			mkcatdirs (path, catpath);
+
+			/* Open the db in CTRW mode to store the $ver$ ID */
+
+			dbf = MYDBM_CTRWOPEN (database);
+			if (dbf == NULL) {
+				if (errno == EACCES || errno == EROFS) {
+					debug ("database %s is read-only\n",
+					       database);
+					return 0;
+				} else {
+					error (0, errno,
+					       _("can't create index cache %s"),
+					       database);
+					return -errno;
+				}
+			}
+
+			dbver_wr (dbf);
+
+			created = 1;
+		} else
+			dbf = MYDBM_RWOPEN(database);
 
 		if (!dbf) {
 			gripe_rwopen_failed ();
@@ -465,62 +493,14 @@ void reset_db_time (void)
 	free (MYDBM_DPTR (key));
 }
 
-/* Create directory containing database.
- *
- * I'm too lazy to implement mkdir -p properly; one level should do for the
- * case at hand, namely per-locale databases.
- */
-int make_database_directory (const char *db)
-{
-	char *dbdir;
-	struct stat st;
-
-	if (!strchr (db, '/'))
-		return 0;
-
-	dbdir = dir_name (db);
-	if (stat (dbdir, &st) == 0)
-		goto success;
-	if (errno != ENOENT)
-		goto success; /* don't know, but we'll find out soon enough */
-	if (mkdir (dbdir, 0777) != 0) {
-		error (0, errno,
-		       _("can't create index cache directory %s"), dbdir);
-		return 1;
-	}
-success:
-	free (dbdir);
-	return 0;
-}
-
 /* routine to prepare/create the db prior to calling testmandirs() */
-int create_db (const char *manpath)
+int create_db (const char *manpath, const char *catpath)
 {
 	int amount;
 	
 	debug ("create_db(%s): %s\n", manpath, database);
 
-	if (make_database_directory (database) != 0)
-		return 0;
-
-	/* Open the db in CTRW mode to store the $ver$ ID */
-
-	dbf = MYDBM_CTRWOPEN (database);
-	if (dbf == NULL) {
-		if (errno == EACCES || errno == EROFS) {
-			debug ("database %s is read-only\n", database);
-			return 0;
-		} else {
-			error (0, errno, _("can't create index cache %s"),
-			       database);
-			return -errno;
-		}
-	}
-
-	dbver_wr (dbf);
-	MYDBM_CLOSE (dbf);
-
-	amount = testmandirs (manpath, (time_t) 0);
+	amount = testmandirs (manpath, catpath, (time_t) 0, 1);
 
 	if (amount) {
 		update_db_time ();
@@ -533,11 +513,8 @@ int create_db (const char *manpath)
 
 /* routine to update the db, ensure that it is consistent with the 
    filesystem */
-int update_db (const char *manpath)
+int update_db (const char *manpath, const char *catpath)
 {
-	if (make_database_directory (database) != 0)
-		return 0;
-
 	dbf = MYDBM_RDOPEN (database);
 	if (dbf && dbver_rd (dbf)) {
 		MYDBM_CLOSE (dbf);
@@ -559,10 +536,11 @@ int update_db (const char *manpath)
 		       MYDBM_DPTR (content) ? atol (MYDBM_DPTR (content)) : 0L);
 		if (MYDBM_DPTR (content)) {
 			new = testmandirs (
-				manpath, (time_t) atol (MYDBM_DPTR (content)));
+				manpath, catpath,
+				(time_t) atol (MYDBM_DPTR (content)), 0);
 			MYDBM_FREE (MYDBM_DPTR (content));
 		} else
-			new = testmandirs (manpath, (time_t) 0);
+			new = testmandirs (manpath, catpath, (time_t) 0, 0);
 
 		if (new) {
 			update_db_time ();

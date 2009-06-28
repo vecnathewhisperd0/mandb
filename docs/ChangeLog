@@ -1,3 +1,26 @@
+Sun Jun 28 17:56:49 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	Don't create unnecessary database directories (Debian bug #472919).
+
+	* src/check_mandirs.c (testmandirs): Add catpath and create
+	  arguments. Create the database when it first seems to be needed.
+	  Use mkcatdirs rather than make_database_directory.
+	  (make_database_directory): Remove.
+	  (create_db): Add catpath argument. Don't create the database here;
+	  let testmandirs do it when needed instead.
+	  (update_db): Add catpath argument. Don't create the database
+	  directory; either it exists already in which case there's nothing
+	  to do, or it's missing in which case there'll be no database to
+	  update anyway.
+	* src/check_mandirs.h (create_db, update_db): Update prototypes.
+	* src/mandb.c (update_db_wrapper): Add catpath argument.
+	  (mandb): Update calls to functions that now take the catpath too.
+	* src/manp.c (add_mandb_map): Don't create the cat hierarchy here;
+	  testmandirs will do it on demand.
+	  (mkcatdirs): Make external for use by check_mandirs.c.
+	* src/manp.h (mkcatdirs): Add prototype.
+	* docs/NEWS: Document this.
+
 Sun Jun 28 16:33:24 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (DESCRIPTION): Note that the exact rendering of

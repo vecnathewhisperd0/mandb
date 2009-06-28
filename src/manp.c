@@ -97,7 +97,6 @@ char *user_config_file = NULL;
 int disable_cache;
 int min_cat_width = 80, max_cat_width = 80, cat_width = 0;
 
-static void mkcatdirs (const char *mandir, const char *catdir);
 static inline char *get_manpath_from_path (const char *path);
 static inline char *has_mandir (const char *p);
 static inline char *fsstnd (const char *path);
@@ -241,10 +240,6 @@ static void add_mandb_map (const char *mandir, const char *catdir,
 
 	debug ("%s mandir `%s', catdir `%s'.\n",
 	       user ? "User" : "Global", mandir, tmpcatdir);
-
-	/* create the catman hierarchy if it doesn't exist */
-	if (strcmp (program_name, "mandb") == 0)
-		mkcatdirs (mandir, tmpcatdir);
 
 	free (tmpcatdir);
 }
@@ -746,7 +741,7 @@ extern uid_t euid;			/* initial effective user id */
 #endif /* SECURE_MAN_UID */
 
 /* create the catman hierarchy if it doesn't exist */
-static void
+void
 mkcatdirs (const char *mandir, const char *catdir)
 {
 	char *manname, *catname;
