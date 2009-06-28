@@ -479,6 +479,8 @@ static char *get_nls_manpath (const char *manpathlist, const char *locale)
 			 * manual pages reside at the top level.
 			 */
 			manpath = pathappend (manpath, path);
+
+		closedir (mandir);
 	}
 
 	free_locale_bits (&lbits);
