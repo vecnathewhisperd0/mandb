@@ -1,3 +1,19 @@
+Sun Jun 28 16:21:34 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	Implement 'man -K', which was the last major remaining missing
+	feature when comparing man-db with the man package (Ubuntu bug
+	#390575).
+
+	* src/man.c (options, parse_opt): New -K/--global-apropos option.
+	  (main): Handle --global-apropos.
+	  (locate_page): Skip database lookups in --global-apropos mode.
+	  (grep, do_global_apropos_section, do_global_apropos): New
+	  functions.
+	* src/man.h (do_global_apropos): Add prototype.
+	* man/man1/man.man1 (SYNOPSIS, Main modes of operation): Document
+	  -K/--global-apropos.
+	* docs/NEWS: Document this.
+
 Sun Jun 28 10:31:16 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: po4a 0.36 tags

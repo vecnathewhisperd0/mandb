@@ -33,6 +33,16 @@ Major changes since man-db 2.5.5:
 	o 'make check' now passes in the presence of a UTF-8-aware col, such
 	  as that in util-linux-ng.
 
+	o The 'man -K' option is now supported to search the full text of
+	  all manual pages. This was inspired by a similar option in the
+	  other man package (currently at version 1.6f) currently maintained
+	  by Federico Lucifredi and formerly by Andries Brouwer, but I took
+	  advantage of man-db's pipeline library to implement it entirely
+	  in-process, without having to start a separate grep process for
+	  every manual page. In my tests with fairly typical searches across
+	  variously all manual pages or just one section, man-db's
+	  implementation ran between 3 and 10 times faster.
+
 man-db 2.5.5 (14 March 2009)
 ============================
 

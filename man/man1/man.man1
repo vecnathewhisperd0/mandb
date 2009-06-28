@@ -69,6 +69,17 @@
 .IR options \|]
 .I regexp
 \&.\|.\|.
+.\" The --global-apropos command line
+.br
+.B %man%
+.B \-K
+.RB [\| \-w \||\| \-W \|]
+.RB [\| \-S
+.IR list \|]
+.RB [\| \-i \||\| \-I \|]
+.RI [\| \-\-regex \|]
+.RI [\| section \|]
+.IR term \ .\|.\|.
 .\" The whatis command line
 .br
 .B %man%
@@ -547,6 +558,16 @@ matches.
 See
 .BR %apropos% (1)
 for details.
+.TP
+.if !'po4a'hide' .B \-K, \-\-global\-apropos
+Search for text in all manual pages.
+This is a brute-force search, and is likely to take some time; if you can,
+you should specify a section to reduce the number of pages that need to be
+searched.
+Search terms may be simple strings (the default), or regular expressions if
+the
+.B \-\-regex
+option is used.
 .TP
 .if !'po4a'hide' .B \-l, \-\-local\-file
 Activate `local' mode.

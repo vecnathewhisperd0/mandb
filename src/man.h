@@ -24,6 +24,7 @@
 
 static inline const char *is_section (const char *name);
 static const char **get_section_list (void);
+static int do_global_apropos (const char *name, int *found);
 static int man (const char *name, int *found);
 static int display (const char *dir, const char *man_file,
 		    const char *cat_file, const char *title,
