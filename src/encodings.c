@@ -702,9 +702,12 @@ const char *get_less_charset (const char *locale_charset)
 {
 	const struct less_charset_entry *entry;
 
-	for (entry = less_charset_table; entry->locale_charset; ++entry)
-		if (STREQ (entry->locale_charset, locale_charset))
-			return entry->less_charset;
+	if (locale_charset) {
+		for (entry = less_charset_table; entry->locale_charset;
+		     ++entry)
+			if (STREQ (entry->locale_charset, locale_charset))
+				return entry->less_charset;
+	}
 
 	return fallback_less_charset;
 }
@@ -716,9 +719,12 @@ const char *get_jless_charset (const char *locale_charset)
 {
 	const struct less_charset_entry *entry;
 
-	for (entry = less_charset_table; entry->locale_charset; ++entry)
-		if (STREQ (entry->locale_charset, locale_charset))
-			return entry->jless_charset;
+	if (locale_charset) {
+		for (entry = less_charset_table; entry->locale_charset;
+		     ++entry)
+			if (STREQ (entry->locale_charset, locale_charset))
+				return entry->jless_charset;
+	}
 
 	return NULL;
 }
