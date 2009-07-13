@@ -47,6 +47,14 @@ Major changes since man-db 2.5.5:
 	  corresponding manual page directories, not just because they're
 	  mentioned in the configuration file.
 
+	o By default, man will now will try to interpret pairs of manual
+	  page names given on the command line as equivalent to a single
+	  manual page name containing a hyphen (e.g. 'man foo bar' =>
+	  foo-bar(1)). This supports the common pattern of programs that
+	  implement a number of subcommands, allowing them to provide manual
+	  pages for each that can be accessed using similar syntax as would
+	  be used to invoke the subcommands themselves.
+
 man-db 2.5.5 (14 March 2009)
 ============================
 

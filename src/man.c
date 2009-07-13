@@ -169,6 +169,7 @@ enum opts {
 	OPT_WILDCARD,
 	OPT_NAMES,
 	OPT_NO_HYPHENATION,
+	OPT_NO_SUBPAGES,
 	OPT_MAX
 };
 
@@ -227,6 +228,7 @@ static int names_only;
 static int ult_flags = SO_LINK | SOFT_LINK | HARD_LINK;
 static const char *recode = NULL;
 static int no_hyphenation;
+static int subpages = 1;
 
 static int ascii;		/* insert tr in the output pipe */
 static int save_cat; 		/* security breach? Can we save the cat? */
@@ -293,6 +295,8 @@ static struct argp_option options[] = {
 									   "descriptions"),						25 },
 	{ "all",		'a',	0,		0,		N_("find all matching manual pages"),				26 },
 	{ "update",		'u',	0,		0,		N_("force a cache consistency check") },
+	{ "no-subpages",
+		    OPT_NO_SUBPAGES,	0,		0,		N_("don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"),	27 },
 
 	{ 0,			0,	0,		0,		N_("Controlling formatted output:"),				30 },
 	{ "pager",		'P',	N_("PAGER"),	0,		N_("use program PAGER to display output") },
@@ -446,6 +450,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'u':
 			update = 1;
+			return 0;
+		case OPT_NO_SUBPAGES:
+			subpages = 0;
 			return 0;
 
 		case 'P':
@@ -1120,8 +1127,21 @@ int main (int argc, char *argv[])
 		skip = 0;
 		if (global_apropos)
 			status = do_global_apropos (nextarg, &found);
-		else
-			status = man (nextarg, &found);
+		else {
+			int found_subpage = 0;
+			if (subpages && first_arg < argc) {
+				char *subname = xasprintf (
+					"%s-%s", nextarg, argv[first_arg]);
+				status = man (subname, &found);
+				free (subname);
+				if (status == OK) {
+					found_subpage = 1;
+					++first_arg;
+				}
+			}
+			if (!found_subpage)
+				status = man (nextarg, &found);
+		}
 
 		/* clean out the cache of database lookups for each man page */
 		hash_free (db_hash);
@@ -1132,11 +1152,23 @@ int main (int argc, char *argv[])
 				/* Maybe the section wasn't a section after
 				 * all? e.g. 'man 9wm fvwm'.
 				 */
+				int found_subpage = 0;
 				debug ("\nRetrying section %s as name\n",
 				       section);
 				tmp = section;
 				section = NULL;
-				status = man (tmp, &found);
+				if (subpages) {
+					char *subname = xasprintf (
+						"%s-%s", tmp, nextarg);
+					status = man (subname, &found);
+					free (subname);
+					if (status == OK) {
+						found_subpage = 1;
+						++first_arg;
+					}
+				}
+				if (!found_subpage)
+					status = man (tmp, &found);
 				hash_free (db_hash);
 				db_hash = NULL;
 				/* ... but don't gripe about it if it doesn't

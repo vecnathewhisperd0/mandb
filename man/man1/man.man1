@@ -41,6 +41,7 @@
 .RB [\| \-\-names\-only \|]
 .RB [\| \-a \|]
 .RB [\| \-u \|]
+.RB [\| \-\-no\-subpages \|]
 .RB [\| \-P
 .IR pager \|]
 .RB [\| \-r
@@ -786,6 +787,33 @@ ensure that they are an accurate representation of the filesystem.
 It will only have a useful effect if
 .B %man%
 is installed with the setuid bit set.
+.TP
+.if !'po4a'hide' .B \-\-no\-subpages
+By default,
+.B %man%
+will try to interpret pairs of manual page names given on the command line
+as equivalent to a single manual page name containing a hyphen.
+This supports the common pattern of programs that implement a number of
+subcommands, allowing them to provide manual pages for each that can be
+accessed using similar syntax as would be used to invoke the subcommands
+themselves.
+For example:
+
+.nf
+.if !'po4a'hide' \&  $ man \-aw git diff
+.if !'po4a'hide' \&  /usr/share/man/man1/git\-diff.1.gz
+.fi
+
+To disable this behaviour, use the
+.B \-\-no\-subpages
+option.
+
+.nf
+.if !'po4a'hide' \&  $ man \-aw \-\-no\-subpages git diff
+.if !'po4a'hide' \&  /usr/share/man/man1/git.1.gz
+.if !'po4a'hide' \&  /usr/share/man/man3/Git.3pm.gz
+.if !'po4a'hide' \&  /usr/share/man/man1/diff.1.gz
+.fi
 .SS "Controlling formatted output"
 .TP
 .BI \-P\  pager ,\ \-\-pager= pager
