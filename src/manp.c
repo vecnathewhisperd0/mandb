@@ -804,7 +804,6 @@ mkcatdirs (const char *mandir, const char *catdir)
 	}
 }
 
-extern char *program_name;
 /* Parse the manpath.config file, extracting appropriate information. */
 static void add_to_dirlist (FILE *config, int user)
 {

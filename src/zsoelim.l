@@ -107,7 +107,7 @@ static int no_newline;
 W	[ \t]
 
 %option full noread ecs
-%option 8bit batch
+%option 8bit batch never-interactive
 %option noyywrap nounput
 
 %%

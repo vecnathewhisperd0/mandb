@@ -7165,6 +7165,62 @@ $as_echo "$man_cv_gcc_warning_format_security" >&6; }
    CFLAGS="$man_saved_CFLAGS"
  fi
 	man_saved_CFLAGS="$CFLAGS"
+ CFLAGS="$CFLAGS -Wredundant-decls"
+ { $as_echo "$as_me:$LINENO: checking that GCC supports -Wredundant-decls" >&5
+$as_echo_n "checking that GCC supports -Wredundant-decls... " >&6; }
+if test "${man_cv_gcc_warning_redundant_decls+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  man_cv_gcc_warning_redundant_decls=no
+    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  man_cv_gcc_warning_redundant_decls=yes
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+{ $as_echo "$as_me:$LINENO: result: $man_cv_gcc_warning_redundant_decls" >&5
+$as_echo "$man_cv_gcc_warning_redundant_decls" >&6; }
+ if test "$man_cv_gcc_warning_redundant_decls" = no; then
+   CFLAGS="$man_saved_CFLAGS"
+ fi
+	man_saved_CFLAGS="$CFLAGS"
  CFLAGS="$CFLAGS -Wno-missing-field-initializers"
  { $as_echo "$as_me:$LINENO: checking that GCC supports -Wno-missing-field-initializers" >&5
 $as_echo_n "checking that GCC supports -Wno-missing-field-initializers... " >&6; }

@@ -116,6 +116,7 @@ then
 	MAN_GCC_WARNING([strict-prototypes])
 	MAN_GCC_WARNING([shadow])
 	MAN_GCC_WARNING([format-security])
+	MAN_GCC_WARNING([redundant-decls])
 	MAN_GCC_WARNING([no-missing-field-initializers])
 fi
 AC_PROG_INSTALL

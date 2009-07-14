@@ -1,3 +1,14 @@
+Tue Jul 14 22:48:56 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Add -Wredundant-decls to CFLAGS.
+	* lib/tempfile.c: Remove redundant declarations of mkstemp and
+	  mkdtemp.
+	* src/manp.c: Remove redundant and unused declaration of
+	  program_name.
+	* src/zsoelim.l: Add never-interactive option, partly because that's
+	  reasonably accurate anyway and partly to suppress flex's redundant
+	  declaration of isatty.
+
 Mon Jul 13 13:40:17 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (options, parse_opt): New --no-subpages option.

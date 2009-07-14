@@ -30,10 +30,6 @@
 
 #include "manconfig.h"
 
-/* Other library functions used in man-db. */
-extern int mkstemp (char *template);
-extern char *mkdtemp (char *template);
-
 static const char *path_search (void)
 {
 	const char *dir = NULL;
