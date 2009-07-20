@@ -2251,7 +2251,7 @@ static void locale_macros (void *data)
 		 * category):
 		 */
 		".if (\\n[.g] & ((\\n[.x] > 1) :"
-		" ((\\n[.x] == 1) & (\\n[.y] >= 20)) :"
+		" ((\\n[.x] == 1) & (\\n[.y] > 20)) :"
 		" ((\\n[.x] == 1) & (\\n[.y] == 20) & (\\n[.Y] >= 2)))) \\{\n"
 		/*   disable warnings of category 'file' */
 		".  warn (\\n[.warn] -"
