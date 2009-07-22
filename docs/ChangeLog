@@ -1,3 +1,18 @@
+Wed Jul 22 10:48:10 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	Make whatis/apropos only display any given manual page, or pointers
+	to it, once (Ubuntu bug #27113).
+
+	* lib/hashtable.c (hash_lookup_structure): Make external.
+	* lib/hashtable.h (hash_lookup_structure): Add prototype.
+	* src/whatis.c (get_whatis): Split pointer resolution out to ...
+	  (resolve_pointers): ... here. Only accept info->pointer == page if
+	  info->name == page too.
+	  (display): Use resolve_pointers so that we have the resolved name
+	  to hand. Only display any given resolved name once.
+	  (main): Initialise display_seen hash table.
+	* docs/NEWS: Document this.
+
 Tue Jul 21 22:05:01 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* docs/NEWS: Fix typo.

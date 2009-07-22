@@ -2,7 +2,7 @@
  * hashtable.c: in core hash table routines.
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2002 Colin Watson.
+ * Copyright (C) 2002, 2003, 2004, 2005, 2007, 2008, 2009 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -88,8 +88,8 @@ struct hashtable *hash_create (hash_free_ptr free_defn)
 /* Return pointer to hash entry structure containing s, or NULL if it
  * doesn't exist.
  */
-static void *hash_lookup_structure (const struct hashtable *ht,
-				    const char *s, size_t len)
+void *hash_lookup_structure (const struct hashtable *ht,
+			     const char *s, size_t len)
 {
 	struct nlist *np;
 

@@ -2,7 +2,7 @@
  * hashtable.h: contains struct nlist
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2002 Colin Watson.
+ * Copyright (C) 2002, 2003, 2004, 2005, 2007, 2009 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -45,6 +45,8 @@ extern void null_hash_free (void *defn);
 extern void plain_hash_free (void *defn);
 
 extern struct hashtable *hash_create (hash_free_ptr free_defn);
+extern void *hash_lookup_structure (const struct hashtable *ht,
+				    const char *s, size_t len);
 extern void *hash_lookup (const struct hashtable *ht,
 			  const char *s, size_t len);
 extern struct nlist *hash_install (struct hashtable *ht,

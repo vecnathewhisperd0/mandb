@@ -106,6 +106,7 @@ static const char *alt_systems = "";
 static const char *locale = NULL;
 
 static struct hashtable *apropos_seen = NULL;
+static struct hashtable *display_seen = NULL;
 
 const char *argp_program_version; /* initialised in main */
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
@@ -286,25 +287,16 @@ static inline int use_grep (char *page, char *manpath)
 	return status;
 }
 
-/* fill_in_whatis() is really a ../libdb/db_lookup.c routine but whatis.c
-   is the only file that actually requires access to the whatis text... */
-   
-/* Take mandata struct (earlier returned from a dblookup()) and return 
-   the relative whatis */
-static char *get_whatis (struct mandata *info, const char *page)
+static struct mandata *resolve_pointers (struct mandata *info,
+					 const char *page)
 {
 	int rounds;
 	const char *newpage;
 
-	/* See if we need to fill in the whatis here. */
-	if (*(info->pointer) == '-' || STREQ (info->pointer, page)) {
-		if (info->whatis != NULL && *(info->whatis))
-			return xstrdup (info->whatis);
-		if (!quiet && *(info->pointer) != '-')
-			error (0, 0, _("warning: %s contains a pointer loop"),
-			       page);
-		return xstrdup (_("(unknown subject)"));
-	}
+	if (*(info->pointer) == '-' ||
+	    ((!info->name || STREQ (info->name, page)) &&
+	     STREQ (info->pointer, page)))
+		return info;
 
 	/* Now we have to work through pointers. The limit of 10 is fairly
 	 * arbitrary: it's just there to avoid an infinite loop.
@@ -316,23 +308,12 @@ static char *get_whatis (struct mandata *info, const char *page)
 
 		/* If the pointer lookup fails, do nothing. */
 		if (!info)
-			return xstrdup (_("(unknown subject)"));
+			return NULL;
 
-		/* See if we need to fill in the whatis here. */
 		if (*(info->pointer) == '-' ||
-		    STREQ (info->pointer, newpage)) {
-			if (info->whatis != NULL && *(info->whatis)) {
-				char *return_whatis = xstrdup (info->whatis);
-				free_mandata_struct (info);
-				return return_whatis;
-			}
-			if (!quiet && *(info->pointer) != '-')
-				error (0, 0,
-				       _("warning: %s contains a pointer loop"),
-				       page);
-			free_mandata_struct (info);
-			return xstrdup (_("(unknown subject)"));
-		}
+		    ((!info->name || STREQ (info->name, newpage)) &&
+		     STREQ (info->pointer, newpage)))
+			return info;
 
 		newinfo = dblookup_exact (info->pointer, info->ext, 1);
 		free_mandata_struct (info);
@@ -341,24 +322,52 @@ static char *get_whatis (struct mandata *info, const char *page)
 
 	if (!quiet)
 		error (0, 0, _("warning: %s contains a pointer loop"), page);
+	return NULL;
+}
+
+/* fill_in_whatis() is really a ../libdb/db_lookup.c routine but whatis.c
+   is the only file that actually requires access to the whatis text... */
+   
+/* Take mandata struct (earlier returned from a dblookup()) and return 
+   the relative whatis */
+static char *get_whatis (struct mandata *info, const char *page)
+{
+	if (!info)
+		return xstrdup (_("(unknown subject)"));
+
+	/* See if we need to fill in the whatis here. */
+	if (info->whatis != NULL && *(info->whatis))
+		return xstrdup (info->whatis);
+	if (!quiet && *(info->pointer) != '-')
+		error (0, 0, _("warning: %s contains a pointer loop"),
+		       page);
 	return xstrdup (_("(unknown subject)"));
 }
 
 /* print out any matches found */
 static void display (struct mandata *info, char *page)
 {
+	struct mandata *newinfo;
 	char *string, *whatis, *string_conv;
 	const char *page_name;
 	int line_len, rest;
 
-	whatis = get_whatis (info, page);
-	
-	dbprintf (info);
+	newinfo = resolve_pointers (info, page);
+	whatis = get_whatis (newinfo, page);
+	if (newinfo == NULL)
+		newinfo = info;
 
-	if (info->name)
-		page_name = info->name;
+	dbprintf (newinfo);
+
+	if (newinfo->name)
+		page_name = newinfo->name;
 	else
 		page_name = page;
+
+	if (hash_lookup_structure (display_seen,
+				   page_name, strlen (page_name)))
+		goto out;
+	hash_install (display_seen, page_name, strlen (page_name), NULL);
 
 	line_len = get_line_length ();
 
@@ -367,9 +376,9 @@ static void display (struct mandata *info, char *page)
 		string = appendstr (string, "...", NULL);
 	} else
 		string = xstrdup (page_name);
-	string = appendstr (string, " (", info->ext, ")", NULL);
-	if (!STREQ (info->pointer, "-") && !STREQ (info->pointer, page))
-		string = appendstr (string, " [", info->pointer, "]", NULL);
+	string = appendstr (string, " (", newinfo->ext, ")", NULL);
+	if (!STREQ (newinfo->pointer, "-") && !STREQ (newinfo->pointer, page))
+		string = appendstr (string, " [", newinfo->pointer, "]", NULL);
 
 	if (strlen (string) < (size_t) 20) {
 		int i;
@@ -390,9 +399,13 @@ static void display (struct mandata *info, char *page)
 	string_conv = simple_convert (conv_to_locale, string);
 	fputs (string_conv, stdout);
 
-	free (whatis);
 	free (string_conv);
 	free (string);
+
+out:
+	free (whatis);
+	if (newinfo != info)
+		free_mandata_struct (newinfo);
 }
 
 /* lookup the page and display the results */
@@ -753,6 +766,7 @@ int main (int argc, char *argv[])
 	create_pathlist (manp, manpathlist);
 
 	apropos_seen = hash_create (&plain_hash_free);
+	display_seen = hash_create (&null_hash_free);
 
 #ifdef HAVE_ICONV
 	locale_charset = appendstr (NULL, get_locale_charset (), "//IGNORE",
@@ -775,6 +789,7 @@ int main (int argc, char *argv[])
 	if (conv_to_locale != (iconv_t) -1)
 		iconv_close (conv_to_locale);
 #endif /* HAVE_ICONV */
+	hash_free (display_seen);
 	hash_free (apropos_seen);
 	free_pathlist (manpathlist);
 	free (manp);
