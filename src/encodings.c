@@ -303,6 +303,7 @@ static struct less_charset_entry less_charset_table[] = {
 	{ "UTF-8",		"utf-8",	NULL		},
 
 #ifdef MULTIBYTE_GROFF
+	{ "CP1251",		"windows",	NULL		},
 	{ "EUC-JP",		"iso8859",	"japanese-ujis"	},
 	{ "KOI8-R",		"koi8-r",	NULL		},
 	/* close enough? */
