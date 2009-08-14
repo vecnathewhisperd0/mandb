@@ -23,7 +23,7 @@
  * Mon May  2 17:36:33 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  *
  * CJW: Many changes to whatis parsing. Added database purging.
- * See docs/ChangeLog for details.
+ * See ChangeLog for details.
  */
 
 #ifdef HAVE_CONFIG_H
