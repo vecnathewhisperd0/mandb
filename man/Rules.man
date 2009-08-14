@@ -28,21 +28,21 @@ TESTS_ENVIRONMENT = @SHELL@ $(top_srcdir)/man/check-man
 TESTS = $(man1_MANS) $(man5_MANS) $(man8_MANS)
 
 replace.sed: $(top_builddir)/man/replace.sin
-	sed -e 's,%REPLACE_CONFIG_FILE%,$(config_file),g' $(top_builddir)/man/replace.sin > $@
+	$(AM_V_GEN)sed -e 's,%REPLACE_CONFIG_FILE%,$(config_file),g' $(top_builddir)/man/replace.sin > $@
 
 .man1.1: replace.sed
-	$(MKDIR_P) man1
+	$(AM_V_at)$(MKDIR_P) man1
 	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
-	program=`echo '$@' | sed -e 's/\.1//' -e 's,.*/,,' -e '$(program_transform_name)'`; \
+	$(AM_V_GEN)program=`echo '$@' | sed -e 's/\.1//' -e 's,.*/,,' -e '$(program_transform_name)'`; \
 	sed -f replace.sed -e "s,%program%,$$program,g" $< > $@
 .man5.5: replace.sed
-	$(MKDIR_P) man5
+	$(AM_V_at)$(MKDIR_P) man5
 	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
-	sed -f replace.sed $< > $@
+	$(AM_V_GEN)sed -f replace.sed $< > $@
 .man8.8: replace.sed
-	$(MKDIR_P) man8
+	$(AM_V_at)$(MKDIR_P) man8
 	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
-	program=`echo '$@' | sed -e 's/\.8//' -e 's,.*/,,' -e '$(program_transform_name)'`; \
+	$(AM_V_GEN)program=`echo '$@' | sed -e 's/\.8//' -e 's,.*/,,' -e '$(program_transform_name)'`; \
 	sed -f replace.sed -e "s,%program%,$$program,g" $< > $@
 
 mostlyclean-local:

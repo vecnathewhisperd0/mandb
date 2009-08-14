@@ -5,6 +5,7 @@ m4_pattern_forbid([^MAN_])
 AC_INIT([man-db], [2.5.5], [cjwatson@debian.org])
 AC_CONFIG_AUX_DIR(tools)
 AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign])
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR(src/man.c)
 

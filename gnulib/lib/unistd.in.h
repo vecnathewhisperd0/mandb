@@ -3,7 +3,7 @@
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
+   the Free Software Foundation; either version 3, or (at your option)
    any later version.
 
    This program is distributed in the hope that it will be useful,
@@ -150,10 +150,13 @@ extern int close (int);
 
 
 #if @GNULIB_DUP2@
-# if !@HAVE_DUP2@
+# if @REPLACE_DUP2@
+#  define dup2 rpl_dup2
+# endif
+# if !@HAVE_DUP2@ || @REPLACE_DUP2@
 /* Copy the file descriptor OLDFD into file descriptor NEWFD.  Do nothing if
    NEWFD = OLDFD, otherwise close NEWFD first if it is open.
-   Return 0 if successful, otherwise -1 and errno set.
+   Return newfd if successful, otherwise -1 and errno set.
    See the POSIX:2001 specification
    <http://www.opengroup.org/susv3xsh/dup2.html>.  */
 extern int dup2 (int oldfd, int newfd);
@@ -214,7 +217,11 @@ extern int fchdir (int /*fd*/);
 
 #  define dup rpl_dup
 extern int dup (int);
-#  define dup2 rpl_dup2
+
+#  if @REPLACE_DUP2@
+#   undef dup2
+#  endif
+#  define dup2 rpl_dup2_fchdir
 extern int dup2 (int, int);
 
 # endif

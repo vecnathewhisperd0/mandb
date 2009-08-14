@@ -4,7 +4,7 @@
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
+   the Free Software Foundation; either version 3, or (at your option)
    any later version.
 
    This program is distributed in the hope that it will be useful,
@@ -264,7 +264,11 @@ extern size_t wcsrtombs (char *dest, const wchar_t **srcp, size_t len, mbstate_t
 
 /* Convert a wide string to a string.  */
 #if @GNULIB_WCSNRTOMBS@
-# if !@HAVE_WCSNRTOMBS@
+# if @REPLACE_WCSNRTOMBS@
+#  undef wcsnrtombs
+#  define wcsnrtombs rpl_wcsnrtombs
+# endif
+# if !@HAVE_WCSNRTOMBS@ || @REPLACE_WCSNRTOMBS@
 extern size_t wcsnrtombs (char *dest, const wchar_t **srcp, size_t srclen, size_t len, mbstate_t *ps);
 # endif
 #elif defined GNULIB_POSIXCHECK

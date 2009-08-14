@@ -56,6 +56,7 @@ AC_DEFUN([gl_INIT],
     [AM_XGETTEXT_OPTION([--flag=argp_error:2:c-format])
      AM_XGETTEXT_OPTION([--flag=argp_failure:4:c-format])])
   gl_FUNC_ATEXIT
+  AC_REQUIRE([AC_C_INLINE])
   gl_FUNC_BTOWC
   gl_WCHAR_MODULE_INDICATOR([btowc])
   AC_FUNC_CANONICALIZE_FILE_NAME
@@ -78,7 +79,7 @@ AC_DEFUN([gl_INIT],
   gl_UNISTD_MODULE_INDICATOR([dup2])
   gl_ENVIRON
   gl_UNISTD_MODULE_INDICATOR([environ])
-  AC_REQUIRE([gl_HEADER_ERRNO_H])
+  gl_HEADER_ERRNO_H
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
@@ -93,13 +94,15 @@ AC_DEFUN([gl_INIT],
   gl_MODULE_INDICATOR([fcntl-safer])
   gl_FILE_NAME_CONCAT
   gl_FLOAT_H
-  # No macro. You should also use one of fnmatch-posix or fnmatch-gnu.
+  gl_FUNC_FNMATCH_POSIX
   gl_FUNC_FNMATCH_GNU
   gl_FUNC_GETCWD
   gl_UNISTD_MODULE_INDICATOR([getcwd])
   gl_GETLOGIN_R
   gl_UNISTD_MODULE_INDICATOR([getlogin_r])
   gl_GETOPT
+  gl_FUNC_GETPAGESIZE
+  gl_UNISTD_MODULE_INDICATOR([getpagesize])
   dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
   AM_GNU_GETTEXT_VERSION([0.17])
   AC_SUBST([LIBINTL])
@@ -128,6 +131,8 @@ AC_DEFUN([gl_INIT],
   gl_WCHAR_MODULE_INDICATOR([mbsinit])
   gl_FUNC_MBSRTOWCS
   gl_WCHAR_MODULE_INDICATOR([mbsrtowcs])
+  gl_FUNC_MEMCHR
+  gl_STRING_MODULE_INDICATOR([memchr])
   gl_FUNC_MEMCMP
   gl_FUNC_MEMPCPY
   gl_STRING_MODULE_INDICATOR([mempcpy])
@@ -138,7 +143,7 @@ AC_DEFUN([gl_INIT],
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
   gl_FUNC_MKSTEMP
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
-  AC_REQUIRE([gl_MULTIARCH])
+  gl_MULTIARCH
   gl_FUNC_OPEN
   gl_MODULE_INDICATOR([open])
   gl_FCNTL_MODULE_INDICATOR([open])
@@ -355,6 +360,7 @@ AC_DEFUN([gltests_LIBSOURCES], [
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/config.rpath
   build-aux/link-warning.h
+  lib/alignof.h
   lib/alloca.c
   lib/alloca.in.h
   lib/areadlink-with-size.c
@@ -377,6 +383,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/at-func.c
   lib/atexit.c
   lib/basename.c
+  lib/bitrotate.h
   lib/btowc.c
   lib/canonicalize-lgpl.c
   lib/canonicalize.c
@@ -425,6 +432,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/getopt.in.h
   lib/getopt1.c
   lib/getopt_int.h
+  lib/getpagesize.c
   lib/gettext.h
   lib/gettimeofday.c
   lib/glob-libc.h
@@ -454,6 +462,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mbsinit.c
   lib/mbsrtowcs-state.c
   lib/mbsrtowcs.c
+  lib/memchr.c
+  lib/memchr.valgrind
   lib/memcmp.c
   lib/mempcpy.c
   lib/memrchr.c
@@ -589,6 +599,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/getcwd.m4
   m4/getlogin_r.m4
   m4/getopt.m4
+  m4/getpagesize.m4
   m4/gettext.m4
   m4/gettimeofday.m4
   m4/glibc2.m4
@@ -626,12 +637,15 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mbsinit.m4
   m4/mbsrtowcs.m4
   m4/mbstate_t.m4
+  m4/memchr.m4
   m4/memcmp.m4
   m4/mempcpy.m4
   m4/memrchr.m4
   m4/minmax.m4
   m4/mkdtemp.m4
   m4/mkstemp.m4
+  m4/mmap-anon.m4
+  m4/mode_t.m4
   m4/multiarch.m4
   m4/nls.m4
   m4/onceonly.m4
