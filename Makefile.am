@@ -21,7 +21,7 @@
 
 SUBDIRS = docs intl gnulib/lib gnulib/po lib libdb src man manual po tools
 
-dist_noinst_DATA = README include/README
+dist_noinst_DATA = NEWS README include/README
 
 EXTRA_DIST = autogen.sh gnulib/m4/gnulib-cache.m4
 

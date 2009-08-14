@@ -40,7 +40,7 @@ DIST_COMMON = README $(am__configure_deps) $(dist_noinst_DATA) \
 	$(srcdir)/config.h.in $(top_srcdir)/configure \
 	$(top_srcdir)/include/comp_src.h.in \
 	$(top_srcdir)/include/manconfig.h.in \
-	$(top_srcdir)/intl/Makefile.in ABOUT-NLS
+	$(top_srcdir)/intl/Makefile.in ABOUT-NLS ChangeLog NEWS
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/m4/man-check-progs.m4 \
@@ -877,7 +877,7 @@ uncompress = @uncompress@
 unlzma = @unlzma@
 vgrind = @vgrind@
 SUBDIRS = docs intl gnulib/lib gnulib/po lib libdb src man manual po tools
-dist_noinst_DATA = README include/README
+dist_noinst_DATA = NEWS README include/README
 EXTRA_DIST = autogen.sh gnulib/m4/gnulib-cache.m4
 
 # Note that autopoint installs into the first directory here. Yes, this
