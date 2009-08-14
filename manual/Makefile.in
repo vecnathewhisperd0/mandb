@@ -832,6 +832,7 @@ ME_FILES = \
 	sec.me
 
 MANUAL = man_db
+MANUAL_INSTALL = man-db-manual
 dist_noinst_DATA = \
 	README \
 	$(ME_FILES)
@@ -972,7 +973,8 @@ info: info-am
 info-am:
 
 install-data-am:
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
 
 install-dvi-am:
@@ -1016,19 +1018,21 @@ ps: ps-am
 ps-am: ps-local
 
 uninstall-am:
-
-.MAKE: install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: install-am install-data-am install-strip uninstall-am
 
 .PHONY: all all-am check check-am clean clean-generic clean-local \
 	distclean distclean-generic distdir dvi dvi-am dvi-local html \
 	html-am html-local info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am ps-local uninstall uninstall-am
+	install-data install-data-am install-data-hook install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic pdf pdf-am ps ps-am ps-local uninstall \
+	uninstall-am uninstall-hook
 
 
 version: $(top_srcdir)/configure.ac
@@ -1066,6 +1070,24 @@ tps: $(MANUAL).tps
 
 clean-local:
 	-rm -f $(MANUAL)-*.png
+
+install-data-hook:
+	test -z "$(docdir)" || $(MKDIR_P) "$(DESTDIR)$(docdir)"
+	@if test -f $(MANUAL).cat; then \
+		echo " $(INSTALL_DATA) $(MANUAL).cat '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).txt'"; \
+		$(INSTALL_DATA) $(MANUAL).cat "$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).txt" || exit $$?; \
+	fi
+	@if test -f $(MANUAL).dvi; then \
+		echo " $(INSTALL_DATA) $(MANUAL).dvi '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).dvi'"; \
+		$(INSTALL_DATA) $(MANUAL).dvi "$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).dvi" || exit $$?; \
+	fi
+	@if test -f $(MANUAL).ps; then \
+		echo " $(INSTALL_DATA) $(MANUAL).ps '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).ps'"; \
+		$(INSTALL_DATA) $(MANUAL).ps "$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).ps" || exit $$?; \
+	fi
+
+uninstall-hook:
+	rm -rf "$(DESTDIR)$(docdir)"
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

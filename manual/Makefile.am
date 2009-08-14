@@ -32,6 +32,7 @@ ME_FILES = \
 	sec.me
 
 MANUAL = man_db
+MANUAL_INSTALL = man-db-manual
 
 dist_noinst_DATA = \
 	README \
@@ -86,3 +87,21 @@ tps: $(MANUAL).tps
 
 clean-local:
 	-rm -f $(MANUAL)-*.png
+
+install-data-hook:
+	test -z "$(docdir)" || $(MKDIR_P) "$(DESTDIR)$(docdir)"
+	@if test -f $(MANUAL).cat; then \
+		echo " $(INSTALL_DATA) $(MANUAL).cat '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).txt'"; \
+		$(INSTALL_DATA) $(MANUAL).cat "$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).txt" || exit $$?; \
+	fi
+	@if test -f $(MANUAL).dvi; then \
+		echo " $(INSTALL_DATA) $(MANUAL).dvi '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).dvi'"; \
+		$(INSTALL_DATA) $(MANUAL).dvi "$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).dvi" || exit $$?; \
+	fi
+	@if test -f $(MANUAL).ps; then \
+		echo " $(INSTALL_DATA) $(MANUAL).ps '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).ps'"; \
+		$(INSTALL_DATA) $(MANUAL).ps "$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).ps" || exit $$?; \
+	fi
+
+uninstall-hook:
+	rm -rf "$(DESTDIR)$(docdir)"
