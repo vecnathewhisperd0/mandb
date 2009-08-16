@@ -452,6 +452,7 @@ AC_CONFIG_FILES(Makefile
 	lib/Makefile
 	src/Makefile
 	src/man_db.conf
+	src/tests/Makefile
 	man/Makefile
 	man/replace.sin
 	man/po4a/Makefile

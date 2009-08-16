@@ -14,12 +14,11 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
+pkglibexecdir = $(libexecdir)/@PACKAGE@
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -34,15 +33,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = catman$(EXEEXT) lexgrog$(EXEEXT) man$(EXEEXT) \
-	mandb$(EXEEXT) manpath$(EXEEXT) whatis$(EXEEXT) \
-	zsoelim$(EXEEXT)
-sbin_PROGRAMS = accessdb$(EXEEXT)
-pkglibexec_PROGRAMS = globbing$(EXEEXT) manconv$(EXEEXT)
-noinst_PROGRAMS = wrapper$(EXEEXT)
-subdir = src
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/man_db.conf.in lexgrog.c zsoelim.c
+subdir = src/tests
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/m4/man-check-progs.m4 \
@@ -205,146 +197,19 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES = man_db.conf
+CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" \
-	"$(DESTDIR)$(sbindir)"
-PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS) $(pkglibexec_PROGRAMS) \
-	$(sbin_PROGRAMS)
-am_accessdb_OBJECTS = accessdb.$(OBJEXT) util.$(OBJEXT)
-accessdb_OBJECTS = $(am_accessdb_OBJECTS)
-am__DEPENDENCIES_1 =
-am__DEPENDENCIES_2 = $(top_builddir)/libdb/libmandb.a \
-	$(am__DEPENDENCIES_1)
-accessdb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
-am_catman_OBJECTS = catman.$(OBJEXT) fake_security.$(OBJEXT) \
-	manp.$(OBJEXT) util.$(OBJEXT)
-catman_OBJECTS = $(am_catman_OBJECTS)
-catman_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
-am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT) \
-	util.$(OBJEXT)
-globbing_OBJECTS = $(am_globbing_OBJECTS)
-globbing_DEPENDENCIES = $(LIBMAN)
-am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
-	encodings.$(OBJEXT) fake_security.$(OBJEXT) lexgrog.$(OBJEXT) \
-	lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) ult_src.$(OBJEXT) \
-	util.$(OBJEXT)
-lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
-lexgrog_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
-am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
-	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
-	man.$(OBJEXT) manconv.$(OBJEXT) manp.$(OBJEXT) \
-	security.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT) \
-	zsoelim.$(OBJEXT)
-man_OBJECTS = $(am_man_OBJECTS)
-man_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
-	$(am__DEPENDENCIES_1)
-am_manconv_OBJECTS = encodings.$(OBJEXT) manconv.$(OBJEXT) \
-	manconv_main.$(OBJEXT)
-manconv_OBJECTS = $(am_manconv_OBJECTS)
-manconv_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
-am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
-	descriptions.$(OBJEXT) descriptions_store.$(OBJEXT) \
-	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
-	lexgrog.$(OBJEXT) manconv.$(OBJEXT) mandb.$(OBJEXT) \
-	manp.$(OBJEXT) security.$(OBJEXT) straycats.$(OBJEXT) \
-	ult_src.$(OBJEXT) util.$(OBJEXT)
-mandb_OBJECTS = $(am_mandb_OBJECTS)
-mandb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
-	$(am__DEPENDENCIES_1)
-am_manpath_OBJECTS = fake_security.$(OBJEXT) manp.$(OBJEXT) \
-	manpath.$(OBJEXT) util.$(OBJEXT)
-manpath_OBJECTS = $(am_manpath_OBJECTS)
-manpath_DEPENDENCIES = $(LIBMAN)
-am_whatis_OBJECTS = encodings.$(OBJEXT) fake_security.$(OBJEXT) \
-	manconv.$(OBJEXT) manp.$(OBJEXT) util.$(OBJEXT) \
-	whatis.$(OBJEXT)
-whatis_OBJECTS = $(am_whatis_OBJECTS)
-whatis_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-am_wrapper_OBJECTS = wrapper.$(OBJEXT)
-wrapper_OBJECTS = $(am_wrapper_OBJECTS)
-wrapper_DEPENDENCIES = $(LIBMAN)
-am_zsoelim_OBJECTS = globbing.$(OBJEXT) util.$(OBJEXT) \
-	zsoelim.$(OBJEXT) zsoelim_main.$(OBJEXT)
-zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
-zsoelim_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
-depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
-am__depfiles_maybe = depfiles
-am__mv = mv -f
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_$(V))
-am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))
-am__v_CC_0 = @echo "  CC    " $@;
-AM_V_at = $(am__v_at_$(V))
-am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
-am__v_at_0 = @
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_$(V))
-am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
-am__v_CCLD_0 = @echo "  CCLD  " $@;
-LEXCOMPILE = $(LEX) $(LFLAGS) $(AM_LFLAGS)
-AM_V_LEX = $(am__v_LEX_$(V))
-am__v_LEX_ = $(am__v_LEX_$(AM_DEFAULT_VERBOSITY))
-am__v_LEX_0 = @echo "  LEX   " $@;
-YLWRAP = $(top_srcdir)/tools/ylwrap
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(accessdb_SOURCES) $(catman_SOURCES) $(globbing_SOURCES) \
-	$(lexgrog_SOURCES) $(man_SOURCES) $(manconv_SOURCES) \
-	$(mandb_SOURCES) $(manpath_SOURCES) $(whatis_SOURCES) \
-	$(wrapper_SOURCES) $(zsoelim_SOURCES)
-DIST_SOURCES = $(accessdb_SOURCES) $(catman_SOURCES) \
-	$(globbing_SOURCES) $(lexgrog_SOURCES) $(man_SOURCES) \
-	$(manconv_SOURCES) $(mandb_SOURCES) $(manpath_SOURCES) \
-	$(whatis_SOURCES) $(wrapper_SOURCES) $(zsoelim_SOURCES)
-RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
-	html-recursive info-recursive install-data-recursive \
-	install-dvi-recursive install-exec-recursive \
-	install-html-recursive install-info-recursive \
-	install-pdf-recursive install-ps-recursive install-recursive \
-	installcheck-recursive installdirs-recursive pdf-recursive \
-	ps-recursive uninstall-recursive
-DATA = $(noinst_DATA)
-RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
-  distclean-recursive maintainer-clean-recursive
-AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
-	$(RECURSIVE_CLEAN_TARGETS:-recursive=) tags TAGS ctags CTAGS \
-	distdir
-ETAGS = etags
-CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
+AM_V_at = $(am__v_at_$(V))
+am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
+am__v_at_0 = @
+SOURCES =
+DIST_SOURCES =
+am__tty_colors = \
+red=; grn=; lgn=; blu=; std=
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-am__relativize = \
-  dir0=`pwd`; \
-  sed_first='s,^\([^/]*\)/.*$$,\1,'; \
-  sed_rest='s,^[^/]*/*,,'; \
-  sed_last='s,^.*/\([^/]*\)$$,\1,'; \
-  sed_butlast='s,/*[^/]*$$,,'; \
-  while test -n "$$dir1"; do \
-    first=`echo "$$dir1" | sed -e "$$sed_first"`; \
-    if test "$$first" != "."; then \
-      if test "$$first" = ".."; then \
-        dir2=`echo "$$dir0" | sed -e "$$sed_last"`/"$$dir2"; \
-        dir0=`echo "$$dir0" | sed -e "$$sed_butlast"`; \
-      else \
-        first2=`echo "$$dir2" | sed -e "$$sed_first"`; \
-        if test "$$first2" = "$$first"; then \
-          dir2=`echo "$$dir2" | sed -e "$$sed_rest"`; \
-        else \
-          dir2="../$$dir2"; \
-        fi; \
-        dir0="$$dir0"/"$$first"; \
-      fi; \
-    fi; \
-    dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
-  done; \
-  reldir="$$dir2"
-pkglibexecdir = $(libexecdir)/@PACKAGE@
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
 ALLOCA_H = @ALLOCA_H@
@@ -953,168 +818,11 @@ troff = @troff@
 uncompress = @uncompress@
 unlzma = @unlzma@
 vgrind = @vgrind@
-SUBDIRS = tests
-noinst_DATA = man_db.conf
-AM_CPPFLAGS = \
-	-I$(top_builddir)/include \
-	-I$(top_builddir)/intl \
-	-I$(top_builddir)/gnulib/lib \
-	-I$(top_srcdir)/gnulib/lib \
-	-I$(top_srcdir)/lib \
-	-I$(top_srcdir)/libdb \
-	-DCONFIG_FILE=\"$(config_file)\" \
-	-DLOCALEDIR=\"$(localedir)\" \
-	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \
-	-DAPROPOS_NAME=\"$(TRANS_APROPOS)\" \
-	-DMAN=\"$(bindir)/$(TRANS_MAN)\" \
-	-DMANCONV=\"$(pkglibexecdir)/$(TRANS_MANCONV)\" \
-	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
-	-DSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\" \
-	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
-
-LIBMAN = $(top_builddir)/lib/libman.a $(top_builddir)/gnulib/lib/libgnu.a
-LIBMANDB = $(top_builddir)/libdb/libmandb.a $(DBLIBS)
-accessdb_LDADD = $(LIBMANDB) $(LIBMAN) @LIBINTL@
-catman_LDADD = $(LIBMANDB) $(LIBMAN) @LIBINTL@
-globbing_LDADD = $(LIBMAN) @LIBINTL@
-lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-man_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-manpath_LDADD = $(LIBMAN) @LIBINTL@
-whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS) @LIBINTL@
-wrapper_LDADD = $(LIBMAN) @LIBINTL@
-zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-accessdb_SOURCES = \
-	accessdb.c \
-	util.c
-
-catman_SOURCES = \
-	catman.c \
-	fake_security.c \
-	manp.c \
-	manp.h \
-	util.c
-
-globbing_SOURCES = \
-	globbing.c \
-	globbing.h \
-	globbing_test.c \
-	util.c
-
-lexgrog_SOURCES = \
-	compression.c \
-	descriptions.c \
-	descriptions.h \
-	encodings.c \
-	encodings.h \
-	fake_security.c \
-	lexgrog.l \
-	lexgrog_test.c \
-	manconv.c \
-	manconv.h \
-	security.h \
-	ult_src.c \
-	ult_src.h \
-	util.c
-
-man_SOURCES = \
-	compression.c \
-	convert_name.c \
-	convert_name.h \
-	encodings.c \
-	encodings.h \
-	filenames.c \
-	filenames.h \
-	globbing.c \
-	globbing.h \
-	man.c \
-	man.h \
-	manconv.c \
-	manconv.h \
-	manp.c \
-	manp.h \
-	security.c \
-	security.h \
-	ult_src.c \
-	ult_src.h \
-	util.c \
-	zsoelim.h \
-	zsoelim.l
-
-manconv_SOURCES = \
-	encodings.c \
-	manconv.c \
-	manconv.h \
-	manconv_main.c
-
-mandb_SOURCES = \
-	check_mandirs.c \
-	check_mandirs.h \
-	compression.c \
-	descriptions.c \
-	descriptions.h \
-	descriptions_store.c \
-	encodings.c \
-	encodings.h \
-	filenames.c \
-	filenames.h \
-	globbing.c \
-	globbing.h \
-	lexgrog.l \
-	manconv.c \
-	manconv.h \
-	mandb.c \
-	manp.c \
-	manp.h \
-	security.c \
-	security.h \
-	straycats.c \
-	ult_src.c \
-	ult_src.h \
-	util.c
-
-manpath_SOURCES = \
-	fake_security.c \
-	manp.c \
-	manp.h \
-	manpath.c \
-	util.c
-
-whatis_SOURCES = \
-	encodings.c \
-	encodings.h \
-	fake_security.c \
-	manconv.c \
-	manconv.h \
-	manp.c \
-	manp.h \
-	util.c \
-	whatis.c
-
-wrapper_SOURCES = \
-	wrapper.c
-
-zsoelim_SOURCES = \
-	globbing.c \
-	globbing.h \
-	util.c \
-	zsoelim.h \
-	zsoelim.l \
-	zsoelim_main.c
-
-CLEANFILES = apropos man_db.conf
-EXTRA_DIST = \
-	README.lexgrog \
-	README.zsoelim \
-	lexgrog.l-2.3.8 \
-	lexgrog.l-2.4a \
-	lexgrog.l.new
-
-all: all-recursive
+TESTS_ENVIRONMENT = PATH=..:$$PATH $(SHELL)
+TESTS = manconv-1
+all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .l .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -1124,9 +832,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/tests/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign src/Makefile
+	  $(AUTOMAKE) --foreign src/tests/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -1145,344 +853,104 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-man_db.conf: $(top_builddir)/config.status $(srcdir)/man_db.conf.in
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
-	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
-	for p in $$list; do echo "$$p $$p"; done | \
-	sed 's/$(EXEEXT)$$//' | \
-	while read p p1; do if test -f $$p; \
-	  then echo "$$p"; echo "$$p"; else :; fi; \
-	done | \
-	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
-	    -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
-	sed 'N;N;N;s,\n, ,g' | \
-	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1 } \
-	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
-	    if ($$2 == $$4) files[d] = files[d] " " $$1; \
-	    else { print "f", $$3 "/" $$4, $$1; } } \
-	  END { for (d in files) print "f", d, files[d] }' | \
-	while read type dir files; do \
-	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
-	    test -z "$$files" || { \
-	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(bindir)$$dir'"; \
-	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
-	    } \
-	; done
-
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
-	files=`for p in $$list; do echo "$$p"; done | \
-	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
-	      -e 's/$$/$(EXEEXT)/' `; \
-	test -n "$$list" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(bindir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(bindir)" && rm -f $$files
-
-clean-binPROGRAMS:
-	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
-install-pkglibexecPROGRAMS: $(pkglibexec_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(pkglibexecdir)" || $(MKDIR_P) "$(DESTDIR)$(pkglibexecdir)"
-	@list='$(pkglibexec_PROGRAMS)'; test -n "$(pkglibexecdir)" || list=; \
-	for p in $$list; do echo "$$p $$p"; done | \
-	sed 's/$(EXEEXT)$$//' | \
-	while read p p1; do if test -f $$p; \
-	  then echo "$$p"; echo "$$p"; else :; fi; \
-	done | \
-	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
-	    -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
-	sed 'N;N;N;s,\n, ,g' | \
-	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1 } \
-	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
-	    if ($$2 == $$4) files[d] = files[d] " " $$1; \
-	    else { print "f", $$3 "/" $$4, $$1; } } \
-	  END { for (d in files) print "f", d, files[d] }' | \
-	while read type dir files; do \
-	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
-	    test -z "$$files" || { \
-	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(pkglibexecdir)$$dir'"; \
-	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(pkglibexecdir)$$dir" || exit $$?; \
-	    } \
-	; done
-
-uninstall-pkglibexecPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(pkglibexec_PROGRAMS)'; test -n "$(pkglibexecdir)" || list=; \
-	files=`for p in $$list; do echo "$$p"; done | \
-	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
-	      -e 's/$$/$(EXEEXT)/' `; \
-	test -n "$$list" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(pkglibexecdir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(pkglibexecdir)" && rm -f $$files
-
-clean-pkglibexecPROGRAMS:
-	-test -z "$(pkglibexec_PROGRAMS)" || rm -f $(pkglibexec_PROGRAMS)
-install-sbinPROGRAMS: $(sbin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(sbindir)" || $(MKDIR_P) "$(DESTDIR)$(sbindir)"
-	@list='$(sbin_PROGRAMS)'; test -n "$(sbindir)" || list=; \
-	for p in $$list; do echo "$$p $$p"; done | \
-	sed 's/$(EXEEXT)$$//' | \
-	while read p p1; do if test -f $$p; \
-	  then echo "$$p"; echo "$$p"; else :; fi; \
-	done | \
-	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
-	    -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
-	sed 'N;N;N;s,\n, ,g' | \
-	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1 } \
-	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
-	    if ($$2 == $$4) files[d] = files[d] " " $$1; \
-	    else { print "f", $$3 "/" $$4, $$1; } } \
-	  END { for (d in files) print "f", d, files[d] }' | \
-	while read type dir files; do \
-	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
-	    test -z "$$files" || { \
-	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(sbindir)$$dir'"; \
-	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(sbindir)$$dir" || exit $$?; \
-	    } \
-	; done
-
-uninstall-sbinPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(sbin_PROGRAMS)'; test -n "$(sbindir)" || list=; \
-	files=`for p in $$list; do echo "$$p"; done | \
-	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
-	      -e 's/$$/$(EXEEXT)/' `; \
-	test -n "$$list" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(sbindir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(sbindir)" && rm -f $$files
-
-clean-sbinPROGRAMS:
-	-test -z "$(sbin_PROGRAMS)" || rm -f $(sbin_PROGRAMS)
-accessdb$(EXEEXT): $(accessdb_OBJECTS) $(accessdb_DEPENDENCIES) 
-	@rm -f accessdb$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(accessdb_OBJECTS) $(accessdb_LDADD) $(LIBS)
-catman$(EXEEXT): $(catman_OBJECTS) $(catman_DEPENDENCIES) 
-	@rm -f catman$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(catman_OBJECTS) $(catman_LDADD) $(LIBS)
-globbing$(EXEEXT): $(globbing_OBJECTS) $(globbing_DEPENDENCIES) 
-	@rm -f globbing$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(globbing_OBJECTS) $(globbing_LDADD) $(LIBS)
-lexgrog$(EXEEXT): $(lexgrog_OBJECTS) $(lexgrog_DEPENDENCIES) 
-	@rm -f lexgrog$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(lexgrog_OBJECTS) $(lexgrog_LDADD) $(LIBS)
-man$(EXEEXT): $(man_OBJECTS) $(man_DEPENDENCIES) 
-	@rm -f man$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(man_OBJECTS) $(man_LDADD) $(LIBS)
-manconv$(EXEEXT): $(manconv_OBJECTS) $(manconv_DEPENDENCIES) 
-	@rm -f manconv$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(manconv_OBJECTS) $(manconv_LDADD) $(LIBS)
-mandb$(EXEEXT): $(mandb_OBJECTS) $(mandb_DEPENDENCIES) 
-	@rm -f mandb$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(mandb_OBJECTS) $(mandb_LDADD) $(LIBS)
-manpath$(EXEEXT): $(manpath_OBJECTS) $(manpath_DEPENDENCIES) 
-	@rm -f manpath$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(manpath_OBJECTS) $(manpath_LDADD) $(LIBS)
-whatis$(EXEEXT): $(whatis_OBJECTS) $(whatis_DEPENDENCIES) 
-	@rm -f whatis$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(whatis_OBJECTS) $(whatis_LDADD) $(LIBS)
-wrapper$(EXEEXT): $(wrapper_OBJECTS) $(wrapper_DEPENDENCIES) 
-	@rm -f wrapper$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(wrapper_OBJECTS) $(wrapper_LDADD) $(LIBS)
-zsoelim$(EXEEXT): $(zsoelim_OBJECTS) $(zsoelim_DEPENDENCIES) 
-	@rm -f zsoelim$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(zsoelim_OBJECTS) $(zsoelim_LDADD) $(LIBS)
-
-mostlyclean-compile:
-	-rm -f *.$(OBJEXT)
-
-distclean-compile:
-	-rm -f *.tab.c
-
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/accessdb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/catman.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_mandirs.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/compression.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/convert_name.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/descriptions.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/descriptions_store.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encodings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fake_security.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filenames.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/man.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manconv.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manconv_main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mandb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manp.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manpath.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/security.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/straycats.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ult_src.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wrapper.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim_main.Po@am__quote@
-
-.c.o:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c $<
-
-.c.obj:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.l.c:
-	$(AM_V_LEX)$(am__skiplex) $(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
-
-# This directory's subdirectories are mostly independent; you can cd
-# into them and run `make' without going through this Makefile.
-# To change the values of `make' variables: instead of editing Makefiles,
-# (1) if the variable is set in `config.status', edit `config.status'
-#     (which will cause the Makefiles to be regenerated when you run `make');
-# (2) otherwise, pass the desired values on the `make' command line.
-$(RECURSIVE_TARGETS):
-	@failcom='exit 1'; \
-	for f in x $$MAKEFLAGS; do \
-	  case $$f in \
-	    *=* | --[!k]*);; \
-	    *k*) failcom='fail=yes';; \
-	  esac; \
-	done; \
-	dot_seen=no; \
-	target=`echo $@ | sed s/-recursive//`; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    dot_seen=yes; \
-	    local_target="$$target-am"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
-	  || eval $$failcom; \
-	done; \
-	if test "$$dot_seen" = "no"; then \
-	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
-	fi; test -z "$$fail"
-
-$(RECURSIVE_CLEAN_TARGETS):
-	@failcom='exit 1'; \
-	for f in x $$MAKEFLAGS; do \
-	  case $$f in \
-	    *=* | --[!k]*);; \
-	    *k*) failcom='fail=yes';; \
-	  esac; \
-	done; \
-	dot_seen=no; \
-	case "$@" in \
-	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
-	  *) list='$(SUBDIRS)' ;; \
-	esac; \
-	rev=''; for subdir in $$list; do \
-	  if test "$$subdir" = "."; then :; else \
-	    rev="$$subdir $$rev"; \
-	  fi; \
-	done; \
-	rev="$$rev ."; \
-	target=`echo $@ | sed s/-recursive//`; \
-	for subdir in $$rev; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    local_target="$$target-am"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
-	  || eval $$failcom; \
-	done && test -z "$$fail"
-tags-recursive:
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  test "$$subdir" = . || ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
-	done
-ctags-recursive:
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  test "$$subdir" = . || ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
-	done
-
-ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
-	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-	      END { if (nonempty) { for (i in files) print i; }; }'`; \
-	mkid -fID $$unique
 tags: TAGS
+TAGS:
 
-TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
-		$(TAGS_FILES) $(LISP)
-	set x; \
-	here=`pwd`; \
-	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
-	  include_option=--etags-include; \
-	  empty_fix=.; \
-	else \
-	  include_option=--include; \
-	  empty_fix=; \
-	fi; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  if test "$$subdir" = .; then :; else \
-	    test ! -f $$subdir/TAGS || \
-	      set "$$@" "$$include_option=$$here/$$subdir/TAGS"; \
-	  fi; \
-	done; \
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-	      END { if (nonempty) { for (i in files) print i; }; }'`; \
-	shift; \
-	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
-	  test -n "$$unique" || unique=$$empty_fix; \
-	  if test $$# -gt 0; then \
-	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
-	      "$$@" $$unique; \
-	  else \
-	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
-	      $$unique; \
-	  fi; \
-	fi
 ctags: CTAGS
-CTAGS: ctags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
-		$(TAGS_FILES) $(LISP)
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-	      END { if (nonempty) { for (i in files) print i; }; }'`; \
-	test -z "$(CTAGS_ARGS)$$unique" \
-	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
-	     $$unique
+CTAGS:
 
-GTAGS:
-	here=`$(am__cd) $(top_builddir) && pwd` \
-	  && $(am__cd) $(top_srcdir) \
-	  && gtags -i $(GTAGS_ARGS) "$$here"
 
-distclean-tags:
-	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
+check-TESTS: $(TESTS)
+	@failed=0; all=0; xfail=0; xpass=0; skip=0; \
+	srcdir=$(srcdir); export srcdir; \
+	list=' $(TESTS) '; \
+	$(am__tty_colors); \
+	if test -n "$$list"; then \
+	  for tst in $$list; do \
+	    if test -f ./$$tst; then dir=./; \
+	    elif test -f $$tst; then dir=; \
+	    else dir="$(srcdir)/"; fi; \
+	    if $(TESTS_ENVIRONMENT) $${dir}$$tst; then \
+	      all=`expr $$all + 1`; \
+	      case " $(XFAIL_TESTS) " in \
+	      *[\ \	]$$tst[\ \	]*) \
+		xpass=`expr $$xpass + 1`; \
+		failed=`expr $$failed + 1`; \
+		col=$$red; res=XPASS; \
+	      ;; \
+	      *) \
+		col=$$grn; res=PASS; \
+	      ;; \
+	      esac; \
+	    elif test $$? -ne 77; then \
+	      all=`expr $$all + 1`; \
+	      case " $(XFAIL_TESTS) " in \
+	      *[\ \	]$$tst[\ \	]*) \
+		xfail=`expr $$xfail + 1`; \
+		col=$$lgn; res=XFAIL; \
+	      ;; \
+	      *) \
+		failed=`expr $$failed + 1`; \
+		col=$$red; res=FAIL; \
+	      ;; \
+	      esac; \
+	    else \
+	      skip=`expr $$skip + 1`; \
+	      col=$$blu; res=SKIP; \
+	    fi; \
+	    echo "$${col}$$res$${std}: $$tst"; \
+	  done; \
+	  if test "$$all" -eq 1; then \
+	    tests="test"; \
+	    All=""; \
+	  else \
+	    tests="tests"; \
+	    All="All "; \
+	  fi; \
+	  if test "$$failed" -eq 0; then \
+	    if test "$$xfail" -eq 0; then \
+	      banner="$$All$$all $$tests passed"; \
+	    else \
+	      if test "$$xfail" -eq 1; then failures=failure; else failures=failures; fi; \
+	      banner="$$All$$all $$tests behaved as expected ($$xfail expected $$failures)"; \
+	    fi; \
+	  else \
+	    if test "$$xpass" -eq 0; then \
+	      banner="$$failed of $$all $$tests failed"; \
+	    else \
+	      if test "$$xpass" -eq 1; then passes=pass; else passes=passes; fi; \
+	      banner="$$failed of $$all $$tests did not behave as expected ($$xpass unexpected $$passes)"; \
+	    fi; \
+	  fi; \
+	  dashes="$$banner"; \
+	  skipped=""; \
+	  if test "$$skip" -ne 0; then \
+	    if test "$$skip" -eq 1; then \
+	      skipped="($$skip test was not run)"; \
+	    else \
+	      skipped="($$skip tests were not run)"; \
+	    fi; \
+	    test `echo "$$skipped" | wc -c` -le `echo "$$banner" | wc -c` || \
+	      dashes="$$skipped"; \
+	  fi; \
+	  report=""; \
+	  if test "$$failed" -ne 0 && test -n "$(PACKAGE_BUGREPORT)"; then \
+	    report="Please report to $(PACKAGE_BUGREPORT)"; \
+	    test `echo "$$report" | wc -c` -le `echo "$$banner" | wc -c` || \
+	      dashes="$$report"; \
+	  fi; \
+	  dashes=`echo "$$dashes" | sed s/./=/g`; \
+	  if test "$$failed" -eq 0; then \
+	    echo "$$grn$$dashes"; \
+	  else \
+	    echo "$$red$$dashes"; \
+	  fi; \
+	  echo "$$banner"; \
+	  test -z "$$skipped" || echo "$$skipped"; \
+	  test -z "$$report" || echo "$$report"; \
+	  echo "$$dashes$$std"; \
+	  test "$$failed" -eq 0; \
+	else :; fi
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
@@ -1514,51 +982,20 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
-	  if test "$$subdir" = .; then :; else \
-	    test -d "$(distdir)/$$subdir" \
-	    || $(MKDIR_P) "$(distdir)/$$subdir" \
-	    || exit 1; \
-	  fi; \
-	done
-	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
-	  if test "$$subdir" = .; then :; else \
-	    dir1=$$subdir; dir2="$(distdir)/$$subdir"; \
-	    $(am__relativize); \
-	    new_distdir=$$reldir; \
-	    dir1=$$subdir; dir2="$(top_distdir)"; \
-	    $(am__relativize); \
-	    new_top_distdir=$$reldir; \
-	    echo " (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir="$$new_top_distdir" distdir="$$new_distdir" \\"; \
-	    echo "     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)"; \
-	    ($(am__cd) $$subdir && \
-	      $(MAKE) $(AM_MAKEFLAGS) \
-	        top_distdir="$$new_top_distdir" \
-	        distdir="$$new_distdir" \
-		am__remove_distdir=: \
-		am__skip_length_check=: \
-		am__skip_mode_fix=: \
-	        distdir) \
-	      || exit 1; \
-	  fi; \
-	done
 check-am: all-am
-check: check-recursive
-all-am: Makefile $(PROGRAMS) $(DATA)
-installdirs: installdirs-recursive
-installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" "$(DESTDIR)$(sbindir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
-install: install-recursive
-install-exec: install-exec-recursive
-install-data: install-data-recursive
-uninstall: uninstall-recursive
+	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
+check: check-am
+all-am: Makefile
+installdirs:
+install: install-am
+install-exec: install-exec-am
+install-data: install-data-am
+uninstall: uninstall-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-recursive
+installcheck: installcheck-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -1567,7 +1004,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -1576,135 +1012,85 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-rm -f lexgrog.c
-	-rm -f zsoelim.c
-clean: clean-recursive
+clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-noinstPROGRAMS \
-	clean-pkglibexecPROGRAMS clean-sbinPROGRAMS mostlyclean-am
+clean-am: clean-generic mostlyclean-am
 
-distclean: distclean-recursive
-	-rm -rf ./$(DEPDIR)
+distclean: distclean-am
 	-rm -f Makefile
-distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-tags
+distclean-am: clean-am distclean-generic
 
-dvi: dvi-recursive
+dvi: dvi-am
 
 dvi-am:
 
-html: html-recursive
+html: html-am
 
 html-am:
 
-info: info-recursive
+info: info-am
 
 info-am:
 
 install-data-am:
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
-install-dvi: install-dvi-recursive
+
+install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-binPROGRAMS install-pkglibexecPROGRAMS \
-	install-sbinPROGRAMS
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
-install-html: install-html-recursive
+install-exec-am:
+
+install-html: install-html-am
 
 install-html-am:
 
-install-info: install-info-recursive
+install-info: install-info-am
 
 install-info-am:
 
 install-man:
 
-install-pdf: install-pdf-recursive
+install-pdf: install-pdf-am
 
 install-pdf-am:
 
-install-ps: install-ps-recursive
+install-ps: install-ps-am
 
 install-ps-am:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-recursive
-	-rm -rf ./$(DEPDIR)
+maintainer-clean: maintainer-clean-am
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-recursive
+mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic
+mostlyclean-am: mostlyclean-generic
 
-pdf: pdf-recursive
+pdf: pdf-am
 
 pdf-am:
 
-ps: ps-recursive
+ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-pkglibexecPROGRAMS \
-	uninstall-sbinPROGRAMS
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
-.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
-	install-am install-data-am install-exec-am install-strip \
-	tags-recursive uninstall-am
+uninstall-am:
 
-.PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
-	all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-noinstPROGRAMS clean-pkglibexecPROGRAMS \
-	clean-sbinPROGRAMS ctags ctags-recursive distclean \
-	distclean-compile distclean-generic distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am \
-	install-data-hook install-dvi install-dvi-am install-exec \
-	install-exec-am install-exec-hook install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pkglibexecPROGRAMS install-ps \
-	install-ps-am install-sbinPROGRAMS install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am uninstall-binPROGRAMS uninstall-hook \
-	uninstall-pkglibexecPROGRAMS uninstall-sbinPROGRAMS
+.MAKE: check-am install-am install-strip
 
+.PHONY: all all-am check check-TESTS check-am clean clean-generic \
+	distclean distclean-generic distdir dvi dvi-am html html-am \
+	info info-am install install-am install-data install-data-am \
+	install-dvi install-dvi-am install-exec install-exec-am \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am uninstall \
+	uninstall-am
 
-apropos$(EXEEXT): whatis$(EXEEXT)
-	rm -f $@
-	$(LN_S) whatis$(EXEEXT) $@
-
-all-am: apropos$(EXEEXT)
-
-install-exec-hook:
-	-test -z "$(man_owner)" || \
-	chown $(man_owner) \
-		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
-		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
-	chmod $(man_mode) \
-		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
-		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
-	cd $(DESTDIR)$(bindir) && rm -f $(TRANS_APROPOS)$(EXEEXT) && \
-		$(LN_S) $(TRANS_WHATIS)$(EXEEXT) $(TRANS_APROPOS)$(EXEEXT)
-
-install-data-hook:
-	@if test -f $(DESTDIR)$(config_file); then \
-		echo "$(DESTDIR)$(config_file) already exists; overwrite manually if necessary"; \
-	else \
-		test -z "$(config_file_dirname)" || $(MKDIR_P) "$(DESTDIR)$(config_file_dirname)"; \
-		echo " $(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file)"; \
-		$(INSTALL_DATA) man_db.conf $(DESTDIR)$(config_file); \
-	fi
-
-uninstall-hook:
-	rm -f $(DESTDIR)$(bindir)/$(TRANS_APROPOS)$(EXEEXT)
-	@echo "Please remove $(DESTDIR)$(config_file) manually if necessary"
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

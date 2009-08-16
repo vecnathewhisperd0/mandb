@@ -1,0 +1,19 @@
+#! /bin/sh
+
+# Test manconv's support for Emacs-style coding: tags.
+
+: ${MANCONV=manconv}
+
+tmpdir=tmp-manconv-1
+mkdir -p "$tmpdir" || exit $?
+trap 'rm -rf "$tmpdir"' EXIT HUP INT QUIT TERM
+
+cat >"$tmpdir/1.exp" <<'EOF'
+'\" -*- coding: ISO-8859-1
+á
+EOF
+iconv -f UTF-8 -t ISO-8859-1 <"$tmpdir/1.exp" >"$tmpdir/1.inp"
+$MANCONV -f UTF-8 -t UTF-8 <"$tmpdir/1.inp" >"$tmpdir/1.out"
+diff "$tmpdir/1.out" "$tmpdir/1.exp"
+
+exit $?

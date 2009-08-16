@@ -21,6 +21,8 @@
 
 pkglibexecdir = $(libexecdir)/@PACKAGE@
 
+SUBDIRS = tests
+
 bin_PROGRAMS = \
 	catman \
 	lexgrog \
