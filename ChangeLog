@@ -1,3 +1,13 @@
+Mon Aug 17 00:38:12 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (conversion_table): New table, with contents
+	  mostly borrowed from groff's preconv.
+	  (convert_encoding): New function.
+	  (check_preprocessor_encoding): Loop through semicolon-separated
+	  tags, and convert Emacs coding tags to ones that libiconv
+	  understands (Debian bug #496604).
+	* src/tests/manconv-1: Test multiple tags. Test coding aliases.
+
 Sun Aug 16 23:52:38 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/testlib.sh: Add a simple test library, to be extended as

@@ -19,4 +19,20 @@ iconv -f UTF-8 -t ISO-8859-1 <"$tmpdir/1.exp" >"$tmpdir/1.inp"
 $MANCONV -f UTF-8 -t UTF-8 <"$tmpdir/1.inp" >"$tmpdir/1.out"
 expect_pass 'simple coding tag' 'diff "$tmpdir/1.out" "$tmpdir/1.exp"'
 
+cat >"$tmpdir/2.exp" <<'EOF'
+'\" -*- mode: troff; coding: ISO-8859-1
+á
+EOF
+iconv -f UTF-8 -t ISO-8859-1 <"$tmpdir/2.exp" >"$tmpdir/2.inp"
+$MANCONV -f UTF-8 -t UTF-8 <"$tmpdir/2.inp" >"$tmpdir/2.out"
+expect_pass 'mode and coding tags' 'diff "$tmpdir/2.out" "$tmpdir/2.exp"'
+
+cat >"$tmpdir/3.exp" <<'EOF'
+'\" -*- mode: troff; coding: ISO-LATIN-1
+á
+EOF
+iconv -f UTF-8 -t ISO-8859-1 <"$tmpdir/3.exp" >"$tmpdir/3.inp"
+$MANCONV -f UTF-8 -t UTF-8 <"$tmpdir/3.inp" >"$tmpdir/3.out"
+expect_pass 'iso-latin-1 coding alias' 'diff "$tmpdir/3.out" "$tmpdir/3.exp"'
+
 finish
