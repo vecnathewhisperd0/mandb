@@ -27,6 +27,9 @@ Major changes since man-db 2.5.5:
 	o whatis and apropos only display any given manual page, or pointers
 	  to it, once.
 
+	o man now sets less(1)'s environment up correctly for manual pages
+	  encoded in CP1251.
+
 	Improvements:
 	-------------
 
@@ -58,6 +61,14 @@ Major changes since man-db 2.5.5:
 	  each that can be accessed using similar syntax as would be used to
 	  invoke the subcommands themselves. Suggested by H. Peter Anvin,
 	  Federico Lucifredi, and others on the git mailing list.
+
+	o The build process is now quieter by default. Use './configure
+	  --disable-silent-rules' or 'make V=0' if you don't like this or
+	  your make(1) doesn't support the non-standard extension required.
+
+	o 'make install' now installs the manual.
+
+	o manconv understands a wider range of Emacs-style coding tags.
 
 man-db 2.5.5 (14 March 2009)
 ============================
