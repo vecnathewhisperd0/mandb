@@ -2,6 +2,9 @@
 
 # Test manconv's support for Emacs-style coding: tags.
 
+: ${srcdir=.}
+. "$srcdir/testlib.sh"
+
 : ${MANCONV=manconv}
 
 tmpdir=tmp-manconv-1
@@ -14,6 +17,6 @@ cat >"$tmpdir/1.exp" <<'EOF'
 EOF
 iconv -f UTF-8 -t ISO-8859-1 <"$tmpdir/1.exp" >"$tmpdir/1.inp"
 $MANCONV -f UTF-8 -t UTF-8 <"$tmpdir/1.inp" >"$tmpdir/1.out"
-diff "$tmpdir/1.out" "$tmpdir/1.exp"
+expect_pass 'simple coding tag' 'diff "$tmpdir/1.out" "$tmpdir/1.exp"'
 
-exit $?
+finish
