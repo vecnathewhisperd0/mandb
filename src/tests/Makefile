@@ -819,7 +819,7 @@ uncompress =
 unlzma = lzma -dc
 vgrind = 
 TESTS_ENVIRONMENT = PATH=..:$$PATH $(SHELL)
-TESTS = manconv-1
+TESTS = manconv-1 manconv-2
 all: all-am
 
 .SUFFIXES:

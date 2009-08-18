@@ -65,24 +65,32 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 	static const size_t buf_size = 65536;
 	size_t input_size = buf_size;
 	const char *input;
-	static char *output = NULL;
-	iconv_t cd;
+	static char *utf8 = NULL, *output = NULL;
+	size_t utf8left = 0;
+	iconv_t cd_utf8, cd = NULL;
+	int to_utf8 = STREQ (try_to_code, "UTF-8") ||
+		      STRNEQ (try_to_code, "UTF-8//", 7);
+	int ignore_errors = (strstr (try_to_code, "//IGNORE") != NULL);;
 	int ret = 0;
 
-	/* Only handle //IGNORE for the last encoding. */
-	if (!last) {
-		char *ignore = strstr (try_to_code, "//IGNORE");
-		if (ignore)
-			*ignore = '\0';
-	}
 	debug ("trying encoding %s -> %s\n", try_from_code, try_to_code);
 
-	cd = iconv_open (try_to_code, try_from_code);
-	if (cd == (iconv_t) -1) {
-		error (0, errno, "iconv_open (\"%s\", \"%s\")",
-		       try_to_code, try_from_code);
+	cd_utf8 = iconv_open ("UTF-8", try_from_code);
+	if (cd_utf8 == (iconv_t) -1) {
+		error (0, errno, "iconv_open (\"UTF-8\", \"%s\")",
+		       try_from_code);
 		free (try_to_code);
 		return -1;
+	}
+
+	if (!to_utf8) {
+		cd = iconv_open (try_to_code, "UTF-8");
+		if (cd == (iconv_t) -1) {
+			error (0, errno, "iconv_open (\"%s\", \"UTF-8\")",
+			       try_to_code);
+			free (try_to_code);
+			return -1;
+		}
 	}
 
 	input = pipeline_peek (p, &input_size);
@@ -99,38 +107,71 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		}
 	}
 
+	if (!utf8)
+		utf8 = xmalloc (buf_size);
 	if (!output)
 		output = xmalloc (buf_size);
 
-	while (input_size) {
-		char *inptr = (char *) input, *outptr = output;
-		size_t inleft = input_size, outleft = buf_size;
-		size_t n;
+	while (input_size || utf8left) {
+		char *inptr = (char *) input, *utf8ptr = utf8, *outptr;
+		size_t inleft = input_size, outleft;
+		size_t n, n2 = -1;
 
-		n = iconv (cd, (ICONV_CONST char **) &inptr, &inleft,
-			   &outptr, &outleft);
+		if (!utf8left) {
+			/* First, convert the text to UTF-8. By assumption,
+			 * all validly-encoded text can be converted to
+			 * UTF-8 assuming that we picked the correct
+			 * encoding. Any errors at this stage are due to
+			 * selecting an incorrect encoding, or due to
+			 * misencoded source text.
+			 */
+			utf8left = buf_size;
+			n = iconv (cd_utf8, (ICONV_CONST char **) &inptr,
+				   &inleft, &utf8ptr, &utf8left);
+			utf8left = buf_size - utf8left;
 
-		if (n == (size_t) -1 &&
-		    errno == EILSEQ && strstr (try_to_code, "//IGNORE"))
-			errno = 0;
+			/* If we need to try the next encoding, do that
+			 * before writing anything.
+			 */
+			if (!last && n == (size_t) -1 &&
+			    (errno == EILSEQ ||
+			     (errno == EINVAL && input_size < buf_size))) {
+				ret = -1;
+				break;
+			}
+		}
 
-		/* If we need to try the next encoding, do that before
-		 * writing anything.
+		/* If the target encoding is UTF-8 (the common case), then
+		 * we can just write out what we've got. Otherwise, we need
+		 * to convert to the target encoding. Any errors at this
+		 * stage are due to characters that are not representable in
+		 * the target encoding.
 		 */
-		if (!last && n == (size_t) -1 &&
-		    ((errno == EILSEQ && !strstr (try_to_code, "//IGNORE")) ||
-		     (errno == EINVAL && input_size < buf_size))) {
-			ret = -1;
-			break;
+		if (to_utf8) {
+			memcpy (output, utf8, utf8left);
+			outptr = output + utf8left;
+			outleft = utf8left;
+			utf8left = 0;
+		} else if (utf8left) {
+			outptr = output;
+			outleft = buf_size;
+			utf8ptr = utf8;
+			n2 = iconv (
+				cd, (ICONV_CONST char **) &utf8ptr, &utf8left,
+				&outptr, &outleft);
+			outleft = buf_size - outleft;
+
+			if (n2 == (size_t) -1 &&
+			    errno == EILSEQ && ignore_errors)
+				errno = 0;
 		}
 
 		if (outptr != output) {
 			/* We have something to write out. */
 			int errno_save = errno;
 			size_t w;
-			w = fwrite (output, 1, buf_size - outleft, stdout);
-			if (w < (size_t) (buf_size - outleft) ||
-			    ferror (stdout))
+			w = fwrite (output, 1, outleft, stdout);
+			if (w < (size_t) outleft || ferror (stdout))
 				error (FATAL, 0, _("can't write to "
 						   "standard output"));
 			errno = errno_save;
@@ -139,31 +180,29 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		if (inptr != input)
 			pipeline_peek_skip (p, input_size - inleft);
 
-		if (n != (size_t) -1) {
-			/* All the input text is processed. For
-			 * state-dependent character sets we have to flush
-			 * the state now.
+		if (!to_utf8 && n2 != (size_t) -1) {
+			/* All the UTF-8 text we have so far was processed.
+			 * For state-dependent character sets we have to
+			 * flush the state now.
 			 */
 			outptr = output;
 			outleft = buf_size;
-			n = iconv (cd, NULL, NULL, &outptr, &outleft);
+			iconv (cd, NULL, NULL, &outptr, &outleft);
+			outleft = buf_size - outleft;
 
 			if (outptr != output) {
 				/* We have something to write out. */
 				int errno_save = errno;
 				size_t w;
-				w = fwrite (output, 1, buf_size - outleft,
-					    stdout);
-				if (w < (size_t) (buf_size - outleft) ||
-				    ferror (stdout))
+				w = fwrite (output, 1, outleft, stdout);
+				if (w < (size_t) outleft || ferror (stdout))
 					error (FATAL, 0, _("can't write to "
 							   "standard output"));
 				errno = errno_save;
 			}
-		} else {
+		} else if (!to_utf8) {
 			/* !last case handled above */
-			if (errno == EILSEQ &&
-			    !strstr (try_to_code, "//IGNORE")) {
+			if (errno == EILSEQ && !ignore_errors) {
 				if (!quiet)
 					error (0, errno, "iconv");
 				exit (FATAL);
@@ -176,18 +215,27 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 			}
 		}
 
-		input_size = buf_size;
-		input = pipeline_peek (p, &input_size);
-		while (input_size < buf_size) {
-			size_t old_input_size = input_size;
+		/* Unless we have some UTF-8 text left (which will only
+		 * happen if the output encoding is more verbose than UTF-8,
+		 * so is unlikely for legacy encodings), we need to fetch
+		 * more input text now.
+		 */
+		if (!utf8left) {
 			input_size = buf_size;
 			input = pipeline_peek (p, &input_size);
-			if (input_size == old_input_size)
-				break;
+			while (input_size < buf_size) {
+				size_t old_input_size = input_size;
+				input_size = buf_size;
+				input = pipeline_peek (p, &input_size);
+				if (input_size == old_input_size)
+					break;
+			}
 		}
 	}
 
-	iconv_close (cd);
+	if (!to_utf8)
+		iconv_close (cd);
+	iconv_close (cd_utf8);
 	free (try_to_code);
 
 	return ret;

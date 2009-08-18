@@ -1,3 +1,14 @@
+Tue Aug 18 09:47:50 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/manconv.c (try_iconv): Convert text to UTF-8 and then (if
+	  necessary) to the target encoding. This allows us to distinguish
+	  between "text not in input encoding" and "characters not
+	  representable in output encoding" (Debian bug #514963).
+	* src/tests/manconv-2: Add test for this and some other possible
+	  encoding-handling bugs in manconv.
+	* src/tests/Makefile.am (TESTS): Add manconv-2.
+	* NEWS: Document this.
+
 Mon Aug 17 18:32:04 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/testlib.sh (init): New function.
