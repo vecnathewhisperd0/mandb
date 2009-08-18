@@ -20,3 +20,5 @@
 
 TESTS_ENVIRONMENT = PATH=..:$$PATH $(SHELL)
 TESTS = manconv-1 manconv-2
+
+dist_check_SCRIPTS = testlib.sh $(TESTS)
