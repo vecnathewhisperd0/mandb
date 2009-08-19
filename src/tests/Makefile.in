@@ -237,6 +237,7 @@ CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DATADIRNAME = @DATADIRNAME@
 DBLIBS = @DBLIBS@
+DBTYPE = @DBTYPE@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DIRENT_H = @DIRENT_H@
@@ -819,8 +820,12 @@ troff = @troff@
 uncompress = @uncompress@
 unlzma = @unlzma@
 vgrind = @vgrind@
-TESTS_ENVIRONMENT = PATH=..:$$PATH $(SHELL)
-TESTS = lexgrog-1 manconv-1 manconv-2
+TESTS_ENVIRONMENT = PATH=..:$$PATH DBTYPE=$(DBTYPE) $(SHELL)
+TESTS = \
+	lexgrog-1 \
+	manconv-1 manconv-2 \
+	mandb-1
+
 dist_check_SCRIPTS = testlib.sh $(TESTS)
 all: all-am
 

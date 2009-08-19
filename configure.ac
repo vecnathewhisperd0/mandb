@@ -368,7 +368,8 @@ then
     do
       AC_CHECK_LIB($lib, gdbm_fetch,
 		   test "$lib" = "c" || DBLIBS="-l$lib" 
-		   [AC_DEFINE(GDBM, 1, [Define if you have, and want to use, gdbm interface routines.])]
+		   [AC_DEFINE(GDBM, 1, [Define if you have, and want to use, gdbm interface routines.])
+		    AC_SUBST([DBTYPE], [gdbm])]
 		   db=yes, db=no)
       if test "$db" = "yes" 
       then
@@ -403,7 +404,8 @@ then
     do
       AC_CHECK_LIB($lib, dbm_fetch,
 		   test "$lib" = "c" || DBLIBS="-l$lib"
-		   [AC_DEFINE(NDBM, 1, [Define if you have, and want to use, ndbm interface routines.])]
+		   [AC_DEFINE(NDBM, 1, [Define if you have, and want to use, ndbm interface routines.])
+		    AC_SUBST([DBTYPE], [ndbm])]
 		   db=yes, db=no)
       test "$db" = "yes" && break
       done], db=no)

@@ -1,3 +1,18 @@
+Wed Aug 19 20:23:00 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/mandb.c (main): Treat the main configuration file as optional
+	  if we're only producing user databases. This makes testing easier.
+
+	* configure.ac, m4/man-bdb.m4 (MAN_CHECK_BDB): Define DBTYPE to
+	  gdbm, ndbm, or btree, indicating the database type in use.
+
+	* src/tests/testlib.sh (fake_config, db_ext, accessdb_filter): New
+	  functions.
+	* src/tests/mandb-1: New test.
+	* src/tests/Makefile.am (TESTS_ENVIRONMENT): Set DBTYPE
+	  appropriately in the test environment.
+	  (TESTS): Add mandb-1.
+
 Wed Aug 19 12:17:25 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/testlib.sh (write_page): New function.

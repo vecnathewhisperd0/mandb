@@ -617,6 +617,7 @@ int main (int argc, char *argv[])
 		user = 1;
 #endif /* SECURE_MAN_UID */
 
+	read_config_file (user);
 
 	/* This is required for get_catpath(), regardless */
 	manp = get_manpath (NULL);	/* also calls read_config_file() */

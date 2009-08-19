@@ -37,6 +37,7 @@ then
                                   [Define if you have, and want to use, Berkeley database header files.])
                AC_DEFINE_UNQUOTED([BTREE], [1],
                                   [Define if you have, and want to use, the Berkeley database library.])
+               AC_SUBST([DBTYPE], [btree])
                DBLIBS="-l$lib"
                db=yes],
               [db=no])

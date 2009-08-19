@@ -18,7 +18,10 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-TESTS_ENVIRONMENT = PATH=..:$$PATH $(SHELL)
-TESTS = lexgrog-1 manconv-1 manconv-2
+TESTS_ENVIRONMENT = PATH=..:$$PATH DBTYPE=$(DBTYPE) $(SHELL)
+TESTS = \
+	lexgrog-1 \
+	manconv-1 manconv-2 \
+	mandb-1
 
 dist_check_SCRIPTS = testlib.sh $(TESTS)
