@@ -19,6 +19,6 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 TESTS_ENVIRONMENT = PATH=..:$$PATH $(SHELL)
-TESTS = manconv-1 manconv-2
+TESTS = lexgrog-1 manconv-1 manconv-2
 
 dist_check_SCRIPTS = testlib.sh $(TESTS)
