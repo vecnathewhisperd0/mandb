@@ -835,7 +835,7 @@ char *check_preprocessor_encoding (pipeline *p)
 
 	if (directive && strstr (directive, "-*-")) {
 		const char *pp_search = strstr (directive, "-*-") + 3;
-		while (*pp_search) {
+		while (pp_search && *pp_search) {
 			while (*pp_search == ' ')
 				++pp_search;
 			if (STRNEQ (pp_search, "coding:", 7)) {

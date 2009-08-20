@@ -1,3 +1,11 @@
+Thu Aug 20 15:05:38 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (check_preprocessor_encoding): Break coding tag
+	  search loop if pp_search is NULL, fixing a segfault (introduced by
+	  the fix for Debian bug #496604) if there is a preprocessor comment
+	  line with no coding tag.
+	* src/tests/manconv-1: Add a test for this bug.
+
 Thu Aug 20 09:52:23 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* libdb/db_store.c (replace_if_necessary): Always replace if the

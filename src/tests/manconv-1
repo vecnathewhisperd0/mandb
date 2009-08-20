@@ -33,4 +33,11 @@ iconv -f UTF-8 -t ISO-8859-1 <"$tmpdir/3.exp" >"$tmpdir/3.inp"
 $MANCONV -f UTF-8 -t UTF-8 <"$tmpdir/3.inp" >"$tmpdir/3.out"
 expect_pass 'iso-latin-1 coding alias' 'diff "$tmpdir/3.exp" "$tmpdir/3.out"'
 
+cat >"$tmpdir/4.inp" <<'EOF'
+'\" -*- nroff -*-
+EOF
+$MANCONV -f UTF-8 -t UTF-8 <"$tmpdir/4.inp" >"$tmpdir/4.out"
+expect_pass 'preprocessor comment but no coding tag' \
+	'diff "$tmpdir/4.inp" "$tmpdir/4.out"'
+
 finish
