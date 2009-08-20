@@ -1,3 +1,9 @@
+Thu Aug 20 15:17:54 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l (MAX_NAME): Increase from 2048 to 8192, since some
+	  manual pages with NAME sections exceeding 2048 bytes have been
+	  observed in the wild (Debian bug #489907).
+
 Thu Aug 20 15:05:38 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/encodings.c (check_preprocessor_encoding): Break coding tag

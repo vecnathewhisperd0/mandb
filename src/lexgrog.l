@@ -52,7 +52,7 @@
 #include "encodings.h"
 
 #define YY_READ_BUF_SIZE	1024
-#define MAX_NAME		2048
+#define MAX_NAME		8192
 
 #ifdef PROFILE
 static int ctr[YY_NUM_RULES];
