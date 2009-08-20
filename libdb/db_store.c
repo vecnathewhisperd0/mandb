@@ -87,6 +87,13 @@ static int replace_if_necessary (struct mandata *newdata,
 				 struct mandata *olddata,
 				 datum newkey, datum newcont)
 {
+	if (newdata->_st_mtime > olddata->_st_mtime) {
+		debug ("replace_if_necessary(): newer mtime; replacing\n");
+		if (MYDBM_REPLACE (dbf, newkey, newcont))
+			gripe_replace_key (MYDBM_DPTR (newkey));
+		return 0;
+	}
+
 	if (compare_ids (newdata->id, olddata->id, 0) < 0) {
 		if (MYDBM_REPLACE (dbf, newkey, newcont))
 			gripe_replace_key (MYDBM_DPTR (newkey));
@@ -96,15 +103,9 @@ static int replace_if_necessary (struct mandata *newdata,
 	/* TODO: name fields should be collated with the requested name */
 
 	if (newdata->id == olddata->id) {
-		if (STREQ (dash_if_unset (newdata->comp), olddata->comp)) {
-			if (newdata->_st_mtime != olddata->_st_mtime) {
-				debug ("replace_if_necessary(): replace\n");
-				if (MYDBM_REPLACE (dbf, newkey, newcont))
-					gripe_replace_key (
-						MYDBM_DPTR (newkey));
-			}
+		if (STREQ (dash_if_unset (newdata->comp), olddata->comp))
 			return 0; /* same file */
-		} else {
+		else {
 			debug ("ignoring differing compression "
 			       "extensions: %s\n", MYDBM_DPTR (newkey));
 			return 1; /* differing exts */

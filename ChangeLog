@@ -1,3 +1,16 @@
+Thu Aug 20 09:52:23 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_store.c (replace_if_necessary): Always replace if the
+	  mtime of the new data is newer than that of the old data,
+	  regardless of the id (Debian bug #490582).
+
+	* src/tests/testlib.sh (next_second): New function.
+	* src/tests/mandb-2: New test for this bug.
+	* src/tests/Makefile.am (TESTS): Add mandb-2.
+
+	* src/tests/mandb-1: Run mandb with a clean path, and only on the
+	  test manual page hierarchy.
+
 Thu Aug 20 07:47:02 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (run_mandb): If -C was given, pass it through to mandb.

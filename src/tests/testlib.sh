@@ -58,6 +58,14 @@ accessdb_filter () {
 		sed 's/\(-> "[^ ][^ ]* [^ ][^ ]* [^ ][^ ]* \)[^ ][^ ]* /\1MTIME /'
 }
 
+next_second () {
+	startdate="$(date +%s)"
+	while :; do
+		sleep 1
+		[ "$(date +%s)" = "$startdate" ] || break
+	done
+}
+
 expect_pass () {
 	ret=0
 	eval "$2" || ret=$?

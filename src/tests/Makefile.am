@@ -23,6 +23,6 @@ TESTS = \
 	lexgrog-1 \
 	man-1 \
 	manconv-1 manconv-2 \
-	mandb-1
+	mandb-1 mandb-2
 
 dist_check_SCRIPTS = testlib.sh $(TESTS)
