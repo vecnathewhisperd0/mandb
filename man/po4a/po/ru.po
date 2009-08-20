@@ -1,4 +1,4 @@
-# translation of man-db-manpages-2.5.5.ru.po to Russian
+# translation of man-db-manpages-2.5.6-pre1.ru.po to Russian
 # Russian translation for man pages from man-db
 # Copyright (C) 2008, 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the man-db package.
@@ -7,9 +7,9 @@
 # Yuri Kozlov <kozlov.y@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.5.5\n"
+"Project-Id-Version: man-db-manpages 2.5.6-pre1\n"
 "POT-Creation-Date: 2009-07-13 13:37+0200\n"
-"PO-Revision-Date: 2009-03-15 21:55+0300\n"
+"PO-Revision-Date: 2009-08-20 21:35+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
 "MIME-Version: 1.0\n"
@@ -835,7 +835,6 @@ msgstr "%man% - доступ к справочным страницам"
 #.  The apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:66
-#, fuzzy
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -853,12 +852,12 @@ msgstr ""
 "I<локаль>\\|] [\\|B<-m> I<система>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<путь>"
 "\\|] [\\|B<-S> I<список разделов>\\|] [\\|B<-e> I<доп.расширение>\\|] [\\|B<-"
 "i>\\||\\|B<-I>\\|] [\\|B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--names-only>"
-"\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<-P> I<пейджер>\\|] [\\|B<-r> "
-"I<приглашение>\\|] [\\|B<-7>\\|] [\\|B<-E> I<кодировка>\\|] [\\|B<--no-"
-"hyphenation>\\|] [\\|B<-p> I<строка>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|"
-"I<устройство>\\|]\\|] [\\|B<-H>\\|[\\|I<браузер>\\|]\\|] [\\|B<-X>\\|[\\|"
-"I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<раздел>\\|] I<страница>\\ .\\|.\\|."
-"\\|]\\ .\\|.\\|."
+"\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<--no-subpages>\\|] [\\|B<-P> "
+"I<пейджер>\\|] [\\|B<-r> I<приглашение>\\|] [\\|B<-7>\\|] [\\|B<-E> "
+"I<кодировка>\\|] [\\|B<--no-hyphenation>\\|] [\\|B<-p> I<строка>\\|] [\\|B<-"
+"t>\\|] [\\|B<-T>\\|[\\|I<устройство>\\|]\\|] [\\|B<-H>\\|[\\|I<браузер>\\|]"
+"\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<раздел>\\|] "
+"I<страница>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
 
 #.  The --global-apropos command line
 #. type: Plain text
@@ -869,13 +868,12 @@ msgstr "B<%man%> B<-k> [\\|I<apropos> I<параметры>\\|] I<регвыр> 
 #.  The whatis command line
 #. type: Plain text
 #: ../../man/man1/man.man1:85
-#, fuzzy
 msgid ""
 "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<list>\\|] [\\|B<-i>\\||"
 "\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|."
 msgstr ""
-"B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<файл>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] "
-"I<страница> \\&.\\|.\\|."
+"B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<список>\\|] [\\|B<-i>"
+"\\||\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<раздел>\\|] I<термин>\\ .\\|.\\|."
 
 #.  The --local command line
 #. type: Plain text
@@ -1107,6 +1105,9 @@ msgid ""
 "will usually not be able to render italics when running in a terminal, and "
 "will typically use underlined or coloured text instead."
 msgstr ""
+"Точная растеризация может отличаться на разных устройствах вывода. Например, "
+"man, обычно, не способна вывести курсив в терминале, и вместо него выведет "
+"текст подчёркнутым или цветным."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:244
@@ -1597,6 +1598,11 @@ msgid ""
 "strings (the default), or regular expressions if the B<--regex> option is "
 "used."
 msgstr ""
+"Поиск текста во всех справочных страницах. Используется простой поиск "
+"перебором, что занимает определённое время; если можно, указывайте раздел "
+"для сокращения числа страниц, в которых нужно искать. Термины поиска могут "
+"быть простыми строками (по умолчанию), или регулярными выражениями, если "
+"указан параметр B<--regex>."
 
 #.  Compressed nroff source files with a supported compression
 #.  extension will be decompressed by man prior to being displaying via the
@@ -1874,11 +1880,17 @@ msgid ""
 "can be accessed using similar syntax as would be used to invoke the "
 "subcommands themselves.  For example:"
 msgstr ""
+"По умолчанию, B<%man%> пытается интерпретировать пары имён справочных "
+"страниц, указанных в командной строке, как единое имя справочной страницы, "
+"содержащее символ переноса. Это поддерживает общую систему программ, которые "
+"имеют несколько подкоманд, позволяя для каждой из них предоставлять "
+"справочные страницы используя синтаксис, похожий на вызов самих подкоманд. "
+"Например:"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:810
 msgid "To disable this behaviour, use the B<--no-subpages> option."
-msgstr ""
+msgstr "Чтобы выключить такое поведение, укажите параметр B<--no-subpages>."
 
 #. type: SS
 #: ../../man/man1/man.man1:817
