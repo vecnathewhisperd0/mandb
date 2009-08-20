@@ -7,9 +7,9 @@ init () {
 }
 
 fake_config () {
-	cat >"$tmpdir/manpath.config" <<EOF
-MANDATORY_MANPATH	$tmpdir/usr/share/man
-EOF
+	for dir; do
+		echo "MANDATORY_MANPATH	$tmpdir$dir"
+	done >"$tmpdir/manpath.config"
 }
 
 db_ext () {
@@ -42,6 +42,14 @@ EOF
 		lzma)	lzma -9c ;;
 	esac <"$3.tmp2" >"$3"
 	rm -f "$3.tmp1" "$3.tmp2"
+}
+
+run_clean_path () {
+	if [ "$CLEANPATH" ]; then
+		PATH="$CLEANPATH" "$@"
+	else
+		"$@"
+	fi
 }
 
 accessdb_filter () {

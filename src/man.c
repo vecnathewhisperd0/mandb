@@ -802,6 +802,9 @@ static int run_mandb (int create, const char *manpath, const char *filename)
 	else
 		command_arg (mandb_cmd, "-q");
 
+	if (user_config_file)
+		command_args (mandb_cmd, "-C", user_config_file, NULL);
+
 	if (filename)
 		command_args (mandb_cmd, "-f", filename, NULL);
 	else if (create)
@@ -973,7 +976,7 @@ int main (int argc, char *argv[])
 
 	pipeline_install_sigchld ();
 
-	read_config_file (local_man_file);
+	read_config_file (local_man_file || user_config_file);
 
 	/* if the user wants whatis or apropos, give it to them... */
 	if (external)

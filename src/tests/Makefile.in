@@ -820,9 +820,10 @@ troff = @troff@
 uncompress = @uncompress@
 unlzma = @unlzma@
 vgrind = @vgrind@
-TESTS_ENVIRONMENT = PATH=..:$$PATH DBTYPE=$(DBTYPE) $(SHELL)
+TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) $(SHELL)
 TESTS = \
 	lexgrog-1 \
+	man-1 \
 	manconv-1 manconv-2 \
 	mandb-1
 

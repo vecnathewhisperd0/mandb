@@ -1,3 +1,18 @@
+Thu Aug 20 07:47:02 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (run_mandb): If -C was given, pass it through to mandb.
+	  (main): Treat the main configuration file as optional if -C was
+	  given.
+
+	* src/tests/testlib.sh (fake_config): Take the manual page
+	  hierarchies to use as arguments.
+	  (run_clean_path): New function.
+	* src/tests/man-1: New test, for Debian bug #163347 (apparently
+	  fixed some time back).
+	* src/tests/Makefile.am (TESTS_ENVIRONMENT): Set CLEANPATH, so that
+	  run_clean_path can run commands with a reduced PATH.
+	  (TESTS): Add man-1.
+
 Wed Aug 19 20:23:00 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/mandb.c (main): Treat the main configuration file as optional
