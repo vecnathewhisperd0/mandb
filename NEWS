@@ -74,6 +74,14 @@ Major changes since man-db 2.5.5:
 
 	o manconv understands a wider range of Emacs-style coding tags.
 
+	o Recommendations to change MAN_DB_CREATES, MAN_DB_UPDATES, and
+	  MAN_CATS #define options in manconfig.h have been replaced by new
+	  configure options --enable-automatic-create,
+	  --disable-automatic-update, and --disable-cats respectively. Note
+	  that automatic user database creation is now off by default, as it
+	  is often too slow for the usefulness it adds; use
+	  --enable-automatic-create to enable it.
+
 man-db 2.5.5 (14 March 2009)
 ============================
 

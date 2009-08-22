@@ -94,6 +94,26 @@ AC_ARG_WITH(sections,
 		sections="$withval"
 	 fi],
 	[: ${sections=1 n l 8 3 2 5 4 9 6 7}])
+AC_ARG_ENABLE(automatic-create,
+[AS_HELP_STRING([--enable-automatic-create], [allow man to create user databases on the fly])],
+	[if test "$enableval" = "yes"
+	 then
+		AC_DEFINE([MAN_DB_CREATES], [1], [Allow man to create user databases on the fly.])
+	 fi])
+AC_ARG_ENABLE(automatic-update,
+[AS_HELP_STRING([--disable-automatic-update], [don't allow man to update databases on the fly])],
+	[if test "$enableval" = "yes"
+	 then
+		AC_DEFINE([MAN_DB_UPDATES], [1], [Allow man to update databases on the fly.])
+	 fi],
+	[AC_DEFINE([MAN_DB_UPDATES], [1], [Allow man to update databases on the fly.])])
+AC_ARG_ENABLE(cats,
+[AS_HELP_STRING([--disable-cats], [don't allow man to create/update cat files])],
+	[if test "$enableval" = "yes"
+	 then
+		AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])
+	 fi],
+	[AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])])
 
 # Finish the argument parsing.
 AC_SUBST(man_owner)dnl

@@ -287,3 +287,22 @@ Berkeley DB and finally ndbm and will #define appropriate variables relative
 to the first one found.
 To override the built-in order on platforms having a choice of interface
 library, use this option to specify which library to use.
+.ip \-\-enable\-automatic\-create
+If this flag is used,
+.b man
+will automatically create index databases for users' private manual page
+hierarchies.
+.ip \-\-disable\-automatic\-update
+Normally,
+.b man
+will update entries in index databases if it finds newly installed manual
+pages (if the
+.b \-\-update
+flag is used) or delete entries if manual pages are removed.
+This flag suppresses this behaviour.
+.ip \-\-disable\-cats
+Normally,
+.b man
+will automatically try to create cat files corresponding to manual files
+when a manual page is read.
+This flag suppresses this behaviour.

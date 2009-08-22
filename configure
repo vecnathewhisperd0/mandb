@@ -1218,6 +1218,9 @@ with_device
 with_db
 with_config_file
 with_sections
+enable_automatic_create
+enable_automatic_update
+enable_cats
 enable_dependency_tracking
 enable_threads
 with_browser
@@ -1880,6 +1883,11 @@ Optional Features:
   --enable-setuid=ARG     install man setuid to user ARG [ARG=man]
   --disable-setuid        don't install man setuid
   --enable-undoc=COMMAND  suggest COMMAND for missing manual pages
+  --enable-automatic-create
+                          allow man to create user databases on the fly
+  --disable-automatic-update
+                          don't allow man to update databases on the fly
+  --disable-cats          don't allow man to create/update cat files
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --enable-threads={posix|solaris|pth|win32}
@@ -3840,6 +3848,44 @@ if test "${with_sections+set}" = set; then :
 	 fi
 else
   : ${sections=1 n l 8 3 2 5 4 9 6 7}
+fi
+
+# Check whether --enable-automatic-create was given.
+if test "${enable_automatic_create+set}" = set; then :
+  enableval=$enable_automatic_create; if test "$enableval" = "yes"
+	 then
+
+$as_echo "#define MAN_DB_CREATES 1" >>confdefs.h
+
+	 fi
+fi
+
+# Check whether --enable-automatic-update was given.
+if test "${enable_automatic_update+set}" = set; then :
+  enableval=$enable_automatic_update; if test "$enableval" = "yes"
+	 then
+
+$as_echo "#define MAN_DB_UPDATES 1" >>confdefs.h
+
+	 fi
+else
+
+$as_echo "#define MAN_DB_UPDATES 1" >>confdefs.h
+
+fi
+
+# Check whether --enable-cats was given.
+if test "${enable_cats+set}" = set; then :
+  enableval=$enable_cats; if test "$enableval" = "yes"
+	 then
+
+$as_echo "#define MAN_CATS 1" >>confdefs.h
+
+	 fi
+else
+
+$as_echo "#define MAN_CATS 1" >>confdefs.h
+
 fi
 
 

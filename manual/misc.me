@@ -63,10 +63,9 @@ Each index database may be owned by an arbitrary user who will have
 subsequent write access to the database.
 Cat files are created in the same way as for mode (1) above.
 .br
-To use the \*M utilities in this mode, edit
-.i include/manconfig.h
-and comment out
-\(oq#define MAN_DB_UPDATES\(cq.
+To use the \*M utilities in this mode, give the option
+\(oq\-\-disable\-automatic\-update\(cq to
+.b configure .
 .ip "(3) No man database updates or cat production"
 .b man
 is installed not setuid.
@@ -83,13 +82,9 @@ whenever new manual files are installed.
 will be completely passive in its action, i.e. no index databases will be
 written to and no cat files are ever produced.
 .br
-To use the \*M utilities in this mode, supply the option
-\(oq\-\-disable\-setuid\(cq to
-.b configure
-and edit
-.i include/manconfig.h ,
-commenting out \(oq#define MAN_DB_UPDATES\(cq and \(oq#define MAN_CATS\(cq
-after running
+To use the \*M utilities in this mode, supply the options
+\(oq\-\-disable\-setuid \-\-disable\-automatic\-update \-\-disable\-cats\(cq
+to
 .b configure ,
 or build \*M as in mode (1) and install the binaries without the setuid
 bit set.
@@ -106,13 +101,12 @@ does not update the databases.
 Cat files are produced and stored in world writable cat directories and have
 world write access themselves.
 .br
-To use the \*M utilities in this mode, supply the option
-\(oq\-\-disable\-setuid\(cq to
+To use the \*M utilities in this mode, supply the options
+\(oq\-\-disable\-setuid \-\-disable\-automatic\-update\(cq to
 .b configure ,
 edit
 .i include/manconfig.h
-and comment out \(oq#define MAN_DB_UPDATES\(cq and change the definition of
-CATMODE from 0644 to 0666.
+and change the definition of CATMODE from 0644 to 0666.
 .lp
 Other variations can also be used.
 In fact it is possible for
@@ -120,26 +114,19 @@ In fact it is possible for
 to actually create index databases, usually the job of
 .b mandb ,
 for users' private manual page hierarchies.
-This is enabled by editing
-.i include/manconfig.h
-and un-commenting the `/* #define MAN_DB_CREATES */' line.
-man\-db\-2.2 operated in this manner.
+This is enabled by giving the option
+\(oq\-\-enable\-automatic\-create\(cq to
+.b configure .
 .lp
 In summary,
 .i include/manconfig.h
 contains definitions for
 .bu
-MAN_DB_CREATES
-.bu
-MAN_DB_UPDATES
-.bu
-MAN_CATS
-.bu
 CATMODE
 .bu
 DBMODE
 .lp
-and the setuid installation and operation of
+the setuid installation and operation of
 .b man
 is modified by supplying either of the following options to
 .b configure :
@@ -147,6 +134,17 @@ is modified by supplying either of the following options to
 \-\-enable\-setuid=USER
 .bu
 \-\-disable\-setuid
+.lp
+and other aspects of
+.b man 's
+behaviour are controlled by the following options to
+.b configure :
+.bu
+\-\-enable\-automatic\-create
+.bu
+\-\-disable\-automatic\-update
+.bu
+\-\-disable\-cats
 .BS 2 "NFS root squash"
 .lp
 If
