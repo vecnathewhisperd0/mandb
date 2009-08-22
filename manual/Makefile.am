@@ -39,11 +39,11 @@ dist_noinst_DATA = \
 	$(ME_FILES)
 noinst_DATA = \
 	$(MANUAL).cat \
-	$(MANUAL).dvi \
 	$(MANUAL).ps
 
 CLEANFILES = \
 	$(noinst_DATA) \
+	$(MANUAL).dvi \
 	$(MANUAL).html \
 	$(MANUAL).pp \
 	$(MANUAL).tdvi \
@@ -93,10 +93,6 @@ install-data-hook:
 	@if test -f $(MANUAL).cat; then \
 		echo " $(INSTALL_DATA) $(MANUAL).cat '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).txt'"; \
 		$(INSTALL_DATA) $(MANUAL).cat "$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).txt" || exit $$?; \
-	fi
-	@if test -f $(MANUAL).dvi; then \
-		echo " $(INSTALL_DATA) $(MANUAL).dvi '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).dvi'"; \
-		$(INSTALL_DATA) $(MANUAL).dvi "$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).dvi" || exit $$?; \
 	fi
 	@if test -f $(MANUAL).ps; then \
 		echo " $(INSTALL_DATA) $(MANUAL).ps '$(DESTDIR)$(docdir)/$(MANUAL_INSTALL).ps'"; \
