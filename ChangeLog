@@ -1,3 +1,22 @@
+Sat Aug 22 15:34:15 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	Cope with some more cases of database corruption (Debian bug
+	#187750).
+
+	* libdb/db_store.c (dbstore): Always replace existing keys once
+	  we've decided we ought to. If the key already exists in the
+	  database, then that probably indicates some kind of database
+	  corruption, but our new key is almost certainly better.
+	* src/check_mandirs.c (sanity_check_db): New function, checking
+	  dbver_rd and ensuring that all keys have non-NULL content.
+	  (update_db): Use sanity_check_db to decide whether an existing
+	  database is OK.
+
+	* src/accessdb.c (main): If we encounter a key with no content,
+	  print a debugging message and continue as far as we can before
+	  exiting non-zero, rather than just silently exiting non-zero
+	  immediately.
+
 Sat Aug 22 14:58:39 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/mandb-2: Run mandb with a clean path, and only on the

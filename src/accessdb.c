@@ -106,6 +106,7 @@ static struct argp argp = { options, parse_opt, args_doc, doc, 0,
 int main (int argc, char *argv[])
 {
 	datum key;
+	int ret = OK;
 
 	program_name = base_name (argv[0]);
 
@@ -141,8 +142,11 @@ int main (int argc, char *argv[])
 		char *t, *nicekey;
 
 		content = MYDBM_FETCH (dbf, key);
-		if (!MYDBM_DPTR (content))
-			exit (FATAL);
+		if (!MYDBM_DPTR (content)) {
+			debug ("key %s has no content!\n", MYDBM_DPTR (key));
+			ret = FATAL;
+			goto next;
+		}
 		nicekey = xstrdup (MYDBM_DPTR (key));
 		while ( (t = strchr (nicekey, '\t')) )
 			*t = '~';
@@ -151,11 +155,12 @@ int main (int argc, char *argv[])
 		printf ("%s -> \"%s\"\n", nicekey, MYDBM_DPTR (content));
 		free (nicekey); 
 		MYDBM_FREE (MYDBM_DPTR (content));
+next:
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE (MYDBM_DPTR (key));
 		key = nextkey;
 	}
 
 	MYDBM_CLOSE (dbf);
-	exit (OK);
+	exit (ret);
 }

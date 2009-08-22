@@ -511,12 +511,40 @@ int create_db (const char *manpath, const char *catpath)
 	return amount;
 }
 
+/* Make sure an existing database is essentially sane. */
+int sanity_check_db (void)
+{
+	datum key;
+
+	if (dbver_rd (dbf))
+		return 0;
+
+	key = MYDBM_FIRSTKEY (dbf);
+	while (MYDBM_DPTR (key) != NULL) {
+		datum content, nextkey;
+
+		content = MYDBM_FETCH (dbf, key);
+		if (!MYDBM_DPTR (content)) {
+			debug ("warning: %s has a key with no content (%s); "
+			       "rebuilding\n", database, MYDBM_DPTR (key));
+			MYDBM_FREE (MYDBM_DPTR (key));
+			return 0;
+		}
+		MYDBM_FREE (MYDBM_DPTR (content));
+		nextkey = MYDBM_NEXTKEY (dbf, key);
+		MYDBM_FREE (MYDBM_DPTR (key));
+		key = nextkey;
+	}
+
+	return 1;
+}
+
 /* routine to update the db, ensure that it is consistent with the 
    filesystem */
 int update_db (const char *manpath, const char *catpath)
 {
 	dbf = MYDBM_RDOPEN (database);
-	if (dbf && dbver_rd (dbf)) {
+	if (dbf && !sanity_check_db ()) {
 		MYDBM_CLOSE (dbf);
 		dbf = NULL;
 	}

@@ -42,13 +42,6 @@
 #include "mydbm.h"
 #include "db_storage.h"
 
-/* deal with situation where we cannot insert an unused key */
-static void gripe_insert_unused (char *data)
-{
-	error (0, 0, _("cannot insert unused key %s"), data);
-	gripe_corrupt_data ();
-}
-
 /* compare_ids(a,b) is true if id 'a' is preferred to id 'b', i.e. if 'a' is
  * a more canonical database entry than 'b'. This usually goes in comparison
  * order, but there's a special exception when FAVOUR_STRAYCATS is set.
@@ -177,8 +170,8 @@ int dbstore (struct mandata *in, const char *base)
 		if (!STREQ (base, MYDBM_DPTR (oldkey)))
 			in->name = xstrdup (base);
 		oldcont = make_content (in);
-		if (MYDBM_INSERT (dbf, oldkey, oldcont))
-			gripe_insert_unused (MYDBM_DPTR (oldkey));
+		if (MYDBM_REPLACE (dbf, oldkey, oldcont))
+			gripe_replace_key (MYDBM_DPTR (oldkey));
 		free (MYDBM_DPTR (oldcont));
 		free (in->name);
 		in->name = NULL;
@@ -286,8 +279,13 @@ int dbstore (struct mandata *in, const char *base)
 
 		lastcont = make_content (&old);
 
-		if (MYDBM_INSERT (dbf, lastkey, lastcont))
-			gripe_insert_unused (MYDBM_DPTR (lastkey));
+		/* We always replace here; if the multi key already exists
+		 * in the database, then that indicates some kind of
+		 * database corruption, but our new multi key is almost
+		 * certainly better.
+		 */
+		if (MYDBM_REPLACE (dbf, lastkey, lastcont))
+			gripe_replace_key (MYDBM_DPTR (lastkey));
 
 		free (MYDBM_DPTR (lastkey));
 		free (MYDBM_DPTR (lastcont));
@@ -295,8 +293,8 @@ int dbstore (struct mandata *in, const char *base)
 		newkey = make_multi_key (base, in->ext);
 		newcont = make_content (in);
 
-		if (MYDBM_INSERT (dbf, newkey, newcont))
-			gripe_insert_unused (MYDBM_DPTR (newkey));
+		if (MYDBM_REPLACE (dbf, newkey, newcont))
+			gripe_replace_key (MYDBM_DPTR (newkey));
 
 		free (MYDBM_DPTR (newkey));
 		free (MYDBM_DPTR (newcont));
