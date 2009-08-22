@@ -70,15 +70,16 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 	iconv_t cd_utf8, cd = NULL;
 	int to_utf8 = STREQ (try_to_code, "UTF-8") ||
 		      STRNEQ (try_to_code, "UTF-8//", 7);
+	const char *utf8_target = last ? "UTF-8//IGNORE" : "UTF-8";
 	int ignore_errors = (strstr (try_to_code, "//IGNORE") != NULL);;
 	int ret = 0;
 
 	debug ("trying encoding %s -> %s\n", try_from_code, try_to_code);
 
-	cd_utf8 = iconv_open ("UTF-8", try_from_code);
+	cd_utf8 = iconv_open (utf8_target, try_from_code);
 	if (cd_utf8 == (iconv_t) -1) {
-		error (0, errno, "iconv_open (\"UTF-8\", \"%s\")",
-		       try_from_code);
+		error (0, errno, "iconv_open (\"%s\", \"%s\")",
+		       utf8_target, try_from_code);
 		free (try_to_code);
 		return -1;
 	}

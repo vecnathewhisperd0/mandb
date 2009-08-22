@@ -56,4 +56,19 @@ $MANCONV -f UTF-8:ISO-8859-2 -t ISO-8859-2//IGNORE \
 expect_pass 'recognises input encoding and omits invalid output character' \
 	'diff "$tmpdir/4.exp" "$tmpdir/4.out"'
 
+# 0xAE does not exist in ISO-8859-7, so manconv won't be able to recode this
+# to UTF-8 without conversion errors. (In the original case where this was
+# seen in the wild, the coding: tag should actually have read ISO-8859-13.)
+iconv -f UTF-8 -t ISO-8859-13 >"$tmpdir/5.inp" <<'EOF'
+'\" -*- coding: ISO-8859-7
+REGISTERED SIGN: ®
+trailing data
+EOF
+iconv -f ISO-8859-7 -t UTF-8//IGNORE \
+	<"$tmpdir/5.inp" >"$tmpdir/5.exp" 2>/dev/null
+$MANCONV -f UTF-8:ISO-8859-1 -t UTF-8//IGNORE \
+	<"$tmpdir/5.inp" >"$tmpdir/5.out"
+expect_pass 'copes with invalid input characters' \
+	'diff "$tmpdir/5.exp" "$tmpdir/5.out"'
+
 finish
