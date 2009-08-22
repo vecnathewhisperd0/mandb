@@ -724,9 +724,12 @@ next_manpath:
 	free_pathlist (manpathlist);
 	free (manp);
 	if (create && !amount) {
+		const char *must_create;
 		if (!quiet)
 			fprintf (stderr, _("No databases created."));
-		exit (FAIL);
+		must_create = getenv ("MAN_MUST_CREATE");
+		if (STREQ (must_create, "1"))
+			exit (FAIL);
 	}
 	free (program_name);
 	exit (OK);

@@ -807,9 +807,10 @@ static int run_mandb (int create, const char *manpath, const char *filename)
 
 	if (filename)
 		command_args (mandb_cmd, "-f", filename, NULL);
-	else if (create)
+	else if (create) {
 		command_arg (mandb_cmd, "-c");
-	else
+		command_setenv (mandb_cmd, "MAN_MUST_CREATE", "1");
+	} else
 		command_arg (mandb_cmd, "-p");
 
 	if (manpath)

@@ -1,3 +1,22 @@
+Sun Aug 23 00:04:56 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (command_setenv): New function, allowing
+	  application code to ask for environment variables to be set when a
+	  command is executed.
+	  (command_new, command_new_function, command_dup, command_dump,
+	  command_tostring, command_free): Handle new nenv, env_max, and env
+	  members of 'struct command'.
+	  (argstr_get_word): Add TODO comment for environment variable
+	  support.
+	  (pipeline_start): Set environment variables as requested.
+	* lib/pipeline.h (struct command_env): New structure.
+	  (struct command): Add nenv, env_max, and env members.
+	  (command_setenv): Add prototype.
+	* src/man.c (run_mandb): Set MAN_MUST_CREATE=1 environment variable
+	  if create is true.
+	* src/mandb.c (main): If --create was passed and no databases were
+	  created, only exit non-zero if MAN_MUST_CREATE=1.
+
 Sat Aug 22 15:34:15 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	Cope with some more cases of database corruption (Debian bug
