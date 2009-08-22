@@ -16,7 +16,7 @@ db_ext="$(db_ext)"
 
 write_page fs 5 "$tmpdir/usr/share/man/man5/fs.5.gz" \
 	UTF-8 gz t 'fs \- fs(5)'
-$MANDB -C "$tmpdir/manpath.config" -u -q
+run_clean_path $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 cat >"$tmpdir/1.exp" <<EOF
 fs -> "- 5 5 MTIME A - - gz fs(5)"
 EOF
