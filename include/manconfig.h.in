@@ -255,6 +255,13 @@
 #  define ATTRIBUTE_UNUSED
 #endif
 
+/* Does this compiler support marking functions as non-returning? */
+#if GNUC_PREREQ(2,5)
+#  define ATTRIBUTE_NORETURN __attribute__ ((__noreturn__))
+#else
+#  define ATTRIBUTE_NORETURN
+#endif
+
 /* Does this compiler support malloc return checking? */
 #if GNUC_PREREQ(2,96)
 #  define ATTRIBUTE_MALLOC __attribute__ ((__malloc__))
