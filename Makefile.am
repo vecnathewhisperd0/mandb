@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 ## Copyright (C) 1994, 1995 Graeme Wilford.
-## Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007 Colin Watson.
+## Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007, 2009 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -23,7 +23,11 @@ SUBDIRS = docs intl gnulib/lib gnulib/po lib libdb src man manual po tools
 
 dist_noinst_DATA = NEWS README include/README
 
-EXTRA_DIST = autogen.sh gnulib/lib/xmalloc.patch gnulib/m4/gnulib-cache.m4
+EXTRA_DIST = \
+	autogen.sh \
+	gnulib/lib/xmalloc.patch \
+	gnulib/m4/gnulib-cache.m4 \
+	gnulib/m4/gnulib-tool.m4
 
 # Note that autopoint installs into the first directory here. Yes, this
 # means that it installs into gnulib/m4, so we always run gnulib-tool after
