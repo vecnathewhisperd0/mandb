@@ -23,7 +23,7 @@ SUBDIRS = docs intl gnulib/lib gnulib/po lib libdb src man manual po tools
 
 dist_noinst_DATA = NEWS README include/README
 
-EXTRA_DIST = autogen.sh gnulib/m4/gnulib-cache.m4
+EXTRA_DIST = autogen.sh gnulib/lib/xmalloc.patch gnulib/m4/gnulib-cache.m4
 
 # Note that autopoint installs into the first directory here. Yes, this
 # means that it installs into gnulib/m4, so we always run gnulib-tool after
