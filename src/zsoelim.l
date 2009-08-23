@@ -24,6 +24,9 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * Added functionality over gsoelim to allow for compressed .so includes.
+ * This is required as the first *roff preprocessor in order to deal with
+ * 100% of compressed source files correctly. A replacement tmac.andoc was
+ * considered, but would not have been portable to all systems.
  *
  * Wed Oct 12 18:46:11 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
  *

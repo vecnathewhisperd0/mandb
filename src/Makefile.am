@@ -176,7 +176,6 @@ CLEANFILES = apropos man_db.conf
 
 EXTRA_DIST = \
 	README.lexgrog \
-	README.zsoelim \
 	lexgrog.l-2.3.8 \
 	lexgrog.l-2.4a \
 	lexgrog.l.new
