@@ -33,7 +33,6 @@ bin_PROGRAMS = \
 	zsoelim
 sbin_PROGRAMS = accessdb
 pkglibexec_PROGRAMS = globbing manconv
-noinst_PROGRAMS = wrapper
 noinst_DATA = man_db.conf
 
 AM_CPPFLAGS = \
@@ -65,7 +64,6 @@ manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
 mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
 manpath_LDADD = $(LIBMAN) @LIBINTL@
 whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS) @LIBINTL@
-wrapper_LDADD = $(LIBMAN) @LIBINTL@
 zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
 
 accessdb_SOURCES = \
@@ -166,8 +164,6 @@ whatis_SOURCES = \
 	manp.h \
 	util.c \
 	whatis.c
-wrapper_SOURCES = \
-	wrapper.c
 zsoelim_SOURCES = \
 	globbing.c \
 	globbing.h \

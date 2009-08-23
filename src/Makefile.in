@@ -39,7 +39,6 @@ bin_PROGRAMS = catman$(EXEEXT) lexgrog$(EXEEXT) man$(EXEEXT) \
 	zsoelim$(EXEEXT)
 sbin_PROGRAMS = accessdb$(EXEEXT)
 pkglibexec_PROGRAMS = globbing$(EXEEXT) manconv$(EXEEXT)
-noinst_PROGRAMS = wrapper$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/man_db.conf.in lexgrog.c zsoelim.c
@@ -209,8 +208,7 @@ CONFIG_CLEAN_FILES = man_db.conf
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" \
 	"$(DESTDIR)$(sbindir)"
-PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS) $(pkglibexec_PROGRAMS) \
-	$(sbin_PROGRAMS)
+PROGRAMS = $(bin_PROGRAMS) $(pkglibexec_PROGRAMS) $(sbin_PROGRAMS)
 am_accessdb_OBJECTS = accessdb.$(OBJEXT) util.$(OBJEXT)
 accessdb_OBJECTS = $(am_accessdb_OBJECTS)
 am__DEPENDENCIES_1 =
@@ -262,9 +260,6 @@ am_whatis_OBJECTS = encodings.$(OBJEXT) fake_security.$(OBJEXT) \
 whatis_OBJECTS = $(am_whatis_OBJECTS)
 whatis_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-am_wrapper_OBJECTS = wrapper.$(OBJEXT)
-wrapper_OBJECTS = $(am_wrapper_OBJECTS)
-wrapper_DEPENDENCIES = $(LIBMAN)
 am_zsoelim_OBJECTS = globbing.$(OBJEXT) util.$(OBJEXT) \
 	zsoelim.$(OBJEXT) zsoelim_main.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
@@ -297,11 +292,11 @@ am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(accessdb_SOURCES) $(catman_SOURCES) $(globbing_SOURCES) \
 	$(lexgrog_SOURCES) $(man_SOURCES) $(manconv_SOURCES) \
 	$(mandb_SOURCES) $(manpath_SOURCES) $(whatis_SOURCES) \
-	$(wrapper_SOURCES) $(zsoelim_SOURCES)
+	$(zsoelim_SOURCES)
 DIST_SOURCES = $(accessdb_SOURCES) $(catman_SOURCES) \
 	$(globbing_SOURCES) $(lexgrog_SOURCES) $(man_SOURCES) \
 	$(manconv_SOURCES) $(mandb_SOURCES) $(manpath_SOURCES) \
-	$(whatis_SOURCES) $(wrapper_SOURCES) $(zsoelim_SOURCES)
+	$(whatis_SOURCES) $(zsoelim_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -984,7 +979,6 @@ manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
 mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
 manpath_LDADD = $(LIBMAN) @LIBINTL@
 whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS) @LIBINTL@
-wrapper_LDADD = $(LIBMAN) @LIBINTL@
 zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
 accessdb_SOURCES = \
 	accessdb.c \
@@ -1093,9 +1087,6 @@ whatis_SOURCES = \
 	util.c \
 	whatis.c
 
-wrapper_SOURCES = \
-	wrapper.c
-
 zsoelim_SOURCES = \
 	globbing.c \
 	globbing.h \
@@ -1185,9 +1176,6 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
 install-pkglibexecPROGRAMS: $(pkglibexec_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	test -z "$(pkglibexecdir)" || $(MKDIR_P) "$(DESTDIR)$(pkglibexecdir)"
@@ -1289,9 +1277,6 @@ manpath$(EXEEXT): $(manpath_OBJECTS) $(manpath_DEPENDENCIES)
 whatis$(EXEEXT): $(whatis_OBJECTS) $(whatis_DEPENDENCIES) 
 	@rm -f whatis$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(whatis_OBJECTS) $(whatis_LDADD) $(LIBS)
-wrapper$(EXEEXT): $(wrapper_OBJECTS) $(wrapper_DEPENDENCIES) 
-	@rm -f wrapper$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(wrapper_OBJECTS) $(wrapper_LDADD) $(LIBS)
 zsoelim$(EXEEXT): $(zsoelim_OBJECTS) $(zsoelim_DEPENDENCIES) 
 	@rm -f zsoelim$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(zsoelim_OBJECTS) $(zsoelim_LDADD) $(LIBS)
@@ -1327,7 +1312,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ult_src.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wrapper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim_main.Po@am__quote@
 
@@ -1581,8 +1565,8 @@ maintainer-clean-generic:
 	-rm -f zsoelim.c
 clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-noinstPROGRAMS \
-	clean-pkglibexecPROGRAMS clean-sbinPROGRAMS mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-pkglibexecPROGRAMS \
+	clean-sbinPROGRAMS mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
@@ -1660,16 +1644,16 @@ uninstall-am: uninstall-binPROGRAMS uninstall-pkglibexecPROGRAMS \
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-noinstPROGRAMS clean-pkglibexecPROGRAMS \
-	clean-sbinPROGRAMS ctags ctags-recursive distclean \
-	distclean-compile distclean-generic distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am \
-	install-data-hook install-dvi install-dvi-am install-exec \
-	install-exec-am install-exec-hook install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pkglibexecPROGRAMS install-ps \
-	install-ps-am install-sbinPROGRAMS install-strip installcheck \
+	clean-generic clean-pkglibexecPROGRAMS clean-sbinPROGRAMS \
+	ctags ctags-recursive distclean distclean-compile \
+	distclean-generic distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-binPROGRAMS \
+	install-data install-data-am install-data-hook install-dvi \
+	install-dvi-am install-exec install-exec-am install-exec-hook \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am \
+	install-pkglibexecPROGRAMS install-ps install-ps-am \
+	install-sbinPROGRAMS install-strip installcheck \
 	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags tags-recursive \
