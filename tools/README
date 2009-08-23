@@ -1,15 +1,10 @@
-This directory contains various shell scripts:
+Many of the files in this directory are used internally by man-db's build
+system. The rest are as follows:
 
 chconfig:	Converts a man-db configuration file to the FHS.
 
 checkman:	Can be run to inform of manual pages duplicated across
 		hierarchies.
-
-config.guess, config.sub:
-		Used by configure to detect the build architecture.
-
-install-sh:	Used by configure if a BSD-like install program is not
-		found.
 
 mandb_fmt-script: 
 		An example of a per manual page hierarchy formatter
@@ -17,6 +12,3 @@ mandb_fmt-script:
 
 mkcatdirs:	Can be used to create all of the required cat directories
 		after installation.
-
-mkinstalldirs:	Used by the Makefiles to create any install dirctories that
-		do not already exist.
