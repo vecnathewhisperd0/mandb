@@ -1,14 +1,10 @@
 README for the man-db manual pager suite
 ========================================
 
-Please read the man-db manual, available in PostScript format, located at an
-FTP site carrying this package.  It contains configuration details and other
-aspects of this manual pager suite that are not duplicated or relevant in
-this README.
-
-As of man-db-2.3.11, the man-db manual is *included* with this distribution
-in source form.  Please check manual/README for details of the formatters
-required.  The man-db manual must be built from the manual subdirectory.
+Please read the man-db manual, included in the manual subdirectory of this
+distribution.  It contains configuration details and other aspects of this
+manual pager suite that are not duplicated or relevant in this README.
+Check manual/README for details of the formatters required.
 
 Read docs/INSTALL.autoconf for generic options to configure.
 Read docs/INSTALL.quick if you know all about man-db.
@@ -105,16 +101,15 @@ options are discussed in docs/INSTALL.autoconf.  The following list of
 options is extracted from the man-db manual.  It is strongly recommended
 that relevant sections of the manual are read if any of these options are
 used.
- 
---enable-setuid[=ARG]
-     By  default,  man will be installed as a setuid program
-     to user man. Use this option with an argument to change
-     the setuid owner.
+
+−−enable−setuid[=ARG]
+     By default, man will be installed as a setuid program to user  man.   Use
+     this option with an argument to change the setuid owner.
 
 --disable-setuid
-     Use  this option to install man as a non-setuid program
-     and to change  the  default  cat  and  database  files'
-     access flags to allow users to modify them.
+     Use  this option to install man as a non-setuid program and to change the
+     default cat and database files' access flags to  allow  users  to  modify
+     them.
 
 --enable-mandirs=OS
      By default, man-db supports manual page directories  in  any  of  several
@@ -127,18 +122,16 @@ used.
      not currently capable of writing cat pages in the proper BSD layout.
 
 --with-device=DEVICE
-     Use  this  flag to alter the default output device used
-     by NROFF. DEVICE is passed to NROFF with the -T option.
-     configure  will  test that NROFF will run with the sup-
-     plied device argument.
+     Use this flag to alter the default output device used by NROFF. DEVICE is
+     passed  to NROFF with the -T option.  configure will test that NROFF will
+     run with the supplied device argument.
 
 --with-db=LIBRARY
-     configure will look for database interface libraries in
-     the  order  gdbm, Berkeley DB and finally ndbm and will
-     #define appropriate variables relative to the first one
-     found. To override the built in order on platforms hav-
-     ing a choice of interface library, use this  option  to
-     specify which library to use.
+     configure will look for database interface libraries in the  order  gdbm,
+     Berkeley DB and finally ndbm and will #define appropriate variables rela-
+     tive to the first one found.  To override the built-in order on platforms
+     having  a  choice  of interface library, use this option to specify which
+     library to use.
 
 −−enable−automatic−create
      If this flag is used, man will automatically create index  databases  for
