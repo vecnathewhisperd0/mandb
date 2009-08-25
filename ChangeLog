@@ -1,3 +1,13 @@
+Wed Aug 26 00:20:45 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_store.c (compare_ids): Fix documentation of return
+	  values.
+	  (replace_if_necessary): Don't replace ULT_MAN or SO_MAN with
+	  lesser ids just because the mtime is newer. (This still satisfies
+	  Debian bug #490582, but doesn't cause the database to be rebuilt
+	  every time mandb runs on hierarchies with both symlinks and whatis
+	  entries for the same name.)
+
 Tue Aug 25 17:07:05 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l (zh_CN_name, zh_TW_name): Add alternative

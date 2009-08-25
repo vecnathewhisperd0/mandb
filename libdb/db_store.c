@@ -42,9 +42,11 @@
 #include "mydbm.h"
 #include "db_storage.h"
 
-/* compare_ids(a,b) is true if id 'a' is preferred to id 'b', i.e. if 'a' is
- * a more canonical database entry than 'b'. This usually goes in comparison
- * order, but there's a special exception when FAVOUR_STRAYCATS is set.
+/* compare_ids(a,b) is negative if id 'a' is preferred to id 'b', i.e. if
+ * 'a' is a more canonical database entry than 'b'; positive if 'b' is
+ * preferred to 'a'; and zero if they are equivalent. This usually goes in
+ * comparison order, but there's a special exception when FAVOUR_STRAYCATS
+ * is set.
  *
  * If promote_links is true, consider SO_MAN equivalent to ULT_MAN. This is
  * appropriate when sorting candidate pages for display.
@@ -80,7 +82,14 @@ static int replace_if_necessary (struct mandata *newdata,
 				 struct mandata *olddata,
 				 datum newkey, datum newcont)
 {
-	if (newdata->_st_mtime > olddata->_st_mtime) {
+	/* It's OK to replace ULT_MAN with SO_MAN if the mtime is newer. It
+	 * isn't OK to replace a real page (either ULT_MAN or SO_MAN) with a
+	 * whatis reference; if the real page really went away then
+	 * purge_missing will catch that in time, but a real page that still
+	 * exists should always take precedence.
+	 */
+	if (compare_ids (newdata->id, olddata->id, 1) <= 0 &&
+	    newdata->_st_mtime > olddata->_st_mtime) {
 		debug ("replace_if_necessary(): newer mtime; replacing\n");
 		if (MYDBM_REPLACE (dbf, newkey, newcont))
 			gripe_replace_key (MYDBM_DPTR (newkey));
