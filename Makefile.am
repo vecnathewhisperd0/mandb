@@ -24,10 +24,19 @@ SUBDIRS = docs intl gnulib/lib gnulib/po lib libdb src man manual po tools
 dist_noinst_DATA = NEWS README include/README
 
 EXTRA_DIST = \
+	.bzrignore \
 	autogen.sh \
+	gnulib/lib/xmalloc.c.orig \
 	gnulib/lib/xmalloc.patch \
 	gnulib/m4/gnulib-cache.m4 \
-	gnulib/m4/gnulib-tool.m4
+	gnulib/m4/gnulib-tool.m4 \
+	release.sh
+
+# These macro files are imported by gnulib-tool, but at present not used. We
+# include them in the distribution anyway for maximum consistency.
+EXTRA_DIST += \
+	gnulib/m4/intldir.m4 \
+	gnulib/m4/sockpfaf.m4
 
 # Note that autopoint installs into the first directory here. Yes, this
 # means that it installs into gnulib/m4, so we always run gnulib-tool after
