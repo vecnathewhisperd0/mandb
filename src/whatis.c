@@ -350,6 +350,7 @@ static void display (struct mandata *info, char *page)
 	struct mandata *newinfo;
 	char *string, *whatis, *string_conv;
 	const char *page_name;
+	char *key;
 	int line_len, rest;
 
 	newinfo = resolve_pointers (info, page);
@@ -364,10 +365,10 @@ static void display (struct mandata *info, char *page)
 	else
 		page_name = page;
 
-	if (hash_lookup_structure (display_seen,
-				   page_name, strlen (page_name)))
+	key = xasprintf ("%s (%s)", page_name, newinfo->ext);
+	if (hash_lookup_structure (display_seen, key, strlen (key)))
 		goto out;
-	hash_install (display_seen, page_name, strlen (page_name), NULL);
+	hash_install (display_seen, key, strlen (key), NULL);
 
 	line_len = get_line_length ();
 
@@ -403,6 +404,7 @@ static void display (struct mandata *info, char *page)
 	free (string);
 
 out:
+	free (key);
 	free (whatis);
 	if (newinfo != info)
 		free_mandata_struct (newinfo);
