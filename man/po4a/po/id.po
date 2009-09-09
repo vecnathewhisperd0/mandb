@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.5.5\n"
+"Project-Id-Version: man-db-manpages 2.5.6-pre1\n"
 "POT-Creation-Date: 2009-07-13 13:37+0200\n"
-"PO-Revision-Date: 2009-03-21 11:40+0700\n"
+"PO-Revision-Date: 2009-09-09 07:00+0700\n"
 "Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -825,7 +825,6 @@ msgstr "%man% - sebuah antar-muka ke referensi buku panduan online"
 #.  The apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:66
-#, fuzzy
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -843,11 +842,12 @@ msgstr ""
 "I<lokal>\\|] [\\|B<-m> I<sistem>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<jalur>"
 "\\|] [\\|B<-S> I<daftar>\\|] [\\|B<-e> I<ekstensi>\\|] [\\|B<-i>\\||\\|B<-I>"
 "\\|] [\\|B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--names-only>\\|] [\\|B<-a>"
-"\\|] [\\|B<-u>\\|] [\\|B<-P> I<pager>\\|] [\\|B<-r> I<prompt>\\|] [\\|B<-7>"
-"\\|] [\\|B<-E> I<pengkodean>\\|] [\\|B<--no-hyphenation>\\|] [\\|B<-p> "
-"I<string>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|I<perangkat>\\|]\\|] [\\|B<-H>\\|"
-"[\\|I<browser>\\|]\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|"
-"I<bagian>\\|] I<halaman>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
+"\\|] [\\|B<-u>\\|] [\\|B<--no-subpages>\\|][\\|B<-P> I<pager>\\|] [\\|B<-r> "
+"I<prompt>\\|] [\\|B<-7>\\|] [\\|B<-E> I<pengkodean>\\|] [\\|B<--no-"
+"hyphenation>\\|] [\\|B<-p> I<string>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|"
+"I<perangkat>\\|]\\|] [\\|B<-H>\\|[\\|I<browser>\\|]\\|] [\\|B<-X>\\|[\\|"
+"I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<bagian>\\|] I<halaman>\\ .\\|.\\|.\\|]"
+"\\ .\\|.\\|."
 
 #.  The --global-apropos command line
 #. type: Plain text
@@ -858,13 +858,12 @@ msgstr "B<%man%> B<-k> [\\|I<apropos> I<pilihan>\\|] I<regexp> \\&.\\|.\\|."
 #.  The whatis command line
 #. type: Plain text
 #: ../../man/man1/man.man1:85
-#, fuzzy
 msgid ""
 "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<list>\\|] [\\|B<-i>\\||"
 "\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|."
 msgstr ""
-"B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<berkas>\\|] [\\|B<-d>\\|] [\\|B<-D>"
-"\\|] I<halaman> \\&.\\|.\\|."
+"B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<daftar>\\|] [\\|B<-i>"
+"\\||\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|<bagian>\\|] I<term>\\.\\|.\\|."
 
 #.  The --local command line
 #. type: Plain text
@@ -1087,6 +1086,10 @@ msgid ""
 "will usually not be able to render italics when running in a terminal, and "
 "will typically use underlined or coloured text instead."
 msgstr ""
+"Merender secara tepat mungkin akan berbeda tergantung dari perangkat "
+"keluaran. Sebagai contoh, man biasanya tidak dapat merender italics ketika "
+"berjalan dalam sebuah terminal, dan biasanya menggunakan garis bawah atau "
+"teks berwarna."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:244
@@ -1587,6 +1590,11 @@ msgid ""
 "strings (the default), or regular expressions if the B<--regex> option is "
 "used."
 msgstr ""
+"Cari teks dalam seluruh halaman manual. Ini adalah pencarian secara paksa, "
+"dan biasanya memerlukan waktu cukup lama; jika anda dapat, anda seharusnya "
+"menspesifikasikan sebuah bagian untuk mengurangi jumlah dari halam yang akan "
+"dicari. Kata pencarian mungkin dapat berupa kata sederhana (baku), atau "
+"ekspresi umum jika opsi B<--regex> digunakan."
 
 #.  Compressed nroff source files with a supported compression
 #.  extension will be decompressed by man prior to being displaying via the
@@ -1870,11 +1878,18 @@ msgid ""
 "can be accessed using similar syntax as would be used to invoke the "
 "subcommands themselves.  For example:"
 msgstr ""
+"Secara baku, B<%man%> akan mencoba menginterpretasikan pasangan dari nama "
+"halaman manual yang diberikan di baris perintah sama dengan sebuah halaman "
+"manual tunggal berisi sebuah hyphen. Ini didukung dengan pola sama dari "
+"aplikasi yang mengimplementasikan jumlah dari perintah bawah, mengijinkannya "
+"untuk menyediakan halaman manual yang dapat diakses menggunakan sintaks "
+"serupa seperti yang digunakan untuk menjalankan perintah bawah itu sendiri. "
+"Sebagai contoh:"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:810
 msgid "To disable this behaviour, use the B<--no-subpages> option."
-msgstr ""
+msgstr "Untuk menonaktifkan perilaku ini, gunakan pilihan B<--no-subpages>."
 
 #. type: SS
 #: ../../man/man1/man.man1:817
