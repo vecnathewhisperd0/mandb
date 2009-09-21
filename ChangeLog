@@ -1,3 +1,10 @@
+Tue Sep 22 00:53:42 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (get_default_device): If the locale encoding is
+	  ASCII, then use the ascii device even if preconv is available; it
+	  will do a better job than producing UTF-8 output and then recoding
+	  that to ASCII (Debian bug #547695).
+
 Sat Sep 19 15:02:20 BST 2009  Clytie Siddall  <clytie@riverland.net.au>
 
 	* po/vi.po: Update from Translation Project.

@@ -658,8 +658,17 @@ const char *get_default_device (const char *locale_charset,
 {
 	const struct charset_entry *entry;
 
-	if (get_groff_preconv ())
-		return "utf8";
+	if (get_groff_preconv ()) {
+		/* ASCII is a special case, and the only way we can get
+		 * things like bullet marks to come out right is by using
+		 * the ascii device. People using such a basic locale
+		 * probably don't want anything fancy anyway.
+		 */
+		if (locale_charset && STREQ (locale_charset, "ANSI_X3.4-1968"))
+			return "ascii";
+		else
+			return "utf8";
+	}
 
 	if (!locale_charset)
 		return fallback_default_device;
