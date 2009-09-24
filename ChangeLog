@@ -1,3 +1,11 @@
+Thu Sep 24 12:32:48 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_pump): When a source pipeline dies, make
+	  sure to drain its output before discarding its output file
+	  descriptor (Debian bug #548153). We still record the death to
+	  avoid duplicate debugging messages.
+	* NEWS: Document this.
+
 Tue Sep 22 00:53:42 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/encodings.c (get_default_device): If the locale encoding is
