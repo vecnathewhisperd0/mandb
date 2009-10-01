@@ -75,7 +75,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
+					 ARGP_HELP_STD_HELP &
+					 ~ARGP_HELP_PRE_DOC);
 			break;
 		case ARGP_KEY_ARG:
 			if (database)

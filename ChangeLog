@@ -1,3 +1,10 @@
+Thu Oct  1 01:08:40 BST 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/accessdb.c (parse_opt), src/lexgrog_test.c (parse_opt),
+	  src/whatis.c (parse_opt): Turn off ARGP_HELP_PRE_DOC to avoid
+	  problems with translations of documentation strings beginning with
+	  a vertical tab separator (i.e. no pre-option documentation).
+
 Thu Sep 24 12:32:48 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_pump): When a source pipeline dies, make
