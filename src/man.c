@@ -1596,18 +1596,23 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 								  NULL);
 					command_arg (cmd, tmpdev);
 					free (tmpdev);
-				} else if (gxditview) {
+				}
+#ifdef TROFF_IS_GROFF
+				else if (gxditview) {
 					char *tmpdev = appendstr (NULL, "-TX",
 								  gxditview,
 								  NULL);
 					command_arg (cmd, tmpdev);
 					free (tmpdev);
 				}
+#endif /* TROFF_IS_GROFF */
 			}
 
 			if (wants_post) {
+#ifdef TROFF_IS_GROFF
 				if (gxditview)
 					command_arg (cmd, "-X");
+#endif /* TROFF_IS_GROFF */
 
 				if (roff_device && STREQ (roff_device, "ps"))
 					/* Tell grops to guess the page
