@@ -213,6 +213,7 @@ else
 	AC_CHECK_PROGS(troff, troff gtroff)
 	TROFF=troff
 fi
+AC_SUBST([TROFF])
 if test -n "$troff"
 then
 	AC_DEFINE(HAS_TROFF, 1, [Define if you have troff.])
