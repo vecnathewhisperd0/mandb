@@ -1,7 +1,6 @@
-/* Invoke dup, but avoid some glitches.
+/* Invoke openat, but avoid some glitches.
 
-   Copyright (C) 2001, 2004, 2005, 2006, 2009 Free Software
-   Foundation, Inc.
+   Copyright (C) 2005, 2006, 2008-2009 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,27 +15,32 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
-/* Written by Paul Eggert.  */
+/* Written by Paul Eggert for open, ported by Eric Blake for openat.  */
 
 #include <config.h>
 
-#include "unistd-safer.h"
+#include "fcntl-safer.h"
 
 #include <fcntl.h>
-
-#include <unistd.h>
-
-/* Like dup, but do not return STDIN_FILENO, STDOUT_FILENO, or
-   STDERR_FILENO.  */
+#include <stdarg.h>
+#include "unistd-safer.h"
 
 int
-dup_safer (int fd)
+openat_safer (int fd, char const *file, int flags, ...)
 {
-#if defined F_DUPFD && !REPLACE_FCHDIR
-  return fcntl (fd, F_DUPFD, STDERR_FILENO + 1);
-#else
-  /* fd_safer calls us back, but eventually the recursion unwinds and
-     does the right thing.  */
-  return fd_safer (dup (fd));
-#endif
+  mode_t mode = 0;
+
+  if (flags & O_CREAT)
+    {
+      va_list ap;
+      va_start (ap, flags);
+
+      /* We have to use PROMOTED_MODE_T instead of mode_t, otherwise GCC 4
+	 creates crashing code when 'mode_t' is smaller than 'int'.  */
+      mode = va_arg (ap, PROMOTED_MODE_T);
+
+      va_end (ap);
+    }
+
+  return fd_safer (openat (fd, file, flags, mode));
 }

@@ -66,9 +66,6 @@
    language is requested. */
 #undef ENABLE_NLS
 
-/* Define if gnulib's fchdir() replacement is used. */
-#undef FCHDIR_REPLACEMENT
-
 /* Define on systems for which file names may have a so-called `drive letter'
    prefix, define this to compute the length of that prefix, including the
    colon. */
@@ -97,11 +94,17 @@
 /* Define to 1 when using the gnulib module fcntl-safer. */
 #undef GNULIB_FCNTL_SAFER
 
+/* Define to 1 when using the gnulib module getopt-gnu. */
+#undef GNULIB_GETOPT_GNU
+
 /* Define to indicate the 'malloc' module. */
 #undef GNULIB_MALLOC_GNU
 
 /* Define to 1 when using the gnulib module open. */
 #undef GNULIB_OPEN
+
+/* Define to 1 when using the gnulib module openat-safer. */
+#undef GNULIB_OPENAT_SAFER
 
 /* Define to 1 to add extern declaration of program_invocation_name to argp.h
    */
@@ -110,6 +113,9 @@
 /* Define to 1 to add extern declaration of program_invocation_short_name to
    argp.h */
 #undef GNULIB_PROGRAM_INVOCATION_SHORT_NAME
+
+/* Define to 1 when using the gnulib module unistd-safer. */
+#undef GNULIB_UNISTD_SAFER
 
 /* Define if nroff is GNU nroff. */
 #undef GNU_NROFF
@@ -169,7 +175,7 @@
    the CoreFoundation framework. */
 #undef HAVE_CFPREFERENCESCOPYAPPVALUE
 
-/* Define to 1 if your system has a working `chown' function. */
+/* Define to 1 if you have the `chown' function. */
 #undef HAVE_CHOWN
 
 /* Define if you have col. */
@@ -279,6 +285,10 @@
 /* Define to 1 if you have the declaration of `snprintf', and to 0 if you
    don't. */
 #undef HAVE_DECL_SNPRINTF
+
+/* Define to 1 if you have the declaration of `strdup', and to 0 if you don't.
+   */
+#undef HAVE_DECL_STRDUP
 
 /* Define to 1 if you have the declaration of `strerror', and to 0 if you
    don't. */
@@ -613,6 +623,9 @@
 /* Define to 1 if you have the `readlink' function. */
 #undef HAVE_READLINK
 
+/* Define if the 'realloc' function is POSIX compliant. */
+#undef HAVE_REALLOC_POSIX
+
 /* Define if you have refer. */
 #undef HAVE_REFER
 
@@ -722,7 +735,7 @@
 /* Define to 1 if you have the `strncasecmp' function. */
 #undef HAVE_STRNCASECMP
 
-/* Define if you have the strndup() function and it works. */
+/* Define to 1 if you have the `strndup' function. */
 #undef HAVE_STRNDUP
 
 /* Define to 1 if you have the `strnlen' function. */
@@ -1007,6 +1020,13 @@
 /* Define to 1 if dup2 returns 0 instead of the target fd. */
 #undef REPLACE_DUP2
 
+/* Define to 1 if gnulib's fchdir() replacement is used. */
+#undef REPLACE_FCHDIR
+
+/* Define to 1 if open() should work around the inability to open a directory.
+   */
+#undef REPLACE_OPEN_DIRECTORY
+
 /* Define this to 1 if strerror is broken. */
 #undef REPLACE_STRERROR
 
@@ -1144,14 +1164,8 @@
    used. */
 #undef __GETOPT_PREFIX
 
-/* Define to rpl_ if the openat replacement function should be used. */
-#undef __OPENAT_PREFIX
-
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
-
-/* Define to rpl_fchownat if the replacement function should be used. */
-#undef fchownat
 
 /* Define to a replacement function name for fnmatch(). */
 #undef fnmatch
@@ -1256,9 +1270,6 @@
 
 /* Define to rpl_regfree if the replacement should be used. */
 #undef regfree
-
-/* Define to rpl_rename if the replacement function should be used. */
-#undef rename
 
 /* Define to the equivalent of the C99 'restrict' keyword, or to
    nothing if this is not supported.  Do not define if restrict is

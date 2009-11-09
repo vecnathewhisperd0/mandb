@@ -53,8 +53,8 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_ALLOCA
   gl_ARGP
   m4_ifdef([AM_XGETTEXT_OPTION],
-    [AM_XGETTEXT_OPTION([--flag=argp_error:2:c-format])
-     AM_XGETTEXT_OPTION([--flag=argp_failure:4:c-format])])
+    [AM_][XGETTEXT_OPTION([--flag=argp_error:2:c-format])
+     AM_][XGETTEXT_OPTION([--flag=argp_failure:4:c-format])])
   gl_FUNC_ATEXIT
   AC_REQUIRE([AC_C_INLINE])
   gl_FUNC_BTOWC
@@ -82,8 +82,8 @@ AC_DEFUN([gl_INIT],
   gl_HEADER_ERRNO_H
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
-    [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
-     AM_XGETTEXT_OPTION([--flag=error_at_line:5:c-format])])
+    [AM_][XGETTEXT_OPTION([--flag=error:3:c-format])
+     AM_][XGETTEXT_OPTION([--flag=error_at_line:5:c-format])])
   gl_EXITFAIL
   gl_FUNC_FCHDIR
   gl_UNISTD_MODULE_INDICATOR([fchdir])
@@ -92,6 +92,8 @@ AC_DEFUN([gl_INIT],
   gl_FCNTL_H
   gl_FCNTL_SAFER
   gl_MODULE_INDICATOR([fcntl-safer])
+  gl_FUNC_FDOPENDIR
+  gl_DIRENT_MODULE_INDICATOR([fdopendir])
   gl_FILE_NAME_CONCAT
   gl_FLOAT_H
   gl_FUNC_FNMATCH_POSIX
@@ -100,7 +102,9 @@ AC_DEFUN([gl_INIT],
   gl_UNISTD_MODULE_INDICATOR([getcwd])
   gl_GETLOGIN_R
   gl_UNISTD_MODULE_INDICATOR([getlogin_r])
-  gl_GETOPT
+  gl_FUNC_GETOPT_GNU
+  gl_MODULE_INDICATOR([getopt-gnu])
+  gl_FUNC_GETOPT_POSIX
   gl_FUNC_GETPAGESIZE
   gl_UNISTD_MODULE_INDICATOR([getpagesize])
   dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
@@ -148,13 +152,18 @@ AC_DEFUN([gl_INIT],
   gl_MODULE_INDICATOR([open])
   gl_FCNTL_MODULE_INDICATOR([open])
   gl_FUNC_OPENAT
+  gl_OPENAT_SAFER
+  gl_MODULE_INDICATOR([openat-safer])
   gl_PATHMAX
   gl_FUNC_RAWMEMCHR
   gl_STRING_MODULE_INDICATOR([rawmemchr])
   gl_FUNC_READLINK
   gl_UNISTD_MODULE_INDICATOR([readlink])
+  gl_FUNC_REALLOC_POSIX
+  gl_STDLIB_MODULE_INDICATOR([realloc-posix])
   gl_REGEX
   gl_FUNC_RENAME
+  gl_STDIO_MODULE_INDICATOR([rename])
   gl_SAME
   gl_SAVE_CWD
   gl_FUNC_SETENV
@@ -172,6 +181,7 @@ AC_DEFUN([gl_INIT],
   gt_TYPE_SSIZE_T
   gl_STDARG_H
   AM_STDBOOL_H
+  gl_STDDEF_H
   gl_STDINT_H
   gl_STDIO_H
   gl_STDLIB_H
@@ -179,6 +189,8 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_STRCHRNUL
   gl_STRING_MODULE_INDICATOR([strchrnul])
   gl_FUNC_STRCSPN
+  gl_FUNC_STRDUP_POSIX
+  gl_STRING_MODULE_INDICATOR([strdup])
   gl_FUNC_STRERROR
   gl_STRING_MODULE_INDICATOR([strerror])
   gl_HEADER_STRING_H
@@ -205,14 +217,15 @@ AC_DEFUN([gl_INIT],
   gl_TLS
   gl_UNISTD_H
   gl_UNISTD_SAFER
+  gl_MODULE_INDICATOR([unistd-safer])
   gl_FUNC_UNSETENV
   gl_STDLIB_MODULE_INDICATOR([unsetenv])
   gl_FUNC_VASNPRINTF
   gl_FUNC_VASPRINTF
   gl_STDIO_MODULE_INDICATOR([vasprintf])
   m4_ifdef([AM_XGETTEXT_OPTION],
-    [AM_XGETTEXT_OPTION([--flag=asprintf:2:c-format])
-     AM_XGETTEXT_OPTION([--flag=vasprintf:2:c-format])])
+    [AM_][XGETTEXT_OPTION([--flag=asprintf:2:c-format])
+     AM_][XGETTEXT_OPTION([--flag=vasprintf:2:c-format])])
   gl_FUNC_VSNPRINTF
   gl_STDIO_MODULE_INDICATOR([vsnprintf])
   gl_WCHAR_H
@@ -225,7 +238,7 @@ AC_DEFUN([gl_INIT],
   gl_XSTRNDUP
   gl_XVASPRINTF
   m4_ifdef([AM_XGETTEXT_OPTION],
-    [AM_XGETTEXT_OPTION([--flag=xasprintf:1:c-format])])
+    [AM_][XGETTEXT_OPTION([--flag=xasprintf:1:c-format])])
   m4_ifval(gl_LIBSOURCES_LIST, [
     m4_syscmd([test ! -d ]m4_defn([gl_LIBSOURCES_DIR])[ ||
       for gl_file in ]gl_LIBSOURCES_LIST[ ; do
@@ -416,6 +429,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fcntl-safer.h
   lib/fcntl.in.h
   lib/fd-safer.c
+  lib/fdopendir.c
   lib/file-set.c
   lib/file-set.h
   lib/filenamecat.c
@@ -476,6 +490,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/openat-die.c
   lib/openat-priv.h
   lib/openat-proc.c
+  lib/openat-safer.c
   lib/openat.c
   lib/openat.h
   lib/pathmax.h
@@ -487,6 +502,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/rawmemchr.c
   lib/rawmemchr.valgrind
   lib/readlink.c
+  lib/realloc.c
   lib/ref-add.sin
   lib/ref-del.sin
   lib/regcomp.c
@@ -512,6 +528,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/snprintf.c
   lib/stdarg.in.h
   lib/stdbool.in.h
+  lib/stddef.in.h
   lib/stdint.in.h
   lib/stdio-write.c
   lib/stdio.in.h
@@ -520,6 +537,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strchrnul.c
   lib/strchrnul.valgrind
   lib/strcspn.c
+  lib/strdup.c
   lib/streq.h
   lib/strerror.c
   lib/string.in.h
@@ -591,6 +609,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/fclose.m4
   m4/fcntl-safer.m4
   m4/fcntl_h.m4
+  m4/fdopendir.m4
   m4/filenamecat.m4
   m4/float_h.m4
   m4/fnmatch.m4
@@ -658,6 +677,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/progtest.m4
   m4/rawmemchr.m4
   m4/readlink.m4
+  m4/realloc.m4
   m4/regex.m4
   m4/rename.m4
   m4/same.m4
@@ -673,6 +693,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/ssize_t.m4
   m4/stdarg.m4
   m4/stdbool.m4
+  m4/stddef_h.m4
   m4/stdint.m4
   m4/stdint_h.m4
   m4/stdio_h.m4
@@ -680,6 +701,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strcase.m4
   m4/strchrnul.m4
   m4/strcspn.m4
+  m4/strdup.m4
   m4/strerror.m4
   m4/string_h.m4
   m4/strings_h.m4
