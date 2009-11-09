@@ -468,6 +468,9 @@ MAN_TRANS_SUBST(manpath)
 MAN_TRANS_SUBST(whatis)
 MAN_TRANS_SUBST(zsoelim)
 
+# If we're cross-compiling, tests won't work.
+AM_CONDITIONAL([CROSS_COMPILING], [test "x$cross_compiling" = xyes])
+
 AC_CONFIG_FILES(Makefile
 	gnulib/lib/Makefile
 	gnulib/po/Makefile.in

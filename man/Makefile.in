@@ -960,8 +960,8 @@ man8_MANS = \
 
 EXTRA_DIST = LINGUAS LINGUAS.po4a check-man
 CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS) replace.sed
-TESTS_ENVIRONMENT = @SHELL@ $(top_srcdir)/man/check-man
-TESTS = $(man1_MANS) $(man5_MANS) $(man8_MANS)
+@CROSS_COMPILING_FALSE@TESTS_ENVIRONMENT = @SHELL@ $(top_srcdir)/man/check-man
+@CROSS_COMPILING_FALSE@TESTS = $(man1_MANS) $(man5_MANS) $(man8_MANS)
 all: all-recursive
 
 .SUFFIXES:

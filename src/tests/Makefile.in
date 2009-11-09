@@ -872,13 +872,14 @@ uncompress = @uncompress@
 unlzma = @unlzma@
 vgrind = @vgrind@
 TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) $(SHELL)
-TESTS = \
+ALL_TESTS = \
 	lexgrog-1 \
 	man-1 \
 	manconv-1 manconv-2 \
 	mandb-1 mandb-2
 
-dist_check_SCRIPTS = testlib.sh $(TESTS)
+@CROSS_COMPILING_FALSE@TESTS = $(ALL_TESTS)
+dist_check_SCRIPTS = testlib.sh $(ALL_TESTS)
 all: all-am
 
 .SUFFIXES:

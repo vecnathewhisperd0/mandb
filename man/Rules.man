@@ -24,8 +24,10 @@ mandir = @mandir@/$(LINGUA)
 CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS) replace.sed
 
 export top_builddir LINGUA EGREP
+if !CROSS_COMPILING
 TESTS_ENVIRONMENT = @SHELL@ $(top_srcdir)/man/check-man
 TESTS = $(man1_MANS) $(man5_MANS) $(man8_MANS)
+endif
 
 replace.sed: $(top_builddir)/man/replace.sin
 	$(AM_V_GEN)sed -e 's,%REPLACE_CONFIG_FILE%,$(config_file),g' $(top_builddir)/man/replace.sin > $@

@@ -19,10 +19,13 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) $(SHELL)
-TESTS = \
+ALL_TESTS = \
 	lexgrog-1 \
 	man-1 \
 	manconv-1 manconv-2 \
 	mandb-1 mandb-2
+if !CROSS_COMPILING
+TESTS = $(ALL_TESTS)
+endif
 
-dist_check_SCRIPTS = testlib.sh $(TESTS)
+dist_check_SCRIPTS = testlib.sh $(ALL_TESTS)
