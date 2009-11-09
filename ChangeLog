@@ -1,3 +1,12 @@
+Mon Nov  9 16:27:44 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (find_charset_locale): New function.
+	* src/encodings.h (find_charset_locale): Add prototype.
+	* src/man.c (make_roff_command): When invoking col, ensure that
+	  LC_CTYPE is set to an appropriate locale for the selected
+	  character set (Debian bug #555331).
+	* NEWS: Document this.
+
 Thu Oct  8 23:22:57 BST 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/encodings.c: Include <unistd.h> for dup and STDIN_FILENO.

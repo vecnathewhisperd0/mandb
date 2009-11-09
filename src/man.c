@@ -1640,18 +1640,30 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			 */
 			const char *man_keep_formatting =
 				getenv ("MAN_KEEP_FORMATTING");
+			command *colcmd = NULL;
 			if ((!man_keep_formatting || !*man_keep_formatting) &&
 			    !isatty (STDOUT_FILENO)) {
 				save_cat = 0;
 				setenv ("GROFF_NO_SGR", "1", 1);
-				pipeline_command_args (p, COL,
-						       "-b", "-p", "-x", NULL);
+				colcmd = command_new_args (
+					COL, "-b", "-p", "-x", NULL);
 			}
 #ifndef GNU_NROFF
 			/* tbl needs col */
 			else if (using_tbl && !troff && *COL)
-				pipeline_command_args (p, COL, NULL);
+				colcmd = command_new (COL);
 #endif /* GNU_NROFF */
+
+			if (colcmd) {
+				char *col_locale =
+					find_charset_locale (locale_charset);
+				if (col_locale) {
+					command_setenv (colcmd, "LC_CTYPE",
+							col_locale);
+					free (col_locale);
+				}
+				pipeline_command (p, colcmd);
+			}
 		}
 	} else {
 		/* use external formatter script, it takes arguments

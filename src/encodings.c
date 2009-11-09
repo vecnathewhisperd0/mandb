@@ -605,6 +605,61 @@ const char *get_locale_charset (void)
 		return NULL;
 }
 
+/* Find a locale with this character set. This is a non-portable operation,
+ * but required to make col(1) work correctly with -E. If no locale can be
+ * found, or if none needs to be set, return NULL.
+ *
+ * The caller should free the returned string when it is finished with it.
+ */
+char *find_charset_locale (const char *charset)
+{
+	const char *canonical_charset = get_canonical_charset_name (charset);
+	char *saved_locale;
+	const char *supported_path = "/usr/share/i18n/SUPPORTED";
+	FILE *supported;
+	char *line = NULL;
+	size_t n = 0;
+	char *locale = NULL;
+
+	if (STREQ (charset, get_locale_charset ()))
+		return NULL;
+
+	supported = fopen (supported_path, "r");
+	if (!supported)
+		return NULL;
+
+	saved_locale = xstrdup (setlocale (LC_CTYPE, NULL));
+
+	while (getline (&line, &n, supported) >= 0) {
+		const char *space = strchr (line, ' ');
+		if (space) {
+			char *encoding = xstrdup (space + 1);
+			char *newline = strchr (encoding, '\n');
+			if (newline)
+				*newline = 0;
+			if (STREQ (canonical_charset,
+				   get_canonical_charset_name (encoding))) {
+				locale = xstrndup (line, space - line);
+				/* Is this locale actually installed? */
+				if (setlocale (LC_CTYPE, locale)) {
+					free (encoding);
+					free (line);
+					goto out;
+				} else
+					locale = NULL;
+			}
+			free (encoding);
+		}
+		free (line);
+		line = NULL;
+	}
+
+out:
+	setlocale (LC_CTYPE, saved_locale);
+	fclose (supported);
+	return locale;
+}
+
 /* Can we take this input encoding and produce this output encoding, perhaps
  * with the help of some iconv pipes? */
 static int compatible_encodings (const char *input, const char *output)

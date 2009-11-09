@@ -10,6 +10,11 @@ Major changes since man-db 2.5.6:
 	  from it, it now drains the output file descriptor rather than
 	  immediately discarding it.
 
+	o If /usr/share/i18n/SUPPORTED is available, man attempts to use it
+	  to ensure that LC_CTYPE is set to an appropriate locale for the
+	  selected character set when invoking col. This fixes 'LANG=C man
+	  -E UTF-8', as used by lintian.
+
 man-db 2.5.6 (26 August 2009)
 =============================
 
