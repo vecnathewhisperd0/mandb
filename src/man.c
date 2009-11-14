@@ -307,8 +307,10 @@ static struct argp_option options[] = {
 	{ "encoding",		'E',	N_("ENCODING"),	0,		N_("use selected output encoding") },
 	{ "no-hyphenation",
 		 OPT_NO_HYPHENATION,	0,		0,		N_("turn off hyphenation") },
+	{ "nh",			0,	0,		OPTION_ALIAS },
 	{ "no-justification",
 	       OPT_NO_JUSTIFICATION,	0,		0,		N_("turn off justification") },
+	{ "nj",			0,	0,		OPTION_ALIAS },
 	{ "preprocessor",	'p',	N_("STRING"),	0,		N_("STRING indicates which preprocessors to run:\n"
 									   "e - [n]eqn, p - pic, t - tbl,\n"
 									   "g - grap, r - refer, v - vgrind") },
