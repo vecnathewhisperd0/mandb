@@ -290,32 +290,6 @@ If unsure of the default preprocessors required by a system, the standard
 system's man(1) manual page may provide an answer. 
 
 
-System specific notes
-=====================
-
-Linux
-
-	o Public released C library distributions prior to 4.5.26 contain 
-	  no Berkeley DB interface routines and an old gdbm implementation. 
-	  It is advisable to either install a recent version of gdbm (v1.6+) 
-	  or the Berkeley DB library (v1.79+) to gain enhanced performance.
-
-	o C library distribution 4.6.20 contains a bug that requires -static 
-	  to be used as a linker option if -g and -ldb are also used.  If 
-	  not, programs linked with the db library will cause a segmentation
-	  violation on startup.
-
-	o C library distribution 4.6.27 contains a bug that causes links
-	  with -ldb to fail completely if -g is used without -static.  As 
-	  such, configure will automatically choose gdbm routines found 
-	  in the gdbm library if $CFLAGS contains -g without -static at the 
-	  time of running configure.
-
-	o The recommended ./configure command:
-
-		CFLAGS='-O2 -fomit-frame-pointer' ./configure --prefix=/usr
-
-
 Contacting the maintainer
 =========================
 
