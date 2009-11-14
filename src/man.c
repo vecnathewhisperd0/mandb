@@ -2231,35 +2231,14 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 	free (tmpcat);
 }
 
-/* TODO: This function would be more efficient if the disabling sequence
- * were simply written in sequence before starting the decompressor.
- * However, that requires a new COMMAND_SEQUENCE type in the pipeline
- * library. If that is ever needed for another reason, then this function
- * should be rewritten using it.
- */
 static void disable_hyphenation (void *data ATTRIBUTE_UNUSED)
 {
 	fputs (".nh\n"
 	       ".de hy\n"
 	       "..\n", stdout);
-
-	for (;;) {
-		char buffer[4096];
-		int r = read (STDIN_FILENO, buffer, 4096);
-		if (r <= 0)
-			break;
-		if (fwrite (buffer, 1, (size_t) r, stdout) < (size_t) r)
-			break;
-	}
 }
 
 #ifdef TROFF_IS_GROFF
-/* TODO: This function would be more efficient if the macro requests were
- * simply written in sequence before starting the decompressor. However,
- * that requires a new COMMAND_SEQUENCE type in the pipeline library. If
- * that is ever needed for another reason, then this function should be
- * rewritten using it.
- */
 static void locale_macros (void *data)
 {
 	printf (
@@ -2275,15 +2254,6 @@ static void locale_macros (void *data)
 		/*   and load the appropriate per-locale macros */
 		".  mso %s.tmac\n"
 		".\\}\n", (const char *) data);
-
-	for (;;) {
-		char buffer[4096];
-		int r = read (STDIN_FILENO, buffer, 4096);
-		if (r <= 0)
-			break;
-		if (fwrite (buffer, 1, (size_t) r, stdout) < (size_t) r)
-			break;
-	}
 }
 #endif /* TROFF_IS_GROFF */
 
@@ -2317,6 +2287,8 @@ static int display (const char *dir, const char *man_file,
 
 	/* define format_cmd */
 	if (man_file) {
+		command *seq = command_new_sequence ("decompressor", NULL);
+
 		if (*man_file)
 			decomp = decompress_open (man_file);
 		else
@@ -2324,9 +2296,9 @@ static int display (const char *dir, const char *man_file,
 
 		if (no_hyphenation) {
 			command *hcmd = command_new_function (
-				"(echo .nh && echo .de hy && echo .. && cat)",
+				"echo .nh && echo .de hy && echo ..",
 				disable_hyphenation, NULL, NULL);
-			pipeline_command (decomp, hcmd);
+			command_sequence_command (seq, hcmd);
 		}
 
 #ifdef TROFF_IS_GROFF
@@ -2343,17 +2315,23 @@ static int display (const char *dir, const char *man_file,
 				command *lcmd;
 
 				unpack_locale_bits (page_lang, &bits);
-				name = xasprintf (
-					"(echo .mso %s.tmac && "
-					"cat)", bits.language);
+				name = xasprintf ("echo .mso %s.tmac",
+						  bits.language);
 				lcmd = command_new_function (
 					name, locale_macros, free, page_lang);
-				pipeline_command (decomp, lcmd);
+				command_sequence_command (seq, lcmd);
 				free (name);
 				free_locale_bits (&bits);
 			}
 		}
 #endif /* TROFF_IS_GROFF */
+
+		if (seq->u.sequence.ncommands) {
+			assert (decomp->ncommands == 1);
+			command_sequence_command (seq, decomp->commands[0]);
+			decomp->commands[0] = seq;
+		} else
+			command_free (seq);
 	}
 
 	if (decomp) {

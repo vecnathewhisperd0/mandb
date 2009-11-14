@@ -1,3 +1,24 @@
+Sat Nov 14 10:23:28 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* include/manconfig.h.in (ATTRIBUTE_NORETURN): Define to an
+	  attribute marking a function as non-returning if using GCC 2.5 or
+	  newer.
+	* lib/pipeline.c (command_new_sequence, command_sequence_command):
+	  New functions.
+	  (command_dup, command_dump, command_tostring, command_free):
+	  Handle commands of type COMMAND_SEQUENCE.
+	  (pipeline_start): Move command execution to ...
+	  (command_start_child): ... here (new function). Handle commands of
+	  type COMMAND_SEQUENCE.
+	* lib/pipeline.h (enum command_tag): Add COMMAND_SEQUENCE.
+	  (struct command): Add support for commands that consist of a
+	  sequence of commands.
+	  (command_new_sequence, command_sequence_command): Add prototypes.
+	* src/man.c (disable_hyphenation, locale_macros): Drop passthrough
+	  code.
+	  (display): Create a command sequence for hyphenation and
+	  locale-macro decompressor prefixes if necessary.
+
 Mon Nov  9 16:59:47 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Define a CROSS_COMPILING conditional if
