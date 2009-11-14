@@ -129,6 +129,17 @@ AC_PROG_CC
 gl_EARLY
 AC_PROG_CPP
 CFLAGS="$CFLAGS -Wall"
+case $host_os in
+	ultrix4.3*)
+		dnl When compiled for BSD environment, each running `man'
+		dnl increases the system load as reported by uptime(1) by
+		dnl one.  The reason for this behaviour is currently
+		dnl unknown, but the load increase does *not* reflect actual
+		dnl resource usage.  To avoid it, compile for POSIX
+		dnl environment:
+		CFLAGS="$CFLAGS -YPOSIX"
+		;;
+esac
 if test "$GCC" = yes
 then
 	MAN_GCC_WARNING([]) # -W
