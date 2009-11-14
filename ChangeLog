@@ -1,3 +1,16 @@
+Sat Nov 14 10:28:29 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	Add option to disable justification (Debian bug #440047).
+
+	* src/man.c (options, parse_opt): Accept --no-justification. Reset
+	  corresponding variable with -D.
+	  (disable_justification): New function.
+	  (display): Append disable_justification to the decompressor
+	  pipeline if --no-justification is used.
+	* man/man1/man.man1 (SYNOPSIS, Controlling formatted output):
+	  Document --no-justification.
+	* NEWS: Document this.
+
 Sat Nov 14 10:23:28 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* include/manconfig.h.in (ATTRIBUTE_NORETURN): Define to an

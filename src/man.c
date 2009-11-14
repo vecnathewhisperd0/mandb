@@ -169,6 +169,7 @@ enum opts {
 	OPT_WILDCARD,
 	OPT_NAMES,
 	OPT_NO_HYPHENATION,
+	OPT_NO_JUSTIFICATION,
 	OPT_NO_SUBPAGES,
 	OPT_MAX
 };
@@ -228,6 +229,7 @@ static int names_only;
 static int ult_flags = SO_LINK | SOFT_LINK | HARD_LINK;
 static const char *recode = NULL;
 static int no_hyphenation;
+static int no_justification;
 static int subpages = 1;
 
 static int ascii;		/* insert tr in the output pipe */
@@ -305,6 +307,8 @@ static struct argp_option options[] = {
 	{ "encoding",		'E',	N_("ENCODING"),	0,		N_("use selected output encoding") },
 	{ "no-hyphenation",
 		 OPT_NO_HYPHENATION,	0,		0,		N_("turn off hyphenation") },
+	{ "no-justification",
+	       OPT_NO_JUSTIFICATION,	0,		0,		N_("turn off justification") },
 	{ "preprocessor",	'p',	N_("STRING"),	0,		N_("STRING indicates which preprocessors to run:\n"
 									   "e - [n]eqn, p - pic, t - tbl,\n"
 									   "g - grap, r - refer, v - vgrind") },
@@ -349,7 +353,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				print_where = print_where_cat =
 				ascii = match_case =
 				regex_opt = wildcard = names_only =
-				no_hyphenation = 0;
+				no_hyphenation = no_justification = 0;
 #ifdef TROFF_IS_GROFF
 			ditroff = 0;
 			gxditview = NULL;
@@ -471,6 +475,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case OPT_NO_HYPHENATION:
 			no_hyphenation = 1;
+			return 0;
+		case OPT_NO_JUSTIFICATION:
+			no_justification = 1;
 			return 0;
 		case 'p':
 			preprocessors = arg;
@@ -2238,6 +2245,13 @@ static void disable_hyphenation (void *data ATTRIBUTE_UNUSED)
 	       "..\n", stdout);
 }
 
+static void disable_justification (void *data ATTRIBUTE_UNUSED)
+{
+	fputs (".na\n"
+	       ".de ad\n"
+	       "..\n", stdout);
+}
+
 #ifdef TROFF_IS_GROFF
 static void locale_macros (void *data)
 {
@@ -2299,6 +2313,13 @@ static int display (const char *dir, const char *man_file,
 				"echo .nh && echo .de hy && echo ..",
 				disable_hyphenation, NULL, NULL);
 			command_sequence_command (seq, hcmd);
+		}
+
+		if (no_justification) {
+			command *jcmd = command_new_function (
+				"echo .na && echo .de ad && echo ..",
+				disable_justification, NULL, NULL);
+			command_sequence_command (seq, jcmd);
 		}
 
 #ifdef TROFF_IS_GROFF

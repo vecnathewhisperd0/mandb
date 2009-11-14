@@ -50,6 +50,7 @@
 .RB [\| \-E
 .IR encoding \|]
 .RB [\| \-\-no\-hyphenation \|]
+.RB [\| \-\-no\-justification \|]
 .RB [\| \-p
 .IR string \|]
 .RB [\| \-t \|]
@@ -1005,6 +1006,20 @@ but consult the
 documentation instead; for instance, you can put "\e%" inside a word to
 indicate that it may be hyphenated at that point, or put "\e%" at the start
 of a word to prevent it from being hyphenated.
+.TP
+.if !'po4a'hide' .B \-\-no\-justification
+Normally,
+.B nroff
+will automatically justify text to both margins.
+This option disables full justification, leaving justified only to the left
+margin, sometimes called "ragged-right" text.
+
+If you are writing a manual page and simply want to prevent
+.B nroff
+from justifying certain paragraphs, do not use this option, but consult the
+.B nroff
+documentation instead; for instance, you can use the ".na", ".nf", ".fi",
+and ".ad" requests to temporarily disable adjusting and filling.
 .TP
 .BI \-p\  string ,\ \-\-preprocessor= string
 Specify the sequence of preprocessors to run before
