@@ -94,3 +94,35 @@ int pathsearch_executable (const char *name)
 {
 	return pathsearch (name, 0111);
 }
+
+int directory_on_path (const char *dir)
+{
+	char *cwd = NULL;
+	char *path = xstrdup (getenv ("PATH"));
+	char *pathtok = path;
+	const char *element;
+	int ret = 0;
+
+	if (!path)
+		/* Eh? Oh well. */
+		return 0;
+
+	for (element = strsep (&pathtok, ":"); element;
+	     element = strsep (&pathtok, ":")) {
+		if (!*element) {
+			if (!cwd)
+				cwd = xgetcwd ();
+			element = cwd;
+		}
+
+		if (STREQ (element, dir)) {
+			ret = 1;
+			break;
+		}
+	}
+
+	free (path);
+	if (cwd)
+		free (cwd);
+	return ret;
+}

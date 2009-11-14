@@ -201,7 +201,7 @@ static char *colon_sep_section_list;
 static const char *preprocessors;
 static const char *pager;
 static const char *locale;
-static char *internal_locale;
+static char *internal_locale, *multiple_locale;
 static const char *prompt_string;
 static char *less;
 static const char *std_sections[] = STD_SECTIONS;
@@ -836,6 +836,31 @@ static int run_mandb (int create, const char *manpath, const char *filename)
 #endif /* MAN_DB_CREATES || MAN_DB_UPDATES */
 
 
+static char *locale_manpath (char *manpath)
+{
+	char *all_locales;
+	char *new_manpath;
+
+	if (multiple_locale && *multiple_locale) {
+		if (internal_locale && *internal_locale)
+			all_locales = xasprintf ("%s:%s", multiple_locale,
+						 internal_locale);
+		else
+			all_locales = xstrdup (multiple_locale);
+	} else {
+		if (internal_locale && *internal_locale)
+			all_locales = xstrdup (internal_locale);
+		else
+			all_locales = NULL;
+	}
+
+	new_manpath = add_nls_manpaths (manpath, all_locales);
+	free (all_locales);
+
+	return new_manpath;
+}
+
+
 /* man issued with `-l' option */
 static int local_man_loop (const char *argv)
 {
@@ -875,6 +900,48 @@ static int local_man_loop (const char *argv)
 			return NOT_FOUND;
 		}
 
+		if (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) {
+			/* Perhaps an executable. If its directory is on
+			 * $PATH, then we want to look up the corresponding
+			 * manual page in the appropriate hierarchy rather
+			 * than displaying the executable.
+			 */
+			char *argv_dir = dir_name (argv);
+			int found = 0;
+
+			if (directory_on_path (argv_dir)) {
+				char *argv_base = base_name (argv);
+				char *new_manp;
+				char **old_manpathlist;
+				int i;
+
+				debug ("recalculating manpath for executable "
+				       "in %s\n", argv_dir);
+
+				new_manp = locale_manpath (
+					get_manpath_from_path (argv_dir, 0));
+
+				old_manpathlist = XNMALLOC (MAXDIRS, char *);
+				for (i = 0; i < MAXDIRS; ++i)
+					old_manpathlist[i] = manpathlist[i];
+				create_pathlist (new_manp, manpathlist);
+
+				man (argv_base, &found);
+
+				for (i = 0; i < MAXDIRS; ++i) {
+					free (manpathlist[i]);
+					manpathlist[i] = old_manpathlist[i];
+				}
+				free (old_manpathlist);
+				free (new_manp);
+				free (argv_base);
+			}
+			free (argv_dir);
+
+			if (found)
+				return OK;
+		}
+
 		if (exit_status == OK) {
 			char *argv_base = base_name (argv);
 			char *argv_abs;
@@ -908,7 +975,6 @@ int main (int argc, char *argv[])
 	int argc_env, exit_status = OK;
 	char **argv_env;
 	const char *tmp;
-	char *multiple_locale = NULL;
 
 	program_name = base_name (argv[0]);
 
@@ -1050,6 +1116,8 @@ int main (int argc, char *argv[])
 	if (first_arg == argc)
 		gripe_no_name (NULL);
 
+	section_list = get_section_list ();
+
 	/* man issued with `-l' option */
 	if (local_man_file) {
 		while (first_arg < argc) {
@@ -1062,27 +1130,9 @@ int main (int argc, char *argv[])
 		exit (exit_status);
 	}
 
-	if (manp == NULL) {
-		char *all_locales;
-
-		if (multiple_locale && *multiple_locale) {
-			if (internal_locale && *internal_locale)
-				all_locales = xasprintf ("%s:%s",
-							 multiple_locale,
-							 internal_locale);
-			else
-				all_locales = xstrdup (multiple_locale);
-		} else {
-			if (internal_locale && *internal_locale)
-				all_locales = xstrdup (internal_locale);
-			else
-				all_locales = NULL;
-		}
-
-		manp = add_nls_manpaths (get_manpath (alt_system_name),
-					 all_locales);
-		free (all_locales);
-	} else
+	if (manp == NULL)
+		manp = locale_manpath (get_manpath (alt_system_name));
+	else
 		free (get_manpath (NULL));
 
 	debug ("manpath search path (with duplicates) = %s\n", manp);
@@ -1091,8 +1141,6 @@ int main (int argc, char *argv[])
 
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();
-
-	section_list = get_section_list ();
 
 #ifdef MAN_DB_UPDATES
 	/* If `-u', do it now. */

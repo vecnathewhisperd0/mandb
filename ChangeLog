@@ -1,3 +1,22 @@
+Sat Nov 14 18:51:37 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	Do what the user probably means when the full path to an executable
+	is given as an argument (Debian bug #505465).
+
+	* lib/pathsearch.c (directory_on_path): New function.
+	* lib/pathsearch.h (directory_on_path): Add prototype.
+	* src/manp.c (get_manpath_from_path): Make external. Add 'mandatory'
+	  argument to control the addition of MANDATORY_MANPATH entries.
+	  (guess_manpath): Update caller.
+	* src/manp.h (get_manpath_from_path): Add prototype.
+	* src/man.c (main): Move locale manpath expansion to ...
+	  (locale_manpath): ... here (new function).
+	  (local_man_loop): If the argument is an executable, try looking up
+	  the corresponding manual page in the appropriate part of the
+	  manpath, rather than just trying to format the text of the
+	  executable as a manual page.
+	* NEWS: Document this.
+
 Sat Nov 14 10:28:29 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	Add option to disable justification (Debian bug #440047).

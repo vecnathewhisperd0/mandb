@@ -97,7 +97,6 @@ char *user_config_file = NULL;
 int disable_cache;
 int min_cat_width = 80, max_cat_width = 80, cat_width = 0;
 
-static inline char *get_manpath_from_path (const char *path);
 static inline char *has_mandir (const char *p);
 static inline char *fsstnd (const char *path);
 static char *def_path (int flag);
@@ -665,7 +664,7 @@ static char *guess_manpath (const char *systems)
 						   def_path (MANDATORY));
 		}
 
-		manpathlist = get_manpath_from_path (path);
+		manpathlist = get_manpath_from_path (path, 1);
 	}
 	manpath = add_system_manpath (systems, manpathlist);
 	free (manpathlist);
@@ -963,7 +962,7 @@ static char *def_path (int flag)
  * $HOME/man exists -- the directory $HOME/man will be added
  * to the manpath.
  */
-static inline char *get_manpath_from_path (const char *path)
+char *get_manpath_from_path (const char *path, int mandatory)
 {
 	int len;
 	char *tmppath;
@@ -1028,11 +1027,13 @@ static inline char *get_manpath_from_path (const char *path)
 
 	free (tmppath);
 
-	debug ("\nadding mandatory man directories\n\n");
+	if (mandatory) {
+		debug ("\nadding mandatory man directories\n\n");
 
-	for (list = namestore; list; list = list->next)
-		if (list->flag == MANDATORY) 
-			add_dir_to_list (tmplist, list->key);
+		for (list = namestore; list; list = list->next)
+			if (list->flag == MANDATORY) 
+				add_dir_to_list (tmplist, list->key);
+	}
 
 	len = 0;
 	lp = tmplist;

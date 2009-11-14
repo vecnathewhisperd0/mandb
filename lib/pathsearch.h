@@ -28,4 +28,7 @@
  */
 int pathsearch_executable (const char *name);
 
+/* Return non-zero if DIR matches an entry on the $PATH. */
+int directory_on_path (const char *dir);
+
 #endif /* PATHSEARCH_H */
