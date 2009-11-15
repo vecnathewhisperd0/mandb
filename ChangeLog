@@ -1,3 +1,14 @@
+Sun Nov 15 14:02:11 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	Search man<sec><ext> directories in the GNU layout (Debian bug
+	#519807, Arch Linux bug #13734).
+
+	* src/globbing.c (match_in_directory): Optionally take allocated
+	  count from caller. If it's non-zero, don't clear the glob.
+	  (look_for_file): In the GNU layout, search all subdirectories of
+	  hier that begin with the first character of the section.
+	* NEWS: Document this.
+
 Sun Nov 15 13:32:58 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/globbing.c (match_in_directory): Make this void; checking
