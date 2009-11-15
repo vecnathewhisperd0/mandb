@@ -1,3 +1,13 @@
+Sun Nov 15 13:32:58 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* src/globbing.c (match_in_directory): Make this void; checking
+	  whether any glob matches were returned is sufficient. Move
+	  glob-clearing code to ...
+	  (clear_glob): ... here (new function).
+	  (look_for_file): Simplify since we now only need to check
+	  gbuf.gl_pathc == 0, not the return value of match_in_directory as
+	  well. Clear gbuf on entry.
+
 Sun Nov 15 13:18:38 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/lexgrog-1, src/tests/man-1, src/tests/manconv-1,
