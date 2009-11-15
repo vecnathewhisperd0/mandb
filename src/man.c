@@ -2793,9 +2793,60 @@ static int compare_candidates (const struct candidate *left,
 			return 1;
 	}
 
-	/* Try comparing based on language. Assuming we've got the right
-	 * name, then it's better to display a page in the user's preferred
-	 * language than a page from a better section.
+	/* Compare pure sections first, then ids, then extensions.
+	 * Rationale: whatis refs get the same section and extension as
+	 * their source, but may be supplanted by a real page with a
+	 * slightly different extension, possibly in another hierarchy (!);
+	 * see Debian bug #204249 for the gory details.
+	 *
+	 * Any extension spelt out in full in section_list effectively
+	 * becomes a pure section; this allows extensions to be selectively
+	 * moved out of order with respect to their parent sections.
+	 */
+	if (strcmp (lsource->ext, rsource->ext)) {
+		/* Find out whether lsource->ext is ahead of rsource->ext in
+		 * section_list.
+		 */
+		const char **sp;
+		for (sp = section_list; *sp; ++sp) {
+			if (!*(*sp + 1)) {
+				/* No extension */
+				if (!sec_left  && **sp == *(lsource->ext))
+					sec_left  = sp - section_list + 1;
+				if (!sec_right && **sp == *(rsource->ext))
+					sec_right = sp - section_list + 1;
+			} else if (STREQ (*sp, lsource->ext)) {
+				sec_left  = sp - section_list + 1;
+			} else if (STREQ (*sp, rsource->ext)) {
+				sec_right = sp - section_list + 1;
+			}
+			/* Keep looking for a more specific match */
+		}
+		if (sec_left != sec_right)
+			return sec_left - sec_right;
+
+		cmp = strcmp (lsource->sec, rsource->sec);
+		if (cmp)
+			return cmp;
+	}
+
+	/* ULT_MAN comes first, etc. Consider SO_MAN equivalent to ULT_MAN. */
+	cmp = compare_ids (lsource->id, rsource->id, 1);
+	if (cmp)
+		return cmp;
+
+	/* The order in section_list has already been compared above. For
+	 * everything not mentioned explicitly there, we just compare
+	 * lexically.
+	 */
+	cmp = strcmp (lsource->ext, rsource->ext);
+	if (cmp)
+		return cmp;
+
+	/* Try comparing based on language. We used to prefer to display a
+	 * page in the user's preferred language than a page from a better
+	 * section, but that attracted objections, so now we prefer to get
+	 * the section right. See Debian bug #519547.
 	 */
 	slash1 = strrchr (left->path, '/');
 	slash2 = strrchr (right->path, '/');
@@ -2868,56 +2919,6 @@ out:
 		if (cmp)
 			return cmp;
 	}
-
-	/* Compare pure sections first, then ids, then extensions.
-	 * Rationale: whatis refs get the same section and extension as
-	 * their source, but may be supplanted by a real page with a
-	 * slightly different extension, possibly in another hierarchy (!);
-	 * see Debian bug #204249 for the gory details.
-	 *
-	 * Any extension spelt out in full in section_list effectively
-	 * becomes a pure section; this allows extensions to be selectively
-	 * moved out of order with respect to their parent sections.
-	 */
-	if (strcmp (lsource->ext, rsource->ext)) {
-		/* Find out whether lsource->ext is ahead of rsource->ext in
-		 * section_list.
-		 */
-		const char **sp;
-		for (sp = section_list; *sp; ++sp) {
-			if (!*(*sp + 1)) {
-				/* No extension */
-				if (!sec_left  && **sp == *(lsource->ext))
-					sec_left  = sp - section_list + 1;
-				if (!sec_right && **sp == *(rsource->ext))
-					sec_right = sp - section_list + 1;
-			} else if (STREQ (*sp, lsource->ext)) {
-				sec_left  = sp - section_list + 1;
-			} else if (STREQ (*sp, rsource->ext)) {
-				sec_right = sp - section_list + 1;
-			}
-			/* Keep looking for a more specific match */
-		}
-		if (sec_left != sec_right)
-			return sec_left - sec_right;
-
-		cmp = strcmp (lsource->sec, rsource->sec);
-		if (cmp)
-			return cmp;
-	}
-
-	/* ULT_MAN comes first, etc. Consider SO_MAN equivalent to ULT_MAN. */
-	cmp = compare_ids (lsource->id, rsource->id, 1);
-	if (cmp)
-		return cmp;
-
-	/* The order in section_list has already been compared above. For
-	 * everything not mentioned explicitly there, we just compare
-	 * lexically.
-	 */
-	cmp = strcmp (lsource->ext, rsource->ext);
-	if (cmp)
-		return cmp;
 
 	/* Explicitly stabilise the sort as a last resort, so that manpath
 	 * ordering (e.g. language-specific hierarchies) works.
