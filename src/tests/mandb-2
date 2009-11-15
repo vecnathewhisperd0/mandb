@@ -21,7 +21,7 @@ cat >"$tmpdir/1.exp" <<EOF
 fs -> "- 5 5 MTIME A - - gz fs(5)"
 EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/1.out"
-expect_pass 'fs(5) setup' 'diff "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_pass 'fs(5) setup' 'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
 next_second
 write_page filesystems 5 "$tmpdir/usr/share/man/man5/filesystems.5.gz" \
@@ -34,6 +34,6 @@ fs -> "- 5 5 MTIME B - - gz filesystems(5)"
 EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/2.out"
 expect_pass 'mandb notices regular file -> symlink' \
-	'diff "$tmpdir/2.exp" "$tmpdir/2.out"'
+	'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
 
 finish

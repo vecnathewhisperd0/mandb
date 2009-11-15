@@ -17,6 +17,6 @@ write_page test 1 "$tmpdir/usr/share/man/man1/test.1.gz" UTF-8 gz t \
 run_clean_path $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 echo 'test -> "- 1 1 MTIME A - - gz simple mandb test"' >"$tmpdir/1.exp"
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/1.out"
-expect_pass 'simple mandb test' 'diff "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_pass 'simple mandb test' 'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
 finish

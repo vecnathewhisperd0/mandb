@@ -26,6 +26,6 @@ run_clean_path $MAN -C "$tmpdir/manpath.config" \
 	-M "$tmpdir/usr/local/man:$tmpdir/usr/share/man" \
 	-aw md5sum >"$tmpdir/1.out"
 expect_pass 'symlinks with matching names win' \
-	'diff "$tmpdir/1.exp" "$tmpdir/1.out"'
+	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
 finish
