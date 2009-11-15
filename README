@@ -102,50 +102,50 @@ options is extracted from the man-db manual.  It is strongly recommended
 that relevant sections of the manual are read if any of these options are
 used.
 
-−−enable−setuid[=ARG]
-     By default, man will be installed as a setuid program to user  man.   Use
+--enable-setuid[=ARG]
+     By default, man will be installed as a setuid program to user man.  Use
      this option with an argument to change the setuid owner.
 
 --disable-setuid
-     Use  this option to install man as a non-setuid program and to change the
-     default cat and database files' access flags to  allow  users  to  modify
+     Use this option to install man as a non-setuid program and to change the
+     default cat and database files' access flags to allow users to modify
      them.
 
 --enable-mandirs=OS
-     By default, man-db supports manual page directories  in  any  of  several
-     layouts  used by free and proprietary versions of UNIX.  However, in cer-
-     tain cases, this can cause man-db to find  the  wrong  page  by  mistake,
-     especially  when  the  names  of  some manual pages on the system contain
-     periods.  Use this option with an argument of GNU, HPUX,  IRIX,  Solaris,
-     or  BSD  (or more than one of these, separated by commas) to support only
+     By default, man-db supports manual page directories in any of several
+     layouts used by free and proprietary versions of UNIX.  However, in
+     certain cases, this can cause man-db to find the wrong page by mistake,
+     especially when the names of some manual pages on the system contain
+     periods.  Use this option with an argument of GNU, HPUX, IRIX, Solaris,
+     or BSD (or more than one of these, separated by commas) to support only
      the layouts typically used on each of those systems.  Note that man-db is
      not currently capable of writing cat pages in the proper BSD layout.
 
 --with-device=DEVICE
      Use this flag to alter the default output device used by NROFF. DEVICE is
-     passed  to NROFF with the -T option.  configure will test that NROFF will
+     passed to NROFF with the -T option.  configure will test that NROFF will
      run with the supplied device argument.
 
 --with-db=LIBRARY
-     configure will look for database interface libraries in the  order  gdbm,
-     Berkeley DB and finally ndbm and will #define appropriate variables rela-
-     tive to the first one found.  To override the built-in order on platforms
-     having  a  choice  of interface library, use this option to specify which
-     library to use.
+     configure will look for database interface libraries in the order gdbm,
+     Berkeley DB and finally ndbm and will #define appropriate variables
+     relative to the first one found.  To override the built-in order on
+     platforms having a choice of interface library, use this option to
+     specify which library to use.
 
-−−enable−automatic−create
-     If this flag is used, man will automatically create index  databases  for
+--enable-automatic-create
+     If this flag is used, man will automatically create index databases for
      users' private manual page hierarchies.
 
-−−disable−automatic−update
-     Normally,  man  will  update entries in index databases if it finds newly
-     installed manual pages (if the −−update flag is used) or  delete  entries
+--disable-automatic-update
+     Normally, man will update entries in index databases if it finds newly
+     installed manual pages (if the --update flag is used) or delete entries
      if manual pages are removed.  This flag suppresses this behaviour.
 
-−−disable−cats
+--disable-cats
      Normally, man will automatically try to create cat files corresponding to
-     manual files when a manual page is read.  This flag suppresses  this  be-
-     haviour.
+     manual files when a manual page is read.  This flag suppresses this
+     behaviour.
 
 
 INSTALL

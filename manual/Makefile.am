@@ -36,7 +36,9 @@ MANUAL_INSTALL = man-db-manual
 
 dist_noinst_DATA = \
 	README \
-	$(ME_FILES)
+	$(ME_FILES) \
+	options-only.me \
+	print-options
 noinst_DATA = \
 	$(MANUAL).cat \
 	$(MANUAL).ps
