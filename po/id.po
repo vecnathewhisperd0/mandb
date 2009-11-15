@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.6-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2009-08-26 01:15+0100\n"
+"POT-Creation-Date: 2009-11-15 16:01+0000\n"
 "PO-Revision-Date: 2009-09-08 19:00+0700\n"
 "Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -15,93 +15,93 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/pipeline.c:223 lib/pipeline.c:235
+#: lib/pipeline.c:224 lib/pipeline.c:236
 #, c-format
 msgid "badly formed configuration directive: '%s'"
 msgstr "konfigurasi direktif dibentuk secara buruk: '%s'"
 
-#: lib/pipeline.c:675
+#: lib/pipeline.c:613 lib/pipeline.c:1451
+#, c-format
+msgid "can't install SIGCHLD handler"
+msgstr "tidak dapat memasang pengelola SIGCHLD"
+
+#: lib/pipeline.c:621 lib/pipeline.c:1125 src/catman.c:199
+#, c-format
+msgid "fork failed"
+msgstr "fork gagal"
+
+#: lib/pipeline.c:631 lib/pipeline.c:1392
+#, c-format
+msgid "waitpid failed"
+msgstr "waitpid gagal"
+
+#: lib/pipeline.c:646 lib/pipeline.c:1351
+#, c-format
+msgid "%s: %s (core dumped)"
+msgstr "%s:  %s (core dikeluarkan)"
+
+#: lib/pipeline.c:651 lib/pipeline.c:1356
+#, c-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: lib/pipeline.c:678
+#, c-format
+msgid "can't execute %s"
+msgstr "tidak dapat menjalankan %s"
+
+#: lib/pipeline.c:918
 #, c-format
 msgid "pipeline input not open"
 msgstr "baris pipa masukan tidak terbuka"
 
-#: lib/pipeline.c:688
+#: lib/pipeline.c:931
 #, c-format
 msgid "pipeline output not open"
 msgstr "baris pipa keluaran tidak terbuka"
 
-#: lib/pipeline.c:837 lib/pipeline.c:856
+#: lib/pipeline.c:1077 lib/pipeline.c:1096
 #, c-format
 msgid "pipe failed"
 msgstr "pipa gagal"
 
-#: lib/pipeline.c:845 src/lexgrog.l:612 src/man.c:2380 src/man.c:2457
-#: src/man.c:2550 src/manconv_main.c:172 src/straycats.c:212 src/ult_src.c:278
+#: lib/pipeline.c:1085 src/lexgrog.l:612 src/man.c:2441 src/man.c:2518
+#: src/man.c:2611 src/manconv_main.c:172 src/straycats.c:212 src/ult_src.c:278
 #: src/ult_src.c:292 src/zsoelim.l:396
 #, c-format
 msgid "can't open %s"
 msgstr "tidak dapat membuka %s"
 
-#: lib/pipeline.c:885 src/catman.c:199
-#, c-format
-msgid "fork failed"
-msgstr "fork gagal"
-
-#: lib/pipeline.c:893 lib/pipeline.c:902
+#: lib/pipeline.c:1133 lib/pipeline.c:1142
 #, c-format
 msgid "dup2 failed"
 msgstr "dup2 gagal"
 
-#: lib/pipeline.c:896 lib/pipeline.c:905 lib/pipeline.c:912 lib/pipeline.c:921
-#: lib/pipeline.c:991 lib/pipeline.c:995
+#: lib/pipeline.c:1136 lib/pipeline.c:1145 lib/pipeline.c:1152
+#: lib/pipeline.c:1161 lib/pipeline.c:1188 lib/pipeline.c:1192
 #, c-format
 msgid "close failed"
 msgstr "gagal menutup"
 
-#: lib/pipeline.c:985
-#, c-format
-msgid "can't execute %s"
-msgstr "tidak dapat menjalankan %s"
-
-#: lib/pipeline.c:1087
+#: lib/pipeline.c:1284
 #, c-format
 msgid "closing pipeline input stream failed"
 msgstr "penutupan baris pipa masukan stream gagal"
 
-#: lib/pipeline.c:1092 lib/pipeline.c:1360
+#: lib/pipeline.c:1289 lib/pipeline.c:1559
 #, c-format
 msgid "closing pipeline input failed"
 msgstr "penutupan baris pipa masukan gagal"
 
-#: lib/pipeline.c:1099
+#: lib/pipeline.c:1296
 #, c-format
 msgid "closing pipeline output stream failed"
 msgstr "penutupan baris pipa aliran keluaran gagal"
 
-#: lib/pipeline.c:1106 lib/pipeline.c:1385
+#: lib/pipeline.c:1303 lib/pipeline.c:1584
 #, c-format
 msgid "closing pipeline output failed"
 msgstr "penutupan baris pipa keluaran gagal"
-
-#: lib/pipeline.c:1154
-#, c-format
-msgid "%s: %s (core dumped)"
-msgstr "%s:  %s (core dikeluarkan)"
-
-#: lib/pipeline.c:1159
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: lib/pipeline.c:1195
-#, c-format
-msgid "waitpid failed"
-msgstr "waitpid gagal"
-
-#: lib/pipeline.c:1254
-#, c-format
-msgid "can't install SIGCHLD handler"
-msgstr "tidak dapat memasang pengelola SIGCHLD"
 
 #: lib/xregcomp.c:47
 #, c-format
@@ -138,7 +138,7 @@ msgstr "hanya bagian %d ada dalam isi"
 msgid "bad fetch on multi key %s"
 msgstr "pengambilan buruk di multi kunci %s"
 
-#: libdb/db_lookup.c:452 src/whatis.c:529
+#: libdb/db_lookup.c:452 src/whatis.c:530
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Basis data %s terkorupsi; membuat kembali dengan mandb --create"
@@ -168,12 +168,12 @@ msgid "The man database defaults to %s%s."
 msgstr "Basis data man baku ke %s%s."
 
 #: src/accessdb.c:65 src/catman.c:99 src/globbing_test.c:59
-#: src/lexgrog_test.c:66 src/man.c:263 src/manconv_main.c:94 src/mandb.c:97
+#: src/lexgrog_test.c:66 src/man.c:265 src/manconv_main.c:94 src/mandb.c:97
 #: src/manpath.c:66 src/whatis.c:119 src/zsoelim_main.c:59
 msgid "emit debugging messages"
 msgstr "keluarkan pesan penelusuran"
 
-#: src/accessdb.c:136
+#: src/accessdb.c:137
 #, c-format
 msgid "can't open %s for reading"
 msgstr "tidak dapat membuka %s untuk pembacaan"
@@ -182,20 +182,20 @@ msgstr "tidak dapat membuka %s untuk pembacaan"
 msgid "[SECTION...]"
 msgstr "[BAGIAN...]"
 
-#: src/catman.c:100 src/man.c:285 src/whatis.c:128
+#: src/catman.c:100 src/man.c:287 src/whatis.c:128
 msgid "PATH"
 msgstr "JALUR"
 
-#: src/catman.c:100 src/man.c:285 src/whatis.c:128
+#: src/catman.c:100 src/man.c:287 src/whatis.c:128
 msgid "set search path for manual pages to PATH"
 msgstr "tentukan jalur pencarian untuk halaman buku panduan ke JALUR"
 
-#: src/catman.c:101 src/man.c:262 src/mandb.c:105 src/manpath.c:68
+#: src/catman.c:101 src/man.c:264 src/mandb.c:105 src/manpath.c:68
 #: src/whatis.c:130
 msgid "FILE"
 msgstr "BERKAS"
 
-#: src/catman.c:101 src/man.c:262 src/mandb.c:105 src/manpath.c:68
+#: src/catman.c:101 src/man.c:264 src/mandb.c:105 src/manpath.c:68
 #: src/whatis.c:130
 msgid "use this user configuration file"
 msgstr "gunakan berkas konfigurasi pengguna ini"
@@ -318,19 +318,19 @@ msgstr "peringatan: %s: mengabaikan nama berkas palsu"
 msgid "PATH SECTION NAME"
 msgstr "NAMA JALUR BAGIAN"
 
-#: src/globbing_test.c:60 src/man.c:288
+#: src/globbing_test.c:60 src/man.c:290
 msgid "EXTENSION"
 msgstr "EKSTENSI"
 
-#: src/globbing_test.c:60 src/man.c:289
+#: src/globbing_test.c:60 src/man.c:291
 msgid "limit search to extension type EXTENSION"
 msgstr "batasi pencarian ke tipe ekstensi EKSTENSI"
 
-#: src/globbing_test.c:61 src/man.c:290
+#: src/globbing_test.c:61 src/man.c:292
 msgid "look for pages case-insensitively (default)"
 msgstr "cari untuk halaman dengan tidak membedakan besar huruf (baku)"
 
-#: src/globbing_test.c:62 src/man.c:291
+#: src/globbing_test.c:62 src/man.c:293
 msgid "look for pages case-sensitively"
 msgstr "cari untuk halaman dengan membedakan besar huruf"
 
@@ -371,15 +371,15 @@ msgstr "tampilkan informasi whatis"
 msgid "show guessed series of preprocessing filters"
 msgstr "tampilkan urutan terkaan dari preproses penyaring"
 
-#: src/lexgrog_test.c:71 src/man.c:280 src/man.c:305
+#: src/lexgrog_test.c:71 src/man.c:282 src/man.c:307
 msgid "ENCODING"
 msgstr "PENGKODEAN"
 
-#: src/lexgrog_test.c:71 src/man.c:305
+#: src/lexgrog_test.c:71 src/man.c:307
 msgid "use selected output encoding"
 msgstr "gunakan pengkodean keluaran yang dipilih"
 
-#: src/lexgrog_test.c:114 src/man.c:531 src/man.c:541
+#: src/lexgrog_test.c:115 src/man.c:540 src/man.c:550
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s: pilihan tidak kompatibel"
@@ -389,141 +389,146 @@ msgstr "%s: pilihan tidak kompatibel"
 msgid "command exited with status %d: %s"
 msgstr "perintah keluar dengan status %d: %s"
 
-#: src/man.c:258
+#: src/man.c:260
 msgid "[SECTION] PAGE..."
 msgstr "[BAGIAN] HALAMAN..."
 
-#: src/man.c:264
+#: src/man.c:266
 msgid "reset all options to their default values"
 msgstr "reset semua pilihan ke nilai bakunya"
 
-#: src/man.c:266
+#: src/man.c:268
 msgid "WARNINGS"
 msgstr "PERINGATAN"
 
-#: src/man.c:267
+#: src/man.c:269
 msgid "enable warnings from groff"
 msgstr "aktifkan peringatan dari groff"
 
-#: src/man.c:270
+#: src/man.c:272
 msgid "Main modes of operation:"
 msgstr "Mode operasi utama:"
 
-#: src/man.c:271
+#: src/man.c:273
 msgid "equivalent to whatis"
 msgstr "sama dengan whatis"
 
-#: src/man.c:272
+#: src/man.c:274
 msgid "equivalent to apropos"
 msgstr "sama dengan apropos"
 
-#: src/man.c:273
+#: src/man.c:275
 msgid "search for text in all pages"
 msgstr "cari teks dalam seluruh halaman"
 
-#: src/man.c:274
+#: src/man.c:276
 msgid "print physical location of man page(s)"
 msgstr "tampilkan lokasi aktual dari halaman man"
 
-#: src/man.c:276
+#: src/man.c:278
 msgid "print physical location of cat file(s)"
 msgstr "tampilkan lokasi aktual dari halaman cat"
 
-#: src/man.c:278
+#: src/man.c:280
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr "interpretasikan HALAMAN argumen sebagai nama berkas lokal"
 
-#: src/man.c:279
+#: src/man.c:281
 msgid "used by catman to reformat out of date cat pages"
 msgstr ""
 "digunakan oleh catman untuk mereformat keluaran dari halaman tanggal cat"
 
-#: src/man.c:280
+#: src/man.c:282
 msgid "output source page encoded in ENCODING"
 msgstr "keluaran sumber halaman dikodekan dalam PENGKODEAN"
 
-#: src/man.c:282
+#: src/man.c:284
 msgid "Finding manual pages:"
 msgstr "Mencari halaman manual:"
 
-#: src/man.c:283 src/whatis.c:129
+#: src/man.c:285 src/whatis.c:129
 msgid "LOCALE"
 msgstr "LOKAL"
 
-#: src/man.c:283
+#: src/man.c:285
 msgid "define the locale for this particular man search"
 msgstr "definisikan lokal untuk pencarian man ini"
 
-#: src/man.c:284 src/manpath.c:69 src/whatis.c:127
+#: src/man.c:286 src/manpath.c:69 src/whatis.c:127
 msgid "SYSTEM"
 msgstr "SISTEM"
 
-#: src/man.c:284 src/manpath.c:69 src/whatis.c:127
+#: src/man.c:286 src/manpath.c:69 src/whatis.c:127
 msgid "use manual pages from other systems"
 msgstr "gunakan halaman manual dari sistem lain"
 
-#: src/man.c:286
+#: src/man.c:288
 msgid "LIST"
 msgstr "DAFTAR"
 
-#: src/man.c:286
+#: src/man.c:288
 msgid "use colon separated section list"
 msgstr "gunakan daftar bagian dipisahkan oleh kolon"
 
-#: src/man.c:292
+#: src/man.c:294
 msgid "show all pages matching regex"
 msgstr "tampilkan seluruh halaman yang cocok dengan regex"
 
-#: src/man.c:293
+#: src/man.c:295
 msgid "show all pages matching wildcard"
 msgstr "tampilkan seluruh halaman yang cocok dengan huruf bebas"
 
-#: src/man.c:294
+#: src/man.c:296
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
 "buat pencocokan nama halaman --regex dan --wildcard saja, bukan deskripsi"
 
-#: src/man.c:296
+#: src/man.c:298
 msgid "find all matching manual pages"
 msgstr "cari seluruh halaman buku panduan yang cocok"
 
-#: src/man.c:297
+#: src/man.c:299
 msgid "force a cache consistency check"
 msgstr "paksa sebuah pemeriksaan konsistensi persediaan"
 
-#: src/man.c:299
+#: src/man.c:301
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
 msgstr "jangan coba halaman dalam, contoh 'man foo bar' => 'man foo-bar'"
 
-#: src/man.c:301
+#: src/man.c:303
 msgid "Controlling formatted output:"
 msgstr "Mengontrol keluaran terformat:"
 
-#: src/man.c:302
+#: src/man.c:304
 msgid "PAGER"
 msgstr "PAGER"
 
-#: src/man.c:302
+#: src/man.c:304
 msgid "use program PAGER to display output"
 msgstr "gunakan aplikasi PAGER untuk menampilkan keluaran"
 
-#: src/man.c:303 src/man.c:308
+#: src/man.c:305 src/man.c:314
 msgid "STRING"
 msgstr "STRING"
 
-#: src/man.c:303
+#: src/man.c:305
 msgid "provide the `less' pager with a prompt"
 msgstr "sediakan pager `less' dengan sebuah prompt"
 
-#: src/man.c:304
+#: src/man.c:306
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "tampilkan terjemahan ASCII dari beberapa karakter latin1"
 
-#: src/man.c:307
+#: src/man.c:309
 msgid "turn off hyphenation"
 msgstr "non-aktifkan hyphenasi"
 
-#: src/man.c:308
+#: src/man.c:312
+#, fuzzy
+msgid "turn off justification"
+msgstr "non-aktifkan hyphenasi"
+
+#: src/man.c:314
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
@@ -533,34 +538,34 @@ msgstr ""
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 
-#: src/man.c:312
+#: src/man.c:318
 #, c-format
 msgid "use %s to format pages"
 msgstr "gunakan %s untuk memformat halaman"
 
-#: src/man.c:313
+#: src/man.c:319
 msgid "DEVICE"
 msgstr "PERANGKAT"
 
-#: src/man.c:314
+#: src/man.c:320
 #, c-format
 msgid "use %s with selected device"
 msgstr "gunakan %s dengan perangkat yang dipilih"
 
-#: src/man.c:320
+#: src/man.c:326
 msgid "BROWSER"
 msgstr "BROWSER"
 
-#: src/man.c:321
+#: src/man.c:327
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr "gunakan %s atau BROWSER untuk menampilkan keluaran HTML"
 
-#: src/man.c:322
+#: src/man.c:328
 msgid "RESOLUTION"
 msgstr "RESOLUSI"
 
-#: src/man.c:324
+#: src/man.c:330
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
@@ -568,106 +573,106 @@ msgstr ""
 "gunakan groff dan tampilkan melalui gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:326
+#: src/man.c:332
 msgid "use groff and force it to produce ditroff"
 msgstr "gunakan groff dan paksa itu untuk menghasilkan ditroff"
 
-#: src/man.c:588 src/man.c:677
+#: src/man.c:597 src/man.c:686
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "Tidak ada masukan buku panduan untuk %s\n"
 
-#: src/man.c:590
+#: src/man.c:599
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr ""
 "(Secara alternatif, halaman buku panduan mana yang anda inginkan dari bagian "
 "%s?)\n"
 
-#: src/man.c:594
+#: src/man.c:603
 msgid "What manual page do you want?\n"
 msgstr "Halaman buku panduan mana yang anda inginkan?\n"
 
-#: src/man.c:674
+#: src/man.c:683
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Tidak ada masukan buku panduan untuk %s dalam bagian%s\n"
 
-#: src/man.c:682
+#: src/man.c:691
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Lihat '%s' untuk bantuan ketika halaman manual tidak tersedia.\n"
 
-#: src/man.c:848 src/man.c:2301
+#: src/man.c:882 src/man.c:2347
 #, c-format
 msgid "can't chdir to %s"
 msgstr "tidak dapat chdir ke %s"
 
-#: src/man.c:1028
+#: src/man.c:1103
 msgid " Manual page "
 msgstr " Halaman buku panduan "
 
-#: src/man.c:1096 src/man.c:3330
+#: src/man.c:1153 src/man.c:3392
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "perintah mandb gagal dengan status keluar %d"
 
-#: src/man.c:1587
+#: src/man.c:1644
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "mengabaikan preprosesor tidak dikenal `%c'"
 
-#: src/man.c:1872 src/mandb.c:299
+#: src/man.c:1941 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "tidak dapat chown %s"
 
-#: src/man.c:1884 src/mandb.c:213
+#: src/man.c:1953 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "tidak dapat chmod %s"
 
-#: src/man.c:1895 src/mandb.c:204
+#: src/man.c:1964 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "tidak dapat mengubah nama %s ke %s"
 
-#: src/man.c:1914
+#: src/man.c:1983
 #, c-format
 msgid "can't set times on %s"
 msgstr "tidak dapat menset waktu di %s"
 
-#: src/man.c:1923
+#: src/man.c:1992
 #, c-format
 msgid "can't unlink %s"
 msgstr "tidak dapat unlink %s"
 
-#: src/man.c:1974
+#: src/man.c:2043
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "tidak dapat membuat cat sementara untuk %s"
 
-#: src/man.c:2092
+#: src/man.c:2161
 #, c-format
 msgid "can't create temporary directory"
 msgstr "tidak dapat membuat direktori sementara"
 
-#: src/man.c:2094 src/man.c:2136 src/man.c:2166
+#: src/man.c:2163 src/man.c:2205 src/man.c:2235
 #, c-format
 msgid "can't change to directory %s"
 msgstr "tidak  dapat mengubah direktori %s"
 
-#: src/man.c:2107
+#: src/man.c:2176
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "tidak dapat membuka berkas sementara %s"
 
-#: src/man.c:2142 src/man.c:2171
+#: src/man.c:2211 src/man.c:2240
 #, c-format
 msgid "can't remove directory %s"
 msgstr "tidak dapat menghapus direktori %s"
 
-#: src/man.c:2499
+#: src/man.c:2560
 #, c-format
 msgid ""
 "\n"
@@ -676,17 +681,17 @@ msgstr ""
 "\n"
 "tidak dapat menulis ke %s dalam mode catman"
 
-#: src/man.c:3184
+#: src/man.c:3246
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: bergantung ke referensi whatis sudah ditinggalkan\n"
 
-#: src/man.c:3530
+#: src/man.c:3592
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "internal error: tipe kandidat %d diluar dari jangkauan"
 
-#: src/man.c:3793
+#: src/man.c:3855
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -828,82 +833,82 @@ msgstr "%d masukan basis data lama telah dihapus.\n"
 msgid "No databases created."
 msgstr "Tidak ada basis data yang dibuat."
 
-#: src/manp.c:309
+#: src/manp.c:308
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "tidak dapat menerima berkas konfigurasi manpath %s"
 
-#: src/manp.c:315
+#: src/manp.c:314
 #, c-format
 msgid "warning: %s"
 msgstr "peringatan: %s"
 
-#: src/manp.c:321
+#: src/manp.c:320
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "peringatan: %s bukan sebuah direktori"
 
-#: src/manp.c:326
+#: src/manp.c:325
 #, c-format
 msgid "manpath list too long"
 msgstr "daftar manpath terlalu panjang"
 
-#: src/manp.c:655
+#: src/manp.c:654
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "peringatan: $PATH belum diset"
 
-#: src/manp.c:662
+#: src/manp.c:661
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "peringatan: $PATH kosong"
 
-#: src/manp.c:690
+#: src/manp.c:689
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "peringatan: $MANPATH set, mengawali %s"
 
-#: src/manp.c:701
+#: src/manp.c:700
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "peringatan: $MANPATH set, menambahkan %s"
 
-#: src/manp.c:713
+#: src/manp.c:712
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "peringatan: $MANPATH set, memasukan %s"
 
-#: src/manp.c:727
+#: src/manp.c:726
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "peringatan: $MANPATH set, mengabaikan %s"
 
-#: src/manp.c:760 src/manp.c:787
+#: src/manp.c:759 src/manp.c:786
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "peringatan: tidak dapat membuat catdir %s"
 
-#: src/manp.c:855
+#: src/manp.c:854
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "tidak dapat mengambil daftar direktori `%s'"
 
-#: src/manp.c:910
+#: src/manp.c:909
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "tidak dapat membuka berkas konfigurasi manpath %s"
 
-#: src/manp.c:942
+#: src/manp.c:941
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "peringatan: direktori wajib %s tidak ada"
 
-#: src/manp.c:1158
+#: src/manp.c:1159
 #, c-format
 msgid "can't determine current directory"
 msgstr "tidak dapat menentukan direktori sekarang"
 
-#: src/manp.c:1331
+#: src/manp.c:1332
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "peringatan: %s tidak dimulai dengan  %s"
@@ -1000,21 +1005,21 @@ msgstr "hanya cari di bagian ini"
 msgid "define the locale for this search"
 msgstr "definisikan lokal untuk pencarian ini"
 
-#: src/whatis.c:198
+#: src/whatis.c:199
 #, c-format
 msgid "%s what?\n"
 msgstr "%s apa?\n"
 
-#: src/whatis.c:324 src/whatis.c:342
+#: src/whatis.c:325 src/whatis.c:343
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "peringatan: %s berisi sebuah penunjuk loop"
 
-#: src/whatis.c:336 src/whatis.c:344
+#: src/whatis.c:337 src/whatis.c:345
 msgid "(unknown subject)"
 msgstr "(subjek tidak diketahui)"
 
-#: src/whatis.c:667
+#: src/whatis.c:668
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: tidak ada yang sesuai.\n"
