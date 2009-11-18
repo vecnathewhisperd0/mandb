@@ -1,4 +1,4 @@
-# translation of man-db-manpages-2.5.6-pre1.ru.po to Russian
+# translation of man-db-manpages-2.5.7-pre1.ru.po to Russian
 # Russian translation for man pages from man-db
 # Copyright (C) 2008, 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the man-db package.
@@ -7,9 +7,9 @@
 # Yuri Kozlov <kozlov.y@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.5.6-pre1\n"
+"Project-Id-Version: man-db-manpages 2.5.7-pre1\n"
 "POT-Creation-Date: 2009-11-14 08:05+0000\n"
-"PO-Revision-Date: 2009-08-20 21:35+0400\n"
+"PO-Revision-Date: 2009-11-16 20:10+0300\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
 "MIME-Version: 1.0\n"
@@ -835,7 +835,6 @@ msgstr "%man% - доступ к справочным страницам"
 #.  The apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:67
-#, fuzzy
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -856,10 +855,10 @@ msgstr ""
 "i>\\||\\|B<-I>\\|] [\\|B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--names-only>"
 "\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<--no-subpages>\\|] [\\|B<-P> "
 "I<пейджер>\\|] [\\|B<-r> I<приглашение>\\|] [\\|B<-7>\\|] [\\|B<-E> "
-"I<кодировка>\\|] [\\|B<--no-hyphenation>\\|] [\\|B<-p> I<строка>\\|] [\\|B<-"
-"t>\\|] [\\|B<-T>\\|[\\|I<устройство>\\|]\\|] [\\|B<-H>\\|[\\|I<браузер>\\|]"
-"\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<раздел>\\|] "
-"I<страница>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
+"I<кодировка>\\|] [\\|B<--no-hyphenation>\\|] [\\|B<--no-justification>\\|] "
+"[\\|B<-p> I<строка>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|I<устройство>\\|]\\|] "
+"[\\|B<-H>\\|[\\|I<браузер>\\|]\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>"
+"\\|] [\\|[\\|I<раздел>\\|] I<страница>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
 
 #.  The --global-apropos command line
 #. type: Plain text
@@ -1384,7 +1383,7 @@ msgid ""
 msgstr ""
 "Также в этом пакете есть переводы интерфейса на разные языки, которые могут "
 "быть включены тем же путём. Если вы обнаружили, что для вашего языка нет "
-"справочных страниц или непереведён интерфейс и вы хотите сделать это, то "
+"справочных страниц или не переведён интерфейс и вы хотите сделать это, то "
 "свяжитесь с сопровождающим, который скоординирует данную работу."
 
 #. type: Plain text
@@ -1556,7 +1555,6 @@ msgstr "B<--warnings>[=I<предупреждения>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:553
-#, fuzzy
 msgid ""
 "Enable warnings from I<groff>.  This may be used to perform sanity checks on "
 "the source text of manual pages.  I<warnings> is a comma-separated list of "
@@ -1567,7 +1565,9 @@ msgstr ""
 "Включить предупреждения от I<groff>. Это может быть использовано для "
 "проверки тривиальных ошибок в исходном тексте справочных страниц. "
 "I<Предупреждения> представляют собой список названий предупреждений через "
-"запятую; если он не указан, то по умолчанию используется значение \"mac\"."
+"запятую; если он не указан, то по умолчанию используется значение \"mac\". "
+"Полный список доступных предупреждений можно найти в B<info groff>, раздел "
+"\\(lqПредупреждения\\(rq."
 
 #. type: SS
 #: ../../man/man1/man.man1:553
@@ -1931,6 +1931,11 @@ msgid ""
 "script, which may take the file to display either as an argument or on "
 "standard input."
 msgstr ""
+"Значением может быть просто имя команды или команды с параметрами, можно "
+"использовать экранирование интерпретатора команд (обратные слэши, одиночные "
+"кавычки или двойные кавычки). Нельзя объединять несколько команд каналами; "
+"если эту нужно, создайте сценарий-обёртку, который получает файл для показа "
+"в виде параметра или со стандартного ввода."
 
 #. type: TP
 #: ../../man/man1/man.man1:844
@@ -2162,10 +2167,12 @@ msgid ""
 "option disables full justification, leaving justified only to the left "
 "margin, sometimes called \"ragged-right\" text."
 msgstr ""
+"Обычно, B<nroff> автоматически выравнивает текст по обеим границам. Этот "
+"параметр выключает полное выравнивание, оставляя выравнивание по левому "
+"краю, получается так называемый текст \"без выключки по правому краю\"."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1023
-#, fuzzy
 msgid ""
 "If you are writing a manual page and simply want to prevent B<nroff> from "
 "justifying certain paragraphs, do not use this option, but consult the "
@@ -2174,10 +2181,10 @@ msgid ""
 "filling."
 msgstr ""
 "Если вы пишите справочную страницу и просто хотите отключить в B<nroff> "
-"перенос в словах в неподходящем месте, не используйте этот параметр, а "
-"почитайте документацию к B<nroff>; например, вы можете поместить \"\\e%\" "
-"внутрь слова в место возможного разрыва, или поместить \"\\e%\" в начало "
-"слова, что не даст его разорвать совсем."
+"выравнивание в некоторых параграфах, не используйте этот параметр, а "
+"почитайте документацию к B<nroff>; например, вы можете использовать запросы "
+"\".na\", \".nf\", \".fi\", и \".ad\" для временного отключения выравнивания "
+"и заполнения."
 
 #. type: TP
 #: ../../man/man1/man.man1:1023
