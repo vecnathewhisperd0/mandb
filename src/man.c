@@ -703,8 +703,10 @@ static void do_extern (int argc, char *argv[])
 	/* Please keep these in the same order as they are in whatis.c. */
 	if (debug_level)
 		command_arg (cmd, "-d");
+	if (colon_sep_section_list)
+		command_args (cmd, "-s", colon_sep_section_list, NULL);
 	if (alt_system_name)
-		command_args (cmd, "-s", alt_system_name, NULL);
+		command_args (cmd, "-m", alt_system_name, NULL);
 	if (manp)
 		command_args (cmd, "-M", manp, NULL);
 	if (locale)
