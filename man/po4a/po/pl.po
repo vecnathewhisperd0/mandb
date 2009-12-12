@@ -851,7 +851,6 @@ msgstr "%man% - interfejs stron podręcznika ekranowego"
 #.  The apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:67
-#, fuzzy
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -865,17 +864,18 @@ msgid ""
 "I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<section>\\|] I<page>\\ .\\|.\\|.\\|]"
 "\\ .\\|.\\|."
 msgstr ""
-"B<%man%> [\\|B<-C> I<plik>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings> "
+"B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<ostrzeżenia>\\|]\\|] [\\|B<-R> I<kodowanie_znaków>\\|] [\\|B<-L> "
-"I<ustawienia_językowe> \\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|"
-"B<-M> I<ścieżka>\\|] [\\| B<-S> I<lista>\\|] [\\|B<-e> I<rozszerzenie>\\|] "
-"[\\|B<-i>\\||\\|B<-I>\\|] [\\| B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--"
-"names-only>\\|] [\\|B<-a>\\|] [\\| B<-u>\\|] [\\|B<-P> I<pager>\\|] [\\|B<-"
-"r> I<linia_zachęty>\\|] [\\|B<-7>\\|] [\\| B<-E> I<kodowanie_znaków> \\|] "
-"[\\|B<--no-hyphenation>\\|] [\\|B<-p> I<łańcuch_znaków>\\|]  [\\|B<-t>\\|] "
-"[\\|B<-T>\\|[\\|I<urządzenie>\\|]\\|] [\\|B<-H>\\|[\\|I<przeglądarka> \\|]"
-"\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<sekcja>\\|]  "
-"I<strona>\\ .\\|.\\|.\\|]\\ .\\|.\\|. "
+"I<ustawienia_językowe>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|"
+"B<-M> I<path>\\|] [\\|B<-S> I<list>\\|] [\\|B<-e> I<rozszerzenie>\\|] [\\|B<-"
+"i>\\||\\|B<-I>\\|] [\\|B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--names-only>"
+"\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<--no-subpages>\\|] [\\|B<-P> I<pager>"
+"\\|] [\\|B<-r> I<linia_zachęty>\\|] [\\|B<-7>\\|] [\\|B<-E> "
+"I<kodowanie_znaków>\\|] [\\|B<--no-hyphenation>\\|] [\\|B<--no-justification>"
+"\\|] [\\|B<-p> I<łańcuch_znaków>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|"
+"I<urządzenie>\\|]\\|] [\\|B<-H>\\|[\\|I<przeglądarka>\\|]\\|] [\\|B<-X>\\|"
+"[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<sekcja>\\|] I<strona>\\ .\\|.\\|."
+"\\|]\\ .\\|.\\|."
 
 #
 #.  The --global-apropos command line
@@ -889,13 +889,12 @@ msgstr ""
 #.  The whatis command line
 #. type: Plain text
 #: ../../man/man1/man.man1:86
-#, fuzzy
 msgid ""
 "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<list>\\|] [\\|B<-i>\\||"
 "\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|."
 msgstr ""
-"B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<plik>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] "
-"I<strona> \\&.\\|.\\|."
+"B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<lista>\\|] [\\|B<-i>\\||"
+"\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<strona>\\|] I<termin>\\ .\\|.\\|."
 
 #
 #.  The --local command line
@@ -1126,6 +1125,10 @@ msgid ""
 "will usually not be able to render italics when running in a terminal, and "
 "will typically use underlined or coloured text instead."
 msgstr ""
+"Sposób, w jaki będzie wyświetlona strona podręcznika, zależy od urządzenia "
+"wyjściowego. Na przykład man zazwyczaj nie będzie mógł wyświetlić czcionki "
+"kursywej, jeśli jest uruchomiony na terminalu, więc zamiast niej użyje "
+"podkreśleń lub zmieni kolor czcionki."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:245
@@ -1582,7 +1585,6 @@ msgstr "B<--warnings>[=I<ostrzeżenia>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:553
-#, fuzzy
 msgid ""
 "Enable warnings from I<groff>.  This may be used to perform sanity checks on "
 "the source text of manual pages.  I<warnings> is a comma-separated list of "
@@ -1592,8 +1594,9 @@ msgid ""
 msgstr ""
 "Włącza ostrzeżenia programu I<groff>. Można użyć tej opcji, aby sprawdzić "
 "poprawność tekstu źródłowego stron podręcznika ekranowego. I<ostrzeżenia> to "
-"rozdzielona przecinkami lista nazw ostrzeżeń, jeśli nie jest podana, to "
-"przyjmowana jest wartość domyślna - \"mac\"."
+"rozdzielona przecinkami lista nazw ostrzeżeń; jeśli nie jest podana, to "
+"przyjmowana jest wartość domyślna - \"mac\". Listę dostępnych ostrzeżeń "
+"można znaleźć w  B<info groff>, sekcja \\(lqOstrzeżenia\\(rq."
 
 #. type: SS
 #: ../../man/man1/man.man1:553
@@ -1629,6 +1632,12 @@ msgid ""
 "strings (the default), or regular expressions if the B<--regex> option is "
 "used."
 msgstr ""
+"Szuka tekstu we wszystkich stronach podręcznika ekranowego. Jest to "
+"przeszukiwanie siłowe (brute-force), więc czasochłonne. Jeśli jest to "
+"możliwe, prosimy o podanie numeru sekcji, aby zmniejszyć liczbę "
+"przeszukiwanych stron podręcznika. Klucze wyszukiwania mogą być zwykłymi "
+"łańcuchami znaków (domyślnie) lub wyrażeniami regularnymi (jeśli podano "
+"opcję B<--regex>)."
 
 #.  Compressed nroff source files with a supported compression
 #.  extension will be decompressed by man prior to being displaying via the
@@ -1909,11 +1918,17 @@ msgid ""
 "can be accessed using similar syntax as would be used to invoke the "
 "subcommands themselves.  For example:"
 msgstr ""
+"Domyślnie, B<%man%> próbuje interpretować pary nazw stron podręcznika podane "
+"w linii poleceń jako odpowiednik nazwy pojedynczej strony podręcznika "
+"zawierającej myślnik. Wspiera to zwyczajowy wzorzec programów "
+"implementujących podprogramy, pozwalając im na dostarczanie stron "
+"podręcznika dla każdego podprogramu przy użyciu podobnej składni jaka byłaby "
+"użyta do uruchomienia tego podprogramu. Przykład:"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:814
 msgid "To disable this behaviour, use the B<--no-subpages> option."
-msgstr ""
+msgstr "Aby wyłączyć to zachowanie, proszę użyć opcji B<--no-subpages>."
 
 #. type: SS
 #: ../../man/man1/man.man1:821
@@ -1949,6 +1964,12 @@ msgid ""
 "script, which may take the file to display either as an argument or on "
 "standard input."
 msgstr ""
+"Wartością może być nazwa zwykłego polecenia lub polecenie z argumentami. W "
+"wartości można używać znaków cytowania powłoki (odwrotne ukośniki, "
+"pojedyncze lub podwójne cudzysłowy), jednakże nie można łączyć wielu poleceń "
+"w potoki; jeśli jest to potrzebne należy użyć skryptu otaczającego potok. "
+"Skrypt ten powinien móc przyjmować plik do wyświetlenia albo jako argument "
+"linii poleceń, albo odczytać go ze standardowego wejścia."
 
 #. type: TP
 #: ../../man/man1/man.man1:844
@@ -2012,9 +2033,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:888
-#, fuzzy
 msgid "B<byte\\e\\ %bB?s/%s..?\\e\\ (END):?pB\\e\\ %pB\\e\\e%..>"
-msgstr "B<bajt\\e\\ %bB?s/%s..?\\e\\ (KONIEC):?pB\\ %pB\\e\\e%..>"
+msgstr "B<bajt\\e\\ %bB?s/%s..?\\e\\ (KONIEC):?pB\\e\\ %pB\\e\\e%..>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:903
@@ -2186,10 +2206,13 @@ msgid ""
 "option disables full justification, leaving justified only to the left "
 "margin, sometimes called \"ragged-right\" text."
 msgstr ""
+"Zazwyczaj B<nroff> automatycznie wyrówna tekst w linii do obu marginesów. "
+"Opcja ta wyłącza takie wyrównywanie, zostawiając wyrównywanie tylko do "
+"lewego marginesu, co powoduje, że tekst z prawej strony jest \"postrzępiony"
+"\"."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1023
-#, fuzzy
 msgid ""
 "If you are writing a manual page and simply want to prevent B<nroff> from "
 "justifying certain paragraphs, do not use this option, but consult the "
@@ -2197,12 +2220,11 @@ msgid ""
 "\", \".fi\", and \".ad\" requests to temporarily disable adjusting and "
 "filling."
 msgstr ""
-"Jeśli piszesz stronę podręcznika ekranowego, to aby powstrzymać B<nroff> "
-"przed przenoszeniem wyrazów do nowej linii w nieodpowiednim miejscu, należy "
-"zapoznać się z dokumentacją programu B<nroff>, zamiast używać tej opcji; na "
-"przykład można w słowie umieścić sekwencję \"\\e%\" wskazującą miejsce, w "
-"którym słowo może być podzielone przy przenoszeniu, albo umieścić \"\\e%\" "
-"na początku słowa, co zabroni jego dzielenia."
+"Podczas pisania strony podręcznika ekranowego, nie należy używać tej opcji "
+"do powstrzymywania B<nroff>a od wyrównywania linii w akapicie do obu "
+"marginesów. Zamiast tego proszę zapoznać się z dokumentacją programu "
+"B<nroff>. Na przykład można użyć żądań \".na\", \".nf\", \".fi\", and \".ad"
+"\", aby tymczasowo wyłączyć wyrównywanie linii i wypełnianie spacjami."
 
 #. type: TP
 #: ../../man/man1/man.man1:1023
