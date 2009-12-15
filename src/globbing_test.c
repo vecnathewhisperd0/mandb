@@ -108,6 +108,8 @@ int main (int argc, char **argv)
 
 	program_name = base_name (argv[0]);
 
+	init_debug ();
+
 	if (!setlocale (LC_ALL, "") && !getenv ("MAN_NO_LOCALE_WARNING"))
 		/* Obviously can't translate this. */
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "

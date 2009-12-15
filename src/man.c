@@ -982,6 +982,8 @@ int main (int argc, char *argv[])
 
 	program_name = base_name (argv[0]);
 
+	init_debug ();
+
 	umask (022);
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, "") && !getenv ("MAN_NO_LOCALE_WARNING"))

@@ -111,6 +111,9 @@ int main (int argc, char *argv[])
 	char *path_string;
 
 	program_name = base_name (argv[0]);
+
+	init_debug ();
+
 	/* initialise the locale */
 	if (!setlocale (LC_ALL, "") && !getenv ("MAN_NO_LOCALE_WARNING"))
 		/* Obviously can't translate this. */

@@ -1,3 +1,15 @@
+Tue Dec 15 13:47:50 GMT 2009  Colin Watson  <cjwatson@debian.org>
+
+	* lib/debug.c (init_debug): New function: check for MAN_DEBUG=1 in
+	  the environment.
+	* include/manconfig.h.in (init_debug): Add prototype.
+	* src/accessdb.c (main), src/catman.c (main), src/globbing_test.c
+	  (main), src/lexgrog_test.c (main), src/man.c (main),
+	  src/manconv_main.c (main), src/mandb.c (main), src/manpath.c
+	  (main), src/whatis.c (main), src/zsoelim_main.c (main): Call
+	  init_debug.
+	* NEWS: Document this.
+
 Sat Dec 12 00:36:14 GMT 2009  Robert Luberda  <robert@debian.org>
 
 	* man/po4a/po/pl.po: Update from Translation Project.

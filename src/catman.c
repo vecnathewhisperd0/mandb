@@ -411,6 +411,8 @@ int main (int argc, char *argv[])
 
 	program_name = base_name (argv[0]);
 
+	init_debug ();
+
 	/* initialise the locale */
 	locale = xstrdup (setlocale (LC_ALL, ""));
 	if (!locale) {

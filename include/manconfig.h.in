@@ -336,6 +336,7 @@ extern char *create_tempdir (const char *template)
 	ATTRIBUTE_WARN_UNUSED_RESULT;
 
 extern int debug_level;		/* shows whether -d issued */
+extern void init_debug (void);
 extern void debug (const char *message, ...) ATTRIBUTE_FORMAT_PRINTF(1, 2);
 extern void debug_error (const char *message, ...)
 	ATTRIBUTE_FORMAT_PRINTF(1, 2);
