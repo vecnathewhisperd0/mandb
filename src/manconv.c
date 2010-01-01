@@ -1,7 +1,7 @@
 /*
  * manconv.c: convert manual page from one encoding to another
  *
- * Copyright (C) 2007, 2008 Colin Watson.
+ * Copyright (C) 2007, 2008, 2009, 2010 Colin Watson.
  * Based loosely on parts of glibc's iconv_prog.c, which is:
  * Copyright (C) 1998-2004, 2005, 2006, 2007 Free Software Foundation, Inc.
  *
@@ -114,6 +114,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		output = xmalloc (buf_size);
 
 	while (input_size || utf8left) {
+		int handle_iconv_errors = 0;
 		char *inptr = (char *) input, *utf8ptr = utf8, *outptr;
 		size_t inleft = input_size, outleft;
 		size_t n, n2 = -1;
@@ -139,7 +140,8 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 			     (errno == EINVAL && input_size < buf_size))) {
 				ret = -1;
 				break;
-			}
+			} else
+				handle_iconv_errors = 1;
 		}
 
 		/* If the target encoding is UTF-8 (the common case), then
@@ -161,6 +163,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 				cd, (ICONV_CONST char **) &utf8ptr, &utf8left,
 				&outptr, &outleft);
 			outleft = buf_size - outleft;
+			handle_iconv_errors = 1;
 
 			if (n2 == (size_t) -1 &&
 			    errno == EILSEQ && ignore_errors)
@@ -201,8 +204,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 							   "standard output"));
 				errno = errno_save;
 			}
-		} else if (!to_utf8) {
-			/* !last case handled above */
+		} else if (handle_iconv_errors) {
 			if (errno == EILSEQ && !ignore_errors) {
 				if (!quiet)
 					error (0, errno, "iconv");

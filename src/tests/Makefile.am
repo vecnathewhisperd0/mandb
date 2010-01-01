@@ -22,7 +22,7 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) $(SHELL)
 ALL_TESTS = \
 	lexgrog-1 \
 	man-1 \
-	manconv-1 manconv-2 \
+	manconv-1 manconv-2 manconv-3 \
 	mandb-1 mandb-2
 if !CROSS_COMPILING
 TESTS = $(ALL_TESTS)

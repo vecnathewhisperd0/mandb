@@ -1,3 +1,10 @@
+Fri Jan  1 11:37:13 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/manconv.c (try_iconv): Handle iconv errors when attempting to
+	  convert the last input encoding to UTF-8 (Debian bug #562503).
+	* src/tests/manconv-3: Add test for this.
+	* src/tests/Makefile.am (TESTS): Add manconv-3.
+
 Tue Dec 15 14:10:19 GMT 2009  Colin Watson  <cjwatson@debian.org>
 
 	* src/mandb.c (main): Fix possible crash when MAN_MUST_CREATE is
