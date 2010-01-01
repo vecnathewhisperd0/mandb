@@ -140,7 +140,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 			     (errno == EINVAL && input_size < buf_size))) {
 				ret = -1;
 				break;
-			} else
+			} else if (n == (size_t) -1)
 				handle_iconv_errors = 1;
 		}
 
@@ -163,7 +163,8 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 				cd, (ICONV_CONST char **) &utf8ptr, &utf8left,
 				&outptr, &outleft);
 			outleft = buf_size - outleft;
-			handle_iconv_errors = 1;
+			if (n2 == (size_t) -1)
+				handle_iconv_errors = 1;
 
 			if (n2 == (size_t) -1 &&
 			    errno == EILSEQ && ignore_errors)
