@@ -1,4 +1,4 @@
-# socketpair.m4
+# man-socketpair.m4 serial 1
 dnl
 dnl Check if the socketpair(2) system call can be used
 dnl and should be used as a fast replacement for pipe(2)
