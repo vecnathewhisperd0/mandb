@@ -1,3 +1,16 @@
+Wed Jan 13 18:26:47 GMT 2010  Diego Pettenò  <flameeyes@gentoo.org>
+
+	Add support for heirloom-doctools.
+
+	* configure.ac: Substitute TROFF.
+	* manual/Makefile.am (.pp.dvi, .pp.ps, .pp.tdvi, .pp.html): Use
+	  $(TROFF) rather than groff or troff.
+	* src/man.c (options, parse_opt): Just ignore the --warnings option
+	  when troff is not groff, rather than compiling it out entirely.
+	  (make_roff_command): Only use gxditview variable when troff is
+	  groff.
+	* NEWS: Document this.
+
 Tue Jan 12 13:33:51 GMT 2010  Samuel Thibault  <sthibault@debian.org>
 
 	* lib/pipeline.c (pipeline_pump): Fix off-by-one error when write

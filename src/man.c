@@ -259,15 +259,19 @@ error_t argp_err_exit_status = FAIL;
 
 static const char args_doc[] = N_("[SECTION] PAGE...");
 
+# ifdef TROFF_IS_GROFF
+#  define MAYBE_HIDDEN 0
+# else
+#  define MAYBE_HIDDEN OPTION_HIDDEN
+# endif
+
 /* Please keep these options in the same order as in parse_opt below. */
 static struct argp_option options[] = {
 	{ "config-file",	'C',	N_("FILE"),	0,		N_("use this user configuration file") },
 	{ "debug",		'd',	0,		0,		N_("emit debugging messages") },
 	{ "default",		'D',	0,		0,		N_("reset all options to their default values") },
-#ifdef TROFF_IS_GROFF
-	{ "warnings",  OPT_WARNINGS,    N_("WARNINGS"), OPTION_ARG_OPTIONAL,
+	{ "warnings",  OPT_WARNINGS,    N_("WARNINGS"), MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
 									N_("enable warnings from groff") },
-#endif /* TROFF_IS_GROFF */
 
 	{ 0,			0,	0,		0,		N_("Main modes of operation:"),					10 },
 	{ "whatis",		'f',	0,		0,		N_("equivalent to whatis") },
@@ -318,11 +322,6 @@ static struct argp_option options[] = {
 	{ "troff",		't',	0,		0,		N_("use %s to format pages"),					32 },
 	{ "troff-device",	'T',	N_("DEVICE"),	OPTION_ARG_OPTIONAL,
 									N_("use %s with selected device") },
-# ifdef TROFF_IS_GROFF
-#  define MAYBE_HIDDEN 0
-# else
-#  define MAYBE_HIDDEN OPTION_HIDDEN
-# endif
 	{ "html",		'H',	N_("BROWSER"),	MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
 									N_("use %s or BROWSER to display HTML output"),			33 },
 	{ "gxditview",		'X',	N_("RESOLUTION"),
@@ -368,8 +367,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			colon_sep_section_list = manp = NULL;
 			return 0;
 
-#ifdef TROFF_IS_GROFF
 		case OPT_WARNINGS:
+#ifdef TROFF_IS_GROFF
 			{
 				char *s = xstrdup
 					(arg ? arg : default_roff_warnings);
@@ -386,8 +385,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
 				free (s);
 			}
-			return 0;
 #endif /* TROFF_IS_GROFF */
+			return 0;
 
 		case 'f':
 			external = WHATIS;
@@ -1657,18 +1656,23 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 								  NULL);
 					command_arg (cmd, tmpdev);
 					free (tmpdev);
-				} else if (gxditview) {
+				}
+#ifdef TROFF_IS_GROFF
+				else if (gxditview) {
 					char *tmpdev = appendstr (NULL, "-TX",
 								  gxditview,
 								  NULL);
 					command_arg (cmd, tmpdev);
 					free (tmpdev);
 				}
+#endif /* TROFF_IS_GROFF */
 			}
 
 			if (wants_post) {
+#ifdef TROFF_IS_GROFF
 				if (gxditview)
 					command_arg (cmd, "-X");
+#endif /* TROFF_IS_GROFF */
 
 				if (roff_device && STREQ (roff_device, "ps"))
 					/* Tell grops to guess the page
