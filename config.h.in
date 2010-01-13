@@ -38,6 +38,9 @@
    source. */
 #undef COMP_SRC
 
+/* Define if shutdown(2) does not set modes for socket descriptor. */
+#undef CORRECT_SOCKETPAIR_MODE
+
 /* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
    systems. This function is required for `alloca.c' support on those systems.
    */
@@ -1116,6 +1119,9 @@
 /* Define if references to the GNU Pth multithreading library should be made
    weak. */
 #undef USE_PTH_THREADS_WEAK
+
+/* Define if socketpair(2) can be used as a fast replacement for pipe(2). */
+#undef USE_SOCKETPAIR_PIPE
 
 /* Define if the old Solaris multithreading library can be used. */
 #undef USE_SOLARIS_THREADS
