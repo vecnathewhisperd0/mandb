@@ -396,7 +396,9 @@ AC_ARG_ENABLE(socketpair-pipe,
   [ if test "$enableval" = "yes"
     then
       MAN_SOCKETPAIR_PIPE
-      MAN_SOCKETPAIR_MODE
+      if test "$man_cv_socketpair_pipe" = yes; then
+	MAN_SOCKETPAIR_MODE
+      fi
     fi
   ])
 
