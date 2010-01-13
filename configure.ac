@@ -395,8 +395,8 @@ AC_ARG_ENABLE(socketpair-pipe,
 [AS_HELP_STRING([--enable-socketpair-pipe], [Use socketpair(2) as fast replacment for pipe(2)])],
   [ if test "$enableval" = "yes"
     then
-      AM_SOCKETPAIR_PIPE
-      AM_SOCKETPAIR_MODE
+      MAN_SOCKETPAIR_PIPE
+      MAN_SOCKETPAIR_MODE
     fi
   ])
 

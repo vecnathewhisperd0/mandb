@@ -5,9 +5,9 @@ dnl and should be used as a fast replacement for pipe(2)
 dnl
 dnl Author: Werner Fink <werner@suse.de>, 2009
 
-AC_DEFUN([AM_SOCKETPAIR_PIPE],
+AC_DEFUN([MAN_SOCKETPAIR_PIPE],
 [ AC_MSG_CHECKING([if socketpair(2) can be used as fast replacement for pipe(2)])
-  AC_CACHE_VAL(am_cv_socketpair_pipe, [
+  AC_CACHE_VAL(man_cv_socketpair_pipe, [
     AC_TRY_RUN([
 #include <netdb.h>
 #include <netinet/in.h>
@@ -59,10 +59,10 @@ int main()
 	close(sfd[0]);
 	write(sfd[1],test,sizeof(test) - 1);
 	return 1;
-}], [am_cv_socketpair_pipe=yes], [am_cv_socketpair_pipe=no], [am_cv_socketpair_pipe=no])
+}], [man_cv_socketpair_pipe=yes], [man_cv_socketpair_pipe=no], [man_cv_socketpair_pipe=no])
   ])
-  AC_MSG_RESULT([$am_cv_socketpair_pipe])
-  if test "$am_cv_socketpair_pipe" = yes; then
+  AC_MSG_RESULT([$man_cv_socketpair_pipe])
+  if test "$man_cv_socketpair_pipe" = yes; then
     AC_DEFINE(USE_SOCKETPAIR_PIPE, 1, [Define if socketpair(2) can be used as a fast replacement for pipe(2).])
   fi
 ])
@@ -71,9 +71,9 @@ dnl
 dnl Check if shutdown(2) does not set mode for the socket descriptor
 dnl compare with ls -lL /proc/<pid>/fd/
 dnl
-AC_DEFUN([AM_SOCKETPAIR_MODE],
+AC_DEFUN([MAN_SOCKETPAIR_MODE],
 [ AC_MSG_CHECKING([if shutdown(2) does not set mode for the socket descriptor])
-  AC_CACHE_VAL(am_cv_socketpair_mode, [
+  AC_CACHE_VAL(man_cv_socketpair_mode, [
     AC_TRY_RUN([
 #include <netdb.h>
 #include <netinet/in.h>
@@ -107,10 +107,10 @@ int main()
 	if ((st[0].st_mode & (S_IRUSR|S_IWUSR)) != S_IRUSR && (st[1].st_mode & (S_IRUSR|S_IWUSR)) != S_IWUSR)
 		return 1;
 	return 0;
-}], [am_cv_socketpair_mode=yes], [am_cv_socketpair_mode=no], [am_cv_socketpair_mode=no])
+}], [man_cv_socketpair_mode=yes], [man_cv_socketpair_mode=no], [man_cv_socketpair_mode=no])
   ])
-  AC_MSG_RESULT([$am_cv_socketpair_mode])
-  if test "$am_cv_socketpair_mode" = yes; then
+  AC_MSG_RESULT([$man_cv_socketpair_mode])
+  if test "$man_cv_socketpair_mode" = yes; then
     AC_DEFINE(CORRECT_SOCKETPAIR_MODE, 1, [Define if shutdown(2) does not set modes for socket descriptor.])
   fi
 ])
