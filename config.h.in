@@ -82,6 +82,14 @@
    followed by a file name component separator. */
 #undef FILE_SYSTEM_DRIVE_PREFIX_CAN_BE_RELATIVE
 
+/* Define to 1 if mkdir mistakenly creates a directory given with a trailing
+   dot component. */
+#undef FUNC_MKDIR_DOT_BUG
+
+/* Define to 1 if realpath() can malloc memory, always gives an absolute path,
+   and handles trailing slash correctly. */
+#undef FUNC_REALPATH_WORKS
+
 /* Define if you have, and want to use, gdbm interface routines. */
 #undef GDBM
 
@@ -94,8 +102,8 @@
 /* Define to 1 when using the gnulib module canonicalize-lgpl. */
 #undef GNULIB_CANONICALIZE_LGPL
 
-/* Define to 1 when using the gnulib module fcntl-safer. */
-#undef GNULIB_FCNTL_SAFER
+/* Define to 1 when using the gnulib module dirname. */
+#undef GNULIB_DIRNAME
 
 /* Define to 1 when using the gnulib module getopt-gnu. */
 #undef GNULIB_GETOPT_GNU
@@ -105,9 +113,6 @@
 
 /* Define to 1 when using the gnulib module open. */
 #undef GNULIB_OPEN
-
-/* Define to 1 when using the gnulib module openat-safer. */
-#undef GNULIB_OPENAT_SAFER
 
 /* Define to 1 to add extern declaration of program_invocation_name to argp.h
    */
@@ -190,10 +195,6 @@
 /* Define if the GNU dcgettext() function is already present or preinstalled.
    */
 #undef HAVE_DCGETTEXT
-
-/* Define to 1 if you have the declaration of `canonicalize_file_name', and to
-   0 if you don't. */
-#undef HAVE_DECL_CANONICALIZE_FILE_NAME
 
 /* Define to 1 if you have the declaration of `clearerr_unlocked', and to 0 if
    you don't. */
@@ -578,9 +579,6 @@
 /* Define to 1 if you have the `openat' function. */
 #undef HAVE_OPENAT
 
-/* Define to 1 if you have the <OS.h> header file. */
-#undef HAVE_OS_H
-
 /* Define if you have pager. */
 #undef HAVE_PAGER
 
@@ -629,11 +627,14 @@
 /* Define if the 'realloc' function is POSIX compliant. */
 #undef HAVE_REALLOC_POSIX
 
+/* Define to 1 if you have the `realpath' function. */
+#undef HAVE_REALPATH
+
 /* Define if you have refer. */
 #undef HAVE_REFER
 
-/* Define to 1 if you have the `resolvepath' function. */
-#undef HAVE_RESOLVEPATH
+/* Define to 1 if you have the `rmdir' function. */
+#undef HAVE_RMDIR
 
 /* Define to 1 if the system has the type `sa_family_t'. */
 #undef HAVE_SA_FAMILY_T
@@ -760,7 +761,7 @@
 /* Define to 1 if the system has the type `struct random_data'. */
 #undef HAVE_STRUCT_RANDOM_DATA
 
-/* Define to 1 if `struct sigaction' is a member of `sa_sigaction'. */
+/* Define to 1 if `sa_sigaction' is a member of `struct sigaction'. */
 #undef HAVE_STRUCT_SIGACTION_SA_SIGACTION
 
 /* Define to 1 if the system has the type `struct sockaddr_storage'. */
@@ -819,6 +820,9 @@
 /* Define if you have tbl. */
 #undef HAVE_TBL
 
+/* Define to 1 if you have the <time.h> header file. */
+#undef HAVE_TIME_H
+
 /* Define to 1 if you have the `tsearch' function. */
 #undef HAVE_TSEARCH
 
@@ -827,6 +831,9 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the `unlinkat' function. */
+#undef HAVE_UNLINKAT
 
 /* Define to 1 if you have the `unsetenv' function. */
 #undef HAVE_UNSETENV
@@ -1012,19 +1019,38 @@
    'ptrdiff_t'. */
 #undef PTRDIFF_T_SUFFIX
 
+/* Define to 1 if readlink fails to recognize a trailing slash. */
+#undef READLINK_TRAILING_SLASH_BUG
+
 /* Define if rename does not work when the destination file exists, as on
-   Windows. */
+   Cygwin 1.5 or Windows. */
 #undef RENAME_DEST_EXISTS_BUG
 
-/* Define if rename does not work for source file names with a trailing slash,
-   like the one from SunOS 4.1.1_U1. */
-#undef RENAME_TRAILING_SLASH_BUG
+/* Define if rename fails to leave hard links alone, as on NetBSD 1.6 or
+   Cygwin 1.5. */
+#undef RENAME_HARD_LINK_BUG
+
+/* Define if rename does not correctly handle slashes on the destination
+   argument, such as on Solaris 10 or NetBSD 1.6. */
+#undef RENAME_TRAILING_SLASH_DEST_BUG
+
+/* Define if rename does not correctly handle slashes on the source argument,
+   such as on Solaris 9 or cygwin 1.5. */
+#undef RENAME_TRAILING_SLASH_SOURCE_BUG
 
 /* Define to 1 if dup2 returns 0 instead of the target fd. */
 #undef REPLACE_DUP2
 
 /* Define to 1 if gnulib's fchdir() replacement is used. */
 #undef REPLACE_FCHDIR
+
+/* Define to 1 if stat needs help when passed a directory name with a trailing
+   slash */
+#undef REPLACE_FUNC_STAT_DIR
+
+/* Define to 1 if stat needs help when passed a file name with a trailing
+   slash */
+#undef REPLACE_FUNC_STAT_FILE
 
 /* Define to 1 if open() should work around the inability to open a directory.
    */
@@ -1261,9 +1287,6 @@
 
 /* Define to rpl_re_syntax_options if the replacement should be used. */
 #undef re_syntax_options
-
-/* Define to a replacement function name for realpath(). */
-#undef realpath
 
 /* Define to rpl_regcomp if the replacement should be used. */
 #undef regcomp
