@@ -1360,6 +1360,7 @@ enable_nls
 with_libiconv_prefix
 with_included_gettext
 with_libintl_prefix
+enable_socketpair_pipe
 '
       ac_precious_vars='build_alias
 host_alias
@@ -2011,6 +2012,8 @@ Optional Features:
   --disable-rpath         do not hardcode runtime library paths
   --disable-largefile     omit support for large files
   --disable-nls           do not use Native Language Support
+  --enable-socketpair-pipe
+                          Use socketpair(2) as fast replacment for pipe(2)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -29305,6 +29308,168 @@ fi
 if test "x$ac_cv_func_fork_works" = xyes; then
 
 $as_echo "#define HAVE_WORKING_FORK 1" >>confdefs.h
+
+fi
+
+
+# Check for socketpair(2) as fast replacment for pipe(2).
+# Check whether --enable-socketpair-pipe was given.
+if test "${enable_socketpair_pipe+set}" = set; then :
+  enableval=$enable_socketpair_pipe;  if test "$enableval" = "yes"
+    then
+       { $as_echo "$as_me:${as_lineno-$LINENO}: checking if socketpair(2) can be used as fast replacement for pipe(2)" >&5
+$as_echo_n "checking if socketpair(2) can be used as fast replacement for pipe(2)... " >&6; }
+  if test "${man_cv_socketpair_pipe+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    if test "$cross_compiling" = yes; then :
+  man_cv_socketpair_pipe=no
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <netdb.h>
+#include <netinet/in.h>
+#include <signal.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#ifndef SHUT_RD
+#	define SHUT_RD	0
+#endif
+#ifndef SHUT_WR
+#	define SHUT_WR	1
+#endif
+
+static void sigpipe(int sig)
+{
+	_exit(0);
+}
+
+int main()
+{
+	const char test[] = "May use socketpair(2) instead of pipe(2)\n";
+	char buf[256];
+	int sfd[2], s;
+	pid_t pid;
+	if (socketpair(AF_UNIX,SOCK_STREAM,0,sfd) < 0)
+		return 1;
+	if (shutdown(sfd[1],SHUT_RD) < 0 || shutdown(sfd[0],SHUT_WR) < 0)
+		return 1;
+	if ((pid = fork()) < 0)
+		return 1;
+	if (pid) {
+		close(sfd[1]);
+		waitpid(-1,&s,0);
+		if (read(sfd[0],buf,sizeof(buf)) < 0)
+			return 1;
+	} else {
+		close(sfd[0]);
+		write(sfd[1],test,sizeof(test) - 1);
+		return 0;
+	}
+	close(sfd[0]);
+	signal(SIGPIPE, sigpipe);
+	if (socketpair(AF_UNIX,SOCK_STREAM,0,sfd) < 0)
+		return 1;
+	if (shutdown(sfd[1],SHUT_RD) < 0 || shutdown(sfd[0],SHUT_WR) < 0)
+		return 1;
+	close(sfd[0]);
+	write(sfd[1],test,sizeof(test) - 1);
+	return 1;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  man_cv_socketpair_pipe=yes
+else
+  man_cv_socketpair_pipe=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_socketpair_pipe" >&5
+$as_echo "$man_cv_socketpair_pipe" >&6; }
+  if test "$man_cv_socketpair_pipe" = yes; then
+
+$as_echo "#define USE_SOCKETPAIR_PIPE 1" >>confdefs.h
+
+  fi
+
+      if test "$man_cv_socketpair_pipe" = yes; then
+	 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if shutdown(2) does not set mode for the socket descriptor" >&5
+$as_echo_n "checking if shutdown(2) does not set mode for the socket descriptor... " >&6; }
+  if test "${man_cv_socketpair_mode+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    if test "$cross_compiling" = yes; then :
+  man_cv_socketpair_mode=no
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/stat.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+#ifndef SHUT_RD
+#	define SHUT_RD	0
+#endif
+#ifndef SHUT_WR
+#	define SHUT_WR	1
+#endif
+
+int main()
+{
+	int sfd[2];
+	struct stat st[2];
+	if (socketpair(AF_UNIX,SOCK_STREAM,0,sfd) < 0)
+		return 1;
+	if (shutdown(sfd[1],SHUT_RD) < 0 || shutdown(sfd[0],SHUT_WR) < 0)
+		return 1;
+	if (fstat(sfd[0], &(st[0])) < 0 || fstat(sfd[1], &(st[1])) < 0)
+		return 1;
+	if ((st[0].st_mode & (S_IRUSR|S_IWUSR)) == S_IRUSR && (st[1].st_mode & (S_IRUSR|S_IWUSR)) == S_IWUSR)
+		return 1;
+	if (fchmod(sfd[0], S_IRUSR) < 0 || fchmod(sfd[1], S_IWUSR) < 0)
+		return 1;
+	if (fstat(sfd[0], &(st[0])) < 0 || fstat(sfd[1], &(st[1])) < 0)
+		return 1;
+	if ((st[0].st_mode & (S_IRUSR|S_IWUSR)) != S_IRUSR && (st[1].st_mode & (S_IRUSR|S_IWUSR)) != S_IWUSR)
+		return 1;
+	return 0;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  man_cv_socketpair_mode=yes
+else
+  man_cv_socketpair_mode=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_socketpair_mode" >&5
+$as_echo "$man_cv_socketpair_mode" >&6; }
+  if test "$man_cv_socketpair_mode" = yes; then
+
+$as_echo "#define CORRECT_SOCKETPAIR_MODE 1" >>confdefs.h
+
+  fi
+
+      fi
+    fi
 
 fi
 
