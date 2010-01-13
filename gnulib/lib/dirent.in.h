@@ -35,14 +35,10 @@ extern "C" {
 
 /* Declare overridden functions.  */
 
-#if @REPLACE_FCHDIR@
-# define opendir rpl_opendir
-extern DIR * opendir (const char *);
+#if @REPLACE_CLOSEDIR@
 # define closedir rpl_closedir
 extern int closedir (DIR *);
 #endif
-
-/* Declare other POSIX functions.  */
 
 #if @GNULIB_DIRFD@
 # if !@HAVE_DECL_DIRFD@ && !defined dirfd
@@ -59,7 +55,11 @@ extern int dirfd (DIR const *dir);
 #endif
 
 #if @GNULIB_FDOPENDIR@
-# if !@HAVE_FDOPENDIR@
+# if @REPLACE_FDOPENDIR@
+#  undef fdopendir
+#  define fdopendir rpl_fdopendir
+# endif
+# if !@HAVE_FDOPENDIR@ || @REPLACE_FDOPENDIR@
 /* Open a directory stream visiting the given directory file
    descriptor.  Return NULL and set errno if fd is not visiting a
    directory.  On success, this function consumes fd (it will be
@@ -73,6 +73,11 @@ extern DIR *fdopendir (int fd);
     (GL_LINK_WARNING ("fdopendir is unportable - " \
                       "use gnulib module fdopendir for portability"), \
      fdopendir (f))
+#endif
+
+#if @REPLACE_OPENDIR@
+# define opendir rpl_opendir
+extern DIR * opendir (const char *);
 #endif
 
 #if @GNULIB_SCANDIR@

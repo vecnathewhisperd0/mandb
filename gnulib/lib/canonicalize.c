@@ -18,34 +18,25 @@
 
 #include "canonicalize.h"
 
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-
-#if HAVE_SYS_PARAM_H
-# include <sys/param.h>
-#endif
-
 #include <sys/stat.h>
-
 #include <unistd.h>
 
-#include <errno.h>
-#include <stddef.h>
-
+#include "areadlink.h"
 #include "file-set.h"
-#include "filenamecat.h"
 #include "hash-triple.h"
+#include "pathmax.h"
 #include "xalloc.h"
 #include "xgetcwd.h"
 
-#ifndef __set_errno
-# define __set_errno(Val) errno = (Val)
+#ifndef DOUBLE_SLASH_IS_DISTINCT_ROOT
+# define DOUBLE_SLASH_IS_DISTINCT_ROOT 0
 #endif
 
-#include "pathmax.h"
-#include "areadlink.h"
-
-#if !(HAVE_CANONICALIZE_FILE_NAME || GNULIB_CANONICALIZE_LGPL)
+#if !((HAVE_CANONICALIZE_FILE_NAME && FUNC_REALPATH_WORKS)	\
+      || GNULIB_CANONICALIZE_LGPL)
 /* Return the canonical absolute name of file NAME.  A canonical name
    does not contain any `.', `..' components nor any repeated file name
    separators ('/') or symlinks.  All components must exist.
@@ -54,68 +45,7 @@
 char *
 canonicalize_file_name (const char *name)
 {
-# if HAVE_RESOLVEPATH
-
-  char *resolved, *extra_buf = NULL;
-  size_t resolved_size;
-  ssize_t resolved_len;
-
-  if (name == NULL)
-    {
-      __set_errno (EINVAL);
-      return NULL;
-    }
-
-  if (name[0] == '\0')
-    {
-      __set_errno (ENOENT);
-      return NULL;
-    }
-
-  /* All known hosts with resolvepath (e.g. Solaris 7) don't turn
-     relative names into absolute ones, so prepend the working
-     directory if the file name is not absolute.  */
-  if (name[0] != '/')
-    {
-      char *wd;
-
-      if (!(wd = xgetcwd ()))
-	return NULL;
-
-      extra_buf = file_name_concat (wd, name, NULL);
-      name = extra_buf;
-      free (wd);
-    }
-
-  resolved_size = strlen (name);
-  while (1)
-    {
-      resolved_size = 2 * resolved_size + 1;
-      resolved = xmalloc (resolved_size);
-      resolved_len = resolvepath (name, resolved, resolved_size);
-      if (resolved_len < 0)
-	{
-	  free (resolved);
-	  free (extra_buf);
-	  return NULL;
-	}
-      if (resolved_len < resolved_size)
-	break;
-      free (resolved);
-    }
-
-  free (extra_buf);
-
-  /* NUL-terminate the resulting name.  */
-  resolved[resolved_len] = '\0';
-
-  return resolved;
-
-# else
-
   return canonicalize_filename_mode (name, CAN_EXISTING);
-
-# endif /* !HAVE_RESOLVEPATH */
 }
 #endif /* !HAVE_CANONICALIZE_FILE_NAME */
 
@@ -143,7 +73,8 @@ seen_triple (Hash_table **ht, char const *filename, struct stat const *st)
   return false;
 }
 
-/* Return the canonical absolute name of file NAME.  A canonical name
+/* Return the canonical absolute name of file NAME, while treating
+   missing elements according to CAN_MODE.  A canonical name
    does not contain any `.', `..' components nor any repeated file name
    separators ('/') or symlinks.  Whether components must exist
    or not depends on canonicalize mode.  The result is malloc'd.  */
@@ -157,16 +88,17 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
   char const *rname_limit;
   size_t extra_len = 0;
   Hash_table *ht = NULL;
+  int saved_errno;
 
   if (name == NULL)
     {
-      __set_errno (EINVAL);
+      errno = EINVAL;
       return NULL;
     }
 
   if (name[0] == '\0')
     {
-      __set_errno (ENOENT);
+      errno = ENOENT;
       return NULL;
     }
 
@@ -194,6 +126,8 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
       rname_limit = rname + PATH_MAX;
       rname[0] = '/';
       dest = rname + 1;
+      if (DOUBLE_SLASH_IS_DISTINCT_ROOT && name[1] == '/')
+	*dest++ = '/';
     }
 
   for (start = name; *start; start = end)
@@ -215,6 +149,9 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
 	  /* Back up to previous component, ignore if at root already.  */
 	  if (dest > rname + 1)
 	    while ((--dest)[-1] != '/');
+	  if (DOUBLE_SLASH_IS_DISTINCT_ROOT && dest == rname + 1
+	      && *dest == '/')
+	    dest++;
 	}
       else
 	{
@@ -244,10 +181,15 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
 
 	  if (lstat (rname, &st) != 0)
 	    {
+	      saved_errno = errno;
 	      if (can_mode == CAN_EXISTING)
 		goto error;
-	      if (can_mode == CAN_ALL_BUT_LAST && *end)
-		goto error;
+	      if (can_mode == CAN_ALL_BUT_LAST)
+		{
+		  if (end[strspn (end, "/")] || saved_errno != ENOENT)
+		    goto error;
+		  continue;
+		}
 	      st.st_mode = 0;
 	    }
 
@@ -262,11 +204,10 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
 		 the same symlink,NAME pair twice does indicate a loop.  */
 	      if (seen_triple (&ht, name, &st))
 		{
-		  __set_errno (ELOOP);
 		  if (can_mode == CAN_MISSING)
 		    continue;
-		  else
-		    goto error;
+		  saved_errno = ELOOP;
+		  goto error;
 		}
 
 	      buf = areadlink_with_size (rname, st.st_size);
@@ -274,8 +215,8 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
 		{
 		  if (can_mode == CAN_MISSING && errno != ENOMEM)
 		    continue;
-		  else
-		    goto error;
+		  saved_errno = errno;
+		  goto error;
 		}
 
 	      n = strlen (buf);
@@ -298,11 +239,21 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
 	      name = end = memcpy (extra_buf, buf, n);
 
 	      if (buf[0] == '/')
-		dest = rname + 1;	/* It's an absolute symlink */
+		{
+		  dest = rname + 1;	/* It's an absolute symlink */
+		  if (DOUBLE_SLASH_IS_DISTINCT_ROOT && buf[1] == '/')
+		    *dest++ = '/';
+		}
 	      else
-		/* Back up to previous component, ignore if at root already: */
-		if (dest > rname + 1)
-		  while ((--dest)[-1] != '/');
+		{
+		  /* Back up to previous component, ignore if at root
+		     already: */
+		  if (dest > rname + 1)
+		    while ((--dest)[-1] != '/');
+		  if (DOUBLE_SLASH_IS_DISTINCT_ROOT && dest == rname + 1
+		      && *dest == '/')
+		    dest++;
+		}
 
 	      free (buf);
 	    }
@@ -310,7 +261,7 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
 	    {
 	      if (!S_ISDIR (st.st_mode) && *end && (can_mode != CAN_MISSING))
 		{
-		  errno = ENOTDIR;
+		  saved_errno = ENOTDIR;
 		  goto error;
 		}
 	    }
@@ -318,6 +269,8 @@ canonicalize_filename_mode (const char *name, canonicalize_mode_t can_mode)
     }
   if (dest > rname + 1 && dest[-1] == '/')
     --dest;
+  if (DOUBLE_SLASH_IS_DISTINCT_ROOT && dest == rname + 1 && *dest == '/')
+    dest++;
   *dest = '\0';
 
   free (extra_buf);
@@ -330,5 +283,6 @@ error:
   free (rname);
   if (ht)
     hash_free (ht);
+  errno = saved_errno;
   return NULL;
 }

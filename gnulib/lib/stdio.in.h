@@ -227,7 +227,14 @@ extern int rpl_fseek (FILE *fp, long offset, int whence);
    fflush(), and which detect pipes.  */
 #  define fseeko rpl_fseeko
 extern int fseeko (FILE *fp, off_t offset, int whence);
-#  define fseek(fp, offset, whence) fseeko (fp, (off_t)(offset), whence)
+#  if !@GNULIB_FSEEK@
+#   undef fseek
+#   define fseek(f,o,w) \
+     (GL_LINK_WARNING ("fseek cannot handle files larger than 4 GB " \
+                       "on 32-bit platforms - " \
+                       "use fseeko function for handling of large files"), \
+      fseeko (f, o, w))
+#  endif
 # endif
 #elif defined GNULIB_POSIXCHECK
 # undef fseeko
@@ -263,7 +270,14 @@ extern long rpl_ftell (FILE *fp);
 # if @REPLACE_FTELLO@
 #  define ftello rpl_ftello
 extern off_t ftello (FILE *fp);
-#  define ftell(fp) ftello (fp)
+#  if !@GNULIB_FTELL@
+#   undef ftell
+#   define ftell(f) \
+     (GL_LINK_WARNING ("ftell cannot handle files larger than 4 GB " \
+                       "on 32-bit platforms - " \
+                       "use ftello function for handling of large files"), \
+      ftello (f))
+#  endif
 # endif
 #elif defined GNULIB_POSIXCHECK
 # undef ftello
@@ -416,6 +430,20 @@ extern int putchar (int c);
 extern int puts (const char *string);
 #endif
 
+#if @GNULIB_REMOVE@
+# if @REPLACE_REMOVE@
+#  undef remove
+#  define remove rpl_remove
+extern int remove (const char *name);
+# endif
+#elif defined GNULIB_POSIXCHECK
+# undef remove
+# define remove(n)					   \
+   (GL_LINK_WARNING ("remove cannot handle directories on some platforms - " \
+                     "use gnulib module remove for more portability"), \
+    remove (n))
+#endif
+
 #if @GNULIB_RENAME@
 # if @REPLACE_RENAME@
 #  undef rename
@@ -428,6 +456,22 @@ extern int rename (const char *old, const char *new);
    (GL_LINK_WARNING ("rename is buggy on some platforms - " \
                      "use gnulib module rename for more portability"), \
     rename (o, n))
+#endif
+
+#if @GNULIB_RENAMEAT@
+# if @REPLACE_RENAMEAT@
+#  undef renameat
+#  define renameat rpl_renameat
+# endif
+# if !@HAVE_RENAMEAT@ || @REPLACE_RENAMEAT@
+extern int renameat (int fd1, char const *file1, int fd2, char const *file2);
+# endif
+#elif defined GNULIB_POSIXCHECK
+# undef renameat
+# define renameat(d1,f1,d2,f2)		   \
+    (GL_LINK_WARNING ("renameat is not portable - " \
+                      "use gnulib module renameat for portability"), \
+     renameat (d1, f1, d2, f2))
 #endif
 
 #if @GNULIB_SNPRINTF@

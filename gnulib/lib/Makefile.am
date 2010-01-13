@@ -118,7 +118,7 @@ EXTRA_libgnu_a_SOURCES += btowc.c
 ## begin gnulib module canonicalize
 
 
-EXTRA_DIST += canonicalize.c canonicalize.h pathmax.h
+EXTRA_DIST += canonicalize.c canonicalize.h
 
 EXTRA_libgnu_a_SOURCES += canonicalize.c
 
@@ -127,7 +127,7 @@ EXTRA_libgnu_a_SOURCES += canonicalize.c
 ## begin gnulib module canonicalize-lgpl
 
 
-EXTRA_DIST += canonicalize-lgpl.c canonicalize.h
+EXTRA_DIST += canonicalize-lgpl.c
 
 EXTRA_libgnu_a_SOURCES += canonicalize-lgpl.c
 
@@ -249,7 +249,9 @@ dirent.h: dirent.in.h
 	      -e 's|@''HAVE_FDOPENDIR''@|$(HAVE_FDOPENDIR)|g' \
 	      -e 's|@''HAVE_SCANDIR''@|$(HAVE_SCANDIR)|g' \
 	      -e 's|@''HAVE_ALPHASORT''@|$(HAVE_ALPHASORT)|g' \
-	      -e 's|@''REPLACE_FCHDIR''@|$(REPLACE_FCHDIR)|g' \
+	      -e 's|@''REPLACE_CLOSEDIR''@|$(REPLACE_CLOSEDIR)|g' \
+	      -e 's|@''REPLACE_FDOPENDIR''@|$(REPLACE_FDOPENDIR)|g' \
+	      -e 's|@''REPLACE_OPENDIR''@|$(REPLACE_OPENDIR)|g' \
 	      -e '/definition of GL_LINK_WARNING/r $(LINK_WARNING_H)' \
 	      < $(srcdir)/dirent.in.h; \
 	} > $@-t && \
@@ -272,11 +274,20 @@ EXTRA_libgnu_a_SOURCES += dirfd.c
 ## begin gnulib module dirname
 
 
-EXTRA_DIST += basename.c dirname.c dirname.h stripslash.c
+EXTRA_DIST += basename.c dirname.c stripslash.c
 
 EXTRA_libgnu_a_SOURCES += basename.c dirname.c stripslash.c
 
 ## end   gnulib module dirname
+
+## begin gnulib module dirname-lgpl
+
+
+EXTRA_DIST += basename-lgpl.c dirname-lgpl.c dirname.h stripslash.c
+
+EXTRA_libgnu_a_SOURCES += basename-lgpl.c dirname-lgpl.c stripslash.c
+
+## end   gnulib module dirname-lgpl
 
 ## begin gnulib module dup2
 
@@ -365,6 +376,7 @@ fcntl.h: fcntl.in.h
 	      -e 's|@''GNULIB_OPEN''@|$(GNULIB_OPEN)|g' \
 	      -e 's|@''GNULIB_OPENAT''@|$(GNULIB_OPENAT)|g' \
 	      -e 's|@''REPLACE_OPEN''@|$(REPLACE_OPEN)|g' \
+	      -e 's|@''REPLACE_OPENAT''@|$(REPLACE_OPENAT)|g' \
 	      -e 's|@''HAVE_OPENAT''@|$(HAVE_OPENAT)|g' \
 	      -e '/definition of GL_LINK_WARNING/r $(LINK_WARNING_H)' \
 	      < $(srcdir)/fcntl.in.h; \
@@ -375,15 +387,6 @@ MOSTLYCLEANFILES += fcntl.h fcntl.h-t
 EXTRA_DIST += fcntl.in.h
 
 ## end   gnulib module fcntl-h
-
-## begin gnulib module fcntl-safer
-
-
-EXTRA_DIST += creat-safer.c fcntl--.h fcntl-safer.h open-safer.c
-
-EXTRA_libgnu_a_SOURCES += creat-safer.c open-safer.c
-
-## end   gnulib module fcntl-safer
 
 ## begin gnulib module fdopendir
 
@@ -401,15 +404,6 @@ libgnu_a_SOURCES += file-set.c
 EXTRA_DIST += file-set.h
 
 ## end   gnulib module file-set
-
-## begin gnulib module filenamecat
-
-
-EXTRA_DIST += filenamecat.c filenamecat.h
-
-EXTRA_libgnu_a_SOURCES += filenamecat.c
-
-## end   gnulib module filenamecat
 
 ## begin gnulib module float
 
@@ -479,7 +473,12 @@ BUILT_SOURCES += $(GETOPT_H)
 getopt.h: getopt.in.h
 	$(AM_V_GEN)rm -f $@-t $@ && \
 	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
-	  cat $(srcdir)/getopt.in.h; \
+	  sed -e 's|@''HAVE_GETOPT_H''@|$(HAVE_GETOPT_H)|g' \
+	      -e 's|@''INCLUDE_NEXT''@|$(INCLUDE_NEXT)|g' \
+	      -e 's|@''PRAGMA_SYSTEM_HEADER''@|@PRAGMA_SYSTEM_HEADER@|g' \
+	      -e 's|@''NEXT_GETOPT_H''@|$(NEXT_GETOPT_H)|g' \
+	      -e '/definition of GL_LINK_WARNING/r $(LINK_WARNING_H)' \
+	      < $(srcdir)/getopt.in.h; \
 	} > $@-t && \
 	mv -f $@-t $@
 MOSTLYCLEANFILES += getopt.h getopt.h-t
@@ -489,15 +488,6 @@ EXTRA_DIST += getopt.c getopt.in.h getopt1.c getopt_int.h
 EXTRA_libgnu_a_SOURCES += getopt.c getopt1.c
 
 ## end   gnulib module getopt-posix
-
-## begin gnulib module getpagesize
-
-
-EXTRA_DIST += getpagesize.c
-
-EXTRA_libgnu_a_SOURCES += getpagesize.c
-
-## end   gnulib module getpagesize
 
 ## begin gnulib module gettext
 
@@ -789,6 +779,15 @@ libgnu_a_SOURCES += minmax.h
 
 ## end   gnulib module minmax
 
+## begin gnulib module mkdir
+
+
+EXTRA_DIST += mkdir.c
+
+EXTRA_libgnu_a_SOURCES += mkdir.c
+
+## end   gnulib module mkdir
+
 ## begin gnulib module mkdtemp
 
 
@@ -819,9 +818,9 @@ EXTRA_libgnu_a_SOURCES += open.c
 ## begin gnulib module openat
 
 
-EXTRA_DIST += at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c openat-priv.h openat-proc.c openat.c openat.h
+EXTRA_DIST += at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c openat-priv.h openat-proc.c openat.c openat.h unlinkat.c
 
-EXTRA_libgnu_a_SOURCES += at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c openat-proc.c openat.c
+EXTRA_libgnu_a_SOURCES += at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c openat-proc.c openat.c unlinkat.c
 
 ## end   gnulib module openat
 
@@ -830,15 +829,6 @@ EXTRA_libgnu_a_SOURCES += at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c op
 libgnu_a_SOURCES += openat-die.c
 
 ## end   gnulib module openat-die
-
-## begin gnulib module openat-safer
-
-
-EXTRA_DIST += fcntl--.h fcntl-safer.h openat-safer.c
-
-EXTRA_libgnu_a_SOURCES += openat-safer.c
-
-## end   gnulib module openat-safer
 
 ## begin gnulib module pathmax
 
@@ -891,6 +881,15 @@ EXTRA_DIST += rename.c
 EXTRA_libgnu_a_SOURCES += rename.c
 
 ## end   gnulib module rename
+
+## begin gnulib module rmdir
+
+
+EXTRA_DIST += rmdir.c
+
+EXTRA_libgnu_a_SOURCES += rmdir.c
+
+## end   gnulib module rmdir
 
 ## begin gnulib module same
 
@@ -998,6 +997,15 @@ EXTRA_DIST += snprintf.c
 EXTRA_libgnu_a_SOURCES += snprintf.c
 
 ## end   gnulib module snprintf
+
+## begin gnulib module stat
+
+
+EXTRA_DIST += stat.c
+
+EXTRA_libgnu_a_SOURCES += stat.c
+
+## end   gnulib module stat
 
 ## begin gnulib module stdarg
 
@@ -1141,7 +1149,9 @@ stdio.h: stdio.in.h
 	      -e 's|@''GNULIB_PUTC''@|$(GNULIB_PUTC)|g' \
 	      -e 's|@''GNULIB_PUTCHAR''@|$(GNULIB_PUTCHAR)|g' \
 	      -e 's|@''GNULIB_PUTS''@|$(GNULIB_PUTS)|g' \
+	      -e 's|@''GNULIB_REMOVE''@|$(GNULIB_REMOVE)|g' \
 	      -e 's|@''GNULIB_RENAME''@|$(GNULIB_RENAME)|g' \
+	      -e 's|@''GNULIB_RENAMEAT''@|$(GNULIB_RENAMEAT)|g' \
 	      -e 's|@''GNULIB_SNPRINTF''@|$(GNULIB_SNPRINTF)|g' \
 	      -e 's|@''GNULIB_SPRINTF_POSIX''@|$(GNULIB_SPRINTF_POSIX)|g' \
 	      -e 's|@''GNULIB_STDIO_H_SIGPIPE''@|$(GNULIB_STDIO_H_SIGPIPE)|g' \
@@ -1160,6 +1170,7 @@ stdio.h: stdio.in.h
 	      -e 's|@''HAVE_DECL_SNPRINTF''@|$(HAVE_DECL_SNPRINTF)|g' \
 	      -e 's|@''HAVE_DECL_VSNPRINTF''@|$(HAVE_DECL_VSNPRINTF)|g' \
 	      -e 's|@''HAVE_DPRINTF''@|$(HAVE_DPRINTF)|g' \
+	      -e 's|@''HAVE_RENAMEAT''@|$(HAVE_RENAMEAT)|g' \
 	      -e 's|@''HAVE_VASPRINTF''@|$(HAVE_VASPRINTF)|g' \
 	      -e 's|@''HAVE_VDPRINTF''@|$(HAVE_VDPRINTF)|g' \
 	      -e 's|@''REPLACE_DPRINTF''@|$(REPLACE_DPRINTF)|g' \
@@ -1178,7 +1189,9 @@ stdio.h: stdio.in.h
 	      -e 's|@''REPLACE_PERROR''@|$(REPLACE_PERROR)|g' \
 	      -e 's|@''REPLACE_POPEN''@|$(REPLACE_POPEN)|g' \
 	      -e 's|@''REPLACE_PRINTF''@|$(REPLACE_PRINTF)|g' \
+	      -e 's|@''REPLACE_REMOVE''@|$(REPLACE_REMOVE)|g' \
 	      -e 's|@''REPLACE_RENAME''@|$(REPLACE_RENAME)|g' \
+	      -e 's|@''REPLACE_RENAMEAT''@|$(REPLACE_RENAMEAT)|g' \
 	      -e 's|@''REPLACE_SNPRINTF''@|$(REPLACE_SNPRINTF)|g' \
 	      -e 's|@''REPLACE_SPRINTF''@|$(REPLACE_SPRINTF)|g' \
 	      -e 's|@''REPLACE_STDIO_WRITE_FUNCS''@|$(REPLACE_STDIO_WRITE_FUNCS)|g' \
@@ -1212,18 +1225,21 @@ stdlib.h: stdlib.in.h
 	  sed -e 's|@''INCLUDE_NEXT''@|$(INCLUDE_NEXT)|g' \
 	      -e 's|@''PRAGMA_SYSTEM_HEADER''@|@PRAGMA_SYSTEM_HEADER@|g' \
 	      -e 's|@''NEXT_STDLIB_H''@|$(NEXT_STDLIB_H)|g' \
-	      -e 's|@''HAVE_RANDOM_H''@|$(HAVE_RANDOM_H)|g' \
-	      -e 's|@''GNULIB_MALLOC_POSIX''@|$(GNULIB_MALLOC_POSIX)|g' \
-	      -e 's|@''GNULIB_REALLOC_POSIX''@|$(GNULIB_REALLOC_POSIX)|g' \
-	      -e 's|@''GNULIB_CALLOC_POSIX''@|$(GNULIB_CALLOC_POSIX)|g' \
 	      -e 's|@''GNULIB_ATOLL''@|$(GNULIB_ATOLL)|g' \
+	      -e 's|@''GNULIB_CALLOC_POSIX''@|$(GNULIB_CALLOC_POSIX)|g' \
+	      -e 's|@''GNULIB_CANONICALIZE_FILE_NAME''@|$(GNULIB_CANONICALIZE_FILE_NAME)|g' \
 	      -e 's|@''GNULIB_GETLOADAVG''@|$(GNULIB_GETLOADAVG)|g' \
 	      -e 's|@''GNULIB_GETSUBOPT''@|$(GNULIB_GETSUBOPT)|g' \
+	      -e 's|@''GNULIB_MALLOC_POSIX''@|$(GNULIB_MALLOC_POSIX)|g' \
 	      -e 's|@''GNULIB_MKDTEMP''@|$(GNULIB_MKDTEMP)|g' \
 	      -e 's|@''GNULIB_MKOSTEMP''@|$(GNULIB_MKOSTEMP)|g' \
+	      -e 's|@''GNULIB_MKOSTEMPS''@|$(GNULIB_MKOSTEMPS)|g' \
 	      -e 's|@''GNULIB_MKSTEMP''@|$(GNULIB_MKSTEMP)|g' \
+	      -e 's|@''GNULIB_MKSTEMPS''@|$(GNULIB_MKSTEMPS)|g' \
 	      -e 's|@''GNULIB_PUTENV''@|$(GNULIB_PUTENV)|g' \
 	      -e 's|@''GNULIB_RANDOM_R''@|$(GNULIB_RANDOM_R)|g' \
+	      -e 's|@''GNULIB_REALLOC_POSIX''@|$(GNULIB_REALLOC_POSIX)|g' \
+	      -e 's|@''GNULIB_REALPATH''@|$(GNULIB_REALPATH)|g' \
 	      -e 's|@''GNULIB_RPMATCH''@|$(GNULIB_RPMATCH)|g' \
 	      -e 's|@''GNULIB_SETENV''@|$(GNULIB_SETENV)|g' \
 	      -e 's|@''GNULIB_STRTOD''@|$(GNULIB_STRTOD)|g' \
@@ -1232,12 +1248,18 @@ stdlib.h: stdlib.in.h
 	      -e 's|@''GNULIB_UNSETENV''@|$(GNULIB_UNSETENV)|g' \
 	      -e 's|@''HAVE_ATOLL''@|$(HAVE_ATOLL)|g' \
 	      -e 's|@''HAVE_CALLOC_POSIX''@|$(HAVE_CALLOC_POSIX)|g' \
+	      -e 's|@''HAVE_CANONICALIZE_FILE_NAME''@|$(HAVE_CANONICALIZE_FILE_NAME)|g' \
+	      -e 's|@''HAVE_DECL_GETLOADAVG''@|$(HAVE_DECL_GETLOADAVG)|g' \
 	      -e 's|@''HAVE_GETSUBOPT''@|$(HAVE_GETSUBOPT)|g' \
 	      -e 's|@''HAVE_MALLOC_POSIX''@|$(HAVE_MALLOC_POSIX)|g' \
 	      -e 's|@''HAVE_MKDTEMP''@|$(HAVE_MKDTEMP)|g' \
 	      -e 's|@''HAVE_MKOSTEMP''@|$(HAVE_MKOSTEMP)|g' \
-	      -e 's|@''HAVE_REALLOC_POSIX''@|$(HAVE_REALLOC_POSIX)|g' \
+	      -e 's|@''HAVE_MKOSTEMPS''@|$(HAVE_MKOSTEMPS)|g' \
+	      -e 's|@''HAVE_MKSTEMPS''@|$(HAVE_MKSTEMPS)|g' \
+	      -e 's|@''HAVE_RANDOM_H''@|$(HAVE_RANDOM_H)|g' \
 	      -e 's|@''HAVE_RANDOM_R''@|$(HAVE_RANDOM_R)|g' \
+	      -e 's|@''HAVE_REALLOC_POSIX''@|$(HAVE_REALLOC_POSIX)|g' \
+	      -e 's|@''HAVE_REALPATH''@|$(HAVE_REALPATH)|g' \
 	      -e 's|@''HAVE_RPMATCH''@|$(HAVE_RPMATCH)|g' \
 	      -e 's|@''HAVE_SETENV''@|$(HAVE_SETENV)|g' \
 	      -e 's|@''HAVE_STRTOD''@|$(HAVE_STRTOD)|g' \
@@ -1246,9 +1268,10 @@ stdlib.h: stdlib.in.h
 	      -e 's|@''HAVE_STRUCT_RANDOM_DATA''@|$(HAVE_STRUCT_RANDOM_DATA)|g' \
 	      -e 's|@''HAVE_SYS_LOADAVG_H''@|$(HAVE_SYS_LOADAVG_H)|g' \
 	      -e 's|@''HAVE_UNSETENV''@|$(HAVE_UNSETENV)|g' \
-	      -e 's|@''HAVE_DECL_GETLOADAVG''@|$(HAVE_DECL_GETLOADAVG)|g' \
+	      -e 's|@''REPLACE_CANONICALIZE_FILE_NAME''@|$(REPLACE_CANONICALIZE_FILE_NAME)|g' \
 	      -e 's|@''REPLACE_MKSTEMP''@|$(REPLACE_MKSTEMP)|g' \
 	      -e 's|@''REPLACE_PUTENV''@|$(REPLACE_PUTENV)|g' \
+	      -e 's|@''REPLACE_REALPATH''@|$(REPLACE_REALPATH)|g' \
 	      -e 's|@''REPLACE_STRTOD''@|$(REPLACE_STRTOD)|g' \
 	      -e 's|@''VOID_UNSETENV''@|$(VOID_UNSETENV)|g' \
 	      -e '/definition of GL_LINK_WARNING/r $(LINK_WARNING_H)' \
@@ -1550,22 +1573,30 @@ sys/stat.h: sys_stat.in.h
 	      -e 's|@''NEXT_SYS_STAT_H''@|$(NEXT_SYS_STAT_H)|g' \
 	      -e 's|@''GNULIB_FCHMODAT''@|$(GNULIB_FCHMODAT)|g' \
 	      -e 's|@''GNULIB_FSTATAT''@|$(GNULIB_FSTATAT)|g' \
+	      -e 's|@''GNULIB_FUTIMENS''@|$(GNULIB_FUTIMENS)|g' \
 	      -e 's|@''GNULIB_LCHMOD''@|$(GNULIB_LCHMOD)|g' \
 	      -e 's|@''GNULIB_LSTAT''@|$(GNULIB_LSTAT)|g' \
 	      -e 's|@''GNULIB_MKDIRAT''@|$(GNULIB_MKDIRAT)|g' \
 	      -e 's|@''GNULIB_MKFIFOAT''@|$(GNULIB_MKFIFOAT)|g' \
 	      -e 's|@''GNULIB_MKNODAT''@|$(GNULIB_MKNODAT)|g' \
+	      -e 's|@''GNULIB_STAT''@|$(GNULIB_STAT)|g' \
+	      -e 's|@''GNULIB_UTIMENSAT''@|$(GNULIB_UTIMENSAT)|g' \
 	      -e 's|@''HAVE_FCHMODAT''@|$(HAVE_FCHMODAT)|g' \
 	      -e 's|@''HAVE_FSTATAT''@|$(HAVE_FSTATAT)|g' \
+	      -e 's|@''HAVE_FUTIMENS''@|$(HAVE_FUTIMENS)|g' \
 	      -e 's|@''HAVE_LCHMOD''@|$(HAVE_LCHMOD)|g' \
 	      -e 's|@''HAVE_LSTAT''@|$(HAVE_LSTAT)|g' \
 	      -e 's|@''HAVE_MKDIRAT''@|$(HAVE_MKDIRAT)|g' \
 	      -e 's|@''HAVE_MKFIFOAT''@|$(HAVE_MKFIFOAT)|g' \
 	      -e 's|@''HAVE_MKNODAT''@|$(HAVE_MKNODAT)|g' \
-	      -e 's|@''REPLACE_FCHDIR''@|$(REPLACE_FCHDIR)|g' \
+	      -e 's|@''HAVE_UTIMENSAT''@|$(HAVE_UTIMENSAT)|g' \
+	      -e 's|@''REPLACE_FSTAT''@|$(REPLACE_FSTAT)|g' \
 	      -e 's|@''REPLACE_FSTATAT''@|$(REPLACE_FSTATAT)|g' \
+	      -e 's|@''REPLACE_FUTIMENS''@|$(REPLACE_FUTIMENS)|g' \
 	      -e 's|@''REPLACE_LSTAT''@|$(REPLACE_LSTAT)|g' \
 	      -e 's|@''REPLACE_MKDIR''@|$(REPLACE_MKDIR)|g' \
+	      -e 's|@''REPLACE_STAT''@|$(REPLACE_STAT)|g' \
+	      -e 's|@''REPLACE_UTIMENSAT''@|$(REPLACE_UTIMENSAT)|g' \
 	      -e '/definition of GL_LINK_WARNING/r $(LINK_WARNING_H)' \
 	      < $(srcdir)/sys_stat.in.h; \
 	} > $@-t && \
@@ -1641,6 +1672,34 @@ EXTRA_DIST += $(top_srcdir)/tools/config.rpath
 
 ## end   gnulib module threadlib
 
+## begin gnulib module time
+
+BUILT_SOURCES += time.h
+
+# We need the following in order to create <time.h> when the system
+# doesn't have one that works with the given compiler.
+time.h: time.in.h
+	$(AM_V_GEN)rm -f $@-t $@ && \
+	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */' && \
+	  sed -e 's|@''INCLUDE_NEXT''@|$(INCLUDE_NEXT)|g' \
+	      -e 's|@''PRAGMA_SYSTEM_HEADER''@|@PRAGMA_SYSTEM_HEADER@|g' \
+	      -e 's|@NEXT_TIME_H''@|$(NEXT_TIME_H)|g' \
+	      -e 's|@REPLACE_LOCALTIME_R''@|$(REPLACE_LOCALTIME_R)|g' \
+	      -e 's|@REPLACE_MKTIME''@|$(REPLACE_MKTIME)|g' \
+	      -e 's|@REPLACE_NANOSLEEP''@|$(REPLACE_NANOSLEEP)|g' \
+	      -e 's|@REPLACE_STRPTIME''@|$(REPLACE_STRPTIME)|g' \
+	      -e 's|@REPLACE_TIMEGM''@|$(REPLACE_TIMEGM)|g' \
+	      -e 's|@SYS_TIME_H_DEFINES_STRUCT_TIMESPEC''@|$(SYS_TIME_H_DEFINES_STRUCT_TIMESPEC)|g' \
+	      -e 's|@TIME_H_DEFINES_STRUCT_TIMESPEC''@|$(TIME_H_DEFINES_STRUCT_TIMESPEC)|g' \
+	      < $(srcdir)/time.in.h; \
+	} > $@-t && \
+	mv $@-t $@
+MOSTLYCLEANFILES += time.h time.h-t
+
+EXTRA_DIST += time.in.h
+
+## end   gnulib module time
+
 ## begin gnulib module tls
 
 libgnu_a_SOURCES += glthread/tls.h glthread/tls.c
@@ -1674,20 +1733,25 @@ unistd.h: unistd.in.h
 	      -e 's|@''GNULIB_GETCWD''@|$(GNULIB_GETCWD)|g' \
 	      -e 's|@''GNULIB_GETDOMAINNAME''@|$(GNULIB_GETDOMAINNAME)|g' \
 	      -e 's|@''GNULIB_GETDTABLESIZE''@|$(GNULIB_GETDTABLESIZE)|g' \
+	      -e 's|@''GNULIB_GETGROUPS''@|$(GNULIB_GETGROUPS)|g' \
 	      -e 's|@''GNULIB_GETHOSTNAME''@|$(GNULIB_GETHOSTNAME)|g' \
 	      -e 's|@''GNULIB_GETLOGIN_R''@|$(GNULIB_GETLOGIN_R)|g' \
 	      -e 's|@''GNULIB_GETPAGESIZE''@|$(GNULIB_GETPAGESIZE)|g' \
 	      -e 's|@''GNULIB_GETUSERSHELL''@|$(GNULIB_GETUSERSHELL)|g' \
 	      -e 's|@''GNULIB_LCHOWN''@|$(GNULIB_LCHOWN)|g' \
 	      -e 's|@''GNULIB_LINK''@|$(GNULIB_LINK)|g' \
+	      -e 's|@''GNULIB_LINKAT''@|$(GNULIB_LINKAT)|g' \
 	      -e 's|@''GNULIB_LSEEK''@|$(GNULIB_LSEEK)|g' \
 	      -e 's|@''GNULIB_PIPE2''@|$(GNULIB_PIPE2)|g' \
 	      -e 's|@''GNULIB_READLINK''@|$(GNULIB_READLINK)|g' \
 	      -e 's|@''GNULIB_READLINKAT''@|$(GNULIB_READLINKAT)|g' \
+	      -e 's|@''GNULIB_RMDIR''@|$(GNULIB_RMDIR)|g' \
 	      -e 's|@''GNULIB_SLEEP''@|$(GNULIB_SLEEP)|g' \
+	      -e 's|@''GNULIB_SYMLINK''@|$(GNULIB_SYMLINK)|g' \
 	      -e 's|@''GNULIB_SYMLINKAT''@|$(GNULIB_SYMLINKAT)|g' \
 	      -e 's|@''GNULIB_UNISTD_H_GETOPT''@|$(GNULIB_UNISTD_H_GETOPT)|g' \
 	      -e 's|@''GNULIB_UNISTD_H_SIGPIPE''@|$(GNULIB_UNISTD_H_SIGPIPE)|g' \
+	      -e 's|@''GNULIB_UNLINK''@|$(GNULIB_UNLINK)|g' \
 	      -e 's|@''GNULIB_UNLINKAT''@|$(GNULIB_UNLINKAT)|g' \
 	      -e 's|@''GNULIB_WRITE''@|$(GNULIB_WRITE)|g' \
 	      -e 's|@''HAVE_DUP2''@|$(HAVE_DUP2)|g' \
@@ -1699,14 +1763,17 @@ unistd.h: unistd.in.h
 	      -e 's|@''HAVE_FTRUNCATE''@|$(HAVE_FTRUNCATE)|g' \
 	      -e 's|@''HAVE_GETDOMAINNAME''@|$(HAVE_GETDOMAINNAME)|g' \
 	      -e 's|@''HAVE_GETDTABLESIZE''@|$(HAVE_GETDTABLESIZE)|g' \
+	      -e 's|@''HAVE_GETGROUPS''@|$(HAVE_GETGROUPS)|g' \
 	      -e 's|@''HAVE_GETHOSTNAME''@|$(HAVE_GETHOSTNAME)|g' \
 	      -e 's|@''HAVE_GETPAGESIZE''@|$(HAVE_GETPAGESIZE)|g' \
 	      -e 's|@''HAVE_GETUSERSHELL''@|$(HAVE_GETUSERSHELL)|g' \
 	      -e 's|@''HAVE_LINK''@|$(HAVE_LINK)|g' \
+	      -e 's|@''HAVE_LINKAT''@|$(HAVE_LINKAT)|g' \
 	      -e 's|@''HAVE_PIPE2''@|$(HAVE_PIPE2)|g' \
 	      -e 's|@''HAVE_READLINK''@|$(HAVE_READLINK)|g' \
 	      -e 's|@''HAVE_READLINKAT''@|$(HAVE_READLINKAT)|g' \
 	      -e 's|@''HAVE_SLEEP''@|$(HAVE_SLEEP)|g' \
+	      -e 's|@''HAVE_SYMLINK''@|$(HAVE_SYMLINK)|g' \
 	      -e 's|@''HAVE_SYMLINKAT''@|$(HAVE_SYMLINKAT)|g' \
 	      -e 's|@''HAVE_UNLINKAT''@|$(HAVE_UNLINKAT)|g' \
 	      -e 's|@''HAVE_DECL_ENVIRON''@|$(HAVE_DECL_ENVIRON)|g' \
@@ -1715,14 +1782,22 @@ unistd.h: unistd.in.h
 	      -e 's|@''HAVE_SYS_PARAM_H''@|$(HAVE_SYS_PARAM_H)|g' \
 	      -e 's|@''REPLACE_CHOWN''@|$(REPLACE_CHOWN)|g' \
 	      -e 's|@''REPLACE_CLOSE''@|$(REPLACE_CLOSE)|g' \
+	      -e 's|@''REPLACE_DUP''@|$(REPLACE_DUP)|g' \
 	      -e 's|@''REPLACE_DUP2''@|$(REPLACE_DUP2)|g' \
 	      -e 's|@''REPLACE_FCHDIR''@|$(REPLACE_FCHDIR)|g' \
 	      -e 's|@''REPLACE_FCHOWNAT''@|$(REPLACE_FCHOWNAT)|g' \
 	      -e 's|@''REPLACE_GETCWD''@|$(REPLACE_GETCWD)|g' \
+	      -e 's|@''REPLACE_GETGROUPS''@|$(REPLACE_GETGROUPS)|g' \
 	      -e 's|@''REPLACE_GETPAGESIZE''@|$(REPLACE_GETPAGESIZE)|g' \
 	      -e 's|@''REPLACE_LCHOWN''@|$(REPLACE_LCHOWN)|g' \
 	      -e 's|@''REPLACE_LINK''@|$(REPLACE_LINK)|g' \
+	      -e 's|@''REPLACE_LINKAT''@|$(REPLACE_LINKAT)|g' \
 	      -e 's|@''REPLACE_LSEEK''@|$(REPLACE_LSEEK)|g' \
+	      -e 's|@''REPLACE_READLINK''@|$(REPLACE_READLINK)|g' \
+	      -e 's|@''REPLACE_RMDIR''@|$(REPLACE_RMDIR)|g' \
+	      -e 's|@''REPLACE_SYMLINK''@|$(REPLACE_SYMLINK)|g' \
+	      -e 's|@''REPLACE_UNLINK''@|$(REPLACE_UNLINK)|g' \
+	      -e 's|@''REPLACE_UNLINKAT''@|$(REPLACE_UNLINKAT)|g' \
 	      -e 's|@''REPLACE_WRITE''@|$(REPLACE_WRITE)|g' \
 	      -e 's|@''UNISTD_H_HAVE_WINSOCK2_H''@|$(UNISTD_H_HAVE_WINSOCK2_H)|g' \
 	      -e 's|@''UNISTD_H_HAVE_WINSOCK2_H_AND_USE_SOCKETS''@|$(UNISTD_H_HAVE_WINSOCK2_H_AND_USE_SOCKETS)|g' \
@@ -1744,6 +1819,15 @@ EXTRA_DIST += dup-safer.c fd-safer.c pipe-safer.c unistd--.h unistd-safer.h
 EXTRA_libgnu_a_SOURCES += dup-safer.c fd-safer.c pipe-safer.c
 
 ## end   gnulib module unistd-safer
+
+## begin gnulib module unlink
+
+
+EXTRA_DIST += unlink.c
+
+EXTRA_libgnu_a_SOURCES += unlink.c
+
+## end   gnulib module unlink
 
 ## begin gnulib module unsetenv
 

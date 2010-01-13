@@ -38,6 +38,9 @@
 /* Get nlink_t.  */
 #include <sys/types.h>
 
+/* Get struct timespec.  */
+#include <time.h>
+
 /* The include_next requires a split double-inclusion guard.  */
 #@INCLUDE_NEXT@ @NEXT_SYS_STAT_H@
 
@@ -278,28 +281,15 @@
 # define S_IRWXUGO (S_IRWXU | S_IRWXG | S_IRWXO)
 #endif
 
-
-#ifdef __cplusplus
-extern "C" {
+/* Macros for futimens and utimensat.  */
+#ifndef UTIME_NOW
+# define UTIME_NOW (-1)
+# define UTIME_OMIT (-2)
 #endif
 
 
-#if @GNULIB_LSTAT@
-# if ! @HAVE_LSTAT@
-/* mingw does not support symlinks, therefore it does not have lstat.  But
-   without links, stat does just fine.  */
-#  define lstat stat
-# elif @REPLACE_LSTAT@
-#  undef lstat
-#  define lstat rpl_lstat
-extern int rpl_lstat (const char *name, struct stat *buf);
-# endif
-#elif defined GNULIB_POSIXCHECK
-# undef lstat
-# define lstat(p,b)							\
-  (GL_LINK_WARNING ("lstat is unportable - "				\
-		    "use gnulib module lstat for portability"),		\
-   lstat (p, b))
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 
@@ -313,6 +303,12 @@ extern int fchmodat (int fd, char const *file, mode_t mode, int flag);
     (GL_LINK_WARNING ("fchmodat is not portable - " \
                       "use gnulib module openat for portability"), \
      fchmodat (d, n, m, f))
+#endif
+
+
+#if @REPLACE_FSTAT@
+# define fstat rpl_fstat
+extern int fstat (int fd, struct stat *buf);
 #endif
 
 
@@ -333,69 +329,22 @@ extern int fstatat (int fd, char const *name, struct stat *st, int flags);
 #endif
 
 
-#if @GNULIB_MKDIRAT@
-# if !@HAVE_MKDIRAT@
-extern int mkdirat (int fd, char const *file, mode_t mode);
+#if @GNULIB_FUTIMENS@
+# if @REPLACE_FUTIMENS@
+#  undef futimens
+#  define futimens rpl_futimens
+# endif
+# if !@HAVE_FUTIMENS@ || @REPLACE_FUTIMENS@
+extern int futimens (int fd, struct timespec const times[2]);
 # endif
 #elif defined GNULIB_POSIXCHECK
-# undef mkdirat
-# define mkdirat(d,n,m)                         \
-    (GL_LINK_WARNING ("mkdirat is not portable - " \
-                      "use gnulib module openat for portability"), \
-     mkdirat (d, n, m))
+# undef futimens
+# define futimens(f,t)                         \
+    (GL_LINK_WARNING ("futimens is not portable - " \
+                      "use gnulib module futimens for portability"), \
+     futimens (f, t))
 #endif
 
-#if @GNULIB_MKFIFOAT@
-# if !@HAVE_MKFIFOAT@
-int mkfifoat (int fd, char const *file, mode_t mode);
-# endif
-#elif defined GNULIB_POSIXCHECK
-# undef mkfifoat
-# define mkfifoat(d,n,m)				     \
-    (GL_LINK_WARNING ("mkfifoat is not portable - " \
-                      "use gnulib module mkfifoat for portability"), \
-     mkfifoat (d, n, m))
-#endif
-
-#if @GNULIB_MKNODAT@
-# if !@HAVE_MKNODAT@
-int mknodat (int fd, char const *file, mode_t mode, dev_t dev);
-# endif
-#elif defined GNULIB_POSIXCHECK
-# undef mknodat
-# define mknodat(f,n,m,d)			     \
-    (GL_LINK_WARNING ("mknodat is not portable - " \
-                      "use gnulib module mkfifoat for portability"), \
-     mknodat (f, n, m, d))
-#endif
-
-#if @REPLACE_FCHDIR@
-# define fstat rpl_fstat
-extern int fstat (int fd, struct stat *buf);
-#endif
-
-#if @REPLACE_MKDIR@
-# undef mkdir
-# define mkdir rpl_mkdir
-extern int mkdir (char const *name, mode_t mode);
-#else
-/* mingw's _mkdir() function has 1 argument, but we pass 2 arguments.
-   Additionally, it declares _mkdir (and depending on compile flags, an
-   alias mkdir), only in the nonstandard <io.h>, which is included above.  */
-# if (defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__
-
-static inline int
-rpl_mkdir (char const *name, mode_t mode)
-{
-  return _mkdir (name);
-}
-
-#  define mkdir rpl_mkdir
-# endif
-#endif
-
-
-/* Declare BSD extensions.  */
 
 #if @GNULIB_LCHMOD@
 /* Change the mode of FILENAME to MODE, without dereferencing it if FILENAME
@@ -419,6 +368,129 @@ extern int lchmod (const char *filename, mode_t mode);
     (GL_LINK_WARNING ("lchmod is unportable - " \
                       "use gnulib module lchmod for portability"), \
      lchmod (f, m))
+#endif
+
+
+#if @GNULIB_LSTAT@
+# if ! @HAVE_LSTAT@
+/* mingw does not support symlinks, therefore it does not have lstat.  But
+   without links, stat does just fine.  */
+#  define lstat stat
+# elif @REPLACE_LSTAT@
+#  undef lstat
+#  define lstat rpl_lstat
+extern int rpl_lstat (const char *name, struct stat *buf);
+# endif
+#elif defined GNULIB_POSIXCHECK
+# undef lstat
+# define lstat(p,b)							\
+  (GL_LINK_WARNING ("lstat is unportable - "				\
+		    "use gnulib module lstat for portability"),		\
+   lstat (p, b))
+#endif
+
+
+#if @REPLACE_MKDIR@
+# undef mkdir
+# define mkdir rpl_mkdir
+extern int mkdir (char const *name, mode_t mode);
+#else
+/* mingw's _mkdir() function has 1 argument, but we pass 2 arguments.
+   Additionally, it declares _mkdir (and depending on compile flags, an
+   alias mkdir), only in the nonstandard <io.h>, which is included above.  */
+# if (defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__
+
+static inline int
+rpl_mkdir (char const *name, mode_t mode)
+{
+  return _mkdir (name);
+}
+
+#  define mkdir rpl_mkdir
+# endif
+#endif
+
+
+#if @GNULIB_MKDIRAT@
+# if !@HAVE_MKDIRAT@
+extern int mkdirat (int fd, char const *file, mode_t mode);
+# endif
+#elif defined GNULIB_POSIXCHECK
+# undef mkdirat
+# define mkdirat(d,n,m)                         \
+    (GL_LINK_WARNING ("mkdirat is not portable - " \
+                      "use gnulib module openat for portability"), \
+     mkdirat (d, n, m))
+#endif
+
+
+#if @GNULIB_MKFIFOAT@
+# if !@HAVE_MKFIFOAT@
+int mkfifoat (int fd, char const *file, mode_t mode);
+# endif
+#elif defined GNULIB_POSIXCHECK
+# undef mkfifoat
+# define mkfifoat(d,n,m)				     \
+    (GL_LINK_WARNING ("mkfifoat is not portable - " \
+                      "use gnulib module mkfifoat for portability"), \
+     mkfifoat (d, n, m))
+#endif
+
+
+#if @GNULIB_MKNODAT@
+# if !@HAVE_MKNODAT@
+int mknodat (int fd, char const *file, mode_t mode, dev_t dev);
+# endif
+#elif defined GNULIB_POSIXCHECK
+# undef mknodat
+# define mknodat(f,n,m,d)			     \
+    (GL_LINK_WARNING ("mknodat is not portable - " \
+                      "use gnulib module mkfifoat for portability"), \
+     mknodat (f, n, m, d))
+#endif
+
+
+#if @GNULIB_STAT@
+# if @REPLACE_STAT@
+/* We can't use the object-like #define stat rpl_stat, because of
+   struct stat.  This means that rpl_stat will not be used if the user
+   does (stat)(a,b).  Oh well.  */
+#  undef stat
+#  ifdef _LARGE_FILES
+    /* With _LARGE_FILES defined, AIX (only) defines stat to stat64,
+       so we have to replace stat64() instead of stat(). */
+#   define stat stat64
+#   undef stat64
+#   define stat64(name, st) rpl_stat (name, st)
+#  else /* !_LARGE_FILES */
+#   define stat(name, st) rpl_stat (name, st)
+#  endif /* !_LARGE_FILES */
+extern int stat (const char *name, struct stat *buf);
+# endif
+#elif defined GNULIB_POSIXCHECK
+# undef stat
+# define stat(p,b)							\
+  (GL_LINK_WARNING ("stat is unportable - "				\
+		    "use gnulib module stat for portability"),		\
+   stat (p, b))
+#endif
+
+
+#if @GNULIB_UTIMENSAT@
+# if @REPLACE_UTIMENSAT@
+#  undef utimensat
+#  define utimensat rpl_utimensat
+# endif
+# if !@HAVE_UTIMENSAT@ || @REPLACE_UTIMENSAT@
+   extern int utimensat (int fd, char const *name,
+                         struct timespec const times[2], int flag);
+# endif
+#elif defined GNULIB_POSIXCHECK
+# undef utimensat
+# define utimensat(d,n,t,f)                          \
+    (GL_LINK_WARNING ("utimensat is not portable - " \
+                      "use gnulib module utimensat for portability"), \
+     utimensat (d, n, t, f))
 #endif
 
 
