@@ -390,9 +390,9 @@ AC_TYPE_SIZE_T
 AC_TYPE_SIGNAL
 AC_FUNC_VFORK
 
-# Check for socketpair(2) as fast replacment for pipe(2).
+# Check for socketpair(2) as fast replacement for pipe(2).
 AC_ARG_ENABLE(socketpair-pipe,
-[AS_HELP_STRING([--enable-socketpair-pipe], [Use socketpair(2) as fast replacment for pipe(2)])],
+[AS_HELP_STRING([--enable-socketpair-pipe], [Use socketpair(2) as fast replacement for pipe(2)])],
   [ if test "$enableval" = "yes"
     then
       MAN_SOCKETPAIR_PIPE
