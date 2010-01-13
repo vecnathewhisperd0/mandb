@@ -390,6 +390,16 @@ AC_TYPE_SIZE_T
 AC_TYPE_SIGNAL
 AC_FUNC_VFORK
 
+# Check for socketpair(2) as fast replacment for pipe(2).
+AC_ARG_ENABLE(socketpair-pipe,
+[AS_HELP_STRING([--enable-socketpair-pipe], [Use socketpair(2) as fast replacment for pipe(2)])],
+  [ if test "$enableval" = "yes"
+    then
+      AM_SOCKETPAIR_PIPE
+      AM_SOCKETPAIR_MODE
+    fi
+  ])
+
 # Find a suitable database interface header and library.
 #
 # Check for GNU dbm routines.
