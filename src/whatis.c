@@ -665,7 +665,7 @@ static int search (char *page)
 	chkr_garbage_detector ();
 
 	if (!found)
-		printf (_("%s: nothing appropriate.\n"), page);
+		fprintf (stderr, _("%s: nothing appropriate.\n"), page);
 
 	free (lowpage);
 
