@@ -141,7 +141,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 				ret = -1;
 				break;
 			} else if (n == (size_t) -1)
-				handle_iconv_errors = 1;
+				handle_iconv_errors = errno;
 		}
 
 		/* If the target encoding is UTF-8 (the common case), then
@@ -150,7 +150,13 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		 * stage are due to characters that are not representable in
 		 * the target encoding.
 		 */
-		if (to_utf8) {
+		if (handle_iconv_errors)
+			/* Fall back to error handling below.  If we have
+			 * anything to write out, we'll do it next time
+			 * round the loop.
+			 */
+			outptr = output;
+		else if (to_utf8) {
 			memcpy (output, utf8, utf8left);
 			outptr = output + utf8left;
 			outleft = utf8left;
@@ -164,7 +170,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 				&outptr, &outleft);
 			outleft = buf_size - outleft;
 			if (n2 == (size_t) -1)
-				handle_iconv_errors = 1;
+				handle_iconv_errors = errno;
 
 			if (n2 == (size_t) -1 &&
 			    errno == EILSEQ && ignore_errors)
@@ -206,6 +212,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 				errno = errno_save;
 			}
 		} else if (handle_iconv_errors) {
+			errno = handle_iconv_errors;
 			if (errno == EILSEQ && !ignore_errors) {
 				if (!quiet)
 					error (0, errno, "iconv");
