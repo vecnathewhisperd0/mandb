@@ -1,5 +1,5 @@
 # stdlib_h.m4 serial 21
-dnl Copyright (C) 2007-2009 Free Software Foundation, Inc.
+dnl Copyright (C) 2007-2010 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -80,6 +80,7 @@ AC_DEFUN([gl_STDLIB_H_DEFAULTS],
   REPLACE_MKSTEMP=0;         AC_SUBST([REPLACE_MKSTEMP])
   REPLACE_PUTENV=0;          AC_SUBST([REPLACE_PUTENV])
   REPLACE_REALPATH=0;        AC_SUBST([REPLACE_REALPATH])
+  REPLACE_SETENV=0;          AC_SUBST([REPLACE_SETENV])
   REPLACE_STRTOD=0;          AC_SUBST([REPLACE_STRTOD])
-  VOID_UNSETENV=0;           AC_SUBST([VOID_UNSETENV])
+  REPLACE_UNSETENV=0;        AC_SUBST([REPLACE_UNSETENV])
 ])

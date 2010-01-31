@@ -1,5 +1,5 @@
-# dirent_h.m4 serial 6
-dnl Copyright (C) 2008-2009 Free Software Foundation, Inc.
+# dirent_h.m4 serial 8
+dnl Copyright (C) 2008-2010 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -12,14 +12,15 @@ AC_DEFUN([gl_DIRENT_H],
   dnl once only, before all statements that occur in other macros.
   AC_REQUIRE([gl_DIRENT_H_DEFAULTS])
 
+  dnl <dirent.h> is always overridden, because of GNULIB_POSIXCHECK.
   gl_CHECK_NEXT_HEADERS([dirent.h])
 ])
 
 dnl Unconditionally enables the replacement of <dirent.h>.
 AC_DEFUN([gl_REPLACE_DIRENT_H],
 [
-  AC_REQUIRE([gl_DIRENT_H_DEFAULTS])
-  DIRENT_H='dirent.h'
+  dnl This is a no-op, because <dirent.h> is always overridden.
+  :
 ])
 
 AC_DEFUN([gl_DIRENT_MODULE_INDICATOR],
@@ -44,5 +45,4 @@ AC_DEFUN([gl_DIRENT_H_DEFAULTS],
   REPLACE_CLOSEDIR=0;   AC_SUBST([REPLACE_CLOSEDIR])
   REPLACE_FDOPENDIR=0;  AC_SUBST([REPLACE_FDOPENDIR])
   REPLACE_OPENDIR=0;    AC_SUBST([REPLACE_OPENDIR])
-  DIRENT_H='';          AC_SUBST([DIRENT_H])
 ])

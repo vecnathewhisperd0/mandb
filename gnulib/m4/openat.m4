@@ -1,7 +1,7 @@
-# serial 25
+# serial 27
 # See if we need to use our replacement for Solaris' openat et al functions.
 
-dnl Copyright (C) 2004-2009 Free Software Foundation, Inc.
+dnl Copyright (C) 2004-2010 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -74,7 +74,7 @@ AC_DEFUN([gl_FUNC_FCHOWNAT_DEREF_BUG],
      ln -s conftest.no-such $gl_dangle
      AC_RUN_IFELSE(
        [AC_LANG_SOURCE(
-	  [[
+          [[
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -84,10 +84,10 @@ int
 main ()
 {
   return (fchownat (AT_FDCWD, "$gl_dangle", -1, getgid (),
-		    AT_SYMLINK_NOFOLLOW) != 0
-	  && errno == ENOENT);
+                    AT_SYMLINK_NOFOLLOW) != 0
+          && errno == ENOENT);
 }
-	  ]])],
+          ]])],
     [gl_cv_func_fchownat_nofollow_works=yes],
     [gl_cv_func_fchownat_nofollow_works=no],
     [gl_cv_func_fchownat_nofollow_works=no],
@@ -102,9 +102,15 @@ main ()
 # Also use the replacement function if fchownat is simply not available.
 AC_DEFUN([gl_FUNC_FCHOWNAT],
 [
+  AC_REQUIRE([gl_FUNC_CHOWN])
   AC_CHECK_FUNC([fchownat],
-    [gl_FUNC_FCHOWNAT_DEREF_BUG([REPLACE_FCHOWNAT=1])],
+    [gl_FUNC_FCHOWNAT_DEREF_BUG([REPLACE_FCHOWNAT=1
+      AC_DEFINE([FCHOWNAT_NOFOLLOW_BUG], [1], [Define to 1 if your
+      platform has fchownat, but it cannot perform lchown tasks.])])],
     [HAVE_FCHOWNAT=0])
+  if test $REPLACE_CHOWN = 1; then
+    REPLACE_FCHOWNAT=1
+  fi
   if test $HAVE_FCHOWNAT = 0 || test $REPLACE_FCHOWNAT = 1; then
     AC_LIBOBJ([fchownat])
   fi
@@ -112,6 +118,7 @@ AC_DEFUN([gl_FUNC_FCHOWNAT],
 
 AC_DEFUN([gl_PREREQ_OPENAT],
 [
+  AC_REQUIRE([AC_C_INLINE])
   AC_REQUIRE([gl_PROMOTED_TYPE_MODE_T])
   :
 ])

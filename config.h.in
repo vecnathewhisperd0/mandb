@@ -25,11 +25,18 @@
 /* Define if you have, and want to use, the Berkeley database library. */
 #undef BTREE
 
+/* Define to 1 if chown fails to change ctime when at least one argument was
+   not -1. */
+#undef CHOWN_CHANGE_TIME_BUG
+
 /* Define if chown is not POSIX compliant regarding IDs of -1. */
 #undef CHOWN_FAILS_TO_HONOR_ID_OF_NEGATIVE_ONE
 
 /* Define if chown modifies symlinks. */
 #undef CHOWN_MODIFIES_SYMLINK
+
+/* Define to 1 if chown mishandles trailing slash. */
+#undef CHOWN_TRAILING_SLASH_BUG
 
 /* Define if you have compressors and want to support compressed cat files. */
 #undef COMP_CAT
@@ -68,6 +75,13 @@
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #undef ENABLE_NLS
+
+/* Define to 1 if your platform has fchownat, but it cannot perform lchown
+   tasks. */
+#undef FCHOWNAT_NOFOLLOW_BUG
+
+/* Define this to 1 if F_DUPFD behavior does not match POSIX */
+#undef FCNTL_DUPFD_BUGGY
 
 /* Define on systems for which file names may have a so-called `drive letter'
    prefix, define this to compute the length of that prefix, including the
@@ -121,9 +135,6 @@
 /* Define to 1 to add extern declaration of program_invocation_short_name to
    argp.h */
 #undef GNULIB_PROGRAM_INVOCATION_SHORT_NAME
-
-/* Define to 1 when using the gnulib module unistd-safer. */
-#undef GNULIB_UNISTD_SAFER
 
 /* Define if nroff is GNU nroff. */
 #undef GNU_NROFF
@@ -268,6 +279,10 @@
    don't. */
 #undef HAVE_DECL_MEMRCHR
 
+/* Define to 1 if you have the declaration of `optreset', and to 0 if you
+   don't. */
+#undef HAVE_DECL_OPTRESET
+
 /* Define if program_invocation_name is declared */
 #undef HAVE_DECL_PROGRAM_INVOCATION_NAME
 
@@ -362,6 +377,12 @@
 
 /* Define to 1 if you have the `fchmodat' function. */
 #undef HAVE_FCHMODAT
+
+/* Define to 1 if you have the `fchown' function. */
+#undef HAVE_FCHOWN
+
+/* Define to 1 if you have the `fcntl' function. */
+#undef HAVE_FCNTL
 
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
@@ -686,6 +707,9 @@
 
 /* Define to 1 if the system has the type `sigset_t'. */
 #undef HAVE_SIGSET_T
+
+/* Define to 1 if you have the `sleep' function. */
+#undef HAVE_SLEEP
 
 /* Define to 1 if you have the `snprintf' function. */
 #undef HAVE_SNPRINTF
@@ -1038,9 +1062,6 @@
    such as on Solaris 9 or cygwin 1.5. */
 #undef RENAME_TRAILING_SLASH_SOURCE_BUG
 
-/* Define to 1 if dup2 returns 0 instead of the target fd. */
-#undef REPLACE_DUP2
-
 /* Define to 1 if gnulib's fchdir() replacement is used. */
 #undef REPLACE_FCHDIR
 
@@ -1135,6 +1156,9 @@
 
 /* Version number of package */
 #undef VERSION
+
+/* Define to 1 if unsetenv returns void instead of int. */
+#undef VOID_UNSETENV
 
 /* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
    'wchar_t'. */
@@ -1329,14 +1353,17 @@
    <inttypes.h> don't define. */
 #undef uintmax_t
 
-/* Define as a marker that can be attached to function parameter declarations
-   for parameters that are not used.  This helps to reduce warnings, such as
-   from GCC -Wunused-parameter.  */
+/* Define as a marker that can be attached to declarations that might not
+    be used.  This helps to reduce warnings, such as from
+    GCC -Wunused-parameter.  */
 #if __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 7)
-# define _UNUSED_PARAMETER_ __attribute__ ((__unused__))
+# define _GL_UNUSED __attribute__ ((__unused__))
 #else
-# define _UNUSED_PARAMETER_
+# define _GL_UNUSED
 #endif
+/* The name _UNUSED_PARAMETER_ is an earlier spelling, although the name
+   is a misnomer outside of parameter lists.  */
+#define _UNUSED_PARAMETER_ _GL_UNUSED
 
 
 /* Define as a macro for copying va_list variables. */
