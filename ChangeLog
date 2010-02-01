@@ -1,3 +1,9 @@
+Mon Feb  1 12:18:36 PST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_wait): Don't bother printing error
+	  messages for SIGINT and SIGQUIT, since these correspond to
+	  explicit user actions (Debian bug #568000).
+
 Sun Jan 31 03:44:59 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/manconv.c (try_iconv): Don't lose iconv errors from converting
