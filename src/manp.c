@@ -1284,14 +1284,23 @@ char *get_catpath (const char *name, int cattype)
 		    ((cattype & USER_CAT)   && list->flag == MANDB_MAP_USER)) {
 			size_t manlen = strlen (list->key);
 			if (STRNEQ (name, list->key, manlen)) {
-				const char *suffix = name + manlen;
+				const char *suffix;
+				char *infix;
 				char *catpath = xstrdup (list->cont);
 
-				if (*suffix == '/') {
-					++suffix;
-					catpath = appendstr (catpath, "/",
-							     NULL);
+				/* find second-last slash */
+				suffix = strrchr (name, '/');
+				if (suffix) {
+					while (--suffix > name + manlen)
+						if (*suffix == '/')
+							break;
 				}
+				if (*suffix == '/')
+					++suffix;
+				infix = xstrndup (name + manlen,
+						  suffix - (name + manlen));
+				catpath = appendstr (catpath, infix, NULL);
+				free (infix);
 				if (STRNEQ (suffix, "man", 3)) {
 					suffix += 3;
 					catpath = appendstr (catpath, "cat",
