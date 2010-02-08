@@ -2108,7 +2108,13 @@ static int format_display_and_save (pipeline *decomp,
 {
 	pipeline *sav_p = open_cat_stream (cat_file);
 	int instat;
-	RETSIGTYPE (*old_handler)(int) = signal (SIGPIPE, SIG_IGN);
+	struct sigaction sa, osa_sigpipe;
+
+	memset (&sa, 0, sizeof sa);
+	sa.sa_handler = SIG_IGN;
+	sigemptyset (&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction (SIGPIPE, &sa, &osa_sigpipe);
 
 	if (global_manpath)
 		drop_effective_privs ();
@@ -2132,7 +2138,7 @@ static int format_display_and_save (pipeline *decomp,
 	if (sav_p)
 		close_cat_stream (sav_p, cat_file, instat);
 	pipeline_wait (disp_cmd);
-	signal (SIGPIPE, old_handler);
+	sigaction (SIGPIPE, &osa_sigpipe, NULL);
 	return instat;
 }
 #endif /* MAN_CATS */
