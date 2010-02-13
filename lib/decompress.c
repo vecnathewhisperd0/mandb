@@ -77,7 +77,7 @@ pipeline *decompress_open (const char *filename)
 	char *ext;
 	struct compression *comp;
 
-	if (stat (filename, &st) < 0 && !S_ISDIR (st.st_mode))
+	if (stat (filename, &st) < 0 || S_ISDIR (st.st_mode))
 		return NULL;
 
 #ifdef HAVE_LIBZ
