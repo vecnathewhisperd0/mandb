@@ -48,6 +48,12 @@ Major changes since man-db 2.5.6:
 	o Add support for emulating pipe() with socketpair(), which is
 	  faster on some systems; thanks to Werner Fink of SUSE.
 
+	o Cat pages are now always saved in UTF-8, and converted to the
+	  proper encoding at display time, which means that cat pages can
+	  now be saved regardless of locale. Note that a consequence of this
+	  is that cat pages now include formatting information (e.g.
+	  overstriking) and need to be run through col(1) before display.
+
 man-db 2.5.6 (26 August 2009)
 =============================
 

@@ -79,64 +79,63 @@
 struct directory_entry {
 	const char *lang_dir;
 	const char *source_encoding;
-	const char *standard_output_encoding;
 };
 
 static struct directory_entry directory_table[] = {
-	{ "C",		"ISO-8859-1",	"ANSI_X3.4-1968"	}, /* English */
-	{ "POSIX",	"ISO-8859-1",	"ANSI_X3.4-1968"	}, /* English */
-	{ "da",		"ISO-8859-1",	"ISO-8859-1"		}, /* Danish */
-	{ "de",		"ISO-8859-1",	"ISO-8859-1"		}, /* German */
-	{ "en",		"ISO-8859-1",	"ISO-8859-1"		}, /* English */
-	{ "es",		"ISO-8859-1",	"ISO-8859-1"		}, /* Spanish */
-	{ "et",		"ISO-8859-1",	"ISO-8859-1"		}, /* Estonian */
-	{ "fi",		"ISO-8859-1",	"ISO-8859-1"		}, /* Finnish */
-	{ "fr",		"ISO-8859-1",	"ISO-8859-1"		}, /* French */
-	{ "ga",		"ISO-8859-1",	"ISO-8859-1"		}, /* Irish */
-	{ "gl",		"ISO-8859-1",	"ISO-8859-1"		}, /* Galician */
-	{ "id",		"ISO-8859-1",	"ISO-8859-1"		}, /* Indonesian */
-	{ "is",		"ISO-8859-1",	"ISO-8859-1"		}, /* Icelandic */
-	{ "it",		"ISO-8859-1",	"ISO-8859-1"		}, /* Italian */
-	{ "nb",		"ISO-8859-1",	"ISO-8859-1"		}, /* Norwegian Bokmål */
-	{ "nl",		"ISO-8859-1",	"ISO-8859-1"		}, /* Dutch */
-	{ "nn",		"ISO-8859-1",	"ISO-8859-1"		}, /* Norwegian Nynorsk */
-	{ "no",		"ISO-8859-1",	"ISO-8859-1"		}, /* Norwegian */
-	{ "pt",		"ISO-8859-1",	"ISO-8859-1"		}, /* Portuguese */
-	{ "sv",		"ISO-8859-1",	"ISO-8859-1"		}, /* Swedish */
+	{ "C",		"ISO-8859-1"	}, /* English */
+	{ "POSIX",	"ISO-8859-1"	}, /* English */
+	{ "da",		"ISO-8859-1"	}, /* Danish */
+	{ "de",		"ISO-8859-1"	}, /* German */
+	{ "en",		"ISO-8859-1"	}, /* English */
+	{ "es",		"ISO-8859-1"	}, /* Spanish */
+	{ "et",		"ISO-8859-1"	}, /* Estonian */
+	{ "fi",		"ISO-8859-1"	}, /* Finnish */
+	{ "fr",		"ISO-8859-1"	}, /* French */
+	{ "ga",		"ISO-8859-1"	}, /* Irish */
+	{ "gl",		"ISO-8859-1"	}, /* Galician */
+	{ "id",		"ISO-8859-1"	}, /* Indonesian */
+	{ "is",		"ISO-8859-1"	}, /* Icelandic */
+	{ "it",		"ISO-8859-1"	}, /* Italian */
+	{ "nb",		"ISO-8859-1"	}, /* Norwegian Bokmål */
+	{ "nl",		"ISO-8859-1"	}, /* Dutch */
+	{ "nn",		"ISO-8859-1"	}, /* Norwegian Nynorsk */
+	{ "no",		"ISO-8859-1"	}, /* Norwegian */
+	{ "pt",		"ISO-8859-1"	}, /* Portuguese */
+	{ "sv",		"ISO-8859-1"	}, /* Swedish */
 
 #ifdef MULTIBYTE_GROFF
 	/* These languages require a patched version of groff with the
 	 * ascii8 and nippon devices.
 	 */
-	{ "be",		"CP1251",	"CP1251"		}, /* Belarusian */
-	{ "bg",		"CP1251",	"CP1251"		}, /* Bulgarian */
-	{ "cs",		"ISO-8859-2",	"ISO-8859-2"		}, /* Czech */
-	{ "el",		"ISO-8859-7",	"ISO-8859-7"		}, /* Greek */
-	{ "hr",		"ISO-8859-2",	"ISO-8859-2"		}, /* Croatian */
-	{ "hu",		"ISO-8859-2",	"ISO-8859-2"		}, /* Hungarian */
-	{ "ja",		"EUC-JP",	"EUC-JP"		}, /* Japanese */
-	{ "ko",		"EUC-KR",	"EUC-KR"		}, /* Korean */
-	{ "lt",		"ISO-8859-13",	"ISO-8859-13"		}, /* Lithuanian */
-	{ "lv",		"ISO-8859-13",	"ISO-8859-13"		}, /* Latvian */
-	{ "mk",		"ISO-8859-5",	"ISO-8859-5"		}, /* Macedonian */
-	{ "pl",		"ISO-8859-2",	"ISO-8859-2"		}, /* Polish */
-	{ "ro",		"ISO-8859-2",	"ISO-8859-2"		}, /* Romanian */
-	{ "ru",		"KOI8-R",	"KOI8-R"		}, /* Russian */
-	{ "sk",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovak */
-	{ "sl",		"ISO-8859-2",	"ISO-8859-2"		}, /* Slovenian */
+	{ "be",		"CP1251"	}, /* Belarusian */
+	{ "bg",		"CP1251"	}, /* Bulgarian */
+	{ "cs",		"ISO-8859-2"	}, /* Czech */
+	{ "el",		"ISO-8859-7"	}, /* Greek */
+	{ "hr",		"ISO-8859-2"	}, /* Croatian */
+	{ "hu",		"ISO-8859-2"	}, /* Hungarian */
+	{ "ja",		"EUC-JP"	}, /* Japanese */
+	{ "ko",		"EUC-KR"	}, /* Korean */
+	{ "lt",		"ISO-8859-13"	}, /* Lithuanian */
+	{ "lv",		"ISO-8859-13"	}, /* Latvian */
+	{ "mk",		"ISO-8859-5"	}, /* Macedonian */
+	{ "pl",		"ISO-8859-2"	}, /* Polish */
+	{ "ro",		"ISO-8859-2"	}, /* Romanian */
+	{ "ru",		"KOI8-R"	}, /* Russian */
+	{ "sk",		"ISO-8859-2"	}, /* Slovak */
+	{ "sl",		"ISO-8859-2"	}, /* Slovenian */
 	/* sr@latin must precede sr, due to top-down left-substring matching later */
-	{ "sr@latin",   "ISO-8859-2",   "ISO-8859-2"            }, /* Serbian Latin */
-	{ "sr",		"ISO-8859-5",	"ISO-8859-5"		}, /* Serbian */
-	{ "tr",		"ISO-8859-9",	"ISO-8859-9"		}, /* Turkish */
-	{ "uk",		"KOI8-U",	"KOI8-U"		}, /* Ukrainian */
-	{ "vi",		"TCVN5712-1",	"TCVN5712-1"		}, /* Vietnamese */
-	{ "zh_CN",	"GBK",		"GBK"			}, /* Simplified Chinese */
-	{ "zh_SG",	"GBK",		"GBK"			}, /* Simplified Chinese, Singapore */
-	{ "zh_HK",	"BIG5HKSCS",	"BIG5HKSCS"		}, /* Traditional Chinese, Hong Kong */
-	{ "zh_TW",	"BIG5",		"BIG5"			}, /* Traditional Chinese */
+	{ "sr@latin",	"ISO-8859-2"	}, /* Serbian Latin */
+	{ "sr",		"ISO-8859-5"	}, /* Serbian */
+	{ "tr",		"ISO-8859-9"	}, /* Turkish */
+	{ "uk",		"KOI8-U"	}, /* Ukrainian */
+	{ "vi",		"TCVN5712-1"	}, /* Vietnamese */
+	{ "zh_CN",	"GBK"		}, /* Simplified Chinese */
+	{ "zh_SG",	"GBK"		}, /* Simplified Chinese, Singapore */
+	{ "zh_HK",	"BIG5HKSCS"	}, /* Traditional Chinese, Hong Kong */
+	{ "zh_TW",	"BIG5"		}, /* Traditional Chinese */
 #endif /* MULTIBYTE_GROFF */
 
-	{ NULL,		NULL,		"NULL"			}
+	{ NULL,		NULL		}
 };
 
 static const char *fallback_source_encoding = "ISO-8859-1";
@@ -513,45 +512,6 @@ const char *get_source_encoding (const char *lang)
 			return entry->source_encoding;
 
 	return fallback_source_encoding;
-}
-
-/* Return the standard output encoding for the source man page, based on the
- * directory in which it was found. This should only be used to determine
- * whether a cat page can be saved.
- *
- * The caller should free the returned string when it is finished with it.
- */
-char *get_standard_output_encoding (const char *lang)
-{
-	const struct directory_entry *entry;
-	const char *dot;
-
-	if (!lang || !*lang) {
-		/* Guess based on the locale. */
-		lang = setlocale (LC_MESSAGES, NULL);
-		if (!lang)
-			return NULL;
-	}
-
-	dot = strchr (lang, '.');
-	if (dot) {
-		/* The cat directory will have a corresponding name to the
-		 * man directory including an explicit character set, so the
-		 * pages it contains should have that encoding.
-		 */
-		char *dir_encoding =
-			xstrndup (dot + 1, strcspn (dot + 1, ",@"));
-		char *canonical_dir_encoding =
-			xstrdup (get_canonical_charset_name (dir_encoding));
-		free (dir_encoding);
-		return canonical_dir_encoding;
-	}
-
-	for (entry = directory_table; entry->lang_dir; ++entry)
-		if (STRNEQ (entry->lang_dir, lang, strlen (entry->lang_dir)))
-			return xstrdup (entry->standard_output_encoding);
-
-	return NULL;
 }
 
 const char *get_canonical_charset_name (const char *charset)

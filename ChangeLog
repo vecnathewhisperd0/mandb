@@ -1,3 +1,33 @@
+Sun Feb 14 00:19:47 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Always save cat pages in UTF-8 (Debian bug #446741).
+
+	* src/encodings.c (struct directory_entry): Remove
+	  standard_output_encoding member.
+	  (directory_table): Likewise.
+	  (get_standard_output_encoding): Remove.
+	* src/encodings.h (get_standard_output_encoding): Remove prototype.
+	* src/man.c (my_locale_charset): New function, with code moved from
+	  make_roff_command.
+	  (make_roff_command): Return pipeline output encoding in a new
+	  output parameter.  Remove enforcement that cat pages could only be
+	  saved for the manual hierarchy's default character set.  Move
+	  post-cat-page pipeline elements to ...
+	  (add_output_iconv, make_display_command): ... here.
+	  (make_display_command): Remove code for handling a named input
+	  file, which has been unused for some time.  New encoding argument.
+	  (open_cat_stream): New encoding argument.  Convert from it to
+	  UTF-8 while saving the cat page.
+	  (format_display_and_save): New encoding argument, passed to
+	  open_cat_stream.
+	  (display_catman): New encoding argument.  Convert from it to UTF-8
+	  while saving the cat page.
+	  (display): Get formatted encoding from make_roff_command and pass
+	  it to display_catman, make_display_command, and
+	  format_display_and_save.  Assume UTF-8 when displaying an existing
+	  cat page.
+	* NEWS: Document this.
+
 Sat Feb 13 14:25:42 GMT 2010  Vincent Lefèvre  <vincent@vinc17.net>
 
 	* lib/decompress.c (decompress_open): Fix sense of directory check

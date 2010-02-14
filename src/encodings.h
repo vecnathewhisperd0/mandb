@@ -23,7 +23,6 @@
 const char *get_groff_preconv (void);
 char *get_page_encoding (const char *lang);
 const char *get_source_encoding (const char *lang);
-char *get_standard_output_encoding (const char *lang);
 const char *get_canonical_charset_name (const char *charset);
 const char *get_locale_charset (void);
 char *find_charset_locale (const char *charset);

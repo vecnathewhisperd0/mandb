@@ -1388,9 +1388,18 @@ static const char *get_preprocessors (pipeline *decomp, const char *dbfilters)
 	return pp_string;
 }
 
+static const char *my_locale_charset (void)
+{
+	if (want_encoding && !is_roff_device (want_encoding))
+		return want_encoding;
+	else
+		return get_locale_charset ();
+}
+
 /* Return pipeline to format file to stdout. */
 static pipeline *make_roff_command (const char *dir, const char *file,
-				    pipeline *decomp, const char *dbfilters)
+				    pipeline *decomp, const char *dbfilters,
+				    char **result_encoding)
 {
 	const char *pp_string;
 	const char *roff_opt;
@@ -1400,6 +1409,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	char *page_encoding = NULL;
 	const char *output_encoding = NULL;
 	const char *locale_charset = NULL;
+
+	*result_encoding = xstrdup ("UTF-8"); /* optimistic default */
 
 #ifndef ALT_EXT_FORMAT
 	dir = dir; /* not used unless looking for formatters in catdir */
@@ -1453,7 +1464,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	if (!fmt_prog) {
 		/* we don't have an external formatter script */
 		const char *source_encoding, *roff_encoding;
-		char *cat_charset = NULL;
 		const char *groff_preconv;
 
 		if (!recode) {
@@ -1478,24 +1488,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		if (!troff) {
 #define STRC(s, otherwise) ((s) ? (s) : (otherwise))
 
-			cat_charset = get_standard_output_encoding (lang);
-			if (want_encoding && !is_roff_device (want_encoding))
-				locale_charset = want_encoding;
-			else
-				locale_charset = get_locale_charset ();
-			debug ("cat_charset = %s\n",
-			       STRC (cat_charset, "NULL"));
+			locale_charset = my_locale_charset ();
 			debug ("locale_charset = %s\n",
 			       STRC (locale_charset, "NULL"));
-
-			/* Only save cat pages for this manual hierarchy's
-			 * default character set. If we don't know the cat
-			 * charset, anything goes.
-			 */
-			if (cat_charset &&
-			    (!locale_charset ||
-			     !STREQ (cat_charset, locale_charset)))
-				save_cat = 0;
 
 			/* Pick the default device for this locale if there
 			 * wasn't one selected explicitly.
@@ -1538,6 +1533,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			if (!output_encoding)
 				output_encoding = source_encoding;
 			debug ("output_encoding = %s\n", output_encoding);
+			free (*result_encoding);
+			*result_encoding = xstrdup (output_encoding);
 
 			if (!getenv ("LESSCHARSET")) {
 				const char *less_charset =
@@ -1557,8 +1554,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				}
 			}
 		}
-
-		free (cat_charset);
 	}
 
 	if (recode)
@@ -1687,48 +1682,13 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				break;
 		} while (*pp_string++);
 
-		if ((!want_encoding || !is_roff_device (want_encoding)) &&
-		    output_encoding && locale_charset &&
-		    !STREQ (output_encoding, locale_charset)) {
-			char *locale_charset_translit =
-				xasprintf ("%s//TRANSLIT", locale_charset);
-			pipeline_command_args (p, "iconv", "-c",
-					       "-f", output_encoding,
-					       "-t", locale_charset_translit,
-					       NULL);
-			free (locale_charset_translit);
-		}
-
 		if (!troff && *COL) {
-			/* get rid of special characters if not writing to a
-			 * terminal
-			 */
 			const char *man_keep_formatting =
 				getenv ("MAN_KEEP_FORMATTING");
-			command *colcmd = NULL;
 			if ((!man_keep_formatting || !*man_keep_formatting) &&
-			    !isatty (STDOUT_FILENO)) {
-				save_cat = 0;
+			    !isatty (STDOUT_FILENO))
+				/* we'll run col later, but prepare for it */
 				setenv ("GROFF_NO_SGR", "1", 1);
-				colcmd = command_new_args (
-					COL, "-b", "-p", "-x", NULL);
-			}
-#ifndef GNU_NROFF
-			/* tbl needs col */
-			else if (using_tbl && !troff && *COL)
-				colcmd = command_new (COL);
-#endif /* GNU_NROFF */
-
-			if (colcmd) {
-				char *col_locale =
-					find_charset_locale (locale_charset);
-				if (col_locale) {
-					command_setenv (colcmd, "LC_CTYPE",
-							col_locale);
-					free (col_locale);
-				}
-				pipeline_command (p, colcmd);
-			}
 		}
 	} else {
 		/* use external formatter script, it takes arguments
@@ -1846,57 +1806,79 @@ static void setenv_less (const char *title)
 	free (less_opts);
 }
 
-/* Return pipeline to display file. NULL means stdin.
+void add_output_iconv (pipeline *p, const char *source, const char *target)
+{
+	debug ("add_output_iconv: source %s, target %s\n", source, target);
+	if (source && target && !STREQ (source, target)) {
+		char *target_translit = xasprintf ("%s//TRANSLIT", target);
+		pipeline_command_args (p, "iconv", "-c",
+				       "-f", source, "-t", target_translit,
+				       NULL);
+		free (target_translit);
+	}
+}
+
+/* Return pipeline to display file provided on stdin.
  *
  * TODO: htmlout case is pretty weird now. I'd like the intelligence to be
  * somewhere other than format_display.
  */
-static pipeline *make_display_command (const char *file, const char *title)
+static pipeline *make_display_command (const char *encoding, const char *title)
 {
-	pipeline *p;
-	command *cmd;
+	pipeline *p = pipeline_new ();
+	const char *locale_charset = NULL;
 
 	setenv_less (title);
 
-	if (file) {
-		if (ascii) {
-			p = pipeline_new ();
-			cmd = command_new_argstr (get_def_user ("cat", CAT));
-			command_arg (cmd, file);
-			pipeline_command (p, cmd);
-			pipeline_command_argstr
-				(p, get_def_user ("tr", TR TR_SET1 TR_SET2));
-			pipeline_command_argstr (p, pager);
-		}
-#ifdef TROFF_IS_GROFF
-		else if (htmlout)
-			/* format_display deals with html_pager */
-			p = NULL;
-#endif
-		else {
-			p = pipeline_new ();
-			cmd = command_new_argstr (pager);
-			command_arg (cmd, file);
-			pipeline_command (p, cmd);
-		}
-	} else {
-		if (ascii) {
-			p = pipeline_new ();
-			pipeline_command_argstr
-				(p, get_def_user ("tr", TR TR_SET1 TR_SET2));
-			pipeline_command_argstr (p, pager);
-		}
-#ifdef TROFF_IS_GROFF
-		else if (htmlout)
-			/* format_display deals with html_pager */
-			p = NULL;
-#endif
-		else {
-			p = pipeline_new ();
-			pipeline_command_argstr (p, pager);
+	locale_charset = my_locale_charset ();
+
+	if (!troff && (!want_encoding || !is_roff_device (want_encoding)))
+		add_output_iconv (p, encoding, locale_charset);
+
+	if (!troff && *COL) {
+		/* get rid of special characters if not writing to a
+		 * terminal
+		 */
+		const char *man_keep_formatting =
+			getenv ("MAN_KEEP_FORMATTING");
+		command *colcmd = NULL;
+		if ((!man_keep_formatting || !*man_keep_formatting) &&
+		    !isatty (STDOUT_FILENO))
+			colcmd = command_new_args (
+				COL, "-b", "-p", "-x", NULL);
+#ifndef GNU_NROFF
+		/* tbl needs col */
+		else if (using_tbl && !troff && *COL)
+			colcmd = command_new (COL);
+#endif /* GNU_NROFF */
+
+		if (colcmd) {
+			char *col_locale =
+				find_charset_locale (locale_charset);
+			if (col_locale) {
+				command_setenv (colcmd, "LC_CTYPE",
+						col_locale);
+				free (col_locale);
+			}
+			pipeline_command (p, colcmd);
 		}
 	}
 
+	if (ascii) {
+		pipeline_command_argstr
+			(p, get_def_user ("tr", TR TR_SET1 TR_SET2));
+		pipeline_command_argstr (p, pager);
+	} else
+#ifdef TROFF_IS_GROFF
+	if (!htmlout)
+		/* format_display deals with html_pager */
+#endif
+		pipeline_command_argstr (p, pager);
+
+	if (!p->ncommands) {
+		pipeline_free (p);
+		p = NULL;
+	}
 	return p;
 }
 
@@ -2024,7 +2006,7 @@ static void maybe_discard_stderr (pipeline *p)
 #ifdef MAN_CATS
 
 /* Return pipeline to write formatted manual page to for saving as cat file. */
-static pipeline *open_cat_stream (const char *cat_file)
+static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 {
 	pipeline *cat_p;
 #  ifdef COMP_CAT
@@ -2055,19 +2037,13 @@ static pipeline *open_cat_stream (const char *cat_file)
 	if (!debug_level)
 		push_cleanup ((cleanup_fun) unlink, tmp_cat_file, 1);
 
-#  ifdef COMP_CAT
-	/* write to a pipe that compresses into tmp_cat_file */
-
-	/* fork the compressor */
 	cat_p = pipeline_new ();
+	add_output_iconv (cat_p, encoding, "UTF-8");
+#  ifdef COMP_CAT
+	/* fork the compressor */
 	comp_cmd = command_new_argstr (get_def ("compressor", COMPRESSOR));
 	comp_cmd->nice = 10;
 	pipeline_command (cat_p, comp_cmd);
-#  else
-	/* write directly to tmp_cat_file */
-
-	/* fake up a pipeline structure */
-	cat_p = pipeline_new ();
 #  endif
 	cat_p->want_out = tmp_cat_fd; /* pipeline_start will close it */
 
@@ -2104,9 +2080,9 @@ static int close_cat_stream (pipeline *cat_p, const char *cat_file,
 static int format_display_and_save (pipeline *decomp,
 				    pipeline *format_cmd,
 				    pipeline *disp_cmd,
-				    const char *cat_file)
+				    const char *cat_file, const char *encoding)
 {
-	pipeline *sav_p = open_cat_stream (cat_file);
+	pipeline *sav_p = open_cat_stream (cat_file, encoding);
 	int instat;
 	struct sigaction sa, osa_sigpipe;
 
@@ -2267,7 +2243,7 @@ static void format_display (pipeline *decomp,
 /* "Display" a page in catman mode, which amounts to saving it. */
 /* TODO: merge with format_display_and_save? */
 static void display_catman (const char *cat_file, pipeline *decomp,
-			    pipeline *format_cmd)
+			    pipeline *format_cmd, const char *encoding)
 {
 	char *tmpcat = tmp_cat_filename (cat_file);
 	int status;
@@ -2277,6 +2253,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 				 get_def ("compressor", COMPRESSOR));
 #endif /* COMP_CAT */
 
+	add_output_iconv (format_cmd, encoding, "UTF-8");
 	maybe_discard_stderr (format_cmd);
 	format_cmd->want_out = tmp_cat_fd;
 
@@ -2349,6 +2326,7 @@ static int display (const char *dir, const char *man_file,
 	int found;
 	static int prompt;
 	pipeline *format_cmd;	/* command to format man_file to stdout */
+	char *formatted_encoding = NULL;
 	int display_to_stdout;
 	pipeline *decomp = NULL;
 	int decomp_errno = 0;
@@ -2422,7 +2400,9 @@ static int display (const char *dir, const char *man_file,
 	if (decomp) {
 		pipeline_start (decomp);
 		format_cmd = make_roff_command (dir, man_file, decomp,
-						dbfilters);
+						dbfilters,
+						&formatted_encoding);
+		debug ("formatted_encoding = %s\n", formatted_encoding);
 	} else {
 		format_cmd = NULL;
 		decomp_errno = errno;
@@ -2487,6 +2467,10 @@ static int display (const char *dir, const char *man_file,
 		 * refuse gracefully if the file isn't writeable.
 		 */
 
+		/* In theory we might be able to get away with saving cats
+		 * for want_encoding, but it does change the roff device so
+		 * perhaps that's best avoided.
+		 */
 		if (want_encoding
 #ifdef TROFF_IS_GROFF
 		    || htmlout
@@ -2576,7 +2560,8 @@ static int display (const char *dir, const char *man_file,
 					       cat_file);
 				else
 					display_catman (cat_file, decomp,
-							format_cmd);
+							format_cmd,
+							formatted_encoding);
 			}
 		} else if (format) {
 			/* no cat or out of date */
@@ -2591,7 +2576,8 @@ static int display (const char *dir, const char *man_file,
 					return 0;
 			}
 
-			disp_cmd = make_display_command (NULL, title);
+			disp_cmd = make_display_command (formatted_encoding,
+							 title);
 
 #ifdef MAN_CATS
 			if (save_cat) {
@@ -2600,7 +2586,8 @@ static int display (const char *dir, const char *man_file,
 				format_display_and_save (decomp,
 							 format_cmd,
 							 disp_cmd,
-							 cat_file);
+							 cat_file,
+							 formatted_encoding);
 			} else 
 #endif /* MAN_CATS */
 				/* don't save cat */
@@ -2627,7 +2614,7 @@ static int display (const char *dir, const char *man_file,
 				pipeline_free (decomp);
 				return 0;
 			}
-			disp_cmd = make_display_command (NULL, title);
+			disp_cmd = make_display_command ("UTF-8", title);
 			format_display (decomp_cat, NULL, disp_cmd, man_file);
 			pipeline_free (disp_cmd);
 			pipeline_free (decomp_cat);
