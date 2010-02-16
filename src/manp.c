@@ -1288,12 +1288,18 @@ char *get_catpath (const char *name, int cattype)
 				char *infix;
 				char *catpath = xstrdup (list->cont);
 
-				/* find second-last slash */
+				/* For NLS subdirectories (e.g.
+				 * /usr/share/man/de -> /var/cache/man/de),
+				 * we need to find the second-last slash, as
+				 * long as this strictly follows the key.
+				 */
 				suffix = strrchr (name, '/');
 				if (suffix) {
-					while (--suffix > name + manlen)
-						if (*suffix == '/')
+					while (suffix > name + manlen)
+						if (*--suffix == '/')
 							break;
+					if (suffix < name + manlen)
+						suffix = name + manlen;
 				}
 				if (*suffix == '/')
 					++suffix;
