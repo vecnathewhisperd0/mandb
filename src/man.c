@@ -2296,6 +2296,12 @@ static void disable_justification (void *data ATTRIBUTE_UNUSED)
 #ifdef TROFF_IS_GROFF
 static void locale_macros (void *data)
 {
+	const char *macro_lang = data;
+	const char *hyphen_lang = STREQ (lang, "en") ? "us" : macro_lang;
+
+	debug ("Macro language %s; hyphenation language %s\n",
+	       macro_lang, hyphen_lang);
+
 	printf (
 		/* If we're using groff >= 1.20.2 (for the 'file' warning
 		 * category):
@@ -2308,7 +2314,11 @@ static void locale_macros (void *data)
 		" (\\n[.warn] / 1048576 %% 2 * 1048576))\n"
 		/*   and load the appropriate per-locale macros */
 		".  mso %s.tmac\n"
-		".\\}\n", (const char *) data);
+		".\\}\n"
+		/* set the hyphenation language anyway, to make sure groff
+		 * only hyphenates languages it knows about
+		 */
+		".hla %s\n", macro_lang, hyphen_lang);
 }
 #endif /* TROFF_IS_GROFF */
 
