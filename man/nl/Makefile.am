@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
-## Copyright (C) 2008 Colin Watson.
+## Copyright (C) 1994, 1995 Graeme Wilford.
+## Copyright (C) 2001, 2002, 2003, 2007, 2008 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -18,25 +19,25 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-POFILES = po/id.po po/nl.po po/pl.po po/ru.po
+LINGUA = nl
+PO4A_LINGUA = yes
 
-EXTRA_DIST = po4a.cfg po/man-db-manpages.pot $(POFILES)
+EXTRA_DIST = translator.add
 
-if PO4A
-# Always generate output files even if poorly translated, since Automake's
-# generated rules will get upset otherwise.
-PO4A_ARGS = --variable srcdir=$(top_srcdir)/man \
-	    --variable builddir=$(top_builddir)/man \
-	    --keep 0
+man1_MANS = \
+	man1/apropos.1 \
+	man1/lexgrog.1 \
+	man1/man.1 \
+	man1/manconv.1 \
+	man1/manpath.1 \
+	man1/whatis.1 \
+	man1/zsoelim.1
+man5_MANS = \
+	man5/manpath.5
+man8_MANS = \
+	man8/accessdb.8 \
+	man8/catman.8 \
+	man8/mandb.8
 
-all-local:
-	$(PO4A) $(PO4A_ARGS) $(srcdir)/po4a.cfg
+include $(top_srcdir)/man/Rules.man
 
-update-po:
-	$(PO4A) $(PO4A_ARGS) --no-translations $(srcdir)/po4a.cfg
-
-clean-local:
-	$(PO4A) $(PO4A_ARGS) --rm-translations $(srcdir)/po4a.cfg
-
-dist-hook: update-po
-endif

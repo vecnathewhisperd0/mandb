@@ -20,7 +20,7 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 SUBDIRS = $(MAN_SUBDIRS)
-DIST_SUBDIRS = po4a de es fr id it ja pl ru
+DIST_SUBDIRS = po4a de es fr id it ja nl pl ru
 
 LINGUA = .
 
