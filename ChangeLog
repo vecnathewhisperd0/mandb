@@ -1,3 +1,17 @@
+Tue Mar  2 10:04:54 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Fix assertion failure on 'man -l' with an uncompressed page and
+	prefixed input (no-hyphenation, no-justification, or a non-English
+	page).
+
+	* lib/pipeline.c (command_new_passthrough): New function.
+	* lib/pipeline.h (command_new_passthrough): Add prototype.
+	* src/man.c (display): Allow zero-command decompression pipelines
+	  with prefix sequences.  In that case, append a passthrough command
+	  to the prefix sequence, and append the prefix sequence to the
+	  decompression pipeline rather than replacing its first command.
+	* NEWS: Document this.
+
 Tue Mar  2 09:31:36 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* man/po4a/po/nl.po: New from Translation Project (thanks, Erwin

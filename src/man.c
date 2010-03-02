@@ -2400,9 +2400,16 @@ static int display (const char *dir, const char *man_file,
 #endif /* TROFF_IS_GROFF */
 
 		if (seq->u.sequence.ncommands) {
-			assert (decomp->ncommands == 1);
-			command_sequence_command (seq, decomp->commands[0]);
-			decomp->commands[0] = seq;
+			assert (decomp->ncommands <= 1);
+			if (decomp->ncommands) {
+				command_sequence_command
+					(seq, decomp->commands[0]);
+				decomp->commands[0] = seq;
+			} else {
+				command_sequence_command
+					(seq, command_new_passthrough ());
+				pipeline_command (decomp, seq);
+			}
 		} else
 			command_free (seq);
 	}
