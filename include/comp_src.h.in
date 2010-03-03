@@ -67,6 +67,11 @@ struct compression comp_list[] = {
 	{UNLZMA, "lzma", NULL},
 #endif /* HAVE_LZMA */
 
+/* If we have xz, incorporate the following */
+#ifdef HAVE_XZ
+	{UNXZ, "xz", NULL},
+#endif /* HAVE_XZ */
+
 /*------------------------------------------------------*/
 /* Add your decompressor(s) and extension(s) below here */
 /*------------------------------------------------------*/

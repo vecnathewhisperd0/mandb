@@ -321,6 +321,11 @@ if test -n "$bzip2"
 then
 	bunzip2="$bzip2 -dc"
 fi
+MAN_CHECK_PROGS([xz], [XZ], [use XZ as Lempel-Ziv-Markov chain-Algorithm compression utility], [xz])
+if test -n "$xz"
+then
+	unxz="$xz -dc"
+fi
 MAN_CHECK_PROGS([lzma], [LZMA], [use LZMA as Lempel-Ziv-Markov chain-Algorithm compression utility], [lzma])
 if test -n "$lzma"
 then
@@ -337,6 +342,7 @@ AC_SUBST(gunzip)
 AC_SUBST(uncompress)
 AC_SUBST(bunzip2)
 AC_SUBST(unlzma)
+AC_SUBST(unxz)
 MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
 

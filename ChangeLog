@@ -1,3 +1,12 @@
+Tue Mar  2 19:11:44 GMT 2010  Darren Salt  <linux@youmustbejoking.demon.co.uk>
+
+	Add support for XZ-compressed manual pages (Debian bug #572233).
+
+	* configure.ac: Check for xz.
+	* include/comp_src.h.in (comp_list): Add xz.
+	* include/manconfig.h.in: Define UNXZ.
+	* NEWS: Document this.
+
 Tue Mar  2 10:04:54 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	Fix assertion failure on 'man -l' with an uncompressed page and
