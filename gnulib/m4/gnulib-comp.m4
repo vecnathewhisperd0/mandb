@@ -89,7 +89,6 @@ AC_DEFUN([gl_INIT],
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_][XGETTEXT_OPTION([--flag=error:3:c-format])
      AM_][XGETTEXT_OPTION([--flag=error_at_line:5:c-format])])
-  gl_EXITFAIL
   gl_FUNC_FCHDIR
   gl_UNISTD_MODULE_INDICATOR([fchdir])
   gl_FUNC_FCLOSE
@@ -104,6 +103,8 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_FNMATCH_GNU
   gl_FUNC_GETCWD
   gl_UNISTD_MODULE_INDICATOR([getcwd])
+  gl_FUNC_GETDTABLESIZE
+  gl_UNISTD_MODULE_INDICATOR([getdtablesize])
   gl_GETLOGIN_R
   gl_UNISTD_MODULE_INDICATOR([getlogin_r])
   gl_FUNC_GETOPT_GNU
@@ -114,9 +115,11 @@ AC_DEFUN([gl_INIT],
   AC_SUBST([LIBINTL])
   AC_SUBST([LTLIBINTL])
   gl_FUNC_GETTIMEOFDAY
+  gl_SYS_TIME_MODULE_INDICATOR([gettimeofday])
   gl_GLOB
   gl_HASH
   gl_INLINE
+  gl_LANGINFO_H
   gl_FUNC_LCHOWN
   gl_UNISTD_MODULE_INDICATOR([lchown])
   gl_IGNORE_UNUSED_LIBRARIES
@@ -151,6 +154,8 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_MKSTEMP
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
   gl_MULTIARCH
+  gl_FUNC_NL_LANGINFO
+  gl_LANGINFO_MODULE_INDICATOR([nl_langinfo])
   gl_FUNC_OPEN
   gl_MODULE_INDICATOR([open])
   gl_FCNTL_MODULE_INDICATOR([open])
@@ -380,7 +385,7 @@ AC_DEFUN([gltests_LIBSOURCES], [
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/arg-nonnull.h
   build-aux/config.rpath
-  build-aux/link-warning.h
+  build-aux/warn-on-use.h
   lib/alignof.h
   lib/alloca.c
   lib/alloca.in.h
@@ -447,6 +452,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fnmatch_loop.c
   lib/fstatat.c
   lib/getcwd.c
+  lib/getdtablesize.c
   lib/getlogin_r.c
   lib/getopt.c
   lib/getopt.in.h
@@ -469,6 +475,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/hash.c
   lib/hash.h
   lib/intprops.h
+  lib/langinfo.in.h
   lib/lchown.c
   lib/localcharset.c
   lib/localcharset.h
@@ -491,6 +498,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mkdirat.c
   lib/mkdtemp.c
   lib/mkstemp.c
+  lib/nl_langinfo.c
   lib/open.c
   lib/openat-die.c
   lib/openat-priv.h
@@ -611,7 +619,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/environ.m4
   m4/errno_h.m4
   m4/error.m4
-  m4/exitfail.m4
   m4/extensions.m4
   m4/fchdir.m4
   m4/fclose.m4
@@ -624,6 +631,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/getcwd-abort-bug.m4
   m4/getcwd-path-max.m4
   m4/getcwd.m4
+  m4/getdtablesize.m4
   m4/getlogin_r.m4
   m4/getopt.m4
   m4/gettext.m4
@@ -644,6 +652,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/intmax_t.m4
   m4/inttypes-pri.m4
   m4/inttypes_h.m4
+  m4/langinfo_h.m4
   m4/lchown.m4
   m4/lcmessage.m4
   m4/lib-ignore.m4
@@ -674,6 +683,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mmap-anon.m4
   m4/mode_t.m4
   m4/multiarch.m4
+  m4/nl_langinfo.m4
   m4/nls.m4
   m4/onceonly.m4
   m4/open.m4
@@ -736,6 +746,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/vasprintf.m4
   m4/visibility.m4
   m4/vsnprintf.m4
+  m4/warn-on-use.m4
   m4/wchar.m4
   m4/wchar_t.m4
   m4/wcrtomb.m4
