@@ -1,3 +1,18 @@
+Wed Mar 17 10:26:44 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* gnulib: Import localcharset module.
+	* src/encodings.c (struct charset_entry): Rename locale_charset to
+	  charset_from_locale.  Update all users.
+	  (struct less_charset_entry): Likewise.
+	  (get_locale_charset): Use locale_charset function from Gnulib,
+	  rather than dealing with nl_langinfo and the fallback ourselves.
+	  (get_default_device): Rename locale_charset parameter to
+	  charset_from_locale.
+	  (get_less_charset): Likewise.
+	  (get_jless_charset): Likewise.
+	* src/tests/Makefile.am (TESTS_ENVIRONMENT): Add
+	  @LOCALCHARSET_TESTS_ENVIRONMENT@.
+
 Sat Mar 13 22:15:54 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* man/check-man: Ignore "table wider than line width" warnings for

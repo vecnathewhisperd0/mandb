@@ -29,10 +29,8 @@
 #include <unistd.h>
 
 #include "gettext.h"
+#include "localcharset.h"
 #include <locale.h>
-#ifdef HAVE_LANGINFO_CODESET
-#  include <langinfo.h>
-#endif
 #include <ctype.h>
 
 #include "manconfig.h"
@@ -204,11 +202,11 @@ static struct charset_alias_entry charset_alias_table[] = {
 };
 
 /* The default groff terminal output device to be used is determined based
- * on nl_langinfo(CODESET), which returns the character set used by the
- * current locale.
+ * on locale_charset (), which returns the character set used by the current
+ * locale.
  */
 struct charset_entry {
-	const char *locale_charset;
+	const char *charset_from_locale;
 	const char *default_device;
 };
 
@@ -292,7 +290,7 @@ static const char *fallback_roff_encoding = "ISO-8859-1";
  * Character set names compatible only with jless go in jless_charset.
  */
 struct less_charset_entry {
-	const char *locale_charset;
+	const char *charset_from_locale;
 	const char *less_charset;
 	const char *jless_charset;
 };
@@ -547,14 +545,7 @@ const char *get_locale_charset (void)
 
 	ctype = setlocale (LC_CTYPE, "");
 
-#ifdef HAVE_LANGINFO_CODESET
-	charset = nl_langinfo (CODESET);
-#else
-	/* If the libc can't tell us, then try to guess from LC_CTYPE. */
-	charset = strchr (ctype, '.');
-	if (charset)
-		++charset;
-#endif
+	charset = locale_charset ();
 
 	/* Restore LC_CTYPE to its value on entry to this function. */
 	setlocale (LC_CTYPE, saved_locale);
@@ -669,7 +660,7 @@ static int compatible_encodings (const char *input, const char *output)
  * All this encoding compatibility stuff feels like a slightly nasty hack,
  * but I haven't yet come up with a cleaner way to do it.
  */
-const char *get_default_device (const char *locale_charset,
+const char *get_default_device (const char *charset_from_locale,
 				const char *source_encoding)
 {
 	const struct charset_entry *entry;
@@ -680,17 +671,18 @@ const char *get_default_device (const char *locale_charset,
 		 * the ascii device. People using such a basic locale
 		 * probably don't want anything fancy anyway.
 		 */
-		if (locale_charset && STREQ (locale_charset, "ANSI_X3.4-1968"))
+		if (charset_from_locale &&
+		    STREQ (charset_from_locale, "ANSI_X3.4-1968"))
 			return "ascii";
 		else
 			return "utf8";
 	}
 
-	if (!locale_charset)
+	if (!charset_from_locale)
 		return fallback_default_device;
 
-	for (entry = charset_table; entry->locale_charset; ++entry) {
-		if (STREQ (entry->locale_charset, locale_charset)) {
+	for (entry = charset_table; entry->charset_from_locale; ++entry) {
+		if (STREQ (entry->charset_from_locale, charset_from_locale)) {
 			const char *roff_encoding =
 				get_roff_encoding (entry->default_device,
 						   source_encoding);
@@ -776,14 +768,15 @@ const char *get_output_encoding (const char *device)
 }
 
 /* Return the value of LESSCHARSET appropriate for this locale. */
-const char *get_less_charset (const char *locale_charset)
+const char *get_less_charset (const char *charset_from_locale)
 {
 	const struct less_charset_entry *entry;
 
-	if (locale_charset) {
-		for (entry = less_charset_table; entry->locale_charset;
+	if (charset_from_locale) {
+		for (entry = less_charset_table; entry->charset_from_locale;
 		     ++entry)
-			if (STREQ (entry->locale_charset, locale_charset))
+			if (STREQ (entry->charset_from_locale,
+				   charset_from_locale))
 				return entry->less_charset;
 	}
 
@@ -793,14 +786,15 @@ const char *get_less_charset (const char *locale_charset)
 /* Return the value of JLESSCHARSET appropriate for this locale. May return
  * NULL.
  */
-const char *get_jless_charset (const char *locale_charset)
+const char *get_jless_charset (const char *charset_from_locale)
 {
 	const struct less_charset_entry *entry;
 
-	if (locale_charset) {
-		for (entry = less_charset_table; entry->locale_charset;
+	if (charset_from_locale) {
+		for (entry = less_charset_table; entry->charset_from_locale;
 		     ++entry)
-			if (STREQ (entry->locale_charset, locale_charset))
+			if (STREQ (entry->charset_from_locale,
+				   charset_from_locale))
 				return entry->jless_charset;
 	}
 

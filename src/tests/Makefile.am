@@ -18,7 +18,8 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) $(SHELL)
+TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) \
+		    @LOCALCHARSET_TESTS_ENVIRONMENT@ $(SHELL)
 ALL_TESTS = \
 	lexgrog-1 \
 	man-1 \

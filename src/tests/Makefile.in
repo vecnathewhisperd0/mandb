@@ -964,7 +964,9 @@ unlzma = @unlzma@
 unxz = @unxz@
 vgrind = @vgrind@
 xz = @xz@
-TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) $(SHELL)
+TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) \
+		    @LOCALCHARSET_TESTS_ENVIRONMENT@ $(SHELL)
+
 ALL_TESTS = \
 	lexgrog-1 \
 	man-1 \
