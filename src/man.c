@@ -1203,6 +1203,16 @@ int main (int argc, char *argv[])
 					++first_arg;
 				}
 			}
+			if (!found_subpage && subpages && first_arg < argc) {
+				char *subname = xasprintf (
+					"%s_%s", nextarg, argv[first_arg]);
+				status = man (subname, &found);
+				free (subname);
+				if (status == OK) {
+					found_subpage = 1;
+					++first_arg;
+				}
+			}
 			if (!found_subpage)
 				status = man (nextarg, &found);
 		}
