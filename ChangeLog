@@ -1,3 +1,16 @@
+Wed Mar 24 11:04:46 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Fix build regression when GNU_NROFF is undefined (Savannah bug
+	#29318).
+
+	* src/man.c (add_col): New function, split out from
+	  make_display_command.
+	  (make_roff_command): Reinstate tbl/col logic here, as by the time
+	  we get to make_display_command we've forgotten whether tbl was
+	  used.
+	  (make_display_command): Remove tbl/col logic, useless here.  Use
+	  add_col.
+
 Sun Mar 21 21:59:54 GMT 2010  Tanguy Ortolo  <tanguy+debian@ortolo.eu>
 
 	* src/man.c (main): Try underscore-separated subpages as well as

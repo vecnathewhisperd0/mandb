@@ -43,6 +43,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <assert.h>
 #include <errno.h>
 #include <termios.h>
@@ -1406,6 +1407,26 @@ static const char *my_locale_charset (void)
 		return get_locale_charset ();
 }
 
+static void add_col (pipeline *p, const char *locale_charset, ...)
+{
+	command *cmd;
+	va_list argv;
+	char *col_locale;
+
+	cmd = command_new (COL);
+	va_start (argv, locale_charset);
+	command_argv (cmd, argv);
+	va_end (argv);
+
+	col_locale = find_charset_locale (locale_charset);
+	if (col_locale) {
+		command_setenv (cmd, "LC_CTYPE", col_locale);
+		free (col_locale);
+	}
+
+	pipeline_command (p, cmd);
+}
+
 /* Return pipeline to format file to stdout. */
 static pipeline *make_roff_command (const char *dir, const char *file,
 				    pipeline *decomp, const char *dbfilters,
@@ -1699,6 +1720,11 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			    !isatty (STDOUT_FILENO))
 				/* we'll run col later, but prepare for it */
 				setenv ("GROFF_NO_SGR", "1", 1);
+#ifndef GNU_NROFF
+			/* tbl needs col */
+			else if (using_tbl && !troff && *COL)
+				add_col (p, locale_charset, NULL);
+#endif /* GNU_NROFF */
 		}
 	} else {
 		/* use external formatter script, it takes arguments
@@ -1851,27 +1877,9 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 		 */
 		const char *man_keep_formatting =
 			getenv ("MAN_KEEP_FORMATTING");
-		command *colcmd = NULL;
 		if ((!man_keep_formatting || !*man_keep_formatting) &&
 		    !isatty (STDOUT_FILENO))
-			colcmd = command_new_args (
-				COL, "-b", "-p", "-x", NULL);
-#ifndef GNU_NROFF
-		/* tbl needs col */
-		else if (using_tbl && !troff && *COL)
-			colcmd = command_new (COL);
-#endif /* GNU_NROFF */
-
-		if (colcmd) {
-			char *col_locale =
-				find_charset_locale (locale_charset);
-			if (col_locale) {
-				command_setenv (colcmd, "LC_CTYPE",
-						col_locale);
-				free (col_locale);
-			}
-			pipeline_command (p, colcmd);
-		}
+			add_col (p, locale_charset, "-b", "-p", "-x", NULL);
 	}
 
 	if (ascii) {
