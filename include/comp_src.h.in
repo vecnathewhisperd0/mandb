@@ -55,7 +55,10 @@ struct compression comp_list[] = {
 /* If we have compress, incorporate the following */
 #ifdef HAVE_COMPRESS
 	{UNCOMPRESS, "Z", NULL},
-#endif /* HAVE_COMPRESS */
+/* Else if we have gzip, incorporate the following */
+#elif defined (HAVE_GZIP)
+	{GUNZIP, "Z", NULL},
+#endif /* HAVE_COMPRESS || HAVE_GZIP */
 
 /* If we have bzip2, incorporate the following */
 #ifdef HAVE_BZIP2
