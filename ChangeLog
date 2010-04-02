@@ -1,3 +1,11 @@
+Fri Apr  2 20:44:11 BST 2010  Ville Skyttä  <ville.skytta@iki.fi>
+
+	* configure.ac: Only test for lzma if xz is missing.  Add xz to list
+	  of compressors checked when deciding whether to define COMP_CAT or
+	  COMP_SRC.
+	* include/comp_src.h.in (comp_list): If xz is available, use it for
+	  .lzma files in preference.
+
 Fri Apr  2 20:26:41 BST 2010  Ville Skyttä  <ville.skytta@iki.fi>
 
 	* include/comp_src.h.in (comp_list): If compress is not available,

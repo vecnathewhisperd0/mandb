@@ -326,13 +326,15 @@ MAN_CHECK_PROGS([xz], [XZ], [use XZ as Lempel-Ziv-Markov chain-Algorithm compres
 if test -n "$xz"
 then
 	unxz="$xz -dc"
-fi
+else
+dnl lzma not used/needed if we have xz
 MAN_CHECK_PROGS([lzma], [LZMA], [use LZMA as Lempel-Ziv-Markov chain-Algorithm compression utility], [lzma])
 if test -n "$lzma"
 then
 	unlzma="$lzma -dc"
 fi
-if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$lzma"
+fi
+if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$xz" || test -n "$lzma"
 then
 	AC_DEFINE(COMP_CAT, 1, [Define if you have compressors and want to support compressed cat files.])
 	AC_DEFINE(COMP_SRC, 1, [Define if you have compressors and want to support compressed manual source.])
