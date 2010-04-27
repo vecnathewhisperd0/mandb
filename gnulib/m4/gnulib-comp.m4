@@ -26,13 +26,159 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([AC_PROG_RANLIB])
   AC_REQUIRE([AM_PROG_CC_C_O])
+  # Code from module alignof:
+  # Code from module alloca:
+  # Code from module alloca-opt:
+  # Code from module areadlink-with-size:
+  # Code from module arg-nonnull:
+  # Code from module argp:
+  # Code from module atexit:
+  # Code from module bitrotate:
+  # Code from module btowc:
+  # Code from module c++defs:
+  # Code from module canonicalize:
+  # Code from module canonicalize-lgpl:
+  # Code from module chdir-long:
+  # Code from module chown:
+  # Code from module cloexec:
+  # Code from module close:
+  # Code from module close-hook:
+  # Code from module configmake:
+  # Code from module d-ino:
+  # Code from module d-type:
+  # Code from module dirent:
+  # Code from module dirfd:
+  # Code from module dirname:
+  # Code from module dirname-lgpl:
+  # Code from module double-slash-root:
+  # Code from module dup2:
+  # Code from module environ:
+  # Code from module errno:
+  # Code from module error:
+  # Code from module exitfail:
+  # Code from module extensions:
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
+  # Code from module fchdir:
+  # Code from module fclose:
+  # Code from module fcntl:
+  # Code from module fcntl-h:
+  # Code from module fdopendir:
+  # Code from module file-set:
+  # Code from module float:
+  # Code from module fnmatch:
+  # Code from module fnmatch-gnu:
+  # Code from module getcwd:
+  # Code from module getdtablesize:
+  # Code from module getlogin_r:
+  # Code from module getopt-gnu:
+  # Code from module getopt-posix:
+  # Code from module gettext:
+  # Code from module gettext-h:
+  # Code from module gettimeofday:
+  # Code from module glob:
+  # Code from module hash:
+  # Code from module hash-pjw:
+  # Code from module hash-triple:
+  # Code from module havelib:
+  # Code from module include_next:
+  # Code from module inline:
+  # Code from module intprops:
+  # Code from module langinfo:
+  # Code from module lchown:
+  # Code from module lib-ignore:
+  # Code from module localcharset:
+  # Code from module lock:
+  # Code from module lstat:
+  # Code from module malloc:
+  # Code from module malloc-posix:
+  # Code from module malloca:
+  # Code from module mbrtowc:
+  # Code from module mbsinit:
+  # Code from module mbsrtowcs:
+  # Code from module memchr:
+  # Code from module memcmp:
+  # Code from module mempcpy:
+  # Code from module memrchr:
+  # Code from module minmax:
+  # Code from module mkdir:
+  # Code from module mkdtemp:
+  # Code from module mkstemp:
+  # Code from module multiarch:
+  # Code from module nl_langinfo:
+  # Code from module open:
+  # Code from module openat:
+  # Code from module openat-die:
+  # Code from module pathmax:
+  # Code from module rawmemchr:
+  # Code from module readlink:
+  # Code from module realloc-posix:
+  # Code from module regex:
+  # Code from module rename:
+  # Code from module rmdir:
+  # Code from module same:
+  # Code from module same-inode:
+  # Code from module save-cwd:
+  # Code from module setenv:
+  # Code from module sigaction:
+  # Code from module signal:
+  # Code from module sigprocmask:
+  # Code from module size_max:
+  # Code from module sleep:
+  # Code from module snprintf:
+  # Code from module ssize_t:
+  # Code from module stat:
+  # Code from module stdarg:
   dnl Some compilers (e.g., AIX 5.3 cc) need to be in c99 mode
   dnl for the builtin va_copy to work.  With Autoconf 2.60 or later,
   dnl AC_PROG_CC_STDC arranges for this.  With older Autoconf AC_PROG_CC_STDC
   dnl shouldn't hurt, though installers are on their own to set c99 mode.
   AC_REQUIRE([AC_PROG_CC_STDC])
+  # Code from module stdbool:
+  # Code from module stddef:
+  # Code from module stdint:
+  # Code from module stdio:
+  # Code from module stdlib:
+  # Code from module strcase:
+  # Code from module strchrnul:
+  # Code from module strcspn:
+  # Code from module strdup-posix:
+  # Code from module streq:
+  # Code from module strerror:
+  # Code from module string:
+  # Code from module strings:
+  # Code from module strndup:
+  # Code from module strnlen:
+  # Code from module strnlen1:
+  # Code from module strsep:
+  # Code from module strsignal:
+  # Code from module sys_select:
+  # Code from module sys_socket:
+  # Code from module sys_stat:
+  # Code from module sys_time:
+  # Code from module sysexits:
+  # Code from module tempname:
+  # Code from module threadlib:
   gl_THREADLIB_EARLY
+  # Code from module time:
+  # Code from module tls:
+  # Code from module unistd:
+  # Code from module unistd-safer:
+  # Code from module unlink:
+  # Code from module unsetenv:
+  # Code from module vasnprintf:
+  # Code from module vasprintf:
+  # Code from module verify:
+  # Code from module vsnprintf:
+  # Code from module warn-on-use:
+  # Code from module wchar:
+  # Code from module wcrtomb:
+  # Code from module wctype:
+  # Code from module xalloc:
+  # Code from module xalloc-die:
+  # Code from module xgetcwd:
+  # Code from module xsize:
+  # Code from module xstrndup:
+  # Code from module xvasprintf:
 ])
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -43,6 +189,7 @@ AC_DEFUN([gl_INIT],
   gl_cond_libtool=false
   gl_libdeps=
   gl_ltlibdeps=
+  gl_m4_base='gnulib/m4'
   m4_pushdef([AC_LIBOBJ], m4_defn([gl_LIBOBJ]))
   m4_pushdef([AC_REPLACE_FUNCS], m4_defn([gl_REPLACE_FUNCS]))
   m4_pushdef([AC_LIBSOURCES], m4_defn([gl_LIBSOURCES]))
@@ -50,207 +197,357 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='gnulib/lib'
+  # Code from module alignof:
+  # Code from module alloca:
+  # Code from module alloca-opt:
   gl_FUNC_ALLOCA
+  # Code from module areadlink-with-size:
+  # Code from module arg-nonnull:
+  # Code from module argp:
   gl_ARGP
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_][XGETTEXT_OPTION([--flag=argp_error:2:c-format])
      AM_][XGETTEXT_OPTION([--flag=argp_failure:4:c-format])])
+  # Code from module atexit:
   gl_FUNC_ATEXIT
+  # Code from module bitrotate:
   AC_REQUIRE([AC_C_INLINE])
+  # Code from module btowc:
   gl_FUNC_BTOWC
   gl_WCHAR_MODULE_INDICATOR([btowc])
+  # Code from module c++defs:
+  # Code from module canonicalize:
   gl_FUNC_CANONICALIZE_FILENAME_MODE
   gl_MODULE_INDICATOR([canonicalize])
+  gl_MODULE_INDICATOR_FOR_TESTS([canonicalize])
   gl_STDLIB_MODULE_INDICATOR([canonicalize_file_name])
+  # Code from module canonicalize-lgpl:
   gl_CANONICALIZE_LGPL
   gl_MODULE_INDICATOR([canonicalize-lgpl])
   gl_STDLIB_MODULE_INDICATOR([canonicalize_file_name])
   gl_STDLIB_MODULE_INDICATOR([realpath])
+  # Code from module chdir-long:
   gl_FUNC_CHDIR_LONG
+  # Code from module chown:
   gl_FUNC_CHOWN
   gl_UNISTD_MODULE_INDICATOR([chown])
+  # Code from module cloexec:
+  gl_CLOEXEC
+  gl_MODULE_INDICATOR_FOR_TESTS([cloexec])
+  # Code from module close:
   gl_FUNC_CLOSE
   gl_UNISTD_MODULE_INDICATOR([close])
+  # Code from module close-hook:
+  # Code from module configmake:
+  # Code from module d-ino:
   gl_CHECK_TYPE_STRUCT_DIRENT_D_INO
+  # Code from module d-type:
   gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
+  # Code from module dirent:
   gl_DIRENT_H
+  # Code from module dirfd:
   gl_FUNC_DIRFD
   gl_DIRENT_MODULE_INDICATOR([dirfd])
+  # Code from module dirname:
   gl_DIRNAME
   gl_MODULE_INDICATOR([dirname])
+  # Code from module dirname-lgpl:
   gl_DIRNAME_LGPL
+  # Code from module double-slash-root:
   gl_DOUBLE_SLASH_ROOT
+  # Code from module dup2:
   gl_FUNC_DUP2
   gl_UNISTD_MODULE_INDICATOR([dup2])
+  # Code from module environ:
   gl_ENVIRON
   gl_UNISTD_MODULE_INDICATOR([environ])
+  # Code from module errno:
   gl_HEADER_ERRNO_H
+  # Code from module error:
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_][XGETTEXT_OPTION([--flag=error:3:c-format])
      AM_][XGETTEXT_OPTION([--flag=error_at_line:5:c-format])])
+  # Code from module exitfail:
+  # Code from module extensions:
+  # Code from module fchdir:
   gl_FUNC_FCHDIR
   gl_UNISTD_MODULE_INDICATOR([fchdir])
+  # Code from module fclose:
   gl_FUNC_FCLOSE
   gl_STDIO_MODULE_INDICATOR([fclose])
+  # Code from module fcntl:
   gl_FUNC_FCNTL
   gl_FCNTL_MODULE_INDICATOR([fcntl])
+  # Code from module fcntl-h:
   gl_FCNTL_H
+  # Code from module fdopendir:
   gl_FUNC_FDOPENDIR
   gl_DIRENT_MODULE_INDICATOR([fdopendir])
+  gl_MODULE_INDICATOR([fdopendir])
+  # Code from module file-set:
+  # Code from module float:
   gl_FLOAT_H
+  # Code from module fnmatch:
   gl_FUNC_FNMATCH_POSIX
+  # Code from module fnmatch-gnu:
   gl_FUNC_FNMATCH_GNU
+  # Code from module getcwd:
   gl_FUNC_GETCWD
   gl_UNISTD_MODULE_INDICATOR([getcwd])
+  # Code from module getdtablesize:
   gl_FUNC_GETDTABLESIZE
   gl_UNISTD_MODULE_INDICATOR([getdtablesize])
-  gl_GETLOGIN_R
+  # Code from module getlogin_r:
+  gl_FUNC_GETLOGIN_R
   gl_UNISTD_MODULE_INDICATOR([getlogin_r])
+  # Code from module getopt-gnu:
   gl_FUNC_GETOPT_GNU
-  gl_MODULE_INDICATOR([getopt-gnu])
+  gl_MODULE_INDICATOR_FOR_TESTS([getopt-gnu])
+  # Code from module getopt-posix:
   gl_FUNC_GETOPT_POSIX
+  # Code from module gettext:
   dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
   AM_GNU_GETTEXT_VERSION([0.17])
+  # Code from module gettext-h:
   AC_SUBST([LIBINTL])
   AC_SUBST([LTLIBINTL])
+  # Code from module gettimeofday:
   gl_FUNC_GETTIMEOFDAY
   gl_SYS_TIME_MODULE_INDICATOR([gettimeofday])
+  # Code from module glob:
   gl_GLOB
+  # Code from module hash:
   gl_HASH
+  # Code from module hash-pjw:
+  # Code from module hash-triple:
+  # Code from module havelib:
+  # Code from module include_next:
+  # Code from module inline:
   gl_INLINE
+  # Code from module intprops:
+  # Code from module langinfo:
   gl_LANGINFO_H
+  # Code from module lchown:
   gl_FUNC_LCHOWN
   gl_UNISTD_MODULE_INDICATOR([lchown])
+  # Code from module lib-ignore:
   gl_IGNORE_UNUSED_LIBRARIES
+  # Code from module localcharset:
   gl_LOCALCHARSET
   LOCALCHARSET_TESTS_ENVIRONMENT="CHARSETALIASDIR=\"\$(top_builddir)/$gl_source_base\""
   AC_SUBST([LOCALCHARSET_TESTS_ENVIRONMENT])
+  # Code from module lock:
   gl_LOCK
+  # Code from module lstat:
   gl_FUNC_LSTAT
   gl_SYS_STAT_MODULE_INDICATOR([lstat])
+  # Code from module malloc:
   AC_FUNC_MALLOC
   AC_DEFINE([GNULIB_MALLOC_GNU], 1, [Define to indicate the 'malloc' module.])
+  # Code from module malloc-posix:
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
+  # Code from module malloca:
   gl_MALLOCA
+  # Code from module mbrtowc:
   gl_FUNC_MBRTOWC
   gl_WCHAR_MODULE_INDICATOR([mbrtowc])
+  # Code from module mbsinit:
   gl_FUNC_MBSINIT
   gl_WCHAR_MODULE_INDICATOR([mbsinit])
+  # Code from module mbsrtowcs:
   gl_FUNC_MBSRTOWCS
   gl_WCHAR_MODULE_INDICATOR([mbsrtowcs])
+  # Code from module memchr:
   gl_FUNC_MEMCHR
   gl_STRING_MODULE_INDICATOR([memchr])
+  # Code from module memcmp:
   gl_FUNC_MEMCMP
+  # Code from module mempcpy:
   gl_FUNC_MEMPCPY
   gl_STRING_MODULE_INDICATOR([mempcpy])
+  # Code from module memrchr:
   gl_FUNC_MEMRCHR
   gl_STRING_MODULE_INDICATOR([memrchr])
+  # Code from module minmax:
   gl_MINMAX
+  # Code from module mkdir:
   gl_FUNC_MKDIR
+  # Code from module mkdtemp:
   gt_FUNC_MKDTEMP
   gl_STDLIB_MODULE_INDICATOR([mkdtemp])
+  # Code from module mkstemp:
   gl_FUNC_MKSTEMP
   gl_STDLIB_MODULE_INDICATOR([mkstemp])
+  # Code from module multiarch:
   gl_MULTIARCH
+  # Code from module nl_langinfo:
   gl_FUNC_NL_LANGINFO
   gl_LANGINFO_MODULE_INDICATOR([nl_langinfo])
+  # Code from module open:
   gl_FUNC_OPEN
-  gl_MODULE_INDICATOR([open])
   gl_FCNTL_MODULE_INDICATOR([open])
+  # Code from module openat:
   gl_FUNC_OPENAT
+  # Code from module openat-die:
+  # Code from module pathmax:
   gl_PATHMAX
+  # Code from module rawmemchr:
   gl_FUNC_RAWMEMCHR
   gl_STRING_MODULE_INDICATOR([rawmemchr])
+  # Code from module readlink:
   gl_FUNC_READLINK
   gl_UNISTD_MODULE_INDICATOR([readlink])
+  # Code from module realloc-posix:
   gl_FUNC_REALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([realloc-posix])
+  # Code from module regex:
   gl_REGEX
+  # Code from module rename:
   gl_FUNC_RENAME
   gl_STDIO_MODULE_INDICATOR([rename])
+  # Code from module rmdir:
   gl_FUNC_RMDIR
   gl_UNISTD_MODULE_INDICATOR([rmdir])
+  # Code from module same:
   gl_SAME
+  # Code from module same-inode:
+  # Code from module save-cwd:
   gl_SAVE_CWD
+  # Code from module setenv:
   gl_FUNC_SETENV
   gl_STDLIB_MODULE_INDICATOR([setenv])
+  # Code from module sigaction:
   gl_SIGACTION
   gl_SIGNAL_MODULE_INDICATOR([sigaction])
+  # Code from module signal:
   gl_SIGNAL_H
+  # Code from module sigprocmask:
   gl_SIGNALBLOCKING
   gl_SIGNAL_MODULE_INDICATOR([sigprocmask])
+  # Code from module size_max:
   gl_SIZE_MAX
+  # Code from module sleep:
   gl_FUNC_SLEEP
   gl_UNISTD_MODULE_INDICATOR([sleep])
+  # Code from module snprintf:
   gl_FUNC_SNPRINTF
   gl_STDIO_MODULE_INDICATOR([snprintf])
+  # Code from module ssize_t:
   gt_TYPE_SSIZE_T
+  # Code from module stat:
   gl_FUNC_STAT
   gl_SYS_STAT_MODULE_INDICATOR([stat])
+  # Code from module stdarg:
   gl_STDARG_H
+  # Code from module stdbool:
   AM_STDBOOL_H
+  # Code from module stddef:
   gl_STDDEF_H
+  # Code from module stdint:
   gl_STDINT_H
+  # Code from module stdio:
   gl_STDIO_H
+  # Code from module stdlib:
   gl_STDLIB_H
+  # Code from module strcase:
   gl_STRCASE
+  # Code from module strchrnul:
   gl_FUNC_STRCHRNUL
   gl_STRING_MODULE_INDICATOR([strchrnul])
+  # Code from module strcspn:
   gl_FUNC_STRCSPN
+  # Code from module strdup-posix:
   gl_FUNC_STRDUP_POSIX
   gl_STRING_MODULE_INDICATOR([strdup])
+  # Code from module streq:
+  # Code from module strerror:
   gl_FUNC_STRERROR
   gl_STRING_MODULE_INDICATOR([strerror])
+  # Code from module string:
   gl_HEADER_STRING_H
+  # Code from module strings:
   gl_HEADER_STRINGS_H
+  # Code from module strndup:
   gl_FUNC_STRNDUP
   gl_STRING_MODULE_INDICATOR([strndup])
+  # Code from module strnlen:
   gl_FUNC_STRNLEN
   gl_STRING_MODULE_INDICATOR([strnlen])
+  # Code from module strnlen1:
+  # Code from module strsep:
   gl_FUNC_STRSEP
   gl_STRING_MODULE_INDICATOR([strsep])
+  # Code from module strsignal:
   gl_FUNC_STRSIGNAL
   gl_STRING_MODULE_INDICATOR([strsignal])
+  # Code from module sys_select:
   gl_HEADER_SYS_SELECT
   AC_PROG_MKDIR_P
+  # Code from module sys_socket:
   gl_HEADER_SYS_SOCKET
   AC_PROG_MKDIR_P
+  # Code from module sys_stat:
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
+  # Code from module sys_time:
   gl_HEADER_SYS_TIME_H
   AC_PROG_MKDIR_P
+  # Code from module sysexits:
   gl_SYSEXITS
+  # Code from module tempname:
   gl_FUNC_GEN_TEMPNAME
+  # Code from module threadlib:
   gl_THREADLIB
+  # Code from module time:
   gl_HEADER_TIME_H
+  # Code from module tls:
   gl_TLS
+  # Code from module unistd:
   gl_UNISTD_H
+  # Code from module unistd-safer:
   gl_UNISTD_SAFER
+  # Code from module unlink:
   gl_FUNC_UNLINK
   gl_UNISTD_MODULE_INDICATOR([unlink])
+  # Code from module unsetenv:
   gl_FUNC_UNSETENV
   gl_STDLIB_MODULE_INDICATOR([unsetenv])
+  # Code from module vasnprintf:
   gl_FUNC_VASNPRINTF
+  # Code from module vasprintf:
   gl_FUNC_VASPRINTF
   gl_STDIO_MODULE_INDICATOR([vasprintf])
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_][XGETTEXT_OPTION([--flag=asprintf:2:c-format])
      AM_][XGETTEXT_OPTION([--flag=vasprintf:2:c-format])])
+  # Code from module verify:
+  # Code from module vsnprintf:
   gl_FUNC_VSNPRINTF
   gl_STDIO_MODULE_INDICATOR([vsnprintf])
+  # Code from module warn-on-use:
+  # Code from module wchar:
   gl_WCHAR_H
+  # Code from module wcrtomb:
   gl_FUNC_WCRTOMB
   gl_WCHAR_MODULE_INDICATOR([wcrtomb])
+  # Code from module wctype:
   gl_WCTYPE_H
+  # Code from module xalloc:
   gl_XALLOC
+  # Code from module xalloc-die:
+  # Code from module xgetcwd:
   gl_XGETCWD
+  # Code from module xsize:
   gl_XSIZE
+  # Code from module xstrndup:
   gl_XSTRNDUP
+  # Code from module xvasprintf:
   gl_XVASPRINTF
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_][XGETTEXT_OPTION([--flag=xasprintf:1:c-format])])
+  # End of code from modules
   m4_ifval(gl_LIBSOURCES_LIST, [
     m4_syscmd([test ! -d ]m4_defn([gl_LIBSOURCES_DIR])[ ||
       for gl_file in ]gl_LIBSOURCES_LIST[ ; do
@@ -290,6 +587,13 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gltests_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='tests'
+changequote(,)dnl
+  gltests_WITNESS=IN_`echo "${PACKAGE-$PACKAGE_TARNAME}" | LC_ALL=C tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ | LC_ALL=C sed -e 's/[^A-Z0-9_]/_/g'`_GNULIB_TESTS
+changequote([, ])dnl
+  AC_SUBST([gltests_WITNESS])
+  gl_module_indicator_condition=$gltests_WITNESS
+  m4_pushdef([gl_MODULE_INDICATOR_CONDITION], [$gl_module_indicator_condition])
+  m4_popdef([gl_MODULE_INDICATOR_CONDITION])
   m4_ifval(gltests_LIBSOURCES_LIST, [
     m4_syscmd([test ! -d ]m4_defn([gltests_LIBSOURCES_DIR])[ ||
       for gl_file in ]gltests_LIBSOURCES_LIST[ ; do
@@ -384,6 +688,7 @@ AC_DEFUN([gltests_LIBSOURCES], [
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/arg-nonnull.h
+  build-aux/c++defs.h
   build-aux/config.rpath
   build-aux/warn-on-use.h
   lib/alignof.h
@@ -418,6 +723,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/chdir-long.c
   lib/chdir-long.h
   lib/chown.c
+  lib/cloexec.c
+  lib/cloexec.h
   lib/close-hook.c
   lib/close-hook.h
   lib/close.c
@@ -605,6 +912,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/canonicalize.m4
   m4/chdir-long.m4
   m4/chown.m4
+  m4/cloexec.m4
   m4/close.m4
   m4/codeset.m4
   m4/d-ino.m4
@@ -747,10 +1055,10 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/visibility.m4
   m4/vsnprintf.m4
   m4/warn-on-use.m4
-  m4/wchar.m4
+  m4/wchar_h.m4
   m4/wchar_t.m4
   m4/wcrtomb.m4
-  m4/wctype.m4
+  m4/wctype_h.m4
   m4/wint_t.m4
   m4/xalloc.m4
   m4/xgetcwd.m4

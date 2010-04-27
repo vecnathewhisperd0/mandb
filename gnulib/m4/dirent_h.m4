@@ -1,4 +1,4 @@
-# dirent_h.m4 serial 9
+# dirent_h.m4 serial 12
 dnl Copyright (C) 2008-2010 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
@@ -32,7 +32,9 @@ AC_DEFUN([gl_DIRENT_MODULE_INDICATOR],
 [
   dnl Use AC_REQUIRE here, so that the default settings are expanded once only.
   AC_REQUIRE([gl_DIRENT_H_DEFAULTS])
-  GNULIB_[]m4_translit([$1],[abcdefghijklmnopqrstuvwxyz./-],[ABCDEFGHIJKLMNOPQRSTUVWXYZ___])=1
+  gl_MODULE_INDICATOR_SET_VARIABLE([$1])
+  dnl Define it also as a C macro, for the benefit of the unit tests.
+  gl_MODULE_INDICATOR_FOR_TESTS([$1])
 ])
 
 AC_DEFUN([gl_DIRENT_H_DEFAULTS],
@@ -44,6 +46,7 @@ AC_DEFUN([gl_DIRENT_H_DEFAULTS],
   GNULIB_ALPHASORT=0;   AC_SUBST([GNULIB_ALPHASORT])
   dnl Assume proper GNU behavior unless another module says otherwise.
   HAVE_DECL_DIRFD=1;    AC_SUBST([HAVE_DECL_DIRFD])
+  HAVE_DECL_FDOPENDIR=1;AC_SUBST([HAVE_DECL_FDOPENDIR])
   HAVE_FDOPENDIR=1;     AC_SUBST([HAVE_FDOPENDIR])
   HAVE_SCANDIR=1;       AC_SUBST([HAVE_SCANDIR])
   HAVE_ALPHASORT=1;     AC_SUBST([HAVE_ALPHASORT])
