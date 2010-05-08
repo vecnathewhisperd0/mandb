@@ -122,6 +122,12 @@ char *filename_info (const char *file, struct mandata *info,
 		}
 		*ext++ = '\0';			/* set section ext */
 		info->ext = ext;
+		if (!*info->ext) {
+			/* zero-length section extension */
+			gripe_bogus_manpage (file);
+			free (manpage);
+			return NULL;
+		}
 	}
 
 	info->sec = strrchr (manpage, '/') + 4;	/* set section name */
