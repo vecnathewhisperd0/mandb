@@ -126,8 +126,9 @@ char *filename_info (const char *file, struct mandata *info,
 
 	info->sec = strrchr (manpage, '/') + 4;	/* set section name */
 
-	if (strncmp (info->sec, info->ext, strlen (info->sec)) != 0) {
-		/* mismatch in extension */
+	if (strlen (info->sec) >= 1 && strlen (info->ext) >= 1 &&
+	    info->sec[0] != info->ext[0]) {
+		/* mismatch in section */
 		gripe_bogus_manpage (file);
 		free (manpage);
 		return NULL;
