@@ -1,3 +1,14 @@
+Sun May  9 07:37:14 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.5.8-pre1.
+	* release.sh: Remove man/po4a/po/man-db-manpages.pot before running
+	  'make distcheck', to force it to be regenerated with the current
+	  version number.
+	* man/po4a/Makefile.am: Make po/man-db-manpages.pot depend on
+	  update-po, rather than using dist-hook which is too late.
+	* po/man-db.pot, po/*.po: Update.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+
 Sat May  8 15:39:49 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/filenames.c (filename_info): Explicitly fail if the extension
