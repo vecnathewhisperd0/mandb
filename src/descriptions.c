@@ -106,6 +106,7 @@ struct page_description *parse_descriptions (const char *base,
 		}
 
 		free (names);
+		free (record);
 
 		sep = nextsep;
 	}

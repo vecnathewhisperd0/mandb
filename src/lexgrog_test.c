@@ -207,6 +207,8 @@ int main (int argc, char **argv)
 				printf ("\n");
 			}
 			free_descriptions (descs);
+			free (lg.filters);
+			free (lg.whatis);
 		}
 
 		if (!found) {

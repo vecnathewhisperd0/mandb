@@ -881,6 +881,7 @@ char *check_preprocessor_encoding (pipeline *p)
 			}
 		}
 	}
+	free (directive);
 #endif /* PP_COOKIE */
 
 	return pp_encoding;
@@ -899,6 +900,7 @@ static void manconv_stdin (void *data)
 	pipeline_start (p);
 	manconv (p, codes->from, codes->to);
 	pipeline_wait (p);
+	pipeline_free (p);
 }
 
 static void free_manconv_codes (void *data)
