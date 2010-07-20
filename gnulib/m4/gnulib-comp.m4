@@ -308,7 +308,7 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_GETOPT_POSIX
   # Code from module gettext:
   dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
-  AM_GNU_GETTEXT_VERSION([0.17])
+  AM_GNU_GETTEXT_VERSION([0.18.1])
   # Code from module gettext-h:
   AC_SUBST([LIBINTL])
   AC_SUBST([LTLIBINTL])
@@ -907,6 +907,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/00gnulib.m4
   m4/alloca.m4
   m4/argp.m4
+  m4/asm-underscore.m4
   m4/atexit.m4
   m4/btowc.m4
   m4/canonicalize.m4
