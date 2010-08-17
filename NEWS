@@ -10,6 +10,11 @@ Major changes since man-db 2.5.7:
 	  any of --no-hyphenation, --no-justification, or a non-English
 	  page.
 
+	o 2.5.7 introduced a regression when running catman in some locales,
+	  most notably in the C locale: while converting the output to
+	  UTF-8, iconv was run after the compressor rather than before it.
+	  This release fixes that.
+
 	Improvements:
 	-------------
 

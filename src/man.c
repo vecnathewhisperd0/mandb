@@ -2267,12 +2267,13 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 	char *tmpcat = tmp_cat_filename (cat_file);
 	int status;
 
+	add_output_iconv (format_cmd, encoding, "UTF-8");
+
 #ifdef COMP_CAT
 	pipeline_command_argstr (format_cmd,
 				 get_def ("compressor", COMPRESSOR));
 #endif /* COMP_CAT */
 
-	add_output_iconv (format_cmd, encoding, "UTF-8");
 	maybe_discard_stderr (format_cmd);
 	format_cmd->want_out = tmp_cat_fd;
 
