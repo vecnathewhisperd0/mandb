@@ -1842,7 +1842,8 @@ static void setenv_less (const char *title)
 	free (less_opts);
 }
 
-void add_output_iconv (pipeline *p, const char *source, const char *target)
+static void add_output_iconv (pipeline *p,
+			      const char *source, const char *target)
 {
 	debug ("add_output_iconv: source %s, target %s\n", source, target);
 	if (source && target && !STREQ (source, target)) {
