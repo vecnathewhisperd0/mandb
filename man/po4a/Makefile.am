@@ -36,7 +36,13 @@ update-po:
 	$(PO4A) $(PO4A_ARGS) --no-translations $(srcdir)/po4a.cfg
 
 clean-local:
+	set -e; for preserve in $(POFILES) po/man-db-manpages.pot; do \
+		cp -a "$$preserve" "$$preserve.safe"; \
+	done
 	$(PO4A) $(PO4A_ARGS) --rm-translations $(srcdir)/po4a.cfg
+	set -e; for preserve in $(POFILES) po/man-db-manpages.pot; do \
+		mv "$$preserve.safe" "$$preserve"; \
+	done
 
 po/man-db-manpages.pot: update-po
 endif
