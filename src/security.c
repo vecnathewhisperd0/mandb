@@ -194,22 +194,6 @@ void regain_effective_privs (void)
 #endif /* SECURE_MAN_UID */
 }
 
-/* remove() a file after dropping privs. */
-int remove_with_dropped_privs (const char *filename)
-{
-	int ret;
-	
-	drop_effective_privs ();
-	ret = remove (filename);
-	debug ("remove(\"%s\")\n", filename);
-	regain_effective_privs ();
-
-	if (ret != 0)
-		error (0, errno, _("can't remove %s"), filename);
-
-	return ret;
-}
-
 /* 
  * If we want to execute a system command with no effective priveledges
  * we have to either

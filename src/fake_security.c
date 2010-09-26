@@ -69,11 +69,6 @@ void regain_effective_privs (void)
 	/* do nothing */
 }
 
-int remove_with_dropped_privs (const char *filename)
-{
-	return remove (filename);
-}
-
 int do_system_drop_privs (pipeline *pl)
 {
 	return do_system (pl);
