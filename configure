@@ -13154,7 +13154,6 @@ fi
   # Code from module areadlink-with-size:
   # Code from module arg-nonnull:
   # Code from module argp:
-  # Code from module atexit:
   # Code from module bitrotate:
   # Code from module btowc:
   # Code from module c++defs:
@@ -13218,7 +13217,6 @@ fi
   # Code from module mbsinit:
   # Code from module mbsrtowcs:
   # Code from module memchr:
-  # Code from module memcmp:
   # Code from module mempcpy:
   # Code from module memrchr:
   # Code from module minmax:
@@ -13258,7 +13256,6 @@ fi
   # Code from module stdlib:
   # Code from module strcase:
   # Code from module strchrnul:
-  # Code from module strcspn:
   # Code from module strdup-posix:
   # Code from module streq:
   # Code from module strerror:
@@ -23324,38 +23321,6 @@ rm -f core conftest.err conftest.$ac_objext \
 
   XGETTEXT_EXTRA_OPTIONS="$XGETTEXT_EXTRA_OPTIONS --flag=argp_failure:4:c-format"
 
-  # Code from module atexit:
-
-
-
-
-
-
-
-
-
-  for ac_func in atexit
-do :
-  ac_fn_c_check_func "$LINENO" "atexit" "ac_cv_func_atexit"
-if test "x$ac_cv_func_atexit" = x""yes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_ATEXIT 1
-_ACEOF
-
-else
-
-    gl_LIBOBJS="$gl_LIBOBJS $ac_func.$ac_objext"
-
-fi
-done
-
-
-  if test $ac_cv_func_atexit = no; then
-
-  :
-
-  fi
-
   # Code from module bitrotate:
 
   # Code from module btowc:
@@ -27741,114 +27706,6 @@ $as_echo "#define GNULIB_TEST_MEMCHR 1" >>confdefs.h
 
 
 
-  # Code from module memcmp:
-
-  if test $cross_compiling != no; then
-    # AC_FUNC_MEMCMP as of 2.62 defaults to 'no' when cross compiling.
-    # We default to yes if memcmp appears to exist, which works
-    # better for MinGW.
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cross-compiling target has memcmp" >&5
-$as_echo_n "checking whether cross-compiling target has memcmp... " >&6; }
-if test "${ac_cv_func_memcmp_working+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-                        #include <string.h>
-
-int
-main ()
-{
-int ret = memcmp ("foo", "bar", 0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_func_memcmp_working=yes
-else
-  ac_cv_func_memcmp_working=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_func_memcmp_working" >&5
-$as_echo "$ac_cv_func_memcmp_working" >&6; }
-  fi
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for working memcmp" >&5
-$as_echo_n "checking for working memcmp... " >&6; }
-if test "${ac_cv_func_memcmp_working+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test "$cross_compiling" = yes; then :
-  ac_cv_func_memcmp_working=no
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-$ac_includes_default
-int
-main ()
-{
-
-  /* Some versions of memcmp are not 8-bit clean.  */
-  char c0 = '\100', c1 = '\200', c2 = '\201';
-  if (memcmp(&c0, &c2, 1) >= 0 || memcmp(&c1, &c2, 1) >= 0)
-    return 1;
-
-  /* The Next x86 OpenStep bug shows up only when comparing 16 bytes
-     or more and with at least one buffer not starting on a 4-byte boundary.
-     William Lewis provided this test program.   */
-  {
-    char foo[21];
-    char bar[21];
-    int i;
-    for (i = 0; i < 4; i++)
-      {
-	char *a = foo + i;
-	char *b = bar + i;
-	strcpy (a, "--------01111111");
-	strcpy (b, "--------10000000");
-	if (memcmp (a, b, 16) >= 0)
-	  return 1;
-      }
-    return 0;
-  }
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_run "$LINENO"; then :
-  ac_cv_func_memcmp_working=yes
-else
-  ac_cv_func_memcmp_working=no
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_func_memcmp_working" >&5
-$as_echo "$ac_cv_func_memcmp_working" >&6; }
-test $ac_cv_func_memcmp_working = no &&
-
-
-
-
-
-
-
-  gl_LIBOBJS="$gl_LIBOBJS memcmp.$ac_objext"
-
-
-    if test $ac_cv_func_memcmp_working = no; then
-
-$as_echo "#define memcmp rpl_memcmp" >>confdefs.h
-
-    :
-  fi
-
   # Code from module mempcpy:
 
 
@@ -31679,36 +31536,6 @@ done
 $as_echo "#define GNULIB_TEST_STRCHRNUL 1" >>confdefs.h
 
 
-
-  # Code from module strcspn:
-
-
-
-
-
-
-
-
-
-  for ac_func in strcspn
-do :
-  ac_fn_c_check_func "$LINENO" "strcspn" "ac_cv_func_strcspn"
-if test "x$ac_cv_func_strcspn" = x""yes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_STRCSPN 1
-_ACEOF
-
-else
-
-    gl_LIBOBJS="$gl_LIBOBJS $ac_func.$ac_objext"
-
-fi
-done
-
-
-  if test $ac_cv_func_strcspn = no; then
-    :
-  fi
 
   # Code from module strdup-posix:
 

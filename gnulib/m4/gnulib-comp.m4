@@ -32,7 +32,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module areadlink-with-size:
   # Code from module arg-nonnull:
   # Code from module argp:
-  # Code from module atexit:
   # Code from module bitrotate:
   # Code from module btowc:
   # Code from module c++defs:
@@ -96,7 +95,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module mbsinit:
   # Code from module mbsrtowcs:
   # Code from module memchr:
-  # Code from module memcmp:
   # Code from module mempcpy:
   # Code from module memrchr:
   # Code from module minmax:
@@ -140,7 +138,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module stdlib:
   # Code from module strcase:
   # Code from module strchrnul:
-  # Code from module strcspn:
   # Code from module strdup-posix:
   # Code from module streq:
   # Code from module strerror:
@@ -210,8 +207,6 @@ AC_SUBST([LTALLOCA])
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_][XGETTEXT_OPTION([--flag=argp_error:2:c-format])
      AM_][XGETTEXT_OPTION([--flag=argp_failure:4:c-format])])
-  # Code from module atexit:
-  gl_FUNC_ATEXIT
   # Code from module bitrotate:
   AC_REQUIRE([AC_C_INLINE])
   # Code from module btowc:
@@ -364,8 +359,6 @@ AC_SUBST([LTALLOCA])
   # Code from module memchr:
   gl_FUNC_MEMCHR
   gl_STRING_MODULE_INDICATOR([memchr])
-  # Code from module memcmp:
-  gl_FUNC_MEMCMP
   # Code from module mempcpy:
   gl_FUNC_MEMPCPY
   gl_STRING_MODULE_INDICATOR([mempcpy])
@@ -458,8 +451,6 @@ AC_SUBST([LTALLOCA])
   # Code from module strchrnul:
   gl_FUNC_STRCHRNUL
   gl_STRING_MODULE_INDICATOR([strchrnul])
-  # Code from module strcspn:
-  gl_FUNC_STRCSPN
   # Code from module strdup-posix:
   gl_FUNC_STRDUP_POSIX
   gl_STRING_MODULE_INDICATOR([strdup])
@@ -710,7 +701,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/asnprintf.c
   lib/asprintf.c
   lib/at-func.c
-  lib/atexit.c
   lib/basename-lgpl.c
   lib/basename.c
   lib/bitrotate.h
@@ -795,7 +785,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mbsrtowcs.c
   lib/memchr.c
   lib/memchr.valgrind
-  lib/memcmp.c
   lib/mempcpy.c
   lib/memrchr.c
   lib/minmax.h
@@ -855,7 +844,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strcasecmp.c
   lib/strchrnul.c
   lib/strchrnul.valgrind
-  lib/strcspn.c
   lib/strdup.c
   lib/streq.h
   lib/strerror.c
@@ -906,7 +894,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/alloca.m4
   m4/argp.m4
   m4/asm-underscore.m4
-  m4/atexit.m4
   m4/btowc.m4
   m4/canonicalize.m4
   m4/chdir-long.m4
@@ -980,7 +967,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mbsrtowcs.m4
   m4/mbstate_t.m4
   m4/memchr.m4
-  m4/memcmp.m4
   m4/mempcpy.m4
   m4/memrchr.m4
   m4/minmax.m4
@@ -1027,7 +1013,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdlib_h.m4
   m4/strcase.m4
   m4/strchrnul.m4
-  m4/strcspn.m4
   m4/strdup.m4
   m4/strerror.m4
   m4/string_h.m4

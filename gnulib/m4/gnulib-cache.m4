@@ -15,13 +15,12 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gnulib/lib --m4-base=gnulib/m4 --po-base=gnulib/po --doc-base=doc --tests-base=tests --aux-dir=tools --libtool --macro-prefix=gl --po-domain=man-db argp atexit canonicalize dirname error fnmatch-gnu getopt-gnu gettext glob lib-ignore localcharset lock memcmp minmax mkdtemp mkstemp regex rename setenv sigaction signal sigprocmask strcspn strerror strsep strsignal sys_select unsetenv xalloc xgetcwd xstrndup xvasprintf
+#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gnulib/lib --m4-base=gnulib/m4 --po-base=gnulib/po --doc-base=doc --tests-base=tests --aux-dir=tools --libtool --macro-prefix=gl --po-domain=man-db argp canonicalize dirname error fnmatch-gnu getopt-gnu gettext glob lib-ignore localcharset lock minmax mkdtemp mkstemp regex rename setenv sigaction signal sigprocmask strerror strsep strsignal sys_select unsetenv xalloc xgetcwd xstrndup xvasprintf
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
 gl_MODULES([
   argp
-  atexit
   canonicalize
   dirname
   error
@@ -32,7 +31,6 @@ gl_MODULES([
   lib-ignore
   localcharset
   lock
-  memcmp
   minmax
   mkdtemp
   mkstemp
@@ -42,7 +40,6 @@ gl_MODULES([
   sigaction
   signal
   sigprocmask
-  strcspn
   strerror
   strsep
   strsignal
