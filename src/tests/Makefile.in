@@ -1021,7 +1021,8 @@ unlzma = @unlzma@
 unxz = @unxz@
 vgrind = @vgrind@
 xz = @xz@
-TESTS_ENVIRONMENT = PATH=..:$$PATH CLEANPATH=.. DBTYPE=$(DBTYPE) \
+TESTS_ENVIRONMENT = PATH=..:$$PATH DBTYPE=$(DBTYPE) \
+		    top_builddir=$(top_builddir) \
 		    @LOCALCHARSET_TESTS_ENVIRONMENT@ $(SHELL)
 
 ALL_TESTS = \

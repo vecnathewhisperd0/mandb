@@ -6,6 +6,13 @@ init () {
 	trap 'rm -rf "$tmpdir"' HUP INT QUIT TERM
 }
 
+run () {
+	"$top_builddir/libtool" --mode=execute \
+		-dlopen "$top_builddir/lib/.libs/libman.la" \
+		-dlopen "$top_builddir/libdb/.libs/libmandb.la" \
+		"$@"
+}
+
 fake_config () {
 	for dir; do
 		echo "MANDATORY_MANPATH	$tmpdir$dir"
@@ -44,17 +51,9 @@ EOF
 	rm -f "$3.tmp1" "$3.tmp2"
 }
 
-run_clean_path () {
-	if [ "$CLEANPATH" ]; then
-		PATH="$CLEANPATH" "$@"
-	else
-		"$@"
-	fi
-}
-
 accessdb_filter () {
 	# e.g. 'test -> "- 1 1 1250702063 A - - gz simple mandb test"'
-	$ACCESSDB "$1" | grep -v '^\$' | \
+	run $ACCESSDB "$1" | grep -v '^\$' | \
 		sed 's/\(-> "[^ ][^ ]* [^ ][^ ]* [^ ][^ ]* \)[^ ][^ ]* /\1MTIME /'
 }
 

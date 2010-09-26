@@ -16,7 +16,8 @@ db_ext="$(db_ext)"
 
 write_page fs 5 "$tmpdir/usr/share/man/man5/fs.5.gz" \
 	UTF-8 gz t 'fs \- fs(5)'
-run_clean_path $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
+MANPATH="$tmpdir/usr/share/man" run $MANDB -C "$tmpdir/manpath.config" -u -q \
+	"$tmpdir/usr/share/man"
 cat >"$tmpdir/1.exp" <<EOF
 fs -> "- 5 5 MTIME A - - gz fs(5)"
 EOF
@@ -27,7 +28,8 @@ next_second
 write_page filesystems 5 "$tmpdir/usr/share/man/man5/filesystems.5.gz" \
 	UTF-8 gz t 'filesystems \- filesystems(5)'
 ln -sf filesystems.5.gz "$tmpdir/usr/share/man/man5/fs.5.gz"
-run_clean_path $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
+MANPATH="$tmpdir/usr/share/man" run $MANDB -C "$tmpdir/manpath.config" -u -q \
+	"$tmpdir/usr/share/man"
 cat >"$tmpdir/2.exp" <<EOF
 filesystems -> "- 5 5 MTIME A - - gz filesystems(5)"
 fs -> "- 5 5 MTIME B - - gz filesystems(5)"

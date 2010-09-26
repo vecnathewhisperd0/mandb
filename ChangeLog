@@ -1,3 +1,20 @@
+Sun Sep 26 23:53:08 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	Get the tests working again following the switch to libtool.
+
+	* src/tests/Makefile.am (TESTS_ENVIRONMENT): Remove CLEANPATH.
+	* src/tests/man-1, src/tests/mandb-1, src/tests/mandb-2: Set MANPATH
+	  rather than using run_clean_path; running with a stripped-down
+	  PATH is risky in general and breaks libtool in particular.
+	* src/tests/testlib.sh (run_clean_path): Remove.
+
+	* src/tests/Makefile.am (TESTS_ENVIRONMENT): Add top_builddir.
+	* src/tests/testlib.sh (run): New function.
+	* src/tests/lexgrog-1, src/tests/man-1, src/tests/manconv-1,
+	  src/tests/manconv-2, src/tests/manconv-3, src/tests/mandb-1,
+	  src/tests/mandb-2, src/tests/testlib.sh (accessdb_filter): Use run
+	  when running programs from the build tree.
+
 Sun Sep 26 23:25:31 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	Move encodings to libman.
