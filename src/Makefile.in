@@ -242,15 +242,15 @@ globbing_OBJECTS = $(am_globbing_OBJECTS)
 globbing_DEPENDENCIES = $(LIBMAN)
 am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
 	encodings.$(OBJEXT) fake_security.$(OBJEXT) lexgrog.$(OBJEXT) \
-	lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) ult_src.$(OBJEXT) \
-	util.$(OBJEXT)
+	lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) \
+	manconv_client.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
 lexgrog_DEPENDENCIES = $(LIBMAN)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
-	man.$(OBJEXT) manconv.$(OBJEXT) manp.$(OBJEXT) \
-	security.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT) \
-	zsoelim.$(OBJEXT)
+	man.$(OBJEXT) manconv.$(OBJEXT) manconv_client.$(OBJEXT) \
+	manp.$(OBJEXT) security.$(OBJEXT) ult_src.$(OBJEXT) \
+	util.$(OBJEXT) zsoelim.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
 man_DEPENDENCIES = $(LIBMANDB)
 am_manconv_OBJECTS = encodings.$(OBJEXT) manconv.$(OBJEXT) \
@@ -260,9 +260,9 @@ manconv_DEPENDENCIES = $(LIBMAN)
 am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	descriptions.$(OBJEXT) descriptions_store.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
-	lexgrog.$(OBJEXT) manconv.$(OBJEXT) mandb.$(OBJEXT) \
-	manp.$(OBJEXT) security.$(OBJEXT) straycats.$(OBJEXT) \
-	ult_src.$(OBJEXT) util.$(OBJEXT)
+	lexgrog.$(OBJEXT) manconv.$(OBJEXT) manconv_client.$(OBJEXT) \
+	mandb.$(OBJEXT) manp.$(OBJEXT) security.$(OBJEXT) \
+	straycats.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
 mandb_DEPENDENCIES = $(LIBMANDB)
 am_manpath_OBJECTS = manp.$(OBJEXT) manpath.$(OBJEXT) util.$(OBJEXT)
@@ -1212,6 +1212,8 @@ lexgrog_SOURCES = \
 	lexgrog_test.c \
 	manconv.c \
 	manconv.h \
+	manconv_client.c \
+	manconv_client.h \
 	security.h \
 	ult_src.c \
 	ult_src.h \
@@ -1231,6 +1233,8 @@ man_SOURCES = \
 	man.h \
 	manconv.c \
 	manconv.h \
+	manconv_client.c \
+	manconv_client.h \
 	manp.c \
 	manp.h \
 	security.c \
@@ -1263,6 +1267,8 @@ mandb_SOURCES = \
 	lexgrog.l \
 	manconv.c \
 	manconv.h \
+	manconv_client.c \
+	manconv_client.h \
 	mandb.c \
 	manp.c \
 	manp.h \
@@ -1522,6 +1528,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexgrog_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/man.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manconv.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manconv_client.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manconv_main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mandb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manp.Po@am__quote@

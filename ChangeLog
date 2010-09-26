@@ -1,3 +1,17 @@
+Sun Sep 26 23:15:00 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/encodings.c (struct manconv_codes, manconv_stdin,
+	  free_manconv_codes, add_manconv): Move to ...
+	* src/manconv_client.c: ... here (new file).
+	* src/encodings.h (add_manconv): Move to ...
+	* src/manconv_client.h: ... here (new file).
+	* src/lexgrog.l, src/man.c, src/straycats.c: Include
+	  manconv_client.h.
+	* src/Makefile.am (lexgrog_SOURCES, man_SOURCES, mandb_SOURCES): Add
+	  manconv_client.c and manconv_client.h.
+
+	* src/manp.c: Remove unnecessary inclusion of encodings.h.
+
 Sun Sep 26 22:59:54 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/compression.c: Remove unnecessary inclusion of security.h.

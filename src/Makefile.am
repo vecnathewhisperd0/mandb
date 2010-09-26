@@ -90,6 +90,8 @@ lexgrog_SOURCES = \
 	lexgrog_test.c \
 	manconv.c \
 	manconv.h \
+	manconv_client.c \
+	manconv_client.h \
 	security.h \
 	ult_src.c \
 	ult_src.h \
@@ -108,6 +110,8 @@ man_SOURCES = \
 	man.h \
 	manconv.c \
 	manconv.h \
+	manconv_client.c \
+	manconv_client.h \
 	manp.c \
 	manp.h \
 	security.c \
@@ -138,6 +142,8 @@ mandb_SOURCES = \
 	lexgrog.l \
 	manconv.c \
 	manconv.h \
+	manconv_client.c \
+	manconv_client.h \
 	mandb.c \
 	manp.c \
 	manp.h \

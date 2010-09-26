@@ -104,6 +104,7 @@ static char *cwd;
 #include "encodings.h"
 #include "convert_name.h"
 #include "zsoelim.h"
+#include "manconv_client.h"
 #include "man.h"
 
 #ifdef SECURE_MAN_UID

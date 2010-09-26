@@ -70,6 +70,7 @@
 #include "encodings.h"
 #include "manp.h"
 #include "security.h"
+#include "manconv_client.h"
 
 static char *catdir, *mandir;
 

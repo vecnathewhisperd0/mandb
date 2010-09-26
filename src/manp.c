@@ -69,7 +69,6 @@
 #include "error.h"
 #include "cleanup.h"
 
-#include "encodings.h"
 #include "manp.h"
 
 struct list {

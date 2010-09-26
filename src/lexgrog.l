@@ -50,6 +50,7 @@
 
 #include "security.h"
 #include "encodings.h"
+#include "manconv_client.h"
 
 #define YY_READ_BUF_SIZE	1024
 #define MAX_NAME		8192
