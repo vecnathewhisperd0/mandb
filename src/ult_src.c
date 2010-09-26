@@ -68,7 +68,6 @@
 #include "pipeline.h"
 #include "decompress.h"
 
-#include "security.h"
 #include "ult_src.h"
 
 /* Find minimum value hard link filename for given file and inode.

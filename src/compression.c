@@ -46,8 +46,6 @@
 #include "error.h"
 #include "pipeline.h"
 
-#include "security.h"
-
 /* Take filename as arg, return structure containing decompressor 
    and extension, or NULL if no comp extension found. 
    If want_stem, set comp->stem to the filename without extension, which
