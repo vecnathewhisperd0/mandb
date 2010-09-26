@@ -9,6 +9,8 @@ AM_MAINTAINER_MODE
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR(src/man.c)
+AC_GNU_SOURCE
+LT_INIT([disable-static])
 
 if test ! -f "$srcdir/gnulib/po/Makefile.in.in"; then
 	AC_MSG_ERROR([you must run ./autogen.sh before ./configure when building from revision control])
@@ -125,7 +127,6 @@ AC_SUBST(config_file_dirname)dnl
 AC_SUBST(sections)dnl
 
 # Check $PATH for the following programs and append suitable options.
-AC_GNU_SOURCE
 AC_PROG_CC
 gl_EARLY
 AC_PROG_CPP
@@ -153,7 +154,6 @@ then
 	MAN_GCC_WARNING([no-missing-field-initializers])
 fi
 AC_PROG_INSTALL
-AC_PROG_RANLIB
 AC_PROG_LN_S
 AC_CHECK_PROGS(cat, cat)
 MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx])

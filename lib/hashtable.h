@@ -26,13 +26,13 @@
 #ifndef _HASHTABLE_H
 #define _HASHTABLE_H
 
-typedef void (*hash_free_ptr) (void *defn);
+typedef void (*hashtable_free_ptr) (void *defn);
 
 struct hashtable {
 	struct nlist **hashtab;		/* the storage array */
 	int unique;			/* unique hash values */
 	int identical;			/* identical hash values */
-	hash_free_ptr free_defn;	/* function to free a hash entry */
+	hashtable_free_ptr free_defn;	/* function to free a hash entry */
 };
 
 struct nlist {
@@ -41,17 +41,18 @@ struct nlist {
         void *defn;		/* the _definition_ */
 };
 
-extern void null_hash_free (void *defn);
-extern void plain_hash_free (void *defn);
+extern void null_hashtable_free (void *defn);
+extern void plain_hashtable_free (void *defn);
 
-extern struct hashtable *hash_create (hash_free_ptr free_defn);
-extern void *hash_lookup_structure (const struct hashtable *ht,
-				    const char *s, size_t len);
-extern void *hash_lookup (const struct hashtable *ht,
-			  const char *s, size_t len);
-extern struct nlist *hash_install (struct hashtable *ht,
-				   const char *name, size_t len, void *defn);
-extern void hash_remove (struct hashtable *ht, const char *s, size_t len);
-extern void hash_free (struct hashtable *ht);
+extern struct hashtable *hashtable_create (hashtable_free_ptr free_defn);
+extern void *hashtable_lookup_structure (const struct hashtable *ht,
+					 const char *s, size_t len);
+extern void *hashtable_lookup (const struct hashtable *ht,
+			       const char *s, size_t len);
+extern struct nlist *hashtable_install (struct hashtable *ht,
+					const char *name, size_t len,
+					void *defn);
+extern void hashtable_remove (struct hashtable *ht, const char *s, size_t len);
+extern void hashtable_free (struct hashtable *ht);
 
 #endif /* _HASHTABLE_H */

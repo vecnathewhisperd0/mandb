@@ -19,16 +19,16 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-noinst_LIBRARIES = libman.a
+pkglib_LTLIBRARIES = libman.la
 dist_noinst_DATA = README
 
-libman_a_CPPFLAGS = \
+libman_la_CPPFLAGS = \
 	-I$(top_builddir)/include \
 	-I$(top_builddir)/intl \
 	-I$(top_srcdir)/gnulib/lib \
 	-I$(top_builddir)/gnulib/lib
 
-libman_a_SOURCES = \
+libman_la_SOURCES = \
 	appendstr.c \
 	cleanup.c \
 	cleanup.h \
@@ -52,7 +52,9 @@ libman_a_SOURCES = \
 	xregcomp.h
 
 ## Headers that are used conditionally. Automake can't detect these itself.
-libman_a_SOURCES += \
+libman_la_SOURCES += \
 	flock.h
 
-libman_a_LIBADD = $(LIBOBJS)
+libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LIBOBJS) $(LIBCOMPRESS) @LIBINTL@
+
+libman_la_LDFLAGS = -avoid-version -release $(VERSION) -rpath $(pkglibdir)

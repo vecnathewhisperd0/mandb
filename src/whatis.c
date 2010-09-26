@@ -367,9 +367,9 @@ static void display (struct mandata *info, char *page)
 		page_name = page;
 
 	key = xasprintf ("%s (%s)", page_name, newinfo->ext);
-	if (hash_lookup_structure (display_seen, key, strlen (key)))
+	if (hashtable_lookup_structure (display_seen, key, strlen (key)))
 		goto out;
-	hash_install (display_seen, key, strlen (key), NULL);
+	hashtable_install (display_seen, key, strlen (key), NULL);
 
 	line_len = get_line_length ();
 
@@ -564,8 +564,8 @@ static int do_apropos (char *page, char *lowpage)
 				seen_key = xstrdup (MYDBM_DPTR (key));
 			seen_key = appendstr (seen_key, " (", info.ext, ")",
 					      NULL);
-			seen_count = hash_lookup (apropos_seen, seen_key,
-						  strlen (seen_key));
+			seen_count = hashtable_lookup (apropos_seen, seen_key,
+						       strlen (seen_key));
 			if (seen_count && !require_all)
 				goto nextpage_tab;
 			got_match = parse_name (lowpage, MYDBM_DPTR (key));
@@ -579,9 +579,10 @@ static int do_apropos (char *page, char *lowpage)
 					seen_count = xmalloc
 						(sizeof *seen_count);
 					*seen_count = 0;
-					hash_install (apropos_seen, seen_key,
-						      strlen (seen_key),
-						      seen_count);
+					hashtable_install (apropos_seen,
+							   seen_key,
+							   strlen (seen_key),
+							   seen_count);
 				}
 				++(*seen_count);
 				if (!require_all ||
@@ -770,8 +771,8 @@ int main (int argc, char *argv[])
 
 	create_pathlist (manp, manpathlist);
 
-	apropos_seen = hash_create (&plain_hash_free);
-	display_seen = hash_create (&null_hash_free);
+	apropos_seen = hashtable_create (&plain_hashtable_free);
+	display_seen = hashtable_create (&null_hashtable_free);
 
 #ifdef HAVE_ICONV
 	locale_charset = appendstr (NULL, get_locale_charset (), "//IGNORE",
@@ -794,8 +795,8 @@ int main (int argc, char *argv[])
 	if (conv_to_locale != (iconv_t) -1)
 		iconv_close (conv_to_locale);
 #endif /* HAVE_ICONV */
-	hash_free (display_seen);
-	hash_free (apropos_seen);
+	hashtable_free (display_seen);
+	hashtable_free (apropos_seen);
 	free_pathlist (manpathlist);
 	free (manp);
 	free (internal_locale);

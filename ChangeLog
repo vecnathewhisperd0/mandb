@@ -1,3 +1,44 @@
+Sun Sep 26 22:08:39 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	Build libman and libmandb as shared libraries, reducing our
+	installed footprint by about 200K.
+
+	* configure.ac: Add LT_INIT.  Move AC_GNU_SOURCE up to above it.
+	  Remove redundant AC_PROG_RANLIB.
+	* gnulib/m4/gnulib-cache.m4: Enable libtool support.
+	* gnulib/m4/libtool.m4, gnulib/m4/ltoptions.m4,
+	  gnulib/m4/ltsugar.m4, gnulib/m4/ltversion.m4,
+	  gnulib/m4/lt~obsolete.m4, tools/ltmain.sh: New files, created by
+	  libtoolize.
+	* autogen.sh: Export LIBTOOLIZE_OPTIONS=--quiet.
+	* lib/Makefile.am: Switch to libtool.  Add ../gnulib/lib/libgnu.la,
+	  $(LIBCOMPRESS), and @LIBINTL@ to LIBADD.  Install the library in
+	  $(pkglibdir), and instruct libtool to set an RPATH on binaries
+	  built against this library.
+	* libdb/Makefile.am: Switch to libtool.  Add ../lib/libman.la to
+	  LIBADD.  Install the library in $(pkglibdir), and instruct libtool
+	  to set an RPATH on binaries built against this library.
+	* src/Makefile.am (LIBMAN): Reduce to libman.
+	  (LIBMANDB): Reduce to libmandb.
+	  (accessdb_LDADD, catman_LDADD, globbing_LDADD, lexgrog_LDADD,
+	  man_LDADD, manconv_LDADD, mandb_LDADD, manpath_LDADD,
+	  whatis_LDADD, zsoelim_LDADD): Remove dependencies of libman and
+	  libmandb.
+	* .bzrignore: Add **/*.la, **/*.lo, **/.libs, and ./libtool.
+	* NEWS: Document this.
+
+	Avoid symbol clashes between libgnu and libman.
+
+	* lib/hashtable.c (null_hash_free, plain_hash_free, hash_create,
+	  hash_lookup_structure, hash_lookup, hash_install, hash_remove,
+	  hash_free): Rename to ...
+	  (null_hashtable_free, plain_hashtable_free, hashtable_create,
+	  hashtable_lookup_structure, hashtable_lookup, hashtable_install,
+	  hashtable_remove, hashtable_free): ... these.  Update all callers
+	  and prototypes.
+	* lib/hashtable.h (hash_free_ptr): Rename to ...
+	  (hashtable_free_ptr): ... this.  Update all users.
+
 Thu Sep 16 13:53:11 BST 2010  Robert Luberda  <robert@debian.org>
 
 	* man/po4a/po/pl.po: Update from Translation Project.

@@ -57,13 +57,13 @@ man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, GDBM_FILE file)
 	return wrap;
 }
 
-static void parent_sortkey_hash_free (void *defn)
+static void parent_sortkey_hashtable_free (void *defn)
 {
 	/* Automatically free child hashtables on removal. */
-	hash_free ((struct hashtable *) defn);
+	hashtable_free ((struct hashtable *) defn);
 }
 
-static void sortkey_hash_free (void *defn)
+static void sortkey_hashtable_free (void *defn)
 {
 	struct sortkey *key = (struct sortkey *) defn;
 	free (MYDBM_DPTR (key->key));
@@ -131,28 +131,30 @@ datum man_gdbm_firstkey (man_gdbm_wrapper wrap)
 	qsort (keys, numkeys, sizeof *keys, &sortkey_compare);
 
 	/* Link the elements together and insert them into a hash. */
-	sortkey_hash = hash_create (&sortkey_hash_free);
+	sortkey_hash = hashtable_create (&sortkey_hashtable_free);
 	for (i = 0; i < numkeys; ++i) {
 		if (i < numkeys - 1)
 			keys[i]->next = keys[i + 1];
 		else
 			keys[i]->next = NULL;
-		hash_install (sortkey_hash,
-			      MYDBM_DPTR (keys[i]->key),
-			      MYDBM_DSIZE (keys[i]->key),
-			      keys[i]);
+		hashtable_install (sortkey_hash,
+				   MYDBM_DPTR (keys[i]->key),
+				   MYDBM_DSIZE (keys[i]->key),
+				   keys[i]);
 	}
 	firstkey = keys[0];
 	free (keys);	/* element memory now owned by hashtable */
 
 	if (!parent_sortkey_hash) {
-		parent_sortkey_hash = hash_create (&parent_sortkey_hash_free);
-		push_cleanup ((cleanup_fun) hash_free, parent_sortkey_hash, 0);
+		parent_sortkey_hash = hashtable_create
+			(&parent_sortkey_hashtable_free);
+		push_cleanup ((cleanup_fun) hashtable_free,
+			      parent_sortkey_hash, 0);
 	}
 
 	/* Remember this structure for use by nextkey. */
-	hash_install (parent_sortkey_hash,
-		      wrap->name, strlen (wrap->name), sortkey_hash);
+	hashtable_install (parent_sortkey_hash,
+			   wrap->name, strlen (wrap->name), sortkey_hash);
 
 	if (firstkey)
 		return copy_datum (firstkey->key);
@@ -167,13 +169,13 @@ datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key)
 
 	if (!parent_sortkey_hash)
 		return empty_datum;
-	sortkey_hash = hash_lookup (parent_sortkey_hash,
-				    wrap->name, strlen (wrap->name));
+	sortkey_hash = hashtable_lookup (parent_sortkey_hash,
+					 wrap->name, strlen (wrap->name));
 	if (!sortkey_hash)
 		return empty_datum;
 
-	sortkey = hash_lookup (sortkey_hash,
-			       MYDBM_DPTR (key), MYDBM_DSIZE (key));
+	sortkey = hashtable_lookup (sortkey_hash,
+				    MYDBM_DPTR (key), MYDBM_DSIZE (key));
 	if (!sortkey || !sortkey->next)
 		return empty_datum;
 
@@ -187,11 +189,11 @@ void man_gdbm_close (man_gdbm_wrapper wrap)
 
 	if (parent_sortkey_hash) {
 		struct hashtable *sortkey_hash =
-			hash_lookup (parent_sortkey_hash,
-				     wrap->name, strlen (wrap->name));
+			hashtable_lookup (parent_sortkey_hash,
+					  wrap->name, strlen (wrap->name));
 		if (sortkey_hash)
-			hash_remove (parent_sortkey_hash,
-				     wrap->name, strlen (wrap->name));
+			hashtable_remove (parent_sortkey_hash,
+					  wrap->name, strlen (wrap->name));
 	}
 
 	free (wrap->name);

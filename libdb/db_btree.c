@@ -205,20 +205,20 @@ static inline datum btree_findkey (DB *db, u_int flags)
 
 	if (flags == R_FIRST) {
 		if (loop_check_hash) {
-			hash_free (loop_check_hash);
+			hashtable_free (loop_check_hash);
 			loop_check_hash = NULL;
 		}
 	}
 	if (!loop_check_hash)
-		loop_check_hash = hash_create (&plain_hash_free);
+		loop_check_hash = hashtable_create (&plain_hashtable_free);
 
 	if (((db->seq) (db, (DBT *) &key, (DBT *) &data, flags))) {
 		memset (&key, 0, sizeof key);
 		return key;
 	}
 
-	if (hash_lookup (loop_check_hash,
-	                 MYDBM_DPTR (key), MYDBM_DSIZE (key))) {
+	if (hashtable_lookup (loop_check_hash,
+			      MYDBM_DPTR (key), MYDBM_DSIZE (key))) {
 		/* We've seen this key already, which is broken. Return NULL
 		 * so the caller doesn't go round in circles.
 		 */
@@ -229,8 +229,8 @@ static inline datum btree_findkey (DB *db, u_int flags)
 		return key;
 	}
 
-	hash_install (loop_check_hash, MYDBM_DPTR (key), MYDBM_DSIZE (key),
-	              NULL);
+	hashtable_install (loop_check_hash,
+			   MYDBM_DPTR (key), MYDBM_DSIZE (key), NULL);
 
 	return copy_datum (key);
 }

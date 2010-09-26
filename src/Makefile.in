@@ -115,6 +115,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/lib-ld.m4 \
 	$(top_srcdir)/gnulib/m4/lib-link.m4 \
 	$(top_srcdir)/gnulib/m4/lib-prefix.m4 \
+	$(top_srcdir)/gnulib/m4/libtool.m4 \
 	$(top_srcdir)/gnulib/m4/localcharset.m4 \
 	$(top_srcdir)/gnulib/m4/locale-fr.m4 \
 	$(top_srcdir)/gnulib/m4/locale-ja.m4 \
@@ -122,6 +123,10 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/lock.m4 \
 	$(top_srcdir)/gnulib/m4/longlong.m4 \
 	$(top_srcdir)/gnulib/m4/lstat.m4 \
+	$(top_srcdir)/gnulib/m4/ltoptions.m4 \
+	$(top_srcdir)/gnulib/m4/ltsugar.m4 \
+	$(top_srcdir)/gnulib/m4/ltversion.m4 \
+	$(top_srcdir)/gnulib/m4/lt~obsolete.m4 \
 	$(top_srcdir)/gnulib/m4/malloc.m4 \
 	$(top_srcdir)/gnulib/m4/malloca.m4 \
 	$(top_srcdir)/gnulib/m4/mbrtowc.m4 \
@@ -224,14 +229,14 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" \
 PROGRAMS = $(bin_PROGRAMS) $(pkglibexec_PROGRAMS) $(sbin_PROGRAMS)
 am_accessdb_OBJECTS = accessdb.$(OBJEXT) util.$(OBJEXT)
 accessdb_OBJECTS = $(am_accessdb_OBJECTS)
-am__DEPENDENCIES_1 =
-am__DEPENDENCIES_2 = $(top_builddir)/libdb/libmandb.a \
-	$(am__DEPENDENCIES_1)
-accessdb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
+accessdb_DEPENDENCIES = $(LIBMANDB)
+AM_V_lt = $(am__v_lt_$(V))
+am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+am__v_lt_0 = --silent
 am_catman_OBJECTS = catman.$(OBJEXT) fake_security.$(OBJEXT) \
 	manp.$(OBJEXT) util.$(OBJEXT)
 catman_OBJECTS = $(am_catman_OBJECTS)
-catman_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN)
+catman_DEPENDENCIES = $(LIBMANDB)
 am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT) \
 	util.$(OBJEXT)
 globbing_OBJECTS = $(am_globbing_OBJECTS)
@@ -241,19 +246,18 @@ am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
 	lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) ult_src.$(OBJEXT) \
 	util.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
-lexgrog_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
+lexgrog_DEPENDENCIES = $(LIBMAN)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
 	man.$(OBJEXT) manconv.$(OBJEXT) manp.$(OBJEXT) \
 	security.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT) \
 	zsoelim.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
-man_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
-	$(am__DEPENDENCIES_1)
+man_DEPENDENCIES = $(LIBMANDB)
 am_manconv_OBJECTS = encodings.$(OBJEXT) manconv.$(OBJEXT) \
 	manconv_main.$(OBJEXT)
 manconv_OBJECTS = $(am_manconv_OBJECTS)
-manconv_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
+manconv_DEPENDENCIES = $(LIBMAN)
 am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	descriptions.$(OBJEXT) descriptions_store.$(OBJEXT) \
 	encodings.$(OBJEXT) filenames.$(OBJEXT) globbing.$(OBJEXT) \
@@ -261,8 +265,7 @@ am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	manp.$(OBJEXT) security.$(OBJEXT) straycats.$(OBJEXT) \
 	ult_src.$(OBJEXT) util.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
-mandb_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
-	$(am__DEPENDENCIES_1)
+mandb_DEPENDENCIES = $(LIBMANDB)
 am_manpath_OBJECTS = fake_security.$(OBJEXT) manp.$(OBJEXT) \
 	manpath.$(OBJEXT) util.$(OBJEXT)
 manpath_OBJECTS = $(am_manpath_OBJECTS)
@@ -271,18 +274,22 @@ am_whatis_OBJECTS = encodings.$(OBJEXT) fake_security.$(OBJEXT) \
 	manconv.$(OBJEXT) manp.$(OBJEXT) util.$(OBJEXT) \
 	whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
-whatis_DEPENDENCIES = $(am__DEPENDENCIES_2) $(LIBMAN) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+am__DEPENDENCIES_1 =
+whatis_DEPENDENCIES = $(LIBMANDB) $(am__DEPENDENCIES_1)
 am_zsoelim_OBJECTS = globbing.$(OBJEXT) util.$(OBJEXT) \
 	zsoelim.$(OBJEXT) zsoelim_main.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
-zsoelim_DEPENDENCIES = $(LIBMAN) $(am__DEPENDENCIES_1)
+zsoelim_DEPENDENCIES = $(LIBMAN)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_$(V))
 am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))
 am__v_CC_0 = @echo "  CC    " $@;
@@ -290,12 +297,16 @@ AM_V_at = $(am__v_at_$(V))
 am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
 am__v_at_0 = @
 CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD  " $@;
 @MAINTAINER_MODE_FALSE@am__skiplex = test -f $@ ||
 LEXCOMPILE = $(LEX) $(LFLAGS) $(AM_LFLAGS)
+LTLEXCOMPILE = $(LIBTOOL) $(AM_V_lt) $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(LEX) $(LFLAGS) $(AM_LFLAGS)
 AM_V_LEX = $(am__v_LEX_$(V))
 am__v_LEX_ = $(am__v_LEX_$(AM_DEFAULT_VERBOSITY))
 am__v_LEX_0 = @echo "  LEX   " $@;
@@ -360,6 +371,7 @@ ALLOCA_H = @ALLOCA_H@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 APPLE_UNIVERSAL_BUILD = @APPLE_UNIVERSAL_BUILD@
+AR = @AR@
 ASM_SYMBOL_PREFIX = @ASM_SYMBOL_PREFIX@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
@@ -384,6 +396,8 @@ DBLIBS = @DBLIBS@
 DBTYPE = @DBTYPE@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DSYMUTIL = @DSYMUTIL@
+DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
@@ -396,6 +410,7 @@ EOVERFLOW_HIDDEN = @EOVERFLOW_HIDDEN@
 EOVERFLOW_VALUE = @EOVERFLOW_VALUE@
 ERRNO_H = @ERRNO_H@
 EXEEXT = @EXEEXT@
+FGREP = @FGREP@
 FLOAT_H = @FLOAT_H@
 FNMATCH_H = @FNMATCH_H@
 GENCAT = @GENCAT@
@@ -790,13 +805,12 @@ INTLOBJS = @INTLOBJS@
 INTL_DEFAULT_VERBOSITY = @INTL_DEFAULT_VERBOSITY@
 INTL_LIBTOOL_SUFFIX_PREFIX = @INTL_LIBTOOL_SUFFIX_PREFIX@
 INTL_MACOSX_LIBS = @INTL_MACOSX_LIBS@
+LD = @LD@
 LDFLAGS = @LDFLAGS@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
 LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBCOMPRESS = @LIBCOMPRESS@
-LIBGNU_LIBDEPS = @LIBGNU_LIBDEPS@
-LIBGNU_LTLIBDEPS = @LIBGNU_LTLIBDEPS@
 LIBICONV = @LIBICONV@
 LIBINTL = @LIBINTL@
 LIBMULTITHREAD = @LIBMULTITHREAD@
@@ -805,13 +819,16 @@ LIBPTH = @LIBPTH@
 LIBPTH_PREFIX = @LIBPTH_PREFIX@
 LIBS = @LIBS@
 LIBTHREAD = @LIBTHREAD@
+LIBTOOL = @LIBTOOL@
 LINGUAS = @LINGUAS@
+LIPO = @LIPO@
 LN_S = @LN_S@
 LOCALCHARSET_TESTS_ENVIRONMENT = @LOCALCHARSET_TESTS_ENVIRONMENT@
 LOCALE_FR = @LOCALE_FR@
 LOCALE_FR_UTF8 = @LOCALE_FR_UTF8@
 LOCALE_JA = @LOCALE_JA@
 LOCALE_ZH_CN = @LOCALE_ZH_CN@
+LTALLOCA = @LTALLOCA@
 LTLIBC = @LTLIBC@
 LTLIBICONV = @LTLIBICONV@
 LTLIBINTL = @LTLIBINTL@
@@ -872,7 +889,12 @@ NEXT_TIME_H = @NEXT_TIME_H@
 NEXT_UNISTD_H = @NEXT_UNISTD_H@
 NEXT_WCHAR_H = @NEXT_WCHAR_H@
 NEXT_WCTYPE_H = @NEXT_WCTYPE_H@
+NM = @NM@
+NMEDIT = @NMEDIT@
+OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
+OTOOL = @OTOOL@
+OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -996,6 +1018,7 @@ REPLACE_WCSRTOMBS = @REPLACE_WCSRTOMBS@
 REPLACE_WCTOB = @REPLACE_WCTOB@
 REPLACE_WCWIDTH = @REPLACE_WCWIDTH@
 REPLACE_WRITE = @REPLACE_WRITE@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SIG_ATOMIC_T_SUFFIX = @SIG_ATOMIC_T_SUFFIX@
@@ -1046,6 +1069,7 @@ abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -1098,6 +1122,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lt_ECHO = @lt_ECHO@
 lzma = @lzma@
 man_mode = @man_mode@
 man_owner = @man_owner@
@@ -1151,18 +1176,18 @@ AM_CPPFLAGS = \
 	-DSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 
-LIBMAN = $(top_builddir)/lib/libman.a $(top_builddir)/gnulib/lib/libgnu.a
-LIBMANDB = $(top_builddir)/libdb/libmandb.a $(DBLIBS)
-accessdb_LDADD = $(LIBMANDB) $(LIBMAN) @LIBINTL@
-catman_LDADD = $(LIBMANDB) $(LIBMAN) @LIBINTL@
-globbing_LDADD = $(LIBMAN) @LIBINTL@
-lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-man_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-manpath_LDADD = $(LIBMAN) @LIBINTL@
-whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS) @LIBINTL@
-zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
+LIBMAN = $(top_builddir)/lib/libman.la
+LIBMANDB = $(top_builddir)/libdb/libmandb.la
+accessdb_LDADD = $(LIBMANDB)
+catman_LDADD = $(LIBMANDB)
+globbing_LDADD = $(LIBMAN)
+lexgrog_LDADD = $(LIBMAN)
+man_LDADD = $(LIBMANDB)
+manconv_LDADD = $(LIBMAN)
+mandb_LDADD = $(LIBMANDB)
+manpath_LDADD = $(LIBMAN)
+whatis_LDADD = $(LIBMANDB) $(LIBICONV)
+zsoelim_LDADD = $(LIBMAN)
 accessdb_SOURCES = \
 	accessdb.c \
 	util.c
@@ -1288,7 +1313,7 @@ EXTRA_DIST = \
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .c .l .o .obj
+.SUFFIXES: .c .l .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -1327,7 +1352,7 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
 	for p in $$list; do echo "$$p $$p"; done | \
 	sed 's/$(EXEEXT)$$//' | \
-	while read p p1; do if test -f $$p; \
+	while read p p1; do if test -f $$p || test -f $$p1; \
 	  then echo "$$p"; echo "$$p"; else :; fi; \
 	done | \
 	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
@@ -1341,8 +1366,8 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	while read type dir files; do \
 	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
 	    test -z "$$files" || { \
-	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(bindir)$$dir'"; \
-	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
+	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(bindir)$$dir'"; \
+	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
 	    } \
 	; done
 
@@ -1357,14 +1382,20 @@ uninstall-binPROGRAMS:
 	cd "$(DESTDIR)$(bindir)" && rm -f $$files
 
 clean-binPROGRAMS:
-	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+	@list='$(bin_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
 install-pkglibexecPROGRAMS: $(pkglibexec_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	test -z "$(pkglibexecdir)" || $(MKDIR_P) "$(DESTDIR)$(pkglibexecdir)"
 	@list='$(pkglibexec_PROGRAMS)'; test -n "$(pkglibexecdir)" || list=; \
 	for p in $$list; do echo "$$p $$p"; done | \
 	sed 's/$(EXEEXT)$$//' | \
-	while read p p1; do if test -f $$p; \
+	while read p p1; do if test -f $$p || test -f $$p1; \
 	  then echo "$$p"; echo "$$p"; else :; fi; \
 	done | \
 	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
@@ -1378,8 +1409,8 @@ install-pkglibexecPROGRAMS: $(pkglibexec_PROGRAMS)
 	while read type dir files; do \
 	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
 	    test -z "$$files" || { \
-	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(pkglibexecdir)$$dir'"; \
-	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(pkglibexecdir)$$dir" || exit $$?; \
+	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(pkglibexecdir)$$dir'"; \
+	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(pkglibexecdir)$$dir" || exit $$?; \
 	    } \
 	; done
 
@@ -1394,14 +1425,20 @@ uninstall-pkglibexecPROGRAMS:
 	cd "$(DESTDIR)$(pkglibexecdir)" && rm -f $$files
 
 clean-pkglibexecPROGRAMS:
-	-test -z "$(pkglibexec_PROGRAMS)" || rm -f $(pkglibexec_PROGRAMS)
+	@list='$(pkglibexec_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
 install-sbinPROGRAMS: $(sbin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	test -z "$(sbindir)" || $(MKDIR_P) "$(DESTDIR)$(sbindir)"
 	@list='$(sbin_PROGRAMS)'; test -n "$(sbindir)" || list=; \
 	for p in $$list; do echo "$$p $$p"; done | \
 	sed 's/$(EXEEXT)$$//' | \
-	while read p p1; do if test -f $$p; \
+	while read p p1; do if test -f $$p || test -f $$p1; \
 	  then echo "$$p"; echo "$$p"; else :; fi; \
 	done | \
 	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
@@ -1415,8 +1452,8 @@ install-sbinPROGRAMS: $(sbin_PROGRAMS)
 	while read type dir files; do \
 	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
 	    test -z "$$files" || { \
-	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(sbindir)$$dir'"; \
-	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(sbindir)$$dir" || exit $$?; \
+	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(sbindir)$$dir'"; \
+	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(sbindir)$$dir" || exit $$?; \
 	    } \
 	; done
 
@@ -1431,7 +1468,13 @@ uninstall-sbinPROGRAMS:
 	cd "$(DESTDIR)$(sbindir)" && rm -f $$files
 
 clean-sbinPROGRAMS:
-	-test -z "$(sbin_PROGRAMS)" || rm -f $(sbin_PROGRAMS)
+	@list='$(sbin_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
 accessdb$(EXEEXT): $(accessdb_OBJECTS) $(accessdb_DEPENDENCIES) 
 	@rm -f accessdb$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(accessdb_OBJECTS) $(accessdb_LDADD) $(LIBS)
@@ -1513,8 +1556,22 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
 
+.c.lo:
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
 .l.c:
 	$(AM_V_LEX)$(am__skiplex) $(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -1747,8 +1804,8 @@ maintainer-clean-generic:
 	-rm -f zsoelim.c
 clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-pkglibexecPROGRAMS \
-	clean-sbinPROGRAMS mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool \
+	clean-pkglibexecPROGRAMS clean-sbinPROGRAMS mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
@@ -1806,7 +1863,8 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-recursive
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 pdf: pdf-recursive
 
@@ -1826,20 +1884,21 @@ uninstall-am: uninstall-binPROGRAMS uninstall-pkglibexecPROGRAMS \
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-pkglibexecPROGRAMS clean-sbinPROGRAMS \
-	ctags ctags-recursive distclean distclean-compile \
-	distclean-generic distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-data-hook install-dvi \
-	install-dvi-am install-exec install-exec-am install-exec-hook \
-	install-html install-html-am install-info install-info-am \
-	install-man install-pdf install-pdf-am \
-	install-pkglibexecPROGRAMS install-ps install-ps-am \
-	install-sbinPROGRAMS install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am uninstall-binPROGRAMS uninstall-hook \
+	clean-generic clean-libtool clean-pkglibexecPROGRAMS \
+	clean-sbinPROGRAMS ctags ctags-recursive distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-binPROGRAMS install-data \
+	install-data-am install-data-hook install-dvi install-dvi-am \
+	install-exec install-exec-am install-exec-hook install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-pkglibexecPROGRAMS \
+	install-ps install-ps-am install-sbinPROGRAMS install-strip \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
+	uninstall-binPROGRAMS uninstall-hook \
 	uninstall-pkglibexecPROGRAMS uninstall-sbinPROGRAMS
 
 

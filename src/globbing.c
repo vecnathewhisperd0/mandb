@@ -116,7 +116,7 @@ struct dirent_hashent {
 	size_t names_len, names_max;
 };
 
-static void dirent_hash_free (void *defn)
+static void dirent_hashtable_free (void *defn)
 {
 	struct dirent_hashent *hashent = defn;
 	size_t i;
@@ -143,10 +143,10 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 	struct dirent *entry;
 
 	if (!dirent_hash) {
-		dirent_hash = hash_create (&dirent_hash_free);
-		push_cleanup ((cleanup_fun) hash_free, dirent_hash, 0);
+		dirent_hash = hashtable_create (&dirent_hashtable_free);
+		push_cleanup ((cleanup_fun) hashtable_free, dirent_hash, 0);
 	}
-	cache = hash_lookup (dirent_hash, path, strlen (path));
+	cache = hashtable_lookup (dirent_hash, path, strlen (path));
 
 	/* Check whether we've got this one already. */
 	if (cache) {
@@ -181,7 +181,7 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 	qsort (cache->names, cache->names_len, sizeof *cache->names,
 	       &cache_compare);
 
-	hash_install (dirent_hash, path, strlen (path), cache);
+	hashtable_install (dirent_hash, path, strlen (path), cache);
 	closedir (dir);
 
 	return cache;

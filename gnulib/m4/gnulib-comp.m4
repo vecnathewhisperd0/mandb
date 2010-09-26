@@ -185,10 +185,8 @@ AC_DEFUN([gl_EARLY],
 # "Check for header files, types and library functions".
 AC_DEFUN([gl_INIT],
 [
-  AM_CONDITIONAL([GL_COND_LIBTOOL], [false])
-  gl_cond_libtool=false
-  gl_libdeps=
-  gl_ltlibdeps=
+  AM_CONDITIONAL([GL_COND_LIBTOOL], [true])
+  gl_cond_libtool=true
   gl_m4_base='gnulib/m4'
   m4_pushdef([AC_LIBOBJ], m4_defn([gl_LIBOBJ]))
   m4_pushdef([AC_REPLACE_FUNCS], m4_defn([gl_REPLACE_FUNCS]))
@@ -199,6 +197,10 @@ AC_DEFUN([gl_INIT],
   gl_source_base='gnulib/lib'
   # Code from module alignof:
   # Code from module alloca:
+changequote(,)dnl
+LTALLOCA=`echo "$ALLOCA" | sed -e 's/\.[^.]* /.lo /g;s/\.[^.]*$/.lo/'`
+changequote([, ])dnl
+AC_SUBST([LTALLOCA])
   # Code from module alloca-opt:
   gl_FUNC_ALLOCA
   # Code from module areadlink-with-size:
@@ -624,10 +626,6 @@ changequote([, ])dnl
     AC_SUBST([gltests_LIBOBJS], [$gltests_libobjs])
     AC_SUBST([gltests_LTLIBOBJS], [$gltests_ltlibobjs])
   ])
-  LIBGNU_LIBDEPS="$gl_libdeps"
-  AC_SUBST([LIBGNU_LIBDEPS])
-  LIBGNU_LTLIBDEPS="$gl_ltlibdeps"
-  AC_SUBST([LIBGNU_LTLIBDEPS])
 ])
 
 # Like AC_LIBOBJ, except that the module name goes

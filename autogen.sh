@@ -6,4 +6,5 @@ if type gnulib-tool >/dev/null 2>&1; then
 	patch -s -p0 < gnulib/lib/xmalloc.patch
 	export AUTOPOINT=true
 fi
+export LIBTOOLIZE_OPTIONS=--quiet
 autoreconf -fi "$@"

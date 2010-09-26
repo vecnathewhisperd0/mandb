@@ -52,19 +52,19 @@ AM_CPPFLAGS = \
 	-DSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
 
-LIBMAN = $(top_builddir)/lib/libman.a $(top_builddir)/gnulib/lib/libgnu.a
-LIBMANDB = $(top_builddir)/libdb/libmandb.a $(DBLIBS)
+LIBMAN = $(top_builddir)/lib/libman.la
+LIBMANDB = $(top_builddir)/libdb/libmandb.la
 
-accessdb_LDADD = $(LIBMANDB) $(LIBMAN) @LIBINTL@
-catman_LDADD = $(LIBMANDB) $(LIBMAN) @LIBINTL@
-globbing_LDADD = $(LIBMAN) @LIBINTL@
-lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-man_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-mandb_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
-manpath_LDADD = $(LIBMAN) @LIBINTL@
-whatis_LDADD = $(LIBMANDB) $(LIBMAN) $(LIBICONV) $(LIBCOMPRESS) @LIBINTL@
-zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS) @LIBINTL@
+accessdb_LDADD = $(LIBMANDB)
+catman_LDADD = $(LIBMANDB)
+globbing_LDADD = $(LIBMAN)
+lexgrog_LDADD = $(LIBMAN)
+man_LDADD = $(LIBMANDB)
+manconv_LDADD = $(LIBMAN)
+mandb_LDADD = $(LIBMANDB)
+manpath_LDADD = $(LIBMAN)
+whatis_LDADD = $(LIBMANDB) $(LIBICONV)
+zsoelim_LDADD = $(LIBMAN)
 
 accessdb_SOURCES = \
 	accessdb.c \

@@ -20,7 +20,7 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * All of these routines except hash_free() can be found in K&R II.
+ * All of these routines except hashtable_free() can be found in K&R II.
  *
  * Sat Aug 20 15:01:02 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
  */
@@ -63,19 +63,19 @@ static unsigned int hash (const char *s, size_t len)
 #endif
 }
 
-void null_hash_free (void *defn)
+void null_hashtable_free (void *defn)
 {
 	defn = defn; /* unused */
 }
 
-void plain_hash_free (void *defn)
+void plain_hashtable_free (void *defn)
 {
 	if (defn)
 		free (defn);
 }
 
 /* Create a hashtable. */
-struct hashtable *hash_create (hash_free_ptr free_defn)
+struct hashtable *hashtable_create (hashtable_free_ptr free_defn)
 {
 	struct hashtable *ht = XMALLOC (struct hashtable);
 	ht->hashtab = XCALLOC (HASHSIZE, struct nlist *);
@@ -88,8 +88,8 @@ struct hashtable *hash_create (hash_free_ptr free_defn)
 /* Return pointer to hash entry structure containing s, or NULL if it
  * doesn't exist.
  */
-void *hash_lookup_structure (const struct hashtable *ht,
-			     const char *s, size_t len)
+void *hashtable_lookup_structure (const struct hashtable *ht,
+				  const char *s, size_t len)
 {
 	struct nlist *np;
 
@@ -101,9 +101,9 @@ void *hash_lookup_structure (const struct hashtable *ht,
 }
 
 /* Return pointer to definition of s, or NULL if it doesn't exist. */
-void *hash_lookup (const struct hashtable *ht, const char *s, size_t len)
+void *hashtable_lookup (const struct hashtable *ht, const char *s, size_t len)
 {
-	struct nlist *np = hash_lookup_structure (ht, s, len);
+	struct nlist *np = hashtable_lookup_structure (ht, s, len);
 	if (np)
 		return np->defn;
 	else
@@ -111,12 +111,12 @@ void *hash_lookup (const struct hashtable *ht, const char *s, size_t len)
 }
 
 /* Return structure containing definition (never NULL). */
-struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
-			    void *defn)
+struct nlist *hashtable_install (struct hashtable *ht,
+				 const char *name, size_t len, void *defn)
 {
 	struct nlist *np;
 
-	np = hash_lookup_structure (ht, name, len);
+	np = hashtable_lookup_structure (ht, name, len);
 	if (np) {
 		if (np->defn)
 			ht->free_defn (np->defn);
@@ -148,7 +148,7 @@ struct nlist *hash_install (struct hashtable *ht, const char *name, size_t len,
 }
 
 /* Remove structure containing name from the hash tree. */
-void hash_remove (struct hashtable *ht, const char *name, size_t len)
+void hashtable_remove (struct hashtable *ht, const char *name, size_t len)
 {
 	struct nlist *np, *prev;
 	unsigned int hashval = hash (name, len);
@@ -172,14 +172,14 @@ void hash_remove (struct hashtable *ht, const char *name, size_t len)
 /* Free up the hash tree (garbage collection). Also call the free_defn()
  * hook to free up values if necessary.
  */
-void hash_free (struct hashtable *ht)
+void hashtable_free (struct hashtable *ht)
 {
 	int i;
 
 	if (!ht)
 		return;
 
-	debug ("hash_free: %d entries, %d (%d%%) unique\n",
+	debug ("hashtable_free: %d entries, %d (%d%%) unique\n",
 	       ht->unique + ht->identical,
 	       ht->unique,
 	       ht->unique ? (ht->unique * 100) / (ht->unique + ht->identical)

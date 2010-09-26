@@ -1219,7 +1219,7 @@ int main (int argc, char *argv[])
 		}
 
 		/* clean out the cache of database lookups for each man page */
-		hash_free (db_hash);
+		hashtable_free (db_hash);
 		db_hash = NULL;
 
 		if (section && maybe_section) {
@@ -1244,7 +1244,7 @@ int main (int argc, char *argv[])
 				}
 				if (!found_subpage)
 					status = man (tmp, &found);
-				hash_free (db_hash);
+				hashtable_free (db_hash);
 				db_hash = NULL;
 				/* ... but don't gripe about it if it doesn't
 				 * work!
@@ -1290,7 +1290,7 @@ int main (int argc, char *argv[])
 
 		chkr_garbage_detector ();
 	}
-	hash_free (db_hash);
+	hashtable_free (db_hash);
 	db_hash = NULL;
 
 	drop_effective_privs ();
@@ -3390,7 +3390,7 @@ static int display_database_check (struct candidate *candp)
 	return exists;
 }
 
-static void db_hash_free (void *defn)
+static void db_hashtable_free (void *defn)
 {
 	free_mandata_struct (defn);
 }
@@ -3468,10 +3468,10 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 		database = mkdbname (manpath);
 
 	if (!db_hash)
-		db_hash = hash_create (&db_hash_free);
+		db_hash = hashtable_create (&db_hashtable_free);
 
 	/* Have we looked here already? */
-	data = hash_lookup (db_hash, manpath, strlen (manpath));
+	data = hashtable_lookup (db_hash, manpath, strlen (manpath));
 
 	if (!data) {
 		dbf = MYDBM_RDOPEN (database);
@@ -3491,8 +3491,8 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			else
 				data = dblookup_all (name, section,
 						     match_case);
-			hash_install (db_hash, manpath, strlen (manpath),
-				      data);
+			hashtable_install (db_hash, manpath, strlen (manpath),
+					   data);
 			MYDBM_CLOSE (dbf);
 #ifdef MAN_DB_CREATES
 		} else if (!global_manpath) {
@@ -3502,9 +3502,9 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 				data = infoalloc ();
 				data->next = NULL;
 				data->addr = NULL;
-				hash_install (db_hash,
-					      manpath, strlen (manpath),
-					      data);
+				hashtable_install (db_hash,
+						   manpath, strlen (manpath),
+						   data);
 				return TRY_DATABASE_OPEN_FAILED;
 			}
 			return TRY_DATABASE_CREATED;
@@ -3514,8 +3514,8 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			data = infoalloc ();
 			data->next = (struct mandata *) NULL;
 			data->addr = NULL;
-			hash_install (db_hash, manpath, strlen (manpath),
-				      data);
+			hashtable_install (db_hash, manpath, strlen (manpath),
+					   data);
 			return TRY_DATABASE_OPEN_FAILED;
 		}
 	}
@@ -3540,7 +3540,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 				found_stale = 1;
 
 	if (found_stale) {
-		hash_remove (db_hash, manpath, strlen (manpath));
+		hashtable_remove (db_hash, manpath, strlen (manpath));
 		return TRY_DATABASE_UPDATED;
 	}
 #endif /* MAN_DB_UPDATES */

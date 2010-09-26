@@ -208,9 +208,9 @@ void test_manfile (const char *file, const char *path)
 	}
 
 	if (!whatis_hash)
-		whatis_hash = hash_create (&plain_hash_free);
+		whatis_hash = hashtable_create (&plain_hashtable_free);
 
-	if (hash_lookup (whatis_hash, ult, strlen (ult)) == NULL) {
+	if (hashtable_lookup (whatis_hash, ult, strlen (ult)) == NULL) {
 		if (!STRNEQ (ult, file, len))
 			debug ("\ntest_manfile(): link not in cache:\n"
 			       " source = %s\n"
@@ -247,7 +247,8 @@ void test_manfile (const char *file, const char *path)
 	 * clear the hash between calls.
 	 */
 
-	lg.whatis = xstrdup (hash_lookup (whatis_hash, ult, strlen (ult)));
+	lg.whatis = xstrdup (hashtable_lookup (whatis_hash,
+					       ult, strlen (ult)));
 
 	if (!lg.whatis) {	/* cache miss */
 		/* go get the whatis info in its raw state */
@@ -259,8 +260,8 @@ void test_manfile (const char *file, const char *path)
 		free (file_base);
 		regain_effective_privs ();
 
-		hash_install (whatis_hash, ult, strlen (ult),
-			      xstrdup (lg.whatis));
+		hashtable_install (whatis_hash, ult, strlen (ult),
+				   xstrdup (lg.whatis));
 	}
 
 	debug ("\"%s\"\n", lg.whatis);

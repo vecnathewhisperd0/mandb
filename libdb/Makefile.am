@@ -19,17 +19,17 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-noinst_LIBRARIES = libmandb.a
+pkglib_LTLIBRARIES = libmandb.la
 dist_noinst_DATA = README
 
-libmandb_a_CPPFLAGS = \
+libmandb_la_CPPFLAGS = \
 	-I$(top_builddir)/include \
 	-I$(top_builddir)/intl \
 	-I$(top_srcdir)/gnulib/lib \
 	-I$(top_builddir)/gnulib/lib \
 	-I$(top_srcdir)/lib
 
-libmandb_a_SOURCES = \
+libmandb_la_SOURCES = \
 	db_btree.c \
 	db_delete.c \
 	db_gdbm.c \
@@ -39,3 +39,7 @@ libmandb_a_SOURCES = \
 	db_store.c \
 	db_ver.c \
 	mydbm.h
+
+libmandb_la_LIBADD = ../lib/libman.la $(DBLIBS)
+
+libmandb_la_LDFLAGS = -avoid-version -release $(VERSION) -rpath $(pkglibdir)
