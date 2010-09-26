@@ -233,8 +233,7 @@ accessdb_DEPENDENCIES = $(LIBMANDB)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
-am_catman_OBJECTS = catman.$(OBJEXT) fake_security.$(OBJEXT) \
-	manp.$(OBJEXT) util.$(OBJEXT)
+am_catman_OBJECTS = catman.$(OBJEXT) manp.$(OBJEXT) util.$(OBJEXT)
 catman_OBJECTS = $(am_catman_OBJECTS)
 catman_DEPENDENCIES = $(LIBMANDB)
 am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT) \
@@ -266,13 +265,11 @@ am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	ult_src.$(OBJEXT) util.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
 mandb_DEPENDENCIES = $(LIBMANDB)
-am_manpath_OBJECTS = fake_security.$(OBJEXT) manp.$(OBJEXT) \
-	manpath.$(OBJEXT) util.$(OBJEXT)
+am_manpath_OBJECTS = manp.$(OBJEXT) manpath.$(OBJEXT) util.$(OBJEXT)
 manpath_OBJECTS = $(am_manpath_OBJECTS)
 manpath_DEPENDENCIES = $(LIBMAN)
-am_whatis_OBJECTS = encodings.$(OBJEXT) fake_security.$(OBJEXT) \
-	manconv.$(OBJEXT) manp.$(OBJEXT) util.$(OBJEXT) \
-	whatis.$(OBJEXT)
+am_whatis_OBJECTS = encodings.$(OBJEXT) manconv.$(OBJEXT) \
+	manp.$(OBJEXT) util.$(OBJEXT) whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
 am__DEPENDENCIES_1 =
 whatis_DEPENDENCIES = $(LIBMANDB) $(am__DEPENDENCIES_1)
@@ -1194,7 +1191,6 @@ accessdb_SOURCES = \
 
 catman_SOURCES = \
 	catman.c \
-	fake_security.c \
 	manp.c \
 	manp.h \
 	util.c
@@ -1278,7 +1274,6 @@ mandb_SOURCES = \
 	util.c
 
 manpath_SOURCES = \
-	fake_security.c \
 	manp.c \
 	manp.h \
 	manpath.c \
@@ -1287,7 +1282,6 @@ manpath_SOURCES = \
 whatis_SOURCES = \
 	encodings.c \
 	encodings.h \
-	fake_security.c \
 	manconv.c \
 	manconv.h \
 	manp.c \

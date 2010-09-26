@@ -1,3 +1,12 @@
+Sun Sep 26 22:47:02 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (mkcatdirs): Move to ...
+	* src/check_mandirs.c (mkcatdirs): ... here, as it's only used by
+	  testmandirs.  Removes dependency of manp.c on security.h.
+	* src/manp.h (mkcatdirs): Remove prototype.
+	* src/Makefile.am (catman_SOURCES, manpath_SOURCES, whatis_SOURCES):
+	  Remove fake_security.c.
+
 Sun Sep 26 22:34:17 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/security.c (remove_with_dropped_privs): Remove; no longer

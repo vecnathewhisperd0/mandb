@@ -71,7 +71,6 @@ accessdb_SOURCES = \
 	util.c
 catman_SOURCES = \
 	catman.c \
-	fake_security.c \
 	manp.c \
 	manp.h \
 	util.c
@@ -149,7 +148,6 @@ mandb_SOURCES = \
 	ult_src.h \
 	util.c
 manpath_SOURCES = \
-	fake_security.c \
 	manp.c \
 	manp.h \
 	manpath.c \
@@ -157,7 +155,6 @@ manpath_SOURCES = \
 whatis_SOURCES = \
 	encodings.c \
 	encodings.h \
-	fake_security.c \
 	manconv.c \
 	manconv.h \
 	manp.c \

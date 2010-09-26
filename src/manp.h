@@ -36,7 +36,6 @@ extern void free_locale_bits (struct locale_bits *bits);
 extern char *add_nls_manpaths (char *manpathlist, const char *locales);
 extern char *get_manpath (const char *systems);
 extern char *get_manpath_from_path (const char *path, int mandatory);
-extern void mkcatdirs (const char *mandir, const char *catdir);
 extern void create_pathlist (const char *manp, char **mp);
 extern void free_pathlist (char **mp);
 extern char *get_mandb_manpath (void);

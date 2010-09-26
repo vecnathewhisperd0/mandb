@@ -69,7 +69,6 @@
 #include "error.h"
 #include "cleanup.h"
 
-#include "security.h"
 #include "encodings.h"
 #include "manp.h"
 
@@ -732,75 +731,6 @@ char *get_manpath (const char *systems)
 		manpathlist = guess_manpath (systems);
 
 	return manpathlist;
-}
-
-#ifdef SECURE_MAN_UID
-extern uid_t ruid;			/* initial real user id */
-extern uid_t euid;			/* initial effective user id */
-#endif /* SECURE_MAN_UID */
-
-/* create the catman hierarchy if it doesn't exist */
-void
-mkcatdirs (const char *mandir, const char *catdir)
-{
-	char *manname, *catname;
-#ifdef SECURE_MAN_UID
-	struct passwd *man_owner = get_man_owner ();
-#endif
-
-	if (catdir) {
-		int oldmask = umask (022);
-		/* first the base catdir */
-		if (is_directory (catdir) != 1) {
-			regain_effective_privs ();
-			if (mkdir (catdir, S_ISGID | 0755) < 0) {
-				if (!quiet)
-					error (0, 0,
-					       _("warning: cannot create catdir %s"),
-					       catdir);
-				debug ("warning: cannot create catdir %s\n",
-				       catdir);
-			} else
-				debug ("created base catdir %s\n", catdir);
-#ifdef SECURE_MAN_UID
-			if (ruid == 0)
-				chown (catdir, man_owner->pw_uid, 0);
-#endif /* SECURE_MAN_UID */
-			drop_effective_privs ();
-		}
-		/* then the hierarchy */
-		catname = appendstr (NULL, catdir, "/cat1", NULL);
-		manname = appendstr (NULL, mandir, "/man1", NULL);
-		if (is_directory (catdir) == 1) {
-			int j;
-			regain_effective_privs ();
-			debug ("creating catdir hierarchy %s	", catdir);
-			for (j = 1; j <= 9; j++) {
-				catname[strlen (catname) - 1] = '0' + j;
-				manname[strlen (manname) - 1] = '0' + j;
-				if ((is_directory (manname) == 1)
-				 && (is_directory (catname) != 1)) {
-					if (mkdir (catname,
-						   S_ISGID | 0755) < 0) {
-						if (!quiet)
-							error (0, 0, _("warning: cannot create catdir %s"), catname);
-						debug ("warning: cannot create catdir %s\n", catname);
-					} else
-						debug (" cat%d", j);
-#ifdef SECURE_MAN_UID
-					if (ruid == 0)
-						chown (catname,
-						       man_owner->pw_uid, 0);
-#endif /* SECURE_MAN_UID */
-				}
-			}
-			debug ("\n");
-			drop_effective_privs ();
-		}
-		free (catname);
-		free (manname);
-		umask (oldmask);
-	}
 }
 
 /* Parse the manpath.config file, extracting appropriate information. */
