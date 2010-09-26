@@ -35,6 +35,8 @@ libman_la_SOURCES = \
 	debug.c \
 	decompress.c \
 	decompress.h \
+	encodings.c \
+	encodings.h \
 	hashtable.c \
 	hashtable.h \
 	linelength.c \

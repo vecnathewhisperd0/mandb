@@ -1,3 +1,18 @@
+Sun Sep 26 23:25:31 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	Move encodings to libman.
+
+	* src/encodings.c: Move to ...
+	* lib/encodings.c: ... here.
+	* src/encodings.h: Move to ...
+	* lib/encodings.h: ... here.
+	* lib/Makefile.am (libman_la_SOURCES): Add encodings.c and
+	  encodings.h.
+	* src/Makefile.am (lexgrog_SOURCES, man_SOURCES, manconv_SOURCES,
+	  mandb_SOURCES, manpath_SOURCES): Remove encodings.c and
+	  encodings.h.
+	* lib/README: Add encodings.*.
+
 Sun Sep 26 23:15:00 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/encodings.c (struct manconv_codes, manconv_stdin,

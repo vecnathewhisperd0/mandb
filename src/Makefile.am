@@ -83,8 +83,6 @@ lexgrog_SOURCES = \
 	compression.c \
 	descriptions.c \
 	descriptions.h \
-	encodings.c \
-	encodings.h \
 	fake_security.c \
 	lexgrog.l \
 	lexgrog_test.c \
@@ -100,8 +98,6 @@ man_SOURCES = \
 	compression.c \
 	convert_name.c \
 	convert_name.h \
-	encodings.c \
-	encodings.h \
 	filenames.c \
 	filenames.h \
 	globbing.c \
@@ -122,7 +118,6 @@ man_SOURCES = \
 	zsoelim.h \
 	zsoelim.l
 manconv_SOURCES = \
-	encodings.c \
 	manconv.c \
 	manconv.h \
 	manconv_main.c
@@ -133,8 +128,6 @@ mandb_SOURCES = \
 	descriptions.c \
 	descriptions.h \
 	descriptions_store.c \
-	encodings.c \
-	encodings.h \
 	filenames.c \
 	filenames.h \
 	globbing.c \
@@ -159,8 +152,6 @@ manpath_SOURCES = \
 	manpath.c \
 	util.c
 whatis_SOURCES = \
-	encodings.c \
-	encodings.h \
 	manconv.c \
 	manconv.h \
 	manp.c \

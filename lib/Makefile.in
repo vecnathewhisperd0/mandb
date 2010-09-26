@@ -248,10 +248,11 @@ libman_la_DEPENDENCIES = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
 	$(am__DEPENDENCIES_1)
 am_libman_la_OBJECTS = libman_la-appendstr.lo libman_la-cleanup.lo \
 	libman_la-debug.lo libman_la-decompress.lo \
-	libman_la-hashtable.lo libman_la-linelength.lo \
-	libman_la-lower.lo libman_la-pathsearch.lo \
-	libman_la-pipeline.lo libman_la-tempfile.lo \
-	libman_la-wordfnmatch.lo libman_la-xregcomp.lo
+	libman_la-encodings.lo libman_la-hashtable.lo \
+	libman_la-linelength.lo libman_la-lower.lo \
+	libman_la-pathsearch.lo libman_la-pipeline.lo \
+	libman_la-tempfile.lo libman_la-wordfnmatch.lo \
+	libman_la-xregcomp.lo
 libman_la_OBJECTS = $(am_libman_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -1092,10 +1093,10 @@ libman_la_CPPFLAGS = \
 	-I$(top_builddir)/gnulib/lib
 
 libman_la_SOURCES = appendstr.c cleanup.c cleanup.h debug.c \
-	decompress.c decompress.h hashtable.c hashtable.h linelength.c \
-	linelength.h lower.c lower.h pathsearch.c pathsearch.h \
-	pipeline.c pipeline.h tempfile.c wordfnmatch.c wordfnmatch.h \
-	xregcomp.c xregcomp.h flock.h
+	decompress.c decompress.h encodings.c encodings.h hashtable.c \
+	hashtable.h linelength.c linelength.h lower.c lower.h \
+	pathsearch.c pathsearch.h pipeline.c pipeline.h tempfile.c \
+	wordfnmatch.c wordfnmatch.h xregcomp.c xregcomp.h flock.h
 libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
 	$(LIBCOMPRESS) @LIBINTL@
 
@@ -1180,6 +1181,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-cleanup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-debug.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-decompress.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-encodings.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-hashtable.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-linelength.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-lower.Plo@am__quote@
@@ -1244,6 +1246,14 @@ libman_la-decompress.lo: decompress.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='decompress.c' object='libman_la-decompress.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_la-decompress.lo `test -f 'decompress.c' || echo '$(srcdir)/'`decompress.c
+
+libman_la-encodings.lo: encodings.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_la-encodings.lo -MD -MP -MF $(DEPDIR)/libman_la-encodings.Tpo -c -o libman_la-encodings.lo `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libman_la-encodings.Tpo $(DEPDIR)/libman_la-encodings.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='encodings.c' object='libman_la-encodings.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_la-encodings.lo `test -f 'encodings.c' || echo '$(srcdir)/'`encodings.c
 
 libman_la-hashtable.lo: hashtable.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_la-hashtable.lo -MD -MP -MF $(DEPDIR)/libman_la-hashtable.Tpo -c -o libman_la-hashtable.lo `test -f 'hashtable.c' || echo '$(srcdir)/'`hashtable.c
