@@ -113,13 +113,6 @@ int is_directory (const char *path)
 	return ((sb.st_mode & S_IFDIR) != 0);
 }
 
-/* wrapper for pipeline library */
-int do_system (pipeline *pl)
-{
-	pipeline_start (pl);
-	return pipeline_wait (pl);
-}
-
 /* Escape dangerous metacharacters before dumping into a shell command. */
 char *escape_shell (const char *unesc)
 {

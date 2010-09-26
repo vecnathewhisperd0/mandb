@@ -1,3 +1,29 @@
+Mon Sep 27 00:24:50 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	Move security to libman.
+
+	* src/security.c: Move to ...
+	* lib/security.c: ... here.
+	* src/security.h: Move to ...
+	* lib/security.h: ... here.
+	* lib/Makefile.am (libman_la_SOURCES): Add security.c and
+	  security.h.
+	* src/Makefile.am (lexgrog_SOURCES): Remove fake_security.c and
+	  security.h.
+	  (man_SOURCES, mandb_SOURCES): Remove security.c and security.h.
+	* lib/README: Add security.*.
+	* src/lexgrog_test.c: Call init_security, so that we can use generic
+	  security functions rather than fake_security.
+	* src/fake_security.c: Remove.
+
+	* lib/security.c (do_system_drop_privs): Unroll calls to do_system
+	  into calls to pipeline_start and pipeline_wait.
+	* src/whatis.c (use_grep): Likewise.
+	* src/util.c (do_system): Remove.
+	* include/manconfig.h.in (do_system): Remove.
+
+	* src/*.c: Update #include grouping for movements to libman.
+
 Sun Sep 26 23:53:08 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	Get the tests working again following the switch to libtool.

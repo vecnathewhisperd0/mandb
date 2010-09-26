@@ -47,6 +47,8 @@ libman_la_SOURCES = \
 	pathsearch.h \
 	pipeline.c \
 	pipeline.h \
+	security.c \
+	security.h \
 	tempfile.c \
 	wordfnmatch.c \
 	wordfnmatch.h \

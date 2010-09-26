@@ -47,9 +47,9 @@
 #include "error.h"
 #include "pipeline.h"
 #include "decompress.h"
-
 #include "security.h"
 #include "encodings.h"
+
 #include "manconv_client.h"
 
 #define YY_READ_BUF_SIZE	1024

@@ -241,16 +241,14 @@ am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT) \
 globbing_OBJECTS = $(am_globbing_OBJECTS)
 globbing_DEPENDENCIES = $(LIBMAN)
 am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
-	fake_security.$(OBJEXT) lexgrog.$(OBJEXT) \
-	lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) \
+	lexgrog.$(OBJEXT) lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) \
 	manconv_client.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
 lexgrog_DEPENDENCIES = $(LIBMAN)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	filenames.$(OBJEXT) globbing.$(OBJEXT) man.$(OBJEXT) \
 	manconv.$(OBJEXT) manconv_client.$(OBJEXT) manp.$(OBJEXT) \
-	security.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT) \
-	zsoelim.$(OBJEXT)
+	ult_src.$(OBJEXT) util.$(OBJEXT) zsoelim.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
 man_DEPENDENCIES = $(LIBMANDB)
 am_manconv_OBJECTS = manconv.$(OBJEXT) manconv_main.$(OBJEXT)
@@ -260,8 +258,8 @@ am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	descriptions.$(OBJEXT) descriptions_store.$(OBJEXT) \
 	filenames.$(OBJEXT) globbing.$(OBJEXT) lexgrog.$(OBJEXT) \
 	manconv.$(OBJEXT) manconv_client.$(OBJEXT) mandb.$(OBJEXT) \
-	manp.$(OBJEXT) security.$(OBJEXT) straycats.$(OBJEXT) \
-	ult_src.$(OBJEXT) util.$(OBJEXT)
+	manp.$(OBJEXT) straycats.$(OBJEXT) ult_src.$(OBJEXT) \
+	util.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
 mandb_DEPENDENCIES = $(LIBMANDB)
 am_manpath_OBJECTS = manp.$(OBJEXT) manpath.$(OBJEXT) util.$(OBJEXT)
@@ -1204,14 +1202,12 @@ lexgrog_SOURCES = \
 	compression.c \
 	descriptions.c \
 	descriptions.h \
-	fake_security.c \
 	lexgrog.l \
 	lexgrog_test.c \
 	manconv.c \
 	manconv.h \
 	manconv_client.c \
 	manconv_client.h \
-	security.h \
 	ult_src.c \
 	ult_src.h \
 	util.c
@@ -1232,8 +1228,6 @@ man_SOURCES = \
 	manconv_client.h \
 	manp.c \
 	manp.h \
-	security.c \
-	security.h \
 	ult_src.c \
 	ult_src.h \
 	util.c \
@@ -1264,8 +1258,6 @@ mandb_SOURCES = \
 	mandb.c \
 	manp.c \
 	manp.h \
-	security.c \
-	security.h \
 	straycats.c \
 	ult_src.c \
 	ult_src.h \
@@ -1509,7 +1501,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/convert_name.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/descriptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/descriptions_store.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fake_security.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filenames.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globbing_test.Po@am__quote@
@@ -1522,7 +1513,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mandb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manpath.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/security.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/straycats.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ult_src.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@

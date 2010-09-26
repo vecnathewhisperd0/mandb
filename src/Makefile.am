@@ -83,14 +83,12 @@ lexgrog_SOURCES = \
 	compression.c \
 	descriptions.c \
 	descriptions.h \
-	fake_security.c \
 	lexgrog.l \
 	lexgrog_test.c \
 	manconv.c \
 	manconv.h \
 	manconv_client.c \
 	manconv_client.h \
-	security.h \
 	ult_src.c \
 	ult_src.h \
 	util.c
@@ -110,8 +108,6 @@ man_SOURCES = \
 	manconv_client.h \
 	manp.c \
 	manp.h \
-	security.c \
-	security.h \
 	ult_src.c \
 	ult_src.h \
 	util.c \
@@ -140,8 +136,6 @@ mandb_SOURCES = \
 	mandb.c \
 	manp.c \
 	manp.h \
-	security.c \
-	security.h \
 	straycats.c \
 	ult_src.c \
 	ult_src.h \

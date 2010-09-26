@@ -66,11 +66,11 @@
 #include "lower.h"
 #include "wordfnmatch.h"
 #include "xregcomp.h"
+#include "encodings.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
 
-#include "encodings.h"
 #include "manp.h"
 
 static char *manpathlist[MAXDIRS];
@@ -274,7 +274,8 @@ static inline int use_grep (char *page, char *manpath)
 		command_args (grep_cmd, anchored_page, whatis_file, NULL);
 		pipeline_command (grep_pl, grep_cmd);
 
-		status = (do_system (grep_pl) == 0);
+		pipeline_start (grep_pl);
+		status = (pipeline_wait (grep_pl) == 0);
 
 		free (anchored_page);
 		pipeline_free (grep_pl);

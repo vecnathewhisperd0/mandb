@@ -251,8 +251,8 @@ am_libman_la_OBJECTS = libman_la-appendstr.lo libman_la-cleanup.lo \
 	libman_la-encodings.lo libman_la-hashtable.lo \
 	libman_la-linelength.lo libman_la-lower.lo \
 	libman_la-pathsearch.lo libman_la-pipeline.lo \
-	libman_la-tempfile.lo libman_la-wordfnmatch.lo \
-	libman_la-xregcomp.lo
+	libman_la-security.lo libman_la-tempfile.lo \
+	libman_la-wordfnmatch.lo libman_la-xregcomp.lo
 libman_la_OBJECTS = $(am_libman_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -1095,8 +1095,9 @@ libman_la_CPPFLAGS = \
 libman_la_SOURCES = appendstr.c cleanup.c cleanup.h debug.c \
 	decompress.c decompress.h encodings.c encodings.h hashtable.c \
 	hashtable.h linelength.c linelength.h lower.c lower.h \
-	pathsearch.c pathsearch.h pipeline.c pipeline.h tempfile.c \
-	wordfnmatch.c wordfnmatch.h xregcomp.c xregcomp.h flock.h
+	pathsearch.c pathsearch.h pipeline.c pipeline.h security.c \
+	security.h tempfile.c wordfnmatch.c wordfnmatch.h xregcomp.c \
+	xregcomp.h flock.h
 libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
 	$(LIBCOMPRESS) @LIBINTL@
 
@@ -1187,6 +1188,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-lower.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-pathsearch.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-pipeline.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-security.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-tempfile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-wordfnmatch.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-xregcomp.Plo@am__quote@
@@ -1294,6 +1296,14 @@ libman_la-pipeline.lo: pipeline.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pipeline.c' object='libman_la-pipeline.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_la-pipeline.lo `test -f 'pipeline.c' || echo '$(srcdir)/'`pipeline.c
+
+libman_la-security.lo: security.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_la-security.lo -MD -MP -MF $(DEPDIR)/libman_la-security.Tpo -c -o libman_la-security.lo `test -f 'security.c' || echo '$(srcdir)/'`security.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libman_la-security.Tpo $(DEPDIR)/libman_la-security.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='security.c' object='libman_la-security.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_la-security.lo `test -f 'security.c' || echo '$(srcdir)/'`security.c
 
 libman_la-tempfile.lo: tempfile.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_la-tempfile.lo -MD -MP -MF $(DEPDIR)/libman_la-tempfile.Tpo -c -o libman_la-tempfile.lo `test -f 'tempfile.c' || echo '$(srcdir)/'`tempfile.c

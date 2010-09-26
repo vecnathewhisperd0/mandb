@@ -52,8 +52,8 @@
 
 #include "error.h"
 #include "pipeline.h"
-
 #include "encodings.h"
+
 #include "manconv.h"
 
 #ifdef HAVE_ICONV

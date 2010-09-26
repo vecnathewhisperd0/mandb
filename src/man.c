@@ -91,6 +91,8 @@ static char *cwd;
 #include "linelength.h"
 #include "decompress.h"
 #include "xregcomp.h"
+#include "security.h"
+#include "encodings.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -100,8 +102,6 @@ static char *cwd;
 #include "globbing.h"
 #include "ult_src.h"
 #include "manp.h"
-#include "security.h"
-#include "encodings.h"
 #include "convert_name.h"
 #include "zsoelim.h"
 #include "manconv_client.h"

@@ -66,6 +66,7 @@
 
 #include "error.h"
 #include "hashtable.h"
+#include "security.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -75,7 +76,6 @@
 #include "globbing.h"
 #include "manp.h"
 #include "ult_src.h"
-#include "security.h"
 #include "check_mandirs.h"
 
 int opt_test;		/* don't update db */

@@ -57,13 +57,13 @@
 #include "error.h"
 #include "cleanup.h"
 #include "pipeline.h"
+#include "security.h"
 
 #include "mydbm.h"
 
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "manp.h"
-#include "security.h"
 
 char *program_name;
 int quiet = 1;

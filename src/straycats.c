@@ -62,14 +62,14 @@
 #include "error.h"
 #include "pipeline.h"
 #include "decompress.h"
+#include "encodings.h"
+#include "security.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
 
 #include "descriptions.h"
-#include "encodings.h"
 #include "manp.h"
-#include "security.h"
 #include "manconv_client.h"
 
 static char *catdir, *mandir;
