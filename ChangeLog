@@ -1,3 +1,15 @@
+Mon Sep 27 19:06:10 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	Move util to libman.
+
+	* src/util.c: Move to ...
+	* lib/util.c: ... here.
+	* lib/Makefile.am (libman_la_SOURCES): Add util.c.
+	* src/Makefile.am (accessdb_SOURCES, catman_SOURCES,
+	  globbing_SOURCES, lexgrog_SOURCES, man_SOURCES, mandb_SOURCES,
+	  manpath_SOURCES, whatis_SOURCES, zsoelim_SOURCES): Remove util.c.
+	* lib/README: Add util.c.
+
 Mon Sep 27 00:50:37 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* gnulib/m4/gnulib-cache.m4: Remove obsolete modules atexit, memcmp,

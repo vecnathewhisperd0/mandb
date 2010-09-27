@@ -67,18 +67,15 @@ whatis_LDADD = $(LIBMANDB) $(LIBICONV)
 zsoelim_LDADD = $(LIBMAN)
 
 accessdb_SOURCES = \
-	accessdb.c \
-	util.c
+	accessdb.c
 catman_SOURCES = \
 	catman.c \
 	manp.c \
-	manp.h \
-	util.c
+	manp.h
 globbing_SOURCES = \
 	globbing.c \
 	globbing.h \
-	globbing_test.c \
-	util.c
+	globbing_test.c
 lexgrog_SOURCES = \
 	compression.c \
 	descriptions.c \
@@ -90,8 +87,7 @@ lexgrog_SOURCES = \
 	manconv_client.c \
 	manconv_client.h \
 	ult_src.c \
-	ult_src.h \
-	util.c
+	ult_src.h
 man_SOURCES = \
 	compression.c \
 	convert_name.c \
@@ -110,7 +106,6 @@ man_SOURCES = \
 	manp.h \
 	ult_src.c \
 	ult_src.h \
-	util.c \
 	zsoelim.h \
 	zsoelim.l
 manconv_SOURCES = \
@@ -138,24 +133,20 @@ mandb_SOURCES = \
 	manp.h \
 	straycats.c \
 	ult_src.c \
-	ult_src.h \
-	util.c
+	ult_src.h
 manpath_SOURCES = \
 	manp.c \
 	manp.h \
-	manpath.c \
-	util.c
+	manpath.c
 whatis_SOURCES = \
 	manconv.c \
 	manconv.h \
 	manp.c \
 	manp.h \
-	util.c \
 	whatis.c
 zsoelim_SOURCES = \
 	globbing.c \
 	globbing.h \
-	util.c \
 	zsoelim.h \
 	zsoelim.l \
 	zsoelim_main.c

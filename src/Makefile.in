@@ -224,28 +224,27 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" \
 	"$(DESTDIR)$(sbindir)"
 PROGRAMS = $(bin_PROGRAMS) $(pkglibexec_PROGRAMS) $(sbin_PROGRAMS)
-am_accessdb_OBJECTS = accessdb.$(OBJEXT) util.$(OBJEXT)
+am_accessdb_OBJECTS = accessdb.$(OBJEXT)
 accessdb_OBJECTS = $(am_accessdb_OBJECTS)
 accessdb_DEPENDENCIES = $(LIBMANDB)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
-am_catman_OBJECTS = catman.$(OBJEXT) manp.$(OBJEXT) util.$(OBJEXT)
+am_catman_OBJECTS = catman.$(OBJEXT) manp.$(OBJEXT)
 catman_OBJECTS = $(am_catman_OBJECTS)
 catman_DEPENDENCIES = $(LIBMANDB)
-am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT) \
-	util.$(OBJEXT)
+am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT)
 globbing_OBJECTS = $(am_globbing_OBJECTS)
 globbing_DEPENDENCIES = $(LIBMAN)
 am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
 	lexgrog.$(OBJEXT) lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) \
-	manconv_client.$(OBJEXT) ult_src.$(OBJEXT) util.$(OBJEXT)
+	manconv_client.$(OBJEXT) ult_src.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
 lexgrog_DEPENDENCIES = $(LIBMAN)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	filenames.$(OBJEXT) globbing.$(OBJEXT) man.$(OBJEXT) \
 	manconv.$(OBJEXT) manconv_client.$(OBJEXT) manp.$(OBJEXT) \
-	ult_src.$(OBJEXT) util.$(OBJEXT) zsoelim.$(OBJEXT)
+	ult_src.$(OBJEXT) zsoelim.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
 man_DEPENDENCIES = $(LIBMANDB)
 am_manconv_OBJECTS = manconv.$(OBJEXT) manconv_main.$(OBJEXT)
@@ -255,20 +254,18 @@ am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	descriptions.$(OBJEXT) descriptions_store.$(OBJEXT) \
 	filenames.$(OBJEXT) globbing.$(OBJEXT) lexgrog.$(OBJEXT) \
 	manconv.$(OBJEXT) manconv_client.$(OBJEXT) mandb.$(OBJEXT) \
-	manp.$(OBJEXT) straycats.$(OBJEXT) ult_src.$(OBJEXT) \
-	util.$(OBJEXT)
+	manp.$(OBJEXT) straycats.$(OBJEXT) ult_src.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
 mandb_DEPENDENCIES = $(LIBMANDB)
-am_manpath_OBJECTS = manp.$(OBJEXT) manpath.$(OBJEXT) util.$(OBJEXT)
+am_manpath_OBJECTS = manp.$(OBJEXT) manpath.$(OBJEXT)
 manpath_OBJECTS = $(am_manpath_OBJECTS)
 manpath_DEPENDENCIES = $(LIBMAN)
-am_whatis_OBJECTS = manconv.$(OBJEXT) manp.$(OBJEXT) util.$(OBJEXT) \
-	whatis.$(OBJEXT)
+am_whatis_OBJECTS = manconv.$(OBJEXT) manp.$(OBJEXT) whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
 am__DEPENDENCIES_1 =
 whatis_DEPENDENCIES = $(LIBMANDB) $(am__DEPENDENCIES_1)
-am_zsoelim_OBJECTS = globbing.$(OBJEXT) util.$(OBJEXT) \
-	zsoelim.$(OBJEXT) zsoelim_main.$(OBJEXT)
+am_zsoelim_OBJECTS = globbing.$(OBJEXT) zsoelim.$(OBJEXT) \
+	zsoelim_main.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
 zsoelim_DEPENDENCIES = $(LIBMAN)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -1180,20 +1177,17 @@ manpath_LDADD = $(LIBMAN)
 whatis_LDADD = $(LIBMANDB) $(LIBICONV)
 zsoelim_LDADD = $(LIBMAN)
 accessdb_SOURCES = \
-	accessdb.c \
-	util.c
+	accessdb.c
 
 catman_SOURCES = \
 	catman.c \
 	manp.c \
-	manp.h \
-	util.c
+	manp.h
 
 globbing_SOURCES = \
 	globbing.c \
 	globbing.h \
-	globbing_test.c \
-	util.c
+	globbing_test.c
 
 lexgrog_SOURCES = \
 	compression.c \
@@ -1206,8 +1200,7 @@ lexgrog_SOURCES = \
 	manconv_client.c \
 	manconv_client.h \
 	ult_src.c \
-	ult_src.h \
-	util.c
+	ult_src.h
 
 man_SOURCES = \
 	compression.c \
@@ -1227,7 +1220,6 @@ man_SOURCES = \
 	manp.h \
 	ult_src.c \
 	ult_src.h \
-	util.c \
 	zsoelim.h \
 	zsoelim.l
 
@@ -1257,27 +1249,23 @@ mandb_SOURCES = \
 	manp.h \
 	straycats.c \
 	ult_src.c \
-	ult_src.h \
-	util.c
+	ult_src.h
 
 manpath_SOURCES = \
 	manp.c \
 	manp.h \
-	manpath.c \
-	util.c
+	manpath.c
 
 whatis_SOURCES = \
 	manconv.c \
 	manconv.h \
 	manp.c \
 	manp.h \
-	util.c \
 	whatis.c
 
 zsoelim_SOURCES = \
 	globbing.c \
 	globbing.h \
-	util.c \
 	zsoelim.h \
 	zsoelim.l \
 	zsoelim_main.c
@@ -1512,7 +1500,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/manpath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/straycats.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ult_src.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whatis.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zsoelim_main.Po@am__quote@

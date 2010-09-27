@@ -50,6 +50,7 @@ libman_la_SOURCES = \
 	security.c \
 	security.h \
 	tempfile.c \
+	util.c \
 	wordfnmatch.c \
 	wordfnmatch.h \
 	xregcomp.c \
