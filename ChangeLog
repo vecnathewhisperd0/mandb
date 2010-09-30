@@ -1,3 +1,18 @@
+Thu Sep 30 16:01:22 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	Convert the French manual pages translation to po4a.
+
+	* man/LINGUAS: Remove fr.
+	* man/LINGUAS.po4a: Add fr.
+	* man/fr/man1, man/fr/man5, man/fr/man8: Remove.
+	* man/fr/Makefile.am (PO4A_LINGUA): Set to yes.
+	  (EXTRA_DIST): Add translator.add.
+	  (man1_MANS): Add man1/manconv.1.
+	* man/po4a/Makefile.am (POFILES): Add po/fr.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add fr.
+	* man/THANKS: Add David Prévot.
+	* .bzrignore: Add man/fr/man1, man/fr/man5, and man/fr/man8.
+
 Thu Sep 30 15:44:46 BST 2010  David Prévot  <david@tilapin.org>
 
 	* po/fr.po: Update from Translation Project.

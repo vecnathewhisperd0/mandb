@@ -20,11 +20,15 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 LINGUA = fr
+PO4A_LINGUA = yes
+
+EXTRA_DIST = translator.add
 
 man1_MANS = \
 	man1/apropos.1 \
 	man1/lexgrog.1 \
 	man1/man.1 \
+	man1/manconv.1 \
 	man1/manpath.1 \
 	man1/whatis.1 \
 	man1/zsoelim.1

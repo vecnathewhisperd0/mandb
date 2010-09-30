@@ -18,7 +18,7 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-POFILES = po/id.po po/nl.po po/pl.po po/ru.po
+POFILES = po/fr.po po/id.po po/nl.po po/pl.po po/ru.po
 
 EXTRA_DIST = po4a.cfg po/man-db-manpages.pot $(POFILES)
 
