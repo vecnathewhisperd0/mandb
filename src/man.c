@@ -662,11 +662,9 @@ static void add_roff_line_length (command *cmd, int *save_cat_p)
 
 	length = get_roff_line_length ();
 	if (length) {
-		char optionll[32], optionlt[32];
 		debug ("Using %d-character lines\n", length);
-		sprintf (optionll, "-rLL=%dn", length);
-		sprintf (optionlt, "-rLT=%dn", length);
-		command_args (cmd, optionll, optionlt, NULL);
+		command_argf (cmd, "-rLL=%dn", length);
+		command_argf (cmd, "-rLT=%dn", length);
 	}
 }
 
@@ -1651,12 +1649,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 					add_roff_line_length (cmd, &save_cat);
 
 				for (cur = roff_warnings; cur;
-				     cur = cur->next) {
-					char *arg = xasprintf
-						("-w%s", cur->name);
-					command_arg (cmd, arg);
-					free (arg);
-				}
+				     cur = cur->next)
+					command_argf (cmd, "-w%s", cur->name);
 #endif /* TROFF_IS_GROFF */
 
 				command_argstr (cmd, roff_opt);
@@ -1675,21 +1669,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			}
 
 			if (wants_dev) {
-				if (roff_device) {
-					char *tmpdev = appendstr (NULL, "-T",
-								  roff_device,
-								  NULL);
-					command_arg (cmd, tmpdev);
-					free (tmpdev);
-				}
+				if (roff_device)
+					command_argf (cmd,
+						      "-T%s", roff_device);
 #ifdef TROFF_IS_GROFF
-				else if (gxditview) {
-					char *tmpdev = appendstr (NULL, "-TX",
-								  gxditview,
-								  NULL);
-					command_arg (cmd, tmpdev);
-					free (tmpdev);
-				}
+				else if (gxditview)
+					command_argf (cmd, "-TX%s", gxditview);
 #endif /* TROFF_IS_GROFF */
 			}
 

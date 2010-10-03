@@ -1,3 +1,11 @@
+Sun Oct  3 23:57:45 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (command_argf): New function.
+	* lib/pipeline.h (command_argf): Add prototype.
+	* src/man.c (add_roff_line_length): Use it, reducing need for
+	  temporary local variables.
+	  (make_roff_command): Likewise.
+
 Sun Oct  3 23:30:06 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (setenv_less): Take a command argument.  Set environment
