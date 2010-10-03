@@ -161,8 +161,6 @@ int main (int argc, char **argv)
 	else
 		type = 1;
 
-	pipeline_install_sigchld ();
-
 	for (i = 0; i < num_files; ++i) {
 		lexgrog lg;
 		const char *file;

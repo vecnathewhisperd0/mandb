@@ -166,8 +166,6 @@ int main (int argc, char *argv[])
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
 
-	pipeline_install_sigchld ();
-
 	if (filename) {
 		p = decompress_open (filename);
 		if (!p)

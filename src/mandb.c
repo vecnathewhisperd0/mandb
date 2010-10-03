@@ -602,8 +602,6 @@ int main (int argc, char *argv[])
 	}
 #endif /* __profile__ */
 
-	pipeline_install_sigchld ();
-
 #ifdef SECURE_MAN_UID
 	/* record who we are and drop effective privs for later use */
 	init_security ();

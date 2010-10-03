@@ -1055,8 +1055,6 @@ int main (int argc, char *argv[])
 	init_security ();
 #endif /* SECURE_MAN_UID */
 
-	pipeline_install_sigchld ();
-
 	read_config_file (local_man_file || user_config_file);
 
 	/* if the user wants whatis or apropos, give it to them... */

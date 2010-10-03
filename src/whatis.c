@@ -744,8 +744,6 @@ int main (int argc, char *argv[])
 		}
 	}
 
-	pipeline_install_sigchld ();
-
 	/* sort out the internal manpath */
 	if (manp == NULL) {
 		char *all_locales;

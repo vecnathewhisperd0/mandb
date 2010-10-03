@@ -111,8 +111,6 @@ int main (int argc, char *argv[])
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
 
-	pipeline_install_sigchld ();
-
 	/* parse files in command line order */
 	for (i = 0; i < num_files; ++i) {
 		if (zsoelim_open_file (files[i]))
