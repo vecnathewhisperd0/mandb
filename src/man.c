@@ -1803,14 +1803,14 @@ static pipeline *make_browser (const char *pattern, const char *file)
 	return p;
 }
 
-static void setenv_less (const char *title)
+static void setenv_less (command *cmd, const char *title)
 {
 	const char *esc_title;
 	char *less_opts, *man_pn;
 	const char *force = getenv ("MANLESS");
 
 	if (force) {
-		setenv ("LESS", force, 1);
+		command_setenv (cmd, "LESS", force);
 		return;
 	}
 
@@ -1832,11 +1832,10 @@ static void setenv_less (const char *title)
 	}
 
 	debug ("Setting LESS to %s\n", less_opts);
-	/* If there isn't enough space in the environment, ignore it. */
-	setenv ("LESS", less_opts, 1);
+	command_setenv (cmd, "LESS", less_opts);
 
 	debug ("Setting MAN_PN to %s\n", esc_title);
-	setenv ("MAN_PN", esc_title, 1);
+	command_setenv (cmd, "MAN_PN", esc_title);
 
 	free (less_opts);
 }
@@ -1863,8 +1862,7 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 {
 	pipeline *p = pipeline_new ();
 	const char *locale_charset = NULL;
-
-	setenv_less (title);
+	command *pager_cmd = NULL;
 
 	locale_charset = my_locale_charset ();
 
@@ -1885,13 +1883,18 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 	if (ascii) {
 		pipeline_command_argstr
 			(p, get_def_user ("tr", TR TR_SET1 TR_SET2));
-		pipeline_command_argstr (p, pager);
+		pager_cmd = command_new_argstr (pager);
 	} else
 #ifdef TROFF_IS_GROFF
 	if (!htmlout)
 		/* format_display deals with html_pager */
 #endif
-		pipeline_command_argstr (p, pager);
+		pager_cmd = command_new_argstr (pager);
+
+	if (pager_cmd) {
+		setenv_less (pager_cmd, title);
+		pipeline_command (p, pager_cmd);
+	}
 
 	if (!p->ncommands) {
 		pipeline_free (p);

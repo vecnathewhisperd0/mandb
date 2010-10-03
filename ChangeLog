@@ -1,3 +1,10 @@
+Sun Oct  3 23:30:06 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (setenv_less): Take a command argument.  Set environment
+	  variables only for that command, not globally.
+	  (make_display_command): Call setenv_less on the command
+	  constructed from pager.
+
 Sun Oct  3 22:34:13 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (reap_children, pipeline_sigchld,
