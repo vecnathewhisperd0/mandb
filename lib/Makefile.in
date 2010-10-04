@@ -1096,7 +1096,7 @@ libman_la_SOURCES = appendstr.c cleanup.c cleanup.h debug.c \
 	security.h tempfile.c util.c wordfnmatch.c wordfnmatch.h \
 	xregcomp.c xregcomp.h flock.h
 libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
-	$(LIBCOMPRESS) @LIBINTL@
+	$(LIBCOMPRESS) @LTLIBINTL@
 
 libman_la_LDFLAGS = -avoid-version -release $(VERSION) -rpath $(pkglibdir)
 all: all-am

@@ -61,6 +61,6 @@ libman_la_SOURCES += \
 	flock.h
 
 libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
-	$(LIBCOMPRESS) @LIBINTL@
+	$(LIBCOMPRESS) @LTLIBINTL@
 
 libman_la_LDFLAGS = -avoid-version -release $(VERSION) -rpath $(pkglibdir)
