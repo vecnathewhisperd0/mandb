@@ -6,101 +6,117 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.4.10\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2010-05-08 16:18+0100\n"
+"POT-Creation-Date: 2010-10-04 23:53+0100\n"
 "PO-Revision-Date: 2000-11-11 22:25+09:00\n"
 "Last-Translator: UCHIDA Norihiro <KY4N-UCD@asahi-net.or.jp>\n"
 "Language-Team: debian-doc <debian-doc@debian.or.jp>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=euc-jp\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/pipeline.c:247 lib/pipeline.c:259
+#: lib/pipeline.c:248 lib/pipeline.c:260
 #, c-format
 msgid "badly formed configuration directive: '%s'"
 msgstr ""
 
-#: lib/pipeline.c:655 lib/pipeline.c:1476
+#: lib/pipeline.c:668 lib/pipeline.c:1127
 #, c-format
 msgid "can't install SIGCHLD handler"
 msgstr ""
 
-#: lib/pipeline.c:663 lib/pipeline.c:1150 src/catman.c:199
+#: lib/pipeline.c:676 lib/pipeline.c:1263 src/catman.c:199
 #, c-format
 msgid "fork failed"
 msgstr "fork に失敗しました"
 
-#: lib/pipeline.c:673 lib/pipeline.c:1417
+#: lib/pipeline.c:686 lib/pipeline.c:1475
 #, c-format
 msgid "waitpid failed"
 msgstr ""
 
-#: lib/pipeline.c:688 lib/pipeline.c:1376
+#: lib/pipeline.c:701 lib/pipeline.c:1434
 #, c-format
 msgid "%s: %s (core dumped)"
 msgstr ""
 
-#: lib/pipeline.c:693 lib/pipeline.c:1381
+#: lib/pipeline.c:706 lib/pipeline.c:1439
 #, c-format
 msgid "%s: %s"
 msgstr ""
 
-#: lib/pipeline.c:720
+#: lib/pipeline.c:733
 #, fuzzy, c-format
 msgid "can't execute %s"
 msgstr "%s を実行できません"
 
-#: lib/pipeline.c:943
+#: lib/pipeline.c:956
 #, c-format
 msgid "pipeline input not open"
 msgstr ""
 
-#: lib/pipeline.c:956
+#: lib/pipeline.c:969
 #, c-format
 msgid "pipeline output not open"
 msgstr ""
 
-#: lib/pipeline.c:1102 lib/pipeline.c:1121
+#: lib/pipeline.c:1215 lib/pipeline.c:1234
 #, fuzzy, c-format
 msgid "pipe failed"
 msgstr "fork に失敗しました"
 
-#: lib/pipeline.c:1110 src/lexgrog.l:612 src/man.c:2470 src/man.c:2551
-#: src/man.c:2647 src/manconv_main.c:174 src/straycats.c:212 src/ult_src.c:278
-#: src/ult_src.c:292 src/zsoelim.l:396
+#: lib/pipeline.c:1223 src/lexgrog.l:613 src/man.c:2459 src/man.c:2540
+#: src/man.c:2636 src/manconv_main.c:172 src/straycats.c:213 src/ult_src.c:277
+#: src/ult_src.c:291 src/zsoelim.l:396
 #, c-format
 msgid "can't open %s"
 msgstr "%s をオープンできません"
 
-#: lib/pipeline.c:1158 lib/pipeline.c:1167
+#: lib/pipeline.c:1271 lib/pipeline.c:1280
 #, fuzzy, c-format
 msgid "dup2 failed"
 msgstr "fork に失敗しました"
 
-#: lib/pipeline.c:1161 lib/pipeline.c:1170 lib/pipeline.c:1177
-#: lib/pipeline.c:1186 lib/pipeline.c:1213 lib/pipeline.c:1217
+#: lib/pipeline.c:1274 lib/pipeline.c:1283 lib/pipeline.c:1290
+#: lib/pipeline.c:1299 lib/pipeline.c:1326 lib/pipeline.c:1330
 #, fuzzy, c-format
 msgid "close failed"
 msgstr "fork に失敗しました"
 
-#: lib/pipeline.c:1309
+#: lib/pipeline.c:1367
 #, c-format
 msgid "closing pipeline input stream failed"
 msgstr ""
 
-#: lib/pipeline.c:1314 lib/pipeline.c:1584
+#: lib/pipeline.c:1372 lib/pipeline.c:1606
 #, c-format
 msgid "closing pipeline input failed"
 msgstr ""
 
-#: lib/pipeline.c:1321
+#: lib/pipeline.c:1379
 #, c-format
 msgid "closing pipeline output stream failed"
 msgstr ""
 
-#: lib/pipeline.c:1328 lib/pipeline.c:1609
+#: lib/pipeline.c:1386 lib/pipeline.c:1631
 #, c-format
 msgid "closing pipeline output failed"
 msgstr ""
+
+#: lib/security.c:114
+#, c-format
+msgid "can't set effective uid"
+msgstr "有効な UID を設定できません"
+
+#: lib/security.c:136 src/mandb.c:614
+#, c-format
+msgid "the setuid man user \"%s\" does not exist"
+msgstr "setuid された man ユーザ \"%s\" は存在しません"
+
+#: lib/security.c:235
+#, c-format
+msgid "can't fork"
+msgstr "fork できません"
 
 #: lib/xregcomp.c:47
 #, c-format
@@ -137,7 +153,7 @@ msgstr "中身が %d フィールドしかありません"
 msgid "bad fetch on multi key %s"
 msgstr "複合キー %s は不正な呼び出しです"
 
-#: libdb/db_lookup.c:452 src/whatis.c:530
+#: libdb/db_lookup.c:452 src/whatis.c:531
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr ""
@@ -167,7 +183,7 @@ msgid "The man database defaults to %s%s."
 msgstr ""
 
 #: src/accessdb.c:65 src/catman.c:99 src/globbing_test.c:59
-#: src/lexgrog_test.c:66 src/man.c:272 src/manconv_main.c:94 src/mandb.c:97
+#: src/lexgrog_test.c:67 src/man.c:273 src/manconv_main.c:94 src/mandb.c:97
 #: src/manpath.c:66 src/whatis.c:119 src/zsoelim_main.c:59
 msgid "emit debugging messages"
 msgstr ""
@@ -181,20 +197,20 @@ msgstr "%s をオープンできません"
 msgid "[SECTION...]"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:292 src/whatis.c:128
+#: src/catman.c:100 src/man.c:293 src/whatis.c:128
 msgid "PATH"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:292 src/whatis.c:128
+#: src/catman.c:100 src/man.c:293 src/whatis.c:128
 msgid "set search path for manual pages to PATH"
 msgstr ""
 
-#: src/catman.c:101 src/man.c:271 src/mandb.c:105 src/manpath.c:68
+#: src/catman.c:101 src/man.c:272 src/mandb.c:105 src/manpath.c:68
 #: src/whatis.c:130
 msgid "FILE"
 msgstr ""
 
-#: src/catman.c:101 src/man.c:271 src/mandb.c:105 src/manpath.c:68
+#: src/catman.c:101 src/man.c:272 src/mandb.c:105 src/manpath.c:68
 #: src/whatis.c:130
 #, fuzzy
 msgid "use this user configuration file"
@@ -249,7 +265,7 @@ msgstr "%s を更新できません"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "警告: %s/man%s/%s.%s*: 拡張子が競合しています"
 
-#: src/check_mandirs.c:104 src/check_mandirs.c:450
+#: src/check_mandirs.c:104 src/check_mandirs.c:518
 #, c-format
 msgid "can't update index cache %s"
 msgstr "index キャッシュ %s を更新できません"
@@ -260,37 +276,42 @@ msgid "warning: %s: bad symlink or ROFF `.so' request"
 msgstr ""
 "警告： %s： シンボリックリンクが不正であるか、ROFF `.so' 要求が不正です"
 
-#: src/check_mandirs.c:283
+#: src/check_mandirs.c:284
 #, c-format
 msgid "warning: %s: ignoring empty file"
 msgstr "警告: %s: 空ファイルを無視しています"
 
-#: src/check_mandirs.c:287 src/straycats.c:264
+#: src/check_mandirs.c:288 src/straycats.c:265
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
-#: src/check_mandirs.c:313 src/check_mandirs.c:350 src/mandb.c:672
-#: src/straycats.c:85 src/straycats.c:292 src/ult_src.c:92
+#: src/check_mandirs.c:314 src/check_mandirs.c:418 src/mandb.c:670
+#: src/straycats.c:86 src/straycats.c:293 src/ult_src.c:91
 #, c-format
 msgid "can't search directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/check_mandirs.c:393
+#: src/check_mandirs.c:353 src/check_mandirs.c:380
+#, c-format
+msgid "warning: cannot create catdir %s"
+msgstr "警告: cat ディレクトリ %s を作成できません"
+
+#: src/check_mandirs.c:461
 #, c-format
 msgid "can't create index cache %s"
 msgstr "index キャッシュ %s を作成できません"
 
-#: src/check_mandirs.c:413
+#: src/check_mandirs.c:481
 #, fuzzy, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "パス`%s'の index キャッシュを更新しています。お待ちください..."
 
-#: src/check_mandirs.c:508 src/check_mandirs.c:576
+#: src/check_mandirs.c:576 src/check_mandirs.c:644
 msgid "done.\n"
 msgstr "完了しました\n"
 
-#: src/check_mandirs.c:813
+#: src/check_mandirs.c:881
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr ""
@@ -305,12 +326,7 @@ msgstr "%s を cat 名に変換できません"
 msgid "warning: failed to store entry for %s(%s)"
 msgstr ""
 
-#: src/fake_security.c:57
-#, c-format
-msgid "can't get passwd structure for uid 0"
-msgstr ""
-
-#: src/filenames.c:47 src/straycats.c:117 src/straycats.c:146
+#: src/filenames.c:47 src/straycats.c:118 src/straycats.c:147
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "警告: %s: セクションが違うファイル名を無視しています"
@@ -319,19 +335,19 @@ msgstr "警告: %s: セクションが違うファイル名を無視しています"
 msgid "PATH SECTION NAME"
 msgstr ""
 
-#: src/globbing_test.c:60 src/man.c:295
+#: src/globbing_test.c:60 src/man.c:296
 msgid "EXTENSION"
 msgstr ""
 
-#: src/globbing_test.c:60 src/man.c:296
+#: src/globbing_test.c:60 src/man.c:297
 msgid "limit search to extension type EXTENSION"
 msgstr ""
 
-#: src/globbing_test.c:61 src/man.c:297
+#: src/globbing_test.c:61 src/man.c:298
 msgid "look for pages case-insensitively (default)"
 msgstr ""
 
-#: src/globbing_test.c:62 src/man.c:298
+#: src/globbing_test.c:62 src/man.c:299
 msgid "look for pages case-sensitively"
 msgstr ""
 
@@ -343,224 +359,224 @@ msgstr ""
 msgid "the page name contains wildcards"
 msgstr ""
 
-#: src/lexgrog.l:511
+#: src/lexgrog.l:512
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "警告: %s の whatis が %d バイトを超えています。切り詰めています。"
 
-#: src/lexgrog_test.c:62 src/zsoelim_main.c:56
+#: src/lexgrog_test.c:63 src/zsoelim_main.c:56
 msgid "FILE..."
 msgstr ""
 
-#: src/lexgrog_test.c:63
+#: src/lexgrog_test.c:64
 msgid "The defaults are --man and --whatis."
 msgstr ""
 
-#: src/lexgrog_test.c:67
+#: src/lexgrog_test.c:68
 msgid "parse as man page"
 msgstr ""
 
-#: src/lexgrog_test.c:68
+#: src/lexgrog_test.c:69
 msgid "parse as cat page"
 msgstr ""
 
-#: src/lexgrog_test.c:69
+#: src/lexgrog_test.c:70
 msgid "show whatis information"
 msgstr ""
 
-#: src/lexgrog_test.c:70
+#: src/lexgrog_test.c:71
 msgid "show guessed series of preprocessing filters"
 msgstr ""
 
-#: src/lexgrog_test.c:71 src/man.c:287 src/man.c:312
+#: src/lexgrog_test.c:72 src/man.c:288 src/man.c:313
 msgid "ENCODING"
 msgstr ""
 
-#: src/lexgrog_test.c:71 src/man.c:312
+#: src/lexgrog_test.c:72 src/man.c:313
 msgid "use selected output encoding"
 msgstr ""
 
-#: src/lexgrog_test.c:115 src/man.c:540 src/man.c:550
+#: src/lexgrog_test.c:116 src/man.c:541 src/man.c:551
 #, fuzzy, c-format
 msgid "%s: incompatible options"
 msgstr " オプションが矛盾しています"
 
-#: src/man.c:163
+#: src/man.c:164
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "コマンドはステータス %d で終了しました: %s"
 
-#: src/man.c:261
+#: src/man.c:262
 msgid "[SECTION] PAGE..."
 msgstr ""
 
-#: src/man.c:273
+#: src/man.c:274
 msgid "reset all options to their default values"
 msgstr ""
 
-#: src/man.c:274
+#: src/man.c:275
 msgid "WARNINGS"
 msgstr ""
 
-#: src/man.c:275
+#: src/man.c:276
 msgid "enable warnings from groff"
 msgstr ""
 
-#: src/man.c:277
+#: src/man.c:278
 msgid "Main modes of operation:"
 msgstr ""
 
-#: src/man.c:278
+#: src/man.c:279
 msgid "equivalent to whatis"
 msgstr ""
 
-#: src/man.c:279
+#: src/man.c:280
 msgid "equivalent to apropos"
 msgstr ""
 
-#: src/man.c:280
+#: src/man.c:281
 msgid "search for text in all pages"
 msgstr ""
 
-#: src/man.c:281
+#: src/man.c:282
 msgid "print physical location of man page(s)"
 msgstr ""
 
-#: src/man.c:283
+#: src/man.c:284
 msgid "print physical location of cat file(s)"
 msgstr ""
 
-#: src/man.c:285
+#: src/man.c:286
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr ""
 
-#: src/man.c:286
+#: src/man.c:287
 msgid "used by catman to reformat out of date cat pages"
 msgstr ""
 
-#: src/man.c:287
+#: src/man.c:288
 msgid "output source page encoded in ENCODING"
 msgstr ""
 
-#: src/man.c:289
+#: src/man.c:290
 msgid "Finding manual pages:"
 msgstr ""
 
-#: src/man.c:290 src/whatis.c:129
+#: src/man.c:291 src/whatis.c:129
 msgid "LOCALE"
 msgstr ""
 
-#: src/man.c:290
+#: src/man.c:291
 msgid "define the locale for this particular man search"
 msgstr ""
 
-#: src/man.c:291 src/manpath.c:69 src/whatis.c:127
+#: src/man.c:292 src/manpath.c:69 src/whatis.c:127
 msgid "SYSTEM"
 msgstr ""
 
-#: src/man.c:291 src/manpath.c:69 src/whatis.c:127
+#: src/man.c:292 src/manpath.c:69 src/whatis.c:127
 msgid "use manual pages from other systems"
 msgstr ""
 
-#: src/man.c:293
+#: src/man.c:294
 msgid "LIST"
 msgstr ""
 
-#: src/man.c:293
+#: src/man.c:294
 msgid "use colon separated section list"
 msgstr ""
 
-#: src/man.c:299
+#: src/man.c:300
 msgid "show all pages matching regex"
 msgstr ""
 
-#: src/man.c:300
+#: src/man.c:301
 msgid "show all pages matching wildcard"
 msgstr ""
 
-#: src/man.c:301
+#: src/man.c:302
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
 
-#: src/man.c:303
+#: src/man.c:304
 msgid "find all matching manual pages"
 msgstr ""
 
-#: src/man.c:304
+#: src/man.c:305
 msgid "force a cache consistency check"
 msgstr ""
 
-#: src/man.c:306
+#: src/man.c:307
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
 msgstr ""
 
-#: src/man.c:308
+#: src/man.c:309
 msgid "Controlling formatted output:"
 msgstr ""
 
-#: src/man.c:309
+#: src/man.c:310
 msgid "PAGER"
 msgstr ""
 
-#: src/man.c:309
+#: src/man.c:310
 msgid "use program PAGER to display output"
 msgstr ""
 
-#: src/man.c:310 src/man.c:319
+#: src/man.c:311 src/man.c:320
 msgid "STRING"
 msgstr ""
 
-#: src/man.c:310
+#: src/man.c:311
 msgid "provide the `less' pager with a prompt"
 msgstr ""
 
-#: src/man.c:311
+#: src/man.c:312
 msgid "display ASCII translation of certain latin1 chars"
 msgstr ""
 
-#: src/man.c:314
+#: src/man.c:315
 msgid "turn off hyphenation"
 msgstr ""
 
-#: src/man.c:317
+#: src/man.c:318
 msgid "turn off justification"
 msgstr ""
 
-#: src/man.c:319
+#: src/man.c:320
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 msgstr ""
 
-#: src/man.c:323
+#: src/man.c:324
 #, c-format
 msgid "use %s to format pages"
 msgstr ""
 
-#: src/man.c:324
+#: src/man.c:325
 msgid "DEVICE"
 msgstr ""
 
-#: src/man.c:325
+#: src/man.c:326
 #, c-format
 msgid "use %s with selected device"
 msgstr ""
 
-#: src/man.c:326
+#: src/man.c:327
 msgid "BROWSER"
 msgstr ""
 
-#: src/man.c:327
+#: src/man.c:328
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr ""
 
-#: src/man.c:328
+#: src/man.c:329
 msgid "RESOLUTION"
 msgstr ""
 
-#: src/man.c:330
+#: src/man.c:331
 #, fuzzy
 msgid ""
 "use groff and display through gxditview (X11):\n"
@@ -568,106 +584,106 @@ msgid ""
 msgstr ""
 "                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:332
+#: src/man.c:333
 #, fuzzy
 msgid "use groff and force it to produce ditroff"
 msgstr ""
 "-Z, --ditroff               groff を使用して強制的に ditroff を生成する。"
 
-#: src/man.c:597 src/man.c:686
+#: src/man.c:598 src/man.c:685
 #, fuzzy, c-format
 msgid "No manual entry for %s\n"
 msgstr "マニュアル %s は登録されていません"
 
-#: src/man.c:599
+#: src/man.c:600
 #, fuzzy, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "セクション %s のマニュアルページを指定してください。\n"
 
-#: src/man.c:603
+#: src/man.c:604
 msgid "What manual page do you want?\n"
 msgstr "マニュアルページを指定してください\n"
 
-#: src/man.c:683
+#: src/man.c:682
 #, fuzzy, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "マニュアル %s は登録されていません"
 
-#: src/man.c:691
+#: src/man.c:690
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 
-#: src/man.c:884 src/man.c:2367
+#: src/man.c:883 src/man.c:2356
 #, c-format
 msgid "can't chdir to %s"
 msgstr "%s にディレクトリを変更できません"
 
-#: src/man.c:1107
+#: src/man.c:1104
 msgid " Manual page "
 msgstr ""
 
-#: src/man.c:1157 src/man.c:3428
+#: src/man.c:1154 src/man.c:3417
 #, fuzzy, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "man コマンドが終了ステータス %d で失敗しました"
 
-#: src/man.c:1673
+#: src/man.c:1666
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "不明なプリプロセッサ `%c' を無視しています"
 
-#: src/man.c:1949 src/mandb.c:299
+#: src/man.c:1937 src/mandb.c:299
 #, c-format
 msgid "can't chown %s"
 msgstr "%s の所有者を変更できません"
 
-#: src/man.c:1961 src/mandb.c:213
+#: src/man.c:1949 src/mandb.c:213
 #, c-format
 msgid "can't chmod %s"
 msgstr "%s の許可属性を変更できません"
 
-#: src/man.c:1972 src/mandb.c:204
+#: src/man.c:1960 src/mandb.c:204
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:1991
+#: src/man.c:1979
 #, fuzzy, c-format
 msgid "can't set times on %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:2000
+#: src/man.c:1988
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s を削除(unlink)できません"
 
-#: src/man.c:2051
+#: src/man.c:2039
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "一時的なファイル名を作成できません"
 
-#: src/man.c:2169
+#: src/man.c:2157
 #, fuzzy, c-format
 msgid "can't create temporary directory"
 msgstr "一時的なファイル名を作成できません"
 
-#: src/man.c:2171 src/man.c:2213 src/man.c:2243
+#: src/man.c:2159 src/man.c:2201 src/man.c:2231
 #, fuzzy, c-format
 msgid "can't change to directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/man.c:2184
+#: src/man.c:2172
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "manpath 設定ファイル %s をオープンできません"
 
-#: src/man.c:2219 src/man.c:2248
+#: src/man.c:2207 src/man.c:2236
 #, fuzzy, c-format
 msgid "can't remove directory %s"
 msgstr "ディレクトリ %s を検索できません"
 
-#: src/man.c:2593
+#: src/man.c:2582
 #, c-format
 msgid ""
 "\n"
@@ -676,17 +692,17 @@ msgstr ""
 "\n"
 "catman モードで %s に書き込みできません"
 
-#: src/man.c:3282
+#: src/man.c:3271
 #, fuzzy, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
-#: src/man.c:3628
+#: src/man.c:3617
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 
-#: src/man.c:3891
+#: src/man.c:3880
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -772,7 +788,7 @@ msgstr ""
 msgid "update just the entry for this filename"
 msgstr ""
 
-#: src/mandb.c:197 src/security.c:208
+#: src/mandb.c:197
 #, c-format
 msgid "can't remove %s"
 msgstr "%s を削除できません"
@@ -792,18 +808,13 @@ msgstr "%s を作成できません"
 msgid "Processing manual pages under %s...\n"
 msgstr "%s 配下のマニュアルページを処理しています...\n"
 
-#: src/mandb.c:616 src/security.c:136
-#, c-format
-msgid "the setuid man user \"%s\" does not exist"
-msgstr "setuid された man ユーザ \"%s\" は存在しません"
-
-#: src/mandb.c:638
+#: src/mandb.c:636
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "警告: %s に MANDB_MAP の指定はありません。あなたの manpath を使用します"
 
-#: src/mandb.c:710
+#: src/mandb.c:708
 #, fuzzy, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -812,97 +823,92 @@ msgstr ""
 "%d 箇所の man サブディレクトリに新しいマニュアルページがありました。\n"
 "%d 個のマニュアルページ"
 
-#: src/mandb.c:714
+#: src/mandb.c:712
 #, fuzzy, c-format
 msgid "%d stray cats were added.\n"
 msgstr "と %d 個の roff のない cat ファイル"
 
-#: src/mandb.c:716
+#: src/mandb.c:714
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr ""
 
-#: src/mandb.c:731
+#: src/mandb.c:729
 #, c-format
 msgid "No databases created."
 msgstr ""
 
-#: src/manp.c:308
+#: src/manp.c:306
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "manpath 設定ファイル %s の内容を解釈できません"
 
-#: src/manp.c:314
+#: src/manp.c:312
 #, c-format
 msgid "warning: %s"
 msgstr "警告: %s"
 
-#: src/manp.c:320
+#: src/manp.c:318
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "警告: %s はディレクトリではありません"
 
-#: src/manp.c:325
+#: src/manp.c:323
 #, c-format
 msgid "manpath list too long"
 msgstr ""
 
-#: src/manp.c:654
+#: src/manp.c:652
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "警告: $PATH が設定されていません"
 
-#: src/manp.c:661
+#: src/manp.c:659
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "警告: $PATH が定義されていません"
 
-#: src/manp.c:689
+#: src/manp.c:687
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定に追加します"
 
-#: src/manp.c:700
+#: src/manp.c:698
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定を追加します"
 
-#: src/manp.c:712
+#: src/manp.c:710
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定を挿入します"
 
-#: src/manp.c:726
+#: src/manp.c:724
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "警告: $MANPATH が設定されています。%s を無視します"
 
-#: src/manp.c:759 src/manp.c:786
-#, c-format
-msgid "warning: cannot create catdir %s"
-msgstr "警告: cat ディレクトリ %s を作成できません"
-
-#: src/manp.c:854
+#: src/manp.c:783
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "ディレクトリリスト `%s' を解析できません"
 
-#: src/manp.c:909
+#: src/manp.c:838
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "manpath 設定ファイル %s をオープンできません"
 
-#: src/manp.c:941
+#: src/manp.c:870
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "警告: 必要なディレクトリ %s が存在しません"
 
-#: src/manp.c:1159
+#: src/manp.c:1088
 #, c-format
 msgid "can't determine current directory"
 msgstr "カレントディレクトリを決定できません"
 
-#: src/manp.c:1347
+#: src/manp.c:1276
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "警告: %s は %s で始まっていません"
@@ -920,37 +926,27 @@ msgstr ""
 msgid "warning: no global manpaths set in config file %s"
 msgstr "警告: 設定ファイル %s にグローバルな manpath の設定がありません"
 
-#: src/security.c:114
-#, c-format
-msgid "can't set effective uid"
-msgstr "有効な UID を設定できません"
-
-#: src/security.c:249
-#, c-format
-msgid "can't fork"
-msgstr "fork できません"
-
-#: src/straycats.c:232 src/ult_src.c:136
+#: src/straycats.c:233 src/ult_src.c:135
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "警告: %s はシンボリックリンクが切れています"
 
-#: src/straycats.c:235 src/ult_src.c:139 src/ult_src.c:221
+#: src/straycats.c:236 src/ult_src.c:138 src/ult_src.c:220
 #, c-format
 msgid "can't resolve %s"
 msgstr "%s を解決できません"
 
-#: src/straycats.c:297
+#: src/straycats.c:298
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "%s 配下の roff がない cat ファイルをチェックしています...\n"
 
-#: src/straycats.c:336
+#: src/straycats.c:337
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "警告: index キャッシュ %s を更新できません"
 
-#: src/ult_src.c:257
+#: src/ult_src.c:256
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s は自分自身を参照しています"
@@ -1004,17 +1000,17 @@ msgstr ""
 msgid "%s what?\n"
 msgstr "%s キーワードは何ですか？\n"
 
-#: src/whatis.c:325 src/whatis.c:343
+#: src/whatis.c:326 src/whatis.c:344
 #, fuzzy, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "警告: %s はディレクトリではありません"
 
-#: src/whatis.c:337 src/whatis.c:345
+#: src/whatis.c:338 src/whatis.c:346
 #, fuzzy
 msgid "(unknown subject)"
 msgstr "(不明)"
 
-#: src/whatis.c:668
+#: src/whatis.c:670
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: 適切なものはありませんでした。\n"
