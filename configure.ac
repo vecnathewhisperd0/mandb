@@ -381,7 +381,7 @@ AC_HEADER_DIRENT
 AC_CHECK_HEADERS(fcntl.h sys/file.h)
 
 # Internationalization support.
-AM_GNU_GETTEXT([use-libtool])
+AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 AC_SUBST(LINGUAS)
 AM_ICONV
@@ -529,6 +529,5 @@ AC_CONFIG_FILES(Makefile
 	tools/Makefile
 	include/comp_src.h
 	include/manconfig.h
-	intl/Makefile
 	po/Makefile.in)
 AC_OUTPUT

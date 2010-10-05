@@ -19,7 +19,7 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-SUBDIRS = docs intl gnulib/lib gnulib/po lib libdb src man manual po tools
+SUBDIRS = docs gnulib/lib gnulib/po lib libdb src man manual po tools
 
 dist_noinst_DATA = NEWS README include/README
 
@@ -35,8 +35,17 @@ EXTRA_DIST = \
 # These macro files are imported by gnulib-tool, but at present not used. We
 # include them in the distribution anyway for maximum consistency.
 EXTRA_DIST += \
+	gnulib/m4/glibc2.m4 \
+	gnulib/m4/intdiv0.m4 \
+	gnulib/m4/intl.m4 \
 	gnulib/m4/intldir.m4 \
-	gnulib/m4/sockpfaf.m4
+	gnulib/m4/intmax.m4 \
+	gnulib/m4/inttypes-pri.m4 \
+	gnulib/m4/lcmessage.m4 \
+	gnulib/m4/printf-posix.m4 \
+	gnulib/m4/sockpfaf.m4 \
+	gnulib/m4/uintmax_t.m4 \
+	gnulib/m4/visibility.m4
 
 # Note that autopoint installs into the first directory here. Yes, this
 # means that it installs into gnulib/m4, so we always run gnulib-tool after

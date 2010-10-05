@@ -1,3 +1,25 @@
+Tue Oct  5 10:36:35 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	It turns out that AM_GNU_GETTEXT([use-libtool]) is unsupported.
+	Switch to external libintl instead.
+
+	* configure.ac (AM_GNU_GETTEXT): Set external.
+	  (AC_CONFIG_FILES): Remove intl/Makefile.
+	* Makefile.am (SUBDIRS): Remove intl.
+	  (EXTRA_DIST): Add gnulib/m4/glibc2.m4, gnulib/m4/intdiv0.m4,
+	  gnulib/m4/intl.m4, gnulib/m4/intmax.m4, gnulib/m4/inttypes-pri.m4,
+	  gnulib/m4/lcmessage.m4, gnulib/m4/printf-posix.m4,
+	  gnulib/m4/uintmax_t.m4, and gnulib/m4/visibility.m4.
+	* intl: Remove.
+	* lib/Makefile.am (libman_la_CPPFLAGS): Remove
+	  -I$(top_builddir)/intl.
+	* libdb/Makefile.am (libmandb_la_CPPFLAGS): Likewise.
+	* src/Makefile.am (AM_CPPFLAGS): Likewise.
+	* .bzrignore: Remove intl/Makefile, intl/charset.alias,
+	  intl/libgnuintl.h, intl/libintl.h, intl/ref-add.sed, and
+	  intl/ref-del.sed.
+	* NEWS: Document this.
+
 Tue Oct  5 01:05:24 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac (AM_GNU_GETTEXT): Set use-libtool.
