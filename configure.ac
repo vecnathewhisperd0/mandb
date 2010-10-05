@@ -381,7 +381,7 @@ AC_HEADER_DIRENT
 AC_CHECK_HEADERS(fcntl.h sys/file.h)
 
 # Internationalization support.
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT([use-libtool])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 AC_SUBST(LINGUAS)
 AM_ICONV

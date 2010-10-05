@@ -37467,8 +37467,8 @@ $as_echo "$ac_res" >&6; }
       if test "$nls_cv_use_gnu_gettext" = "yes"; then
                 BUILD_INCLUDED_LIBINTL=yes
         USE_INCLUDED_LIBINTL=yes
-        LIBINTL="\${top_builddir}/intl/libintl.a $LIBICONV $LIBTHREAD"
-        LTLIBINTL="\${top_builddir}/intl/libintl.a $LTLIBICONV $LTLIBTHREAD"
+        LIBINTL="\${top_builddir}/intl/libintl.la $LIBICONV $LIBTHREAD"
+        LTLIBINTL="\${top_builddir}/intl/libintl.la $LTLIBICONV $LTLIBTHREAD"
         LIBS=`echo " $LIBS " | sed -e 's/ -lintl / /' -e 's/^ //' -e 's/ $//'`
       fi
 
@@ -37588,7 +37588,7 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
     fi
 
 
-        INTL_LIBTOOL_SUFFIX_PREFIX=
+        INTL_LIBTOOL_SUFFIX_PREFIX=l
 
 
 
