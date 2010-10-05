@@ -35,13 +35,12 @@ all-local:
 update-po:
 	$(PO4A) $(PO4A_ARGS) --no-translations $(srcdir)/po4a.cfg
 
+# Ideally we would use:
+#   $(PO4A) $(PO4A_ARGS) --rm-translations $(srcdir)/po4a.cfg
+# ... but that also updates PO/POT files (http://bugs.debian.org/599179).
 clean-local:
-	set -e; for preserve in $(POFILES) po/man-db-manpages.pot; do \
-		cp -a "$$preserve" "$$preserve.safe"; \
-	done
-	$(PO4A) $(PO4A_ARGS) --rm-translations $(srcdir)/po4a.cfg
-	set -e; for preserve in $(POFILES) po/man-db-manpages.pot; do \
-		mv "$$preserve.safe" "$$preserve"; \
+	set -e; for po in $$(cat $(top_srcdir)/man/LINGUAS.po4a); do \
+		rm -f ../$$po/man*/*.man*; \
 	done
 
 po/man-db-manpages.pot: update-po

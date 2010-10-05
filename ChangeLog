@@ -1,3 +1,10 @@
+Tue Oct  5 11:48:57 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* man/po4a/Makefile.am (clean-local): Don't use 'po4a
+	  --rm-translations', since it sometimes updates PO/POT files and
+	  the obvious workaround for that breaks 'make distcheck'.
+	  Reimplement it by hand instead.
+
 Tue Oct  5 10:59:02 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* man/check-man: Use libtool to run man from the build tree.
