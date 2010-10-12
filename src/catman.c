@@ -67,7 +67,6 @@
 #include "dirname.h"
 
 #include "gettext.h"
-#include <locale.h>
 #define _(String) gettext (String)
 #define N_(String) gettext_noop (String)
 
@@ -413,19 +412,9 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 
-	/* initialise the locale */
-	locale = xstrdup (setlocale (LC_ALL, ""));
-	if (!locale) {
-		/* Obviously can't translate this. */
-		if (!getenv ("MAN_NO_LOCALE_WARNING"))
-			error (0, 0, "can't set the locale; make sure $LC_* "
-				     "and $LANG are correct");
+	locale = xstrdup (init_locale (LC_ALL, ""));
+	if (!locale)
 		locale = xstrdup ("C");
-	}
-	setenv ("MAN_NO_LOCALE_WARNING", "1", 1);
-	bindtextdomain (PACKAGE, LOCALEDIR);
-	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
-	textdomain (PACKAGE);
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);

@@ -31,6 +31,12 @@ Major changes since man-db 2.5.7:
 	  to be translated, then please install GNU libintl separately
 	  (http://www.gnu.org/software/gettext/).
 
+	o Warnings about unrecognised locales are now suppressed if the
+	  DPKG_RUNNING_VERSION environment variable is set (i.e. man-db is
+	  running within a Debian package's maintainer script), since the
+	  system locales are often out of sync with the C library in that
+	  context.  Thanks to the Debian Perl maintainers for the idea.
+
 man-db 2.5.7 (16 February 2010)
 ===============================
 

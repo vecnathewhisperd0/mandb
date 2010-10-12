@@ -984,15 +984,7 @@ int main (int argc, char *argv[])
 	init_debug ();
 
 	umask (022);
-	/* initialise the locale */
-	if (!setlocale (LC_ALL, "") && !getenv ("MAN_NO_LOCALE_WARNING"))
-		/* Obviously can't translate this. */
-		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
-			     "are correct");
-	setenv ("MAN_NO_LOCALE_WARNING", "1", 1);
-	bindtextdomain (PACKAGE, LOCALEDIR);
-	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
-	textdomain (PACKAGE);
+	init_locale (LC_ALL, "");
 
 	internal_locale = setlocale (LC_MESSAGES, NULL);
 	/* Use LANGUAGE only when LC_MESSAGES locale category is

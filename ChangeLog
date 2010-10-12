@@ -1,3 +1,20 @@
+Tue Oct 12 11:16:31 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/util.c (init_locale): New function.
+	* include/manconfig.h.in (init_locale): Add prototype.
+	* src/Makefile.am (AM_CPPFLAGS): Move -DLOCALEDIR to ...
+	* lib/Makefile.am (libman_la_CPPFLAGS): ... here.
+
+	* src/accessdb.c (main), src/catman.c (main), src/globbing_test.c
+	  (main), src/lexgrog_test.c (main), src/man.c (main),
+	  src/manconv_main.c (main), src/mandb.c (main), src/manpath.c
+	  (main), src/whatis.c (main), src/zsoelim.c (main): Use
+	  init_locale.
+
+	* lib/util.c (init_locale): Suppress warning message if
+	  DPKG_RUNNING_VERSION is set in the environment.
+	* NEWS: Document this.
+
 Mon Oct 11 09:38:03 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* docs/HACKING (Revision control): Update for restored bzr+ssh

@@ -42,7 +42,6 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/lib \
 	-I$(top_srcdir)/libdb \
 	-DCONFIG_FILE=\"$(config_file)\" \
-	-DLOCALEDIR=\"$(localedir)\" \
 	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \
 	-DAPROPOS_NAME=\"$(TRANS_APROPOS)\" \
 	-DMAN=\"$(bindir)/$(TRANS_MAN)\" \

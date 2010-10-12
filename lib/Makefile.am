@@ -25,7 +25,8 @@ dist_noinst_DATA = README
 libman_la_CPPFLAGS = \
 	-I$(top_builddir)/include \
 	-I$(top_srcdir)/gnulib/lib \
-	-I$(top_builddir)/gnulib/lib
+	-I$(top_builddir)/gnulib/lib \
+	-DLOCALEDIR=\"$(localedir)\"
 
 libman_la_SOURCES = \
 	appendstr.c \

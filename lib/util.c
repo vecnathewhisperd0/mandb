@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2004, 2007, 2008, 2010 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -42,9 +42,13 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <locale.h>
+
+#include "gettext.h"
 
 #include "manconfig.h"
 
+#include "error.h"
 #include "pipeline.h"
 
 /*
@@ -226,4 +230,20 @@ char *lang_dir (const char *filename)
 	ld = xstrndup (fm, sm - fm);
 	debug ("found lang dir element %s\n", ld);
 	return ld;
+}
+
+char *init_locale (int category, const char *locale)
+{
+	char *ret = setlocale (category, locale);
+	if (!ret &&
+	    !getenv ("MAN_NO_LOCALE_WARNING") &&
+	    !getenv ("DPKG_RUNNING_VERSION"))
+		/* Obviously can't translate this. */
+		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
+			     "are correct");
+	setenv ("MAN_NO_LOCALE_WARNING", "1", 1);
+	bindtextdomain (PACKAGE, LOCALEDIR);
+	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
+	textdomain (PACKAGE);
+	return ret;
 }
