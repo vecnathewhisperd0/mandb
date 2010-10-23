@@ -396,7 +396,6 @@ AC_TYPE_UID_T
 AC_TYPE_SIZE_T
 
 # Checks for functions.
-AC_TYPE_SIGNAL
 AC_FUNC_VFORK
 
 # Check for socketpair(2) as fast replacement for pipe(2).
