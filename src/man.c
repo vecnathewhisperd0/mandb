@@ -2207,7 +2207,6 @@ static void format_display (pipeline *decomp,
 			debug ("Trying browser: %s\n", candidate);
 			browser = make_browser (candidate, htmlfile);
 			status = do_system_drop_privs (browser);
-			pipeline_free (browser);
 			if (!status)
 				break;
 		}

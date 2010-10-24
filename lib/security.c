@@ -205,6 +205,8 @@ void regain_effective_privs (void)
  * not required in the child again. (a) does not require a fork() as the
  * system()'d processes will not have suid=MAN_OWNER and will be unable 
  * to gain any man derived priveledges.
+ *
+ * Note that this frees the supplied pipeline.
  */
 int do_system_drop_privs (pipeline *p)
 {
@@ -249,6 +251,7 @@ int do_system_drop_privs (pipeline *p)
 			errno = save;
 	}
 
+	pipeline_free (p);
 	return status;
 #  endif /* all ways to do a sys command after dropping privs */
 

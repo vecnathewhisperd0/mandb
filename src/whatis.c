@@ -277,7 +277,6 @@ static inline int use_grep (char *page, char *manpath)
 		status = (pipeline_run (grep_pl) == 0);
 
 		free (anchored_page);
-		pipeline_free (grep_pl);
 	} else {
 		debug ("warning: can't read the fallback whatis text database "
 		       "%s/whatis\n", manpath);

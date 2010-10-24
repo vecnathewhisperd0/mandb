@@ -1,3 +1,16 @@
+Sun Oct 24 21:04:45 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_run): This would be a more convenient
+	  wrapper for the common case if it freed the pipeline as well, so
+	  do that.  (Callers that don't want this should call pipeline_start
+	  and pipeline_wait separately.)
+	* lib/pipeline.h (pipeline_run): Update comment.
+	* lib/security.c (do_system_drop_privs): Consistently free the
+	  supplied pipeline, and document doing so.
+	* src/man.c (format_display): Remove pipeline_free after
+	  do_system_drop_privs.
+	* src/whatis.c (use_grep): Remove pipeline_free after pipeline_run.
+
 Sun Oct 24 21:03:25 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_new_command_args): New function.
