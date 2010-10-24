@@ -274,8 +274,7 @@ static inline int use_grep (char *page, char *manpath)
 		command_args (grep_cmd, anchored_page, whatis_file, NULL);
 		pipeline_command (grep_pl, grep_cmd);
 
-		pipeline_start (grep_pl);
-		status = (pipeline_wait (grep_pl) == 0);
+		status = (pipeline_run (grep_pl) == 0);
 
 		free (anchored_page);
 		pipeline_free (grep_pl);

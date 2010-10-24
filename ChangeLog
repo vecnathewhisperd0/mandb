@@ -1,3 +1,11 @@
+Sun Oct 24 20:59:27 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_run): New function.
+	* lib/pipeline.h (pipeline_run): Add prototype.
+	* lib/security.c (do_system_drop_privs): Use it.
+	* src/man.c (do_extern, run_mandb): Likewise.
+	* src/whatis.c (use_grep): Likewise.
+
 Sun Oct 24 20:56:00 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.h (pipeline_pump): Mention in comment that arguments

@@ -211,14 +211,12 @@ int do_system_drop_privs (pipeline *p)
 #ifdef SECURE_MAN_UID
 	
 #  ifdef POSIX_SAVED_IDS
-	if (uid == ruid) {
-		pipeline_start (p);
-		return pipeline_wait (p);
-	} else {
+	if (uid == ruid)
+		return pipeline_run (p);
+	else {
 		int status;
 		drop_effective_privs ();
-		pipeline_start (p);
-		status = pipeline_wait (p);
+		status = pipeline_run (p);
 		regain_effective_privs ();
 		return status;
 	}
@@ -238,8 +236,7 @@ int do_system_drop_privs (pipeline *p)
 		pop_all_cleanups ();
 		if (SWAP_UIDS (ruid, ruid))
 			gripe_set_euid ();
-		pipeline_start (p);
-		exit (pipeline_wait (p));
+		exit (pipeline_run (p));
 	} else {
 		pid_t res;
 		int save = errno;
@@ -256,7 +253,6 @@ int do_system_drop_privs (pipeline *p)
 #  endif /* all ways to do a sys command after dropping privs */
 
 #else  /* !SECURE_MAN_UID */
-	pipeline_start (p);
-	return pipeline_wait (p);
+	return pipeline_run (p);
 #endif /* SECURE_MAN_UID */
 }

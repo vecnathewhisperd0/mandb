@@ -717,8 +717,7 @@ static void do_extern (int argc, char *argv[])
 	p = pipeline_new_commands (cmd, NULL);
 
 	/* privs are already dropped */
-	pipeline_start (p);
-	exit (pipeline_wait (p));
+	exit (pipeline_run (p));
 }
 
 /* lookup $MANOPT and if available, put in *argv[] format for argp */
@@ -833,8 +832,7 @@ static int run_mandb (int create, const char *manpath, const char *filename)
 		pipeline_dump (mandb_pl, stderr);
 	}
 
-	pipeline_start (mandb_pl);
-	return pipeline_wait (mandb_pl);
+	return pipeline_run (mandb_pl);
 }
 #endif /* MAN_DB_CREATES || MAN_DB_UPDATES */
 
