@@ -1870,7 +1870,7 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 		pipeline_command (p, pager_cmd);
 	}
 
-	if (!p->ncommands) {
+	if (!pipeline_get_ncommands (p)) {
 		pipeline_free (p);
 		p = NULL;
 	}
@@ -1987,8 +1987,8 @@ static void discard_stderr (pipeline *p)
 {
 	int i;
 
-	for (i = 0; i < p->ncommands; ++i)
-		p->commands[i]->discard_err = 1;
+	for (i = 0; i < pipeline_get_ncommands (p); ++i)
+		command_discard_err (pipeline_get_command (p, i), 1);
 }
 
 static void maybe_discard_stderr (pipeline *p)
@@ -2037,10 +2037,11 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 #  ifdef COMP_CAT
 	/* fork the compressor */
 	comp_cmd = command_new_argstr (get_def ("compressor", COMPRESSOR));
-	comp_cmd->nice = 10;
+	command_nice (comp_cmd, 10);
 	pipeline_command (cat_p, comp_cmd);
 #  endif
-	cat_p->want_out = tmp_cat_fd; /* pipeline_start will close it */
+	/* pipeline_start will close tmp_cat_fd */
+	pipeline_want_out (cat_p, tmp_cat_fd);
 
 	return cat_p;
 }
@@ -2134,6 +2135,7 @@ static void format_display (pipeline *decomp,
 #ifdef TROFF_IS_GROFF
 	if (format_cmd && htmlout) {
 		char *man_base, *man_ext;
+		int htmlfd;
 
 		old_cwd = xgetcwd ();
 		if (!old_cwd) {
@@ -2154,12 +2156,11 @@ static void format_display (pipeline *decomp,
 		htmlfile = xstrdup (htmldir);
 		htmlfile = appendstr (htmlfile, "/", man_base, ".html", NULL);
 		free (man_base);
-		format_cmd->want_out = open (htmlfile,
-					     O_CREAT | O_EXCL | O_WRONLY,
-					     0644);
-		if (format_cmd->want_out == -1)
+		htmlfd = open (htmlfile, O_CREAT | O_EXCL | O_WRONLY, 0644);
+		if (htmlfd == -1)
 			error (FATAL, errno, _("can't open temporary file %s"),
 			       htmlfile);
+		pipeline_want_out (format_cmd, htmlfd);
 		pipeline_connect (decomp, format_cmd, NULL);
 		pipeline_pump (decomp, format_cmd, NULL);
 		pipeline_wait (decomp);
@@ -2250,7 +2251,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 #endif /* COMP_CAT */
 
 	maybe_discard_stderr (format_cmd);
-	format_cmd->want_out = tmp_cat_fd;
+	pipeline_want_out (format_cmd, tmp_cat_fd);
 
 	push_cleanup ((cleanup_fun) unlink, tmpcat, 1);
 
@@ -2349,6 +2350,7 @@ static int display (const char *dir, const char *man_file,
 	/* define format_cmd */
 	if (man_file) {
 		command *seq = command_new_sequence ("decompressor", NULL);
+		int seq_ncmds = 0;
 
 		if (*man_file)
 			decomp = decompress_open (man_file);
@@ -2360,6 +2362,7 @@ static int display (const char *dir, const char *man_file,
 				"echo .nh && echo .de hy && echo ..",
 				disable_hyphenation, NULL, NULL);
 			command_sequence_command (seq, hcmd);
+			++seq_ncmds;
 		}
 
 		if (no_justification) {
@@ -2367,6 +2370,7 @@ static int display (const char *dir, const char *man_file,
 				"echo .na && echo .de ad && echo ..",
 				disable_justification, NULL, NULL);
 			command_sequence_command (seq, jcmd);
+			++seq_ncmds;
 		}
 
 #ifdef TROFF_IS_GROFF
@@ -2388,18 +2392,20 @@ static int display (const char *dir, const char *man_file,
 				lcmd = command_new_function (
 					name, locale_macros, free, page_lang);
 				command_sequence_command (seq, lcmd);
+				++seq_ncmds;
 				free (name);
 				free_locale_bits (&bits);
 			}
 		}
 #endif /* TROFF_IS_GROFF */
 
-		if (seq->u.sequence.ncommands) {
-			assert (decomp->ncommands <= 1);
-			if (decomp->ncommands) {
+		if (seq_ncmds) {
+			assert (pipeline_get_ncommands (decomp) <= 1);
+			if (pipeline_get_ncommands (decomp)) {
 				command_sequence_command
-					(seq, decomp->commands[0]);
-				decomp->commands[0] = seq;
+					(seq,
+					 pipeline_get_command (decomp, 0));
+				pipeline_set_command (decomp, 0, seq);
 			} else {
 				command_sequence_command
 					(seq, command_new_passthrough ());

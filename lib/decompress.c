@@ -122,9 +122,9 @@ pipeline *decompress_open (const char *filename)
 	p = pipeline_new ();
 
 got_pipeline:
-	p->want_infile = filename;
-	p->want_out = -1;
-	p->ignore_signals = 0;
+	pipeline_want_infile (p, filename);
+	pipeline_want_out (p, -1);
+	pipeline_ignore_signals (p, 0);
 	return p;
 }
 
@@ -142,8 +142,8 @@ pipeline *decompress_fdopen (int fd)
 	p = pipeline_new ();
 #endif /* HAVE_LIBZ */
 
-	p->want_in = fd;
-	p->want_out = -1;
-	p->ignore_signals = 0;
+	pipeline_want_in (p, fd);
+	pipeline_want_out (p, -1);
+	pipeline_ignore_signals (p, 0);
 	return p;
 }

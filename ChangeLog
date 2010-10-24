@@ -1,3 +1,37 @@
+Sun Oct 24 21:10:20 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	Make command and pipeline opaque types.
+
+	* lib/pipeline.c (command_nice, command_discard_err,
+	  pipeline_get_ncommands, pipeline_get_command,
+	  pipeline_set_command, pipeline_want_in, pipeline_want_out,
+	  pipeline_want_infile, pipeline_want_outfile,
+	  pipeline_ignore_signals): New functions.
+	* lib/pipeline.h (command_nice, command_discard_err,
+	  pipeline_get_ncommands, pipeline_get_command,
+	  pipeline_set_command, pipeline_want_in, pipeline_want_out,
+	  pipeline_want_infile, pipeline_want_outfile,
+	  pipeline_ignore_signals): Add prototypes.
+
+	* lib/pipeline.h (enum command_tag, struct command_env, struct
+	  command, struct pipeline): Move to ...
+	* lib/pipeline.c (enum command_tag, struct command_env, struct
+	  command, struct pipeline): ... here.
+
+	Redirections are now handled slightly differently internally,
+	allowing redirection from/to fd 0.
+
+	* lib/pipeline.c (pipeline_new, pipeline_join): Set redirect_in and
+	  redirect_out.
+	  (pipeline_connect): Use pipeline_want_in and pipeline_want_out.
+	  Check source->redirect_out.
+	  (pipeline_start): Handle new redirection semantics.
+
+	* lib/decompress.c (decompress_open, decompress_fdopen): Use new
+	  accessor functions rather than accessing pipeline fields directly.
+	* src/man.c (make_display_command, discard_stderr, open_cat_stream,
+	  format_display, display_catman, display): Likewise.
+
 Sun Oct 24 21:04:45 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_run): This would be a more convenient

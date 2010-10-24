@@ -74,6 +74,114 @@
 #   endif
 #endif
 
+enum command_tag {
+	COMMAND_PROCESS,
+	COMMAND_FUNCTION,
+	COMMAND_SEQUENCE
+};
+
+struct command_env {
+	char *name;
+	char *value;
+};
+
+struct command {
+	enum command_tag tag;
+	char *name;
+	int nice;
+	int discard_err;	/* discard stderr? */
+	int nenv;
+	int env_max;		/* size of allocated array */
+	struct command_env *env;
+	union {
+		struct command_process {
+			int argc;
+			int argv_max;	/* size of allocated array */
+			char **argv;
+		} process;
+		struct command_function {
+			command_function_type *func;
+			command_function_free_type *free_func;
+			void *data;
+		} function;
+		struct command_sequence {
+			int ncommands;
+			int commands_max;
+			struct command **commands;
+		} sequence;
+	} u;
+};
+
+enum pipeline_redirect {
+	REDIRECT_NONE,
+	REDIRECT_FD,
+	REDIRECT_FILE_NAME
+};
+
+struct pipeline {
+	int ncommands;
+	int commands_max;	/* size of allocated array */
+	command **commands;
+	pid_t *pids;
+	int *statuses;		/* -1 until command exits */
+
+	/* REDIRECT_NONE for no redirection; REDIRECT_FD for redirection
+	 * from/to file descriptor; REDIRECT_FILE_NAME for redirection
+	 * from/to file name.
+	 */
+	enum pipeline_redirect redirect_in, redirect_out;
+
+	/* If non-negative, these contain caller-supplied file descriptors
+	 * for the input and output of the whole pipeline.  If negative,
+	 * pipeline_start() will create pipes and store the input writing
+	 * half and the output reading half in infd and outfd as
+	 * appropriate.
+	 */
+	int want_in, want_out;
+
+	/* If non-NULL, these contain files to open and use as the input and
+	 * output of the whole pipeline.  These are only used if want_in or
+	 * want_out respectively is zero.  The value of using these rather
+	 * than simply opening the files before starting the pipeline is
+	 * that the files will be opened with the same privileges under
+	 * which the pipeline is being run.
+	 */
+	const char *want_infile, *want_outfile;
+
+	/* See above. Default to -1. The caller should consider these
+	 * read-only.
+	 */
+	int infd, outfd;
+
+	/* Set by pipeline_get_infile() and pipeline_get_outfile()
+	 * respectively. Default to NULL.
+	 */
+	FILE *infile, *outfile;
+
+	/* Set by pipeline_connect() to record that this pipeline reads its
+	 * input from another pipeline. Defaults to NULL.
+	 */
+	struct pipeline *source;
+
+	/* Private buffer for use by read/peek functions. */
+	char *buffer;
+	size_t buflen, bufmax;
+
+	/* The last line returned by readline/peekline. Private. */
+	char *line_cache;
+
+	/* The amount of data at the end of buffer which has been
+	 * read-ahead, either by an explicit peek or by readline/peekline
+	 * reading a block at a time to save work. Private.
+	 */
+	size_t peek_offset;
+
+	/* If set, ignore SIGINT and SIGQUIT while the pipeline is running,
+	 * like system(). Defaults to 1.
+	 */
+	int ignore_signals;
+};
+
 /* ---------------------------------------------------------------------- */
 
 /* Functions to build individual commands. */
@@ -485,6 +593,16 @@ void command_argstr (command *cmd, const char *argstr)
 	}
 }
 
+void command_nice (command *cmd, int value)
+{
+	cmd->nice = value;
+}
+
+void command_discard_err (command *cmd, int discard_err)
+{
+	cmd->discard_err = discard_err;
+}
+
 void command_setenv (command *cmd, const char *name, const char *value)
 {
 	if (cmd->nenv >= cmd->env_max) {
@@ -792,6 +910,7 @@ pipeline *pipeline_new (void)
 	p->commands = xnmalloc (p->commands_max, sizeof *p->commands);
 	p->pids = NULL;
 	p->statuses = NULL;
+	p->redirect_in = p->redirect_out = REDIRECT_NONE;
 	p->want_in = p->want_out = 0;
 	p->want_infile = p->want_outfile = NULL;
 	p->infd = p->outfd = -1;
@@ -855,8 +974,10 @@ pipeline *pipeline_join (pipeline *p1, pipeline *p2)
 	p->commands = xnmalloc (p->commands_max, sizeof *p->commands);
 	p->pids = NULL;
 	p->statuses = NULL;
+	p->redirect_in = p1->redirect_in;
 	p->want_in = p1->want_in;
 	p->want_infile = p1->want_infile;
+	p->redirect_out = p2->redirect_out;
 	p->want_out = p2->want_out;
 	p->want_outfile = p2->want_outfile;
 	p->infd = p1->infd;
@@ -886,19 +1007,16 @@ void pipeline_connect (pipeline *source, pipeline *sink, ...)
 	/* We must be in control of output from the source pipeline. If the
 	 * source isn't started, we can force this.
 	 */
-	if (!source->pids) {
-		source->want_out = -1;
-		source->want_outfile = NULL;
-	}
+	if (!source->pids)
+		pipeline_want_out (source, -1);
+	assert (source->redirect_out == REDIRECT_FD);
 	assert (source->want_out < 0);
-	assert (!source->want_outfile);
 
 	va_start (argv, sink);
 	for (arg = sink; arg; arg = va_arg (argv, pipeline *)) {
 		assert (!arg->pids); /* not started */
 		arg->source = source;
-		arg->want_in = -1;
-		arg->want_infile = NULL;
+		pipeline_want_in (arg, -1);
 
 		/* Zero-command sinks should represent data being passed
 		 * straight through from the input to the output.
@@ -959,6 +1077,61 @@ void pipeline_commands (pipeline *p, ...)
 	va_start (cmdv, p);
 	pipeline_commandv (p, cmdv);
 	va_end (cmdv);
+}
+
+int pipeline_get_ncommands (pipeline *p)
+{
+	return p->ncommands;
+}
+
+command *pipeline_get_command (pipeline *p, int n)
+{
+	if (n < 0 || n >= p->ncommands)
+		return NULL;
+	return p->commands[n];
+}
+
+command *pipeline_set_command (pipeline *p, int n, command *cmd)
+{
+	command *prev;
+	if (n < 0 || n >= p->ncommands)
+		return NULL;
+	prev = p->commands[n];
+	p->commands[n] = cmd;
+	return prev;
+}
+
+void pipeline_want_in (pipeline *p, int fd)
+{
+	p->redirect_in = REDIRECT_FD;
+	p->want_in = fd;
+	p->want_infile = NULL;
+}
+
+void pipeline_want_out (pipeline *p, int fd)
+{
+	p->redirect_out = REDIRECT_FD;
+	p->want_out = fd;
+	p->want_outfile = NULL;
+}
+
+void pipeline_want_infile (pipeline *p, const char *file)
+{
+	p->redirect_in = (file != NULL) ? REDIRECT_FILE_NAME : REDIRECT_NONE;
+	p->want_in = 0;
+	p->want_infile = file;
+}
+
+void pipeline_want_outfile (pipeline *p, const char *file)
+{
+	p->redirect_out = (file != NULL) ? REDIRECT_FILE_NAME : REDIRECT_NONE;
+	p->want_out = 0;
+	p->want_outfile = file;
+}
+
+void pipeline_ignore_signals (pipeline *p, int ignore_signals)
+{
+	p->ignore_signals = ignore_signals;
 }
 
 FILE *pipeline_get_infile (pipeline *p)
@@ -1225,14 +1398,15 @@ void pipeline_start (pipeline *p)
 	while (sigprocmask (SIG_SETMASK, &oset, NULL) == -1 && errno == EINTR)
 		;
 
-	if (p->want_in < 0) {
+	if (p->redirect_in == REDIRECT_FD && p->want_in < 0) {
 		if (pipe (infd) < 0)
 			error (FATAL, errno, _("pipe failed"));
 		last_input = infd[0];
 		p->infd = infd[1];
-	} else if (p->want_in > 0)
+	} else if (p->redirect_in == REDIRECT_FD)
 		last_input = p->want_in;
-	else if (p->want_infile) {
+	else if (p->redirect_in == REDIRECT_FILE_NAME) {
+		assert (p->want_infile);
 		last_input = open (p->want_infile, O_RDONLY);
 		if (last_input < 0)
 			error (FATAL, errno, _("can't open %s"),
@@ -1244,7 +1418,8 @@ void pipeline_start (pipeline *p)
 		pid_t pid;
 		int output_read = -1, output_write = -1;
 
-		if (i != p->ncommands - 1 || p->want_out < 0) {
+		if (i != p->ncommands - 1 ||
+		    (p->redirect_out == REDIRECT_FD && p->want_out < 0)) {
 			if (pipe (pdes) < 0)
 				error (FATAL, errno, _("pipe failed"));
 			if (i == p->ncommands - 1)
@@ -1252,9 +1427,10 @@ void pipeline_start (pipeline *p)
 			output_read = pdes[0];
 			output_write = pdes[1];
 		} else if (i == p->ncommands - 1) {
-			if (p->want_out > 0)
+			if (p->redirect_out == REDIRECT_FD)
 				output_write = p->want_out;
-			else if (p->want_outfile) {
+			else if (p->redirect_out == REDIRECT_FILE_NAME) {
+				assert (p->want_outfile);
 				output_write = open (p->want_outfile,
 						     O_WRONLY);
 				if (output_write < 0)
