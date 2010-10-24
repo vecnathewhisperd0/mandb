@@ -1771,8 +1771,7 @@ static pipeline *make_browser (const char *pattern, const char *file)
 		free (esc_file);
 	}
 
-	p = pipeline_new ();
-	pipeline_command_args (p, "/bin/sh", "-c", browser, NULL);
+	p = pipeline_new_command_args ("/bin/sh", "-c", browser, NULL);
 	free (browser);
 
 	return p;
