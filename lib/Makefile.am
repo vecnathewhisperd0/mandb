@@ -26,7 +26,8 @@ libman_la_CPPFLAGS = \
 	-I$(top_builddir)/include \
 	-I$(top_srcdir)/gnulib/lib \
 	-I$(top_builddir)/gnulib/lib \
-	-DLOCALEDIR=\"$(localedir)\"
+	-DLOCALEDIR=\"$(localedir)\" \
+	$(libpipeline_CFLAGS)
 
 libman_la_SOURCES = \
 	appendstr.c \
@@ -45,8 +46,6 @@ libman_la_SOURCES = \
 	lower.h \
 	pathsearch.c \
 	pathsearch.h \
-	pipeline.c \
-	pipeline.h \
 	security.c \
 	security.h \
 	tempfile.c \
@@ -56,6 +55,12 @@ libman_la_SOURCES = \
 	xregcomp.c \
 	xregcomp.h
 
+if INTERNAL_PIPELINE
+libman_la_SOURCES += \
+	pipeline.c \
+	pipeline.h
+endif
+
 ## Headers that are used conditionally. Automake can't detect these itself.
 libman_la_SOURCES += \
 	flock.h
@@ -63,4 +68,6 @@ libman_la_SOURCES += \
 libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
 	$(LIBCOMPRESS) @LTLIBINTL@
 
-libman_la_LDFLAGS = -avoid-version -release $(VERSION) -rpath $(pkglibdir)
+libman_la_LDFLAGS = \
+	-avoid-version -release $(VERSION) -rpath $(pkglibdir) \
+	$(libpipeline_LIBS)

@@ -48,7 +48,8 @@ AM_CPPFLAGS = \
 	-DMANCONV=\"$(pkglibexecdir)/$(TRANS_MANCONV)\" \
 	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
 	-DSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\" \
-	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
+	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\" \
+	$(libpipeline_CFLAGS)
 
 LIBMAN = $(top_builddir)/lib/libman.la
 LIBMANDB = $(top_builddir)/libdb/libmandb.la

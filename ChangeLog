@@ -1,3 +1,15 @@
+Sun Oct 24 23:37:08 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	Allow building with an external libpipeline.
+
+	* configure.ac: Add --with-external-pipeline option.
+	* lib/Makefile.am (libman_la_CPPFLAGS): Add $(libpipeline_CFLAGS).
+	  (libman_la_SOURCES): Include pipeline.c and pipeline.h only
+	  conditionally.
+	  (libman_la_LDFLAGS): Add $(libpipeline_LIBS).
+	* src/Makefile.am (AM_CPPFLAGS): Add $(libpipeline_CFLAGS).
+	* NEWS: Document this.
+
 Sun Oct 24 21:15:07 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (command_start_child): Add trailing newline to
