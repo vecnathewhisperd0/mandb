@@ -1,3 +1,15 @@
+Mon Oct 25 17:59:01 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipeline_install_post_fork): New function.
+	  (pipeline_start): Call post-fork handler rather than hardcoding
+	  pop_all_cleanups.
+	* lib/pipeline.h (pipeline_install_post_fork): Add prototype.
+
+	* src/lexgrog_test.c (main), src/man.c (main), src/manconv_main.c
+	  (main), src/mandb.c (main), src/whatis.c (main),
+	  src/zsoelim_main.c (main): Install pop_all_cleanups as a post-fork
+	  handler.
+
 Mon Oct 25 16:18:08 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (command_unsetenv): New function.

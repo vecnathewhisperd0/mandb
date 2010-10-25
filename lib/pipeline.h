@@ -260,6 +260,15 @@ void pipeline_free (pipeline *p);
 
 /* Functions to run pipelines and handle signals. */
 
+typedef void pipeline_post_fork_fn (void);
+
+/* Install a post-fork handler.  This will be run immediately after forking
+ * any child process.  For instance, this may be used for cleaning up
+ * application-specific signal handlers.  Pass NULL to clear any existing
+ * post-fork handler.
+ */
+void pipeline_install_post_fork (pipeline_post_fork_fn *fn);
+
 /* Start the processes in a pipeline. Installs this library's SIGCHLD
  * handler if not already installed. Calls error(FATAL) on error. */
 void pipeline_start (pipeline *p);

@@ -1338,6 +1338,13 @@ static void pipeline_install_sigchld (void)
 	installed = 1;
 }
 
+static pipeline_post_fork_fn *post_fork = NULL;
+
+void pipeline_install_post_fork (pipeline_post_fork_fn *fn)
+{
+	post_fork = fn;
+}
+
 static int ignored_signals = 0;
 static struct sigaction osa_sigint, osa_sigquit;
 
@@ -1475,7 +1482,8 @@ void pipeline_start (pipeline *p)
 			error (FATAL, errno, _("fork failed"));
 		if (pid == 0) {
 			/* child */
-			pop_all_cleanups ();
+			if (post_fork)
+				post_fork ();
 
 			/* input, reading side */
 			if (last_input != -1) {

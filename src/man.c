@@ -980,6 +980,7 @@ int main (int argc, char *argv[])
 	program_name = base_name (argv[0]);
 
 	init_debug ();
+	pipeline_install_post_fork (pop_all_cleanups);
 
 	umask (022);
 	init_locale (LC_ALL, "");

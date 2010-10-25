@@ -59,6 +59,7 @@
 
 #include "manconfig.h"
 
+#include "cleanup.h"
 #include "error.h"
 #include "pipeline.h"
 #include "linelength.h"
@@ -702,6 +703,7 @@ int main (int argc, char *argv[])
 	}
 
 	init_debug ();
+	pipeline_install_post_fork (pop_all_cleanups);
 	init_locale (LC_ALL, "");
 
 	internal_locale = setlocale (LC_MESSAGES, NULL);

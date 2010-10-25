@@ -37,6 +37,7 @@
 
 #include "manconfig.h"
 
+#include "cleanup.h"
 #include "error.h"
 #include "pipeline.h"
 #include "decompress.h"
@@ -152,6 +153,7 @@ int main (int argc, char *argv[])
 	program_name = base_name (argv[0]);
 
 	init_debug ();
+	pipeline_install_post_fork (pop_all_cleanups);
 	init_locale (LC_ALL, "");
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
