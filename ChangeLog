@@ -1,3 +1,12 @@
+Mon Oct 25 16:18:08 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (command_unsetenv): New function.
+	  (command_dup, command_dump, command_tostring): Check for NULL
+	  cmd->env[i].value.
+	  (command_start_child): If cmd->env[i].value is NULL, call unsetenv
+	  rather than setenv.
+	* lib/pipeline.h (command_unsetenv): Add prototype.
+
 Sun Oct 24 23:37:08 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	Allow building with an external libpipeline.
