@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.5.7-pre1\n"
+"Project-Id-Version: man-db-manpages 2.5.8-pre1\n"
 "POT-Creation-Date: 2010-05-09 07:39+0200\n"
-"PO-Revision-Date: 2010-03-02 09:13+0100\n"
+"PO-Revision-Date: 2010-10-24 20:48+0200\n"
 "Last-Translator: Erwin Poeze <erwin.poeze@gmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
@@ -1867,13 +1867,6 @@ msgstr ""
 #. type: Plain text
 #: ../../man/man1/man.man1:806
 #, fuzzy
-#| msgid ""
-#| "By default, B<%man%> will try to interpret pairs of manual page names "
-#| "given on the command line as equivalent to a single manual page name "
-#| "containing a hyphen.  This supports the common pattern of programs that "
-#| "implement a number of subcommands, allowing them to provide manual pages "
-#| "for each that can be accessed using similar syntax as would be used to "
-#| "invoke the subcommands themselves.  For example:"
 msgid ""
 "By default, B<%man%> will try to interpret pairs of manual page names given "
 "on the command line as equivalent to a single manual page name containing a "
@@ -2166,6 +2159,9 @@ msgid ""
 "option disables full justification, leaving justified only to the left "
 "margin, sometimes called \"ragged-right\" text."
 msgstr ""
+"Normaal zal B<nroff> tekst automatisch tussen beide marges uitvullen.  Deze "
+"optie schakelt volledige uitvulling uit, waarbij alleen uitlijnen tegen de "
+"linker marge overblijft."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1024
@@ -2176,12 +2172,16 @@ msgid ""
 "\", \".fi\", and \".ad\" requests to temporarily disable adjusting and "
 "filling."
 msgstr ""
+"Als u tijdens het schrijven van een man-pagina wilt verhinderen dat B<nroff> "
+"bepaalde alinea's uitvult, kunt u deze optie beter niet gebruiken. Raadpleeg "
+"liever de B<nroff>-documentatie; u kunt bijvoorbeeld de \".na\", \".nf\", \"."
+"fi\" en \".ad\" gebruiken om aanpassing en uitvulling uit te schakelen."
 
 #. type: TP
 #: ../../man/man1/man.man1:1024
 #, no-wrap
 msgid "B<-p\\ >I<string>B<,\\ --preprocessor=>I<string>"
-msgstr ""
+msgstr "B<-p\\ >I<string>B<,\\ --preprocessor=>I<string>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1043
@@ -2193,6 +2193,13 @@ msgid ""
 "B<refer> (B<r>).  This option overrides the $B<MANROFFSEQ> environment "
 "variable.  B<%zsoelim%> is always run as the very first preprocessor."
 msgstr ""
+"Geef de volgorde van preprocessors aan die vóór B<nroff> of B<troff>/"
+"B<groff> uitgevoerd moeten worden.  Niet alle installaties zullen over een "
+"volledige verzameling van preprocessors beschikken.  Sommige preprocessors "
+"en de aan hen toegewezen letters zijn: B<eqn> (B<e>), B<grap> (B<g>), B<pic> "
+"(B<p>), B<tbl> (B<t>), B<vgrind> (B<v>), B<refer> (B<r>).  Deze optie "
+"overschrijft de omgevingsvariabele $B<MANROFFSEQ>.  B<%zsoelim%> wordt "
+"altijd als de allereerste preprocessor uitgevoerd."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1053
@@ -2200,12 +2207,14 @@ msgid ""
 "Use I<%troff%> to format the manual page to stdout.  This option is not "
 "required in conjunction with B<-H>, B<-T>, or B<-Z>."
 msgstr ""
+"Gebruik I<%troff%> om de man-pagina voor stdout op te maken.  Deze optie is "
+"niet vereist in samenhang met B<-H>, B<-T> of B<-Z>."
 
 #. type: TP
 #: ../../man/man1/man.man1:1053
 #, no-wrap
 msgid "B<-T>[I<device>], B<--troff-device>[=I<device>]"
-msgstr ""
+msgstr "B<-T>[I<apparaat>], B<--troff-device>[=I<apparaat>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1065
@@ -2215,12 +2224,16 @@ msgid ""
 "Examples (provided with Groff-1.17) include B<dvi>, B<latin1>, B<ps>, "
 "B<utf8>, B<X75> and B<X100>."
 msgstr ""
+"Deze optie wordt gebruikt om uitvoer van B<groff> (of mogelijk B<troff's>) "
+"geschikt te maken voor een apparaat anders dan de standaard.  Het "
+"veronderstelt B<-t>.  Voorbeelden (geleverd met Groff-1.17) zijn B<dvi>, "
+"B<latin1>, B<ps>, B<utf8>, B<X75> en B<X100>."
 
 #. type: TP
 #: ../../man/man1/man.man1:1065
 #, no-wrap
 msgid "B<-H>[I<browser>], B<--html>[=I<browser>]"
-msgstr ""
+msgstr "B<-H>[I<browser>], B<--html>[=I<browser>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1081
@@ -2232,12 +2245,17 @@ msgid ""
 "B<lynx>).  This option implies B<-t>, and will only work with B<GNU> "
 "B<troff>."
 msgstr ""
+"Deze optie laat B<groff> HTML-uitvoer produceren en toont deze uitvoer in "
+"een webbrowser.  De keuze voor een browser wordt bepaald door het optionele "
+"I<browser>-argument, de door omgevingsvariabele $B<BROWSER> of door een "
+"compilatiestandaard (meestal B<lynx>).  Deze optie veronderstelt B<-t> en "
+"werkt alleen samen met B<GNU> B<troff>."
 
 #. type: TP
 #: ../../man/man1/man.man1:1081
 #, no-wrap
 msgid "B<-X>[I<dpi>], B<--gxditview>[=I<dpi>]"
-msgstr ""
+msgstr "B<-X>[I<dpi>], B<--gxditview>[=I<dpi>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1095
@@ -2248,6 +2266,11 @@ msgid ""
 "option implies B<-T> with the X75, X75-12, X100, or X100-12 device "
 "respectively."
 msgstr ""
+"Deze optie toont de uitvoer van B<groff> in een grafisch venster via het "
+"B<gxditview>-programma.  De I<dpi>-instelling (dots per inch) kan 75, 75-12, "
+"100 of 100-12 zijn, met als standaard 75. De -12-varianten gebruiken een 12-"
+"punts basislettertype. Deze optie veronderstelt B<-T> met een X75-, X75-12-, "
+"X100- resp. X100-12-apparaat."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1111
@@ -2257,23 +2280,29 @@ msgid ""
 "this option is passed to B<groff> and will suppress the use of a post-"
 "processor.  It implies B<-t>."
 msgstr ""
+"B<groff> zal B<troff> uitvoeren en vervolgens een geschikte postprocessor "
+"gebruiken om de uitvoer te maken die geschikt is voor het gekozen apparaat.  "
+"Als I<%troff%> groter is dan B<groff> wordt deze optie doorgegeven an "
+"B<groff> en wordt er geen postprocessor gebruikt.  Het impliceert B<-t>."
 
 #. type: SS
 #: ../../man/man1/man.man1:1111
 #, no-wrap
 msgid "Getting help"
-msgstr ""
+msgstr "Hulp krijgen"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1131
 msgid "A child process returned a non-zero exit status."
-msgstr ""
+msgstr "Een child-proces gaf een stopstatus ongelijk aan nul."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1134
 msgid ""
 "At least one of the pages/files/keywords didn't exist or wasn't matched."
 msgstr ""
+"Minstens een van de pagina's/bestanden/trefwoorden bestond niet of kwam niet "
+"overeen."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1141
@@ -2281,6 +2310,8 @@ msgid ""
 "If $B<MANPATH> is set, its value is used as the path to search for manual "
 "pages."
 msgstr ""
+"Als $B<MANPATH> ingesteld is, wordt het pad gebruikt om naar man-pagina's te "
+"zoeken."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1152
@@ -2288,6 +2319,9 @@ msgid ""
 "The contents of $B<MANROFFOPT> are added to the command line every time "
 "B<man> invokes the formatter (B<nroff>, B<troff>, or B<groff>)."
 msgstr ""
+"De inhoud van $B<MANROFFOPT> wordt aan de opdrachtregel toegevoegd iedere "
+"keer als B<man> een beroep doet op de opmaker (B<nroff>, B<troff> of "
+"B<groff>)."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1159
@@ -2296,6 +2330,9 @@ msgid ""
 "preprocessors to pass each manual page through.  The default preprocessor "
 "list is system dependent."
 msgstr ""
+"Als $B<MANROFFSEQ> ingesteld is, wordt de waarde gebruikt om de "
+"preprocessors vast te stellen waarmee iedere man-pagina verwerkt wordt.  De "
+"standaard preprocessorlijst is systeemafhankelijk."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1165 ../../man/man8/catman.man8:81
@@ -2303,6 +2340,9 @@ msgid ""
 "If $B<MANSECT> is set, its value is a colon-delimited list of sections and "
 "it is used to determine which manual sections to search and in what order."
 msgstr ""
+"Als $B<MANSECT> insteld is, wordt deze dubbelpuntgescheiden lijst met "
+"secties gebruikt om te bepalen welke man-paginasecties doorzocht worden, en "
+"in welke volgorde."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1178
@@ -2311,6 +2351,9 @@ msgid ""
 "its value is used as the name of the program used to display the manual "
 "page.  By default, B<%pager%> is used."
 msgstr ""
+"De waarde van $B<MANPAGER> of $B<PAGER> ($B<MANPAGER> heeft de voorkeur) "
+"wordt gebruikt als programma om de man-pagina te tonen.  Standaard wordt "
+"hiervoor B<%pager%> gebruikt."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1203
@@ -2321,6 +2364,11 @@ msgid ""
 "to set the prompt string unconditionally to \\(lqmy prompt string\\(rq, set "
 "$B<MANLESS> to \\(oqB<-Psmy\\ prompt\\ string>\\(cq."
 msgstr ""
+"Wanneer $B<MANLESS> is ingesteld, zal B<%man%> geen 'prompt-string' aanmaken "
+"voor de B<less>-opmaker.  In plaats daarvan wordt de waarde van $B<MANLESS> "
+"woordelijk gekopieerd naar $B<LESS>.  Bijvoorbeeld, als u de prompt altijd "
+"wilt instellen op \\(lqmy prompt string\\(rq, stel $B<MANLESS> dan in op "
+"\\(oqB<-Psmy\\ prompt\\ string>\\(cq."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1219
@@ -2331,6 +2379,11 @@ msgid ""
 "output from B<groff>, I<%%> is replaced by a single percent sign (%), and I<"
 "%c> is replaced by a colon (:)."
 msgstr ""
+"Als $B<BROWSER> ingesteld is, bestaat deze uit een dubbelepuntgescheiden "
+"lijst met opdrachten, waarbij iedere opdracht poogt een webbrowser voor "
+"B<man> B<--html> te starten.  In ieder opdracht wordt I<%s> vervangen door "
+"een bestandsnaam met de HTML-uitvoer van B<groff>, I<%%> door een enkel "
+"procentteken (%) en U<%c> door een dubbelepunt (:)."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1242
@@ -2342,6 +2395,12 @@ msgid ""
 "they will become obsolete.  N.B. All spaces that should be interpreted as "
 "part of an option's argument must be escaped."
 msgstr ""
+"Als $B<MANOPT> ingesteld is, zal het vóór de B<%man%'s>-opdracht ontleed "
+"worden en er wordt van uitgegaan dat het in een gelijke indeling staat.  Net "
+"zoals alle andere B<%man%>specifieke omgevingsvariabelen als "
+"opdrachtregelopties uitdrukt kunnen worden, en daarmee kandidaat zijn om "
+"opgenomen te worden in $B<MANOPT>, wordt verwacht dat deze uitgerangeerd "
+"gaan worden."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1256
@@ -2354,6 +2413,14 @@ msgid ""
 "default formatting can be used, that is when the terminal line length is "
 "between 66 and 80 characters."
 msgstr ""
+"Als $B<MANWIDTH> ingesteld is, wordt zijn waarde gebruikt als regellengte "
+"waarop man-pagina's opgemaakt moeten worden.  Als het niet ingesteld is, "
+"worden man-pagina's opgemaakt met een regellengte passend bij de huidige "
+"terminal (via een B<ioctl>(2), mits beschikbaar, de waarde van $B<COLUMNS>, "
+"of terugvallend op 80 tekens als geen van alle beschikbaar is). "
+"Categoriepagina's worden alleen opgeslagen als de standaardopmaak gebruikt "
+"kan worden, dus als de regellengte van de terminal tussen de 66 en 80 tekens "
+"is."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1267
@@ -2365,6 +2432,12 @@ msgid ""
 "may be useful for wrappers around B<%man%> that can interpret formatting "
 "characters."
 msgstr ""
+"Normaal, als uitvoer niet doorgestuurd wordt naar een terminal (zoals naar "
+"een bestand of een pijp), worden opmaaktekens genegeerd om het resultaat "
+"makkelijker leesbaar te maken zonder speciale hulpmiddelen. Echter, als "
+"$B<MAN_KEEP_FORMATTING> ingesteld is op een niet-lege waarde, dan worden "
+"deze opmaaktekens behouden.  Dit kan nuttig zijn voor wrappers om B<%man%> "
+"die opmaaktekens kunnen interpreteren."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1280
@@ -2378,6 +2451,15 @@ msgid ""
 "some users want to see them anyway, so, if $B<MAN_KEEP_STDERR> is set to any "
 "non-empty value, error output will be displayed as usual."
 msgstr ""
+"Normaal, als de uitvoer doorgestuurd wordt naar een terminal (meestal een "
+"pagina-opmaker), dan wordt ieder foutenuitvoer van de opdracht om opgemaakte "
+"versies van man-pagina's te maken genegeerd om verstoring van de pagina-"
+"opmaker te voorkomen. Programma's zoals B<groff> produceren relatief weinig "
+"foutmeldingen over typografische problemen zoals slechte uitlijning die "
+"lelijk zijn en algemeen verwarrend als ze naast de man-pagina worden "
+"getoond.  Echter, sommige gebruikers willen ze toch zien, dus, als "
+"$B<MAN_KEEP_STDERR> ingesteld is op een niet-lege waarde, zal de foutmelding "
+"normaal getoond worden."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1292
@@ -2387,17 +2469,21 @@ msgid ""
 "%> will display its messages in that locale (if available).  See B<setlocale>"
 "(3)  for precise details."
 msgstr ""
+"Afhankelijk van het systeem en de implementatie, worden $B<LANG> en "
+"$B<LC_MESSAGES> bevraagd om de huidige locale te bepalen.  B<%man%> zal zijn "
+"meldingen in die locale tonen (mits beschikbaar).  Zie B<setlocale>(3) voor "
+"de details."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1296 ../../man/man1/manpath.man1:125
 #: ../../man/man8/catman.man8:91 ../../man/man8/mandb.man8:187
 msgid "man-db configuration file."
-msgstr ""
+msgstr "man-db-configuratiebestand."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1299
 msgid "A global manual page hierarchy."
-msgstr ""
+msgstr "Een algemene man-paginahierarchie."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1328
@@ -2407,17 +2493,23 @@ msgid ""
 "%zsoelim%>(1), B<setlocale>(3), B<man>(7), B<ascii>(7), B<latin1>(7), the "
 "man-db package manual, B<FSSTND>."
 msgstr ""
+"B<%mandb%>(8), B<%manpath%>(1), B<manpath>(5), B<%apropos%>(1), B<%whatis%>"
+"(1), B<%catman%>(8), B<less>(1), B<nroff>(1), B<troff>(1), B<groff>(1), B<"
+"%zsoelim%>(1), B<setlocale>(3), B<man>(7), B<ascii>(7), B<latin1>(7), de man-"
+"db-pakkethandleiding, B<FSSTND>."
 
 #. type: SH
 #: ../../man/man1/man.man1:1328
 #, no-wrap
 msgid "HISTORY"
-msgstr ""
+msgstr "GESCHIEDENIS"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1330
 msgid "1990, 1991 - Originally written by John W. Eaton (jwe@che.utexas.edu)."
 msgstr ""
+"1990, 1991 - Oorspronkelijk geschreven door John W. Eaton (jwe@che.utexas."
+"edu)."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1333
@@ -2425,6 +2517,8 @@ msgid ""
 "Dec 23 1992: Rik Faith (faith@cs.unc.edu) applied bug fixes supplied by "
 "Willem Kasdorp (wkasdo@nikhefk.nikef.nl)."
 msgstr ""
+"23 dec 1992: Rik Faith (faith@cs.unc.edu) paste reparaties van fouten toe "
+"geleverd door Willem Kasdorp (wkasdo@nikhefk.nikef.nl)."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1337
@@ -2433,6 +2527,9 @@ msgid ""
 "been developing and maintaining this package with the help of a few "
 "dedicated people."
 msgstr ""
+"30 april 1994 - 23 februari 2000: Wilf. (G.Wilford@ee.surrey.ac.uk) heeft "
+"dit pakket ontwikkeld en onderhouden met hulp van een aantal toegewijde "
+"mensen."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1341
@@ -2441,6 +2538,9 @@ msgid ""
 "orgE<gt> maintained and enhanced this package for the Debian project, with "
 "the help of all the community."
 msgstr ""
+"30 oktober 1996 - 30 maart 2001: Fabrizio Polacco E<lt>fpolacco@debian."
+"orgE<gt> onderhoudde en verbeterde dit pakket voor het Debian-project met "
+"behulp van de gehele gemeenschap."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1343
@@ -2448,17 +2548,19 @@ msgid ""
 "31st March 2001 - present day: Colin Watson E<lt>cjwatson@debian.orgE<gt> is "
 "now developing and maintaining man-db."
 msgstr ""
+"31 Maart 2001 - heden: Colin Watson E<lt>cjwatson@debian.orgE<gt> ontwikkelt "
+"en onderhoudt man-db."
 
 #. type: TH
 #: ../../man/man1/manconv.man1:9
 #, no-wrap
 msgid "%thmanconv%"
-msgstr ""
+msgstr "%thmanconv%"
 
 #. type: Plain text
 #: ../../man/man1/manconv.man1:12
 msgid "%manconv% - convert manual page from one encoding to another"
-msgstr ""
+msgstr "%manconv% - converteert man-pagina van een codering naar een andere"
 
 #. type: Plain text
 #: ../../man/man1/manconv.man1:20
