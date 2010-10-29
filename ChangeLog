@@ -1,3 +1,16 @@
+Fri Oct 29 06:18:31 BST 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/pipeline.c (pipecmd_new_sequencev): New function.
+	  (pipecmd_new_sequence): Rewrite in terms of pipecmd_new_sequence.
+	  (pipeline_new_command_argv): New function.
+	  (pipeline_new_command_args): Rewrite in terms of
+	  pipeline_new_command_argv.
+	  (pipeline_command_argv): New function.
+	  (pipeline_command_args): Rewrite in terms of
+	  pipeline_command_argv.
+	* lib/pipeline.h (pipecmd_new_sequencev, pipeline_new_command_argv,
+	  pipeline_command_argv): Add prototypes.
+
 Fri Oct 29 05:28:33 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.c (pipeline_wait): Rename to ...
