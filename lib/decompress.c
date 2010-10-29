@@ -124,7 +124,6 @@ pipeline *decompress_open (const char *filename)
 got_pipeline:
 	pipeline_want_infile (p, filename);
 	pipeline_want_out (p, -1);
-	pipeline_ignore_signals (p, 0);
 	return p;
 }
 
@@ -144,6 +143,5 @@ pipeline *decompress_fdopen (int fd)
 
 	pipeline_want_in (p, fd);
 	pipeline_want_out (p, -1);
-	pipeline_ignore_signals (p, 0);
 	return p;
 }

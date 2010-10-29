@@ -1773,6 +1773,7 @@ static pipeline *make_browser (const char *pattern, const char *file)
 	}
 
 	p = pipeline_new_command_args ("/bin/sh", "-c", browser, NULL);
+	pipeline_ignore_signals (p, 1);
 	free (browser);
 
 	return p;
@@ -1870,6 +1871,7 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 		setenv_less (pager_cmd, title);
 		pipeline_command (p, pager_cmd);
 	}
+	pipeline_ignore_signals (p, 1);
 
 	if (!pipeline_get_ncommands (p)) {
 		pipeline_free (p);
