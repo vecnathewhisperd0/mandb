@@ -68,7 +68,7 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 {
 	struct manconv_codes *codes = xmalloc (sizeof *codes);
 	char *name;
-	command *cmd;
+	pipecmd *cmd;
 
 	if (STREQ (source, "UTF-8") && STREQ (target, "UTF-8"))
 		return;
@@ -92,7 +92,7 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 	name = appendstr (name, " -t ", codes->to, NULL);
 	if (quiet >= 2)
 		name = appendstr (name, " -q", NULL);
-	cmd = command_new_function (name, &manconv_stdin, &free_manconv_codes,
+	cmd = pipecmd_new_function (name, &manconv_stdin, &free_manconv_codes,
 				    codes);
 	free (name);
 	pipeline_command (p, cmd);

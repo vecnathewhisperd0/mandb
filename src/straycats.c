@@ -174,7 +174,7 @@ static int check_for_stray (void)
 			lexgrog lg;
 			char *lang, *page_encoding;
 			char *mandir_base;
-			command *col_cmd;
+			pipecmd *col_cmd;
 			char *fullpath;
 
 			/* we have a straycat. Need to filter it and get
@@ -221,9 +221,9 @@ static int check_for_stray (void)
 			free (page_encoding);
 			free (lang);
 
-			col_cmd = command_new_argstr
+			col_cmd = pipecmd_new_argstr
 				(get_def_user ("col", COL));
-			command_arg (col_cmd, "-bx");
+			pipecmd_arg (col_cmd, "-bx");
 			pipeline_command (decomp, col_cmd);
 
 			fullpath = canonicalize_file_name (catdir);

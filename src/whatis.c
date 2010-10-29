@@ -251,7 +251,7 @@ static inline int use_grep (char *page, char *manpath)
 
 	if (access (whatis_file, R_OK) == 0) {
 		pipeline *grep_pl = pipeline_new ();
-		command *grep_cmd;
+		pipecmd *grep_cmd;
 		const char *flags;
 		char *anchored_page = NULL;
 
@@ -270,9 +270,9 @@ static inline int use_grep (char *page, char *manpath)
 			anchored_page = appendstr (NULL, "^", page, NULL);
 		}
 
-		grep_cmd = command_new_argstr (get_def_user ("grep", GREP));
-		command_argstr (grep_cmd, flags);
-		command_args (grep_cmd, anchored_page, whatis_file, NULL);
+		grep_cmd = pipecmd_new_argstr (get_def_user ("grep", GREP));
+		pipecmd_argstr (grep_cmd, flags);
+		pipecmd_args (grep_cmd, anchored_page, whatis_file, NULL);
 		pipeline_command (grep_pl, grep_cmd);
 
 		status = (pipeline_run (grep_pl) == 0);

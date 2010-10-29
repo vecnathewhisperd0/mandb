@@ -640,7 +640,7 @@ static int get_roff_line_length (void)
 		return 0;
 }
 
-static void add_roff_line_length (command *cmd, int *save_cat_p)
+static void add_roff_line_length (pipecmd *cmd, int *save_cat_p)
 {
 	int length;
 
@@ -663,8 +663,8 @@ static void add_roff_line_length (command *cmd, int *save_cat_p)
 	length = get_roff_line_length ();
 	if (length) {
 		debug ("Using %d-character lines\n", length);
-		command_argf (cmd, "-rLL=%dn", length);
-		command_argf (cmd, "-rLT=%dn", length);
+		pipecmd_argf (cmd, "-rLL=%dn", length);
+		pipecmd_argf (cmd, "-rLT=%dn", length);
 	}
 }
 
@@ -696,24 +696,24 @@ static inline void gripe_no_man (const char *name, const char *sec)
 static void do_extern (int argc, char *argv[])
 {
 	pipeline *p;
-	command *cmd;
+	pipecmd *cmd;
 
-	cmd = command_new (external);
+	cmd = pipecmd_new (external);
 	/* Please keep these in the same order as they are in whatis.c. */
 	if (debug_level)
-		command_arg (cmd, "-d");
+		pipecmd_arg (cmd, "-d");
 	if (colon_sep_section_list)
-		command_args (cmd, "-s", colon_sep_section_list, NULL);
+		pipecmd_args (cmd, "-s", colon_sep_section_list, NULL);
 	if (alt_system_name)
-		command_args (cmd, "-m", alt_system_name, NULL);
+		pipecmd_args (cmd, "-m", alt_system_name, NULL);
 	if (manp)
-		command_args (cmd, "-M", manp, NULL);
+		pipecmd_args (cmd, "-M", manp, NULL);
 	if (locale)
-		command_args (cmd, "-L", locale, NULL);
+		pipecmd_args (cmd, "-L", locale, NULL);
 	if (user_config_file)
-		command_args (cmd, "-C", user_config_file, NULL);
+		pipecmd_args (cmd, "-C", user_config_file, NULL);
 	while (first_arg < argc)
-		command_arg (cmd, argv[first_arg++]);
+		pipecmd_arg (cmd, argv[first_arg++]);
 	p = pipeline_new_commands (cmd, NULL);
 
 	/* privs are already dropped */
@@ -804,26 +804,26 @@ static inline const char *escape_less (const char *string)
 static int run_mandb (int create, const char *manpath, const char *filename)
 {
 	pipeline *mandb_pl = pipeline_new ();
-	command *mandb_cmd = command_new ("mandb");
+	pipecmd *mandb_cmd = pipecmd_new ("mandb");
 
 	if (debug_level)
-		command_arg (mandb_cmd, "-d");
+		pipecmd_arg (mandb_cmd, "-d");
 	else
-		command_arg (mandb_cmd, "-q");
+		pipecmd_arg (mandb_cmd, "-q");
 
 	if (user_config_file)
-		command_args (mandb_cmd, "-C", user_config_file, NULL);
+		pipecmd_args (mandb_cmd, "-C", user_config_file, NULL);
 
 	if (filename)
-		command_args (mandb_cmd, "-f", filename, NULL);
+		pipecmd_args (mandb_cmd, "-f", filename, NULL);
 	else if (create) {
-		command_arg (mandb_cmd, "-c");
-		command_setenv (mandb_cmd, "MAN_MUST_CREATE", "1");
+		pipecmd_arg (mandb_cmd, "-c");
+		pipecmd_setenv (mandb_cmd, "MAN_MUST_CREATE", "1");
 	} else
-		command_arg (mandb_cmd, "-p");
+		pipecmd_arg (mandb_cmd, "-p");
 
 	if (manpath)
-		command_arg (mandb_cmd, manpath);
+		pipecmd_arg (mandb_cmd, manpath);
 
 	pipeline_command (mandb_pl, mandb_cmd);
 
@@ -1397,18 +1397,18 @@ static const char *my_locale_charset (void)
 
 static void add_col (pipeline *p, const char *locale_charset, ...)
 {
-	command *cmd;
+	pipecmd *cmd;
 	va_list argv;
 	char *col_locale;
 
-	cmd = command_new (COL);
+	cmd = pipecmd_new (COL);
 	va_start (argv, locale_charset);
-	command_argv (cmd, argv);
+	pipecmd_argv (cmd, argv);
 	va_end (argv);
 
 	col_locale = find_charset_locale (locale_charset);
 	if (col_locale) {
-		command_setenv (cmd, "LC_CTYPE", col_locale);
+		pipecmd_setenv (cmd, "LC_CTYPE", col_locale);
 		free (col_locale);
 	}
 
@@ -1424,7 +1424,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	const char *roff_opt;
 	char *fmt_prog;
 	pipeline *p = pipeline_new ();
-	command *cmd;
+	pipecmd *cmd;
 	char *page_encoding = NULL;
 	const char *output_encoding = NULL;
 	const char *locale_charset = NULL;
@@ -1486,7 +1486,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		const char *groff_preconv;
 
 		if (!recode) {
-			cmd = command_new_function (SOELIM, &zsoelim_stdin,
+			cmd = pipecmd_new_function (SOELIM, &zsoelim_stdin,
 						    NULL, NULL);
 			pipeline_command (p, cmd);
 		}
@@ -1593,32 +1593,32 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			switch (*pp_string) {
 			case 'e':
 				if (troff)
-					cmd = command_new_argstr
+					cmd = pipecmd_new_argstr
 						(get_def ("eqn", EQN));
 				else
-					cmd = command_new_argstr
+					cmd = pipecmd_new_argstr
 						(get_def ("neqn", NEQN));
 				wants_dev = 1;
 				break;
 			case 'g':
-				cmd = command_new_argstr
+				cmd = pipecmd_new_argstr
 					(get_def ("grap", GRAP));
 				break;
 			case 'p':
-				cmd = command_new_argstr
+				cmd = pipecmd_new_argstr
 					(get_def ("pic", PIC));
 				break;
 			case 't':
-				cmd = command_new_argstr
+				cmd = pipecmd_new_argstr
 					(get_def ("tbl", TBL));
 				using_tbl = 1;
 				break;
 			case 'v':
-				cmd = command_new_argstr
+				cmd = pipecmd_new_argstr
 					(get_def ("vgrind", VGRIND));
 				break;
 			case 'r':
-				cmd = command_new_argstr
+				cmd = pipecmd_new_argstr
 					(get_def ("refer", REFER));
 				break;
 			case ' ':
@@ -1626,25 +1626,25 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			case 0:
 				/* done with preprocessors, now add roff */
 				if (troff) {
-					cmd = command_new_argstr
+					cmd = pipecmd_new_argstr
 						(get_def ("troff", TROFF));
 					save_cat = 0;
 				} else
-					cmd = command_new_argstr
+					cmd = pipecmd_new_argstr
 						(get_def ("nroff", NROFF));
 
 #ifdef TROFF_IS_GROFF
 				if (troff && ditroff)
-					command_arg (cmd, "-Z");
+					pipecmd_arg (cmd, "-Z");
 				else if (!troff)
 					add_roff_line_length (cmd, &save_cat);
 
 				for (cur = roff_warnings; cur;
 				     cur = cur->next)
-					command_argf (cmd, "-w%s", cur->name);
+					pipecmd_argf (cmd, "-w%s", cur->name);
 #endif /* TROFF_IS_GROFF */
 
-				command_argstr (cmd, roff_opt);
+				pipecmd_argstr (cmd, roff_opt);
 
 				wants_dev = 1;
 				wants_post = 1;
@@ -1661,25 +1661,25 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 			if (wants_dev) {
 				if (roff_device)
-					command_argf (cmd,
+					pipecmd_argf (cmd,
 						      "-T%s", roff_device);
 #ifdef TROFF_IS_GROFF
 				else if (gxditview)
-					command_argf (cmd, "-TX%s", gxditview);
+					pipecmd_argf (cmd, "-TX%s", gxditview);
 #endif /* TROFF_IS_GROFF */
 			}
 
 			if (wants_post) {
 #ifdef TROFF_IS_GROFF
 				if (gxditview)
-					command_arg (cmd, "-X");
+					pipecmd_arg (cmd, "-X");
 #endif /* TROFF_IS_GROFF */
 
 				if (roff_device && STREQ (roff_device, "ps"))
 					/* Tell grops to guess the page
 					 * size.
 					 */
-					command_arg (cmd, "-P-g");
+					pipecmd_arg (cmd, "-P-g");
 			}
 
 			pipeline_command (p, cmd);
@@ -1705,9 +1705,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
 		   output device */
-		cmd = command_new_args (fmt_prog, file, pp_string, NULL);
+		cmd = pipecmd_new_args (fmt_prog, file, pp_string, NULL);
 		if (roff_device)
-			command_arg (cmd, roff_device);
+			pipecmd_arg (cmd, roff_device);
 		pipeline_command (p, cmd);
 	}
 
@@ -1778,14 +1778,14 @@ static pipeline *make_browser (const char *pattern, const char *file)
 	return p;
 }
 
-static void setenv_less (command *cmd, const char *title)
+static void setenv_less (pipecmd *cmd, const char *title)
 {
 	const char *esc_title;
 	char *less_opts, *man_pn;
 	const char *force = getenv ("MANLESS");
 
 	if (force) {
-		command_setenv (cmd, "LESS", force);
+		pipecmd_setenv (cmd, "LESS", force);
 		return;
 	}
 
@@ -1807,10 +1807,10 @@ static void setenv_less (command *cmd, const char *title)
 	}
 
 	debug ("Setting LESS to %s\n", less_opts);
-	command_setenv (cmd, "LESS", less_opts);
+	pipecmd_setenv (cmd, "LESS", less_opts);
 
 	debug ("Setting MAN_PN to %s\n", esc_title);
-	command_setenv (cmd, "MAN_PN", esc_title);
+	pipecmd_setenv (cmd, "MAN_PN", esc_title);
 
 	free (less_opts);
 }
@@ -1837,7 +1837,7 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 {
 	pipeline *p = pipeline_new ();
 	const char *locale_charset = NULL;
-	command *pager_cmd = NULL;
+	pipecmd *pager_cmd = NULL;
 
 	locale_charset = my_locale_charset ();
 
@@ -1858,13 +1858,13 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 	if (ascii) {
 		pipeline_command_argstr
 			(p, get_def_user ("tr", TR TR_SET1 TR_SET2));
-		pager_cmd = command_new_argstr (pager);
+		pager_cmd = pipecmd_new_argstr (pager);
 	} else
 #ifdef TROFF_IS_GROFF
 	if (!htmlout)
 		/* format_display deals with html_pager */
 #endif
-		pager_cmd = command_new_argstr (pager);
+		pager_cmd = pipecmd_new_argstr (pager);
 
 	if (pager_cmd) {
 		setenv_less (pager_cmd, title);
@@ -1989,7 +1989,7 @@ static void discard_stderr (pipeline *p)
 	int i;
 
 	for (i = 0; i < pipeline_get_ncommands (p); ++i)
-		command_discard_err (pipeline_get_command (p, i), 1);
+		pipecmd_discard_err (pipeline_get_command (p, i), 1);
 }
 
 static void maybe_discard_stderr (pipeline *p)
@@ -2006,7 +2006,7 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 {
 	pipeline *cat_p;
 #  ifdef COMP_CAT
-	command *comp_cmd;
+	pipecmd *comp_cmd;
 #  endif
 
 	created_tmp_cat = 0;
@@ -2037,8 +2037,8 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 	add_output_iconv (cat_p, encoding, "UTF-8");
 #  ifdef COMP_CAT
 	/* fork the compressor */
-	comp_cmd = command_new_argstr (get_def ("compressor", COMPRESSOR));
-	command_nice (comp_cmd, 10);
+	comp_cmd = pipecmd_new_argstr (get_def ("compressor", COMPRESSOR));
+	pipecmd_nice (comp_cmd, 10);
 	pipeline_command (cat_p, comp_cmd);
 #  endif
 	/* pipeline_start will close tmp_cat_fd */
@@ -2350,7 +2350,7 @@ static int display (const char *dir, const char *man_file,
 
 	/* define format_cmd */
 	if (man_file) {
-		command *seq = command_new_sequence ("decompressor", NULL);
+		pipecmd *seq = pipecmd_new_sequence ("decompressor", NULL);
 		int seq_ncmds = 0;
 
 		if (*man_file)
@@ -2359,18 +2359,18 @@ static int display (const char *dir, const char *man_file,
 			decomp = decompress_fdopen (dup (STDIN_FILENO));
 
 		if (no_hyphenation) {
-			command *hcmd = command_new_function (
+			pipecmd *hcmd = pipecmd_new_function (
 				"echo .nh && echo .de hy && echo ..",
 				disable_hyphenation, NULL, NULL);
-			command_sequence_command (seq, hcmd);
+			pipecmd_sequence_command (seq, hcmd);
 			++seq_ncmds;
 		}
 
 		if (no_justification) {
-			command *jcmd = command_new_function (
+			pipecmd *jcmd = pipecmd_new_function (
 				"echo .na && echo .de ad && echo ..",
 				disable_justification, NULL, NULL);
-			command_sequence_command (seq, jcmd);
+			pipecmd_sequence_command (seq, jcmd);
 			++seq_ncmds;
 		}
 
@@ -2385,14 +2385,14 @@ static int display (const char *dir, const char *man_file,
 			    !STREQ (page_lang, "C")) {
 				struct locale_bits bits;
 				char *name;
-				command *lcmd;
+				pipecmd *lcmd;
 
 				unpack_locale_bits (page_lang, &bits);
 				name = xasprintf ("echo .mso %s.tmac",
 						  bits.language);
-				lcmd = command_new_function (
+				lcmd = pipecmd_new_function (
 					name, locale_macros, free, page_lang);
-				command_sequence_command (seq, lcmd);
+				pipecmd_sequence_command (seq, lcmd);
 				++seq_ncmds;
 				free (name);
 				free_locale_bits (&bits);
@@ -2403,17 +2403,17 @@ static int display (const char *dir, const char *man_file,
 		if (seq_ncmds) {
 			assert (pipeline_get_ncommands (decomp) <= 1);
 			if (pipeline_get_ncommands (decomp)) {
-				command_sequence_command
+				pipecmd_sequence_command
 					(seq,
 					 pipeline_get_command (decomp, 0));
 				pipeline_set_command (decomp, 0, seq);
 			} else {
-				command_sequence_command
-					(seq, command_new_passthrough ());
+				pipecmd_sequence_command
+					(seq, pipecmd_new_passthrough ());
 				pipeline_command (decomp, seq);
 			}
 		} else
-			command_free (seq);
+			pipecmd_free (seq);
 	}
 
 	if (decomp) {
