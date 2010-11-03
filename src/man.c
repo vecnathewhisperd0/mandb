@@ -1157,11 +1157,13 @@ int main (int argc, char *argv[])
      		 * See if this argument is a valid section name.  If not,
       		 * is_section returns NULL.
       		 */
-		tmp = is_section (nextarg);
-		if (tmp) {
-			section = tmp;
-			debug ("\nsection: %s\n", section);
-			maybe_section = 1;
+		if (!catman) {
+			tmp = is_section (nextarg);
+			if (tmp) {
+				section = tmp;
+				debug ("\nsection: %s\n", section);
+				maybe_section = 1;
+			}
 		}
 
 		if (maybe_section) {

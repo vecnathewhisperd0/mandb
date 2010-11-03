@@ -22,7 +22,7 @@
  * Thu Dec  8 00:03:12 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
  */
 
-/* MAX_ARGS must be >= 6, 4 for options, 1 for page and 1 for NULL */
+/* MAX_ARGS must be >= 7, 5 for options, 1 for page and 1 for NULL */
 #define MAX_ARGS	1024	/* *argv[MAX_ARG] */
 
 #ifdef HAVE_CONFIG_H
@@ -294,6 +294,7 @@ static int parse_for_sec (const char *manpath, const char *section)
 
 	args[arg_no++] = xstrdup ("-caM");	/* options */
 	args[arg_no++] = xstrdup (manpath);	/* particular manpath */
+	args[arg_no++] = xstrdup ("-S");
 	args[arg_no++] = xstrdup (section);	/* particular section */
 
 	first_arg = arg_no;		/* first pagename argument */

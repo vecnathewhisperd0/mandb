@@ -1,3 +1,11 @@
+Wed Nov  3 20:27:46 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/catman.c (parse_for_sec): Explicitly pass -S before section
+	  number, to reduce ambiguity.
+	* src/man.c (main): In catman mode, never try to guess whether a
+	  page argument is a section, as it's too easy to get this wrong
+	  (Ubuntu bug #664211).
+
 Fri Oct 29 07:25:44 BST 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/pipeline.h (pipeline_install_post_fork): Clarify that this is
