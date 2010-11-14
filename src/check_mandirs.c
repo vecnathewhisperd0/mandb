@@ -185,7 +185,6 @@ void test_manfile (const char *file, const char *path)
 				return;
 			}
 		}
-		free_mandata_struct (exists);
 	}
 
 	/* Check if it happens to be a symlink/hardlink to something already
@@ -203,6 +202,10 @@ void test_manfile (const char *file, const char *path)
 	if (!ult) {
 		/* already warned about this, don't do so again */
 		debug ("test_manfile(): bad link %s\n", file);
+		if (!opt_test && exists) {
+			dbdelete (manpage_base, exists);
+			free_mandata_struct (exists);
+		}
 		free (manpage);
 		return;
 	}
@@ -228,9 +231,16 @@ void test_manfile (const char *file, const char *path)
 			error (0, 0,
 			       _("warning: %s: bad symlink or ROFF `.so' request"),
 			       file);
+		if (!opt_test && exists) {
+			dbdelete (manpage_base, exists);
+			free_mandata_struct (exists);
+		}
 		free (manpage);
 		return;
 	}
+
+	if (exists)
+		free_mandata_struct (exists);
 
 	pages++;			/* pages seen so far */
 
@@ -713,7 +723,7 @@ pointers_next:
  * out that this is better handled in look_for_file() itself.
  */
 static int count_glob_matches (const char *name, const char *ext,
-			       char **source)
+			       char **source, long db_mtime)
 {
 	char **walk;
 	int count = 0;
@@ -728,6 +738,11 @@ static int count_glob_matches (const char *name, const char *ext,
 		if (stat (*walk, &statbuf) == -1) {
 			debug ("count_glob_matches: excluding %s "
 			       "because stat failed\n", *walk);
+			continue;
+		}
+		if (db_mtime != -1 && statbuf.st_mtime <= db_mtime) {
+			debug ("count_glob_matches: excluding %s, "
+			       "no newer than database\n", *walk);
 			continue;
 		}
 
@@ -753,7 +768,7 @@ static int purge_normal (const char *name, struct mandata *info,
 	/* TODO: On some systems, the cat page extension differs from the
 	 * man page extension, so this may be too strict.
 	 */
-	if (count_glob_matches (name, info->ext, found))
+	if (count_glob_matches (name, info->ext, found, -1))
 		return 0;
 
 	if (!opt_test)
@@ -767,12 +782,12 @@ static int purge_normal (const char *name, struct mandata *info,
 
 /* Decide whether to purge a reference to a WHATIS_MAN or WHATIS_CAT page. */
 static int purge_whatis (const char *path, int cat, const char *name,
-			 struct mandata *info, char **found)
+			 struct mandata *info, char **found, long db_mtime)
 {
 	/* TODO: On some systems, the cat page extension differs from the
 	 * man page extension, so this may be too strict.
 	 */
-	if (count_glob_matches (name, info->ext, found)) {
+	if (count_glob_matches (name, info->ext, found, db_mtime)) {
 		/* If the page exists and didn't beforehand, then presumably
 		 * we're about to rescan, which will replace the WHATIS_MAN
 		 * entry with something better. However, there have been
@@ -813,7 +828,8 @@ static int purge_whatis (const char *path, int cat, const char *name,
 					    info->pointer, cat, LFF_MATCHCASE);
 		debug_level = save_debug;
 
-		if (count_glob_matches (info->pointer, info->ext, real_found))
+		if (count_glob_matches (info->pointer, info->ext, real_found,
+					-1))
 			return 0;
 
 		if (!opt_test)
@@ -872,6 +888,7 @@ int purge_missing (const char *manpath, const char *catpath)
 	struct stat st;
 	datum key;
 	int count = 0;
+	long db_mtime = -1;
 
 	if (stat (database, &st) != 0)
 		/* nothing to purge */
@@ -884,6 +901,29 @@ int purge_missing (const char *manpath, const char *catpath)
 	if (!dbf) {
 		gripe_rwopen_failed ();
 		return 0;
+	}
+
+	/* Extract the database mtime. */
+	key = MYDBM_FIRSTKEY (dbf);
+	while (MYDBM_DPTR (key) != NULL) {
+		datum content, nextkey;
+
+		if (STREQ (MYDBM_DPTR (key), KEY)) {
+			content = MYDBM_FETCH (dbf, key);
+			if (MYDBM_DPTR (content)) {
+				errno = 0;
+				db_mtime = strtol (MYDBM_DPTR (content), NULL,
+						   10);
+				if (errno)
+					db_mtime = -1;
+				MYDBM_FREE (MYDBM_DPTR (key));
+				break;
+			}
+		}
+
+		nextkey = MYDBM_NEXTKEY (dbf, key);
+		MYDBM_FREE (MYDBM_DPTR (key));
+		key = nextkey;
 	}
 
 	key = MYDBM_FIRSTKEY (dbf);
@@ -953,10 +993,10 @@ int purge_missing (const char *manpath, const char *catpath)
 			count += purge_normal (nicekey, &entry, found);
 		else if (entry.id == WHATIS_MAN)
 			count += purge_whatis (manpath, 0, nicekey,
-					       &entry, found);
+					       &entry, found, db_mtime);
 		else	/* entry.id == WHATIS_CAT */
 			count += purge_whatis (catpath, 1, nicekey,
-					       &entry, found);
+					       &entry, found, db_mtime);
 
 		free (nicekey);
 

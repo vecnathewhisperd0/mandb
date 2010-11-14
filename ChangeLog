@@ -1,3 +1,17 @@
+Sun Nov 14 22:12:21 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Prevent repeated rescans when a link is broken.
+
+	* src/check_mandirs.c (test_manfile): Explicitly delete bad links
+	  from the database.
+	  (count_glob_matches, purge_whatis, purge_missing): Extract the
+	  database mtime, and ignore any pages at least as old as that for
+	  the purposes of deciding whether a whatis entry has been replaced
+	  by a real page.
+	* src/tests/mandb-3: New test.
+	* src/tests/Makefile.am (ALL_TESTS): Add mandb-3.
+	* NEWS: Document this.
+
 Wed Nov  3 23:40:25 GMT 2010  Jordi Mallach  <jordi@gnu.org>
 
 	* po/ca.po: Update from Translation Project.
