@@ -913,8 +913,7 @@ static int local_man_loop (const char *argv)
 			if (directory_on_path (argv_dir)) {
 				char *argv_base = base_name (argv);
 				char *new_manp;
-				char **old_manpathlist;
-				int i;
+				char **old_manpathlist, **mp;
 
 				debug ("recalculating manpath for executable "
 				       "in %s\n", argv_dir);
@@ -923,16 +922,16 @@ static int local_man_loop (const char *argv)
 					get_manpath_from_path (argv_dir, 0));
 
 				old_manpathlist = XNMALLOC (MAXDIRS, char *);
-				for (i = 0; i < MAXDIRS; ++i)
-					old_manpathlist[i] = manpathlist[i];
+				memcpy (old_manpathlist, manpathlist,
+					MAXDIRS * sizeof (*manpathlist));
 				create_pathlist (new_manp, manpathlist);
 
 				man (argv_base, &found);
 
-				for (i = 0; i < MAXDIRS; ++i) {
-					free (manpathlist[i]);
-					manpathlist[i] = old_manpathlist[i];
-				}
+				for (mp = manpathlist; *mp; ++mp)
+					free (*mp);
+				memcpy (manpathlist, old_manpathlist,
+					MAXDIRS * sizeof (*manpathlist));
 				free (old_manpathlist);
 				free (new_manp);
 				free (argv_base);
