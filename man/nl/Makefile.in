@@ -1369,7 +1369,7 @@ clean-am: clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic
+distclean-am: clean-am distclean-generic distclean-local
 
 dvi: dvi-am
 
@@ -1436,17 +1436,17 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 
 .PHONY: all all-am check check-TESTS check-am clean clean-generic \
 	clean-libtool dist-hook distclean distclean-generic \
-	distclean-libtool distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-man1 install-man5 install-man8 install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool mostlyclean-local pdf pdf-am ps ps-am \
-	uninstall uninstall-am uninstall-man uninstall-man1 \
-	uninstall-man5 uninstall-man8
+	distclean-libtool distclean-local distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-man1 install-man5 \
+	install-man8 install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool \
+	mostlyclean-local pdf pdf-am ps ps-am uninstall uninstall-am \
+	uninstall-man uninstall-man1 uninstall-man5 uninstall-man8
 
 
 export top_builddir LINGUA EGREP
@@ -1488,9 +1488,9 @@ dist-hook:
 		done; \
 	fi
 
-distclean-hook:
+distclean-local:
 	@if [ "x$(PO4A_LINGUA)" = xyes ]; then \
-		-rm -rf man1 man5 man8; \
+		rm -rf man1 man5 man8; \
 	fi
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
