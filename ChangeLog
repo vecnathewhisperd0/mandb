@@ -1,3 +1,11 @@
+Wed Nov 17 11:22:28 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (test_manfile): Revert changes to this
+	  function from 2010-11-14.  Explicitly deleting bad links from the
+	  database was overly sensitive to directory ordering, and caused
+	  test failures on some systems.
+	* NEWS: Document this.
+
 Mon Nov 15 22:34:57 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.5.8.

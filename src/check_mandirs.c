@@ -185,6 +185,7 @@ void test_manfile (const char *file, const char *path)
 				return;
 			}
 		}
+		free_mandata_struct (exists);
 	}
 
 	/* Check if it happens to be a symlink/hardlink to something already
@@ -202,10 +203,6 @@ void test_manfile (const char *file, const char *path)
 	if (!ult) {
 		/* already warned about this, don't do so again */
 		debug ("test_manfile(): bad link %s\n", file);
-		if (!opt_test && exists) {
-			dbdelete (manpage_base, exists);
-			free_mandata_struct (exists);
-		}
 		free (manpage);
 		return;
 	}
@@ -231,16 +228,9 @@ void test_manfile (const char *file, const char *path)
 			error (0, 0,
 			       _("warning: %s: bad symlink or ROFF `.so' request"),
 			       file);
-		if (!opt_test && exists) {
-			dbdelete (manpage_base, exists);
-			free_mandata_struct (exists);
-		}
 		free (manpage);
 		return;
 	}
-
-	if (exists)
-		free_mandata_struct (exists);
 
 	pages++;			/* pages seen so far */
 
