@@ -580,7 +580,7 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
-	init_locale (LC_ALL, "");
+	init_locale ();
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);

@@ -413,7 +413,7 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 
-	locale = xstrdup (init_locale (LC_ALL, ""));
+	locale = xstrdup (init_locale ());
 	if (!locale)
 		locale = xstrdup ("C");
 

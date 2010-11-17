@@ -112,7 +112,7 @@ int main (int argc, char *argv[])
 	program_name = base_name (argv[0]);
 
 	init_debug ();
-	init_locale (LC_ALL, "");
+	init_locale ();
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);

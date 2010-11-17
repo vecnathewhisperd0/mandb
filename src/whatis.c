@@ -704,7 +704,7 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
-	init_locale (LC_ALL, "");
+	init_locale ();
 
 	internal_locale = setlocale (LC_MESSAGES, NULL);
 	/* Use LANGUAGE only when LC_MESSAGES locale category is

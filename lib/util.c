@@ -232,9 +232,9 @@ char *lang_dir (const char *filename)
 	return ld;
 }
 
-char *init_locale (int category, const char *locale)
+char *init_locale (void)
 {
-	char *ret = setlocale (category, locale);
+	char *ret = setlocale (LC_ALL, "");
 	if (!ret &&
 	    !getenv ("MAN_NO_LOCALE_WARNING") &&
 	    !getenv ("DPKG_RUNNING_VERSION"))
@@ -242,8 +242,10 @@ char *init_locale (int category, const char *locale)
 		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
 			     "are correct");
 	setenv ("MAN_NO_LOCALE_WARNING", "1", 1);
+#ifdef ENABLE_NLS
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
 	textdomain (PACKAGE);
+#endif /* ENABLE_NLS */
 	return ret;
 }

@@ -1,3 +1,11 @@
+Wed Nov 17 11:34:36 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* lib/util.c (init_locale): Avoid warnings if configured with
+	  --disable-nls.  Remove arguments, since this was only ever called
+	  as 'init_locale (LC_ALL, "")' anyway, and that required callers to
+	  explicitly include <locale.h>.  Update all callers.
+	* include/manconfig.h.in (init_locale): Update prototype.
+
 Wed Nov 17 11:22:28 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/check_mandirs.c (test_manfile): Revert changes to this
