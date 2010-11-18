@@ -51,19 +51,20 @@ AM_CPPFLAGS = \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\" \
 	$(libpipeline_CFLAGS)
 
-LIBMAN = $(top_builddir)/lib/libman.la
-LIBMANDB = $(top_builddir)/libdb/libmandb.la
+LIBMAN = $(top_builddir)/lib/libman.la $(top_builddir)/gnulib/lib/libgnu.la \
+	 @LTLIBINTL@
+LIBMANDB = $(top_builddir)/libdb/libmandb.la $(LIBMAN) $(DBLIBS)
 
 accessdb_LDADD = $(LIBMANDB)
 catman_LDADD = $(LIBMANDB)
 globbing_LDADD = $(LIBMAN)
-lexgrog_LDADD = $(LIBMAN)
-man_LDADD = $(LIBMANDB)
-manconv_LDADD = $(LIBMAN)
-mandb_LDADD = $(LIBMANDB)
+lexgrog_LDADD = $(LIBMAN) $(libpipeline_LIBS) $(LTLIBICONV)
+man_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
+manconv_LDADD = $(LIBMAN) $(libpipeline_LIBS) $(LTLIBICONV)
+mandb_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
 manpath_LDADD = $(LIBMAN)
-whatis_LDADD = $(LIBMANDB) $(LTLIBICONV)
-zsoelim_LDADD = $(LIBMAN)
+whatis_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
+zsoelim_LDADD = $(LIBMAN) $(libpipeline_LIBS)
 
 accessdb_SOURCES = \
 	accessdb.c

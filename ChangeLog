@@ -1,3 +1,20 @@
+Thu Nov 18 13:46:04 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Reducing linkage when we switched to libtool caused build failures
+	with versions of GNU ld that default to --no-copy-dt-needed-entries.
+	Partially revert these changes, this time taking care to directly
+	link programs against libraries if and only if they use symbols from
+	those libraries directly (otherwise, the linkage from libman.la and
+	libmandb.la should be sufficient).
+
+	* src/Makefile.am (LIBMAN): Add $(top_builddir)/gnulib/lib/libgnu.la
+	  and @LTLIBINTL@.
+	  (LIBMANDB): Add $(LIBMAN) and $(DBLIBS).
+	  (lexgrog_LDADD, man_LDADD, manconv_LDADD, mandb_LDADD): Add
+	  $(libpipeline_LIBS) and $(LTLIBICONV).
+	  (whatis_LDADD, zsoelim_LDADD): Add $(libpipeline_LIBS).
+	* NEWS: Document this.
+
 Wed Nov 17 11:43:30 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.5.9.

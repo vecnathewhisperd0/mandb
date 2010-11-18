@@ -217,48 +217,57 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkglibexecdir)" \
 PROGRAMS = $(bin_PROGRAMS) $(pkglibexec_PROGRAMS) $(sbin_PROGRAMS)
 am_accessdb_OBJECTS = accessdb.$(OBJEXT)
 accessdb_OBJECTS = $(am_accessdb_OBJECTS)
-accessdb_DEPENDENCIES = $(LIBMANDB)
+am__DEPENDENCIES_1 = $(top_builddir)/lib/libman.la \
+	$(top_builddir)/gnulib/lib/libgnu.la
+am__DEPENDENCIES_2 =
+am__DEPENDENCIES_3 = $(top_builddir)/libdb/libmandb.la \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2)
+accessdb_DEPENDENCIES = $(am__DEPENDENCIES_3)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am_catman_OBJECTS = catman.$(OBJEXT) manp.$(OBJEXT)
 catman_OBJECTS = $(am_catman_OBJECTS)
-catman_DEPENDENCIES = $(LIBMANDB)
+catman_DEPENDENCIES = $(am__DEPENDENCIES_3)
 am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT)
 globbing_OBJECTS = $(am_globbing_OBJECTS)
-globbing_DEPENDENCIES = $(LIBMAN)
+globbing_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
 	lexgrog.$(OBJEXT) lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) \
 	manconv_client.$(OBJEXT) ult_src.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
-lexgrog_DEPENDENCIES = $(LIBMAN)
+lexgrog_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
+	$(am__DEPENDENCIES_2)
 am_man_OBJECTS = compression.$(OBJEXT) convert_name.$(OBJEXT) \
 	filenames.$(OBJEXT) globbing.$(OBJEXT) man.$(OBJEXT) \
 	manconv.$(OBJEXT) manconv_client.$(OBJEXT) manp.$(OBJEXT) \
 	ult_src.$(OBJEXT) zsoelim.$(OBJEXT)
 man_OBJECTS = $(am_man_OBJECTS)
-man_DEPENDENCIES = $(LIBMANDB)
+man_DEPENDENCIES = $(am__DEPENDENCIES_3) $(am__DEPENDENCIES_2) \
+	$(am__DEPENDENCIES_2)
 am_manconv_OBJECTS = manconv.$(OBJEXT) manconv_main.$(OBJEXT)
 manconv_OBJECTS = $(am_manconv_OBJECTS)
-manconv_DEPENDENCIES = $(LIBMAN)
+manconv_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
+	$(am__DEPENDENCIES_2)
 am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 	descriptions.$(OBJEXT) descriptions_store.$(OBJEXT) \
 	filenames.$(OBJEXT) globbing.$(OBJEXT) lexgrog.$(OBJEXT) \
 	manconv.$(OBJEXT) manconv_client.$(OBJEXT) mandb.$(OBJEXT) \
 	manp.$(OBJEXT) straycats.$(OBJEXT) ult_src.$(OBJEXT)
 mandb_OBJECTS = $(am_mandb_OBJECTS)
-mandb_DEPENDENCIES = $(LIBMANDB)
+mandb_DEPENDENCIES = $(am__DEPENDENCIES_3) $(am__DEPENDENCIES_2) \
+	$(am__DEPENDENCIES_2)
 am_manpath_OBJECTS = manp.$(OBJEXT) manpath.$(OBJEXT)
 manpath_OBJECTS = $(am_manpath_OBJECTS)
-manpath_DEPENDENCIES = $(LIBMAN)
+manpath_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_whatis_OBJECTS = manconv.$(OBJEXT) manp.$(OBJEXT) whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
-am__DEPENDENCIES_1 =
-whatis_DEPENDENCIES = $(LIBMANDB) $(am__DEPENDENCIES_1)
+whatis_DEPENDENCIES = $(am__DEPENDENCIES_3) $(am__DEPENDENCIES_2) \
+	$(am__DEPENDENCIES_2)
 am_zsoelim_OBJECTS = globbing.$(OBJEXT) zsoelim.$(OBJEXT) \
 	zsoelim_main.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
-zsoelim_DEPENDENCIES = $(LIBMAN)
+zsoelim_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
 am__depfiles_maybe = depfiles
@@ -1136,18 +1145,20 @@ AM_CPPFLAGS = \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\" \
 	$(libpipeline_CFLAGS)
 
-LIBMAN = $(top_builddir)/lib/libman.la
-LIBMANDB = $(top_builddir)/libdb/libmandb.la
+LIBMAN = $(top_builddir)/lib/libman.la $(top_builddir)/gnulib/lib/libgnu.la \
+	 @LTLIBINTL@
+
+LIBMANDB = $(top_builddir)/libdb/libmandb.la $(LIBMAN) $(DBLIBS)
 accessdb_LDADD = $(LIBMANDB)
 catman_LDADD = $(LIBMANDB)
 globbing_LDADD = $(LIBMAN)
-lexgrog_LDADD = $(LIBMAN)
-man_LDADD = $(LIBMANDB)
-manconv_LDADD = $(LIBMAN)
-mandb_LDADD = $(LIBMANDB)
+lexgrog_LDADD = $(LIBMAN) $(libpipeline_LIBS) $(LTLIBICONV)
+man_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
+manconv_LDADD = $(LIBMAN) $(libpipeline_LIBS) $(LTLIBICONV)
+mandb_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
 manpath_LDADD = $(LIBMAN)
-whatis_LDADD = $(LIBMANDB) $(LTLIBICONV)
-zsoelim_LDADD = $(LIBMAN)
+whatis_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
+zsoelim_LDADD = $(LIBMAN) $(libpipeline_LIBS)
 accessdb_SOURCES = \
 	accessdb.c
 
