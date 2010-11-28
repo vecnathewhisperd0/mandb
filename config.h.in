@@ -45,9 +45,6 @@
    source. */
 #undef COMP_SRC
 
-/* Define if shutdown(2) does not set modes for socket descriptor. */
-#undef CORRECT_SOCKETPAIR_MODE
-
 /* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
    systems. This function is required for `alloca.c' support on those systems.
    */
@@ -265,9 +262,6 @@
 /* Define to 1 when the gnulib module sleep should be tested. */
 #undef GNULIB_TEST_SLEEP
 
-/* Define to 1 when the gnulib module snprintf should be tested. */
-#undef GNULIB_TEST_SNPRINTF
-
 /* Define to 1 when the gnulib module stat should be tested. */
 #undef GNULIB_TEST_STAT
 
@@ -288,9 +282,6 @@
 
 /* Define to 1 when the gnulib module strsep should be tested. */
 #undef GNULIB_TEST_STRSEP
-
-/* Define to 1 when the gnulib module strsignal should be tested. */
-#undef GNULIB_TEST_STRSIGNAL
 
 /* Define to 1 when the gnulib module unlink should be tested. */
 #undef GNULIB_TEST_UNLINK
@@ -459,10 +450,6 @@
    */
 #undef HAVE_DECL_SLEEP
 
-/* Define to 1 if you have the declaration of `snprintf', and to 0 if you
-   don't. */
-#undef HAVE_DECL_SNPRINTF
-
 /* Define to 1 if you have the declaration of `strdup', and to 0 if you don't.
    */
 #undef HAVE_DECL_STRDUP
@@ -487,14 +474,6 @@
    don't. */
 #undef HAVE_DECL_STRNLEN
 
-/* Define to 1 if you have the declaration of `strsignal', and to 0 if you
-   don't. */
-#undef HAVE_DECL_STRSIGNAL
-
-/* Define to 1 if you have the declaration of `sys_siglist', and to 0 if you
-   don't. */
-#undef HAVE_DECL_SYS_SIGLIST
-
 /* Define to 1 if you have the declaration of `vsnprintf', and to 0 if you
    don't. */
 #undef HAVE_DECL_VSNPRINTF
@@ -502,10 +481,6 @@
 /* Define to 1 if you have the declaration of `_snprintf', and to 0 if you
    don't. */
 #undef HAVE_DECL__SNPRINTF
-
-/* Define to 1 if you have the declaration of `_sys_siglist', and to 0 if you
-   don't. */
-#undef HAVE_DECL__SYS_SIGLIST
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
@@ -777,20 +752,11 @@
 /* Define to 1 if you have the `rawmemchr' function. */
 #undef HAVE_RAWMEMCHR
 
-/* Define to 1 if accept is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_ACCEPT
-
-/* Define to 1 if accept4 is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_ACCEPT4
-
 /* Define to 1 if alphasort is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_ALPHASORT
 
 /* Define to 1 if atoll is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_ATOLL
-
-/* Define to 1 if bind is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_BIND
 
 /* Define to 1 if btowc is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_BTOWC
@@ -801,9 +767,6 @@
 
 /* Define to 1 if chown is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_CHOWN
-
-/* Define to 1 if connect is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_CONNECT
 
 /* Define to 1 if dirfd is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_DIRFD
@@ -898,15 +861,6 @@
 /* Define to 1 if getpagesize is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_GETPAGESIZE
 
-/* Define to 1 if getpeername is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_GETPEERNAME
-
-/* Define to 1 if getsockname is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_GETSOCKNAME
-
-/* Define to 1 if getsockopt is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_GETSOCKOPT
-
 /* Define to 1 if getsubopt is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_GETSUBOPT
 
@@ -933,9 +887,6 @@
 
 /* Define to 1 if linkat is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_LINKAT
-
-/* Define to 1 if listen is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_LISTEN
 
 /* Define to 1 if lseek is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_LSEEK
@@ -1033,12 +984,6 @@
 /* Define to 1 if realpath is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_REALPATH
 
-/* Define to 1 if recv is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_RECV
-
-/* Define to 1 if recvfrom is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_RECVFROM
-
 /* Define to 1 if renameat is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_RENAMEAT
 
@@ -1051,29 +996,14 @@
 /* Define to 1 if scandir is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SCANDIR
 
-/* Define to 1 if select is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_SELECT
-
-/* Define to 1 if send is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_SEND
-
-/* Define to 1 if sendto is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_SENDTO
-
 /* Define to 1 if setenv is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SETENV
-
-/* Define to 1 if setsockopt is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_SETSOCKOPT
 
 /* Define to 1 if setstate_r is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SETSTATE_R
 
 /* Define to 1 if setusershell is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SETUSERSHELL
-
-/* Define to 1 if shutdown is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_SHUTDOWN
 
 /* Define to 1 if sigaction is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SIGACTION
@@ -1104,9 +1034,6 @@
 
 /* Define to 1 if snprintf is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SNPRINTF
-
-/* Define to 1 if socket is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_SOCKET
 
 /* Define to 1 if srandom_r is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SRANDOM_R
@@ -1231,9 +1158,6 @@
 /* Define if you have refer. */
 #undef HAVE_REFER
 
-/* Define to 1 if the system has the type `sa_family_t'. */
-#undef HAVE_SA_FAMILY_T
-
 /* Define to 1 if you have the <search.h> header file. */
 #undef HAVE_SEARCH_H
 
@@ -1248,9 +1172,6 @@
 
 /* Define to 1 if you have the `setreuid' function. */
 #undef HAVE_SETREUID
-
-/* Define to 1 if you have the `shutdown' function. */
-#undef HAVE_SHUTDOWN
 
 /* Define to 1 if you have the `sigaction' function. */
 #undef HAVE_SIGACTION
@@ -1342,9 +1263,6 @@
 /* Define to 1 if you have the `strsep' function. */
 #undef HAVE_STRSEP
 
-/* Define to 1 if you have the `strsignal' function. */
-#undef HAVE_STRSIGNAL
-
 /* Define if there is a member named d_type in the struct describing directory
    headers. */
 #undef HAVE_STRUCT_DIRENT_D_TYPE
@@ -1354,9 +1272,6 @@
 
 /* Define to 1 if `sa_sigaction' is a member of `struct sigaction'. */
 #undef HAVE_STRUCT_SIGACTION_SA_SIGACTION
-
-/* Define to 1 if the system has the type `struct sockaddr_storage'. */
-#undef HAVE_STRUCT_SOCKADDR_STORAGE
 
 /* Define to 1 if you have the <sysexits.h> header file. */
 #undef HAVE_SYSEXITS_H
@@ -1386,9 +1301,6 @@
 
 /* Define to 1 if you have the <sys/param.h> header file. */
 #undef HAVE_SYS_PARAM_H
-
-/* Define to 1 if you have the <sys/select.h> header file. */
-#undef HAVE_SYS_SELECT_H
 
 /* Define to 1 if you have the <sys/socket.h> header file. */
 #undef HAVE_SYS_SOCKET_H
@@ -1497,9 +1409,6 @@
 
 /* Define to 1 if `vfork' works. */
 #undef HAVE_WORKING_VFORK
-
-/* Define to 1 if you have the <ws2tcpip.h> header file. */
-#undef HAVE_WS2TCPIP_H
 
 /* Define if you have xz. */
 #undef HAVE_XZ
@@ -1705,9 +1614,6 @@
 /* Define if references to the GNU Pth multithreading library should be made
    weak. */
 #undef USE_PTH_THREADS_WEAK
-
-/* Define if socketpair(2) can be used as a fast replacement for pipe(2). */
-#undef USE_SOCKETPAIR_PIPE
 
 /* Define if the old Solaris multithreading library can be used. */
 #undef USE_SOLARIS_THREADS

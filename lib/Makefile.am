@@ -55,12 +55,6 @@ libman_la_SOURCES = \
 	xregcomp.c \
 	xregcomp.h
 
-if INTERNAL_PIPELINE
-libman_la_SOURCES += \
-	pipeline.c \
-	pipeline.h
-endif
-
 ## Headers that are used conditionally. Automake can't detect these itself.
 libman_la_SOURCES += \
 	flock.h

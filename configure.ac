@@ -117,9 +117,6 @@ AC_ARG_ENABLE(cats,
 		AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])
 	 fi],
 	[AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])])
-AC_ARG_WITH(external-pipeline,
-[AS_HELP_STRING([--with-external-pipeline], [use external pipeline library])],
-	[man_pipeline="$withval"], [man_pipeline=no])
 
 # Finish the argument parsing.
 AC_SUBST(man_owner)dnl
@@ -401,23 +398,8 @@ AC_TYPE_SIZE_T
 # Checks for functions.
 AC_FUNC_VFORK
 
-# Check for socketpair(2) as fast replacement for pipe(2).
-AC_ARG_ENABLE(socketpair-pipe,
-[AS_HELP_STRING([--enable-socketpair-pipe], [Use socketpair(2) as fast replacement for pipe(2)])],
-  [ if test "$enableval" = "yes"
-    then
-      MAN_SOCKETPAIR_PIPE
-      if test "$man_cv_socketpair_pipe" = yes; then
-	MAN_SOCKETPAIR_MODE
-      fi
-    fi
-  ])
-
-# Check for external pipeline library.
-AM_CONDITIONAL([INTERNAL_PIPELINE], [test "x$man_pipeline" = xno])
-if test "x$man_pipeline" != xno; then
-	PKG_CHECK_MODULES([libpipeline], [libpipeline])
-fi
+# Check for pipeline library.
+PKG_CHECK_MODULES([libpipeline], [libpipeline])
 
 # Find a suitable database interface header and library.
 #

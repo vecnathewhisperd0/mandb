@@ -1,3 +1,18 @@
+Sun Nov 28 15:01:21 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Remove internal copy of libpipeline.
+
+	* configure.ac: Remove --enable-socketpair-pipe and
+	  --with-external-pipeline options.  Remove INTERNAL_PIPELINE
+	  Automake conditional.  Check for libpipeline unconditionally.
+	* docs/INSTALL.quick: Mention the need to install libpipeline.
+	* gnulib: Remove strsignal and sys_select modules.
+	* lib/Makefile.am (libman_la_SOURCES): Never add pipeline.c or
+	  pipeline.h.
+	* lib/pipeline.c, lib/pipeline.h: Remove.
+	* m4/man-socketpair.m4: Remove.
+	* NEWS: Document this.  Bump to 2.6.0.
+
 Thu Nov 18 13:46:04 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	Reducing linkage when we switched to libtool caused build failures

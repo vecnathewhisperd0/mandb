@@ -26,7 +26,6 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([AC_PROG_RANLIB])
   AC_REQUIRE([AM_PROG_CC_C_O])
-  # Code from module alignof:
   # Code from module alloca:
   # Code from module alloca-opt:
   # Code from module areadlink-with-size:
@@ -122,7 +121,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module sigprocmask:
   # Code from module size_max:
   # Code from module sleep:
-  # Code from module snprintf:
   # Code from module ssize_t:
   # Code from module stat:
   # Code from module stdarg:
@@ -147,9 +145,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module strnlen:
   # Code from module strnlen1:
   # Code from module strsep:
-  # Code from module strsignal:
-  # Code from module sys_select:
-  # Code from module sys_socket:
   # Code from module sys_stat:
   # Code from module sys_time:
   # Code from module sysexits:
@@ -157,7 +152,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module threadlib:
   gl_THREADLIB_EARLY
   # Code from module time:
-  # Code from module tls:
   # Code from module unistd:
   # Code from module unistd-safer:
   # Code from module unlink:
@@ -192,7 +186,6 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='gnulib/lib'
-  # Code from module alignof:
   # Code from module alloca:
 changequote(,)dnl
 LTALLOCA=`echo "$ALLOCA" | sed -e 's/\.[^.]* /.lo /g;s/\.[^.]*$/.lo/'`
@@ -426,9 +419,6 @@ AC_SUBST([LTALLOCA])
   # Code from module sleep:
   gl_FUNC_SLEEP
   gl_UNISTD_MODULE_INDICATOR([sleep])
-  # Code from module snprintf:
-  gl_FUNC_SNPRINTF
-  gl_STDIO_MODULE_INDICATOR([snprintf])
   # Code from module ssize_t:
   gt_TYPE_SSIZE_T
   # Code from module stat:
@@ -472,15 +462,6 @@ AC_SUBST([LTALLOCA])
   # Code from module strsep:
   gl_FUNC_STRSEP
   gl_STRING_MODULE_INDICATOR([strsep])
-  # Code from module strsignal:
-  gl_FUNC_STRSIGNAL
-  gl_STRING_MODULE_INDICATOR([strsignal])
-  # Code from module sys_select:
-  gl_HEADER_SYS_SELECT
-  AC_PROG_MKDIR_P
-  # Code from module sys_socket:
-  gl_HEADER_SYS_SOCKET
-  AC_PROG_MKDIR_P
   # Code from module sys_stat:
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
@@ -495,8 +476,6 @@ AC_SUBST([LTALLOCA])
   gl_THREADLIB
   # Code from module time:
   gl_HEADER_TIME_H
-  # Code from module tls:
-  gl_TLS
   # Code from module unistd:
   gl_UNISTD_H
   # Code from module unistd-safer:
@@ -680,7 +659,6 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/c++defs.h
   build-aux/config.rpath
   build-aux/warn-on-use.h
-  lib/alignof.h
   lib/alloca.c
   lib/alloca.in.h
   lib/areadlink-with-size.c
@@ -761,8 +739,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/glthread/lock.c
   lib/glthread/lock.h
   lib/glthread/threadlib.c
-  lib/glthread/tls.c
-  lib/glthread/tls.h
   lib/hash-pjw.c
   lib/hash-pjw.h
   lib/hash-triple.c
@@ -827,12 +803,10 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/setenv.c
   lib/sig-handler.h
   lib/sigaction.c
-  lib/siglist.h
   lib/signal.in.h
   lib/sigprocmask.c
   lib/size_max.h
   lib/sleep.c
-  lib/snprintf.c
   lib/stat.c
   lib/stdarg.in.h
   lib/stdbool.in.h
@@ -856,9 +830,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strnlen1.c
   lib/strnlen1.h
   lib/strsep.c
-  lib/strsignal.c
-  lib/sys_select.in.h
-  lib/sys_socket.in.h
   lib/sys_stat.in.h
   lib/sys_time.in.h
   lib/sysexits.in.h
@@ -1000,8 +971,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/signalblocking.m4
   m4/size_max.m4
   m4/sleep.m4
-  m4/snprintf.m4
-  m4/sockpfaf.m4
   m4/ssize_t.m4
   m4/stat.m4
   m4/stdarg.m4
@@ -1020,16 +989,12 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strndup.m4
   m4/strnlen.m4
   m4/strsep.m4
-  m4/strsignal.m4
-  m4/sys_select_h.m4
-  m4/sys_socket_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
   m4/sysexits.m4
   m4/tempname.m4
   m4/threadlib.m4
   m4/time_h.m4
-  m4/tls.m4
   m4/uintmax_t.m4
   m4/unistd-safer.m4
   m4/unistd_h.m4
