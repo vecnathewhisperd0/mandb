@@ -153,12 +153,6 @@ zsoelim_SOURCES = \
 
 CLEANFILES = apropos man_db.conf
 
-EXTRA_DIST = \
-	README.lexgrog \
-	lexgrog.l-2.3.8 \
-	lexgrog.l-2.4a \
-	lexgrog.l.new
-
 apropos$(EXEEXT): whatis$(EXEEXT)
 	rm -f $@
 	$(LN_S) whatis$(EXEEXT) $@
