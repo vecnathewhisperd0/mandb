@@ -258,8 +258,8 @@ am_whatis_OBJECTS = manconv.$(OBJEXT) manp.$(OBJEXT) whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
 whatis_DEPENDENCIES = $(am__DEPENDENCIES_3) $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_2)
-am_zsoelim_OBJECTS = globbing.$(OBJEXT) zsoelim.$(OBJEXT) \
-	zsoelim_main.$(OBJEXT)
+am_zsoelim_OBJECTS = globbing.$(OBJEXT) manp.$(OBJEXT) \
+	zsoelim.$(OBJEXT) zsoelim_main.$(OBJEXT)
 zsoelim_OBJECTS = $(am_zsoelim_OBJECTS)
 zsoelim_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -1215,6 +1215,8 @@ whatis_SOURCES = \
 zsoelim_SOURCES = \
 	globbing.c \
 	globbing.h \
+	manp.c \
+	manp.h \
 	zsoelim.h \
 	zsoelim.l \
 	zsoelim_main.c

@@ -147,6 +147,8 @@ whatis_SOURCES = \
 zsoelim_SOURCES = \
 	globbing.c \
 	globbing.h \
+	manp.c \
+	manp.h \
 	zsoelim.h \
 	zsoelim.l \
 	zsoelim_main.c

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+ * Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
  * Colin Watson.
  *
  * This file is part of man-db.
@@ -1111,6 +1111,15 @@ int main (int argc, char *argv[])
 
 	section_list = get_section_list ();
 
+	if (manp == NULL)
+		manp = locale_manpath (get_manpath (alt_system_name));
+	else
+		free (get_manpath (NULL));
+
+	debug ("manpath search path (with duplicates) = %s\n", manp);
+
+	create_pathlist (manp, manpathlist);
+
 	/* man issued with `-l' option */
 	if (local_man_file) {
 		while (first_arg < argc) {
@@ -1122,15 +1131,6 @@ int main (int argc, char *argv[])
 		free (program_name);
 		exit (exit_status);
 	}
-
-	if (manp == NULL)
-		manp = locale_manpath (get_manpath (alt_system_name));
-	else
-		free (get_manpath (NULL));
-
-	debug ("manpath search path (with duplicates) = %s\n", manp);
-
-	create_pathlist (manp, manpathlist);
 
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();
@@ -1432,10 +1432,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 	*result_encoding = xstrdup ("UTF-8"); /* optimistic default */
 
-#ifndef ALT_EXT_FORMAT
-	dir = dir; /* not used unless looking for formatters in catdir */
-#endif
-
 	pp_string = get_preprocessors (decomp, dbfilters);
 
 	roff_opt = getenv ("MANROFFOPT");
@@ -1487,8 +1483,13 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		const char *groff_preconv;
 
 		if (!recode) {
+			struct zsoelim_stdin_data *zsoelim_data;
+
+			zsoelim_data = zsoelim_stdin_data_new (dir,
+							       manpathlist);
 			cmd = pipecmd_new_function (SOELIM, &zsoelim_stdin,
-						    NULL, NULL);
+						    zsoelim_stdin_data_free,
+						    zsoelim_data);
 			pipeline_command (p, cmd);
 		}
 

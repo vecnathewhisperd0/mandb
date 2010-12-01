@@ -3,7 +3,8 @@
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 1997 Fabrizio Polacco.
- * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010
+ * Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -30,8 +31,10 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "xvasprintf.h"
 
 #include "gettext.h"
+#include <locale.h>
 #define _(String) gettext (String)
 #define N_(String) gettext_noop (String)
 
@@ -42,9 +45,13 @@
 #include "pipeline.h"
 #include "decompress.h"
 
+#include "manp.h"
 #include "zsoelim.h"
 
 char *program_name;
+int quiet = 1;
+
+static char *manpathlist[MAXDIRS];
 
 static char **files;
 static int num_files;
@@ -93,6 +100,8 @@ static struct argp argp = { options, parse_opt, args_doc };
 
 int main (int argc, char *argv[])
 {
+	char *multiple_locale = NULL, *internal_locale, *all_locales;
+	char *manp;
 	int i;
 
 	program_name = base_name (argv[0]);
@@ -101,15 +110,46 @@ int main (int argc, char *argv[])
 	pipeline_install_post_fork (pop_all_cleanups);
 	init_locale ();
 
+	internal_locale = setlocale (LC_MESSAGES, NULL);
+	/* Use LANGUAGE only when LC_MESSAGES locale category is
+	 * neither "C" nor "POSIX". */
+	if (internal_locale && strcmp (internal_locale, "C") &&
+	    strcmp (internal_locale, "POSIX"))
+		multiple_locale = getenv ("LANGUAGE");
+	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
+
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
 
+	if (multiple_locale && *multiple_locale) {
+		if (internal_locale && *internal_locale)
+			all_locales = xasprintf ("%s:%s",
+						 multiple_locale,
+						 internal_locale);
+		else
+			all_locales = xstrdup (multiple_locale);
+	} else {
+		if (internal_locale && *internal_locale)
+			all_locales = xstrdup (internal_locale);
+		else
+			all_locales = NULL;
+	}
+
+	manp = add_nls_manpaths (get_manpath (NULL), all_locales);
+	free (all_locales);
+
+	create_pathlist (manp, manpathlist);
+
 	/* parse files in command line order */
 	for (i = 0; i < num_files; ++i) {
-		if (zsoelim_open_file (files[i]))
+		if (zsoelim_open_file (files[i], manpathlist, NULL))
 			continue;
-		zsoelim_parse_file ();
+		zsoelim_parse_file (manpathlist, NULL);
 	}
+
+	free_pathlist (manpathlist);
+	free (manp);
+	free (internal_locale);
 
 	return OK;
 }

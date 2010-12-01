@@ -5,7 +5,8 @@
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 1997 Fabrizio Polacco.
- * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010
+ * Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -55,6 +56,7 @@
 #define LINE	so_line[so_stack_ptr]
 #define PIPE	so_pipe[so_stack_ptr]
 
+#include "dirname.h"
 #include "xgetcwd.h"
 
 #include "gettext.h"
@@ -68,8 +70,7 @@
 #include "decompress.h"
 
 #include "globbing.h"
-
-int zsoelim_open_file (const char *filename);
+#include "zsoelim.h"
 
 #ifdef ACCEPT_QUOTES
 #  define ZAP_QUOTES	zap_quotes ()
@@ -84,6 +85,13 @@ static int so_line[MAX_SO_DEPTH];
 static pipeline *so_pipe[MAX_SO_DEPTH];
 static int so_stack_ptr;
 static int no_newline;
+static char * const *so_manpathlist;
+static const char *so_parent_path;
+
+struct zsoelim_stdin_data {
+	char *path;
+	char * const *manpathlist;
+};
 
 /* The flex documentation says that yyin is only used by YY_INPUT, so we
  * should safely be able to abuse it as a handy way to keep track of the
@@ -163,7 +171,8 @@ W	[ \t]
 
 			no_newline = 0;
 
-			if (zsoelim_open_file (yytext)) {
+			if (zsoelim_open_file (yytext, so_manpathlist,
+					       so_parent_path)) {
 				--so_stack_ptr;
 #ifndef __alpha
 				error (OK, 0, 
@@ -266,6 +275,7 @@ W	[ \t]
 		PIPE = NULL;
 		free (NAME);
 		NAME = NULL;
+		so_manpathlist = NULL;
 
 		if (no_newline)
 			putchar ('\n');
@@ -299,7 +309,7 @@ static void zap_quotes (void)
 #endif
 
 /* initialise the stack and call the parser */
-void zsoelim_parse_file (void)
+void zsoelim_parse_file (char * const *manpathlist, const char *parent_path)
 {
 #ifdef PP_COOKIE
 	const char *line;
@@ -307,6 +317,8 @@ void zsoelim_parse_file (void)
 	int linenum = 1;
 
 	so_stack_ptr = 0;
+	so_manpathlist = manpathlist;
+	so_parent_path = parent_path;
 
 #ifdef PP_COOKIE
 	/* Skip over the first line if it's something that manconv might
@@ -326,77 +338,166 @@ void zsoelim_parse_file (void)
 	yylex ();
 }
 
+pipeline *try_compressed (char **filename)
+{
+	struct compression *comp;
+	size_t len = strlen (*filename);
+	pipeline *decomp;
+
+	/* Try the uncompressed name first. */
+	(*filename)[len - 1] = '\0';
+	debug ("trying %s\n", *filename);
+	decomp = decompress_open (*filename);
+	if (decomp)
+		return decomp;
+	(*filename)[len - 1] = '.';
+
+	for (comp = comp_list; comp->ext; ++comp) {
+		*filename = appendstr (*filename, comp->ext, NULL);
+		debug ("trying %s\n", *filename);
+		decomp = decompress_open (*filename);
+		if (decomp)
+			return decomp;
+		(*filename)[len] = '\0';
+	}
+
+	return NULL;
+}
+
 /* This routine is used to open the specified file or uncompress a compressed
    version and open that instead */
-int zsoelim_open_file (const char *filename)
+int zsoelim_open_file (const char *filename, char * const *manpathlist,
+		       const char *parent_path)
 {
 	pipeline *decomp;
+	char * const *mp;
+
+	if (parent_path)
+		debug ("opening %s (parent path: %s)\n",
+		       filename, parent_path);
+	else
+		debug ("opening %s\n", filename);
 
 	if (strcmp (filename, "-") == 0) {
 		decomp = decompress_fdopen (dup (STDIN_FILENO));
 		NAME = xstrdup (filename);
 	} else {
-		decomp = decompress_open (filename);
+		char *compfile;
 
-		if (decomp)
-			NAME = xstrdup (filename);
-		else {
-			struct compression *comp;
-			char *compfile = appendstr (NULL, filename, ".", NULL);
-			size_t len = strlen (compfile);
+		/* If there is no parent path, try opening directly first. */
+		if (!parent_path) {
+			compfile = appendstr (NULL, filename, ".", NULL);
 
-			for (comp = comp_list; comp->ext; ++comp) {
-				compfile = appendstr (compfile, comp->ext,
-						      NULL);
-				decomp = decompress_open (compfile);
-				if (decomp) {
-					NAME = compfile;
-					break;
-				}
-				compfile[len] = '\0';
-			}
-
-			if (!decomp)
+			decomp = try_compressed (&compfile);
+			if (decomp) {
+				NAME = compfile;
+				goto out;
+			} else
 				free (compfile);
 		}
 
-		/* This is insufficient, but we don't know the full search
-		 * path here so it's the best we can do for the time being;
-		 * with any luck it should cover most of the cases people
-		 * migrating from man to man-db need. See Debian bug
-		 * #503472.
-		 */
-		if (!decomp && !strchr (filename, '/') &&
-		    strchr (filename, '.')) {
-			char *pwd = xgetcwd ();
-			const char *dot = strchr (filename, '.');
-			char *name = xstrndup (filename, dot - filename);
-			const char *dot2 = dot ? strchr (dot + 1, '.') : NULL;
-			char *sec = dot2 ?
-				xstrndup (dot + 1, dot2 - (dot + 1)) :
-				xstrdup (dot + 1);
-			char **names = look_for_file (pwd, sec, name, 0,
-						      LFF_MATCHCASE);
+		if (manpathlist && strchr (filename, '/')) {
+			/* File name with a directory part.  Try looking it
+			 * up within each manpath entry.
+			 */
+			if (parent_path) {
+				compfile = appendstr (NULL, parent_path, "/",
+						      filename, ".", NULL);
+
+				decomp = try_compressed (&compfile);
+				if (decomp) {
+					NAME = compfile;
+					goto out;
+				}
+
+				free (compfile);
+			}
+
+			for (mp = manpathlist; *mp; ++mp) {
+				if (parent_path && STREQ (*mp, parent_path))
+					continue;
+
+				compfile = appendstr (NULL, *mp, "/",
+						      filename, ".", NULL);
+
+				decomp = try_compressed (&compfile);
+				if (decomp) {
+					NAME = compfile;
+					goto out;
+				}
+
+				free (compfile);
+			}
+		} else if (manpathlist) {
+			/* File name with no directory part.  Try searching
+			 * the manpath.
+			 */
+			char *name, *sec, *dot;
+			char **names;
 			char **np;
 
-			for (np = names; np && *np; ++np) {
-				decomp = decompress_open (*np);
-				if (decomp) {
-					NAME = xstrdup (*np);
-					break;
+			name = xstrdup (filename);
+			dot = strchr (name, '.');
+			if (!dot) {
+				free (name);
+				goto out;
+			}
+			*dot++ = '\0';
+			sec = dot;
+			dot = strchr (dot, '.');
+			if (dot)
+				*dot = '\0';
+
+			if (parent_path) {
+				names = look_for_file (parent_path, sec, name,
+						       0, LFF_MATCHCASE);
+				for (np = names; np && *np; ++np) {
+					decomp = decompress_open (*np);
+					if (decomp) {
+						NAME = xstrdup (*np);
+						goto out;
+					}
 				}
 			}
 
-			free (sec);
+			for (mp = manpathlist; *mp; ++mp) {
+				if (parent_path && STREQ (*mp, parent_path))
+					continue;
+
+				names = look_for_file (*mp, sec, name,
+						       0, LFF_MATCHCASE);
+				for (np = names; np && *np; ++np) {
+					decomp = decompress_open (*np);
+					if (decomp) {
+						NAME = xstrdup (*np);
+						goto out;
+					}
+				}
+			}
+
 			free (name);
-			free (pwd);
 		}
 
+		/* If there is a parent path, try opening directly last. */
+		if (parent_path) {
+			compfile = appendstr (NULL, filename, ".", NULL);
+
+			decomp = try_compressed (&compfile);
+			if (decomp) {
+				NAME = compfile;
+				goto out;
+			} else
+				free (compfile);
+		}
+
+out:
 		if (!decomp) {
 			error (0, errno, _("can't open %s"), filename);
 			return 1;
 		}
 	}
+
+	debug ("opened %s\n", NAME);
 
 	pipeline_start (decomp);
 	PIPE = decomp;
@@ -406,8 +507,29 @@ int zsoelim_open_file (const char *filename)
 	return 0;
 }
 
-void zsoelim_stdin (void *data ATTRIBUTE_UNUSED)
+void zsoelim_stdin (void *data)
 {
-	zsoelim_open_file ("-");
-	zsoelim_parse_file ();
+	struct zsoelim_stdin_data *zsoelim_data = data;
+
+	zsoelim_open_file ("-", NULL, zsoelim_data->path);
+	zsoelim_parse_file (zsoelim_data->manpathlist, zsoelim_data->path);
+}
+
+struct zsoelim_stdin_data *zsoelim_stdin_data_new (const char *path,
+						   char * const *manpathlist)
+{
+	struct zsoelim_stdin_data *data = XMALLOC (struct zsoelim_stdin_data);
+
+	data->path = xstrdup (path);
+	data->manpathlist = manpathlist;
+
+	return data;
+}
+
+void zsoelim_stdin_data_free (void *data)
+{
+	struct zsoelim_stdin_data *zsoelim_data = data;
+
+	free (zsoelim_data->path);
+	free (zsoelim_data);
 }

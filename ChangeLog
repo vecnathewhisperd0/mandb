@@ -1,3 +1,35 @@
+Wed Dec  1 22:24:51 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Improve .so searching (Debian bug #503472).
+
+	* src/Makefile.am (zsoelim_SOURCES): Add manp.c and manp.h.
+	* src/zsoelim.l (zsoelim_parse_file): Take manpathlist and
+	  parent_path arguments, and save those to pass on to
+	  zsoelim_open_file.
+	  (try_compressed): New function, split out from zsoelim_open_file.
+	  (zsoelim_open_file): Take manpathlist and parent_path arguments.
+	  Rearrange search logic as follows: (1) if there is no parent_path,
+	  try opening directly; (2) look up filename within each manpath
+	  entry, treating filenames without directory parts as full manual
+	  page lookups; (3) if there is a parent_path, try opening directly.
+	  (zsoelim_stdin): Pass path and manpathlist from input data to
+	  zsoelim_open_file and zsoelim_parse_file.
+	  (zsoelim_stdin_data_new, zsoelim_stdin_data_free): New functions.
+	* src/zsoelim.h (zsoelim_open_file, zsoelim_parse_file): Update
+	  prototypes.
+	  (zsoelim_stdin_data_new, zsoelim_stdin_data_free): Add prototypes.
+	* src/zsoelim_main.c (main): Initialise locale and manpath.  Pass
+	  manpath to zsoelim_open_file and zsoelim_parse_file.
+	* src/man.c (main): Calculate manpath before handling -l option.
+	  (make_roff_command): Pass dir and manpathlist to zsoelim_stdin.
+	* src/tests/zsoelim-1: New test.
+	* src/tests/Makefile.am (ALL_TESTS): Add zsoelim-1.
+	* NEWS: Document this.
+
+	* src/manp.c (get_def): If not setuid, make this identical to
+	  get_def_user.
+	* src/manp.h (get_def): Likewise.
+
 Wed Dec  1 14:15:34 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* lib/security.c (do_system_drop_privs): Copy-edit header comment,

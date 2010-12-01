@@ -138,14 +138,26 @@ static struct list *iterate_over_list (struct list *prev, char *key, int flag)
 	return NULL;
 }
 
+#ifdef SECURE_MAN_UID
+extern uid_t ruid;
+extern uid_t euid;
+
 /* Must not return DEFINEs set in ~/.manpath. This is used to fetch
  * definitions used in raised-privilege code; if in doubt, be conservative!
+ *
+ * If not setuid, this is identical to get_def_user.
  */
 const char *get_def (const char *thing, const char *def)
 {
-	const char *config_def = get_from_list (thing, DEFINE);
+	const char *config_def;
+
+	if (ruid == euid)
+		return get_def_user (thing, def);
+
+	config_def = get_from_list (thing, DEFINE);
 	return config_def ? config_def : def;
 }
+#endif
 
 const char *get_def_user (const char *thing, const char *def)
 {

@@ -20,6 +20,13 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-int zsoelim_open_file (const char *filename);
-void zsoelim_parse_file (void);
+int zsoelim_open_file (const char *filename, char * const *manpathlist,
+		       const char *parent_path);
+void zsoelim_parse_file (char * const *manpathlist, const char *parent_path);
+
+struct zsoelim_stdin_data;
+
 void zsoelim_stdin (void *data);
+struct zsoelim_stdin_data *zsoelim_stdin_data_new (const char *path,
+						   char * const *manpathlist);
+void zsoelim_stdin_data_free (void *data);
