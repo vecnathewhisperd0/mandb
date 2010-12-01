@@ -195,16 +195,16 @@ void regain_effective_privs (void)
 }
 
 /* 
- * If we want to execute a system command with no effective priveledges
- * we have to either
- * 	(a) Use saved id's (if available) to completely drop effective 
- * 	    priveledges and re-engage them after the call.
- *	(b) fork() and then drop effective privs in the child. Do the 
- * 	    system() command from the child and wait for it to die.
+ * If we want to execute a pipeline with no effective privileges we have to
+ * either:
+ * 	(a) Use saved ids (if available) to completely drop effective 
+ * 	    privileges and re-engage them after the call.
+ *	(b) fork() and then drop effective privs in the child. Run the 
+ * 	    pipeline from the child and wait for it to die.
  * (b) does not need saved ids as, once dropped, the effective privs are 
  * not required in the child again. (a) does not require a fork() as the
- * system()'d processes will not have suid=MAN_OWNER and will be unable 
- * to gain any man derived priveledges.
+ * child pipeline processes will not have suid=MAN_OWNER and will be unable
+ * to gain any man-derived privileges.
  *
  * Note that this frees the supplied pipeline.
  */
