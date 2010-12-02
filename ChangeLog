@@ -1,3 +1,10 @@
+Thu Dec  2 23:32:07 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/whatis.c (parse_opt): Make -f and -k force program identity to
+	  whatis and apropos respectively.  This is useful when running
+	  directly from the build tree, since libtool makes it hard to
+	  detect the program name correctly.
+
 Thu Dec  2 19:28:06 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/catman.c (parse_for_sec): Format ARG_MAX - arg_size using %zd.

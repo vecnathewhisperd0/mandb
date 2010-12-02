@@ -183,8 +183,12 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			user_config_file = arg;
 			return 0;
 		case 'f':
+			/* helpful override if program name detection fails */
+			am_apropos = 0;
+			return 0;
 		case 'k':
-			/* ignore, may be passed by man */
+			/* helpful override if program name detection fails */
+			am_apropos = 1;
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
