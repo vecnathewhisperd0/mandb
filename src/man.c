@@ -1858,16 +1858,18 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 			add_col (p, locale_charset, "-b", "-p", "-x", NULL);
 	}
 
-	if (ascii) {
-		pipeline_command_argstr
-			(p, get_def_user ("tr", TR TR_SET1 TR_SET2));
-		pager_cmd = pipecmd_new_argstr (pager);
-	} else
+	if (isatty (STDOUT_FILENO)) {
+		if (ascii) {
+			pipeline_command_argstr
+				(p, get_def_user ("tr", TR TR_SET1 TR_SET2));
+			pager_cmd = pipecmd_new_argstr (pager);
+		} else
 #ifdef TROFF_IS_GROFF
-	if (!htmlout)
-		/* format_display deals with html_pager */
+		if (!htmlout)
+			/* format_display deals with html_pager */
 #endif
-		pager_cmd = pipecmd_new_argstr (pager);
+			pager_cmd = pipecmd_new_argstr (pager);
+	}
 
 	if (pager_cmd) {
 		setenv_less (pager_cmd, title);
