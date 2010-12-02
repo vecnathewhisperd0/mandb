@@ -1,3 +1,16 @@
+Thu Dec  2 00:31:31 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Handle roff named glyphs and perldoc strings in NAME sections
+	(Debian bug #601025).
+
+	* src/lexgrog.l (glyphs, perldocs): New arrays.
+	  (MAN_NAME): Call newline_found on encountering \& at the start of
+	  a line.  Call add_glyph_to_whatis on roff named glyphs, and
+	  add_perldoc_to_whatis on perldoc strings.
+	  (compare_macro, add_macro_to_whatis, add_glyph_to_whatis,
+	  add_perldoc_to_whatis): New functions.
+	* NEWS: Document this.
+
 Wed Dec  1 22:24:51 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	Improve .so searching (Debian bug #503472).

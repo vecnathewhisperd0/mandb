@@ -37,6 +37,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "gettext.h"
@@ -60,11 +61,158 @@ static int ctr[YY_NUM_RULES];
 #  define YY_USER_ACTION ++ctr[yy_act];
 #endif
 
+#define ARRAY_SIZE(array) (sizeof (array) / sizeof ((array)[0]))
+
+struct macro {
+	const char *name;
+	const char *value;
+};
+
+static const struct macro glyphs[] = {
+	/* It is vital to keep these in strcmp order (sort -t\" -k2)!  They
+	 * will be searched using bsearch.
+	 * Data from groff_char(7), although I have omitted some that are
+	 * particularly unlikely to be used in NAME sections.
+	 */
+	{ "'A", "Á" },
+	{ "'C", "Ć" },
+	{ "'E", "É" },
+	{ "'I", "Í" },
+	{ "'O", "Ó" },
+	{ "'U", "Ú" },
+	{ "'Y", "Ý" },
+	{ "'a", "á" },
+	{ "'c", "ć" },
+	{ "'e", "é" },
+	{ "'i", "í" },
+	{ "'o", "ó" },
+	{ "'u", "ú" },
+	{ "'y", "ý" },
+	{ ",C", "Ç" },
+	{ ",c", "ç" },
+	{ "-D", "Ð" },
+	{ ".i", "ı" },
+	{ "/L", "Ł" },
+	{ "/O", "Ø" },
+	{ "/l", "ł" },
+	{ "/o", "ø" },
+	{ ":A", "Ä" },
+	{ ":E", "Ë" },
+	{ ":I", "Ï" },
+	{ ":O", "Ö" },
+	{ ":U", "Ü" },
+	{ ":Y", "Ÿ" },
+	{ ":a", "ä" },
+	{ ":e", "ë" },
+	{ ":i", "ï" },
+	{ ":o", "ö" },
+	{ ":u", "ü" },
+	{ ":y", "ÿ" },
+	{ "AE", "Æ" },
+	{ "Bq", "„" },
+	{ "Fc", "»" },
+	{ "Fi", "ffi" },
+	{ "Fl", "ffl" },
+	{ "Fo", "«" },
+	{ "IJ", "Ĳ" },
+	{ "OE", "Œ" },
+	{ "Sd", "ð" },
+	{ "TP", "Þ" },
+	{ "Tp", "þ" },
+	{ "^A", "Â" },
+	{ "^E", "Ê" },
+	{ "^I", "Î" },
+	{ "^O", "Ô" },
+	{ "^U", "Û" },
+	{ "^a", "â" },
+	{ "^e", "ê" },
+	{ "^i", "î" },
+	{ "^o", "ô" },
+	{ "^u", "û" },
+	{ "`A", "À" },
+	{ "`E", "È" },
+	{ "`I", "Ì" },
+	{ "`O", "Ò" },
+	{ "`U", "Ù" },
+	{ "`a", "à" },
+	{ "`e", "è" },
+	{ "`i", "ì" },
+	{ "`o", "ò" },
+	{ "`u", "ù" },
+	{ "a\"", "˝" },
+	{ "a-", "¯" },
+	{ "a.", "˙" },
+	{ "a^", "^" },
+	{ "aa", "´" },
+	{ "ab", "˘" },
+	{ "ac", "¸" },
+	{ "ad", "¨" },
+	{ "ae", "æ" },
+	{ "ah", "ˇ" },
+	{ "ao", "˚" },
+	{ "aq", "'" },
+	{ "a~", "~" },
+	{ "bq", "‚" },
+	{ "cq", "’" },
+	{ "dq", "\"" },
+	{ "em", "—" },
+	{ "en", "–" },
+	{ "fc", "›" },
+	{ "ff", "ff" },
+	{ "fi", "fi" },
+	{ "fl", "fl" },
+	{ "fo", "‹" },
+	{ "ga", "`" },
+	{ "ha", "^" },
+	{ "ho", "˛" },
+	{ "hy", "‐" },
+	{ "ij", "ĳ" },
+	{ "lq", "“" },
+	{ "oA", "Å" },
+	{ "oa", "å" },
+	{ "oe", "œ" },
+	{ "oq", "‘" },
+	{ "r!", "¡" },
+	{ "r?", "¿" },
+	{ "rq", "”" },
+	{ "ss", "ß" },
+	{ "ti", "~" },
+	{ "vS", "Š" },
+	{ "vZ", "Ž" },
+	{ "vs", "š" },
+	{ "vz", "ž" },
+	{ "~A", "Ã" },
+	{ "~N", "Ñ" },
+	{ "~O", "Õ" },
+	{ "~a", "ã" },
+	{ "~n", "ñ" },
+	{ "~o", "õ" },
+	{ NULL, NULL }
+};
+
+static const struct macro perldocs[] = {
+	/* It is vital to keep these in strcmp order (sort -t\" -k2)!  They
+	 * will be searched using bsearch.
+	 * Data from Pod/Man.pm.
+	 */
+	{ "--", "-" },
+	{ "Aq", "'" },
+	{ "C'", "'" },
+	{ "C+", "C++" },
+	{ "C`", "`" },
+	{ "L\"", "\"" },
+	{ "PI", "π" },
+	{ "R\"", "\"" },
+	{ NULL, NULL }
+};
+
 static void add_str_to_whatis (const char *string, size_t length);
 static void add_char_to_whatis (unsigned char c);
 static void add_separator_to_whatis (void);
 static void add_wordn_to_whatis (const char *string, size_t length);
 static void add_word_to_whatis (const char *string);
+static void add_glyph_to_whatis (const char *string, size_t length);
+static void add_perldoc_to_whatis (const char *string, size_t length);
 static void mdoc_text (const char *string);
 static void newline_found (void);
 
@@ -277,6 +425,7 @@ vgrind_request	\.vS
 	{bol}\.V[be]{blank}.*		|	/* pod2man, verbatim mode */
 	{bol}\.IX{blank}.*		|	/* .IX line */
 	{bol}\.Nm{blank}+		|	/* mdoc name */
+	{bol}\\&			|	/* non-breaking space */
 	{next}{comment}.*		{	/* per line comments */
 						newline_found ();
 					}
@@ -315,8 +464,12 @@ vgrind_request	\.vS
 
 	{next}\\\$[1-9]			/* interpolate arg */
 
-	{next}\\\*(\({alpha})?{alpha}	/* interpolate string */
-	{next}\\\({alpha}{alpha}	/* special (non printable) character */
+	/* roff named glyphs */
+	{next}\\\(..|\\\[..\]		add_glyph_to_whatis (yytext + 2, 2);
+	/* perldoc strings */
+	{next}\\\*\(..|\\\*\[..\]	add_perldoc_to_whatis (yytext + 3, 2);
+	{next}\\\*.			add_perldoc_to_whatis (yytext + 2, 1);
+
 	{next}\\["#].* 			/* comment */
 
 	{next}{font_change}		/* font changes */
@@ -562,6 +715,53 @@ static void add_wordn_to_whatis (const char *string, size_t length)
 static void add_word_to_whatis (const char *string)
 {
 	add_wordn_to_whatis (string, strlen (string));
+}
+
+struct compare_macro_key {
+	const char *string;
+	size_t length;
+};
+
+static int compare_macro (const void *left, const void *right)
+{
+	const struct compare_macro_key *key = left;
+	const struct macro *value = right;
+	int cmp;
+
+	cmp = strncmp (key->string, value->name, key->length);
+	if (cmp)
+		return cmp;
+	/* equal up to key->length, so value->name must be at least size
+	 * key->length + 1
+	 */
+	else if (value->name[key->length])
+		return -1;
+	else
+		return 0;
+}
+
+static void add_macro_to_whatis (const struct macro *macros, size_t n_macros,
+				 const char *string, size_t length)
+{
+	struct compare_macro_key key;
+	const struct macro *macro;
+
+	key.string = string;
+	key.length = length;
+	macro = bsearch (&key, macros, n_macros, sizeof (struct macro),
+			 compare_macro);
+	if (macro)
+		add_str_to_whatis (macro->value, strlen (macro->value));
+}
+
+static void add_glyph_to_whatis (const char *string, size_t length)
+{
+	add_macro_to_whatis (glyphs, ARRAY_SIZE (glyphs), string, length);
+}
+
+static void add_perldoc_to_whatis (const char *string, size_t length)
+{
+	add_macro_to_whatis (perldocs, ARRAY_SIZE (perldocs), string, length);
 }
 
 static void mdoc_text (const char *string)
