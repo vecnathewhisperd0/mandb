@@ -18,7 +18,7 @@
 .RB [\| \-e \||\| \-w \||\| \-r\c
 \|]
 .RB [\| \-s
-.IR section \|]
+.IR list \|]
 .RB [\| \-m
 .IR system \|[\|,.\|.\|.\|]\|]
 .RB [\| \-M
@@ -101,14 +101,16 @@ results from poorly-written
 .B NAME
 sections.
 .TP
-\fB\-s\fP \fIsection\fP, \fB\-\-section\fP \fIsection\fP
-Search only the given manual section.
-If
-.I section
+\fB\-s\fP \fIlist\fP, \fB\-\-sections\fP \fIlist\fP, \fB\-\-section\fP \fIlist\fP
+Search only the given manual sections.
+.I list
+is a colon- or comma-separated list of sections.
+If an entry in
+.I list
 is a simple section, for example "3", then the displayed list of
 descriptions will include pages in sections "3", "3perl", "3x", and so on;
-while if
-.I section
+while if an entry in
+.I list
 has an extension, for example "3perl", then the list will only include
 pages in that exact part of the manual section.
 .\"

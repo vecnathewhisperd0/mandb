@@ -1,3 +1,23 @@
+Thu Dec  2 23:54:03 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Allow passing multiple sections to whatis and apropos (Debian bug
+	#571285).
+
+	* src/whatis.c (options): Allow spelling --section as --sections;
+	  this is now the preferred long spelling.  Document that the
+	  argument may be colon-separated.
+	  (split_sections): New function.
+	  (parse_opt): Pass -s argument through split_sections.
+	  (do_whatis): Move most logic to ...
+	  (do_whatis_section): ... here.
+	  (do_whatis): Iterate over sections, calling do_whatis_section for
+	  each.
+	  (do_apropos): Test all requested sections.
+	* man/man1/apropos.man1 (SYNOPSIS, OPTIONS), man/man1/whatis.man1
+	  (SYNOPSIS, OPTIONS): Document new semantics.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+	* NEWS: Document this.
+
 Thu Dec  2 23:32:07 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/whatis.c (parse_opt): Make -f and -k force program identity to

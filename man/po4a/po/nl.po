@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.5.8-pre1\n"
-"POT-Creation-Date: 2010-05-09 07:39+0200\n"
+"POT-Creation-Date: 2010-12-02 23:47+0000\n"
 "PO-Revision-Date: 2010-10-24 20:48+0200\n"
 "Last-Translator: Erwin Poeze <erwin.poeze@gmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -83,11 +83,16 @@ msgstr "SAMENVATTING"
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:32
+#, fuzzy
+#| msgid ""
+#| "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|"
+#| "B<-s> I<section>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-"
+#| "M> I<path>\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<keyword> "
+#| "\\&.\\|.\\|."
 msgid ""
 "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|B<-"
-"s> I<section>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
-"I<path>\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<keyword> \\&.\\|."
-"\\|."
+"s> I<list>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<path>"
+"\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<keyword> \\&.\\|.\\|."
 msgstr ""
 "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|B<-"
 "s> I<sectie>\\|] [\\|B<-m> I<systeem>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
@@ -233,9 +238,10 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/apropos.man1:103 ../../man/man1/whatis.man1:107
-#, no-wrap
-msgid "B<-s> I<section>, B<--section> I<section>"
-msgstr "B<-s> I<sectie>, B<--sectie> I<sectie>"
+#, fuzzy, no-wrap
+#| msgid "B<-S\\ >I<list>B<,\\ -s\\ >I<list>B<,\\ --sections=>I<list>"
+msgid "B<-s> I<list>, B<--sections> I<list>, B<--section> I<list>"
+msgstr "B<-S\\ >I<lijst>B<,\\ -s\\ >I<lijst>B<,\\ --sections=>I<lijst>"
 
 #
 #.  Due to the rather silly limit of 6 args per request in some `native'
@@ -244,11 +250,19 @@ msgstr "B<-s> I<sectie>, B<--sectie> I<sectie>"
 #.  tag, then .RS (start relative indent), the text, finally .RE
 #.  (end relative indent).
 #. type: Plain text
-#: ../../man/man1/apropos.man1:121 ../../man/man1/whatis.man1:125
+#: ../../man/man1/apropos.man1:123 ../../man/man1/whatis.man1:127
+#, fuzzy
+#| msgid ""
+#| "Search only the given manual section.  If I<section> is a simple section, "
+#| "for example \"3\", then the displayed list of descriptions will include "
+#| "pages in sections \"3\", \"3perl\", \"3x\", and so on; while if "
+#| "I<section> has an extension, for example \"3perl\", then the list will "
+#| "only include pages in that exact part of the manual section."
 msgid ""
-"Search only the given manual section.  If I<section> is a simple section, "
-"for example \"3\", then the displayed list of descriptions will include "
-"pages in sections \"3\", \"3perl\", \"3x\", and so on; while if I<section> "
+"Search only the given manual sections.  I<list> is a colon- or comma-"
+"separated list of sections.  If an entry in I<list> is a simple section, for "
+"example \"3\", then the displayed list of descriptions will include pages in "
+"sections \"3\", \"3perl\", \"3x\", and so on; while if an entry in I<list> "
 "has an extension, for example \"3perl\", then the list will only include "
 "pages in that exact part of the manual section."
 msgstr ""
@@ -259,8 +273,8 @@ msgstr ""
 "lijst alleen pagina's bevatten die voorkomen in dat deel van de handleiding. "
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:127 ../../man/man1/man.man1:653
-#: ../../man/man1/manpath.man1:66 ../../man/man1/whatis.man1:131
+#: ../../man/man1/apropos.man1:129 ../../man/man1/man.man1:653
+#: ../../man/man1/manpath.man1:66 ../../man/man1/whatis.man1:133
 msgid ""
 "B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|B<,> B<--systems=>I<system>\\|[\\|,."
 "\\|.\\|.\\|]"
@@ -269,7 +283,7 @@ msgstr ""
 "\\|.\\|.\\|]"
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:133
+#: ../../man/man1/apropos.man1:135
 msgid ""
 "If this system has access to other operating system's manual page "
 "descriptions, they can be searched using this option.  To search NewOS's "
@@ -280,7 +294,7 @@ msgstr ""
 "NieuwOS's man-pagina's te doorzoeken, gebruikt u optie B<-m> B<NieuwOS>."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:145
+#: ../../man/man1/apropos.man1:147
 msgid ""
 "The I<system> specified can be a combination of comma-delimited operating "
 "system names.  To include a search of the native operating system's "
@@ -293,14 +307,14 @@ msgstr ""
 "argument op.  Deze optie zal voorgaan op de omgevingsvariabele $B<SYSTEM>. "
 
 #. type: TP
-#: ../../man/man1/apropos.man1:146 ../../man/man1/man.man1:672
-#: ../../man/man1/whatis.man1:150 ../../man/man8/catman.man8:59
+#: ../../man/man1/apropos.man1:148 ../../man/man1/man.man1:672
+#: ../../man/man1/whatis.man1:152 ../../man/man8/catman.man8:59
 #, no-wrap
 msgid "B<-M\\ >I<path>B<,\\ --manpath=>I<path>"
 msgstr "B<-M\\ >I<pad>B<,\\ --manpath=>I<pad>"
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:160 ../../man/man1/whatis.man1:164
+#: ../../man/man1/apropos.man1:162 ../../man/man1/whatis.man1:166
 msgid ""
 "Specify an alternate set of colon-delimited manual page hierarchies to "
 "search.  By default, B<%program%> uses the $B<MANPATH> environment variable, "
@@ -316,15 +330,15 @@ msgstr ""
 "$B<MANPATH>."
 
 #. type: TP
-#: ../../man/man1/apropos.man1:160 ../../man/man1/man.man1:623
-#: ../../man/man1/whatis.man1:164
+#: ../../man/man1/apropos.man1:162 ../../man/man1/man.man1:623
+#: ../../man/man1/whatis.man1:166
 #, no-wrap
 msgid "B<-L\\ >I<locale>B<,\\ --locale=>I<locale>"
 msgstr "B<-L\\ >I<taalgebied>B<,\\ --locale=>I<taalgebied>"
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:177 ../../man/man1/man.man1:647
-#: ../../man/man1/whatis.man1:181
+#: ../../man/man1/apropos.man1:179 ../../man/man1/man.man1:647
+#: ../../man/man1/whatis.man1:183
 msgid ""
 "B<%program%> will normally determine your current locale by a call to the C "
 "function B<setlocale>(3)  which interrogates various environment variables, "
@@ -344,16 +358,16 @@ msgstr ""
 "eerste instantie bepaald is."
 
 #. type: TP
-#: ../../man/man1/apropos.man1:177 ../../man/man1/man.man1:524
-#: ../../man/man1/manpath.man1:85 ../../man/man1/whatis.man1:181
+#: ../../man/man1/apropos.man1:179 ../../man/man1/man.man1:524
+#: ../../man/man1/manpath.man1:85 ../../man/man1/whatis.man1:183
 #: ../../man/man8/catman.man8:64 ../../man/man8/mandb.man8:126
 #, no-wrap
 msgid "B<-C\\ >I<file>B<,\\ --config-file=>I<file>"
 msgstr "B<-C\\ >I<bestand>B<,\\ --config-file=>I<bestand>"
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:181 ../../man/man1/man.man1:528
-#: ../../man/man1/manpath.man1:89 ../../man/man1/whatis.man1:185
+#: ../../man/man1/apropos.man1:183 ../../man/man1/man.man1:528
+#: ../../man/man1/manpath.man1:89 ../../man/man1/whatis.man1:187
 #: ../../man/man8/catman.man8:68 ../../man/man8/mandb.man8:130
 msgid ""
 "Use this user configuration file rather than the default of I<~/.manpath>."
@@ -362,66 +376,66 @@ msgstr ""
 "I<~/.manpath>."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:184 ../../man/man1/lexgrog.man1:86
+#: ../../man/man1/apropos.man1:186 ../../man/man1/lexgrog.man1:86
 #: ../../man/man1/man.man1:1115 ../../man/man1/manconv.man1:69
-#: ../../man/man1/manpath.man1:92 ../../man/man1/whatis.man1:188
+#: ../../man/man1/manpath.man1:92 ../../man/man1/whatis.man1:190
 #: ../../man/man1/zsoelim.man1:67 ../../man/man8/accessdb.man8:47
 #: ../../man/man8/catman.man8:71
 msgid "Print a help message and exit."
 msgstr "Een hulptekst tonen en stoppen."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:187 ../../man/man1/lexgrog.man1:89
+#: ../../man/man1/apropos.man1:189 ../../man/man1/lexgrog.man1:89
 #: ../../man/man1/man.man1:1118 ../../man/man1/manconv.man1:72
-#: ../../man/man1/manpath.man1:95 ../../man/man1/whatis.man1:191
+#: ../../man/man1/manpath.man1:95 ../../man/man1/whatis.man1:193
 #: ../../man/man1/zsoelim.man1:70 ../../man/man8/accessdb.man8:50
 #: ../../man/man8/catman.man8:74
 msgid "Display version information."
 msgstr "Versieinformatie tonen."
 
 #. type: SH
-#: ../../man/man1/apropos.man1:187 ../../man/man1/lexgrog.man1:89
-#: ../../man/man1/man.man1:1118 ../../man/man1/whatis.man1:191
+#: ../../man/man1/apropos.man1:189 ../../man/man1/lexgrog.man1:89
+#: ../../man/man1/man.man1:1118 ../../man/man1/whatis.man1:193
 #: ../../man/man8/mandb.man8:136
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr "STOPSTATUS"
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:191 ../../man/man1/lexgrog.man1:93
-#: ../../man/man1/man.man1:1122 ../../man/man1/whatis.man1:195
+#: ../../man/man1/apropos.man1:193 ../../man/man1/lexgrog.man1:93
+#: ../../man/man1/man.man1:1122 ../../man/man1/whatis.man1:197
 #: ../../man/man8/mandb.man8:140
 msgid "Successful program execution."
 msgstr "Programma correct uitgevoerd."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:194 ../../man/man1/man.man1:1125
-#: ../../man/man1/whatis.man1:198
+#: ../../man/man1/apropos.man1:196 ../../man/man1/man.man1:1125
+#: ../../man/man1/whatis.man1:200
 msgid "Usage, syntax or configuration file error."
 msgstr "Gebruiks-, syntax- of configuratiebestandfout."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:197 ../../man/man1/man.man1:1128
-#: ../../man/man1/whatis.man1:201 ../../man/man8/mandb.man8:146
+#: ../../man/man1/apropos.man1:199 ../../man/man1/man.man1:1128
+#: ../../man/man1/whatis.man1:203 ../../man/man8/mandb.man8:146
 msgid "Operational error."
 msgstr "Uitvoeringsfout."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:200 ../../man/man1/whatis.man1:204
+#: ../../man/man1/apropos.man1:202 ../../man/man1/whatis.man1:206
 msgid "Nothing was found that matched the criteria specified."
 msgstr "Er is niets gevonden dat overeenkomt met de opgegeven criteria."
 
 #. type: SH
-#: ../../man/man1/apropos.man1:200 ../../man/man1/man.man1:1134
-#: ../../man/man1/manpath.man1:95 ../../man/man1/whatis.man1:204
+#: ../../man/man1/apropos.man1:202 ../../man/man1/man.man1:1134
+#: ../../man/man1/manpath.man1:95 ../../man/man1/whatis.man1:206
 #: ../../man/man8/catman.man8:74
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr "OMGEVING"
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:209 ../../man/man1/man.man1:1227
-#: ../../man/man1/manpath.man1:121 ../../man/man1/whatis.man1:213
+#: ../../man/man1/apropos.man1:211 ../../man/man1/man.man1:1227
+#: ../../man/man1/manpath.man1:121 ../../man/man1/whatis.man1:215
 msgid ""
 "If $B<SYSTEM> is set, it will have the same effect as if it had been "
 "specified as the argument to the B<-m> option."
@@ -430,7 +444,7 @@ msgstr ""
 "opgegeven van optie B<-m> als argument."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:215 ../../man/man1/whatis.man1:219
+#: ../../man/man1/apropos.man1:217 ../../man/man1/whatis.man1:221
 #: ../../man/man8/catman.man8:87
 msgid ""
 "If $B<MANPATH> is set, its value is interpreted as the colon-delimited "
@@ -440,7 +454,7 @@ msgstr ""
 "zoekpad van dubbelepuntgescheiden hiërarchie van man-pagina's."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:227 ../../man/man1/whatis.man1:231
+#: ../../man/man1/apropos.man1:229 ../../man/man1/whatis.man1:233
 msgid ""
 "If $B<MANWIDTH> is set, its value is used as the terminal width (see the B<--"
 "long> option).  If it is not set, the terminal width will be calculated "
@@ -453,7 +467,7 @@ msgstr ""
 "waarde van $B<COLUMNS>, of wordt er teruggevallen op 80 karakters."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:236
+#: ../../man/man1/apropos.man1:238
 msgid ""
 "If $B<POSIXLY_CORRECT> is set, even to a null value, the default B<%apropos"
 "%> search will be as an extended regex (B<-r>).  Nowadays, this is the "
@@ -464,35 +478,35 @@ msgstr ""
 "(B<-r>).  Momenteel is dit hoe dan ook het standaardgedrag."
 
 #. type: SH
-#: ../../man/man1/apropos.man1:236 ../../man/man1/man.man1:1292
-#: ../../man/man1/manpath.man1:121 ../../man/man1/whatis.man1:231
+#: ../../man/man1/apropos.man1:238 ../../man/man1/man.man1:1292
+#: ../../man/man1/manpath.man1:121 ../../man/man1/whatis.man1:233
 #: ../../man/man8/catman.man8:87 ../../man/man8/mandb.man8:183
 #, no-wrap
 msgid "FILES"
 msgstr "BESTANDEN"
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:242 ../../man/man1/man.man1:1304
-#: ../../man/man1/whatis.man1:237 ../../man/man8/catman.man8:96
+#: ../../man/man1/apropos.man1:244 ../../man/man1/man.man1:1304
+#: ../../man/man1/whatis.man1:239 ../../man/man8/catman.man8:96
 #: ../../man/man8/mandb.man8:199
 msgid "A traditional global I<index> database cache."
 msgstr "Een traditionele, algemene I<index>-database-cache."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:248 ../../man/man1/man.man1:1310
-#: ../../man/man1/whatis.man1:243 ../../man/man8/mandb.man8:192
+#: ../../man/man1/apropos.man1:250 ../../man/man1/man.man1:1310
+#: ../../man/man1/whatis.man1:245 ../../man/man8/mandb.man8:192
 msgid "An FHS compliant global I<index> database cache."
 msgstr "Een algemene I<index>-database-cache, in overeenstemming met FHS."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:253 ../../man/man1/whatis.man1:248
+#: ../../man/man1/apropos.man1:255 ../../man/man1/whatis.man1:250
 msgid "A traditional B<whatis> text database."
 msgstr "Een traditionele B<watis>-tekstdatabase."
 
 #. type: SH
-#: ../../man/man1/apropos.man1:253 ../../man/man1/lexgrog.man1:191
+#: ../../man/man1/apropos.man1:255 ../../man/man1/lexgrog.man1:191
 #: ../../man/man1/man.man1:1310 ../../man/man1/manconv.man1:72
-#: ../../man/man1/manpath.man1:125 ../../man/man1/whatis.man1:248
+#: ../../man/man1/manpath.man1:125 ../../man/man1/whatis.man1:250
 #: ../../man/man1/zsoelim.man1:70 ../../man/man8/catman.man8:102
 #: ../../man/man8/mandb.man8:205
 #, no-wrap
@@ -500,9 +514,9 @@ msgid "SEE ALSO"
 msgstr "ZIE OOK"
 
 #. type: SH
-#: ../../man/man1/apropos.man1:257 ../../man/man1/lexgrog.man1:201
+#: ../../man/man1/apropos.man1:259 ../../man/man1/lexgrog.man1:201
 #: ../../man/man1/manconv.man1:75 ../../man/man1/manpath.man1:129
-#: ../../man/man1/whatis.man1:252 ../../man/man1/zsoelim.man1:75
+#: ../../man/man1/whatis.man1:254 ../../man/man1/zsoelim.man1:75
 #: ../../man/man8/accessdb.man8:50 ../../man/man8/catman.man8:106
 #: ../../man/man8/mandb.man8:215
 #, no-wrap
@@ -2723,11 +2737,21 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:32
+#, fuzzy
+#| msgid ""
+#| "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|"
+#| "B<-s> I<section>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-"
+#| "M> I<path>\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<keyword> "
+#| "\\&.\\|.\\|."
 msgid ""
-"B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<section>"
+"B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<list>"
 "\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<path>\\|] [\\|"
 "B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<name> \\&.\\|.\\|."
 msgstr ""
+"B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|B<-"
+"s> I<sectie>\\|] [\\|B<-m> I<systeem>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
+"I<pad>\\|] [\\|B<-L> I<taalgebied>\\|] [\\|B<-C> I<bestand>\\|] I<trefwoord> "
+"\\&.\\|.\\|."
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:39
@@ -2783,7 +2807,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../../man/man1/whatis.man1:138
+#: ../../man/man1/whatis.man1:140
 msgid ""
 "If this system has access to other operating system's manual page names, "
 "they can be accessed using this option.  To search NewOS's manual page "
@@ -2791,7 +2815,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../../man/man1/whatis.man1:149
+#: ../../man/man1/whatis.man1:151
 msgid ""
 "The I<system> specified can be a combination of comma delimited operating "
 "system names.  To include a search of the native operating system's manual "
@@ -3493,3 +3517,6 @@ msgid ""
 "B<lexgrog>(1)."
 msgstr ""
 "De voormalige sectie B<WAT IS ONTLEDEN> is nu onderdeel van B<lexgrog>(1)."
+
+#~ msgid "B<-s> I<section>, B<--section> I<section>"
+#~ msgstr "B<-s> I<sectie>, B<--sectie> I<sectie>"
