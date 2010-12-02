@@ -1877,10 +1877,9 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 	}
 	pipeline_ignore_signals (p, 1);
 
-	if (!pipeline_get_ncommands (p)) {
-		pipeline_free (p);
-		p = NULL;
-	}
+	if (!pipeline_get_ncommands (p))
+		/* Always return at least a dummy pipeline. */
+		pipeline_command (p, pipecmd_new_passthrough ());
 	return p;
 }
 

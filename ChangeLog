@@ -1,3 +1,8 @@
+Thu Dec  2 19:23:36 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (make_display_command): Make sure the returned pipeline
+	  is never NULL; this causes crashes later.
+
 Thu Dec  2 12:33:43 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (make_display_command): Don't start a pager if standard
