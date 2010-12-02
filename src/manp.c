@@ -1050,7 +1050,7 @@ static inline char *has_mandir (const char *path)
 	   
 	char *subdir = strrchr (path, '/');
 	if (subdir) {
-		newpath = xasprintf ("%.*s/man", subdir - path, path);
+		newpath = xasprintf ("%.*s/man", (int) (subdir - path), path);
 		if (is_directory (newpath) == 1)
 			return newpath;
 		free (newpath);
@@ -1062,7 +1062,8 @@ static inline char *has_mandir (const char *path)
 	free (newpath);
 
 	if (subdir) {
-		newpath = xasprintf ("%.*s/share/man", subdir - path, path);
+		newpath = xasprintf ("%.*s/share/man",
+				     (int) (subdir - path), path);
 		if (is_directory (newpath) == 1)
 			return newpath;
 		free (newpath);
@@ -1150,8 +1151,8 @@ void create_pathlist (const char *manp, char **mp)
 		     ++dupcheck) {
 			if (!STREQ (*mp, *dupcheck))
 				continue;
-			debug ("Removing duplicate manpath entry %s (%d) -> "
-			       "%s (%d)\n",
+			debug ("Removing duplicate manpath entry %s (%td) -> "
+			       "%s (%td)\n",
 			       oldmp, mp - mphead,
 			       *dupcheck, dupcheck - mphead);
 			free (*mp);

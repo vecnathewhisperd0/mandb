@@ -340,7 +340,7 @@ static int parse_for_sec (const char *manpath, const char *section)
 							    &(args[arg_no]));
 					arg_size += strlen (args[arg_no++]) + 1;
 
-					debug ("arg space free: %d bytes\n",
+					debug ("arg space free: %zd bytes\n",
 					       ARG_MAX - arg_size);
 
 					/* Check to see if we have enough room 
