@@ -1,3 +1,12 @@
+Sun Dec  5 20:58:10 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	Provide byte positions in manconv errors (Debian bug #562789).
+
+	* src/manconv.c (locate_error): New function.
+	  (try_iconv): Skip over processed input data after handling errors.
+	  Use locate_error to produce exact byte positions for conversion
+	  errors.
+
 Thu Dec  2 23:54:03 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	Allow passing multiple sections to whatis and apropos (Debian bug

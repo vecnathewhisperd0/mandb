@@ -37,6 +37,8 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
+#include <unistd.h>
 
 #ifdef HAVE_ICONV
 #  include <iconv.h>
@@ -58,12 +60,48 @@
 
 #ifdef HAVE_ICONV
 
+/* When converting text containing an invalid multibyte sequence to
+ * UTF-8//IGNORE, GNU libc's iconv returns EILSEQ but sets *inbuf to the end
+ * of the input buffer.  I'm not sure whether this is a bug or not (it seems
+ * to contradict the documentation), but work around it anyway by recoding
+ * to UTF-8 so that we can accurately position the error.
+ */
+static off_t locate_error (const char *try_from_code,
+			   const char *input, size_t input_size,
+			   char *utf8, size_t utf8_size)
+{
+	iconv_t cd_utf8_strict;
+	char *inptr = (char *) input, *utf8ptr = utf8;
+	size_t inleft = input_size, utf8left = utf8_size;
+	size_t n;
+	off_t ret;
+
+	cd_utf8_strict = iconv_open ("UTF-8", try_from_code);
+	if (cd_utf8_strict == (iconv_t) -1) {
+		error (0, errno, "iconv_open (\"UTF-8\", \"%s\")",
+		       try_from_code);
+		return 0;
+	}
+
+	n = iconv (cd_utf8_strict, (ICONV_CONST char **) &inptr, &inleft,
+		   &utf8ptr, &utf8left);
+	if (n == (size_t) -1)
+		ret = inptr - input;
+	else
+		ret = 0;
+
+	iconv_close (cd_utf8_strict);
+
+	return ret;
+}
+
 static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		      int last)
 {
 	char *try_to_code = xstrdup (to);
 	static const size_t buf_size = 65536;
 	size_t input_size = buf_size;
+	off_t input_pos = 0;
 	const char *input;
 	static char *utf8 = NULL, *output = NULL;
 	size_t utf8left = 0;
@@ -188,9 +226,6 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 			errno = errno_save;
 		}
 
-		if (inptr != input)
-			pipeline_peek_skip (p, input_size - inleft);
-
 		if (!to_utf8 && n2 != (size_t) -1) {
 			/* All the UTF-8 text we have so far was processed.
 			 * For state-dependent character sets we have to
@@ -212,18 +247,37 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 				errno = errno_save;
 			}
 		} else if (handle_iconv_errors) {
-			errno = handle_iconv_errors;
-			if (errno == EILSEQ && !ignore_errors) {
-				if (!quiet)
-					error (0, errno, "iconv");
+			intmax_t error_pos;
+
+			if (handle_iconv_errors == EILSEQ && !ignore_errors) {
+				if (!quiet) {
+					error_pos = input_pos + locate_error (
+						try_from_code,
+						input, input_size,
+						utf8, buf_size);
+					error (0, handle_iconv_errors,
+					       "byte %jd: iconv", error_pos);
+				}
 				exit (FATAL);
-			} else if (errno == EINVAL && input_size < buf_size) {
-				if (!quiet)
-					error (FATAL, 0,
+			} else if (handle_iconv_errors == EINVAL &&
+				   input_size < buf_size) {
+				if (!quiet) {
+					error_pos = input_pos + locate_error (
+						try_from_code,
+						input, input_size,
+						utf8, buf_size);
+					error (FATAL, 0, "byte %jd: %s",
+					       error_pos,
 					       _("iconv: incomplete character "
 						 "at end of buffer"));
+				}
 				exit (FATAL);
 			}
+		}
+
+		if (inptr != input) {
+			pipeline_peek_skip (p, input_size - inleft);
+			input_pos += input_size - inleft;
 		}
 
 		/* Unless we have some UTF-8 text left (which will only
