@@ -78,6 +78,8 @@ AC_DEFUN([gl_EARLY],
   # Code from module hash-pjw:
   # Code from module hash-triple:
   # Code from module havelib:
+  # Code from module idpriv-drop:
+  # Code from module idpriv-droptemp:
   # Code from module include_next:
   # Code from module inline:
   # Code from module intprops:
@@ -312,6 +314,10 @@ AC_SUBST([LTALLOCA])
   # Code from module hash-pjw:
   # Code from module hash-triple:
   # Code from module havelib:
+  # Code from module idpriv-drop:
+  gl_IDPRIV
+  # Code from module idpriv-droptemp:
+  gl_IDPRIV
   # Code from module include_next:
   # Code from module inline:
   gl_INLINE
@@ -745,6 +751,9 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/hash-triple.h
   lib/hash.c
   lib/hash.h
+  lib/idpriv-drop.c
+  lib/idpriv-droptemp.c
+  lib/idpriv.h
   lib/intprops.h
   lib/langinfo.in.h
   lib/lchown.c
@@ -907,6 +916,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/gnulib-common.m4
   m4/hash.m4
   m4/iconv.m4
+  m4/idpriv.m4
   m4/include_next.m4
   m4/inline.m4
   m4/intdiv0.m4

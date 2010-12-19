@@ -1,3 +1,14 @@
+Sun Dec 19 16:10:35 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* gnulib: Import idpriv-drop and idpriv-droptemp modules.
+	* configure.ac: Stop checking for seteuid, setreuid, and setresuid.
+	* lib/security.c (POSIX_SAVED_IDS, SET_EUID, SWAP_UIDS): Remove in
+	  favour of idpriv.h.
+	  (drop_effective_privs): Use idpriv_temp_drop.
+	  (regain_effective_privs): Use idpriv_temp_restore.
+	  (do_system_drop_privs): Use idpriv_drop.  Drop saved-IDs case;
+	  avoiding a fork doesn't justify having two code paths.
+
 Sun Dec  5 20:58:10 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	Provide byte positions in manconv errors (Debian bug #562789).

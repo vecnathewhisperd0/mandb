@@ -2,7 +2,7 @@
  * security.c: Routines to aid secure uid operations 
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001 Colin Watson.
+ * Copyright (C) 2001, 2003, 2004, 2007, 2010 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -59,44 +59,9 @@
     * they live in are writeable by this user.
     */
 
-#  include <unistd.h> 			/* for _POSIX_SAVED_IDS */
-#  if defined(_POSIX_SAVED_IDS)
-#    if defined(__ultrix__)
-       /* Ultrix pretends to have saved uids, but hasn't unless: */
-#      if defined(POSIX) || defined(SYSTEM_FIVE)
-#        define POSIX_SAVED_IDS
-#      endif /* POSIX || SYSTEM_FIVE */
-#    else /* !ultrix */
-#      define POSIX_SAVED_IDS
-#    endif /* ultrix */
-#  endif /* _POSIX_SAVED_IDS */
+#  include <unistd.h>
 
-/* Sort out the function to use to set the euid.  Used if we have suid */
-  
-#  ifdef POSIX_SAVED_IDS
-#    if defined (HAVE_SETEUID)
-#      define SET_EUID(euid)		seteuid(euid)
-#    elif defined (HAVE_SETREUID)
-#      define SET_EUID(euid)		setreuid(-1, euid)
-#    elif defined (HAVE_SETRESUID)
-#      define SET_EUID(euid)		setresuid(-1, euid, -1)
-#    endif /* HAVE_SETEUID */
-
-/* Sort out the function to use to swap ruid with euid.  Used if no suid. */
-
-#  else /* !POSIX_SAVED_IDS */
-#    if defined (HAVE_SETREUID)
-#      define SWAP_UIDS(ida, idb)	setreuid(idb, ida)
-#    elif defined (HAVE_SETRESUID)
-#      define SWAP_UIDS(ida, idb)	setresuid(idb, ida, -1)
-#      warning Using setresuid() whithout _POSIX_SAVED_IDS!
-#    endif /* HAVE_SETREUID */
-#  endif /* POSIX_SAVED_IDS */
-
-#  if defined (POSIX_SAVED_IDS) && !defined (SET_EUID) || \
-    !defined (POSIX_SAVED_IDS) && !defined (SWAP_UIDS)
-#    error Cannot compile man as a setuid program: insufficient seteuid funcs.
-#  endif
+#  include "idpriv.h"
 
 uid_t ruid;				/* initial real user id */
 uid_t euid;				/* initial effective user id */
@@ -151,13 +116,8 @@ void drop_effective_privs (void)
 #ifdef SECURE_MAN_UID
 	if (uid != ruid) {
 		debug ("drop_effective_privs()\n");
-#  ifdef POSIX_SAVED_IDS
-		if (SET_EUID (ruid))
-#  else
-		if (SWAP_UIDS (euid, ruid))
-#  endif 
+		if (idpriv_temp_drop ())
 			gripe_set_euid ();
-
 		uid = ruid;
 	}
 
@@ -182,11 +142,7 @@ void regain_effective_privs (void)
 
 	if (uid != euid) {
 		debug ("regain_effective_privs()\n");
-#  ifdef POSIX_SAVED_IDS
-		if (SET_EUID (euid))
-#  else
-		if (SWAP_UIDS (ruid, euid))
-#  endif
+		if (idpriv_temp_restore ())
 			gripe_set_euid ();
 
 		uid = euid;
@@ -194,37 +150,19 @@ void regain_effective_privs (void)
 #endif /* SECURE_MAN_UID */
 }
 
-/* 
- * If we want to execute a pipeline with no effective privileges we have to
- * either:
- * 	(a) Use saved ids (if available) to completely drop effective 
- * 	    privileges and re-engage them after the call.
- *	(b) fork() and then drop effective privs in the child. Run the 
- * 	    pipeline from the child and wait for it to die.
- * (b) does not need saved ids as, once dropped, the effective privs are 
- * not required in the child again. (a) does not require a fork() as the
- * child pipeline processes will not have suid=MAN_OWNER and will be unable
- * to gain any man-derived privileges.
+/* The safest way to execute a pipeline with no effective privileges is to
+ * fork, permanently drop privileges in the child, run the pipeline from the
+ * child, and wait for it to die.
+ *
+ * It is possible to use saved IDs to avoid the fork, since effective IDs
+ * are copied to saved IDs on execve; we used to do this.  However, forking
+ * is not expensive enough to justify the extra code.
  *
  * Note that this frees the supplied pipeline.
  */
 int do_system_drop_privs (pipeline *p)
 {
 #ifdef SECURE_MAN_UID
-	
-#  ifdef POSIX_SAVED_IDS
-	if (uid == ruid)
-		return pipeline_run (p);
-	else {
-		int status;
-		drop_effective_privs ();
-		status = pipeline_run (p);
-		regain_effective_privs ();
-		return status;
-	}
-	
-#  else /* !POSIX_SAVED_IDS */
-
 	pid_t child;
 	int status;
 
@@ -236,7 +174,7 @@ int do_system_drop_privs (pipeline *p)
 		status = 0;
 	} else if (child == 0) {
 		pop_all_cleanups ();
-		if (SWAP_UIDS (ruid, ruid))
+		if (idpriv_drop ())
 			gripe_set_euid ();
 		exit (pipeline_run (p));
 	} else {
@@ -253,8 +191,6 @@ int do_system_drop_privs (pipeline *p)
 
 	pipeline_free (p);
 	return status;
-#  endif /* all ways to do a sys command after dropping privs */
-
 #else  /* !SECURE_MAN_UID */
 	return pipeline_run (p);
 #endif /* SECURE_MAN_UID */
