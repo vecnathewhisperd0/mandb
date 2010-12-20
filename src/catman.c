@@ -67,6 +67,7 @@
 #include "dirname.h"
 
 #include "gettext.h"
+#include <locale.h>
 #define _(String) gettext (String)
 #define N_(String) gettext_noop (String)
 
@@ -413,7 +414,8 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 
-	locale = xstrdup (init_locale ());
+	init_locale ();
+	locale = setlocale (LC_MESSAGES, NULL);
 	if (!locale)
 		locale = xstrdup ("C");
 

@@ -1,3 +1,12 @@
+Mon Dec 20 00:41:04 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/catman.c (main): Initialise locale using the LC_MESSAGES
+	  category rather than LC_ALL.  glibc returns a composite name for
+	  the latter.
+	* lib/util.c (init_locale): Return void instead of returning the
+	  result of setlocale.
+	* include/manconfig.h.in (init_locale): Update prototype.
+
 Sun Dec 19 16:10:35 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* gnulib: Import idpriv-drop and idpriv-droptemp modules.

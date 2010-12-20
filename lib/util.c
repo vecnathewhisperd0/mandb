@@ -232,10 +232,10 @@ char *lang_dir (const char *filename)
 	return ld;
 }
 
-char *init_locale (void)
+void init_locale (void)
 {
-	char *ret = setlocale (LC_ALL, "");
-	if (!ret &&
+	char *locale = setlocale (LC_ALL, "");
+	if (!locale &&
 	    !getenv ("MAN_NO_LOCALE_WARNING") &&
 	    !getenv ("DPKG_RUNNING_VERSION"))
 		/* Obviously can't translate this. */
@@ -247,5 +247,4 @@ char *init_locale (void)
 	bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);
 	textdomain (PACKAGE);
 #endif /* ENABLE_NLS */
-	return ret;
 }
