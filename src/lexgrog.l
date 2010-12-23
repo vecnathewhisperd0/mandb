@@ -186,8 +186,7 @@ static const struct macro glyphs[] = {
 	{ "~O", "Õ" },
 	{ "~a", "ã" },
 	{ "~n", "ñ" },
-	{ "~o", "õ" },
-	{ NULL, NULL }
+	{ "~o", "õ" }
 };
 
 static const struct macro perldocs[] = {
@@ -202,8 +201,7 @@ static const struct macro perldocs[] = {
 	{ "C`", "`" },
 	{ "L\"", "\"" },
 	{ "PI", "π" },
-	{ "R\"", "\"" },
-	{ NULL, NULL }
+	{ "R\"", "\"" }
 };
 
 static void add_str_to_whatis (const char *string, size_t length);

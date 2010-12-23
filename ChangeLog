@@ -1,3 +1,9 @@
+Thu Dec 23 15:50:39 GMT 2010  Colin Watson  <cjwatson@debian.org>
+
+	* src/lexgrog.l (glyphs, perldocs): Remove terminating NULL entries;
+	  these arrays are handled using bsearch with an explicit length,
+	  and NULL-terminating them causes crashes.
+
 Mon Dec 20 00:41:04 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/catman.c (main): Initialise locale using the LC_MESSAGES
