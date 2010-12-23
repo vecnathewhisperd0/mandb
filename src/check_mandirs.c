@@ -476,10 +476,15 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 		}
 
 		if (!quiet) {
-			fprintf (stderr, "\r");
+			int tty = isatty (STDERR_FILENO);
+
+			if (tty)
+				fprintf (stderr, "\r");
 			fprintf (stderr,
 				 _("Updating index cache for path "
 				   "`%s/%s'. Wait..."), path, mandir->d_name);
+			if (!tty)
+				fprintf (stderr, "\n");
 		}
 		add_dir_entries (path, mandir->d_name);
 		MYDBM_CLOSE (dbf);
