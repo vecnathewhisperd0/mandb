@@ -1,3 +1,15 @@
+Mon Jan  3 00:56:55 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (get_manpath_from_path): Return an empty string rather
+	  than asserting if no path elements with corresponding manpaths
+	  were found (Debian bug #608490).
+	* src/man.c (local_man_loop): Skip executable processing if no
+	  useful manpath was returned.
+	* src/tests/man-2: New test for this bug.
+	* src/tests/Makefile.am (ALL_TESTS): Add man-2.
+
+	* README (Copyright and licensing): New year.
+
 Thu Dec 23 16:00:06 GMT 2010  Colin Watson  <cjwatson@debian.org>
 
 	* src/check_mandirs.c (testmandirs): Make output neater when stderr
