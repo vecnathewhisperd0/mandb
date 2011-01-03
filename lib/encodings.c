@@ -1,7 +1,8 @@
 /*
  * encodings.c: locale and encoding handling for man
  *
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Colin Watson.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011
+ *               Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -211,24 +212,28 @@ struct charset_entry {
 
 static struct charset_entry charset_table[] = {
 	{ "ANSI_X3.4-1968",	"ascii"		},
+#ifndef HEIRLOOM_NROFF
 	{ "ISO-8859-1",		"latin1"	},
+#endif /* HEIRLOOM_NROFF */
 	{ "UTF-8",		"utf8"		},
 
-#ifdef MULTIBYTE_GROFF
+#ifndef HEIRLOOM_NROFF
+# ifdef MULTIBYTE_GROFF
 	{ "BIG5",		"nippon"	},
 	{ "BIG5HKSCS",		"nippon"	},
 	{ "EUC-CN",		"nippon"	},
 	{ "EUC-JP",		"nippon"	},
 	{ "EUC-TW",		"nippon"	},
 	{ "GBK",		"nippon"	},
-#else /* !MULTIBYTE_GROFF */
+# else /* !MULTIBYTE_GROFF */
 	/* If we have a smarter version of groff, this is better dealt with
 	 * using either ascii8 (Debian multibyte patch) or preconv (as of
 	 * groff 1.20). This is a not-quite-right stopgap in case we have
 	 * neither.
 	 */
 	{ "ISO-8859-15",    	"latin1"	},
-#endif /* MULTIBYTE_GROFF */
+# endif /* MULTIBYTE_GROFF */
+#endif /* HEIRLOOM_NROFF */
 
 	{ NULL,			NULL		}
 };
@@ -265,6 +270,11 @@ static struct device_entry device_table[] = {
 	{ "ascii8",	NULL,			NULL			},
 	{ "nippon",	NULL,			NULL			},
 #endif /* MULTIBYTE_GROFF */
+
+#ifdef HEIRLOOM_NROFF
+	/* Not strictly accurate, but we only use this in UTF-8 locales. */
+	{ "locale",	"UTF-8",		"UTF-8"			},
+#endif /* HEIRLOOM_NROFF */
 
 	/* troff devices */
 	{ "X75",	NULL,			NULL			},

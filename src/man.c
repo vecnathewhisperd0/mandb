@@ -640,9 +640,19 @@ static int get_roff_line_length (void)
 		return 0;
 }
 
-static void add_roff_line_length (pipecmd *cmd, int *save_cat_p)
+#ifdef HEIRLOOM_NROFF
+static void heirloom_line_length (void *data)
+{
+	printf (".ll %sn\n", (const char *) data);
+	/* TODO: This fails to do anything useful.  Why? */
+	printf (".lt %sn\n", (const char *) data);
+}
+#endif /* HEIRLOOM_NROFF */
+
+static pipecmd *add_roff_line_length (pipecmd *cmd, int *save_cat_p)
 {
 	int length;
+	pipecmd *ret = NULL;
 
 	if (!catman) {
 		int line_length = get_line_length ();
@@ -662,10 +672,29 @@ static void add_roff_line_length (pipecmd *cmd, int *save_cat_p)
 
 	length = get_roff_line_length ();
 	if (length) {
+#ifdef HEIRLOOM_NROFF
+		char *name;
+		char *lldata;
+		pipecmd *llcmd;
+#endif /* HEIRLOOM_NROFF */
+
 		debug ("Using %d-character lines\n", length);
+#if defined(TROFF_IS_GROFF)
 		pipecmd_argf (cmd, "-rLL=%dn", length);
 		pipecmd_argf (cmd, "-rLT=%dn", length);
+#elif defined(HEIRLOOM_NROFF)
+		name = xasprintf ("echo .ll %dn && echo .lt %dn",
+				  length, length);
+		lldata = xasprintf ("%d", length);
+		llcmd = pipecmd_new_function (name, heirloom_line_length, free,
+					      lldata);
+		ret = pipecmd_new_sequence ("line-length", llcmd,
+					    pipecmd_new_passthrough (), NULL);
+		free (name);
+#endif /* HEIRLOOM_NROFF */
 	}
+
+	return ret;
 }
 
 static inline void gripe_no_man (const char *name, const char *sec)
@@ -1526,6 +1555,22 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				roff_device =
 					get_default_device (locale_charset,
 							    source_encoding);
+#ifdef HEIRLOOM_NROFF
+				/* In Heirloom, if LC_CTYPE is a UTF-8
+				 * locale, then -Tlocale will be equivalent
+				 * to -Tutf8 except that it will do a
+				 * slightly better job of rendering some
+				 * special characters.
+				 */
+				if (STREQ (roff_device, "utf8")) {
+					const char *real_locale_charset =
+						get_locale_charset ();
+					if (real_locale_charset &&
+					    STREQ (real_locale_charset,
+						   "UTF-8"))
+						roff_device = "locale";
+				}
+#endif /* HEIRLOOM_NROFF */
 				debug ("roff_device (locale) = %s\n",
 				       STRC (roff_device, "NULL"));
 			}
@@ -1644,13 +1689,27 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #ifdef TROFF_IS_GROFF
 				if (troff && ditroff)
 					pipecmd_arg (cmd, "-Z");
-				else if (!troff)
-					add_roff_line_length (cmd, &save_cat);
+#endif /* TROFF_IS_GROFF */
 
+#if defined(TROFF_IS_GROFF) || defined(HEIRLOOM_NROFF)
+				if (!troff) {
+					pipecmd *seq = add_roff_line_length
+						(cmd, &save_cat);
+					if (seq)
+						pipeline_command (p, seq);
+				}
+#endif /* TROFF_IS_GROFF || HEIRLOOM_NROFF */
+
+#ifdef TROFF_IS_GROFF
 				for (cur = roff_warnings; cur;
 				     cur = cur->next)
 					pipecmd_argf (cmd, "-w%s", cur->name);
 #endif /* TROFF_IS_GROFF */
+
+#ifdef HEIRLOOM_NROFF
+				if (ruid != euid)
+					pipecmd_unsetenv (cmd, "TROFFMACS");
+#endif /* HEIRLOOM_NROFF */
 
 				pipecmd_argstr (cmd, roff_opt);
 
@@ -1723,6 +1782,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	return p;
 }
 
+#ifdef TROFF_IS_GROFF
 /* Return pipeline to run a browser on a given file, observing
  * http://www.tuxedo.org/~esr/BROWSER/.
  *
@@ -1786,6 +1846,7 @@ static pipeline *make_browser (const char *pattern, const char *file)
 
 	return p;
 }
+#endif /* TROFF_IS_GROFF */
 
 static void setenv_less (pipecmd *cmd, const char *title)
 {
@@ -2136,8 +2197,10 @@ static void format_display (pipeline *decomp,
 			    const char *man_file)
 {
 	int status;
+#ifdef TROFF_IS_GROFF
 	char *old_cwd = NULL;
 	char *htmldir = NULL, *htmlfile = NULL;
+#endif /* TROFF_IS_GROFF */
 
 	if (format_cmd)
 		maybe_discard_stderr (format_cmd);

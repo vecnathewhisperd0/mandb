@@ -172,6 +172,10 @@ MAN_CHECK_PROGS([nroff], [NROFF], [use NROFF as roff formatter for character dev
 if test -n "$nroff"
 then
 	MAN_PROG_GNU_NROFF($nroff)
+	if test "$man_cv_prog_gnu_nroff" != "yes"
+	then
+		MAN_PROG_HEIRLOOM_NROFF($nroff)
+	fi
 	if test -n "$nroff_device" 
 	then
 		AC_MSG_CHECKING(that nroff works with argument$nroff_device)
@@ -199,6 +203,14 @@ then
 	
 	if test -n "$man_cv_prog_nroff_macro"
 	then
+		if test "$man_cv_prog_heirloom_nroff" = "yes"
+		then
+			# Heirloom works best with some extra options:
+			#   -mg: groff compatibility
+			#   -msafe: disable privileged operations
+			#   -mpadj: clean up line breaking
+			man_cv_prog_nroff_macro="-mg -msafe -mpadj ${man_cv_prog_nroff_macro}"
+		fi
 		nroff="$nroff ${man_cv_prog_nroff_macro}"
 dnl		nroff="$nroff ${man_cv_prog_nroff_macro}${nroff_device}"
 		AC_MSG_RESULT($man_cv_prog_nroff_macro)
@@ -245,6 +257,14 @@ then
 	done])
 	if test -n "$man_cv_prog_troff_options"
 	then
+		if test "$man_cv_prog_heirloom_nroff" = "yes"
+		then
+			# Heirloom works best with some extra options:
+			#   -mg: groff compatibility
+			#   -msafe: disable privileged operations
+			#   -mpadj: clean up line breaking
+			man_cv_prog_troff_options="-mg -msafe -mpadj ${man_cv_prog_troff_options}"
+		fi
 		troff="$troff $man_cv_prog_troff_options"
 		AC_MSG_RESULT($man_cv_prog_troff_options)
 	else

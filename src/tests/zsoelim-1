@@ -52,7 +52,7 @@ test
 EOF
 MANPATH="$tmpdir/usr/local/man:$tmpdir/usr/share/man" run $MAN \
 	-C "$tmpdir/manpath.config" test | \
-	grep -v '^\.lf ' >"$tmpdir/1.out"
+	grep -v '^\.l[flt] ' >"$tmpdir/1.out"
 expect_pass 'test(1) expanded correctly' \
 	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 

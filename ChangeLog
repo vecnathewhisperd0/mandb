@@ -1,3 +1,29 @@
+Mon Jan  3 03:02:50 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	Add basic support for the Heirloom Documentation Tools.
+
+	* m4/man-heirloom-nroff.m4: New file.
+	* configure.ac: Call MAN_PROG_HEIRLOOM_NROFF.  If successful and an
+	  nroff macro was found, prepend -mg -msafe -mpadj to the nroff and
+	  troff options.
+	* lib/encodings.c (charset_table) [HEIRLOOM_NROFF]: Disable latin1
+	  and nippon devices.
+	  (device_table) [HEIRLOOM_NROFF]: Add locale device.
+	* src/man.c (heirloom_line_length) [HEIRLOOM_NROFF]: New function.
+	  (add_roff_line_length): Optionally return a command, which should
+	  be inserted before troff.
+	  (add_roff_line_length) [HEIRLOOM_NROFF]: Support Heirloom, which
+	  needs text inserted at the start of the input.
+	  (make_roff_command) [HEIRLOOM_NROFF]: Use locale device instead of
+	  utf8 in UTF-8 locales.  Handle add_roff_line_length return value.
+	  Unset TROFFMACS if running setuid.
+	  (make_browser): Compile only if TROFF_IS_GROFF.
+	  (format_display): Only declare variables related to HTML output if
+	  TROFF_IS_GROFF.
+	* src/tests/zsoelim-1: Ignore .ll and .lt lines inserted by
+	  heirloom_line_length.
+	* NEWS: Document this.
+
 Mon Jan  3 00:56:55 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c (get_manpath_from_path): Return an empty string rather
