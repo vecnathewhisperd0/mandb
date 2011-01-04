@@ -2,7 +2,7 @@
  * security.c: Routines to aid secure uid operations 
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2003, 2004, 2007, 2010 Colin Watson.
+ * Copyright (C) 2001, 2003, 2004, 2007, 2010, 2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -86,6 +86,11 @@ void init_security (void)
 	debug ("ruid=%d, euid=%d\n", (int) ruid, (int) euid);
 	priv_drop_count = 0;
 	drop_effective_privs ();
+}
+
+int running_setuid (void)
+{
+	return ruid != euid;
 }
 
 /* Return a pointer to the password entry structure for MAN_OWNER. This

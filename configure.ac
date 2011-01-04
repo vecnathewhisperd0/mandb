@@ -419,7 +419,7 @@ AC_TYPE_SIZE_T
 AC_FUNC_VFORK
 
 # Check for pipeline library.
-PKG_CHECK_MODULES([libpipeline], [libpipeline])
+PKG_CHECK_MODULES([libpipeline], [libpipeline >= 1.1.0])
 
 # Find a suitable database interface header and library.
 #

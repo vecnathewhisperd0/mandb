@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2004, 2008, 2010, 2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -29,4 +29,5 @@ extern void drop_effective_privs (void);
 extern void regain_effective_privs (void);
 extern int do_system_drop_privs (struct pipeline *p);
 extern void init_security (void);
+extern int running_setuid (void);
 extern struct passwd *get_man_owner (void);

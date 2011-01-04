@@ -1,3 +1,16 @@
+Tue Jan  4 11:09:00 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	* lib/security.c (running_setuid): New function.
+	* lib/security.h (running_setuid): Add prototype.
+	* src/manconv_client.c (manconv_stdin): If running setuid, exec
+	  manconv as an external process, since iconv_open is not guaranteed
+	  to work correctly in setuid processes.
+
+	* configure.ac: Require libpipeline >= 1.1.0.
+	* docs/INSTALL.quick: Document increased version requirement.
+
+	* NEWS: Document this.
+
 Mon Jan  3 03:02:50 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	Add basic support for the Heirloom Documentation Tools.
