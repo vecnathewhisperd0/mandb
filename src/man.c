@@ -1707,7 +1707,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #endif /* TROFF_IS_GROFF */
 
 #ifdef HEIRLOOM_NROFF
-				if (ruid != euid)
+				if (running_setuid ())
 					pipecmd_unsetenv (cmd, "TROFFMACS");
 #endif /* HEIRLOOM_NROFF */
 
