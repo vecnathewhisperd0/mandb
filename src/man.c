@@ -2259,7 +2259,7 @@ static void format_display (pipeline *decomp,
 				       old_cwd);
 				chdir ("/");
 			}
-			if (remove_directory (htmldir) == -1)
+			if (remove_directory (htmldir, 0) == -1)
 				error (0, errno,
 				       _("can't remove directory %s"),
 				       htmldir);
@@ -2288,7 +2288,7 @@ static void format_display (pipeline *decomp,
 			       old_cwd);
 			chdir ("/");
 		}
-		if (remove_directory (htmldir) == -1)
+		if (remove_directory (htmldir, 0) == -1)
 			error (0, errno, _("can't remove directory %s"),
 			       htmldir);
 		free (htmlfile);

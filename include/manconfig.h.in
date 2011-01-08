@@ -362,7 +362,7 @@ extern int find_name_decompressed (struct pipeline *p, const char *filename,
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);
 extern char *escape_shell (const char *unesc);
-extern int remove_directory (const char *directory);
+extern int remove_directory (const char *directory, int recurse);
 extern char *trim_spaces (const char *s);
 extern char *lang_dir (const char *filename);
 extern void init_locale (void);

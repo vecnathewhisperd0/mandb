@@ -1,3 +1,26 @@
+Sat Jan  8 11:42:13 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	Remove obsolete NLS subdirectories of cat directories (Debian bug
+	#558804).
+
+	* lib/hashtable.c (hashtable_iterate): New function.
+	* lib/hashtable.h (hashtable_iterate): Add prototype.
+
+	* lib/util.c (remove_directory): Add recurse parameter.  Add missing
+	  closedir calls.
+	* include/manconfig.h.in (remove_directory): Update prototype.
+	* src/man.c (format_display): Update remove_directory callers.
+
+	* src/mandb.c (process_manpath): Add catpath to tried_catpath hash.
+	  Check that manpath exists and is a directory here rather than in
+	  the caller.
+	  (is_lang_dir, purge_catdir, purge_catdirs): New functions.
+	  (main): Create and free tried_catdirs.  Move manpath stat checks
+	  to process_manpath.  Call purge_catdirs after all manpath entries
+	  have been processed.
+
+	* NEWS: Document this.
+
 Fri Jan  7 23:49:55 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (format_display_and_save): Drop SIGPIPE handling.

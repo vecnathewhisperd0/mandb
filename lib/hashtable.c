@@ -169,6 +169,39 @@ void hashtable_remove (struct hashtable *ht, const char *name, size_t len)
 	}
 }
 
+struct hashtable_iter {
+	struct nlist **bucket;
+	struct nlist *np;
+};
+
+/* Iterate over hash.  Do not modify hash while iterating. */
+struct nlist *hashtable_iterate (const struct hashtable *ht,
+				 struct hashtable_iter **iterp)
+{
+	struct hashtable_iter *iter = *iterp;
+
+	if (!iter)
+		*iterp = iter = XZALLOC (struct hashtable_iter);
+
+	if (iter->np && iter->np->next)
+		return iter->np = iter->np->next;
+
+	if (iter->bucket)
+		++iter->bucket;
+	else
+		iter->bucket = ht->hashtab;
+
+	while (iter->bucket < ht->hashtab + HASHSIZE) {
+		if (*iter->bucket)
+			return iter->np = *iter->bucket;
+		++iter->bucket;
+	}
+
+	free (iter);
+	*iterp = NULL;
+	return NULL;
+}
+
 /* Free up the hash tree (garbage collection). Also call the free_defn()
  * hook to free up values if necessary.
  */

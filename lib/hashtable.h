@@ -41,6 +41,8 @@ struct nlist {
         void *defn;		/* the _definition_ */
 };
 
+struct hashtable_iter;
+
 extern void null_hashtable_free (void *defn);
 extern void plain_hashtable_free (void *defn);
 
@@ -52,6 +54,8 @@ extern void *hashtable_lookup (const struct hashtable *ht,
 extern struct nlist *hashtable_install (struct hashtable *ht,
 					const char *name, size_t len,
 					void *defn);
+extern struct nlist *hashtable_iterate (const struct hashtable *ht,
+					struct hashtable_iter **iterp);
 extern void hashtable_remove (struct hashtable *ht, const char *s, size_t len);
 extern void hashtable_free (struct hashtable *ht);
 

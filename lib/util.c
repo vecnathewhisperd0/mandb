@@ -141,32 +141,45 @@ char *escape_shell (const char *unesc)
 	return esc;
 }
 
-/* Remove a directory and all files in it. Does not recurse beyond that. */
-int remove_directory (const char *directory)
+/* Remove a directory and all files in it.  Only recurse beyond that if
+ * RECURSE is set.
+ */
+int remove_directory (const char *directory, int recurse)
 {
 	DIR *handle = opendir (directory);
 	struct dirent *entry;
 
 	if (!handle)
 		return -1;
-	entry = readdir (handle);
-	while (entry) {
+	while ((entry = readdir (handle)) != NULL) {
 		struct stat st;
-		char *path = xstrdup (directory);
+		char *path;
+
+		if (STREQ (entry->d_name, ".") || STREQ (entry->d_name, ".."))
+			continue;
+		path = xstrdup (directory);
 		path = appendstr (path, "/", entry->d_name, NULL);
 		if (stat (path, &st) == -1) {
 			free (path);
+			closedir (handle);
 			return -1;
 		}
-		if (S_ISREG (st.st_mode)) {
+		if (recurse && S_ISDIR (st.st_mode)) {
+			if (remove_directory (path, recurse) == -1) {
+				free (path);
+				closedir (handle);
+				return -1;
+			}
+		} else if (S_ISREG (st.st_mode)) {
 			if (unlink (path) == -1) {
 				free (path);
+				closedir (handle);
 				return -1;
 			}
 		}
 		free (path);
-		entry = readdir (handle);
 	}
+	closedir (handle);
 
 	if (rmdir (directory) == -1)
 		return -1;

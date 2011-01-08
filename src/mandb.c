@@ -55,6 +55,7 @@
 
 #include "error.h"
 #include "cleanup.h"
+#include "hashtable.h"
 #include "pipeline.h"
 #include "security.h"
 
@@ -489,9 +490,12 @@ static int mandb (const char *catpath, const char *manpath)
 	return amount;
 }
 
-static int process_manpath (const char *manpath, int global_manpath)
+static int process_manpath (const char *manpath, int global_manpath,
+			    struct hashtable *tried_catdirs)
 {
 	char *catpath;
+	int *seen;
+	struct stat st;
 	int amount = 0;
 
 	if (global_manpath) { 	/* system db */
@@ -502,6 +506,13 @@ static int process_manpath (const char *manpath, int global_manpath)
 		if (!catpath)
 			catpath = xstrdup (manpath);
 	}
+	seen = XMALLOC (int);
+	*seen = 0;
+	hashtable_install (tried_catdirs, catpath, strlen (catpath), seen);
+
+	if (stat (manpath, &st) < 0 || !S_ISDIR (st.st_mode))
+		return 0;
+	*seen = 1;
 
 	force_rescan = 0;
 	if (purge) {
@@ -566,11 +577,95 @@ out:
 	return amount;
 }
 
+int is_lang_dir (const char *base)
+{
+	return strlen (base) >= 2 &&
+	       base[0] >= 'a' && base[0] <= 'z' &&
+	       base[1] >= 'a' && base[1] <= 'z' &&
+	       (!base[2] || base[2] < 'a' || base[2] > 'z');
+}
+
+void purge_catdir (const struct hashtable *tried_catdirs, const char *path)
+{
+	struct stat st;
+
+	if (stat (path, &st) == 0 && S_ISDIR (st.st_mode) &&
+	    !hashtable_lookup (tried_catdirs, path, strlen (path))) {
+		if (!quiet)
+			printf (_("Removing obsolete catdir %s...\n"), path);
+		remove_directory (path, 1);
+	}
+}
+
+/* Remove catdirs whose corresponding mandirs no longer exist.  For safety,
+ * in case people set catdirs to silly locations, we only do this for NLS
+ * subdirectories of catdirs.
+ *
+ * We need to be careful here to avoid removing catdirs just because we
+ * happened not to inspect the corresponding mandir this time round.  If a
+ * mandir was inspected and turned out not to exist, then its catdir is
+ * clearly fair game for removal of NLS subdirectories.  These must match
+ * the usual NLS pattern (two lower-case letters followed by nothing or a
+ * non-letter).
+ */
+void purge_catdirs (const struct hashtable *tried_catdirs)
+{
+	struct hashtable_iter *iter = NULL;
+	const struct nlist *elt;
+
+	while ((elt = hashtable_iterate (tried_catdirs, &iter)) != NULL) {
+		const char *path = elt->name;
+		char *base;
+		DIR *dir;
+		struct dirent *subdirent;
+
+		base = base_name (path);
+		if (is_lang_dir (base)) {
+			/* expect to check this as a subdirectory later */
+			free (base);
+			continue;
+		}
+		free (base);
+
+		dir = opendir (path);
+		if (!dir)
+			continue;
+		while ((subdirent = readdir (dir)) != NULL) {
+			char *subdirpath;
+			int *subdirseen;
+
+			if (STREQ (subdirent->d_name, ".") ||
+			    STREQ (subdirent->d_name, ".."))
+				continue;
+			if (STRNEQ (subdirent->d_name, "cat", 3))
+				continue;
+			if (!is_lang_dir (subdirent->d_name))
+				continue;
+
+			subdirpath = appendstr (NULL, path, "/",
+						subdirent->d_name, NULL);
+
+			subdirseen = hashtable_lookup (tried_catdirs,
+						       subdirpath,
+						       strlen (subdirpath));
+			if (subdirseen && *subdirseen)
+				debug ("Seen mandir for %s; not deleting\n",
+				       subdirpath);
+			else
+				purge_catdir (tried_catdirs, subdirpath);
+
+			free (subdirpath);
+		}
+		closedir (dir);
+	}
+}
+
 int main (int argc, char *argv[])
 {
 	char *sys_manp;
 	int amount = 0;
 	char **mp;
+	struct hashtable *tried_catdirs;
 
 #ifdef __profile__
 	char *cwd;
@@ -637,12 +732,13 @@ int main (int argc, char *argv[])
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();
 
+	tried_catdirs = hashtable_create (plain_hashtable_free);
+
 	for (mp = manpathlist; *mp; mp++) {
 		int global_manpath = is_global_mandir (*mp);
 		int ret;
 		DIR *dir;
 		struct dirent *subdirent;
-		struct stat st;
 
 		if (global_manpath) {	/* system db */
 			if (user)
@@ -651,7 +747,7 @@ int main (int argc, char *argv[])
 			drop_effective_privs ();
 		}
 
-		ret = process_manpath (*mp, global_manpath);
+		ret = process_manpath (*mp, global_manpath, tried_catdirs);
 		if (ret < 0)
 			exit (FATAL);
 		amount += ret;
@@ -674,14 +770,11 @@ int main (int argc, char *argv[])
 
 			subdirpath = appendstr (NULL, *mp, "/",
 						subdirent->d_name, NULL);
-			if (stat (subdirpath, &st) == 0 &&
-			    S_ISDIR (st.st_mode)) {
-				ret = process_manpath (subdirpath,
-						       global_manpath);
-				if (ret < 0)
-					exit (FATAL);
-				amount += ret;
-			}
+			ret = process_manpath (subdirpath, global_manpath,
+					       tried_catdirs);
+			if (ret < 0)
+				exit (FATAL);
+			amount += ret;
 			free (subdirpath);
 		}
 
@@ -693,6 +786,9 @@ next_manpath:
 
 		chkr_garbage_detector ();
 	}
+
+	purge_catdirs (tried_catdirs);
+	hashtable_free (tried_catdirs);
 
 	if (!quiet) {
 		printf (_(
