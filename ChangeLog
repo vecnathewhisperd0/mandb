@@ -1,3 +1,17 @@
+Sat Jan  8 18:14:18 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	Remove obsolete cat* subdirectories as well as NLS subdirectories.
+
+	* src/mandb.c (process_manpath): Store the manpath in tried_catdirs
+	  along with whether it has been seen.
+	  (tried_catdirs_free): New function.
+	  (purge_catdir): Improve message.
+	  (purge_catsubdirs): New function.
+	  (purge_catdirs): Adjust tried_catdirs handling.  Call
+	  purge_catsubdirs for both top-level catdirs and NLS catdirs.
+	  (main): Set tried_catdirs free function to tried_catdirs_free.
+	* NEWS: Document this.
+
 Sat Jan  8 11:42:13 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	Remove obsolete NLS subdirectories of cat directories (Debian bug

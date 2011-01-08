@@ -87,6 +87,11 @@ static int user;
 static int create;
 static const char *arg_manp;
 
+struct tried_catdirs_entry {
+	char *manpath;
+	int seen;
+};
+
 const char *argp_program_version = "mandb " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
@@ -494,7 +499,7 @@ static int process_manpath (const char *manpath, int global_manpath,
 			    struct hashtable *tried_catdirs)
 {
 	char *catpath;
-	int *seen;
+	struct tried_catdirs_entry *tried;
 	struct stat st;
 	int amount = 0;
 
@@ -506,13 +511,14 @@ static int process_manpath (const char *manpath, int global_manpath,
 		if (!catpath)
 			catpath = xstrdup (manpath);
 	}
-	seen = XMALLOC (int);
-	*seen = 0;
-	hashtable_install (tried_catdirs, catpath, strlen (catpath), seen);
+	tried = XMALLOC (struct tried_catdirs_entry);
+	tried->manpath = xstrdup (manpath);
+	tried->seen = 0;
+	hashtable_install (tried_catdirs, catpath, strlen (catpath), tried);
 
 	if (stat (manpath, &st) < 0 || !S_ISDIR (st.st_mode))
 		return 0;
-	*seen = 1;
+	tried->seen = 1;
 
 	force_rescan = 0;
 	if (purge) {
@@ -585,6 +591,14 @@ int is_lang_dir (const char *base)
 	       (!base[2] || base[2] < 'a' || base[2] > 'z');
 }
 
+void tried_catdirs_free (void *defn)
+{
+	struct tried_catdirs_entry *tried = defn;
+
+	free (tried->manpath);
+	free (tried);
+}
+
 void purge_catdir (const struct hashtable *tried_catdirs, const char *path)
 {
 	struct stat st;
@@ -592,14 +606,49 @@ void purge_catdir (const struct hashtable *tried_catdirs, const char *path)
 	if (stat (path, &st) == 0 && S_ISDIR (st.st_mode) &&
 	    !hashtable_lookup (tried_catdirs, path, strlen (path))) {
 		if (!quiet)
-			printf (_("Removing obsolete catdir %s...\n"), path);
+			printf (_("Removing obsolete cat directory %s...\n"),
+				path);
 		remove_directory (path, 1);
 	}
 }
 
+void purge_catsubdirs (const char *manpath, const char *catpath)
+{
+	DIR *dir;
+	struct dirent *ent;
+	struct stat st;
+
+	dir = opendir (catpath);
+	if (!dir)
+		return;
+	while ((ent = readdir (dir)) != NULL) {
+		char *mandir, *catdir;
+
+		if (!STRNEQ (ent->d_name, "cat", 3))
+			continue;
+
+		mandir = appendstr (NULL, manpath, "/man", ent->d_name + 3,
+				    NULL);
+		catdir = appendstr (NULL, catpath, "/", ent->d_name, NULL);
+
+		if (stat (mandir, &st) != 0 && errno == ENOENT) {
+			if (!quiet)
+				printf (_("Removing obsolete cat directory "
+					  "%s...\n"), catdir);
+			remove_directory (catdir, 1);
+		}
+
+		free (catdir);
+		free (mandir);
+	}
+	closedir (dir);
+}
+
 /* Remove catdirs whose corresponding mandirs no longer exist.  For safety,
- * in case people set catdirs to silly locations, we only do this for NLS
- * subdirectories of catdirs.
+ * in case people set catdirs to silly locations, we only do this for the
+ * cat* and NLS subdirectories of catdirs, but not for the top-level catdir
+ * itself (which might contain other data, or which might be difficult for
+ * mandb to recreate with the proper permissions).
  *
  * We need to be careful here to avoid removing catdirs just because we
  * happened not to inspect the corresponding mandir this time round.  If a
@@ -615,6 +664,7 @@ void purge_catdirs (const struct hashtable *tried_catdirs)
 
 	while ((elt = hashtable_iterate (tried_catdirs, &iter)) != NULL) {
 		const char *path = elt->name;
+		struct tried_catdirs_entry *tried = elt->defn;
 		char *base;
 		DIR *dir;
 		struct dirent *subdirent;
@@ -627,12 +677,13 @@ void purge_catdirs (const struct hashtable *tried_catdirs)
 		}
 		free (base);
 
+		purge_catsubdirs (tried->manpath, path);
+
 		dir = opendir (path);
 		if (!dir)
 			continue;
 		while ((subdirent = readdir (dir)) != NULL) {
 			char *subdirpath;
-			int *subdirseen;
 
 			if (STREQ (subdirent->d_name, ".") ||
 			    STREQ (subdirent->d_name, ".."))
@@ -645,13 +696,16 @@ void purge_catdirs (const struct hashtable *tried_catdirs)
 			subdirpath = appendstr (NULL, path, "/",
 						subdirent->d_name, NULL);
 
-			subdirseen = hashtable_lookup (tried_catdirs,
-						       subdirpath,
-						       strlen (subdirpath));
-			if (subdirseen && *subdirseen)
+			tried = hashtable_lookup (tried_catdirs, subdirpath,
+						  strlen (subdirpath));
+			if (tried && tried->seen) {
 				debug ("Seen mandir for %s; not deleting\n",
 				       subdirpath);
-			else
+				/* However, we may still need to purge cat*
+				 * subdirectories.
+				 */
+				purge_catsubdirs (tried->manpath, subdirpath);
+			} else
 				purge_catdir (tried_catdirs, subdirpath);
 
 			free (subdirpath);
@@ -732,7 +786,7 @@ int main (int argc, char *argv[])
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();
 
-	tried_catdirs = hashtable_create (plain_hashtable_free);
+	tried_catdirs = hashtable_create (tried_catdirs_free);
 
 	for (mp = manpathlist; *mp; mp++) {
 		int global_manpath = is_global_mandir (*mp);
