@@ -33,14 +33,6 @@ errors="$(LC_ALL=C MANWIDTH=80 MAN_KEEP_FORMATTING=1 "$top_builddir/libtool" \
 # this across the board for now.
 errors="$(echo "$errors" | $EGREP -v "(cannot adjust line|can't break line)")" || true
 
-# Ignore tbl warnings from groff >= 1.20 for now. These parts of our manual
-# pages should probably be rewritten without tbl.
-case $LINGUA in
-	de|id|it|nl|pl|ru)
-		errors="$(echo "$errors" | $EGREP -v 'table wider than line width')" || true
-		;;
-esac
-
 if [ "$code" != 0 ]; then
 	echo "man -E UTF-8 -l $1 failed with exit status $code and error output:"
 	echo "$errors"

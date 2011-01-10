@@ -23,6 +23,8 @@ POFILES = po/fr.po po/id.po po/nl.po po/pl.po po/ru.po
 EXTRA_DIST = po4a.cfg po/man-db-manpages.pot $(POFILES)
 
 if PO4A
+PO4A_ENVIRONMENT = PERL5LIB=`pwd`
+
 # Always generate output files even if poorly translated, since Automake's
 # generated rules will get upset otherwise.
 PO4A_ARGS = --variable srcdir=$(top_srcdir)/man \
@@ -30,10 +32,11 @@ PO4A_ARGS = --variable srcdir=$(top_srcdir)/man \
 	    --keep 0
 
 all-local:
-	$(PO4A) $(PO4A_ARGS) $(srcdir)/po4a.cfg
+	$(PO4A_ENVIRONMENT) $(PO4A) $(PO4A_ARGS) $(srcdir)/po4a.cfg
 
 update-po:
-	$(PO4A) $(PO4A_ARGS) --no-translations $(srcdir)/po4a.cfg
+	$(PO4A_ENVIRONMENT) $(PO4A) $(PO4A_ARGS) --no-translations \
+		$(srcdir)/po4a.cfg
 
 po/man-db-manpages.pot: update-po
 endif

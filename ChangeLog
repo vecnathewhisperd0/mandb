@@ -1,3 +1,18 @@
+Mon Jan 10 16:20:22 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	* man/man1/man.man1 (DESCRIPTION), man/de/man1/man.man1
+	  (BESCHREIBUNG), man/es/man1/man.man1 (DESCRIPCIÓN),
+	  man/it/man1/man.man1 (DESCRIZIONE), man/ja/man1/man.man1 (説明):
+	  Enclose long table cells in T{ T}.
+	* man/po4a/Locale/Po4a/Manext.pm: New file, to let us translate
+	  individual table cells separately.
+	* man/po4a/Makefile.am: Run po4a with PERL5LIB=`pwd`.
+	* man/po4a/po4a.cfg: Change type to manext.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+	* man/check-man: Stop ignoring "table wider than line width"
+	  warnings.
+	* NEWS: Document this.
+
 Sat Jan  8 18:21:07 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	* po/POTFILES.in: Remove lib/pipeline.c (file removed) and
