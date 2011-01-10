@@ -2,7 +2,8 @@
  * ult_src.c: Find the ultimate source of a page
  *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011
+ *               Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -184,6 +185,26 @@ static char *test_for_include (const char *buffer)
 	return NULL;
 }
 
+static void ult_trace (struct ult_trace *trace, const char *s)
+{
+	if (!trace)
+		return;
+	if (trace->len >= trace->max) {
+		trace->max *= 2;
+		trace->names = xrealloc (trace->names,
+					 sizeof (char *) * trace->max);
+	}
+	trace->names[trace->len++] = xstrdup (s);
+}
+
+void free_ult_trace (struct ult_trace *trace)
+{
+	size_t i;
+	for (i = 0; i < trace->len; ++i)
+		free (trace->names[i]);
+	free (trace->names);
+}
+
 /*
  * recursive function which finds the ultimate source file by following
  * any ".so filename" directives in the first line of the man pages.
@@ -193,12 +214,21 @@ static char *test_for_include (const char *buffer)
  * flags is a combination of SO_LINK | SOFT_LINK | HARD_LINK
  */
 const char *ult_src (const char *name, const char *path,
-		     struct stat *buf, int flags)
+		     struct stat *buf, int flags, struct ult_trace *trace)
 {
 	static char *base;		/* must be static */
 	static short recurse; 		/* must be static */
 
 	/* initialise the function */
+
+	if (trace) {
+		if (!trace->names) {
+			trace->len = 0;
+			trace->max = 16;
+			trace->names = XNMALLOC (trace->max, char *);
+		}
+		ult_trace (trace, name);
+	}
 
 	/* as ult_softlink() & ult_hardlink() do all of their respective
 	 * resolving in one call, only need to sort them out once
@@ -316,7 +346,7 @@ const char *ult_src (const char *name, const char *path,
 				debug ("ult_src: points to %s\n", base);
 
 				recurse++;
-				ult = ult_src (base, path, NULL, flags);
+				ult = ult_src (base, path, NULL, flags, trace);
 				recurse--;
 
 				pipeline_wait (decomp);
@@ -332,5 +362,7 @@ const char *ult_src (const char *name, const char *path,
 	}
 
 	/* We have the ultimate source */
+	if (trace)
+		ult_trace (trace, base);
 	return base;
 }

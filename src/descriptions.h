@@ -1,7 +1,7 @@
 /*
  * descriptions.h: Interface to manipulating man page descriptions
  *
- * Copyright (C) 2002 Colin Watson.
+ * Copyright (C) 2002, 2007, 2008, 2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -28,8 +28,12 @@ struct page_description {
 	struct page_description *next;
 };
 
+struct ult_trace;
+
 extern struct page_description *parse_descriptions (const char *base,
 						    const char *whatis);
 extern void store_descriptions (const struct page_description *head,
-				struct mandata *info, const char *base);
+				struct mandata *info,
+				const char *path, const char *base,
+				struct ult_trace *trace);
 extern void free_descriptions (struct page_description *head);

@@ -2,7 +2,8 @@
  * lexgrog_test.c: test whatis extraction from man/cat pages
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+ *               2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -184,7 +185,7 @@ int main (int argc, char **argv)
 			}
 
 			file = ult_src (files[i], path ? path : ".",
-					&statbuf, SO_LINK);
+					&statbuf, SO_LINK, NULL);
 			if (path)
 				free (path);
 		}

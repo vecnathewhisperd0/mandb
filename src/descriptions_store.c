@@ -1,7 +1,7 @@
 /*
  * descriptions_store.c: store man page descriptions in database
  *
- * Copyright (C) 2002, 2003, 2006 Colin Watson.
+ * Copyright (C) 2002, 2003, 2006, 2007, 2008, 2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -37,6 +37,8 @@
 
 #include "db_storage.h"
 
+#include "filenames.h"
+#include "ult_src.h"
 #include "descriptions.h"
 
 static void gripe_bad_store (const char *name, const char *ext)
@@ -46,31 +48,87 @@ static void gripe_bad_store (const char *name, const char *ext)
 		       name, ext);
 }
 
+/* Is PATH a prefix of DIR, such that DIR is in the manual hierarchy PATH?
+ * This requires that the part of DIR following PATH start with "/man".
+ */
+static int is_prefix (const char *path, const char *dir)
+{
+	return (STRNEQ (dir, path, strlen (path)) &&
+		STRNEQ (dir + strlen (path), "/man", 4));
+}
+
 /* Take a list of descriptions returned by parse_descriptions() and store
  * it into the database.
  */
 void store_descriptions (const struct page_description *head,
-			 struct mandata *info, const char *base)
+			 struct mandata *info,
+			 const char *path, const char *base,
+			 struct ult_trace *trace)
 {
 	const struct page_description *desc;
 	char save_id = info->id;
+	size_t i;
 
-	debug ("base = '%s'\n", base);
+	if (trace) {
+		for (i = 0; i < trace->len; ++i)
+			debug ("trace->names[%d] = '%s'\n",
+			       i, trace->names[i]);
+	}
 
 	for (desc = head; desc; desc = desc->next) {
 		/* Either it's the real thing or merely a reference. Get the
 		 * id and pointer right in either case.
 		 */
+		int found_real_page = 0;
+		int found_external = 0;
+
 		if (STREQ (base, desc->name)) {
 			info->id = save_id;
 			info->pointer = NULL;
 			info->whatis = desc->whatis;
-		} else {
+			found_real_page = 1;
+		} else if (trace) {
+			for (i = 0; i < trace->len; ++i) {
+				struct mandata trace_info;
+				char *buf;
+
+				buf = filename_info (trace->names[i],
+						     &trace_info, "");
+				if (trace_info.name &&
+				    STREQ (trace_info.name, desc->name)) {
+					if (path && !is_prefix (path, buf)) {
+						/* Link outside this manual
+						 * hierarchy; skip this
+						 * description.
+						 */
+						found_external = 1;
+						free (trace_info.name);
+						free (buf);
+						break;
+					}
+					info->id = save_id;
+					info->pointer = NULL;
+					info->whatis = desc->whatis;
+					found_real_page = 1;
+				}
+
+				free (trace_info.name);
+				free (buf);
+			}
+		}
+
+		if (found_external) {
+			debug ("skipping '%s'; link outside manual "
+			       "hierarchy\n", desc->name);
+			continue;
+		}
+
+		if (!found_real_page) {
 			if (save_id < STRAY_CAT)
 				info->id = WHATIS_MAN;
 			else
 				info->id = WHATIS_CAT;
-			info->pointer = base;
+			info->pointer = xstrdup (base);
 			/* Don't waste space storing the whatis in the db
 			 * more than once.
 			 */

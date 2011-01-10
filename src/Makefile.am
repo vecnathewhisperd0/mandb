@@ -1,7 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 ##
 ## Copyright (C) 1994, 1995 Graeme Wilford.
-## Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Colin Watson.
+## Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+##               2011 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -80,6 +81,8 @@ lexgrog_SOURCES = \
 	compression.c \
 	descriptions.c \
 	descriptions.h \
+	filenames.c \
+	filenames.h \
 	lexgrog.l \
 	lexgrog_test.c \
 	manconv.c \

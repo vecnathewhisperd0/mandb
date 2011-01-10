@@ -3055,7 +3055,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 
 		filename = make_filename (path, name, source, cat ? "cat" : "man");
 		ult = ult_src (filename, path, NULL,
-			       get_ult_flags (from_db, source->id));
+			       get_ult_flags (from_db, source->id), NULL);
 		free (filename);
 	}
 
@@ -3234,7 +3234,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 		 * must be either ULT_MAN or SO_MAN. ult_src() can tell us
 		 * which.
 		 */
-		ult = ult_src (*np, path, NULL, ult_flags);
+		ult = ult_src (*np, path, NULL, ult_flags, NULL);
 		if (!ult) {
 			/* already warned */
 			debug ("try_section(): bad link %s\n", *np);
@@ -3272,7 +3272,8 @@ static int display_filesystem (struct candidate *candp)
 		char *cat_file;
 		int found;
 
-		man_file = ult_src (filename, candp->path, NULL, ult_flags);
+		man_file = ult_src (filename, candp->path, NULL, ult_flags,
+				    NULL);
 		if (man_file == NULL) {
 			free (title);
 			return 0;
@@ -3347,7 +3348,7 @@ static int display_database (struct candidate *candp)
 			char *cat_file;
 
 			man_file = ult_src (file, candp->path, NULL,
-					    get_ult_flags (1, in->id));
+					    get_ult_flags (1, in->id), NULL);
 			if (man_file == NULL) {
 				free (title);
 				return found; /* zero */
@@ -3780,7 +3781,7 @@ static int do_global_apropos_section (const char *path, const char *sec,
 
 		title = appendstr (NULL, strchr (info_buffer, '\0') + 1,
 				   "(", info->ext, ")", NULL);
-		man_file = ult_src (*np, path, NULL, ult_flags);
+		man_file = ult_src (*np, path, NULL, ult_flags, NULL);
 		if (!man_file)
 			goto next;
 		cat_file = find_cat_file (path, *np, man_file);

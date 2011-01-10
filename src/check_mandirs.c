@@ -2,7 +2,8 @@
  * check_mandirs.c: used to auto-update the database caches
  *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2004, 2007, 2008 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2007, 2008, 2009, 2010, 2011
+ *               Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -84,6 +85,20 @@ int force_rescan = 0;
 
 static struct hashtable *whatis_hash = NULL;
 
+struct whatis_hashent {
+	char *whatis;
+	struct ult_trace trace;
+};
+
+static void whatis_hashtable_free (void *defn)
+{
+	struct whatis_hashent *hashent = defn;
+
+	free (hashent->whatis);
+	free_ult_trace (&hashent->trace);
+	free (hashent);
+}
+
 static void gripe_multi_extensions (const char *path, const char *sec, 
 				    const char *name, const char *ext)
 {
@@ -121,9 +136,12 @@ void test_manfile (const char *file, const char *path)
 	struct mandata info, *exists;
 	struct stat buf;
 	size_t len;
+	struct ult_trace ult_trace;
+	struct whatis_hashent *whatis;
 
 	memset (&lg, 0, sizeof (struct lexgrog));
 	memset (&info, 0, sizeof (struct mandata));
+	memset (&ult_trace, 0, sizeof (struct ult_trace));
 
 	manpage = filename_info (file, &info, NULL);
 	if (!manpage)
@@ -196,7 +214,7 @@ void test_manfile (const char *file, const char *path)
 		/* Avoid too much noise in debug output */
 		int save_debug = debug_level;
 		debug_level = 0;
-		ult = ult_src (file, path, &buf, SOFT_LINK | HARD_LINK);
+		ult = ult_src (file, path, &buf, SOFT_LINK | HARD_LINK, NULL);
 		debug_level = save_debug;
 	}
 
@@ -208,9 +226,10 @@ void test_manfile (const char *file, const char *path)
 	}
 
 	if (!whatis_hash)
-		whatis_hash = hashtable_create (&plain_hashtable_free);
+		whatis_hash = hashtable_create (&whatis_hashtable_free);
 
-	if (hashtable_lookup (whatis_hash, ult, strlen (ult)) == NULL) {
+	whatis = hashtable_lookup (whatis_hash, ult, strlen (ult));
+	if (!whatis) {
 		if (!STRNEQ (ult, file, len))
 			debug ("\ntest_manfile(): link not in cache:\n"
 			       " source = %s\n"
@@ -220,7 +239,7 @@ void test_manfile (const char *file, const char *path)
 		 * manx/foo.x', which will give us an unobtainable whatis
 		 * for the entry. */
 		ult = ult_src (file, path, &buf,
-			       SO_LINK | SOFT_LINK | HARD_LINK);
+			       SO_LINK | SOFT_LINK | HARD_LINK, &ult_trace);
 	}
 
 	if (!ult) {
@@ -247,11 +266,10 @@ void test_manfile (const char *file, const char *path)
 	 * clear the hash between calls.
 	 */
 
-	lg.whatis = xstrdup (hashtable_lookup (whatis_hash,
-					       ult, strlen (ult)));
-
-	if (!lg.whatis) {	/* cache miss */
-		/* go get the whatis info in its raw state */
+	if (whatis)
+		lg.whatis = xstrdup (whatis->whatis);
+	else {
+		/* Cache miss; go and get the whatis info in its raw state. */
 		char *file_base = base_name (file);
 
 		lg.type = MANPAGE;
@@ -260,8 +278,11 @@ void test_manfile (const char *file, const char *path)
 		free (file_base);
 		regain_effective_privs ();
 
-		hashtable_install (whatis_hash, ult, strlen (ult),
-				   xstrdup (lg.whatis));
+		whatis = XMALLOC (struct whatis_hashent);
+		whatis->whatis = xstrdup (lg.whatis);
+		/* We filled out ult_trace above. */
+		memcpy (&whatis->trace, &ult_trace, sizeof (ult_trace));
+		hashtable_install (whatis_hash, ult, strlen (ult), whatis);
 	}
 
 	debug ("\"%s\"\n", lg.whatis);
@@ -275,7 +296,8 @@ void test_manfile (const char *file, const char *path)
 		if (descs) {
 			if (!opt_test)
 				store_descriptions (descs, &info,
-						    manpage_base);
+						    path, manpage_base,
+						    &whatis->trace);
 			free_descriptions (descs);
 		}
 	} else if (quiet < 2) {

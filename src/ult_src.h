@@ -3,6 +3,7 @@
  *
  * Copyright (C) 1990, 1991 John W. Eaton.
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
+ * Copyright (C) 2002, 2003, 2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -25,5 +26,18 @@
 #define SOFT_LINK	0002
 #define HARD_LINK	0004
 
+/* Trace of the link chain from a given file.  Any names listed here should
+ * not have WHATIS_MAN entries created for them.
+ */
+struct ult_trace {
+	char **names;
+	size_t len;
+	size_t max;
+};
+
+struct stat;
+
 extern const char *ult_src (const char *name, const char *path,
-			    struct stat *buf, int flags);
+			    struct stat *buf, int flags,
+			    struct ult_trace *trace);
+extern void free_ult_trace (struct ult_trace *trace);

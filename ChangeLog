@@ -1,3 +1,33 @@
+Mon Jan 10 20:08:03 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	If mandb sees that A is a symlink to B, it should never store a
+	whatis reference for B (Debian bug #204249).
+
+	* src/check_mandirs.c (whatis_hashtable_free): New function.
+	  (test_manfile): Change whatis_hash free function to
+	  whatis_hashtable_free.  Fetch an ult_trace structure from ult_src,
+	  record it in whatis_hash in the case of a cache miss, and pass it
+	  to store_descriptions.
+	* src/descriptions_store.c (is_prefix): New function.
+	  (store_descriptions): Add path and trace parameters.  Update all
+	  callers.
+	* src/descriptions.h (store_descriptions): Update prototype.  Count
+	  a match for any name in the provided ult_trace structure as
+	  indicating that we shouldn't create a whatis reference.  If a name
+	  matches a trace entry outside the current manual hierarchy, skip
+	  that name entirely.
+	* src/ult_src.c (ult_trace, free_ult_trace): New functions.
+	  (ult_src): Add trace parameter.  Record each file name we
+	  encounter in the trace.  Update all callers.
+	* src/ult_src.h (ult_src): Update prototype.
+	  (free_ult_trace): Add prototype.
+	* src/Makefile.am (lexgrog_SOURCES): Add filenames.c and
+	  filenames.h.
+
+	* src/tests/mandb-2: Test two-level symlinks.
+	* src/tests/mandb-4: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add mandb-4.
+
 Mon Jan 10 16:20:22 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/man.man1 (DESCRIPTION), man/de/man1/man.man1

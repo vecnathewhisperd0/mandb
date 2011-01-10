@@ -2,7 +2,8 @@
  * straycats.c: find and process stray cat files
  *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2010, 2011
+ *               Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -71,6 +72,7 @@
 #include "descriptions.h"
 #include "manp.h"
 #include "manconv_client.h"
+#include "ult_src.h"
 
 static char *catdir, *mandir;
 
@@ -258,7 +260,7 @@ static int check_for_stray (void)
 					if (descs) {
 						store_descriptions
 							(descs, &info,
-							 mandir_base);
+							 NULL, mandir, NULL);
 						free_descriptions (descs);
 					}
 				} else if (quiet < 2)

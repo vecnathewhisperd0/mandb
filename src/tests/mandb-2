@@ -38,4 +38,17 @@ accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/2.out"
 expect_pass 'mandb notices regular file -> symlink' \
 	'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
 
+next_second
+ln -sf fs.5.gz "$tmpdir/usr/share/man/man5/fs2.5.gz"
+MANPATH="$tmpdir/usr/share/man" run $MANDB -C "$tmpdir/manpath.config" -u -q \
+	"$tmpdir/usr/share/man"
+cat >"$tmpdir/3.exp" <<EOF
+filesystems -> "- 5 5 MTIME A - - gz filesystems(5)"
+fs -> "- 5 5 MTIME B - - gz filesystems(5)"
+fs2 -> "- 5 5 MTIME B - - gz filesystems(5)"
+EOF
+accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/3.out"
+expect_pass 'mandb notices two-level symlink' \
+	'diff -u "$tmpdir/3.exp" "$tmpdir/3.out"'
+
 finish
