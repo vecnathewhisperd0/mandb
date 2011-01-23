@@ -70,13 +70,13 @@ is a manual page hierarchy such as
 .IR /usr/man .
 .SH OPTIONS
 .TP
-.if !'po4a'hide' .B \-d, \-\-debug
+.if !'po4a'hide' .BR \-d ", " \-\-debug
 Print debugging information.
 .TP
-.if !'po4a'hide' .B \-v, \-\-verbose
+.if !'po4a'hide' .BR \-v ", " \-\-verbose
 Print verbose warning messages.
 .TP
-.if !'po4a'hide' .B \-r, \-\-regex
+.if !'po4a'hide' .BR \-r ", " \-\-regex
 Interpret each 
 .I name 
 as a regular expression.
@@ -87,7 +87,7 @@ This option causes
 .B %whatis% 
 to be somewhat slower due to the nature of database searches.
 .TP
-.if !'po4a'hide' .B \-w, \-\-wildcard
+.if !'po4a'hide' .BR \-w ", " \-\-wildcard
 Interpret each 
 .I name 
 as a pattern containing shell style wildcards.
@@ -98,7 +98,7 @@ This option causes
 .B %whatis%
 to be somewhat slower due to the nature of database searches.
 .TP
-.if !'po4a'hide' .B \-l, \-\-long
+.if !'po4a'hide' .BR \-l ", " \-\-long
 Do not trim output to the terminal width.
 Normally, output will be truncated to the terminal width to avoid ugly
 results from poorly-written
@@ -127,7 +127,7 @@ pages in that exact part of the manual section.
 .PP
 .B \-m 
 .I system\c 
-.RB \|[\|,.\|.\|.\|]\| ,
+\|[\|,.\|.\|.\|]\|,
 .BI \-\-systems= system\c 
 \|[\|,.\|.\|.\|]
 .RS
@@ -150,7 +150,7 @@ This option will override the
 environment variable.
 .RE
 .TP
-.BI \-M\  path ,\ \-\-manpath= path
+.BI \-M\  path \fR,\ \fB\-\-manpath= path
 Specify an alternate set of colon-delimited manual page hierarchies to
 search.
 By default,
@@ -164,7 +164,7 @@ environment variable.
 This option overrides the contents of
 .RB $ MANPATH .
 .TP
-.BI \-L\  locale ,\ \-\-locale= locale
+.BI \-L\  locale \fR,\ \fB\-\-locale= locale
 .B %program%
 will normally determine your current locale by a call to the C function
 .BR setlocale (3)
@@ -181,14 +181,14 @@ begins.
 Output such as the help message will always be displayed in the initially
 determined locale.
 .TP
-.BI \-C\  file ,\ \-\-config\-file= file
+.BI \-C\  file \fR,\ \fB\-\-config\-file= file
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
-.if !'po4a'hide' .B \-h, \-\-help
+.if !'po4a'hide' .BR \-h ", " \-\-help
 Print a help message and exit.
 .TP
-.if !'po4a'hide' .B \-V, \-\-version
+.if !'po4a'hide' .BR \-V ", " \-\-version
 Display version information.
 .SH "EXIT STATUS"
 .TP
