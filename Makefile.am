@@ -43,7 +43,6 @@ EXTRA_DIST += \
 	gnulib/m4/inttypes-pri.m4 \
 	gnulib/m4/lcmessage.m4 \
 	gnulib/m4/printf-posix.m4 \
-	gnulib/m4/sockpfaf.m4 \
 	gnulib/m4/uintmax_t.m4 \
 	gnulib/m4/visibility.m4
 

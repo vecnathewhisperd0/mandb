@@ -20,10 +20,10 @@
 
 POFILES = po/fr.po po/id.po po/nl.po po/pl.po po/ru.po
 
-EXTRA_DIST = po4a.cfg po/man-db-manpages.pot $(POFILES)
+EXTRA_DIST = po4a.cfg Locale/Po4a/Manext.pm po/man-db-manpages.pot $(POFILES)
 
 if PO4A
-PO4A_ENVIRONMENT = PERL5LIB=`pwd`
+PO4A_ENVIRONMENT = PERL5LIB=$(srcdir)
 
 # Always generate output files even if poorly translated, since Automake's
 # generated rules will get upset otherwise.
