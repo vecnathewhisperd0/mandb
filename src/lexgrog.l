@@ -423,6 +423,7 @@ vgrind_request	\.vS
 	{bol}\.V[be]{blank}.*		|	/* pod2man, verbatim mode */
 	{bol}\.IX{blank}.*		|	/* .IX line */
 	{bol}\.Nm{blank}+		|	/* mdoc name */
+	{bol}\.PD{blank}*		|	/* paragraph spacing */
 	{bol}\\&			|	/* non-breaking space */
 	{next}{comment}.*		{	/* per line comments */
 						newline_found ();
