@@ -44,6 +44,10 @@ Major changes since man-db 2.5.9:
 	o mandb removes cat* and NLS subdirectories of cat directories whose
 	  corresponding man directories no longer exist.
 
+	o mandb forces SIGPIPE back to its default disposition on startup,
+	  to avoid noisy output in case it was started in a context where
+	  SIGPIPE was ignored.
+
 man-db 2.5.9 (17 November 2010)
 ===============================
 

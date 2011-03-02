@@ -1,3 +1,10 @@
+Wed Mar  2 11:12:13 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	* src/mandb.c (main): Reset SIGPIPE to SIG_DFL on startup, to avoid
+	  noisy output in the event that mandb was started from a context
+	  where SIGPIPE was ignored (e.g. Fedora bug #649674).
+	* NEWS: Document this.
+
 Tue Jan 25 00:20:29 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l (MAN_NAME): Consider .PD requests as paragraph

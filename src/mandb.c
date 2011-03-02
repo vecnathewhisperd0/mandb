@@ -38,6 +38,7 @@
 #include <sys/stat.h>	/* for chmod() */
 #include <dirent.h>
 #include <unistd.h>
+#include <signal.h>
 
 #ifdef SECURE_MAN_UID
 #  include <pwd.h>
@@ -720,6 +721,9 @@ int main (int argc, char *argv[])
 	int amount = 0;
 	char **mp;
 	struct hashtable *tried_catdirs;
+#ifdef SIGPIPE
+	struct sigaction sa;
+#endif /* SIGPIPE */
 
 #ifdef __profile__
 	char *cwd;
@@ -730,6 +734,19 @@ int main (int argc, char *argv[])
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
 	init_locale ();
+
+#ifdef SIGPIPE
+	/* Reset SIGPIPE to its default disposition.  Too many broken pieces
+	 * of software (Python << 3.2, gnome-session, etc.) spawn child
+	 * processes with SIGPIPE ignored, and this produces noise in cron
+	 * mail.
+	 */
+	memset (&sa, 0, sizeof sa);
+	sa.sa_handler = SIG_DFL;
+	sigemptyset (&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction (SIGPIPE, &sa, NULL);
+#endif /* SIGPIPE */
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
