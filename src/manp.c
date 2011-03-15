@@ -85,6 +85,7 @@ struct list {
 
 static struct list *namestore, *tailstore;
 
+#define SECTION_USER	-6
 #define SECTION		-5
 #define DEFINE_USER	-4
 #define DEFINE		-3
@@ -178,14 +179,14 @@ static void print_list (void)
 		       list->key, list->cont, list->flag);
 }
 
-static void add_sections (char *sections)
+static void add_sections (char *sections, int user)
 {
 	char *section_list = xstrdup (sections);
 	char *sect;
 
 	for (sect = strtok (section_list, " "); sect;
 	     sect = strtok (NULL, " ")) {
-		add_to_list (sect, "", SECTION);
+		add_to_list (sect, "", user ? SECTION_USER : SECTION);
 		debug ("Added section `%s'.\n", sect);
 	}
 	free (section_list);
@@ -194,16 +195,26 @@ static void add_sections (char *sections)
 const char **get_sections (void)
 {
 	struct list *list;
-	int length = 0;
+	int length_user = 0, length = 0;
 	const char **sections, **sectionp;
+	int flag;
 
-	for (list = namestore; list; list = list->next)
-		if (list->flag == SECTION)
+	for (list = namestore; list; list = list->next) {
+		if (list->flag == SECTION_USER)
+			length_user++;
+		else if (list->flag == SECTION)
 			length++;
-	sections = xnmalloc (length + 1, sizeof *sections);
+	}
+	if (length_user) {
+		sections = xnmalloc (length_user + 1, sizeof *sections);
+		flag = SECTION_USER;
+	} else {
+		sections = xnmalloc (length + 1, sizeof *sections);
+		flag = SECTION;
+	}
 	sectionp = sections;
 	for (list = namestore; list; list = list->next)
-		if (list->flag == SECTION)
+		if (list->flag == flag)
 			*sectionp++ = list->key;
 	*sectionp = NULL;
 	return sections;
@@ -783,10 +794,10 @@ static void add_to_dirlist (FILE *config, int user)
 				      key, cont)) > 0)
 			add_def (key, cont, c, user);
 		else if (sscanf (bp, "SECTION %511[^\n]", cont) == 1)
-			add_sections (cont);
+			add_sections (cont, user);
 		else if (sscanf (bp, "SECTIONS %511[^\n]", cont) == 1)
 			/* Since I keep getting it wrong ... */
-			add_sections (cont);
+			add_sections (cont, user);
 		else if (sscanf (bp, "MINCATWIDTH %d", &val) == 1)
 			min_cat_width = val;
 		else if (sscanf (bp, "MAXCATWIDTH %d", &val) == 1)
