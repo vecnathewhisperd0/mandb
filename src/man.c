@@ -2890,10 +2890,24 @@ static int compare_candidates (const struct candidate *left,
 	 * moved out of order with respect to their parent sections.
 	 */
 	if (strcmp (lsource->ext, rsource->ext)) {
+		const char **sp;
+
+		/* If the user asked for an explicit section, sort exact
+		 * matches first.
+		 */
+		if (section) {
+			if (STREQ (lsource->ext, section)) {
+				if (!STREQ (rsource->ext, section))
+					return -1;
+			} else {
+				if (STREQ (rsource->ext, section))
+					return 1;
+			}
+		}
+
 		/* Find out whether lsource->ext is ahead of rsource->ext in
 		 * section_list.
 		 */
-		const char **sp;
 		for (sp = section_list; *sp; ++sp) {
 			if (!*(*sp + 1)) {
 				/* No extension */

@@ -23,7 +23,7 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH DBTYPE=$(DBTYPE) \
 		    @LOCALCHARSET_TESTS_ENVIRONMENT@ $(SHELL)
 ALL_TESTS = \
 	lexgrog-1 \
-	man-1 man-2 \
+	man-1 man-2 man-3 \
 	manconv-1 manconv-2 manconv-3 \
 	mandb-1 mandb-2 mandb-3 mandb-4 \
 	zsoelim-1
