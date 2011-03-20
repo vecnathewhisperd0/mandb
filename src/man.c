@@ -1093,8 +1093,10 @@ int main (int argc, char *argv[])
 	   issued as an argument or in $MANOPT */
 	if (locale) {
 		free (internal_locale);
-		internal_locale = xstrdup (setlocale (LC_ALL, locale));
-		if (internal_locale == NULL)
+		internal_locale = setlocale (LC_ALL, locale);
+		if (internal_locale)
+			internal_locale = xstrdup (internal_locale);
+		else
 			internal_locale = xstrdup (locale);
 
 		debug ("main(): locale = %s, internal_locale = %s\n",
@@ -1435,14 +1437,15 @@ static void add_col (pipeline *p, const char *locale_charset, ...)
 {
 	pipecmd *cmd;
 	va_list argv;
-	char *col_locale;
+	char *col_locale = NULL;
 
 	cmd = pipecmd_new (COL);
 	va_start (argv, locale_charset);
 	pipecmd_argv (cmd, argv);
 	va_end (argv);
 
-	col_locale = find_charset_locale (locale_charset);
+	if (locale_charset)
+		col_locale = find_charset_locale (locale_charset);
 	if (col_locale) {
 		pipecmd_setenv (cmd, "LC_CTYPE", col_locale);
 		free (col_locale);
@@ -3086,7 +3089,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	candp->from_db = from_db;
 	candp->cat = cat;
 	candp->path = path;
-	candp->ult = xstrdup (ult);
+	candp->ult = ult ? xstrdup (ult) : NULL;
 	candp->source = source;
 	candp->add_index = add_index++;
 	candp->next = NULL;

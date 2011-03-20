@@ -2,7 +2,8 @@
  * whatis.c: search the index or whatis database(s) for words.
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011
+ *               Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -624,7 +625,7 @@ static int do_apropos (char *page, char *lowpage)
 			if (seen_count && !require_all)
 				goto nextpage_tab;
 			got_match = parse_name (lowpage, MYDBM_DPTR (key));
-			whatis = xstrdup (info.whatis);
+			whatis = info.whatis ? xstrdup (info.whatis) : NULL;
 			if (!got_match && whatis)
 				got_match = parse_whatis (page, lowpage,
 							  whatis);
@@ -777,8 +778,10 @@ int main (int argc, char *argv[])
 	   issued as an argument or in $MANOPT */
 	if (locale) {
 		free (internal_locale);
-		internal_locale = xstrdup (setlocale (LC_ALL, locale));
-		if (internal_locale == NULL)
+		internal_locale = setlocale (LC_ALL, locale);
+		if (internal_locale)
+			internal_locale = xstrdup (internal_locale);
+		else
 			internal_locale = xstrdup (locale);
 
 		debug ("main(): locale = %s, internal_locale = %s\n",

@@ -1,7 +1,7 @@
 /* tempfile.c: handle temporary directory creation (formerly also temporary
  * files but this is no longer used).
  *
- * Copyright (C) 2001, 2003, 2007 Colin Watson <cjwatson@debian.org>.
+ * Copyright (C) 2001, 2003, 2007, 2009, 2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -65,12 +65,12 @@ static const char *path_search (void)
  */
 char *create_tempdir (const char *template)
 {
-	char *dir = xstrdup (path_search ());
+	const char *dir = path_search ();
 	char *created_dirname;
 
 	if (!dir)
 		return NULL;
-	created_dirname = appendstr (dir, "/", template, "XXXXXX", NULL);
+	created_dirname = appendstr (NULL, dir, "/", template, "XXXXXX", NULL);
 	if (!mkdtemp (created_dirname))
 		return NULL;
 	return created_dirname;

@@ -550,7 +550,9 @@ const char *get_locale_charset (void)
 	/* We need to modify LC_CTYPE temporarily in order to look at the
 	 * codeset, so save it first.
 	 */
-	saved_locale = xstrdup (setlocale (LC_CTYPE, NULL));
+	saved_locale = setlocale (LC_CTYPE, NULL);
+	if (saved_locale)
+		saved_locale = xstrdup (saved_locale);
 
 	ctype = setlocale (LC_CTYPE, "");
 
@@ -588,7 +590,9 @@ char *find_charset_locale (const char *charset)
 	if (!supported)
 		return NULL;
 
-	saved_locale = xstrdup (setlocale (LC_CTYPE, NULL));
+	saved_locale = setlocale (LC_CTYPE, NULL);
+	if (saved_locale)
+		saved_locale = xstrdup (saved_locale);
 
 	while (getline (&line, &n, supported) >= 0) {
 		const char *space = strchr (line, ' ');

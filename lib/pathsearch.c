@@ -1,7 +1,7 @@
 /*
  * pathsearch.c: $PATH-searching functions.
  *
- * Copyright (C) 2004 Colin Watson.
+ * Copyright (C) 2004, 2007, 2008, 2009, 2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -39,8 +39,8 @@
 static int pathsearch (const char *name, const mode_t bits)
 {
 	char *cwd = NULL;
-	char *path = xstrdup (getenv ("PATH"));
-	char *pathtok = path;
+	char *path = getenv ("PATH");
+	char *pathtok;
 	const char *element;
 	struct stat st;
 	int ret = 0;
@@ -51,13 +51,14 @@ static int pathsearch (const char *name, const mode_t bits)
 
 	if (strchr (name, '/')) {
 		/* Qualified name; look directly. */
-		free (path);
 		if (stat (name, &st) == -1)
 			return 0;
 		if (S_ISREG (st.st_mode) && (st.st_mode & bits))
 			return 1;
 		return 0;
 	}
+
+	pathtok = path = xstrdup (path);
 
 	/* Unqualified name; iterate over $PATH looking for it. */
 	for (element = strsep (&pathtok, ":"); element;
@@ -98,14 +99,16 @@ int pathsearch_executable (const char *name)
 int directory_on_path (const char *dir)
 {
 	char *cwd = NULL;
-	char *path = xstrdup (getenv ("PATH"));
-	char *pathtok = path;
+	char *path = getenv ("PATH");
+	char *pathtok;
 	const char *element;
 	int ret = 0;
 
 	if (!path)
 		/* Eh? Oh well. */
 		return 0;
+
+	pathtok = path = xstrdup (path);
 
 	for (element = strsep (&pathtok, ":"); element;
 	     element = strsep (&pathtok, ":")) {

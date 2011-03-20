@@ -837,11 +837,11 @@ void read_config_file (int optional)
 
 	push_cleanup (free_config_file, NULL, 0);
 
-	home = xstrdup (getenv ("HOME"));
+	home = getenv ("HOME");
 	if (home) {
 		char *dotmanpath;
 		if (!user_config_file)
-			dotmanpath = appendstr (home, "/.manpath", NULL);
+			dotmanpath = appendstr (NULL, home, "/.manpath", NULL);
 		else
 			dotmanpath = xstrdup (user_config_file);
 		config = fopen (dotmanpath, "r");

@@ -1,7 +1,7 @@
 /*
  * descriptions.c: manipulate man page descriptions
  *
- * Copyright (C) 2002, 2003, 2006, 2007, 2008, 2009 Colin Watson.
+ * Copyright (C) 2002, 2003, 2006, 2007, 2008, 2009, 2010, 2011 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -118,7 +118,8 @@ struct page_description *parse_descriptions (const char *base,
 		if (head) {
 			desc->next = xmalloc (sizeof *desc);
 			desc = desc->next;
-			desc->whatis = xstrdup (head->whatis);
+			desc->whatis =
+				head->whatis ? xstrdup (head->whatis) : NULL;
 		} else {
 			desc = xmalloc (sizeof *desc);
 			head = desc;

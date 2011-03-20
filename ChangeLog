@@ -1,3 +1,36 @@
+Sun Mar 20 12:58:42 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	Remove the need for our patched version of xstrdup.
+
+	* lib/encodings.c (get_locale_charset): Check return value of
+	  setlocale before passing to xstrdup.
+	  (find_charset_locale): Likewise.
+	* lib/pathsearch.c (pathsearch): Check return value of getenv before
+	  passing to xstrdup.
+	  (pathsearch_executable): Likewise.
+	* lib/tempfile.c (create_tempdir): Adjust appendstr call to avoid
+	  needing to pass return value of path_search to xstrdup.
+	* src/check_mandirs.c (test_manfile): Don't pass NULL lg.whatis to
+	  xstrdup.
+	* src/descriptions.c (parse_descriptions): Don't pass NULL
+	  head->whatis to xstrdup.
+	* src/man.c (main): Check return value of setlocale before passing
+	  to xstrdup.
+	  (add_col): Only call find_charset_locale if locale_charset is
+	  non-NULL.
+	  (add_candidate): Don't pass NULL ult to xstrdup.
+	* src/manp.c (read_config_file): Adjust appendstr call to avoid
+	  needing to pass return value of getenv to xstrdup.
+	* src/whatis.c (do_apropos): Don't pass NULL info.whatis to xstrdup.
+	  (main): Check return value of setlocale before passing to xstrdup.
+	* src/zsoelim.l (zsoelim_stdin_data_new): Don't pass NULL path to
+	  xstrdup.
+
+	* Makefile.am (EXTRA_DIST): Remove gnulib/lib/xmalloc.c.orig and
+	  gnulib/lib/xmalloc.patch.
+	* autogen.sh: Stop applying gnulib/lib/xmalloc.patch.
+	* gnulib/lib/xmalloc.c.orig, gnulib/lib/xmalloc.patch: Remove.
+
 Sun Mar 20 01:39:41 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	* gnulib: Import waitpid module.

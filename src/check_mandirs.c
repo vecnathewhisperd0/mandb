@@ -279,7 +279,7 @@ void test_manfile (const char *file, const char *path)
 		regain_effective_privs ();
 
 		whatis = XMALLOC (struct whatis_hashent);
-		whatis->whatis = xstrdup (lg.whatis);
+		whatis->whatis = lg.whatis ? xstrdup (lg.whatis) : NULL;
 		/* We filled out ult_trace above. */
 		memcpy (&whatis->trace, &ult_trace, sizeof (ult_trace));
 		hashtable_install (whatis_hash, ult, strlen (ult), whatis);
