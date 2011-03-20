@@ -1,5 +1,5 @@
 /* Hierarchial argument parsing help output
-   Copyright (C) 1995-2005, 2007, 2009-2010 Free Software Foundation, Inc.
+   Copyright (C) 1995-2005, 2007, 2009-2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Written by Miles Bader <miles@gnu.ai.mit.edu>.
 
@@ -570,7 +570,9 @@ hol_entry_short_iterate (const struct hol_entry *entry,
 }
 
 static inline int
+#if __GNUC__ >= 3
 __attribute__ ((always_inline))
+#endif
 hol_entry_long_iterate (const struct hol_entry *entry,
                         int (*func)(const struct argp_option *opt,
                                     const struct argp_option *real,

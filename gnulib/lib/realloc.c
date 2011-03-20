@@ -1,6 +1,6 @@
 /* realloc() function that is glibc compatible.
 
-   Copyright (C) 1997, 2003-2004, 2006-2007, 2009-2010 Free Software
+   Copyright (C) 1997, 2003-2004, 2006-2007, 2009-2011 Free Software
    Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -23,11 +23,14 @@
 /* Only the AC_FUNC_REALLOC macro defines 'realloc' already in config.h.  */
 #ifdef realloc
 # define NEED_REALLOC_GNU 1
+/* Whereas the gnulib module 'realloc-gnu' defines HAVE_REALLOC_GNU.  */
+#elif GNULIB_REALLOC_GNU && !HAVE_REALLOC_GNU
+# define NEED_REALLOC_GNU 1
 #endif
 
 /* Infer the properties of the system's malloc function.
-   Only the AC_FUNC_MALLOC macro defines 'malloc' already in config.h.  */
-#if GNULIB_MALLOC_GNU && !defined malloc
+   The gnulib module 'malloc-gnu' defines HAVE_MALLOC_GNU.  */
+#if GNULIB_MALLOC_GNU && HAVE_MALLOC_GNU
 # define SYSTEM_MALLOC_GLIBC_COMPATIBLE 1
 #endif
 

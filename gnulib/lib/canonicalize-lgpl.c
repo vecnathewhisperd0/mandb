@@ -1,5 +1,5 @@
 /* Return the canonical absolute name of a given file.
-   Copyright (C) 1996-2010 Free Software Foundation, Inc.
+   Copyright (C) 1996-2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    This program is free software: you can redistribute it and/or modify
@@ -51,6 +51,12 @@
 # include "pathmax.h"
 # include "malloca.h"
 # if HAVE_GETCWD
+#  if IN_RELOCWRAPPER
+    /* When building the relocatable program wrapper, use the system's getcwd
+       function, not the gnulib override, otherwise we would get a link error.
+     */
+#   undef getcwd
+#  endif
 #  ifdef VMS
     /* We want the directory in Unix syntax, not in VMS syntax.  */
 #   define __getcwd(buf, max) getcwd (buf, max, 0)

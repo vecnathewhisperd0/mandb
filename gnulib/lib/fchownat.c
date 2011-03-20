@@ -4,7 +4,7 @@
    when the buggy fchownat-with-AT_SYMLINK_NOFOLLOW operates on a symlink, it
    mistakenly affects the symlink referent, rather than the symlink itself.
 
-   Copyright (C) 2006-2007, 2009-2010 Free Software Foundation, Inc.
+   Copyright (C) 2006-2007, 2009-2011 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -87,6 +87,13 @@ rpl_fchownat (int fd, char const *file, uid_t owner, gid_t group, int flag)
 # if FCHOWNAT_NOFOLLOW_BUG
   if (flag == AT_SYMLINK_NOFOLLOW)
     return local_lchownat (fd, file, owner, group);
+# endif
+# if FCHOWNAT_EMPTY_FILENAME_BUG
+  if (file[0] == '\0')
+    {
+      errno = ENOENT;
+      return -1;
+    }
 # endif
 # if CHOWN_TRAILING_SLASH_BUG
   {

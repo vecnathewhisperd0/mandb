@@ -1,5 +1,5 @@
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2002-2010 Free Software Foundation, Inc.
+# Copyright (C) 2002-2011 Free Software Foundation, Inc.
 #
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
@@ -12,7 +12,8 @@
 # This file represents the compiled summary of the specification in
 # gnulib-cache.m4. It lists the computed macro invocations that need
 # to be invoked from configure.ac.
-# In projects using CVS, this file can be treated like other built files.
+# In projects that use version control, this file can be treated like
+# other built files.
 
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -89,7 +90,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module localcharset:
   # Code from module lock:
   # Code from module lstat:
-  # Code from module malloc:
+  # Code from module malloc-gnu:
   # Code from module malloc-posix:
   # Code from module malloca:
   # Code from module mbrtowc:
@@ -165,7 +166,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module warn-on-use:
   # Code from module wchar:
   # Code from module wcrtomb:
-  # Code from module wctype:
+  # Code from module wctype-h:
   # Code from module xalloc:
   # Code from module xalloc-die:
   # Code from module xgetcwd:
@@ -231,6 +232,7 @@ AC_SUBST([LTALLOCA])
   gl_UNISTD_MODULE_INDICATOR([close])
   # Code from module close-hook:
   # Code from module configmake:
+  gl_CONFIGMAKE_PREP
   # Code from module d-ino:
   gl_CHECK_TYPE_STRUCT_DIRENT_D_INO
   # Code from module d-type:
@@ -338,9 +340,9 @@ AC_SUBST([LTALLOCA])
   # Code from module lstat:
   gl_FUNC_LSTAT
   gl_SYS_STAT_MODULE_INDICATOR([lstat])
-  # Code from module malloc:
-  AC_FUNC_MALLOC
-  AC_DEFINE([GNULIB_MALLOC_GNU], 1, [Define to indicate the 'malloc' module.])
+  # Code from module malloc-gnu:
+  gl_FUNC_MALLOC_GNU
+  gl_MODULE_INDICATOR([malloc-gnu])
   # Code from module malloc-posix:
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
@@ -510,7 +512,7 @@ AC_SUBST([LTALLOCA])
   # Code from module wcrtomb:
   gl_FUNC_WCRTOMB
   gl_WCHAR_MODULE_INDICATOR([wcrtomb])
-  # Code from module wctype:
+  # Code from module wctype-h:
   gl_WCTYPE_H
   # Code from module xalloc:
   gl_XALLOC
@@ -766,6 +768,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/malloca.valgrind
   lib/mbrtowc.c
   lib/mbsinit.c
+  lib/mbsrtowcs-impl.h
   lib/mbsrtowcs-state.c
   lib/mbsrtowcs.c
   lib/memchr.c
@@ -881,6 +884,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/cloexec.m4
   m4/close.m4
   m4/codeset.m4
+  m4/configmake.m4
   m4/d-ino.m4
   m4/d-type.m4
   m4/dirent_h.m4
