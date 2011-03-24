@@ -154,7 +154,6 @@ void regain_effective_privs (void)
 void do_system_drop_privs_child (void *data)
 {
 	pipeline *p = data;
-	int status;
 
 	if (idpriv_drop ())
 		gripe_set_euid ();
