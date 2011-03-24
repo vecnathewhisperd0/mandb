@@ -131,7 +131,7 @@ extern uid_t euid;
 #  define STDERR_FILENO 2
 #endif
 
-const char *lang;
+char *lang;
 
 /* external formatter programs, one for use without -t, and one with -t */
 #define NFMT_PROG "./mandb_nfmt"
@@ -1003,6 +1003,8 @@ executable_out:
 					error (0, errno, "%s", argv);
 				exit_status = NOT_FOUND;
 			}
+			free (lang);
+			lang = NULL;
 			free (argv_base);
 		}
 	}
@@ -3310,6 +3312,8 @@ static int display_filesystem (struct candidate *candp)
 		found = display (candp->path, man_file, cat_file, title, NULL);
 		if (cat_file)
 			free (cat_file);
+		free (lang);
+		lang = NULL;
 		free (title);
 
 		return found;
@@ -3386,6 +3390,8 @@ static int display_database (struct candidate *candp)
 					  title, in->filter);
 			if (cat_file)
 				free (cat_file);
+			free (lang);
+			lang = NULL;
 		} /* else {drop through to the bottom and return 0 anyway} */
 	} else 
 
@@ -3808,9 +3814,12 @@ static int do_global_apropos_section (const char *path, const char *sec,
 		man_file = ult_src (*np, path, NULL, ult_flags, NULL);
 		if (!man_file)
 			goto next;
+		lang = lang_dir (man_file);
 		cat_file = find_cat_file (path, *np, man_file);
 		if (display (path, man_file, cat_file, title, NULL))
 			found = 1;
+		free (lang);
+		lang = NULL;
 
 next:
 		free (cat_file);

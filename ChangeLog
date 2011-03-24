@@ -1,3 +1,13 @@
+Thu Mar 24 12:43:51 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (lang): Make non-const.
+	  (local_man_loop): Free lang after calling display.
+	  (display_filesystem): Likewise.
+	  (display_database): Likewise.
+	  (do_global_apropos_section): Ensure lang is set while calling
+	  display.
+	* NEWS: Document this.
+
 Thu Mar 24 01:22:00 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	Help novices find their way around.  See
