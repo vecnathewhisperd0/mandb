@@ -702,8 +702,14 @@ static inline void gripe_no_man (const char *name, const char *sec)
 	/* On AIX and IRIX, fall back to the vendor supplied browser. */
 #if defined _AIX || defined __sgi
 	if (!troff) {
-		unsetenv ("MANPATH");
-		execv ("/usr/bin/man", global_argv);
+		pipecmd *vendor_man;
+		int i;
+
+		vendor_man = pipecmd_new ("/usr/bin/man");
+		for (i = 1; i < argc; ++i)
+			pipecmd_arg (vendor_man, global_argv[i]);
+		pipecmd_unsetenv (vendor_man, "MANPATH");
+		pipecmd_exec (vendor_man);
 	}
 #endif
 

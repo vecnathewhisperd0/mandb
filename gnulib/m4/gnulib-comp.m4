@@ -150,7 +150,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module strsep:
   # Code from module sys_stat:
   # Code from module sys_time:
-  # Code from module sys_wait:
   # Code from module sysexits:
   # Code from module tempname:
   # Code from module threadlib:
@@ -164,7 +163,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module vasprintf:
   # Code from module verify:
   # Code from module vsnprintf:
-  # Code from module waitpid:
   # Code from module warn-on-use:
   # Code from module wchar:
   # Code from module wcrtomb:
@@ -478,9 +476,6 @@ AC_SUBST([LTALLOCA])
   # Code from module sys_time:
   gl_HEADER_SYS_TIME_H
   AC_PROG_MKDIR_P
-  # Code from module sys_wait:
-  gl_SYS_WAIT_H
-  AC_PROG_MKDIR_P
   # Code from module sysexits:
   gl_SYSEXITS
   # Code from module tempname:
@@ -511,9 +506,6 @@ AC_SUBST([LTALLOCA])
   # Code from module vsnprintf:
   gl_FUNC_VSNPRINTF
   gl_STDIO_MODULE_INDICATOR([vsnprintf])
-  # Code from module waitpid:
-  gl_FUNC_WAITPID
-  gl_SYS_WAIT_MODULE_INDICATOR([waitpid])
   # Code from module warn-on-use:
   # Code from module wchar:
   gl_WCHAR_H
@@ -852,7 +844,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strsep.c
   lib/sys_stat.in.h
   lib/sys_time.in.h
-  lib/sys_wait.in.h
   lib/sysexits.in.h
   lib/tempname.c
   lib/tempname.h
@@ -868,7 +859,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/vasprintf.c
   lib/verify.h
   lib/vsnprintf.c
-  lib/waitpid.c
   lib/wchar.in.h
   lib/wcrtomb.c
   lib/wctype.in.h
@@ -1015,7 +1005,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strsep.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
-  m4/sys_wait_h.m4
   m4/sysexits.m4
   m4/tempname.m4
   m4/threadlib.m4
@@ -1028,7 +1017,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/vasprintf.m4
   m4/visibility.m4
   m4/vsnprintf.m4
-  m4/waitpid.m4
   m4/warn-on-use.m4
   m4/wchar_h.m4
   m4/wchar_t.m4

@@ -415,9 +415,6 @@ AC_TYPE_PID_T
 AC_TYPE_UID_T
 AC_TYPE_SIZE_T
 
-# Checks for functions.
-AC_FUNC_VFORK
-
 # Check for pipeline library.
 PKG_CHECK_MODULES([libpipeline], [libpipeline >= 1.1.0])
 
@@ -486,7 +483,7 @@ fi
 AC_SUBST(DBLIBS)
 
 # Check for available functions.
-AC_REPLACE_FUNCS(flock waitpid)
+AC_REPLACE_FUNCS(flock)
 
 dnl MAN_ECHO_VAR(ENV-VARIABLE)
 define(MAN_ECHO_VAR, [AC_MSG_NOTICE([default $1 = "$$1"])])dnl

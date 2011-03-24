@@ -1,3 +1,29 @@
+Thu Mar 24 01:03:13 GMT 2011  Colin Watson  <cjwatson@debian.org>
+
+	Rewrite all remaining subprocess handling in terms of libpipeline.
+
+	* lib/security.c (do_system_drop_privs_child): New function.
+	  (do_system_drop_privs): Rewrite using libpipeline.
+	* src/catman.c (post_fork): New function.
+	  (catman): Rewrite using libpipeline.
+	  (add_arg): Rewrite as a wrapper around pipecmd_arg.
+	  (do_catman): Remove.
+	  (reset_cursor): Remove.
+	  (parse_for_sec): Use libpipeline for subprocess handling.
+	  (main): Install custom post-fork handler.
+	* src/man.c (gripe_no_man) [_AIX || __sgi]: Rewrite vendor fallback
+	  using libpipeline.
+	* src/Makefile.am (catman_LDADD): Add $(libpipeline_LIBS).
+
+	* src/catman.c (main): Duplicate the output of setlocale if
+	  non-NULL.
+
+	* configure.ac (AC_FUNC_VFORK): Remove.
+	  (AC_REPLACE_FUNCS): Remove waitpid.
+	* gnulib: Remove waitpid module.
+	* lib/README: Remove waitpid.c.
+	* lib/waitpid.c: Remove.
+
 Sun Mar 20 12:58:42 GMT 2011  Colin Watson  <cjwatson@debian.org>
 
 	Remove the need for our patched version of xstrdup.

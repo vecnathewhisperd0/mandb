@@ -57,7 +57,7 @@ LIBMAN = $(top_builddir)/lib/libman.la $(top_builddir)/gnulib/lib/libgnu.la \
 LIBMANDB = $(top_builddir)/libdb/libmandb.la $(LIBMAN) $(DBLIBS)
 
 accessdb_LDADD = $(LIBMANDB)
-catman_LDADD = $(LIBMANDB)
+catman_LDADD = $(LIBMANDB) $(libpipeline_LIBS)
 globbing_LDADD = $(LIBMAN)
 lexgrog_LDADD = $(LIBMAN) $(libpipeline_LIBS) $(LTLIBICONV)
 man_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)

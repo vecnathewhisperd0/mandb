@@ -2,6 +2,8 @@
  * catman.c: create and/or update cat files
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
+ * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008, 2009, 2010, 2011
+ *               Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -23,7 +25,7 @@
  */
 
 /* MAX_ARGS must be >= 7, 5 for options, 1 for page and 1 for NULL */
-#define MAX_ARGS	1024	/* *argv[MAX_ARG] */
+#define MAX_ARGS	1024
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -35,11 +37,6 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-
-#if HAVE_SYS_WAIT_H
-#  include <sys/wait.h>
-#endif /* HAVE_SYS_WAIT_H */
-
 #include <unistd.h>
 #include <limits.h>  
 
@@ -73,7 +70,9 @@
 
 #include "manconfig.h"
 
+#include "cleanup.h"
 #include "error.h"
+#include "pipeline.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -175,139 +174,96 @@ static int rdopen_db (void)
 	return 0;
 }
 
-/* fork() and execve() man with the appropriate catman args. 
-   If we inline this function, gcc v2.6.2 gives us `clobber' warnings ?? */
-static void catman (char *args[])
+static void post_fork (void)
 {
-	pid_t child;
+	pop_all_cleanups ();
+	if (dbf)
+		MYDBM_CLOSE (dbf);
+}
+
+/* Execute man with the appropriate catman args.  Always frees cmd.
+   If we inline this function, gcc v2.6.2 gives us `clobber' warnings ?? */
+static void catman (pipecmd *cmd)
+{
+	pipeline *p;
 	int status;
-	int res;
 
 	if (debug_level) {
 		/* just show the command, but don't execute it */
-		char **p;
-
-		fputs ("man command =", stderr);
-		for (p = args; *p; p++)
-			fprintf (stderr, " %s", *p);
+		fputs ("man command = ", stderr);
+		pipecmd_dump (cmd, stderr);
 		putc ('\n', stderr);
+		pipecmd_free (cmd);
 		return;
 	}
-		
-	child = vfork ();
-	if (child < 0)
-		error (FATAL, errno, _("fork failed"));
-	else if (child == 0) {
-		char *const envp[] = { NULL };
 
-		execve (MAN, args, envp);
-		_exit (127);
-	} 
-
-	do {			/* cope with non-restarting system calls */
-		res = waitpid (child, &status, 0);
-	} while ((res == -1) && (errno == EINTR));
-	if (res == -1)
-		error (FATAL, 0, _("can't get man command's exit status"));
-	else if (status)
+	p = pipeline_new_commands (cmd, NULL);
+	status = pipeline_run (p);
+	if (status)
 		error (CHILD_FAIL, 0,
 		       _("man command failed with exit status %d"), status);
 }
 
-/* accept key and a pointer to the array address that needs to be filled in,
-   fill in address and return 1 if MYDBM_DPTR (key) can be freed otherwise 0 */
-static inline int add_arg (datum key, char **argument)
+/* Add key to this command, stripping off tab-and-following if necessary.
+ * Return length of argument.
+ */
+static inline size_t add_arg (pipecmd *cmd, datum key)
 {
-    	char *tab;
+	char *tab;
+	size_t len;
 
 	tab = strrchr (MYDBM_DPTR (key), '\t');
+	if (tab == MYDBM_DPTR (key))
+		tab = NULL;
 
-	if (tab && tab != MYDBM_DPTR (key)) {
+	if (tab)
 		*tab = '\0';
-		*argument = xstrdup (MYDBM_DPTR (key));
+	pipecmd_arg (cmd, MYDBM_DPTR (key));
+	len = strlen (MYDBM_DPTR (key));
+	debug ("key: '%s' (%d), len: %zd\n", MYDBM_DPTR (key), MYDBM_DSIZE (key), len);
+	if (tab)
 		*tab = '\t';
-		return 1;
-	} 
 
-	*argument = MYDBM_DPTR (key);
-	return 0;
+	return len;
 }
-
-/* simply close db, tidy up, call catman() and then free() the array */
-static void do_catman (char *args[], int arg_no, int first_arg)
-{
-	MYDBM_CLOSE (dbf);
-
-	/* The last argument must be NULL */
-	args[arg_no] = NULL;
-
-	catman (args);
-
-	/* don't free the last entry, it's NULL */
-	/* don't free the last but one entry, it's our nextkey */
-	arg_no -= 2;
-
-	while (arg_no >= first_arg)
-		/* all db methods now free() */	
-		MYDBM_FREE (args[arg_no--]);
-}
-
-#ifdef BTREE
-/* we need to reset the cursor position after a reopen */
-static inline void reset_cursor (datum key)
-{
-	int status;
-	DBT content; /* dummy */
-	
-	status = (dbf->seq) (dbf, (DBT *) &key, &content, R_CURSOR);
-	if (status == 1)
-		status = (dbf->seq) (dbf, (DBT *) &key, &content, R_LAST);
-	if (status == -1)
-		error (FATAL, errno,
-		       _("unable to reset cursor position in %s"), database);
-}
-#else /* !BTREE */
-#  define reset_cursor(key) 		/* nothing */
-#endif /* BTREE */
 
 /* find all pages that are in the supplied manpath and section and that are
    ultimate source files. */
 static int parse_for_sec (const char *manpath, const char *section)
 {
-	char *args[MAX_ARGS];
+	pipecmd *basecmd, *cmd;
 	datum key;
 	size_t arg_size, initial_bit;
-	int arg_no = 0, message = 1, first_arg;
-	
+	int message = 1, first_arg;
+
 	if (rdopen_db () || dbver_rd (dbf))
 		return 1;
-		
-	args[arg_no++] = xstrdup ("man"); 	/* Name of program */
+
+	basecmd = pipecmd_new ("man");
+	pipecmd_clearenv (basecmd);
 
 	/* As we supply a NULL environment to save precious execve() space,
 	   we must also supply a locale if necessary */
 	if (locale) {
-		args[arg_no++] = xstrdup ("-L");	/* locale option */
-		args[arg_no++] = xstrdup (locale);	/* The locale */
+		pipecmd_args (basecmd, "-L", locale, NULL);
 		initial_bit = sizeof "-L" + strlen (locale) + 1;
 	} else
 		initial_bit = 0;
 
-	args[arg_no++] = xstrdup ("-caM");	/* options */
-	args[arg_no++] = xstrdup (manpath);	/* particular manpath */
-	args[arg_no++] = xstrdup ("-S");
-	args[arg_no++] = xstrdup (section);	/* particular section */
+	pipecmd_args (basecmd, "-caM", manpath, NULL);	/* manpath */
+	pipecmd_args (basecmd, "-S", section, NULL);	/* section */
 
-	first_arg = arg_no;		/* first pagename argument */
-	
-	initial_bit += sizeof "man" + sizeof "-caM" + 
+	initial_bit += sizeof "man" + sizeof "-caM" +
 		       strlen (manpath) + strlen (section) + 2;
+
+	cmd = pipecmd_dup (basecmd);
+	first_arg = pipecmd_get_nargs (cmd);
 
 	arg_size = initial_bit;
 	key = MYDBM_FIRSTKEY (dbf);
 
 	while (MYDBM_DPTR (key) != NULL) {
-		int free_key = 1;
+		datum nextkey;
 
 		/* ignore db identifier keys */
 		if (*MYDBM_DPTR (key) != '$') { 
@@ -337,9 +293,7 @@ static int parse_for_sec (const char *manpath, const char *section)
 						message = 0;
 					}
 
-					free_key = add_arg (key,
-							    &(args[arg_no]));
-					arg_size += strlen (args[arg_no++]) + 1;
+					arg_size += add_arg (cmd, key) + 1;
 
 					debug ("arg space free: %zd bytes\n",
 					       ARG_MAX - arg_size);
@@ -349,16 +303,11 @@ static int parse_for_sec (const char *manpath, const char *section)
 					   and that we haven't run out of array 
 					   space too */ 
 				    	if (arg_size >= ARG_MAX - NAME_MAX ||
-				    	    arg_no == MAX_ARGS - 1) {
-				    		do_catman (args, arg_no,
-							   first_arg);
+				    	    pipecmd_get_nargs (cmd) ==
+						    MAX_ARGS) {
+						catman (cmd);
 
-				    		/* reopen db and tidy up */
-				    		if (rdopen_db ())
-				    			return 1;
-						reset_cursor (key);
-						free_key = 1;
-				    		arg_no = first_arg;
+						cmd = pipecmd_dup (basecmd);
 				    		arg_size = initial_bit;
 				    	}
 				}
@@ -373,23 +322,19 @@ static int parse_for_sec (const char *manpath, const char *section)
 			MYDBM_FREE (MYDBM_DPTR (content));
 		}
 
-		/* If we are not using the key, free it now */
-		if (free_key) {
-			datum nextkey;
-
-			nextkey = MYDBM_NEXTKEY (dbf, key);
-			MYDBM_FREE (MYDBM_DPTR (key));
-			key = nextkey;
-		} else 
-			key = MYDBM_NEXTKEY (dbf, key);
+		nextkey = MYDBM_NEXTKEY (dbf, key);
+		MYDBM_FREE (MYDBM_DPTR (key));
+		key = nextkey;
 	}
 
-	if (arg_no > first_arg)
-		do_catman (args, arg_no, first_arg);
+	MYDBM_CLOSE (dbf);
+	dbf = NULL;
+	if (pipecmd_get_nargs (cmd) > first_arg)
+		catman (cmd);
+	else
+		pipecmd_free (cmd);
 
-	arg_no = first_arg - 1;
-	while (arg_no >= 0)
-		free (args[arg_no--]);
+	pipecmd_free (basecmd);
 
 	return 0;
 }
@@ -413,10 +358,13 @@ int main (int argc, char *argv[])
 	program_name = base_name (argv[0]);
 
 	init_debug ();
+	pipeline_install_post_fork (post_fork);
 
 	init_locale ();
 	locale = setlocale (LC_MESSAGES, NULL);
-	if (!locale)
+	if (locale)
+		locale = xstrdup (locale);
+	else
 		locale = xstrdup ("C");
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))

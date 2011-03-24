@@ -36,7 +36,7 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = lib
 DIST_COMMON = README $(dist_noinst_DATA) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in flock.c waitpid.c
+	$(srcdir)/Makefile.in flock.c
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/m4/man-check-progs.m4 \
@@ -176,7 +176,6 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/strsep.m4 \
 	$(top_srcdir)/gnulib/m4/sys_stat_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_time_h.m4 \
-	$(top_srcdir)/gnulib/m4/sys_wait_h.m4 \
 	$(top_srcdir)/gnulib/m4/sysexits.m4 \
 	$(top_srcdir)/gnulib/m4/tempname.m4 \
 	$(top_srcdir)/gnulib/m4/threadlib.m4 \
@@ -187,7 +186,6 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/vasnprintf.m4 \
 	$(top_srcdir)/gnulib/m4/vasprintf.m4 \
 	$(top_srcdir)/gnulib/m4/vsnprintf.m4 \
-	$(top_srcdir)/gnulib/m4/waitpid.m4 \
 	$(top_srcdir)/gnulib/m4/warn-on-use.m4 \
 	$(top_srcdir)/gnulib/m4/wchar_h.m4 \
 	$(top_srcdir)/gnulib/m4/wchar_t.m4 \
@@ -508,7 +506,6 @@ GNULIB_VPRINTF = @GNULIB_VPRINTF@
 GNULIB_VPRINTF_POSIX = @GNULIB_VPRINTF_POSIX@
 GNULIB_VSNPRINTF = @GNULIB_VSNPRINTF@
 GNULIB_VSPRINTF_POSIX = @GNULIB_VSPRINTF_POSIX@
-GNULIB_WAITPID = @GNULIB_WAITPID@
 GNULIB_WCPCPY = @GNULIB_WCPCPY@
 GNULIB_WCPNCPY = @GNULIB_WCPNCPY@
 GNULIB_WCRTOMB = @GNULIB_WCRTOMB@
@@ -808,7 +805,6 @@ NEXT_AS_FIRST_DIRECTIVE_STRING_H = @NEXT_AS_FIRST_DIRECTIVE_STRING_H@
 NEXT_AS_FIRST_DIRECTIVE_SYSEXITS_H = @NEXT_AS_FIRST_DIRECTIVE_SYSEXITS_H@
 NEXT_AS_FIRST_DIRECTIVE_SYS_STAT_H = @NEXT_AS_FIRST_DIRECTIVE_SYS_STAT_H@
 NEXT_AS_FIRST_DIRECTIVE_SYS_TIME_H = @NEXT_AS_FIRST_DIRECTIVE_SYS_TIME_H@
-NEXT_AS_FIRST_DIRECTIVE_SYS_WAIT_H = @NEXT_AS_FIRST_DIRECTIVE_SYS_WAIT_H@
 NEXT_AS_FIRST_DIRECTIVE_TIME_H = @NEXT_AS_FIRST_DIRECTIVE_TIME_H@
 NEXT_AS_FIRST_DIRECTIVE_UNISTD_H = @NEXT_AS_FIRST_DIRECTIVE_UNISTD_H@
 NEXT_AS_FIRST_DIRECTIVE_WCHAR_H = @NEXT_AS_FIRST_DIRECTIVE_WCHAR_H@
@@ -830,7 +826,6 @@ NEXT_STRING_H = @NEXT_STRING_H@
 NEXT_SYSEXITS_H = @NEXT_SYSEXITS_H@
 NEXT_SYS_STAT_H = @NEXT_SYS_STAT_H@
 NEXT_SYS_TIME_H = @NEXT_SYS_TIME_H@
-NEXT_SYS_WAIT_H = @NEXT_SYS_WAIT_H@
 NEXT_TIME_H = @NEXT_TIME_H@
 NEXT_UNISTD_H = @NEXT_UNISTD_H@
 NEXT_WCHAR_H = @NEXT_WCHAR_H@
@@ -1210,7 +1205,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/flock.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/waitpid.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-appendstr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-cleanup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-debug.Plo@am__quote@

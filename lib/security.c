@@ -32,12 +32,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
-
 #include <sys/types.h>
-
-#if HAVE_SYS_WAIT_H
-#  include <sys/wait.h>
-#endif
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -155,6 +150,18 @@ void regain_effective_privs (void)
 #endif /* SECURE_MAN_UID */
 }
 
+#ifdef SECURE_MAN_UID
+void do_system_drop_privs_child (void *data)
+{
+	pipeline *p = data;
+	int status;
+
+	if (idpriv_drop ())
+		gripe_set_euid ();
+	exit (pipeline_run (p));
+}
+#endif /* SECURE_MAN_UID */
+
 /* The safest way to execute a pipeline with no effective privileges is to
  * fork, permanently drop privileges in the child, run the pipeline from the
  * child, and wait for it to die.
@@ -168,31 +175,14 @@ void regain_effective_privs (void)
 int do_system_drop_privs (pipeline *p)
 {
 #ifdef SECURE_MAN_UID
-	pid_t child;
+	pipecmd *child_cmd;
+	pipeline *child;
 	int status;
 
-	fflush (NULL);
-	child = fork ();
-
-	if (child < 0) {
-		error (0, errno, _("can't fork"));
-		status = 0;
-	} else if (child == 0) {
-		pop_all_cleanups ();
-		if (idpriv_drop ())
-			gripe_set_euid ();
-		exit (pipeline_run (p));
-	} else {
-		pid_t res;
-		int save = errno;
-		do {	/* cope with non-restarting system calls */
-			res = waitpid (child, &status, 0);
-		} while (res == -1 && errno == EINTR);
-		if (res == -1)
-			status = -1;
-		else
-			errno = save;
-	}
+	child_cmd = pipecmd_new_function ("unprivileged child",
+					  do_system_drop_privs_child, NULL, p);
+	child = pipeline_new_commands (child_cmd, NULL);
+	status = pipeline_run (child);
 
 	pipeline_free (p);
 	return status;
