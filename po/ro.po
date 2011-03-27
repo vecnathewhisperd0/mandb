@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.2-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2011-01-08 18:18+0000\n"
+"POT-Creation-Date: 2011-03-27 18:21+0100\n"
 "PO-Revision-Date: 2003-10-27 08:40+0200\n"
 "Last-Translator: Eugen Hoanca <eugenh@urban-grafx.ro>\n"
 "Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
@@ -16,20 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/security.c:79
+#: lib/security.c:74
 #, c-format
 msgid "can't set effective uid"
 msgstr "nu se poate seta uid efectiv"
 
-#: lib/security.c:106 src/mandb.c:754
+#: lib/security.c:101 src/mandb.c:771
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "utilizatorul man setuidat \"%s\" nu existã"
-
-#: lib/security.c:178
-#, c-format
-msgid "can't fork"
-msgstr "nu se poate face fork"
 
 #: lib/xregcomp.c:47
 #, c-format
@@ -66,7 +61,7 @@ msgstr "numai %d câmpuri în conþinut"
 msgid "bad fetch on multi key %s"
 msgstr "aducere(fetch) incorectã în multi chei %s"
 
-#: libdb/db_lookup.c:452 src/whatis.c:573
+#: libdb/db_lookup.c:452 src/whatis.c:574
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Baza de date %s e coruptã; reconstruiþi cu mandb --create"
@@ -95,9 +90,9 @@ msgstr ""
 msgid "The man database defaults to %s%s."
 msgstr ""
 
-#: src/accessdb.c:64 src/catman.c:99 src/globbing_test.c:58
-#: src/lexgrog_test.c:67 src/man.c:273 src/manconv_main.c:94 src/mandb.c:102
-#: src/manpath.c:65 src/whatis.c:120 src/zsoelim_main.c:66
+#: src/accessdb.c:64 src/catman.c:98 src/globbing_test.c:58
+#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:103
+#: src/manpath.c:65 src/whatis.c:121 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr ""
 
@@ -106,60 +101,45 @@ msgstr ""
 msgid "can't open %s for reading"
 msgstr "nu se poate deschide %s pentru citire"
 
-#: src/catman.c:96
+#: src/catman.c:95
 msgid "[SECTION...]"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:293 src/whatis.c:130
+#: src/catman.c:99 src/man.c:293 src/whatis.c:131
 msgid "PATH"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:293 src/whatis.c:130
+#: src/catman.c:99 src/man.c:293 src/whatis.c:131
 msgid "set search path for manual pages to PATH"
 msgstr ""
 
-#: src/catman.c:101 src/man.c:272 src/mandb.c:110 src/manpath.c:67
-#: src/whatis.c:132
+#: src/catman.c:100 src/man.c:272 src/mandb.c:111 src/manpath.c:67
+#: src/whatis.c:133
 msgid "FILE"
 msgstr ""
 
-#: src/catman.c:101 src/man.c:272 src/mandb.c:110 src/manpath.c:67
-#: src/whatis.c:132
+#: src/catman.c:100 src/man.c:272 src/mandb.c:111 src/manpath.c:67
+#: src/whatis.c:133
 #, fuzzy
 msgid "use this user configuration file"
 msgstr "nu se poate deschide fiºierul de configurare al cãii de man %s"
 
-#: src/catman.c:172
+#: src/catman.c:171
 #, c-format
 msgid "cannot read database %s"
 msgstr "nu se poate citi baza de date %s."
 
-#: src/catman.c:199
-#, c-format
-msgid "fork failed"
-msgstr "fork eºuat"
-
-#: src/catman.c:211
-#, c-format
-msgid "can't get man command's exit status"
-msgstr "nu s-a putut afla starea de ieºire a comenzii man"
-
-#: src/catman.c:214
+#: src/catman.c:204
 #, c-format
 msgid "man command failed with exit status %d"
 msgstr "comanda man a eºuat cu stare de ieºire %d"
 
-#: src/catman.c:267
-#, c-format
-msgid "unable to reset cursor position in %s"
-msgstr "nu se poate reseta poziþia cursorului în %s"
-
-#: src/catman.c:320
+#: src/catman.c:276
 #, c-format
 msgid "NULL content for key: %s"
 msgstr "conþinut NULL pentru cheia: %s"
 
-#: src/catman.c:335
+#: src/catman.c:291
 #, c-format
 msgid ""
 "\n"
@@ -168,67 +148,67 @@ msgstr ""
 "\n"
 "Se înnoiesc(update) fiºierele cat pentru secþiunea %s a ierarhiei man %s\n"
 
-#: src/catman.c:400
+#: src/catman.c:345
 #, c-format
 msgid "cannot write within %s"
 msgstr "nu se poate scrie în %s"
 
-#: src/catman.c:474
+#: src/catman.c:422
 #, c-format
 msgid "unable to update %s"
 msgstr "nu se poate înnoi(update) %s"
 
-#: src/check_mandirs.c:92
+#: src/check_mandirs.c:107
 #, c-format
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "avertisment: %s/man%s/%s.%s*: extensii concurente"
 
-#: src/check_mandirs.c:104 src/check_mandirs.c:523
+#: src/check_mandirs.c:119 src/check_mandirs.c:545
 #, c-format
 msgid "can't update index cache %s"
 msgstr "nu se poate înnoi(update) index cache %s"
 
-#: src/check_mandirs.c:229
+#: src/check_mandirs.c:248
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
 msgstr "avertisment: %s: symlink eronat sau cerere ROFF `.so'"
 
-#: src/check_mandirs.c:284
+#: src/check_mandirs.c:306
 #, c-format
 msgid "warning: %s: ignoring empty file"
 msgstr "avertisment: %s: se ignorã fiºierul vid."
 
-#: src/check_mandirs.c:288 src/straycats.c:265
+#: src/check_mandirs.c:310 src/straycats.c:267
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "avertisment: %s: analiza(parse) whatis pentru %s(%s) eºuatã"
 
-#: src/check_mandirs.c:314 src/check_mandirs.c:418 src/mandb.c:811
-#: src/straycats.c:86 src/straycats.c:293 src/ult_src.c:91
+#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:828
+#: src/straycats.c:88 src/straycats.c:295 src/ult_src.c:92
 #, c-format
 msgid "can't search directory %s"
 msgstr "nu se poate cãuta directorul %s"
 
-#: src/check_mandirs.c:353 src/check_mandirs.c:380
+#: src/check_mandirs.c:375 src/check_mandirs.c:402
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "avertisment: nu se poate crea catdir %s"
 
-#: src/check_mandirs.c:461
+#: src/check_mandirs.c:483
 #, c-format
 msgid "can't create index cache %s"
 msgstr "nu se poate crea index cache-ului %s"
 
-#: src/check_mandirs.c:484
+#: src/check_mandirs.c:506
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Se înnoieºte(update) index cache-ul pentru calea `%s%s'. Aºteptaþi..."
 
-#: src/check_mandirs.c:581 src/check_mandirs.c:649
+#: src/check_mandirs.c:603 src/check_mandirs.c:671
 msgid "done.\n"
 msgstr "efectuat.\n"
 
-#: src/check_mandirs.c:893
+#: src/check_mandirs.c:915
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Se curãþã(purge) intrãrile vechi ale bazei de date în %s...\n"
@@ -238,12 +218,12 @@ msgstr "Se curãþã(purge) intrãrile vechi ale bazei de date în %s...\n"
 msgid "Can't convert %s to cat name"
 msgstr "Nu pot converti %s în nume cat"
 
-#: src/descriptions_store.c:45
+#: src/descriptions_store.c:47
 #, c-format
 msgid "warning: failed to store entry for %s(%s)"
 msgstr "avertisment: am eºuat în depozitarea intrãrii pentru %s (%s)"
 
-#: src/filenames.c:47 src/straycats.c:118 src/straycats.c:147
+#: src/filenames.c:47 src/straycats.c:120 src/straycats.c:149
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "avertisment: %s: se ignorã numele de fiºier fals(bogus)"
@@ -276,51 +256,51 @@ msgstr ""
 msgid "the page name contains wildcards"
 msgstr ""
 
-#: src/lexgrog.l:663
+#: src/lexgrog.l:664
 #, c-format
 msgid "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr "avertisment: whatis pentru %s depãºeºte %d octeþi, se trunchiazã."
 
-#: src/lexgrog.l:811 src/man.c:2520 src/man.c:2601 src/man.c:2697
-#: src/manconv_main.c:165 src/straycats.c:213 src/ult_src.c:277
-#: src/ult_src.c:291 src/zsoelim.l:495
+#: src/lexgrog.l:812 src/man.c:2532 src/man.c:2613 src/man.c:2709
+#: src/manconv_main.c:165 src/straycats.c:215 src/ult_src.c:307
+#: src/ult_src.c:321 src/zsoelim.l:495
 #, c-format
 msgid "can't open %s"
 msgstr "nu se poate deschide %s"
 
-#: src/lexgrog_test.c:63 src/zsoelim_main.c:63
+#: src/lexgrog_test.c:64 src/zsoelim_main.c:63
 msgid "FILE..."
 msgstr ""
 
-#: src/lexgrog_test.c:64
+#: src/lexgrog_test.c:65
 msgid "The defaults are --man and --whatis."
 msgstr ""
 
-#: src/lexgrog_test.c:68
+#: src/lexgrog_test.c:69
 msgid "parse as man page"
 msgstr ""
 
-#: src/lexgrog_test.c:69
+#: src/lexgrog_test.c:70
 msgid "parse as cat page"
 msgstr ""
 
-#: src/lexgrog_test.c:70
+#: src/lexgrog_test.c:71
 msgid "show whatis information"
 msgstr ""
 
-#: src/lexgrog_test.c:71
+#: src/lexgrog_test.c:72
 msgid "show guessed series of preprocessing filters"
 msgstr ""
 
-#: src/lexgrog_test.c:72 src/man.c:288 src/man.c:313
+#: src/lexgrog_test.c:73 src/man.c:288 src/man.c:313
 msgid "ENCODING"
 msgstr ""
 
-#: src/lexgrog_test.c:72 src/man.c:313
+#: src/lexgrog_test.c:73 src/man.c:313
 msgid "use selected output encoding"
 msgstr ""
 
-#: src/lexgrog_test.c:116 src/man.c:541 src/man.c:551
+#: src/lexgrog_test.c:117 src/man.c:541 src/man.c:551
 #, fuzzy, c-format
 msgid "%s: incompatible options"
 msgstr ": opþiuni incompatibile"
@@ -387,7 +367,7 @@ msgstr ""
 msgid "Finding manual pages:"
 msgstr " Paginã de manual "
 
-#: src/man.c:291 src/whatis.c:131
+#: src/man.c:291 src/whatis.c:132
 msgid "LOCALE"
 msgstr ""
 
@@ -395,15 +375,15 @@ msgstr ""
 msgid "define the locale for this particular man search"
 msgstr ""
 
-#: src/man.c:292 src/manpath.c:68 src/whatis.c:129
+#: src/man.c:292 src/manpath.c:68 src/whatis.c:130
 msgid "SYSTEM"
 msgstr ""
 
-#: src/man.c:292 src/manpath.c:68 src/whatis.c:129
+#: src/man.c:292 src/manpath.c:68 src/whatis.c:130
 msgid "use manual pages from other systems"
 msgstr ""
 
-#: src/man.c:294 src/whatis.c:127
+#: src/man.c:294 src/whatis.c:128
 msgid "LIST"
 msgstr ""
 
@@ -511,7 +491,7 @@ msgstr ""
 msgid "use groff and force it to produce ditroff"
 msgstr ""
 
-#: src/man.c:598 src/man.c:714
+#: src/man.c:598 src/man.c:720
 #, fuzzy, c-format
 msgid "No manual entry for %s\n"
 msgstr "Nu existã intrare în manual pentru %s"
@@ -525,87 +505,87 @@ msgstr "Ce paginã de manual doriþi din secþiunea %s?\n"
 msgid "What manual page do you want?\n"
 msgstr "Ce paginã de manual doriþi?\n"
 
-#: src/man.c:711
+#: src/man.c:717
 #, fuzzy, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Nu existã intrare în manual pentru %s"
 
-#: src/man.c:719
+#: src/man.c:725
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 "Citiþi `%s' pentru ajutor în caz cã paginile de manual nu sunt disponibile.\n"
 
-#: src/man.c:910 src/man.c:2412
+#: src/man.c:916 src/man.c:2424
 #, c-format
 msgid "can't chdir to %s"
 msgstr "nu se poate schimba directorul(chdir) în %s"
 
-#: src/man.c:1129
+#: src/man.c:1139
 msgid " Manual page "
 msgstr " Paginã de manual "
 
-#: src/man.c:1179 src/man.c:3478
+#: src/man.c:1190 src/man.c:3509
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "comanda mandb a eºuat cu stare de ieºire %d"
 
-#: src/man.c:1724
+#: src/man.c:1736
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "se ignorã preprocesorul necunoscut `%c'"
 
-#: src/man.c:1999 src/mandb.c:304
+#: src/man.c:2011 src/mandb.c:305
 #, c-format
 msgid "can't chown %s"
 msgstr "nu se poate face chown pe %s"
 
-#: src/man.c:2011 src/mandb.c:218
+#: src/man.c:2023 src/mandb.c:219
 #, c-format
 msgid "can't chmod %s"
 msgstr "nu se poate face chmod pe %s"
 
-#: src/man.c:2022 src/mandb.c:209
+#: src/man.c:2034 src/mandb.c:210
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "nu se poate redenumi %s în %s"
 
-#: src/man.c:2041
+#: src/man.c:2053
 #, c-format
 msgid "can't set times on %s"
 msgstr "nu se poate seta timpul pe %s"
 
-#: src/man.c:2050
+#: src/man.c:2062
 #, c-format
 msgid "can't unlink %s"
 msgstr "nu se poate scoate linkul(unlink) la %s"
 
-#: src/man.c:2101
+#: src/man.c:2113
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "nu se poate crea un nume de fiºier temporar"
 
-#: src/man.c:2215
+#: src/man.c:2227
 #, fuzzy, c-format
 msgid "can't create temporary directory"
 msgstr "nu se poate crea un nume de fiºier temporar"
 
-#: src/man.c:2217 src/man.c:2258 src/man.c:2287
+#: src/man.c:2229 src/man.c:2270 src/man.c:2299
 #, c-format
 msgid "can't change to directory %s"
 msgstr "nu se poate schimba în directorul %s"
 
-#: src/man.c:2228
+#: src/man.c:2240
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "nu se poate deschide fiºierul de configurare al cãii de man %s"
 
-#: src/man.c:2264 src/man.c:2292
+#: src/man.c:2276 src/man.c:2304
 #, c-format
 msgid "can't remove directory %s"
 msgstr "nu se poate ºterge directorul %s"
 
-#: src/man.c:2643
+#: src/man.c:2655
 #, c-format
 msgid ""
 "\n"
@@ -614,17 +594,17 @@ msgstr ""
 "\n"
 "nu se poate scrie în %s în modul catman"
 
-#: src/man.c:3332
+#: src/man.c:3361
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: încrederea în referinþele whatis este învechitã\n"
 
-#: src/man.c:3678
+#: src/man.c:3709
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "eroare internã: candidatul tip %d depãºeºte domeniul"
 
-#: src/man.c:3941
+#: src/man.c:3975
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -674,75 +654,75 @@ msgstr ""
 msgid "must specify an output encoding"
 msgstr ""
 
-#: src/mandb.c:99
+#: src/mandb.c:100
 msgid "[MANPATH]"
 msgstr ""
 
-#: src/mandb.c:103
+#: src/mandb.c:104
 msgid "work quietly, except for 'bogus' warning"
 msgstr ""
 
-#: src/mandb.c:104
+#: src/mandb.c:105
 msgid "don't look for or add stray cats to the dbs"
 msgstr ""
 
-#: src/mandb.c:105
+#: src/mandb.c:106
 msgid "don't purge obsolete entries from the dbs"
 msgstr ""
 
-#: src/mandb.c:106
+#: src/mandb.c:107
 msgid "produce user databases only"
 msgstr ""
 
-#: src/mandb.c:107
+#: src/mandb.c:108
 msgid "create dbs from scratch, rather than updating"
 msgstr ""
 
-#: src/mandb.c:108
+#: src/mandb.c:109
 msgid "check manual pages for correctness"
 msgstr ""
 
-#: src/mandb.c:109
+#: src/mandb.c:110
 msgid "FILENAME"
 msgstr ""
 
-#: src/mandb.c:109
+#: src/mandb.c:110
 msgid "update just the entry for this filename"
 msgstr ""
 
-#: src/mandb.c:202
+#: src/mandb.c:203
 #, c-format
 msgid "can't remove %s"
 msgstr "nu se poate ºterge %s"
 
-#: src/mandb.c:252
+#: src/mandb.c:253
 #, c-format
 msgid "can't write to %s"
 msgstr "nu se poate scrie în %s"
 
-#: src/mandb.c:257
+#: src/mandb.c:258
 #, c-format
 msgid "can't read from %s"
 msgstr "nu se poate citi din %s"
 
-#: src/mandb.c:428
+#: src/mandb.c:429
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Se proceseazã paginile de manual sub %s...\n"
 
-#: src/mandb.c:609 src/mandb.c:636
+#: src/mandb.c:610 src/mandb.c:637
 #, fuzzy, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Se verificã cat-urile rãtãcite sub %s...\n"
 
-#: src/mandb.c:776
+#: src/mandb.c:793
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "avertisment: nu existã directive MANDB_MAP în %s, se foloseºte calea voastrã "
 "de man"
 
-#: src/mandb.c:849
+#: src/mandb.c:866
 #, c-format
 msgid ""
 "%d man subdirectories contained newer manual pages.\n"
@@ -751,92 +731,92 @@ msgstr ""
 "%d subdirectoare man conþin pagini de manual noi.\n"
 "%d pagini de manual au fost adãugate.\n"
 
-#: src/mandb.c:853
+#: src/mandb.c:870
 #, c-format
 msgid "%d stray cats were added.\n"
 msgstr "%d cat-uri rãtãcite au fost adãugate.\n"
 
-#: src/mandb.c:855
+#: src/mandb.c:872
 #, c-format
 msgid "%d old database entries were purged.\n"
 msgstr "%d intrãri vechi în baza de date au fost eliminate.\n"
 
-#: src/mandb.c:870
+#: src/mandb.c:887
 #, fuzzy, c-format
 msgid "No databases created."
 msgstr "Nici o bazã de date înnoitã (updated)."
 
-#: src/manp.c:320
+#: src/manp.c:331
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "nu pot înþelege fiºierul de configuraþie pentru cale man %s"
 
-#: src/manp.c:326
+#: src/manp.c:337
 #, c-format
 msgid "warning: %s"
 msgstr "avertisment: %s"
 
-#: src/manp.c:332
+#: src/manp.c:343
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "avertisment: %s nu este un director"
 
-#: src/manp.c:337
+#: src/manp.c:348
 #, c-format
 msgid "manpath list too long"
 msgstr "lista de cãi man este prea lungã"
 
-#: src/manp.c:666
+#: src/manp.c:677
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "avertisment: nu este setat $PATH"
 
-#: src/manp.c:673
+#: src/manp.c:684
 #, fuzzy, c-format
 msgid "warning: empty $PATH"
 msgstr "avertisment: %PATH vid"
 
-#: src/manp.c:701
+#: src/manp.c:712
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "avertisment: $MANPATH setat, se adaugã la început(prepending) %s"
 
-#: src/manp.c:712
+#: src/manp.c:723
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "avertisment: $MANPATH setat, se adaugã(append) %s"
 
-#: src/manp.c:724
+#: src/manp.c:735
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "avertisment: $MANPATH setat, se insereazã %s"
 
-#: src/manp.c:738
+#: src/manp.c:749
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "avertisment: $MANPATH setat, se ignorã %s"
 
-#: src/manp.c:797
+#: src/manp.c:808
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "nu se poate analiza(parse) lista de directoare `%s'"
 
-#: src/manp.c:852
+#: src/manp.c:863
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "nu se poate deschide fiºierul de configurare al cãii de man %s"
 
-#: src/manp.c:884
+#: src/manp.c:895
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "avertisment: directorul necesar %s nu existã"
 
-#: src/manp.c:1108
+#: src/manp.c:1119
 #, c-format
 msgid "can't determine current directory"
 msgstr "nu se poate determina directorul curent"
 
-#: src/manp.c:1296
+#: src/manp.c:1307
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "avertisment: %s nu începe cu %s"
@@ -855,86 +835,86 @@ msgid "warning: no global manpaths set in config file %s"
 msgstr ""
 "avertisment: nu existã cãi man globale setate în fiºierul de configurare %s"
 
-#: src/straycats.c:233 src/ult_src.c:135
+#: src/straycats.c:235 src/ult_src.c:136
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "avertisment: %s este un symlink nesigur(dangling)"
 
-#: src/straycats.c:236 src/ult_src.c:138 src/ult_src.c:220
+#: src/straycats.c:238 src/ult_src.c:139 src/ult_src.c:250
 #, c-format
 msgid "can't resolve %s"
 msgstr "nu se poate rezolva %s"
 
-#: src/straycats.c:298
+#: src/straycats.c:300
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "Se verificã cat-urile rãtãcite sub %s...\n"
 
-#: src/straycats.c:337
+#: src/straycats.c:339
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "avertisment: nu se poate înnoi(update) index cache-ul %s"
 
-#: src/ult_src.c:256
+#: src/ult_src.c:286
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s este auto-referinþã(self-referencing)"
 
-#: src/whatis.c:116
+#: src/whatis.c:117
 msgid "KEYWORD..."
 msgstr ""
 
-#: src/whatis.c:117
+#: src/whatis.c:118
 msgid "The --regex option is enabled by default."
 msgstr ""
 
-#: src/whatis.c:121
+#: src/whatis.c:122
 msgid "print verbose warning messages"
 msgstr ""
 
-#: src/whatis.c:122
+#: src/whatis.c:123
 msgid "interpret each keyword as a regex"
 msgstr ""
 
-#: src/whatis.c:123
+#: src/whatis.c:124
 msgid "search each keyword for exact match"
 msgstr ""
 
-#: src/whatis.c:124
+#: src/whatis.c:125
 msgid "the keyword(s) contain wildcards"
 msgstr ""
 
-#: src/whatis.c:125
+#: src/whatis.c:126
 msgid "require all keywords to match"
 msgstr ""
 
-#: src/whatis.c:126
+#: src/whatis.c:127
 msgid "do not trim output to terminal width"
 msgstr ""
 
-#: src/whatis.c:127
+#: src/whatis.c:128
 msgid "search only these sections (colon-separated)"
 msgstr ""
 
-#: src/whatis.c:131
+#: src/whatis.c:132
 msgid "define the locale for this search"
 msgstr ""
 
-#: src/whatis.c:228
+#: src/whatis.c:229
 #, c-format
 msgid "%s what?\n"
 msgstr "%s ce?\n"
 
-#: src/whatis.c:353 src/whatis.c:371
+#: src/whatis.c:354 src/whatis.c:372
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "avertisment: %s conþine o buclã pointer"
 
-#: src/whatis.c:365 src/whatis.c:373
+#: src/whatis.c:366 src/whatis.c:374
 msgid "(unknown subject)"
 msgstr "(subiect necunoscut)"
 
-#: src/whatis.c:724
+#: src/whatis.c:725
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: nimic potrivit.\n"
@@ -972,6 +952,18 @@ msgstr ""
 #: src/zsoelim_main.c:67
 msgid "compatibility switch (ignored)"
 msgstr ""
+
+#~ msgid "can't fork"
+#~ msgstr "nu se poate face fork"
+
+#~ msgid "fork failed"
+#~ msgstr "fork eºuat"
+
+#~ msgid "can't get man command's exit status"
+#~ msgstr "nu s-a putut afla starea de ieºire a comenzii man"
+
+#~ msgid "unable to reset cursor position in %s"
+#~ msgstr "nu se poate reseta poziþia cursorului în %s"
 
 #~ msgid "badly formed configuration directive: '%s'"
 #~ msgstr "directivã de configurare greºit formatã: `%s'"
