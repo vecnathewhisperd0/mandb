@@ -69,7 +69,7 @@ AC_ARG_WITH([device],
 	 	nroff_device=" -T$withval"
 	 fi])
 AC_ARG_WITH([db],
-[AS_HELP_STRING([--with-db=LIBRARY], [use database library LIBRARY (db4, db3, db2, db1, db, gdbm, ndbm)])],
+[AS_HELP_STRING([--with-db=LIBRARY], [use database library LIBRARY (db5, db4, db3, db2, db1, db, gdbm, ndbm)])],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
 	 then
 	 	AC_MSG_ERROR([--with-db requires an argument])
@@ -443,6 +443,7 @@ then
 fi
 
 # Check for Berkeley db routines (first version API).
+MAN_CHECK_BDB([db5 db], [db5/db_185.h db_185.h], [db5 db-5])
 MAN_CHECK_BDB([db4 db], [db4/db_185.h db_185.h], [db4 db-4])
 MAN_CHECK_BDB([db3 db], [db3/db_185.h db_185.h], [db3])
 MAN_CHECK_BDB([db2 db], [db_185.h db2/db_185.h db2_185.h], [db2 db])
