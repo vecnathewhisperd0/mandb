@@ -14213,8 +14213,8 @@ $as_echo "ambiguous" >&6; }
 $as_echo "$as_me: WARNING: please edit include/manconfig.h and add nroff definition" >&2;}
 	fi
 else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cannot find an nroff-like program" >&5
-$as_echo "$as_me: WARNING: Cannot find an nroff-like program" >&2;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cannot find an nroff-like program, formatting of manual page source will not be supported." >&5
+$as_echo "$as_me: WARNING: Cannot find an nroff-like program, formatting of manual page source will not be supported." >&2;}
 	nroff="(nroff not installed)"
 
 $as_echo "#define NROFF_MISSING 1" >>confdefs.h
@@ -37333,7 +37333,7 @@ fi
 eval ac_res=\$$as_man_tr_bdb
 	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
 $as_echo "$ac_res" >&6; }
-        if test `eval 'as_val=${'$as_man_tr_bdb'};$as_echo "$as_val"'` = yes; then :
+        if eval test \"x\$"$as_man_tr_bdb"\" = x"yes"; then :
 
 
 cat >>confdefs.h <<_ACEOF
@@ -37345,10 +37345,10 @@ cat >>confdefs.h <<_ACEOF
 #define BTREE 1
 _ACEOF
 
-               DBTYPE=btree
+                   DBTYPE=btree
 
-               DBLIBS="-l$lib"
-               db=yes
+                   DBLIBS="-l$lib"
+                   db=yes
 else
   db=no
 fi
@@ -37421,7 +37421,7 @@ fi
 eval ac_res=\$$as_man_tr_bdb
 	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
 $as_echo "$ac_res" >&6; }
-        if test `eval 'as_val=${'$as_man_tr_bdb'};$as_echo "$as_val"'` = yes; then :
+        if eval test \"x\$"$as_man_tr_bdb"\" = x"yes"; then :
 
 
 cat >>confdefs.h <<_ACEOF
@@ -37433,10 +37433,10 @@ cat >>confdefs.h <<_ACEOF
 #define BTREE 1
 _ACEOF
 
-               DBTYPE=btree
+                   DBTYPE=btree
 
-               DBLIBS="-l$lib"
-               db=yes
+                   DBLIBS="-l$lib"
+                   db=yes
 else
   db=no
 fi
@@ -37509,7 +37509,7 @@ fi
 eval ac_res=\$$as_man_tr_bdb
 	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
 $as_echo "$ac_res" >&6; }
-        if test `eval 'as_val=${'$as_man_tr_bdb'};$as_echo "$as_val"'` = yes; then :
+        if eval test \"x\$"$as_man_tr_bdb"\" = x"yes"; then :
 
 
 cat >>confdefs.h <<_ACEOF
@@ -37521,10 +37521,10 @@ cat >>confdefs.h <<_ACEOF
 #define BTREE 1
 _ACEOF
 
-               DBTYPE=btree
+                   DBTYPE=btree
 
-               DBLIBS="-l$lib"
-               db=yes
+                   DBLIBS="-l$lib"
+                   db=yes
 else
   db=no
 fi
@@ -37597,7 +37597,7 @@ fi
 eval ac_res=\$$as_man_tr_bdb
 	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
 $as_echo "$ac_res" >&6; }
-        if test `eval 'as_val=${'$as_man_tr_bdb'};$as_echo "$as_val"'` = yes; then :
+        if eval test \"x\$"$as_man_tr_bdb"\" = x"yes"; then :
 
 
 cat >>confdefs.h <<_ACEOF
@@ -37609,10 +37609,10 @@ cat >>confdefs.h <<_ACEOF
 #define BTREE 1
 _ACEOF
 
-               DBTYPE=btree
+                   DBTYPE=btree
 
-               DBLIBS="-l$lib"
-               db=yes
+                   DBLIBS="-l$lib"
+                   db=yes
 else
   db=no
 fi

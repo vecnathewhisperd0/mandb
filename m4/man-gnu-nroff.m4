@@ -1,4 +1,4 @@
-# man-gnu-nroff.m4 serial 1
+# man-gnu-nroff.m4 serial 2
 dnl
 dnl Check to see if nroff is GNU nroff, take nroff path as arg.
 dnl
@@ -18,7 +18,7 @@ EOF
 
 if test "$man_cv_prog_gnu_nroff" = "yes" 
 then
-	AC_DEFINE([GNU_NROFF], 1, [Define if nroff is GNU nroff.])
+	AC_DEFINE([GNU_NROFF], [1], [Define if nroff is GNU nroff.])
 fi
 AC_MSG_RESULT([$man_cv_prog_gnu_nroff])
 ])

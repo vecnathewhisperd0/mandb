@@ -1,4 +1,4 @@
-# man-linguas.m4 serial 1
+# man-linguas.m4 serial 2
 dnl MAN_LINGUAS
 dnl Compute the set of localised manual pages to install, taking the LINGUAS
 dnl environment variable into account if set.
@@ -23,7 +23,7 @@ dnl Authors:
 dnl   Ulrich Drepper <drepper@cygnus.com>, 1995-2000.
 dnl   Bruno Haible <haible@clisp.cons.org>, 2000-2003.
 
-AC_PREREQ(2.50)
+AC_PREREQ([2.50])
 
 AC_DEFUN([MAN_LINGUAS],
 [

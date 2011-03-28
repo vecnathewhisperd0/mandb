@@ -3,12 +3,12 @@ m4_pattern_forbid([^MAN_])
 
 # Initialise and check we're in the correct directory.
 AC_INIT([man-db], [2.6.0-pre1], [cjwatson@debian.org])
-AC_CONFIG_AUX_DIR(tools)
+AC_CONFIG_AUX_DIR([tools])
 AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign])
 AM_MAINTAINER_MODE
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_PREREQ([2.59])
-AC_CONFIG_SRCDIR(src/man.c)
+AC_CONFIG_SRCDIR([src/man.c])
 AC_GNU_SOURCE
 LT_INIT([disable-static])
 
@@ -16,19 +16,19 @@ if test ! -f "$srcdir/gnulib/po/Makefile.in.in"; then
 	AC_MSG_ERROR([you must run ./autogen.sh before ./configure when building from revision control])
 fi
 
-AC_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
 
 # Define below date and version information to be put into man pages etc.
 date=2011-03-27
-AC_SUBST(date)dnl
+AC_SUBST([date])dnl
 roff_version=`echo AC_PACKAGE_VERSION | sed 's/-/\\-/g'`
-AC_SUBST(roff_version)dnl
+AC_SUBST([roff_version])dnl
 
 # We have to be a bit naughty here and supply options.
 # The autoconf literature states that only features that can be separately
 # 'built' should use --enable and friends. Oh well...
-AC_ARG_ENABLE(setuid,
+AC_ARG_ENABLE([setuid],
 [AS_HELP_STRING([--enable-setuid[=ARG]], [install man setuid to user ARG [ARG=man]])
 AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 	  [if test "$enableval" = "yes" 
@@ -44,73 +44,73 @@ AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 		man_owner=$enableval
 		man_mode="4755"
 		AC_MSG_NOTICE([Man will be installed setuid $enableval])
-	   	AC_DEFINE_UNQUOTED(SECURE_MAN_UID, "$man_owner",
+	   	AC_DEFINE_UNQUOTED([SECURE_MAN_UID], ["$man_owner"],
 				   [Define as the setuid owner of man or undefine if not installing setuid.])
 	   fi],
 	  [man_owner=man
 	   man_mode="4755"
-	   AC_DEFINE_UNQUOTED(SECURE_MAN_UID, "$man_owner")])
-AC_ARG_ENABLE(undoc,
+	   AC_DEFINE_UNQUOTED([SECURE_MAN_UID], ["$man_owner"])])
+AC_ARG_ENABLE([undoc],
 [AS_HELP_STRING([--enable-undoc=COMMAND], [suggest COMMAND for missing manual pages])],
 	[if test "$enableval" = "yes" || test "$enableval" = "no"
 	 then
-		AC_MSG_ERROR(--enable-undoc requires an argument)
+		AC_MSG_ERROR([--enable-undoc requires an argument])
 	 else
 		AC_MSG_NOTICE([Suggesting '$enableval' for missing manual pages])
-		AC_DEFINE_UNQUOTED(UNDOC_COMMAND, "$enableval",
+		AC_DEFINE_UNQUOTED([UNDOC_COMMAND], ["$enableval"],
 				   [Define as the name of a command you want to suggest when a non-existent page is requested.])
 	 fi])
-AC_ARG_WITH(device,
+AC_ARG_WITH([device],
 [AS_HELP_STRING([--with-device=DEVICE], [use nroff with the output device DEVICE])],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
 	 then
-	 	AC_MSG_ERROR(--with-device requires an argument)
+	 	AC_MSG_ERROR([--with-device requires an argument])
 	 else
 	 	nroff_device=" -T$withval"
 	 fi])
-AC_ARG_WITH(db,
+AC_ARG_WITH([db],
 [AS_HELP_STRING([--with-db=LIBRARY], [use database library LIBRARY (db4, db3, db2, db1, db, gdbm, ndbm)])],
 	[if test "$withval" = "yes" || test "$withval" = "no" 
 	 then
-	 	AC_MSG_ERROR(--with-db requires an argument)
+	 	AC_MSG_ERROR([--with-db requires an argument])
 	 else
 	 	db=$withval
 	 fi],
-	 : ${db=no})
-AC_ARG_WITH(config-file,
+	[: ${db=no}])
+AC_ARG_WITH([config-file],
 [AS_HELP_STRING([--with-config-file=CF], [use config file CF [CF=SYSCONFDIR/man_db.conf]])],
 	[if test "$withval" = "yes" || test "$withval" = "no"
 	 then
-		AC_MSG_ERROR(--with-config-file requires an argument)
+		AC_MSG_ERROR([--with-config-file requires an argument])
 	 else
 		config_file=$withval
 	 fi],
-	 : ${config_file=\$\{sysconfdir\}/man_db.conf})
+	[: ${config_file=\$\{sysconfdir\}/man_db.conf}])
 config_file_basename=${withval##*/}
 config_file_dirname=`AS_DIRNAME(["$config_file"])`
-AC_ARG_WITH(sections,
+AC_ARG_WITH([sections],
 [AS_HELP_STRING([--with-sections=SECTIONS], [use manual page sections SECTIONS @<:@1 n l 8 3 0 2 5 4 9 6 7@:>@])],
 	[if test "$withval" = "yes" || test "$withval" = "no"
 	 then
-		AC_MSG_ERROR(--with-sections requires an argument)
+		AC_MSG_ERROR([--with-sections requires an argument])
 	 else
 		sections="$withval"
 	 fi],
 	[: ${sections=1 n l 8 3 2 5 4 9 6 7}])
-AC_ARG_ENABLE(automatic-create,
+AC_ARG_ENABLE([automatic-create],
 [AS_HELP_STRING([--enable-automatic-create], [allow man to create user databases on the fly])],
 	[if test "$enableval" = "yes"
 	 then
 		AC_DEFINE([MAN_DB_CREATES], [1], [Allow man to create user databases on the fly.])
 	 fi])
-AC_ARG_ENABLE(automatic-update,
+AC_ARG_ENABLE([automatic-update],
 [AS_HELP_STRING([--disable-automatic-update], [don't allow man to update databases on the fly])],
 	[if test "$enableval" = "yes"
 	 then
 		AC_DEFINE([MAN_DB_UPDATES], [1], [Allow man to update databases on the fly.])
 	 fi],
 	[AC_DEFINE([MAN_DB_UPDATES], [1], [Allow man to update databases on the fly.])])
-AC_ARG_ENABLE(cats,
+AC_ARG_ENABLE([cats],
 [AS_HELP_STRING([--disable-cats], [don't allow man to create/update cat files])],
 	[if test "$enableval" = "yes"
 	 then
@@ -119,12 +119,12 @@ AC_ARG_ENABLE(cats,
 	[AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])])
 
 # Finish the argument parsing.
-AC_SUBST(man_owner)dnl
-AC_SUBST(man_mode)dnl
-AC_SUBST(config_file)dnl
-AC_SUBST(config_file_basename)dnl
-AC_SUBST(config_file_dirname)dnl
-AC_SUBST(sections)dnl
+AC_SUBST([man_owner])dnl
+AC_SUBST([man_mode])dnl
+AC_SUBST([config_file])dnl
+AC_SUBST([config_file_basename])dnl
+AC_SUBST([config_file_dirname])dnl
+AC_SUBST([sections])dnl
 
 # Check $PATH for the following programs and append suitable options.
 AC_PROG_CC
@@ -155,11 +155,11 @@ then
 fi
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AC_CHECK_PROGS(cat, cat)
+AC_CHECK_PROGS([cat], [cat])
 MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx])
 test -n "$browser" && browser="exec $browser"
-AC_CHECK_PROGS(tr, tr)
-AC_CHECK_PROGS(grep, grep)
+AC_CHECK_PROGS([tr], [tr])
+AC_CHECK_PROGS([grep], [grep])
 MAN_CHECK_PROGS([pager], [PAGER], [use PAGER as default pager], [pager less more])
 test -n "$pager" && pager="$pager -s"
 
@@ -171,26 +171,26 @@ macros="andoc an doc"
 MAN_CHECK_PROGS([nroff], [NROFF], [use NROFF as roff formatter for character devices], [nroff gnroff groff])
 if test -n "$nroff"
 then
-	MAN_PROG_GNU_NROFF($nroff)
+	MAN_PROG_GNU_NROFF([$nroff])
 	if test "$man_cv_prog_gnu_nroff" != "yes"
 	then
-		MAN_PROG_HEIRLOOM_NROFF($nroff)
+		MAN_PROG_HEIRLOOM_NROFF([$nroff])
 	fi
 	if test -n "$nroff_device" 
 	then
-		AC_MSG_CHECKING(that nroff works with argument$nroff_device)
+		AC_MSG_CHECKING([that nroff works with argument$nroff_device])
 		# We cannot cache this result as it can change between runs
 		# of configure.
 		if $nroff $nroff_device </dev/null >/dev/null 2>&1 3>&1
 		then 
-			AC_MSG_RESULT(yes)
+			AC_MSG_RESULT([yes])
 		else
-			AC_MSG_RESULT(no)
-			AC_MSG_ERROR(nroff does not work with argument$nroff_device)
+			AC_MSG_RESULT([no])
+			AC_MSG_ERROR([nroff does not work with argument$nroff_device])
 		fi
 	fi
-	AC_MSG_CHECKING(for appropriate nroff macro)
-	AC_CACHE_VAL(man_cv_prog_nroff_macro, [
+	AC_MSG_CHECKING([for appropriate nroff macro])
+	AC_CACHE_VAL([man_cv_prog_nroff_macro], [
 	
 	for macro in $macros
 	do
@@ -213,36 +213,36 @@ then
 		fi
 		nroff="$nroff ${man_cv_prog_nroff_macro}"
 dnl		nroff="$nroff ${man_cv_prog_nroff_macro}${nroff_device}"
-		AC_MSG_RESULT($man_cv_prog_nroff_macro)
+		AC_MSG_RESULT([$man_cv_prog_nroff_macro])
 	else
-		AC_MSG_RESULT(ambiguous)
-		AC_MSG_WARN(please edit include/manconfig.h and add nroff definition)
+		AC_MSG_RESULT([ambiguous])
+		AC_MSG_WARN([please edit include/manconfig.h and add nroff definition])
 	fi 
 else
-	AC_MSG_WARN(Cannot find an nroff-like program, formatting of manual page source will not be supported.)
+	AC_MSG_WARN([Cannot find an nroff-like program, formatting of manual page source will not be supported.])
 	nroff="(nroff not installed)"
-	AC_DEFINE(NROFF_MISSING, 1, [Define if you don't have nroff.])
+	AC_DEFINE([NROFF_MISSING], [1], [Define if you don't have nroff.])
 fi
 
 dnl It would be nice to use MAN_CHECK_PROGS here, but how do we determine
 dnl TROFF_IS_GROFF?
-AC_CHECK_PROGS(troff, groff)
+AC_CHECK_PROGS([troff], [groff])
 if test -n "$troff"
 then
 	troff_is_groff=yes
-	AC_DEFINE(TROFF_IS_GROFF, 1, [Define if you are using groff as troff.])
+	AC_DEFINE([TROFF_IS_GROFF], [1], [Define if you are using groff as troff.])
 	TROFF=groff
 else
 	troff_is_groff=no
-	AC_CHECK_PROGS(troff, troff gtroff)
+	AC_CHECK_PROGS([troff], [troff gtroff])
 	TROFF=troff
 fi
 AC_SUBST([TROFF])
 if test -n "$troff"
 then
-	AC_DEFINE(HAS_TROFF, 1, [Define if you have troff.])
-	AC_MSG_CHECKING(for appropriate $TROFF options)
-	AC_CACHE_VAL(man_cv_prog_troff_options, [
+	AC_DEFINE([HAS_TROFF], [1], [Define if you have troff.])
+	AC_MSG_CHECKING([for appropriate $TROFF options])
+	AC_CACHE_VAL([man_cv_prog_troff_options], [
 	# Do a quick test to see if -t works [AIX needs this], groff doesn't
 	# as it indicates pre-process with tbl.
 	test "$TROFF" = "troff" && $troff -t </dev/null >/dev/null 2>&1 3>&1 \
@@ -266,10 +266,10 @@ then
 			man_cv_prog_troff_options="-mg -msafe -mpadj ${man_cv_prog_troff_options}"
 		fi
 		troff="$troff $man_cv_prog_troff_options"
-		AC_MSG_RESULT($man_cv_prog_troff_options)
+		AC_MSG_RESULT([$man_cv_prog_troff_options])
 	else
-		AC_MSG_RESULT(ambiguous)
-		AC_MSG_WARN(please edit include/manconfig.h and add troff definition)
+		AC_MSG_RESULT([ambiguous])
+		AC_MSG_WARN([please edit include/manconfig.h and add troff definition])
 	fi
 else
 	troff="(troff not installed)"
@@ -279,7 +279,7 @@ AC_CHECK_PROGS([preconv], [gpreconv preconv])
 
 AC_MSG_CHECKING([for groff with Debian multibyte patch or real Unicode support])
 man_mb_groff=no
-AC_ARG_ENABLE(mb-groff,
+AC_ARG_ENABLE([mb-groff],
 [AS_HELP_STRING([--enable-mb-groff], [expect groff with Debian multibyte patch or real Unicode support])],
 	[if test "$enableval" = "yes"
 	 then
@@ -298,7 +298,7 @@ AC_ARG_ENABLE(mb-groff,
 AC_MSG_RESULT([$man_mb_groff])
 if test "$man_mb_groff" = "yes"
 then
-	AC_DEFINE(MULTIBYTE_GROFF, 1,
+	AC_DEFINE([MULTIBYTE_GROFF], 1,
 		  [Define if your groff installation has the Debian multibyte patch.])
 fi
 
@@ -356,24 +356,24 @@ fi
 fi
 if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$xz" || test -n "$lzma"
 then
-	AC_DEFINE(COMP_CAT, 1, [Define if you have compressors and want to support compressed cat files.])
-	AC_DEFINE(COMP_SRC, 1, [Define if you have compressors and want to support compressed manual source.])
+	AC_DEFINE([COMP_CAT], [1], [Define if you have compressors and want to support compressed cat files.])
+	AC_DEFINE([COMP_SRC], [1], [Define if you have compressors and want to support compressed manual source.])
 fi
-AC_SUBST(compressor)
-AC_SUBST(compress_ext)
-AC_SUBST(gunzip)
-AC_SUBST(uncompress)
-AC_SUBST(bunzip2)
-AC_SUBST(unlzma)
-AC_SUBST(unxz)
+AC_SUBST([compressor])
+AC_SUBST([compress_ext])
+AC_SUBST([gunzip])
+AC_SUBST([uncompress])
+AC_SUBST([bunzip2])
+AC_SUBST([unlzma])
+AC_SUBST([unxz])
 MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
 
 # Work out which manual page hierarchy scheme might be in use.
-AC_ARG_ENABLE(mandirs,
+AC_ARG_ENABLE([mandirs],
 [AS_HELP_STRING([--enable-mandirs=OS], [select manual page hierarchy organization (GNU, HPUX, IRIX, Solaris, BSD)])],
 	[AC_MSG_NOTICE([Using $enableval hierarchy organization(s)])
-	 AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$enableval",
+	 AC_DEFINE_UNQUOTED([MANDIR_LAYOUT], ["$enableval"],
 			    [Define to the manual page hierarchy organization(s) in use.])],
 	[case $host in
 		*-gnu)          mandirs=GNU;;
@@ -385,10 +385,10 @@ AC_ARG_ENABLE(mandirs,
 	 esac
 	 if test -n "$mandirs"; then
 		AC_MSG_NOTICE([Using $mandirs hierarchy organization])
-		AC_DEFINE_UNQUOTED(MANDIR_LAYOUT, "$mandirs")
+		AC_DEFINE_UNQUOTED([MANDIR_LAYOUT], ["$mandirs"])
 	 else
 		AC_MSG_NOTICE([Allowing any hierarchy organization])
-		AC_DEFINE(MANDIR_LAYOUT, "")
+		AC_DEFINE([MANDIR_LAYOUT], [""])
 	 fi])
 
 # Check for various header files and associated libraries.
@@ -398,12 +398,12 @@ AC_PROG_LEX
 gl_INIT
 AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(fcntl.h sys/file.h)
+AC_CHECK_HEADERS([fcntl.h sys/file.h])
 
 # Internationalization support.
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
-AC_SUBST(LINGUAS)
+AC_SUBST([LINGUAS])
 AM_ICONV
 MAN_PO4A
 MAN_LINGUAS
@@ -423,19 +423,19 @@ PKG_CHECK_MODULES([libpipeline], [libpipeline >= 1.1.0])
 # Check for GNU dbm routines.
 if test "$db" = "no" || test "$db" = "gdbm"
 then
-  AC_CHECK_HEADER(gdbm.h,[
+  AC_CHECK_HEADER([gdbm.h], [
     for lib in gdbm c dbm
     do
-      AC_CHECK_LIB($lib, gdbm_fetch,
+      AC_CHECK_LIB([$lib], [gdbm_fetch],
 		   test "$lib" = "c" || DBLIBS="-l$lib" 
-		   [AC_DEFINE(GDBM, 1, [Define if you have, and want to use, gdbm interface routines.])
+		   [AC_DEFINE([GDBM], [1], [Define if you have, and want to use, gdbm interface routines.])
 		    AC_SUBST([DBTYPE], [gdbm])]
 		   db=yes, db=no)
       if test "$db" = "yes" 
       then
         man_save_LIBS="$LIBS"
         LIBS="$LIBS $DBLIBS"
-        AC_CHECK_FUNCS(gdbm_exists)
+        AC_CHECK_FUNCS([gdbm_exists])
         LIBS="$man_save_LIBS"
         break
       fi
@@ -459,12 +459,12 @@ dnl MAN_CHECK_BDB([db], [db1/db.h], [db c], [AC_DEFINE(DB_ON_LIBC)])
 # Check for UNIX ndbm routines.
 if test "$db" = "no" || test "$db" = "ndbm"
 then
-  AC_CHECK_HEADER(ndbm.h,[
+  AC_CHECK_HEADER([ndbm.h], [
     for lib in ndbm c dbm
     do
-      AC_CHECK_LIB($lib, dbm_fetch,
+      AC_CHECK_LIB([$lib], [dbm_fetch],
 		   test "$lib" = "c" || DBLIBS="-l$lib"
-		   [AC_DEFINE(NDBM, 1, [Define if you have, and want to use, ndbm interface routines.])
+		   [AC_DEFINE([NDBM], [1], [Define if you have, and want to use, ndbm interface routines.])
 		    AC_SUBST([DBTYPE], [ndbm])]
 		   db=yes, db=no)
       test "$db" = "yes" && break
@@ -475,42 +475,42 @@ if test "$db" != "yes"
 then 
     if test "$db" = "no"
     then
-      AC_MSG_ERROR(Fatal: no supported database library/header found)
+      AC_MSG_ERROR([Fatal: no supported database library/header found])
     else
-      AC_MSG_ERROR(Fatal: $db: unsupported database library)
+      AC_MSG_ERROR([Fatal: $db: unsupported database library])
     fi
 fi
-AC_SUBST(DBLIBS)
+AC_SUBST([DBLIBS])
 
 # Check for available functions.
-AC_REPLACE_FUNCS(flock)
+AC_REPLACE_FUNCS([flock])
 
 dnl MAN_ECHO_VAR(ENV-VARIABLE)
-define(MAN_ECHO_VAR, [AC_MSG_NOTICE([default $1 = "$$1"])])dnl
+define([MAN_ECHO_VAR], [AC_MSG_NOTICE([default $1 = "$$1"])])dnl
 dnl
-MAN_ECHO_VAR(CC)
-MAN_ECHO_VAR(CPP)
-MAN_ECHO_VAR(CPPFLAGS)
-MAN_ECHO_VAR(CFLAGS)
-MAN_ECHO_VAR(LDFLAGS)
-MAN_ECHO_VAR(LIBS)
-MAN_ECHO_VAR(DBLIBS)
+MAN_ECHO_VAR([CC])
+MAN_ECHO_VAR([CPP])
+MAN_ECHO_VAR([CPPFLAGS])
+MAN_ECHO_VAR([CFLAGS])
+MAN_ECHO_VAR([LDFLAGS])
+MAN_ECHO_VAR([LIBS])
+MAN_ECHO_VAR([DBLIBS])
 
 # Transformed versions of program names for use in Automake variables.
-MAN_TRANS_SUBST(apropos)
-MAN_TRANS_SUBST(catman)
-MAN_TRANS_SUBST(lexgrog)
-MAN_TRANS_SUBST(man)
-MAN_TRANS_SUBST(manconv)
-MAN_TRANS_SUBST(mandb)
-MAN_TRANS_SUBST(manpath)
-MAN_TRANS_SUBST(whatis)
-MAN_TRANS_SUBST(zsoelim)
+MAN_TRANS_SUBST([apropos])
+MAN_TRANS_SUBST([catman])
+MAN_TRANS_SUBST([lexgrog])
+MAN_TRANS_SUBST([man])
+MAN_TRANS_SUBST([manconv])
+MAN_TRANS_SUBST([mandb])
+MAN_TRANS_SUBST([manpath])
+MAN_TRANS_SUBST([whatis])
+MAN_TRANS_SUBST([zsoelim])
 
 # If we're cross-compiling, tests won't work.
 AM_CONDITIONAL([CROSS_COMPILING], [test "x$cross_compiling" = xyes])
 
-AC_CONFIG_FILES(Makefile
+AC_CONFIG_FILES([Makefile
 	gnulib/lib/Makefile
 	gnulib/po/Makefile.in
 	lib/Makefile
@@ -535,5 +535,5 @@ AC_CONFIG_FILES(Makefile
 	tools/Makefile
 	include/comp_src.h
 	include/manconfig.h
-	po/Makefile.in)
+	po/Makefile.in])
 AC_OUTPUT
