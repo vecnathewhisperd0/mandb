@@ -164,6 +164,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module verify:
   # Code from module vsnprintf:
   # Code from module warn-on-use:
+  # Code from module warnings:
   # Code from module wchar:
   # Code from module wcrtomb:
   # Code from module wctype-h:
@@ -507,6 +508,8 @@ AC_SUBST([LTALLOCA])
   gl_FUNC_VSNPRINTF
   gl_STDIO_MODULE_INDICATOR([vsnprintf])
   # Code from module warn-on-use:
+  # Code from module warnings:
+  AC_SUBST([WARN_CFLAGS])
   # Code from module wchar:
   gl_WCHAR_H
   # Code from module wcrtomb:
@@ -1018,6 +1021,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/visibility.m4
   m4/vsnprintf.m4
   m4/warn-on-use.m4
+  m4/warnings.m4
   m4/wchar_h.m4
   m4/wchar_t.m4
   m4/wcrtomb.m4

@@ -824,6 +824,7 @@ HAVE_WINT_T
 HAVE_WCHAR_H
 NEXT_AS_FIRST_DIRECTIVE_WCHAR_H
 NEXT_WCHAR_H
+WARN_CFLAGS
 HAVE_FEATURES_H
 HAVE_UNISTD_H
 NEXT_AS_FIRST_DIRECTIVE_UNISTD_H
@@ -6104,13 +6105,13 @@ if test "${lt_cv_nm_interface+set}" = set; then :
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:6107: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:6108: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:6110: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:6111: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:6113: output\"" >&5)
+  (eval echo "\"\$as_me:6114: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -7315,7 +7316,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7318 "configure"' > conftest.$ac_ext
+  echo '#line 7319 "configure"' > conftest.$ac_ext
   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8576,11 +8577,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8579: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8580: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8583: \$? = $ac_status" >&5
+   echo "$as_me:8584: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8915,11 +8916,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8918: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8919: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8922: \$? = $ac_status" >&5
+   echo "$as_me:8923: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9020,11 +9021,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9023: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9024: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9027: \$? = $ac_status" >&5
+   echo "$as_me:9028: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9075,11 +9076,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9078: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9079: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9082: \$? = $ac_status" >&5
+   echo "$as_me:9083: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11459,7 +11460,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 11462 "configure"
+#line 11463 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11555,7 +11556,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 11558 "configure"
+#line 11559 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13331,6 +13332,7 @@ fi
   # Code from module verify:
   # Code from module vsnprintf:
   # Code from module warn-on-use:
+  # Code from module warnings:
   # Code from module wchar:
   # Code from module wcrtomb:
   # Code from module wctype-h:
@@ -13486,15 +13488,15 @@ case $host_os in
 esac
 if test "$GCC" = yes
 then
-	man_saved_CFLAGS="$CFLAGS"
- CFLAGS="$CFLAGS -W"
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking that GCC supports -W" >&5
-$as_echo_n "checking that GCC supports -W... " >&6; }
-if test "${man_cv_gcc_warning_+set}" = set; then :
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler handles -W" >&5
+$as_echo_n "checking whether compiler handles -W... " >&6; }
+if test "${gl_cv_warn__W+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  man_cv_gcc_warning_=no
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="${CPPFLAGS} -W"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
@@ -13505,25 +13507,30 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  man_cv_gcc_warning_=yes
+if ac_fn_c_try_cpp "$LINENO"; then :
+  gl_cv_warn__W=yes
+else
+  gl_cv_warn__W=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.i conftest.$ac_ext
+  CPPFLAGS="$save_CPPFLAGS"
+
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_gcc_warning_" >&5
-$as_echo "$man_cv_gcc_warning_" >&6; }
- if test "$man_cv_gcc_warning_" = no; then
-   CFLAGS="$man_saved_CFLAGS"
- fi # -W
-	man_saved_CFLAGS="$CFLAGS"
- CFLAGS="$CFLAGS -Wpointer-arith"
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking that GCC supports -Wpointer-arith" >&5
-$as_echo_n "checking that GCC supports -Wpointer-arith... " >&6; }
-if test "${man_cv_gcc_warning_pointer_arith+set}" = set; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn__W" >&5
+$as_echo "$gl_cv_warn__W" >&6; }
+if test "x$gl_cv_warn__W" = x""yes; then :
+  as_fn_append CFLAGS " -W"
+fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler handles -Wpointer-arith" >&5
+$as_echo_n "checking whether compiler handles -Wpointer-arith... " >&6; }
+if test "${gl_cv_warn__Wpointer_arith+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  man_cv_gcc_warning_pointer_arith=no
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="${CPPFLAGS} -Wpointer-arith"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
@@ -13534,25 +13541,30 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  man_cv_gcc_warning_pointer_arith=yes
+if ac_fn_c_try_cpp "$LINENO"; then :
+  gl_cv_warn__Wpointer_arith=yes
+else
+  gl_cv_warn__Wpointer_arith=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.i conftest.$ac_ext
+  CPPFLAGS="$save_CPPFLAGS"
+
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_gcc_warning_pointer_arith" >&5
-$as_echo "$man_cv_gcc_warning_pointer_arith" >&6; }
- if test "$man_cv_gcc_warning_pointer_arith" = no; then
-   CFLAGS="$man_saved_CFLAGS"
- fi
-	man_saved_CFLAGS="$CFLAGS"
- CFLAGS="$CFLAGS -Wwrite-strings"
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking that GCC supports -Wwrite-strings" >&5
-$as_echo_n "checking that GCC supports -Wwrite-strings... " >&6; }
-if test "${man_cv_gcc_warning_write_strings+set}" = set; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn__Wpointer_arith" >&5
+$as_echo "$gl_cv_warn__Wpointer_arith" >&6; }
+if test "x$gl_cv_warn__Wpointer_arith" = x""yes; then :
+  as_fn_append CFLAGS " -Wpointer-arith"
+fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler handles -Wwrite-strings" >&5
+$as_echo_n "checking whether compiler handles -Wwrite-strings... " >&6; }
+if test "${gl_cv_warn__Wwrite_strings+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  man_cv_gcc_warning_write_strings=no
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="${CPPFLAGS} -Wwrite-strings"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
@@ -13563,25 +13575,30 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  man_cv_gcc_warning_write_strings=yes
+if ac_fn_c_try_cpp "$LINENO"; then :
+  gl_cv_warn__Wwrite_strings=yes
+else
+  gl_cv_warn__Wwrite_strings=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.i conftest.$ac_ext
+  CPPFLAGS="$save_CPPFLAGS"
+
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_gcc_warning_write_strings" >&5
-$as_echo "$man_cv_gcc_warning_write_strings" >&6; }
- if test "$man_cv_gcc_warning_write_strings" = no; then
-   CFLAGS="$man_saved_CFLAGS"
- fi
-	man_saved_CFLAGS="$CFLAGS"
- CFLAGS="$CFLAGS -Wstrict-prototypes"
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking that GCC supports -Wstrict-prototypes" >&5
-$as_echo_n "checking that GCC supports -Wstrict-prototypes... " >&6; }
-if test "${man_cv_gcc_warning_strict_prototypes+set}" = set; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn__Wwrite_strings" >&5
+$as_echo "$gl_cv_warn__Wwrite_strings" >&6; }
+if test "x$gl_cv_warn__Wwrite_strings" = x""yes; then :
+  as_fn_append CFLAGS " -Wwrite-strings"
+fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler handles -Wstrict-prototypes" >&5
+$as_echo_n "checking whether compiler handles -Wstrict-prototypes... " >&6; }
+if test "${gl_cv_warn__Wstrict_prototypes+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  man_cv_gcc_warning_strict_prototypes=no
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="${CPPFLAGS} -Wstrict-prototypes"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
@@ -13592,25 +13609,30 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  man_cv_gcc_warning_strict_prototypes=yes
+if ac_fn_c_try_cpp "$LINENO"; then :
+  gl_cv_warn__Wstrict_prototypes=yes
+else
+  gl_cv_warn__Wstrict_prototypes=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.i conftest.$ac_ext
+  CPPFLAGS="$save_CPPFLAGS"
+
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_gcc_warning_strict_prototypes" >&5
-$as_echo "$man_cv_gcc_warning_strict_prototypes" >&6; }
- if test "$man_cv_gcc_warning_strict_prototypes" = no; then
-   CFLAGS="$man_saved_CFLAGS"
- fi
-	man_saved_CFLAGS="$CFLAGS"
- CFLAGS="$CFLAGS -Wshadow"
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking that GCC supports -Wshadow" >&5
-$as_echo_n "checking that GCC supports -Wshadow... " >&6; }
-if test "${man_cv_gcc_warning_shadow+set}" = set; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn__Wstrict_prototypes" >&5
+$as_echo "$gl_cv_warn__Wstrict_prototypes" >&6; }
+if test "x$gl_cv_warn__Wstrict_prototypes" = x""yes; then :
+  as_fn_append CFLAGS " -Wstrict-prototypes"
+fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler handles -Wshadow" >&5
+$as_echo_n "checking whether compiler handles -Wshadow... " >&6; }
+if test "${gl_cv_warn__Wshadow+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  man_cv_gcc_warning_shadow=no
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="${CPPFLAGS} -Wshadow"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
@@ -13621,25 +13643,30 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  man_cv_gcc_warning_shadow=yes
+if ac_fn_c_try_cpp "$LINENO"; then :
+  gl_cv_warn__Wshadow=yes
+else
+  gl_cv_warn__Wshadow=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.i conftest.$ac_ext
+  CPPFLAGS="$save_CPPFLAGS"
+
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_gcc_warning_shadow" >&5
-$as_echo "$man_cv_gcc_warning_shadow" >&6; }
- if test "$man_cv_gcc_warning_shadow" = no; then
-   CFLAGS="$man_saved_CFLAGS"
- fi
-	man_saved_CFLAGS="$CFLAGS"
- CFLAGS="$CFLAGS -Wformat-security"
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking that GCC supports -Wformat-security" >&5
-$as_echo_n "checking that GCC supports -Wformat-security... " >&6; }
-if test "${man_cv_gcc_warning_format_security+set}" = set; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn__Wshadow" >&5
+$as_echo "$gl_cv_warn__Wshadow" >&6; }
+if test "x$gl_cv_warn__Wshadow" = x""yes; then :
+  as_fn_append CFLAGS " -Wshadow"
+fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler handles -Wformat-security" >&5
+$as_echo_n "checking whether compiler handles -Wformat-security... " >&6; }
+if test "${gl_cv_warn__Wformat_security+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  man_cv_gcc_warning_format_security=no
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="${CPPFLAGS} -Wformat-security"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
@@ -13650,25 +13677,30 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  man_cv_gcc_warning_format_security=yes
+if ac_fn_c_try_cpp "$LINENO"; then :
+  gl_cv_warn__Wformat_security=yes
+else
+  gl_cv_warn__Wformat_security=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.i conftest.$ac_ext
+  CPPFLAGS="$save_CPPFLAGS"
+
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_gcc_warning_format_security" >&5
-$as_echo "$man_cv_gcc_warning_format_security" >&6; }
- if test "$man_cv_gcc_warning_format_security" = no; then
-   CFLAGS="$man_saved_CFLAGS"
- fi
-	man_saved_CFLAGS="$CFLAGS"
- CFLAGS="$CFLAGS -Wredundant-decls"
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking that GCC supports -Wredundant-decls" >&5
-$as_echo_n "checking that GCC supports -Wredundant-decls... " >&6; }
-if test "${man_cv_gcc_warning_redundant_decls+set}" = set; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn__Wformat_security" >&5
+$as_echo "$gl_cv_warn__Wformat_security" >&6; }
+if test "x$gl_cv_warn__Wformat_security" = x""yes; then :
+  as_fn_append CFLAGS " -Wformat-security"
+fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler handles -Wredundant-decls" >&5
+$as_echo_n "checking whether compiler handles -Wredundant-decls... " >&6; }
+if test "${gl_cv_warn__Wredundant_decls+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  man_cv_gcc_warning_redundant_decls=no
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="${CPPFLAGS} -Wredundant-decls"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
@@ -13679,25 +13711,30 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  man_cv_gcc_warning_redundant_decls=yes
+if ac_fn_c_try_cpp "$LINENO"; then :
+  gl_cv_warn__Wredundant_decls=yes
+else
+  gl_cv_warn__Wredundant_decls=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.i conftest.$ac_ext
+  CPPFLAGS="$save_CPPFLAGS"
+
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_gcc_warning_redundant_decls" >&5
-$as_echo "$man_cv_gcc_warning_redundant_decls" >&6; }
- if test "$man_cv_gcc_warning_redundant_decls" = no; then
-   CFLAGS="$man_saved_CFLAGS"
- fi
-	man_saved_CFLAGS="$CFLAGS"
- CFLAGS="$CFLAGS -Wno-missing-field-initializers"
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking that GCC supports -Wno-missing-field-initializers" >&5
-$as_echo_n "checking that GCC supports -Wno-missing-field-initializers... " >&6; }
-if test "${man_cv_gcc_warning_no_missing_field_initializers+set}" = set; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn__Wredundant_decls" >&5
+$as_echo "$gl_cv_warn__Wredundant_decls" >&6; }
+if test "x$gl_cv_warn__Wredundant_decls" = x""yes; then :
+  as_fn_append CFLAGS " -Wredundant-decls"
+fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler handles -Wno-missing-field-initializers" >&5
+$as_echo_n "checking whether compiler handles -Wno-missing-field-initializers... " >&6; }
+if test "${gl_cv_warn__Wno_missing_field_initializers+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
-  man_cv_gcc_warning_no_missing_field_initializers=no
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="${CPPFLAGS} -Wno-missing-field-initializers"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
@@ -13708,16 +13745,21 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  man_cv_gcc_warning_no_missing_field_initializers=yes
+if ac_fn_c_try_cpp "$LINENO"; then :
+  gl_cv_warn__Wno_missing_field_initializers=yes
+else
+  gl_cv_warn__Wno_missing_field_initializers=no
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.i conftest.$ac_ext
+  CPPFLAGS="$save_CPPFLAGS"
+
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_gcc_warning_no_missing_field_initializers" >&5
-$as_echo "$man_cv_gcc_warning_no_missing_field_initializers" >&6; }
- if test "$man_cv_gcc_warning_no_missing_field_initializers" = no; then
-   CFLAGS="$man_saved_CFLAGS"
- fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn__Wno_missing_field_initializers" >&5
+$as_echo "$gl_cv_warn__Wno_missing_field_initializers" >&6; }
+if test "x$gl_cv_warn__Wno_missing_field_initializers" = x""yes; then :
+  as_fn_append CFLAGS " -Wno-missing-field-initializers"
+fi
+
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ln -s works" >&5
@@ -33466,6 +33508,8 @@ $as_echo "#define GNULIB_TEST_VSNPRINTF 1" >>confdefs.h
 
 
   # Code from module warn-on-use:
+  # Code from module warnings:
+
   # Code from module wchar:
 
 
