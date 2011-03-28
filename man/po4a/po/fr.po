@@ -1,14 +1,14 @@
 # French translation of man-db manual pages
-# Copyright (C) 2005-2006, 2010 Debian French l10n team <debian-l10n-french@lists.debian.org>.
+# Copyright (C) 2005-2006, 2010, 2011 Debian French l10n team <debian-l10n-french@lists.debian.org>.
 # This file is distributed under the same license as the man-db package.
 #
 # Valery Perrin <valery.perrin.debian@free.fr>, 2005, 2006.
-# David Prévot <david@tilapin.org>, 2010.
+# David Prévot <david@tilapin.org>, 2010, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.5.8-pre1\n"
-"POT-Creation-Date: 2011-03-24 01:19+0000\n"
-"PO-Revision-Date: 2010-09-29 14:28-0400\n"
+"Project-Id-Version: man-db-manpages 2.6.0-pre1\n"
+"POT-Creation-Date: 2011-03-27 18:28+0200\n"
+"PO-Revision-Date: 2011-03-27 15:10-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "Language: fr\n"
@@ -84,19 +84,13 @@ msgstr "SYNOPSIS"
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:32
-#, fuzzy
-#| msgid ""
-#| "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|"
-#| "B<-s> I<section>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-"
-#| "M> I<path>\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<keyword> "
-#| "\\&.\\|.\\|."
 msgid ""
 "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|B<-"
 "s> I<list>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<path>"
 "\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<keyword> \\&.\\|.\\|."
 msgstr ""
 "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|B<-"
-"s> I<section>\\|] [\\|B<-m> I<système>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
+"s> I<liste>\\|] [\\|B<-m> I<système>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
 "I<chemin>\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<fichier>\\|] I<mot-clé> "
 "\\&.\\|.\\|."
 
@@ -244,10 +238,9 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/apropos.man1:103 ../../man/man1/whatis.man1:107
-#, fuzzy, no-wrap
-#| msgid "B<-S\\ >I<list>B<,\\ -s\\ >I<list>B<,\\ --sections=>I<list>"
+#, no-wrap
 msgid "B<-s> I<list>, B<--sections> I<list>, B<--section> I<list>"
-msgstr "B<-S\\ >I<liste>,\\ B<-s\\ >I<liste>,\\ B<--sections=>I<liste>"
+msgstr "B<-s> I<liste>, B<--sections> I<liste>, B<--section> I<liste>"
 
 #.  Due to the rather silly limit of 6 args per request in some `native'
 #.  *roff compilers, we have do the following to get the two-line
@@ -256,13 +249,6 @@ msgstr "B<-S\\ >I<liste>,\\ B<-s\\ >I<liste>,\\ B<--sections=>I<liste>"
 #.  (end relative indent).
 #. type: Plain text
 #: ../../man/man1/apropos.man1:123 ../../man/man1/whatis.man1:127
-#, fuzzy
-#| msgid ""
-#| "Search only the given manual section.  If I<section> is a simple section, "
-#| "for example \"3\", then the displayed list of descriptions will include "
-#| "pages in sections \"3\", \"3perl\", \"3x\", and so on; while if "
-#| "I<section> has an extension, for example \"3perl\", then the list will "
-#| "only include pages in that exact part of the manual section."
 msgid ""
 "Search only the given manual sections.  I<list> is a colon- or comma-"
 "separated list of sections.  If an entry in I<list> is a simple section, for "
@@ -271,12 +257,13 @@ msgid ""
 "has an extension, for example \"3perl\", then the list will only include "
 "pages in that exact part of the manual section."
 msgstr ""
-"La recherche est limitée à la section de manuel indiquée. Si I<section> est "
-"une section simple, par exemple «\\ 3\\ », alors la liste des descriptions "
-"affichées inclura les pages des sections «\\ 3\\ », «\\ 3perl\\ », «\\ 3x\\ "
-"», et ainsi de suite. Par contre, si I<section> est plus précis, par exemple "
-"«\\ 3perl\\ », alors la liste inclura seulement les pages de cette partie de "
-"section."
+"La recherche est limitée aux sections de manuel indiquées. I<liste> est une "
+"liste de sections séparées par des deux-points ou des virgules. Si une des "
+"entrées de la I<liste> est une section simple, par exemple «\\ 3\\ », alors "
+"la liste des descriptions affichées inclura les pages des sections «\\ 3\\ "
+"», «\\ 3perl\\ », «\\ 3x\\ », et ainsi de suite. Par contre, si une des "
+"entrées de la I<liste> est plus précise, par exemple «\\ 3perl\\ », alors la "
+"liste n'inclura que les pages de cette partie de section."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:129 ../../man/man1/man.man1:681
@@ -888,7 +875,7 @@ msgstr ""
 #: ../../man/man1/man.man1:75
 msgid "B<%man%> B<-k> [\\|I<apropos> I<options>\\|] I<regexp> \\&.\\|.\\|."
 msgstr ""
-"B<%man%> B<-k> [\\|I<apropos> I<options>\\|] I<expression_rationnelle> \\&."
+"B<%man%> B<-k> [\\|I<options d'apropos>\\|] I<expression_rationnelle> \\&."
 "\\|.\\|."
 
 #.  The whatis command line
@@ -905,7 +892,7 @@ msgstr ""
 #. type: Plain text
 #: ../../man/man1/man.man1:94
 msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|."
-msgstr "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|."
+msgstr "B<%man%> B<-f> [\\|I<options de whatis>\\|] I<page> \\&.\\|.\\|."
 
 #.  The --where/--where-cat command line
 #. type: Plain text
@@ -984,129 +971,113 @@ msgstr ""
 #: ../../man/man1/man.man1:182
 #, no-wrap
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:182
-#, fuzzy, no-wrap
-#| msgid "1@Executable programs or shell commands\n"
+#, no-wrap
 msgid "Executable programs or shell commands"
-msgstr ""
-"1@T{\n"
-"Programmes exécutables ou commandes de l'interpréteur de commandes (shell)\\ ;\n"
-"T}\n"
+msgstr "Programmes exécutables ou commandes de l'interpréteur de commandes (shell)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:185
 #, no-wrap
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:185
-#, fuzzy, no-wrap
-#| msgid "2@System calls (functions provided by the kernel)\n"
+#, no-wrap
 msgid "System calls (functions provided by the kernel)"
-msgstr "2@Appels système (fonctions fournies par le noyau)\\ ;\n"
+msgstr "Appels système (fonctions fournies par le noyau)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:188
 #, no-wrap
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:188
-#, fuzzy, no-wrap
-#| msgid "3@Library calls (functions within program libraries)\n"
+#, no-wrap
 msgid "Library calls (functions within program libraries)"
-msgstr ""
-"3@T{\n"
-"Appels de bibliothèque (fonctions fournies par les bibliothèques des programmes)\\ ;\n"
-"T}\n"
+msgstr "Appels de bibliothèque (fonctions fournies par les bibliothèques des programmes)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:191
 #, no-wrap
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:191
-#, fuzzy, no-wrap
-#| msgid "4@Special files (usually found in I</dev>)\n"
+#, no-wrap
 msgid "Special files (usually found in I</dev>)"
-msgstr "4@Fichiers spéciaux (situés généralement dans I</dev>)\\ ;\n"
+msgstr "Fichiers spéciaux (situés généralement dans I</dev>)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:194
 #, no-wrap
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:194
-#, fuzzy, no-wrap
-#| msgid "5@File formats and conventions eg I</etc/passwd>\n"
+#, no-wrap
 msgid "File formats and conventions eg I</etc/passwd>"
-msgstr "5@Formats des fichiers et conventions. Par exemple I</etc/passwd>\\ ;\n"
+msgstr "Formats des fichiers et conventions. Par exemple I</etc/passwd>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:197
 #, no-wrap
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:197
-#, fuzzy, no-wrap
-#| msgid "6@Games\n"
+#, no-wrap
 msgid "Games"
-msgstr "6@Jeux\\ ;\n"
+msgstr "Jeux"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:200
 #, no-wrap
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:200
-#, fuzzy, no-wrap
-#| msgid "Miscellaneous (including macro packages and conventions),\n"
+#, no-wrap
 msgid ""
 "Miscellaneous (including macro packages and conventions),\n"
 "e.g. B<man>(7), B<groff>(7)"
-msgstr "Divers (y compris les macropaquets et les conventions).\n"
+msgstr ""
+"Divers (y compris les macropaquets et les conventions),\n"
+"par exemple B<man>(7), B<groff>(7)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:204
 #, no-wrap
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:204
-#, fuzzy, no-wrap
-#| msgid "8@System administration commands (usually only for root)\n"
+#, no-wrap
 msgid "System administration commands (usually only for root)"
-msgstr ""
-"8@T{\n"
-"Commandes de gestion du système (généralement réservées au superutilisateur)\\ ;\n"
-"T}\n"
+msgstr "Commandes de gestion du système (généralement réservées au superutilisateur)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:207
 #, no-wrap
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:207
-#, fuzzy, no-wrap
-#| msgid "9@Kernel routines [\\|Non standard\\|]\n"
+#, no-wrap
 msgid "Kernel routines [\\|Non standard\\|]"
-msgstr "9@Sous-programmes du noyau [\\|hors standard\\|].\n"
+msgstr "Sous-programmes du noyau [\\|hors standard\\|]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:215
@@ -1140,86 +1111,73 @@ msgstr ""
 #: ../../man/man1/man.man1:243
 #, no-wrap
 msgid "B<bold text>"
-msgstr ""
+msgstr "B<texte gras>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:243
-#, fuzzy, no-wrap
-#| msgid "B<bold text>@type exactly as shown.\n"
+#, no-wrap
 msgid "type exactly as shown."
-msgstr "B<texte gras>@à taper exactement comme indiqué\\ ;\n"
+msgstr "à taper exactement comme indiqué\\ ;"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:246
 #, no-wrap
 msgid "I<italic text>"
-msgstr ""
+msgstr "I<texte italique>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:246
-#, fuzzy, no-wrap
-#| msgid "I<italic text>@replace with appropriate argument.\n"
+#, no-wrap
 msgid "replace with appropriate argument."
-msgstr "I<texte italique>@à remplacer par l'argument approprié\\ ;\n"
+msgstr "à remplacer par l'argument approprié\\ ;"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:249
 #, no-wrap
 msgid "[\\|B<-abc>\\|]"
-msgstr ""
+msgstr "[\\|B<-abc>\\|]"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:249
-#, fuzzy, no-wrap
-#| msgid "[\\|B<-abc>\\|]@any or all arguments within [ ] are optional.\n"
+#, no-wrap
 msgid "any or all arguments within [ ] are optional."
-msgstr "[\\|B<-abc>\\|]@tous les arguments entre [\\ ] sont facultatifs\\ ;\n"
+msgstr "tous les arguments entre [\\ ] sont facultatifs\\ ;"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:252
 #, no-wrap
 msgid "B<-a\\|>|\\|B<-b>"
-msgstr ""
+msgstr "B<-a\\|>|\\|B<-b>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:252
-#, fuzzy, no-wrap
-#| msgid "B<-a\\|>|\\|B<-b>@options delimited by | cannot be used together.\n"
+#, no-wrap
 msgid "options delimited by | cannot be used together."
-msgstr ""
-"B<-a\\|>|\\|B<-b>@T{\n"
-"les options séparées par | ne peuvent pas être utilisées simultanément\\ ;\n"
-"T}\n"
+msgstr "les options séparées par | ne peuvent pas être utilisées simultanément\\ ;"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:255
-#, fuzzy, no-wrap
-#| msgid "I<argument>B< .\\|.\\|.@>I<argument> is repeatable.\n"
+#, no-wrap
 msgid "I<argument>B< .\\|.\\|.>"
-msgstr "I<argument>B< .\\|.\\|.@>I<argument> peut être répété\\ ;\n"
+msgstr "I<argument>B< .\\|.\\|.>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:255
-#, fuzzy, no-wrap
-#| msgid "I<argument>B< .\\|.\\|.@>I<argument> is repeatable.\n"
+#, no-wrap
 msgid "I<argument> is repeatable."
-msgstr "I<argument>B< .\\|.\\|.@>I<argument> peut être répété\\ ;\n"
+msgstr "I<argument> peut être répété\\ ;"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:258
 #, no-wrap
 msgid "[\\|I<expression>\\|]B< .\\|.\\|.>"
-msgstr ""
+msgstr "[\\|I<expression>\\|]B< .\\|.\\|.>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:258
-#, fuzzy, no-wrap
-#| msgid "[\\|I<expression>\\|]B< .\\|.\\|.@>entire I<expression>\\ within [ ] is repeatable.\n"
+#, no-wrap
 msgid "entire I<expression>\\ within [ ] is repeatable."
-msgstr ""
-"[\\|I<expression>\\|]B< .\\|.\\|.@T{\n"
-">toute l'I<expression>\\ située à l'intérieur de [\\ ] peut être répétée.\n"
-"T}\n"
+msgstr "toute l'I<expression>\\ située à l'intérieur de [\\ ] peut être répétée."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:266
@@ -2158,18 +2116,10 @@ msgstr "B<byte\\e\\ %bB?s/%s..?\\e\\ (END):?pB\\e\\ %pB\\e\\e%..>"
 #. type: Plain text
 #: ../../man/man1/man.man1:919
 msgid "B<(press h for help or q to quit)>"
-msgstr ""
+msgstr "B<(tapez h pour l'aide ou q pour quitter)>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:934
-#, fuzzy
-#| msgid ""
-#| "It is broken into two lines here for the sake of readability only.  For "
-#| "its meaning see the B<less>(1)  manual page.  The prompt string is first "
-#| "evaluated by the shell.  All double quotes, back-quotes and backslashes "
-#| "in the prompt must be escaped by a preceding backslash.  The prompt "
-#| "string may end in an escaped $ which may be followed by further options "
-#| "for less.  By default B<%man%> sets the B<-ix8> options."
 msgid ""
 "It is broken into three lines here for the sake of readability only.  For "
 "its meaning see the B<less>(1)  manual page.  The prompt string is first "
@@ -2178,7 +2128,7 @@ msgid ""
 "end in an escaped $ which may be followed by further options for less.  By "
 "default B<%man%> sets the B<-ix8> options."
 msgstr ""
-"Cette chaîne a été coupée en deux lignes, ici, uniquement pour des raisons "
+"Cette chaîne a été coupée en trois lignes, ici, uniquement pour des raisons "
 "de lisibilité. Pour sa signification, consultez la page de manuel de B<less>"
 "(1). La chaîne de caractères est d'abord évaluée par l'interpréteur de "
 "commandes. Tous les guillemets, apostrophes inversées et contre-obliques "
@@ -2221,25 +2171,25 @@ msgstr ""
 #: ../../man/man1/man.man1:974
 #, no-wrap
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:974
 #, no-wrap
 msgid "Octal"
-msgstr ""
+msgstr "Octal"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:974
 #, no-wrap
 msgid "latin1"
-msgstr ""
+msgstr "latin1"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:974
 #, no-wrap
 msgid "ascii\n"
-msgstr ""
+msgstr "ascii\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:975 ../../man/man8/mandb.man8:60
@@ -2249,103 +2199,99 @@ msgstr "_\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:976
-#, fuzzy, no-wrap
-#| msgid "continuation hyphen@255@\\*[softhyphen]@-\n"
+#, no-wrap
 msgid "continuation hyphen"
-msgstr "trait d'union@255@\\*[softhyphen]@-\n"
+msgstr "trait d'union"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:976
 #, no-wrap
 msgid "255"
-msgstr ""
+msgstr "255"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:976
 #, no-wrap
 msgid "\\*[softhyphen]"
-msgstr ""
+msgstr "\\*[softhyphen]"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:976
 #, no-wrap
 msgid "-\n"
-msgstr ""
+msgstr "-\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:977
-#, fuzzy, no-wrap
-#| msgid "bullet (middle dot)@267@\\(bu@o\n"
+#, no-wrap
 msgid "bullet (middle dot)"
-msgstr "point médian@267@\\(bu@o\n"
+msgstr "point médian"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:977
 #, no-wrap
 msgid "267"
-msgstr ""
+msgstr "267"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:977
 #, no-wrap
 msgid "\\(bu"
-msgstr ""
+msgstr "\\(bu"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:977
 #, no-wrap
 msgid "o\n"
-msgstr ""
+msgstr "o\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:978
-#, fuzzy, no-wrap
-#| msgid "acute accent@264@\\(aa@'\n"
+#, no-wrap
 msgid "acute accent"
-msgstr "accent aigu@264@\\(aa@'\n"
+msgstr "accent aigu"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:978
 #, no-wrap
 msgid "264"
-msgstr ""
+msgstr "264"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:978
 #, no-wrap
 msgid "\\(aa"
-msgstr ""
+msgstr "\\(aa"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:978
 #, no-wrap
 msgid "'\n"
-msgstr ""
+msgstr "'\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:979
-#, fuzzy, no-wrap
-#| msgid "multiplication sign@327@\\(mu@x\n"
+#, no-wrap
 msgid "multiplication sign"
-msgstr "symbole de multiplication@327@\\(mu@x\n"
+msgstr "symbole de multiplication"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:979
 #, no-wrap
 msgid "327"
-msgstr ""
+msgstr "327"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:979
 #, no-wrap
 msgid "\\(mu"
-msgstr ""
+msgstr "\\(mu"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:979
 #, no-wrap
 msgid "x\n"
-msgstr ""
+msgstr "x\n"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1000
@@ -3049,18 +2995,12 @@ msgstr "%whatis% - affiche la description des pages de manuel"
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:32
-#, fuzzy
-#| msgid ""
-#| "B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> "
-#| "I<section>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
-#| "I<path>\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<name> \\&.\\|."
-#| "\\|."
 msgid ""
 "B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<list>"
 "\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<path>\\|] [\\|"
 "B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<name> \\&.\\|.\\|."
 msgstr ""
-"B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<section>"
+"B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<liste>"
 "\\|] [\\|B<-m> I<système>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<chemin>\\|] "
 "[\\|B<-L> I<locale>\\|] [\\|B<-C> I<fichier>\\|] I<nom> \\&.\\|.\\|."
 
@@ -3832,95 +3772,92 @@ msgstr ""
 #: ../../man/man8/mandb.man8:59
 #, no-wrap
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:59
 #, no-wrap
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:59
 #, no-wrap
 msgid "Async"
-msgstr ""
+msgstr "Async"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:59
 #, no-wrap
 msgid "Filename\n"
-msgstr ""
+msgstr "Nom de fichier\n"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:61
 #, no-wrap
 msgid "Berkeley db"
-msgstr ""
+msgstr "Berkeley db"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:61
 #, no-wrap
 msgid "Binary tree"
-msgstr ""
+msgstr "Arbre Binaire"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:61 ../../man/man8/mandb.man8:62
 #, no-wrap
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:61
 #, no-wrap
 msgid "I<index.bt>\n"
-msgstr ""
+msgstr "I<index.bt>\n"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:62
-#, fuzzy, no-wrap
-#| msgid "GNU gdbm v E<gt>= 1.6@Hashed@Yes@I<index.db>\n"
+#, no-wrap
 msgid "GNU gdbm v E<gt>= 1.6"
-msgstr "GNU gdbm v E<gt>= 1.6@Hachage@Oui@I<index.db>\n"
+msgstr "GNU gdbm v E<gt>= 1.6"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:62 ../../man/man8/mandb.man8:63
 #: ../../man/man8/mandb.man8:64
 #, no-wrap
 msgid "Hashed"
-msgstr ""
+msgstr "Hachage"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:62 ../../man/man8/mandb.man8:63
 #, no-wrap
 msgid "I<index.db>\n"
-msgstr ""
+msgstr "I<index.db>\n"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:63
-#, fuzzy, no-wrap
-#| msgid "GNU gdbm v E<lt>  1.6@Hashed@No@I<index.db>\n"
+#, no-wrap
 msgid "GNU gdbm v E<lt>  1.6"
-msgstr "GNU gdbm v E<lt> 1.6@Hachage@Non@I<index.db>\n"
+msgstr "GNU gdbm v E<lt> 1.6"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:63 ../../man/man8/mandb.man8:64
 #, no-wrap
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:64
 #, no-wrap
 msgid "UNIX ndbm"
-msgstr ""
+msgstr "UNIX ndbm"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:64
-#, fuzzy, no-wrap
-#| msgid "I</usr/man/index.(bt|db|dir|pag)>"
+#, no-wrap
 msgid "I<index.(dir|pag)>\n"
-msgstr "I</usr/man/index.(bt|db|dir|pag)>"
+msgstr "I<index.(dir|pag)>\n"
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:75
@@ -4148,6 +4085,9 @@ msgstr ""
 "La section B<ANALYSE WHATIS> autrefois incluse dans cette page de manuel est "
 "maintenant incorporée à B<lexgrog>(1)."
 
+#~ msgid "B<-s> I<section>, B<--section> I<section>"
+#~ msgstr "B<-s> I<section>, B<--section> I<section>"
+
 #~ msgid "7@T{\n"
 #~ msgstr "7@T{\n"
 
@@ -4168,9 +4108,6 @@ msgstr ""
 
 #~ msgid "UNIX ndbm@Hashed@No@I<index.(dir|pag)>\n"
 #~ msgstr "UNIX ndbm@Hachage@Non@I<index.(dir|pag)>\n"
-
-#~ msgid "B<-s> I<section>, B<--section> I<section>"
-#~ msgstr "B<-s> I<section>, B<--section> I<section>"
 
 #~ msgid "B<-h, --help>"
 #~ msgstr "B<-h, --help>"
