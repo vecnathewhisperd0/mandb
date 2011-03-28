@@ -1,3 +1,10 @@
+Mon Mar 28 13:07:50 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/mydbm.h (btree_close, btree_exists, btree_fetch,
+	  btree_firstkey, btree_nextkey, btree_replace, btree_nextkeydata):
+	  Drop inline specifier; these functions are typically used from
+	  different translation units from their definitions.
+
 Mon Mar 28 12:59:54 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Add support for db5.

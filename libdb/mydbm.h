@@ -133,14 +133,14 @@ extern int ndbm_flclose(DBM *db);
 typedef DBT datum;
 
 extern DB *btree_flopen(char *filename, int flags, int mode);
-extern inline int btree_close(DB *db);
-extern inline int btree_exists(DB *db, datum key);
-extern inline datum btree_fetch(DB *db, datum key);
+extern int btree_close(DB *db);
+extern int btree_exists(DB *db, datum key);
+extern datum btree_fetch(DB *db, datum key);
 extern int btree_insert(DB *db, datum key, datum cont);
-extern inline datum btree_firstkey(DB *db);
-extern inline datum btree_nextkey(DB *db);
-extern inline int btree_replace(DB *db, datum key, datum content);
-extern inline int btree_nextkeydata(DB *db, datum *key, datum *cont);
+extern datum btree_firstkey(DB *db);
+extern datum btree_nextkey(DB *db);
+extern int btree_replace(DB *db, datum key, datum content);
+extern int btree_nextkeydata(DB *db, datum *key, datum *cont);
 
 #  define DB_EXT			".bt"
 #  define MYDBM_FILE			DB*
