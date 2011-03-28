@@ -757,6 +757,7 @@ gl_LIBOBJS
 am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
+LIBOBJS
 CROSS_COMPILING_FALSE
 CROSS_COMPILING_TRUE
 TRANS_ZSOELIM_UPPER
@@ -777,7 +778,6 @@ TRANS_CATMAN_UPPER
 TRANS_CATMAN
 TRANS_APROPOS_UPPER
 TRANS_APROPOS
-LIBOBJS
 DBLIBS
 DBTYPE
 libpipeline_LIBS
@@ -853,6 +853,9 @@ NEXT_AS_FIRST_DIRECTIVE_SYSEXITS_H
 NEXT_SYSEXITS_H
 NEXT_AS_FIRST_DIRECTIVE_SYS_STAT_H
 NEXT_SYS_STAT_H
+HAVE_SYS_FILE_H
+NEXT_AS_FIRST_DIRECTIVE_SYS_FILE_H
+NEXT_SYS_FILE_H
 NEXT_AS_FIRST_DIRECTIVE_STRINGS_H
 NEXT_STRINGS_H
 NEXT_AS_FIRST_DIRECTIVE_STRING_H
@@ -1015,6 +1018,8 @@ HAVE_GETOPT_H
 NEXT_AS_FIRST_DIRECTIVE_GETOPT_H
 NEXT_GETOPT_H
 FNMATCH_H
+HAVE_FLOCK
+GNULIB_FLOCK
 FLOAT_H
 NEXT_AS_FIRST_DIRECTIVE_FLOAT_H
 NEXT_FLOAT_H
@@ -3432,6 +3437,8 @@ gl_func_list="$gl_func_list dup2"
 gl_func_list="$gl_func_list fcntl"
 gl_func_list="$gl_func_list fchdir"
 gl_func_list="$gl_func_list fdopendir"
+gl_func_list="$gl_func_list flock"
+gl_header_list="$gl_header_list unistd.h"
 gl_func_list="$gl_func_list isblank"
 gl_func_list="$gl_func_list iswctype"
 gl_func_list="$gl_func_list mbsrtowcs"
@@ -3448,7 +3455,6 @@ gl_header_list="$gl_header_list getopt.h"
 gl_header_list="$gl_header_list sys/time.h"
 gl_func_list="$gl_func_list gettimeofday"
 gl_header_list="$gl_header_list sys/cdefs.h"
-gl_header_list="$gl_header_list unistd.h"
 gl_func_list="$gl_func_list fstatat"
 gl_func_list="$gl_func_list getpwnam_r"
 gl_func_list="$gl_func_list getuid"
@@ -3486,6 +3492,7 @@ gl_func_list="$gl_func_list strdup"
 gl_header_list="$gl_header_list sys/socket.h"
 gl_header_list="$gl_header_list strings.h"
 gl_func_list="$gl_func_list strndup"
+gl_header_list="$gl_header_list sys/file.h"
 gl_header_list="$gl_header_list sys/stat.h"
 gl_header_list="$gl_header_list sysexits.h"
 gl_func_list="$gl_func_list pipe"
@@ -6105,13 +6112,13 @@ if test "${lt_cv_nm_interface+set}" = set; then :
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:6108: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:6115: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:6111: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:6118: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:6114: output\"" >&5)
+  (eval echo "\"\$as_me:6121: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -7316,7 +7323,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7319 "configure"' > conftest.$ac_ext
+  echo '#line 7326 "configure"' > conftest.$ac_ext
   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8577,11 +8584,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8580: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8587: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8584: \$? = $ac_status" >&5
+   echo "$as_me:8591: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8916,11 +8923,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8919: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8926: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8923: \$? = $ac_status" >&5
+   echo "$as_me:8930: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9021,11 +9028,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9024: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9031: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9028: \$? = $ac_status" >&5
+   echo "$as_me:9035: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9076,11 +9083,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9079: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9086: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9083: \$? = $ac_status" >&5
+   echo "$as_me:9090: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11460,7 +11467,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 11463 "configure"
+#line 11470 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11556,7 +11563,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 11559 "configure"
+#line 11566 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13234,6 +13241,7 @@ fi
   # Code from module fdopendir:
   # Code from module file-set:
   # Code from module float:
+  # Code from module flock:
   # Code from module fnmatch:
   # Code from module fnmatch-gnu:
   # Code from module getcwd:
@@ -13314,6 +13322,7 @@ fi
   # Code from module strnlen:
   # Code from module strnlen1:
   # Code from module strsep:
+  # Code from module sys_file:
   # Code from module sys_stat:
   # Code from module sys_time:
   # Code from module sysexits:
@@ -18185,6 +18194,20 @@ _ACEOF
 
 
 
+  GNULIB_FLOCK=0;
+  HAVE_FLOCK=1;
+
+
+
+
+
+
+
+
+
+
+
+
 
    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for mbstate_t" >&5
 $as_echo_n "checking for mbstate_t... " >&6; }
@@ -18993,11 +19016,6 @@ _ACEOF
                      eval ac_cv_have_decl_$gl_func=yes
 fi
       done
-
-
-
-
-
 
 
 
@@ -22459,6 +22477,11 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+
+
+
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether stat file-mode macros are broken" >&5
 $as_echo_n "checking whether stat file-mode macros are broken... " >&6; }
 if test "${ac_cv_header_stat_broken+set}" = set; then :
@@ -25143,6 +25166,64 @@ $as_echo "$gl_cv_next_float_h" >&6; }
 
       ;;
   esac
+
+
+  # Code from module flock:
+
+
+
+  :
+
+
+
+
+
+  if test $ac_cv_func_flock = no; then
+    HAVE_FLOCK=0
+
+
+
+
+
+
+
+
+  gl_LIBOBJS="$gl_LIBOBJS flock.$ac_objext"
+
+
+
+  :
+
+
+
+
+
+
+  :
+
+
+
+
+
+
+    ac_fn_c_check_member "$LINENO" "struct flock" "l_type" "ac_cv_member_struct_flock_l_type" "#include <fcntl.h>
+"
+if test "x$ac_cv_member_struct_flock_l_type" = x""yes; then :
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_STRUCT_FLOCK_L_TYPE 1
+_ACEOF
+
+
+fi
+
+
+  fi
+
+
+
+
+  GNULIB_FLOCK=1
 
 
   # Code from module fnmatch:
@@ -32452,6 +32533,126 @@ $as_echo "#define GNULIB_TEST_STRSEP 1" >>confdefs.h
 
 
 
+  # Code from module sys_file:
+
+
+
+
+
+
+
+
+
+  :
+
+
+
+
+
+
+
+
+     if test $gl_cv_have_include_next = yes; then
+       gl_cv_next_sys_file_h='<'sys/file.h'>'
+     else
+       { $as_echo "$as_me:${as_lineno-$LINENO}: checking absolute name of <sys/file.h>" >&5
+$as_echo_n "checking absolute name of <sys/file.h>... " >&6; }
+if test "${gl_cv_next_sys_file_h+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+
+             if test $ac_cv_header_sys_file_h = yes; then
+
+
+               cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/file.h>
+
+_ACEOF
+                                                                                                                        case "$host_os" in
+                 aix*) gl_absname_cpp="$ac_cpp -C" ;;
+                 *)    gl_absname_cpp="$ac_cpp" ;;
+               esac
+                                                            gl_cv_next_sys_file_h='"'`(eval "$gl_absname_cpp conftest.$ac_ext") 2>&5 |
+                  sed -n '\#/sys/file.h#{
+                    s#.*"\(.*/sys/file.h\)".*#\1#
+                    s#^/[^/]#//&#
+                    p
+                    q
+                  }'`'"'
+          else
+               gl_cv_next_sys_file_h='<'sys/file.h'>'
+             fi
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_next_sys_file_h" >&5
+$as_echo "$gl_cv_next_sys_file_h" >&6; }
+     fi
+     NEXT_SYS_FILE_H=$gl_cv_next_sys_file_h
+
+     if test $gl_cv_have_include_next = yes || test $gl_cv_have_include_next = buggy; then
+       # INCLUDE_NEXT_AS_FIRST_DIRECTIVE='include_next'
+       gl_next_as_first_directive='<'sys/file.h'>'
+     else
+       # INCLUDE_NEXT_AS_FIRST_DIRECTIVE='include'
+       gl_next_as_first_directive=$gl_cv_next_sys_file_h
+     fi
+     NEXT_AS_FIRST_DIRECTIVE_SYS_FILE_H=$gl_next_as_first_directive
+
+
+
+
+
+  if test $ac_cv_header_sys_file_h = yes; then
+    HAVE_SYS_FILE_H=1
+  else
+    HAVE_SYS_FILE_H=0
+  fi
+
+
+
+    for gl_func in flock; do
+    as_gl_Symbol=`$as_echo "gl_cv_have_raw_decl_$gl_func" | $as_tr_sh`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $gl_func is declared without a macro" >&5
+$as_echo_n "checking whether $gl_func is declared without a macro... " >&6; }
+if eval "test \"\${$as_gl_Symbol+set}\"" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/file.h>
+
+int
+main ()
+{
+#undef $gl_func
+  (void) $gl_func;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  eval "$as_gl_Symbol=yes"
+else
+  eval "$as_gl_Symbol=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+eval ac_res=\$$as_gl_Symbol
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+     if eval test \"x\$"$as_gl_Symbol"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_RAW_DECL_$gl_func" | $as_tr_cpp` 1
+_ACEOF
+
+                     eval ac_cv_have_decl_$gl_func=yes
+fi
+      done
+
+
+
   # Code from module sys_stat:
 
 
@@ -37789,22 +37990,6 @@ then
       as_fn_error $? "Fatal: $db: unsupported database library" "$LINENO" 5
     fi
 fi
-
-
-# Check for available functions.
-ac_fn_c_check_func "$LINENO" "flock" "ac_cv_func_flock"
-if test "x$ac_cv_func_flock" = x""yes; then :
-  $as_echo "#define HAVE_FLOCK 1" >>confdefs.h
-
-else
-  case " $LIBOBJS " in
-  *" flock.$ac_objext "* ) ;;
-  *) LIBOBJS="$LIBOBJS flock.$ac_objext"
- ;;
-esac
-
-fi
-
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: default CC = \"$CC\"" >&5

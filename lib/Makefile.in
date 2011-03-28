@@ -36,7 +36,7 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = lib
 DIST_COMMON = README $(dist_noinst_DATA) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in flock.c
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/m4/man-check-progs.m4 \
@@ -77,6 +77,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/fcntl_h.m4 \
 	$(top_srcdir)/gnulib/m4/fdopendir.m4 \
 	$(top_srcdir)/gnulib/m4/float_h.m4 \
+	$(top_srcdir)/gnulib/m4/flock.m4 \
 	$(top_srcdir)/gnulib/m4/fnmatch.m4 \
 	$(top_srcdir)/gnulib/m4/getcwd-abort-bug.m4 \
 	$(top_srcdir)/gnulib/m4/getcwd-path-max.m4 \
@@ -173,6 +174,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/strndup.m4 \
 	$(top_srcdir)/gnulib/m4/strnlen.m4 \
 	$(top_srcdir)/gnulib/m4/strsep.m4 \
+	$(top_srcdir)/gnulib/m4/sys_file_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_stat_h.m4 \
 	$(top_srcdir)/gnulib/m4/sys_time_h.m4 \
 	$(top_srcdir)/gnulib/m4/sysexits.m4 \
@@ -348,6 +350,7 @@ GNULIB_FCLOSE = @GNULIB_FCLOSE@
 GNULIB_FCNTL = @GNULIB_FCNTL@
 GNULIB_FDOPENDIR = @GNULIB_FDOPENDIR@
 GNULIB_FFLUSH = @GNULIB_FFLUSH@
+GNULIB_FLOCK = @GNULIB_FLOCK@
 GNULIB_FOPEN = @GNULIB_FOPEN@
 GNULIB_FPRINTF = @GNULIB_FPRINTF@
 GNULIB_FPRINTF_POSIX = @GNULIB_FPRINTF_POSIX@
@@ -592,6 +595,7 @@ HAVE_FCHOWNAT = @HAVE_FCHOWNAT@
 HAVE_FCNTL = @HAVE_FCNTL@
 HAVE_FDOPENDIR = @HAVE_FDOPENDIR@
 HAVE_FEATURES_H = @HAVE_FEATURES_H@
+HAVE_FLOCK = @HAVE_FLOCK@
 HAVE_FSEEKO = @HAVE_FSEEKO@
 HAVE_FSTATAT = @HAVE_FSTATAT@
 HAVE_FSYNC = @HAVE_FSYNC@
@@ -687,6 +691,7 @@ HAVE_SYMLINKAT = @HAVE_SYMLINKAT@
 HAVE_SYSEXITS_H = @HAVE_SYSEXITS_H@
 HAVE_SYS_BITYPES_H = @HAVE_SYS_BITYPES_H@
 HAVE_SYS_CDEFS_H = @HAVE_SYS_CDEFS_H@
+HAVE_SYS_FILE_H = @HAVE_SYS_FILE_H@
 HAVE_SYS_INTTYPES_H = @HAVE_SYS_INTTYPES_H@
 HAVE_SYS_LOADAVG_H = @HAVE_SYS_LOADAVG_H@
 HAVE_SYS_PARAM_H = @HAVE_SYS_PARAM_H@
@@ -803,6 +808,7 @@ NEXT_AS_FIRST_DIRECTIVE_STDLIB_H = @NEXT_AS_FIRST_DIRECTIVE_STDLIB_H@
 NEXT_AS_FIRST_DIRECTIVE_STRINGS_H = @NEXT_AS_FIRST_DIRECTIVE_STRINGS_H@
 NEXT_AS_FIRST_DIRECTIVE_STRING_H = @NEXT_AS_FIRST_DIRECTIVE_STRING_H@
 NEXT_AS_FIRST_DIRECTIVE_SYSEXITS_H = @NEXT_AS_FIRST_DIRECTIVE_SYSEXITS_H@
+NEXT_AS_FIRST_DIRECTIVE_SYS_FILE_H = @NEXT_AS_FIRST_DIRECTIVE_SYS_FILE_H@
 NEXT_AS_FIRST_DIRECTIVE_SYS_STAT_H = @NEXT_AS_FIRST_DIRECTIVE_SYS_STAT_H@
 NEXT_AS_FIRST_DIRECTIVE_SYS_TIME_H = @NEXT_AS_FIRST_DIRECTIVE_SYS_TIME_H@
 NEXT_AS_FIRST_DIRECTIVE_TIME_H = @NEXT_AS_FIRST_DIRECTIVE_TIME_H@
@@ -824,6 +830,7 @@ NEXT_STDLIB_H = @NEXT_STDLIB_H@
 NEXT_STRINGS_H = @NEXT_STRINGS_H@
 NEXT_STRING_H = @NEXT_STRING_H@
 NEXT_SYSEXITS_H = @NEXT_SYSEXITS_H@
+NEXT_SYS_FILE_H = @NEXT_SYS_FILE_H@
 NEXT_SYS_STAT_H = @NEXT_SYS_STAT_H@
 NEXT_SYS_TIME_H = @NEXT_SYS_TIME_H@
 NEXT_TIME_H = @NEXT_TIME_H@
@@ -1118,12 +1125,32 @@ libman_la_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\" \
 	$(libpipeline_CFLAGS)
 
-libman_la_SOURCES = appendstr.c cleanup.c cleanup.h debug.c \
-	decompress.c decompress.h encodings.c encodings.h hashtable.c \
-	hashtable.h linelength.c linelength.h lower.c lower.h \
-	pathsearch.c pathsearch.h security.c security.h tempfile.c \
-	util.c wordfnmatch.c wordfnmatch.h xregcomp.c xregcomp.h \
-	flock.h
+libman_la_SOURCES = \
+	appendstr.c \
+	cleanup.c \
+	cleanup.h \
+	debug.c \
+	decompress.c \
+	decompress.h \
+	encodings.c \
+	encodings.h \
+	hashtable.c \
+	hashtable.h \
+	linelength.c \
+	linelength.h \
+	lower.c \
+	lower.h \
+	pathsearch.c \
+	pathsearch.h \
+	security.c \
+	security.h \
+	tempfile.c \
+	util.c \
+	wordfnmatch.c \
+	wordfnmatch.h \
+	xregcomp.c \
+	xregcomp.h
+
 libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
 	$(LIBCOMPRESS) @LTLIBINTL@
 
@@ -1205,7 +1232,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/flock.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-appendstr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-cleanup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-debug.Plo@am__quote@
@@ -1483,7 +1509,7 @@ clean-am: clean-generic clean-libtool clean-pkglibLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf $(DEPDIR) ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1529,7 +1555,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf $(DEPDIR) ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

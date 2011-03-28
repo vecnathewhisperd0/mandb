@@ -64,6 +64,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module fdopendir:
   # Code from module file-set:
   # Code from module float:
+  # Code from module flock:
   # Code from module fnmatch:
   # Code from module fnmatch-gnu:
   # Code from module getcwd:
@@ -148,6 +149,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module strnlen:
   # Code from module strnlen1:
   # Code from module strsep:
+  # Code from module sys_file:
   # Code from module sys_stat:
   # Code from module sys_time:
   # Code from module sysexits:
@@ -283,6 +285,9 @@ AC_SUBST([LTALLOCA])
   # Code from module file-set:
   # Code from module float:
   gl_FLOAT_H
+  # Code from module flock:
+  gl_FUNC_FLOCK
+  gl_HEADER_SYS_FILE_MODULE_INDICATOR([flock])
   # Code from module fnmatch:
   gl_FUNC_FNMATCH_POSIX
   # Code from module fnmatch-gnu:
@@ -471,6 +476,9 @@ AC_SUBST([LTALLOCA])
   # Code from module strsep:
   gl_FUNC_STRSEP
   gl_STRING_MODULE_INDICATOR([strsep])
+  # Code from module sys_file:
+  gl_HEADER_SYS_FILE_H
+  AC_PROG_MKDIR_P
   # Code from module sys_stat:
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
@@ -731,6 +739,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/file-set.h
   lib/float+.h
   lib/float.in.h
+  lib/flock.c
   lib/fnmatch.c
   lib/fnmatch.in.h
   lib/fnmatch_loop.c
@@ -845,6 +854,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strnlen1.c
   lib/strnlen1.h
   lib/strsep.c
+  lib/sys_file.in.h
   lib/sys_stat.in.h
   lib/sys_time.in.h
   lib/sysexits.in.h
@@ -908,6 +918,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/fcntl_h.m4
   m4/fdopendir.m4
   m4/float_h.m4
+  m4/flock.m4
   m4/fnmatch.m4
   m4/getcwd-abort-bug.m4
   m4/getcwd-path-max.m4
@@ -1006,6 +1017,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strndup.m4
   m4/strnlen.m4
   m4/strsep.m4
+  m4/sys_file_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
   m4/sysexits.m4

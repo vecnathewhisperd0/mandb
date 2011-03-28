@@ -55,10 +55,6 @@ libman_la_SOURCES = \
 	xregcomp.c \
 	xregcomp.h
 
-## Headers that are used conditionally. Automake can't detect these itself.
-libman_la_SOURCES += \
-	flock.h
-
 libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
 	$(LIBCOMPRESS) @LTLIBINTL@
 

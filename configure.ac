@@ -483,9 +483,6 @@ then
 fi
 AC_SUBST([DBLIBS])
 
-# Check for available functions.
-AC_REPLACE_FUNCS([flock])
-
 dnl MAN_ECHO_VAR(ENV-VARIABLE)
 define([MAN_ECHO_VAR], [AC_MSG_NOTICE([default $1 = "$$1"])])dnl
 dnl
