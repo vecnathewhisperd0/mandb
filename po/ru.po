@@ -2,20 +2,20 @@
 # This file is distributed under the same license as the man-db package.
 # Copyright (C) 2009 Colin Watson (msgids)
 #
-# Yuri Kozlov <yuray@komyakino.ru>, 2004-2009.
+# Yuri Kozlov <yuray@komyakino.ru>, 2004-2009, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.5.7-pre1\n"
+"Project-Id-Version: man-db 2.6.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2011-03-27 18:21+0100\n"
-"PO-Revision-Date: 2009-11-16 19:54+0300\n"
+"PO-Revision-Date: 2011-03-28 20:16+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -717,9 +717,9 @@ msgid "Processing manual pages under %s...\n"
 msgstr "Обработка справочных страниц в %s...\n"
 
 #: src/mandb.c:610 src/mandb.c:637
-#, fuzzy, c-format
+#, c-format
 msgid "Removing obsolete cat directory %s...\n"
-msgstr "Проверка побочных cat в %s...\n"
+msgstr "Удаляется устаревший каталог cat %s...\n"
 
 #: src/mandb.c:793
 #, c-format
@@ -898,9 +898,8 @@ msgid "do not trim output to terminal width"
 msgstr "не обрезать вывод по ширине терминала"
 
 #: src/whatis.c:128
-#, fuzzy
 msgid "search only these sections (colon-separated)"
-msgstr "искать только в этой секции"
+msgstr "искать только в этих секциях (разделяются двоеточиями)"
 
 #: src/whatis.c:132
 msgid "define the locale for this search"
@@ -960,23 +959,14 @@ msgstr "%s:%d: незакрытая кавычка в roff запросе"
 msgid "compatibility switch (ignored)"
 msgstr "для совместимости (игнорируется)"
 
-#~ msgid "can't fork"
-#~ msgstr "не удалось выполнить функцию fork"
-
-#~ msgid "fork failed"
-#~ msgstr "функция fork вернула ошибку"
-
-#~ msgid "can't get man command's exit status"
-#~ msgstr "не удалось получить код выхода команды man"
-
-#~ msgid "unable to reset cursor position in %s"
-#~ msgstr "не удалось сбросить позицию курсора в %s"
-
 #~ msgid "badly formed configuration directive: '%s'"
 #~ msgstr "неправильный формат директивы конфигурации: '%s'"
 
 #~ msgid "can't install SIGCHLD handler"
 #~ msgstr "не удалось установить обработчик SIGCHLD"
+
+#~ msgid "fork failed"
+#~ msgstr "функция fork вернула ошибку"
 
 #~ msgid "waitpid failed"
 #~ msgstr "функция waitpid вернула ошибку"
@@ -1017,8 +1007,17 @@ msgstr "для совместимости (игнорируется)"
 #~ msgid "closing pipeline output failed"
 #~ msgstr "не удалось закрыть вывод конвейера"
 
-#~ msgid "SECTION"
-#~ msgstr "СЕКЦИЯ"
+#~ msgid "can't get man command's exit status"
+#~ msgstr "не удалось получить код выхода команды man"
+
+#~ msgid "unable to reset cursor position in %s"
+#~ msgstr "не удалось сбросить позицию курсора в %s"
 
 #~ msgid "can't get passwd structure for uid 0"
 #~ msgstr "не удалось получить структуру passwd для uid 0"
+
+#~ msgid "can't fork"
+#~ msgstr "не удалось выполнить функцию fork"
+
+#~ msgid "SECTION"
+#~ msgstr "СЕКЦИЯ"
