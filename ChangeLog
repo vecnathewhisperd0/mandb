@@ -1,3 +1,10 @@
+Thu Apr  7 12:46:34 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* lib/cleanup.c (do_cleanups): Set tos and nslots to 0 before
+	  freeing stack, in case do_cleanups_sigsafe is called again from a
+	  signal handler (Fedora bug #694332).
+	* NEWS: Document this.
+
 Sat Apr  2 12:20:30 BST 2011  David Prévot  <david@tilapin.org>
 
 	* po/fr.po: Update from Translation Project.

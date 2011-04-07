@@ -179,6 +179,8 @@ void
 do_cleanups (void)
 {
   do_cleanups_sigsafe (0);
+  tos = 0;
+  nslots = 0;
   free (stack);
   stack = NULL;
 }
