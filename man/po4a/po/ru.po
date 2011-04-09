@@ -3,20 +3,20 @@
 # Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the man-db package.
 #
-# Yuri Kozlov <yuray@komyakino.ru>, 2008, 2009, 2010.
+# Yuri Kozlov <yuray@komyakino.ru>, 2008, 2009, 2010, 2011.
 # Yuri Kozlov <kozlov.y@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.5.8-pre1\n"
-"POT-Creation-Date: 2011-03-24 01:19+0000\n"
-"PO-Revision-Date: 2010-05-10 10:32+0400\n"
+"Project-Id-Version: man-db-manpages 2.6.0-pre1\n"
+"POT-Creation-Date: 2011-03-27 18:28+0200\n"
+"PO-Revision-Date: 2011-03-29 21:14+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -86,19 +86,13 @@ msgstr "СИНТАКСИС"
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:32
-#, fuzzy
-#| msgid ""
-#| "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|"
-#| "B<-s> I<section>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-"
-#| "M> I<path>\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<keyword> "
-#| "\\&.\\|.\\|."
 msgid ""
 "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|B<-"
 "s> I<list>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<path>"
 "\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<keyword> \\&.\\|.\\|."
 msgstr ""
 "B<%apropos%> [\\|B<-dalhvV>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|B<-"
-"s> I<раздел>\\|] [\\|B<-m> I<система>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
+"s> I<список>\\|] [\\|B<-m> I<система>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
 "I<путь>\\|] [\\|B<-L> I<локаль>\\|] [\\|B<-C> I<файл>\\|] I<ключевое слово> "
 "\\&.\\|.\\|."
 
@@ -239,12 +233,10 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/apropos.man1:103 ../../man/man1/whatis.man1:107
-#, fuzzy, no-wrap
-#| msgid "B<-S\\ >I<list>B<,\\ -s\\ >I<list>B<,\\ --sections=>I<list>"
+#, no-wrap
 msgid "B<-s> I<list>, B<--sections> I<list>, B<--section> I<list>"
-msgstr "B<-S\\ >I<список разделов>B<,\\ -s\\ >I<список разделов>B<,\\ --sections=>I<список разделов>"
+msgstr "B<-s> I<список>, B<--sections> I<список>, B<--section> I<список>"
 
-#
 #.  Due to the rather silly limit of 6 args per request in some `native'
 #.  *roff compilers, we have do the following to get the two-line
 #.  hanging tag on one line. .PP to begin a new paragraph, then the
@@ -252,13 +244,6 @@ msgstr "B<-S\\ >I<список разделов>B<,\\ -s\\ >I<список ра�
 #.  (end relative indent).
 #. type: Plain text
 #: ../../man/man1/apropos.man1:123 ../../man/man1/whatis.man1:127
-#, fuzzy
-#| msgid ""
-#| "Search only the given manual section.  If I<section> is a simple section, "
-#| "for example \"3\", then the displayed list of descriptions will include "
-#| "pages in sections \"3\", \"3perl\", \"3x\", and so on; while if "
-#| "I<section> has an extension, for example \"3perl\", then the list will "
-#| "only include pages in that exact part of the manual section."
 msgid ""
 "Search only the given manual sections.  I<list> is a colon- or comma-"
 "separated list of sections.  If an entry in I<list> is a simple section, for "
@@ -267,11 +252,12 @@ msgid ""
 "has an extension, for example \"3perl\", then the list will only include "
 "pages in that exact part of the manual section."
 msgstr ""
-"Искать только в заданном разделе справочных страниц. Если в I<разделе> "
-"указан только номер, например \"3\", то в выводимый список описаний войдут "
-"страницы из разделов \"3\", \"3perl\", \"3x\" и так далее; но если I<раздел> "
-"указан с расширением, например \"3perl\", то будут показаны страницы только "
-"из этого раздела справочных страниц."
+"Искать только в заданном разделе справочных страниц. В I<списке> "
+"перечисляются разделы через двоеточие или запятую. Если в I<списке> указан "
+"только номер, например \"3\", то в выводимый список описаний войдут страницы "
+"из разделов \"3\", \"3perl\", \"3x\" и так далее; но если в I<списке> "
+"указано расширение, например \"3perl\", то будут показаны страницы только из "
+"раздела справочных страниц с этим расширением."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:129 ../../man/man1/man.man1:681
@@ -979,120 +965,113 @@ msgstr ""
 #: ../../man/man1/man.man1:182
 #, no-wrap
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:182
-#, fuzzy, no-wrap
-#| msgid "1@Executable programs or shell commands\n"
+#, no-wrap
 msgid "Executable programs or shell commands"
-msgstr "1@Исполняемые программы или команды оболочки (shell)\n"
+msgstr "Исполняемые программы или команды оболочки (shell)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:185
 #, no-wrap
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:185
-#, fuzzy, no-wrap
-#| msgid "2@System calls (functions provided by the kernel)\n"
+#, no-wrap
 msgid "System calls (functions provided by the kernel)"
-msgstr "2@Системные вызовы (функции, предоставляемые ядром)\n"
+msgstr "Системные вызовы (функции, предоставляемые ядром)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:188
 #, no-wrap
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:188
-#, fuzzy, no-wrap
-#| msgid "3@Library calls (functions within program libraries)\n"
+#, no-wrap
 msgid "Library calls (functions within program libraries)"
-msgstr "3@Библиотечные вызовы (функции, предоставляемые программными библиотеками)\n"
+msgstr "Библиотечные вызовы (функции, предоставляемые программными библиотеками)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:191
 #, no-wrap
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:191
-#, fuzzy, no-wrap
-#| msgid "4@Special files (usually found in I</dev>)\n"
+#, no-wrap
 msgid "Special files (usually found in I</dev>)"
-msgstr "4@Специальные файлы (обычно находящиеся в каталоге I</dev>)\n"
+msgstr "Специальные файлы (обычно находящиеся в каталоге I</dev>)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:194
 #, no-wrap
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:194
-#, fuzzy, no-wrap
-#| msgid "5@File formats and conventions eg I</etc/passwd>\n"
+#, no-wrap
 msgid "File formats and conventions eg I</etc/passwd>"
-msgstr "5@Форматы файлов и соглашения, например I</etc/passwd>\n"
+msgstr "Форматы файлов и соглашения, например о I</etc/passwd>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:197
 #, no-wrap
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:197
-#, fuzzy, no-wrap
-#| msgid "6@Games\n"
+#, no-wrap
 msgid "Games"
-msgstr "6@Игры\n"
+msgstr "Игры"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:200
 #, no-wrap
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:200
-#, fuzzy, no-wrap
-#| msgid "Miscellaneous (including macro packages and conventions),\n"
+#, no-wrap
 msgid ""
 "Miscellaneous (including macro packages and conventions),\n"
 "e.g. B<man>(7), B<groff>(7)"
-msgstr "Разное (включает пакеты макросов и соглашения),\n"
+msgstr ""
+"Разное (включает пакеты макросов и соглашения),\n"
+"например B<man>(7), B<groff>(7)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:204
 #, no-wrap
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:204
-#, fuzzy, no-wrap
-#| msgid "8@System administration commands (usually only for root)\n"
+#, no-wrap
 msgid "System administration commands (usually only for root)"
-msgstr "8@Команды администрирования системы (обычно, запускаемые только суперпользователем)\n"
+msgstr "Команды администрирования системы (обычно, запускаемые только суперпользователем)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:207
 #, no-wrap
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:207
-#, fuzzy, no-wrap
-#| msgid "9@Kernel routines [\\|Non standard\\|]\n"
+#, no-wrap
 msgid "Kernel routines [\\|Non standard\\|]"
-msgstr "9@Процедуры ядра [\\|нестандартный раздел\\|]\n"
+msgstr "Процедуры ядра [\\|нестандартный раздел\\|]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:215
@@ -1129,80 +1108,73 @@ msgstr ""
 #: ../../man/man1/man.man1:243
 #, no-wrap
 msgid "B<bold text>"
-msgstr ""
+msgstr "B<текст жирным шрифтом>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:243
-#, fuzzy, no-wrap
-#| msgid "B<bold text>@type exactly as shown.\n"
+#, no-wrap
 msgid "type exactly as shown."
-msgstr "B<текст жирным шрифтом>@набирать точно как показано\n"
+msgstr "набирать точно как показано."
 
 #. type: tbl table
 #: ../../man/man1/man.man1:246
 #, no-wrap
 msgid "I<italic text>"
-msgstr ""
+msgstr "I<текст курсивным шрифтом>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:246
-#, fuzzy, no-wrap
-#| msgid "I<italic text>@replace with appropriate argument.\n"
+#, no-wrap
 msgid "replace with appropriate argument."
-msgstr "I<текст курсивным шрифтом>@заменить соответствующим параметром\n"
+msgstr "заменить соответствующим значением."
 
 #. type: tbl table
 #: ../../man/man1/man.man1:249
 #, no-wrap
 msgid "[\\|B<-abc>\\|]"
-msgstr ""
+msgstr "[\\|B<-abc>\\|]"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:249
-#, fuzzy, no-wrap
-#| msgid "[\\|B<-abc>\\|]@any or all arguments within [ ] are optional.\n"
+#, no-wrap
 msgid "any or all arguments within [ ] are optional."
-msgstr "[\\|B<-abc>\\|]@любой или все параметры внутри [ ] необязательны\n"
+msgstr "любой или все параметры внутри [ ] необязательны."
 
 #. type: tbl table
 #: ../../man/man1/man.man1:252
 #, no-wrap
 msgid "B<-a\\|>|\\|B<-b>"
-msgstr ""
+msgstr "B<-a\\|>|\\|B<-b>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:252
-#, fuzzy, no-wrap
-#| msgid "B<-a\\|>|\\|B<-b>@options delimited by | cannot be used together.\n"
+#, no-wrap
 msgid "options delimited by | cannot be used together."
-msgstr "B<-a\\|>|\\|B<-b>@параметры, разделённые |, не могут указываться одновременно\n"
+msgstr "параметры, разделённые |, не могут указываться одновременно."
 
 #. type: tbl table
 #: ../../man/man1/man.man1:255
-#, fuzzy, no-wrap
-#| msgid "I<argument>B< .\\|.\\|.@>I<argument> is repeatable.\n"
+#, no-wrap
 msgid "I<argument>B< .\\|.\\|.>"
-msgstr "I<параметр>B< .\\|.\\|.@>повторяющийся I<параметр>\n"
+msgstr "I<параметр>B< .\\|.\\|.>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:255
-#, fuzzy, no-wrap
-#| msgid "I<argument>B< .\\|.\\|.@>I<argument> is repeatable.\n"
+#, no-wrap
 msgid "I<argument> is repeatable."
-msgstr "I<параметр>B< .\\|.\\|.@>повторяющийся I<параметр>\n"
+msgstr "повторяющийся I<параметр>."
 
 #. type: tbl table
 #: ../../man/man1/man.man1:258
 #, no-wrap
 msgid "[\\|I<expression>\\|]B< .\\|.\\|.>"
-msgstr ""
+msgstr "[\\|I<выражение>\\|]B< .\\|.\\|.>"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:258
-#, fuzzy, no-wrap
-#| msgid "[\\|I<expression>\\|]B< .\\|.\\|.@>entire I<expression>\\ within [ ] is repeatable.\n"
+#, no-wrap
 msgid "entire I<expression>\\ within [ ] is repeatable."
-msgstr "[\\|I<выражение>\\|]B< .\\|.\\|.@>всё I<выражение>\\ внутри [ ] может вводиться несколько раз\n"
+msgstr "всё I<выражение>\\ внутри [ ] может вводиться несколько раз."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:266
@@ -1211,7 +1183,7 @@ msgid ""
 "will usually not be able to render italics when running in a terminal, and "
 "will typically use underlined or coloured text instead."
 msgstr ""
-"Точная растеризация может отличаться на разных устройствах вывода. Например, "
+"Точная отрисовка может отличаться на разных устройствах вывода. Например, "
 "man, обычно, не способна вывести курсив в терминале, и вместо него выведет "
 "текст подчёркнутым или цветным."
 
@@ -1852,7 +1824,7 @@ msgstr ""
 #: ../../man/man1/man.man1:720
 #, no-wrap
 msgid "B<-S\\ >I<list>,\\ B<-s\\ >I<list>,\\ B<--sections=>I<list>"
-msgstr "B<-S\\ >I<список разделов>,\\ B<-s\\ >I<список разделов>,\\ B<--sections=>I<список разделов>"
+msgstr "B<-S\\ >I<список>,\\ B<-s\\ >I<список>,\\ B<--sections=>I<список>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:730
@@ -2099,28 +2071,22 @@ msgstr ""
 #. type: Plain text
 #: ../../man/man1/man.man1:915
 msgid "B<\\e\\ Manual\\e\\ page\\e\\ \\e$MAN_PN\\e\\ ?ltline\\e\\ %lt?L/%L.:>"
-msgstr "B<\\e\\ Manual\\e\\ page\\e\\ \\e$MAN_PN\\e\\ ?ltline\\e\\ %lt?L/%L.:>"
+msgstr ""
+"B<\\e\\ Справочная\\e\\ страница\\e\\ \\e$MAN_PN\\e\\ ?ltстрока\\e\\ %lt?L/"
+"%L.:>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:917
 msgid "B<byte\\e\\ %bB?s/%s..?\\e\\ (END):?pB\\e\\ %pB\\e\\e%..>"
-msgstr "B<byte\\e\\ %bB?s/%s..?\\e\\ (END):?pB\\e\\ %pB\\e\\e%..>"
+msgstr "B<byte\\e\\ %bB?s/%s..?\\e\\ (ВСЕ):?pB\\e\\ %pB\\e\\e%..>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:919
 msgid "B<(press h for help or q to quit)>"
-msgstr ""
+msgstr "B<(h -- справка, q -- выход)>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:934
-#, fuzzy
-#| msgid ""
-#| "It is broken into two lines here for the sake of readability only.  For "
-#| "its meaning see the B<less>(1)  manual page.  The prompt string is first "
-#| "evaluated by the shell.  All double quotes, back-quotes and backslashes "
-#| "in the prompt must be escaped by a preceding backslash.  The prompt "
-#| "string may end in an escaped $ which may be followed by further options "
-#| "for less.  By default B<%man%> sets the B<-ix8> options."
 msgid ""
 "It is broken into three lines here for the sake of readability only.  For "
 "its meaning see the B<less>(1)  manual page.  The prompt string is first "
@@ -2129,7 +2095,7 @@ msgid ""
 "end in an escaped $ which may be followed by further options for less.  By "
 "default B<%man%> sets the B<-ix8> options."
 msgstr ""
-"Здесь она разделена на две строки только для повышения читаемости. Описание "
+"Здесь она разделена на три строки только для повышения читаемости. Описание "
 "её составных частей смотрите в справочной странице B<less>(1). Строка "
 "приглашения сначала обрабатывается оболочкой командной строки. Все двойные "
 "кавычки, обратные кавычки и обратные косые черты в приглашении должны "
@@ -2170,25 +2136,25 @@ msgstr ""
 #: ../../man/man1/man.man1:974
 #, no-wrap
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:974
 #, no-wrap
 msgid "Octal"
-msgstr ""
+msgstr "Восьмеричный код"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:974
 #, no-wrap
 msgid "latin1"
-msgstr ""
+msgstr "latin1"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:974
 #, no-wrap
 msgid "ascii\n"
-msgstr ""
+msgstr "ascii\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:975 ../../man/man8/mandb.man8:60
@@ -2198,103 +2164,99 @@ msgstr "_\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:976
-#, fuzzy, no-wrap
-#| msgid "continuation hyphen@255@\\*[softhyphen]@-\n"
+#, no-wrap
 msgid "continuation hyphen"
-msgstr "continuation hyphen@255@\\*[softhyphen]@-\n"
+msgstr "длинный перенос"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:976
 #, no-wrap
 msgid "255"
-msgstr ""
+msgstr "255"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:976
 #, no-wrap
 msgid "\\*[softhyphen]"
-msgstr ""
+msgstr "\\*[мягкий перенос]"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:976
 #, no-wrap
 msgid "-\n"
-msgstr ""
+msgstr "-\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:977
-#, fuzzy, no-wrap
-#| msgid "bullet (middle dot)@267@\\(bu@o\n"
+#, no-wrap
 msgid "bullet (middle dot)"
-msgstr "bullet (middle dot)@267@\\(bu@o\n"
+msgstr "bullet (точка в центре)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:977
 #, no-wrap
 msgid "267"
-msgstr ""
+msgstr "267"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:977
 #, no-wrap
 msgid "\\(bu"
-msgstr ""
+msgstr "\\(bu"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:977
 #, no-wrap
 msgid "o\n"
-msgstr ""
+msgstr "o\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:978
-#, fuzzy, no-wrap
-#| msgid "acute accent@264@\\(aa@'\n"
+#, no-wrap
 msgid "acute accent"
-msgstr "acute accent@264@\\(aa@'\n"
+msgstr "значок ударения"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:978
 #, no-wrap
 msgid "264"
-msgstr ""
+msgstr "264"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:978
 #, no-wrap
 msgid "\\(aa"
-msgstr ""
+msgstr "\\(aa"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:978
 #, no-wrap
 msgid "'\n"
-msgstr ""
+msgstr "'\n"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:979
-#, fuzzy, no-wrap
-#| msgid "multiplication sign@327@\\(mu@x\n"
+#, no-wrap
 msgid "multiplication sign"
-msgstr "multiplication sign@327@\\(mu@x\n"
+msgstr "знак ударения"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:979
 #, no-wrap
 msgid "327"
-msgstr ""
+msgstr "327"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:979
 #, no-wrap
 msgid "\\(mu"
-msgstr ""
+msgstr "\\(mu"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:979
 #, no-wrap
 msgid "x\n"
-msgstr ""
+msgstr "x\n"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1000
@@ -2990,23 +2952,14 @@ msgstr "%whatis% - показывает описания справочных с
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:32
-#, fuzzy
-#| msgid ""
-#| "B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> "
-#| "I<section>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
-#| "I<path>\\|] [\\|B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<name> \\&.\\|."
-#| "\\|."
 msgid ""
 "B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<list>"
 "\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<path>\\|] [\\|"
 "B<-L> I<locale>\\|] [\\|B<-C> I<file>\\|] I<name> \\&.\\|.\\|."
 msgstr ""
-"B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<раздел>"
+"B<%whatis%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<список>"
 "\\|] [\\|B<-m> I<система>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<путь>\\|] [\\|"
-"B<-L> I<локаль>\\|] [\\|B<-C> I<файл>\\|] I<название> \\&.\\|.\\|. B<%whatis"
-"%> [\\|B<-dlhvV>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> I<раздел>\\|] [\\|"
-"B<-m> I<система>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> I<путь>\\|] [\\|B<-L> "
-"I<локаль>\\|] [\\|B<-C> I<файл>\\|] I<название> \\&.\\|.\\|."
+"B<-L> I<локаль>\\|] [\\|B<-C> I<файл>\\|] I<название> \\&.\\|.\\|."
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:39
@@ -3733,95 +3686,92 @@ msgstr ""
 #: ../../man/man8/mandb.man8:59
 #, no-wrap
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:59
 #, no-wrap
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:59
 #, no-wrap
 msgid "Async"
-msgstr ""
+msgstr "Асинхронность"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:59
 #, no-wrap
 msgid "Filename\n"
-msgstr ""
+msgstr "Имя файла\n"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:61
 #, no-wrap
 msgid "Berkeley db"
-msgstr ""
+msgstr "Berkeley db"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:61
 #, no-wrap
 msgid "Binary tree"
-msgstr ""
+msgstr "двоичное дерево"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:61 ../../man/man8/mandb.man8:62
 #, no-wrap
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:61
 #, no-wrap
 msgid "I<index.bt>\n"
-msgstr ""
+msgstr "I<index.bt>\n"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:62
-#, fuzzy, no-wrap
-#| msgid "GNU gdbm v E<gt>= 1.6@Hashed@Yes@I<index.db>\n"
+#, no-wrap
 msgid "GNU gdbm v E<gt>= 1.6"
-msgstr "GNU gdbm v E<gt>= 1.6@хэш@да@I<index.db>\n"
+msgstr "GNU gdbm v E<gt>= 1.6"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:62 ../../man/man8/mandb.man8:63
 #: ../../man/man8/mandb.man8:64
 #, no-wrap
 msgid "Hashed"
-msgstr ""
+msgstr "Хэш"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:62 ../../man/man8/mandb.man8:63
 #, no-wrap
 msgid "I<index.db>\n"
-msgstr ""
+msgstr "I<index.db>\n"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:63
-#, fuzzy, no-wrap
-#| msgid "GNU gdbm v E<lt>  1.6@Hashed@No@I<index.db>\n"
+#, no-wrap
 msgid "GNU gdbm v E<lt>  1.6"
-msgstr "GNU gdbm v E<lt>  1.6@хэш@нет@I<index.db>\n"
+msgstr "GNU gdbm v E<lt>  1.6"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:63 ../../man/man8/mandb.man8:64
 #, no-wrap
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:64
 #, no-wrap
 msgid "UNIX ndbm"
-msgstr ""
+msgstr "UNIX ndbm"
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:64
-#, fuzzy, no-wrap
-#| msgid "UNIX ndbm@Hashed@No@I<index.(dir|pag)>\n"
+#, no-wrap
 msgid "I<index.(dir|pag)>\n"
-msgstr "UNIX ndbm@хэш@нет@I<index.(dir|pag)>\n"
+msgstr "I<index.(dir|pag)>\n"
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:75
@@ -4043,6 +3993,9 @@ msgstr ""
 "Прежде в этой странице был раздел B<ЧТО АНАЛИЗИРУЕТСЯ>, но теперь он "
 "перенесён в B<lexgrog>(1)."
 
+#~ msgid "B<-s> I<section>, B<--section> I<section>"
+#~ msgstr "B<-s> I<раздел>, B<--section> I<раздел>"
+
 #~ msgid "7@T{\n"
 #~ msgstr "7@T{\n"
 
@@ -4060,6 +4013,3 @@ msgstr ""
 
 #~ msgid "Berkeley db@Binary tree@Yes@I<index.bt>\n"
 #~ msgstr "Berkeley db@двоичное дерево@да@I<index.bt>\n"
-
-#~ msgid "B<-s> I<section>, B<--section> I<section>"
-#~ msgstr "B<-s> I<раздел>, B<--section> I<раздел>"
