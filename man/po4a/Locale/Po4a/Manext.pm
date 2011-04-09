@@ -94,7 +94,7 @@ NEXT_LINE:
             my ($l2, $r2) = $self->SUPER::shiftline();
             while (defined $l2) {
                 $line .= $l2;
-                last if $line =~ /T}\n?$/;
+                last if $l2 =~ /^T}/;
                 ($l2, $r2) = $self->SUPER::shiftline();
             }
         }
