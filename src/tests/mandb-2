@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # What happens when a manual page changes from a regular file to a symbolic
-# link?
+# link and back?
 #   http://bugs.debian.org/490582
 
 : ${srcdir=.}
@@ -50,5 +50,20 @@ EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/3.out"
 expect_pass 'mandb notices two-level symlink' \
 	'diff -u "$tmpdir/3.exp" "$tmpdir/3.out"'
+
+next_second
+rm -f "$tmpdir/usr/share/man/man5/fs.5.gz"
+write_page fs 5 "$tmpdir/usr/share/man/man5/fs.5.gz" \
+	UTF-8 gz t 'fs \- new fs(5)'
+MANPATH="$tmpdir/usr/share/man" run $MANDB -C "$tmpdir/manpath.config" -u -q \
+	"$tmpdir/usr/share/man"
+cat >"$tmpdir/4.exp" <<EOF
+filesystems -> "- 5 5 MTIME A - - gz filesystems(5)"
+fs -> "- 5 5 MTIME A - - gz new fs(5)"
+fs2 -> "- 5 5 MTIME B - - gz filesystems(5)"
+EOF
+accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/4.out"
+expect_pass 'mandb notices symlink -> regular file' \
+	'diff -u "$tmpdir/4.exp" "$tmpdir/4.out"'
 
 finish
