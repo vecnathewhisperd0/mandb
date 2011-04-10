@@ -1,3 +1,10 @@
+Sun Apr 10 02:10:56 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* src/descriptions_store.c (store_descriptions): Ensure that the
+	  target of a symlink or .so chain is always recorded as a real
+	  page.  Fixes mandb-2 test failures.
+	* NEWS: Document this.
+
 Sun Apr 10 01:55:28 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/mandb-2: Test the case where a manual page changes from

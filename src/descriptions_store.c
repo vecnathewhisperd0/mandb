@@ -106,7 +106,11 @@ void store_descriptions (const struct page_description *head,
 						free (buf);
 						break;
 					}
-					info->id = save_id;
+					if (i == trace->len - 1 &&
+					    save_id == SO_MAN)
+						info->id = ULT_MAN;
+					else
+						info->id = save_id;
 					info->pointer = NULL;
 					info->whatis = desc->whatis;
 					found_real_page = 1;
