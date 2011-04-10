@@ -829,7 +829,7 @@ static void free_config_file (void *unused ATTRIBUTE_UNUSED)
 void read_config_file (int optional)
 {
 	static int done = 0;
-	char *home;
+	char *dotmanpath = NULL;
 	FILE *config;
 
 	if (done)
@@ -837,13 +837,14 @@ void read_config_file (int optional)
 
 	push_cleanup (free_config_file, NULL, 0);
 
-	home = getenv ("HOME");
-	if (home) {
-		char *dotmanpath;
-		if (!user_config_file)
+	if (user_config_file)
+		dotmanpath = xstrdup (user_config_file);
+	else {
+		char *home = getenv ("HOME");
+		if (home)
 			dotmanpath = appendstr (NULL, home, "/.manpath", NULL);
-		else
-			dotmanpath = xstrdup (user_config_file);
+	}
+	if (dotmanpath) {
 		config = fopen (dotmanpath, "r");
 		if (config != NULL) {
 			debug ("From the config file %s:\n\n", dotmanpath);
