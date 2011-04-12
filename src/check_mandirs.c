@@ -267,7 +267,7 @@ void test_manfile (const char *file, const char *path)
 	 */
 
 	if (whatis)
-		lg.whatis = xstrdup (whatis->whatis);
+		lg.whatis = whatis->whatis ? xstrdup (whatis->whatis) : NULL;
 	else {
 		/* Cache miss; go and get the whatis info in its raw state. */
 		char *file_base = base_name (file);

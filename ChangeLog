@@ -1,3 +1,12 @@
+Tue Apr 12 14:03:38 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (test_manfile): whatis->whatis may be NULL in
+	  the case of an empty page.  Guard against this (Debian bug
+	  #622104).
+	* src/tests/mandb-5: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add mandb-5.
+	* NEWS: Document this.
+
 Sun Apr 10 22:09:10 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.6.0.1.
