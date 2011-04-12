@@ -1,14 +1,14 @@
 # Catalan message catalogs for man-db.
-# Copyright © 2002, 2003, 2005, 2010 Colin Watson (msgids)
+# Copyright © 2002, 2003, 2005, 2010, 2011 Colin Watson (msgids)
 # This file is distributed under the same licence as the man-db package.
-# Jordi Mallach <jordi@gnu.org>, 2002, 2003, 2005, 2010.
+# Jordi Mallach <jordi@gnu.org>, 2002, 2003, 2005, 2010, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.5.8-pre1\n"
+"Project-Id-Version: man-db 2.6.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2011-04-10 21:35+0100\n"
-"PO-Revision-Date: 2010-11-03 22:06+0100\n"
+"POT-Creation-Date: 2011-03-27 18:21+0100\n"
+"PO-Revision-Date: 2011-04-11 22:39+0200\n"
 "Last-Translator: Jordi Mallach <jordi@gnu.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -211,8 +211,7 @@ msgstr "no es pot crear la memòria cau d'índex %s"
 #: src/check_mandirs.c:506
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
-msgstr ""
-"S'està actualitzant la memòria cau d'índex del camí «%s/%s». Espereu..."
+msgstr "S'està actualitzant la memòria cau d'índex del camí «%s/%s». Espereu…"
 
 #: src/check_mandirs.c:603 src/check_mandirs.c:671
 msgid "done.\n"
@@ -222,7 +221,7 @@ msgstr "fet.\n"
 #: src/check_mandirs.c:915
 #, c-format
 msgid "Purging old database entries in %s...\n"
-msgstr "S'estan purgant entrades antigues de la base de dades en %s...\n"
+msgstr "S'estan purgant entrades antigues de la base de dades en %s…\n"
 
 #: src/convert_name.c:46
 #, c-format
@@ -739,13 +738,13 @@ msgstr "no es pot llegir de %s"
 #: src/mandb.c:429
 #, c-format
 msgid "Processing manual pages under %s...\n"
-msgstr "Processant pàgines de manual sota %s...\n"
+msgstr "Processant pàgines de manual sota %s…\n"
 
 # S'estan...  ivb
 #: src/mandb.c:610 src/mandb.c:637
-#, fuzzy, c-format
+#, c-format
 msgid "Removing obsolete cat directory %s...\n"
-msgstr "S'estan cercant cats orfes sota %s...\n"
+msgstr "S'està suprimint el directori de cats obsolet %s…\n"
 
 # s'està utilitzant/s'utilitza/s'utilitzarà  ivb
 #: src/mandb.c:793
@@ -839,22 +838,22 @@ msgstr "avís: $MANPATH establert, es descartarà %s"
 msgid "can't parse directory list `%s'"
 msgstr "no es pot analitzar sintàcticament la llista de directoris «%s»"
 
-#: src/manp.c:864
+#: src/manp.c:863
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "no es pot obrir el fitxer de configuració del camí de man %s"
 
-#: src/manp.c:896
+#: src/manp.c:895
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "avís: el directori requerit %s no existeix"
 
-#: src/manp.c:1120
+#: src/manp.c:1119
 #, c-format
 msgid "can't determine current directory"
 msgstr "no es pot determinar el directori actual"
 
-#: src/manp.c:1308
+#: src/manp.c:1307
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "avís: %s no comença amb %s"
@@ -887,7 +886,7 @@ msgstr "no es pot resoldre %s"
 #: src/straycats.c:300
 #, c-format
 msgid "Checking for stray cats under %s...\n"
-msgstr "S'estan cercant cats orfes sota %s...\n"
+msgstr "S'estan cercant cats orfes sota %s…\n"
 
 #: src/straycats.c:339
 #, c-format
@@ -932,9 +931,8 @@ msgid "do not trim output to terminal width"
 msgstr "no ajustes l'eixida a l'amplada del terminal"
 
 #: src/whatis.c:128
-#, fuzzy
 msgid "search only these sections (colon-separated)"
-msgstr "cerca només en aquesta secció"
+msgstr "cerca només en aquestes seccions (separades per punts i coma)"
 
 #: src/whatis.c:132
 msgid "define the locale for this search"
@@ -1002,24 +1000,14 @@ msgstr "%s:%d: cometa no terminada a la petició roff"
 msgid "compatibility switch (ignored)"
 msgstr "commutador de compatibilitat (descartat)"
 
-#~ msgid "can't fork"
-#~ msgstr "no es pot fer «fork»"
-
-#~ msgid "fork failed"
-#~ msgstr "«fork» ha fallat"
-
-# «obtenir»?  ivb
-#~ msgid "can't get man command's exit status"
-#~ msgstr "no es pot obtenir l'estat d'eixida de l'ordre de man"
-
-#~ msgid "unable to reset cursor position in %s"
-#~ msgstr "no s'ha pogut reiniciar la posició del cursor en %s"
-
 #~ msgid "badly formed configuration directive: '%s'"
 #~ msgstr "la directiva de configuració està mal formatada: «%s»"
 
 #~ msgid "can't install SIGCHLD handler"
 #~ msgstr "no es pot instal·lar el gestor de SIGCHLD"
+
+#~ msgid "fork failed"
+#~ msgstr "«fork» ha fallat"
 
 #~ msgid "waitpid failed"
 #~ msgstr "«waitpid» ha fallat"
@@ -1060,11 +1048,21 @@ msgstr "commutador de compatibilitat (descartat)"
 #~ msgid "closing pipeline output failed"
 #~ msgstr "no s'ha pogut tancar el conducte d'eixida"
 
-#~ msgid "SECTION"
-#~ msgstr "SECCIÓ"
+# «obtenir»?  ivb
+#~ msgid "can't get man command's exit status"
+#~ msgstr "no es pot obtenir l'estat d'eixida de l'ordre de man"
+
+#~ msgid "unable to reset cursor position in %s"
+#~ msgstr "no s'ha pogut reiniciar la posició del cursor en %s"
 
 #~ msgid "can't get passwd structure for uid 0"
 #~ msgstr "No es pot obtindre l'estructura de contrasenya per a l'uid 0"
+
+#~ msgid "can't fork"
+#~ msgstr "no es pot fer «fork»"
+
+#~ msgid "SECTION"
+#~ msgstr "SECCIÓ"
 
 # Em sembla que és «inserir» però no ho puc comprovar ara.  ivb
 # Crec que "insertar" i "inserir" son vàlides, però per unificar,
@@ -1089,7 +1087,7 @@ msgstr "commutador de compatibilitat (descartat)"
 # Mantens «manpath» pel nom de la variable? No és coherent amb la següent.  ivb
 # Sí, canviat. jm
 #~ msgid "usage: %s [-dhV] [-C file] [-M manpath] [section] ...\n"
-#~ msgstr "forma d'ús: %s [-dhV] [-C fitxer] [-M camí de man] [secció] ...\n"
+#~ msgstr "forma d'ús: %s [-dhV] [-C fitxer] [-M camí de man] [secció] …\n"
 
 #~ msgid ""
 #~ "-d, --debug                 produce debugging info.\n"
@@ -1137,7 +1135,7 @@ msgstr "commutador de compatibilitat (descartat)"
 #~ "-h, --help                  mostra aquest missatge sobre l'ús.\n"
 
 #~ msgid "usage: %s [-mcwfhV] file ...\n"
-#~ msgstr "forma d'ús: %s [-mcwfhV] fitxer ...\n"
+#~ msgstr "forma d'ús: %s [-mcwfhV] fitxer …\n"
 
 # as -> com a, like -> com  ivb
 #~ msgid ""
@@ -1175,7 +1173,7 @@ msgstr "commutador de compatibilitat (descartat)"
 #~ "forma d'ús: %s [-c|-f|-k|-w|-tZT dispositiu] [-i|-I] [-adlhu7V] [-Mcamí]\n"
 #~ "                [-Ppaginador] [-Cfitxer] [-Sllista] [-msistema] [-"
 #~ "pcadena]\n"
-#~ "                [-Llocale] [-eextensió] [secció] pàgina ...\n"
+#~ "                [-Llocale] [-eextensió] [secció] pàgina …\n"
 
 #~ msgid ""
 #~ "usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
@@ -1185,7 +1183,7 @@ msgstr "commutador de compatibilitat (descartat)"
 #~ msgstr ""
 #~ "forma d'ús: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mcamí] [-Ppaginador]\n"
 #~ "                [-Cfitxer] [-Sllista] [-msistema] [-pcadena] [-Llocale]\n"
-#~ "                [-eextensió] [secció] pàgina ...\n"
+#~ "                [-eextensió] [secció] pàgina …\n"
 #~ "\n"
 
 # «location» l'he vist a sovint com a «ubicació», però és igual.  ivb
@@ -1336,10 +1334,10 @@ msgstr "commutador de compatibilitat (descartat)"
 #~ msgstr "error en escriure en el fitxer temporal %s"
 
 #~ msgid "Still saving the page, please wait...\n"
-#~ msgstr "Encara s'està desant la pàgina, espereu...\n"
+#~ msgstr "Encara s'està desant la pàgina, espereu…\n"
 
 #~ msgid "Reformatting %s, please wait...\n"
-#~ msgstr "S'està reformatant %s, espereu...\n"
+#~ msgstr "S'està reformatant %s, espereu…\n"
 
 # Millor si uses la mateixa traducció de «manpath» arreu.  ivb
 #~ msgid "usage: %s [-dqspuct|-h|-V] [-C file] [-f filename] [manpath]\n"
@@ -1421,7 +1419,7 @@ msgstr "commutador de compatibilitat (descartat)"
 #~ msgstr ""
 #~ "forma d'ús: %s [-dhV] [-r|-w|-e] [-s secció] [-m sistemes] [-M camí de "
 #~ "man]\n"
-#~ "               [-C fitxer] paraula clau ...\n"
+#~ "               [-C fitxer] paraula clau …\n"
 
 # -e: cerca coincidències exactes en cada paraula clau.  ivb
 #~ msgid ""
@@ -1462,7 +1460,7 @@ msgstr "commutador de compatibilitat (descartat)"
 #~ "              keyword ...\n"
 #~ msgstr ""
 #~ "forma d'ús: %s [-dhV] [-r|-w] [-s secció] [-m sistemes] [-M camí de man]\n"
-#~ "               [-C fitxer] paraula clau ...\n"
+#~ "               [-C fitxer] paraula clau …\n"
 
 #~ msgid ""
 #~ "-d, --debug                produce debugging info.\n"
@@ -1537,7 +1535,7 @@ msgstr "commutador de compatibilitat (descartat)"
 #~ "usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"
 #~ msgstr ""
 #~ "forma d'ús: %s [-dhV] [-r|-w] [-m sistemes] [-M camí de man] [-C fitxer] "
-#~ "paraula clau ...\n"
+#~ "paraula clau …\n"
 
 #~ msgid "key %s is missing name component - is this an old db?"
 #~ msgstr ""
