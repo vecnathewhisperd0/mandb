@@ -1,3 +1,10 @@
+Wed Apr 13 10:26:07 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* src/descriptions.c (parse_descriptions): Once we've seen at least
+	  one record, ignore any further records that don't include a whatis
+	  description, as they tend to be noise (Arch Linux bug #22866).
+	* NEWS: Document this.
+
 Tue Apr 12 14:10:17 BST 2011  Jordi Mallach  <jordi@gnu.org>
 
 	* po/ca.po: Update from Translation Project.

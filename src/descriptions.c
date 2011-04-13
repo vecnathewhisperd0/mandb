@@ -74,8 +74,21 @@ struct page_description *parse_descriptions (const char *base,
 		dash = strstr (record, " - ");
 		if (dash)
 			names = xstrndup (record, dash - record);
-		else
+		else if (!desc)
+			/* Some pages have a NAME section with just the page
+			 * name and no whatis.  We might as well include
+			 * this.
+			 */
 			names = xstrdup (record);
+		else
+			/* Once at least one record has been seen, further
+			 * cases where there is no whatis usually amount to
+			 * garbage following the useful records, and can
+			 * cause problems due to false WHATIS_MAN entries in
+			 * the database.  On the whole it seems best to
+			 * ignore these.
+			 */
+			goto next;
 
 		for (token = strtok (names, ","); token;
 		     token = strtok (NULL, ",")) {
@@ -106,6 +119,7 @@ struct page_description *parse_descriptions (const char *base,
 		}
 
 		free (names);
+next:
 		free (record);
 
 		sep = nextsep;

@@ -8,6 +8,10 @@ Major changes since man-db 2.6.0.1:
 
 	o Fix a segfault when scanning links to empty pages.
 
+	o Once we've seen at least one record in a page's NAME section,
+	  ignore any further records that don't include a whatis
+	  description, as they tend to be noise.
+
 man-db 2.6.0.1 (10 April 2011)
 ==============================
 
