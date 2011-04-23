@@ -13,8 +13,8 @@
 
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
-m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.67],,
-[m4_warning([this file was generated for autoconf 2.67.
+m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.68],,
+[m4_warning([this file was generated for autoconf 2.68.
 You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically `autoreconf'.])])
@@ -1220,7 +1220,6 @@ m4_include([m4/man-trans-subst.m4])
 m4_include([gnulib/m4/00gnulib.m4])
 m4_include([gnulib/m4/alloca.m4])
 m4_include([gnulib/m4/argp.m4])
-m4_include([gnulib/m4/asm-underscore.m4])
 m4_include([gnulib/m4/btowc.m4])
 m4_include([gnulib/m4/canonicalize.m4])
 m4_include([gnulib/m4/chdir-long.m4])
@@ -1234,7 +1233,6 @@ m4_include([gnulib/m4/d-type.m4])
 m4_include([gnulib/m4/dirent_h.m4])
 m4_include([gnulib/m4/dirfd.m4])
 m4_include([gnulib/m4/dirname.m4])
-m4_include([gnulib/m4/dos.m4])
 m4_include([gnulib/m4/double-slash-root.m4])
 m4_include([gnulib/m4/dup2.m4])
 m4_include([gnulib/m4/eealloc.m4])
@@ -1295,6 +1293,7 @@ m4_include([gnulib/m4/mbrtowc.m4])
 m4_include([gnulib/m4/mbsinit.m4])
 m4_include([gnulib/m4/mbsrtowcs.m4])
 m4_include([gnulib/m4/mbstate_t.m4])
+m4_include([gnulib/m4/mbtowc.m4])
 m4_include([gnulib/m4/memchr.m4])
 m4_include([gnulib/m4/mempcpy.m4])
 m4_include([gnulib/m4/memrchr.m4])

@@ -60,7 +60,6 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/00gnulib.m4 \
 	$(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/argp.m4 \
-	$(top_srcdir)/gnulib/m4/asm-underscore.m4 \
 	$(top_srcdir)/gnulib/m4/btowc.m4 \
 	$(top_srcdir)/gnulib/m4/canonicalize.m4 \
 	$(top_srcdir)/gnulib/m4/chdir-long.m4 \
@@ -74,7 +73,6 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/dirent_h.m4 \
 	$(top_srcdir)/gnulib/m4/dirfd.m4 \
 	$(top_srcdir)/gnulib/m4/dirname.m4 \
-	$(top_srcdir)/gnulib/m4/dos.m4 \
 	$(top_srcdir)/gnulib/m4/double-slash-root.m4 \
 	$(top_srcdir)/gnulib/m4/dup2.m4 \
 	$(top_srcdir)/gnulib/m4/eealloc.m4 \
@@ -135,6 +133,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/mbsinit.m4 \
 	$(top_srcdir)/gnulib/m4/mbsrtowcs.m4 \
 	$(top_srcdir)/gnulib/m4/mbstate_t.m4 \
+	$(top_srcdir)/gnulib/m4/mbtowc.m4 \
 	$(top_srcdir)/gnulib/m4/memchr.m4 \
 	$(top_srcdir)/gnulib/m4/mempcpy.m4 \
 	$(top_srcdir)/gnulib/m4/memrchr.m4 \
@@ -315,7 +314,6 @@ AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 APPLE_UNIVERSAL_BUILD = @APPLE_UNIVERSAL_BUILD@
 AR = @AR@
-ASM_SYMBOL_PREFIX = @ASM_SYMBOL_PREFIX@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -440,6 +438,7 @@ GNULIB_MBSSEP = @GNULIB_MBSSEP@
 GNULIB_MBSSPN = @GNULIB_MBSSPN@
 GNULIB_MBSSTR = @GNULIB_MBSSTR@
 GNULIB_MBSTOK_R = @GNULIB_MBSTOK_R@
+GNULIB_MBTOWC = @GNULIB_MBTOWC@
 GNULIB_MEMCHR = @GNULIB_MEMCHR@
 GNULIB_MEMMEM = @GNULIB_MEMMEM@
 GNULIB_MEMPCPY = @GNULIB_MEMPCPY@
@@ -566,6 +565,7 @@ GNULIB_WCSTOK = @GNULIB_WCSTOK@
 GNULIB_WCSWIDTH = @GNULIB_WCSWIDTH@
 GNULIB_WCSXFRM = @GNULIB_WCSXFRM@
 GNULIB_WCTOB = @GNULIB_WCTOB@
+GNULIB_WCTOMB = @GNULIB_WCTOMB@
 GNULIB_WCTRANS = @GNULIB_WCTRANS@
 GNULIB_WCTYPE = @GNULIB_WCTYPE@
 GNULIB_WCWIDTH = @GNULIB_WCWIDTH@
@@ -941,6 +941,7 @@ REPLACE_MBSINIT = @REPLACE_MBSINIT@
 REPLACE_MBSNRTOWCS = @REPLACE_MBSNRTOWCS@
 REPLACE_MBSRTOWCS = @REPLACE_MBSRTOWCS@
 REPLACE_MBSTATE_T = @REPLACE_MBSTATE_T@
+REPLACE_MBTOWC = @REPLACE_MBTOWC@
 REPLACE_MEMCHR = @REPLACE_MEMCHR@
 REPLACE_MEMMEM = @REPLACE_MEMMEM@
 REPLACE_MKDIR = @REPLACE_MKDIR@
@@ -1006,6 +1007,7 @@ REPLACE_WCSNRTOMBS = @REPLACE_WCSNRTOMBS@
 REPLACE_WCSRTOMBS = @REPLACE_WCSRTOMBS@
 REPLACE_WCSWIDTH = @REPLACE_WCSWIDTH@
 REPLACE_WCTOB = @REPLACE_WCTOB@
+REPLACE_WCTOMB = @REPLACE_WCTOMB@
 REPLACE_WCWIDTH = @REPLACE_WCWIDTH@
 REPLACE_WRITE = @REPLACE_WRITE@
 SED = @SED@
@@ -1158,31 +1160,31 @@ EXTRA_DIST = alloca.c alloca.in.h areadlink.h \
 	canonicalize-lgpl.c chdir-long.c chdir-long.h chown.c \
 	fchown-stub.c cloexec.c cloexec.h close.c close-hook.h \
 	dirent.in.h dirfd.c basename.c dirname.c stripslash.c \
-	basename-lgpl.c dirname-lgpl.c dirname.h stripslash.c dup2.c \
-	errno.in.h error.c error.h exitfail.h fchdir.c fclose.c \
-	fcntl.c fcntl.in.h fdopendir.c openat-priv.h openat-proc.c \
-	file-set.h float.in.h flock.c fnmatch.c fnmatch.in.h \
-	fnmatch_loop.c getcwd.c getdtablesize.c getlogin_r.c getopt.c \
-	getopt.in.h getopt1.c getopt_int.h \
+	basename-lgpl.c dirname-lgpl.c dirname.h stripslash.c \
+	dosname.h dup2.c errno.in.h error.c error.h exitfail.h \
+	fchdir.c fclose.c fcntl.c fcntl.in.h fdopendir.c openat-priv.h \
+	openat-proc.c file-set.h float.in.h flock.c fnmatch.c \
+	fnmatch.in.h fnmatch_loop.c getcwd.c getdtablesize.c \
+	getlogin_r.c getopt.c getopt.in.h getopt1.c getopt_int.h \
 	$(top_srcdir)/tools/config.rpath gettimeofday.c glob-libc.h \
 	glob.c glob.in.h hash.c hash.h hash-triple.h \
 	$(top_srcdir)/tools/config.rpath idpriv.h idpriv.h intprops.h \
 	langinfo.in.h lchown.c config.charset ref-add.sin ref-del.sin \
 	lstat.c malloc.c malloc.c malloca.h malloca.valgrind mbrtowc.c \
 	mbsinit.c mbsrtowcs-impl.h mbsrtowcs-state.c mbsrtowcs.c \
-	memchr.c memchr.valgrind mempcpy.c memrchr.c mkdir.c mkdtemp.c \
-	mkstemp.c nl_langinfo.c open.c at-func.c fchmodat.c fchownat.c \
-	fstatat.c mkdirat.c openat-priv.h openat-proc.c openat.c \
-	openat.h unlinkat.c pathmax.h rawmemchr.c rawmemchr.valgrind \
-	readlink.c realloc.c regcomp.c regex.c regex.h \
-	regex_internal.c regex_internal.h regexec.c rename.c rmdir.c \
-	same.c same.h same-inode.h save-cwd.c save-cwd.h setenv.c \
-	sig-handler.h sigaction.c signal.in.h sigprocmask.c sleep.c \
-	stat.c stdarg.in.h stdbool.in.h stddef.in.h stdint.in.h \
-	stdio-write.c stdio.in.h stdlib.in.h strcasecmp.c \
-	strncasecmp.c strchrnul.c strchrnul.valgrind strdup.c streq.h \
-	strerror.c string.in.h strings.in.h strndup.c strnlen.c \
-	strsep.c sys_file.in.h sys_stat.in.h sys_time.in.h \
+	mbtowc-impl.h mbtowc.c memchr.c memchr.valgrind mempcpy.c \
+	memrchr.c mkdir.c mkdtemp.c mkstemp.c nl_langinfo.c open.c \
+	at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c \
+	openat-priv.h openat-proc.c openat.c openat.h unlinkat.c \
+	pathmax.h rawmemchr.c rawmemchr.valgrind readlink.c realloc.c \
+	regcomp.c regex.c regex.h regex_internal.c regex_internal.h \
+	regexec.c rename.c rmdir.c same.c same.h same-inode.h \
+	save-cwd.c save-cwd.h setenv.c sig-handler.h sigaction.c \
+	signal.in.h sigprocmask.c sleep.c stat.c stdarg.in.h \
+	stdbool.in.h stddef.in.h stdint.in.h stdio.in.h stdlib.in.h \
+	strcasecmp.c strncasecmp.c strchrnul.c strchrnul.valgrind \
+	strdup.c streq.h strerror.c string.in.h strings.in.h strndup.c \
+	strnlen.c strsep.c sys_file.in.h sys_stat.in.h sys_time.in.h \
 	sysexits.in.h tempname.c tempname.h \
 	$(top_srcdir)/tools/config.rpath time.in.h unistd.in.h \
 	dup-safer.c fd-safer.c pipe-safer.c unistd--.h unistd-safer.h \
@@ -1256,17 +1258,18 @@ EXTRA_libgnu_la_SOURCES = alloca.c btowc.c canonicalize.c \
 	fnmatch.c fnmatch_loop.c getcwd.c getdtablesize.c getlogin_r.c \
 	getopt.c getopt1.c gettimeofday.c glob.c hash.c lchown.c \
 	lstat.c malloc.c malloc.c mbrtowc.c mbsinit.c \
-	mbsrtowcs-state.c mbsrtowcs.c memchr.c mempcpy.c memrchr.c \
-	mkdir.c mkdtemp.c mkstemp.c nl_langinfo.c open.c at-func.c \
-	fchmodat.c fchownat.c fstatat.c mkdirat.c openat-proc.c \
-	openat.c unlinkat.c rawmemchr.c readlink.c realloc.c regcomp.c \
-	regex.c regex_internal.c regexec.c rename.c rmdir.c same.c \
-	save-cwd.c setenv.c sigaction.c sigprocmask.c sleep.c stat.c \
-	stdio-write.c strcasecmp.c strncasecmp.c strchrnul.c strdup.c \
-	strerror.c strndup.c strnlen.c strsep.c tempname.c dup-safer.c \
-	fd-safer.c pipe-safer.c unlink.c unsetenv.c asnprintf.c \
-	printf-args.c printf-parse.c vasnprintf.c asprintf.c \
-	vasprintf.c vsnprintf.c wcrtomb.c xmalloc.c xgetcwd.c
+	mbsrtowcs-state.c mbsrtowcs.c mbtowc.c memchr.c mempcpy.c \
+	memrchr.c mkdir.c mkdtemp.c mkstemp.c nl_langinfo.c open.c \
+	at-func.c fchmodat.c fchownat.c fstatat.c mkdirat.c \
+	openat-proc.c openat.c unlinkat.c rawmemchr.c readlink.c \
+	realloc.c regcomp.c regex.c regex_internal.c regexec.c \
+	rename.c rmdir.c same.c save-cwd.c setenv.c sigaction.c \
+	sigprocmask.c sleep.c stat.c strcasecmp.c strncasecmp.c \
+	strchrnul.c strdup.c strerror.c strndup.c strnlen.c strsep.c \
+	tempname.c dup-safer.c fd-safer.c pipe-safer.c unlink.c \
+	unsetenv.c asnprintf.c printf-args.c printf-parse.c \
+	vasnprintf.c asprintf.c vasprintf.c vsnprintf.c wcrtomb.c \
+	xmalloc.c xgetcwd.c
 libgnu_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(LTLIBINTL) \
 	$(LTLIBTHREAD)
 ARG_NONNULL_H = arg-nonnull.h
@@ -1411,6 +1414,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbsinit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbsrtowcs-state.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbsrtowcs.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbtowc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memchr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mempcpy.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memrchr.Plo@am__quote@
@@ -1442,7 +1446,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sigprocmask.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sleep.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stat.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stdio-write.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strcasecmp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strchrnul.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strdup.Plo@am__quote@
@@ -2175,6 +2178,7 @@ stdint.h: stdint.in.h
 	      -e 's/@''HAVE_INTTYPES_H''@/$(HAVE_INTTYPES_H)/g' \
 	      -e 's/@''HAVE_SYS_INTTYPES_H''@/$(HAVE_SYS_INTTYPES_H)/g' \
 	      -e 's/@''HAVE_SYS_BITYPES_H''@/$(HAVE_SYS_BITYPES_H)/g' \
+	      -e 's/@''HAVE_WCHAR_H''@/$(HAVE_WCHAR_H)/g' \
 	      -e 's/@''HAVE_LONG_LONG_INT''@/$(HAVE_LONG_LONG_INT)/g' \
 	      -e 's/@''HAVE_UNSIGNED_LONG_LONG_INT''@/$(HAVE_UNSIGNED_LONG_LONG_INT)/g' \
 	      -e 's/@''APPLE_UNIVERSAL_BUILD''@/$(APPLE_UNIVERSAL_BUILD)/g' \
@@ -2314,6 +2318,7 @@ stdlib.h: stdlib.in.h $(CXXDEFS_H) $(ARG_NONNULL_H) $(WARN_ON_USE_H)
 	      -e 's|@''GNULIB_GETSUBOPT''@|$(GNULIB_GETSUBOPT)|g' \
 	      -e 's|@''GNULIB_GRANTPT''@|$(GNULIB_GRANTPT)|g' \
 	      -e 's|@''GNULIB_MALLOC_POSIX''@|$(GNULIB_MALLOC_POSIX)|g' \
+	      -e 's|@''GNULIB_MBTOWC''@|$(GNULIB_MBTOWC)|g' \
 	      -e 's|@''GNULIB_MKDTEMP''@|$(GNULIB_MKDTEMP)|g' \
 	      -e 's|@''GNULIB_MKOSTEMP''@|$(GNULIB_MKOSTEMP)|g' \
 	      -e 's|@''GNULIB_MKOSTEMPS''@|$(GNULIB_MKOSTEMPS)|g' \
@@ -2332,6 +2337,7 @@ stdlib.h: stdlib.in.h $(CXXDEFS_H) $(ARG_NONNULL_H) $(WARN_ON_USE_H)
 	      -e 's|@''GNULIB_SYSTEM_POSIX''@|$(GNULIB_SYSTEM_POSIX)|g' \
 	      -e 's|@''GNULIB_UNLOCKPT''@|$(GNULIB_UNLOCKPT)|g' \
 	      -e 's|@''GNULIB_UNSETENV''@|$(GNULIB_UNSETENV)|g' \
+	      -e 's|@''GNULIB_WCTOMB''@|$(GNULIB_WCTOMB)|g' \
 	      < $(srcdir)/stdlib.in.h | \
 	  sed -e 's|@''HAVE__EXIT''@|$(HAVE__EXIT)|g' \
 	      -e 's|@''HAVE_ATOLL''@|$(HAVE_ATOLL)|g' \
@@ -2360,6 +2366,7 @@ stdlib.h: stdlib.in.h $(CXXDEFS_H) $(ARG_NONNULL_H) $(WARN_ON_USE_H)
 	      -e 's|@''REPLACE_CALLOC''@|$(REPLACE_CALLOC)|g' \
 	      -e 's|@''REPLACE_CANONICALIZE_FILE_NAME''@|$(REPLACE_CANONICALIZE_FILE_NAME)|g' \
 	      -e 's|@''REPLACE_MALLOC''@|$(REPLACE_MALLOC)|g' \
+	      -e 's|@''REPLACE_MBTOWC''@|$(REPLACE_MBTOWC)|g' \
 	      -e 's|@''REPLACE_MKSTEMP''@|$(REPLACE_MKSTEMP)|g' \
 	      -e 's|@''REPLACE_PUTENV''@|$(REPLACE_PUTENV)|g' \
 	      -e 's|@''REPLACE_REALLOC''@|$(REPLACE_REALLOC)|g' \
@@ -2367,6 +2374,7 @@ stdlib.h: stdlib.in.h $(CXXDEFS_H) $(ARG_NONNULL_H) $(WARN_ON_USE_H)
 	      -e 's|@''REPLACE_SETENV''@|$(REPLACE_SETENV)|g' \
 	      -e 's|@''REPLACE_STRTOD''@|$(REPLACE_STRTOD)|g' \
 	      -e 's|@''REPLACE_UNSETENV''@|$(REPLACE_UNSETENV)|g' \
+	      -e 's|@''REPLACE_WCTOMB''@|$(REPLACE_WCTOMB)|g' \
 	      -e '/definitions of _GL_FUNCDECL_RPL/r $(CXXDEFS_H)' \
 	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
 	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)'; \

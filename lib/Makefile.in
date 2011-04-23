@@ -48,7 +48,6 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/00gnulib.m4 \
 	$(top_srcdir)/gnulib/m4/alloca.m4 \
 	$(top_srcdir)/gnulib/m4/argp.m4 \
-	$(top_srcdir)/gnulib/m4/asm-underscore.m4 \
 	$(top_srcdir)/gnulib/m4/btowc.m4 \
 	$(top_srcdir)/gnulib/m4/canonicalize.m4 \
 	$(top_srcdir)/gnulib/m4/chdir-long.m4 \
@@ -62,7 +61,6 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/dirent_h.m4 \
 	$(top_srcdir)/gnulib/m4/dirfd.m4 \
 	$(top_srcdir)/gnulib/m4/dirname.m4 \
-	$(top_srcdir)/gnulib/m4/dos.m4 \
 	$(top_srcdir)/gnulib/m4/double-slash-root.m4 \
 	$(top_srcdir)/gnulib/m4/dup2.m4 \
 	$(top_srcdir)/gnulib/m4/eealloc.m4 \
@@ -123,6 +121,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/gnulib/m4/mbsinit.m4 \
 	$(top_srcdir)/gnulib/m4/mbsrtowcs.m4 \
 	$(top_srcdir)/gnulib/m4/mbstate_t.m4 \
+	$(top_srcdir)/gnulib/m4/mbtowc.m4 \
 	$(top_srcdir)/gnulib/m4/memchr.m4 \
 	$(top_srcdir)/gnulib/m4/mempcpy.m4 \
 	$(top_srcdir)/gnulib/m4/memrchr.m4 \
@@ -286,7 +285,6 @@ AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 APPLE_UNIVERSAL_BUILD = @APPLE_UNIVERSAL_BUILD@
 AR = @AR@
-ASM_SYMBOL_PREFIX = @ASM_SYMBOL_PREFIX@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -411,6 +409,7 @@ GNULIB_MBSSEP = @GNULIB_MBSSEP@
 GNULIB_MBSSPN = @GNULIB_MBSSPN@
 GNULIB_MBSSTR = @GNULIB_MBSSTR@
 GNULIB_MBSTOK_R = @GNULIB_MBSTOK_R@
+GNULIB_MBTOWC = @GNULIB_MBTOWC@
 GNULIB_MEMCHR = @GNULIB_MEMCHR@
 GNULIB_MEMMEM = @GNULIB_MEMMEM@
 GNULIB_MEMPCPY = @GNULIB_MEMPCPY@
@@ -537,6 +536,7 @@ GNULIB_WCSTOK = @GNULIB_WCSTOK@
 GNULIB_WCSWIDTH = @GNULIB_WCSWIDTH@
 GNULIB_WCSXFRM = @GNULIB_WCSXFRM@
 GNULIB_WCTOB = @GNULIB_WCTOB@
+GNULIB_WCTOMB = @GNULIB_WCTOMB@
 GNULIB_WCTRANS = @GNULIB_WCTRANS@
 GNULIB_WCTYPE = @GNULIB_WCTYPE@
 GNULIB_WCWIDTH = @GNULIB_WCWIDTH@
@@ -912,6 +912,7 @@ REPLACE_MBSINIT = @REPLACE_MBSINIT@
 REPLACE_MBSNRTOWCS = @REPLACE_MBSNRTOWCS@
 REPLACE_MBSRTOWCS = @REPLACE_MBSRTOWCS@
 REPLACE_MBSTATE_T = @REPLACE_MBSTATE_T@
+REPLACE_MBTOWC = @REPLACE_MBTOWC@
 REPLACE_MEMCHR = @REPLACE_MEMCHR@
 REPLACE_MEMMEM = @REPLACE_MEMMEM@
 REPLACE_MKDIR = @REPLACE_MKDIR@
@@ -977,6 +978,7 @@ REPLACE_WCSNRTOMBS = @REPLACE_WCSNRTOMBS@
 REPLACE_WCSRTOMBS = @REPLACE_WCSRTOMBS@
 REPLACE_WCSWIDTH = @REPLACE_WCSWIDTH@
 REPLACE_WCTOB = @REPLACE_WCTOB@
+REPLACE_WCTOMB = @REPLACE_WCTOMB@
 REPLACE_WCWIDTH = @REPLACE_WCWIDTH@
 REPLACE_WRITE = @REPLACE_WRITE@
 SED = @SED@

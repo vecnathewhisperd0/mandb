@@ -49,6 +49,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module dirfd:
   # Code from module dirname:
   # Code from module dirname-lgpl:
+  # Code from module dosname:
   # Code from module double-slash-root:
   # Code from module dup2:
   # Code from module environ:
@@ -97,6 +98,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module mbrtowc:
   # Code from module mbsinit:
   # Code from module mbsrtowcs:
+  # Code from module mbtowc:
   # Code from module memchr:
   # Code from module mempcpy:
   # Code from module memrchr:
@@ -250,6 +252,7 @@ AC_SUBST([LTALLOCA])
   gl_MODULE_INDICATOR([dirname])
   # Code from module dirname-lgpl:
   gl_DIRNAME_LGPL
+  # Code from module dosname:
   # Code from module double-slash-root:
   gl_DOUBLE_SLASH_ROOT
   # Code from module dup2:
@@ -363,6 +366,9 @@ AC_SUBST([LTALLOCA])
   # Code from module mbsrtowcs:
   gl_FUNC_MBSRTOWCS
   gl_WCHAR_MODULE_INDICATOR([mbsrtowcs])
+  # Code from module mbtowc:
+  gl_FUNC_MBTOWC
+  gl_STDLIB_MODULE_INDICATOR([mbtowc])
   # Code from module memchr:
   gl_FUNC_MEMCHR
   gl_STRING_MODULE_INDICATOR([memchr])
@@ -719,6 +725,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/dirname-lgpl.c
   lib/dirname.c
   lib/dirname.h
+  lib/dosname.h
   lib/dup-safer.c
   lib/dup2.c
   lib/errno.in.h
@@ -783,6 +790,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mbsrtowcs-impl.h
   lib/mbsrtowcs-state.c
   lib/mbsrtowcs.c
+  lib/mbtowc-impl.h
+  lib/mbtowc.c
   lib/memchr.c
   lib/memchr.valgrind
   lib/mempcpy.c
@@ -836,7 +845,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdbool.in.h
   lib/stddef.in.h
   lib/stdint.in.h
-  lib/stdio-write.c
   lib/stdio.in.h
   lib/stdlib.in.h
   lib/strcasecmp.c
@@ -889,7 +897,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/00gnulib.m4
   m4/alloca.m4
   m4/argp.m4
-  m4/asm-underscore.m4
   m4/btowc.m4
   m4/canonicalize.m4
   m4/chdir-long.m4
@@ -903,7 +910,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/dirent_h.m4
   m4/dirfd.m4
   m4/dirname.m4
-  m4/dos.m4
   m4/double-slash-root.m4
   m4/dup2.m4
   m4/eealloc.m4
@@ -965,6 +971,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mbsinit.m4
   m4/mbsrtowcs.m4
   m4/mbstate_t.m4
+  m4/mbtowc.m4
   m4/memchr.m4
   m4/mempcpy.m4
   m4/memrchr.m4
