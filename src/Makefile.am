@@ -22,7 +22,7 @@
 
 pkglibexecdir = $(libexecdir)/@PACKAGE@
 
-SUBDIRS = tests
+SUBDIRS = . tests
 
 bin_PROGRAMS = \
 	catman \
