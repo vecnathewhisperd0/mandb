@@ -5,14 +5,14 @@
 # Michael Piefel <piefel@informatik.hu-berlin.de>, 2002, 2003.
 # Karl Eichwalder <ke@suse.de>, 2006.
 # Kai Wasserbäch <debian@carbon-project.org>, 2009.
-# Martin Schauer <Martin.E.Schauer@gmx.de>, 2010.
+# Martin Schauer <Martin.E.Schauer@gmx.de>, 2010, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.5.8-pre1\n"
+"Project-Id-Version: man-db 2.6.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2011-04-13 11:03+0100\n"
-"PO-Revision-Date: 2010-10-21 23:15+0200\n"
+"POT-Creation-Date: 2011-03-27 18:21+0100\n"
+"PO-Revision-Date: 2011-04-28 12:35+0200\n"
 "Last-Translator: Martin Eberhard Schauer <Martin.E.Schauer@gmx.de>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
 "Language: de\n"
@@ -728,18 +728,18 @@ msgstr "%s kann nicht ausgelesen werden"
 #: src/mandb.c:429
 #, c-format
 msgid "Processing manual pages under %s...\n"
-msgstr "Handbuchseiten unter %s verarbeiten ...\n"
+msgstr "Handbuchseiten unter %s werden verarbeitet ...\n"
 
 #: src/mandb.c:610 src/mandb.c:637
-#, fuzzy, c-format
+#, c-format
 msgid "Removing obsolete cat directory %s...\n"
-msgstr "Handbuchseiten ohne »cat«-Dateien in %s werden gesucht ...\n"
+msgstr "veraltetes »cat«-Verzeichnis %s wird entfernt ...\n"
 
 #: src/mandb.c:793
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
-"Warnung: Keine MANDB_MAP-Anweisung in %s, benutze den Handbuchpfad (MANPATH)"
+"Warnung: keine MANDB_MAP-Anweisungen in %s, ihr Handbuchpfad wird verwendet"
 
 #: src/mandb.c:866
 #, c-format
@@ -768,7 +768,7 @@ msgstr "Keine Datenbanken erstellt."
 #: src/manp.c:331
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
-msgstr "Die Handbuchpfad-Konfigurationsdatei %s kann nicht ausgewertet werden"
+msgstr "Die Handbuchpfad-Konfigurationsdatei %s kann nicht ausgewertet werden."
 
 #: src/manp.c:337
 #, c-format
@@ -820,22 +820,22 @@ msgstr "Warnung: $MANPATH ist gesetzt, ignoriere %s"
 msgid "can't parse directory list `%s'"
 msgstr "Verzeichnisliste »%s« kann nicht verarbeitet werden"
 
-#: src/manp.c:864
+#: src/manp.c:863
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "Handbuchpfad-Konfigurationsdatei %s kann nicht geöffnet werden"
 
-#: src/manp.c:896
+#: src/manp.c:895
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "Warnung: erforderliches Verzeichnis %s existiert nicht"
 
-#: src/manp.c:1120
+#: src/manp.c:1119
 #, c-format
 msgid "can't determine current directory"
 msgstr "momentanes Verzeichnis kann nicht festgestellt werden"
 
-#: src/manp.c:1308
+#: src/manp.c:1307
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "Warnung: %s fängt nicht mit %s an"
@@ -913,9 +913,8 @@ msgid "do not trim output to terminal width"
 msgstr "Ausgabe nicht an Terminalbreite anpassen"
 
 #: src/whatis.c:128
-#, fuzzy
 msgid "search only these sections (colon-separated)"
-msgstr "nur diesen Abschnitt durchsuchen"
+msgstr "nur diese Abschnitte durchsuchen (durch Doppelpunkte getrennt)"
 
 #: src/whatis.c:132
 msgid "define the locale for this search"
@@ -973,66 +972,3 @@ msgstr "%s:%d: nicht geschlossene Anführungszeichen in »roff«-Anfrage"
 #: src/zsoelim_main.c:67
 msgid "compatibility switch (ignored)"
 msgstr "Kompatibilitätsparameter (ignoriert)"
-
-#~ msgid "can't fork"
-#~ msgstr "Es kann kein Unterprozess erzeugt werden"
-
-#~ msgid "fork failed"
-#~ msgstr "Erstellung eines Unterprozesses (fork) fehlgeschlagen"
-
-#~ msgid "can't get man command's exit status"
-#~ msgstr "Exit-Status des Man-Befehls kann nicht ermittelt werden"
-
-#~ msgid "unable to reset cursor position in %s"
-#~ msgstr "Zeigerposition in %s kann nicht zurückgesetzt werden"
-
-#~ msgid "badly formed configuration directive: '%s'"
-#~ msgstr "fehlerhaft formatierte Konfigurationsdirektive: »%s«"
-
-#~ msgid "can't install SIGCHLD handler"
-#~ msgstr "Bearbeitungsroutine für SIGCHLD kann nicht installiert werden"
-
-#~ msgid "waitpid failed"
-#~ msgstr "Warten auf Prozessbeendigung (waitpid) fehlgeschlagen"
-
-#~ msgid "%s: %s (core dumped)"
-#~ msgstr "%s: %s (Speicherabbild ausgegeben)"
-
-#~ msgid "%s: %s"
-#~ msgstr "%s: %s"
-
-#~ msgid "can't execute %s"
-#~ msgstr "%s konnte nicht ausgeführt werden"
-
-#~ msgid "pipeline input not open"
-#~ msgstr "Eingabe der Weiterleitung nicht offen"
-
-#~ msgid "pipeline output not open"
-#~ msgstr "Ausgabe der Weiterleitung nicht offen"
-
-#~ msgid "pipe failed"
-#~ msgstr "Weiterleitung (pipe) fehlgeschlagen"
-
-#~ msgid "dup2 failed"
-#~ msgstr "Dateideskriptorverdoppelung (dup2) fehlgeschlagen"
-
-#~ msgid "close failed"
-#~ msgstr "Schließen fehlgeschlagen"
-
-#~ msgid "closing pipeline input stream failed"
-#~ msgstr "Schließen des Eingabestroms der Weiterleitung fehlgeschlagen"
-
-#~ msgid "closing pipeline input failed"
-#~ msgstr "Schließen der Eingabe der Weiterleitung fehlgeschlagen"
-
-#~ msgid "closing pipeline output stream failed"
-#~ msgstr "Schließen des Ausgabestroms der Weiterleitung fehlgeschlagen"
-
-#~ msgid "closing pipeline output failed"
-#~ msgstr "Schließen der Ausgabe der Weiterleitung fehlgeschlagen"
-
-#~ msgid "SECTION"
-#~ msgstr "ABSCHNITT"
-
-#~ msgid "can't get passwd structure for uid 0"
-#~ msgstr "passwd-Struktur für UID 0 kann nicht ermittelt werden"
