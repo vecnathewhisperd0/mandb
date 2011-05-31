@@ -1643,7 +1643,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	if (recode)
 		;
 	else if (!fmt_prog) {
+#ifndef GNU_NROFF
 		int using_tbl = 0;
+#endif /* GNU_NROFF */
 
 		do {
 #ifdef TROFF_IS_GROFF
@@ -1676,7 +1678,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			case 't':
 				cmd = pipecmd_new_argstr
 					(get_def ("tbl", TBL));
+#ifndef GNU_NROFF
 				using_tbl = 1;
+#endif /* GNU_NROFF */
 				break;
 			case 'v':
 				cmd = pipecmd_new_argstr

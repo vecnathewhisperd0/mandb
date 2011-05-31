@@ -1,3 +1,11 @@
+Tue May 31 01:04:26 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* lib/encodings.c (get_locale_charset): Eliminate ctype variable,
+	  which was set but not used.
+	* src/man.c (make_roff_command): Preprocess out code to set
+	  using_tbl if GNU_NROFF is defined, since that code is only used if
+	  it is not defined.
+
 Tue May 31 00:59:01 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (locale_macros): Add a backslash to the end of the .if

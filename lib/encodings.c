@@ -543,7 +543,6 @@ const char *get_canonical_charset_name (const char *charset)
 /* Return the current locale's character set. */
 const char *get_locale_charset (void)
 {
-	const char *ctype;
 	const char *charset;
 	char *saved_locale;
 
@@ -554,7 +553,7 @@ const char *get_locale_charset (void)
 	if (saved_locale)
 		saved_locale = xstrdup (saved_locale);
 
-	ctype = setlocale (LC_CTYPE, "");
+	setlocale (LC_CTYPE, "");
 
 	charset = locale_charset ();
 
