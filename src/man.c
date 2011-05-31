@@ -2383,7 +2383,8 @@ static void locale_macros (void *data)
 		 */
 		".if (\\n[.g] & ((\\n[.x] > 1) :"
 		" ((\\n[.x] == 1) & (\\n[.y] > 20)) :"
-		" ((\\n[.x] == 1) & (\\n[.y] == 20) & (\\n[.Y] >= 2)))) \\{\n"
+		" ((\\n[.x] == 1) & (\\n[.y] == 20) & (\\n[.Y] >= 2)))) "
+		"\\{\\\n"
 		/*   disable warnings of category 'file' */
 		".  warn (\\n[.warn] -"
 		" (\\n[.warn] / 1048576 %% 2 * 1048576))\n"
