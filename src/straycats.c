@@ -177,6 +177,7 @@ static int check_for_stray (void)
 			char *lang, *page_encoding;
 			char *mandir_base;
 			pipecmd *col_cmd;
+			char *col_locale;
 			char *fullpath;
 
 			/* we have a straycat. Need to filter it and get
@@ -226,6 +227,12 @@ static int check_for_stray (void)
 			col_cmd = pipecmd_new_argstr
 				(get_def_user ("col", COL));
 			pipecmd_arg (col_cmd, "-bx");
+			col_locale = find_charset_locale ("UTF-8");
+			if (col_locale) {
+				pipecmd_setenv (col_cmd, "LC_CTYPE",
+						col_locale);
+				free (col_locale);
+			}
 			pipeline_command (decomp, col_cmd);
 
 			fullpath = canonicalize_file_name (catdir);
