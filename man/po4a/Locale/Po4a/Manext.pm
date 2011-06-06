@@ -148,6 +148,33 @@ sub translate {
                    $self->SUPER::translate($inner, $ref, $type, %options) .
                    "\nT}$2";
         }
+
+        # Do not translate horizontal rules.
+        return $str if $str =~ /^[-_=]$/;
+
+        # Do not translate table entries that consist only of numbers (e.g.
+        # the sections table in man(1)).
+        return $str if $str =~ /^[0-9]+$/;
+
+        # Do not translate table entries that consist only of a groff
+        # special character or escape (e.g. the --ascii translation table in
+        # man(1)).
+        if ($str =~ /^\\[^([]$/ or              # e.g. \`
+            $str =~ /^\\\(..$/ or               # e.g. \(bu
+            $str =~ /^\\\[.*?\]$/ or            # e.g. \[bu]
+            $str =~ /^\\[^([][^([]$/ or         # e.g. \fB
+            $str =~ /^\\[^([]\(..$/ or          # e.g. \n(XX
+            $str =~ /^\\[^([]\[.*?\]$/) {       # e.g. \*[softhyphen]
+            return $str;
+        }
+
+        # Do not translate "latin1" and "ascii" (from the --ascii
+        # translation table in man(1)).
+        return $str if $str =~ /^(?:latin1|ascii)$/;
+
+        # Do not translate symbols used in the --ascii translation table in
+        # man(1).
+        return $str if $str =~ /^[o'x]$/;
     }
 
     return $self->SUPER::translate($str, $ref, $type, %options);
