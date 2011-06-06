@@ -267,7 +267,8 @@ static int check_for_stray (void)
 					if (descs) {
 						store_descriptions
 							(descs, &info,
-							 NULL, mandir, NULL);
+							 NULL, mandir_base,
+							 NULL);
 						free_descriptions (descs);
 					}
 				} else if (quiet < 2)
