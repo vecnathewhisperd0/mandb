@@ -29,10 +29,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#if HAVE_SYS_FILE_H
-#  include <sys/file.h> /* for flock() */
-#endif
-
+#include <sys/file.h> /* for flock() */
 #include <sys/types.h> /* for open() */
 #include <sys/stat.h>
 
@@ -45,8 +42,6 @@
 #include "xvasprintf.h"
 
 #include "manconfig.h"
-
-#include "flock.h"
 
 #include "mydbm.h"
 #include "db_storage.h"

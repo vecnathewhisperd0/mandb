@@ -1,3 +1,10 @@
+Thu Jun 16 12:18:08 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* libdb/db_btree.c, libdb/db_ndbm.c: Stop including "flock.h",
+	  removed in 2.6.0.  Reported by Maciej Mrozowski.  Include
+	  <sys/file.h> unconditionally, since Gnulib now provides it.
+	* NEWS: Document this.
+
 Mon Jun  6 11:25:28 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* man/po4a/Locale/Po4a/Manext.pm (translate): Exclude a number of

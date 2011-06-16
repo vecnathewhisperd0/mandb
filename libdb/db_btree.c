@@ -32,10 +32,7 @@
 #include <errno.h>
 #include <string.h>
 
-#if HAVE_SYS_FILE_H
-#  include <sys/file.h> /* for flock() */
-#endif
-
+#include <sys/file.h> /* for flock() */
 #include <sys/types.h> /* for open() */
 #include <sys/stat.h>
 
@@ -48,7 +45,6 @@
 #include "manconfig.h"
 
 #include "error.h"
-#include "flock.h"
 #include "hashtable.h"
 
 #include "mydbm.h"
