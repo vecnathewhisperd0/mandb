@@ -1,3 +1,9 @@
+Fri Jul  8 13:27:41 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* src/mandb.c (xcopy): Use a 32KiB buffer when copying files, rather
+	  than a 1KiB buffer.  This seems somewhat faster (although it's
+	  hard to tell on an SSD!).
+
 Fri Jul  8 12:49:46 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	Upgrade to Gnulib 20110609-stable.

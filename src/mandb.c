@@ -245,7 +245,7 @@ static int xcopy (const char *from, const char *to)
 	}
 
 	while (!feof (ifp) && !ferror (ifp)) {
-		char buf[1024];
+		char buf[32 * 1024];
 		size_t in = fread (buf, 1, sizeof (buf), ifp);
 		if (in > 0) {
 			if (fwrite (buf, 1, in, ofp) == 0 && ferror (ofp)) {
