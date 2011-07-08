@@ -80,6 +80,9 @@
 /* Define this to 1 if F_DUPFD behavior does not match POSIX */
 #undef FCNTL_DUPFD_BUGGY
 
+/* Define to 1 if the system's ftello function has the Solaris bug. */
+#undef FTELLO_BROKEN_AFTER_SWITCHING_FROM_READ_TO_WRITE
+
 /* Define to 1 if mkdir mistakenly creates a directory given with a trailing
    dot component. */
 #undef FUNC_MKDIR_DOT_BUG
@@ -116,6 +119,14 @@
 /* Define to a C preprocessor expression that evaluates to 1 or 0, depending
    whether the gnulib module fdopendir shall be considered present. */
 #undef GNULIB_FDOPENDIR
+
+/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
+   whether the gnulib module fflush shall be considered present. */
+#undef GNULIB_FFLUSH
+
+/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
+   whether the gnulib module getcwd shall be considered present. */
+#undef GNULIB_GETCWD
 
 /* Define to a C preprocessor expression that evaluates to 1 or 0, depending
    whether the gnulib module malloc-gnu shall be considered present. */
@@ -169,6 +180,18 @@
 /* Define to 1 when the gnulib module fdopendir should be tested. */
 #undef GNULIB_TEST_FDOPENDIR
 
+/* Define to 1 when the gnulib module fflush should be tested. */
+#undef GNULIB_TEST_FFLUSH
+
+/* Define to 1 when the gnulib module fpurge should be tested. */
+#undef GNULIB_TEST_FPURGE
+
+/* Define to 1 when the gnulib module fseeko should be tested. */
+#undef GNULIB_TEST_FSEEKO
+
+/* Define to 1 when the gnulib module ftello should be tested. */
+#undef GNULIB_TEST_FTELLO
+
 /* Define to 1 when the gnulib module getcwd should be tested. */
 #undef GNULIB_TEST_GETCWD
 
@@ -186,6 +209,9 @@
 
 /* Define to 1 when the gnulib module lchown should be tested. */
 #undef GNULIB_TEST_LCHOWN
+
+/* Define to 1 when the gnulib module lseek should be tested. */
+#undef GNULIB_TEST_LSEEK
 
 /* Define to 1 when the gnulib module lstat should be tested. */
 #undef GNULIB_TEST_LSTAT
@@ -374,6 +400,10 @@
    you don't. */
 #undef HAVE_DECL_FGETS_UNLOCKED
 
+/* Define to 1 if you have the declaration of `fpurge', and to 0 if you don't.
+   */
+#undef HAVE_DECL_FPURGE
+
 /* Define to 1 if you have the declaration of `fputc_unlocked', and to 0 if
    you don't. */
 #undef HAVE_DECL_FPUTC_UNLOCKED
@@ -385,6 +415,14 @@
 /* Define to 1 if you have the declaration of `fread_unlocked', and to 0 if
    you don't. */
 #undef HAVE_DECL_FREAD_UNLOCKED
+
+/* Define to 1 if you have the declaration of `fseeko', and to 0 if you don't.
+   */
+#undef HAVE_DECL_FSEEKO
+
+/* Define to 1 if you have the declaration of `ftello', and to 0 if you don't.
+   */
+#undef HAVE_DECL_FTELLO
 
 /* Define to 1 if you have the declaration of `fwrite_unlocked', and to 0 if
    you don't. */
@@ -456,10 +494,6 @@
    don't. */
 #undef HAVE_DECL_STRERROR_R
 
-/* Define to 1 if you have the declaration of `strncasecmp', and to 0 if you
-   don't. */
-#undef HAVE_DECL_STRNCASECMP
-
 /* Define to 1 if you have the declaration of `strndup', and to 0 if you
    don't. */
 #undef HAVE_DECL_STRNDUP
@@ -525,6 +559,12 @@
 
 /* Define to 1 if you have the `flockfile' function. */
 #undef HAVE_FLOCKFILE
+
+/* Define to 1 if you have the `fpurge' function. */
+#undef HAVE_FPURGE
+
+/* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
+#undef HAVE_FSEEKO
 
 /* Define to 1 if you have the `fstatat' function. */
 #undef HAVE_FSTATAT
@@ -671,9 +711,6 @@
 
 /* Define to 1 if <wchar.h> declares mbstate_t. */
 #undef HAVE_MBSTATE_T
-
-/* Define to 1 if you have the `memchr' function. */
-#undef HAVE_MEMCHR
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -872,6 +909,9 @@
 /* Define to 1 if grantpt is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_GRANTPT
 
+/* Define to 1 if group_member is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_GROUP_MEMBER
+
 /* Define to 1 if initstat_r is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_INITSTAT_R
 
@@ -1052,9 +1092,6 @@
 /* Define to 1 if stpncpy is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_STPNCPY
 
-/* Define to 1 if strcasecmp is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_STRCASECMP
-
 /* Define to 1 if strcasestr is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_STRCASESTR
 
@@ -1066,9 +1103,6 @@
 
 /* Define to 1 if strerror_r is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_STRERROR_R
-
-/* Define to 1 if strncasecmp is declared even after undefining macros. */
-#undef HAVE_RAW_DECL_STRNCASECMP
 
 /* Define to 1 if strncat is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_STRNCAT
@@ -1331,9 +1365,6 @@
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
 
-/* Define to 1 if you have the `strcasecmp' function. */
-#undef HAVE_STRCASECMP
-
 /* Define to 1 if you have the `strchrnul' function. */
 #undef HAVE_STRCHRNUL
 
@@ -1348,9 +1379,6 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
-
-/* Define to 1 if you have the `strncasecmp' function. */
-#undef HAVE_STRNCASECMP
 
 /* Define to 1 if you have the `strndup' function. */
 #undef HAVE_STRNDUP
@@ -1499,11 +1527,20 @@
 /* Define to 1 if you have the `_ftime' function. */
 #undef HAVE__FTIME
 
+/* Define to 1 if you have the `__fpurge' function. */
+#undef HAVE___FPURGE
+
+/* Define to 1 if you have the `__freading' function. */
+#undef HAVE___FREADING
+
 /* Define if nroff is Heirloom nroff. */
 #undef HEIRLOOM_NROFF
 
 /* Define as const if the declaration of iconv() needs const. */
 #undef ICONV_CONST
+
+/* Define to 1 if lseek does not detect pipes. */
+#undef LSEEK_PIPE_BROKEN
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */
@@ -1721,6 +1758,9 @@
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #undef _FILE_OFFSET_BITS
+
+/* Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2). */
+#undef _LARGEFILE_SOURCE
 
 /* Define for large files, on AIX-style hosts. */
 #undef _LARGE_FILES
