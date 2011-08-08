@@ -420,6 +420,8 @@ static int mandb (const char *catpath, const char *manpath)
 	char pid[23];
 	int ret, amount;
 	char *dbname;
+	char *cachedir_tag;
+	struct stat st;
 
 	dbname = mkdbname (catpath);
 	sprintf (pid, "%d", getpid ());
@@ -427,6 +429,25 @@ static int mandb (const char *catpath, const char *manpath)
 	
 	if (!quiet) 
 		printf (_("Processing manual pages under %s...\n"), manpath);
+
+	cachedir_tag = xasprintf ("%s/CACHEDIR.TAG", catpath);
+	if (stat (cachedir_tag, &st) == -1 && errno == ENOENT) {
+		FILE *cachedir_tag_file;
+
+		cachedir_tag_file = fopen (cachedir_tag, "w");
+		if (cachedir_tag_file) {
+			fputs ("Signature: 8a477f597d28d172789f06886806bc55\n"
+			       "# This file is a cache directory tag created "
+			       "by man-db.\n"
+			       "# For information about cache directory tags, "
+			       "see:\n"
+			       "#\thttp://www.brynosaurus.com/cachedir/\n",
+			       cachedir_tag_file);
+			fclose (cachedir_tag_file);
+		}
+	}
+	free (cachedir_tag);
+
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	dbfile = appendstr (NULL, dbname, ".db", NULL);
