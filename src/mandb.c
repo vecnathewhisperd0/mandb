@@ -47,6 +47,7 @@
 #include "argp.h"
 #include "dirname.h"
 #include "xgetcwd.h"
+#include "xvasprintf.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
