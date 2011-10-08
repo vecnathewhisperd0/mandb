@@ -1,3 +1,20 @@
+Sat Oct  8 17:07:17 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	Convert the Japanese manual pages translation to po4a.
+
+	* man/po4a/po/ja.po: New from Translation Project (thanks, Yasuaki
+	  Taniguchi).
+	* man/LINGUAS: Remove ja.
+	* man/LINGUAS.po4a: Add ja.
+	* man/ja/man1, man/ja/man5, man/ja/man8: Remove.
+	* man/ja/Makefile.am (PO4A_LINGUA): Set to yes.
+	  (EXTRA_DIST): Add translator.add.
+	  (man1_MANS): Add man1/lexgrog.1 and man1/manconv.1.
+	* man/po4a/Makefile.am (POFILES): Add po/ja.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add ja.
+	* man/THANKS: Add Yasuaki Taniguchi.
+	* .bzrignore: Add man/ja/man1, man/ja/man5, and man/ja/man8.
+
 Sun Sep 18 18:28:37 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/mandb-5: Make executable.
