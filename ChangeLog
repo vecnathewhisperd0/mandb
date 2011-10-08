@@ -1,3 +1,20 @@
+Sat Oct  8 23:34:26 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	Convert the German manual pages translation to po4a.
+
+	* man/po4a/po/de.po: New from Translation Project (thanks, Martin
+	  Eberhard Schauer).
+	* man/LINGUAS: Remove de.
+	* man/LINGUAS.po4a: Add de.
+	* man/de/man1, man/de/man5, man/de/man8: Remove.
+	* man/de/Makefile.am (PO4A_LINGUA): Set to yes.
+	  (EXTRA_DIST): Add translator.add.
+	  (man1_MANS): Add man1/lexgrog.1 and man1/manconv.1.
+	* man/po4a/Makefile.am (POFILES): Add po/de.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add de.
+	* man/THANKS: Credit Martin Schauer with man/de as well as de.po.
+	* .bzrignore: Add man/de/man1, man/de/man5, and man/de/man8.
+
 Sat Oct  8 17:11:08 BST 2011  Yasuaki Taniguchi  <yasuakit@gmail.com>
 
 	* po/ja.po: Update from Translation Project.
