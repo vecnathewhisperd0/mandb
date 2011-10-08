@@ -85,6 +85,8 @@ char *filename_info (const char *file, struct mandata *info,
 	char *slash = strrchr (manpage, '/');
 	char *base_name;
 
+	memset (info, 0, sizeof (struct mandata));
+
 #ifdef COMP_SRC
 	struct compression *comp;
 #endif

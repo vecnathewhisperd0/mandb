@@ -1,3 +1,12 @@
+Sun Oct  9 00:24:22 BST 2011  Peter Schiffer  <pschiffe@redhat.com>
+
+	* src/filenames.c (filename_info): Zero-initialise the contents of
+	  info to avoid a double-free in store_descriptions (Fedora bug
+	  #702904).
+	* src/tests/mandb-6: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add mandb-6.
+	* NEWS: Document this.
+
 Sun Oct  9 00:16:25 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* NEWS: Update.

@@ -25,7 +25,7 @@ ALL_TESTS = \
 	lexgrog-1 \
 	man-1 man-2 man-3 \
 	manconv-1 manconv-2 manconv-3 \
-	mandb-1 mandb-2 mandb-3 mandb-4 mandb-5 \
+	mandb-1 mandb-2 mandb-3 mandb-4 mandb-5 mandb-6 \
 	zsoelim-1
 if !CROSS_COMPILING
 TESTS = $(ALL_TESTS)
