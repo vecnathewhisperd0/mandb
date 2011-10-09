@@ -761,12 +761,14 @@ char *get_manpath (const char *systems)
 static void add_to_dirlist (FILE *config, int user)
 {
 	char *bp;
-	char buf[BUFSIZ];
+	char *buf = NULL;
+	size_t n = 0;
 	char key[50], cont[512];
 	int val;
 	int c;
 
-	while ((bp = fgets (buf, BUFSIZ, config))) {
+	while (getline (&buf, &n, config) >= 0) {
+		bp = buf;
 
 		while (CTYPE (isspace, *bp))
 			bp++;
@@ -776,13 +778,13 @@ static void add_to_dirlist (FILE *config, int user)
 		 * everything that sprintf()s manpath et al!
 		 */
 		if (*bp == '#' || *bp == '\0')
-			continue;
+			goto next;
 		else if (strncmp (bp, "NOCACHE", 7) == 0)
 			disable_cache = 1;
 		else if (strncmp (bp, "NO", 2) == 0)
-			continue;	/* match any word starting with NO */
+			goto next;	/* match any word starting with NO */
 		else if (sscanf (bp, "MANBIN %*s") == 1)
-			continue;
+			goto next;
 		else if (sscanf (bp, "MANDATORY_MANPATH %49s", key) == 1)
 			add_mandatory (key);	
 		else if (sscanf (bp, "MANPATH_MAP %49s %511s", key, cont) == 2) 
@@ -808,6 +810,10 @@ static void add_to_dirlist (FILE *config, int user)
 			error (0, 0, _("can't parse directory list `%s'"), bp);
 			gripe_reading_mp_config (CONFIG_FILE);
 		}
+
+next:
+		free (buf);
+		buf = NULL;
 	}
 }
 
