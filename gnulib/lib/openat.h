@@ -19,19 +19,15 @@
 #ifndef _GL_HEADER_OPENAT
 #define _GL_HEADER_OPENAT
 
-#include <fcntl.h>
+/* Write "fcntl.h" here, not <fcntl.h>, otherwise OSF/1 5.1 DTK cc miscompiles
+   openat.c because that file has a preliminary #include <fcntl.h>.  */
+#include "fcntl.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <stdbool.h>
-
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 8)
-# define _GL_ATTRIBUTE_NORETURN __attribute__ ((__noreturn__))
-#else
-# define _GL_ATTRIBUTE_NORETURN /* empty */
-#endif
 
 #if !HAVE_OPENAT
 
@@ -47,8 +43,8 @@ bool openat_needs_fchdir (void);
 
 #endif
 
-void openat_restore_fail (int) _GL_ATTRIBUTE_NORETURN;
-void openat_save_fail (int) _GL_ATTRIBUTE_NORETURN;
+_Noreturn void openat_restore_fail (int);
+_Noreturn void openat_save_fail (int);
 
 /* Using these function names makes application code
    slightly more readable than it would be with

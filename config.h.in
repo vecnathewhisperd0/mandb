@@ -80,8 +80,8 @@
 /* Define this to 1 if F_DUPFD behavior does not match POSIX */
 #undef FCNTL_DUPFD_BUGGY
 
-/* Define to 1 if the system's ftello function has the Solaris bug. */
-#undef FTELLO_BROKEN_AFTER_SWITCHING_FROM_READ_TO_WRITE
+/* Define to 1 if fstatat (..., 0) does not work, as in AIX 7.1. */
+#undef FSTATAT_ZERO_FLAG_BROKEN
 
 /* Define to 1 if mkdir mistakenly creates a directory given with a trailing
    dot component. */
@@ -121,10 +121,6 @@
 #undef GNULIB_FDOPENDIR
 
 /* Define to a C preprocessor expression that evaluates to 1 or 0, depending
-   whether the gnulib module fflush shall be considered present. */
-#undef GNULIB_FFLUSH
-
-/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
    whether the gnulib module getcwd shall be considered present. */
 #undef GNULIB_GETCWD
 
@@ -139,6 +135,10 @@
 /* Define to 1 to add extern declaration of program_invocation_short_name to
    argp.h */
 #undef GNULIB_PROGRAM_INVOCATION_SHORT_NAME
+
+/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
+   whether the gnulib module strerror shall be considered present. */
+#undef GNULIB_STRERROR
 
 /* Define to 1 when the gnulib module btowc should be tested. */
 #undef GNULIB_TEST_BTOWC
@@ -171,26 +171,11 @@
 /* Define to 1 when the gnulib module fchdir should be tested. */
 #undef GNULIB_TEST_FCHDIR
 
-/* Define to 1 when the gnulib module fclose should be tested. */
-#undef GNULIB_TEST_FCLOSE
-
 /* Define to 1 when the gnulib module fcntl should be tested. */
 #undef GNULIB_TEST_FCNTL
 
 /* Define to 1 when the gnulib module fdopendir should be tested. */
 #undef GNULIB_TEST_FDOPENDIR
-
-/* Define to 1 when the gnulib module fflush should be tested. */
-#undef GNULIB_TEST_FFLUSH
-
-/* Define to 1 when the gnulib module fpurge should be tested. */
-#undef GNULIB_TEST_FPURGE
-
-/* Define to 1 when the gnulib module fseeko should be tested. */
-#undef GNULIB_TEST_FSEEKO
-
-/* Define to 1 when the gnulib module ftello should be tested. */
-#undef GNULIB_TEST_FTELLO
 
 /* Define to 1 when the gnulib module getcwd should be tested. */
 #undef GNULIB_TEST_GETCWD
@@ -209,9 +194,6 @@
 
 /* Define to 1 when the gnulib module lchown should be tested. */
 #undef GNULIB_TEST_LCHOWN
-
-/* Define to 1 when the gnulib module lseek should be tested. */
-#undef GNULIB_TEST_LSEEK
 
 /* Define to 1 when the gnulib module lstat should be tested. */
 #undef GNULIB_TEST_LSTAT
@@ -400,10 +382,6 @@
    you don't. */
 #undef HAVE_DECL_FGETS_UNLOCKED
 
-/* Define to 1 if you have the declaration of `fpurge', and to 0 if you don't.
-   */
-#undef HAVE_DECL_FPURGE
-
 /* Define to 1 if you have the declaration of `fputc_unlocked', and to 0 if
    you don't. */
 #undef HAVE_DECL_FPUTC_UNLOCKED
@@ -415,14 +393,6 @@
 /* Define to 1 if you have the declaration of `fread_unlocked', and to 0 if
    you don't. */
 #undef HAVE_DECL_FREAD_UNLOCKED
-
-/* Define to 1 if you have the declaration of `fseeko', and to 0 if you don't.
-   */
-#undef HAVE_DECL_FSEEKO
-
-/* Define to 1 if you have the declaration of `ftello', and to 0 if you don't.
-   */
-#undef HAVE_DECL_FTELLO
 
 /* Define to 1 if you have the declaration of `fwrite_unlocked', and to 0 if
    you don't. */
@@ -456,6 +426,18 @@
    don't. */
 #undef HAVE_DECL_ISBLANK
 
+/* Define to 1 if you have the declaration of `mbrtowc', and to 0 if you
+   don't. */
+#undef HAVE_DECL_MBRTOWC
+
+/* Define to 1 if you have the declaration of `mbsinit', and to 0 if you
+   don't. */
+#undef HAVE_DECL_MBSINIT
+
+/* Define to 1 if you have the declaration of `mbsrtowcs', and to 0 if you
+   don't. */
+#undef HAVE_DECL_MBSRTOWCS
+
 /* Define to 1 if you have the declaration of `memrchr', and to 0 if you
    don't. */
 #undef HAVE_DECL_MEMRCHR
@@ -486,10 +468,6 @@
    */
 #undef HAVE_DECL_STRDUP
 
-/* Define to 1 if you have the declaration of `strerror', and to 0 if you
-   don't. */
-#undef HAVE_DECL_STRERROR
-
 /* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
    don't. */
 #undef HAVE_DECL_STRERROR_R
@@ -502,6 +480,10 @@
    don't. */
 #undef HAVE_DECL_STRNLEN
 
+/* Define to 1 if you have the declaration of `towlower', and to 0 if you
+   don't. */
+#undef HAVE_DECL_TOWLOWER
+
 /* Define to 1 if you have the declaration of `unsetenv', and to 0 if you
    don't. */
 #undef HAVE_DECL_UNSETENV
@@ -509,6 +491,10 @@
 /* Define to 1 if you have the declaration of `vsnprintf', and to 0 if you
    don't. */
 #undef HAVE_DECL_VSNPRINTF
+
+/* Define to 1 if you have the declaration of `wcrtomb', and to 0 if you
+   don't. */
+#undef HAVE_DECL_WCRTOMB
 
 /* Define to 1 if you have the declaration of `_snprintf', and to 0 if you
    don't. */
@@ -524,7 +510,7 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Define to 1 if you have the `dup2' function. */
+/* Define to 1 if you have the 'dup2' function. */
 #undef HAVE_DUP2
 
 /* Define if you have the declaration of environ. */
@@ -559,12 +545,6 @@
 
 /* Define to 1 if you have the `flockfile' function. */
 #undef HAVE_FLOCKFILE
-
-/* Define to 1 if you have the `fpurge' function. */
-#undef HAVE_FPURGE
-
-/* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
-#undef HAVE_FSEEKO
 
 /* Define to 1 if you have the `fstatat' function. */
 #undef HAVE_FSTATAT
@@ -840,6 +820,12 @@
 /* Define to 1 if fdopendir is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_FDOPENDIR
 
+/* Define to 1 if ffsl is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_FFSL
+
+/* Define to 1 if ffsll is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_FFSLL
+
 /* Define to 1 if flock is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_FLOCK
 
@@ -1007,6 +993,9 @@
 
 /* Define to 1 if pread is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_PREAD
+
+/* Define to 1 if pthread_sigmask is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_PTHREAD_SIGMASK
 
 /* Define to 1 if ptsname is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_PTSNAME
@@ -1449,6 +1438,9 @@
 /* Define if you have tbl. */
 #undef HAVE_TBL
 
+/* Define to 1 if you have the `towlower' function. */
+#undef HAVE_TOWLOWER
+
 /* Define to 1 if you have the `tsearch' function. */
 #undef HAVE_TSEARCH
 
@@ -1527,20 +1519,11 @@
 /* Define to 1 if you have the `_ftime' function. */
 #undef HAVE__FTIME
 
-/* Define to 1 if you have the `__fpurge' function. */
-#undef HAVE___FPURGE
-
-/* Define to 1 if you have the `__freading' function. */
-#undef HAVE___FREADING
-
 /* Define if nroff is Heirloom nroff. */
 #undef HEIRLOOM_NROFF
 
 /* Define as const if the declaration of iconv() needs const. */
 #undef ICONV_CONST
-
-/* Define to 1 if lseek does not detect pipes. */
-#undef LSEEK_PIPE_BROKEN
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */
@@ -1664,8 +1647,8 @@
    */
 #undef REPLACE_OPEN_DIRECTORY
 
-/* Define this to 1 if strerror is broken. */
-#undef REPLACE_STRERROR
+/* Define to 1 if strerror(0) does not return a message implying success. */
+#undef REPLACE_STRERROR_0
 
 /* Define if vasnprintf exists but is overridden by gnulib. */
 #undef REPLACE_VASNPRINTF
@@ -1690,9 +1673,9 @@
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at runtime.
-	STACK_DIRECTION > 0 => grows toward higher addresses
-	STACK_DIRECTION < 0 => grows toward lower addresses
-	STACK_DIRECTION = 0 => direction of growth unknown */
+        STACK_DIRECTION > 0 => grows toward higher addresses
+        STACK_DIRECTION < 0 => grows toward lower addresses
+        STACK_DIRECTION = 0 => direction of growth unknown */
 #undef STACK_DIRECTION
 
 /* Define to 1 if the `S_IS*' macros in <sys/stat.h> do not work properly. */
@@ -1756,17 +1739,32 @@
    `char[]'. */
 #undef YYTEXT_POINTER
 
+/* Enable large inode numbers on Mac OS X.  */
+#ifndef _DARWIN_USE_64_BIT_INODE
+# define _DARWIN_USE_64_BIT_INODE 1
+#endif
+
 /* Number of bits in a file offset, on hosts where this is settable. */
 #undef _FILE_OFFSET_BITS
-
-/* Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2). */
-#undef _LARGEFILE_SOURCE
 
 /* Define for large files, on AIX-style hosts. */
 #undef _LARGE_FILES
 
 /* Define to 1 if on MINIX. */
 #undef _MINIX
+
+/* The _Noreturn keyword of draft C1X.  */
+#ifndef _Noreturn
+# if (3 <= __GNUC__ || (__GNUC__ == 2 && 8 <= __GNUC_MINOR__) \
+      || 0x5110 <= __SUNPRO_C)
+#  define _Noreturn __attribute__ ((__noreturn__))
+# elif 1200 <= _MSC_VER
+#  define _Noreturn __declspec (noreturn)
+# else
+#  define _Noreturn
+# endif
+#endif
+
 
 /* Define to 2 if the system does not provide POSIX.1 features except with
    this defined. */
@@ -1784,6 +1782,10 @@
 /* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE
+#endif
+/* Enable general extensions on MacOS X.  */
+#ifndef _DARWIN_C_SOURCE
+# undef _DARWIN_C_SOURCE
 #endif
 /* Enable GNU extensions on systems that have them.  */
 #ifndef _GNU_SOURCE
@@ -1939,6 +1941,20 @@
 /* The name _UNUSED_PARAMETER_ is an earlier spelling, although the name
    is a misnomer outside of parameter lists.  */
 #define _UNUSED_PARAMETER_ _GL_UNUSED
+
+/* The __pure__ attribute was added in gcc 2.96.  */
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+# define _GL_ATTRIBUTE_PURE __attribute__ ((__pure__))
+#else
+# define _GL_ATTRIBUTE_PURE /* empty */
+#endif
+
+/* The __const__ attribute was added in gcc 2.95.  */
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95)
+# define _GL_ATTRIBUTE_CONST __attribute__ ((__const__))
+#else
+# define _GL_ATTRIBUTE_CONST /* empty */
+#endif
 
 
 /* Define as a macro for copying va_list variables. */
