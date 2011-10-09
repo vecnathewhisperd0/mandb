@@ -30,7 +30,6 @@ man1_MANS = \
 man5_MANS = \
 	man5/manpath.5
 man8_MANS = \
-	man8/accessdb.8 \
 	man8/catman.8 \
 	man8/mandb.8
 
