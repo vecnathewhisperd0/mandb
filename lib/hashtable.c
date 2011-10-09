@@ -63,9 +63,8 @@ static unsigned int hash (const char *s, size_t len)
 #endif
 }
 
-void null_hashtable_free (void *defn)
+void null_hashtable_free (void *defn ATTRIBUTE_UNUSED)
 {
-	defn = defn; /* unused */
 }
 
 void plain_hashtable_free (void *defn)

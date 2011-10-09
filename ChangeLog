@@ -1,3 +1,10 @@
+Sun Oct  9 23:32:41 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* lib/hashtable.c (null_hashtable_free): Use ATTRIBUTE_UNUSED to
+	  appease compiler warnings rather than assigning an argument to
+	  itself.
+	* src/mandb.c (cleanup_sigsafe, cleanup): Likewise.
+
 Sun Oct  9 23:14:11 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (get_roff_line_length, add_roff_line_length): Only

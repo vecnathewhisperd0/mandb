@@ -364,10 +364,8 @@ static inline int update_db_wrapper (const char *manpath, const char *catpath)
 }
 
 /* remove incomplete databases */
-static void cleanup_sigsafe (void *dummy)
+static void cleanup_sigsafe (void *dummy ATTRIBUTE_UNUSED)
 {
-	dummy = dummy; /* not used */
-
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	if (tmpdbfile)
@@ -385,10 +383,8 @@ static void cleanup_sigsafe (void *dummy)
 }
 
 /* remove incomplete databases */
-static void cleanup (void *dummy)
+static void cleanup (void *dummy ATTRIBUTE_UNUSED)
 {
-	dummy = dummy; /* not used */
-
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	if (tmpdbfile) {
