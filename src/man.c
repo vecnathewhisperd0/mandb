@@ -625,6 +625,7 @@ static void get_term (void)
 	}
 }
 
+#if defined(TROFF_IS_GROFF) || defined(HEIRLOOM_NROFF)
 static int get_roff_line_length (void)
 {
 	int line_length = cat_width ? cat_width : get_line_length ();
@@ -696,6 +697,7 @@ static pipecmd *add_roff_line_length (pipecmd *cmd, int *save_cat_p)
 
 	return ret;
 }
+#endif /* TROFF_IS_GROFF || HEIRLOOM_NROFF */
 
 static inline void gripe_no_man (const char *name, const char *sec)
 {

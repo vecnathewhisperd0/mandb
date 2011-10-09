@@ -1,3 +1,9 @@
+Sun Oct  9 23:14:11 BST 2011  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (get_roff_line_length, add_roff_line_length): Only
+	  compile if either TROFF_IS_GROFF or HEIRLOOM_NROFF is defined.
+	  Spotted by cppcheck.
+
 Sun Oct  9 22:50:36 BST 2011  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c (add_to_dirlist): Read lines from configuration file
