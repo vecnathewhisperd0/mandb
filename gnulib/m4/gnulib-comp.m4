@@ -68,7 +68,9 @@ AC_DEFUN([gl_EARLY],
   # Code from module fnmatch-gnu:
   # Code from module getcwd:
   # Code from module getcwd-lgpl:
+  # Code from module getdelim:
   # Code from module getdtablesize:
+  # Code from module getline:
   # Code from module getlogin_r:
   # Code from module getopt-gnu:
   # Code from module getopt-posix:
@@ -325,11 +327,23 @@ if test $REPLACE_GETCWD = 1; then
   AC_LIBOBJ([getcwd-lgpl])
 fi
 gl_UNISTD_MODULE_INDICATOR([getcwd])
+gl_FUNC_GETDELIM
+if test $HAVE_GETDELIM = 0 || test $REPLACE_GETDELIM = 1; then
+  AC_LIBOBJ([getdelim])
+  gl_PREREQ_GETDELIM
+fi
+gl_STDIO_MODULE_INDICATOR([getdelim])
 gl_FUNC_GETDTABLESIZE
 if test $HAVE_GETDTABLESIZE = 0; then
   AC_LIBOBJ([getdtablesize])
 fi
 gl_UNISTD_MODULE_INDICATOR([getdtablesize])
+gl_FUNC_GETLINE
+if test $REPLACE_GETLINE = 1; then
+  AC_LIBOBJ([getline])
+  gl_PREREQ_GETLINE
+fi
+gl_STDIO_MODULE_INDICATOR([getline])
 gl_FUNC_GETLOGIN_R
 if test $HAVE_GETLOGIN_R = 0 || test $REPLACE_GETLOGIN_R = 1; then
   AC_LIBOBJ([getlogin_r])
@@ -860,7 +874,9 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fstatat.c
   lib/getcwd-lgpl.c
   lib/getcwd.c
+  lib/getdelim.c
   lib/getdtablesize.c
+  lib/getline.c
   lib/getlogin_r.c
   lib/getopt.c
   lib/getopt.in.h
@@ -1036,7 +1052,9 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/getcwd-abort-bug.m4
   m4/getcwd-path-max.m4
   m4/getcwd.m4
+  m4/getdelim.m4
   m4/getdtablesize.m4
+  m4/getline.m4
   m4/getlogin_r.m4
   m4/getopt.m4
   m4/gettext.m4
