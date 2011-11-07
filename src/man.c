@@ -1154,8 +1154,16 @@ int main (int argc, char *argv[])
 
 	debug ("\nusing %s as pager\n", pager);
 
-	if (first_arg == argc)
+	if (first_arg == argc) {
+		/* http://twitter.com/#!/marnanel/status/132280557190119424 */
+		time_t now = time (NULL);
+		struct tm *localnow = localtime (&now);
+		if (localnow &&
+		    localnow->tm_hour == 0 && localnow->tm_min == 1)
+			fprintf (stderr, "gimme gimme gimme\n");
+
 		gripe_no_name (NULL);
+	}
 
 	section_list = get_section_list ();
 
