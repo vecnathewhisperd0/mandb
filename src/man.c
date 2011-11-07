@@ -1159,7 +1159,7 @@ int main (int argc, char *argv[])
 		time_t now = time (NULL);
 		struct tm *localnow = localtime (&now);
 		if (localnow &&
-		    localnow->tm_hour == 0 && localnow->tm_min == 1)
+		    localnow->tm_hour == 0 && localnow->tm_min == 30)
 			fprintf (stderr, "gimme gimme gimme\n");
 
 		gripe_no_name (NULL);
