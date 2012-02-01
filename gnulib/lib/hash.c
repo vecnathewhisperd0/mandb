@@ -113,8 +113,8 @@ struct hash_table
    1.0).  The growth threshold defaults to 0.8, and the growth factor
    defaults to 1.414, meaning that the table will have doubled its size
    every second time 80% of the buckets get used.  */
-#define DEFAULT_GROWTH_THRESHOLD 0.8
-#define DEFAULT_GROWTH_FACTOR 1.414
+#define DEFAULT_GROWTH_THRESHOLD 0.8f
+#define DEFAULT_GROWTH_FACTOR 1.414f
 
 /* If a deletion empties a bucket and causes the ratio of used buckets to
    table size to become smaller than the shrink threshold (a number between
@@ -122,8 +122,8 @@ struct hash_table
    number greater than the shrink threshold but smaller than 1.0).  The shrink
    threshold and factor default to 0.0 and 1.0, meaning that the table never
    shrinks.  */
-#define DEFAULT_SHRINK_THRESHOLD 0.0
-#define DEFAULT_SHRINK_FACTOR 1.0
+#define DEFAULT_SHRINK_THRESHOLD 0.0f
+#define DEFAULT_SHRINK_FACTOR 1.0f
 
 /* Use this to initialize or reset a TUNING structure to
    some sensible values. */
@@ -440,7 +440,7 @@ hash_string (const char *string, size_t n_buckets)
 /* Return true if CANDIDATE is a prime number.  CANDIDATE should be an odd
    number at least equal to 11.  */
 
-static bool
+static bool _GL_ATTRIBUTE_CONST
 is_prime (size_t candidate)
 {
   size_t divisor = 3;
@@ -459,7 +459,7 @@ is_prime (size_t candidate)
 /* Round a given CANDIDATE number up to the nearest prime, and return that
    prime.  Primes lower than 10 are merely skipped.  */
 
-static size_t
+static size_t _GL_ATTRIBUTE_CONST
 next_prime (size_t candidate)
 {
   /* Skip small primes.  */
@@ -540,7 +540,7 @@ check_tuning (Hash_table *table)
    TUNING, or return 0 if there is no possible way to allocate that
    many entries.  */
 
-static size_t
+static size_t _GL_ATTRIBUTE_PURE
 compute_bucket_size (size_t candidate, const Hash_tuning *tuning)
 {
   if (!tuning->is_n_buckets)
@@ -1018,7 +1018,9 @@ hash_rehash (Hash_table *table, size_t candidate)
   return false;
 }
 
-/* Return -1 upon memory allocation failure.
+/* Insert ENTRY into hash TABLE if there is not already a matching entry.
+
+   Return -1 upon memory allocation failure.
    Return 1 if insertion succeeded.
    Return 0 if there is already a matching entry in the table,
    and in that case, if MATCHED_ENT is non-NULL, set *MATCHED_ENT
@@ -1030,10 +1032,11 @@ hash_rehash (Hash_table *table, size_t candidate)
    hash_insert, the only way to distinguish those cases is to compare
    the return value and ENTRY.  That works only when you can have two
    different ENTRY values that point to data that compares "equal".  Thus,
-   when the ENTRY value is a simple scalar, you must use hash_insert0.
-   ENTRY must not be NULL.  */
+   when the ENTRY value is a simple scalar, you must use
+   hash_insert_if_absent.  ENTRY must not be NULL.  */
 int
-hash_insert0 (Hash_table *table, void const *entry, void const **matched_ent)
+hash_insert_if_absent (Hash_table *table, void const *entry,
+                       void const **matched_ent)
 {
   void *data;
   struct hash_entry *bucket;
@@ -1113,6 +1116,14 @@ hash_insert0 (Hash_table *table, void const *entry, void const **matched_ent)
   return 1;
 }
 
+/* hash_insert0 is the deprecated name for hash_insert_if_absent.
+   .  */
+int
+hash_insert0 (Hash_table *table, void const *entry, void const **matched_ent)
+{
+  return hash_insert_if_absent (table, entry, matched_ent);
+}
+
 /* If ENTRY matches an entry already in the hash table, return the pointer
    to the entry from the table.  Otherwise, insert ENTRY and return ENTRY.
    Return NULL if the storage required for insertion cannot be allocated.
@@ -1123,7 +1134,7 @@ void *
 hash_insert (Hash_table *table, void const *entry)
 {
   void const *matched_ent;
-  int err = hash_insert0 (table, entry, &matched_ent);
+  int err = hash_insert_if_absent (table, entry, &matched_ent);
   return (err == -1
           ? NULL
           : (void *) (err == 0 ? matched_ent : entry));
