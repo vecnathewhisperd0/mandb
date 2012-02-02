@@ -346,15 +346,19 @@ MAN_CHECK_PROGS([xz], [XZ], [use XZ as Lempel-Ziv-Markov chain-Algorithm compres
 if test -n "$xz"
 then
 	unxz="$xz -dc"
-else
-dnl lzma not used/needed if we have xz
+fi
+MAN_CHECK_PROGS([lzip], [LZIP], [use LZIP as Lempel-Ziv-Markov chain-Algorithm compression utility], [lzip])
+if test -n "$lzip"
+then
+	unlzip="$lzip -dc"
+fi
+dnl lzma not used/needed if we have xz or lzip
 MAN_CHECK_PROGS([lzma], [LZMA], [use LZMA as Lempel-Ziv-Markov chain-Algorithm compression utility], [lzma])
-if test -n "$lzma"
+if test -n "$lzma" && test -z "$xz" && test -z "$lzip"
 then
 	unlzma="$lzma -dc"
 fi
-fi
-if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$xz" || test -n "$lzma"
+if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$xz" || test -n "$lzip" || test -n "$lzma"
 then
 	AC_DEFINE([COMP_CAT], [1], [Define if you have compressors and want to support compressed cat files.])
 	AC_DEFINE([COMP_SRC], [1], [Define if you have compressors and want to support compressed manual source.])
@@ -366,6 +370,7 @@ AC_SUBST([uncompress])
 AC_SUBST([bunzip2])
 AC_SUBST([unlzma])
 AC_SUBST([unxz])
+AC_SUBST([unlzip])
 MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
 

@@ -1,3 +1,13 @@
+Thu Feb  2 00:02:07 GMT 2012  Matias A. Fonzo  <selk@dragora.org>
+
+	Add support for Lzip-compressed manual pages.
+
+	* configure.ac: Check for lzip.  Don't test for lzma if lzip is
+	  present, as was already the case for xz.
+	* include/comp_src.h.in (comp_list): Add lzip.
+	* include/manconfig.h.in: Define UNLZIP.
+	* NEWS: Document this.
+
 Wed Feb  1 23:25:03 GMT 2012  Colin Watson  <cjwatson@debian.org>
 
 	Upgrade to Automake 1.11.2 and Gnulib 20111211-stable.
