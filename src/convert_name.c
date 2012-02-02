@@ -41,9 +41,11 @@
 #include "manp.h"
 #include "convert_name.h"
 
+static inline void gripe_converting_name (const char *name) ATTRIBUTE_NORETURN;
 static inline void gripe_converting_name (const char *name)
 {
 	error (FATAL, 0, _("Can't convert %s to cat name"), name);
+	abort (); /* error should have exited; help compilers prove noreturn */
 }
 
 /* Convert the trailing part of 'name' to be a cat page path by altering its

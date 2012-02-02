@@ -2278,6 +2278,8 @@ static void format_display (pipeline *decomp,
 	if (format_cmd && htmlout) {
 		char *browser_list, *candidate;
 
+		assert (old_cwd); /* initialised above */
+
 		if (status) {
 			if (chdir (old_cwd) == -1) {
 				error (0, errno,

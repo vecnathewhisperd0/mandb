@@ -1,3 +1,20 @@
+Thu Feb  2 01:51:18 GMT 2012  Colin Watson  <cjwatson@debian.org>
+
+	Fix some errors spotted by the clang static analyser.  Some just
+	needed to be suppressed, but there were two real bugs.
+
+	* src/manconv.c (try_iconv): Make sure outptr is always initialised,
+	  even in the corner case where we convert some input text but don't
+	  get any UTF-8 text in return.
+	* src/manp.c (get_catpath): Handle manpaths not containing a slash.
+
+	* src/convert_name.c: Mark as non-returning, and add an abort after
+	  error (FATAL) to help the compiler prove this.
+	* src/man.c (format_display): Add an assert to help clang prove that
+	  old_cwd is always non-NULL when used.
+	* src/ult_src.c: Add asserts to help clang prove that buf is always
+	  non-NULL when used.
+
 Thu Feb  2 00:02:07 GMT 2012  Matias A. Fonzo  <selk@dragora.org>
 
 	Add support for Lzip-compressed manual pages.

@@ -1261,13 +1261,15 @@ char *get_catpath (const char *name, int cattype)
 				 * long as this strictly follows the key.
 				 */
 				suffix = strrchr (name, '/');
-				if (suffix) {
-					while (suffix > name + manlen)
-						if (*--suffix == '/')
-							break;
-					if (suffix < name + manlen)
-						suffix = name + manlen;
-				}
+				if (!suffix)
+					return appendstr (catpath,
+							  name + manlen, NULL);
+
+				while (suffix > name + manlen)
+					if (*--suffix == '/')
+						break;
+				if (suffix < name + manlen)
+					suffix = name + manlen;
 				if (*suffix == '/')
 					++suffix;
 				infix = xstrndup (name + manlen,

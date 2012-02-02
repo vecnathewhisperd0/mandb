@@ -153,7 +153,8 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 
 	while (input_size || utf8left) {
 		int handle_iconv_errors = 0;
-		char *inptr = (char *) input, *utf8ptr = utf8, *outptr;
+		char *inptr = (char *) input, *utf8ptr = utf8;
+		char *outptr = output;
 		size_t inleft = input_size, outleft;
 		size_t n, n2 = -1;
 
@@ -193,10 +194,10 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 			 * anything to write out, we'll do it next time
 			 * round the loop.
 			 */
-			outptr = output;
+			;
 		else if (to_utf8) {
 			memcpy (output, utf8, utf8left);
-			outptr = output + utf8left;
+			outptr += utf8left;
 			outleft = utf8left;
 			utf8left = 0;
 		} else if (utf8left) {
@@ -213,7 +214,14 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 			if (n2 == (size_t) -1 &&
 			    errno == EILSEQ && ignore_errors)
 				errno = 0;
-		}
+		} else
+			/* We appear to have converted some input text, but
+			 * not actually ended up with any UTF-8 text.  This
+			 * is odd.  However, we can at least continue round
+			 * the loop, skip the input text we converted, and
+			 * then we should get a different result next time.
+			 */
+			outptr = output;
 
 		if (outptr != output) {
 			/* We have something to write out. */
