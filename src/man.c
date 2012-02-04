@@ -280,6 +280,7 @@ static struct argp_option options[] = {
 	{ "apropos",		'k',	0,		0,		N_("equivalent to apropos") },
 	{ "global-apropos",	'K',	0,		0,		N_("search for text in all pages") },
 	{ "where",		'w',	0,		0,		N_("print physical location of man page(s)") },
+	{ "path",		0,	0,		OPTION_ALIAS },
 	{ "location",		0,	0,		OPTION_ALIAS },
 	{ "where-cat",		'W',	0,		0,		N_("print physical location of cat file(s)") },
 	{ "location-cat",	0,	0,		OPTION_ALIAS },
@@ -1162,7 +1163,12 @@ int main (int argc, char *argv[])
 		    localnow->tm_hour == 0 && localnow->tm_min == 30)
 			fprintf (stderr, "gimme gimme gimme\n");
 
-		gripe_no_name (NULL);
+		if (print_where) {
+			manp = get_manpath ("");
+			printf ("%s\n", manp);
+			exit (OK);
+		} else
+			gripe_no_name (NULL);
 	}
 
 	section_list = get_section_list ();
