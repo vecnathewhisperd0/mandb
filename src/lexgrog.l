@@ -660,8 +660,15 @@ vgrind_request	\.vS
 /* print warning and force scanner to terminate */
 static void too_big (void)
 {
+	/* Even though MAX_NAME is a macro expanding to a constant, we
+	 * translate it using ngettext anyway because that will make it
+	 * easier to change the macro later.
+	 */
 	error (0, 0,
-	       _("warning: whatis for %s exceeds %d bytes, truncating."),
+	       ngettext ("warning: whatis for %s exceeds %d byte, "
+			 "truncating.",
+			 "warning: whatis for %s exceeds %d bytes, "
+			 "truncating.", MAX_NAME),
 	       fname, MAX_NAME);
 
 	BEGIN (FORCE_EXIT);

@@ -178,7 +178,8 @@ char **split_data (char *content, char *start[])
 		start[count] = strsep (&content, "\t");
 		if (!start[count]) {
 			error (0, 0,
-			       _("only %d fields in content"),
+			       ngettext ("only %d field in content",
+					 "only %d fields in content", count),
 			       count);
 			gripe_corrupt_data ();
 		}
@@ -188,7 +189,8 @@ char **split_data (char *content, char *start[])
 	start[FIELDS - 1] = content;
 	if (!start[FIELDS - 1]) {
 		error (0, 0,
-		       _("only %d fields in content"),
+		       ngettext ("only %d field in content",
+				 "only %d fields in content", FIELDS - 1),
 		       FIELDS - 1);
 		gripe_corrupt_data ();
 	}

@@ -880,14 +880,24 @@ next_manpath:
 	hashtable_free (tried_catdirs);
 
 	if (!quiet) {
-		printf (_(
-		        "%d man subdirectories contained newer manual pages.\n"
-		        "%d manual pages were added.\n"), 
-		        amount, pages);
+		printf (ngettext ("%d man subdirectory contained newer "
+				  "manual pages.\n",
+				  "%d man subdirectories contained newer "
+				  "manual pages.\n", amount),
+			amount);
+		printf (ngettext ("%d manual page was added.\n",
+				  "%d manual pages were added.\n", pages),
+			pages);
 		if (check_for_strays)
-			printf (_("%d stray cats were added.\n"), strays);
+			printf (ngettext ("%d stray cat was added.\n",
+					  "%d stray cats were added.\n",
+					  strays),
+			        strays);
 		if (purge)
-			printf (_("%d old database entries were purged.\n"),
+			printf (ngettext ("%d old database entry was "
+					  "purged.\n",
+					  "%d old database entries were "
+					  "purged.\n", purged),
 				purged);
 	}
 
