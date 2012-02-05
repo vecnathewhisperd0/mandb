@@ -1,7 +1,7 @@
 /*
  * manconv.c: convert manual page from one encoding to another
  *
- * Copyright (C) 2007, 2008, 2009, 2010 Colin Watson.
+ * Copyright (C) 2007, 2008, 2009, 2010, 2012 Colin Watson.
  * Based loosely on parts of glibc's iconv_prog.c, which is:
  * Copyright (C) 1998-2004, 2005, 2006, 2007 Free Software Foundation, Inc.
  *

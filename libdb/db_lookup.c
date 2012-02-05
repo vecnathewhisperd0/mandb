@@ -2,7 +2,8 @@
  * db_lookup.c: low level database interface routines for man.
  *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008 Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008, 2009, 2012
+ *               Colin Watson.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
