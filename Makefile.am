@@ -44,6 +44,11 @@ EXTRA_DIST += \
 	gnulib/m4/uintmax_t.m4 \
 	gnulib/m4/visibility.m4
 
+# We deliberately leave the configuration file in place on uninstall, since
+# it may contain local customisations.
+distuninstallcheck_listfiles = \
+	find . -type f -print | grep -v 'etc/man_db\.conf'
+
 # Note that autopoint installs into the first directory here. Yes, this
 # means that it installs into gnulib/m4, so we always run gnulib-tool after
 # autopoint, at least for now. See

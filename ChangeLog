@@ -1,3 +1,14 @@
+Sun Feb  5 01:34:14 GMT 2012  Colin Watson  <cjwatson@debian.org>
+
+	Fix 'make distcheck' to pass with Automake 1.11.2.
+
+	* Makefile.am (distuninstallcheck_listfiles): Ignore the
+	  configuration file, which is deliberately left in place on
+	  uninstall.
+	* configure.ac (AM_INIT_AUTOMAKE): Add -Wno-override.
+	* src/Makefile.am (EXTRA_DIST): Force distribution of lexgrog.c and
+	  zsoelim.c.
+
 Sun Feb  5 00:53:23 GMT 2012  Colin Watson  <cjwatson@debian.org>
 
 	* docs/HACKING (Revision control): Recommend 'bzr branch' rather

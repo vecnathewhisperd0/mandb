@@ -36,6 +36,8 @@ sbin_PROGRAMS = accessdb
 pkglibexec_PROGRAMS = globbing manconv
 noinst_DATA = man_db.conf
 
+EXTRA_DIST = lexgrog.c zsoelim.c
+
 AM_CPPFLAGS = \
 	-I$(top_builddir)/include \
 	-I$(top_builddir)/gnulib/lib \
