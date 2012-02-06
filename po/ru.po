@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the man-db package.
 # Copyright (C) 2009 Colin Watson (msgids)
 #
-# Yuri Kozlov <yuray@komyakino.ru>, 2004-2009, 2011.
+# Yuri Kozlov <yuray@komyakino.ru>, 2004-2009, 2011, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.6.0-pre1\n"
+"Project-Id-Version: man-db 2.6.1-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2012-02-05 00:53+0000\n"
-"PO-Revision-Date: 2011-03-28 20:16+0400\n"
+"PO-Revision-Date: 2012-02-06 20:46+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
 "Language: ru\n"
@@ -55,11 +55,11 @@ msgid "cannot replace key %s"
 msgstr "не удалось заменить ключ %s"
 
 #: libdb/db_lookup.c:181 libdb/db_lookup.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
-msgstr[0] "в содержимом только %d полей"
-msgstr[1] "в содержимом только %d полей"
+msgstr[0] "в содержимом только %d поле"
+msgstr[1] "в содержимом только %d поля"
 msgstr[2] "в содержимом только %d полей"
 
 #: libdb/db_lookup.c:382
@@ -263,15 +263,15 @@ msgid "the page name contains wildcards"
 msgstr "имя страницы содержит групповые символы"
 
 #: src/lexgrog.l:668
-#, fuzzy, c-format
+#, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] ""
-"предупреждение: результат whatis для %s превысил %d байт, обрезание."
+"предупреждение: результат whatis для %s превысил %d байт, обрезается."
 msgstr[1] ""
-"предупреждение: результат whatis для %s превысил %d байт, обрезание."
+"предупреждение: результат whatis для %s превысил %d байта, обрезается."
 msgstr[2] ""
-"предупреждение: результат whatis для %s превысил %d байт, обрезание."
+"предупреждение: результат whatis для %s превысил %d байт, обрезается."
 
 #: src/lexgrog.l:819 src/man.c:2555 src/man.c:2636 src/man.c:2732
 #: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:309
@@ -736,42 +736,36 @@ msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "предупреждение: нет директивы MANDB_MAP в %s, используется ваш manpath"
 
 #: src/mandb.c:883
-#, fuzzy, c-format
+#, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
-msgstr[0] ""
-"%d man подкаталоги содержат более новые справочные страницы.\n"
-"%d справочных страниц добавлено.\n"
-msgstr[1] ""
-"%d man подкаталоги содержат более новые справочные страницы.\n"
-"%d справочных страниц добавлено.\n"
-msgstr[2] ""
-"%d man подкаталоги содержат более новые справочные страницы.\n"
-"%d справочных страниц добавлено.\n"
+msgstr[0] "В %d man-подкаталоге содержатся более новые справочные страницы.\n"
+msgstr[1] "В %d man-подкаталогах содержатся более новые справочные страницы.\n"
+msgstr[2] "В %d man-подкаталогах содержатся более новые справочные страницы.\n"
 
 #: src/mandb.c:888
-#, fuzzy, c-format
+#, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
-msgstr[0] " Справочная страница "
-msgstr[1] " Справочная страница "
-msgstr[2] " Справочная страница "
+msgstr[0] "Добавлена %d справочная страница.\n"
+msgstr[1] "Добавлено %d справочные страницы.\n"
+msgstr[2] "Добавлено %d справочных страниц.\n"
 
 #: src/mandb.c:892
-#, fuzzy, c-format
+#, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
-msgstr[0] "%d побочных cat добавлено.\n"
-msgstr[1] "%d побочных cat добавлено.\n"
-msgstr[2] "%d побочных cat добавлено.\n"
+msgstr[0] "Добавлена %d побочная cat-страница.\n"
+msgstr[1] "Добавлено %d побочные cat-страницы.\n"
+msgstr[2] "Добавлено %d побочных cat-страниц.\n"
 
 #: src/mandb.c:897
-#, fuzzy, c-format
+#, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
-msgstr[0] "%d старых записей базы данных вычищено.\n"
-msgstr[1] "%d старых записей базы данных вычищено.\n"
-msgstr[2] "%d старых записей базы данных вычищено.\n"
+msgstr[0] "Вычищена %d старая запись базы данных.\n"
+msgstr[1] "Вычищено %d старые записи базы данных.\n"
+msgstr[2] "Вычищено %d старых записей базы данных.\n"
 
 #: src/mandb.c:915
 #, c-format
