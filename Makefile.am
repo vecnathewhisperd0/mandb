@@ -22,7 +22,7 @@
 
 SUBDIRS = docs gnulib/lib gnulib/po lib libdb src man manual po tools
 
-dist_noinst_DATA = NEWS README include/README
+dist_noinst_DATA = FAQ NEWS README include/README
 
 EXTRA_DIST = \
 	.bzrignore \
