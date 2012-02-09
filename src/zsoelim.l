@@ -1,3 +1,9 @@
+%top{
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /* HAVE_CONFIG_H */
+}
+
 %{
 
 /*
@@ -39,10 +45,6 @@
 
 #define MAX_SO_DEPTH 	10		/* max .so recursion depth */
 #undef ACCEPT_QUOTES			/* accept quoted roff requests */
-
-#ifdef HAVE_CONFIG_H
-#  include "config.h"
-#endif /* HAVE_CONFIG_H */
 
 #include <string.h>
 #include <stdlib.h>
