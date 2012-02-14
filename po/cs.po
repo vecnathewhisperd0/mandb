@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.0.2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2012-02-05 00:53+0000\n"
+"POT-Creation-Date: 2012-02-14 12:14+0000\n"
 "PO-Revision-Date: 2011-12-05 09:03+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "nelze nastavit platné uid"
 
-#: lib/security.c:101 src/mandb.c:789
+#: lib/security.c:101 src/mandb.c:790
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "uživatel manuálových stránek „%s“ použitý v setuid neexistuje"
@@ -38,22 +38,22 @@ msgstr "Fatální chyba: regulární výraz „%s“: %s"
 msgid "multi key %s does not exist"
 msgstr "vícenásobný klíč %s neexistuje"
 
-#: libdb/db_lookup.c:71
+#: libdb/db_lookup.c:72
 #, c-format
 msgid "can't lock index cache %s"
 msgstr "nelze zamknout rejstřík %s"
 
-#: libdb/db_lookup.c:78
+#: libdb/db_lookup.c:79
 #, c-format
 msgid "index cache %s corrupt"
 msgstr "rejstřík %s je poškozen"
 
-#: libdb/db_lookup.c:84
+#: libdb/db_lookup.c:85
 #, c-format
 msgid "cannot replace key %s"
 msgstr "nelze nahradit klíč %s"
 
-#: libdb/db_lookup.c:181 libdb/db_lookup.c:192
+#: libdb/db_lookup.c:182 libdb/db_lookup.c:193
 #, fuzzy, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
@@ -61,12 +61,12 @@ msgstr[0] "pouze %d položek v obsahu"
 msgstr[1] "pouze %d položek v obsahu"
 msgstr[2] "pouze %d položek v obsahu"
 
-#: libdb/db_lookup.c:382
+#: libdb/db_lookup.c:383
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "nelze získat vícenásobný klíč %s"
 
-#: libdb/db_lookup.c:454 src/whatis.c:574
+#: libdb/db_lookup.c:455 src/whatis.c:574
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Databáze %s je poškozena; znovu ji sestavte pomocí „mandb --create“"
@@ -96,7 +96,7 @@ msgid "The man database defaults to %s%s."
 msgstr "Výchozí manuálová databáze je %s%s."
 
 #: src/accessdb.c:64 src/catman.c:98 src/globbing_test.c:58
-#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:104
+#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:105
 #: src/manpath.c:65 src/whatis.c:121 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr "vysílat ladicí zprávy"
@@ -118,12 +118,12 @@ msgstr "CESTA"
 msgid "set search path for manual pages to PATH"
 msgstr "nastavit cestu pro vyhledávání v manuálových stránkách na CESTA"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:112 src/manpath.c:67
+#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:133
 msgid "FILE"
 msgstr "SOUBOR"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:112 src/manpath.c:67
+#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:133
 msgid "use this user configuration file"
 msgstr "použít tento soubor s uživatelským nastavením"
@@ -187,7 +187,7 @@ msgstr "varování: %s: ignoruje se prázdný soubor"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "varování: %s: selhalo zpracování programem whatis pro %s(%s)"
 
-#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:846
+#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:847
 #: src/straycats.c:88 src/straycats.c:303 src/ult_src.c:92
 #, c-format
 msgid "can't search directory %s"
@@ -217,7 +217,7 @@ msgstr "dokončeno.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "Mažou se staré databázové záznamy v %s…\n"
 
-#: src/convert_name.c:47
+#: src/convert_name.c:49
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "%s nelze převést na název katalogu"
@@ -260,7 +260,7 @@ msgstr "považovat název stránky za regulární výraz"
 msgid "the page name contains wildcards"
 msgstr "název stránky obsahuje divoké znaky"
 
-#: src/lexgrog.l:668
+#: src/lexgrog.l:671
 #, fuzzy, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
@@ -268,9 +268,9 @@ msgstr[0] "varování: program whatis pro %s překročil %d bajtů, bude zkráce
 msgstr[1] "varování: program whatis pro %s překročil %d bajtů, bude zkrácen"
 msgstr[2] "varování: program whatis pro %s překročil %d bajtů, bude zkrácen"
 
-#: src/lexgrog.l:819 src/man.c:2555 src/man.c:2636 src/man.c:2732
+#: src/lexgrog.l:822 src/man.c:2555 src/man.c:2636 src/man.c:2732
 #: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:309
-#: src/ult_src.c:323 src/zsoelim.l:495
+#: src/ult_src.c:323 src/zsoelim.l:497
 #, c-format
 msgid "can't open %s"
 msgstr "nelze otevřít soubor %s"
@@ -549,17 +549,17 @@ msgstr "program mandb skončil s návratovým kódem %d"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ignoruje se neznámé předzpracování „%c“"
 
-#: src/man.c:2031 src/mandb.c:306
+#: src/man.c:2031 src/mandb.c:307
 #, c-format
 msgid "can't chown %s"
 msgstr "nelze změnit vlastnictví %s"
 
-#: src/man.c:2043 src/mandb.c:220
+#: src/man.c:2043 src/mandb.c:221
 #, c-format
 msgid "can't chmod %s"
 msgstr "nelze změnit oprávnění k %s"
 
-#: src/man.c:2054 src/mandb.c:211
+#: src/man.c:2054 src/mandb.c:212
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s nelze přejmenovat na %s"
@@ -668,74 +668,74 @@ msgstr "je nutné zadat vstupní kódování"
 msgid "must specify an output encoding"
 msgstr "je nutné zadat výstupní kódování"
 
-#: src/mandb.c:101
+#: src/mandb.c:102
 msgid "[MANPATH]"
 msgstr "[CESTA_K_MANUÁLOVÝM_STRÁNKÁM]"
 
-#: src/mandb.c:105
+#: src/mandb.c:106
 msgid "work quietly, except for 'bogus' warning"
 msgstr "pracovat tiše, s výjimkou „falešných“ varování"
 
-#: src/mandb.c:106
+#: src/mandb.c:107
 msgid "don't look for or add stray cats to the dbs"
 msgstr "nehledat a nepřidávat do databáze bezprizorní katalogy"
 
-#: src/mandb.c:107
+#: src/mandb.c:108
 msgid "don't purge obsolete entries from the dbs"
 msgstr "nemazat z databáze zastaralé záznamy"
 
-#: src/mandb.c:108
+#: src/mandb.c:109
 msgid "produce user databases only"
 msgstr "vytvořit pouze uživatelskou databázi"
 
-#: src/mandb.c:109
+#: src/mandb.c:110
 msgid "create dbs from scratch, rather than updating"
 msgstr "vytvořit databázi raději od píky, než ji aktualizovat"
 
-#: src/mandb.c:110
+#: src/mandb.c:111
 msgid "check manual pages for correctness"
 msgstr "zkontrolovat, zda jsou manuálové stránky v pořádku"
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "FILENAME"
 msgstr "SOUBOR"
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "update just the entry for this filename"
 msgstr "aktualizovat jen záznam pro tento soubor"
 
-#: src/mandb.c:204
+#: src/mandb.c:205
 #, c-format
 msgid "can't remove %s"
 msgstr "nelze odstranit soubor %s"
 
-#: src/mandb.c:254
+#: src/mandb.c:255
 #, c-format
 msgid "can't write to %s"
 msgstr "nelze zapisovat do souboru %s"
 
-#: src/mandb.c:259
+#: src/mandb.c:260
 #, c-format
 msgid "can't read from %s"
 msgstr "nelze číst ze souboru %s"
 
-#: src/mandb.c:428
+#: src/mandb.c:429
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Zpracovávají se manuálové stránky ve složce %s…\n"
 
-#: src/mandb.c:628 src/mandb.c:655
+#: src/mandb.c:629 src/mandb.c:656
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Odstraňuje se zastaralá složka katalogů %s…\n"
 
-#: src/mandb.c:811
+#: src/mandb.c:812
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "varování: v souboru %s není direktiva MANDB_MAP, použije se program manpath"
 
-#: src/mandb.c:883
+#: src/mandb.c:884
 #, fuzzy, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -749,7 +749,7 @@ msgstr[2] ""
 "%d manuálové podsložky obsahovaly nové manuálové stránky.\n"
 "%d manuálových stránek bylo přidáno.\n"
 
-#: src/mandb.c:888
+#: src/mandb.c:889
 #, fuzzy, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
@@ -757,7 +757,7 @@ msgstr[0] " Manuálová stránka "
 msgstr[1] " Manuálová stránka "
 msgstr[2] " Manuálová stránka "
 
-#: src/mandb.c:892
+#: src/mandb.c:893
 #, fuzzy, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -765,7 +765,7 @@ msgstr[0] "Byly přidány %d bezprizorní katalogy.\n"
 msgstr[1] "Byly přidány %d bezprizorní katalogy.\n"
 msgstr[2] "Byly přidány %d bezprizorní katalogy.\n"
 
-#: src/mandb.c:897
+#: src/mandb.c:898
 #, fuzzy, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
@@ -773,7 +773,7 @@ msgstr[0] "Bylo vymazáno %d starých databázových záznamů.\n"
 msgstr[1] "Bylo vymazáno %d starých databázových záznamů.\n"
 msgstr[2] "Bylo vymazáno %d starých databázových záznamů.\n"
 
-#: src/mandb.c:915
+#: src/mandb.c:916
 #, c-format
 msgid "No databases created."
 msgstr "Nebyla vytvořena žádná databáze."
@@ -952,32 +952,32 @@ msgstr "(neznámý předmět)"
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: nic neodpovídá.\n"
 
-#: src/zsoelim.l:164
+#: src/zsoelim.l:166
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d: požadavky .so se zanořily příliš hluboko nebo jsou rekurzivní"
 
-#: src/zsoelim.l:179
+#: src/zsoelim.l:181
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d: varování: selhal požadavek .so"
 
-#: src/zsoelim.l:201
+#: src/zsoelim.l:203
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d: varování: nový řádek v požadavku .so, ignorován"
 
-#: src/zsoelim.l:254
+#: src/zsoelim.l:256
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr "%s:%d: varování: vadný požadavek .lf, ignorován"
 
-#: src/zsoelim.l:264
+#: src/zsoelim.l:266
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d: varování: nový řádek v požadavku .lf, ignorován"
 
-#: src/zsoelim.l:305
+#: src/zsoelim.l:307
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: nezakončené uvozovky v požadavku roff"

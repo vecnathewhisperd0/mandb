@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.1-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2012-02-05 00:53+0000\n"
+"POT-Creation-Date: 2012-02-14 12:14+0000\n"
 "PO-Revision-Date: 2008-01-16 17:49-0600\n"
 "Last-Translator: Ming Hua <minghua-guest@users.alioth.debian.org>\n"
 "Language-Team: Chinese (simplified) <translation-team-zh-cn@lists."
@@ -33,7 +33,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "无法设置等效 uid"
 
-#: lib/security.c:101 src/mandb.c:789
+#: lib/security.c:101 src/mandb.c:790
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "不存在用来将 man 程序 setuid 的用户 %s"
@@ -49,35 +49,35 @@ msgstr "致命错误：regex `%s'：%s"
 msgid "multi key %s does not exist"
 msgstr ""
 
-#: libdb/db_lookup.c:71
+#: libdb/db_lookup.c:72
 #, c-format
 msgid "can't lock index cache %s"
 msgstr ""
 
-#: libdb/db_lookup.c:78
+#: libdb/db_lookup.c:79
 #, c-format
 msgid "index cache %s corrupt"
 msgstr ""
 
-#: libdb/db_lookup.c:84
+#: libdb/db_lookup.c:85
 #, c-format
 msgid "cannot replace key %s"
 msgstr ""
 
-#: libdb/db_lookup.c:181 libdb/db_lookup.c:192
+#: libdb/db_lookup.c:182 libdb/db_lookup.c:193
 #, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libdb/db_lookup.c:382
+#: libdb/db_lookup.c:383
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr ""
 
 #  need-proofread
-#: libdb/db_lookup.c:454 src/whatis.c:574
+#: libdb/db_lookup.c:455 src/whatis.c:574
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "数据库 %s 毁坏；请用 mandb --create 命令重建"
@@ -107,7 +107,7 @@ msgid "The man database defaults to %s%s."
 msgstr "默认的 man 数据库是 %s%s。"
 
 #: src/accessdb.c:64 src/catman.c:98 src/globbing_test.c:58
-#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:104
+#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:105
 #: src/manpath.c:65 src/whatis.c:121 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr "输出调试信息"
@@ -130,12 +130,12 @@ msgstr "路径"
 msgid "set search path for manual pages to PATH"
 msgstr "设置搜索手册页的路径为“路径”"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:112 src/manpath.c:67
+#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:133
 msgid "FILE"
 msgstr "文件"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:112 src/manpath.c:67
+#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:133
 msgid "use this user configuration file"
 msgstr "使用该用户设置文件"
@@ -202,7 +202,7 @@ msgstr "警告：%s：忽略空文件"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "警告：%s：用 whatis 解读 %s(%s) 失败"
 
-#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:846
+#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:847
 #: src/straycats.c:88 src/straycats.c:303 src/ult_src.c:92
 #, c-format
 msgid "can't search directory %s"
@@ -233,7 +233,7 @@ msgstr "完成。\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "正在删除 %s 里的旧数据库条目...\n"
 
-#: src/convert_name.c:47
+#: src/convert_name.c:49
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "无法把 %s 转换为 cat 名称"
@@ -280,16 +280,16 @@ msgstr "把每个关键词都当作正则表达式解读"
 msgid "the page name contains wildcards"
 msgstr "关键词里包含通配符"
 
-#: src/lexgrog.l:668
+#: src/lexgrog.l:671
 #, fuzzy, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "警告：对 %s 的 whatis 操作结果超过 %d 字节，正在截断。"
 msgstr[1] "警告：对 %s 的 whatis 操作结果超过 %d 字节，正在截断。"
 
-#: src/lexgrog.l:819 src/man.c:2555 src/man.c:2636 src/man.c:2732
+#: src/lexgrog.l:822 src/man.c:2555 src/man.c:2636 src/man.c:2732
 #: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:309
-#: src/ult_src.c:323 src/zsoelim.l:495
+#: src/ult_src.c:323 src/zsoelim.l:497
 #, c-format
 msgid "can't open %s"
 msgstr "无法打开 %s"
@@ -572,17 +572,17 @@ msgstr "mandb 命令失败，退出状态代码为 %d"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "忽略未知的预处理器 `%c'"
 
-#: src/man.c:2031 src/mandb.c:306
+#: src/man.c:2031 src/mandb.c:307
 #, c-format
 msgid "can't chown %s"
 msgstr "无法 chown %s"
 
-#: src/man.c:2043 src/mandb.c:220
+#: src/man.c:2043 src/mandb.c:221
 #, c-format
 msgid "can't chmod %s"
 msgstr "无法 chmod %s"
 
-#: src/man.c:2054 src/mandb.c:211
+#: src/man.c:2054 src/mandb.c:212
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "无法将 %s 改名为 %s"
@@ -694,73 +694,73 @@ msgstr "必须指定输入所用的编码"
 msgid "must specify an output encoding"
 msgstr "必须指定输出所用的编码"
 
-#: src/mandb.c:101
+#: src/mandb.c:102
 msgid "[MANPATH]"
 msgstr "[手册路径]"
 
-#: src/mandb.c:105
+#: src/mandb.c:106
 msgid "work quietly, except for 'bogus' warning"
 msgstr "安静运行，除 bogus 警告外不输出信息"
 
-#: src/mandb.c:106
+#: src/mandb.c:107
 msgid "don't look for or add stray cats to the dbs"
 msgstr "不要在数据库中寻找或添加流浪猫"
 
-#: src/mandb.c:107
+#: src/mandb.c:108
 msgid "don't purge obsolete entries from the dbs"
 msgstr "不要删除数据库中过时的旧条目"
 
-#: src/mandb.c:108
+#: src/mandb.c:109
 msgid "produce user databases only"
 msgstr "仅生成用户数据库"
 
-#: src/mandb.c:109
+#: src/mandb.c:110
 msgid "create dbs from scratch, rather than updating"
 msgstr "不更新数据库，而是重新创建数据库"
 
-#: src/mandb.c:110
+#: src/mandb.c:111
 msgid "check manual pages for correctness"
 msgstr "检查手册页的正确性"
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "FILENAME"
 msgstr "文件名"
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "update just the entry for this filename"
 msgstr "仅更新该文件名对应的条目"
 
-#: src/mandb.c:204
+#: src/mandb.c:205
 #, c-format
 msgid "can't remove %s"
 msgstr "无法移除 %s"
 
-#: src/mandb.c:254
+#: src/mandb.c:255
 #, c-format
 msgid "can't write to %s"
 msgstr "无法对 %s 写入"
 
-#: src/mandb.c:259
+#: src/mandb.c:260
 #, c-format
 msgid "can't read from %s"
 msgstr "无法从 %s 读取"
 
-#: src/mandb.c:428
+#: src/mandb.c:429
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "正在处理 %s 下的手册页...\n"
 
-#: src/mandb.c:628 src/mandb.c:655
+#: src/mandb.c:629 src/mandb.c:656
 #, fuzzy, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "正在 %s 下查找流浪猫...\n"
 
-#: src/mandb.c:811
+#: src/mandb.c:812
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "警告：在 %s 中没有 MANDB_MAP 指令，使用您的手册路径设置"
 
-#: src/mandb.c:883
+#: src/mandb.c:884
 #, fuzzy, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -774,14 +774,14 @@ msgstr[1] ""
 #  I'm not sure this should be translated.  It comes from a less prompt string
 #  but seems to be only part of it.  (Ming)
 #  need-proofread
-#: src/mandb.c:888
+#: src/mandb.c:889
 #, fuzzy, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] " Manual page "
 msgstr[1] " Manual page "
 
-#: src/mandb.c:892
+#: src/mandb.c:893
 #, fuzzy, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -789,14 +789,14 @@ msgstr[0] "添加了 %d 只流浪猫。\n"
 msgstr[1] "添加了 %d 只流浪猫。\n"
 
 #  need-proofread
-#: src/mandb.c:897
+#: src/mandb.c:898
 #, fuzzy, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "删除了 %d 条旧数据库条目。\n"
 msgstr[1] "删除了 %d 条旧数据库条目。\n"
 
-#: src/mandb.c:915
+#: src/mandb.c:916
 #, c-format
 msgid "No databases created."
 msgstr "未创建任何数据库。"
@@ -977,32 +977,32 @@ msgstr "(未知的主题)"
 msgid "%s: nothing appropriate.\n"
 msgstr "%s：没有 appropriate。\n"
 
-#: src/zsoelim.l:164
+#: src/zsoelim.l:166
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d：.so 请求嵌套太深或形成循环"
 
-#: src/zsoelim.l:179
+#: src/zsoelim.l:181
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d：警告：.so 请求失败"
 
-#: src/zsoelim.l:201
+#: src/zsoelim.l:203
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d：警告：.so 请求中含有换行符，将忽略"
 
-#: src/zsoelim.l:254
+#: src/zsoelim.l:256
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr "%s:%d：警告：不合规格的 .lf 请求，将忽略"
 
-#: src/zsoelim.l:264
+#: src/zsoelim.l:266
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d：警告：.lf 请求中含有换行符，将忽略"
 
-#: src/zsoelim.l:305
+#: src/zsoelim.l:307
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d：roff 请求中含有未结束的引用"

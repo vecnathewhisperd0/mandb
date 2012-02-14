@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.1-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2012-02-05 00:53+0000\n"
+"POT-Creation-Date: 2012-02-14 12:14+0000\n"
 "PO-Revision-Date: 2012-02-08 23:42+0100\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "kan ikke sætte effektivt uid"
 
-#: lib/security.c:101 src/mandb.c:789
+#: lib/security.c:101 src/mandb.c:790
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "en manualbruger »%s« som er setuid findes ikke"
@@ -50,34 +50,34 @@ msgstr "fatalt: regulært udtryk »%s«: %s"
 msgid "multi key %s does not exist"
 msgstr "multinøglen %s findes ikke"
 
-#: libdb/db_lookup.c:71
+#: libdb/db_lookup.c:72
 #, c-format
 msgid "can't lock index cache %s"
 msgstr "kan ikke låse indekscachen %s"
 
-#: libdb/db_lookup.c:78
+#: libdb/db_lookup.c:79
 #, c-format
 msgid "index cache %s corrupt"
 msgstr "indekscachen %s er ødelagt"
 
-#: libdb/db_lookup.c:84
+#: libdb/db_lookup.c:85
 #, c-format
 msgid "cannot replace key %s"
 msgstr "kan ikke erstatte nøglen %s"
 
-#: libdb/db_lookup.c:181 libdb/db_lookup.c:192
+#: libdb/db_lookup.c:182 libdb/db_lookup.c:193
 #, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
 msgstr[0] "kun %d felt i indhold"
 msgstr[1] "kun %d felter i indhold"
 
-#: libdb/db_lookup.c:382
+#: libdb/db_lookup.c:383
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "fejlagtig hentning på multinøgle %s"
 
-#: libdb/db_lookup.c:454 src/whatis.c:574
+#: libdb/db_lookup.c:455 src/whatis.c:574
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Databasen %s er beskadiget; genopbyg med mandb --create"
@@ -107,7 +107,7 @@ msgid "The man database defaults to %s%s."
 msgstr "Manualdatabasen er som standard %s%s."
 
 #: src/accessdb.c:64 src/catman.c:98 src/globbing_test.c:58
-#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:104
+#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:105
 #: src/manpath.c:65 src/whatis.c:121 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr "vis fejlsøgningsbeskeder"
@@ -129,12 +129,12 @@ msgstr "STI"
 msgid "set search path for manual pages to PATH"
 msgstr "angiv søgesti for manualsider med STI"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:112 src/manpath.c:67
+#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:133
 msgid "FILE"
 msgstr "FIL"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:112 src/manpath.c:67
+#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:133
 msgid "use this user configuration file"
 msgstr "brug denne brugers konfigurationsfil"
@@ -198,7 +198,7 @@ msgstr "advarsel: %s: ignorerer tom fil"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "advarsel: %s: whatis-tolkning for %s(%s) mislykkedes"
 
-#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:846
+#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:847
 #: src/straycats.c:88 src/straycats.c:303 src/ult_src.c:92
 #, c-format
 msgid "can't search directory %s"
@@ -228,7 +228,7 @@ msgstr "færdig.\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "Tømmer gamle databaseindgange i %s...\n"
 
-#: src/convert_name.c:47
+#: src/convert_name.c:49
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Kan ikke konvertere %s til katalognavn"
@@ -275,16 +275,16 @@ msgstr "fortolk sidenavn som et regulært udtryk"
 msgid "the page name contains wildcards"
 msgstr "sidenavnet indeholder jokertegn"
 
-#: src/lexgrog.l:668
+#: src/lexgrog.l:671
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "advarsel: whatis for %s overskrider %d byte, forkorter."
 msgstr[1] "advarsel: whatis for %s overskrider %d byte, forkorter."
 
-#: src/lexgrog.l:819 src/man.c:2555 src/man.c:2636 src/man.c:2732
+#: src/lexgrog.l:822 src/man.c:2555 src/man.c:2636 src/man.c:2732
 #: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:309
-#: src/ult_src.c:323 src/zsoelim.l:495
+#: src/ult_src.c:323 src/zsoelim.l:497
 #, c-format
 msgid "can't open %s"
 msgstr "kan ikke åbne %s"
@@ -566,17 +566,17 @@ msgstr "mandb-kommandoen mislykkedes med slutstatus %d"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ignorerer ukendt forbehandler »%c«"
 
-#: src/man.c:2031 src/mandb.c:306
+#: src/man.c:2031 src/mandb.c:307
 #, c-format
 msgid "can't chown %s"
 msgstr "kan ikke skifte ejer på %s"
 
-#: src/man.c:2043 src/mandb.c:220
+#: src/man.c:2043 src/mandb.c:221
 #, c-format
 msgid "can't chmod %s"
 msgstr "kan ikke ændre rettigheder på %s"
 
-#: src/man.c:2054 src/mandb.c:211
+#: src/man.c:2054 src/mandb.c:212
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "kan ikke omdøbe %s til %s"
@@ -684,101 +684,101 @@ msgstr "inddatakodning skal angives"
 msgid "must specify an output encoding"
 msgstr "uddatakodning skal angives"
 
-#: src/mandb.c:101
+#: src/mandb.c:102
 msgid "[MANPATH]"
 msgstr "[MANSTI]"
 
-#: src/mandb.c:105
+#: src/mandb.c:106
 msgid "work quietly, except for 'bogus' warning"
 msgstr "arbejd stille, undtagen for »bogus-advarsler«"
 
-#: src/mandb.c:106
+#: src/mandb.c:107
 msgid "don't look for or add stray cats to the dbs"
 msgstr "kig ikke efter og tilføj ikke vildfarne katalogsider til databaserne"
 
-#: src/mandb.c:107
+#: src/mandb.c:108
 msgid "don't purge obsolete entries from the dbs"
 msgstr "afinstaller ikke forældede punkter fra databaserne"
 
-#: src/mandb.c:108
+#: src/mandb.c:109
 msgid "produce user databases only"
 msgstr "producer kun brugerdatabaser"
 
-#: src/mandb.c:109
+#: src/mandb.c:110
 msgid "create dbs from scratch, rather than updating"
 msgstr "opret databaser fra bunden af i stedet for at opdatere"
 
-#: src/mandb.c:110
+#: src/mandb.c:111
 msgid "check manual pages for correctness"
 msgstr "kontroller manualsider for korrekthed"
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "FILENAME"
 msgstr "FILNAVN"
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "update just the entry for this filename"
 msgstr "opdater kun punktet for dette filnavn"
 
-#: src/mandb.c:204
+#: src/mandb.c:205
 #, c-format
 msgid "can't remove %s"
 msgstr "kan ikke fjerne %s"
 
-#: src/mandb.c:254
+#: src/mandb.c:255
 #, c-format
 msgid "can't write to %s"
 msgstr "kan ikke skrive til %s"
 
-#: src/mandb.c:259
+#: src/mandb.c:260
 #, c-format
 msgid "can't read from %s"
 msgstr "kan ikke læse fra %s"
 
-#: src/mandb.c:428
+#: src/mandb.c:429
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Bearbejder manualsider under %s...\n"
 
-#: src/mandb.c:628 src/mandb.c:655
+#: src/mandb.c:629 src/mandb.c:656
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Fjerner forældet katalogside %s...\n"
 
-#: src/mandb.c:811
+#: src/mandb.c:812
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "advarsel: intet MANDB_MAP-direktiv i %s, bruger din manualsøgesti"
 
-#: src/mandb.c:883
+#: src/mandb.c:884
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d manualunderkatalog indeholdt nyere manualsider.\n"
 msgstr[1] "%d manualunderkataloger indeholdt nyere manualsider.\n"
 
-#: src/mandb.c:888
+#: src/mandb.c:889
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d manualside blev tilføjet.\n"
 msgstr[1] "%d manualsider blev tilføjet.\n"
 
-#: src/mandb.c:892
+#: src/mandb.c:893
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d vildfaren katalogside blev tilføjet.\n"
 msgstr[1] "%d vildfarne katalogsider blev tilføjet.\n"
 
-#: src/mandb.c:897
+#: src/mandb.c:898
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d gammel databaseindgang tømtes.\n"
 msgstr[1] "%d gamle databaseindgange tømtes.\n"
 
-#: src/mandb.c:915
+#: src/mandb.c:916
 #, c-format
 msgid "No databases created."
 msgstr "Ingen databaser er oprettet."
@@ -956,32 +956,32 @@ msgstr "(ukendt emne)"
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ingenting egnet.\n"
 
-#: src/zsoelim.l:164
+#: src/zsoelim.l:166
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d: .so-forespørgsler er indlejret for dybt eller rekursivt"
 
-#: src/zsoelim.l:179
+#: src/zsoelim.l:181
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d: advarsel: .so-forespørgsel mislykkedes"
 
-#: src/zsoelim.l:201
+#: src/zsoelim.l:203
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d: advarsel: linjeskift i .so-forespørgsel; ignorerer"
 
-#: src/zsoelim.l:254
+#: src/zsoelim.l:256
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr "%s:%d: advarsel: forkert udformet .lf-forespørgsel; ignorerer"
 
-#: src/zsoelim.l:264
+#: src/zsoelim.l:266
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d: advarsel: linjeskift i .lf-forespørgsel; ignorerer"
 
-#: src/zsoelim.l:305
+#: src/zsoelim.l:307
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: ikke afsluttet anførelsestegn i roff-forespørgsel"

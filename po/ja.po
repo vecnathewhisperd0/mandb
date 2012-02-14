@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-2.6.0.2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2012-02-05 00:53+0000\n"
+"POT-Creation-Date: 2012-02-14 12:14+0000\n"
 "PO-Revision-Date: 2011-09-11 21:56+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "実効 UID を設定できません"
 
-#: lib/security.c:101 src/mandb.c:789
+#: lib/security.c:101 src/mandb.c:790
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "setuid された man ユーザー \"%s\" は存在しません"
@@ -38,33 +38,33 @@ msgstr "致命的: 正規表現 `%s': %s"
 msgid "multi key %s does not exist"
 msgstr "複合キー %s は存在しません"
 
-#: libdb/db_lookup.c:71
+#: libdb/db_lookup.c:72
 #, c-format
 msgid "can't lock index cache %s"
 msgstr "index キャッシュ %s をロックできません"
 
-#: libdb/db_lookup.c:78
+#: libdb/db_lookup.c:79
 #, c-format
 msgid "index cache %s corrupt"
 msgstr "index キャッシュ %s が壊れています"
 
-#: libdb/db_lookup.c:84
+#: libdb/db_lookup.c:85
 #, c-format
 msgid "cannot replace key %s"
 msgstr "キー %s を置換できません"
 
-#: libdb/db_lookup.c:181 libdb/db_lookup.c:192
+#: libdb/db_lookup.c:182 libdb/db_lookup.c:193
 #, fuzzy, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
 msgstr[0] "中身が %d フィールドしかありません"
 
-#: libdb/db_lookup.c:382
+#: libdb/db_lookup.c:383
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "複合キー %s は不正な呼び出しです"
 
-#: libdb/db_lookup.c:454 src/whatis.c:574
+#: libdb/db_lookup.c:455 src/whatis.c:574
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr ""
@@ -96,7 +96,7 @@ msgid "The man database defaults to %s%s."
 msgstr "man データベースのデフォルトを %s%s にします。"
 
 #: src/accessdb.c:64 src/catman.c:98 src/globbing_test.c:58
-#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:104
+#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:105
 #: src/manpath.c:65 src/whatis.c:121 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr "デバッグメッセージを表示する"
@@ -118,12 +118,12 @@ msgstr "PATH"
 msgid "set search path for manual pages to PATH"
 msgstr "man ページ用の検索パスを PATH に設定する"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:112 src/manpath.c:67
+#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:133
 msgid "FILE"
 msgstr "FILE"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:112 src/manpath.c:67
+#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:133
 msgid "use this user configuration file"
 msgstr "このユーザ設定ファイルを使用する"
@@ -188,7 +188,7 @@ msgstr "警告: %s: 空ファイルを無視しています"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
-#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:846
+#: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:847
 #: src/straycats.c:88 src/straycats.c:303 src/ult_src.c:92
 #, c-format
 msgid "can't search directory %s"
@@ -218,7 +218,7 @@ msgstr "完了しました。\n"
 msgid "Purging old database entries in %s...\n"
 msgstr "%s 内の古いデータベース要素を取り除いています...\n"
 
-#: src/convert_name.c:47
+#: src/convert_name.c:49
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "%s を整形済みファイル名に変換できません"
@@ -261,15 +261,15 @@ msgstr "ページ名を正規表現として解釈する"
 msgid "the page name contains wildcards"
 msgstr "ページ名をワイルドカードとして解釈する"
 
-#: src/lexgrog.l:668
+#: src/lexgrog.l:671
 #, fuzzy, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "警告: %s 用の whatis が %d バイトを超えています。切り詰めます。"
 
-#: src/lexgrog.l:819 src/man.c:2555 src/man.c:2636 src/man.c:2732
+#: src/lexgrog.l:822 src/man.c:2555 src/man.c:2636 src/man.c:2732
 #: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:309
-#: src/ult_src.c:323 src/zsoelim.l:495
+#: src/ult_src.c:323 src/zsoelim.l:497
 #, c-format
 msgid "can't open %s"
 msgstr "%s をオープンできません"
@@ -546,17 +546,17 @@ msgstr "mandb コマンドが終了ステータス %d で失敗しました"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "不明な前処理系 `%c' を無視しています"
 
-#: src/man.c:2031 src/mandb.c:306
+#: src/man.c:2031 src/mandb.c:307
 #, c-format
 msgid "can't chown %s"
 msgstr "%s の所有者を変更 (chown) できません"
 
-#: src/man.c:2043 src/mandb.c:220
+#: src/man.c:2043 src/mandb.c:221
 #, c-format
 msgid "can't chmod %s"
 msgstr "%s の許可属性を変更 (chmod) できません"
 
-#: src/man.c:2054 src/mandb.c:211
+#: src/man.c:2054 src/mandb.c:212
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s の名前を %s に変更できません"
@@ -664,74 +664,74 @@ msgstr "入力エンコーディングを指定しなければいけません"
 msgid "must specify an output encoding"
 msgstr "出力エンコーディングを指定しなければいけません"
 
-#: src/mandb.c:101
+#: src/mandb.c:102
 msgid "[MANPATH]"
 msgstr ""
 
-#: src/mandb.c:105
+#: src/mandb.c:106
 msgid "work quietly, except for 'bogus' warning"
 msgstr ""
 
-#: src/mandb.c:106
+#: src/mandb.c:107
 msgid "don't look for or add stray cats to the dbs"
 msgstr ""
 
-#: src/mandb.c:107
+#: src/mandb.c:108
 msgid "don't purge obsolete entries from the dbs"
 msgstr ""
 
-#: src/mandb.c:108
+#: src/mandb.c:109
 msgid "produce user databases only"
 msgstr ""
 
-#: src/mandb.c:109
+#: src/mandb.c:110
 msgid "create dbs from scratch, rather than updating"
 msgstr ""
 
-#: src/mandb.c:110
+#: src/mandb.c:111
 msgid "check manual pages for correctness"
 msgstr ""
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "FILENAME"
 msgstr ""
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "update just the entry for this filename"
 msgstr ""
 
-#: src/mandb.c:204
+#: src/mandb.c:205
 #, c-format
 msgid "can't remove %s"
 msgstr "%s を削除できません"
 
-#: src/mandb.c:254
+#: src/mandb.c:255
 #, c-format
 msgid "can't write to %s"
 msgstr "%s に書き込めません"
 
-#: src/mandb.c:259
+#: src/mandb.c:260
 #, c-format
 msgid "can't read from %s"
 msgstr "%s から読み込めません"
 
-#: src/mandb.c:428
+#: src/mandb.c:429
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "%s 配下のマニュアルページを処理しています...\n"
 
-#: src/mandb.c:628 src/mandb.c:655
+#: src/mandb.c:629 src/mandb.c:656
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "古い cat ディレクトリ %s を削除しています...\n"
 
-#: src/mandb.c:811
+#: src/mandb.c:812
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "警告: %s に MANDB_MAP の指定はありません。あなたの manpath を使用します"
 
-#: src/mandb.c:883
+#: src/mandb.c:884
 #, fuzzy, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -740,25 +740,25 @@ msgstr[0] ""
 "た。\n"
 "%d 個のマニュアルページが追加されました。\n"
 
-#: src/mandb.c:888
+#: src/mandb.c:889
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] ""
 
-#: src/mandb.c:892
+#: src/mandb.c:893
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] ""
 
-#: src/mandb.c:897
+#: src/mandb.c:898
 #, fuzzy, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d 個の古いデータベース要素が除去されました。\n"
 
-#: src/mandb.c:915
+#: src/mandb.c:916
 #, c-format
 msgid "No databases created."
 msgstr "データベースは作成されませんでした。"
@@ -935,32 +935,32 @@ msgstr "(不明な題名です)"
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: 適切なものはありませんでした。\n"
 
-#: src/zsoelim.l:164
+#: src/zsoelim.l:166
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d: .so 要求の入れ子が深すぎる、または再帰しています"
 
-#: src/zsoelim.l:179
+#: src/zsoelim.l:181
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d: 警告: .so 要求の処理に失敗しました"
 
-#: src/zsoelim.l:201
+#: src/zsoelim.l:203
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d: 警告: .so 要求の中に改行があります。無視しています"
 
-#: src/zsoelim.l:254
+#: src/zsoelim.l:256
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr "%s:%d: 警告: 誤った形式の .lf 要求です。無視しています"
 
-#: src/zsoelim.l:264
+#: src/zsoelim.l:266
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d: 警告: .lf 要求の中に改行があります。無視しています"
 
-#: src/zsoelim.l:305
+#: src/zsoelim.l:307
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: roff 要求の中に終端されていないクォートがあります"
