@@ -47,8 +47,8 @@ extern void null_hashtable_free (void *defn);
 extern void plain_hashtable_free (void *defn);
 
 extern struct hashtable *hashtable_create (hashtable_free_ptr free_defn);
-extern void *hashtable_lookup_structure (const struct hashtable *ht,
-					 const char *s, size_t len);
+extern struct nlist *hashtable_lookup_structure (const struct hashtable *ht,
+						 const char *s, size_t len);
 extern void *hashtable_lookup (const struct hashtable *ht,
 			       const char *s, size_t len);
 extern struct nlist *hashtable_install (struct hashtable *ht,

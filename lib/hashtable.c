@@ -87,8 +87,8 @@ struct hashtable *hashtable_create (hashtable_free_ptr free_defn)
 /* Return pointer to hash entry structure containing s, or NULL if it
  * doesn't exist.
  */
-void *hashtable_lookup_structure (const struct hashtable *ht,
-				  const char *s, size_t len)
+struct nlist *hashtable_lookup_structure (const struct hashtable *ht,
+					  const char *s, size_t len)
 {
 	struct nlist *np;
 
