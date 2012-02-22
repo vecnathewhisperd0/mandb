@@ -2,8 +2,8 @@
  * whatis.c: search the index or whatis database(s) for words.
  *  
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011
- *               Colin Watson.
+ * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011,
+ *               2012 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -91,7 +91,7 @@ int quiet = 1;
 iconv_t conv_to_locale;
 #endif /* HAVE_ICONV */
 
-static regex_t preg;  
+static regex_t *preg;  
 static int regex_opt;
 static int exact;
 
@@ -272,17 +272,20 @@ static char *simple_convert (iconv_t conv, char *string)
 #  define simple_convert(conv, string) xstrdup (string)
 #endif /* HAVE_ICONV */
 
-/* do the old thing, if we cannot find the relevant database */
-static inline int use_grep (char *page, char *manpath)
+/* Do the old thing, if we cannot find the relevant database.
+ * This invokes grep once per argument; we can't do much about this because
+ * we need to know which arguments failed.  The only way to speed this up
+ * would be to implement grep internally, but it hardly seems worth it for a
+ * legacy mechanism.
+ */
+static void use_grep (const char * const *pages, int num_pages, char *manpath,
+		      int *found)
 {
 	char *whatis_file = appendstr (NULL, manpath, "/whatis", NULL);
-	int status;
 
 	if (access (whatis_file, R_OK) == 0) {
-		pipeline *grep_pl = pipeline_new ();
-		pipecmd *grep_cmd;
 		const char *flags;
-		char *anchored_page = NULL;
+		int i;
 
 		if (am_apropos) {
 			if (regex_opt)
@@ -292,29 +295,38 @@ static inline int use_grep (char *page, char *manpath)
 			else
 				flags = get_def_user ("apropos_grep_flags",
 						      APROPOS_GREP_FLAGS);
-			anchored_page = xstrdup (page);
-		} else {
+		} else
 			flags = get_def_user ("whatis_grep_flags",
 					      WHATIS_GREP_FLAGS);
-			anchored_page = appendstr (NULL, "^", page, NULL);
+
+		for (i = 0; i < num_pages; ++i) {
+			pipeline *grep_pl;
+			pipecmd *grep_cmd;
+			char *anchored_page;
+
+			if (am_apropos)
+				anchored_page = xstrdup (pages[i]);
+			else
+				anchored_page = appendstr (NULL, "^", pages[i],
+							   NULL);
+
+			grep_cmd = pipecmd_new_argstr (get_def_user ("grep",
+								     GREP));
+			pipecmd_argstr (grep_cmd, flags);
+			pipecmd_args (grep_cmd, anchored_page, whatis_file,
+				      NULL);
+			grep_pl = pipeline_new_commands (grep_cmd, NULL);
+
+			if (pipeline_run (grep_pl) == 0)
+				found[i] = 1;
+
+			free (anchored_page);
 		}
-
-		grep_cmd = pipecmd_new_argstr (get_def_user ("grep", GREP));
-		pipecmd_argstr (grep_cmd, flags);
-		pipecmd_args (grep_cmd, anchored_page, whatis_file, NULL);
-		pipeline_command (grep_pl, grep_cmd);
-
-		status = (pipeline_run (grep_pl) == 0);
-
-		free (anchored_page);
-	} else {
+	} else
 		debug ("warning: can't read the fallback whatis text database "
 		       "%s/whatis\n", manpath);
-		status = 0;
-	}
 
 	free (whatis_file);
-	return status;
 }
 
 static struct mandata *resolve_pointers (struct mandata *info,
@@ -375,7 +387,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 }
 
 /* print out any matches found */
-static void display (struct mandata *info, char *page)
+static void display (struct mandata *info, const char *page)
 {
 	struct mandata *newinfo;
 	char *string, *whatis, *string_conv;
@@ -441,7 +453,7 @@ out:
 }
 
 /* lookup the page and display the results */
-static inline int do_whatis_section (char *page, const char *section)
+static inline int do_whatis_section (const char *page, const char *section)
 {
 	struct mandata *info;
 	int count = 0;
@@ -460,39 +472,61 @@ static inline int do_whatis_section (char *page, const char *section)
 	return count;
 }
 
-static inline int do_whatis (char *page)
+static void do_whatis (const char * const *pages, int num_pages, int *found)
 {
-	int count = 0;
+	int i;
 
-	if (sections) {
-		char * const *section;
+	for (i = 0; i < num_pages; ++i) {
+		if (sections) {
+			char * const *section;
 
-		for (section = sections; *section; ++section)
-			count += do_whatis_section (page, *section);
-	} else
-		count += do_whatis_section (page, NULL);
-
-	return count;
+			for (section = sections; *section; ++section) {
+				if (do_whatis_section (pages[i], *section))
+					found[i] = 1;
+			}
+		} else {
+			if (do_whatis_section (pages[i], NULL))
+				found[i] = 1;
+		}
+	}
 }
 
-/* return 1 if page matches name, else 0 */
-static int parse_name (char *page, char *dbname)
+/* return 1 if any of pages matches name, else 0 */
+static int parse_name (const char * const *pages, int num_pages,
+		       const char *dbname, int *found)
 { 
-	if (regex_opt)
-		return (regexec (&preg, dbname, 0, (regmatch_t *) 0, 0) == 0);
+	int i;
+	int ret = 0;
+
+	if (regex_opt) {
+		for (i = 0; i < num_pages; ++i) {
+			if (regexec (&preg[i], dbname, 0,
+				     (regmatch_t *) 0, 0) == 0)
+				found[i] = ret = 1;
+		}
+		return ret;
+	}
 
 	if (am_apropos && !wildcard) {
 		char *lowdbname = lower (dbname);
-		int ret = STREQ (lowdbname, page);
+
+		for (i = 0; i < num_pages; ++i) {
+			if (STREQ (lowdbname, pages[i]))
+				found[i] = ret = 1;
+		}
 		free (lowdbname);
 		return ret;
 	}
 
-	return (fnmatch (page, dbname, 0) == 0);
+	for (i = 0; i < num_pages; ++i) {
+		if (fnmatch (pages[i], dbname, 0) == 0)
+			found[i] = ret = 1;
+	}
+	return ret;
 }
 
 /* return 1 on word match */
-static int match (char *lowpage, char *whatis)
+static int match (const char *lowpage, const char *whatis)
 {
 	char *lowwhatis = lower (whatis);
 	size_t len = strlen (lowpage);
@@ -517,20 +551,40 @@ static int match (char *lowpage, char *whatis)
 	return 0;
 }
 
-/* return 1 if page matches whatis, else 0 */
-static int parse_whatis (char *page, char *lowpage, char *whatis)
+/* return 1 if any of pages matches whatis, else 0 */
+static int parse_whatis (const char * const *pages, char * const *lowpages,
+			 int num_pages, const char *whatis, int *found)
 { 
-	if (regex_opt) 
-		return (regexec (&preg, whatis, 0, (regmatch_t *) 0, 0) == 0);
+	int i;
+	int ret = 0;
 
-	if (wildcard) {
-		if (exact)
-			return (fnmatch (page, whatis, 0) == 0);
-		else
-			return word_fnmatch (page, whatis);
+	if (regex_opt) {
+		for (i = 0; i < num_pages; ++i) {
+			if (regexec (&preg[i], whatis, 0,
+				     (regmatch_t *) 0, 0) == 0)
+				found[i] = ret = 1;
+		}
+		return ret;
 	}
 
-	return match (lowpage, whatis);
+	if (wildcard) {
+		for (i = 0; i < num_pages; ++i) {
+			if (exact) {
+				if (fnmatch (pages[i], whatis, 0) == 0)
+					found[i] = ret = 1;
+			} else {
+				if (word_fnmatch (pages[i], whatis))
+					found[i] = ret = 1;
+			}
+		}
+		return ret;
+	}
+
+	for (i = 0; i < num_pages; ++i) {
+		if (match (lowpages[i], whatis))
+			found[i] = ret = 1;
+	}
+	return ret;
 }
 
 /* cjwatson: Optimized functions don't seem to be correct in some
@@ -539,20 +593,28 @@ static int parse_whatis (char *page, char *lowpage, char *whatis)
 #undef BTREE
 
 /* scan for the page, print any matches */
-static int do_apropos (char *page, char *lowpage)
+static void do_apropos (const char * const *pages, int num_pages, int *found)
 {
 	datum key, cont;
-	int found = 0;
-
+	char **lowpages;
+	int i;
 #ifndef BTREE
 	datum nextkey;
+#else /* BTREE */
+	int end;
+#endif /* !BTREE */
 
+	lowpages = XNMALLOC (num_pages, char *);
+	for (i = 0; i < num_pages; ++i) {
+		lowpages[i] = lower (pages[i]);
+		debug ("lower(%s) = \"%s\"\n", pages[i], lowpages[i]);
+	}
+
+#ifndef BTREE
 	key = MYDBM_FIRSTKEY (dbf);
 	while (MYDBM_DPTR (key)) {
 		cont = MYDBM_FETCH (dbf, key);
 #else /* BTREE */
-	int end;
-
 	end = btree_nextkeydata (dbf, &key, &cont);
 	while (!end) {
 #endif /* !BTREE */
@@ -624,11 +686,14 @@ static int do_apropos (char *page, char *lowpage)
 						       strlen (seen_key));
 			if (seen_count && !require_all)
 				goto nextpage_tab;
-			got_match = parse_name (lowpage, MYDBM_DPTR (key));
+			got_match = parse_name ((const char **) lowpages,
+						num_pages, MYDBM_DPTR (key),
+						found);
 			whatis = info.whatis ? xstrdup (info.whatis) : NULL;
 			if (!got_match && whatis)
-				got_match = parse_whatis (page, lowpage,
-							  whatis);
+				got_match = parse_whatis (pages, lowpages,
+							  num_pages, whatis,
+							  found);
 			free (whatis);
 			if (got_match) {
 				if (!seen_count) {
@@ -646,14 +711,12 @@ static int do_apropos (char *page, char *lowpage)
 					display (&info, MYDBM_DPTR (key));
 			}
 			free (seen_key);
-			found++;
 		} else {
-			got_match = parse_name (page, MYDBM_DPTR (key));
+			got_match = parse_name (pages, num_pages,
+						MYDBM_DPTR (key), found);
 			if (got_match)
 				display (&info, MYDBM_DPTR (key));
 		}
-
-		found += got_match;
 
 nextpage_tab:
 		if (tab)
@@ -673,17 +736,17 @@ nextpage:
 		free_mandata_elements (&info);
 	}
 
-	return found;
+	for (i = 0; i < num_pages; ++i)
+		free (lowpages[i]);
+	free (lowpages);
 }
 
 /* loop through the man paths, searching for a match */
-static int search (char *page)
+static int search (const char * const *pages, int num_pages)
 {
-	int found = 0;
-	char *lowpage = lower (page);
+	int *found = XCALLOC (num_pages, int);
 	char *catpath, **mp;
-
-	debug ("lower(%s) = \"%s\"\n", page, lowpage);
+	int any_found, i;
 
 	for (mp = manpathlist; *mp; mp++) {
 		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);
@@ -702,17 +765,17 @@ static int search (char *page)
 			dbf = NULL;
 		}
 		if (!dbf) {
-			found += use_grep (page, *mp);			
+			use_grep (pages, num_pages, *mp, found);
 			continue;
 		}
 
 		if (am_apropos)
-			found += do_apropos (page, lowpage);
+			do_apropos (pages, num_pages, found);
 		else {
-			if (regex_opt || wildcard) {
-				found += do_apropos (page, lowpage);
-			} else
-				found += do_whatis (page);
+			if (regex_opt || wildcard)
+				do_apropos (pages, num_pages, found);
+			else
+				do_whatis (pages, num_pages, found);
 		}
 		free (database);
 		database = NULL;
@@ -721,12 +784,17 @@ static int search (char *page)
 
 	chkr_garbage_detector ();
 
-	if (!found)
-		fprintf (stderr, _("%s: nothing appropriate.\n"), page);
+	any_found = 0;
+	for (i = 0; i < num_pages; ++i) {
+		if (found[i])
+			any_found = 1;
+		else
+			fprintf (stderr, _("%s: nothing appropriate.\n"),
+				 pages[i]);
+	}
 
-	free (lowpage);
-
-	return found;
+	free (found);
+	return any_found;
 }
 
 int main (int argc, char *argv[])
@@ -735,7 +803,6 @@ int main (int argc, char *argv[])
 #ifdef HAVE_ICONV
 	char *locale_charset;
 #endif
-	int i;
 	int status = OK;
 
 	program_name = base_name (argv[0]);
@@ -829,14 +896,22 @@ int main (int argc, char *argv[])
 	free (locale_charset);
 #endif /* HAVE_ICONV */
 
-	for (i = 0; i < num_keywords; ++i) {
-		if (regex_opt)
-			xregcomp (&preg, keywords[i],
+	if (regex_opt) {
+		int i;
+		preg = XNMALLOC (num_keywords, regex_t);
+		for (i = 0; i < num_keywords; ++i)
+			xregcomp (&preg[i], keywords[i],
 				  REG_EXTENDED | REG_NOSUB | REG_ICASE);
-		if (!search (keywords[i]))
-			status = NOT_FOUND;
-		if (regex_opt)
-			regfree (&preg);
+	}
+
+	if (!search ((const char **) keywords, num_keywords))
+		status = NOT_FOUND;
+
+	if (regex_opt) {
+		int i;
+		for (i = 0; i < num_keywords; ++i)
+			regfree (&preg[i]);
+		free (preg);
 	}
 
 #ifdef HAVE_ICONV

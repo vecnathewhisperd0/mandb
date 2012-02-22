@@ -1,3 +1,18 @@
+Wed Feb 22 03:04:45 GMT 2012  Colin Watson  <cjwatson@debian.org>
+
+	Optimise apropos when given many arguments (Ubuntu bug #927028).
+
+	* src/whatis.c (use_grep, do_whatis, parse_name, parse_whatis,
+	  do_apropos, search): Operate on multiple pages.
+	  (use_grep, do_whatis, do_apropos): Update an output array rather
+	  than returning an int.
+	  (parse_name, parse_whatis): Update an output array as well as
+	  returning an int.
+	  (display, do_whatis_section): Constify page argument.
+	  (match): Constify lowpage and whatis arguments.
+	  (main): Process all arguments using a single call to search.
+	* NEWS: Document this.
+
 Wed Feb 22 02:46:22 GMT 2012  Colin Watson  <cjwatson@debian.org>
 
 	* lib/encodings.c (fallback_source_encoding, fallback_roff_encoding,
