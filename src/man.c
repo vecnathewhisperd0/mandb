@@ -215,7 +215,7 @@ static int troff;
 static const char *roff_device = NULL;
 static const char *want_encoding = NULL;
 #ifdef TROFF_IS_GROFF
-static const char *const default_roff_warnings = "mac";
+static const char default_roff_warnings[] = "mac";
 static struct string_llist *roff_warnings = NULL;
 #endif /* TROFF_IS_GROFF */
 static int global_apropos;

@@ -136,7 +136,7 @@ static struct directory_entry directory_table[] = {
 	{ NULL,		NULL		}
 };
 
-static const char *fallback_source_encoding = "ISO-8859-1";
+static const char fallback_source_encoding[] = "ISO-8859-1";
 
 /* Unfortunately, there is no portable way to inspect iconv's internal table
  * of character set aliases. We copy the most interesting ones here so that
@@ -290,7 +290,7 @@ static struct device_entry device_table[] = {
 	{ NULL,		NULL,			NULL			}
 };
 
-static const char *fallback_roff_encoding = "ISO-8859-1";
+static const char fallback_roff_encoding[] = "ISO-8859-1";
 
 /* Setting less_charset to iso8859 tells the less pager that characters
  * between 0xA0 and 0xFF are displayable, not that its input is encoded in
@@ -320,7 +320,7 @@ static struct less_charset_entry less_charset_table[] = {
 	{ NULL,			NULL,		NULL		}
 };
 
-static const char *fallback_less_charset = "iso8859";
+static const char fallback_less_charset[] = "iso8859";
 
 /* Encoding conversions from groff-1.20/src/preproc/preconv/preconv.cpp.
  * I've only included those not already recognised by GNU libiconv.
@@ -576,7 +576,7 @@ char *find_charset_locale (const char *charset)
 {
 	const char *canonical_charset = get_canonical_charset_name (charset);
 	char *saved_locale;
-	const char *supported_path = "/usr/share/i18n/SUPPORTED";
+	const char supported_path[] = "/usr/share/i18n/SUPPORTED";
 	FILE *supported;
 	char *line = NULL;
 	size_t n = 0;

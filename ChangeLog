@@ -1,3 +1,11 @@
+Wed Feb 22 02:46:22 GMT 2012  Colin Watson  <cjwatson@debian.org>
+
+	* lib/encodings.c (fallback_source_encoding, fallback_roff_encoding,
+	  fallback_less_charset): Save memory by declaring as const char[]
+	  rather than const char * (see http://glandium.org/blog/?p=2361).
+	  (find_charset_locale): Likewise for supported_path.
+	* src/man.c (default_roff_warnings): Likewise.
+
 Sat Feb 18 09:34:42 GMT 2012  Colin Watson  <cjwatson@debian.org>
 
 	* lib/hashtable.c (hashtable_lookup_structure): Make return type
