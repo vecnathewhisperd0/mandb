@@ -1,3 +1,16 @@
+Mon Feb 27 13:26:47 GMT 2012  Colin Watson  <cjwatson@debian.org>
+
+	* src/whatis.c (main): Move locale manpath expansion to ...
+	  (locale_manpath): ... here (new function).
+	  (suitable_manpath): New function.
+	  (do_whatis): If a page contains a slash and is a path to an
+	  executable on $PATH, then look up its base name only in
+	  appropriate manual hierarchies.
+	  (search): Pass current manpath entry to do_whatis.
+	* src/tests/whatis-1: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add whatis-1.
+	* NEWS: Document this.
+
 Wed Feb 22 03:04:45 GMT 2012  Colin Watson  <cjwatson@debian.org>
 
 	Optimise apropos when given many arguments (Ubuntu bug #927028).

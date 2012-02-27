@@ -51,6 +51,7 @@
 #endif /* HAVE_ICONV */
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include "regex.h"
 
 #include "argp.h"
@@ -63,6 +64,7 @@
 #include "cleanup.h"
 #include "error.h"
 #include "pipeline.h"
+#include "pathsearch.h"
 #include "linelength.h"
 #include "hashtable.h"
 #include "lower.h"
@@ -106,6 +108,7 @@ static char **sections;
 static char *manp = NULL;
 static const char *alt_systems = "";
 static const char *locale = NULL;
+static char *multiple_locale = NULL, *internal_locale;
 
 static struct hashtable *apropos_seen = NULL;
 static struct hashtable *display_seen = NULL;
@@ -238,6 +241,30 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
 static struct argp apropos_argp = { options, parse_opt, args_doc, apropos_doc };
 static struct argp whatis_argp = { options, parse_opt, args_doc };
+
+static char *locale_manpath (char *manpath)
+{
+	char *all_locales;
+	char *new_manpath;
+
+	if (multiple_locale && *multiple_locale) {
+		if (internal_locale && *internal_locale)
+			all_locales = xasprintf ("%s:%s", multiple_locale,
+						 internal_locale);
+		else
+			all_locales = xstrdup (multiple_locale);
+	} else {
+		if (internal_locale && *internal_locale)
+			all_locales = xstrdup (internal_locale);
+		else
+			all_locales = NULL;
+	}
+
+	new_manpath = add_nls_manpaths (manpath, all_locales);
+	free (all_locales);
+
+	return new_manpath;
+}
 
 #ifdef HAVE_ICONV
 static char *simple_convert (iconv_t conv, char *string)
@@ -472,22 +499,80 @@ static inline int do_whatis_section (const char *page, const char *section)
 	return count;
 }
 
-static void do_whatis (const char * const *pages, int num_pages, int *found)
+static int suitable_manpath (const char *manpath, const char *page_dir)
+{
+	char *page_manp;
+	char *page_manpathlist[MAXDIRS], **mp;
+	int ret;
+
+	page_manp = get_manpath_from_path (page_dir, 0);
+	if (!page_manp || !*page_manp) {
+		free (page_manp);
+		return 0;
+	}
+	page_manp = locale_manpath (page_manp);
+	create_pathlist (page_manp, page_manpathlist);
+
+	ret = 0;
+	for (mp = page_manpathlist; *mp; ++mp) {
+		if (STREQ (*mp, manpath)) {
+			ret = 1;
+			break;
+		}
+	}
+
+	for (mp = page_manpathlist; *mp; ++mp)
+		free (*mp);
+	free (page_manp);
+	return ret;
+}
+
+static void do_whatis (const char * const *pages, int num_pages,
+		       const char *manpath, int *found)
 {
 	int i;
 
 	for (i = 0; i < num_pages; ++i) {
+		char *page = xstrdup (pages[i]);
+		struct stat st;
+
+		if (strchr (page, '/') && stat (page, &st) == 0 &&
+		    !S_ISDIR (st.st_mode) &&
+		    st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) {
+			/* Perhaps an executable.  If its directory is on
+			 * $PATH, then we only want to process this page for
+			 * matching manual hierarchies.
+			 */
+			char *page_dir = dir_name (page);
+
+			if (directory_on_path (page_dir)) {
+				if (suitable_manpath (manpath, page_dir)) {
+					char *old_page = page;
+					page = base_name (old_page);
+					free (old_page);
+				} else {
+					debug ("%s not on manpath for %s\n",
+					       manpath, page);
+					free (page_dir);
+					continue;
+				}
+			}
+			free (page_dir);
+		}
+
 		if (sections) {
 			char * const *section;
 
 			for (section = sections; *section; ++section) {
-				if (do_whatis_section (pages[i], *section))
+				if (do_whatis_section (page, *section))
 					found[i] = 1;
 			}
 		} else {
-			if (do_whatis_section (pages[i], NULL))
+			if (do_whatis_section (page, NULL))
 				found[i] = 1;
 		}
+
+		free (page);
 	}
 }
 
@@ -775,7 +860,7 @@ static int search (const char * const *pages, int num_pages)
 			if (regex_opt || wildcard)
 				do_apropos (pages, num_pages, found);
 			else
-				do_whatis (pages, num_pages, found);
+				do_whatis (pages, num_pages, *mp, found);
 		}
 		free (database);
 		database = NULL;
@@ -799,7 +884,6 @@ static int search (const char * const *pages, int num_pages)
 
 int main (int argc, char *argv[])
 {
-	char *multiple_locale = NULL, *internal_locale;
 #ifdef HAVE_ICONV
 	char *locale_charset;
 #endif
@@ -861,27 +945,9 @@ int main (int argc, char *argv[])
 	}
 
 	/* sort out the internal manpath */
-	if (manp == NULL) {
-		char *all_locales;
-
-		if (multiple_locale && *multiple_locale) {
-			if (internal_locale && *internal_locale)
-				all_locales = xasprintf ("%s:%s",
-							 multiple_locale,
-							 internal_locale);
-			else
-				all_locales = xstrdup (multiple_locale);
-		} else {
-			if (internal_locale && *internal_locale)
-				all_locales = xstrdup (internal_locale);
-			else
-				all_locales = NULL;
-		}
-
-		manp = add_nls_manpaths (get_manpath (alt_systems),
-					 all_locales);
-		free (all_locales);
-	} else
+	if (manp == NULL)
+		manp = locale_manpath (get_manpath (alt_systems));
+	else
 		free (get_manpath (NULL));
 
 	create_pathlist (manp, manpathlist);
