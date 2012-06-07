@@ -346,17 +346,18 @@ MAN_CHECK_PROGS([xz], [XZ], [use XZ as Lempel-Ziv-Markov chain-Algorithm compres
 if test -n "$xz"
 then
 	unxz="$xz -dc"
+else
+dnl lzma not used/needed if we have xz
+MAN_CHECK_PROGS([lzma], [LZMA], [use LZMA as Lempel-Ziv-Markov chain-Algorithm compression utility], [lzma])
+if test -n "$lzma"
+then
+	unlzma="$lzma -dc"
+fi
 fi
 MAN_CHECK_PROGS([lzip], [LZIP], [use LZIP as Lempel-Ziv-Markov chain-Algorithm compression utility], [lzip])
 if test -n "$lzip"
 then
 	unlzip="$lzip -dc"
-fi
-dnl lzma not used/needed if we have xz or lzip
-MAN_CHECK_PROGS([lzma], [LZMA], [use LZMA as Lempel-Ziv-Markov chain-Algorithm compression utility], [lzma])
-if test -n "$lzma" && test -z "$xz" && test -z "$lzip"
-then
-	unlzma="$lzma -dc"
 fi
 if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$xz" || test -n "$lzip" || test -n "$lzma"
 then

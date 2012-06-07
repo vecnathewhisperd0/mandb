@@ -69,17 +69,15 @@ struct compression comp_list[] = {
 #ifdef HAVE_XZ
 	{UNXZ, "xz", NULL},
 	{UNXZ, "lzma", NULL},
-#endif /* HAVE_XZ */
+/* Else if we have lzma, incorporate the following */
+#elif defined (HAVE_LZMA)
+	{UNLZMA, "lzma", NULL},
+#endif /* HAVE_XZ || HAVE_LZMA */
 
 /* If we have lzip, incorporate the following */
 #ifdef HAVE_LZIP
 	{UNLZIP, "lz", NULL},
 #endif /* HAVE_LZIP */
-
-/* Else if we have lzma, incorporate the following */
-#if defined (HAVE_LZMA) && !defined (HAVE_XZ) && !defined (HAVE_LZIP)
-	{UNLZMA, "lzma", NULL},
-#endif /* HAVE_LZMA */
 
 /*------------------------------------------------------*/
 /* Add your decompressor(s) and extension(s) below here */
