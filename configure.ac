@@ -156,7 +156,7 @@ fi
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_CHECK_PROGS([cat], [cat])
-MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx])
+MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx elinks w3m])
 test -n "$browser" && browser="exec $browser"
 AC_CHECK_PROGS([tr], [tr])
 AC_CHECK_PROGS([grep], [grep])
