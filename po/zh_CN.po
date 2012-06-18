@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.1-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2012-02-14 12:14+0000\n"
+"POT-Creation-Date: 2012-06-18 13:40+0100\n"
 "PO-Revision-Date: 2008-01-16 17:49-0600\n"
 "Last-Translator: Ming Hua <minghua-guest@users.alioth.debian.org>\n"
 "Language-Team: Chinese (simplified) <translation-team-zh-cn@lists."
@@ -77,7 +77,7 @@ msgid "bad fetch on multi key %s"
 msgstr ""
 
 #  need-proofread
-#: libdb/db_lookup.c:455 src/whatis.c:574
+#: libdb/db_lookup.c:455 src/whatis.c:721
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "数据库 %s 毁坏；请用 mandb --create 命令重建"
@@ -108,7 +108,7 @@ msgstr "默认的 man 数据库是 %s%s。"
 
 #: src/accessdb.c:64 src/catman.c:98 src/globbing_test.c:58
 #: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:105
-#: src/manpath.c:65 src/whatis.c:121 src/zsoelim_main.c:66
+#: src/manpath.c:65 src/whatis.c:124 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr "输出调试信息"
 
@@ -122,21 +122,21 @@ msgstr "无法打开 %s 读取数据"
 msgid "[SECTION...]"
 msgstr "[章节...]"
 
-#: src/catman.c:99 src/man.c:294 src/whatis.c:131
+#: src/catman.c:99 src/man.c:294 src/whatis.c:134
 msgid "PATH"
 msgstr "路径"
 
-#: src/catman.c:99 src/man.c:294 src/whatis.c:131
+#: src/catman.c:99 src/man.c:294 src/whatis.c:134
 msgid "set search path for manual pages to PATH"
 msgstr "设置搜索手册页的路径为“路径”"
 
 #: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
-#: src/whatis.c:133
+#: src/whatis.c:136
 msgid "FILE"
 msgstr "文件"
 
 #: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
-#: src/whatis.c:133
+#: src/whatis.c:136
 msgid "use this user configuration file"
 msgstr "使用该用户设置文件"
 
@@ -394,7 +394,7 @@ msgstr "以指定编码输出手册页源码"
 msgid "Finding manual pages:"
 msgstr "寻找手册页："
 
-#: src/man.c:292 src/whatis.c:132
+#: src/man.c:292 src/whatis.c:135
 msgid "LOCALE"
 msgstr "区域"
 
@@ -402,16 +402,16 @@ msgstr "区域"
 msgid "define the locale for this particular man search"
 msgstr "定义本次手册页搜索所采用的区域设置"
 
-#: src/man.c:293 src/manpath.c:68 src/whatis.c:130
+#: src/man.c:293 src/manpath.c:68 src/whatis.c:133
 msgid "SYSTEM"
 msgstr "系统"
 
-#: src/man.c:293 src/manpath.c:68 src/whatis.c:130
+#: src/man.c:293 src/manpath.c:68 src/whatis.c:133
 #, fuzzy
 msgid "use manual pages from other systems"
 msgstr "搜索其它 unix 系统的手册页"
 
-#: src/man.c:295 src/whatis.c:128
+#: src/man.c:295 src/whatis.c:131
 msgid "LIST"
 msgstr "列表"
 
@@ -915,64 +915,64 @@ msgstr "警告：无法更新索引缓存 %s"
 msgid "%s is self referencing"
 msgstr "%s 是指向自己的链接"
 
-#: src/whatis.c:117
+#: src/whatis.c:120
 msgid "KEYWORD..."
 msgstr "关键词..."
 
-#: src/whatis.c:118
+#: src/whatis.c:121
 msgid "The --regex option is enabled by default."
 msgstr "默认开启 --regex 选项。"
 
-#: src/whatis.c:122
+#: src/whatis.c:125
 msgid "print verbose warning messages"
 msgstr "输出详细的警告信息"
 
-#: src/whatis.c:123
+#: src/whatis.c:126
 msgid "interpret each keyword as a regex"
 msgstr "把每个关键词都当作正则表达式解读"
 
-#: src/whatis.c:124
+#: src/whatis.c:127
 msgid "search each keyword for exact match"
 msgstr "对每个关键词都进行严格匹配的搜索"
 
-#: src/whatis.c:125
+#: src/whatis.c:128
 msgid "the keyword(s) contain wildcards"
 msgstr "关键词里包含通配符"
 
-#: src/whatis.c:126
+#: src/whatis.c:129
 msgid "require all keywords to match"
 msgstr "要求所有的关键词都同时匹配"
 
-#: src/whatis.c:127
+#: src/whatis.c:130
 msgid "do not trim output to terminal width"
 msgstr "不要把输出按终端宽度截断"
 
-#: src/whatis.c:128
+#: src/whatis.c:131
 #, fuzzy
 msgid "search only these sections (colon-separated)"
 msgstr "仅在该节手册页中搜索"
 
-#: src/whatis.c:132
+#: src/whatis.c:135
 msgid "define the locale for this search"
 msgstr "定义本次搜索所使用的区域设置"
 
-#: src/whatis.c:229
+#: src/whatis.c:232
 #, c-format
 msgid "%s what?\n"
 msgstr "%s 什么？\n"
 
 #  need-proofread
-#: src/whatis.c:354 src/whatis.c:372
+#: src/whatis.c:393 src/whatis.c:411
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "警告：%s 包含一个指针回环"
 
-#: src/whatis.c:366 src/whatis.c:374
+#: src/whatis.c:405 src/whatis.c:413
 msgid "(unknown subject)"
 msgstr "(未知的主题)"
 
 #  partially-translated
-#: src/whatis.c:725
+#: src/whatis.c:877
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s：没有 appropriate。\n"

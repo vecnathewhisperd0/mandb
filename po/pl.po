@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2012-02-14 12:14+0000\n"
+"POT-Creation-Date: 2012-06-18 13:40+0100\n"
 "PO-Revision-Date: 2011-04-04 21:14+0200\n"
 "Last-Translator: Robert Luberda <robert@debian.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -63,7 +63,7 @@ msgstr[1] "tylko %d pól w zmiennej content"
 msgid "bad fetch on multi key %s"
 msgstr "błąd pobierania klucza wielowymiarowego %s"
 
-#: libdb/db_lookup.c:455 src/whatis.c:574
+#: libdb/db_lookup.c:455 src/whatis.c:721
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr ""
@@ -96,7 +96,7 @@ msgstr "Domyślną bazą danych jest %s%s."
 
 #: src/accessdb.c:64 src/catman.c:98 src/globbing_test.c:58
 #: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:105
-#: src/manpath.c:65 src/whatis.c:121 src/zsoelim_main.c:66
+#: src/manpath.c:65 src/whatis.c:124 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr "wyświetla komunikaty diagnostyczne"
 
@@ -109,22 +109,22 @@ msgstr "nie można otworzyć %s do odczytu"
 msgid "[SECTION...]"
 msgstr "[SEKCJA...]"
 
-#: src/catman.c:99 src/man.c:294 src/whatis.c:131
+#: src/catman.c:99 src/man.c:294 src/whatis.c:134
 msgid "PATH"
 msgstr "ŚCIEŻKA"
 
-#: src/catman.c:99 src/man.c:294 src/whatis.c:131
+#: src/catman.c:99 src/man.c:294 src/whatis.c:134
 msgid "set search path for manual pages to PATH"
 msgstr "ustawia ścieżkę wyszukiwania stron podręcznika na ŚCIEŻKĘ"
 
 #: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
-#: src/whatis.c:133
+#: src/whatis.c:136
 msgid "FILE"
 msgstr "PLIK"
 
 #
 #: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
-#: src/whatis.c:133
+#: src/whatis.c:136
 msgid "use this user configuration file"
 msgstr "używa tego pliku konfiguracyjnego użytkownika"
 
@@ -376,7 +376,7 @@ msgstr "wypisuje stronę źródłową przekształconą do KODOWANIA"
 msgid "Finding manual pages:"
 msgstr "Wyszukiwanie stron podręcznika ekranowego:"
 
-#: src/man.c:292 src/whatis.c:132
+#: src/man.c:292 src/whatis.c:135
 msgid "LOCALE"
 msgstr "UST_JĘZYKOWE"
 
@@ -384,15 +384,15 @@ msgstr "UST_JĘZYKOWE"
 msgid "define the locale for this particular man search"
 msgstr "określa ustawienia językowe tego wyszukiwania stron"
 
-#: src/man.c:293 src/manpath.c:68 src/whatis.c:130
+#: src/man.c:293 src/manpath.c:68 src/whatis.c:133
 msgid "SYSTEM"
 msgstr "SYSTEM"
 
-#: src/man.c:293 src/manpath.c:68 src/whatis.c:130
+#: src/man.c:293 src/manpath.c:68 src/whatis.c:133
 msgid "use manual pages from other systems"
 msgstr "używa stron podręcznika z innych systemów"
 
-#: src/man.c:295 src/whatis.c:128
+#: src/man.c:295 src/whatis.c:131
 msgid "LIST"
 msgstr "LISTA"
 
@@ -891,61 +891,61 @@ msgstr "ostrzeżenie: nie można zaktualizować bufora indeksu %s"
 msgid "%s is self referencing"
 msgstr "%s odwołuje się do samego siebie"
 
-#: src/whatis.c:117
+#: src/whatis.c:120
 msgid "KEYWORD..."
 msgstr "SŁOWO_KLUCZ..."
 
-#: src/whatis.c:118
+#: src/whatis.c:121
 msgid "The --regex option is enabled by default."
 msgstr "Opcja --regex jest domyślnie włączona."
 
-#: src/whatis.c:122
+#: src/whatis.c:125
 msgid "print verbose warning messages"
 msgstr "wyświetla szczegółowe ostrzeżenia"
 
-#: src/whatis.c:123
+#: src/whatis.c:126
 msgid "interpret each keyword as a regex"
 msgstr "interpretuje każde słowo kluczowe jako wyr. regularne"
 
-#: src/whatis.c:124
+#: src/whatis.c:127
 msgid "search each keyword for exact match"
 msgstr "szuka każdego słowa kluczowego dla pełnego dopasowania"
 
-#: src/whatis.c:125
+#: src/whatis.c:128
 msgid "the keyword(s) contain wildcards"
 msgstr "słowa kluczowe zawierają znaki dopasowywania"
 
-#: src/whatis.c:126
+#: src/whatis.c:129
 msgid "require all keywords to match"
 msgstr "żąda dopasowania wszystkich słów kluczowych"
 
-#: src/whatis.c:127
+#: src/whatis.c:130
 msgid "do not trim output to terminal width"
 msgstr "nie przycina wyjścia do szerokości terminalu"
 
-#: src/whatis.c:128
+#: src/whatis.c:131
 msgid "search only these sections (colon-separated)"
 msgstr "przeszukuje tylko te sekcje (rozdzielone średnikami)"
 
-#: src/whatis.c:132
+#: src/whatis.c:135
 msgid "define the locale for this search"
 msgstr "ustawienia językowe tego wyszukiwania"
 
-#: src/whatis.c:229
+#: src/whatis.c:232
 #, c-format
 msgid "%s what?\n"
 msgstr "co %s?\n"
 
-#: src/whatis.c:354 src/whatis.c:372
+#: src/whatis.c:393 src/whatis.c:411
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "ostrzeżenie: %s zawiera pętlę wskaźników"
 
-#: src/whatis.c:366 src/whatis.c:374
+#: src/whatis.c:405 src/whatis.c:413
 msgid "(unknown subject)"
 msgstr "(temat nieznany)"
 
-#: src/whatis.c:725
+#: src/whatis.c:877
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: nic odpowiedniego.\n"
