@@ -1,6 +1,6 @@
 /* Work around an fstatat bug on Solaris 9.
 
-   Copyright (C) 2006, 2009-2011 Free Software Foundation, Inc.
+   Copyright (C) 2006, 2009-2012 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ rpl_fstatat (int fd, char const *file, struct stat *st, int flag)
 
 #else /* ! (HAVE_FSTATAT && HAVE_WORKING_FSTATAT_ZERO_FLAG) */
 
-/* On mingw, the gnulib <sys/stat.h> defines `stat' as a function-like
+/* On mingw, the gnulib <sys/stat.h> defines 'stat' as a function-like
    macro; but using it in AT_FUNC_F2 causes compilation failure
    because the preprocessor sees a use of a macro that requires two
    arguments but is only given one.  Hence, we need an inline
@@ -103,7 +103,7 @@ stat_func (char const *name, struct stat *st)
   return stat (name, st);
 }
 
-/* Likewise, if there is no native `lstat', then the gnulib
+/* Likewise, if there is no native 'lstat', then the gnulib
    <sys/stat.h> defined it as stat, which also needs adjustment.  */
 # if !HAVE_LSTAT
 #  undef lstat
