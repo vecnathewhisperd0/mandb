@@ -28,6 +28,8 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <setjmp.h>
 
 #include "manconfig.h"
 
@@ -43,16 +45,54 @@ struct sortkey {
 	struct sortkey *next;
 };
 
-man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, GDBM_FILE file)
+/* setjmp/longjmp handling to defend against _gdbm_fatal exiting under our
+ * feet.  Not thread-safe, but there is no plan for man-db to ever use
+ * threads.
+ */
+static jmp_buf open_env;
+static int opening;
+
+/* Mimic _gdbm_fatal's error output, but handle errors during open more
+ * gracefully than exiting.
+ */
+static void trap_error (const char *val)
+{
+	if (opening) {
+		debug ("gdbm error: %s\n", val);
+		longjmp (open_env, 1);
+	} else
+		fprintf (stderr, "gdbm fatal: %s\n", val);
+}
+
+man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, int flags)
 {
 	man_gdbm_wrapper wrap;
+	GDBM_FILE file;
+	datum key, content;
 
+	opening = 1;
+	if (setjmp (open_env))
+		return NULL;
+	file = gdbm_open ((char *) name, BLK_SIZE, flags, DBMODE, trap_error);
 	if (!file)
 		return NULL;
 
 	wrap = xmalloc (sizeof *wrap);
 	wrap->name = xstrdup (name);
 	wrap->file = file;
+
+	if ((flags & ~GDBM_FAST) != GDBM_NEWDB) {
+		/* While the setjmp/longjmp guard is in effect, make sure we
+		 * can read from the database at all.
+		 */
+		memset (&key, 0, sizeof key);
+		MYDBM_SET (key, xstrdup (VER_KEY));
+		content = MYDBM_FETCH (wrap, key);
+		free (MYDBM_DPTR (key));
+		free (MYDBM_DPTR (content));
+	}
+
+	opening = 0;
 
 	return wrap;
 }

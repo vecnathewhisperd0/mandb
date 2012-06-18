@@ -1,3 +1,19 @@
+Mon Jun 18 04:20:41 BST 2012  Colin Watson  <cjwatson@debian.org>
+
+	Avoid fatal errors when opening a 64-bit GDBM database from a 32-bit
+	process (Ubuntu bug #1001189).
+
+	* libdb/db_gdbm.c (trap_error): New function.
+	  (man_gdbm_open_wrapper): Rearrange interface to call gdbm_open
+	  rather than taking its return value as an argument.  Fetch a test
+	  value from the database after opening it, inside a setjmp/longjmp
+	  guard to prevent GDBM from exiting.
+	* include/mydbm.h (man_gdbm_open_wrapper): Update prototype.
+	  (MYDBM_CTRWOPEN, MYDBM_CRWOPEN, MYDBM_RWOPEN, MYDBM_RDOPEN):
+	  Update man_gdbm_open_wrapper calls, since it now calls gdbm_open
+	  itself.
+	* NEWS: Document this.
+
 Mon May 14 16:40:00 PDT 2012  Colin Watson  <cjwatson@debian.org>
 
 	* NEWS: The fix for Ubuntu bug #927028 also fixed Debian bug #672661

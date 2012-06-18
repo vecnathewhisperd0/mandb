@@ -53,7 +53,7 @@ typedef struct {
 	GDBM_FILE file;
 } *man_gdbm_wrapper;
 
-man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, GDBM_FILE file);
+man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, int flags);
 datum man_gdbm_firstkey (man_gdbm_wrapper wrap);
 datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key);
 void man_gdbm_close (man_gdbm_wrapper wrap);
@@ -64,18 +64,14 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #  define MYDBM_DPTR(d)			((d).dptr)
 #  define MYDBM_SET_DPTR(d, value)	((d).dptr = (value))
 #  define MYDBM_DSIZE(d)		((d).dsize)
-#  define MYDBM_CTRWOPEN(file)		man_gdbm_open_wrapper(file,\
-					  gdbm_open(file, BLK_SIZE,\
-					  GDBM_NEWDB|GDBM_FAST, DBMODE, 0))
-#  define MYDBM_CRWOPEN(file)		man_gdbm_open_wrapper(file,\
-					  gdbm_open(file, BLK_SIZE,\
-					  GDBM_WRCREAT|GDBM_FAST, DBMODE, 0))
-#  define MYDBM_RWOPEN(file)		man_gdbm_open_wrapper(file,\
-					  gdbm_open(file, BLK_SIZE,\
-					  GDBM_WRITER|GDBM_FAST, DBMODE, 0))
-#  define MYDBM_RDOPEN(file)		man_gdbm_open_wrapper(file,\
-					  gdbm_open(file, BLK_SIZE,\
-					  GDBM_READER, DBMODE, 0))
+#  define MYDBM_CTRWOPEN(file)		\
+	man_gdbm_open_wrapper(file, GDBM_NEWDB|GDBM_FAST)
+#  define MYDBM_CRWOPEN(file)		\
+	man_gdbm_open_wrapper(file, GDBM_WRCREAT|GDBM_FAST)
+#  define MYDBM_RWOPEN(file)		\
+	man_gdbm_open_wrapper(file, GDBM_WRITER|GDBM_FAST)
+#  define MYDBM_RDOPEN(file)		\
+	man_gdbm_open_wrapper(file, GDBM_READER)
 #  define MYDBM_INSERT(db, key, cont)	gdbm_store((db)->file, key, cont, GDBM_INSERT)
 #  define MYDBM_REPLACE(db, key, cont) 	gdbm_store((db)->file, key, cont, GDBM_REPLACE)
 #  define MYDBM_EXISTS(db, key)		gdbm_exists((db)->file, key)
