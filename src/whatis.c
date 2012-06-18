@@ -925,6 +925,8 @@ int main (int argc, char *argv[])
 			0, 0, 0))
 		exit (FAIL);
 
+	read_config_file (user_config_file != NULL);
+
 	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
 	if (locale) {
