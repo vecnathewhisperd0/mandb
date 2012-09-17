@@ -10,6 +10,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR([src/man.c])
 AC_GNU_SOURCE
+AM_PROG_AR
 LT_INIT([disable-static])
 
 if test ! -f "$srcdir/gnulib/po/Makefile.in.in"; then
