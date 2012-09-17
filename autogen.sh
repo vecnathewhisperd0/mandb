@@ -1,4 +1,5 @@
-#! /bin/sh -e
+#! /bin/sh
+set -e
 
 if type gnulib-tool >/dev/null 2>&1; then
 	autopoint -f
