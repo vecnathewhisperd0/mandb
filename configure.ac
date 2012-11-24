@@ -526,6 +526,7 @@ AC_CONFIG_FILES([Makefile
 	man/Makefile
 	man/replace.sin
 	man/po4a/Makefile
+	man/da/Makefile
 	man/de/Makefile
 	man/es/Makefile
 	man/fr/Makefile
