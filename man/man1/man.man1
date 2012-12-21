@@ -932,11 +932,10 @@ sets the
 .B \-ix8
 options.
 
-If you want to override
-.BR %man% 's
-prompt string processing completely, use the
+The
 .RB $ MANLESS
-environment variable described below.
+environment variable described below may be used to set a default prompt
+string if none is supplied on the command line.
 .TP
 .if !'po4a'hide' .BR \-7 ", " \-\-ascii
 When viewing a pure
@@ -1223,21 +1222,21 @@ on standard input.
 .if !'po4a'hide' .B MANLESS
 If
 .RB $ MANLESS
-is set,
-.B %man%
-will not perform any of its usual processing to set up a prompt string for
-the
+is set, its value will be used as the default prompt string for the
 .B less
-pager.
-Instead, the value of
-.RB $ MANLESS
-will be copied verbatim into
-.RB $ LESS .
+pager, as if it had been passed using the
+.B \-r
+option (so any occurrences of the text
+.B $MAN_PN
+will be expanded in the same way).
 For example, if you want to set the prompt string unconditionally to
 \(lqmy prompt string\(rq, set
 .RB $ MANLESS
 to
 .RB \(oq \-Psmy\ prompt\ string \(cq.
+Using the
+.B \-r
+option overrides this environment variable.
 .TP
 .if !'po4a'hide' .B BROWSER
 If

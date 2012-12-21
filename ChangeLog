@@ -1,3 +1,12 @@
+Fri Dec 21 21:29:27 GMT 2012  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (main): Use $MANLESS as the default for prompt_string if
+	  the -r option was not used.
+	  (setenv_less): Remove code to copy $MANLESS verbatim into $LESS.
+	* man/man1/man.man1 (Controlling formatted output, ENVIRONMENT):
+	  Describe new behaviour of $MANLESS.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+
 Sun Dec 16 12:00:55 GMT 2012  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (escape_less): Handle incompatible change to option

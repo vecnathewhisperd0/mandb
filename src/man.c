@@ -1153,6 +1153,9 @@ int main (int argc, char *argv[])
 		pager = get_def_user ("cat", CAT);
 
 	if (prompt_string == NULL)
+		prompt_string = getenv ("MANLESS");
+
+	if (prompt_string == NULL)
 #ifdef LESS_PROMPT
 		prompt_string = LESS_PROMPT;
 #else
@@ -1902,12 +1905,6 @@ static void setenv_less (pipecmd *cmd, const char *title)
 {
 	const char *esc_title;
 	char *less_opts, *man_pn;
-	const char *force = getenv ("MANLESS");
-
-	if (force) {
-		pipecmd_setenv (cmd, "LESS", force);
-		return;
-	}
 
 	esc_title = escape_less (title);
 	less_opts = xasprintf (LESS_OPTS, prompt_string, prompt_string);
