@@ -1,3 +1,15 @@
+Sat Dec 22 13:59:14 GMT 2012  Colin Watson  <cjwatson@debian.org>
+
+	Document default section list in manual pages (Debian bug #611007).
+
+	* man/replace.sin.in: Substitute %sections%.
+	* man/man1/man.man1 (DESCRIPTION): Fix misplaced comma.  Document
+	  configured list of sections rather than simply saying "a
+	  pre-defined order".
+	  (ENVIRONMENT): Document default for $MANSECT.
+	* man/man8/catman.man8 (ENVIRONMENT): Likewise.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+
 Fri Dec 21 21:29:27 GMT 2012  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (main): Use $MANLESS as the default for prompt_string if
