@@ -814,35 +814,17 @@ static inline const char *escape_less (const char *string)
 	static char *escaped_string; 
 	char *ptr;
 
-	/* 4*strlen will always be long enough to hold the escaped string */
+	/* 2*strlen will always be long enough to hold the escaped string */
 	ptr = escaped_string = xrealloc (escaped_string, 
-					 4 * strlen (string) + 1);
-
+					 2 * strlen (string) + 1);
+	
 	while (*string) {
-		/* less 456 requires dollar and backslash to be escaped in
-		 * the option string; this means that we need two
-		 * backslashes to effectively escape characters special in
-		 * prompt strings, and that displaying a backslash requires
-		 * two levels of escaping.  Note that this appears to be an
-		 * incompatible change, so this will overescape for earlier
-		 * versions of less.
-		 */
 		if (*string == '?' ||
 		    *string == ':' ||
 		    *string == '.' ||
-		    *string == '%') {
-			/* Special only in prompt strings */
+		    *string == '%' ||
+		    *string == '\\')
 			*ptr++ = '\\';
-			*ptr++ = '\\';
-		} else if (*string == '$')
-			/* Special only in option strings */
-			*ptr++ = '\\';
-		else if (*string == '\\') {
-			/* Special in both option and prompt strings */
-			*ptr++ = '\\';
-			*ptr++ = '\\';
-			*ptr++ = '\\';
-		}
 
 		*ptr++ = *string++;
 	}
