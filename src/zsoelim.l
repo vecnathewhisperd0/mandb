@@ -109,6 +109,7 @@ struct zsoelim_stdin_data {
 	} else \
 		result = YY_NULL; \
 }
+#define YY_NO_INPUT
 %}
 
 %x so

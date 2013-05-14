@@ -237,6 +237,7 @@ static pipeline *decomp;
 	} else \
 		result = YY_NULL; \
 }
+#define YY_NO_INPUT
 %}
 
 %option ecs meta-ecs
