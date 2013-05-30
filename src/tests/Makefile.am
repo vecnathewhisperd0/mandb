@@ -18,9 +18,10 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-TESTS_ENVIRONMENT = PATH=..:$$PATH DBTYPE=$(DBTYPE) \
-		    top_builddir=$(top_builddir) \
-		    @LOCALCHARSET_TESTS_ENVIRONMENT@ $(SHELL)
+TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
+		    DBTYPE=$(DBTYPE); export DBTYPE; \
+		    top_builddir=$(top_builddir); export top_builddir; \
+		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR;
 ALL_TESTS = \
 	lexgrog-1 \
 	man-1 man-2 man-3 \

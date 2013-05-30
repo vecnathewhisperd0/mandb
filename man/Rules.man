@@ -25,7 +25,7 @@ CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS) replace.sed
 
 export top_builddir LINGUA EGREP
 if !CROSS_COMPILING
-TESTS_ENVIRONMENT = @SHELL@ $(top_srcdir)/man/check-man
+LOG_COMPILER = @SHELL@ $(top_srcdir)/man/check-man
 TESTS = $(man1_MANS) $(man5_MANS) $(man8_MANS)
 endif
 

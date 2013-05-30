@@ -1,3 +1,19 @@
+Thu 30 May 11:42:29 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade to Automake 1.13.2 and Gnulib 20130529.
+
+	* .bzrignore: Add gnulib/lib/locale.h, man/**/*.log, man/**/*.trs,
+	  src/tests/*.log, and src/tests/*.trs.
+	* autogen.sh: Drop gnulib/gets.patch backport.
+	* gnulib/gets.patch: Remove.
+	* configure.ac (AM_INIT_AUTOMAKE): Set minimum Automake version to
+	  1.11.  Add parallel-tests option for compatibility with 1.11.
+	* man/Rules.man (TESTS_ENVIRONMENT): Move to ...
+	  (LOG_COMPILER): ... this.
+	* src/tests/Makefile.am (TESTS_ENVIRONMENT): Rewrite as a list of
+	  variable exports rather than as a command prefix, for
+	  compatibility with parallel-tests.
+
 Tue May 14 22:55:09 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* src/lexgrog.l: Define YY_NO_INPUT, suppressing a -Wunused-function

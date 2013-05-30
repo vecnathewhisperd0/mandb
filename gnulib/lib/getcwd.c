@@ -1,4 +1,4 @@
-/* Copyright (C) 1991-1999, 2004-2012 Free Software Foundation, Inc.
+/* Copyright (C) 1991-1999, 2004-2013 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    This program is free software: you can redistribute it and/or modify
@@ -28,9 +28,9 @@
 #include <fcntl.h> /* For AT_FDCWD on Solaris 9.  */
 
 /* If this host provides the openat function or if we're using the
-   gnulib replacement function, then enable code below to make getcwd
-   more efficient and robust.  */
-#if defined HAVE_OPENAT || defined GNULIB_OPENAT
+   gnulib replacement function with a native fdopendir, then enable
+   code below to make getcwd more efficient and robust.  */
+#if defined HAVE_OPENAT || (defined GNULIB_OPENAT && defined HAVE_FDOPENDIR)
 # define HAVE_OPENAT_SUPPORT 1
 #else
 # define HAVE_OPENAT_SUPPORT 0
@@ -135,7 +135,7 @@ __getcwd (char *buf, size_t size)
   size_t allocated = size;
   size_t used;
 
-#if HAVE_RAW_DECL_GETCWD && HAVE_MINIMALLY_WORKING_GETCWD
+#if HAVE_MINIMALLY_WORKING_GETCWD
   /* If AT_FDCWD is not defined, the algorithm below is O(N**2) and
      this is much slower than the system getcwd (at least on
      GNU/Linux).  So trust the system getcwd's results unless they

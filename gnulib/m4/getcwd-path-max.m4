@@ -6,7 +6,7 @@
 # I've heard that this is due to a Linux kernel bug, and that it has
 # been fixed between 2.4.21-pre3 and 2.4.21-pre4.
 
-# Copyright (C) 2003-2007, 2009-2012 Free Software Foundation, Inc.
+# Copyright (C) 2003-2007, 2009-2013 Free Software Foundation, Inc.
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -51,6 +51,9 @@ AC_DEFUN([gl_FUNC_GETCWD_PATH_MAX],
 #else
 # define is_ENAMETOOLONG(x) 0
 #endif
+
+/* Use the getcwd function, not any macro.  */
+#undef getcwd
 
 /* Don't get link errors because mkdir is redefined to rpl_mkdir.  */
 #undef mkdir
