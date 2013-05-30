@@ -285,7 +285,7 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-am_catman_OBJECTS = catman.$(OBJEXT) manp.$(OBJEXT)
+am_catman_OBJECTS = catman.$(OBJEXT) globbing.$(OBJEXT) manp.$(OBJEXT)
 catman_OBJECTS = $(am_catman_OBJECTS)
 catman_DEPENDENCIES = $(am__DEPENDENCIES_3) $(am__DEPENDENCIES_2)
 am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT)
@@ -316,10 +316,12 @@ am_mandb_OBJECTS = check_mandirs.$(OBJEXT) compression.$(OBJEXT) \
 mandb_OBJECTS = $(am_mandb_OBJECTS)
 mandb_DEPENDENCIES = $(am__DEPENDENCIES_3) $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_2)
-am_manpath_OBJECTS = manp.$(OBJEXT) manpath.$(OBJEXT)
+am_manpath_OBJECTS = globbing.$(OBJEXT) manp.$(OBJEXT) \
+	manpath.$(OBJEXT)
 manpath_OBJECTS = $(am_manpath_OBJECTS)
 manpath_DEPENDENCIES = $(am__DEPENDENCIES_1)
-am_whatis_OBJECTS = manconv.$(OBJEXT) manp.$(OBJEXT) whatis.$(OBJEXT)
+am_whatis_OBJECTS = globbing.$(OBJEXT) manconv.$(OBJEXT) \
+	manp.$(OBJEXT) whatis.$(OBJEXT)
 whatis_OBJECTS = $(am_whatis_OBJECTS)
 whatis_DEPENDENCIES = $(am__DEPENDENCIES_3) $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_2)
@@ -1419,6 +1421,8 @@ accessdb_SOURCES = \
 
 catman_SOURCES = \
 	catman.c \
+	globbing.c \
+	globbing.h \
 	manp.c \
 	manp.h
 
@@ -1492,11 +1496,15 @@ mandb_SOURCES = \
 	ult_src.h
 
 manpath_SOURCES = \
+	globbing.c \
+	globbing.h \
 	manp.c \
 	manp.h \
 	manpath.c
 
 whatis_SOURCES = \
+	globbing.c \
+	globbing.h \
 	manconv.c \
 	manconv.h \
 	manp.c \

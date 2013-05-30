@@ -1,3 +1,20 @@
+Thu May 30 12:57:50 BST 2013  Peter Schiffer  <pschiffe@redhat.com>
+                              Colin Watson  <cjwatson@debian.org>
+
+	Add support for wildcards in MANPATH (Fedora bug #677669).
+
+	* src/Makefile.am (catman_SOURCES, manpath_SOURCES, whatis_SOURCES):
+	  Add globbing.c and globbing.h.
+	* src/globbing.c (expand_path): New function.
+	* src/globbing.h (expand_path): Add prototype.
+	* src/manp.c (add_dir_to_list): Rename to ...
+	  (add_expanded_dir_to_list): ... this.
+	  (add_dir_to_list): New function, expanding wildcards and wrapping
+	  add_expanded_dir_to_list.
+	  (add_dir_to_path_list): Expand wildcards.
+	* src/tests/man-4: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add man-4.
+
 Thu May 30 11:51:54 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* Makefile.am (EXTRA_DIST): Remove gnulib/gets.patch.

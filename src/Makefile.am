@@ -73,6 +73,8 @@ accessdb_SOURCES = \
 	accessdb.c
 catman_SOURCES = \
 	catman.c \
+	globbing.c \
+	globbing.h \
 	manp.c \
 	manp.h
 globbing_SOURCES = \
@@ -140,10 +142,14 @@ mandb_SOURCES = \
 	ult_src.c \
 	ult_src.h
 manpath_SOURCES = \
+	globbing.c \
+	globbing.h \
 	manp.c \
 	manp.h \
 	manpath.c
 whatis_SOURCES = \
+	globbing.c \
+	globbing.h \
 	manconv.c \
 	manconv.h \
 	manp.c \

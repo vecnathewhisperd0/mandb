@@ -1429,7 +1429,7 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
 
 ALL_TESTS = \
 	lexgrog-1 \
-	man-1 man-2 man-3 \
+	man-1 man-2 man-3 man-4 \
 	manconv-1 manconv-2 manconv-3 \
 	mandb-1 mandb-2 mandb-3 mandb-4 mandb-5 mandb-6 \
 	whatis-1 \
@@ -1649,6 +1649,13 @@ man-2.log: man-2
 man-3.log: man-3
 	@p='man-3'; \
 	b='man-3'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+man-4.log: man-4
+	@p='man-4'; \
+	b='man-4'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

@@ -24,7 +24,7 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
 		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR;
 ALL_TESTS = \
 	lexgrog-1 \
-	man-1 man-2 man-3 \
+	man-1 man-2 man-3 man-4 \
 	manconv-1 manconv-2 manconv-3 \
 	mandb-1 mandb-2 mandb-3 mandb-4 mandb-5 mandb-6 \
 	whatis-1 \

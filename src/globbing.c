@@ -427,3 +427,30 @@ char **look_for_file (const char *hier, const char *sec,
 	else
 		return gbuf.gl_pathv;
 }
+
+char **expand_path (const char *path)
+{
+	int res = 0;
+	char **result = NULL;
+	glob_t globbuf;
+	size_t i;
+
+	res = glob (path, GLOB_NOCHECK, NULL, &globbuf);
+	/* if glob failed, return the given path */
+	if (res != 0) {
+		result = XNMALLOC (2, char *);
+		result[0] = xstrdup (path);
+		result[1] = NULL;
+		return result;
+	}
+
+	result = XNMALLOC (globbuf.gl_pathc + 1, char *);
+	for (i = 0; i < globbuf.gl_pathc; i++) {
+		result[i] = xstrdup (globbuf.gl_pathv[i]);
+	}
+	result[globbuf.gl_pathc] = NULL;
+
+	globfree (&globbuf);
+
+	return result;
+}

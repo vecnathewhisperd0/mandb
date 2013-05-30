@@ -29,3 +29,6 @@ enum look_for_file_opts {
 /* globbing.c */
 extern char **look_for_file (const char *hier, const char *sec,
 			     const char *unesc_name, int cat, int opts);
+
+/* Expand path with wildcards into list of all existing directories. */
+extern char **expand_path (const char *path);

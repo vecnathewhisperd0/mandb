@@ -75,6 +75,7 @@
 #endif
 
 #include "manp.h"
+#include "globbing.h"
 
 struct list {
 	char *key;
@@ -1030,10 +1031,8 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	return manpathlist;
 }
 
-/*
- * Add a directory to the manpath list if it isn't already there.
- */
-static void add_dir_to_list (char **lp, const char *dir)
+/* Add a directory to the manpath list if it isn't already there. */
+static void add_expanded_dir_to_list (char **lp, const char *dir)
 {
 	int status;
 	int pos = 0;
@@ -1062,6 +1061,23 @@ static void add_dir_to_list (char **lp, const char *dir)
 
 		*lp = xstrdup (dir);
 	}
+}
+
+/*
+ * Add a directory to the manpath list if it isn't already there, expanding
+ * wildcards.
+ */
+static void add_dir_to_list (char **lp, const char *dir)
+{
+	char **expanded_dirs;
+	int i;
+
+	expanded_dirs = expand_path (dir);
+	for (i = 0; expanded_dirs[i]; i++) {
+		add_expanded_dir_to_list (lp, expanded_dirs[i]);
+		free (expanded_dirs[i]);
+	}
+	free (expanded_dirs);
 }
 
 /* path does not exist in config file: check to see if path/../man,
@@ -1105,33 +1121,40 @@ static inline char *has_mandir (const char *path)
 
 static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
 {
-	int status;
-	char *cwd;
+	int status, i;
+	char *cwd, *d, **expanded_dirs;
 
 	if (mp - mphead > MAXDIRS - 1)
 		gripe_overlong_list ();
 
-	status = is_directory (p);
+	expanded_dirs = expand_path (p);
+	for (i = 0; expanded_dirs[i]; i++) {
+		d = expanded_dirs[i];
 
-	if (status < 0)
-		gripe_stat_file (p);
-	else if (status == 0)
-		gripe_not_directory (p);
-	else {
-		/* deal with relative paths */
+		status = is_directory (d);
 
-		if (*p != '/') {
-			cwd = xgetcwd ();
-			if (!cwd)
-				error (FATAL, errno,
-				       _("can't determine current directory"));
-			*mp = appendstr (cwd, "/", p, NULL);
-		} else 
-			*mp = xstrdup (p);
+		if (status < 0)
+			gripe_stat_file (d);
+		else if (status == 0)
+			gripe_not_directory (d);
+		else {
+			/* deal with relative paths */
+			if (*d != '/') {
+				cwd = xgetcwd ();
+				if (!cwd)
+					error (FATAL, errno,
+							_("can't determine current directory"));
+				*mp = appendstr (cwd, "/", d, NULL);
+			} else
+				*mp = xstrdup (d);
 
-		debug ("adding %s to manpathlist\n", *mp);
-		mp++;
+			debug ("adding %s to manpathlist\n", *mp);
+			mp++;
+		}
+		free (d);
 	}
+	free (expanded_dirs);
+
 	return mp;
 }
 
