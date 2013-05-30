@@ -27,7 +27,6 @@ dist_noinst_DATA = FAQ NEWS README include/README
 EXTRA_DIST = \
 	.bzrignore \
 	autogen.sh \
-	gnulib/gets.patch \
 	gnulib/m4/gnulib-cache.m4 \
 	gnulib/m4/gnulib-tool.m4 \
 	release.sh
