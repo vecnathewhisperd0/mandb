@@ -22,6 +22,8 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
 		    DBTYPE=$(DBTYPE); export DBTYPE; \
 		    top_builddir=$(top_builddir); export top_builddir; \
 		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR;
+# Each test must use the configure-detected shell, not necessarily /bin/sh.
+AM_LOG_FLAGS = $(SHELL)
 ALL_TESTS = \
 	lexgrog-1 \
 	man-1 man-2 man-3 man-4 \
