@@ -4,19 +4,19 @@
 # This file is distributed under the same license as the man-db package.
 #
 # Yuri Kozlov <yuray@komyakino.ru>, 2008, 2009, 2010, 2011, 2012.
-# Yuri Kozlov <kozlov.y@gmail.com>, 2008.
+# Yuri Kozlov <yuray@komyakino.ru>, 2008, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.6.1-pre1\n"
-"POT-Creation-Date: 2013-06-03 12:43+0200\n"
-"PO-Revision-Date: 2012-02-06 20:48+0400\n"
+"Project-Id-Version: man-db-manpages 2.6.4-pre1\n"
+"POT-Creation-Date: 2013-06-03 13:08+0200\n"
+"PO-Revision-Date: 2013-06-03 22:21+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.4\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -545,7 +545,7 @@ msgid ""
 "preprocessing filters required by the man page before it is passed to "
 "B<nroff> or B<troff>, or both."
 msgstr ""
-"B<lexgrog> -- это реализация традиционной \\(lqgroff guess\\(rq утилиты с "
+"B<lexgrog> — это реализация традиционной \\(lqgroff guess\\(rq утилиты с "
 "помощью B<lex>. Она читает список файлов из командной строки, которые "
 "являются файлами исходников справочных страниц или уже отформированными "
 "(\\(lqcat\\(rq) страницами, и показывает их названия и описания, "
@@ -934,16 +934,6 @@ msgstr "B<%man%> [\\|B<-hV>\\|]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:179
-#, fuzzy
-#| msgid ""
-#| "B<%man%> is the system's manual pager. Each I<page> argument given to B<"
-#| "%man%> is normally the name of a program, utility or function.  The "
-#| "I<manual page> associated with each of these arguments is then found and "
-#| "displayed. A I<section>, if provided, will direct B<%man%> to look only "
-#| "in that I<section> of the manual.  The default action is to search in all "
-#| "of the available I<sections>, following a pre-defined order and to show "
-#| "only the first I<page> found, even if I<page> exists in several "
-#| "I<sections>."
 msgid ""
 "B<%man%> is the system's manual pager. Each I<page> argument given to B<%man"
 "%> is normally the name of a program, utility or function.  The I<manual "
@@ -955,14 +945,16 @@ msgid ""
 "%manpath_config_file%>), and to show only the first I<page> found, even if "
 "I<page> exists in several I<sections>."
 msgstr ""
-"B<%man%> -- это пейджер справочных страниц системы. Каждый параметр "
+"B<%man%> — это пейджер справочных страниц системы. Каждый параметр "
 "I<страница>, переданный B<%man%>, обычно является названием программы, "
 "утилиты или функции. По каждому из этих параметров выполняется поиск и вывод "
 "связанной с ним I<справочной страницы>. Если указан параметр I<раздел>, то "
 "это заставляет B<%man%> выполнять поиск только в этом справочном I<разделе>. "
 "Действием по умолчанию является поиск во всех доступных I<разделах> в "
-"заранее определённом порядке и показ только первой найденной I<страницы>, "
-"даже если существуют I<страницы> в нескольких I<разделах>."
+"заранее определённом порядке (по умолчанию в «%sections%», если не изменено "
+"директивой B<SECTION> в I<%manpath_config_file%>) и показ только первой "
+"найденной I<страницы>, даже если существуют I<страницы> в нескольких "
+"I<разделах>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:183
@@ -1276,7 +1268,7 @@ msgid ""
 msgstr ""
 "Многие параметры B<%man%> предназначены для предоставления как можно большей "
 "гибкости пользователю. Можно изменять путь поиска, порядок разделов, "
-"выходной обработчик и другие характеристики и операции -- всё это подробно "
+"выходной обработчик и другие характеристики и операции — всё это подробно "
 "описано ниже."
 
 #. type: Plain text
@@ -2004,8 +1996,8 @@ msgid ""
 "was found under and I<x> the current line number.  This is achieved by using "
 "the $B<LESS> environment variable."
 msgstr ""
-"где I<имя> это имя справочной страницы, I<раздел> -- раздел, в котором она "
-"была найдена и I<x> -- номер текущей строки. Приглашение устанавливается с "
+"где I<имя> это имя справочной страницы, I<раздел> — раздел, в котором она "
+"была найдена и I<x> — номер текущей строки. Приглашение устанавливается с "
 "помощью переменной окружения $B<LESS>."
 
 #. You may need to do this if your
@@ -2041,7 +2033,7 @@ msgstr "B<byte\\e\\ %bB?s/%s..?\\e\\ (ВСЕ):?pB\\e\\ %pB\\e\\e%..>"
 #. type: Plain text
 #: ../../man/man1/man.man1:924
 msgid "B<(press h for help or q to quit)>"
-msgstr "B<(h -- справка, q -- выход)>"
+msgstr "B<(h — справка, q — выход)>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:939
@@ -2067,6 +2059,9 @@ msgid ""
 "The $B<MANLESS> environment variable described below may be used to set a "
 "default prompt string if none is supplied on the command line."
 msgstr ""
+"Переменная окружения $B<MANLESS>, описанная ниже, может использоваться для "
+"назначения строки приглашения по умолчанию, если это не задано в командной "
+"строке."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:970
@@ -2387,11 +2382,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1211 ../../man/man8/catman.man8:85
-#, fuzzy
-#| msgid ""
-#| "If $B<MANSECT> is set, its value is a colon-delimited list of sections "
-#| "and it is used to determine which manual sections to search and in what "
-#| "order."
 msgid ""
 "If $B<MANSECT> is set, its value is a colon-delimited list of sections and "
 "it is used to determine which manual sections to search and in what order.  "
@@ -2401,7 +2391,8 @@ msgstr ""
 "Если установлена переменная окружения $B<MANSECT>, то её значением является "
 "список разделов, указанных через двоеточие, и она используется для задания "
 "разделов справочных страниц, в которых будет производится поиск и в каком "
-"порядке."
+"порядке. Значением по умолчанию является «%sections%», если оно не заменено "
+"директивой B<SECTION> в I<%manpath_config_file%>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1224
@@ -2416,13 +2407,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1249
-#, fuzzy
-#| msgid ""
-#| "If $B<MANLESS> is set, B<%man%> will not perform any of its usual "
-#| "processing to set up a prompt string for the B<less> pager.  Instead, the "
-#| "value of $B<MANLESS> will be copied verbatim into $B<LESS>.  For example, "
-#| "if you want to set the prompt string unconditionally to \\(lqmy prompt "
-#| "string\\(rq, set $B<MANLESS> to \\(oqB<-Psmy\\ prompt\\ string>\\(cq."
 msgid ""
 "If $B<MANLESS> is set, its value will be used as the default prompt string "
 "for the B<less> pager, as if it had been passed using the B<-r> option (so "
@@ -2431,12 +2415,13 @@ msgid ""
 "prompt string\\(rq, set $B<MANLESS> to \\(oqB<-Psmy\\ prompt\\ string>"
 "\\(cq.  Using the B<-r> option overrides this environment variable."
 msgstr ""
-"Если установлена переменная окружения $B<MANLESS>, то B<%man%> не будет "
-"выполнять все свои обычные операции для установки строки приглашения для "
-"пейджера B<less>. Вместо этого, значение $B<MANLESS> будет скопировано в "
-"точности в переменную $B<LESS>. Например, если вы хотите установить строку "
+"Если установлена переменная окружения $B<MANLESS>, то её значение будет "
+"использоваться по умолчанию как строка приглашения для пейджера B<less>, как "
+"если бы был указан параметр B<-r> (так что любые появления текста B<$MAN_PN> "
+"будут как-то раскрыты). Например, если вы хотите установить строку "
 "приглашения дословно в \\(lqmy prompt string\\(rq, то установите $B<MANLESS> "
-"равной \\(oqB<-Psmy\\ prompt\\ string>\\(cq."
+"равной \\(oqB<-Psmy\\ prompt\\ string>\\(cq. Указанное значение параметра B<-"
+"r> замещает значение переменной окружения."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1265
@@ -2588,7 +2573,7 @@ msgid ""
 "been developing and maintaining this package with the help of a few "
 "dedicated people."
 msgstr ""
-"30 апреля 1994 -- 23 февраля 2000: Вильф (Wilf., G.Wilford@ee.surrey.ac.uk) "
+"30 апреля 1994 - 23 февраля 2000: Вильф (Wilf., G.Wilford@ee.surrey.ac.uk) "
 "разрабатывал и сопровождал этот пакет с помощью некоторых других людей."
 
 #. type: Plain text
@@ -2598,7 +2583,7 @@ msgid ""
 "orgE<gt> maintained and enhanced this package for the Debian project, with "
 "the help of all the community."
 msgstr ""
-"30 октября 1996 -- 30 марта 2001: Фабрицио Полако (Fabrizio Polacco, "
+"30 октября 1996 - 30 марта 2001: Фабрицио Полако (Fabrizio Polacco, "
 "E<lt>fpolacco@debian.orgE<gt> сопровождал и улучшал этот пакет для проекта "
 "Debian с помощью всего сообщества."
 
@@ -2608,7 +2593,7 @@ msgid ""
 "31st March 2001 - present day: Colin Watson E<lt>cjwatson@debian.orgE<gt> is "
 "now developing and maintaining man-db."
 msgstr ""
-"31 марта 2001 -- настоящие дни: Колин Уотсон (Colin Watson, "
+"31 марта 2001 - настоящие дни: Колин Уотсон (Colin Watson, "
 "E<lt>cjwatson@debian.orgE<gt> занимается разработкой и сопровождением man-db."
 
 #. type: TH
@@ -2881,7 +2866,7 @@ msgstr "B<%whatis% -M> I<manpath> B<-w '*' | sort E<gt>> I<manpath/whatis>"
 #. type: Plain text
 #: ../../man/man1/whatis.man1:71
 msgid "where I<manpath> is a manual page hierarchy such as I</usr/man>."
-msgstr "где I<manpath> -- иерархия справочных страниц, например I</usr/man>."
+msgstr "где I<manpath> — иерархия справочных страниц, например I</usr/man>."
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:89
@@ -3865,16 +3850,6 @@ msgid ""
 msgstr ""
 "Прежде в этой странице был раздел B<ЧТО АНАЛИЗИРУЕТСЯ>, но теперь он "
 "перенесён в B<lexgrog>(1)."
-
-#~ msgid ""
-#~ "If $B<MANSECT> is set, its value is a colon-delimited list of sections "
-#~ "and it is used to determine which manual sections to search and in what "
-#~ "order."
-#~ msgstr ""
-#~ "Если установлена переменная окружения $B<MANSECT>, то её значением "
-#~ "является список разделов, указанных через двоеточие, и она используется "
-#~ "для задания разделов справочных страниц, в которых будет производится "
-#~ "поиск и в каком порядке."
 
 #~ msgid ""
 #~ "If you want to override B<%man%>'s prompt string processing completely, "
