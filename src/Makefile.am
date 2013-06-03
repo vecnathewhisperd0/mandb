@@ -51,7 +51,9 @@ AM_CPPFLAGS = \
 	-DMANCONV=\"$(pkglibexecdir)/$(TRANS_MANCONV)\" \
 	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
 	-DSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\" \
-	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\" \
+	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\"
+AM_CFLAGS = \
+	$(WARN_CFLAGS) \
 	$(libpipeline_CFLAGS)
 
 LIBMAN = $(top_builddir)/lib/libman.la $(top_builddir)/gnulib/lib/libgnu.la \

@@ -22,6 +22,8 @@
 pkglib_LTLIBRARIES = libman.la
 dist_noinst_DATA = README
 
+AM_CFLAGS = $(WARN_CFLAGS)
+
 libman_la_CPPFLAGS = \
 	-I$(top_builddir)/include \
 	-I$(top_srcdir)/gnulib/lib \

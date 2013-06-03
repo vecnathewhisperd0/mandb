@@ -145,14 +145,14 @@ case $host_os in
 esac
 if test "$GCC" = yes
 then
-	gl_WARN_ADD([-W], [CFLAGS])
-	gl_WARN_ADD([-Wpointer-arith], [CFLAGS])
-	gl_WARN_ADD([-Wwrite-strings], [CFLAGS])
-	gl_WARN_ADD([-Wstrict-prototypes], [CFLAGS])
-	gl_WARN_ADD([-Wshadow], [CFLAGS])
-	gl_WARN_ADD([-Wformat-security], [CFLAGS])
-	gl_WARN_ADD([-Wredundant-decls], [CFLAGS])
-	gl_WARN_ADD([-Wno-missing-field-initializers], [CFLAGS])
+	gl_WARN_ADD([-W])
+	gl_WARN_ADD([-Wpointer-arith])
+	gl_WARN_ADD([-Wwrite-strings])
+	gl_WARN_ADD([-Wstrict-prototypes])
+	gl_WARN_ADD([-Wshadow])
+	gl_WARN_ADD([-Wformat-security])
+	gl_WARN_ADD([-Wredundant-decls])
+	gl_WARN_ADD([-Wno-missing-field-initializers])
 fi
 AC_PROG_INSTALL
 AC_PROG_LN_S

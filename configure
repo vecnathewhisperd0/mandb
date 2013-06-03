@@ -1482,6 +1482,7 @@ grep
 tr
 browser
 cat
+WARN_CFLAGS
 ARFLAGS
 sections
 config_file_dirname
@@ -15220,7 +15221,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn_c__W" >&5
 $as_echo "$gl_cv_warn_c__W" >&6; }
 if test "x$gl_cv_warn_c__W" = xyes; then :
-  as_fn_append CFLAGS " -W"
+  as_fn_append WARN_CFLAGS " -W"
 fi
 
 
@@ -15256,7 +15257,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn_c__Wpointer_arith" >&5
 $as_echo "$gl_cv_warn_c__Wpointer_arith" >&6; }
 if test "x$gl_cv_warn_c__Wpointer_arith" = xyes; then :
-  as_fn_append CFLAGS " -Wpointer-arith"
+  as_fn_append WARN_CFLAGS " -Wpointer-arith"
 fi
 
 
@@ -15292,7 +15293,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn_c__Wwrite_strings" >&5
 $as_echo "$gl_cv_warn_c__Wwrite_strings" >&6; }
 if test "x$gl_cv_warn_c__Wwrite_strings" = xyes; then :
-  as_fn_append CFLAGS " -Wwrite-strings"
+  as_fn_append WARN_CFLAGS " -Wwrite-strings"
 fi
 
 
@@ -15328,7 +15329,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn_c__Wstrict_prototypes" >&5
 $as_echo "$gl_cv_warn_c__Wstrict_prototypes" >&6; }
 if test "x$gl_cv_warn_c__Wstrict_prototypes" = xyes; then :
-  as_fn_append CFLAGS " -Wstrict-prototypes"
+  as_fn_append WARN_CFLAGS " -Wstrict-prototypes"
 fi
 
 
@@ -15364,7 +15365,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn_c__Wshadow" >&5
 $as_echo "$gl_cv_warn_c__Wshadow" >&6; }
 if test "x$gl_cv_warn_c__Wshadow" = xyes; then :
-  as_fn_append CFLAGS " -Wshadow"
+  as_fn_append WARN_CFLAGS " -Wshadow"
 fi
 
 
@@ -15400,7 +15401,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn_c__Wformat_security" >&5
 $as_echo "$gl_cv_warn_c__Wformat_security" >&6; }
 if test "x$gl_cv_warn_c__Wformat_security" = xyes; then :
-  as_fn_append CFLAGS " -Wformat-security"
+  as_fn_append WARN_CFLAGS " -Wformat-security"
 fi
 
 
@@ -15436,7 +15437,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn_c__Wredundant_decls" >&5
 $as_echo "$gl_cv_warn_c__Wredundant_decls" >&6; }
 if test "x$gl_cv_warn_c__Wredundant_decls" = xyes; then :
-  as_fn_append CFLAGS " -Wredundant-decls"
+  as_fn_append WARN_CFLAGS " -Wredundant-decls"
 fi
 
 
@@ -15472,7 +15473,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_warn_c__Wno_missing_field_initializers" >&5
 $as_echo "$gl_cv_warn_c__Wno_missing_field_initializers" >&6; }
 if test "x$gl_cv_warn_c__Wno_missing_field_initializers" = xyes; then :
-  as_fn_append CFLAGS " -Wno-missing-field-initializers"
+  as_fn_append WARN_CFLAGS " -Wno-missing-field-initializers"
 fi
 
 

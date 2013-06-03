@@ -1,3 +1,14 @@
+Mon Jun  3 12:07:35 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	Quieten most warnings from compiling Gnulib (Debian bug #668429).
+
+	* configure.ac: Add gl_WARN_ADD results to WARN_CFLAGS rather than
+	  CFLAGS.
+	* lib/Makefile.am (AM_CFLAGS): Add $(WARN_CFLAGS).
+	* libdb/Makefile.am (AM_CFLAGS): Likewise.
+	* src/Makefile.am (AM_CFLAGS): Likewise.  Move $(libpipeline_CFLAGS)
+	  here from AM_CPPFLAGS.
+
 Mon Jun  3 00:01:47 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/Makefile.am (AM_LOG_FLAGS): Force each test to run with
