@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.6.1-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2012-12-22 13:19+0000\n"
+"POT-Creation-Date: 2013-06-03 12:43+0200\n"
 "PO-Revision-Date: 2012-05-03 21:16+0200\n"
 "Last-Translator: Martin Eberhard Schauer <Martin.E.Schauer@gmx.de>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -516,7 +516,7 @@ msgstr ""
 # "mit B<-m> $SYSTEM."
 #. type: Plain text
 #: ../../man/man1/apropos.man1:217 ../../man/man1/whatis.man1:221
-#: ../../man/man8/catman.man8:87
+#: ../../man/man8/catman.man8:91
 msgid ""
 "If $B<MANPATH> is set, its value is interpreted as the colon-delimited "
 "manual page hierarchy search path to use."
@@ -552,7 +552,7 @@ msgstr ""
 #. type: SH
 #: ../../man/man1/apropos.man1:238 ../../man/man1/man.man1:1338
 #: ../../man/man1/manpath.man1:121 ../../man/man1/whatis.man1:233
-#: ../../man/man8/catman.man8:87 ../../man/man8/mandb.man8:191
+#: ../../man/man8/catman.man8:91 ../../man/man8/mandb.man8:191
 #, no-wrap
 msgid "FILES"
 msgstr "DATEIEN"
@@ -563,7 +563,7 @@ msgstr "DATEIEN"
 # Vielleicht doch Cache statt Zwischenpeicher?
 #. type: Plain text
 #: ../../man/man1/apropos.man1:244 ../../man/man1/man.man1:1350
-#: ../../man/man1/whatis.man1:239 ../../man/man8/catman.man8:96
+#: ../../man/man1/whatis.man1:239 ../../man/man8/catman.man8:100
 #: ../../man/man8/mandb.man8:207
 msgid "A traditional global I<index> database cache."
 msgstr "ein traditioneller, globaler Cache für die I<Index>-Datenbank"
@@ -585,7 +585,7 @@ msgstr "eine traditionelle B<whatis>-Textdatenbank"
 #: ../../man/man1/apropos.man1:255 ../../man/man1/lexgrog.man1:191
 #: ../../man/man1/man.man1:1356 ../../man/man1/manconv.man1:72
 #: ../../man/man1/manpath.man1:125 ../../man/man1/whatis.man1:250
-#: ../../man/man1/zsoelim.man1:70 ../../man/man8/catman.man8:102
+#: ../../man/man1/zsoelim.man1:70 ../../man/man8/catman.man8:106
 #: ../../man/man8/mandb.man8:213
 #, no-wrap
 msgid "SEE ALSO"
@@ -595,7 +595,7 @@ msgstr "SIEHE AUCH"
 #: ../../man/man1/apropos.man1:259 ../../man/man1/lexgrog.man1:201
 #: ../../man/man1/manconv.man1:75 ../../man/man1/manpath.man1:129
 #: ../../man/man1/whatis.man1:254 ../../man/man1/zsoelim.man1:75
-#: ../../man/man8/accessdb.man8:50 ../../man/man8/catman.man8:106
+#: ../../man/man8/accessdb.man8:50 ../../man/man8/catman.man8:110
 #: ../../man/man8/mandb.man8:223
 #, no-wrap
 msgid "AUTHOR"
@@ -2522,7 +2522,7 @@ msgstr ""
 "B<tbl> (B<t>)."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1211
+#: ../../man/man1/man.man1:1211 ../../man/man8/catman.man8:85
 #, fuzzy
 #| msgid ""
 #| "If $B<MANSECT> is set, its value is a colon-delimited list of sections "
@@ -2680,7 +2680,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1342 ../../man/man1/manpath.man1:125
-#: ../../man/man8/catman.man8:91 ../../man/man8/mandb.man8:195
+#: ../../man/man8/catman.man8:95 ../../man/man8/mandb.man8:195
 msgid "man-db configuration file."
 msgstr "Konfigurationsdatei für Man-db"
 
@@ -3625,20 +3625,10 @@ msgstr ""
 "Handbuchseiten-Hierarchien an. Als Standard sind dies alle Pfade, die in der "
 "Man-db-Konfigurationsdatei als systemweit gültig deklariert sind."
 
-#. type: Plain text
-#: ../../man/man8/catman.man8:81
-msgid ""
-"If $B<MANSECT> is set, its value is a colon-delimited list of sections and "
-"it is used to determine which manual sections to search and in what order."
-msgstr ""
-"Wenn $B<MANSECT> gesetzt ist, wird ihr Wert als eine durch Doppelpunkte "
-"gegliederte Liste von Abschnitten interpretiert und dazu benutzt, die zu "
-"durchsuchenden Abschnitte und deren Reihenfolge zu bestimmen."
-
 # #-#-#-#-#  catman.8.po (man-db 2.5.7)  #-#-#-#-#
 # Fehler im Original: alternate?
 #. type: Plain text
-#: ../../man/man8/catman.man8:102 ../../man/man8/mandb.man8:213
+#: ../../man/man8/catman.man8:106 ../../man/man8/mandb.man8:213
 msgid "An alternate or FSSTND compliant global I<index> database cache."
 msgstr ""
 "ein alternativer oder FSSTND-konformer, globaler I<Index>-Datenbank-Cache"
@@ -4045,6 +4035,15 @@ msgid ""
 msgstr ""
 "Der frühere Abschnitt B<WAS BEDEUTET PARSEN> ist jetzt Teil von B<lexgrog>"
 "(1)."
+
+#~ msgid ""
+#~ "If $B<MANSECT> is set, its value is a colon-delimited list of sections "
+#~ "and it is used to determine which manual sections to search and in what "
+#~ "order."
+#~ msgstr ""
+#~ "Wenn $B<MANSECT> gesetzt ist, wird ihr Wert als eine durch Doppelpunkte "
+#~ "gegliederte Liste von Abschnitten interpretiert und dazu benutzt, die zu "
+#~ "durchsuchenden Abschnitte und deren Reihenfolge zu bestimmen."
 
 #~ msgid ""
 #~ "If you want to override B<%man%>'s prompt string processing completely, "
