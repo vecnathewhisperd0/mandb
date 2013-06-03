@@ -1,3 +1,31 @@
+man-db 2.6.4
+============
+
+Major changes since man-db 2.6.3:
+
+	Fixes:
+	------
+
+	o man(1) and catman(8) now document the default section list set at
+	  configure time.
+
+	o Build fixes for Automake 1.13.
+
+	Improvements:
+	-------------
+
+	o The MANLESS environment variable is now treated as if it were a
+	  default value for the -r option to man: occurrences of the text
+	  "$MAN_PN" are expanded, and explicitly using the -r option
+	  overrides the default.
+
+	o The (unfortunately still hardcoded) maximum length for paths to
+	  manual page hierarchies in the configuration file is now 511
+	  characters rather than 49.
+
+	o MANPATH entries now undergo glob(7)-style wildcard expansion,
+	  allowing entries such as "/opt/*/man".
+
 man-db 2.6.3 (17 September 2012)
 ================================
 
