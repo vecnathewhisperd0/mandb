@@ -1,21 +1,21 @@
 # French translation of man-db manual pages
-# Copyright (C) 2005-2006, 2010-2012 Debian French l10n team <debian-l10n-french@lists.debian.org>.
+# Copyright (C) 2005-2006, 2010-2013 Debian French l10n team <debian-l10n-french@lists.debian.org>.
 # This file is distributed under the same license as the man-db package.
 #
 # Valery Perrin <valery.perrin.debian@free.fr>, 2005, 2006.
-# David Prévot <david@tilapin.org>, 2010-2012.
+# David Prévot <david@tilapin.org>, 2010-2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.6.1-pre1\n"
-"POT-Creation-Date: 2013-06-03 12:43+0200\n"
-"PO-Revision-Date: 2012-02-06 14:38-0400\n"
+"Project-Id-Version: man-db-manpages 2.6.4-pre1\n"
+"POT-Creation-Date: 2013-06-03 13:08+0200\n"
+"PO-Revision-Date: 2013-06-03 18:25-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. type: TH
@@ -939,16 +939,6 @@ msgstr "B<%man%> [\\|B<-hV>\\|]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:179
-#, fuzzy
-#| msgid ""
-#| "B<%man%> is the system's manual pager. Each I<page> argument given to B<"
-#| "%man%> is normally the name of a program, utility or function.  The "
-#| "I<manual page> associated with each of these arguments is then found and "
-#| "displayed. A I<section>, if provided, will direct B<%man%> to look only "
-#| "in that I<section> of the manual.  The default action is to search in all "
-#| "of the available I<sections>, following a pre-defined order and to show "
-#| "only the first I<page> found, even if I<page> exists in several "
-#| "I<sections>."
 msgid ""
 "B<%man%> is the system's manual pager. Each I<page> argument given to B<%man"
 "%> is normally the name of a program, utility or function.  The I<manual "
@@ -966,9 +956,10 @@ msgstr ""
 "I<page de manuel> correspondant à chaque argument est alors trouvée et "
 "affichée. Si une I<section> est précisée alors B<%man%> limite la recherche "
 "à cette I<section>. Par défaut, il recherche dans toutes les I<sections> "
-"disponibles, suivant un ordre prédéfini. Il n'affiche que la première I<page "
-"de manuel> trouvée, même si d'autres I<pages de manuel> existent dans "
-"d'autres I<sections>."
+"disponibles en suivant un ordre prédéfini (« %sections% » par défaut, à "
+"moins d’être écrasée par la directive B<SECTION> dans I<%manpath_config_file"
+"%>). Il n'affiche que la première I<page de manuel> trouvée, même si "
+"d'autres I<pages de manuel> existent dans d'autres I<sections>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:183
@@ -2101,6 +2092,9 @@ msgid ""
 "The $B<MANLESS> environment variable described below may be used to set a "
 "default prompt string if none is supplied on the command line."
 msgstr ""
+"La variable d'environnement $B<MANLESS> décrite ci-dessous peut être "
+"utilisée pour définir une chaîne d’invite par défaut si aucune n’est fournie "
+"sur la ligne de commande."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:970
@@ -2420,11 +2414,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1211 ../../man/man8/catman.man8:85
-#, fuzzy
-#| msgid ""
-#| "If $B<MANSECT> is set, its value is a colon-delimited list of sections "
-#| "and it is used to determine which manual sections to search and in what "
-#| "order."
 msgid ""
 "If $B<MANSECT> is set, its value is a colon-delimited list of sections and "
 "it is used to determine which manual sections to search and in what order.  "
@@ -2432,8 +2421,10 @@ msgid ""
 "in I<%manpath_config_file%>."
 msgstr ""
 "Si $B<MANSECT> est définie, sa valeur est une liste de sections, séparées "
-"par des deux-points. Cette liste est utilisée pour déterminer dans quelles "
-"sections de manuel, et dans quel ordre la recherche doit s'effectuer."
+"par des deux-points. Cette liste est utilisée pour déterminer les sections "
+"de manuel, et l’ordre, utilisés pour la recherche. C’est « %sections% » par "
+"défaut, à moins d’être écrasée par la directive B<SECTION> dans I<"
+"%manpath_config_file%>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1224
@@ -2448,13 +2439,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1249
-#, fuzzy
-#| msgid ""
-#| "If $B<MANLESS> is set, B<%man%> will not perform any of its usual "
-#| "processing to set up a prompt string for the B<less> pager.  Instead, the "
-#| "value of $B<MANLESS> will be copied verbatim into $B<LESS>.  For example, "
-#| "if you want to set the prompt string unconditionally to \\(lqmy prompt "
-#| "string\\(rq, set $B<MANLESS> to \\(oqB<-Psmy\\ prompt\\ string>\\(cq."
 msgid ""
 "If $B<MANLESS> is set, its value will be used as the default prompt string "
 "for the B<less> pager, as if it had been passed using the B<-r> option (so "
@@ -2463,12 +2447,13 @@ msgid ""
 "prompt string\\(rq, set $B<MANLESS> to \\(oqB<-Psmy\\ prompt\\ string>"
 "\\(cq.  Using the B<-r> option overrides this environment variable."
 msgstr ""
-"Si $B<MANLESS> est définie, B<%man%> ne produira pas la chaîne de caractères "
-"habituelle permettant d'obtenir l'invite de l'afficheur B<less>. Au lieu de "
-"cela, la valeur de $B<MANLESS> sera copié in extenso dans $B<LESS>. Par "
-"exemple, si vous voulez obtenir dans tous les cas la chaîne d'invite «\\ Ma "
-"chaîne d'invite\\ » donnez à $B<MANLESS> la valeur «\\ -PsMa chaîne d'invite"
-"\\ »."
+"Si $B<MANLESS> est définie, sa valeur sera utilisée comme chaîne d’invite "
+"par défaut de l'afficheur B<less>, comme si elle avait été passée en "
+"utilisant l’option B<-r> (donc toutes les occurrences du texte B<$MAN_PN> "
+"seront développées de la même façon). Par exemple, si vous voulez obtenir "
+"dans tous les cas la chaîne d'invite «\\ Ma chaîne d'invite\\ » donnez à "
+"$B<MANLESS> la valeur «\\ -PsMa chaîne d'invite\\ ». L’utilisation de "
+"l’option B<-r> écrasera cette variable d’environnement."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1265
@@ -3958,16 +3943,6 @@ msgid ""
 msgstr ""
 "La section B<ANALYSE WHATIS> autrefois incluse dans cette page de manuel est "
 "maintenant incorporée à B<lexgrog>(1)."
-
-#~ msgid ""
-#~ "If $B<MANSECT> is set, its value is a colon-delimited list of sections "
-#~ "and it is used to determine which manual sections to search and in what "
-#~ "order."
-#~ msgstr ""
-#~ "Si $B<MANSECT> est définie, sa valeur est une liste de sections, séparées "
-#~ "par des deux-points. Cette liste est utilisée pour déterminer dans "
-#~ "quelles sections de manuel, et dans quel ordre la recherche doit "
-#~ "s'effectuer."
 
 #~ msgid ""
 #~ "If you want to override B<%man%>'s prompt string processing completely, "
