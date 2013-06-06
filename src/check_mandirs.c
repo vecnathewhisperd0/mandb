@@ -902,12 +902,23 @@ static int check_multi_key (const char *name, const char *content)
  */
 int purge_missing (const char *manpath, const char *catpath)
 {
+#ifdef NDBM
+	char *dirfile;
+#endif
 	struct stat st;
+	int db_exists;
 	datum key;
 	int count = 0;
 	long db_mtime = -1;
 
-	if (stat (database, &st) != 0)
+#ifdef NDBM
+	dirfile = xasprintf ("%s.dir", database);
+	db_exists = stat (dirfile, &st) == 0;
+	free (dirfile);
+#else
+	db_exists = stat (database, &st) == 0;
+#endif
+	if (!db_exists)
 		/* nothing to purge */
 		return 0;
 
