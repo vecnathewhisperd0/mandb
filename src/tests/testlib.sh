@@ -79,6 +79,11 @@ expect_pass () {
 	fi
 }
 
+skip () {
+	echo "  SKIP: $1"
+	exit 77
+}
+
 finish () {
 	case $failures in
 		0)

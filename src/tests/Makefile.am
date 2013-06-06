@@ -20,6 +20,7 @@
 
 TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
 		    DBTYPE=$(DBTYPE); export DBTYPE; \
+		    MANDIR_LAYOUT=$(MANDIR_LAYOUT); export MANDIR_LAYOUT; \
 		    top_builddir=$(top_builddir); export top_builddir; \
 		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR;
 # Each test must use the configure-detected shell, not necessarily /bin/sh.

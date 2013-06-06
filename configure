@@ -1450,6 +1450,7 @@ GL_COND_LIBTOOL_TRUE
 LEXLIB
 LEX_OUTPUT_ROOT
 LEX
+MANDIR_LAYOUT
 LIBCOMPRESS
 unlzip
 unxz
@@ -17142,6 +17143,7 @@ cat >>confdefs.h <<_ACEOF
 #define MANDIR_LAYOUT "$enableval"
 _ACEOF
 
+	 MANDIR_LAYOUT="$enableval"
 else
   case $host in
 		*-gnu)          mandirs=GNU;;
@@ -17158,13 +17160,16 @@ $as_echo "$as_me: Using $mandirs hierarchy organization" >&6;}
 #define MANDIR_LAYOUT "$mandirs"
 _ACEOF
 
+		MANDIR_LAYOUT="$mandirs"
 	 else
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: Allowing any hierarchy organization" >&5
 $as_echo "$as_me: Allowing any hierarchy organization" >&6;}
 		$as_echo "#define MANDIR_LAYOUT \"\"" >>confdefs.h
 
+		MANDIR_LAYOUT=
 	 fi
 fi
+
 
 
 # Check for various header files and associated libraries.

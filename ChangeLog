@@ -1,3 +1,11 @@
+Thu Jun  6 11:11:36 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Set MANDIR_LAYOUT using AC_SUBST as well as
+	  AC_DEFINE/AC_DEFINE_UNQUOTED.
+	* src/tests/Makefile.am (TESTS_ENVIRONMENT): Export MANDIR_LAYOUT.
+	* src/tests/testlib.sh (skip): New function.
+	* src/tests/man-3: Skip unless the GNU layout is in use.
+
 Thu Jun  6 10:57:17 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/man-1, src/tests/man-2, src/tests/man-3,

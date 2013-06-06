@@ -6,6 +6,14 @@
 : ${srcdir=.}
 . "$srcdir/testlib.sh"
 
+case $MANDIR_LAYOUT in
+	""|GNU)
+		;;
+	*)
+		skip "only applicable to GNU layout"
+		;;
+esac
+
 : ${MAN=man}
 
 init
