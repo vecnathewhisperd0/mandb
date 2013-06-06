@@ -218,7 +218,21 @@ dnl		nroff="$nroff ${man_cv_prog_nroff_macro}${nroff_device}"
 	else
 		AC_MSG_RESULT([ambiguous])
 		AC_MSG_WARN([please edit include/manconfig.h and add nroff definition])
-	fi 
+	fi
+
+	AC_CACHE_CHECK([whether nroff supports warning control],
+		       [man_cv_prog_nroff_warnings], [
+		if test "x$troff_is_groff" = xyes && \
+		   nroff -wmac </dev/null >/dev/null 2>&1
+		then
+			man_cv_prog_nroff_warnings=yes
+		else
+			man_cv_prog_nroff_warnings=no
+		fi])
+	if test "x$man_cv_prog_nroff_warnings" = xyes; then
+		AC_DEFINE([NROFF_WARNINGS], [1],
+			  [Define if nroff supports warning control.])
+	fi
 else
 	AC_MSG_WARN([Cannot find an nroff-like program, formatting of manual page source will not be supported.])
 	nroff="(nroff not installed)"

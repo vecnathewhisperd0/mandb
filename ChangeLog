@@ -1,3 +1,13 @@
+Thu Jun  6 12:03:59 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Add a check for whether 'nroff -wmac' works.
+	* src/man.c (default_roff_warnings, roff_warnings): Define if
+	  NROFF_WARNINGS is defined, rather than TROFF_IS_GROFF.
+	  (options): Hide the --warnings option unless NROFF_WARNINGS is
+	  defined.
+	  (parse_opt, make_roff_command): Handle the --warnings option if
+	  NROFF_WARNINGS is defined, rather than TROFF_IS_GROFF.
+
 Thu Jun  6 11:11:36 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Set MANDIR_LAYOUT using AC_SUBST as well as

@@ -214,10 +214,10 @@ static struct hashtable *db_hash = NULL;
 static int troff;
 static const char *roff_device = NULL;
 static const char *want_encoding = NULL;
-#ifdef TROFF_IS_GROFF
+#ifdef NROFF_WARNINGS
 static const char default_roff_warnings[] = "mac";
 static struct string_llist *roff_warnings = NULL;
-#endif /* TROFF_IS_GROFF */
+#endif /* NROFF_WARNINGS */
 static int global_apropos;
 static int print_where, print_where_cat;
 static int catman;
@@ -261,10 +261,16 @@ error_t argp_err_exit_status = FAIL;
 
 static const char args_doc[] = N_("[SECTION] PAGE...");
 
-# ifdef TROFF_IS_GROFF
-#  define MAYBE_HIDDEN 0
+# ifdef NROFF_WARNINGS
+#  define ONLY_NROFF_WARNINGS 0
 # else
-#  define MAYBE_HIDDEN OPTION_HIDDEN
+#  define ONLY_NROFF_WARNINGS OPTION_HIDDEN
+# endif
+
+# ifdef TROFF_IS_GROFF
+#  define ONLY_TROFF_IS_GROFF 0
+# else
+#  define ONLY_TROFF_IS_GROFF OPTION_HIDDEN
 # endif
 
 /* Please keep these options in the same order as in parse_opt below. */
@@ -272,7 +278,7 @@ static struct argp_option options[] = {
 	{ "config-file",	'C',	N_("FILE"),	0,		N_("use this user configuration file") },
 	{ "debug",		'd',	0,		0,		N_("emit debugging messages") },
 	{ "default",		'D',	0,		0,		N_("reset all options to their default values") },
-	{ "warnings",  OPT_WARNINGS,    N_("WARNINGS"), MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
+	{ "warnings",  OPT_WARNINGS,    N_("WARNINGS"), ONLY_NROFF_WARNINGS | OPTION_ARG_OPTIONAL,
 									N_("enable warnings from groff") },
 
 	{ 0,			0,	0,		0,		N_("Main modes of operation:"),					10 },
@@ -325,13 +331,13 @@ static struct argp_option options[] = {
 	{ "troff",		't',	0,		0,		N_("use %s to format pages"),					32 },
 	{ "troff-device",	'T',	N_("DEVICE"),	OPTION_ARG_OPTIONAL,
 									N_("use %s with selected device") },
-	{ "html",		'H',	N_("BROWSER"),	MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
+	{ "html",		'H',	N_("BROWSER"),	ONLY_TROFF_IS_GROFF | OPTION_ARG_OPTIONAL,
 									N_("use %s or BROWSER to display HTML output"),			33 },
 	{ "gxditview",		'X',	N_("RESOLUTION"),
-							MAYBE_HIDDEN | OPTION_ARG_OPTIONAL,
+							ONLY_TROFF_IS_GROFF | OPTION_ARG_OPTIONAL,
 									N_("use groff and display through gxditview (X11):\n"
 									   "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12") },
-	{ "ditroff",		'Z',	0,		MAYBE_HIDDEN,	N_("use groff and force it to produce ditroff") },
+	{ "ditroff",		'Z',	0,		ONLY_TROFF_IS_GROFF,	N_("use groff and force it to produce ditroff") },
 #endif /* HAS_TROFF */
 
 	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
@@ -371,7 +377,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 
 		case OPT_WARNINGS:
-#ifdef TROFF_IS_GROFF
+#ifdef NROFF_WARNINGS
 			{
 				char *s = xstrdup
 					(arg ? arg : default_roff_warnings);
@@ -388,7 +394,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
 				free (s);
 			}
-#endif /* TROFF_IS_GROFF */
+#endif /* NROFF_WARNINGS */
 			return 0;
 
 		case 'f':
@@ -1667,9 +1673,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #endif /* GNU_NROFF */
 
 		do {
-#ifdef TROFF_IS_GROFF
+#ifdef NROFF_WARNINGS
 			struct string_llist *cur;
-#endif /* TROFF_IS_GROFF */
+#endif /* NROFF_WARNINGS */
 			int wants_dev = 0; /* filter wants a dev argument */
 			int wants_post = 0; /* postprocessor arguments */
 
@@ -1735,11 +1741,11 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				}
 #endif /* TROFF_IS_GROFF || HEIRLOOM_NROFF */
 
-#ifdef TROFF_IS_GROFF
+#ifdef NROFF_WARNINGS
 				for (cur = roff_warnings; cur;
 				     cur = cur->next)
 					pipecmd_argf (cmd, "-w%s", cur->name);
-#endif /* TROFF_IS_GROFF */
+#endif /* NROFF_WARNINGS */
 
 #ifdef HEIRLOOM_NROFF
 				if (running_setuid ())
