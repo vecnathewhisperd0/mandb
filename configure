@@ -17148,7 +17148,7 @@ else
 		*-hpux*)        mandirs=HPUX;;
 		*-irix*)        mandirs=IRIX;;
 		*-solaris*)     mandirs=Solaris;;
-		*-bsd*)         mandirs=BSD;;
+		*-*bsd*)        mandirs=BSD;;
 		*)              mandirs=;;
 	 esac
 	 if test -n "$mandirs"; then
@@ -42028,7 +42028,7 @@ done
 
     if test "$got" = "yes"
     then
-      for lib in db db1
+      for lib in db db1 c
       do
         as_man_tr_bdb=`$as_echo "man_cv_bdb_header_${head}_lib_${lib}" | $as_tr_sh`
         man_saved_LIBS="$LIBS"

@@ -388,7 +388,7 @@ AC_ARG_ENABLE([mandirs],
 		*-hpux*)        mandirs=HPUX;;
 		*-irix*)        mandirs=IRIX;;
 		*-solaris*)     mandirs=Solaris;;
-		*-bsd*)         mandirs=BSD;;
+		*-*bsd*)        mandirs=BSD;;
 		*)              mandirs=;;
 	 esac
 	 if test -n "$mandirs"; then
@@ -454,15 +454,10 @@ MAN_CHECK_BDB([db5 db], [db5/db_185.h db_185.h], [db5 db-5])
 MAN_CHECK_BDB([db4 db], [db4/db_185.h db_185.h], [db4 db-4])
 MAN_CHECK_BDB([db3 db], [db3/db_185.h db_185.h], [db3])
 MAN_CHECK_BDB([db2 db], [db_185.h db2/db_185.h db2_185.h], [db2 db])
-MAN_CHECK_BDB([db1 db], [db/db.h db.h db1/db.h], [db db1])
+MAN_CHECK_BDB([db1 db], [db/db.h db.h db1/db.h], [db db1 c])
 
 dnl MAN_CHECK_BDB([db2], [db2_185.h], [db2 db c], [AC_DEFINE(DB_ON_LIBC)])
 dnl MAN_CHECK_BDB([db2], [db2/db_185.h], [db2 db c])
-dnl # from package libdb1-dev
-dnl MAN_CHECK_BDB([db], [db/db.h], [db c])
-dnl # from package libc6-dev
-dnl # ########## statically linked #####
-dnl MAN_CHECK_BDB([db], [db1/db.h], [db c], [AC_DEFINE(DB_ON_LIBC)])
 
 # Check for UNIX ndbm routines.
 if test "$db" = "no" || test "$db" = "ndbm"
