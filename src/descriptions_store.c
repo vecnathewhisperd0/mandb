@@ -71,7 +71,7 @@ void store_descriptions (const struct page_description *head,
 
 	if (trace) {
 		for (i = 0; i < trace->len; ++i)
-			debug ("trace->names[%d] = '%s'\n",
+			debug ("trace->names[%zu] = '%s'\n",
 			       i, trace->names[i]);
 	}
 
