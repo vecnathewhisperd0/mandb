@@ -24,9 +24,9 @@ mandir = @mandir@/$(LINGUA)
 CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS) replace.sed
 
 if !CROSS_COMPILING
-TESTS_ENVIRONMENT = top_builddir=$(top_builddir); export top_builddir; \
-		    LINGUA=$(LINGUA); export LINGUA; \
-		    EGREP=$(EGREP); export EGREP;
+TESTS_ENVIRONMENT = top_builddir="$(top_builddir)"; export top_builddir; \
+		    LINGUA="$(LINGUA)"; export LINGUA; \
+		    EGREP="$(EGREP)"; export EGREP;
 LOG_COMPILER = @SHELL@ $(top_srcdir)/man/check-man
 TESTS = $(man1_MANS) $(man5_MANS) $(man8_MANS)
 endif

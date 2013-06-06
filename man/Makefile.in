@@ -1511,9 +1511,9 @@ man8_MANS = \
 
 EXTRA_DIST = LINGUAS LINGUAS.po4a check-man
 CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS) replace.sed
-@CROSS_COMPILING_FALSE@TESTS_ENVIRONMENT = top_builddir=$(top_builddir); export top_builddir; \
-@CROSS_COMPILING_FALSE@		    LINGUA=$(LINGUA); export LINGUA; \
-@CROSS_COMPILING_FALSE@		    EGREP=$(EGREP); export EGREP;
+@CROSS_COMPILING_FALSE@TESTS_ENVIRONMENT = top_builddir="$(top_builddir)"; export top_builddir; \
+@CROSS_COMPILING_FALSE@		    LINGUA="$(LINGUA)"; export LINGUA; \
+@CROSS_COMPILING_FALSE@		    EGREP="$(EGREP)"; export EGREP;
 
 @CROSS_COMPILING_FALSE@LOG_COMPILER = @SHELL@ $(top_srcdir)/man/check-man
 @CROSS_COMPILING_FALSE@TESTS = $(man1_MANS) $(man5_MANS) $(man8_MANS)
