@@ -220,7 +220,8 @@ static inline size_t add_arg (pipecmd *cmd, datum key)
 		*tab = '\0';
 	pipecmd_arg (cmd, MYDBM_DPTR (key));
 	len = strlen (MYDBM_DPTR (key));
-	debug ("key: '%s' (%d), len: %zd\n", MYDBM_DPTR (key), MYDBM_DSIZE (key), len);
+	debug ("key: '%s' (%zu), len: %zd\n",
+	       MYDBM_DPTR (key), (size_t) MYDBM_DSIZE (key), len);
 	if (tab)
 		*tab = '\t';
 
