@@ -1451,6 +1451,10 @@ man8_MANS = \
 	man8/mandb.8
 
 CLEANFILES = $(man1_MANS) $(man5_MANS) $(man8_MANS) replace.sed
+@CROSS_COMPILING_FALSE@TESTS_ENVIRONMENT = top_builddir=$(top_builddir); export top_builddir; \
+@CROSS_COMPILING_FALSE@		    LINGUA=$(LINGUA); export LINGUA; \
+@CROSS_COMPILING_FALSE@		    EGREP=$(EGREP); export EGREP;
+
 @CROSS_COMPILING_FALSE@LOG_COMPILER = @SHELL@ $(top_srcdir)/man/check-man
 @CROSS_COMPILING_FALSE@TESTS = $(man1_MANS) $(man5_MANS) $(man8_MANS)
 all: all-am
@@ -2018,8 +2022,6 @@ uninstall-man: uninstall-man1 uninstall-man5 uninstall-man8
 	recheck tags-am uninstall uninstall-am uninstall-man \
 	uninstall-man1 uninstall-man5 uninstall-man8
 
-
-export top_builddir LINGUA EGREP
 
 replace.sed: $(top_builddir)/man/replace.sin
 	$(AM_V_GEN)sed -e 's,%REPLACE_CONFIG_FILE%,$(config_file),g' $(top_builddir)/man/replace.sin > $@
