@@ -328,6 +328,24 @@ then
 	(test -n "$nroff_device" && neqn="$eqn -T$nroff_device" || neqn="$eqn -Tascii")
 fi
 MAN_CHECK_PROGS([tbl], [TBL], [use TBL to preprocess tables], [tbl gtbl])
+TBL_X_FORMAT=
+if test -n "$tbl"
+then
+	AC_CACHE_CHECK([whether tbl supports the 'x' format character],
+		       [man_cv_tbl_x_format], [
+		if (echo .TS; echo ';'; echo lx.; echo SENTINEL; echo .TE) | \
+		   $tbl 2>/dev/null | grep SENTINEL >/dev/null 2>&1
+		then
+			man_cv_tbl_x_format=yes
+		else
+			man_cv_tbl_x_format=no
+		fi])
+	if test "x$man_cv_tbl_x_format" = xyes
+	then
+		TBL_X_FORMAT=x
+	fi
+fi
+AC_SUBST([TBL_X_FORMAT])
 MAN_CHECK_PROGS([col], [COL], [use COL to filter formatting characters from output], [col gcol])
 MAN_CHECK_PROGS([vgrind], [VGRIND], [use VGRIND to preprocess program sources], [vgrind gvgrind])
 MAN_CHECK_PROGS([refer], [REFER], [use REFER to preprocess bibliographic references], [refer grefer])

@@ -1471,6 +1471,7 @@ grap
 refer
 vgrind
 col
+TBL_X_FORMAT
 tbl
 neqn
 eqn
@@ -16373,6 +16374,31 @@ if test -n "$tbl"; then
 $as_echo "#define HAVE_TBL 1" >>confdefs.h
 
 fi
+TBL_X_FORMAT=
+if test -n "$tbl"
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether tbl supports the 'x' format character" >&5
+$as_echo_n "checking whether tbl supports the 'x' format character... " >&6; }
+if ${man_cv_tbl_x_format+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+		if (echo .TS; echo ';'; echo lx.; echo SENTINEL; echo .TE) | \
+		   $tbl 2>/dev/null | grep SENTINEL >/dev/null 2>&1
+		then
+			man_cv_tbl_x_format=yes
+		else
+			man_cv_tbl_x_format=no
+		fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_tbl_x_format" >&5
+$as_echo "$man_cv_tbl_x_format" >&6; }
+	if test "x$man_cv_tbl_x_format" = xyes
+	then
+		TBL_X_FORMAT=x
+	fi
+fi
+
 
 # Check whether --with-col was given.
 if test "${with_col+set}" = set; then :

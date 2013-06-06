@@ -1,3 +1,11 @@
+Thu Jun  6 12:24:27 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* configure.ac: Check whether tbl supports the 'x' format character
+	  (e.g. versions of groff before 1.20), and substitute TBL_X_FORMAT
+	  accordingly.
+	* man/replace.sin.in: Replace "l lx." with "l l." if tbl does not
+	  support the 'x' format character.
+
 Thu Jun  6 12:03:59 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Add a check for whether 'nroff -wmac' works.
