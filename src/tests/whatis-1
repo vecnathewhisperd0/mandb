@@ -14,6 +14,8 @@ cat >>"$tmpdir/manpath.config" <<EOF
 MANPATH_MAP	$tmpdir/usr/bin		$tmpdir/usr/share/man
 MANPATH_MAP	$tmpdir/usr/local/bin	$tmpdir/usr/local/man
 EOF
+MANPATH="$tmpdir/usr/share/man:$tmpdir/usr/local/man"
+export MANPATH
 
 write_page test 1 "$tmpdir/usr/share/man/man1/test.1.gz" \
 	UTF-8 gz '' 'test \- /usr/bin/test'
@@ -22,16 +24,14 @@ write_page test 8 "$tmpdir/usr/local/man/man8/test.8.gz" \
 mkdir -p "$tmpdir/usr/bin" "$tmpdir/usr/local/bin"
 touch "$tmpdir/usr/bin/test" "$tmpdir/usr/local/bin/test"
 chmod +x "$tmpdir/usr/bin/test" "$tmpdir/usr/local/bin/test"
-MANPATH="$tmpdir/usr/share/man:$tmpdir/usr/local/man" run $MANDB \
-	-C "$tmpdir/manpath.config" -u -q \
+run $MANDB -C "$tmpdir/manpath.config" -u -q \
 	"$tmpdir/usr/share/man:$tmpdir/usr/local/man"
 
 cat >"$tmpdir/1.exp" <<EOF
 test (1)             - /usr/bin/test
 test (8)             - /usr/local/bin/test
 EOF
-PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" \
-	MANPATH="$tmpdir/usr/share/man:$tmpdir/usr/local/man" run $WHATIS \
+PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" run $WHATIS \
 	-C "$tmpdir/manpath.config" test >"$tmpdir/1.out"
 expect_pass 'simple name returns all matches' \
 	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -39,8 +39,7 @@ expect_pass 'simple name returns all matches' \
 cat >"$tmpdir/2.exp" <<EOF
 test (1)             - /usr/bin/test
 EOF
-PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" \
-	MANPATH="$tmpdir/usr/share/man:$tmpdir/usr/local/man" run $WHATIS \
+PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" run $WHATIS \
 	-C "$tmpdir/manpath.config" "$tmpdir/usr/bin/test" >"$tmpdir/2.out"
 expect_pass '/usr/bin/test only returns appropriate match' \
 	'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
@@ -48,8 +47,7 @@ expect_pass '/usr/bin/test only returns appropriate match' \
 cat >"$tmpdir/3.exp" <<EOF
 test (8)             - /usr/local/bin/test
 EOF
-PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" \
-	MANPATH="$tmpdir/usr/share/man:$tmpdir/usr/local/man" run $WHATIS \
+PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" run $WHATIS \
 	-C "$tmpdir/manpath.config" "$tmpdir/usr/local/bin/test" \
 	>"$tmpdir/3.out"
 expect_pass '/usr/local/bin/test only returns appropriate match' \

@@ -1,3 +1,14 @@
+Thu Jun  6 10:57:17 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* src/tests/man-1, src/tests/man-2, src/tests/man-3,
+	  src/tests/man-4, src/tests/mandb-1, src/tests/mandb-2,
+	  src/tests/mandb-3, src/tests/mandb-4, src/tests/mandb-5,
+	  src/tests/mandb-6, src/tests/whatis-1, src/tests/zsoelim-1: Export
+	  MANPATH separately rather than trying to set it just for the 'run'
+	  function.  The latter approach does not seem to work reliably in
+	  FreeBSD's /bin/sh.
+	* src/tests/testlib.sh: Stop exporting MANPATH here.
+
 Thu Jun  6 09:37:46 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Use BSD layout on *-*bsd* (e.g. FreeBSD), not just

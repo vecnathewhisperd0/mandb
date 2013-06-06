@@ -11,6 +11,8 @@
 
 init
 fake_config /usr/share/man /usr/X11R6/man
+MANPATH="$tmpdir/usr/share/man:$tmpdir/usr/X11R6/man"
+export MANPATH
 db_ext="$(db_ext)"
 
 write_page xterm 1x "$tmpdir/usr/X11R6/man/man1/xterm.1x.gz" \
@@ -18,8 +20,7 @@ write_page xterm 1x "$tmpdir/usr/X11R6/man/man1/xterm.1x.gz" \
 mkdir -p "$tmpdir/usr/share/man/man1"
 ln -s ../../../X11R6/man/man1/xterm.1x.gz \
       "$tmpdir/usr/share/man/man1/x-terminal-emulator.1.gz"
-MANPATH="$tmpdir/usr/share/man:$tmpdir/usr/X11R6/man" run $MANDB \
-	-C "$tmpdir/manpath.config" -u -q \
+run $MANDB -C "$tmpdir/manpath.config" -u -q \
 	"$tmpdir/usr/share/man:$tmpdir/usr/X11R6/man"
 cat >"$tmpdir/1-share.exp" <<EOF
 x-terminal-emulator -> "- 1 1 MTIME B - - gz terminal emulator for X"
@@ -40,8 +41,7 @@ write_page uxterm 1x "$tmpdir/usr/X11R6/man/man1/uxterm.1x.gz" \
 	'uxterm \- X terminal emulator for Unicode (UTF-8) environments'
 ln -sf ../../../X11R6/man/man1/uxterm.1x.gz \
       "$tmpdir/usr/share/man/man1/x-terminal-emulator.1.gz"
-MANPATH="$tmpdir/usr/share/man:$tmpdir/usr/X11R6/man" run $MANDB \
-	-C "$tmpdir/manpath.config" -u -q \
+run $MANDB -C "$tmpdir/manpath.config" -u -q \
 	"$tmpdir/usr/share/man:$tmpdir/usr/X11R6/man"
 cat >"$tmpdir/2-share.exp" <<EOF
 x-terminal-emulator -> "- 1 1 MTIME B - - gz X terminal emulator for Unicode (UTF-8) environments"

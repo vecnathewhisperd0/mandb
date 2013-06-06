@@ -10,14 +10,15 @@
 
 init
 fake_config /usr/share/man
+MANPATH="$tmpdir/usr/share/man"
+export MANPATH
 
 mkdir -p "$tmpdir/usr/share/man/man8"
 mkdir -p "$tmpdir/usr/lib/aa-bbb"
 write_page test1 8 "$tmpdir/usr/lib/aa-bbb/aa-test1.8.gz" UTF-8 gz t \
 	'test1 \- testing man page'
 ln -s "../../../lib/aa-bbb/aa-test1.8.gz" "$tmpdir/usr/share/man/man8/aa-test1.8.gz"
-MANPATH="$tmpdir/usr/share/man" run $MANDB -C "$tmpdir/manpath.config" -u -q \
-	"$tmpdir/usr/share/man"
+run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 # $? is deliberately expanded here.
 expect_pass 'double free' "test $? -eq 0"
 

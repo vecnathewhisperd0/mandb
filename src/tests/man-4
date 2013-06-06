@@ -71,7 +71,8 @@ expect_pass 'wildcards: -M option: with wildcards: check existing man page II' \
 #
 
 # Without wildcards
-export MANPATH="$tmpdir/usr/share/man"
+MANPATH="$tmpdir/usr/share/man"
+export MANPATH
 
 run $MAN -C "$tmpdir/manpath.config" \
     -aw manpathx > "$tmpdir/1.out" 2> /dev/null
@@ -88,7 +89,8 @@ expect_pass 'wildcards: MANPATH: without wildcards: check existing man page' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
 # With wildcards
-export MANPATH="$tmpdir/usr/share/prog/*/man"
+MANPATH="$tmpdir/usr/share/prog/*/man"
+export MANPATH
 
 run $MAN -C "$tmpdir/manpath.config" \
     -aw manx > "$tmpdir/1.out" 2> /dev/null
@@ -104,7 +106,8 @@ EOF
 expect_pass 'wildcards: MANPATH: with wildcards: check existing man page' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
-export MANPATH="$tmpdir/usr/share/prog/[ab]/man"
+MANPATH="$tmpdir/usr/share/prog/[ab]/man"
+export MANPATH
 
 run $MAN -C "$tmpdir/manpath.config" \
     -aw whatisx > "$tmpdir/1.out"

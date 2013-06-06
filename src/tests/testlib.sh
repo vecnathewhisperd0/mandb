@@ -2,7 +2,6 @@ failures=0
 
 # Save tests the trouble of exporting variables they set when executing 'run'.
 export LC_ALL
-export MANPATH
 
 init () {
 	tmpdir="tmp-${0##*/}"

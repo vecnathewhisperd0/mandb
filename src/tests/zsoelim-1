@@ -10,6 +10,8 @@
 
 init
 fake_config /usr/local/man /usr/share/man
+MANPATH="$tmpdir/usr/local/man:$tmpdir/usr/share/man"
+export MANPATH
 
 cat >"$tmpdir/fake-program" <<EOF
 #! /bin/sh
@@ -50,8 +52,7 @@ test3 \- third-level test page
 .SH DESCRIPTION
 test
 EOF
-MANPATH="$tmpdir/usr/local/man:$tmpdir/usr/share/man" run $MAN \
-	-C "$tmpdir/manpath.config" test | \
+run $MAN -C "$tmpdir/manpath.config" test | \
 	grep -v '^\.l[flt] ' >"$tmpdir/1.out"
 expect_pass 'test(1) expanded correctly' \
 	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'

@@ -11,6 +11,8 @@
 
 init
 fake_config /usr/share/man
+MANPATH="$tmpdir/usr/share/man"
+export MANPATH
 db_ext="$(db_ext)"
 
 NL='
@@ -18,8 +20,7 @@ NL='
 
 write_page test 1 "$tmpdir/usr/share/man/man1/test.1.gz" UTF-8 gz t \
 	"test \- test page${NL}.br${NL}testlink \- link to test page"
-MANPATH="$tmpdir/usr/share/man" run $MANDB -C "$tmpdir/manpath.config" -u -q \
-	"$tmpdir/usr/share/man"
+run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 cat >"$tmpdir/1.exp" <<EOF
 test -> "- 1 1 MTIME A - - gz test page"
 testlink -> "- 1 1 MTIME C test - gz "
@@ -29,8 +30,7 @@ expect_pass 'setup' 'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
 next_second
 echo '.so test.1' | gzip -9c >"$tmpdir/usr/share/man/man1/testlink.1.gz"
-MANPATH="$tmpdir/usr/share/man" run $MANDB -C "$tmpdir/manpath.config" -u -q \
-	"$tmpdir/usr/share/man"
+run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 cat >"$tmpdir/2.exp" <<EOF
 test -> "- 1 1 MTIME A - - gz test page"
 testlink -> "- 1 1 MTIME C test - gz "
@@ -39,8 +39,7 @@ accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/2.out"
 expect_pass 'broken whatis' 'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
 
 next_second
-MANPATH="$tmpdir/usr/share/man" LC_ALL=C run $MANDB \
-	-C "$tmpdir/manpath.config" -u \
+LC_ALL=C run $MANDB -C "$tmpdir/manpath.config" -u \
 	"$tmpdir/usr/share/man" >"$tmpdir/3.out" 2>/dev/null
 realtmpdir="$(pwd -P)/$tmpdir"
 cat >"$tmpdir/3.exp" <<EOF
