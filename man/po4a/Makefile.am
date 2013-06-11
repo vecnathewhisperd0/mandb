@@ -26,7 +26,8 @@ POFILES = \
 	po/ja.po \
 	po/nl.po \
 	po/pl.po \
-	po/ru.po
+	po/ru.po \
+	po/zh_CN.po
 
 EXTRA_DIST = po4a.cfg Locale/Po4a/Manext.pm po/man-db-manpages.pot $(POFILES)
 

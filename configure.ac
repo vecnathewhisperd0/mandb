@@ -566,6 +566,7 @@ AC_CONFIG_FILES([Makefile
 	man/nl/Makefile
 	man/pl/Makefile
 	man/ru/Makefile
+	man/zh_CN/Makefile
 	manual/Makefile
 	libdb/Makefile
 	docs/Makefile
