@@ -153,6 +153,9 @@ static char *ult_softlink (const char *fullpath)
  */
 static char *test_for_include (const char *buffer)
 {
+	if (!buffer)
+		return NULL;
+
 	/* strip out any leading whitespace (if any) */
 	while (CTYPE (isspace, *buffer))
 		buffer++;
@@ -293,6 +296,7 @@ const char *ult_src (const char *name, const char *path,
 		const char *buffer;
 		char *decomp_base;
 		pipeline *decomp;
+		char *include;
 #ifdef COMP_SRC
 		struct stat st;
 
@@ -331,31 +335,28 @@ const char *ult_src (const char *name, const char *path,
 			buffer = pipeline_readline (decomp);
 		} while (buffer && STRNEQ (buffer, ".\\\"", 3));
 
-		if (buffer) {
-			char *include = test_for_include (buffer);
-			if (include) {
-				const char *ult;
+		include = test_for_include (buffer);
+		if (include) {
+			const char *ult;
 
-				/* Restore the original path from before
-				 * ult_softlink() etc., in case it went
-				 * outside the mantree.
-				 */
-				free (base);
-				base = appendstr (NULL, path, "/", include,
-						  NULL);
-				free (include);
+			/* Restore the original path from before
+			 * ult_softlink() etc., in case it went outside the
+			 * mantree.
+			 */
+			free (base);
+			base = appendstr (NULL, path, "/", include, NULL);
+			free (include);
 
-				debug ("ult_src: points to %s\n", base);
+			debug ("ult_src: points to %s\n", base);
 
-				recurse++;
-				ult = ult_src (base, path, NULL, flags, trace);
-				recurse--;
+			recurse++;
+			ult = ult_src (base, path, NULL, flags, trace);
+			recurse--;
 
-				pipeline_wait (decomp);
-				pipeline_free (decomp);
-				free (decomp_base);
-				return ult;
-			}
+			pipeline_wait (decomp);
+			pipeline_free (decomp);
+			free (decomp_base);
+			return ult;
 		}
 
 		pipeline_wait (decomp);
