@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-2.6.0.2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2013-06-03 12:43+0100\n"
+"POT-Creation-Date: 2013-06-23 22:52+0100\n"
 "PO-Revision-Date: 2011-09-11 21:56+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -96,7 +96,7 @@ msgid "The man database defaults to %s%s."
 msgstr "man データベースのデフォルトを %s%s にします。"
 
 #: src/accessdb.c:64 src/catman.c:98 src/globbing_test.c:58
-#: src/lexgrog_test.c:68 src/man.c:273 src/manconv_main.c:94 src/mandb.c:105
+#: src/lexgrog_test.c:68 src/man.c:279 src/manconv_main.c:94 src/mandb.c:105
 #: src/manpath.c:65 src/whatis.c:124 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr "デバッグメッセージを表示する"
@@ -110,20 +110,20 @@ msgstr "%s を読み込み用に開けません"
 msgid "[SECTION...]"
 msgstr "[SECTION...]"
 
-#: src/catman.c:99 src/man.c:294 src/whatis.c:134
+#: src/catman.c:99 src/man.c:300 src/whatis.c:134
 msgid "PATH"
 msgstr "PATH"
 
-#: src/catman.c:99 src/man.c:294 src/whatis.c:134
+#: src/catman.c:99 src/man.c:300 src/whatis.c:134
 msgid "set search path for manual pages to PATH"
 msgstr "man ページ用の検索パスを PATH に設定する"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
+#: src/catman.c:100 src/man.c:278 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:136
 msgid "FILE"
 msgstr "FILE"
 
-#: src/catman.c:100 src/man.c:272 src/mandb.c:113 src/manpath.c:67
+#: src/catman.c:100 src/man.c:278 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:136
 msgid "use this user configuration file"
 msgstr "このユーザ設定ファイルを使用する"
@@ -138,12 +138,12 @@ msgstr "データベース %s を読み込めません"
 msgid "man command failed with exit status %d"
 msgstr "man コマンドが終了ステータス %d で失敗しました"
 
-#: src/catman.c:276
+#: src/catman.c:277
 #, c-format
 msgid "NULL content for key: %s"
 msgstr "キー %s の内容は NULL です"
 
-#: src/catman.c:291
+#: src/catman.c:292
 #, c-format
 msgid ""
 "\n"
@@ -152,12 +152,12 @@ msgstr ""
 "\n"
 "man 階層 %2$s のセクション %1$s の cat ファイルを更新しています\n"
 
-#: src/catman.c:345
+#: src/catman.c:346
 #, c-format
 msgid "cannot write within %s"
 msgstr "%s に書き込めません"
 
-#: src/catman.c:422
+#: src/catman.c:423
 #, c-format
 msgid "unable to update %s"
 msgstr "%s を更新できません"
@@ -189,7 +189,7 @@ msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
 #: src/check_mandirs.c:336 src/check_mandirs.c:440 src/mandb.c:847
-#: src/straycats.c:88 src/straycats.c:303 src/ult_src.c:92
+#: src/straycats.c:88 src/straycats.c:303 src/ult_src.c:95
 #, c-format
 msgid "can't search directory %s"
 msgstr "ディレクトリー %s を検索できません"
@@ -213,7 +213,7 @@ msgstr "パス `%s/%s' の index キャッシュを更新しています。お�
 msgid "done.\n"
 msgstr "完了しました。\n"
 
-#: src/check_mandirs.c:915
+#: src/check_mandirs.c:926
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "%s 内の古いデータベース要素を取り除いています...\n"
@@ -237,19 +237,19 @@ msgstr "警告: %s: おかしなファイル名を無視しています"
 msgid "PATH SECTION NAME"
 msgstr "PATH SECTION NAME"
 
-#: src/globbing_test.c:59 src/man.c:297
+#: src/globbing_test.c:59 src/man.c:303
 msgid "EXTENSION"
 msgstr "EXTENSION"
 
-#: src/globbing_test.c:59 src/man.c:298
+#: src/globbing_test.c:59 src/man.c:304
 msgid "limit search to extension type EXTENSION"
 msgstr ""
 
-#: src/globbing_test.c:60 src/man.c:299
+#: src/globbing_test.c:60 src/man.c:305
 msgid "look for pages case-insensitively (default)"
 msgstr "大文字小文字を区別しないでページを検索する (デフォルト)"
 
-#: src/globbing_test.c:61 src/man.c:300
+#: src/globbing_test.c:61 src/man.c:306
 msgid "look for pages case-sensitively"
 msgstr "大文字小文字を区別してページを検索する"
 
@@ -267,9 +267,9 @@ msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "警告: %s 用の whatis が %d バイトを超えています。切り詰めます。"
 
-#: src/lexgrog.l:823 src/man.c:2552 src/man.c:2633 src/man.c:2729
-#: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:309
-#: src/ult_src.c:323 src/zsoelim.l:498
+#: src/lexgrog.l:823 src/man.c:2558 src/man.c:2639 src/man.c:2735
+#: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:362
+#: src/ult_src.c:376 src/zsoelim.l:498
 #, c-format
 msgid "can't open %s"
 msgstr "%s をオープンできません"
@@ -298,15 +298,15 @@ msgstr "whatis 情報を表示する"
 msgid "show guessed series of preprocessing filters"
 msgstr ""
 
-#: src/lexgrog_test.c:73 src/man.c:289 src/man.c:314
+#: src/lexgrog_test.c:73 src/man.c:295 src/man.c:320
 msgid "ENCODING"
 msgstr "ENCODING"
 
-#: src/lexgrog_test.c:73 src/man.c:314
+#: src/lexgrog_test.c:73 src/man.c:320
 msgid "use selected output encoding"
 msgstr "選択した出力エンコーディングを使用する"
 
-#: src/lexgrog_test.c:117 src/man.c:542 src/man.c:552
+#: src/lexgrog_test.c:117 src/man.c:548 src/man.c:558
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s: 相互に利用できないオプションです"
@@ -320,141 +320,141 @@ msgstr "コマンドはステータス %d で終了しました: %s"
 msgid "[SECTION] PAGE..."
 msgstr "[SECTION] PAGE..."
 
-#: src/man.c:274
+#: src/man.c:280
 msgid "reset all options to their default values"
 msgstr "すべてのオプションをデフォルト値にリセットする"
 
-#: src/man.c:275
+#: src/man.c:281
 msgid "WARNINGS"
 msgstr "WARNINGS"
 
-#: src/man.c:276
+#: src/man.c:282
 msgid "enable warnings from groff"
 msgstr "groff からの警告を有効にする"
 
-#: src/man.c:278
+#: src/man.c:284
 msgid "Main modes of operation:"
 msgstr "操作の主なモード:"
 
-#: src/man.c:279
+#: src/man.c:285
 msgid "equivalent to whatis"
 msgstr "whatis と同様"
 
-#: src/man.c:280
+#: src/man.c:286
 msgid "equivalent to apropos"
 msgstr "apropos と同様"
 
-#: src/man.c:281
+#: src/man.c:287
 msgid "search for text in all pages"
 msgstr "すべてのページのテキストを検索する"
 
-#: src/man.c:282
+#: src/man.c:288
 msgid "print physical location of man page(s)"
 msgstr "マニュアルページの物理的な位置を表示する"
 
-#: src/man.c:285
+#: src/man.c:291
 msgid "print physical location of cat file(s)"
 msgstr "整形済みファイルの物理的な位置を表示する"
 
-#: src/man.c:287
+#: src/man.c:293
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr "PAGE 引数をローカルファイル名として解釈する"
 
-#: src/man.c:288
+#: src/man.c:294
 msgid "used by catman to reformat out of date cat pages"
 msgstr "catman によって古い整形済みページを再整形するために使用される"
 
-#: src/man.c:289
+#: src/man.c:295
 msgid "output source page encoded in ENCODING"
 msgstr "ソースページのエンコーディングが ENCODING であるとみなして出力する"
 
-#: src/man.c:291
+#: src/man.c:297
 msgid "Finding manual pages:"
 msgstr "マニュアルページの探し方:"
 
-#: src/man.c:292 src/whatis.c:135
+#: src/man.c:298 src/whatis.c:135
 msgid "LOCALE"
 msgstr "LOCALE"
 
-#: src/man.c:292
+#: src/man.c:298
 msgid "define the locale for this particular man search"
 msgstr "この man の検索用のロケールを定義する"
 
-#: src/man.c:293 src/manpath.c:68 src/whatis.c:133
+#: src/man.c:299 src/manpath.c:68 src/whatis.c:133
 msgid "SYSTEM"
 msgstr "SYSTEM"
 
-#: src/man.c:293 src/manpath.c:68 src/whatis.c:133
+#: src/man.c:299 src/manpath.c:68 src/whatis.c:133
 msgid "use manual pages from other systems"
 msgstr "ほかのシステムからのマニュアルページを使用する"
 
-#: src/man.c:295 src/whatis.c:131
+#: src/man.c:301 src/whatis.c:131
 msgid "LIST"
 msgstr "LIST"
 
-#: src/man.c:295
+#: src/man.c:301
 msgid "use colon separated section list"
 msgstr "セクションリストとしてコロン (:) で区切られた LIST を使用する"
 
-#: src/man.c:301
+#: src/man.c:307
 msgid "show all pages matching regex"
 msgstr "正規表現に一致したすべてのページを表示する"
 
-#: src/man.c:302
+#: src/man.c:308
 msgid "show all pages matching wildcard"
 msgstr "ワイルドカードに一致したすべてのページを表示する"
 
-#: src/man.c:303
+#: src/man.c:309
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
 "--regex と --wildcard がページ名のみに一致するようにし、説明には一致しないよ"
 "うにする"
 
-#: src/man.c:305
+#: src/man.c:311
 msgid "find all matching manual pages"
 msgstr "全ての一致したマニュアルページを探し出す"
 
-#: src/man.c:306
+#: src/man.c:312
 msgid "force a cache consistency check"
 msgstr "キャッシュ一貫性の確認を強制する"
 
-#: src/man.c:308
+#: src/man.c:314
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
 msgstr ""
 
-#: src/man.c:310
+#: src/man.c:316
 msgid "Controlling formatted output:"
 msgstr "整形された出力の制御:"
 
-#: src/man.c:311
+#: src/man.c:317
 msgid "PAGER"
 msgstr "PAGER"
 
-#: src/man.c:311
+#: src/man.c:317
 msgid "use program PAGER to display output"
 msgstr "出力を表示するプログラムとして PAGER を使用する"
 
-#: src/man.c:312 src/man.c:321
+#: src/man.c:318 src/man.c:327
 msgid "STRING"
 msgstr "STRING"
 
-#: src/man.c:312
+#: src/man.c:318
 msgid "provide the `less' pager with a prompt"
 msgstr "`less' ページャーのプロンプトを指定する"
 
-#: src/man.c:313
+#: src/man.c:319
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "一部の latin1 文字を ASCII 文字に変換して表示する"
 
-#: src/man.c:316
+#: src/man.c:322
 msgid "turn off hyphenation"
 msgstr "ハイフンによる行末処理を無効にする"
 
-#: src/man.c:319
+#: src/man.c:325
 msgid "turn off justification"
 msgstr "均等割り付けを無効にする"
 
-#: src/man.c:321
+#: src/man.c:327
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
@@ -464,34 +464,34 @@ msgstr ""
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 
-#: src/man.c:325
+#: src/man.c:331
 #, c-format
 msgid "use %s to format pages"
 msgstr "ページ整形に %s を使用する"
 
-#: src/man.c:326
+#: src/man.c:332
 msgid "DEVICE"
 msgstr "DEVICE"
 
-#: src/man.c:327
+#: src/man.c:333
 #, c-format
 msgid "use %s with selected device"
 msgstr "選択した DEVICE 向けに %s を使用する"
 
-#: src/man.c:328
+#: src/man.c:334
 msgid "BROWSER"
 msgstr "BROWSER"
 
-#: src/man.c:329
+#: src/man.c:335
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr "HTML 出力を表示するために %s または BROWSER を使用する"
 
-#: src/man.c:330
+#: src/man.c:336
 msgid "RESOLUTION"
 msgstr "RESOLUTION"
 
-#: src/man.c:332
+#: src/man.c:338
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
@@ -499,104 +499,104 @@ msgstr ""
 "groff を使用し、 gxditview (X11) を等して表示する:\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:334
+#: src/man.c:340
 msgid "use groff and force it to produce ditroff"
 msgstr "groff を使用し、強制的に ditroff を生成する"
 
-#: src/man.c:599 src/man.c:723
+#: src/man.c:605 src/man.c:729
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "%s というマニュアルはありません\n"
 
-#: src/man.c:601
+#: src/man.c:607
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr ""
 
-#: src/man.c:605
+#: src/man.c:611
 msgid "What manual page do you want?\n"
 msgstr "マニュアルページを指定してください\n"
 
-#: src/man.c:720
+#: src/man.c:726
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "%s というマニュアルはセクション %s にはありません\n"
 
-#: src/man.c:728
+#: src/man.c:734
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 
-#: src/man.c:919 src/man.c:2444
+#: src/man.c:925 src/man.c:2450
 #, c-format
 msgid "can't chdir to %s"
 msgstr "%s にディレクトリを変更できません"
 
-#: src/man.c:1145
+#: src/man.c:1151
 msgid " Manual page "
 msgstr ""
 
-#: src/man.c:1209 src/man.c:3529
+#: src/man.c:1215 src/man.c:3535
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb コマンドが終了ステータス %d で失敗しました"
 
-#: src/man.c:1759
+#: src/man.c:1765
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "不明な前処理系 `%c' を無視しています"
 
-#: src/man.c:2028 src/mandb.c:307
+#: src/man.c:2034 src/mandb.c:307
 #, c-format
 msgid "can't chown %s"
 msgstr "%s の所有者を変更 (chown) できません"
 
-#: src/man.c:2040 src/mandb.c:221
+#: src/man.c:2046 src/mandb.c:221
 #, c-format
 msgid "can't chmod %s"
 msgstr "%s の許可属性を変更 (chmod) できません"
 
-#: src/man.c:2051 src/mandb.c:212
+#: src/man.c:2057 src/mandb.c:212
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:2070
+#: src/man.c:2076
 #, c-format
 msgid "can't set times on %s"
 msgstr "%s の時刻を設定できません"
 
-#: src/man.c:2079
+#: src/man.c:2085
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s を削除(unlink)できません"
 
-#: src/man.c:2130
+#: src/man.c:2136
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "%s 用の一時的な整形済みファイルを作成できません"
 
-#: src/man.c:2244
+#: src/man.c:2250
 #, c-format
 msgid "can't create temporary directory"
 msgstr "一時ディレクトリを作成できません"
 
-#: src/man.c:2246 src/man.c:2289 src/man.c:2318
+#: src/man.c:2252 src/man.c:2295 src/man.c:2324
 #, c-format
 msgid "can't change to directory %s"
 msgstr "ディレクトリ %s に移動できません"
 
-#: src/man.c:2257
+#: src/man.c:2263
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "一時ファイル %s を開けません"
 
-#: src/man.c:2295 src/man.c:2323
+#: src/man.c:2301 src/man.c:2329
 #, c-format
 msgid "can't remove directory %s"
 msgstr "ディレクトリ %s を削除できません"
 
-#: src/man.c:2675
+#: src/man.c:2681
 #, c-format
 msgid ""
 "\n"
@@ -605,17 +605,17 @@ msgstr ""
 "\n"
 "catman モードで %s に書き込みできません"
 
-#: src/man.c:3381
+#: src/man.c:3387
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr ""
 
-#: src/man.c:3729
+#: src/man.c:3735
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 
-#: src/man.c:3995
+#: src/man.c:4001
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -818,22 +818,22 @@ msgstr "警告: $MANPATH が設定されています。%s を無視します"
 msgid "can't parse directory list `%s'"
 msgstr "ディレクトリリスト `%s' を解析できません"
 
-#: src/manp.c:872
+#: src/manp.c:873
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "manpath 設定ファイル %s をオープンできません"
 
-#: src/manp.c:904
+#: src/manp.c:912
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "警告: 必要なディレクトリ %s が存在しません"
 
-#: src/manp.c:1146
+#: src/manp.c:1159
 #, c-format
 msgid "can't determine current directory"
 msgstr "カレントディレクトリを決定できません"
 
-#: src/manp.c:1340
+#: src/manp.c:1353
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "警告: %s は %s で始まっていません"
@@ -851,12 +851,12 @@ msgstr ""
 msgid "warning: no global manpaths set in config file %s"
 msgstr "警告: 設定ファイル %s にグローバルな manpath の設定がありません"
 
-#: src/straycats.c:242 src/ult_src.c:136
+#: src/straycats.c:242 src/ult_src.c:139
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "警告: %s はシンボリックリンクが切れています"
 
-#: src/straycats.c:245 src/ult_src.c:139 src/ult_src.c:250
+#: src/straycats.c:245 src/ult_src.c:142 src/ult_src.c:302
 #, c-format
 msgid "can't resolve %s"
 msgstr "%s を解決できません"
@@ -871,7 +871,7 @@ msgstr "%s 配下の roff がない cat ファイルをチェックしていま�
 msgid "warning: can't update index cache %s"
 msgstr "警告: index キャッシュ %s を更新できません"
 
-#: src/ult_src.c:288
+#: src/ult_src.c:340
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s は自分自身を参照しています"
