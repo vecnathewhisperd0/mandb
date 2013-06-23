@@ -898,16 +898,26 @@ static char *def_path (int flag)
 
 	for (list = namestore; list; list = list->next)
 		if (list->flag == flag) {
-	 		int status = is_directory (list->key);
+			char **expanded_dirs;
+			int i;
 
-			if (status < 0)
-				gripe_stat_file (list->key);
-			else if (status == 0 && !quiet)
-				error (0, 0,
-				       _("warning: mandatory directory %s "
-					 "doesn't exist"), list->key);
-			else if (status == 1)
-				manpath = pathappend (manpath, list->key);
+			expanded_dirs = expand_path (list->key);
+			for (i = 0; expanded_dirs[i]; i++) {
+				int status = is_directory (expanded_dirs[i]);
+
+				if (status < 0)
+					gripe_stat_file (expanded_dirs[i]);
+				else if (status == 0 && !quiet)
+					error (0, 0,
+					       _("warning: mandatory "
+						 "directory %s doesn't exist"),
+					       expanded_dirs[i]);
+				else if (status == 1)
+					manpath = pathappend
+						(manpath, expanded_dirs[i]);
+				free (expanded_dirs[i]);
+			}
+			free (expanded_dirs);
 		}
 
 	/* If we have complete config file failure... */
