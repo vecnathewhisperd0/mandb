@@ -1,3 +1,17 @@
+Sun Jun 23 21:21:13 BST 2013  Peter Schiffer  <pschiffe@redhat.com>
+                              Colin Watson  <cjwatson@debian.org>
+
+	Search the full manpath when expanding manual pages that consist
+	only of a .so directive (Fedora bug #693458).
+
+	* src/ult_src.c (find_include): New function, handling manpath
+	  search where necessary.
+	  (ult_src): Call it when a .so directive is found.
+	* src/Makefile.am (lexgrog_SOURCES): Add globbing.c and globbing.h.
+	* src/tests/man-5: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add man-5.
+	* NEWS: Document this.
+
 Sun Jun 23 21:15:45 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* src/tests/mandb-3: Don't rely on ".so test.1" not working.

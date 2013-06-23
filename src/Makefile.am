@@ -89,6 +89,8 @@ lexgrog_SOURCES = \
 	descriptions.h \
 	filenames.c \
 	filenames.h \
+	globbing.c \
+	globbing.h \
 	lexgrog.l \
 	lexgrog_test.c \
 	manconv.c \

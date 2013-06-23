@@ -11,6 +11,12 @@ Major changes since man-db 2.6.3:
 
 	o Build fixes for Automake 1.13.
 
+	o man-db 2.6.0 arranged to search the full manpath when expanding
+	  .so directives in manual pages (so that ".so name.1" works as well
+	  as ".so man1/name.1"), but this incorrectly did not take effect
+	  for manual pages that consist only of a .so directive.  This is
+	  now fixed.
+
 	Improvements:
 	-------------
 

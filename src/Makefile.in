@@ -292,8 +292,9 @@ am_globbing_OBJECTS = globbing.$(OBJEXT) globbing_test.$(OBJEXT)
 globbing_OBJECTS = $(am_globbing_OBJECTS)
 globbing_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_lexgrog_OBJECTS = compression.$(OBJEXT) descriptions.$(OBJEXT) \
-	filenames.$(OBJEXT) lexgrog.$(OBJEXT) lexgrog_test.$(OBJEXT) \
-	manconv.$(OBJEXT) manconv_client.$(OBJEXT) ult_src.$(OBJEXT)
+	filenames.$(OBJEXT) globbing.$(OBJEXT) lexgrog.$(OBJEXT) \
+	lexgrog_test.$(OBJEXT) manconv.$(OBJEXT) \
+	manconv_client.$(OBJEXT) ult_src.$(OBJEXT)
 lexgrog_OBJECTS = $(am_lexgrog_OBJECTS)
 lexgrog_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_2)
@@ -1443,6 +1444,8 @@ lexgrog_SOURCES = \
 	descriptions.h \
 	filenames.c \
 	filenames.h \
+	globbing.c \
+	globbing.h \
 	lexgrog.l \
 	lexgrog_test.c \
 	manconv.c \
