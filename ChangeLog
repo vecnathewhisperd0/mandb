@@ -1,3 +1,14 @@
+Sun Jun 23 14:29:34 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* src/manp.c (guess_manpath): Honour MAN_TEST_DISABLE_PATH
+	  environment variable, allowing the test suite to disable PATH
+	  handling.  (May change without notice.)
+	  (read_config_file): Honour MAN_TEST_DISABLE_SYSTEM_CONFIG
+	  environment variable, allowing the test suite to disable reading
+	  the system configuration file.  (May change without notice.)
+	* src/tests/testlib.sh: Set MAN_TEST_DISABLE_SYSTEM_CONFIG=1.
+	* src/tests/man-4: Set MAN_TEST_DISABLE_PATH=1.
+
 Sun Jun 23 12:28:19 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* src/ult_src.c (test_for_include): Return NULL immediately if

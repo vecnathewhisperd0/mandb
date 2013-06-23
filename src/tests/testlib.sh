@@ -3,6 +3,10 @@ failures=0
 # Save tests the trouble of exporting variables they set when executing 'run'.
 export LC_ALL
 
+# Isolate tests from whatever the system configuration may happen to be.
+MAN_TEST_DISABLE_SYSTEM_CONFIG=1
+export MAN_TEST_DISABLE_SYSTEM_CONFIG
+
 init () {
 	tmpdir="tmp-${0##*/}"
 	mkdir -p "$tmpdir" || exit $?

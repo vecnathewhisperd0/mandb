@@ -672,9 +672,9 @@ static char *guess_manpath (const char *systems)
 	const char *path = getenv ("PATH");
 	char *manpathlist, *manpath;
 
-	if (path == NULL) {
+	if (path == NULL || getenv ("MAN_TEST_DISABLE_PATH")) {
 		/* Things aren't going to work well, but hey... */
-		if (!quiet)
+		if (path == NULL && !quiet)
 			error (0, 0, _("warning: $PATH not set"));
 
 		manpathlist = def_path (MANDATORY);
@@ -862,20 +862,23 @@ void read_config_file (int optional)
 		free (dotmanpath);
 	}
 
-	config = fopen (CONFIG_FILE, "r");
-	if (config == NULL) {
-		if (optional)
-			debug ("can't open %s; continuing anyway\n",
-			       CONFIG_FILE);
-		else
-			error (FAIL, 0,
-			       _("can't open the manpath configuration file "
-				 "%s"), CONFIG_FILE);
-	} else {
-		debug ("From the config file %s:\n\n", CONFIG_FILE);
+	if (getenv ("MAN_TEST_DISABLE_SYSTEM_CONFIG") == NULL) {
+		config = fopen (CONFIG_FILE, "r");
+		if (config == NULL) {
+			if (optional)
+				debug ("can't open %s; continuing anyway\n",
+				       CONFIG_FILE);
+			else
+				error (FAIL, 0,
+				       _("can't open the manpath "
+					 "configuration file %s"),
+				       CONFIG_FILE);
+		} else {
+			debug ("From the config file %s:\n\n", CONFIG_FILE);
 
-		add_to_dirlist (config, 0);
-		fclose (config);
+			add_to_dirlist (config, 0);
+			fclose (config);
+		}
 	}
 
 	print_list ();
