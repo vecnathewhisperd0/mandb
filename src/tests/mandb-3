@@ -29,7 +29,7 @@ accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/1.out"
 expect_pass 'setup' 'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
 next_second
-echo '.so test.1' | gzip -9c >"$tmpdir/usr/share/man/man1/testlink.1.gz"
+echo '.so nonexistent.1' | gzip -9c >"$tmpdir/usr/share/man/man1/testlink.1.gz"
 run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 cat >"$tmpdir/2.exp" <<EOF
 test -> "- 1 1 MTIME A - - gz test page"
