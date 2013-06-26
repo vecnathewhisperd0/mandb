@@ -15931,28 +15931,6 @@ $as_echo "ambiguous" >&6; }
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: please edit include/manconfig.h and add nroff definition" >&5
 $as_echo "$as_me: WARNING: please edit include/manconfig.h and add nroff definition" >&2;}
 	fi
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether nroff supports warning control" >&5
-$as_echo_n "checking whether nroff supports warning control... " >&6; }
-if ${man_cv_prog_nroff_warnings+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-		if test "x$troff_is_groff" = xyes && \
-		   nroff -wmac </dev/null >/dev/null 2>&1
-		then
-			man_cv_prog_nroff_warnings=yes
-		else
-			man_cv_prog_nroff_warnings=no
-		fi
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_prog_nroff_warnings" >&5
-$as_echo "$man_cv_prog_nroff_warnings" >&6; }
-	if test "x$man_cv_prog_nroff_warnings" = xyes; then
-
-$as_echo "#define NROFF_WARNINGS 1" >>confdefs.h
-
-	fi
 else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cannot find an nroff-like program, formatting of manual page source will not be supported." >&5
 $as_echo "$as_me: WARNING: Cannot find an nroff-like program, formatting of manual page source will not be supported." >&2;}
@@ -16104,6 +16082,31 @@ $as_echo "$as_me: WARNING: please edit include/manconfig.h and add troff definit
 	fi
 else
 	troff="(troff not installed)"
+fi
+
+if test -n "$nroff"
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether nroff supports warning control" >&5
+$as_echo_n "checking whether nroff supports warning control... " >&6; }
+if ${man_cv_prog_nroff_warnings+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+		if test "x$troff_is_groff" = xyes && \
+		   nroff -wmac </dev/null >/dev/null 2>&1
+		then
+			man_cv_prog_nroff_warnings=yes
+		else
+			man_cv_prog_nroff_warnings=no
+		fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $man_cv_prog_nroff_warnings" >&5
+$as_echo "$man_cv_prog_nroff_warnings" >&6; }
+	if test "x$man_cv_prog_nroff_warnings" = xyes; then
+
+$as_echo "#define NROFF_WARNINGS 1" >>confdefs.h
+
+	fi
 fi
 
 for ac_prog in gpreconv preconv
