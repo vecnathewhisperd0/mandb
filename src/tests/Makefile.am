@@ -27,7 +27,7 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
 AM_LOG_FLAGS = $(SHELL)
 ALL_TESTS = \
 	lexgrog-1 \
-	man-1 man-2 man-3 man-4 man-5 \
+	man-1 man-2 man-3 man-4 man-5 man-6 \
 	manconv-1 manconv-2 manconv-3 \
 	mandb-1 mandb-2 mandb-3 mandb-4 mandb-5 mandb-6 \
 	whatis-1 \

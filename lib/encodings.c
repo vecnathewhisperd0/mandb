@@ -585,13 +585,29 @@ char *find_charset_locale (const char *charset)
 	if (STREQ (charset, get_locale_charset ()))
 		return NULL;
 
-	supported = fopen (supported_path, "r");
-	if (!supported)
-		return NULL;
-
 	saved_locale = setlocale (LC_CTYPE, NULL);
 	if (saved_locale)
 		saved_locale = xstrdup (saved_locale);
+
+	supported = fopen (supported_path, "r");
+	if (!supported) {
+		if (strlen (canonical_charset) >= 5 &&
+		    STRNEQ (canonical_charset, "UTF-8", 5)) {
+			locale = xstrdup ("C.UTF-8");
+			if (setlocale (LC_CTYPE, locale)) {
+				setlocale (LC_CTYPE, saved_locale);
+				return locale;
+			}
+			free (locale);
+			locale = xstrdup ("en_US.UTF-8");
+			if (setlocale (LC_CTYPE, locale)) {
+				setlocale (LC_CTYPE, saved_locale);
+				return locale;
+			}
+			free (locale);
+		}
+		return NULL;
+	}
 
 	while (getline (&line, &n, supported) >= 0) {
 		const char *space = strchr (line, ' ');

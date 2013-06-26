@@ -1,3 +1,13 @@
+Wed Jun 26 22:41:22 BST 2013  Peter Schiffer <pschiffe@redhat.com>
+
+	* lib/encodings.c (find_charset_locale): Fall back to C.UTF-8 then
+	  en_US.UTF-8 if /usr/share/i18n/SUPPORTED does not exist, the
+	  requested character set is UTF-8, and the current LC_CTYPE locale
+	  is not UTF-8 (Fedora bug #657409).
+	* src/tests/man-6: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add man-6.
+	* NEWS: Document this.
+
 Wed Jun 26 22:33:00 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* configure.ac: Move check for whether nroff supports warning
