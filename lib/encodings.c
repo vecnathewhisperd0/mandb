@@ -577,7 +577,7 @@ char *find_charset_locale (const char *charset)
 	const char *canonical_charset = get_canonical_charset_name (charset);
 	char *saved_locale;
 	const char supported_path[] = "/usr/share/i18n/SUPPORTED";
-	FILE *supported;
+	FILE *supported = NULL;
 	char *line = NULL;
 	size_t n = 0;
 	char *locale = NULL;
@@ -594,19 +594,16 @@ char *find_charset_locale (const char *charset)
 		if (strlen (canonical_charset) >= 5 &&
 		    STRNEQ (canonical_charset, "UTF-8", 5)) {
 			locale = xstrdup ("C.UTF-8");
-			if (setlocale (LC_CTYPE, locale)) {
-				setlocale (LC_CTYPE, saved_locale);
-				return locale;
-			}
+			if (setlocale (LC_CTYPE, locale))
+				goto out;
 			free (locale);
 			locale = xstrdup ("en_US.UTF-8");
-			if (setlocale (LC_CTYPE, locale)) {
-				setlocale (LC_CTYPE, saved_locale);
-				return locale;
-			}
+			if (setlocale (LC_CTYPE, locale))
+				goto out;
 			free (locale);
+			locale = NULL;
 		}
-		return NULL;
+		goto out;
 	}
 
 	while (getline (&line, &n, supported) >= 0) {
@@ -635,7 +632,9 @@ char *find_charset_locale (const char *charset)
 
 out:
 	setlocale (LC_CTYPE, saved_locale);
-	fclose (supported);
+	free (saved_locale);
+	if (supported)
+		fclose (supported);
 	return locale;
 }
 
