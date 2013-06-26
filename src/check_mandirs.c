@@ -441,7 +441,10 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 		return 0;
 	}
 
-	chdir (path);
+	if (chdir (path) != 0) {
+		error (0, errno, _("can't change to directory %s"), path);
+		return 0;
+	}
 
 	while( (mandir = readdir (dir)) ) {
 		if (strncmp (mandir->d_name, "man", 3) != 0)
