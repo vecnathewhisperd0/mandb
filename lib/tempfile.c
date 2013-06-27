@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "xvasprintf.h"
+
 #include "manconfig.h"
 
 static const char *path_search (void)
@@ -70,7 +72,7 @@ char *create_tempdir (const char *template)
 
 	if (!dir)
 		return NULL;
-	created_dirname = appendstr (NULL, dir, "/", template, "XXXXXX", NULL);
+	created_dirname = xasprintf ("%s/%sXXXXXX", dir, template);
 	if (!mkdtemp (created_dirname))
 		return NULL;
 	return created_dirname;

@@ -117,7 +117,7 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 		return NULL;
 	}
 
-	ret = appendstr (NULL, dir, "/", base, NULL);
+	ret = xasprintf ("%s/%s", dir, base);
 	free (dir);
 	free (base);
 	return ret;

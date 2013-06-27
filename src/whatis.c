@@ -308,7 +308,7 @@ static char *simple_convert (iconv_t conv, char *string)
 static void use_grep (const char * const *pages, int num_pages, char *manpath,
 		      int *found)
 {
-	char *whatis_file = appendstr (NULL, manpath, "/whatis", NULL);
+	char *whatis_file = xasprintf ("%s/whatis", manpath);
 
 	if (access (whatis_file, R_OK) == 0) {
 		const char *flags;
@@ -334,8 +334,7 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 			if (am_apropos)
 				anchored_page = xstrdup (pages[i]);
 			else
-				anchored_page = appendstr (NULL, "^", pages[i],
-							   NULL);
+				anchored_page = xasprintf ("^%s", pages[i]);
 
 			grep_cmd = pipecmd_new_argstr (get_def_user ("grep",
 								     GREP));
@@ -441,10 +440,9 @@ static void display (struct mandata *info, const char *page)
 
 	line_len = get_line_length ();
 
-	if (strlen (page_name) > (size_t) (line_len / 2)) {
-		string = xstrndup (page_name, line_len / 2 - 3);
-		string = appendstr (string, "...", NULL);
-	} else
+	if (strlen (page_name) > (size_t) (line_len / 2))
+		string = xasprintf ("%.*s...", line_len / 2 - 3, page_name);
+	else
 		string = xstrdup (page_name);
 	string = appendstr (string, " (", newinfo->ext, ")", NULL);
 	if (!STREQ (newinfo->pointer, "-") && !STREQ (newinfo->pointer, page))
@@ -961,8 +959,7 @@ int main (int argc, char *argv[])
 	display_seen = hashtable_create (&null_hashtable_free);
 
 #ifdef HAVE_ICONV
-	locale_charset = appendstr (NULL, get_locale_charset (), "//IGNORE",
-				    NULL);
+	locale_charset = xasprintf ("%s//IGNORE", get_locale_charset ());
 	conv_to_locale = iconv_open (locale_charset, "UTF-8");
 	free (locale_charset);
 #endif /* HAVE_ICONV */

@@ -33,6 +33,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "xvasprintf.h"
+
 #include "gettext.h"
 #define _(String) gettext (String)
 
@@ -79,7 +81,7 @@ char *convert_name (const char *name, int fsstnd)
 
 #ifdef COMP_CAT
 	/* TODO: BSD layout requires .0. */
-	to_name = appendstr (NULL, namestem, "." COMPRESS_EXT, NULL);
+	to_name = xasprintf ("%s.%s", namestem, COMPRESS_EXT);
 #else /* !COMP_CAT */
 	to_name = xstrdup (namestem);
 #endif /* COMP_CAT */

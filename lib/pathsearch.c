@@ -32,6 +32,7 @@
 #include <unistd.h>
 
 #include "xgetcwd.h"
+#include "xvasprintf.h"
 
 #include "manconfig.h"
 #include "pathsearch.h"
@@ -71,7 +72,7 @@ static int pathsearch (const char *name, const mode_t bits)
 			element = cwd;
 		}
 
-		filename = appendstr (NULL, element, "/", name, NULL);
+		filename = xasprintf ("%s/%s", element, name);
 		if (stat (filename, &st) == -1) {
 			free (filename);
 			continue;

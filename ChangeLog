@@ -1,3 +1,31 @@
+Thu Jun 27 10:47:13 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* docs/HACKING: Mention that xasprintf may be more readable than
+	  appendstr.
+	* include/manconfig.h.in (mkdbname): Rephrase using xasprintf.
+	* lib/decompress.c (decompress_open): Likewise.
+	* lib/pathsearch.c (pathsearch): Likewise.
+	* lib/tempfile.c (create_tempdir): Likewise.
+	* lib/util.c (remove_directory): Likewise.
+	* src/check_mandirs.c (add_dir_entries, mkcatdirs): Likewise.
+	* src/compression.c (comp_file): Likewise.
+	* src/convert_name.c (convert_name): Likewise.
+	* src/globbing.c (make_pattern, match_in_directory, look_for_file):
+	  Likewise.
+	* src/man.c (parse_opt, display_filesystem, display_database,
+	  do_global_apropos_section): Likewise.
+	* src/manconv_client.c (add_manconv): Likewise.
+	* src/mandb.c (mandb, process_manpath, purge_catsubdirs,
+	  purge_catdirs, main): Likewise.
+	* src/manp.c (pathappend, get_nls_manpath, get_manpath,
+	  read_config_file, has_mandir): Likewise.
+	* src/ult_src.c (ult_hardlink): Likewise.
+	* src/whatis.c (simple_convert, use_grep, display, main): Likewise.
+	* src/zsoelim.l (zsoelim_open_file): Likewise.
+
+	* src/accessdb.c (parse_opt): Use mkdbname to construct default
+	  database path.
+
 Thu Jun 27 09:43:35 BST 2013  Peter Schiffer  <pschiffe@redhat.com>
 
 	* lib/encodings.c (get_locale_charset): Free saved_locale.

@@ -37,6 +37,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "xvasprintf.h"
+
 #include "gettext.h"
 #define _(String) gettext (String)
 
@@ -99,7 +101,7 @@ struct compression *comp_file (const char *filename)
 	char *compfile;
 	struct compression *comp;
 
-	compfile = appendstr (NULL, filename, ".", NULL);
+	compfile = xasprintf ("%s.", filename);
 	len = strlen (compfile);
 	
 	for (comp = comp_list; comp->ext; comp++) {

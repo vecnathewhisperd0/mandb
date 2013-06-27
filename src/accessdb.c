@@ -83,7 +83,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			database = arg;
 			return 0;
 		case ARGP_KEY_NO_ARGS:
-			database = appendstr (NULL, cat_root, MAN_DB, NULL);
+			database = mkdbname (cat_root);
 			return 0;
 	}
 	return ARGP_ERR_UNKNOWN;

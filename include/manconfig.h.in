@@ -33,6 +33,8 @@
 #ifndef MANCONFIG_H
 #define MANCONFIG_H
 
+#include "xvasprintf.h"
+
 /* STD_SECTIONS must contain all of your man hierarchy subdirectories. The
    order is important. Manual pages will be displayed in this order. Ie
    if "1" comes before "2", then a kill(1) will be displayed in preference to
@@ -95,7 +97,7 @@
 
 /* The name of the databases. DB_EXT depends on the database type in use */
 #define MAN_DB		"/index" DB_EXT
-#define mkdbname(path) appendstr (NULL, path, MAN_DB, NULL)
+#define mkdbname(path)	xasprintf ("%s%s", path, MAN_DB)
 
 /* The locations of the following files were determined by ../configure so
    some of them may be incorrect. Edit as necessary */

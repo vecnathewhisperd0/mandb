@@ -36,6 +36,8 @@
 #  include "zlib.h"
 #endif /* HAVE_LIBZ */
 
+#include "xvasprintf.h"
+
 #include "manconfig.h"
 #include "comp_src.h"
 #include "pipeline.h"
@@ -84,7 +86,7 @@ pipeline *decompress_open (const char *filename)
 	filename_len = strlen (filename);
 	if (filename_len > 3 && STREQ (filename + filename_len - 3, ".gz")) {
 		/* informational only; no shell quoting concerns */
-		char *name = appendstr (NULL, "zcat < ", filename, NULL);
+		char *name = xasprintf ("zcat < %s", filename);
 		cmd = pipecmd_new_function (name, &decompress_zlib, NULL,
 					    NULL);
 		free (name);

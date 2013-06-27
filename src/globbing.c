@@ -36,6 +36,7 @@
 
 #include "fnmatch.h"
 #include "regex.h"
+#include "xvasprintf.h"
 
 #include "manconfig.h"
 
@@ -51,26 +52,23 @@ static const char *mandir_layout = MANDIR_LAYOUT;
 
 static char *make_pattern (const char *name, const char *sec, int opts)
 {
-	char *pattern = xstrdup (name);
+	char *pattern;
 
 	if (opts & LFF_REGEX) {
 		if (extension) {
 			char *esc_ext = escape_shell (extension);
-			pattern = appendstr (pattern, "\\..*", esc_ext, ".*",
-					     NULL);
+			pattern = xasprintf ("%s\\..*%s.*", name, esc_ext);
 			free (esc_ext);
 		} else {
 			char *esc_sec = escape_shell (sec);
-			pattern = appendstr (pattern, "\\.", esc_sec, ".*",
-					     NULL);
+			pattern = xasprintf ("%s\\.%s.*", name, esc_sec);
 			free (esc_sec);
 		}
 	} else {
 		if (extension)
-			pattern = appendstr (pattern, ".*", extension, "*",
-					     NULL);
+			pattern = xasprintf ("%s.*%s*", name, extension);
 		else
-			pattern = appendstr (pattern, ".", sec, "*", NULL);
+			pattern = xasprintf ("%s.%s*", name, sec);
 	}
 
 	return pattern;
@@ -288,7 +286,7 @@ static void match_in_directory (const char *path, const char *pattern, int opts,
 				pglob->gl_pathv, *allocated, sizeof (char *));
 		}
 		pglob->gl_pathv[pglob->gl_pathc++] =
-			appendstr (NULL, path, "/", cache->names[i], NULL);
+			xasprintf ("%s/%s", path, cache->names[i]);
 	}
 
 	if (opts & LFF_REGEX)
@@ -344,7 +342,7 @@ char **look_for_file (const char *hier, const char *sec,
 		size_t allocated = 0;
 
 		memset (&dirs, 0, sizeof (dirs));
-		pattern = appendstr (NULL, cat ? "cat" : "man", "\t*", NULL);
+		pattern = xasprintf ("%s\t*", cat ? "cat" : "man");
 		*strrchr (pattern, '\t') = *sec;
 		match_in_directory (hier, pattern, LFF_MATCHCASE, &dirs, NULL);
 		free (pattern);
@@ -379,9 +377,9 @@ char **look_for_file (const char *hier, const char *sec,
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
 				  NULL);
 		if (opts & LFF_REGEX)
-			pattern = appendstr (NULL, name, "\\..*", NULL);
+			pattern = xasprintf ("%s\\..*", name);
 		else
-			pattern = appendstr (NULL, name, ".*", NULL);
+			pattern = xasprintf ("%s.*", name);
 
 		match_in_directory (path, pattern, opts, &gbuf, NULL);
 		free (pattern);
@@ -407,10 +405,9 @@ char **look_for_file (const char *hier, const char *sec,
 		if (cat) {
 			path = appendstr (path, hier, "/cat", sec, NULL);
 			if (opts & LFF_REGEX)
-				pattern = appendstr (NULL, name, "\\.0.*",
-						     NULL);
+				pattern = xasprintf ("%s\\.0.*", name);
 			else
-				pattern = appendstr (NULL, name, ".0*", NULL);
+				pattern = xasprintf ("%s.0*", name);
 		} else {
 			path = appendstr (path, hier, "/man", sec, NULL);
 			pattern = make_pattern (name, sec, opts);

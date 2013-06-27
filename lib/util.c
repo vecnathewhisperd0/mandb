@@ -44,6 +44,8 @@
 #include <unistd.h>
 #include <locale.h>
 
+#include "xvasprintf.h"
+
 #include "gettext.h"
 
 #include "manconfig.h"
@@ -157,8 +159,7 @@ int remove_directory (const char *directory, int recurse)
 
 		if (STREQ (entry->d_name, ".") || STREQ (entry->d_name, ".."))
 			continue;
-		path = xstrdup (directory);
-		path = appendstr (path, "/", entry->d_name, NULL);
+		path = xasprintf ("%s/%s", directory, entry->d_name);
 		if (stat (path, &st) == -1) {
 			free (path);
 			closedir (handle);

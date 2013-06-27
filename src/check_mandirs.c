@@ -323,7 +323,7 @@ static inline void add_dir_entries (const char *path, char *infile)
 	struct dirent *newdir;
 	DIR *dir;
 
-	manpage = appendstr (NULL, path, "/", infile, "/", NULL);
+	manpage = xasprintf ("%s/%s/", path, infile);
 	len = strlen (manpage);
 
 	/*
@@ -385,8 +385,8 @@ static void mkcatdirs (const char *mandir, const char *catdir)
 			drop_effective_privs ();
 		}
 		/* then the hierarchy */
-		catname = appendstr (NULL, catdir, "/cat1", NULL);
-		manname = appendstr (NULL, mandir, "/man1", NULL);
+		catname = xasprintf ("%s/cat1", catdir);
+		manname = xasprintf ("%s/man1", mandir);
 		if (is_directory (catdir) == 1) {
 			int j;
 			regain_effective_privs ();

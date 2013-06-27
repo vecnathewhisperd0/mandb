@@ -535,25 +535,23 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			/* check for incompatible options */
 			if (troff + whatis + apropos + catman +
 			    (print_where || print_where_cat) > 1) {
-				char *badopts = appendstr
-					(NULL,
+				char *badopts = xasprintf
+					("%s%s%s%s%s%s",
 					 troff ? "-[tTZH] " : "",
 					 whatis ? "-f " : "",
 					 apropos ? "-k " : "",
 					 catman ? "-c " : "",
 					 print_where ? "-w " : "",
-					 print_where_cat ? "-W " : "",
-					 NULL);
+					 print_where_cat ? "-W " : "");
 				argp_error (state,
 					    _("%s: incompatible options"),
 					    badopts);
 			}
 			if (regex_opt + wildcard > 1) {
-				char *badopts = appendstr
-					(NULL,
+				char *badopts = xasprintf
+					("%s%s",
 					 regex_opt ? "--regex " : "",
-					 wildcard ? "--wildcard " : "",
-					 NULL);
+					 wildcard ? "--wildcard " : "");
 				argp_error (state,
 					    _("%s: incompatible options"),
 					    badopts);
@@ -3334,8 +3332,8 @@ static int display_filesystem (struct candidate *candp)
 	char *filename = make_filename (candp->path, NULL, candp->source,
 					candp->cat ? "cat" : "man");
 	/* source->name is never NULL thanks to add_candidate() */
-	char *title = appendstr (NULL, candp->source->name,
-				 "(", candp->source->ext, ")", NULL);
+	char *title = xasprintf ("%s(%s)", candp->source->name,
+				 candp->source->ext);
 	if (candp->cat) {
 		int r;
 
@@ -3414,7 +3412,7 @@ static int display_database (struct candidate *candp)
 	if (in->id == WHATIS_MAN || in->id == WHATIS_CAT)
 		debug (_("%s: relying on whatis refs is deprecated\n"), name);
 
-	title = appendstr (NULL, name, "(", in->ext, ")", NULL);
+	title = xasprintf ("%s(%s)", name, in->ext);
 
 #ifndef NROFF_MISSING /* #ifdef NROFF */
 	/*
@@ -3864,8 +3862,8 @@ static int do_global_apropos_section (const char *path, const char *sec,
 			goto next;
 		info->addr = info_buffer;
 
-		title = appendstr (NULL, strchr (info_buffer, '\0') + 1,
-				   "(", info->ext, ")", NULL);
+		title = xasprintf ("%s(%s)", strchr (info_buffer, '\0') + 1,
+				   info->ext);
 		man_file = ult_src (*np, path, NULL, ult_flags, NULL);
 		if (!man_file)
 			goto next;
