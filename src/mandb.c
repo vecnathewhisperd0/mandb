@@ -227,6 +227,8 @@ static inline void xchmod (const char *path, mode_t mode)
 static int xcopy (const char *from, const char *to)
 {
 	FILE *ifp, *ofp;
+	static const size_t buf_size = 32 * 1024;
+	char *buf;
 	int ret = 0;
 
 	ifp = fopen (from, "r");
@@ -246,9 +248,9 @@ static int xcopy (const char *from, const char *to)
 		return ret;
 	}
 
+	buf = xmalloc (buf_size);
 	while (!feof (ifp) && !ferror (ifp)) {
-		char buf[32 * 1024];
-		size_t in = fread (buf, 1, sizeof (buf), ifp);
+		size_t in = fread (buf, 1, buf_size, ifp);
 		if (in > 0) {
 			if (fwrite (buf, 1, in, ofp) == 0 && ferror (ofp)) {
 				ret = -errno;
@@ -261,6 +263,7 @@ static int xcopy (const char *from, const char *to)
 			break;
 		}
 	}
+	free (buf);
 
 	fclose (ifp);
 	fclose (ofp);
