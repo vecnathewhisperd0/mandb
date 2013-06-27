@@ -501,7 +501,7 @@ static inline int do_whatis_section (const char *page, const char *section)
 
 static int suitable_manpath (const char *manpath, const char *page_dir)
 {
-	char *page_manp;
+	char *page_manp, *pm;
 	char *page_manpathlist[MAXDIRS], **mp;
 	int ret;
 
@@ -510,7 +510,9 @@ static int suitable_manpath (const char *manpath, const char *page_dir)
 		free (page_manp);
 		return 0;
 	}
-	page_manp = locale_manpath (page_manp);
+	pm = locale_manpath (page_manp);
+	free (page_manp);
+	page_manp = pm;
 	create_pathlist (page_manp, page_manpathlist);
 
 	ret = 0;
@@ -554,6 +556,7 @@ static void do_whatis (const char * const *pages, int num_pages,
 					debug ("%s not on manpath for %s\n",
 					       manpath, page);
 					free (page_dir);
+					free (page);
 					continue;
 				}
 			}

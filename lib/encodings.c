@@ -559,6 +559,7 @@ const char *get_locale_charset (void)
 
 	/* Restore LC_CTYPE to its value on entry to this function. */
 	setlocale (LC_CTYPE, saved_locale);
+	free (saved_locale);
 
 	if (charset && *charset)
 		return get_canonical_charset_name (charset);

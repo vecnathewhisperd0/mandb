@@ -500,6 +500,7 @@ static char *get_nls_manpath (const char *manpathlist, const char *locale)
 
 		closedir (mandir);
 	}
+	free (manpathlist_copy);
 
 	free_locale_bits (&lbits);
 	return manpath;
@@ -563,6 +564,7 @@ char *add_nls_manpaths (const char *manpathlist, const char *locales)
 			free (locale_manpath);
 		}
 	}
+	free (locales_copy);
 
 	/* Always try untranslated pages as a last resort. */
 	locale_manpath = get_nls_manpath (manpathlist, "C");
@@ -817,6 +819,8 @@ next:
 		free (buf);
 		buf = NULL;
 	}
+
+	free (buf);
 }
 
 static void free_config_file (void *unused ATTRIBUTE_UNUSED)

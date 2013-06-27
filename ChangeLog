@@ -1,3 +1,28 @@
+Thu Jun 27 09:43:35 BST 2013  Peter Schiffer  <pschiffe@redhat.com>
+
+	* lib/encodings.c (get_locale_charset): Free saved_locale.
+	* src/check_mandirs.c (testmandirs): Close directory handle on
+	  early-return paths.
+	* src/man.c (local_man_loop): Free locale_manpath's argument after
+	  call.
+	  (main): Likewise.  Free cwd, internal_locale, and program_name
+	  before calling gripe_no_name.  Free database before exiting.
+	  (format_display) [TROFF_IS_GROFF]: Free old_cwd.
+	  (display) [TROFF_IS_GROFF]: Free page_lang.
+	  (display): Free formatted_encoding.
+	  (find_cat_file): Free cat_dir.
+	  (try_section): Free info and info_buffer if they weren't added to
+	  the candidates.
+	  (display_filesystem): Free title and filename.
+	  (try_db): Free database before setting it.
+	  (man): Free each candidate using free_candidate, not free.
+	* src/manp.c (get_nls_manpath): Free manpathlist_copy.
+	  (add_nls_manpaths): Free locales_copy.
+	  (add_to_dirlist): Free buf before returning.
+	* src/whatis.c (suitable_manpath): Free locale_manpath's argument
+	  after call.
+	  (do_whatis): Free page on early-continue path.
+
 Thu Jun 27 09:38:35 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* src/manp.c (add_nls_manpaths): Duplicate manpathlist in the case

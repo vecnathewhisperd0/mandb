@@ -443,6 +443,7 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 
 	if (chdir (path) != 0) {
 		error (0, errno, _("can't change to directory %s"), path);
+		closedir (dir);
 		return 0;
 	}
 
@@ -480,11 +481,13 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 				if (errno == EACCES || errno == EROFS) {
 					debug ("database %s is read-only\n",
 					       database);
+					closedir (dir);
 					return 0;
 				} else {
 					error (0, errno,
 					       _("can't create index cache %s"),
 					       database);
+					closedir (dir);
 					return -errno;
 				}
 			}
@@ -497,6 +500,7 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 
 		if (!dbf) {
 			gripe_rwopen_failed ();
+			closedir (dir);
 			return 0;
 		}
 
