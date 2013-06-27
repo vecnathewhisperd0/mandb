@@ -107,13 +107,14 @@ static void free_manconv_codes (void *data)
 
 void add_manconv (pipeline *p, const char *source, const char *target)
 {
-	struct manconv_codes *codes = xmalloc (sizeof *codes);
+	struct manconv_codes *codes;
 	char *name;
 	pipecmd *cmd;
 
 	if (STREQ (source, "UTF-8") && STREQ (target, "UTF-8"))
 		return;
 
+	codes = xmalloc (sizeof *codes);
 	/* informational only; no shell quoting concerns */
 	name = appendstr (NULL, MANCONV, " -f ", NULL);
 	if (STREQ (source, "UTF-8")) {
