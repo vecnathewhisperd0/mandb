@@ -881,7 +881,7 @@ static int run_mandb (int create, const char *manpath, const char *filename)
 #endif /* MAN_DB_CREATES || MAN_DB_UPDATES */
 
 
-static char *locale_manpath (char *manpath)
+static char *locale_manpath (const char *manpath)
 {
 	char *all_locales;
 	char *new_manpath;

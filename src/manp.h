@@ -33,7 +33,7 @@ struct locale_bits {
 extern char *cat_manpath (char *manp);
 extern void unpack_locale_bits (const char *locale, struct locale_bits *bits);
 extern void free_locale_bits (struct locale_bits *bits);
-extern char *add_nls_manpaths (char *manpathlist, const char *locales);
+extern char *add_nls_manpaths (const char *manpathlist, const char *locales);
 extern char *get_manpath (const char *systems);
 extern char *get_manpath_from_path (const char *path, int mandatory);
 extern void create_pathlist (const char *manp, char **mp);

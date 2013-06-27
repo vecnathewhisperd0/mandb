@@ -242,7 +242,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 static struct argp apropos_argp = { options, parse_opt, args_doc, apropos_doc };
 static struct argp whatis_argp = { options, parse_opt, args_doc };
 
-static char *locale_manpath (char *manpath)
+static char *locale_manpath (const char *manpath)
 {
 	char *all_locales;
 	char *new_manpath;

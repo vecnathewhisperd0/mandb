@@ -505,7 +505,7 @@ static char *get_nls_manpath (const char *manpathlist, const char *locale)
 	return manpath;
 }
 
-char *add_nls_manpaths (char *manpathlist, const char *locales)
+char *add_nls_manpaths (const char *manpathlist, const char *locales)
 {
 	char *manpath = NULL;
 	char *locales_copy, *tok, *locales_ptr;
@@ -514,7 +514,7 @@ char *add_nls_manpaths (char *manpathlist, const char *locales)
 	debug ("add_nls_manpaths(): processing %s\n", manpathlist);
 
 	if (locales == NULL || *locales == '\0')
-		return manpathlist;
+		return xstrdup (manpathlist);
 
 	/* For each locale, we iterate over the manpath and find appropriate
 	 * locale directories for each item. We then concatenate the results
