@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.1-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2013-06-23 22:52+0100\n"
+"POT-Creation-Date: 2013-06-27 11:41+0100\n"
 "PO-Revision-Date: 2008-01-16 17:49-0600\n"
 "Last-Translator: Ming Hua <minghua-guest@users.alioth.debian.org>\n"
 "Language-Team: Chinese (simplified) <translation-team-zh-cn@lists."
@@ -77,7 +77,7 @@ msgid "bad fetch on multi key %s"
 msgstr ""
 
 #  need-proofread
-#: libdb/db_lookup.c:455 src/whatis.c:721
+#: libdb/db_lookup.c:455 src/whatis.c:722
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "数据库 %s 毁坏；请用 mandb --create 命令重建"
@@ -182,7 +182,7 @@ msgstr "无法更新 %s"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "警告：%s/man%s/%s.%s*：互相竞争的扩展"
 
-#: src/check_mandirs.c:119 src/check_mandirs.c:545
+#: src/check_mandirs.c:119 src/check_mandirs.c:552
 #, c-format
 msgid "can't update index cache %s"
 msgstr "无法更新索引缓存 %s"
@@ -213,27 +213,32 @@ msgstr "无法搜索目录 %s"
 msgid "warning: cannot create catdir %s"
 msgstr "警告：无法创建 catdir %s"
 
-#: src/check_mandirs.c:483
+#: src/check_mandirs.c:445 src/man.c:2253 src/man.c:2296 src/man.c:2325
+#, c-format
+msgid "can't change to directory %s"
+msgstr "无法切换到目录 %s 中"
+
+#: src/check_mandirs.c:488
 #, c-format
 msgid "can't create index cache %s"
 msgstr "无法创建索引缓存 %s"
 
-#: src/check_mandirs.c:506
+#: src/check_mandirs.c:513
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "正在为路径 %s/%s 更新索引缓存。请等待..."
 
-#: src/check_mandirs.c:603 src/check_mandirs.c:671
+#: src/check_mandirs.c:610 src/check_mandirs.c:678
 msgid "done.\n"
 msgstr "完成。\n"
 
 #  need-proofread
-#: src/check_mandirs.c:926
+#: src/check_mandirs.c:933
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "正在删除 %s 里的旧数据库条目...\n"
 
-#: src/convert_name.c:49
+#: src/convert_name.c:51
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "无法把 %s 转换为 cat 名称"
@@ -287,7 +292,7 @@ msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "警告：对 %s 的 whatis 操作结果超过 %d 字节，正在截断。"
 msgstr[1] "警告：对 %s 的 whatis 操作结果超过 %d 字节，正在截断。"
 
-#: src/lexgrog.l:823 src/man.c:2558 src/man.c:2639 src/man.c:2735
+#: src/lexgrog.l:823 src/man.c:2561 src/man.c:2643 src/man.c:2740
 #: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:362
 #: src/ult_src.c:376 src/zsoelim.l:498
 #, c-format
@@ -327,7 +332,7 @@ msgstr "编码"
 msgid "use selected output encoding"
 msgstr "必须指定输出所用的编码"
 
-#: src/lexgrog_test.c:117 src/man.c:548 src/man.c:558
+#: src/lexgrog_test.c:117 src/man.c:547 src/man.c:556
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s：互不相容的选项"
@@ -525,32 +530,32 @@ msgstr ""
 msgid "use groff and force it to produce ditroff"
 msgstr "使用 groff 并强制它生成 ditroff"
 
-#: src/man.c:605 src/man.c:729
+#: src/man.c:603 src/man.c:727
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "没有 %s 的手册页条目\n"
 
-#: src/man.c:607
+#: src/man.c:605
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "(换句话问，您需要第 %s 节中的什么手册页？)\n"
 
-#: src/man.c:611
+#: src/man.c:609
 msgid "What manual page do you want?\n"
 msgstr "您需要什么手册页？\n"
 
-#: src/man.c:726
+#: src/man.c:724
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "在第 %2$s 节中没有关于 %1$s 的手册页条目。\n"
 
-#: src/man.c:734
+#: src/man.c:732
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "当没有手册页时，可以用 %s 命令来寻求帮助。\n"
 
 #  need-proofread
-#: src/man.c:925 src/man.c:2450
+#: src/man.c:923 src/man.c:2452
 #, c-format
 msgid "can't chdir to %s"
 msgstr "无法进入到 %s 目录中"
@@ -562,7 +567,7 @@ msgstr "无法进入到 %s 目录中"
 msgid " Manual page "
 msgstr " Manual page "
 
-#: src/man.c:1215 src/man.c:3535
+#: src/man.c:1221 src/man.c:3561
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb 命令失败，退出状态代码为 %d"
@@ -572,58 +577,53 @@ msgstr "mandb 命令失败，退出状态代码为 %d"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "忽略未知的预处理器 `%c'"
 
-#: src/man.c:2034 src/mandb.c:307
+#: src/man.c:2035 src/mandb.c:310
 #, c-format
 msgid "can't chown %s"
 msgstr "无法 chown %s"
 
-#: src/man.c:2046 src/mandb.c:221
+#: src/man.c:2047 src/mandb.c:221
 #, c-format
 msgid "can't chmod %s"
 msgstr "无法 chmod %s"
 
-#: src/man.c:2057 src/mandb.c:212
+#: src/man.c:2058 src/mandb.c:212
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "无法将 %s 改名为 %s"
 
 #  need-proofread
-#: src/man.c:2076
+#: src/man.c:2077
 #, c-format
 msgid "can't set times on %s"
 msgstr "无法设定 %s 文件的时间"
 
-#: src/man.c:2085
+#: src/man.c:2086
 #, c-format
 msgid "can't unlink %s"
 msgstr "无法删除 (unlink) %s"
 
-#: src/man.c:2136
+#: src/man.c:2137
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "无法为 %s 创建临时 cat 文件"
 
-#: src/man.c:2250
+#: src/man.c:2251
 #, fuzzy, c-format
 msgid "can't create temporary directory"
 msgstr "无法为 %s 创建临时 cat 文件"
 
-#: src/man.c:2252 src/man.c:2295 src/man.c:2324
-#, c-format
-msgid "can't change to directory %s"
-msgstr "无法切换到目录 %s 中"
-
-#: src/man.c:2263
+#: src/man.c:2264
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "无法打开临时文件 %s"
 
-#: src/man.c:2301 src/man.c:2329
+#: src/man.c:2302 src/man.c:2330
 #, c-format
 msgid "can't remove directory %s"
 msgstr "无法移除目录 %s"
 
-#: src/man.c:2681
+#: src/man.c:2685
 #, c-format
 msgid ""
 "\n"
@@ -633,17 +633,17 @@ msgstr ""
 "无法在 catman 模式下对 %s 写入"
 
 #  need-proofread
-#: src/man.c:3387
+#: src/man.c:3413
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s：依赖于 whatis 引用是已被废弃的做法\n"
 
-#: src/man.c:3735
+#: src/man.c:3762
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "内部错误：候选类型 %d 超出正常范围"
 
-#: src/man.c:4001
+#: src/man.c:4028
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- 下一页: %s [ 查看 (return) | 跳过 (Ctrl-D) | 退出 (Ctrl-C) ]\n"
@@ -735,22 +735,22 @@ msgstr "仅更新该文件名对应的条目"
 msgid "can't remove %s"
 msgstr "无法移除 %s"
 
-#: src/mandb.c:255
+#: src/mandb.c:257
 #, c-format
 msgid "can't write to %s"
 msgstr "无法对 %s 写入"
 
-#: src/mandb.c:260
+#: src/mandb.c:262
 #, c-format
 msgid "can't read from %s"
 msgstr "无法从 %s 读取"
 
-#: src/mandb.c:429
+#: src/mandb.c:430
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "正在处理 %s 下的手册页...\n"
 
-#: src/mandb.c:629 src/mandb.c:656
+#: src/mandb.c:630 src/mandb.c:656
 #, fuzzy, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "正在 %s 下查找流浪猫...\n"
@@ -801,77 +801,77 @@ msgstr[1] "删除了 %d 条旧数据库条目。\n"
 msgid "No databases created."
 msgstr "未创建任何数据库。"
 
-#: src/manp.c:332
+#: src/manp.c:331
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "无法理解手册路径设置文件 %s"
 
-#: src/manp.c:338
+#: src/manp.c:337
 #, c-format
 msgid "warning: %s"
 msgstr "警告：%s"
 
-#: src/manp.c:344
+#: src/manp.c:343
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "警告：%s 不是目录"
 
-#: src/manp.c:349
+#: src/manp.c:348
 #, c-format
 msgid "manpath list too long"
 msgstr "手册路径列表过长"
 
-#: src/manp.c:678
+#: src/manp.c:679
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "警告：没有设定 $PATH"
 
-#: src/manp.c:685
+#: src/manp.c:686
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "警告：$PATH 为空"
 
-#: src/manp.c:713
+#: src/manp.c:714
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "警告：已经设定了 $MANPATH，在前面加上 %s"
 
-#: src/manp.c:724
+#: src/manp.c:725
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "警告：已经设定了 $MANPATH，在后面加上 %s"
 
-#: src/manp.c:736
+#: src/manp.c:737
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "警告：已经设定了 $MANPATH，在其中插入 %s"
 
-#: src/manp.c:750
+#: src/manp.c:751
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "警告：已经设定了 $MANPATH，忽略 %s"
 
-#: src/manp.c:812
+#: src/manp.c:813
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "无法解读目录列表 %s"
 
-#: src/manp.c:873
+#: src/manp.c:876
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "无法打开手册路径设置文件 %s"
 
-#: src/manp.c:912
+#: src/manp.c:915
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "警告：必需的目录 %s 不存在"
 
-#: src/manp.c:1159
+#: src/manp.c:1162
 #, c-format
 msgid "can't determine current directory"
 msgstr "无法确定当前目录"
 
-#: src/manp.c:1353
+#: src/manp.c:1356
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "警告：%s 并非以 %s 开始"
@@ -962,47 +962,47 @@ msgid "%s what?\n"
 msgstr "%s 什么？\n"
 
 #  need-proofread
-#: src/whatis.c:393 src/whatis.c:411
+#: src/whatis.c:392 src/whatis.c:410
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "警告：%s 包含一个指针回环"
 
-#: src/whatis.c:405 src/whatis.c:413
+#: src/whatis.c:404 src/whatis.c:412
 msgid "(unknown subject)"
 msgstr "(未知的主题)"
 
 #  partially-translated
-#: src/whatis.c:877
+#: src/whatis.c:878
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s：没有 appropriate。\n"
 
-#: src/zsoelim.l:167
+#: src/zsoelim.l:168
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d：.so 请求嵌套太深或形成循环"
 
-#: src/zsoelim.l:182
+#: src/zsoelim.l:183
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d：警告：.so 请求失败"
 
-#: src/zsoelim.l:204
+#: src/zsoelim.l:205
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d：警告：.so 请求中含有换行符，将忽略"
 
-#: src/zsoelim.l:257
+#: src/zsoelim.l:258
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr "%s:%d：警告：不合规格的 .lf 请求，将忽略"
 
-#: src/zsoelim.l:267
+#: src/zsoelim.l:268
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d：警告：.lf 请求中含有换行符，将忽略"
 
-#: src/zsoelim.l:308
+#: src/zsoelim.l:309
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d：roff 请求中含有未结束的引用"

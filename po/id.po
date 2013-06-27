@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.6-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2013-06-23 22:52+0100\n"
+"POT-Creation-Date: 2013-06-27 11:41+0100\n"
 "PO-Revision-Date: 2009-09-08 19:00+0700\n"
 "Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -63,7 +63,7 @@ msgstr[1] "hanya bagian %d ada dalam isi"
 msgid "bad fetch on multi key %s"
 msgstr "pengambilan buruk di multi kunci %s"
 
-#: libdb/db_lookup.c:455 src/whatis.c:721
+#: libdb/db_lookup.c:455 src/whatis.c:722
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Basis data %s terkorupsi; membuat kembali dengan mandb --create"
@@ -164,7 +164,7 @@ msgstr "tidak dapat memperbarui %s"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "peringatan: %s/man%s/%s.%s*: ekstensi berkompetisi"
 
-#: src/check_mandirs.c:119 src/check_mandirs.c:545
+#: src/check_mandirs.c:119 src/check_mandirs.c:552
 #, c-format
 msgid "can't update index cache %s"
 msgstr "tidak dapat mengupdate persediaan indeks %s"
@@ -195,26 +195,31 @@ msgstr "tidak dapat mencari direktori %s"
 msgid "warning: cannot create catdir %s"
 msgstr "peringatan: tidak dapat membuat catdir %s"
 
-#: src/check_mandirs.c:483
+#: src/check_mandirs.c:445 src/man.c:2253 src/man.c:2296 src/man.c:2325
+#, c-format
+msgid "can't change to directory %s"
+msgstr "tidak  dapat mengubah direktori %s"
+
+#: src/check_mandirs.c:488
 #, c-format
 msgid "can't create index cache %s"
 msgstr "tidak dapat membuat persediaan indeks %s"
 
-#: src/check_mandirs.c:506
+#: src/check_mandirs.c:513
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Memperbarui persediaan indeks untuk jalur `%s/%s'. Mohon tunggu..."
 
-#: src/check_mandirs.c:603 src/check_mandirs.c:671
+#: src/check_mandirs.c:610 src/check_mandirs.c:678
 msgid "done.\n"
 msgstr "selesai.\n"
 
-#: src/check_mandirs.c:926
+#: src/check_mandirs.c:933
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Menghapus masukan basis data lama dalam %s...\n"
 
-#: src/convert_name.c:49
+#: src/convert_name.c:51
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Tidak dapat mengubah %s ke nama cat"
@@ -264,7 +269,7 @@ msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "peringatan: whatis untuk %s melebihi %d bytes, dipotong."
 msgstr[1] "peringatan: whatis untuk %s melebihi %d bytes, dipotong."
 
-#: src/lexgrog.l:823 src/man.c:2558 src/man.c:2639 src/man.c:2735
+#: src/lexgrog.l:823 src/man.c:2561 src/man.c:2643 src/man.c:2740
 #: src/manconv_main.c:165 src/straycats.c:216 src/ult_src.c:362
 #: src/ult_src.c:376 src/zsoelim.l:498
 #, c-format
@@ -303,7 +308,7 @@ msgstr "PENGKODEAN"
 msgid "use selected output encoding"
 msgstr "gunakan pengkodean keluaran yang dipilih"
 
-#: src/lexgrog_test.c:117 src/man.c:548 src/man.c:558
+#: src/lexgrog_test.c:117 src/man.c:547 src/man.c:556
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s: pilihan tidak kompatibel"
@@ -501,33 +506,33 @@ msgstr ""
 msgid "use groff and force it to produce ditroff"
 msgstr "gunakan groff dan paksa itu untuk menghasilkan ditroff"
 
-#: src/man.c:605 src/man.c:729
+#: src/man.c:603 src/man.c:727
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "Tidak ada masukan buku panduan untuk %s\n"
 
-#: src/man.c:607
+#: src/man.c:605
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr ""
 "(Secara alternatif, halaman buku panduan mana yang anda inginkan dari bagian "
 "%s?)\n"
 
-#: src/man.c:611
+#: src/man.c:609
 msgid "What manual page do you want?\n"
 msgstr "Halaman buku panduan mana yang anda inginkan?\n"
 
-#: src/man.c:726
+#: src/man.c:724
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Tidak ada masukan buku panduan untuk %s dalam bagian%s\n"
 
-#: src/man.c:734
+#: src/man.c:732
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Lihat '%s' untuk bantuan ketika halaman manual tidak tersedia.\n"
 
-#: src/man.c:925 src/man.c:2450
+#: src/man.c:923 src/man.c:2452
 #, c-format
 msgid "can't chdir to %s"
 msgstr "tidak dapat chdir ke %s"
@@ -536,7 +541,7 @@ msgstr "tidak dapat chdir ke %s"
 msgid " Manual page "
 msgstr " Halaman buku panduan "
 
-#: src/man.c:1215 src/man.c:3535
+#: src/man.c:1221 src/man.c:3561
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "perintah mandb gagal dengan status keluar %d"
@@ -546,57 +551,52 @@ msgstr "perintah mandb gagal dengan status keluar %d"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "mengabaikan preprosesor tidak dikenal `%c'"
 
-#: src/man.c:2034 src/mandb.c:307
+#: src/man.c:2035 src/mandb.c:310
 #, c-format
 msgid "can't chown %s"
 msgstr "tidak dapat chown %s"
 
-#: src/man.c:2046 src/mandb.c:221
+#: src/man.c:2047 src/mandb.c:221
 #, c-format
 msgid "can't chmod %s"
 msgstr "tidak dapat chmod %s"
 
-#: src/man.c:2057 src/mandb.c:212
+#: src/man.c:2058 src/mandb.c:212
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "tidak dapat mengubah nama %s ke %s"
 
-#: src/man.c:2076
+#: src/man.c:2077
 #, c-format
 msgid "can't set times on %s"
 msgstr "tidak dapat menset waktu di %s"
 
-#: src/man.c:2085
+#: src/man.c:2086
 #, c-format
 msgid "can't unlink %s"
 msgstr "tidak dapat unlink %s"
 
-#: src/man.c:2136
+#: src/man.c:2137
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "tidak dapat membuat cat sementara untuk %s"
 
-#: src/man.c:2250
+#: src/man.c:2251
 #, c-format
 msgid "can't create temporary directory"
 msgstr "tidak dapat membuat direktori sementara"
 
-#: src/man.c:2252 src/man.c:2295 src/man.c:2324
-#, c-format
-msgid "can't change to directory %s"
-msgstr "tidak  dapat mengubah direktori %s"
-
-#: src/man.c:2263
+#: src/man.c:2264
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "tidak dapat membuka berkas sementara %s"
 
-#: src/man.c:2301 src/man.c:2329
+#: src/man.c:2302 src/man.c:2330
 #, c-format
 msgid "can't remove directory %s"
 msgstr "tidak dapat menghapus direktori %s"
 
-#: src/man.c:2681
+#: src/man.c:2685
 #, c-format
 msgid ""
 "\n"
@@ -605,17 +605,17 @@ msgstr ""
 "\n"
 "tidak dapat menulis ke %s dalam mode catman"
 
-#: src/man.c:3387
+#: src/man.c:3413
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: bergantung ke referensi whatis sudah ditinggalkan\n"
 
-#: src/man.c:3735
+#: src/man.c:3762
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "internal error: tipe kandidat %d diluar dari jangkauan"
 
-#: src/man.c:4001
+#: src/man.c:4028
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
@@ -706,22 +706,22 @@ msgstr "perbarui hanya masukan untuk nama berkas ini"
 msgid "can't remove %s"
 msgstr "tidak dapat menghapus %s"
 
-#: src/mandb.c:255
+#: src/mandb.c:257
 #, c-format
 msgid "can't write to %s"
 msgstr "tidak dapat menulis ke %s"
 
-#: src/mandb.c:260
+#: src/mandb.c:262
 #, c-format
 msgid "can't read from %s"
 msgstr "tidak dapat membaca dari %s"
 
-#: src/mandb.c:429
+#: src/mandb.c:430
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Memproses halaman buku panduan dibawah %s...\n"
 
-#: src/mandb.c:629 src/mandb.c:656
+#: src/mandb.c:630 src/mandb.c:656
 #, fuzzy, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Memeriksa untuk cats menyimpang dibawah %s...\n"
@@ -769,77 +769,77 @@ msgstr[1] "%d masukan basis data lama telah dihapus.\n"
 msgid "No databases created."
 msgstr "Tidak ada basis data yang dibuat."
 
-#: src/manp.c:332
+#: src/manp.c:331
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "tidak dapat menerima berkas konfigurasi manpath %s"
 
-#: src/manp.c:338
+#: src/manp.c:337
 #, c-format
 msgid "warning: %s"
 msgstr "peringatan: %s"
 
-#: src/manp.c:344
+#: src/manp.c:343
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "peringatan: %s bukan sebuah direktori"
 
-#: src/manp.c:349
+#: src/manp.c:348
 #, c-format
 msgid "manpath list too long"
 msgstr "daftar manpath terlalu panjang"
 
-#: src/manp.c:678
+#: src/manp.c:679
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "peringatan: $PATH belum diset"
 
-#: src/manp.c:685
+#: src/manp.c:686
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "peringatan: $PATH kosong"
 
-#: src/manp.c:713
+#: src/manp.c:714
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "peringatan: $MANPATH set, mengawali %s"
 
-#: src/manp.c:724
+#: src/manp.c:725
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "peringatan: $MANPATH set, menambahkan %s"
 
-#: src/manp.c:736
+#: src/manp.c:737
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "peringatan: $MANPATH set, memasukan %s"
 
-#: src/manp.c:750
+#: src/manp.c:751
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "peringatan: $MANPATH set, mengabaikan %s"
 
-#: src/manp.c:812
+#: src/manp.c:813
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "tidak dapat mengambil daftar direktori `%s'"
 
-#: src/manp.c:873
+#: src/manp.c:876
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "tidak dapat membuka berkas konfigurasi manpath %s"
 
-#: src/manp.c:912
+#: src/manp.c:915
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "peringatan: direktori wajib %s tidak ada"
 
-#: src/manp.c:1159
+#: src/manp.c:1162
 #, c-format
 msgid "can't determine current directory"
 msgstr "tidak dapat menentukan direktori sekarang"
 
-#: src/manp.c:1353
+#: src/manp.c:1356
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "peringatan: %s tidak dimulai dengan  %s"
@@ -928,46 +928,46 @@ msgstr "definisikan lokal untuk pencarian ini"
 msgid "%s what?\n"
 msgstr "%s apa?\n"
 
-#: src/whatis.c:393 src/whatis.c:411
+#: src/whatis.c:392 src/whatis.c:410
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "peringatan: %s berisi sebuah penunjuk loop"
 
-#: src/whatis.c:405 src/whatis.c:413
+#: src/whatis.c:404 src/whatis.c:412
 msgid "(unknown subject)"
 msgstr "(subjek tidak diketahui)"
 
-#: src/whatis.c:877
+#: src/whatis.c:878
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: tidak ada yang sesuai.\n"
 
-#: src/zsoelim.l:167
+#: src/zsoelim.l:168
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d: permintaan .so nested terlalu dalam atau rekursif"
 
-#: src/zsoelim.l:182
+#: src/zsoelim.l:183
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d: peringatan: permintaan .so gagal"
 
-#: src/zsoelim.l:204
+#: src/zsoelim.l:205
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d: peringatan: baris baru dalam permintaan .so, diabaikan"
 
-#: src/zsoelim.l:257
+#: src/zsoelim.l:258
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr "%s:%d: peringatan: salah bentuk permintaan .lf, diabaikan"
 
-#: src/zsoelim.l:267
+#: src/zsoelim.l:268
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d: peringatan: baris baru dalam permintaan .lf, diabaikan"
 
-#: src/zsoelim.l:308
+#: src/zsoelim.l:309
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: quote tidak terselesaikan dalam permintaan roff"
