@@ -1,3 +1,11 @@
+Thu Jun 27 09:25:19 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* src/man.c (get_preprocessors_from_file): Return a non-const string
+	  rather than keeping a static copy.
+	  (get_preprocessors): Return a non-const string.
+	  (make_roff_command): Free the return value of get_preprocessors
+	  before returning.
+
 Thu Jun 27 08:39:26 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* src/manconv_client.c (add_manconv): Don't allocate codes until

@@ -1389,16 +1389,9 @@ static inline const char *is_section (const char *name)
 	return NULL;
 }
 
-/* Snarf pre-processors from file, return (static) string or NULL on failure */
-static const char *get_preprocessors_from_file (pipeline *decomp)
+/* Snarf pre-processors from file, return string or NULL on failure */
+static char *get_preprocessors_from_file (pipeline *decomp)
 {
-	static char *directive = NULL;
-
-	if (directive) {
-		free (directive);
-		directive = NULL;
-	}
-
 #ifdef PP_COOKIE
 	const char *line;
 
@@ -1412,45 +1405,45 @@ static const char *get_preprocessors_from_file (pipeline *decomp)
 	if (!strncmp (line, PP_COOKIE, 4)) {
 		const char *newline = strchr (line, '\n');
 		if (newline)
-			directive = xstrndup (line + 4, newline - (line + 4));
+			return xstrndup (line + 4, newline - (line + 4));
 		else
-			directive = xstrdup (line + 4);
+			return xstrdup (line + 4);
 	}
-
-	/* if we didn't find PP_COOKIE, then directive == NULL */
 #endif
-	return directive;
+	return NULL;
 }
 
 
-/* Determine pre-processors, set save_cat and return
-   (static) string */
-static const char *get_preprocessors (pipeline *decomp, const char *dbfilters)
+/* Determine pre-processors, set save_cat and return string */
+static char *get_preprocessors (pipeline *decomp, const char *dbfilters)
 {
-	const char *pp_string;
+	char *pp_string;
 	const char *pp_source;
+	const char *env;
 
 	/* try in order: database, command line, file, environment, default */
 	/* command line overrides the database, but database empty overrides default */
 	if (dbfilters && (dbfilters[0] != '-') && !preprocessors) {
-		pp_string = dbfilters;
+		pp_string = xstrdup (dbfilters);
 		pp_source = "database";
 		save_cat = 1;
-	} else if ((pp_string = preprocessors)) {
+	} else if (preprocessors) {
+		pp_string = xstrdup (preprocessors);
 		pp_source = "command line";
 		save_cat = 0;
 	} else if ((pp_string = get_preprocessors_from_file (decomp))) {
 		pp_source = "file";
 		save_cat = 1;
-	} else if ((pp_string = getenv ("MANROFFSEQ"))) {
+	} else if ((env = getenv ("MANROFFSEQ"))) {
+		pp_string = xstrdup (env);
 		pp_source = "environment";
 		save_cat = 0;
 	} else if (!dbfilters) {
-		pp_string = DEFAULT_MANROFFSEQ;
+		pp_string = xstrdup (DEFAULT_MANROFFSEQ);
 		pp_source = "default";
 		save_cat = 1;
 	} else {
-		pp_string = "";
+		pp_string = xstrdup ("");
 		pp_source = "no filters";
 		save_cat = 1;
 	}
@@ -1493,7 +1486,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				    pipeline *decomp, const char *dbfilters,
 				    char **result_encoding)
 {
-	const char *pp_string;
+	char *raw_pp_string, *pp_string;
 	const char *roff_opt;
 	char *fmt_prog;
 	pipeline *p = pipeline_new ();
@@ -1504,7 +1497,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 	*result_encoding = xstrdup ("UTF-8"); /* optimistic default */
 
-	pp_string = get_preprocessors (decomp, dbfilters);
+	pp_string = raw_pp_string = get_preprocessors (decomp, dbfilters);
 
 	roff_opt = getenv ("MANROFFOPT");
 	if (!roff_opt)
@@ -1820,6 +1813,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	}
 
 	free (page_encoding);
+	free (raw_pp_string);
 	return p;
 }
 
