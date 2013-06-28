@@ -591,23 +591,7 @@ char *find_charset_locale (const char *charset)
 		saved_locale = xstrdup (saved_locale);
 
 	supported = fopen (supported_path, "r");
-	if (!supported) {
-		if (strlen (canonical_charset) >= 5 &&
-		    STRNEQ (canonical_charset, "UTF-8", 5)) {
-			locale = xstrdup ("C.UTF-8");
-			if (setlocale (LC_CTYPE, locale))
-				goto out;
-			free (locale);
-			locale = xstrdup ("en_US.UTF-8");
-			if (setlocale (LC_CTYPE, locale))
-				goto out;
-			free (locale);
-			locale = NULL;
-		}
-		goto out;
-	}
-
-	while (getline (&line, &n, supported) >= 0) {
+	while (supported && getline (&line, &n, supported) >= 0) {
 		const char *space = strchr (line, ' ');
 		if (space) {
 			char *encoding = xstrdup (space + 1);
@@ -620,7 +604,6 @@ char *find_charset_locale (const char *charset)
 				/* Is this locale actually installed? */
 				if (setlocale (LC_CTYPE, locale)) {
 					free (encoding);
-					free (line);
 					goto out;
 				} else
 					locale = NULL;
@@ -631,7 +614,21 @@ char *find_charset_locale (const char *charset)
 		line = NULL;
 	}
 
+	if (strlen (canonical_charset) >= 5 &&
+	    STRNEQ (canonical_charset, "UTF-8", 5)) {
+		locale = xstrdup ("C.UTF-8");
+		if (setlocale (LC_CTYPE, locale))
+			goto out;
+		free (locale);
+		locale = xstrdup ("en_US.UTF-8");
+		if (setlocale (LC_CTYPE, locale))
+			goto out;
+		free (locale);
+		locale = NULL;
+	}
+
 out:
+	free (line);
 	setlocale (LC_CTYPE, saved_locale);
 	free (saved_locale);
 	if (supported)

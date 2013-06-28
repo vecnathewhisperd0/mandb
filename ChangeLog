@@ -1,3 +1,10 @@
+Fri Jun 28 06:13:17 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* lib/encodings.c (find_charset_locale): Attempt fallback locales
+	  even if /usr/share/i18n/SUPPORTED exists.  (It may exist but none
+	  of the UTF-8 locales mentioned it in may be present; nevertheless,
+	  C.UTF-8 may be available.)
+
 Thu Jun 27 11:38:56 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.6.5.
