@@ -1,3 +1,18 @@
+Mon Jul  8 02:15:52 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	Reimplement 'apropos --and' in a way that works with the
+	optimisations introduced in 2.6.2 (Debian bug #678670).
+
+	* src/whatis.c (any_set, all_set): New functions.
+	  (parse_name, parse_whatis): Take an additional found_here
+	  parameter and set its elements.  Return void.
+	  (do_apropos): Combine results from parse_name and parse_whatis
+	  properly according to whether --and is set, rather than relying on
+	  counters that will only ever coincidentally match the number of
+	  search keywords.
+	  (main): Remove apropos_seen hash table.
+	* NEWS: Document this.
+
 Mon Jul  8 01:30:56 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* src/man.c (format_display): Simplify using xasprintf.

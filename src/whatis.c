@@ -110,7 +110,6 @@ static const char *alt_systems = "";
 static const char *locale = NULL;
 static char *multiple_locale = NULL, *internal_locale;
 
-static struct hashtable *apropos_seen = NULL;
 static struct hashtable *display_seen = NULL;
 
 const char *argp_program_version; /* initialised in main */
@@ -577,20 +576,38 @@ static void do_whatis (const char * const *pages, int num_pages,
 	}
 }
 
-/* return 1 if any of pages matches name, else 0 */
-static int parse_name (const char * const *pages, int num_pages,
-		       const char *dbname, int *found)
+static int any_set (int num_pages, int *found_here)
+{
+	int i;
+
+	for (i = 0; i < num_pages; ++i)
+		if (found_here[i])
+			return 1;
+	return 0;
+}
+
+static int all_set (int num_pages, int *found_here)
+{
+	int i;
+
+	for (i = 0; i < num_pages; ++i)
+		if (!found_here[i])
+			return 0;
+	return 1;
+}
+
+static void parse_name (const char * const *pages, int num_pages,
+			const char *dbname, int *found, int *found_here)
 { 
 	int i;
-	int ret = 0;
 
 	if (regex_opt) {
 		for (i = 0; i < num_pages; ++i) {
 			if (regexec (&preg[i], dbname, 0,
 				     (regmatch_t *) 0, 0) == 0)
-				found[i] = ret = 1;
+				found[i] = found_here[i] = 1;
 		}
-		return ret;
+		return;
 	}
 
 	if (am_apropos && !wildcard) {
@@ -598,17 +615,16 @@ static int parse_name (const char * const *pages, int num_pages,
 
 		for (i = 0; i < num_pages; ++i) {
 			if (STREQ (lowdbname, pages[i]))
-				found[i] = ret = 1;
+				found[i] = found_here[i] = 1;
 		}
 		free (lowdbname);
-		return ret;
+		return;
 	}
 
 	for (i = 0; i < num_pages; ++i) {
 		if (fnmatch (pages[i], dbname, 0) == 0)
-			found[i] = ret = 1;
+			found[i] = found_here[i] = 1;
 	}
-	return ret;
 }
 
 /* return 1 on word match */
@@ -637,40 +653,38 @@ static int match (const char *lowpage, const char *whatis)
 	return 0;
 }
 
-/* return 1 if any of pages matches whatis, else 0 */
-static int parse_whatis (const char * const *pages, char * const *lowpages,
-			 int num_pages, const char *whatis, int *found)
+static void parse_whatis (const char * const *pages, char * const *lowpages,
+			  int num_pages, const char *whatis,
+			  int *found, int *found_here)
 { 
 	int i;
-	int ret = 0;
 
 	if (regex_opt) {
 		for (i = 0; i < num_pages; ++i) {
 			if (regexec (&preg[i], whatis, 0,
 				     (regmatch_t *) 0, 0) == 0)
-				found[i] = ret = 1;
+				found[i] = found_here[i] = 1;
 		}
-		return ret;
+		return;
 	}
 
 	if (wildcard) {
 		for (i = 0; i < num_pages; ++i) {
 			if (exact) {
 				if (fnmatch (pages[i], whatis, 0) == 0)
-					found[i] = ret = 1;
+					found[i] = found_here[i] = 1;
 			} else {
 				if (word_fnmatch (pages[i], whatis))
-					found[i] = ret = 1;
+					found[i] = found_here[i] = 1;
 			}
 		}
-		return ret;
+		return;
 	}
 
 	for (i = 0; i < num_pages; ++i) {
 		if (match (lowpages[i], whatis))
-			found[i] = ret = 1;
+			found[i] = found_here[i] = 1;
 	}
-	return ret;
 }
 
 /* cjwatson: Optimized functions don't seem to be correct in some
@@ -683,6 +697,8 @@ static void do_apropos (const char * const *pages, int num_pages, int *found)
 {
 	datum key, cont;
 	char **lowpages;
+	int *found_here;
+	int (*combine) (int, int *);
 	int i;
 #ifndef BTREE
 	datum nextkey;
@@ -695,6 +711,8 @@ static void do_apropos (const char * const *pages, int num_pages, int *found)
 		lowpages[i] = lower (pages[i]);
 		debug ("lower(%s) = \"%s\"\n", pages[i], lowpages[i]);
 	}
+	found_here = XNMALLOC (num_pages, int);
+	combine = require_all ? all_set : any_set;
 
 #ifndef BTREE
 	key = MYDBM_FIRSTKEY (dbf);
@@ -705,7 +723,6 @@ static void do_apropos (const char * const *pages, int num_pages, int *found)
 	while (!end) {
 #endif /* !BTREE */
 		char *tab;
-		int got_match;
 		struct mandata info;
 
 		memset (&info, 0, sizeof (info));
@@ -757,52 +774,23 @@ static void do_apropos (const char * const *pages, int num_pages, int *found)
 		if (tab) 
 			 *tab = '\0';
 
+		memset (found_here, 0, num_pages * sizeof (*found_here));
 		if (am_apropos) {
 			char *whatis;
-			char *seen_key;
-			int *seen_count;
 
-			seen_key = xasprintf (
-				"%s (%s)",
-				info.name ? info.name : MYDBM_DPTR (key),
-				info.ext);
-			seen_count = hashtable_lookup (apropos_seen, seen_key,
-						       strlen (seen_key));
-			if (seen_count && !require_all)
-				goto nextpage_tab;
-			got_match = parse_name ((const char **) lowpages,
-						num_pages, MYDBM_DPTR (key),
-						found);
+			parse_name ((const char **) lowpages, num_pages,
+				    MYDBM_DPTR (key), found, found_here);
 			whatis = info.whatis ? xstrdup (info.whatis) : NULL;
-			if (!got_match && whatis)
-				got_match = parse_whatis (pages, lowpages,
-							  num_pages, whatis,
-							  found);
+			if (!combine (num_pages, found_here) && whatis)
+				parse_whatis (pages, lowpages, num_pages,
+					      whatis, found, found_here);
 			free (whatis);
-			if (got_match) {
-				if (!seen_count) {
-					seen_count = xmalloc
-						(sizeof *seen_count);
-					*seen_count = 0;
-					hashtable_install (apropos_seen,
-							   seen_key,
-							   strlen (seen_key),
-							   seen_count);
-				}
-				++(*seen_count);
-				if (!require_all ||
-				    *seen_count == num_keywords)
-					display (&info, MYDBM_DPTR (key));
-			}
-			free (seen_key);
-		} else {
-			got_match = parse_name (pages, num_pages,
-						MYDBM_DPTR (key), found);
-			if (got_match)
-				display (&info, MYDBM_DPTR (key));
-		}
+		} else
+			parse_name (pages, num_pages,
+				    MYDBM_DPTR (key), found, found_here);
+		if (combine (num_pages, found_here))
+			display (&info, MYDBM_DPTR (key));
 
-nextpage_tab:
 		if (tab)
 			*tab = '\t';
 nextpage:
@@ -953,7 +941,6 @@ int main (int argc, char *argv[])
 
 	create_pathlist (manp, manpathlist);
 
-	apropos_seen = hashtable_create (&plain_hashtable_free);
 	display_seen = hashtable_create (&null_hashtable_free);
 
 #ifdef HAVE_ICONV
@@ -985,7 +972,6 @@ int main (int argc, char *argv[])
 		iconv_close (conv_to_locale);
 #endif /* HAVE_ICONV */
 	hashtable_free (display_seen);
-	hashtable_free (apropos_seen);
 	free_pathlist (manpathlist);
 	free (manp);
 	free (internal_locale);
