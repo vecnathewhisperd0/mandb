@@ -2256,8 +2256,7 @@ static void format_display (pipeline *decomp,
 		man_ext = strchr (man_base, '.');
 		if (man_ext)
 			*man_ext = '\0';
-		htmlfile = xstrdup (htmldir);
-		htmlfile = appendstr (htmlfile, "/", man_base, ".html", NULL);
+		htmlfile = xasprintf ("%s/%s.html", htmldir, man_base);
 		free (man_base);
 		htmlfd = open (htmlfile, O_CREAT | O_EXCL | O_WRONLY, 0644);
 		if (htmlfd == -1)

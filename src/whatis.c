@@ -762,12 +762,10 @@ static void do_apropos (const char * const *pages, int num_pages, int *found)
 			char *seen_key;
 			int *seen_count;
 
-			if (info.name)
-				seen_key = xstrdup (info.name);
-			else
-				seen_key = xstrdup (MYDBM_DPTR (key));
-			seen_key = appendstr (seen_key, " (", info.ext, ")",
-					      NULL);
+			seen_key = xasprintf (
+				"%s (%s)",
+				info.name ? info.name : MYDBM_DPTR (key),
+				info.ext);
 			seen_count = hashtable_lookup (apropos_seen, seen_key,
 						       strlen (seen_key));
 			if (seen_count && !require_all)
