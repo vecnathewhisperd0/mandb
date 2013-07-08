@@ -112,6 +112,8 @@ static void gripe_rwopen_failed (void)
 {
 	if (errno == EACCES || errno == EROFS)
 		debug ("database %s is read-only\n", database);
+	else if (errno == EAGAIN || errno == EWOULDBLOCK)
+		debug ("database %s is locked by another process\n", database);
 	else {
 #ifdef MAN_DB_UPDATES
 		if (!quiet)
@@ -546,11 +548,20 @@ void update_db_time (void)
 	/* we know that this should succeed because we just updated the db! */
 	dbf = MYDBM_RWOPEN (database);
 	if (dbf == NULL) {
-#ifdef MAN_DB_UPDATES
-		if (!quiet)
-#endif /* MAN_DB_UPDATES */
-			error (0, errno, _("can't update index cache %s"),
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+			/* Another mandb process is probably running.  With
+			 * any luck it will update the mtime ...
+			 */
+			debug ("database %s is locked by another process\n",
 			       database);
+		else {
+#ifdef MAN_DB_UPDATES
+			if (!quiet)
+#endif /* MAN_DB_UPDATES */
+				error (0, errno,
+				       _("can't update index cache %s"),
+				       database);
+		}
 		free (MYDBM_DPTR (content));
 		return;
 	}

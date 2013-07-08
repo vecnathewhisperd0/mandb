@@ -1,3 +1,9 @@
+Mon Jul  8 03:00:20 BST 2013  Colin Watson  <cjwatson@debian.org>
+
+	* src/check_mandirs.c (gripe_rwopen_failed, update_db_time):
+	  Downgrade EAGAIN/EWOULDBLOCK errors from attempts to open a
+	  database read-write to debug messages (Debian bug #684235).
+
 Mon Jul  8 02:26:07 BST 2013  Colin Watson  <cjwatson@debian.org>
 
 	* man/man1/whatis.man1 (NAME): Clarify that whatis displays one-line
