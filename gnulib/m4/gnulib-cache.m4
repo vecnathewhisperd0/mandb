@@ -27,7 +27,7 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gnulib/lib --m4-base=gnulib/m4 --po-base=gnulib/po --doc-base=doc --tests-base=tests --aux-dir=tools --no-conditional-dependencies --libtool --macro-prefix=gl --po-domain=man-db argp canonicalize closedir dirname error flock fnmatch-gnu fstat getline getopt-gnu gettext glob idpriv-drop idpriv-droptemp lib-ignore localcharset lock minmax mkdtemp mkstemp opendir regex rename setenv sigaction signal sigprocmask strerror strsep unsetenv warnings xalloc xgetcwd xstrndup xvasprintf
+#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gnulib/lib --m4-base=gnulib/m4 --po-base=gnulib/po --doc-base=doc --tests-base=tests --aux-dir=tools --no-conditional-dependencies --libtool --macro-prefix=gl --po-domain=man-db --no-vc-files argp canonicalize closedir dirname error flock fnmatch-gnu fstat getline getopt-gnu gettext glob idpriv-drop idpriv-droptemp lib-ignore localcharset lock minmax mkdtemp mkstemp opendir regex rename setenv sigaction signal sigprocmask strerror strsep unsetenv warnings xalloc xgetcwd xstrndup xvasprintf
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
@@ -80,3 +80,4 @@ gl_LIBTOOL
 gl_MACRO_PREFIX([gl])
 gl_PO_DOMAIN([man-db])
 gl_WITNESS_C_MACRO([])
+gl_VC_FILES([false])
