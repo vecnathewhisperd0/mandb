@@ -98,6 +98,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module gettimeofday:
   # Code from module gitlog-to-changelog:
   # Code from module glob:
+  # Code from module gnupload:
   # Code from module hash:
   # Code from module hash-pjw:
   # Code from module hash-triple:
@@ -883,6 +884,7 @@ AC_DEFUN([gltests_LIBSOURCES], [
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/config.rpath
   build-aux/gitlog-to-changelog
+  build-aux/gnupload
   build-aux/snippet/_Noreturn.h
   build-aux/snippet/arg-nonnull.h
   build-aux/snippet/c++defs.h
