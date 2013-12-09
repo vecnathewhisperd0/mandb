@@ -144,7 +144,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 							     sizeof *sections);
 					sections[i++] = sec;
 				}
-				sections[i] = NULL;
+				if (sections)
+					sections[i] = NULL;
 				free (mansect);
 			} else {
 				/* use default sections */
