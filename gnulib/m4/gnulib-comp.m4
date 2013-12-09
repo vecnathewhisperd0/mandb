@@ -96,6 +96,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module gettext:
   # Code from module gettext-h:
   # Code from module gettimeofday:
+  # Code from module gitlog-to-changelog:
   # Code from module glob:
   # Code from module hash:
   # Code from module hash-pjw:
@@ -881,6 +882,7 @@ AC_DEFUN([gltests_LIBSOURCES], [
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/config.rpath
+  build-aux/gitlog-to-changelog
   build-aux/snippet/_Noreturn.h
   build-aux/snippet/arg-nonnull.h
   build-aux/snippet/c++defs.h
