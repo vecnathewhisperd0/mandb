@@ -1,16 +1,17 @@
 # Vietnamese translation for man-db.
-# Copyright © 2013 Colin Watson (msgids)
-# Copyright © 2013 Free Software Foundation, Inc.
+# Bản dịch Tiếng Việt dành cho man-db.
+# Copyright © 2014 Colin Watson (msgids)
+# Copyright © 2014 Free Software Foundation, Inc.
 # This file is distributed under the same license as the man-db package.
 # Clytie Siddall <clytie@riverland.net.au>, 2005, 2006, 2007, 2008, 2009, 2010.
-# Trần Ngọc Quân <vnwildman@gmail.com>, 2012-2013.
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2012-2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.6.4-pre1\n"
+"Project-Id-Version: man-db 2.6.6-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2014-01-04 04:36+0000\n"
-"PO-Revision-Date: 2013-06-06 14:22+0700\n"
+"PO-Revision-Date: 2014-01-12 16:01+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "Language: vi\n"
@@ -34,7 +35,7 @@ msgstr "không có người dùng hướng dẫn \"setuid\" \"%s\""
 #: lib/xregcomp.c:47
 #, c-format
 msgid "fatal: regex `%s': %s"
-msgstr "lỗi nghiêm trọng: biểu thức chính quy `%s': %s"
+msgstr "lỗi nghiêm trọng: biểu thức chính quy “%s”: %s"
 
 #: libdb/db_delete.c:103
 #, c-format
@@ -76,7 +77,7 @@ msgstr ""
 #: libdb/db_ver.c:53
 #, c-format
 msgid "warning: %s has no version identifier\n"
-msgstr "cảnh báo: %s không có bộ nhận diện phiên bản\n"
+msgstr "cảnh báo: %s không có định danh phiên bản\n"
 
 #: libdb/db_ver.c:56
 #, c-format
@@ -86,7 +87,7 @@ msgstr "cảnh báo: %s là phiên bản %s, cần %s\n"
 #: libdb/db_ver.c:78
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
-msgstr "lỗi nghiêm trọng: không thể chèn bộ nhận diện phiên bản vào %s"
+msgstr "lỗi nghiêm trọng: không thể chèn định danh phiên bản vào %s"
 
 #: src/accessdb.c:60
 msgid "[MAN DATABASE]"
@@ -114,16 +115,16 @@ msgstr "[PHẦN...]"
 
 #: src/catman.c:99 src/man.c:300 src/whatis.c:133
 msgid "PATH"
-msgstr "ĐƯỜNG DẪN"
+msgstr "ĐƯỜNG_DẪN"
 
 #: src/catman.c:99 src/man.c:300 src/whatis.c:133
 msgid "set search path for manual pages to PATH"
-msgstr "đặt thành ĐƯỜNG DẪN đường dẫn tìm kiếm các trang hướng dẫn"
+msgstr "đặt ĐƯỜNG_DẪN đường dẫn để tìm kiếm các trang hướng dẫn"
 
 #: src/catman.c:100 src/man.c:278 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:135
 msgid "FILE"
-msgstr "TẬP TIN"
+msgstr "TẬP_TIN"
 
 #: src/catman.c:100 src/man.c:278 src/mandb.c:113 src/manpath.c:67
 #: src/whatis.c:135
@@ -152,7 +153,7 @@ msgid ""
 "Updating cat files for section %s of man hierarchy %s\n"
 msgstr ""
 "\n"
-"Đang cập nhật các tập tin \"cat\" cho phần %s của cây \"man\" %s\n"
+"Đang cập nhật các tập tin \"cat\" cho phần %s của cây phân cấp \"man\" %s\n"
 
 #: src/catman.c:347
 #, c-format
@@ -177,7 +178,7 @@ msgstr "không thể cập nhật bộ nhớ tạm mục lục %s"
 #: src/check_mandirs.c:250
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
-msgstr "cảnh báo: %s: liên kết tượng trưng sai, hoặc yêu cầu \".so\" ROFF sai"
+msgstr "cảnh báo: %s: liên kết mềm sai, hoặc yêu cầu \".so\" ROFF sai"
 
 #: src/check_mandirs.c:308
 #, c-format
@@ -204,7 +205,7 @@ msgstr "cảnh báo: không thể tạo catdir (thư mục \"cat\") %s"
 #: src/check_mandirs.c:447 src/man.c:2253 src/man.c:2295 src/man.c:2324
 #, c-format
 msgid "can't change to directory %s"
-msgstr "không thể chuyển đổi sang thư mục %s"
+msgstr "không thể chuyển sang thư mục %s"
 
 #: src/check_mandirs.c:490
 #, c-format
@@ -224,7 +225,7 @@ msgstr "hoàn tất.\n"
 #: src/check_mandirs.c:944
 #, c-format
 msgid "Purging old database entries in %s...\n"
-msgstr "Đang tẩy các mục nhập cơ sở dữ liệu cũ ra %s...\n"
+msgstr "Đang tẩy các mục tin cơ sở dữ liệu cũ trong %s...\n"
 
 #: src/convert_name.c:51
 #, c-format
@@ -234,7 +235,7 @@ msgstr "Không thể chuyển đổi %s sang tên \"cat\""
 #: src/descriptions_store.c:47
 #, c-format
 msgid "warning: failed to store entry for %s(%s)"
-msgstr "cảnh báo: việc lưu trữ mục nhập cho \"%s(%s)\" gặp lỗi"
+msgstr "cảnh báo: gặp lỗi khi lưu trữ mục tin cho \"%s(%s)\""
 
 #: src/filenames.c:47 src/straycats.c:120 src/straycats.c:149
 #, c-format
@@ -247,7 +248,7 @@ msgstr "ĐƯỜNG DẪN PHẦN TÊN"
 
 #: src/globbing_test.c:59 src/man.c:303
 msgid "EXTENSION"
-msgstr "PHẦN MỞ RỘNG"
+msgstr "PHẦN_MỞ_RỘNG"
 
 #: src/globbing_test.c:59 src/man.c:304
 msgid "limit search to extension type EXTENSION"
@@ -255,11 +256,11 @@ msgstr "chỉ tìm kiếm phần mở rộng kiểu PHẦN MỞ RỘNG"
 
 #: src/globbing_test.c:60 src/man.c:305
 msgid "look for pages case-insensitively (default)"
-msgstr "tìm trang thì không phân biệt chữ hoa/thường (mặc định)"
+msgstr "không phân biệt chữ HOA/thường khi tìm (mặc định)"
 
 #: src/globbing_test.c:61 src/man.c:306
 msgid "look for pages case-sensitively"
-msgstr "tìm trang thì phân biệt chữ hoa/thường"
+msgstr "phân biệt chữ HOA/thường khi tìm"
 
 #: src/globbing_test.c:62
 msgid "interpret page name as a regex"
@@ -286,7 +287,7 @@ msgstr "không thể mở %s"
 
 #: src/lexgrog_test.c:64 src/zsoelim_main.c:63
 msgid "FILE..."
-msgstr "TẬP TIN..."
+msgstr "TẬP_TIN..."
 
 #: src/lexgrog_test.c:65
 msgid "The defaults are --man and --whatis."
@@ -294,7 +295,7 @@ msgstr "Tùy chọn mặc định là \"--man\" và \"--whatis\"."
 
 #: src/lexgrog_test.c:69
 msgid "parse as man page"
-msgstr "phân tích dạng trang man"
+msgstr "phân tích ndạng trang man"
 
 #: src/lexgrog_test.c:70
 msgid "parse as cat page"
@@ -310,7 +311,7 @@ msgstr "hiển thị dãy bộ lọc tiền xử lý đã đoán"
 
 #: src/lexgrog_test.c:73 src/man.c:295 src/man.c:320
 msgid "ENCODING"
-msgstr "BẢNG MÃ"
+msgstr "BẢNG_MÃ"
 
 #: src/lexgrog_test.c:73 src/man.c:320
 msgid "use selected output encoding"
@@ -336,7 +337,7 @@ msgstr "đặt lại mọi tùy chọn về giá trị mặc định"
 
 #: src/man.c:281
 msgid "WARNINGS"
-msgstr "CẢNH BÁO"
+msgstr "CẢNH_BÁO"
 
 #: src/man.c:282
 msgid "enable warnings from groff"
@@ -376,7 +377,7 @@ msgstr "được catman dùng để định dạng lại các trang cat cũ"
 
 #: src/man.c:295
 msgid "output source page encoded in ENCODING"
-msgstr "xuất trang mã nguồn đã mã hoá bằng MÃ"
+msgstr "xuất trang mã nguồn đã mã hoá bằng BẢNG_MÃ"
 
 #: src/man.c:297
 msgid "Finding manual pages:"
@@ -384,7 +385,7 @@ msgstr "Đang tìm trang hướng dẫn:"
 
 #: src/man.c:298 src/whatis.c:134
 msgid "LOCALE"
-msgstr "MIỀN ĐỊA PHƯƠNG"
+msgstr "MIỀN_ĐỊA_PHƯƠNG"
 
 #: src/man.c:298
 msgid "define the locale for this particular man search"
@@ -392,7 +393,7 @@ msgstr "xác định miền địa phương cho việc tìm kiếm man đặc bi
 
 #: src/man.c:299 src/manpath.c:68 src/whatis.c:132
 msgid "SYSTEM"
-msgstr "HỆ THỐNG"
+msgstr "HỆ_THỐNG"
 
 #: src/man.c:299 src/manpath.c:68 src/whatis.c:132
 msgid "use manual pages from other systems"
@@ -400,7 +401,7 @@ msgstr "dùng trang man từ hệ thống khác"
 
 #: src/man.c:301 src/whatis.c:130
 msgid "LIST"
-msgstr "DANH SÁCH"
+msgstr "DANH_SÁCH"
 
 #: src/man.c:301
 msgid "use colon separated section list"
@@ -430,19 +431,19 @@ msgstr "ép buộc kiểm tra tính nhất quán của bộ nhớ tạm"
 
 #: src/man.c:314
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
-msgstr "đừng thử trang phụ, v.d. 'man foo bar' => 'man foo-bar'"
+msgstr "đừng thử trang con, v.d. “man foo bar” => “man foo-bar”"
 
 #: src/man.c:316
 msgid "Controlling formatted output:"
-msgstr "Đang điều khiển kết xuất đã định dạng:"
+msgstr "Điều khiển định dạng cho kết xuất:"
 
 #: src/man.c:317
 msgid "PAGER"
-msgstr "BỘ DÀN TRANG"
+msgstr "DÀN_TRANG"
 
 #: src/man.c:317
 msgid "use program PAGER to display output"
-msgstr "dùng chương trình BỘ DÀN TRANG để hiển thị kết xuất"
+msgstr "dùng chương trình DÀN TRANG để hiển thị kết xuất"
 
 #: src/man.c:318 src/man.c:327
 msgid "STRING"
@@ -470,7 +471,7 @@ msgid ""
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 msgstr ""
-"CHUỖI ngụ ý những bộ tiền xử lý nào cần chạy:\n"
+"CHUỖI chỉ ra những bộ tiền xử lý nào cần chạy:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 
@@ -481,7 +482,7 @@ msgstr "dùng %s để định dạng trang"
 
 #: src/man.c:332
 msgid "DEVICE"
-msgstr "THIẾT BỊ"
+msgstr "THIẾT_BỊ"
 
 #: src/man.c:333
 #, c-format
@@ -490,16 +491,16 @@ msgstr "dùng %s với thiết bị đã chọn"
 
 #: src/man.c:334
 msgid "BROWSER"
-msgstr "TRÌNH DUYỆT"
+msgstr "TRÌNH_DUYỆT"
 
 #: src/man.c:335
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
-msgstr "dùng %s hay TRÌNH DUYỆT để hiển thị kết xuất HTML"
+msgstr "dùng %s hoặc TRÌNH DUYỆT để hiển thị kết xuất HTML"
 
 #: src/man.c:336
 msgid "RESOLUTION"
-msgstr "ĐỘ PHÂN GIẢI"
+msgstr "ĐỘ_PHÂN_GIẢI"
 
 #: src/man.c:338
 msgid ""
@@ -516,7 +517,7 @@ msgstr "dùng groff và ép buộc nó sản sinh ditroff"
 #: src/man.c:603 src/man.c:727
 #, c-format
 msgid "No manual entry for %s\n"
-msgstr "Không có trang hướng dẫn cho %s\n"
+msgstr "Không có trang hướng dẫn cho \"%s\"\n"
 
 #: src/man.c:605
 #, c-format
@@ -550,8 +551,7 @@ msgstr " Trang hướng dẫn "
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr ""
-"lệnh \"mandb\" (cơ sở dữ liệu hướng dẫn) đã thất bại với trạng thái thoát là "
-"%d"
+"lệnh \"mandb\" (cơ sở dữ liệu hướng dẫn) gặp lỗi với trạng thái thoát là %d"
 
 #: src/man.c:1765
 #, c-format
@@ -576,12 +576,12 @@ msgstr "không thể thay đổi tên %s thành %s"
 #: src/man.c:2077
 #, c-format
 msgid "can't set times on %s"
-msgstr "không thể lập thời gian trên %s"
+msgstr "không thể đặt thời gian trên %s"
 
 #: src/man.c:2086
 #, c-format
 msgid "can't unlink %s"
-msgstr "không thể bỏ liên kết ra %s"
+msgstr "không thể bỏ liên kết %s"
 
 #: src/man.c:2137
 #, c-format
@@ -620,12 +620,12 @@ msgstr "%s: nhờ các \"ref\" (tham chiếu) của lệnh \"whatis\" bị phả
 #: src/man.c:3761
 #, c-format
 msgid "internal error: candidate type %d out of range"
-msgstr "lỗi nội bộ: kiểu ứng cử %d ở ngoại phạm vị"
+msgstr "lỗi nội bộ: kiểu ứng cử %d nằm ngoài phạm vi"
 
 #: src/man.c:4027
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
-msgstr "--Man-- kế: %s [ xem (return) | nhảy (Ctrl-D) | thoát (Ctrl-C) ]\n"
+msgstr "--Man-- kế: %s [ xem (enter) | nhảy qua (Ctrl-D) | thoát (Ctrl-C) ]\n"
 
 #: src/manconv.c:232 src/manconv.c:253 src/manconv.c:348
 #, c-format
@@ -658,12 +658,12 @@ msgstr "bảng mã cho kết xuất"
 
 #: src/manconv_main.c:95 src/manpath.c:66
 msgid "produce fewer warnings"
-msgstr "sản sinh ra ít cảnh báo hơn"
+msgstr "tạo ra ít cảnh báo hơn"
 
 #: src/manconv_main.c:130 src/manconv_main.c:139
 #, c-format
 msgid "must specify an input encoding"
-msgstr "phải ghi rõ bảng mã nhập vào"
+msgstr "phải ghi rõ bảng mã đầu vào"
 
 #: src/manconv_main.c:134
 #, c-format
@@ -672,7 +672,7 @@ msgstr "phải ghi rõ bảng mã xuất ra"
 
 #: src/mandb.c:102
 msgid "[MANPATH]"
-msgstr "[ĐƯỜNG DẪN MAN]"
+msgstr "[ĐƯỜNG_DẪN_MAN]"
 
 #: src/mandb.c:106
 msgid "work quietly, except for 'bogus' warning"
@@ -684,19 +684,19 @@ msgstr "đừng tìm hay thêm vào cơ sở dữ liệu các cat rải rác"
 
 #: src/mandb.c:108
 msgid "don't purge obsolete entries from the dbs"
-msgstr "đừng tẩy khỏi cơ sở dữ liệu các mục nhập cũ"
+msgstr "đừng tẩy khỏi cơ sở dữ liệu các mục tin cũ"
 
 #: src/mandb.c:109
 msgid "produce user databases only"
-msgstr "tạo chỉ các cơ sở dữ liệu người dùng"
+msgstr "chỉ tạo các cơ sở dữ liệu người dùng"
 
 #: src/mandb.c:110
 msgid "create dbs from scratch, rather than updating"
-msgstr "tạo lại cơ sở dữ liệu từ đầu, hơn là cập nhật"
+msgstr "tạo lại cơ sở dữ liệu từ đầu thay cho cập nhật"
 
 #: src/mandb.c:111
 msgid "check manual pages for correctness"
-msgstr "kiểm tra có trang hướng dẫn đúng"
+msgstr "kiểm tra các trang hướng dẫn xem có đúng không"
 
 #: src/mandb.c:112
 msgid "FILENAME"
@@ -729,13 +729,13 @@ msgstr "Đang xử lý các trang hướng dẫn dưới %s...\n"
 #: src/mandb.c:630 src/mandb.c:656
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
-msgstr "Đang gỡ bỏ các thư mục 'cat' không dùng nữa %s...\n"
+msgstr "Đang gỡ bỏ các thư mục “cat” không dùng nữa %s...\n"
 
 #: src/mandb.c:812
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
-"cảnh báo: không có chỉ thị \"MANDB_MAP\" trong `%s' nên sẽ dùng đường dẫn "
+"cảnh báo: không có chỉ thị \"MANDB_MAP\" trong “%s” nên sẽ dùng đường dẫn "
 "hướng dẫn của bạn."
 
 #: src/mandb.c:884
@@ -760,7 +760,7 @@ msgstr[0] "%d trang \"cat\" thất lạc đã được thêm vào.\n"
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
-msgstr[0] "%d mục nhập cơ sở dữ liệu cũ bị tẩy.\n"
+msgstr[0] "%d mục tin cơ sở dữ liệu cũ bị tẩy.\n"
 
 #: src/mandb.c:916
 #, c-format
@@ -862,7 +862,7 @@ msgstr ""
 #: src/straycats.c:242 src/ult_src.c:139
 #, c-format
 msgid "warning: %s is a dangling symlink"
-msgstr "cảnh báo: %s là liên kết tượng trưng không chỉ vào đâu cả"
+msgstr "cảnh báo: %s là liên kết mềm không chỉ vào đâu cả"
 
 #: src/straycats.c:245 src/ult_src.c:142 src/ult_src.c:302
 #, c-format
