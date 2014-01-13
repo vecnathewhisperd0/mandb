@@ -40,6 +40,16 @@
 #endif
 #define N_(msgid) msgid
 
+#ifdef _LIBC
+# define ARGP_TEXT_DOMAIN "libc"
+#else
+# ifdef DEFAULT_TEXT_DOMAIN
+#  define ARGP_TEXT_DOMAIN DEFAULT_TEXT_DOMAIN
+# else
+#  define ARGP_TEXT_DOMAIN NULL
+# endif
+#endif
+
 #include "argp.h"
 #include "argp-namefrob.h"
 
@@ -134,7 +144,8 @@ argp_default_parser (int key, char *arg, struct argp_state *state)
 }
 
 static const struct argp argp_default_argp =
-  {argp_default_options, &argp_default_parser, NULL, NULL, NULL, NULL, "libc"};
+  {argp_default_options, &argp_default_parser, NULL, NULL, NULL, NULL,
+   ARGP_TEXT_DOMAIN};
 
 
 static const struct argp_option argp_version_options[] =
@@ -155,7 +166,7 @@ argp_version_parser (int key, char *arg, struct argp_state *state)
         fprintf (state->out_stream, "%s\n", argp_program_version);
       else
         __argp_error (state, "%s",
-                      dgettext (state->root_argp->argp_domain,
+                      dgettext (ARGP_TEXT_DOMAIN,
                                 "(PROGRAM ERROR) No version known!?"));
       if (! (state->flags & ARGP_NO_EXIT))
         exit (0);
@@ -167,7 +178,8 @@ argp_version_parser (int key, char *arg, struct argp_state *state)
 }
 
 static const struct argp argp_version_argp =
-  {argp_version_options, &argp_version_parser, NULL, NULL, NULL, NULL, "libc"};
+  {argp_version_options, &argp_version_parser, NULL, NULL, NULL, NULL,
+   ARGP_TEXT_DOMAIN};
 
 /* Returns the offset into the getopt long options array LONG_OPTIONS of a
    long option with called NAME, or -1 if none is found.  Passing NULL as
@@ -608,8 +620,7 @@ parser_finalize (struct parser *parser,
           if (!(parser->state.flags & ARGP_NO_ERRS)
               && parser->state.err_stream)
             fprintf (parser->state.err_stream,
-                     dgettext (parser->argp->argp_domain,
-                               "%s: Too many arguments\n"),
+                     dgettext (ARGP_TEXT_DOMAIN, "%s: Too many arguments\n"),
                      parser->state.name);
           err = EBADKEY;
         }
@@ -755,7 +766,7 @@ parser_parse_opt (struct parser *parser, int opt, char *val)
         N_("(PROGRAM ERROR) Option should have been recognized!?");
       if (group_key == 0)
         __argp_error (&parser->state, "-%c: %s", opt,
-                      dgettext (parser->argp->argp_domain, bad_key_err));
+                      dgettext (ARGP_TEXT_DOMAIN, bad_key_err));
       else
         {
           struct option *long_opt = parser->long_opts;
@@ -763,7 +774,7 @@ parser_parse_opt (struct parser *parser, int opt, char *val)
             long_opt++;
           __argp_error (&parser->state, "--%s: %s",
                         long_opt->name ? long_opt->name : "???",
-                        dgettext (parser->argp->argp_domain, bad_key_err));
+                        dgettext (ARGP_TEXT_DOMAIN, bad_key_err));
         }
     }
 

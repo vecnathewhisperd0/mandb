@@ -47,6 +47,16 @@
 # include "gettext.h"
 #endif
 
+#ifdef _LIBC
+# define ARGP_TEXT_DOMAIN "libc"
+#else
+# ifdef DEFAULT_TEXT_DOMAIN
+#  define ARGP_TEXT_DOMAIN DEFAULT_TEXT_DOMAIN
+# else
+#  define ARGP_TEXT_DOMAIN NULL
+# endif
+#endif
+
 #include "argp.h"
 #include "argp-fmtstream.h"
 #include "argp-namefrob.h"
@@ -144,7 +154,7 @@ validate_uparams (const struct argp_state *state, struct uparams *upptr)
       if (*(int *)((char *)upptr + up->uparams_offs) >= upptr->rmargin)
         {
           __argp_failure (state, 0, 0,
-                          dgettext (state->root_argp->argp_domain,
+                          dgettext (ARGP_TEXT_DOMAIN,
                                     "\
 ARGP_HELP_FMT: %s value is less than or equal to %s"),
                           "rmargin", up->name);
@@ -217,13 +227,13 @@ fill_in_uparams (const struct argp_state *state)
                   {
                     if (unspec && !un->is_bool)
                       __argp_failure (state, 0, 0,
-                                      dgettext (state->root_argp->argp_domain,
+                                      dgettext (ARGP_TEXT_DOMAIN,
                                                 "\
 %.*s: ARGP_HELP_FMT parameter requires a value"),
                                       (int) var_len, var);
                     else if (val < 0)
                       __argp_failure (state, 0, 0,
-                                      dgettext (state->root_argp->argp_domain,
+                                      dgettext (ARGP_TEXT_DOMAIN,
                                                 "\
 %.*s: ARGP_HELP_FMT parameter must be positive"),
                                       (int) var_len, var);
@@ -233,7 +243,7 @@ fill_in_uparams (const struct argp_state *state)
                   }
               if (! un->name)
                 __argp_failure (state, 0, 0,
-                                dgettext (state->root_argp->argp_domain, "\
+                                dgettext (ARGP_TEXT_DOMAIN, "\
 %.*s: Unknown ARGP_HELP_FMT parameter"),
                                 (int) var_len, var);
 
@@ -244,7 +254,7 @@ fill_in_uparams (const struct argp_state *state)
           else if (*var)
             {
               __argp_failure (state, 0, 0,
-                              dgettext (state->root_argp->argp_domain,
+                              dgettext (ARGP_TEXT_DOMAIN,
                                         "Garbage in ARGP_HELP_FMT: %s"), var);
               break;
             }
@@ -1137,7 +1147,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
             __argp_fmtstream_putc (stream, '-');
             __argp_fmtstream_putc (stream, *so);
             if (!have_long_opt || uparams.dup_args)
-              arg (real, " %s", "[%s]", state->root_argp->argp_domain, stream);
+              arg (real, " %s", "[%s]", entry->argp->argp_domain, stream);
             else if (real->arg)
               hhstate->suppressed_dup_arg = 1;
           }
@@ -1159,7 +1169,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
             __argp_fmtstream_puts (stream,
                                    onotrans (opt) ?
                                              opt->name :
-                                   dgettext (state->root_argp->argp_domain,
+                                   dgettext (entry->argp->argp_domain,
                                              opt->name));
           }
     }
@@ -1175,7 +1185,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
             comma (uparams.long_opt_col, &pest);
             __argp_fmtstream_printf (stream, "--%s", opt->name);
             if (first_long_opt || uparams.dup_args)
-              arg (real, "=%s", "[=%s]", state->root_argp->argp_domain,
+              arg (real, "=%s", "[=%s]", entry->argp->argp_domain,
                    stream);
             else if (real->arg)
               hhstate->suppressed_dup_arg = 1;
@@ -1197,7 +1207,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
     }
   else
     {
-      const char *tstr = real->doc ? dgettext (state->root_argp->argp_domain,
+      const char *tstr = real->doc ? dgettext (entry->argp->argp_domain,
                                                real->doc) : 0;
       const char *fstr = filter_doc (tstr, real->key, entry->argp, state);
       if (fstr && *fstr)
@@ -1245,7 +1255,7 @@ hol_help (struct hol *hol, const struct argp_state *state,
 
   if (hhstate.suppressed_dup_arg && uparams.dup_args_note)
     {
-      const char *tstr = dgettext (state->root_argp->argp_domain, "\
+      const char *tstr = dgettext (ARGP_TEXT_DOMAIN, "\
 Mandatory or optional arguments to long options are also mandatory or \
 optional for any corresponding short options.");
       const char *fstr = filter_doc (tstr, ARGP_KEY_HELP_DUP_ARGS_NOTE,
@@ -1638,11 +1648,11 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
 
           if (first_pattern)
             __argp_fmtstream_printf (fs, "%s %s",
-                                     dgettext (argp->argp_domain, "Usage:"),
+                                     dgettext (ARGP_TEXT_DOMAIN, "Usage:"),
                                      name);
           else
             __argp_fmtstream_printf (fs, "%s %s",
-                                     dgettext (argp->argp_domain, "  or: "),
+                                     dgettext (ARGP_TEXT_DOMAIN, "  or: "),
                                      name);
 
           /* We set the lmargin as well as the wmargin, because hol_usage
@@ -1653,7 +1663,7 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
             /* Just show where the options go.  */
             {
               if (hol->num_entries > 0)
-                __argp_fmtstream_puts (fs, dgettext (argp->argp_domain,
+                __argp_fmtstream_puts (fs, dgettext (ARGP_TEXT_DOMAIN,
                                                      " [OPTION...]"));
             }
           else
@@ -1681,7 +1691,7 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
 
   if (flags & ARGP_HELP_SEE)
     {
-      __argp_fmtstream_printf (fs, dgettext (argp->argp_domain, "\
+      __argp_fmtstream_printf (fs, dgettext (ARGP_TEXT_DOMAIN, "\
 Try '%s --help' or '%s --usage' for more information.\n"),
                                name, name);
       anything = 1;
@@ -1708,7 +1718,7 @@ Try '%s --help' or '%s --usage' for more information.\n"),
     {
       if (anything)
         __argp_fmtstream_putc (fs, '\n');
-      __argp_fmtstream_printf (fs, dgettext (argp->argp_domain,
+      __argp_fmtstream_printf (fs, dgettext (ARGP_TEXT_DOMAIN,
                                              "Report bugs to %s.\n"),
                                argp_program_bug_address);
       anything = 1;
@@ -1927,8 +1937,7 @@ __argp_failure (const struct argp_state *state, int status, int errnum,
 #endif
 #if !_LIBC
                   if (! s && ! (s = strerror (errnum)))
-                    s = dgettext (state->root_argp->argp_domain,
-                                  "Unknown system error");
+                    s = dgettext (ARGP_TEXT_DOMAIN, "Unknown system error");
 #endif
                   fputs (s, stream);
                 }
