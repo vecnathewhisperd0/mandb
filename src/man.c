@@ -3113,6 +3113,8 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 			name = req_name;
 
 		filename = make_filename (path, name, source, cat ? "cat" : "man");
+		if (!filename)
+			return 0;
 		ult = ult_src (filename, path, NULL,
 			       get_ult_flags (from_db, source->id), NULL);
 		free (filename);
@@ -3330,9 +3332,13 @@ static int display_filesystem (struct candidate *candp)
 {
 	char *filename = make_filename (candp->path, NULL, candp->source,
 					candp->cat ? "cat" : "man");
+	char *title;
+
+	if (!filename)
+		return 0;
 	/* source->name is never NULL thanks to add_candidate() */
-	char *title = xasprintf ("%s(%s)", candp->source->name,
-				 candp->source->ext);
+	title = xasprintf ("%s(%s)", candp->source->name, candp->source->ext);
+
 	if (candp->cat) {
 		int r;
 
@@ -3420,9 +3426,7 @@ static int display_database (struct candidate *candp)
 
 	if (in->id < STRAY_CAT) {	/* There should be a src page */
 		file = make_filename (candp->path, name, in, "man");
-		debug ("Checking physical location: %s\n", file);
-
-		if (access (file, R_OK) == 0) {
+		if (file) {
 			const char *man_file;
 			char *cat_file;
 
@@ -3444,7 +3448,7 @@ static int display_database (struct candidate *candp)
 			free (lang);
 			lang = NULL;
 		} /* else {drop through to the bottom and return 0 anyway} */
-	} else 
+	} else
 
 #endif /* NROFF_MISSING */
 
@@ -3469,9 +3473,7 @@ static int display_database (struct candidate *candp)
 		}
 
 		file = make_filename (candp->path, name, in, "cat");
-		debug ("Checking physical location: %s\n", file);
-
-		if (access (file, R_OK) != 0) {
+		if (!file) {
 			char *catpath;
 			catpath = get_catpath (candp->path,
 					       global_manpath ? SYSTEM_CAT
@@ -3481,10 +3483,7 @@ static int display_database (struct candidate *candp)
 				file = make_filename (catpath, name,
 						      in, "cat");
 				free (catpath);
-				debug ("Checking physical location: %s\n",
-				       file);
-
-				if (access (file, R_OK) != 0) {
+				if (!file) {
 					/* don't delete here, 
 					   return==0 will do that */
 					free (title);
@@ -3548,6 +3547,8 @@ static int maybe_update_file (const char *manpath, const char *name,
 		real_name = name;
 
 	file = make_filename (manpath, real_name, info, "man");
+	if (!file)
+		return 0;
 	if (lstat (file, &buf) != 0)
 		return 0;
 	if (buf.st_mtime == info->_st_mtime)

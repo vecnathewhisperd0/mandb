@@ -27,6 +27,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "xvasprintf.h"
 
@@ -60,6 +61,12 @@ char *make_filename (const char *path, const char *name,
 
 	if (in->comp && *in->comp != '-')	/* Is there an extension? */
 		file = appendstr (file, ".", in->comp, NULL);
+
+	debug ("Checking physical location: %s\n", file);
+	if (access (file, R_OK) != 0) {
+		free (file);
+		return NULL;
+	}
 
 	return file;
 }

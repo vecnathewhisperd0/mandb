@@ -192,8 +192,8 @@ void test_manfile (const char *file, const char *path)
 			   comp extensions */
 			abs_filename = make_filename (path, NULL,
 						      exists, "man");
-			debug ("test_manfile(): stat %s\n", abs_filename);
-			if (stat (abs_filename, &physical) == -1) {
+			if (!abs_filename ||
+			    stat (abs_filename, &physical) == -1) {
 				if (!opt_test)
 					dbdelete (manpage_base, exists);
 			} else {
