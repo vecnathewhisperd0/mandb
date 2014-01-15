@@ -3333,6 +3333,7 @@ static int display_filesystem (struct candidate *candp)
 	char *filename = make_filename (candp->path, NULL, candp->source,
 					candp->cat ? "cat" : "man");
 	char *title;
+	int found = 0;
 
 	if (!filename)
 		return 0;
@@ -3340,26 +3341,17 @@ static int display_filesystem (struct candidate *candp)
 	title = xasprintf ("%s(%s)", candp->source->name, candp->source->ext);
 
 	if (candp->cat) {
-		int r;
-
-		if (troff || want_encoding || recode) {
-			free (title);
-			return 0;
-		}
-		r = display (candp->path, NULL, filename, title, NULL);
-		free (title);
-		return r;
+		if (troff || want_encoding || recode)
+			goto out;
+		found = display (candp->path, NULL, filename, title, NULL);
 	} else {
 		const char *man_file;
 		char *cat_file;
-		int found;
 
 		man_file = ult_src (filename, candp->path, NULL, ult_flags,
 				    NULL);
-		if (man_file == NULL) {
-			free (title);
-			return 0;
-		}
+		if (man_file == NULL)
+			goto out;
 
 		debug ("found ultimate source file %s\n", man_file);
 		lang = lang_dir (man_file);
@@ -3370,11 +3362,12 @@ static int display_filesystem (struct candidate *candp)
 			free (cat_file);
 		free (lang);
 		lang = NULL;
-		free (title);
-		free (filename);
-
-		return found;
 	}
+
+out:
+	free (title);
+	free (filename);
+	return found;
 }
 
 #ifdef MAN_DB_UPDATES
@@ -3447,6 +3440,7 @@ static int display_database (struct candidate *candp)
 				free (cat_file);
 			free (lang);
 			lang = NULL;
+			free (file);
 		} /* else {drop through to the bottom and return 0 anyway} */
 	} else
 
@@ -3498,6 +3492,7 @@ static int display_database (struct candidate *candp)
 		}
 
 		found += display (candp->path, NULL, file, title, in->filter);
+		free (file);
 	}
 	free (title);
 	return found;
@@ -3560,6 +3555,7 @@ static int maybe_update_file (const char *manpath, const char *name,
 	if (status)
 		error (0, 0, _("mandb command failed with exit status %d"),
 		       status);
+	free (file);
 
 	return 1;
 }

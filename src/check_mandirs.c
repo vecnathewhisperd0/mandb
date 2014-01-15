@@ -184,22 +184,21 @@ void test_manfile (const char *file, const char *path)
 				return;
 			}
 		} else {
-			struct stat physical;
 			char *abs_filename;
-			
+
 			/* see if the cached file actually exists. It's 
 			   evident at this point that we have multiple 
 			   comp extensions */
 			abs_filename = make_filename (path, NULL,
 						      exists, "man");
-			if (!abs_filename ||
-			    stat (abs_filename, &physical) == -1) {
+			if (!abs_filename) {
 				if (!opt_test)
 					dbdelete (manpage_base, exists);
 			} else {
 				gripe_multi_extensions (path, exists->sec,
 							manpage_base,
 							exists->ext);
+				free (abs_filename);
 				free_mandata_struct (exists);
 				free (manpage);
 				return;
