@@ -14,7 +14,7 @@
 %whatis% \- display one-line manual page descriptions
 .SH SYNOPSIS
 .B %whatis% 
-.RB [\| \-dlhvV \|] 
+.RB [\| \-dlv?V \|]
 .RB [\| \-r \||\| \-w\c 
 \|] 
 .RB [\| \-s
@@ -185,8 +185,11 @@ determined locale.
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
-.if !'po4a'hide' .BR \-h ", " \-\-help
+.if !'po4a'hide' .BR \-? ", " \-\-help
 Print a help message and exit.
+.TP
+.if !'po4a'hide' .BR \-\-usage
+Print a short usage message and exit.
 .TP
 .if !'po4a'hide' .BR \-V ", " \-\-version
 Display version information.

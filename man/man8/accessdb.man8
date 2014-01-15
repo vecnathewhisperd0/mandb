@@ -15,7 +15,7 @@ accessdb \- dumps the content of a man-db database in a human readable
 format
 .SH SYNOPSIS
 .B /usr/sbin/accessdb 
-.RB [\| \-hV \|]
+.RB [\| \-d?V \|]
 .RI [ <index-file> ]
 .SH DESCRIPTION
 .B accessdb 
@@ -42,8 +42,14 @@ zsoelim -> "1 1 795981543 A - - satisfy .so requests in roff input"
 .fi
 .SH OPTIONS
 .TP
-.if !'po4a'hide' .BR \-h ", " \-\-help
+.if !'po4a'hide' .BR \-d ", " \-\-debug
+Print debugging information.
+.TP
+.if !'po4a'hide' .BR \-? ", " \-\-help
 Print a help message and exit.
+.TP
+.if !'po4a'hide' .BR \-\-usage
+Print a short usage message and exit.
 .TP
 .if !'po4a'hide' .BR \-V ", " \-\-version
 Display version information.

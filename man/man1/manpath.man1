@@ -14,7 +14,7 @@
 %manpath% \- determine search path for manual pages
 .SH SYNOPSIS
 .B %manpath%  
-.RB [\| \-qgdchV \|] 
+.RB [\| \-qgdc?V \|]
 .RB [\| \-m
 .IR system \|[\|,.\|.\|.\|]\|]
 .RB [\| \-C
@@ -87,8 +87,11 @@ environment variable.
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
-.if !'po4a'hide' .BR \-h ", " \-\-help
+.if !'po4a'hide' .BR \-? ", " \-\-help
 Print a help message and exit.
+.TP
+.if !'po4a'hide' .BR \-\-usage
+Print a short usage message and exit.
 .TP
 .if !'po4a'hide' .BR \-V ", " \-\-version
 Display version information.

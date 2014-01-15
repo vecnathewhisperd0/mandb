@@ -15,7 +15,7 @@
 %mandb% \- create or update the manual page index caches
 .SH SYNOPSIS
 .B %mandb%  
-.RB [\| \-dqsucpt \||\| \-h \||\| \-V \|]
+.RB [\| \-dqsucpt?V \|]
 .RB [\| \-C
 .IR file \|]
 .RI [\| manpath \|]
@@ -136,8 +136,11 @@ and
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
-.if !'po4a'hide' .BR \-h ", " \-\-help
+.if !'po4a'hide' .BR \-? ", " \-\-help
 Show the usage message, then exit.
+.TP
+.if !'po4a'hide' .BR \-\-usage
+Print a short usage message and exit.
 .TP
 .if !'po4a'hide' .BR \-V ", " \-\-version
 Show the version, then exit.

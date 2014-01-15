@@ -12,7 +12,7 @@ lexgrog \- parse header information in man pages
 .SH SYNOPSIS
 .B lexgrog
 .RB [\| \-m \||\| -c \|]
-.RB [\| \-fhwV \|]
+.RB [\| \-dfw?V \|]
 .RB [\| \-E
 .IR encoding \|]
 .I file
@@ -43,6 +43,9 @@ If one of
 input files is \(lq\-\(rq, it will read from standard input; if any input
 file is compressed, a decompressed version will be read automatically.
 .SH OPTIONS
+.TP
+.if !'po4a'hide' .BR \-d ", " \-\-debug
+Print debugging information.
 .TP
 .if !'po4a'hide' .BR \-m ", " \-\-man
 Parse input as man page source files.
@@ -81,8 +84,11 @@ or
 Override the guessed character set for the page to
 .IR encoding .
 .TP
-.if !'po4a'hide' .BR \-h ", " \-\-help
+.if !'po4a'hide' .BR \-? ", " \-\-help
 Print a help message and exit.
+.TP
+.if !'po4a'hide' .BR \-\-usage
+Print a short usage message and exit.
 .TP
 .if !'po4a'hide' .BR \-V ", " \-\-version
 Display version information.

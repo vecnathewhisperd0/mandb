@@ -14,7 +14,7 @@
 %apropos% \- search the manual page names and descriptions
 .SH SYNOPSIS
 .B %apropos% 
-.RB [\| \-dalhvV  \|] 
+.RB [\| \-dalv?V  \|]
 .RB [\| \-e \||\| \-w \||\| \-r\c
 \|]
 .RB [\| \-s
@@ -181,8 +181,11 @@ determined locale.
 Use this user configuration file rather than the default of
 .IR ~/.manpath .
 .TP
-.if !'po4a'hide' .BR \-h ", " \-\-help
+.if !'po4a'hide' .BR \-? ", " \-\-help
 Print a help message and exit.
+.TP
+.if !'po4a'hide' .BR \-\-usage
+Print a short usage message and exit.
 .TP
 .if !'po4a'hide' .BR \-V ", " \-\-version
 Display version information.
