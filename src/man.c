@@ -2501,8 +2501,8 @@ static int display (const char *dir, const char *man_file,
 				++seq_ncmds;
 				free (name);
 				free_locale_bits (&bits);
-			}
-			free (page_lang);
+			} else
+				free (page_lang);
 		}
 #endif /* TROFF_IS_GROFF */
 
