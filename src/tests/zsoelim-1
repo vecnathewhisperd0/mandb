@@ -18,7 +18,8 @@ cat >"$tmpdir/fake-program" <<EOF
 exec cat
 EOF
 chmod +x "$tmpdir/fake-program"
-export PATH="$(pwd -P)/$tmpdir:$PATH"
+PATH="$(pwd -P)/$tmpdir:$PATH"
+export PATH
 
 cat >>"$tmpdir/manpath.config" <<EOF
 DEFINE tbl fake-program

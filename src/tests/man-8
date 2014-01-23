@@ -9,14 +9,16 @@
 
 init
 fake_config /usr/share/man
-export MANPATH="$tmpdir/usr/share/man"
+MANPATH="$tmpdir/usr/share/man"
+export MANPATH
 
 cat >"$tmpdir/fake-program" <<EOF
 #! /bin/sh
 exec cat
 EOF
 chmod +x "$tmpdir/fake-program"
-export PATH="$(pwd -P)/$tmpdir:$PATH"
+PATH="$(pwd -P)/$tmpdir:$PATH"
+export PATH
 
 cat >>"$tmpdir/manpath.config" <<EOF
 DEFINE tbl fake-program
