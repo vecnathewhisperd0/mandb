@@ -1443,7 +1443,9 @@ uninstall-am:
 @PO4A_TRUE@	rm -rf $(STAGING)
 @PO4A_TRUE@	$(MKDIR_P) $(STAGING)
 @PO4A_TRUE@	set -e; for f in po/$(DOMAIN).pot $(POFILES); do \
+@PO4A_TRUE@		base=`basename $$f`; \
 @PO4A_TRUE@		cp -p $(srcdir)/$$f $(STAGING)/; \
+@PO4A_TRUE@		chmod u+w $(STAGING)/$$base; \
 @PO4A_TRUE@	done
 @PO4A_TRUE@	$(RUN_PO4A) $(srcdir)/po4a.cfg
 @PO4A_TRUE@	rm -rf $(STAGING)

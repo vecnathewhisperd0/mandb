@@ -49,7 +49,9 @@ all-local:
 	rm -rf $(STAGING)
 	$(MKDIR_P) $(STAGING)
 	set -e; for f in po/$(DOMAIN).pot $(POFILES); do \
+		base=`basename $$f`; \
 		cp -p $(srcdir)/$$f $(STAGING)/; \
+		chmod u+w $(STAGING)/$$base; \
 	done
 	$(RUN_PO4A) $(srcdir)/po4a.cfg
 	rm -rf $(STAGING)
