@@ -22,12 +22,13 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
 		    DBTYPE=$(DBTYPE); export DBTYPE; \
 		    MANDIR_LAYOUT=$(MANDIR_LAYOUT); export MANDIR_LAYOUT; \
 		    top_builddir=$(top_builddir); export top_builddir; \
-		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR;
+		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR; \
+		    OVERRIDE_DIR="@override_dir@"; export OVERRIDE_DIR;
 # Each test must use the configure-detected shell, not necessarily /bin/sh.
 AM_LOG_FLAGS = $(SHELL)
 ALL_TESTS = \
 	lexgrog-1 \
-	man-1 man-2 man-3 man-4 man-5 man-6 man-7 man-8 \
+	man-1 man-2 man-3 man-4 man-5 man-6 man-7 man-8 man-9 \
 	manconv-1 manconv-2 manconv-3 \
 	mandb-1 mandb-2 mandb-3 mandb-4 mandb-5 mandb-6 \
 	whatis-1 \

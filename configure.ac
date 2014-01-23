@@ -118,6 +118,15 @@ AC_ARG_ENABLE([cats],
 		AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])
 	 fi],
 	[AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])])
+AC_ARG_WITH([override-dir],
+[AS_HELP_STRING([--with-override-dir=OVERRIDE], [use OVERRIDE as relative override dir inside the man path - the first directory to be searched when looking for man pages])],
+	[if test "$withval" = "yes" || test "$withval" = "no"
+	 then
+		AC_MSG_ERROR([--with-override-dir requires an argument])
+	 else
+		override_dir=$withval
+	 fi],
+	[: ${override_dir=""}])
 
 # Finish the argument parsing.
 AC_SUBST([man_owner])dnl
@@ -126,6 +135,7 @@ AC_SUBST([config_file])dnl
 AC_SUBST([config_file_basename])dnl
 AC_SUBST([config_file_dirname])dnl
 AC_SUBST([sections])dnl
+AC_SUBST([override_dir])dnl
 
 # Check $PATH for the following programs and append suitable options.
 AC_PROG_CC

@@ -931,6 +931,24 @@ static char *def_path (int flag)
 }
 
 /*
+ * If specified with configure, append OVERRIDE_DIR to dir param and add it
+ * to the lp list.
+ */
+static void insert_override_dir (char **lp, const char *dir)
+{
+	char *override_dir = NULL;
+
+	if (!strlen (OVERRIDE_DIR)) {
+		return;
+	}
+
+	if ((override_dir = xasprintf ("%s/%s", dir, OVERRIDE_DIR))) {
+		add_dir_to_list (lp, override_dir);
+		free (override_dir);
+	}
+}
+
+/*
  * For each directory in the user's path, see if it is one of the
  * directories listed in the man_db.config file.  If so, and it is
  * not already in the manpath, add it.  If the directory is not listed
@@ -977,6 +995,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 		if (mandir_list) {
 			debug ("is in the config file\n");
 			while (mandir_list) {
+				insert_override_dir(tmplist, mandir_list->cont);
 				add_dir_to_list (tmplist, mandir_list->cont);
 				mandir_list = iterate_over_list
 					(mandir_list, p, MANPATH_MAP);
@@ -994,7 +1013,8 @@ char *get_manpath_from_path (const char *path, int mandatory)
 				debug ("but does have a ../man, man, "
 				       "../share/man, or share/man "
 				       "subdirectory\n");
-	
+
+				insert_override_dir(tmplist, t);
 				add_dir_to_list (tmplist, t);
 				free (t);
 		 	} else
@@ -1010,8 +1030,10 @@ char *get_manpath_from_path (const char *path, int mandatory)
 		debug ("\nadding mandatory man directories\n\n");
 
 		for (list = namestore; list; list = list->next)
-			if (list->flag == MANDATORY) 
+			if (list->flag == MANDATORY) {
+				insert_override_dir(tmplist, list->key);
 				add_dir_to_list (tmplist, list->key);
+			}
 	}
 
 	len = 0;

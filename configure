@@ -1486,6 +1486,7 @@ browser
 cat
 WARN_CFLAGS
 ARFLAGS
+override_dir
 sections
 config_file_dirname
 config_file_basename
@@ -1631,6 +1632,7 @@ with_sections
 enable_automatic_create
 enable_automatic_update
 enable_cats
+with_override_dir
 enable_largefile
 enable_threads
 with_browser
@@ -2338,6 +2340,10 @@ Optional Packages:
   --with-sections=SECTIONS
                           use manual page sections SECTIONS [1 n l 8 3 0 2 5 4
                           9 6 7]
+  --with-override-dir=OVERRIDE
+                          use OVERRIDE as relative override dir inside the man
+                          path - the first directory to be searched when
+                          looking for man pages
   --with-browser=BROWSER  use BROWSER as default web browser
   --with-pager=PAGER      use PAGER as default pager
   --with-nroff=NROFF      use NROFF as roff formatter for character devices
@@ -13363,6 +13369,19 @@ else
 
 $as_echo "#define MAN_CATS 1" >>confdefs.h
 
+fi
+
+
+# Check whether --with-override-dir was given.
+if test "${with_override_dir+set}" = set; then :
+  withval=$with_override_dir; if test "$withval" = "yes" || test "$withval" = "no"
+	 then
+		as_fn_error $? "--with-override-dir requires an argument" "$LINENO" 5
+	 else
+		override_dir=$withval
+	 fi
+else
+  : ${override_dir=""}
 fi
 
 
