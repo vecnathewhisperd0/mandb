@@ -30,7 +30,7 @@
 char *appendstr (char *str, ...)
 {
       va_list ap;
-      int len, newlen;
+      size_t len, newlen;
       char *next, *end;
 
       len = str ? strlen (str) : 0;
