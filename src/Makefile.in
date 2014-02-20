@@ -86,7 +86,7 @@ pkglibexec_PROGRAMS = globbing$(EXEEXT) manconv$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(srcdir)/man_db.conf.in lexgrog.c zsoelim.c \
-	$(top_srcdir)/tools/depcomp $(top_srcdir)/tools/ylwrap
+	$(top_srcdir)/build-aux/depcomp $(top_srcdir)/build-aux/ylwrap
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/man-bdb.m4 \
 	$(top_srcdir)/m4/man-check-progs.m4 \
@@ -344,7 +344,7 @@ am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
-depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
+depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -373,7 +373,7 @@ AM_V_LEX = $(am__v_LEX_@AM_V@)
 am__v_LEX_ = $(am__v_LEX_@AM_DEFAULT_V@)
 am__v_LEX_0 = @echo "  LEX     " $@;
 am__v_LEX_1 = 
-YLWRAP = $(top_srcdir)/tools/ylwrap
+YLWRAP = $(top_srcdir)/build-aux/ylwrap
 SOURCES = $(accessdb_SOURCES) $(catman_SOURCES) $(globbing_SOURCES) \
 	$(lexgrog_SOURCES) $(man_SOURCES) $(manconv_SOURCES) \
 	$(mandb_SOURCES) $(manpath_SOURCES) $(whatis_SOURCES) \
