@@ -1976,6 +1976,7 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 	}
 
 	if (pager_cmd) {
+		pipecmd_chdir (pager_cmd, cwd);
 		setenv_less (pager_cmd, title);
 		pipeline_command (p, pager_cmd);
 	}

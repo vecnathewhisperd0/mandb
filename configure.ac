@@ -472,7 +472,7 @@ AC_TYPE_UID_T
 AC_TYPE_SIZE_T
 
 # Check for pipeline library.
-PKG_CHECK_MODULES([libpipeline], [libpipeline >= 1.1.0])
+PKG_CHECK_MODULES([libpipeline], [libpipeline >= 1.3.0])
 
 # Find a suitable database interface header and library.
 #
