@@ -1,3 +1,11 @@
+man-db 2.10.2
+=============
+
+Improvements:
+
+ * Make `man -H` sleep for a few seconds after starting the browser, since
+   it may background itself before loading files (Dr. Werner Fink).
+
 man-db 2.10.1 (10 February 2022)
 ================================
 

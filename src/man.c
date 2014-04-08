@@ -2018,7 +2018,9 @@ static void format_display (decompress *d,
 				error (CHILD_FAIL, 0,
 				       "no browser configured, so cannot show "
 				       "HTML output");
-		}
+		} else if (!disp_status)
+			sleep (5);  /* firefox runs into background too fast */
+
 		free (browser_list);
 		if (remove_directory (htmldir, 0) == -1)
 			error (0, errno, _("can't remove directory %s"),
