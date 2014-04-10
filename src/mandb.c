@@ -435,17 +435,19 @@ static int mandb (const char *catpath, const char *manpath)
 	if (!quiet) 
 		printf (_("Processing manual pages under %s...\n"), manpath);
 
-	cachedir_tag = xasprintf ("%s/CACHEDIR.TAG", catpath);
-	if (stat (cachedir_tag, &st) == -1 && errno == ENOENT) {
-		FILE *cachedir_tag_file;
+	if (!STREQ (catpath, manpath)) {
+		cachedir_tag = xasprintf ("%s/CACHEDIR.TAG", catpath);
+		if (stat (cachedir_tag, &st) == -1 && errno == ENOENT) {
+			FILE *cachedir_tag_file;
 
-		cachedir_tag_file = fopen (cachedir_tag, "w");
-		if (cachedir_tag_file) {
-			fputs (CACHEDIR_TAG, cachedir_tag_file);
-			fclose (cachedir_tag_file);
+			cachedir_tag_file = fopen (cachedir_tag, "w");
+			if (cachedir_tag_file) {
+				fputs (CACHEDIR_TAG, cachedir_tag_file);
+				fclose (cachedir_tag_file);
+			}
 		}
+		free (cachedir_tag);
 	}
-	free (cachedir_tag);
 
 #ifdef NDBM
 #  ifdef BERKELEY_DB

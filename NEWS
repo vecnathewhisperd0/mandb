@@ -12,6 +12,10 @@ Major changes since man-db 2.6.6:
 	  the manual hierarchy.  (As a result of this fix, man-db now
 	  requires libpipeline >= 1.3.0.)
 
+	o mandb only creates a cache directory tag if the catpath is
+	  different from the manpath, since it should only be created in
+	  directories that consist entirely of cached information.
+
 man-db 2.6.6 (23 January 2014)
 ==============================
 
