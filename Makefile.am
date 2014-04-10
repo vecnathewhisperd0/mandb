@@ -28,6 +28,7 @@ EXTRA_DIST = \
 	.gitignore \
 	ChangeLog-2013 \
 	autogen.sh \
+	gnulib/argp-domain.patch \
 	gnulib/m4/gnulib-cache.m4 \
 	gnulib/m4/gnulib-tool.m4 \
 	release.sh
