@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 m4_pattern_forbid([^MAN_])
 
 # Initialise and check we're in the correct directory.
-AC_INIT([man-db], [2.6.7], [cjwatson@debian.org])
+AC_INIT([man-db], [2.6.7.1], [cjwatson@debian.org])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([1.11 -Wall -Wno-override -Werror foreign dist-xz no-dist-gzip parallel-tests])
 AM_MAINTAINER_MODE
