@@ -12,9 +12,10 @@ fake_config /usr/share/man
 mkdir -p "$tmpdir/usr/share/man"
 mkdir -p "$tmpdir/usr/dir/man"
 mkdir -p "$tmpdir/var/cache/man"
-echo "MANDATORY_MANPATH	" $(realpath $tmpdir/usr/share/man) > "$tmpdir/manpath.config"
-echo "MANDATORY_MANPATH	" $(realpath $tmpdir/usr/dir/man) >> "$tmpdir/manpath.config"
-echo "MANDB_MAP " $(realpath $tmpdir/usr/share/man) $(realpath $tmpdir/var/cache/man) >> "$tmpdir/manpath.config"
+realtmpdir="$(pwd -P)/$tmpdir"
+echo "MANDATORY_MANPATH	$realtmpdir/usr/share/man" > "$tmpdir/manpath.config"
+echo "MANDATORY_MANPATH	$realtmpdir/usr/dir/man" >> "$tmpdir/manpath.config"
+echo "MANDB_MAP $realtmpdir/usr/share/man $realtmpdir/var/cache/man" >> "$tmpdir/manpath.config"
 
 write_page test 1 "$tmpdir/usr/share/man/man1/test.1" UTF-8 '' '' \
 	'test \- simple mandb test'
