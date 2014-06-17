@@ -216,7 +216,7 @@ static void match_in_directory (const char *path, const char *pattern, int opts,
 	size_t my_allocated = 0;
 	int flags;
 	regex_t preg;
-	struct pattern_bsearch pattern_start;
+	struct pattern_bsearch pattern_start = { NULL, -1 };
 	char **bsearched;
 	size_t i;
 
