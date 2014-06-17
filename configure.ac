@@ -127,6 +127,12 @@ AC_ARG_WITH([override-dir],
 		override_dir=$withval
 	 fi],
 	[: ${override_dir=""}])
+AC_ARG_WITH([systemdtmpfilesdir],
+[AS_HELP_STRING([--with-systemdtmpfilesdir=DIR], [Directory for systemd tmpfiles configuration])],
+	[], [dnl
+	# The default is not prefix-sensitive, since systemd's prefix is not
+	# necessarily the same as man-db's.
+	with_systemdtmpfilesdir=/usr/lib/tmpfiles.d])
 
 # Finish the argument parsing.
 AC_SUBST([man_owner])dnl
@@ -136,6 +142,7 @@ AC_SUBST([config_file_basename])dnl
 AC_SUBST([config_file_dirname])dnl
 AC_SUBST([sections])dnl
 AC_SUBST([override_dir])dnl
+AC_SUBST([systemdtmpfilesdir], [$with_systemdtmpfilesdir])
 
 # Check $PATH for the following programs and append suitable options.
 AC_PROG_CC
@@ -562,6 +569,8 @@ AM_CONDITIONAL([CROSS_COMPILING], [test "x$cross_compiling" = xyes])
 AC_CONFIG_FILES([Makefile
 	gnulib/lib/Makefile
 	gnulib/po/Makefile.in
+	init/Makefile
+	init/systemd/Makefile
 	lib/Makefile
 	src/Makefile
 	src/man_db.conf

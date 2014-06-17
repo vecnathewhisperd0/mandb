@@ -1490,6 +1490,7 @@ browser
 cat
 WARN_CFLAGS
 ARFLAGS
+systemdtmpfilesdir
 override_dir
 sections
 config_file_dirname
@@ -1637,6 +1638,7 @@ enable_automatic_create
 enable_automatic_update
 enable_cats
 with_override_dir
+with_systemdtmpfilesdir
 enable_largefile
 enable_threads
 with_browser
@@ -2348,6 +2350,8 @@ Optional Packages:
                           use OVERRIDE as relative override dir inside the man
                           path - the first directory to be searched when
                           looking for man pages
+  --with-systemdtmpfilesdir=DIR
+                          Directory for systemd tmpfiles configuration
   --with-browser=BROWSER  use BROWSER as default web browser
   --with-pager=PAGER      use PAGER as default pager
   --with-nroff=NROFF      use NROFF as roff formatter for character devices
@@ -13390,7 +13394,19 @@ else
 fi
 
 
+# Check whether --with-systemdtmpfilesdir was given.
+if test "${with_systemdtmpfilesdir+set}" = set; then :
+  withval=$with_systemdtmpfilesdir;
+else
+  	# The default is not prefix-sensitive, since systemd's prefix is not
+	# necessarily the same as man-db's.
+	with_systemdtmpfilesdir=/usr/lib/tmpfiles.d
+fi
+
+
 # Finish the argument parsing.
+systemdtmpfilesdir=$with_systemdtmpfilesdir
+
 
 # Check $PATH for the following programs and append suitable options.
 ac_ext=c
@@ -42588,7 +42604,7 @@ else
 fi
 
 
-ac_config_files="$ac_config_files Makefile gnulib/lib/Makefile gnulib/po/Makefile.in lib/Makefile src/Makefile src/man_db.conf src/tests/Makefile man/Makefile man/replace.sin man/po4a/Makefile man/da/Makefile man/de/Makefile man/es/Makefile man/fr/Makefile man/id/Makefile man/it/Makefile man/ja/Makefile man/nl/Makefile man/pl/Makefile man/ru/Makefile man/zh_CN/Makefile manual/Makefile libdb/Makefile docs/Makefile tools/Makefile include/comp_src.h include/manconfig.h po/Makefile.in"
+ac_config_files="$ac_config_files Makefile gnulib/lib/Makefile gnulib/po/Makefile.in init/Makefile init/systemd/Makefile lib/Makefile src/Makefile src/man_db.conf src/tests/Makefile man/Makefile man/replace.sin man/po4a/Makefile man/da/Makefile man/de/Makefile man/es/Makefile man/fr/Makefile man/id/Makefile man/it/Makefile man/ja/Makefile man/nl/Makefile man/pl/Makefile man/ru/Makefile man/zh_CN/Makefile manual/Makefile libdb/Makefile docs/Makefile tools/Makefile include/comp_src.h include/manconfig.h po/Makefile.in"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -43707,6 +43723,8 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "gnulib/lib/Makefile") CONFIG_FILES="$CONFIG_FILES gnulib/lib/Makefile" ;;
     "gnulib/po/Makefile.in") CONFIG_FILES="$CONFIG_FILES gnulib/po/Makefile.in" ;;
+    "init/Makefile") CONFIG_FILES="$CONFIG_FILES init/Makefile" ;;
+    "init/systemd/Makefile") CONFIG_FILES="$CONFIG_FILES init/systemd/Makefile" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "src/man_db.conf") CONFIG_FILES="$CONFIG_FILES src/man_db.conf" ;;
