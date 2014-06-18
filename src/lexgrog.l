@@ -837,6 +837,8 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	if (page_encoding)
 		add_manconv (p, page_encoding, "UTF-8");
 	free (page_encoding);
+	if (p_lg->type && *COL)
+		pipeline_command_args (p, COL, "-b", "-p", "-x", NULL);
 	pipeline_start (p);
 
 	ret = find_name_decompressed (p, filename, p_lg);
