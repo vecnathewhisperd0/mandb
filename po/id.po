@@ -1,20 +1,21 @@
 # Pesan bahasa indonesia untuk man-db
 # Copyright (C) 2008 Colin Watson (msgids)
 # This file is distributed under the same license as the man-db package.
-# Arif E. Nugroho <arif_endro@yahoo.com>, 2008, 2009.
+# Arif E. Nugroho <arif_endro@yahoo.com>, 2008, 2009, 2010, 2011, 2012, 2013, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.5.6-pre1\n"
+"Project-Id-Version: man-db 2.6.6-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2014-04-10 03:29+0100\n"
-"PO-Revision-Date: 2009-09-08 19:00+0700\n"
+"PO-Revision-Date: 2014-08-10 19:00+0700\n"
 "Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: lib/security.c:74
 #, c-format
@@ -52,7 +53,7 @@ msgid "cannot replace key %s"
 msgstr "tidak dapat menggantikan kunci %s"
 
 #: libdb/db_lookup.c:182 libdb/db_lookup.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
 msgstr[0] "hanya bagian %d ada dalam isi"
@@ -263,7 +264,7 @@ msgid "the page name contains wildcards"
 msgstr "nama halaman berisi huruf bebas"
 
 #: src/lexgrog.l:672
-#, fuzzy, c-format
+#, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "peringatan: whatis untuk %s melebihi %d bytes, dipotong."
@@ -453,7 +454,6 @@ msgid "turn off hyphenation"
 msgstr "non-aktifkan hyphenasi"
 
 #: src/man.c:325
-#, fuzzy
 msgid "turn off justification"
 msgstr "non-aktifkan hyphenasi"
 
@@ -722,7 +722,7 @@ msgid "Processing manual pages under %s...\n"
 msgstr "Memproses halaman buku panduan dibawah %s...\n"
 
 #: src/mandb.c:632 src/mandb.c:658
-#, fuzzy, c-format
+#, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Memeriksa untuk cats menyimpang dibawah %s...\n"
 
@@ -733,32 +733,32 @@ msgstr ""
 "peringatan: tidak ada direktif MANDB_MAP dalam %s, menggunakan jalur man anda"
 
 #: src/mandb.c:886
-#, fuzzy, c-format
+#, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] ""
-"%d man subdirektori berisi halaman buku panduan lebih baru.\n"
-"%d halaman buku panduan telah ditambahkan.\n"
+"%d man subdirektori berisi halaman buku panduan lebih baru. halaman buku "
+"panduan telah ditambahkan.\n"
 msgstr[1] ""
-"%d man subdirektori berisi halaman buku panduan lebih baru.\n"
-"%d halaman buku panduan telah ditambahkan.\n"
+"%d man subdirektori berisi halaman buku panduan lebih baru. halaman buku "
+"panduan telah ditambahkan.\n"
 
 #: src/mandb.c:891
-#, fuzzy, c-format
+#, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
-msgstr[0] " Halaman buku panduan "
-msgstr[1] " Halaman buku panduan "
+msgstr[0] "%d Halaman buku panduan \n"
+msgstr[1] "%d Halaman buku panduan \n"
 
 #: src/mandb.c:895
-#, fuzzy, c-format
+#, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d cats menyimpang telah ditambahkan.\n"
 msgstr[1] "%d cats menyimpang telah ditambahkan.\n"
 
 #: src/mandb.c:900
-#, fuzzy, c-format
+#, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d masukan basis data lama telah dihapus.\n"
@@ -915,7 +915,6 @@ msgid "do not trim output to terminal width"
 msgstr "jangan trim keluaran ke lebar terminal"
 
 #: src/whatis.c:130
-#, fuzzy
 msgid "search only these sections (colon-separated)"
 msgstr "hanya cari di bagian ini"
 
@@ -976,35 +975,8 @@ msgstr "%s:%d: quote tidak terselesaikan dalam permintaan roff"
 msgid "compatibility switch (ignored)"
 msgstr "pilihan untuk kompabilitas saja (diabaikan)"
 
-#~ msgid "can't fork"
-#~ msgstr "tidak dapat fork"
-
-#~ msgid "fork failed"
-#~ msgstr "fork gagal"
-
-#~ msgid "can't get man command's exit status"
-#~ msgstr "tidak dapat memperoleh status keluar perintah man"
-
-#~ msgid "unable to reset cursor position in %s"
-#~ msgstr "tidak dapat mereset posisi kursor dalam %s"
-
 #~ msgid "badly formed configuration directive: '%s'"
 #~ msgstr "konfigurasi direktif dibentuk secara buruk: '%s'"
-
-#~ msgid "can't install SIGCHLD handler"
-#~ msgstr "tidak dapat memasang pengelola SIGCHLD"
-
-#~ msgid "waitpid failed"
-#~ msgstr "waitpid gagal"
-
-#~ msgid "%s: %s (core dumped)"
-#~ msgstr "%s:  %s (core dikeluarkan)"
-
-#~ msgid "%s: %s"
-#~ msgstr "%s: %s"
-
-#~ msgid "can't execute %s"
-#~ msgstr "tidak dapat menjalankan %s"
 
 #~ msgid "pipeline input not open"
 #~ msgstr "baris pipa masukan tidak terbuka"
@@ -1015,11 +987,17 @@ msgstr "pilihan untuk kompabilitas saja (diabaikan)"
 #~ msgid "pipe failed"
 #~ msgstr "pipa gagal"
 
+#~ msgid "fork failed"
+#~ msgstr "fork gagal"
+
 #~ msgid "dup2 failed"
 #~ msgstr "dup2 gagal"
 
 #~ msgid "close failed"
 #~ msgstr "gagal menutup"
+
+#~ msgid "can't execute %s"
+#~ msgstr "tidak dapat menjalankan %s"
 
 #~ msgid "closing pipeline input stream failed"
 #~ msgstr "penutupan baris pipa masukan stream gagal"
@@ -1033,14 +1011,35 @@ msgstr "pilihan untuk kompabilitas saja (diabaikan)"
 #~ msgid "closing pipeline output failed"
 #~ msgstr "penutupan baris pipa keluaran gagal"
 
-#~ msgid "SECTION"
-#~ msgstr "BAGIAN"
+#~ msgid "%s: %s (core dumped)"
+#~ msgstr "%s:  %s (core dikeluarkan)"
+
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
+#~ msgid "waitpid failed"
+#~ msgstr "waitpid gagal"
+
+#~ msgid "can't install SIGCHLD handler"
+#~ msgstr "tidak dapat memasang pengelola SIGCHLD"
+
+#~ msgid "cannot insert unused key %s"
+#~ msgstr "tidak dapat memasukan kunci yang tidak digunakan %s"
+
+#~ msgid "can't get man command's exit status"
+#~ msgstr "tidak dapat memperoleh status keluar perintah man"
+
+#~ msgid "unable to reset cursor position in %s"
+#~ msgstr "tidak dapat mereset posisi kursor dalam %s"
 
 #~ msgid "can't get passwd structure for uid 0"
 #~ msgstr "tidak dapat memperoleh struktur passwd untuk uid 0"
 
-#~ msgid "cannot insert unused key %s"
-#~ msgstr "tidak dapat memasukan kunci yang tidak digunakan %s"
+#~ msgid "can't fork"
+#~ msgstr "tidak dapat fork"
+
+#~ msgid "SECTION"
+#~ msgstr "BAGIAN"
 
 #~ msgid "Don't know which program should I run being >%s<\n"
 #~ msgstr "Tidak tahu aplikasi mana yang harus saya jalankan sebagai >%s<\n"
