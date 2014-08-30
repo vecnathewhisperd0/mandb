@@ -3,14 +3,24 @@
 # This file is distributed under the same license as the man-db package.
 # Joe Hansen <joedalton2@yahoo.dk>, 2012, 2014.
 #
+# cat -> katalog
+# dbs -> databaser
 # locale -> sprog
+# options -> tilvalg
 # pager -> tekstviser
+# pipeline -> datakanal
+# preprocessor -> forbehandler
+# section -> afsnit
+# stray cats -> vildfarne katalogsider
+#
+# <device> -> <enhed>
+# <item> -> <punkt> (er kun i en tekststreng her og ikke i selve programfilen).
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.6.6-pre2\n"
 "POT-Creation-Date: 2014-01-15 15:41+0000\n"
-"PO-Revision-Date: 2014-01-18 07:50+0200\n"
+"PO-Revision-Date: 2014-08-30 07:50+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: \n"
@@ -379,7 +389,7 @@ msgstr "Vis versionsinformation."
 #: ../../man/man8/mandb.man8:147
 #, no-wrap
 msgid "EXIT STATUS"
-msgstr ""
+msgstr "AFSLUT-STATUS"
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:196 ../../man/man1/lexgrog.man1:99
@@ -461,13 +471,13 @@ msgstr "FILER"
 #: ../../man/man1/whatis.man1:242 ../../man/man8/catman.man8:103
 #: ../../man/man8/mandb.man8:210
 msgid "A traditional global I<index> database cache."
-msgstr ""
+msgstr "Et traditionelt globalt I<index>-databasemellemlager."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:253 ../../man/man1/man.man1:1359
 #: ../../man/man1/whatis.man1:248 ../../man/man8/mandb.man8:203
 msgid "An FHS compliant global I<index> database cache."
-msgstr ""
+msgstr "Et FHS-overholdende globalt I<index>-databasemellemlager."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:258 ../../man/man1/whatis.man1:253
@@ -548,6 +558,8 @@ msgid ""
 "Parse input as preformatted man pages (\\(lqcat pages\\(rq).  B<--man> and "
 "B<--cat> may not be given simultaneously."
 msgstr ""
+"Fortolk inddata som præformaterede manualsider (\\(lqcat pages\\(rq). B<--"
+"man> og B<--cat> kan ikke angives simultant."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:75
@@ -556,6 +568,9 @@ msgid ""
 "B<apropos> and B<whatis>.  This is the default if neither B<--whatis> nor "
 "B<--filters> is given."
 msgstr ""
+"Vis navnet og beskrivelsen fra manualsidens teksthoved, som brugt af "
+"B<apropos> og B<whatis>. Dette er standarden hvis hverken B<--whatis> eller "
+"B<--filters> er angivet."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:82
@@ -563,6 +578,8 @@ msgid ""
 "Display the list of filters needed to preprocess the man page before "
 "formatting with B<nroff> or B<troff>."
 msgstr ""
+"Vis listen med filtre krævet for at forbehandle manualsiden før formatering "
+"med B<nroff> eller B<troff>."
 
 #. type: TP
 #: ../../man/man1/lexgrog.man1:82
@@ -573,7 +590,7 @@ msgstr "B<-E> I<kodning>, B<--encoding> I<kodning>"
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:86
 msgid "Override the guessed character set for the page to I<encoding>."
-msgstr ""
+msgstr "Overstyr det gættede tegnsæt for siden til I<encoding>."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:102
@@ -584,6 +601,7 @@ msgstr "Fejl i anvendelse."
 #: ../../man/man1/lexgrog.man1:106
 msgid "B<lexgrog> failed to parse one or more of its input files."
 msgstr ""
+"B<lexgrog> mislykkedes i at fortolke en eller flere af dets inddatafiler."
 
 #. type: SH
 #: ../../man/man1/lexgrog.man1:106 ../../man/man1/man.man1:278
@@ -604,6 +622,14 @@ msgid ""
 "  $ lexgrog broken.1\n"
 "  broken.1: parse failed\n"
 msgstr ""
+"  $ lexgrog man.1\n"
+"  man.1: \"man - an interface to the on-line reference manuals\"\n"
+"  $ lexgrog -fw man.1\n"
+"  man.1 (t): \"man - an interface to the on-line reference manuals\"\n"
+"  $ lexgrog -c whatis.cat1 \n"
+"  whatis.cat1: \"whatis - display manual page descriptions\"\n"
+"  $ lexgrog broken.1\n"
+"  broken.1: parse failed\n"
 
 #. type: SH
 #: ../../man/man1/lexgrog.man1:117
@@ -671,6 +697,8 @@ msgid ""
 "(A macro which starts a new paragraph, like CW<.PP>, may be used instead of "
 "the break macro CW<.br>.)"
 msgstr ""
+"(En makro som starter et nyt afsnit, såsom CW<.PP>, kan bruges i stedet for "
+"break-makroen CW<.br>.)"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:178
@@ -678,6 +706,8 @@ msgid ""
 "When using the BSD-derived I<mdoc> macro set, a correct B<NAME> section "
 "looks something like this:"
 msgstr ""
+"Når der bruges det BSD-afledte I<mdoc>-makrosæt, så ligner en korrekt "
+"B<NAME>-sektion noget lignende dette:"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:185
@@ -687,6 +717,9 @@ msgid ""
 "\\&.Nm foo\n"
 "\\&.Nd program to do something>\n"
 msgstr ""
+"CW<\\&.Sh NAVN\n"
+"\\&.Nm foo\n"
+"\\&.Nd program der skal udføre noget>\n"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:197
@@ -698,12 +731,18 @@ msgid ""
 "free-form text there rather than \\(oqname \\e- description\\(cq.  However, "
 "any syntax resembling the above should be accepted."
 msgstr ""
+"Der er flere gængse årsager til at whatis-fortolkning mislykkes. Nogle gange "
+"erstatter forfattere af manualsider \\(oq.SH NAME\\(cq med \\(oq.SH MYPROGRAM"
+"\\(cq, og så kan B<%mandb%> ikke finde afsnittet hvorfra informationen, den "
+"har brug for, skal udtrækkes. Undertiden inkluderer forfatteren et NAVNE-"
+"afsnit, men placerer fri-form tekst der frem for \\(oqname \\e- beskrivelse"
+"\\(cq. Dog bør enhver syntaks der ligner ovenstående blive accepteret."
 
 #. type: SH
 #: ../../man/man1/lexgrog.man1:202
 #, no-wrap
 msgid "NOTES"
-msgstr ""
+msgstr "NOTER"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:207
@@ -712,6 +751,9 @@ msgid ""
 "able to do so correctly if the files are properly installed in a manual page "
 "hierarchy."
 msgstr ""
+"B<lexgrog> forsøger at fortolke filer der indeholder .so-forespørgsler, men "
+"vil kun kunne gøre det korrekt hvis filerne er korrekt installeret i et "
+"manualsidehierarki."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:211
@@ -814,6 +856,8 @@ msgid ""
 "B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] "
 "I<page> \\&.\\|.\\|."
 msgstr ""
+"B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<fil>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] "
+"I<side> \\&.\\|.\\|."
 
 #.  --help and --version
 #. type: Plain text
@@ -850,6 +894,8 @@ msgid ""
 "The table below shows the I<section> numbers of the manual followed by the "
 "types of pages they contain."
 msgstr ""
+"Tabellen nedenfor viser I<section>-antallet af manualen efterfulgt af typen "
+"af sider de indeholder."
 
 #. type: tbl table
 #: ../../man/man1/man.man1:187
@@ -912,7 +958,7 @@ msgstr "Kernerutiner [\\|Ikkestandard\\|]"
 #. type: Plain text
 #: ../../man/man1/man.man1:220
 msgid "A manual I<page> consists of several sections."
-msgstr ""
+msgstr "En manualside består af flere afsnit."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:240
@@ -922,6 +968,10 @@ msgid ""
 "B<ENVIRONMENT>, B<FILES>, B<VERSIONS>, B<CONFORMING\\ TO>, B<NOTES>, "
 "B<BUGS>, B<EXAMPLE>, B<AUTHORS>, and B<SEE\\ ALSO>."
 msgstr ""
+"Konventionelle afsnitsnavne inkluderer B<NAVN>, B<SYNOPSIS>, "
+"B<KONFIGURATION>, B<BESKRIVELSE>, B<TILVALG>, B<AFSLUT-STATUS>, "
+"B<RETURVÆRDI>, B<FEJL>, B<MILJØ>, B<FILER>, B<VERSIONER>, B<KONFORMERER "
+"TIL>, B<NOTER>, B<FEJL>, B<EKSEMPEL>, B<FORFATTERE>, og B<SE OGSÅ>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:244
@@ -929,6 +979,8 @@ msgid ""
 "The following conventions apply to the B<SYNOPSIS> section and can be used "
 "as a guide in other sections."
 msgstr ""
+"De følgende konventioner gælder for afsnittet B<SYNOPSIS> og kan bruges som "
+"en vejledning i andre afsnit."
 
 #. type: tbl table
 #: ../../man/man1/man.man1:248
@@ -1000,7 +1052,7 @@ msgstr "[\\|I<udtryk>\\|] .\\|.\\|."
 #: ../../man/man1/man.man1:263
 #, no-wrap
 msgid "entire I<expression>\\ within [ ] is repeatable."
-msgstr ""
+msgstr "hele I<udtrykket>\\ indenfor [ ] kan gentages."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:271
@@ -1009,6 +1061,9 @@ msgid ""
 "will usually not be able to render italics when running in a terminal, and "
 "will typically use underlined or coloured text instead."
 msgstr ""
+"Præcis optegning kan afhænge af uddataenheden. For eksempel vil man normalt "
+"ikke kunne optegne kursiv når man befinder sig i en manual, og man vil "
+"normalt bruge understregning eller farvelagt tekst i stedet for."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:278
@@ -1023,12 +1078,12 @@ msgstr ""
 #: ../../man/man1/man.man1:279
 #, no-wrap
 msgid "B<%man%>I<\\ ls>"
-msgstr ""
+msgstr "B<%man%>I<\\ ls>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:285
 msgid "Display the manual page for the I<item> (program)  I<ls>."
-msgstr ""
+msgstr "Vis manualsiden for i<punkt> (program) I<ls>."
 
 #. type: TP
 #: ../../man/man1/man.man1:285
@@ -1861,7 +1916,7 @@ msgstr ""
 #: ../../man/man1/man.man1:1095
 #, no-wrap
 msgid "B<-T>[I<device>], B<--troff-device>[=I<device>]"
-msgstr ""
+msgstr "B<-T>[I<enhed>], B<--troff-device>[=I<enhed>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1107
@@ -2082,7 +2137,6 @@ msgstr "1990, 1991 - Oprindelig skrevet af John W. Eaton (jwe@che.utexas.edu)."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1382
-#, fuzzy
 msgid ""
 "Dec 23 1992: Rik Faith (faith@cs.unc.edu) applied bug fixes supplied by "
 "Willem Kasdorp (wkasdo@nikhefk.nikef.nl)."
@@ -2156,11 +2210,14 @@ msgid ""
 "that declaration overrides any input encodings specified on B<%manconv%>'s "
 "command line.  Encoding declarations have the following form:"
 msgstr ""
+"Hvis en kodningsdeklaraton findes på den første linje af manualsiden, så "
+"overstyrer den deklaration alle inddatakodninger specificeret på B<%manconv"
+"%>'s kommandolinje. Kodningsdeklarationer har den følgende form:"
 
 #. type: Plain text
 #: ../../man/man1/manconv.man1:44
 msgid "or (if manual page preprocessors are also to be declared):"
-msgstr ""
+msgstr "eller (hvis manualsideforbehandlere også skal deklareres):"
 
 #. type: TP
 #: ../../man/man1/manconv.man1:51
@@ -2197,12 +2254,12 @@ msgstr "Vis ikke fejlbeskeder når siden ikke kan konverteres."
 #: ../../man/man1/manpath.man1:12
 #, no-wrap
 msgid "%thmanpath%"
-msgstr ""
+msgstr "%thmanpath%"
 
 #. type: Plain text
 #: ../../man/man1/manpath.man1:15
 msgid "%manpath% - determine search path for manual pages"
-msgstr ""
+msgstr "%manpath% - bestem søgesti for manualsider"
 
 #. type: Plain text
 #: ../../man/man1/manpath.man1:22
@@ -2220,6 +2277,9 @@ msgid ""
 "issue a warning.  If not, B<%manpath%> will determine a suitable manual page "
 "hierarchy search path and display the results."
 msgstr ""
+"Hvis $B<MANPATH> er angivet, så vil B<%manpath%> vise dets indhold og "
+"udstede en advarsel. Hvis ikke vil B<%manpath%> bestemme en egnet "
+"hierarkisøgesti for manualsiden og vise resultaterne."
 
 #. type: Plain text
 #: ../../man/man1/manpath.man1:37
@@ -2228,6 +2288,8 @@ msgid ""
 "db configuration file - (I<%manpath_config_file%>)  and the user's "
 "environment."
 msgstr ""
+"Den kolonafgrænsede sti bestemmes med brug af information indhentet fra man-"
+"db-konfigurationsfilen - (I<%manpath_config_file%>) og brugerens miljø."
 
 # måske udsted ikke advarsler
 #. type: Plain text
@@ -2596,7 +2658,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:114
 #, no-wrap
 msgid "B<SECTION> I<section> .\\|.\\|."
-msgstr ""
+msgstr "B<AFSNIT> I<afsnit> .\\|.\\|."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:122
@@ -2626,13 +2688,13 @@ msgstr ""
 #. type: Plain text
 #: ../../man/man5/manpath.man5:142
 msgid "B<SECTIONS> is accepted as an alternative name for this directive."
-msgstr ""
+msgstr "B<AFSNIT> accepteres som et alternativt navn for dette direktiv."
 
 #. type: TP
 #: ../../man/man5/manpath.man5:143
 #, no-wrap
 msgid "B<MINCATWIDTH>I<\\ width>"
-msgstr ""
+msgstr "B<MINCATWIDTH>I<\\ bredde>"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:149
@@ -2640,12 +2702,14 @@ msgid ""
 "If the terminal width is less than I<width>, cat pages will not be created "
 "(if missing) or displayed.  The default is 80."
 msgstr ""
+"Hvis terminalbredden er mindre end I<bredde> vil katalogsider ikke blive "
+"oprettet (hvis manglende) eller vist. Standarden er 80."
 
 #. type: TP
 #: ../../man/man5/manpath.man5:149
 #, no-wrap
 msgid "B<MAXCATWIDTH>I<\\ width>"
-msgstr ""
+msgstr "B<MAXCATWIDTH>I<\\ bredde>"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:155
@@ -2653,12 +2717,14 @@ msgid ""
 "If the terminal width is greater than I<width>, cat pages will not be "
 "created (if missing) or displayed.  The default is 80."
 msgstr ""
+"Hvis terminalbredden er større end I<bredde> vil katalogsider ikke blive "
+"oprettet (hvis manglende) eller vist. Standarden er 80."
 
 #. type: TP
 #: ../../man/man5/manpath.man5:155
 #, no-wrap
 msgid "B<CATWIDTH>I<\\ width>"
-msgstr ""
+msgstr "B<CATWIDTH>I<\\ bredde>"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:165
@@ -2673,6 +2739,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:170
 msgid "This flag prevents B<%man%>(1)  from creating cat pages automatically."
 msgstr ""
+"Dette flag forhindrer B<%man%>(1) i at oprette katalogsider automatisk."
 
 #. type: SH
 #: ../../man/man5/manpath.man5:170
@@ -2686,6 +2753,8 @@ msgid ""
 "Unless the rules above are followed and observed precisely, the manual pager "
 "utilities will not function as desired.  The rules are overly complicated."
 msgstr ""
+"Hvis reglerne anført ovenfor ikke følges præcist, vil redskaberne for "
+"manualtekstviseren ikke fungere som ønsket. Reglerne er alt for kompliceret."
 
 #. type: TH
 #: ../../man/man8/accessdb.man8:12
@@ -2702,7 +2771,7 @@ msgstr "accessdb - dumper indholdet af en man-db-database i et læsbart format"
 #. type: Plain text
 #: ../../man/man8/accessdb.man8:20
 msgid "B</usr/sbin/accessdb> [\\|B<-d?V>\\|] [I<E<lt>index-fileE<gt>>]"
-msgstr ""
+msgstr "B</usr/sbin/accessdb> [\\|B<-d?V>\\|] [I<E<lt>indeksfilE<gt>>]"
 
 #. type: Plain text
 #: ../../man/man8/accessdb.man8:27
@@ -2712,6 +2781,10 @@ msgid ""
 "man/index.E<lt>db-typeE<gt>,> where E<lt>db-typeE<gt> is dependent on the "
 "database library in use."
 msgstr ""
+"B<accessdb> vil vise data indeholdt i en man-db-database i en et læsbart "
+"format. Som standard vil den dumpe dataene fra B</var/cache/man/index."
+"E<lt>db-typeE<gt>,> hvor E<lt>db-typeE<gt> er afhængig af det anvendte "
+"databasebibliotek."
 
 #. type: Plain text
 #: ../../man/man8/accessdb.man8:29
@@ -3113,7 +3186,7 @@ msgstr ""
 #: ../../man/man8/mandb.man8:188
 #, no-wrap
 msgid "B<E<lt>filename_maskE<gt>: competing extensions>"
-msgstr ""
+msgstr "B<E<lt>filename_maskE<gt>: konkurrerende udvidelser>"
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:194
@@ -3122,6 +3195,9 @@ msgid ""
 "by the existence of both a compressed and uncompressed version of the same "
 "manual page.  All but the most recent are ignored."
 msgstr ""
+"Jokertegnet E<lt>filename_maskE<gt> er ikke unik. Dette skyldes normalt "
+"eksistensen af både en pakket og udpakket version af den samme manualside. "
+"Alle undtagen de seneste ignoreres"
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:205
