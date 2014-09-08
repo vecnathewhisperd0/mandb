@@ -1,3 +1,28 @@
+man-db 2.7.0
+============
+
+Major changes since man-db 2.6.7.1:
+
+	Upgrading from previous versions:
+	---------------------------------
+
+	For the first time since version 2.4.0, the database format has
+	changed slightly, so you will need to run 'mandb --create' after
+	installing the new version to rebuild your databases from scratch.
+	(Distribution packages should do this automatically for system
+	databases.)
+
+	Improvements:
+	-------------
+
+	o The modification time of manual databases is now simply stored in
+	  the mtime of the database files themselves, rather than using a
+	  special row.  This makes databases reproducible between
+	  otherwise-identical installations, as long as the underlying
+	  database has predictable behaviour.  As a bonus, man-db now uses
+	  high-precision timestamps to determine whether it needs to update
+	  databases.
+
 man-db 2.6.7.1 (10 April 2014)
 ==============================
 

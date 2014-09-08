@@ -87,6 +87,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module fnmatch-gnu:
   # Code from module fstat:
   # Code from module fstatat:
+  # Code from module futimens:
   # Code from module getcwd:
   # Code from module getcwd-lgpl:
   # Code from module getdelim:
@@ -371,6 +372,11 @@ AC_SUBST([LTALLOCA])
     AC_LIBOBJ([fstatat])
   fi
   gl_SYS_STAT_MODULE_INDICATOR([fstatat])
+  gl_FUNC_FUTIMENS
+  if test $HAVE_FUTIMENS = 0 || test $REPLACE_FUTIMENS = 1; then
+    AC_LIBOBJ([futimens])
+  fi
+  gl_SYS_STAT_MODULE_INDICATOR([futimens])
   gl_FUNC_GETCWD
   if test $REPLACE_GETCWD = 1; then
     AC_LIBOBJ([getcwd])
@@ -972,6 +978,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fnmatch_loop.c
   lib/fstat.c
   lib/fstatat.c
+  lib/futimens.c
   lib/getcwd-lgpl.c
   lib/getcwd.c
   lib/getdelim.c
@@ -1179,6 +1186,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/fnmatch.m4
   m4/fstat.m4
   m4/fstatat.m4
+  m4/futimens.m4
   m4/getcwd-abort-bug.m4
   m4/getcwd-path-max.m4
   m4/getcwd.m4

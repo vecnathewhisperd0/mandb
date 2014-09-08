@@ -37,6 +37,8 @@
 #ifndef MYDBM_H
 # define MYDBM_H
 
+# include "timespec.h"
+
 # if defined(GDBM) && !defined(NDBM) && !defined(BTREE)
 
 #  include <gdbm.h>
@@ -56,6 +58,8 @@ typedef struct {
 man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, int flags);
 datum man_gdbm_firstkey (man_gdbm_wrapper wrap);
 datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key);
+struct timespec man_gdbm_get_time (man_gdbm_wrapper wrap);
+void man_gdbm_set_time (man_gdbm_wrapper wrap, const struct timespec time);
 void man_gdbm_close (man_gdbm_wrapper wrap);
 
 #  define BLK_SIZE			0  /* to invoke normal fs block size */
@@ -80,6 +84,8 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #  define MYDBM_CLOSE(db)		man_gdbm_close(db)
 #  define MYDBM_FIRSTKEY(db)		man_gdbm_firstkey(db)
 #  define MYDBM_NEXTKEY(db, key)		man_gdbm_nextkey(db, key)
+#  define MYDBM_GET_TIME(db)		man_gdbm_get_time(db)
+#  define MYDBM_SET_TIME(db, time)	man_gdbm_set_time(db, time)
 #  define MYDBM_REORG(db)		gdbm_reorganize((db)->file)
 #  define MYDBM_FREE(x)			free(x)
 
@@ -97,6 +103,8 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #  endif /* _DB_H_ */
 
 extern DBM *ndbm_flopen(char *file, int flags, int mode);
+extern struct timespec ndbm_get_time(DBM *db);
+extern void ndbm_set_time(DBM *db, const struct timespec time);
 extern int ndbm_flclose(DBM *db);
 
 #  define DB_EXT				""
@@ -116,6 +124,8 @@ extern int ndbm_flclose(DBM *db);
 #  define MYDBM_CLOSE(db)		ndbm_flclose(db)
 #  define MYDBM_FIRSTKEY(db)		copy_datum(dbm_firstkey(db))
 #  define MYDBM_NEXTKEY(db, key)		copy_datum(dbm_nextkey(db))
+#  define MYDBM_GET_TIME(db)		ndbm_get_time(db)
+#  define MYDBM_SET_TIME(db, time)	ndbm_set_time(db, time)
 #  define MYDBM_REORG(db)		/* nothing - not implemented */
 #  define MYDBM_FREE(x)			free (x)
 
@@ -137,6 +147,8 @@ extern datum btree_firstkey(DB *db);
 extern datum btree_nextkey(DB *db);
 extern int btree_replace(DB *db, datum key, datum content);
 extern int btree_nextkeydata(DB *db, datum *key, datum *cont);
+extern struct timespec btree_get_time(DB *db);
+extern void btree_set_time(DB *db, const struct timespec time);
 
 #  define DB_EXT			".bt"
 #  define MYDBM_FILE			DB*
@@ -155,6 +167,8 @@ extern int btree_nextkeydata(DB *db, datum *key, datum *cont);
 #  define MYDBM_CLOSE(db)		btree_close(db)
 #  define MYDBM_FIRSTKEY(db)		btree_firstkey(db)
 #  define MYDBM_NEXTKEY(db, key)	btree_nextkey(db)
+#  define MYDBM_GET_TIME(db)		btree_get_time(db)
+#  define MYDBM_SET_TIME(db, time)	btree_set_time(db, time)
 #  define MYDBM_REORG(db)		/* nothing - not implemented */
 #  define MYDBM_FREE(x)			free(x)
 

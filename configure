@@ -3491,6 +3491,7 @@ gl_header_list="$gl_header_list wctype.h"
 gl_fnmatch_required=GNU
 gl_header_list="$gl_header_list sys/stat.h"
 gl_func_list="$gl_func_list fstatat"
+gl_func_list="$gl_func_list futimens"
 gl_func_list="$gl_func_list getdelim"
 gl_func_list="$gl_func_list getdtablesize"
 gl_func_list="$gl_func_list getlogin_r"
@@ -3543,7 +3544,6 @@ gl_func_list="$gl_func_list pipe"
 gl_header_list="$gl_header_list utime.h"
 gl_func_list="$gl_func_list futimes"
 gl_func_list="$gl_func_list futimesat"
-gl_func_list="$gl_func_list futimens"
 gl_func_list="$gl_func_list utimensat"
 gl_func_list="$gl_func_list lutimes"
 gl_func_list="$gl_func_list vasnprintf"
@@ -14980,6 +14980,7 @@ fi
   # Code from module fnmatch-gnu:
   # Code from module fstat:
   # Code from module fstatat:
+  # Code from module futimens:
   # Code from module getcwd:
   # Code from module getcwd-lgpl:
   # Code from module getdelim:
@@ -20288,6 +20289,11 @@ _ACEOF
 
       ;;
   esac
+
+
+
+
+
 
 
 
@@ -25993,11 +25999,6 @@ $as_echo "#define HAVE_STRUCT_UTIMBUF 1" >>confdefs.h
 
 
 
-
-
-
-
-
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for wint_t" >&5
 $as_echo_n "checking for wint_t... " >&6; }
 if ${gt_cv_c_wint_t+:} false; then :
@@ -29644,6 +29645,125 @@ $as_echo "#define HAVE_WORKING_FSTATAT_ZERO_FLAG 1" >>confdefs.h
 
 
 $as_echo "#define GNULIB_TEST_FSTATAT 1" >>confdefs.h
+
+
+
+
+
+
+
+  :
+
+
+
+
+
+  if test $ac_cv_func_futimens = no; then
+    HAVE_FUTIMENS=0
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether futimens works" >&5
+$as_echo_n "checking whether futimens works... " >&6; }
+if ${gl_cv_func_futimens_works+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "$cross_compiling" = yes; then :
+  gl_cv_func_futimens_works="guessing no"
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <errno.h>
+
+int
+main ()
+{
+struct timespec ts[2] = { { 1, UTIME_OMIT }, { 1, UTIME_NOW } };
+      int fd = creat ("conftest.file", 0600);
+      struct stat st;
+      if (fd < 0) return 1;
+      errno = 0;
+      if (futimens (AT_FDCWD, NULL) == 0) return 2;
+      if (errno != EBADF) return 3;
+      if (futimens (fd, ts)) return 4;
+      sleep (1);
+      ts[0].tv_nsec = UTIME_NOW;
+      ts[1].tv_nsec = UTIME_OMIT;
+      if (futimens (fd, ts)) return 5;
+      if (fstat (fd, &st)) return 6;
+      if (st.st_ctime < st.st_atime) return 7;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifdef __linux__
+/* The Linux kernel added futimens in 2.6.22, but has bugs with UTIME_OMIT
+   in several file systems as recently as 2.6.32.  Always replace futimens
+   to support older kernels.  */
+choke me
+#endif
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  gl_cv_func_futimens_works=yes
+else
+  gl_cv_func_futimens_works="needs runtime check"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+else
+  gl_cv_func_futimens_works=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+      rm -f conftest.file
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_futimens_works" >&5
+$as_echo "$gl_cv_func_futimens_works" >&6; }
+    if test "$gl_cv_func_futimens_works" != yes; then
+      REPLACE_FUTIMENS=1
+    fi
+  fi
+
+  if test $HAVE_FUTIMENS = 0 || test $REPLACE_FUTIMENS = 1; then
+
+
+
+
+
+
+
+
+  gl_LIBOBJS="$gl_LIBOBJS futimens.$ac_objext"
+
+  fi
+
+
+
+
+
+          GNULIB_FUTIMENS=1
+
+
+
+
+
+$as_echo "#define GNULIB_TEST_FUTIMENS 1" >>confdefs.h
 
 
 

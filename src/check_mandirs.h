@@ -27,4 +27,5 @@ extern void test_manfile (const char *file, const char *path);
 extern int create_db (const char *manpath, const char *catpath);
 extern int update_db (const char *manpath, const char *catpath);
 extern void purge_pointers (const char *name);
-extern int purge_missing (const char *manpath, const char *catpath);
+extern int purge_missing (const char *manpath, const char *catpath,
+			  int will_run_mandb);

@@ -30,6 +30,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <setjmp.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include "stat-time.h"
+#include "timespec.h"
 
 #include "manconfig.h"
 
@@ -220,6 +226,28 @@ datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key)
 		return empty_datum;
 
 	return copy_datum (sortkey->next->key);
+}
+
+struct timespec man_gdbm_get_time (man_gdbm_wrapper wrap)
+{
+	struct stat st;
+
+	if (fstat (gdbm_fdesc (wrap->file), &st) < 0) {
+		struct timespec t;
+		t.tv_sec = -1;
+		t.tv_nsec = -1;
+		return t;
+	}
+	return get_stat_mtime (&st);
+}
+
+void man_gdbm_set_time (man_gdbm_wrapper wrap, const struct timespec time)
+{
+	struct timespec times[2];
+
+	times[0] = time;
+	times[1] = time;
+	futimens (gdbm_fdesc (wrap->file), times);
 }
 
 void man_gdbm_close (man_gdbm_wrapper wrap)

@@ -39,6 +39,8 @@
 
 #include <unistd.h>
 
+#include "stat-time.h"
+#include "timespec.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
@@ -99,6 +101,28 @@ DBM* ndbm_flopen (char *filename, int flags, int mode)
 	}
 
 	return db;
+}
+
+struct timespec ndbm_get_time (DBM *db)
+{
+	struct stat st;
+
+	if (fstat (dbm_dirfno (db), &st) < 0) {
+		struct timespec t;
+		t.tv_sec = -1;
+		t.tv_nsec = -1;
+		return t;
+	}
+	return get_stat_mtime (&st);
+}
+
+void ndbm_set_time (DBM *db, const struct timespec time)
+{
+	struct timespec times[2];
+
+	times[0] = time;
+	times[1] = time;
+	futimens (dbm_dirfno (db), times);
 }
 
 #endif /* NDBM */

@@ -58,6 +58,8 @@
 #include <unistd.h>
 
 #include "dirname.h"
+#include "stat-time.h"
+#include "timespec.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"
@@ -425,12 +427,11 @@ static void mkcatdirs (const char *mandir, const char *catdir)
  * any dirs of the tree that have been modified (ie added to) will then be
  * scanned for new files, which are then added to the db.
  */
-static int testmandirs (const char *path, const char *catpath, time_t last,
-			int create)
+static int testmandirs (const char *path, const char *catpath,
+			struct timespec last, int create)
 {
 	DIR *dir;
 	struct dirent *mandir;
-	struct stat stbuf;
 	int amount = 0;
 	int created = 0;
 
@@ -449,6 +450,9 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 	}
 
 	while( (mandir = readdir (dir)) ) {
+		struct stat stbuf;
+		struct timespec mtime;
+
 		if (strncmp (mandir->d_name, "man", 3) != 0)
 			continue;
 
@@ -458,11 +462,14 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 			continue;
 		if (!S_ISDIR(stbuf.st_mode))		/* not a directory */
 			continue;
-		if (last && stbuf.st_mtime <= last) {
+		mtime = get_stat_mtime (&stbuf);
+		if (last.tv_sec && timespec_cmp (mtime, last) <= 0) {
 			/* scanned already */
-			debug ("%s modified %ld, db modified %ld\n",
-			       mandir->d_name, (long) stbuf.st_mtime,
-			       (long) last);
+			debug ("%s modified %ld.%09ld, "
+			       "db modified %ld.%09ld\n",
+			       mandir->d_name,
+			       (long) mtime.tv_sec, mtime.tv_nsec,
+			       (long) last.tv_sec, last.tv_nsec);
 			continue;
 		}
 
@@ -525,25 +532,12 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 	return amount;
 }
 
-/* update the time key stored within `database' */
+/* update the modification timestamp of `database' */
 static void update_db_time (void)
 {
-	datum key, content;
-#ifdef FAST_BTREE
-	datum key1, content1;
-#endif /* FAST_BTREE */
+	struct timespec now;
 
-	memset (&key, 0, sizeof key);
-	memset (&content, 0, sizeof content);
-#ifdef FAST_BTREE
-	memset (&key1, 0, sizeof key);
-	memset (&content1, 0, sizeof content);
-#endif
-
-	MYDBM_SET (key, xstrdup (KEY));
-	MYDBM_SET (content, xasprintf ("%ld", (long) time (NULL)));
-
-	/* Open the db in RW to store the $mtime$ ID */
+	/* Open the db in RW to update its mtime */
 	/* we know that this should succeed because we just updated the db! */
 	dbf = MYDBM_RWOPEN (database);
 	if (dbf == NULL) {
@@ -561,35 +555,26 @@ static void update_db_time (void)
 				       _("can't update index cache %s"),
 				       database);
 		}
-		free (MYDBM_DPTR (content));
 		return;
 	}
-#ifndef FAST_BTREE
-	MYDBM_REPLACE (dbf, key, content);
-#else /* FAST_BTREE */
-	MYDBM_SET (key1, KEY);
-
-	(dbf->seq) (dbf, (DBT *) &key1, (DBT *) &content1, R_CURSOR);
-	
-	if (strcmp (MYDBM_DPTR (key1), MYDBM_DPTR (key)) == 0)
-		(dbf->put) (dbf, (DBT *) &key, (DBT *) &content, R_CURSOR);
-	else
-		(dbf->put) (dbf, (DBT *) &key, (DBT *) &content, 0);
-#endif /* !FAST_BTREE */
+	now.tv_sec = 0;
+	now.tv_nsec = UTIME_NOW;
+	MYDBM_SET_TIME (dbf, now);
 
 	MYDBM_CLOSE (dbf);
-	free (MYDBM_DPTR (key));
-	free (MYDBM_DPTR (content));
 }
 
 /* routine to prepare/create the db prior to calling testmandirs() */
 int create_db (const char *manpath, const char *catpath)
 {
+	struct timespec time_zero;
 	int amount;
-	
+
 	debug ("create_db(%s): %s\n", manpath, database);
 
-	amount = testmandirs (manpath, catpath, (time_t) 0, 1);
+	time_zero.tv_sec = 0;
+	time_zero.tv_nsec = 0;
+	amount = testmandirs (manpath, catpath, time_zero, 1);
 
 	if (amount) {
 		update_db_time ();
@@ -638,26 +623,12 @@ int update_db (const char *manpath, const char *catpath)
 		dbf = NULL;
 	}
 	if (dbf) {
-		datum key, content;
+		struct timespec mtime = MYDBM_GET_TIME (dbf);
 		int new;
 
-		memset (&key, 0, sizeof key);
-		memset (&content, 0, sizeof content);
-
-		MYDBM_SET (key, xstrdup (KEY));
-		content = MYDBM_FETCH (dbf, key);
-		MYDBM_CLOSE (dbf);
-		free (MYDBM_DPTR (key));
-
-		debug ("update_db(): %ld\n",
-		       MYDBM_DPTR (content) ? atol (MYDBM_DPTR (content)) : 0L);
-		if (MYDBM_DPTR (content)) {
-			new = testmandirs (
-				manpath, catpath,
-				(time_t) atol (MYDBM_DPTR (content)), 0);
-			MYDBM_FREE (MYDBM_DPTR (content));
-		} else
-			new = testmandirs (manpath, catpath, (time_t) 0, 0);
+		debug ("update_db(): %ld.%09ld\n",
+		       (long) mtime.tv_sec, mtime.tv_nsec);
+		new = testmandirs (manpath, catpath, mtime, 0);
 
 		if (new) {
 			update_db_time ();
@@ -734,7 +705,7 @@ pointers_next:
  * out that this is better handled in look_for_file() itself.
  */
 static int count_glob_matches (const char *name, const char *ext,
-			       char **source, long db_mtime)
+			       char **source, struct timespec db_mtime)
 {
 	char **walk;
 	int count = 0;
@@ -751,7 +722,8 @@ static int count_glob_matches (const char *name, const char *ext,
 			       "because stat failed\n", *walk);
 			continue;
 		}
-		if (db_mtime != -1 && statbuf.st_mtime <= db_mtime) {
+		if (db_mtime.tv_sec != (time_t) -1 &&
+		    timespec_cmp (get_stat_mtime (&statbuf), db_mtime) <= 0) {
 			debug ("count_glob_matches: excluding %s, "
 			       "no newer than database\n", *walk);
 			continue;
@@ -776,10 +748,14 @@ static int count_glob_matches (const char *name, const char *ext,
 static int purge_normal (const char *name, struct mandata *info,
 			 char **found)
 {
+	struct timespec t;
+
 	/* TODO: On some systems, the cat page extension differs from the
 	 * man page extension, so this may be too strict.
 	 */
-	if (count_glob_matches (name, info->ext, found, -1))
+	t.tv_sec = -1;
+	t.tv_nsec = -1;
+	if (count_glob_matches (name, info->ext, found, t))
 		return 0;
 
 	if (!opt_test)
@@ -793,7 +769,8 @@ static int purge_normal (const char *name, struct mandata *info,
 
 /* Decide whether to purge a reference to a WHATIS_MAN or WHATIS_CAT page. */
 static int purge_whatis (const char *path, int cat, const char *name,
-			 struct mandata *info, char **found, long db_mtime)
+			 struct mandata *info, char **found,
+			 struct timespec db_mtime)
 {
 	/* TODO: On some systems, the cat page extension differs from the
 	 * man page extension, so this may be too strict.
@@ -834,13 +811,17 @@ static int purge_whatis (const char *path, int cat, const char *name,
 		/* Does the real page still exist? */
 		char **real_found;
 		int save_debug = debug_level;
+		struct timespec t;
+
 		debug_level = 0;
 		real_found = look_for_file (path, info->ext,
 					    info->pointer, cat, LFF_MATCHCASE);
 		debug_level = save_debug;
 
+		t.tv_sec = -1;
+		t.tv_nsec = -1;
 		if (count_glob_matches (info->pointer, info->ext, real_found,
-					-1))
+					t))
 			return 0;
 
 		if (!opt_test)
@@ -894,7 +875,8 @@ static int check_multi_key (const char *name, const char *content)
 /* Go through the database and purge references to man pages that no longer
  * exist.
  */
-int purge_missing (const char *manpath, const char *catpath)
+int purge_missing (const char *manpath, const char *catpath,
+		   int will_run_mandb)
 {
 #ifdef NDBM
 	char *dirfile;
@@ -903,7 +885,7 @@ int purge_missing (const char *manpath, const char *catpath)
 	int db_exists;
 	datum key;
 	int count = 0;
-	long db_mtime = -1;
+	struct timespec db_mtime;
 
 #ifdef NDBM
 	dirfile = xasprintf ("%s.dir", database);
@@ -928,29 +910,7 @@ int purge_missing (const char *manpath, const char *catpath)
 		MYDBM_CLOSE (dbf);
 		return 0;
 	}
-
-	/* Extract the database mtime. */
-	key = MYDBM_FIRSTKEY (dbf);
-	while (MYDBM_DPTR (key) != NULL) {
-		datum content, nextkey;
-
-		if (STREQ (MYDBM_DPTR (key), KEY)) {
-			content = MYDBM_FETCH (dbf, key);
-			if (MYDBM_DPTR (content)) {
-				errno = 0;
-				db_mtime = strtol (MYDBM_DPTR (content), NULL,
-						   10);
-				if (errno)
-					db_mtime = -1;
-				MYDBM_FREE (MYDBM_DPTR (key));
-				break;
-			}
-		}
-
-		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (key));
-		key = nextkey;
-	}
+	db_mtime = MYDBM_GET_TIME (dbf);
 
 	key = MYDBM_FIRSTKEY (dbf);
 
@@ -1033,6 +993,12 @@ int purge_missing (const char *manpath, const char *catpath)
 	}
 
 	MYDBM_REORG (dbf);
+	if (will_run_mandb)
+		/* Reset mtime to avoid confusing mandb into not running.
+		 * TODO: It would be better to avoid this by only opening
+		 * the database once between here and mandb.
+		 */
+		MYDBM_SET_TIME (dbf, db_mtime);
 	MYDBM_CLOSE (dbf);
 	return count;
 }

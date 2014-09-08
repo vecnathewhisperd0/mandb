@@ -47,6 +47,9 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "stat-time.h"
+#include "timespec.h"
+#include "utimens.h"
 #include "xgetcwd.h"
 #include "xvasprintf.h"
 
@@ -227,6 +230,8 @@ static inline void xchmod (const char *path, mode_t mode)
 static int xcopy (const char *from, const char *to)
 {
 	FILE *ifp, *ofp;
+	struct stat st;
+	struct timespec times[2];
 	static const size_t buf_size = 32 * 1024;
 	char *buf;
 	int ret = 0;
@@ -238,6 +243,16 @@ static int xcopy (const char *from, const char *to)
 			return 0;
 		perror ("fopen");
 		return ret;
+	}
+
+	if (fstat (fileno (ifp), &st) >= 0) {
+		times[0] = get_stat_atime (&st);
+		times[1] = get_stat_mtime (&st);
+	} else {
+		times[0].tv_sec = 0;
+		times[0].tv_nsec = UTIME_OMIT;
+		times[1].tv_sec = 0;
+		times[1].tv_nsec = UTIME_OMIT;
 	}
 
 	ofp = fopen (to, "w");
@@ -270,8 +285,10 @@ static int xcopy (const char *from, const char *to)
 
 	if (ret < 0)
 		xremove (to);
-	else
+	else {
 		xchmod (to, DBMODE);
+		utimens (to, times);
+	}
 
 	return ret;
 }
@@ -524,6 +541,7 @@ static int process_manpath (const char *manpath, int global_manpath,
 	char *catpath;
 	struct tried_catdirs_entry *tried;
 	struct stat st;
+	int run_mandb = 0;
 	int amount = 0;
 
 	if (global_manpath) { 	/* system db */
@@ -543,33 +561,29 @@ static int process_manpath (const char *manpath, int global_manpath,
 		return 0;
 	tried->seen = 1;
 
-	force_rescan = 0;
-	if (purge) {
-		database = mkdbname (catpath);
-		purged += purge_missing (manpath, catpath);
-		free (database);
-		database = NULL;
-	}
-
-	push_cleanup (cleanup, NULL, 0);
-	push_cleanup (cleanup_sigsafe, NULL, 1);
 	if (single_filename) {
 		/* The file might be in a per-locale subdirectory that we
 		 * aren't processing right now.
 		 */
 		char *manpath_prefix = xasprintf ("%s/man", manpath);
 		if (STRNEQ (manpath_prefix, single_filename,
-		    strlen (manpath_prefix))) {
-			int ret = mandb (catpath, manpath);
-			if (ret < 0) {
-				amount = ret;
-				goto out;
-			}
-			amount += ret;
-		}
+		    strlen (manpath_prefix)))
+			run_mandb = 1;
 		free (manpath_prefix);
-		/* otherwise try the next manpath */
-	} else {
+	} else
+		run_mandb = 1;
+
+	force_rescan = 0;
+	if (purge) {
+		database = mkdbname (catpath);
+		purged += purge_missing (manpath, catpath, run_mandb);
+		free (database);
+		database = NULL;
+	}
+
+	push_cleanup (cleanup, NULL, 0);
+	push_cleanup (cleanup_sigsafe, NULL, 1);
+	if (run_mandb) {
 		int ret = mandb (catpath, manpath);
 		if (ret < 0) {
 			amount = ret;

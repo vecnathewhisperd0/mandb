@@ -42,6 +42,9 @@
 
 #include <unistd.h>
 
+#include "stat-time.h"
+#include "timespec.h"
+
 #include "manconfig.h"
 
 #include "error.h"
@@ -258,6 +261,28 @@ int btree_nextkeydata (DB *db, datum *key, datum *cont)
 	*cont = copy_datum (*cont);
 
 	return 0;
+}
+
+struct timespec btree_get_time (DB *db)
+{
+	struct stat st;
+
+	if (fstat ((db->fd) (db), &st) < 0) {
+		struct timespec t;
+		t.tv_sec = -1;
+		t.tv_nsec = -1;
+		return t;
+	}
+	return get_stat_mtime (&st);
+}
+
+void btree_set_time (DB *db, const struct timespec time)
+{
+	struct timespec times[2];
+
+	times[0] = time;
+	times[1] = time;
+	futimens ((db->fd) (db), times);
 }
 
 #ifdef FAST_BTREE
