@@ -947,6 +947,10 @@ int purge_missing (const char *manpath, const char *catpath)
 		gripe_rwopen_failed ();
 		return 0;
 	}
+	if (!sanity_check_db ()) {
+		MYDBM_CLOSE (dbf);
+		return 0;
+	}
 
 	/* Extract the database mtime. */
 	key = MYDBM_FIRSTKEY (dbf);
