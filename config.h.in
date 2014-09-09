@@ -76,6 +76,9 @@
    and handles trailing slash correctly. */
 #undef FUNC_REALPATH_WORKS
 
+/* Define to 1 if futimesat mishandles a NULL file name. */
+#undef FUTIMESAT_NULL_BUG
+
 /* Define if you have, and want to use, gdbm interface routines. */
 #undef GDBM
 
@@ -368,6 +371,12 @@
    the CoreFoundation framework. */
 #undef HAVE_CFPREFERENCESCOPYAPPVALUE
 
+/* Define to 1 if you have the `clock_gettime' function. */
+#undef HAVE_CLOCK_GETTIME
+
+/* Define to 1 if you have the `clock_settime' function. */
+#undef HAVE_CLOCK_SETTIME
+
 /* Define to 1 if you have the `closedir' function. */
 #undef HAVE_CLOSEDIR
 
@@ -595,6 +604,15 @@
 /* Define to 1 if you have the `funlockfile' function. */
 #undef HAVE_FUNLOCKFILE
 
+/* Define to 1 if you have the 'futimens' function. */
+#undef HAVE_FUTIMENS
+
+/* Define to 1 if you have the 'futimes' function. */
+#undef HAVE_FUTIMES
+
+/* Define to 1 if you have the 'futimesat' function. */
+#undef HAVE_FUTIMESAT
+
 /* Define to 1 if you have the `gdbm_exists' function. */
 #undef HAVE_GDBM_EXISTS
 
@@ -707,6 +725,9 @@
 /* Define to 1 if you have the 'lstat' function. */
 #undef HAVE_LSTAT
 
+/* Define to 1 if you have the 'lutimes' function. */
+#undef HAVE_LUTIMES
+
 /* Define if you have lzip. */
 #undef HAVE_LZIP
 
@@ -770,6 +791,9 @@
 /* Define to 1 on MSVC platforms that have the "invalid parameter handler"
    concept. */
 #undef HAVE_MSVC_INVALID_PARAMETER_HANDLER
+
+/* Define to 1 if you have the 'nanotime' function. */
+#undef HAVE_NANOTIME
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
@@ -1539,6 +1563,31 @@
 /* Define to 1 if `sa_sigaction' is a member of `struct sigaction'. */
 #undef HAVE_STRUCT_SIGACTION_SA_SIGACTION
 
+/* Define to 1 if `st_atimensec' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_ATIMENSEC
+
+/* Define to 1 if `st_atimespec.tv_nsec' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_ATIMESPEC_TV_NSEC
+
+/* Define to 1 if `st_atim.st__tim.tv_nsec' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_ATIM_ST__TIM_TV_NSEC
+
+/* Define to 1 if `st_atim.tv_nsec' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC
+
+/* Define to 1 if `st_birthtimensec' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_BIRTHTIMENSEC
+
+/* Define to 1 if `st_birthtimespec.tv_nsec' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_BIRTHTIMESPEC_TV_NSEC
+
+/* Define to 1 if `st_birthtim.tv_nsec' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_BIRTHTIM_TV_NSEC
+
+/* Define if struct utimbuf is declared -- usually in <utime.h>. Some systems
+   have utime.h but don't declare the struct anywhere. */
+#undef HAVE_STRUCT_UTIMBUF
+
 /* Define to 1 if you have the 'symlink' function. */
 #undef HAVE_SYMLINK
 
@@ -1604,6 +1653,12 @@
 /* Define to 1 if the system has the type 'unsigned long long int'. */
 #undef HAVE_UNSIGNED_LONG_LONG_INT
 
+/* Define to 1 if you have the 'utimensat' function. */
+#undef HAVE_UTIMENSAT
+
+/* Define to 1 if you have the <utime.h> header file. */
+#undef HAVE_UTIME_H
+
 /* Define to 1 if you have the 'vasnprintf' function. */
 #undef HAVE_VASNPRINTF
 
@@ -1658,6 +1713,9 @@
 
 /* Define to 1 if O_NOFOLLOW works. */
 #undef HAVE_WORKING_O_NOFOLLOW
+
+/* Define if utimes works properly. */
+#undef HAVE_WORKING_UTIMES
 
 /* Define to 1 if you have the <xlocale.h> header file. */
 #undef HAVE_XLOCALE_H
@@ -1847,6 +1905,10 @@
 
 /* Define if you are using groff as troff. */
 #undef TROFF_IS_GROFF
+
+/* Define to 1 if the type of the st_atim member of a struct stat is struct
+   timespec. */
+#undef TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC
 
 /* Define as the name of a command you want to suggest when a non-existent
    page is requested. */

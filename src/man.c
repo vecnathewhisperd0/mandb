@@ -65,7 +65,6 @@ static char *cwd;
 #include <ctype.h>
 #include <signal.h>
 #include <time.h>
-#include <utime.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -73,6 +72,8 @@ static char *cwd;
 #include "dirname.h"
 #include "minmax.h"
 #include "regex.h"
+#include "stat-time.h"
+#include "utimens.h"
 #include "xvasprintf.h"
 #include "xgetcwd.h"
 
@@ -246,7 +247,8 @@ static char *tmp_cat_file;	/* for open_cat_stream(), close_cat_stream() */
 static int created_tmp_cat;			/* dto. */
 #endif
 static int tmp_cat_fd;
-static int man_modtime;		/* modtime of man page, for commit_tmp_cat() */
+static struct timespec man_modtime;	/* modtime of man page, for
+					 * commit_tmp_cat() */
 
 # ifdef TROFF_IS_GROFF
 static int ditroff;
@@ -2067,14 +2069,12 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 			debug ("setting modtime on cat file %s\n", cat_file);
 			status = 0;
 		} else {
-			time_t now = time (NULL);
-			struct utimbuf utb;
-			utb.actime = now;
-			if (man_modtime)
-				utb.modtime = man_modtime;
-			else
-				utb.modtime = 0;
-			status = utime (cat_file, &utb);
+			struct timespec times[2];
+
+			times[0].tv_sec = 0;
+			times[0].tv_nsec = UTIME_NOW;
+			times[1] = man_modtime;
+			status = utimens (cat_file, times);
 			if (status)
 				error (0, errno, _("can't set times on %s"),
 				       cat_file);
@@ -2538,10 +2538,11 @@ static int display (const char *dir, const char *man_file,
 	/* Get modification time, for commit_tmp_cat(). */
 	if (man_file && *man_file) {
 		struct stat stb;
-		if (stat (man_file, &stb))
-			man_modtime = 0;
-		else
-			man_modtime = stb.st_mtime;
+		if (stat (man_file, &stb)) {
+			man_modtime.tv_sec = 0;
+			man_modtime.tv_nsec = 0;
+		} else
+			man_modtime = get_stat_mtime (&stb);
 	}
 
 	display_to_stdout = troff;

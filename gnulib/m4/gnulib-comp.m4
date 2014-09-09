@@ -51,6 +51,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module canonicalize-lgpl:
   # Code from module chdir:
   # Code from module chdir-long:
+  # Code from module clock-time:
   # Code from module cloexec:
   # Code from module close:
   # Code from module closedir:
@@ -96,6 +97,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module getopt-posix:
   # Code from module gettext:
   # Code from module gettext-h:
+  # Code from module gettime:
   # Code from module gettimeofday:
   # Code from module gitlog-to-changelog:
   # Code from module glob:
@@ -167,6 +169,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module snippet/warn-on-use:
   # Code from module ssize_t:
   # Code from module stat:
+  # Code from module stat-time:
   # Code from module stdalign:
   # Code from module stdarg:
   dnl Some compilers (e.g., AIX 5.3 cc) need to be in c99 mode
@@ -200,9 +203,11 @@ AC_DEFUN([gl_EARLY],
   # Code from module threadlib:
   gl_THREADLIB_EARLY
   # Code from module time:
+  # Code from module timespec:
   # Code from module unistd:
   # Code from module unistd-safer:
   # Code from module unsetenv:
+  # Code from module utimens:
   # Code from module vasnprintf:
   # Code from module vasprintf:
   # Code from module verify:
@@ -267,6 +272,7 @@ AC_SUBST([LTALLOCA])
     AC_LIBOBJ([chdir-long])
     gl_PREREQ_CHDIR_LONG
   fi
+  gl_CLOCK_TIME
   gl_MODULE_INDICATOR_FOR_TESTS([cloexec])
   gl_FUNC_CLOSE
   if test $REPLACE_CLOSE = 1; then
@@ -424,6 +430,7 @@ AC_SUBST([LTALLOCA])
   AM_GNU_GETTEXT_VERSION([0.18.1])
   AC_SUBST([LIBINTL])
   AC_SUBST([LTLIBINTL])
+  gl_GETTIME
   gl_FUNC_GETTIMEOFDAY
   if test $HAVE_GETTIMEOFDAY = 0 || test $REPLACE_GETTIMEOFDAY = 1; then
     AC_LIBOBJ([gettimeofday])
@@ -645,6 +652,8 @@ AC_SUBST([LTALLOCA])
     gl_PREREQ_STAT
   fi
   gl_SYS_STAT_MODULE_INDICATOR([stat])
+  gl_STAT_TIME
+  gl_STAT_BIRTHTIME
   gl_STDALIGN_H
   gl_STDARG_H
   AM_STDBOOL_H
@@ -716,6 +725,7 @@ AC_SUBST([LTALLOCA])
   gl_FUNC_GEN_TEMPNAME
   gl_THREADLIB
   gl_HEADER_TIME_H
+  gl_TIMESPEC
   gl_UNISTD_H
   gl_UNISTD_SAFER
   gl_FUNC_UNSETENV
@@ -724,6 +734,7 @@ AC_SUBST([LTALLOCA])
     gl_PREREQ_UNSETENV
   fi
   gl_STDLIB_MODULE_INDICATOR([unsetenv])
+  gl_UTIMENS
   gl_FUNC_VASNPRINTF
   gl_FUNC_VASPRINTF
   gl_STDIO_MODULE_INDICATOR([vasprintf])
@@ -972,6 +983,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/getopt1.c
   lib/getopt_int.h
   lib/gettext.h
+  lib/gettime.c
   lib/gettimeofday.c
   lib/glob-libc.h
   lib/glob.c
@@ -1063,6 +1075,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/sigprocmask.c
   lib/size_max.h
   lib/sleep.c
+  lib/stat-time.c
+  lib/stat-time.h
   lib/stat.c
   lib/stdalign.in.h
   lib/stdarg.in.h
@@ -1096,11 +1110,15 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/tempname.c
   lib/tempname.h
   lib/time.in.h
+  lib/timespec.c
+  lib/timespec.h
   lib/unistd--.h
   lib/unistd-safer.h
   lib/unistd.c
   lib/unistd.in.h
   lib/unsetenv.c
+  lib/utimens.c
+  lib/utimens.h
   lib/vasnprintf.c
   lib/vasnprintf.h
   lib/vasprintf.c
@@ -1130,6 +1148,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/btowc.m4
   m4/canonicalize.m4
   m4/chdir-long.m4
+  m4/clock_time.m4
   m4/close.m4
   m4/closedir.m4
   m4/codeset.m4
@@ -1169,6 +1188,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/getlogin_r.m4
   m4/getopt.m4
   m4/gettext.m4
+  m4/gettime.m4
   m4/gettimeofday.m4
   m4/glibc2.m4
   m4/glibc21.m4
@@ -1252,6 +1272,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/size_max.m4
   m4/sleep.m4
   m4/ssize_t.m4
+  m4/stat-time.m4
   m4/stat.m4
   m4/stdalign.m4
   m4/stdarg.m4
@@ -1279,9 +1300,13 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/tempname.m4
   m4/threadlib.m4
   m4/time_h.m4
+  m4/timespec.m4
   m4/uintmax_t.m4
   m4/unistd-safer.m4
   m4/unistd_h.m4
+  m4/utimbuf.m4
+  m4/utimens.m4
+  m4/utimes.m4
   m4/vasnprintf.m4
   m4/vasprintf.m4
   m4/visibility.m4
