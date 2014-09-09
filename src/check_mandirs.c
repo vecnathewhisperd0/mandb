@@ -526,7 +526,7 @@ static int testmandirs (const char *path, const char *catpath, time_t last,
 }
 
 /* update the time key stored within `database' */
-void update_db_time (void)
+static void update_db_time (void)
 {
 	datum key, content;
 #ifdef FAST_BTREE
