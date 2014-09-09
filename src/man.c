@@ -98,7 +98,6 @@ static char *cwd;
 #include "mydbm.h"
 #include "db_storage.h"
 
-#include "check_mandirs.h"
 #include "filenames.h"
 #include "globbing.h"
 #include "ult_src.h"

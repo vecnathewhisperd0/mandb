@@ -582,29 +582,6 @@ void update_db_time (void)
 	free (MYDBM_DPTR (content));
 }
 
-/* remove the db's time key - called prior to update_db if we want
-   to `force' a full consistency check */
-void reset_db_time (void)
-{
-	datum key;
-
-	memset (&key, 0, sizeof key);
-
-	MYDBM_SET (key, xstrdup (KEY));
-
-	/* we don't really care if we can't open it RW - it's not fatal */
-	dbf = MYDBM_RWOPEN (database);
-	if (dbf == NULL) {
-		debug_error ("reset_db_time(): can't open db");
-		return;
-	}
-
-	MYDBM_DELETE (dbf, key);
-	debug ("reset_db_time()\n");
-	MYDBM_CLOSE (dbf);
-	free (MYDBM_DPTR (key));
-}
-
 /* routine to prepare/create the db prior to calling testmandirs() */
 int create_db (const char *manpath, const char *catpath)
 {
