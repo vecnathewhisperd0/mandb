@@ -207,7 +207,8 @@ static int check_for_stray (void)
 			info.id = STRAY_CAT;
 			info.pointer = NULL;
 			info.filter = "-";
-			info._st_mtime = 0L;
+			info.mtime.tv_sec = 0;
+			info.mtime.tv_nsec = 0;
 
 			drop_effective_privs ();
 			decomp = decompress_open (catdir);

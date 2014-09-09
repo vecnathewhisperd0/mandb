@@ -158,7 +158,7 @@ void test_manfile (const char *file, const char *path)
 
 	/* to get mtime info */
 	(void) lstat (file, &buf);
-	info._st_mtime = buf.st_mtime;
+	info.mtime = get_stat_mtime (&buf);
 
 	/* check that our file actually contains some data */
 	if (buf.st_size == 0) {
@@ -179,8 +179,8 @@ void test_manfile (const char *file, const char *path)
 	 */
 	if (exists) {
 		if (strcmp (exists->comp, info.comp ? info.comp : "-") == 0) {
-			if (exists->_st_mtime == info._st_mtime 
-			    && exists->id < WHATIS_MAN) {
+			if (timespec_cmp (exists->mtime, info.mtime) == 0 &&
+			    exists->id < WHATIS_MAN) {
 				free_mandata_struct (exists);
 				free (manpage);
 				return;

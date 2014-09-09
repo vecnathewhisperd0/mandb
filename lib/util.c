@@ -44,6 +44,8 @@
 #include <unistd.h>
 #include <locale.h>
 
+#include "stat-time.h"
+#include "timespec.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"
@@ -97,7 +99,8 @@ int is_changed (const char *fa, const char *fb)
 	if (fb_sb.st_size == 0)
 		status |= 4;
 
-	status |= (fa_sb.st_mtime != fb_sb.st_mtime);
+	status |= (timespec_cmp (get_stat_mtime (&fa_sb),
+				 get_stat_mtime (&fb_sb)) != 0);
 
 	debug (" (%d)\n", status);
 	return status;

@@ -110,13 +110,13 @@ void dbprintf (const struct mandata *info)
 	       "section:   %s\n"
 	       "comp. ext: %s\n"
 	       "id:        %c\n"
-	       "st_mtime   %ld\n"
+	       "mtime:     %ld.%09ld\n"
 	       "pointer:   %s\n"
 	       "filter:    %s\n"
 	       "whatis:    %s\n\n",
 	       dash_if_unset (info->name),
 	       info->ext, info->sec, info->comp,
-	       info->id, (long) info->_st_mtime,
+	       info->id, (long) info->mtime.tv_sec, info->mtime.tv_nsec,
 	       info->pointer, info->filter, info->whatis);
 }
 
@@ -210,7 +210,8 @@ void split_content (char *cont_ptr, struct mandata *pinfo)
 	pinfo->name = copy_if_set (*(data++));
 	pinfo->ext = *(data++);
 	pinfo->sec = *(data++);
-	pinfo->_st_mtime = (time_t) atol (*(data++));	/* time_t format */
+	pinfo->mtime.tv_sec = (time_t) atol (*(data++));
+	pinfo->mtime.tv_nsec = atol (*(data++));
 	pinfo->id = **(data++);				/* single char id */
 	pinfo->pointer = *(data++);
 	pinfo->filter = *(data++);
@@ -239,11 +240,12 @@ datum make_content (struct mandata *in)
 		in->whatis = dash + 1;
 
 	MYDBM_SET (cont, xasprintf (
-		"%s\t%s\t%s\t%ld\t%c\t%s\t%s\t%s\t%s",
+		"%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s",
 		dash_if_unset (in->name),
 		in->ext,
 		in->sec,
-		(long) in->_st_mtime,
+		(long) in->mtime.tv_sec,
+		in->mtime.tv_nsec,
 		in->id,
 		in->pointer,
 		in->filter,

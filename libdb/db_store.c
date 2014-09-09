@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "timespec.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"
@@ -89,7 +90,7 @@ static int replace_if_necessary (struct mandata *newdata,
 	 * exists should always take precedence.
 	 */
 	if (compare_ids (newdata->id, olddata->id, 1) <= 0 &&
-	    newdata->_st_mtime > olddata->_st_mtime) {
+	    timespec_cmp (newdata->mtime, olddata->mtime) > 0) {
 		debug ("replace_if_necessary(): newer mtime; replacing\n");
 		if (MYDBM_REPLACE (dbf, newkey, newcont))
 			gripe_replace_key (MYDBM_DPTR (newkey));
@@ -138,7 +139,7 @@ static int replace_if_necessary (struct mandata *newdata,
 
  If we have two ULT_MAN pages competing for the same key, we must have
  more than one of foo.sec, foo.sec.comp1, foo.sec.comp2. OR we have a
- replacement page. If the st_mtimes differ, throw out the old struct and
+ replacement page. If the mtimes differ, throw out the old struct and
  replace it with the new, if the comp exts differ, oops, this is bad,
  keep one and return appropriate error code.
 

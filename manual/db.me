@@ -101,7 +101,7 @@ In the following entries, the character
 will be used to separate the fields. In reality a tab is used.
 Direct and indirect entries takes the form:
 .ip
-.i "<name> \(-> <realname>|<ext>|<sec>|<mtime>|<ID>|<ref>|<filter>|<comp>|<whatis>"
+.i "<name> \(-> <realname>|<ext>|<sec>|<mtime.sec>|<mtime.nsec>|<ID>|<ref>|<filter>|<comp>|<whatis>"
 .lp
 Common name index entries take the form:
 .ip
@@ -109,7 +109,7 @@ Common name index entries take the form:
 .lp
 and common name direct or indirect entries take the form:
 .ip
-.i "<name>|<ext> \(-> <realname>|<ext>|<sec>|<mtime>|<ID>|<ref>|<filter>|<comp>|<whatis>"
+.i "<name>|<ext> \(-> <realname>|<ext>|<sec>|<mtime.sec>|<mtime.nsec>|<ID>|<ref>|<filter>|<comp>|<whatis>"
 .lp
 where in each case the filename being represented is formed as
 .ip
@@ -126,8 +126,12 @@ If any of the fields would be empty, a single
 is stored in its place.
 .i <comp>
 represents the compression extension,
-.i <mtime>
-is an integer representing the last modification time of the manual page,
+.i <mtime.sec>
+is an integer representing the seconds part of the last modification
+time of the manual page,
+.i <mtime.nsec>
+is an integer representing the nanoseconds part of the last modification
+time of the manual page,
 .i <ref>
 points to the entry containing the location of the real page,
 .i <ID>
@@ -211,15 +215,18 @@ from the top level build directory is included below.
 .lp
 .nf
 $version$ -> "2.5.0"
-apropos -> "1 1 795981542 A - - search the manual page names and descriptions"
-catman -> "8 8 795981544 A - - create or update the pre-formatted manual pages"
-man -> "1 1 795981542 A - - an interface to the on-line reference manuals"
-mandb -> "8 8 795981544 A - - create or update the manual page index caches"
-manpath -> " 1 5"
-manpath~1 -> "1 1 795981542 A - - determine search path for manual pages"
-manpath~5 -> "5 5 795981543 A - - format of the /etc/man_db.config file"
-whatis -> "1 1 795981543 A - - search the manual page names"
-zsoelim -> "1 1 795981543 A - - satisfy .so requests in roff input"
+accessdb -> "- 8 8 1410381979 324541691 A - - - dumps the content of a man-db database in a human readable format"
+apropos -> "- 1 1 1410381979 268541692 A - - - search the manual page names and descriptions"
+catman -> "- 8 8 1410381979 328541691 A - - - create or update the pre-formatted manual pages"
+lexgrog -> "- 1 1 1410381979 268541692 A - - - parse header information in man pages"
+man -> "- 1 1 1410381979 280541692 A - t - an interface to the on-line reference manuals"
+manconv -> "- 1 1 1410381979 272541692 A - - - convert manual page from one encoding to another"
+mandb -> "- 8 8 1410381979 324541691 A - t - create or update the manual page index caches"
+manpath -> " manpath 5 manpath 1"
+manpath~1 -> "- 1 1 1410381979 300541691 A - - - determine search path for manual pages"
+manpath~5 -> "- 5 5 1410381979 304541691 A - - - format of the /etc/manpath.config file"
+whatis -> "- 1 1 1410381979 300541691 A - - - display one-line manual page descriptions"
+zsoelim -> "- 1 1 1410381979 304541691 A - - - satisfy .so requests in roff input"
 .fi
 .BS 2 "Database types"
 .lp

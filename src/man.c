@@ -3528,6 +3528,7 @@ static int maybe_update_file (const char *manpath, const char *name,
 	const char *real_name;
 	char *file;
 	struct stat buf;
+	struct timespec file_mtime;
 	int status;
 
 	if (!update)
@@ -3548,11 +3549,14 @@ static int maybe_update_file (const char *manpath, const char *name,
 		return 0;
 	if (lstat (file, &buf) != 0)
 		return 0;
-	if (buf.st_mtime == info->_st_mtime)
+	file_mtime = get_stat_mtime (&buf);
+	if (timespec_cmp (file_mtime, info->mtime) == 0)
 		return 0;
 
-	debug ("%s needs to be recached: %ld %ld\n",
-	       file, (long) info->_st_mtime, (long) buf.st_mtime);
+	debug ("%s needs to be recached: %ld.%09ld %ld.%09ld\n",
+	       file,
+	       (long) info->mtime.tv_sec, info->mtime.tv_nsec,
+	       (long) file_mtime.tv_sec, file_mtime.tv_nsec);
 	status = run_mandb (0, manpath, file);
 	if (status)
 		error (0, 0, _("mandb command failed with exit status %d"),

@@ -43,9 +43,9 @@
 #define STRAY_CAT	'D'
 #define WHATIS_CAT	'E'
 
-#define FIELDS  9       /* No of fields in each database page `content' */
+#define FIELDS  10      /* No of fields in each database page `content' */
 
-#include "sys/time.h"	/* for time_t */
+#include "timespec.h"
 
 #include "xalloc.h"
 
@@ -68,7 +68,7 @@ struct mandata {
 	const char *comp;		/* Compression extension */
 	const char *filter;		/* filters needed for the page */
 	const char *whatis;		/* whatis description for page */
-	time_t _st_mtime;		/* mod time for file */
+	struct timespec mtime;		/* mod time for file */
 }; 
 
 /* used by the world */
