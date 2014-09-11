@@ -23,7 +23,8 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
 		    MANDIR_LAYOUT=$(MANDIR_LAYOUT); export MANDIR_LAYOUT; \
 		    top_builddir=$(top_builddir); export top_builddir; \
 		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR; \
-		    OVERRIDE_DIR="$(override_dir)"; export OVERRIDE_DIR;
+		    OVERRIDE_DIR="$(override_dir)"; export OVERRIDE_DIR; \
+		    STAT_HAS_NSEC=$(STAT_HAS_NSEC); export STAT_HAS_NSEC;
 # Each test must use the configure-detected shell, not necessarily /bin/sh.
 AM_LOG_FLAGS = $(SHELL)
 ALL_TESTS = \

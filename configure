@@ -674,6 +674,7 @@ libpipeline_CFLAGS
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
+STAT_HAS_NSEC
 MAN_SUBDIRS
 PO4A_FALSE
 PO4A_TRUE
@@ -42383,6 +42384,17 @@ cat >>confdefs.h <<_ACEOF
 #define size_t unsigned int
 _ACEOF
 
+fi
+
+
+# Do we have any kind of high-precision file timestamps?
+if test "x$ac_cv_member_struct_stat_st_atim_tv_nsec" = xyes || \
+   test "x$ac_cv_member_struct_stat_st_atimespec_tv_nsec" = xyes || \
+   test "x$ac_cv_member_struct_stat_st_atimensec" = xyes || \
+   test "x$ac_cv_member_struct_stat_st_atim_st__tim_tv_nsec" = xyes; then
+	STAT_HAS_NSEC=yes
+else
+	STAT_HAS_NSEC=no
 fi
 
 

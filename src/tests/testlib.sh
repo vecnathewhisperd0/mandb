@@ -65,6 +65,7 @@ accessdb_filter () {
 }
 
 next_second () {
+	[ "$STAT_HAS_NSEC" != yes ] || return
 	startdate="$(date +%s)"
 	while :; do
 		sleep 1
