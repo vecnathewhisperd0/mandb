@@ -460,7 +460,6 @@ AC_ISC_POSIX
 dnl AC_PROG_LEX calls AC_TRY_LINK: must come after above 3
 AC_PROG_LEX
 gl_INIT
-AC_HEADER_DIRENT
 AC_CHECK_HEADERS([fcntl.h sys/file.h])
 
 # Internationalization support.
