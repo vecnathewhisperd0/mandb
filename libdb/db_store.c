@@ -149,7 +149,6 @@ static int replace_if_necessary (struct mandata *newdata,
 
  return errorcode or 0 on success.
 */
-#ifndef FAST_BTREE
 int dbstore (struct mandata *in, const char *base)
 {
 	datum oldkey, oldcont;
@@ -326,4 +325,3 @@ int dbstore (struct mandata *in, const char *base)
 	free (MYDBM_DPTR (oldkey));
 	return 0;
 }
-#endif /* !FAST_BTREE */

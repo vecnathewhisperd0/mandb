@@ -306,7 +306,6 @@ int list_extensions (char *data, char ***names, char ***ext)
  2) One data item exists. Item is returned as first in set of structures.
  3) Many items exist. They are all returned, in a multiple structure set.
  */
-#ifndef FAST_BTREE
 static struct mandata *dblookup (const char *page, const char *section,
 				 int flags)
 {
@@ -405,7 +404,6 @@ static struct mandata *dblookup (const char *page, const char *section,
 		return ret;
 	}
 }
-#endif /* !FAST_BTREE */
 
 struct mandata *dblookup_all (const char *page, const char *section,
 			      int match_case)
