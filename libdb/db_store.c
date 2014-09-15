@@ -119,6 +119,46 @@ static int replace_if_necessary (struct mandata *newdata,
 	return 0;
 }
 
+/* The complement of split_content */
+static datum make_content (struct mandata *in)
+{
+	datum cont;
+	static const char dash[] = "-";
+
+	memset (&cont, 0, sizeof cont);
+
+	if (!in->pointer)
+		in->pointer = dash;
+	if (!in->filter)
+		in->filter = dash;
+	if (!in->comp)
+		in->comp = dash;
+	if (!in->whatis)
+		in->whatis = dash + 1;
+
+	MYDBM_SET (cont, xasprintf (
+		"%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s",
+		dash_if_unset (in->name),
+		in->ext,
+		in->sec,
+		(long) in->mtime.tv_sec,
+		in->mtime.tv_nsec,
+		in->id,
+		in->pointer,
+		in->filter,
+		in->comp,
+		in->whatis));
+
+#ifdef NDBM
+	/* limit of 4096 bytes of data using ndbm */
+	if (MYDBM_DSIZE (cont) > 4095) {
+		MYDBM_DPTR (cont)[4095] = '\0';
+		MYDBM_DSIZE (cont) = 4096;
+	}
+#endif
+	return cont;
+}
+
 /*
  Any one of three situations can occur when storing some data.
 

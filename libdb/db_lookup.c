@@ -86,7 +86,7 @@ void gripe_replace_key (const char *data)
 	gripe_corrupt_data ();
 }
 
-char *copy_if_set (const char *str)
+static char *copy_if_set (const char *str)
 {
 	if (STREQ (str, "-"))
 		return NULL;
@@ -170,7 +170,7 @@ char *name_to_key (const char *name)
 }
 
 /* return char ptr array to the data's fields */
-char **split_data (char *content, char *start[])
+static char **split_data (char *content, char *start[])
 {
         int count;
 
@@ -220,46 +220,6 @@ void split_content (char *cont_ptr, struct mandata *pinfo)
 
 	pinfo->addr = cont_ptr;
 	pinfo->next = (struct mandata *) NULL;
-}
-
-/* The complement of split_content */
-datum make_content (struct mandata *in)
-{
-	datum cont;
-	static const char dash[] = "-";
-
-	memset (&cont, 0, sizeof cont);
-
-	if (!in->pointer)
-		in->pointer = dash;
-	if (!in->filter)
-		in->filter = dash;
-	if (!in->comp)
-		in->comp = dash;
-	if (!in->whatis)
-		in->whatis = dash + 1;
-
-	MYDBM_SET (cont, xasprintf (
-		"%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s",
-		dash_if_unset (in->name),
-		in->ext,
-		in->sec,
-		(long) in->mtime.tv_sec,
-		in->mtime.tv_nsec,
-		in->id,
-		in->pointer,
-		in->filter,
-		in->comp,
-		in->whatis));
-
-#ifdef NDBM
-	/* limit of 4096 bytes of data using ndbm */
-	if (MYDBM_DSIZE (cont) > 4095) {
-		MYDBM_DPTR (cont)[4095] = '\0';
-		MYDBM_DSIZE (cont) = 4096;
-	}
-#endif
-	return cont;
 }
 
 /* Extract all of the names/extensions associated with this key. Each case

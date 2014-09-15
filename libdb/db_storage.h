@@ -96,11 +96,8 @@ extern datum make_multi_key (const char *page, const char *ext);
 #define infoalloc() XZALLOC (struct mandata)
 
 extern char *name_to_key (const char *name);
-extern char **split_data (char *content, char *start[]);
-extern datum make_content (struct mandata *in);
 extern int list_extensions (char *data, char ***names, char ***ext);
 extern void gripe_replace_key (const char *data);
-extern char *copy_if_set (const char *str);
 extern const char *dash_if_unset (const char *str);
 
 #endif
