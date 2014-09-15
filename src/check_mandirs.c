@@ -571,7 +571,7 @@ int create_db (const char *manpath, const char *catpath)
 }
 
 /* Make sure an existing database is essentially sane. */
-int sanity_check_db (void)
+static int sanity_check_db (void)
 {
 	datum key;
 

@@ -342,7 +342,7 @@ void zsoelim_parse_file (char * const *manpathlist, const char *parent_path)
 	yylex ();
 }
 
-pipeline *try_compressed (char **filename)
+static pipeline *try_compressed (char **filename)
 {
 	struct compression *comp;
 	size_t len = strlen (*filename);

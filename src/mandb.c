@@ -620,7 +620,7 @@ out:
 	return amount;
 }
 
-int is_lang_dir (const char *base)
+static int is_lang_dir (const char *base)
 {
 	return strlen (base) >= 2 &&
 	       base[0] >= 'a' && base[0] <= 'z' &&
@@ -628,7 +628,7 @@ int is_lang_dir (const char *base)
 	       (!base[2] || base[2] < 'a' || base[2] > 'z');
 }
 
-void tried_catdirs_free (void *defn)
+static void tried_catdirs_free (void *defn)
 {
 	struct tried_catdirs_entry *tried = defn;
 
@@ -636,7 +636,8 @@ void tried_catdirs_free (void *defn)
 	free (tried);
 }
 
-void purge_catdir (const struct hashtable *tried_catdirs, const char *path)
+static void purge_catdir (const struct hashtable *tried_catdirs,
+			  const char *path)
 {
 	struct stat st;
 
@@ -649,7 +650,7 @@ void purge_catdir (const struct hashtable *tried_catdirs, const char *path)
 	}
 }
 
-void purge_catsubdirs (const char *manpath, const char *catpath)
+static void purge_catsubdirs (const char *manpath, const char *catpath)
 {
 	DIR *dir;
 	struct dirent *ent;
@@ -693,7 +694,7 @@ void purge_catsubdirs (const char *manpath, const char *catpath)
  * the usual NLS pattern (two lower-case letters followed by nothing or a
  * non-letter).
  */
-void purge_catdirs (const struct hashtable *tried_catdirs)
+static void purge_catdirs (const struct hashtable *tried_catdirs)
 {
 	struct hashtable_iter *iter = NULL;
 	const struct nlist *elt;
