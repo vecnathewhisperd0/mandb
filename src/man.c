@@ -102,7 +102,6 @@ static char *cwd;
 #include "globbing.h"
 #include "ult_src.h"
 #include "manp.h"
-#include "convert_name.h"
 #include "zsoelim.h"
 #include "manconv_client.h"
 
@@ -2324,6 +2323,78 @@ static int display (const char *dir, const char *man_file,
 	return found;
 }
 
+static inline void gripe_converting_name (const char *name) ATTRIBUTE_NORETURN;
+static inline void gripe_converting_name (const char *name)
+{
+	error (FATAL, 0, _("Can't convert %s to cat name"), name);
+	abort (); /* error should have exited; help compilers prove noreturn */
+}
+
+/* Convert the trailing part of 'name' to be a cat page path by altering its
+ * extension appropriately. If fsstnd is set, also try converting the
+ * containing directory name from "man1" to "cat1" etc., returning NULL if
+ * that doesn't work.
+ *
+ * fsstnd should only be set if name is the original path of a man page
+ * found in a man hierarchy, not something like a symlink target or a file
+ * named with 'man -l'. Otherwise, a symlink to "/home/manuel/foo.1.gz"
+ * would be converted to "/home/catuel/foo.1.gz", which would be bad.
+ */
+static char *convert_name (const char *name, int fsstnd)
+{
+	char *to_name, *t1 = NULL;
+	char *t2 = NULL;
+#ifdef COMP_SRC
+	struct compression *comp;
+#endif /* COMP_SRC */
+	char *namestem;
+
+#ifdef COMP_SRC
+	comp = comp_info (name, 1);
+	if (comp)
+		namestem = comp->stem;
+	else
+#endif /* COMP_SRC */
+		namestem = xstrdup (name);
+
+#ifdef COMP_CAT
+	/* TODO: BSD layout requires .0. */
+	to_name = xasprintf ("%s.%s", namestem, COMPRESS_EXT);
+#else /* !COMP_CAT */
+	to_name = xstrdup (namestem);
+#endif /* COMP_CAT */
+	free (namestem);
+
+	if (fsstnd) {
+		t1 = strrchr (to_name, '/');
+		if (!t1)
+			gripe_converting_name (name);
+		*t1 = '\0';
+
+		t2 = strrchr (to_name, '/');
+		if (!t2)
+			gripe_converting_name (name);
+		++t2;
+		*t1 = '/';
+
+		if (STRNEQ (t2, "man", 3)) {
+			/* If the second-last component starts with "man",
+			 * replace "man" with "cat".
+			 */
+			*t2 = 'c';
+			*(t2 + 2) = 't';
+		} else {
+			free (to_name);
+			debug ("couldn't convert %s to FSSTND cat file\n",
+			       name);
+			return NULL;
+		}
+	}
+
+	debug ("converted %s to %s\n", name, to_name);
+
+	return to_name;
+}
 
 static char *find_cat_file (const char *path, const char *original,
 			    const char *man_file)

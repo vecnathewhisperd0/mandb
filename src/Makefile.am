@@ -101,8 +101,6 @@ lexgrog_SOURCES = \
 	ult_src.h
 man_SOURCES = \
 	compression.c \
-	convert_name.c \
-	convert_name.h \
 	filenames.c \
 	filenames.h \
 	globbing.c \
