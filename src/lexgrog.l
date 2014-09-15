@@ -35,8 +35,6 @@
  * in the syntax accepted.
  */
 
-#undef PROFILE
-
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
@@ -58,11 +56,6 @@
 
 #define YY_READ_BUF_SIZE	1024
 #define MAX_NAME		8192
-
-#ifdef PROFILE
-static int ctr[YY_NUM_RULES];
-#  define YY_USER_ACTION ++ctr[yy_act];
-#endif
 
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof ((array)[0]))
 
@@ -898,20 +891,3 @@ int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
 		return p_name[0];
 	}
 }
-
-#ifdef PROFILE
-void rule_profile (void)
-{
-	int i, tot = 0;
-
-	printf ("found NAME in %d man, %d cat pages\n", ctr[1], ctr[2]);
-	for (i = 3; i <= YY_NUM_RULES; i++) 
-		if (ctr[i]) {
-			printf ("rule[%d]: %d\n", i, ctr[i]);
-			tot += ctr[i];
-		}
-	printf ("Total rules executed: %d\n", tot);
-}
-#else
-void rule_profile (void) {}
-#endif
