@@ -29,120 +29,18 @@ AC_SUBST([roff_version])dnl
 # We have to be a bit naughty here and supply options.
 # The autoconf literature states that only features that can be separately
 # 'built' should use --enable and friends. Oh well...
-AC_ARG_ENABLE([setuid],
-[AS_HELP_STRING([--enable-setuid[=ARG]], [install man setuid to user ARG [ARG=man]])
-AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
-	  [if test "$enableval" = "yes" 
-	   then
-		enableval=man
-	   fi
-	   if test "$enableval" = "no" 
-	   then
-		man_owner=
-		man_mode="755"
-		AC_MSG_NOTICE([Man will not be installed setuid])
-	   else
-		man_owner=$enableval
-		man_mode="4755"
-		AC_MSG_NOTICE([Man will be installed setuid $enableval])
-	   	AC_DEFINE_UNQUOTED([SECURE_MAN_UID], ["$man_owner"],
-				   [Define as the setuid owner of man or undefine if not installing setuid.])
-	   fi],
-	  [man_owner=man
-	   man_mode="4755"
-	   AC_DEFINE_UNQUOTED([SECURE_MAN_UID], ["$man_owner"])])
-AC_ARG_ENABLE([undoc],
-[AS_HELP_STRING([--enable-undoc=COMMAND], [suggest COMMAND for missing manual pages])],
-	[if test "$enableval" = "yes" || test "$enableval" = "no"
-	 then
-		AC_MSG_ERROR([--enable-undoc requires an argument])
-	 else
-		AC_MSG_NOTICE([Suggesting '$enableval' for missing manual pages])
-		AC_DEFINE_UNQUOTED([UNDOC_COMMAND], ["$enableval"],
-				   [Define as the name of a command you want to suggest when a non-existent page is requested.])
-	 fi])
-AC_ARG_WITH([device],
-[AS_HELP_STRING([--with-device=DEVICE], [use nroff with the output device DEVICE])],
-	[if test "$withval" = "yes" || test "$withval" = "no" 
-	 then
-	 	AC_MSG_ERROR([--with-device requires an argument])
-	 else
-	 	nroff_device=" -T$withval"
-	 fi])
-AC_ARG_WITH([db],
-[AS_HELP_STRING([--with-db=LIBRARY], [use database library LIBRARY (db5, db4, db3, db2, db1, db, gdbm, ndbm)])],
-	[if test "$withval" = "yes" || test "$withval" = "no" 
-	 then
-	 	AC_MSG_ERROR([--with-db requires an argument])
-	 else
-	 	db=$withval
-	 fi],
-	[: ${db=no}])
-AC_ARG_WITH([config-file],
-[AS_HELP_STRING([--with-config-file=CF], [use config file CF [CF=SYSCONFDIR/man_db.conf]])],
-	[if test "$withval" = "yes" || test "$withval" = "no"
-	 then
-		AC_MSG_ERROR([--with-config-file requires an argument])
-	 else
-		config_file=$withval
-	 fi],
-	[: ${config_file=\$\{sysconfdir\}/man_db.conf}])
-config_file_basename=${withval##*/}
-config_file_dirname=`AS_DIRNAME(["$config_file"])`
-AC_ARG_WITH([sections],
-[AS_HELP_STRING([--with-sections=SECTIONS], [use manual page sections SECTIONS @<:@1 n l 8 3 0 2 5 4 9 6 7@:>@])],
-	[if test "$withval" = "yes" || test "$withval" = "no"
-	 then
-		AC_MSG_ERROR([--with-sections requires an argument])
-	 else
-		sections="$withval"
-	 fi],
-	[: ${sections=1 n l 8 3 2 5 4 9 6 7}])
-AC_ARG_ENABLE([automatic-create],
-[AS_HELP_STRING([--enable-automatic-create], [allow man to create user databases on the fly])],
-	[if test "$enableval" = "yes"
-	 then
-		AC_DEFINE([MAN_DB_CREATES], [1], [Allow man to create user databases on the fly.])
-	 fi])
-AC_ARG_ENABLE([automatic-update],
-[AS_HELP_STRING([--disable-automatic-update], [don't allow man to update databases on the fly])],
-	[if test "$enableval" = "yes"
-	 then
-		AC_DEFINE([MAN_DB_UPDATES], [1], [Allow man to update databases on the fly.])
-	 fi],
-	[AC_DEFINE([MAN_DB_UPDATES], [1], [Allow man to update databases on the fly.])])
-AC_ARG_ENABLE([cats],
-[AS_HELP_STRING([--disable-cats], [don't allow man to create/update cat files])],
-	[if test "$enableval" = "yes"
-	 then
-		AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])
-	 fi],
-	[AC_DEFINE([MAN_CATS], [1], [Allow man to create/update cat files.])])
-AC_ARG_WITH([override-dir],
-[AS_HELP_STRING([--with-override-dir=OVERRIDE], [use OVERRIDE as relative override dir inside the man path - the first directory to be searched when looking for man pages])],
-	[if test "$withval" = "yes" || test "$withval" = "no"
-	 then
-		AC_MSG_ERROR([--with-override-dir requires an argument])
-	 else
-		override_dir=$withval
-	 fi],
-	[: ${override_dir=""}])
-AC_ARG_WITH([systemdtmpfilesdir],
-[AS_HELP_STRING([--with-systemdtmpfilesdir=DIR], [Directory for systemd tmpfiles configuration])],
-	[], [dnl
-	# The default is not prefix-sensitive, since systemd's prefix is not
-	# necessarily the same as man-db's.
-	with_systemdtmpfilesdir=/usr/lib/tmpfiles.d])
-
-# Finish the argument parsing.
-AC_SUBST([man_owner])dnl
-AC_SUBST([man_mode])dnl
-AC_SUBST([config_file])dnl
-AC_SUBST([config_file_basename])dnl
-AC_SUBST([config_file_dirname])dnl
-AC_SUBST([sections])dnl
-AC_SUBST([override_dir])dnl
-AC_SUBST([systemdtmpfilesdir], [$with_systemdtmpfilesdir])
+MAN_ARG_SETUID
+MAN_ARG_UNDOC
+MAN_ARG_DEVICE
+MAN_ARG_DB
+MAN_ARG_CONFIG_FILE
+MAN_ARG_SECTIONS
+MAN_ARG_AUTOMATIC_CREATE
+MAN_ARG_AUTOMATIC_UPDATE
+MAN_ARG_CATS
+MAN_ARG_OVERRIDE_DIR
+MAN_ARG_SYSTEMDTMPFILESDIR
+MAN_ARG_MANDIRS
 
 # Check $PATH for the following programs and append suitable options.
 AC_PROG_CC
@@ -428,32 +326,6 @@ AC_SUBST([unxz])
 AC_SUBST([unlzip])
 MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
-
-# Work out which manual page hierarchy scheme might be in use.
-AC_ARG_ENABLE([mandirs],
-[AS_HELP_STRING([--enable-mandirs=OS], [select manual page hierarchy organization (GNU, HPUX, IRIX, Solaris, BSD)])],
-	[AC_MSG_NOTICE([Using $enableval hierarchy organization(s)])
-	 AC_DEFINE_UNQUOTED([MANDIR_LAYOUT], ["$enableval"],
-			    [Define to the manual page hierarchy organization(s) in use.])
-	 MANDIR_LAYOUT="$enableval"],
-	[case $host in
-		*-gnu)          mandirs=GNU;;
-		*-hpux*)        mandirs=HPUX;;
-		*-irix*)        mandirs=IRIX;;
-		*-solaris*)     mandirs=Solaris;;
-		*-*bsd*)        mandirs=BSD;;
-		*)              mandirs=;;
-	 esac
-	 if test -n "$mandirs"; then
-		AC_MSG_NOTICE([Using $mandirs hierarchy organization])
-		AC_DEFINE_UNQUOTED([MANDIR_LAYOUT], ["$mandirs"])
-		MANDIR_LAYOUT="$mandirs"
-	 else
-		AC_MSG_NOTICE([Allowing any hierarchy organization])
-		AC_DEFINE([MANDIR_LAYOUT], [""])
-		MANDIR_LAYOUT=
-	 fi])
-AC_SUBST([MANDIR_LAYOUT])
 
 # Check for various header files and associated libraries.
 AC_ISC_POSIX

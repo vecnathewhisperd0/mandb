@@ -1456,7 +1456,6 @@ GL_COND_LIBTOOL_TRUE
 LEXLIB
 LEX_OUTPUT_ROOT
 LEX
-MANDIR_LAYOUT
 LIBCOMPRESS
 unlzip
 unxz
@@ -1492,6 +1491,7 @@ browser
 cat
 WARN_CFLAGS
 ARFLAGS
+MANDIR_LAYOUT
 systemdtmpfilesdir
 override_dir
 sections
@@ -1641,6 +1641,7 @@ enable_automatic_update
 enable_cats
 with_override_dir
 with_systemdtmpfilesdir
+enable_mandirs
 enable_largefile
 enable_threads
 with_browser
@@ -1660,7 +1661,6 @@ with_bzip2
 with_xz
 with_lzma
 with_lzip
-enable_mandirs
 enable_rpath
 with_libpth_prefix
 with_included_regex
@@ -2322,14 +2322,14 @@ Optional Features:
   --disable-automatic-update
                           don't allow man to update databases on the fly
   --disable-cats          don't allow man to create/update cat files
+  --enable-mandirs=OS     select manual page hierarchy organization (GNU,
+                          HPUX, IRIX, Solaris, BSD)
   --disable-largefile     omit support for large files
   --enable-threads={posix|solaris|pth|windows}
                           specify multithreading API
   --disable-threads       build without multithread safety
   --enable-mb-groff       expect groff with Debian multibyte patch or real
                           Unicode support
-  --enable-mandirs=OS     select manual page hierarchy organization (GNU,
-                          HPUX, IRIX, Solaris, BSD)
   --disable-rpath         do not hardcode runtime library paths
   --disable-nls           do not use Native Language Support
 
@@ -13229,6 +13229,7 @@ roff_version=`echo 2.6.7.1 | sed 's/-/\\-/g'`
 # We have to be a bit naughty here and supply options.
 # The autoconf literature states that only features that can be separately
 # 'built' should use --enable and friends. Oh well...
+
 # Check whether --enable-setuid was given.
 if test "${enable_setuid+set}" = set; then :
   enableval=$enable_setuid; if test "$enableval" = "yes"
@@ -13261,6 +13262,10 @@ _ACEOF
 
 fi
 
+
+
+
+
 # Check whether --enable-undoc was given.
 if test "${enable_undoc+set}" = set; then :
   enableval=$enable_undoc; if test "$enableval" = "yes" || test "$enableval" = "no"
@@ -13278,6 +13283,8 @@ _ACEOF
 fi
 
 
+
+
 # Check whether --with-device was given.
 if test "${with_device+set}" = set; then :
   withval=$with_device; if test "$withval" = "yes" || test "$withval" = "no"
@@ -13287,6 +13294,8 @@ if test "${with_device+set}" = set; then :
 	 	nroff_device=" -T$withval"
 	 fi
 fi
+
+
 
 
 # Check whether --with-db was given.
@@ -13300,6 +13309,8 @@ if test "${with_db+set}" = set; then :
 else
   : ${db=no}
 fi
+
+
 
 
 # Check whether --with-config-file was given.
@@ -13339,6 +13350,11 @@ $as_echo X"$config_file" |
 	  }
 	  s/.*/./; q'`
 
+
+
+
+
+
 # Check whether --with-sections was given.
 if test "${with_sections+set}" = set; then :
   withval=$with_sections; if test "$withval" = "yes" || test "$withval" = "no"
@@ -13351,6 +13367,8 @@ else
   : ${sections=1 n l 8 3 2 5 4 9 6 7}
 fi
 
+
+
 # Check whether --enable-automatic-create was given.
 if test "${enable_automatic_create+set}" = set; then :
   enableval=$enable_automatic_create; if test "$enableval" = "yes"
@@ -13360,6 +13378,8 @@ $as_echo "#define MAN_DB_CREATES 1" >>confdefs.h
 
 	 fi
 fi
+
+
 
 # Check whether --enable-automatic-update was given.
 if test "${enable_automatic_update+set}" = set; then :
@@ -13374,6 +13394,8 @@ else
 $as_echo "#define MAN_DB_UPDATES 1" >>confdefs.h
 
 fi
+
+
 
 # Check whether --enable-cats was given.
 if test "${enable_cats+set}" = set; then :
@@ -13390,6 +13412,8 @@ $as_echo "#define MAN_CATS 1" >>confdefs.h
 fi
 
 
+
+
 # Check whether --with-override-dir was given.
 if test "${with_override_dir+set}" = set; then :
   withval=$with_override_dir; if test "$withval" = "yes" || test "$withval" = "no"
@@ -13403,6 +13427,9 @@ else
 fi
 
 
+
+
+
 # Check whether --with-systemdtmpfilesdir was given.
 if test "${with_systemdtmpfilesdir+set}" = set; then :
   withval=$with_systemdtmpfilesdir;
@@ -13412,9 +13439,48 @@ else
 	with_systemdtmpfilesdir=/usr/lib/tmpfiles.d
 fi
 
-
-# Finish the argument parsing.
 systemdtmpfilesdir=$with_systemdtmpfilesdir
+
+
+
+# Work out which manual page hierarchy scheme might be in use.
+# Check whether --enable-mandirs was given.
+if test "${enable_mandirs+set}" = set; then :
+  enableval=$enable_mandirs; { $as_echo "$as_me:${as_lineno-$LINENO}: Using $enableval hierarchy organization(s)" >&5
+$as_echo "$as_me: Using $enableval hierarchy organization(s)" >&6;}
+
+cat >>confdefs.h <<_ACEOF
+#define MANDIR_LAYOUT "$enableval"
+_ACEOF
+
+	 MANDIR_LAYOUT="$enableval"
+else
+  case $host in
+		*-gnu)          mandirs=GNU;;
+		*-hpux*)        mandirs=HPUX;;
+		*-irix*)        mandirs=IRIX;;
+		*-solaris*)     mandirs=Solaris;;
+		*-*bsd*)        mandirs=BSD;;
+		*)              mandirs=;;
+	 esac
+	 if test -n "$mandirs"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: Using $mandirs hierarchy organization" >&5
+$as_echo "$as_me: Using $mandirs hierarchy organization" >&6;}
+		cat >>confdefs.h <<_ACEOF
+#define MANDIR_LAYOUT "$mandirs"
+_ACEOF
+
+		MANDIR_LAYOUT="$mandirs"
+	 else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: Allowing any hierarchy organization" >&5
+$as_echo "$as_me: Allowing any hierarchy organization" >&6;}
+		$as_echo "#define MANDIR_LAYOUT \"\"" >>confdefs.h
+
+		MANDIR_LAYOUT=
+	 fi
+fi
+
+
 
 
 # Check $PATH for the following programs and append suitable options.
@@ -17299,45 +17365,6 @@ _ACEOF
    LIBCOMPRESS="-lz $LIBCOMPRESS"
 fi
 
-
-
-
-# Work out which manual page hierarchy scheme might be in use.
-# Check whether --enable-mandirs was given.
-if test "${enable_mandirs+set}" = set; then :
-  enableval=$enable_mandirs; { $as_echo "$as_me:${as_lineno-$LINENO}: Using $enableval hierarchy organization(s)" >&5
-$as_echo "$as_me: Using $enableval hierarchy organization(s)" >&6;}
-
-cat >>confdefs.h <<_ACEOF
-#define MANDIR_LAYOUT "$enableval"
-_ACEOF
-
-	 MANDIR_LAYOUT="$enableval"
-else
-  case $host in
-		*-gnu)          mandirs=GNU;;
-		*-hpux*)        mandirs=HPUX;;
-		*-irix*)        mandirs=IRIX;;
-		*-solaris*)     mandirs=Solaris;;
-		*-*bsd*)        mandirs=BSD;;
-		*)              mandirs=;;
-	 esac
-	 if test -n "$mandirs"; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: Using $mandirs hierarchy organization" >&5
-$as_echo "$as_me: Using $mandirs hierarchy organization" >&6;}
-		cat >>confdefs.h <<_ACEOF
-#define MANDIR_LAYOUT "$mandirs"
-_ACEOF
-
-		MANDIR_LAYOUT="$mandirs"
-	 else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: Allowing any hierarchy organization" >&5
-$as_echo "$as_me: Allowing any hierarchy organization" >&6;}
-		$as_echo "#define MANDIR_LAYOUT \"\"" >>confdefs.h
-
-		MANDIR_LAYOUT=
-	 fi
-fi
 
 
 
