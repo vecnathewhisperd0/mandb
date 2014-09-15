@@ -108,7 +108,6 @@ man_SOURCES = \
 	globbing.c \
 	globbing.h \
 	man.c \
-	man.h \
 	manconv.c \
 	manconv.h \
 	manconv_client.c \

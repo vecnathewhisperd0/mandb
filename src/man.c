@@ -105,7 +105,6 @@ static char *cwd;
 #include "convert_name.h"
 #include "zsoelim.h"
 #include "manconv_client.h"
-#include "man.h"
 
 #ifdef SECURE_MAN_UID
 extern uid_t ruid;
@@ -903,476 +902,6 @@ static char *locale_manpath (const char *manpath)
 	free (all_locales);
 
 	return new_manpath;
-}
-
-
-/* man issued with `-l' option */
-static int local_man_loop (const char *argv)
-{
-	int exit_status = OK;
-	int local_mf = local_man_file;
-
-	drop_effective_privs ();
-	local_man_file = 1;
-	if (strcmp (argv, "-") == 0)
-		display (NULL, "", NULL, "(stdin)", NULL);
-	else {
-		struct stat st;
-
-		if (cwd[0]) {
-			debug ("chdir %s\n", cwd);
-			if (chdir (cwd)) {
-				error (0, errno, _("can't chdir to %s"), cwd);
-				regain_effective_privs ();
-				return 0;
-			}
-		}
-
-		/* Check that the file exists and isn't e.g. a directory */
-		if (stat (argv, &st)) {
-			error (0, errno, "%s", argv);
-			return NOT_FOUND;
-		}
-
-		if (S_ISDIR (st.st_mode)) {
-			error (0, EISDIR, "%s", argv);
-			return NOT_FOUND;
-		}
-
-		if (S_ISCHR (st.st_mode) || S_ISBLK (st.st_mode)) {
-			/* EINVAL is about the best I can do. */
-			error (0, EINVAL, "%s", argv);
-			return NOT_FOUND;
-		}
-
-		if (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) {
-			/* Perhaps an executable. If its directory is on
-			 * $PATH, then we want to look up the corresponding
-			 * manual page in the appropriate hierarchy rather
-			 * than displaying the executable.
-			 */
-			char *argv_dir = dir_name (argv);
-			int found = 0;
-
-			if (directory_on_path (argv_dir)) {
-				char *argv_base = base_name (argv);
-				char *new_manp, *nm;
-				char **old_manpathlist, **mp;
-
-				debug ("recalculating manpath for executable "
-				       "in %s\n", argv_dir);
-
-				new_manp = get_manpath_from_path (argv_dir, 0);
-				if (!new_manp || !*new_manp) {
-					debug ("no useful manpath for "
-					       "executable\n");
-					goto executable_out;
-				}
-				nm = locale_manpath (new_manp);
-				free (new_manp);
-				new_manp = nm;
-
-				old_manpathlist = XNMALLOC (MAXDIRS, char *);
-				memcpy (old_manpathlist, manpathlist,
-					MAXDIRS * sizeof (*manpathlist));
-				create_pathlist (new_manp, manpathlist);
-
-				man (argv_base, &found);
-
-				for (mp = manpathlist; *mp; ++mp)
-					free (*mp);
-				memcpy (manpathlist, old_manpathlist,
-					MAXDIRS * sizeof (*manpathlist));
-				free (old_manpathlist);
-executable_out:
-				free (new_manp);
-				free (argv_base);
-			}
-			free (argv_dir);
-
-			if (found)
-				return OK;
-		}
-
-		if (exit_status == OK) {
-			char *argv_base = base_name (argv);
-			char *argv_abs;
-			if (argv[0] == '/')
-				argv_abs = xstrdup (argv);
-			else {
-				argv_abs = xgetcwd ();
-				if (argv_abs)
-					argv_abs = appendstr (argv_abs, "/",
-							      argv, NULL);
-				else
-					argv_abs = xstrdup (argv);
-			}
-			lang = lang_dir (argv_abs);
-			free (argv_abs);
-			if (!display (NULL, argv, NULL, argv_base, NULL)) {
-				if (local_mf)
-					error (0, errno, "%s", argv);
-				exit_status = NOT_FOUND;
-			}
-			free (lang);
-			lang = NULL;
-			free (argv_base);
-		}
-	}
-	local_man_file = local_mf;
-	regain_effective_privs ();
-	return exit_status;
-}
-
-int main (int argc, char *argv[])
-{
-	int argc_env, exit_status = OK;
-	char **argv_env;
-	const char *tmp;
-
-	program_name = base_name (argv[0]);
-
-	init_debug ();
-	pipeline_install_post_fork (pop_all_cleanups);
-
-	umask (022);
-	init_locale ();
-
-	internal_locale = setlocale (LC_MESSAGES, NULL);
-	/* Use LANGUAGE only when LC_MESSAGES locale category is
-	 * neither "C" nor "POSIX". */
-	if (internal_locale && strcmp (internal_locale, "C") &&
-	    strcmp (internal_locale, "POSIX"))
-		multiple_locale = getenv ("LANGUAGE");
-	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
-
-/* export argv, it might be needed when invoking the vendor supplied browser */
-#if defined _AIX || defined __sgi
-	global_argv = argv;
-#endif
-
-	{ /* opens base streams in case someone like "info" closed them */
-		struct stat buf;
-		if (STDIN_FILENO < 0 ||
-		    ((fstat (STDIN_FILENO, &buf) < 0) && (errno == EBADF))) 
-			freopen ("/dev/null", "r", stdin);
-		if (STDOUT_FILENO < 0 ||
-		    ((fstat (STDOUT_FILENO, &buf) < 0) && (errno == EBADF)))
-			freopen ("/dev/null", "w", stdout);
-		if (STDERR_FILENO < 0 ||
-		    ((fstat (STDERR_FILENO, &buf) < 0) && (errno == EBADF)))
-			freopen ("/dev/null", "w", stderr);
-	}
-
-	/* This will enable us to do some profiling and know
-	where gmon.out will end up. Must chdir(cwd) before we return */
-	cwd = xgetcwd ();
-	if (!cwd) {
-		cwd = xmalloc (1);
-		cwd[0] = '\0';
-	}
-
-#ifdef TROFF_IS_GROFF
-	/* used in --help, so initialise early */
-	if (!html_pager) {
-		html_pager = getenv ("BROWSER");
-		if (!html_pager)
-			html_pager = WEB_BROWSER;
-	}
-#endif /* TROFF_IS_GROFF */
-
-	/* First of all, find out if $MANOPT is set. If so, put it in 
-	   *argv[] format for argp to play with. */
-	argv_env = manopt_to_env (&argc_env);
-	if (argv_env)
-		if (argp_parse (&argp, argc_env, argv_env, ARGP_NO_ARGS, 0, 0))
-			exit (FAIL);
-
-	/* parse the actual program args */
-	if (argp_parse (&argp, argc, argv, ARGP_NO_ARGS, &first_arg, 0))
-		exit (FAIL);
-
-#ifdef SECURE_MAN_UID
-	/* record who we are and drop effective privs for later use */
-	init_security ();
-#endif /* SECURE_MAN_UID */
-
-	read_config_file (local_man_file || user_config_file);
-
-	/* if the user wants whatis or apropos, give it to them... */
-	if (external)
-		do_extern (argc, argv);
-
-	get_term (); /* stores terminal settings */
-#ifdef SECURE_MAN_UID
-	debug ("real user = %d; effective user = %d\n", ruid, euid);
-#endif /* SECURE_MAN_UID */
-
-	/* close this locale and reinitialise if a new locale was 
-	   issued as an argument or in $MANOPT */
-	if (locale) {
-		free (internal_locale);
-		internal_locale = setlocale (LC_ALL, locale);
-		if (internal_locale)
-			internal_locale = xstrdup (internal_locale);
-		else
-			internal_locale = xstrdup (locale);
-
-		debug ("main(): locale = %s, internal_locale = %s\n",
-		       locale, internal_locale);
-		if (internal_locale) {
-			setenv ("LANGUAGE", internal_locale, 1);
-			locale_changed ();
-			multiple_locale = NULL;
-		}
-	}
-
-#ifdef TROFF_IS_GROFF
-	if (htmlout)
-		pager = html_pager;
-#endif /* TROFF_IS_GROFF */
-	if (pager == NULL) {
-		pager = getenv ("MANPAGER");
-		if (pager == NULL) {
-			pager = getenv ("PAGER");
-			if (pager == NULL)
-				pager = get_def_user ("pager", PAGER);
-		}
-	}
-	if (*pager == '\0')
-		pager = get_def_user ("cat", CAT);
-
-	if (prompt_string == NULL)
-		prompt_string = getenv ("MANLESS");
-
-	if (prompt_string == NULL)
-#ifdef LESS_PROMPT
-		prompt_string = LESS_PROMPT;
-#else
-		prompt_string = _(
-				" Manual page " MAN_PN
-				" ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):"
-				"?pB %pB\\%.. "
-				"(press h for help or q to quit)");
-#endif
-
-	/* Restore and save $LESS in $MAN_ORIG_LESS so that recursive uses
-	 * of man work as expected.
-	 */
-	less = getenv ("MAN_ORIG_LESS");
-	if (less == NULL)
-		less = getenv ("LESS");
-	setenv ("MAN_ORIG_LESS", less ? less : "", 1);
-
-	debug ("\nusing %s as pager\n", pager);
-
-	if (first_arg == argc) {
-		/* http://twitter.com/#!/marnanel/status/132280557190119424 */
-		time_t now = time (NULL);
-		struct tm *localnow = localtime (&now);
-		if (localnow &&
-		    localnow->tm_hour == 0 && localnow->tm_min == 30)
-			fprintf (stderr, "gimme gimme gimme\n");
-
-		if (print_where) {
-			manp = get_manpath ("");
-			printf ("%s\n", manp);
-			exit (OK);
-		} else {
-			free (cwd);
-			free (internal_locale);
-			free (program_name);
-			gripe_no_name (NULL);
-		}
-	}
-
-	section_list = get_section_list ();
-
-	if (manp == NULL) {
-		char *mp = get_manpath (alt_system_name);
-		manp = locale_manpath (mp);
-		free (mp);
-	} else
-		free (get_manpath (NULL));
-
-	debug ("manpath search path (with duplicates) = %s\n", manp);
-
-	create_pathlist (manp, manpathlist);
-
-	/* man issued with `-l' option */
-	if (local_man_file) {
-		while (first_arg < argc) {
-			exit_status = local_man_loop (argv[first_arg]);
-			++first_arg;
-		}
-		free (cwd);
-		free (internal_locale);
-		free (program_name);
-		exit (exit_status);
-	}
-
-	/* finished manpath processing, regain privs */
-	regain_effective_privs ();
-
-#ifdef MAN_DB_UPDATES
-	/* If `-u', do it now. */
-	if (update) {
-		int status = run_mandb (0, NULL, NULL);
-		if (status)
-			error (0, 0,
-			       _("mandb command failed with exit status %d"),
-			       status);
-	}
-#endif /* MAN_DB_UPDATES */
-
-	while (first_arg < argc) {
-		int status = OK;
-		int found = 0;
-		static int maybe_section = 0;
-		const char *nextarg = argv[first_arg++];
-
-		/*
-     		 * See if this argument is a valid section name.  If not,
-      		 * is_section returns NULL.
-      		 */
-		if (!catman) {
-			tmp = is_section (nextarg);
-			if (tmp) {
-				section = tmp;
-				debug ("\nsection: %s\n", section);
-				maybe_section = 1;
-			}
-		}
-
-		if (maybe_section) {
-			if (first_arg < argc)
-				/* e.g. 'man 3perl Shell' */
-				nextarg = argv[first_arg++];
-			else
-				/* e.g. 'man 9wm' */
-				section = NULL;
-				/* ... but leave maybe_section set so we can
-				 * tell later that this happened.
-				 */
-		}
-
-		/* this is where we actually start looking for the man page */
-		skip = 0;
-		if (global_apropos)
-			status = do_global_apropos (nextarg, &found);
-		else {
-			int found_subpage = 0;
-			if (subpages && first_arg < argc) {
-				char *subname = xasprintf (
-					"%s-%s", nextarg, argv[first_arg]);
-				status = man (subname, &found);
-				free (subname);
-				if (status == OK) {
-					found_subpage = 1;
-					++first_arg;
-				}
-			}
-			if (!found_subpage && subpages && first_arg < argc) {
-				char *subname = xasprintf (
-					"%s_%s", nextarg, argv[first_arg]);
-				status = man (subname, &found);
-				free (subname);
-				if (status == OK) {
-					found_subpage = 1;
-					++first_arg;
-				}
-			}
-			if (!found_subpage)
-				status = man (nextarg, &found);
-		}
-
-		/* clean out the cache of database lookups for each man page */
-		hashtable_free (db_hash);
-		db_hash = NULL;
-
-		if (section && maybe_section) {
-			if (status != OK && !catman) {
-				/* Maybe the section wasn't a section after
-				 * all? e.g. 'man 9wm fvwm'.
-				 */
-				int found_subpage = 0;
-				debug ("\nRetrying section %s as name\n",
-				       section);
-				tmp = section;
-				section = NULL;
-				if (subpages) {
-					char *subname = xasprintf (
-						"%s-%s", tmp, nextarg);
-					status = man (subname, &found);
-					free (subname);
-					if (status == OK) {
-						found_subpage = 1;
-						++first_arg;
-					}
-				}
-				if (!found_subpage)
-					status = man (tmp, &found);
-				hashtable_free (db_hash);
-				db_hash = NULL;
-				/* ... but don't gripe about it if it doesn't
-				 * work!
-				 */
-				if (status == OK) {
-					/* It was a name after all, so arrange
-					 * to try the next page again with a
-					 * null section.
-					 */
-					nextarg = tmp;
-					--first_arg;
-				} else
-					/* No go, it really was a section. */
-					section = tmp;
-			}
-		}
-
-		if (status != OK && !catman) {
-			if (!skip) {
-				exit_status = status;
-				if (exit_status == NOT_FOUND) {
-					if (!section && maybe_section &&
-					    CTYPE (isdigit, nextarg[0]))
-						gripe_no_name (nextarg);
-					else
-						gripe_no_man (nextarg, section);
-				}
-			}
-		} else {
-			debug ("\nFound %d man pages\n", found);
-			if (catman) {
-				printf ("%s", nextarg);
-				if (section)
-					printf ("(%s)", section);
-				if (first_arg != argc)
-					fputs (", ", stdout);
-				else
-					fputs (".\n", stdout);
-			}
-		}
-
-		maybe_section = 0;
-
-		chkr_garbage_detector ();
-	}
-	hashtable_free (db_hash);
-	db_hash = NULL;
-
-	drop_effective_privs ();
-
-	/* For profiling */
-	if (cwd[0])
-		chdir (cwd);
-
-	free (database);
-	free_pathlist (manpathlist);
-	free (cwd);
-	free (internal_locale);
-	free (program_name);
-	exit (exit_status);
 }
 
 /*
@@ -2424,6 +1953,40 @@ static void locale_macros (void *data)
 		".hla %s\n", macro_lang, hyphen_lang);
 }
 #endif /* TROFF_IS_GROFF */
+
+/* allow user to skip a page or quit after viewing desired page 
+   return 1 to skip
+   return 0 to view
+ */
+static inline int do_prompt (const char *name)
+{
+	int ch;
+
+	skip = 0;
+	if (!isatty (STDOUT_FILENO) || !isatty (STDIN_FILENO))
+		return 0;
+
+	fprintf (stderr, _( 
+		 "--Man-- next: %s "
+		 "[ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"), 
+		 name);
+	fflush (stderr);
+
+	do {
+		ch = getchar ();
+		switch (ch) {
+			case '\n':
+				return 0;
+			case EOF:
+				skip = 1;
+				return 1;
+			default:
+				break;
+		}
+	} while (1);
+
+	return 0;
+}
 
 /*
  * optionally chdir to dir, if necessary update cat_file from man_file
@@ -3914,6 +3477,127 @@ static int do_global_apropos (const char *name, int *found)
 	return *found ? OK : NOT_FOUND;
 }
 
+/* Each of local_man_loop and man sometimes calls the other. */
+static int man (const char *name, int *found);
+
+/* man issued with `-l' option */
+static int local_man_loop (const char *argv)
+{
+	int exit_status = OK;
+	int local_mf = local_man_file;
+
+	drop_effective_privs ();
+	local_man_file = 1;
+	if (strcmp (argv, "-") == 0)
+		display (NULL, "", NULL, "(stdin)", NULL);
+	else {
+		struct stat st;
+
+		if (cwd[0]) {
+			debug ("chdir %s\n", cwd);
+			if (chdir (cwd)) {
+				error (0, errno, _("can't chdir to %s"), cwd);
+				regain_effective_privs ();
+				return 0;
+			}
+		}
+
+		/* Check that the file exists and isn't e.g. a directory */
+		if (stat (argv, &st)) {
+			error (0, errno, "%s", argv);
+			return NOT_FOUND;
+		}
+
+		if (S_ISDIR (st.st_mode)) {
+			error (0, EISDIR, "%s", argv);
+			return NOT_FOUND;
+		}
+
+		if (S_ISCHR (st.st_mode) || S_ISBLK (st.st_mode)) {
+			/* EINVAL is about the best I can do. */
+			error (0, EINVAL, "%s", argv);
+			return NOT_FOUND;
+		}
+
+		if (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) {
+			/* Perhaps an executable. If its directory is on
+			 * $PATH, then we want to look up the corresponding
+			 * manual page in the appropriate hierarchy rather
+			 * than displaying the executable.
+			 */
+			char *argv_dir = dir_name (argv);
+			int found = 0;
+
+			if (directory_on_path (argv_dir)) {
+				char *argv_base = base_name (argv);
+				char *new_manp, *nm;
+				char **old_manpathlist, **mp;
+
+				debug ("recalculating manpath for executable "
+				       "in %s\n", argv_dir);
+
+				new_manp = get_manpath_from_path (argv_dir, 0);
+				if (!new_manp || !*new_manp) {
+					debug ("no useful manpath for "
+					       "executable\n");
+					goto executable_out;
+				}
+				nm = locale_manpath (new_manp);
+				free (new_manp);
+				new_manp = nm;
+
+				old_manpathlist = XNMALLOC (MAXDIRS, char *);
+				memcpy (old_manpathlist, manpathlist,
+					MAXDIRS * sizeof (*manpathlist));
+				create_pathlist (new_manp, manpathlist);
+
+				man (argv_base, &found);
+
+				for (mp = manpathlist; *mp; ++mp)
+					free (*mp);
+				memcpy (manpathlist, old_manpathlist,
+					MAXDIRS * sizeof (*manpathlist));
+				free (old_manpathlist);
+executable_out:
+				free (new_manp);
+				free (argv_base);
+			}
+			free (argv_dir);
+
+			if (found)
+				return OK;
+		}
+
+		if (exit_status == OK) {
+			char *argv_base = base_name (argv);
+			char *argv_abs;
+			if (argv[0] == '/')
+				argv_abs = xstrdup (argv);
+			else {
+				argv_abs = xgetcwd ();
+				if (argv_abs)
+					argv_abs = appendstr (argv_abs, "/",
+							      argv, NULL);
+				else
+					argv_abs = xstrdup (argv);
+			}
+			lang = lang_dir (argv_abs);
+			free (argv_abs);
+			if (!display (NULL, argv, NULL, argv_base, NULL)) {
+				if (local_mf)
+					error (0, errno, "%s", argv);
+				exit_status = NOT_FOUND;
+			}
+			free (lang);
+			lang = NULL;
+			free (argv_base);
+		}
+	}
+	local_man_file = local_mf;
+	regain_effective_privs ();
+	return exit_status;
+}
+
 /*
  * Search for manual pages.
  *
@@ -4014,36 +3698,353 @@ static const char **get_section_list (void)
 	}
 }
 
-/* allow user to skip a page or quit after viewing desired page 
-   return 1 to skip
-   return 0 to view
- */
-static inline int do_prompt (const char *name)
+int main (int argc, char *argv[])
 {
-	int ch;
+	int argc_env, exit_status = OK;
+	char **argv_env;
+	const char *tmp;
 
-	skip = 0;
-	if (!isatty (STDOUT_FILENO) || !isatty (STDIN_FILENO))
-		return 0;
+	program_name = base_name (argv[0]);
 
-	fprintf (stderr, _( 
-		 "--Man-- next: %s "
-		 "[ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"), 
-		 name);
-	fflush (stderr);
+	init_debug ();
+	pipeline_install_post_fork (pop_all_cleanups);
 
-	do {
-		ch = getchar ();
-		switch (ch) {
-			case '\n':
-				return 0;
-			case EOF:
-				skip = 1;
-				return 1;
-			default:
-				break;
+	umask (022);
+	init_locale ();
+
+	internal_locale = setlocale (LC_MESSAGES, NULL);
+	/* Use LANGUAGE only when LC_MESSAGES locale category is
+	 * neither "C" nor "POSIX". */
+	if (internal_locale && strcmp (internal_locale, "C") &&
+	    strcmp (internal_locale, "POSIX"))
+		multiple_locale = getenv ("LANGUAGE");
+	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
+
+/* export argv, it might be needed when invoking the vendor supplied browser */
+#if defined _AIX || defined __sgi
+	global_argv = argv;
+#endif
+
+	{ /* opens base streams in case someone like "info" closed them */
+		struct stat buf;
+		if (STDIN_FILENO < 0 ||
+		    ((fstat (STDIN_FILENO, &buf) < 0) && (errno == EBADF))) 
+			freopen ("/dev/null", "r", stdin);
+		if (STDOUT_FILENO < 0 ||
+		    ((fstat (STDOUT_FILENO, &buf) < 0) && (errno == EBADF)))
+			freopen ("/dev/null", "w", stdout);
+		if (STDERR_FILENO < 0 ||
+		    ((fstat (STDERR_FILENO, &buf) < 0) && (errno == EBADF)))
+			freopen ("/dev/null", "w", stderr);
+	}
+
+	/* This will enable us to do some profiling and know
+	where gmon.out will end up. Must chdir(cwd) before we return */
+	cwd = xgetcwd ();
+	if (!cwd) {
+		cwd = xmalloc (1);
+		cwd[0] = '\0';
+	}
+
+#ifdef TROFF_IS_GROFF
+	/* used in --help, so initialise early */
+	if (!html_pager) {
+		html_pager = getenv ("BROWSER");
+		if (!html_pager)
+			html_pager = WEB_BROWSER;
+	}
+#endif /* TROFF_IS_GROFF */
+
+	/* First of all, find out if $MANOPT is set. If so, put it in 
+	   *argv[] format for argp to play with. */
+	argv_env = manopt_to_env (&argc_env);
+	if (argv_env)
+		if (argp_parse (&argp, argc_env, argv_env, ARGP_NO_ARGS, 0, 0))
+			exit (FAIL);
+
+	/* parse the actual program args */
+	if (argp_parse (&argp, argc, argv, ARGP_NO_ARGS, &first_arg, 0))
+		exit (FAIL);
+
+#ifdef SECURE_MAN_UID
+	/* record who we are and drop effective privs for later use */
+	init_security ();
+#endif /* SECURE_MAN_UID */
+
+	read_config_file (local_man_file || user_config_file);
+
+	/* if the user wants whatis or apropos, give it to them... */
+	if (external)
+		do_extern (argc, argv);
+
+	get_term (); /* stores terminal settings */
+#ifdef SECURE_MAN_UID
+	debug ("real user = %d; effective user = %d\n", ruid, euid);
+#endif /* SECURE_MAN_UID */
+
+	/* close this locale and reinitialise if a new locale was 
+	   issued as an argument or in $MANOPT */
+	if (locale) {
+		free (internal_locale);
+		internal_locale = setlocale (LC_ALL, locale);
+		if (internal_locale)
+			internal_locale = xstrdup (internal_locale);
+		else
+			internal_locale = xstrdup (locale);
+
+		debug ("main(): locale = %s, internal_locale = %s\n",
+		       locale, internal_locale);
+		if (internal_locale) {
+			setenv ("LANGUAGE", internal_locale, 1);
+			locale_changed ();
+			multiple_locale = NULL;
 		}
-	} while (1);
+	}
 
-	return 0;
+#ifdef TROFF_IS_GROFF
+	if (htmlout)
+		pager = html_pager;
+#endif /* TROFF_IS_GROFF */
+	if (pager == NULL) {
+		pager = getenv ("MANPAGER");
+		if (pager == NULL) {
+			pager = getenv ("PAGER");
+			if (pager == NULL)
+				pager = get_def_user ("pager", PAGER);
+		}
+	}
+	if (*pager == '\0')
+		pager = get_def_user ("cat", CAT);
+
+	if (prompt_string == NULL)
+		prompt_string = getenv ("MANLESS");
+
+	if (prompt_string == NULL)
+#ifdef LESS_PROMPT
+		prompt_string = LESS_PROMPT;
+#else
+		prompt_string = _(
+				" Manual page " MAN_PN
+				" ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):"
+				"?pB %pB\\%.. "
+				"(press h for help or q to quit)");
+#endif
+
+	/* Restore and save $LESS in $MAN_ORIG_LESS so that recursive uses
+	 * of man work as expected.
+	 */
+	less = getenv ("MAN_ORIG_LESS");
+	if (less == NULL)
+		less = getenv ("LESS");
+	setenv ("MAN_ORIG_LESS", less ? less : "", 1);
+
+	debug ("\nusing %s as pager\n", pager);
+
+	if (first_arg == argc) {
+		/* http://twitter.com/#!/marnanel/status/132280557190119424 */
+		time_t now = time (NULL);
+		struct tm *localnow = localtime (&now);
+		if (localnow &&
+		    localnow->tm_hour == 0 && localnow->tm_min == 30)
+			fprintf (stderr, "gimme gimme gimme\n");
+
+		if (print_where) {
+			manp = get_manpath ("");
+			printf ("%s\n", manp);
+			exit (OK);
+		} else {
+			free (cwd);
+			free (internal_locale);
+			free (program_name);
+			gripe_no_name (NULL);
+		}
+	}
+
+	section_list = get_section_list ();
+
+	if (manp == NULL) {
+		char *mp = get_manpath (alt_system_name);
+		manp = locale_manpath (mp);
+		free (mp);
+	} else
+		free (get_manpath (NULL));
+
+	debug ("manpath search path (with duplicates) = %s\n", manp);
+
+	create_pathlist (manp, manpathlist);
+
+	/* man issued with `-l' option */
+	if (local_man_file) {
+		while (first_arg < argc) {
+			exit_status = local_man_loop (argv[first_arg]);
+			++first_arg;
+		}
+		free (cwd);
+		free (internal_locale);
+		free (program_name);
+		exit (exit_status);
+	}
+
+	/* finished manpath processing, regain privs */
+	regain_effective_privs ();
+
+#ifdef MAN_DB_UPDATES
+	/* If `-u', do it now. */
+	if (update) {
+		int status = run_mandb (0, NULL, NULL);
+		if (status)
+			error (0, 0,
+			       _("mandb command failed with exit status %d"),
+			       status);
+	}
+#endif /* MAN_DB_UPDATES */
+
+	while (first_arg < argc) {
+		int status = OK;
+		int found = 0;
+		static int maybe_section = 0;
+		const char *nextarg = argv[first_arg++];
+
+		/*
+     		 * See if this argument is a valid section name.  If not,
+      		 * is_section returns NULL.
+      		 */
+		if (!catman) {
+			tmp = is_section (nextarg);
+			if (tmp) {
+				section = tmp;
+				debug ("\nsection: %s\n", section);
+				maybe_section = 1;
+			}
+		}
+
+		if (maybe_section) {
+			if (first_arg < argc)
+				/* e.g. 'man 3perl Shell' */
+				nextarg = argv[first_arg++];
+			else
+				/* e.g. 'man 9wm' */
+				section = NULL;
+				/* ... but leave maybe_section set so we can
+				 * tell later that this happened.
+				 */
+		}
+
+		/* this is where we actually start looking for the man page */
+		skip = 0;
+		if (global_apropos)
+			status = do_global_apropos (nextarg, &found);
+		else {
+			int found_subpage = 0;
+			if (subpages && first_arg < argc) {
+				char *subname = xasprintf (
+					"%s-%s", nextarg, argv[first_arg]);
+				status = man (subname, &found);
+				free (subname);
+				if (status == OK) {
+					found_subpage = 1;
+					++first_arg;
+				}
+			}
+			if (!found_subpage && subpages && first_arg < argc) {
+				char *subname = xasprintf (
+					"%s_%s", nextarg, argv[first_arg]);
+				status = man (subname, &found);
+				free (subname);
+				if (status == OK) {
+					found_subpage = 1;
+					++first_arg;
+				}
+			}
+			if (!found_subpage)
+				status = man (nextarg, &found);
+		}
+
+		/* clean out the cache of database lookups for each man page */
+		hashtable_free (db_hash);
+		db_hash = NULL;
+
+		if (section && maybe_section) {
+			if (status != OK && !catman) {
+				/* Maybe the section wasn't a section after
+				 * all? e.g. 'man 9wm fvwm'.
+				 */
+				int found_subpage = 0;
+				debug ("\nRetrying section %s as name\n",
+				       section);
+				tmp = section;
+				section = NULL;
+				if (subpages) {
+					char *subname = xasprintf (
+						"%s-%s", tmp, nextarg);
+					status = man (subname, &found);
+					free (subname);
+					if (status == OK) {
+						found_subpage = 1;
+						++first_arg;
+					}
+				}
+				if (!found_subpage)
+					status = man (tmp, &found);
+				hashtable_free (db_hash);
+				db_hash = NULL;
+				/* ... but don't gripe about it if it doesn't
+				 * work!
+				 */
+				if (status == OK) {
+					/* It was a name after all, so arrange
+					 * to try the next page again with a
+					 * null section.
+					 */
+					nextarg = tmp;
+					--first_arg;
+				} else
+					/* No go, it really was a section. */
+					section = tmp;
+			}
+		}
+
+		if (status != OK && !catman) {
+			if (!skip) {
+				exit_status = status;
+				if (exit_status == NOT_FOUND) {
+					if (!section && maybe_section &&
+					    CTYPE (isdigit, nextarg[0]))
+						gripe_no_name (nextarg);
+					else
+						gripe_no_man (nextarg, section);
+				}
+			}
+		} else {
+			debug ("\nFound %d man pages\n", found);
+			if (catman) {
+				printf ("%s", nextarg);
+				if (section)
+					printf ("(%s)", section);
+				if (first_arg != argc)
+					fputs (", ", stdout);
+				else
+					fputs (".\n", stdout);
+			}
+		}
+
+		maybe_section = 0;
+
+		chkr_garbage_detector ();
+	}
+	hashtable_free (db_hash);
+	db_hash = NULL;
+
+	drop_effective_privs ();
+
+	/* For profiling */
+	if (cwd[0])
+		chdir (cwd);
+
+	free (database);
+	free_pathlist (manpathlist);
+	free (cwd);
+	free (internal_locale);
+	free (program_name);
+	exit (exit_status);
 }
