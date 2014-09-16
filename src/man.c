@@ -3052,7 +3052,8 @@ static int display_database (struct candidate *candp)
 	if (in->id == WHATIS_MAN || in->id == WHATIS_CAT)
 		debug (_("%s: relying on whatis refs is deprecated\n"), name);
 
-	title = xasprintf ("%s(%s)", name, in->ext);
+	title = xasprintf ("%s(%s)",
+			   in->name ? in->name : candp->req_name, in->ext);
 
 #ifndef NROFF_MISSING /* #ifdef NROFF */
 	/*
