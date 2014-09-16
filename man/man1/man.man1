@@ -62,7 +62,7 @@
 .RI [\| dpi \|]\|]
 .RB [\| \-Z \|]
 .RI [\|[\| section \|]
-.IR page \ .\|.\|.\|]\ .\|.\|.
+.IR page \ .\|.\|.\|]\ .\|.\|.\&
 .\" The apropos command line
 .br
 .B %man%
@@ -70,7 +70,7 @@
 .RI [\| apropos
 .IR options \|]
 .I regexp
-\&.\|.\|.
+\&.\|.\|.\&
 .\" The --global-apropos command line
 .br
 .B %man%
@@ -81,7 +81,7 @@
 .RB [\| \-i \||\| \-I \|]
 .RI [\| \-\-regex \|]
 .RI [\| section \|]
-.IR term \ .\|.\|.
+.IR term \ .\|.\|.\&
 .\" The whatis command line
 .br
 .B %man%
@@ -89,7 +89,7 @@
 .RI [\| whatis
 .IR options \|]
 .I page
-\&.\|.\|.
+\&.\|.\|.\&
 .\" The --local command line
 .br
 .B %man%
@@ -122,7 +122,7 @@
 .RI [\| dpi \|]\|]
 .RB [\| \-Z \|]
 .I file
-\&.\|.\|.
+\&.\|.\|.\&
 .\" The --where/--where-cat command line
 .br
 .B %man%
@@ -132,7 +132,7 @@
 .RB [\| \-d \|]
 .RB [\| \-D \|]
 .I page
-\&.\|.\|.
+\&.\|.\|.\&
 .\" The --catman command line
 .br
 .B %man%
@@ -142,21 +142,23 @@
 .RB [\| \-d \|]
 .RB [\| \-D \|]
 .I page
-\&.\|.\|.
+\&.\|.\|.\&
 .\" --help and --version
 .br
 .B %man%
 .RB [\| \-?V \|]
 .SH DESCRIPTION
 .B %man%
-is the system's manual pager. Each
+is the system's manual pager.
+Each
 .I page
 argument given to
 .B %man%
 is normally the name of a program, utility or function.
 The
 .I manual page
-associated with each of these arguments is then found and displayed. A
+associated with each of these arguments is then found and displayed.
+A
 .IR section ,
 if provided, will direct
 .B %man%
@@ -194,7 +196,7 @@ T}
 Library calls (functions within program libraries)
 T}
 4@T{
-Special files (usually found in \fI/dev\fR)
+Special files (usually found in \fI/dev\/\fR)
 T}
 5@T{
 File formats and conventions eg \fI/etc/passwd\fR
@@ -204,7 +206,7 @@ Games
 T}
 7@T{
 Miscellaneous (including macro packages and conventions),
-e.g. \fBman\fR(7), \fBgroff\fR(7)
+e.g.\& \fBman\fR(7), \fBgroff\fR(7)
 T}
 8@T{
 System administration commands (usually only for root)
@@ -306,7 +308,7 @@ should advise as to which processor is bound to the
 .B \-t
 option.
 .TP
-.BI %man%\ \-l\ \-T dvi\ ./foo.1x.gz \ >\  ./foo.1x.dvi
+.BI "%man% \-l \-T" "dvi ./foo.1x.gz" " > " ./foo.1x.dvi
 This command will decompress and format the nroff source manual page
 .I ./foo.1x.gz
 into a
@@ -504,12 +506,13 @@ appropriate permissions),
 .B %man%
 will compress and store the cat file in the background.
 
-The filters are deciphered by a number of means. Firstly, the command
-line option
+The filters are deciphered by a number of means.
+Firstly, the command line option
 .B \-p
 or the environment variable
 .RB $ MANROFFSEQ
-is interrogated. If
+is interrogated.
+If
 .B \-p
 was not used and the environment variable was not set, the initial line of
 the nroff file is parsed for a preprocessor string.
@@ -572,7 +575,7 @@ Any options that follow
 .B \-D
 will have their usual effect.
 .TP
-\fB\-\-warnings\fP[=\fIwarnings\fP]
+\fB\-\-warnings\fP[=\fIwarnings\/\fP]
 Enable warnings from
 .IR groff .
 This may be used to perform sanity checks on the source text of manual
@@ -588,7 +591,8 @@ for a list of available warning names.
 .if !'po4a'hide' .BR \-f ", " \-\-whatis
 Equivalent to
 .BR %whatis% .
-Display a short description from the manual page, if available. See
+Display a short description from the manual page, if available.
+See
 .BR %whatis% (1)
 for details.
 .TP
@@ -972,6 +976,7 @@ device.
 .  ds softhyphen \[shc]
 .el \
 .  ds softhyphen \(hy
+.na
 .TS
 tab (@);
 l c c c.
@@ -990,6 +995,7 @@ T{
 multiplication sign
 T}@327@\(mu@x
 .TE
+.ad
 
 If the
 .I latin1
@@ -1093,7 +1099,7 @@ This option is not required in conjunction with
 or
 .BR \-Z .
 .TP
-\fB\-T\fP[\fIdevice\fP], \fB\-\-troff\-device\fP[=\fIdevice\fP]
+\fB\-T\fP[\fIdevice\/\fP], \fB\-\-troff\-device\fP[=\fIdevice\/\fP]
 This option is used to change
 .B groff
 (or possibly
@@ -1105,7 +1111,7 @@ Examples (provided with Groff-1.17) include
 .BR dvi ", " latin1 ", " ps ", " utf8 ,
 .BR X75 " and " X100 .
 .TP
-\fB\-H\fP[\fIbrowser\fP], \fB\-\-html\fP[=\fIbrowser\fP]
+\fB\-H\fP[\fIbrowser\/\fP], \fB\-\-html\fP[=\fIbrowser\/\fP]
 This option will cause
 .B groff
 to produce HTML output, and will display that output in a web browser.
@@ -1121,7 +1127,7 @@ and will only work with
 .B GNU
 .BR troff .
 .TP
-\fB\-X\fP[\fIdpi\fP], \fB\-\-gxditview\fP[=\fIdpi\fP]
+\fB\-X\fP[\fIdpi\/\fP], \fB\-\-gxditview\fP[=\fIdpi\/\fP]
 This option displays the output of
 .B groff
 in a graphical window using the
@@ -1286,7 +1292,7 @@ specific environment variables can be expressed as command line options, and
 are thus candidates for being included in
 .RB $ MANOPT
 it is expected that they will become obsolete.
-N.B. All spaces that should be interpreted as part of an option's argument
+N.B.  All spaces that should be interpreted as part of an option's argument
 must be escaped.
 .TP
 .if !'po4a'hide' .B MANWIDTH
@@ -1375,18 +1381,18 @@ database cache.
 the man-db package manual,
 .BR FSSTND
 .SH HISTORY
-1990, 1991 \- Originally written by John W. Eaton (jwe@che.utexas.edu).
+1990, 1991 \(en Originally written by John W.\& Eaton (jwe@che.utexas.edu).
 
 Dec 23 1992: Rik Faith (faith@cs.unc.edu) applied bug fixes
 supplied by Willem Kasdorp (wkasdo@nikhefk.nikef.nl).
 
-30th April 1994 \- 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk)
+30th April 1994 \(en 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk)
 has been developing and maintaining this package
 with the help of a few dedicated people.
 
-30th October 1996 \- 30th March 2001: Fabrizio Polacco <fpolacco@debian.org>
+30th October 1996 \(en 30th March 2001: Fabrizio Polacco <fpolacco@debian.org>
 maintained and enhanced this package for the Debian project, with the
 help of all the community.
 
-31st March 2001 \- present day: Colin Watson <cjwatson@debian.org> is now
+31st March 2001 \(en present day: Colin Watson <cjwatson@debian.org> is now
 developing and maintaining man-db.
