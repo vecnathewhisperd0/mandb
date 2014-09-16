@@ -54,6 +54,7 @@
 
 #include "error.h"
 #include "hashtable.h"
+#include "orderfiles.h"
 #include "security.h"
 
 #include "mydbm.h"
@@ -310,6 +311,8 @@ static inline void add_dir_entries (const char *path, char *infile)
 	int len;
 	struct dirent *newdir;
 	DIR *dir;
+	char **names;
+	size_t names_len, names_max, i;
 
 	manpage = xasprintf ("%s/%s/", path, infile);
 	len = strlen (manpage);
@@ -325,19 +328,36 @@ static inline void add_dir_entries (const char *path, char *infile)
 		free (manpage);
                 return;
         }
-        
+
+	names_len = 0;
+	names_max = 1024;
+	names = XNMALLOC (names_max, char *);
+
         /* strlen(newdir->d_name) could be replaced by newdir->d_reclen */
-        
-	while ( (newdir = readdir (dir)) )
-		if (!(*newdir->d_name == '.' && 
-		      strlen (newdir->d_name) < (size_t) 3)) {
-			manpage = appendstr (manpage, newdir->d_name, NULL);
-			test_manfile (manpage, path);
-			*(manpage + len) = '\0';
+
+	while ((newdir = readdir (dir)) != NULL) {
+		if (*newdir->d_name == '.' &&
+		    strlen (newdir->d_name) < (size_t) 3)
+			continue;
+		if (names_len >= names_max) {
+			names_max *= 2;
+			names = xnrealloc (names, names_max, sizeof (char *));
 		}
-		
-	free (manpage);
+		names[names_len++] = xstrdup (newdir->d_name);
+	}
 	closedir (dir);
+
+	order_files (infile, names, names_len);
+
+	for (i = 0; i < names_len; ++i) {
+		manpage = appendstr (manpage, names[i], NULL);
+		test_manfile (manpage, path);
+		*(manpage + len) = '\0';
+		free (names[i]);
+	}
+
+	free (names);
+	free (manpage);
 }
 
 #ifdef SECURE_MAN_UID

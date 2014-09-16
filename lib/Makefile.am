@@ -46,6 +46,8 @@ libman_la_SOURCES = \
 	linelength.h \
 	lower.c \
 	lower.h \
+	orderfiles.c \
+	orderfiles.h \
 	pathsearch.c \
 	pathsearch.h \
 	security.c \

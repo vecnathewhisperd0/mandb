@@ -332,7 +332,8 @@ AC_ISC_POSIX
 dnl AC_PROG_LEX calls AC_TRY_LINK: must come after above 3
 AC_PROG_LEX
 gl_INIT
-AC_CHECK_HEADERS([fcntl.h sys/file.h])
+AC_CHECK_HEADERS([fcntl.h sys/file.h linux/fiemap.h])
+AC_CHECK_FUNCS([posix_fadvise])
 
 # Internationalization support.
 AM_GNU_GETTEXT([external])

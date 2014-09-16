@@ -35,6 +35,10 @@ Major changes since man-db 2.6.7.1:
 	o Timestamps of manual pages are also now stored in the database
 	  with high precision and compared accordingly.
 
+	o Files are now ordered by first physical extent before reading
+	  them, for substantial performance improvements in operations such
+	  as mandb and 'man -K'.
+
 man-db 2.6.7.1 (10 April 2014)
 ==============================
 

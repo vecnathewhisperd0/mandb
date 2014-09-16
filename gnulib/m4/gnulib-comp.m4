@@ -111,6 +111,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module idpriv-droptemp:
   # Code from module include_next:
   # Code from module intprops:
+  # Code from module ioctl:
   # Code from module langinfo:
   # Code from module largefile:
   AC_REQUIRE([AC_SYS_LARGEFILE])
@@ -138,6 +139,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module multiarch:
   # Code from module nl_langinfo:
   # Code from module nocrash:
+  # Code from module nonblocking:
   # Code from module open:
   # Code from module openat:
   # Code from module openat-die:
@@ -168,6 +170,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module snippet/arg-nonnull:
   # Code from module snippet/c++defs:
   # Code from module snippet/warn-on-use:
+  # Code from module socklen:
   # Code from module ssize_t:
   # Code from module stat:
   # Code from module stat-time:
@@ -196,9 +199,12 @@ AC_DEFUN([gl_EARLY],
   # Code from module strnlen1:
   # Code from module strsep:
   # Code from module sys_file:
+  # Code from module sys_ioctl:
+  # Code from module sys_socket:
   # Code from module sys_stat:
   # Code from module sys_time:
   # Code from module sys_types:
+  # Code from module sys_uio:
   # Code from module sysexits:
   # Code from module tempname:
   # Code from module threadlib:
@@ -450,6 +456,11 @@ AC_SUBST([LTALLOCA])
   fi
   gl_IDPRIV
   gl_IDPRIV
+  gl_FUNC_IOCTL
+  if test $HAVE_IOCTL = 0 || test $REPLACE_IOCTL = 1; then
+    AC_LIBOBJ([ioctl])
+  fi
+  gl_SYS_IOCTL_MODULE_INDICATOR([ioctl])
   gl_LANGINFO_H
   AC_REQUIRE([gl_LARGEFILE])
   gl_IGNORE_UNUSED_LIBRARIES
@@ -552,6 +563,17 @@ AC_SUBST([LTALLOCA])
     AC_LIBOBJ([nl_langinfo])
   fi
   gl_LANGINFO_MODULE_INDICATOR([nl_langinfo])
+  gl_NONBLOCKING_IO
+  gl_FCNTL_MODULE_INDICATOR([nonblocking])
+  dnl Define the C macro GNULIB_NONBLOCKING to 1.
+  gl_MODULE_INDICATOR([nonblocking])
+  dnl Define the substituted variable GNULIB_STDIO_H_NONBLOCKING to 1.
+  AC_REQUIRE([gl_STDIO_H_DEFAULTS])
+  AC_REQUIRE([gl_ASM_SYMBOL_PREFIX])
+  GNULIB_STDIO_H_NONBLOCKING=1
+  dnl Define the substituted variable GNULIB_UNISTD_H_NONBLOCKING to 1.
+  AC_REQUIRE([gl_UNISTD_H_DEFAULTS])
+  GNULIB_UNISTD_H_NONBLOCKING=1
   gl_FUNC_OPEN
   if test $REPLACE_OPEN = 1; then
     AC_LIBOBJ([open])
@@ -651,6 +673,7 @@ AC_SUBST([LTALLOCA])
     AC_LIBOBJ([sleep])
   fi
   gl_UNISTD_MODULE_INDICATOR([sleep])
+  gl_TYPE_SOCKLEN_T
   gt_TYPE_SSIZE_T
   gl_FUNC_STAT
   if test $REPLACE_STAT = 1; then
@@ -721,11 +744,17 @@ AC_SUBST([LTALLOCA])
   gl_STRING_MODULE_INDICATOR([strsep])
   gl_HEADER_SYS_FILE_H
   AC_PROG_MKDIR_P
+  gl_SYS_IOCTL_H
+  AC_PROG_MKDIR_P
+  gl_HEADER_SYS_SOCKET
+  AC_PROG_MKDIR_P
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_TIME_H
   AC_PROG_MKDIR_P
   gl_SYS_TYPES_H
+  AC_PROG_MKDIR_P
+  gl_HEADER_SYS_UIO
   AC_PROG_MKDIR_P
   gl_SYSEXITS
   gl_FUNC_GEN_TEMPNAME
@@ -1008,6 +1037,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/idpriv-droptemp.c
   lib/idpriv.h
   lib/intprops.h
+  lib/ioctl.c
   lib/itold.c
   lib/langinfo.in.h
   lib/localcharset.c
@@ -1038,6 +1068,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/msvc-nothrow.c
   lib/msvc-nothrow.h
   lib/nl_langinfo.c
+  lib/nonblocking.c
+  lib/nonblocking.h
   lib/open.c
   lib/openat-die.c
   lib/openat-priv.h
@@ -1090,6 +1122,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdbool.in.h
   lib/stddef.in.h
   lib/stdint.in.h
+  lib/stdio-read.c
+  lib/stdio-write.c
   lib/stdio.in.h
   lib/stdlib.in.h
   lib/strcasecmp.c
@@ -1110,9 +1144,13 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strnlen1.h
   lib/strsep.c
   lib/sys_file.in.h
+  lib/sys_ioctl.in.h
+  lib/sys_socket.c
+  lib/sys_socket.in.h
   lib/sys_stat.in.h
   lib/sys_time.in.h
   lib/sys_types.in.h
+  lib/sys_uio.in.h
   lib/sysexits.in.h
   lib/tempname.c
   lib/tempname.h
@@ -1131,6 +1169,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/vasprintf.c
   lib/verify.h
   lib/vsnprintf.c
+  lib/w32sock.h
   lib/wchar.in.h
   lib/wcrtomb.c
   lib/wctype-h.c
@@ -1152,6 +1191,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/absolute-header.m4
   m4/alloca.m4
   m4/argp.m4
+  m4/asm-underscore.m4
   m4/btowc.m4
   m4/canonicalize.m4
   m4/chdir-long.m4
@@ -1213,6 +1253,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/intmax_t.m4
   m4/inttypes-pri.m4
   m4/inttypes_h.m4
+  m4/ioctl.m4
   m4/langinfo_h.m4
   m4/largefile.m4
   m4/lcmessage.m4
@@ -1251,6 +1292,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/nl_langinfo.m4
   m4/nls.m4
   m4/nocrash.m4
+  m4/nonblocking.m4
   m4/off_t.m4
   m4/onceonly.m4
   m4/open.m4
@@ -1279,6 +1321,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/signalblocking.m4
   m4/size_max.m4
   m4/sleep.m4
+  m4/socklen.m4
+  m4/sockpfaf.m4
   m4/ssize_t.m4
   m4/stat-time.m4
   m4/stat.m4
@@ -1300,10 +1344,12 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strnlen.m4
   m4/strsep.m4
   m4/sys_file_h.m4
+  m4/sys_ioctl_h.m4
   m4/sys_socket_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4
   m4/sys_types_h.m4
+  m4/sys_uio_h.m4
   m4/sysexits.m4
   m4/tempname.m4
   m4/threadlib.m4

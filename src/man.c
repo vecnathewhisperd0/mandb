@@ -94,6 +94,7 @@ static char *cwd;
 #include "xregcomp.h"
 #include "security.h"
 #include "encodings.h"
+#include "orderfiles.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -2887,6 +2888,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 {
 	int found = 0;
 	char **names = NULL, **np;
+	size_t names_len = 0;
 	char cat = 0;
 	int lff_opts = (match_case ? LFF_MATCHCASE : 0) |
 		       (regex_opt ? LFF_REGEX : 0) |
@@ -2916,6 +2918,10 @@ static int try_section (const char *path, const char *sec, const char *name,
 			cat = 1;
 		}
 	}
+
+	for (np = names; np && *np; np++)
+		++names_len;
+	order_files (path, names, names_len);
 
 	for (np = names; np && *np; np++) {
 		struct mandata *info = infoalloc ();
@@ -3466,6 +3472,7 @@ static int do_global_apropos_section (const char *path, const char *sec,
 {
 	int found = 0;
 	char **names, **np;
+	size_t names_len = 0;
 	regex_t search;
 
 	global_manpath = is_global_mandir (path);
@@ -3481,6 +3488,10 @@ static int do_global_apropos_section (const char *path, const char *sec,
 			  (match_case ? 0 : REG_ICASE));
 	else
 		memset (&search, 0, sizeof search);
+
+	for (np = names; np && *np; ++np)
+		++names_len;
+	order_files (path, names, names_len);
 
 	for (np = names; np && *np; ++np) {
 		struct mandata *info;
