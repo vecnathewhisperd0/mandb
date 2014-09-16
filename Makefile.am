@@ -48,6 +48,11 @@ EXTRA_DIST += \
 	gnulib/m4/uintmax_t.m4 \
 	gnulib/m4/visibility.m4
 
+# The default for systemdtmpfilesdir is intentionally not prefix-sensitive,
+# but we need to adjust it in order for distcheck to pass.
+AM_DISTCHECK_CONFIGURE_FLAGS = \
+	--with-systemdtmpfilesdir=\$${prefix}/lib/tmpfiles.d
+
 # We deliberately leave the configuration file in place on uninstall, since
 # it may contain local customisations.
 distuninstallcheck_listfiles = \
