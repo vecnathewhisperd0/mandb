@@ -1219,7 +1219,7 @@ void create_pathlist (const char *manp, char **mp)
 	/* Eliminate duplicates due to symlinks. */
 	mp = mphead;
 	while (*mp) {
-		char *target, *oldmp = NULL;
+		char *target;
 		char **dupcheck;
 		int found_dup = 0;
 
@@ -1227,20 +1227,25 @@ void create_pathlist (const char *manp, char **mp)
 		 * manpath?
 		 */
 		target = canonicalize_file_name (*mp);
-		if (target) {
-			oldmp = *mp;
-			*mp = target;
+		if (!target) {
+			++mp;
+			continue;
 		}
 		/* Only check up to the current list position, to keep item
 		 * order stable across deduplication.
 		 */
 		for (dupcheck = mphead; *dupcheck && dupcheck != mp;
 		     ++dupcheck) {
-			if (!STREQ (*mp, *dupcheck))
+			char *dupcheck_target = canonicalize_file_name
+				(*dupcheck);
+			if (!STREQ (target, dupcheck_target)) {
+				free (dupcheck_target);
 				continue;
+			}
+			free (dupcheck_target);
 			debug ("Removing duplicate manpath entry %s (%td) -> "
 			       "%s (%td)\n",
-			       oldmp, mp - mphead,
+			       *mp, mp - mphead,
 			       *dupcheck, dupcheck - mphead);
 			free (*mp);
 			for (dupcheck = mp; *(dupcheck + 1); ++dupcheck)
@@ -1249,8 +1254,7 @@ void create_pathlist (const char *manp, char **mp)
 			found_dup = 1;
 			break;
 		}
-		if (oldmp)
-			free (oldmp);
+		free (target);
 		if (!found_dup)
 			++mp;
 	}

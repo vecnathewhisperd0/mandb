@@ -21,6 +21,11 @@ Major changes since man-db 2.6.7.1:
 	o Tools that consider the terminal line length now prioritise the
 	  COLUMNS environment variable above the TIOCGWINSZ ioctl.
 
+	o Manpath elements are no longer canonicalised before being inserted
+	  into the search path; this caused the use of incorrect catpaths in
+	  some cases.  This was broken by the LANGUAGE-handling fixes in
+	  2.5.4.
+
 	Improvements:
 	-------------
 
