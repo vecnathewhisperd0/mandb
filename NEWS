@@ -12,8 +12,17 @@ Major changes since man-db 2.6.7.1:
 	(Distribution packages should do this automatically for system
 	databases.)
 
+	Fixes:
+	------
+
+	o lexgrog now filters terminal escape sequences out of cat pages
+	  before trying to parse them.
+
 	Improvements:
 	-------------
+
+	o Ship a systemd tmpfiles snippet to clean up old cat files after a
+	  week.
 
 	o The modification time of manual databases is now simply stored in
 	  the mtime of the database files themselves, rather than using a
