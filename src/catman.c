@@ -139,9 +139,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				sections = NULL;
 				for (sec = strtok (mansect, ":"); sec;
 				     sec = strtok (NULL, ":")) {
-					sections = xrealloc (sections,
-							     (i + 2) *
-							     sizeof *sections);
+					sections = xnrealloc
+						(sections, i + 2,
+						 sizeof *sections);
 					sections[i++] = sec;
 				}
 				if (sections)

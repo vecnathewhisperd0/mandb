@@ -228,8 +228,8 @@ static void ult_trace (struct ult_trace *trace, const char *s)
 		return;
 	if (trace->len >= trace->max) {
 		trace->max *= 2;
-		trace->names = xrealloc (trace->names,
-					 sizeof (char *) * trace->max);
+		trace->names = xnrealloc (trace->names, trace->max,
+					  sizeof (char *));
 	}
 	trace->names[trace->len++] = xstrdup (s);
 }

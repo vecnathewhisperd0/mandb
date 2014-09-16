@@ -170,8 +170,8 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 		if (cache->names_len >= cache->names_max) {
 			cache->names_max *= 2;
 			cache->names =
-				xrealloc (cache->names,
-					  sizeof (char *) * cache->names_max);
+				xnrealloc (cache->names, cache->names_max,
+					   sizeof (char *));
 		}
 		cache->names[cache->names_len++] = xstrdup (entry->d_name);
 	}
