@@ -1,6 +1,6 @@
 /*
  * linelength.c: find the terminal line length
- * Preferences: 1. MANWIDTH, 2. ioctl, 3. COLUMNS, 4. 80
+ * Preferences: 1. MANWIDTH, 2. COLUMNS, 3. ioctl, 4. 80
  *
  * Originally adapted from Andries Brouwer's man implementation, also
  * released under the GPL: authors believed to include Martin Schulze and
@@ -57,6 +57,13 @@ int get_line_length (void)
 			return line_length = width;
 	}
 
+	columns = getenv ("COLUMNS");
+	if (columns != NULL) {
+		width = atoi (columns);
+		if (width > 0)
+			return line_length = width;
+	}
+
 #ifdef TIOCGWINSZ
 	/* Original TIOCGWINSZ approach was from Jon Tombs.
 	 * We don't require both stdin and stdout to be a tty, and line
@@ -78,13 +85,6 @@ int get_line_length (void)
 			return line_length = wsz.ws_col;
 	}
 #endif
-
-	columns = getenv ("COLUMNS");
-	if (columns != NULL) {
-		width = atoi (columns);
-		if (width > 0)
-			return line_length = width;
-	}
 
 	return line_length = 80;
 }

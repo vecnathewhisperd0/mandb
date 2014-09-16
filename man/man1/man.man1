@@ -1295,11 +1295,11 @@ If
 is set, its value is used as the line length for which manual pages should
 be formatted.
 If it is not set, manual pages will be formatted with a line length
-appropriate to the current terminal (using an
-.BR ioctl (2)
-if available, the value of
+appropriate to the current terminal (using the value of
 .RB $ COLUMNS ,
-or falling back to 80 characters if neither is available).
+an
+.BR ioctl (2)
+if available, or falling back to 80 characters if neither is available).
 Cat pages will only be saved when the default formatting can be used, that
 is when the terminal line length is between 66 and 80 characters.
 .TP
