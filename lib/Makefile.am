@@ -64,4 +64,5 @@ libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
 
 libman_la_LDFLAGS = \
 	-avoid-version -release $(VERSION) -rpath $(pkglibdir) \
+	-no-undefined \
 	$(libpipeline_LIBS)

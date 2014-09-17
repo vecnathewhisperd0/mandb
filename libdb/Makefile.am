@@ -43,4 +43,5 @@ libmandb_la_SOURCES = \
 
 libmandb_la_LIBADD = ../lib/libman.la $(DBLIBS)
 
-libmandb_la_LDFLAGS = -avoid-version -release $(VERSION) -rpath $(pkglibdir)
+libmandb_la_LDFLAGS = \
+	-avoid-version -release $(VERSION) -rpath $(pkglibdir) -no-undefined
