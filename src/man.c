@@ -1845,10 +1845,16 @@ static void format_display (pipeline *decomp,
 			if (!status)
 				break;
 		}
-		if (!candidate)
-			error (CHILD_FAIL, 0,
-			       "couldn't execute any browser from %s",
-			       html_pager);
+		if (!candidate) {
+			if (html_pager && *html_pager)
+				error (CHILD_FAIL, 0,
+				       "couldn't execute any browser from %s",
+				       html_pager);
+			else
+				error (CHILD_FAIL, 0,
+				       "no browser configured, so cannot show "
+				       "HTML output");
+		}
 		free (browser_list);
 		if (chdir (old_cwd) == -1) {
 			error (0, errno, _("can't change to directory %s"),
