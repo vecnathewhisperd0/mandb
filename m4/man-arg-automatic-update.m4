@@ -1,6 +1,6 @@
 # man-arg-automatic-update.m4 serial 1
 dnl MAN_ARG_AUTOMATIC_UPDATE
-dnl Add an --enable-automatic-update option.
+dnl Add a --disable-automatic-update option.
 
 AC_DEFUN([MAN_ARG_AUTOMATIC_UPDATE],
 [

@@ -1,6 +1,6 @@
 # man-arg-systemdtmpfilesdir.m4 serial 1
 dnl MAN_ARG_SYSTEMDTMPFILESDIR
-dnl Add an --enable-systemdtmpfilesdir option.
+dnl Add a --with-systemdtmpfilesdir option.
 
 AC_DEFUN([MAN_ARG_SYSTEMDTMPFILESDIR],
 [
