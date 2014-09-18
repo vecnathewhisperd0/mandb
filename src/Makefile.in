@@ -79,10 +79,10 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = catman$(EXEEXT) lexgrog$(EXEEXT) man$(EXEEXT) \
-	mandb$(EXEEXT) manpath$(EXEEXT) whatis$(EXEEXT) \
-	zsoelim$(EXEEXT)
+	mandb$(EXEEXT) manpath$(EXEEXT) whatis$(EXEEXT)
 sbin_PROGRAMS = accessdb$(EXEEXT)
-pkglibexec_PROGRAMS = globbing$(EXEEXT) manconv$(EXEEXT)
+pkglibexec_PROGRAMS = globbing$(EXEEXT) manconv$(EXEEXT) \
+	zsoelim$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(srcdir)/man_db.conf.in lexgrog.c zsoelim.c \
@@ -1471,7 +1471,7 @@ AM_CPPFLAGS = \
 	-DMANCONV=\"$(pkglibexecdir)/$(TRANS_MANCONV)\" \
 	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\" \
-	-DZSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\"
+	-DZSOELIM=\"$(pkglibexecdir)/$(TRANS_ZSOELIM)\"
 
 AM_CFLAGS = \
 	$(WARN_CFLAGS) \

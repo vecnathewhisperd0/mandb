@@ -30,10 +30,9 @@ bin_PROGRAMS = \
 	man \
 	mandb \
 	manpath \
-	whatis \
-	zsoelim
+	whatis
 sbin_PROGRAMS = accessdb
-pkglibexec_PROGRAMS = globbing manconv
+pkglibexec_PROGRAMS = globbing manconv zsoelim
 noinst_DATA = man_db.conf
 
 EXTRA_DIST = lexgrog.c zsoelim.c
@@ -51,7 +50,7 @@ AM_CPPFLAGS = \
 	-DMANCONV=\"$(pkglibexecdir)/$(TRANS_MANCONV)\" \
 	-DMANDB=\"$(bindir)/$(TRANS_MANDB)\" \
 	-DWHATIS=\"$(bindir)/$(TRANS_WHATIS)\" \
-	-DZSOELIM=\"$(bindir)/$(TRANS_ZSOELIM)\"
+	-DZSOELIM=\"$(pkglibexecdir)/$(TRANS_ZSOELIM)\"
 AM_CFLAGS = \
 	$(WARN_CFLAGS) \
 	$(libpipeline_CFLAGS)
