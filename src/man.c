@@ -1090,7 +1090,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 			zsoelim_data = zsoelim_stdin_data_new (dir,
 							       manpathlist);
-			cmd = pipecmd_new_function (SOELIM, &zsoelim_stdin,
+			cmd = pipecmd_new_function (ZSOELIM, &zsoelim_stdin,
 						    zsoelim_stdin_data_free,
 						    zsoelim_data);
 			pipeline_command (p, cmd);
