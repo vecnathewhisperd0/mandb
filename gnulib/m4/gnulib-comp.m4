@@ -137,6 +137,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module msvc-inval:
   # Code from module msvc-nothrow:
   # Code from module multiarch:
+  # Code from module nanosleep:
   # Code from module nl_langinfo:
   # Code from module nocrash:
   # Code from module nonblocking:
@@ -159,6 +160,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module same-inode:
   # Code from module save-cwd:
   # Code from module secure_getenv:
+  # Code from module select:
   # Code from module setenv:
   # Code from module sigaction:
   # Code from module signal:
@@ -170,6 +172,8 @@ AC_DEFUN([gl_EARLY],
   # Code from module snippet/arg-nonnull:
   # Code from module snippet/c++defs:
   # Code from module snippet/warn-on-use:
+  # Code from module socketlib:
+  # Code from module sockets:
   # Code from module socklen:
   # Code from module ssize_t:
   # Code from module stat:
@@ -200,6 +204,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module strsep:
   # Code from module sys_file:
   # Code from module sys_ioctl:
+  # Code from module sys_select:
   # Code from module sys_socket:
   # Code from module sys_stat:
   # Code from module sys_time:
@@ -558,6 +563,12 @@ AC_SUBST([LTALLOCA])
     AC_LIBOBJ([msvc-nothrow])
   fi
   gl_MULTIARCH
+  gl_FUNC_NANOSLEEP
+  if test $HAVE_NANOSLEEP = 0 || test $REPLACE_NANOSLEEP = 1; then
+    AC_LIBOBJ([nanosleep])
+    gl_PREREQ_NANOSLEEP
+  fi
+  gl_TIME_MODULE_INDICATOR([nanosleep])
   gl_FUNC_NL_LANGINFO
   if test $HAVE_NL_LANGINFO = 0 || test $REPLACE_NL_LANGINFO = 1; then
     AC_LIBOBJ([nl_langinfo])
@@ -649,6 +660,11 @@ AC_SUBST([LTALLOCA])
     gl_PREREQ_SECURE_GETENV
   fi
   gl_STDLIB_MODULE_INDICATOR([secure_getenv])
+  gl_FUNC_SELECT
+  if test $REPLACE_SELECT = 1; then
+    AC_LIBOBJ([select])
+  fi
+  gl_SYS_SELECT_MODULE_INDICATOR([select])
   gl_FUNC_SETENV
   if test $HAVE_SETENV = 0 || test $REPLACE_SETENV = 1; then
     AC_LIBOBJ([setenv])
@@ -673,6 +689,8 @@ AC_SUBST([LTALLOCA])
     AC_LIBOBJ([sleep])
   fi
   gl_UNISTD_MODULE_INDICATOR([sleep])
+  gl_SOCKETLIB
+  gl_SOCKETS
   gl_TYPE_SOCKLEN_T
   gt_TYPE_SSIZE_T
   gl_FUNC_STAT
@@ -745,6 +763,8 @@ AC_SUBST([LTALLOCA])
   gl_HEADER_SYS_FILE_H
   AC_PROG_MKDIR_P
   gl_SYS_IOCTL_H
+  AC_PROG_MKDIR_P
+  gl_HEADER_SYS_SELECT
   AC_PROG_MKDIR_P
   gl_HEADER_SYS_SOCKET
   AC_PROG_MKDIR_P
@@ -1067,6 +1087,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/msvc-inval.h
   lib/msvc-nothrow.c
   lib/msvc-nothrow.h
+  lib/nanosleep.c
   lib/nl_langinfo.c
   lib/nonblocking.c
   lib/nonblocking.h
@@ -1106,6 +1127,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/save-cwd.c
   lib/save-cwd.h
   lib/secure_getenv.c
+  lib/select.c
   lib/setenv.c
   lib/sig-handler.c
   lib/sig-handler.h
@@ -1114,6 +1136,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/sigprocmask.c
   lib/size_max.h
   lib/sleep.c
+  lib/sockets.c
+  lib/sockets.h
   lib/stat-time.c
   lib/stat-time.h
   lib/stat.c
@@ -1145,6 +1169,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strsep.c
   lib/sys_file.in.h
   lib/sys_ioctl.in.h
+  lib/sys_select.in.h
   lib/sys_socket.c
   lib/sys_socket.in.h
   lib/sys_stat.in.h
@@ -1289,6 +1314,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/msvc-inval.m4
   m4/msvc-nothrow.m4
   m4/multiarch.m4
+  m4/nanosleep.m4
   m4/nl_langinfo.m4
   m4/nls.m4
   m4/nocrash.m4
@@ -1315,12 +1341,15 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/same.m4
   m4/save-cwd.m4
   m4/secure_getenv.m4
+  m4/select.m4
   m4/setenv.m4
   m4/sigaction.m4
   m4/signal_h.m4
   m4/signalblocking.m4
   m4/size_max.m4
   m4/sleep.m4
+  m4/socketlib.m4
+  m4/sockets.m4
   m4/socklen.m4
   m4/sockpfaf.m4
   m4/ssize_t.m4
@@ -1345,6 +1374,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strsep.m4
   m4/sys_file_h.m4
   m4/sys_ioctl_h.m4
+  m4/sys_select_h.m4
   m4/sys_socket_h.m4
   m4/sys_stat_h.m4
   m4/sys_time_h.m4

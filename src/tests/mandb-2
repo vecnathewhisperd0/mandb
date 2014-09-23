@@ -25,7 +25,7 @@ EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/1.out"
 expect_pass 'fs(5) setup' 'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
-next_second
+./fspause
 write_page filesystems 5 "$tmpdir/usr/share/man/man5/filesystems.5.gz" \
 	UTF-8 gz t 'filesystems \- filesystems(5)'
 ln -sf filesystems.5.gz "$tmpdir/usr/share/man/man5/fs.5.gz"
@@ -38,7 +38,7 @@ accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/2.out"
 expect_pass 'mandb notices regular file -> symlink' \
 	'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
 
-next_second
+./fspause
 ln -sf fs.5.gz "$tmpdir/usr/share/man/man5/fs2.5.gz"
 run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 cat >"$tmpdir/3.exp" <<EOF
@@ -50,7 +50,7 @@ accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/3.out"
 expect_pass 'mandb notices two-level symlink' \
 	'diff -u "$tmpdir/3.exp" "$tmpdir/3.out"'
 
-next_second
+./fspause
 rm -f "$tmpdir/usr/share/man/man5/fs.5.gz"
 write_page fs 5 "$tmpdir/usr/share/man/man5/fs.5.gz" \
 	UTF-8 gz t 'fs \- new fs(5)'

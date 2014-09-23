@@ -28,7 +28,7 @@ EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/1.out"
 expect_pass 'setup' 'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
 
-next_second
+./fspause
 echo '.so nonexistent.1' | gzip -9c >"$tmpdir/usr/share/man/man1/testlink.1.gz"
 run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 cat >"$tmpdir/2.exp" <<EOF
@@ -38,7 +38,7 @@ EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/2.out"
 expect_pass 'broken whatis' 'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
 
-next_second
+./fspause
 LC_ALL=C run $MANDB -C "$tmpdir/manpath.config" -u \
 	"$tmpdir/usr/share/man" >"$tmpdir/3.out" 2>/dev/null
 realtmpdir="$(pwd -P)/$tmpdir"

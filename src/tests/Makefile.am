@@ -23,8 +23,7 @@ TESTS_ENVIRONMENT = PATH=..:$$PATH; export PATH; \
 		    MANDIR_LAYOUT=$(MANDIR_LAYOUT); export MANDIR_LAYOUT; \
 		    top_builddir=$(top_builddir); export top_builddir; \
 		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR; \
-		    OVERRIDE_DIR="$(override_dir)"; export OVERRIDE_DIR; \
-		    STAT_HAS_NSEC=$(STAT_HAS_NSEC); export STAT_HAS_NSEC;
+		    OVERRIDE_DIR="$(override_dir)"; export OVERRIDE_DIR;
 # Each test must use the configure-detected shell, not necessarily /bin/sh.
 AM_LOG_FLAGS = $(SHELL)
 ALL_TESTS = \
@@ -37,5 +36,16 @@ ALL_TESTS = \
 if !CROSS_COMPILING
 TESTS = $(ALL_TESTS)
 endif
+
+AM_CPPFLAGS = \
+	-I$(top_builddir)/include \
+	-I$(top_builddir)/gnulib/lib \
+	-I$(top_srcdir)/gnulib/lib
+AM_CFLAGS = $(WARN_CFLAGS)
+check_PROGRAMS = fspause
+fspause_SOURCES = fspause.c
+fspause_LDADD = \
+	$(top_builddir)/gnulib/lib/libgnu.la \
+	$(LIB_NANOSLEEP)
 
 dist_check_SCRIPTS = testlib.sh $(ALL_TESTS)

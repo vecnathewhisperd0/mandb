@@ -350,17 +350,6 @@ AC_TYPE_PID_T
 AC_TYPE_UID_T
 AC_TYPE_SIZE_T
 
-# Do we have any kind of high-precision file timestamps?
-if test "x$ac_cv_member_struct_stat_st_atim_tv_nsec" = xyes || \
-   test "x$ac_cv_member_struct_stat_st_atimespec_tv_nsec" = xyes || \
-   test "x$ac_cv_member_struct_stat_st_atimensec" = xyes || \
-   test "x$ac_cv_member_struct_stat_st_atim_st__tim_tv_nsec" = xyes; then
-	STAT_HAS_NSEC=yes
-else
-	STAT_HAS_NSEC=no
-fi
-AC_SUBST([STAT_HAS_NSEC])
-
 # Check for pipeline library.
 PKG_CHECK_MODULES([libpipeline], [libpipeline >= 1.3.0])
 

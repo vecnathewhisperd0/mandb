@@ -21,7 +21,7 @@ run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 # $? is deliberately expanded here.
 expect_pass 'empty page' "test $? -eq 0"
 
-next_second
+./fspause
 ln -s empty.1.gz "$tmpdir/usr/share/man/man1/empty2.1.gz"
 run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 # $? is deliberately expanded here.

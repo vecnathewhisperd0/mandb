@@ -257,6 +257,9 @@
 /* Define to 1 when the gnulib module mkstemp should be tested. */
 #undef GNULIB_TEST_MKSTEMP
 
+/* Define to 1 when the gnulib module nanosleep should be tested. */
+#undef GNULIB_TEST_NANOSLEEP
+
 /* Define to 1 when the gnulib module nl_langinfo should be tested. */
 #undef GNULIB_TEST_NL_LANGINFO
 
@@ -301,6 +304,9 @@
 
 /* Define to 1 when the gnulib module secure_getenv should be tested. */
 #undef GNULIB_TEST_SECURE_GETENV
+
+/* Define to 1 when the gnulib module select should be tested. */
+#undef GNULIB_TEST_SELECT
 
 /* Define to 1 when the gnulib module setenv should be tested. */
 #undef GNULIB_TEST_SETENV
@@ -369,6 +375,9 @@
 
 /* Define to 1 if you have the 'btowc' function. */
 #undef HAVE_BTOWC
+
+/* Define to 1 if nanosleep mishandles large arguments. */
+#undef HAVE_BUG_BIG_NANOSLEEP
 
 /* Define if you have bzip2. */
 #undef HAVE_BZIP2
@@ -1160,6 +1169,9 @@
 /* Define to 1 if pread is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_PREAD
 
+/* Define to 1 if pselect is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_PSELECT
+
 /* Define to 1 if pthread_sigmask is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_PTHREAD_SIGMASK
 
@@ -1216,6 +1228,9 @@
 
 /* Define to 1 if secure_getenv is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SECURE_GETENV
+
+/* Define to 1 if select is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_SELECT
 
 /* Define to 1 if send is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SEND
@@ -1693,6 +1708,9 @@
 /* Define to 1 if you have the <sys/param.h> header file. */
 #undef HAVE_SYS_PARAM_H
 
+/* Define to 1 if you have the <sys/select.h> header file. */
+#undef HAVE_SYS_SELECT_H
+
 /* Define to 1 if you have the <sys/socket.h> header file. */
 #undef HAVE_SYS_SOCKET_H
 
@@ -2062,6 +2080,9 @@
 /* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
    'wchar_t'. */
 #undef WCHAR_T_SUFFIX
+
+/* Define if WSAStartup is needed. */
+#undef WINDOWS_SOCKETS
 
 /* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
    'wint_t'. */
