@@ -481,6 +481,11 @@ static int testmandirs (const char *path, const char *catpath,
 		debug ("\tsubdirectory %s has been 'modified'\n",
 		       mandir->d_name);
 
+		if (dbf) {
+			MYDBM_CLOSE (dbf);
+			dbf = NULL;
+		}
+
 		if (create && !created) {
 			/* We seem to have something to do, so create the
 			 * database now.
@@ -530,6 +535,7 @@ static int testmandirs (const char *path, const char *catpath,
 		}
 		add_dir_entries (path, mandir->d_name);
 		MYDBM_CLOSE (dbf);
+		dbf = NULL;
 		amount++;
 	}
 	closedir (dir);
@@ -567,6 +573,7 @@ static void update_db_time (void)
 	MYDBM_SET_TIME (dbf, now);
 
 	MYDBM_CLOSE (dbf);
+	dbf = NULL;
 }
 
 /* routine to prepare/create the db prior to calling testmandirs() */
@@ -913,6 +920,7 @@ int purge_missing (const char *manpath, const char *catpath,
 	}
 	if (!sanity_check_db ()) {
 		MYDBM_CLOSE (dbf);
+		dbf = NULL;
 		return 0;
 	}
 	db_mtime = MYDBM_GET_TIME (dbf);
@@ -1005,5 +1013,6 @@ int purge_missing (const char *manpath, const char *catpath,
 		 */
 		MYDBM_SET_TIME (dbf, db_mtime);
 	MYDBM_CLOSE (dbf);
+	dbf = NULL;
 	return count;
 }

@@ -382,5 +382,6 @@ int straycats (const char *manpath)
 		free (catpath);
 
 	MYDBM_CLOSE (dbf);
+	dbf = NULL;
 	return strays;
 }

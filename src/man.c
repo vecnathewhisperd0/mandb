@@ -3027,7 +3027,8 @@ static void dbdelete_wrapper (const char *page, struct mandata *info)
 		if (dbf) {
 			if (dbdelete (page, info) == 1)
 				debug ("%s(%s) not in db!\n", page, info->ext);
-			MYDBM_CLOSE(dbf);
+			MYDBM_CLOSE (dbf);
+			dbf = NULL;
 		}
 	}
 }
@@ -3275,6 +3276,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			hashtable_install (db_hash, manpath, strlen (manpath),
 					   data);
 			MYDBM_CLOSE (dbf);
+			dbf = NULL;
 #ifdef MAN_DB_CREATES
 		} else if (!global_manpath) {
 			/* create one */

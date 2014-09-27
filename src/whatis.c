@@ -852,6 +852,7 @@ static int search (const char * const *pages, int num_pages)
 		free (database);
 		database = NULL;
 		MYDBM_CLOSE (dbf);
+		dbf = NULL;
 	}
 
 	chkr_garbage_detector ();

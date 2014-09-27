@@ -365,6 +365,7 @@ static int update_one_file (const char *manpath, const char *filename)
 		test_manfile (filename, manpath);
 	}
 	MYDBM_CLOSE (dbf);
+	dbf = NULL;
 
 	return 1;
 }
