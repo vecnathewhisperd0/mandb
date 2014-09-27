@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.1-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2014-09-24 01:51+0100\n"
+"POT-Creation-Date: 2014-09-28 00:10+0100\n"
 "PO-Revision-Date: 2012-03-17 23:42+0100\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "kan ikke sætte effektivt uid"
 
-#: lib/security.c:101 src/mandb.c:807
+#: lib/security.c:101 src/mandb.c:808
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "en manualbruger »%s« som er setuid findes ikke"
@@ -178,7 +178,7 @@ msgstr "kan ikke opdatere %s"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "advarsel: %s/man%s/%s.%s*: filendelser i konflikt"
 
-#: src/check_mandirs.c:109 src/check_mandirs.c:560
+#: src/check_mandirs.c:109 src/check_mandirs.c:566
 #, c-format
 msgid "can't update index cache %s"
 msgstr "kan ikke opdatere indekscachen %s"
@@ -198,7 +198,7 @@ msgstr "advarsel: %s: ignorerer tom fil"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "advarsel: %s: whatis-tolkning for %s(%s) mislykkedes"
 
-#: src/check_mandirs.c:327 src/check_mandirs.c:447 src/mandb.c:864
+#: src/check_mandirs.c:327 src/check_mandirs.c:447 src/mandb.c:865
 #: src/straycats.c:77 src/straycats.c:309 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -214,21 +214,21 @@ msgstr "advarsel: kan ikke oprette katalogmappe %s"
 msgid "can't change to directory %s"
 msgstr "kan ikke skifte til kataloget %s"
 
-#: src/check_mandirs.c:501
+#: src/check_mandirs.c:506
 #, c-format
 msgid "can't create index cache %s"
 msgstr "kan ikke oprette indekscachen %s"
 
-#: src/check_mandirs.c:526
+#: src/check_mandirs.c:531
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Opdaterer indekscache for søgestien »%s/%s«. Vent..."
 
-#: src/check_mandirs.c:587 src/check_mandirs.c:641
+#: src/check_mandirs.c:594 src/check_mandirs.c:648
 msgid "done.\n"
 msgstr "færdig.\n"
 
-#: src/check_mandirs.c:907
+#: src/check_mandirs.c:914
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Tømmer gamle databaseindgange i %s...\n"
@@ -603,7 +603,7 @@ msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- næste: %s [ vis (retur) | overspring (Ctrl-D) | afslut (Ctrl-C) ]\n"
 
-#: src/man.c:2021 src/man.c:3588
+#: src/man.c:2021 src/man.c:3590
 #, c-format
 msgid "can't chdir to %s"
 msgstr "kan ikke skifte katalog til %s"
@@ -622,22 +622,22 @@ msgstr ""
 msgid "Can't convert %s to cat name"
 msgstr "Kan ikke konvertere %s til katalognavn"
 
-#: src/man.c:3059
+#: src/man.c:3060
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: at stole på whatis-referencer er forældet\n"
 
-#: src/man.c:3209 src/man.c:3986
+#: src/man.c:3210 src/man.c:3988
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb-kommandoen mislykkedes med slutstatus %d"
 
-#: src/man.c:3411
+#: src/man.c:3413
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "intern fejl: kandidattype %d uden for gyldigt interval"
 
-#: src/man.c:3916
+#: src/man.c:3918
 msgid " Manual page "
 msgstr " Manualside "
 
@@ -735,50 +735,50 @@ msgstr "kan ikke skrive til %s"
 msgid "can't read from %s"
 msgstr "kan ikke læse fra %s"
 
-#: src/mandb.c:453
+#: src/mandb.c:454
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Bearbejder manualsider under %s...\n"
 
-#: src/mandb.c:647 src/mandb.c:673
+#: src/mandb.c:648 src/mandb.c:674
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Fjerner forældet katalogside %s...\n"
 
-#: src/mandb.c:829
+#: src/mandb.c:830
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "advarsel: intet MANDB_MAP-direktiv i %s, bruger din manualsøgesti"
 
-#: src/mandb.c:901
+#: src/mandb.c:902
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d manualunderkatalog indeholdt nyere manualsider.\n"
 msgstr[1] "%d manualunderkataloger indeholdt nyere manualsider.\n"
 
-#: src/mandb.c:906
+#: src/mandb.c:907
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d manualside blev tilføjet.\n"
 msgstr[1] "%d manualsider blev tilføjet.\n"
 
-#: src/mandb.c:910
+#: src/mandb.c:911
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d vildfaren katalogside blev tilføjet.\n"
 msgstr[1] "%d vildfarne katalogsider blev tilføjet.\n"
 
-#: src/mandb.c:915
+#: src/mandb.c:916
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d gammel databaseindgang blev tømt.\n"
 msgstr[1] "%d gamle databaseindgange blev tømt.\n"
 
-#: src/mandb.c:933
+#: src/mandb.c:934
 #, c-format
 msgid "No databases created."
 msgstr "Ingen databaser er oprettet."
@@ -951,7 +951,7 @@ msgstr "advarsel: %s indeholder en pegerløkke"
 msgid "(unknown subject)"
 msgstr "(ukendt emne)"
 
-#: src/whatis.c:864
+#: src/whatis.c:865
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ingenting egnet.\n"

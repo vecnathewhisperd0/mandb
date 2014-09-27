@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-2.6.5\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2014-09-24 01:51+0100\n"
+"POT-Creation-Date: 2014-09-28 00:10+0100\n"
 "PO-Revision-Date: 2013-06-27 19:41+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "実効 UID を設定できません"
 
-#: lib/security.c:101 src/mandb.c:807
+#: lib/security.c:101 src/mandb.c:808
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "setuid された man ユーザー \"%s\" は存在しません"
@@ -167,7 +167,7 @@ msgstr "%s を更新できません"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "警告: %s/man%s/%s.%s*: 拡張子が競合しています"
 
-#: src/check_mandirs.c:109 src/check_mandirs.c:560
+#: src/check_mandirs.c:109 src/check_mandirs.c:566
 #, c-format
 msgid "can't update index cache %s"
 msgstr "index キャッシュ %s を更新できません"
@@ -188,7 +188,7 @@ msgstr "警告: %s: 空ファイルを無視しています"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
-#: src/check_mandirs.c:327 src/check_mandirs.c:447 src/mandb.c:864
+#: src/check_mandirs.c:327 src/check_mandirs.c:447 src/mandb.c:865
 #: src/straycats.c:77 src/straycats.c:309 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -204,21 +204,21 @@ msgstr "警告: cat ディレクトリー %s を作成できません"
 msgid "can't change to directory %s"
 msgstr "ディレクトリ %s に移動できません"
 
-#: src/check_mandirs.c:501
+#: src/check_mandirs.c:506
 #, c-format
 msgid "can't create index cache %s"
 msgstr "index キャッシュ %s を作成できません"
 
-#: src/check_mandirs.c:526
+#: src/check_mandirs.c:531
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "パス `%s/%s' の index キャッシュを更新しています。お待ちください..."
 
-#: src/check_mandirs.c:587 src/check_mandirs.c:641
+#: src/check_mandirs.c:594 src/check_mandirs.c:648
 msgid "done.\n"
 msgstr "完了しました。\n"
 
-#: src/check_mandirs.c:907
+#: src/check_mandirs.c:914
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "%s 内の古いデータベース要素を取り除いています...\n"
@@ -584,7 +584,7 @@ msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- 次は: %s [ 閲覧 (return) | スキップ (Ctrl-D) | 終了 (Ctrl-C) ]\n"
 
-#: src/man.c:2021 src/man.c:3588
+#: src/man.c:2021 src/man.c:3590
 #, c-format
 msgid "can't chdir to %s"
 msgstr "%s にディレクトリを変更できません"
@@ -603,22 +603,22 @@ msgstr ""
 msgid "Can't convert %s to cat name"
 msgstr "%s を整形済みファイル名に変換できません"
 
-#: src/man.c:3059
+#: src/man.c:3060
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: whatis の参照に頼ることは勧められなくなっています\n"
 
-#: src/man.c:3209 src/man.c:3986
+#: src/man.c:3210 src/man.c:3988
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb コマンドが終了ステータス %d で失敗しました"
 
-#: src/man.c:3411
+#: src/man.c:3413
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "内部エラー: 候補の種類 %d は範囲内にありません"
 
-#: src/man.c:3916
+#: src/man.c:3918
 msgid " Manual page "
 msgstr " マニュアルページ "
 
@@ -718,23 +718,23 @@ msgstr "%s に書き込めません"
 msgid "can't read from %s"
 msgstr "%s から読み込めません"
 
-#: src/mandb.c:453
+#: src/mandb.c:454
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "%s 配下のマニュアルページを処理しています...\n"
 
-#: src/mandb.c:647 src/mandb.c:673
+#: src/mandb.c:648 src/mandb.c:674
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "古い cat ディレクトリ %s を削除しています...\n"
 
-#: src/mandb.c:829
+#: src/mandb.c:830
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "警告: %s に MANDB_MAP の指定はありません。あなたの manpath を使用します"
 
-#: src/mandb.c:901
+#: src/mandb.c:902
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -742,25 +742,25 @@ msgstr[0] ""
 "%d 個のマニュアルページ子ディレクトリに新しいマニュアルページが含まれていまし"
 "た。\n"
 
-#: src/mandb.c:906
+#: src/mandb.c:907
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d 個のマニュアルページが追加されました。\n"
 
-#: src/mandb.c:910
+#: src/mandb.c:911
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "roff のない cat ファイルが %d 個追加されました。\n"
 
-#: src/mandb.c:915
+#: src/mandb.c:916
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d 個の古いデータベース要素が除去されました。\n"
 
-#: src/mandb.c:933
+#: src/mandb.c:934
 #, c-format
 msgid "No databases created."
 msgstr "データベースは作成されませんでした。"
@@ -932,7 +932,7 @@ msgstr "警告: %s にはループしているポインタが含まれていま�
 msgid "(unknown subject)"
 msgstr "(不明な題名です)"
 
-#: src/whatis.c:864
+#: src/whatis.c:865
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: 適切なものはありませんでした。\n"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.1-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2014-09-24 01:51+0100\n"
+"POT-Creation-Date: 2014-09-28 00:10+0100\n"
 "PO-Revision-Date: 2012-02-06 14:43-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "impossible de positionner le propriétaire (UID) effectif"
 
-#: lib/security.c:101 src/mandb.c:807
+#: lib/security.c:101 src/mandb.c:808
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "l'utilisateur man privilégié (setuid) « %s » n'existe pas"
@@ -167,7 +167,7 @@ msgstr "impossible de mettre %s à jour"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "attention : %s/man%s/%s.%s* : extensions en conflit"
 
-#: src/check_mandirs.c:109 src/check_mandirs.c:560
+#: src/check_mandirs.c:109 src/check_mandirs.c:566
 #, c-format
 msgid "can't update index cache %s"
 msgstr "impossible de mettre à jour le cache d'index %s"
@@ -187,7 +187,7 @@ msgstr "attention : %s : fichier vide ignoré"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "attention : %s : la recherche de whatis sur %s(%s) a échoué"
 
-#: src/check_mandirs.c:327 src/check_mandirs.c:447 src/mandb.c:864
+#: src/check_mandirs.c:327 src/check_mandirs.c:447 src/mandb.c:865
 #: src/straycats.c:77 src/straycats.c:309 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -203,21 +203,21 @@ msgstr "attention : impossible de créer le répertoire de pages préformatées
 msgid "can't change to directory %s"
 msgstr "impossible d'aller dans le répertoire %s"
 
-#: src/check_mandirs.c:501
+#: src/check_mandirs.c:506
 #, c-format
 msgid "can't create index cache %s"
 msgstr "impossible de créer le cache d'index %s"
 
-#: src/check_mandirs.c:526
+#: src/check_mandirs.c:531
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Mise à jour du cache d'index pour le chemin « %s/%s ». Attendez…"
 
-#: src/check_mandirs.c:587 src/check_mandirs.c:641
+#: src/check_mandirs.c:594 src/check_mandirs.c:648
 msgid "done.\n"
 msgstr "terminé.\n"
 
-#: src/check_mandirs.c:907
+#: src/check_mandirs.c:914
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Effacement des entrées inutiles de %s en cours…\n"
@@ -588,7 +588,7 @@ msgstr ""
 "--Man-- prochain : %s [ voir (entrée) | passer (Ctrl-D) | quitter (Ctrl-"
 "C) ]\n"
 
-#: src/man.c:2021 src/man.c:3588
+#: src/man.c:2021 src/man.c:3590
 #, c-format
 msgid "can't chdir to %s"
 msgstr "impossible d'aller dans le répertoire %s"
@@ -607,23 +607,23 @@ msgstr ""
 msgid "Can't convert %s to cat name"
 msgstr "Impossible de convertir %s en nom de page préformatée"
 
-#: src/man.c:3059
+#: src/man.c:3060
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr ""
 "%s : il est conseillé de ne plus se baser sur les références de whatis\n"
 
-#: src/man.c:3209 src/man.c:3986
+#: src/man.c:3210 src/man.c:3988
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "la commande mandb a échoué avec le code de retour %d"
 
-#: src/man.c:3411
+#: src/man.c:3413
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "erreur interne : le type candidat %d est hors de portée"
 
-#: src/man.c:3916
+#: src/man.c:3918
 msgid " Manual page "
 msgstr " Page de manuel "
 
@@ -721,52 +721,52 @@ msgstr "impossible d'écrire dans %s"
 msgid "can't read from %s"
 msgstr "impossible de lire à partir de %s"
 
-#: src/mandb.c:453
+#: src/mandb.c:454
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Traitement des pages du manuel sous %s…\n"
 
-#: src/mandb.c:647 src/mandb.c:673
+#: src/mandb.c:648 src/mandb.c:674
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Suppression du répertoire « cat » obsolète %s…\n"
 
-#: src/mandb.c:829
+#: src/mandb.c:830
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "attention : aucune directive MANDB_MAP dans %s, votre fichier manpath est "
 "utilisé"
 
-#: src/mandb.c:901
+#: src/mandb.c:902
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "Un sous-répertoire de manuel contient de nouvelles pages.\n"
 msgstr[1] "%d sous-répertoires de manuel contiennent de nouvelles pages.\n"
 
-#: src/mandb.c:906
+#: src/mandb.c:907
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "Une page de manuel a été ajoutée.\n"
 msgstr[1] "%d pages de manuel ont été ajoutées.\n"
 
-#: src/mandb.c:910
+#: src/mandb.c:911
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "Une page sans source a été ajoutée.\n"
 msgstr[1] "%d pages sans source ont été ajoutées.\n"
 
-#: src/mandb.c:915
+#: src/mandb.c:916
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "Une entrée inutile de la base a été supprimée.\n"
 msgstr[1] "%d entrées inutiles de la base ont été supprimées.\n"
 
-#: src/mandb.c:933
+#: src/mandb.c:934
 #, c-format
 msgid "No databases created."
 msgstr "Aucune base de données créée."
@@ -942,7 +942,7 @@ msgstr "attention : %s contient une référence circulaire"
 msgid "(unknown subject)"
 msgstr "(sujet inconnu)"
 
-#: src/whatis.c:864
+#: src/whatis.c:865
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s : rien d'adéquat\n"

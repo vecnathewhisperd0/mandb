@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.1-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2014-09-24 01:51+0100\n"
+"POT-Creation-Date: 2014-09-28 00:10+0100\n"
 "PO-Revision-Date: 2012-04-07 19:04+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "nelze nastavit platné uid"
 
-#: lib/security.c:101 src/mandb.c:807
+#: lib/security.c:101 src/mandb.c:808
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "uživatel manuálových stránek „%s“ použitý v setuid neexistuje"
@@ -167,7 +167,7 @@ msgstr "nelze aktualizovat %s"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "varování: %s/man%s/%s.%s*: neslučitelné přípony"
 
-#: src/check_mandirs.c:109 src/check_mandirs.c:560
+#: src/check_mandirs.c:109 src/check_mandirs.c:566
 #, c-format
 msgid "can't update index cache %s"
 msgstr "nelze aktualizovat rejstřík %s"
@@ -187,7 +187,7 @@ msgstr "varování: %s: ignoruje se prázdný soubor"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "varování: %s: selhalo zpracování programem whatis pro %s(%s)"
 
-#: src/check_mandirs.c:327 src/check_mandirs.c:447 src/mandb.c:864
+#: src/check_mandirs.c:327 src/check_mandirs.c:447 src/mandb.c:865
 #: src/straycats.c:77 src/straycats.c:309 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -203,21 +203,21 @@ msgstr "varování: nelze vytvořit složku %s pro katalogy"
 msgid "can't change to directory %s"
 msgstr "nelze se přepnout do složky %s"
 
-#: src/check_mandirs.c:501
+#: src/check_mandirs.c:506
 #, c-format
 msgid "can't create index cache %s"
 msgstr "nelze vytvořit rejstřík %s"
 
-#: src/check_mandirs.c:526
+#: src/check_mandirs.c:531
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Aktualizuje se rejstřík pro cestu „%s/%s“. Čekejte…"
 
-#: src/check_mandirs.c:587 src/check_mandirs.c:641
+#: src/check_mandirs.c:594 src/check_mandirs.c:648
 msgid "done.\n"
 msgstr "dokončeno.\n"
 
-#: src/check_mandirs.c:907
+#: src/check_mandirs.c:914
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Mažou se staré databázové záznamy v %s…\n"
@@ -587,7 +587,7 @@ msgstr ""
 "--Man-- následující: %s [zobrazit (enter) | přeskočit (Ctrl-D) | ukončit "
 "(Ctrl-C)]\n"
 
-#: src/man.c:2021 src/man.c:3588
+#: src/man.c:2021 src/man.c:3590
 #, c-format
 msgid "can't chdir to %s"
 msgstr "nelze se přepnout do složky %s"
@@ -606,22 +606,22 @@ msgstr ""
 msgid "Can't convert %s to cat name"
 msgstr "%s nelze převést na název katalogu"
 
-#: src/man.c:3059
+#: src/man.c:3060
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: spoléhat se na to, co program whatis považuje za neschválené\n"
 
-#: src/man.c:3209 src/man.c:3986
+#: src/man.c:3210 src/man.c:3988
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "program mandb skončil s návratovým kódem %d"
 
-#: src/man.c:3411
+#: src/man.c:3413
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "interní chyba: kandidující typ %d je mimo rozsah"
 
-#: src/man.c:3916
+#: src/man.c:3918
 msgid " Manual page "
 msgstr " Manuálová stránka "
 
@@ -719,23 +719,23 @@ msgstr "nelze zapisovat do souboru %s"
 msgid "can't read from %s"
 msgstr "nelze číst ze souboru %s"
 
-#: src/mandb.c:453
+#: src/mandb.c:454
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Zpracovávají se manuálové stránky ve složce %s…\n"
 
-#: src/mandb.c:647 src/mandb.c:673
+#: src/mandb.c:648 src/mandb.c:674
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Odstraňuje se zastaralá složka katalogů %s…\n"
 
-#: src/mandb.c:829
+#: src/mandb.c:830
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "varování: v souboru %s není direktiva MANDB_MAP, použije se program manpath"
 
-#: src/mandb.c:901
+#: src/mandb.c:902
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -743,7 +743,7 @@ msgstr[0] "%d manuálová podsložka obsahovala nové manuálové stránky.\n"
 msgstr[1] "%d manuálové podsložky obsahovaly nové manuálové stránky.\n"
 msgstr[2] "%d manuálových podsložek obsahovalo nové manuálové stránky.\n"
 
-#: src/mandb.c:906
+#: src/mandb.c:907
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
@@ -751,7 +751,7 @@ msgstr[0] "%d manuálová stránka byla přidána.\n"
 msgstr[1] "%d manuálové stránky byly přidány.\n"
 msgstr[2] "%d manuálových stránek bylo přidáno.\n"
 
-#: src/mandb.c:910
+#: src/mandb.c:911
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -759,7 +759,7 @@ msgstr[0] "Byl přidán %d bezprizorní katalog.\n"
 msgstr[1] "Byly přidány %d bezprizorní katalogy.\n"
 msgstr[2] "Bylo přidáno %d bezprizorních katalogů.\n"
 
-#: src/mandb.c:915
+#: src/mandb.c:916
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
@@ -767,7 +767,7 @@ msgstr[0] "Byl vymazán %d starý databázový záznam.\n"
 msgstr[1] "Byly vymazány %d staré databázové záznamy.\n"
 msgstr[2] "Bylo vymazáno %d starých databázových záznamů.\n"
 
-#: src/mandb.c:933
+#: src/mandb.c:934
 #, c-format
 msgid "No databases created."
 msgstr "Nebyla vytvořena žádná databáze."
@@ -941,7 +941,7 @@ msgstr "varování: %s obsahuje zacyklený ukazatel"
 msgid "(unknown subject)"
 msgstr "(neznámý předmět)"
 
-#: src/whatis.c:864
+#: src/whatis.c:865
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: nic neodpovídá.\n"
