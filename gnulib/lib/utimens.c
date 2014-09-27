@@ -243,6 +243,18 @@ fdutimens (int fd, char const *file, struct timespec const timespec[2])
           adjustment_needed++;
         }
 # endif
+# ifdef __GNU__
+      /* Work around lack of UTIME_NOW/UTIME_OMIT support:
+         <https://bugs.debian.org/762677>.  */
+      if (adjustment_needed > 0)
+        {
+          if (fd < 0 ? stat (file, &st) : fstat (fd, &st))
+            return -1;
+          update_timespec (&st, &ts);
+          /* Note that st is good, in case futimens gives ENOSYS.  */
+          adjustment_needed = 3;
+        }
+# endif
 # if HAVE_UTIMENSAT
       if (fd < 0)
         {
