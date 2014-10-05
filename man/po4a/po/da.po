@@ -3,12 +3,14 @@
 # This file is distributed under the same license as the man-db package.
 # Joe Hansen <joedalton2@yahoo.dk>, 2012, 2014.
 #
+# bogus - falsk
 # cat -> katalog
 # dbs -> databaser
 # locale -> sprog
 # options -> tilvalg
 # pager -> tekstviser
 # pipeline -> datakanal
+# post-processor -> efterbrænder
 # preprocessor -> forbehandler
 # section -> afsnit
 # stray cats -> vildfarne katalogsider
@@ -18,9 +20,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.6.6-pre2\n"
+"Project-Id-Version: man-db-manpages 2.7.0-pre1\n"
 "POT-Creation-Date: 2014-09-16 14:04+0100\n"
-"PO-Revision-Date: 2014-08-30 07:50+0200\n"
+"PO-Revision-Date: 2014-10-05 07:50+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: \n"
@@ -784,19 +786,6 @@ msgstr "%man% - en grænseflade til referencemanualerne på nettet"
 #.  The apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:67
-#, fuzzy
-#| msgid ""
-#| "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--"
-#| "warnings>\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> "
-#| "I<locale>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
-#| "I<path>\\|] [\\|B<-S> I<list>\\|] [\\|B<-e> I<extension>\\|] [\\|B<-i>\\||"
-#| "\\|B<-I>\\|] [\\|B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--names-only>"
-#| "\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<--no-subpages>\\|] [\\|B<-P> "
-#| "I<pager>\\|] [\\|B<-r> I<prompt>\\|] [\\|B<-7>\\|] [\\|B<-E> I<encoding>"
-#| "\\|] [\\|B<--no-hyphenation>\\|] [\\|B<--no-justification>\\|] [\\|B<-p> "
-#| "I<string>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|I<device>\\|]\\|] [\\|B<-H>\\|"
-#| "[\\|I<browser>\\|]\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|"
-#| "[\\|I<section>\\|] I<page>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -820,49 +809,33 @@ msgstr ""
 "\\|] [\\|B<--no-justification>\\|] [\\|B<-p> I<streng>\\|] [\\|B<-t>\\|] [\\|"
 "B<-T>\\|[\\|I<enhed>\\|]\\|] [\\|B<-H>\\|[\\|I<browser>\\|]\\|] [\\|B<-X>\\|"
 "[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|I<afsnit>\\|] I<side>\\ .\\|.\\|."
-"\\|]\\ .\\|.\\|."
+"\\|]\\ .\\|.\\|.\\&"
 
 #.  The --global-apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:75
-#, fuzzy
-#| msgid "B<%man%> B<-k> [\\|I<apropos> I<options>\\|] I<regexp> \\&.\\|.\\|."
 msgid "B<%man%> B<-k> [\\|I<apropos> I<options>\\|] I<regexp> \\&.\\|.\\|.\\&"
-msgstr "B<%man%> B<-k> [\\|I<apropos> I<tilvalg>\\|] I<regexp> \\&.\\|.\\|."
+msgstr "B<%man%> B<-k> [\\|I<apropos> I<tilvalg>\\|] I<regexp> \\&.\\|.\\|.\\&"
 
 #.  The whatis command line
 #. type: Plain text
 #: ../../man/man1/man.man1:86
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<list>\\|] [\\|B<-i>"
-#| "\\||\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|."
 msgid ""
 "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<list>\\|] [\\|B<-i>\\||"
 "\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|.\\&"
 msgstr ""
 "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<liste>\\|] [\\|B<-i>\\||"
-"\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<afsnit>\\|] I<term>\\ .\\|.\\|."
+"\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<afsnit>\\|] I<term>\\ .\\|.\\|.\\&"
 
 #.  The --local command line
 #. type: Plain text
 #: ../../man/man1/man.man1:94
-#, fuzzy
-#| msgid "B<%man%> B<-k> [\\|I<apropos> I<options>\\|] I<regexp> \\&.\\|.\\|."
 msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|.\\&"
-msgstr "B<%man%> B<-k> [\\|I<apropos> I<tilvalg>\\|] I<regexp> \\&.\\|.\\|."
+msgstr "B<%man%> B<-k> [\\|I<apropos> I<tilvalg>\\|] I<regexp> \\&.\\|.\\|.\\&"
 
 #.  The --where/--where-cat command line
 #. type: Plain text
 #: ../../man/man1/man.man1:127
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-l> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--"
-#| "warnings>\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> "
-#| "I<locale>\\|] [\\|B<-P> I<pager>\\|] [\\|B<-r> I<prompt>\\|] [\\|B<-7>"
-#| "\\|] [\\|B<-E> I<encoding>\\|] [\\|B<-p> I<string>\\|] [\\|B<-t>\\|] [\\|"
-#| "B<-T>\\|[\\|I<device>\\|]\\|] [\\|B<-H>\\|[\\|I<browser>\\|]\\|] [\\|B<-X>"
-#| "\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] I<file> \\&.\\|.\\|."
 msgid ""
 "B<%man%> B<-l> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--"
 "warnings>\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> "
@@ -876,35 +849,27 @@ msgstr ""
 "I<sprog>\\|] [\\|B<-P> I<tekstviser>\\|] [\\|B<-r> I<prompt>\\|] [\\|B<-7>"
 "\\|] [\\|B<-E> I<kodning>\\|] [\\|B<-p> I<streng>\\|] [\\|B<-t>\\|] [\\|B<-T>"
 "\\|[\\|I<enhed>\\|]\\|] [\\|B<-H>\\|[\\|I<browser>\\|]\\|] [\\|B<-X>\\|[\\|"
-"I<dpi>\\|]\\|] [\\|B<-Z>\\|] I<fil> \\&.\\|.\\|."
+"I<dpi>\\|]\\|] [\\|B<-Z>\\|] I<fil> \\&.\\|.\\|.\\&"
 
 #.  The --catman command line
 #. type: Plain text
 #: ../../man/man1/man.man1:137
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>"
-#| "\\|] I<page> \\&.\\|.\\|."
 msgid ""
 "B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] "
 "I<page> \\&.\\|.\\|.\\&"
 msgstr ""
 "B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<fil>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] "
-"I<side> \\&.\\|.\\|."
+"I<side> \\&.\\|.\\|.\\&"
 
 #.  --help and --version
 #. type: Plain text
 #: ../../man/man1/man.man1:147
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-c> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] I<page> "
-#| "\\&.\\|.\\|."
 msgid ""
 "B<%man%> B<-c> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] I<page> \\&."
 "\\|.\\|.\\&"
 msgstr ""
 "B<%man%> B<-c> [\\|B<-C> I<fil>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] I<side> \\&."
-"\\|.\\|."
+"\\|.\\|.\\&"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:150
@@ -924,6 +889,15 @@ msgid ""
 "%manpath_config_file%>), and to show only the first I<page> found, even if "
 "I<page> exists in several I<sections>."
 msgstr ""
+"B<%man%> er systemets manuelle tekstviser. Hver I<side>-parameter sendt til "
+"B<%man%> er normalt navnet på et program, et redskab eller en funktion. "
+"I<manualsiden> associeret med hvert af disse parametre findes så og vises. "
+"I<afsnit>, hvis angivet, vil dirigere B<%man> til kun at kigge i det "
+"I<afsnit> af manualen. Standardhandlingen er at søge i alle de tilgængelige "
+"I<afsnit>, der efterfølger den prædefinerede rækkefølge (\"%sections%\" som "
+"standard, med mindre overskrevet af direktivet B<SECTION> i I<"
+"%manpath_config_file%>), og at vise kun den første I<side> fundet, selv hvis "
+"I<side> findes i flere I<afsnit>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:185
@@ -954,10 +928,9 @@ msgstr "Bibliotekskald (funktioner i programbiblioteker)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:198
-#, fuzzy, no-wrap
-#| msgid "Special files (usually found in I</dev>)"
+#, no-wrap
 msgid "Special files (usually found in I</dev\\/>)"
-msgstr "Specielle filer (normalt fundet i I</dev>)"
+msgstr "Specielle filer (normalt fundet i I</dev\\/>)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:201
@@ -973,16 +946,13 @@ msgstr "Spil"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:207
-#, fuzzy, no-wrap
-#| msgid ""
-#| "Miscellaneous (including macro packages and conventions),\n"
-#| "e.g. B<man>(7), B<groff>(7)"
+#, no-wrap
 msgid ""
 "Miscellaneous (including macro packages and conventions),\n"
 "e.g.\\& B<man>(7), B<groff>(7)"
 msgstr ""
-"Diverse (inklusiv makropakker og konventioner),\n"
-"f.eks. B<man>(7), B<groff>(7)"
+"Diverse (inklusive makropakker og konventioner),\n"
+"f.eks.\\& B<man>(7), B<groff>(7)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:211
@@ -1130,7 +1100,7 @@ msgstr "Vis manualsiden for I<punkt> (program) I<ls>."
 #: ../../man/man1/man.man1:287
 #, no-wrap
 msgid "B<%man%\\ -a>I<\\ intro>"
-msgstr ""
+msgstr "B<%man%\\ -a>I<\\ intro>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:293
@@ -1139,12 +1109,15 @@ msgid ""
 "within the manual.  It is possible to quit between successive displays or "
 "skip any of them."
 msgstr ""
+"Vis, i rækkefølge, alle de tilgængelige I<intro>-manualsider indeholdt i "
+"denne manual. Det er muligt at afbryde mellem successive visninger eller "
+"udelade nogle af dem."
 
 #. type: TP
 #: ../../man/man1/man.man1:293
 #, no-wrap
 msgid "B<%man% -t >I<alias >|I< lpr -Pps>"
-msgstr ""
+msgstr "B<%man% -t >I<alias >|I< lpr -Pps>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:310
@@ -1160,7 +1133,7 @@ msgstr ""
 #: ../../man/man1/man.man1:310
 #, no-wrap
 msgid "B<%man% -l -T>I<dvi ./foo.1x.gz>B< E<gt> >I<./foo.1x.dvi>"
-msgstr ""
+msgstr "B<%man% -l -T>I<dvi ./foo.1x.gz>B< E<gt> >I<./foo.1x.dvi>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:326
@@ -1176,7 +1149,7 @@ msgstr ""
 #: ../../man/man1/man.man1:326
 #, no-wrap
 msgid "B<%man%\\ -k>I<\\ printf>"
-msgstr ""
+msgstr "B<%man%\\ -k>I<\\ printf>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:334
@@ -1185,12 +1158,15 @@ msgid ""
 "I<printf> as regular expression.  Print out any matches.  Equivalent to B<"
 "%apropos%\\ -r>I<\\ printf>B<.>"
 msgstr ""
+"Søg i de korte beskrivelser og navnene på manualsiderne for nøgleordet "
+"I<printf> som regulært udtryk. Udskriv resultaterne. Svarer til B<%apropos%"
+"\\ -r>I<\\ printf>B<.>"
 
 #. type: TP
 #: ../../man/man1/man.man1:334
 #, no-wrap
 msgid "B<%man%\\ -f>I<\\ smail>"
-msgstr ""
+msgstr "B<%man%\\ -f>I<\\ smail>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:341
@@ -1198,6 +1174,8 @@ msgid ""
 "Lookup the manual pages referenced by I<smail> and print out the short "
 "descriptions of any found.  Equivalent to B<%whatis%\\ -r>I<\\ smail>B<.>"
 msgstr ""
+"Slå manualsiderne refereret af I<smail> op og vis den korte beskrivelse for "
+"det fundne resultat. Svarer til B<%whatis%\\ -r>I<\\ smail>B<.>"
 
 #. type: SH
 #: ../../man/man1/man.man1:341
@@ -1429,10 +1407,9 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/man.man1:577
-#, fuzzy, no-wrap
-#| msgid "B<--warnings>[=I<warnings>]"
+#, no-wrap
 msgid "B<--warnings>[=I<warnings\\/>]"
-msgstr "B<--warnings>[=I<advarsler>]"
+msgstr "B<--warnings>[=I<advarsler\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:589
@@ -1457,16 +1434,12 @@ msgstr "Hovedtilstande for operation"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:598
-#, fuzzy
-#| msgid ""
-#| "Equivalent to B<%apropos%>.  Search the short manual page descriptions "
-#| "for keywords and display any matches.  See B<%apropos%>(1)  for details."
 msgid ""
 "Equivalent to B<%whatis%>.  Display a short description from the manual "
 "page, if available.  See B<%whatis%>(1)  for details."
 msgstr ""
-"Svarer til B<%apropos%>. Søg i de korte manualsidebeskrivelser for nøgleord "
-"og vis alle match. Se B<%apropos%>(1) for detaljer."
+"Svarer til B<%whatis%>. Vis en kort beskrivelse fra manualsiden, hvis "
+"tilgængelig. Se B<%whatis%>(1) for detaljer."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:607
@@ -1959,13 +1932,14 @@ msgid ""
 "Use I<%troff%> to format the manual page to stdout.  This option is not "
 "required in conjunction with B<-H>, B<-T>, or B<-Z>."
 msgstr ""
+"Brug I<%troff%> til at formatere manualsiden til standardud. Tilvalget er "
+"ikke krævet sammen med B<-H>, B<-T> eller B<-Z>."
 
 #. type: TP
 #: ../../man/man1/man.man1:1101
-#, fuzzy, no-wrap
-#| msgid "B<-T>[I<device>], B<--troff-device>[=I<device>]"
+#, no-wrap
 msgid "B<-T>[I<device\\/>], B<--troff-device>[=I<device\\/>]"
-msgstr "B<-T>[I<enhed>], B<--troff-device>[=I<enhed>]"
+msgstr "B<-T>[I<enhed\\/>], B<--troff-device>[=I<enhed\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1113
@@ -1975,13 +1949,16 @@ msgid ""
 "Examples (provided with Groff-1.17) include B<dvi>, B<latin1>, B<ps>, "
 "B<utf8>, B<X75> and B<X100>."
 msgstr ""
+"Denne indstilling bruges til at ændre B<groff>-resultater (eller muligvis "
+"B<troff'er>), så de er egnet for en enhed udover standarden. B<-t> er "
+"underforstået. Eksempler (indeholdt med Groff-1.17) inkluderer B<dvi>, "
+"B<latin1>, B<ps>, B<utf8>, B<X75> og B<X100>."
 
 #. type: TP
 #: ../../man/man1/man.man1:1113
-#, fuzzy, no-wrap
-#| msgid "B<-H>[I<browser>], B<--html>[=I<browser>]"
+#, no-wrap
 msgid "B<-H>[I<browser\\/>], B<--html>[=I<browser\\/>]"
-msgstr "B<-H>[I<browser>], B<--html>[=I<browser>]"
+msgstr "B<-H>[I<browser\\/>], B<--html>[=I<browser\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1129
@@ -1996,10 +1973,9 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/man.man1:1129
-#, fuzzy, no-wrap
-#| msgid "B<-X>[I<dpi>], B<--gxditview>[=I<dpi>]"
+#, no-wrap
 msgid "B<-X>[I<dpi\\/>], B<--gxditview>[=I<dpi\\/>]"
-msgstr "B<-X>[I<dpi>], B<--gxditview>[=I<dpi>]"
+msgstr "B<-X>[I<dpi\\/>], B<--gxditview>[=I<dpi\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1143
@@ -2019,6 +1995,10 @@ msgid ""
 "this option is passed to B<groff> and will suppress the use of a post-"
 "processor.  It implies B<-t>."
 msgstr ""
+"B<groff> vil køre B<troff> og så bruge en passende efterbrænder til at "
+"fremstille et resultat egnet for den valgte enhed. Hvis I<%troff%> er "
+"B<groff>, så vil dette tilvalg sendes til B<groff> og vil undertrykke brugen "
+"af en efterbrænder. B<-t> er underforstået."
 
 #. type: SS
 #: ../../man/man1/man.man1:1159
@@ -2183,12 +2163,10 @@ msgstr "HISTORIK"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1385
-#, fuzzy
-#| msgid ""
-#| "1990, 1991 - Originally written by John W. Eaton (jwe@che.utexas.edu)."
 msgid ""
 "1990, 1991 \\(en Originally written by John W.\\& Eaton (jwe@che.utexas.edu)."
-msgstr "1990, 1991 - Oprindelig skrevet af John W. Eaton (jwe@che.utexas.edu)."
+msgstr ""
+"1990, 1991 \\(en oprindelig skrevet af John W.\\& Eaton (jwe@che.utexas.edu)."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1388
@@ -2201,47 +2179,33 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1392
-#, fuzzy
-#| msgid ""
-#| "30th April 1994 - 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk)  "
-#| "has been developing and maintaining this package with the help of a few "
-#| "dedicated people."
 msgid ""
 "30th April 1994 \\(en 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk)  "
 "has been developing and maintaining this package with the help of a few "
 "dedicated people."
 msgstr ""
-"30. april 1994 - 23. februar 2000: Wilf. (G.Wilford@ee.surrey.ac.uk) har "
+"30. april 1994 \\(en 23. februar 2000: Wilf. (G.Wilford@ee.surrey.ac.uk) har "
 "udviklet og vedligeholdt denne pakke med hjælp fra nogle få dedikerede "
 "personer."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1396
-#, fuzzy
-#| msgid ""
-#| "30th October 1996 - 30th March 2001: Fabrizio Polacco "
-#| "E<lt>fpolacco@debian.orgE<gt> maintained and enhanced this package for "
-#| "the Debian project, with the help of all the community."
 msgid ""
 "30th October 1996 \\(en 30th March 2001: Fabrizio Polacco "
 "E<lt>fpolacco@debian.orgE<gt> maintained and enhanced this package for the "
 "Debian project, with the help of all the community."
 msgstr ""
-"30. oktober 1996 - 30. marts 2001: Fabrizio Polacco E<lt>fpolacco@debian."
-"orgE<gt> vedligeholdte og forbedrede denne pakke for Debianprojektet med "
+"30. oktober 1996 \\(en 30. marts 2001: Fabrizio Polacco E<lt>fpolacco@debian."
+"orgE<gt> vedligeholdte og forberedte denne pakke for Debianprojektet med "
 "hjælp fra hele fællesskabet."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1398
-#, fuzzy
-#| msgid ""
-#| "31st March 2001 - present day: Colin Watson E<lt>cjwatson@debian.orgE<gt> "
-#| "is now developing and maintaining man-db."
 msgid ""
 "31st March 2001 \\(en present day: Colin Watson E<lt>cjwatson@debian."
 "orgE<gt> is now developing and maintaining man-db."
 msgstr ""
-"31. marts 2001 - til i dag: Colin Watson E<lt>cjwatson@debian.orgE<gt> "
+"31. marts 2001 \\(en til i dag: Colin Watson E<lt>cjwatson@debian.orgE<gt> "
 "udvikler og vedligeholder nu man-db."
 
 #. type: TH
@@ -2987,6 +2951,8 @@ msgid ""
 "B<%mandb%> can be compiled with support for any one of the following "
 "database types."
 msgstr ""
+"B<%mandb%> kan kompileres med understøttelse for enhver af de følgende "
+"databasetyper."
 
 #. type: tbl table
 #: ../../man/man8/mandb.man8:59
@@ -3077,7 +3043,7 @@ msgstr "UNIX ndbm"
 #: ../../man/man8/mandb.man8:70
 #, no-wrap
 msgid "I<index.(dir|pag)>\n"
-msgstr ""
+msgstr "I<index.(dir|pag)>\n"
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:83
@@ -3088,6 +3054,11 @@ msgid ""
 "necessary to rerun B<%mandb%> with the B<-c> option to re-create the "
 "databases from scratch."
 msgstr ""
+"De databasetyper som understøtter asynkrone opdateringer tilbyder forbedret "
+"hastighed på bekostning af muligheden for korruption i tilfælde af "
+"usædvanlig afslutning. I et usædvanligt tilfælde, hvor dette er opstået, kan "
+"det være nødvendigt at genkøre B<%mandb%> med tilvalget B<-c> for at "
+"genskabe databaserne fra bunden af."
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:90
@@ -3100,6 +3071,8 @@ msgid ""
 "Do not spend time looking for or adding information to the databases "
 "regarding stray cats."
 msgstr ""
+"Brug ikke tid på at kigge efter eller tilføje information til databaserne "
+"angående vildfarne katalogsider."
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:98
@@ -3224,7 +3197,7 @@ msgstr ""
 #: ../../man/man8/mandb.man8:182
 #, no-wrap
 msgid "B<E<lt>filenameE<gt>: ignoring bogus filename>"
-msgstr ""
+msgstr "B<E<lt>filnavnE<gt>: ignorerer falske filnavne>"
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:188
