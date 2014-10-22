@@ -11,12 +11,13 @@ init () {
 	tmpdir="tmp-${0##*/}"
 	mkdir -p "$tmpdir" || exit $?
 	trap 'rm -rf "$tmpdir"' HUP INT QUIT TERM
+	abstmpdir="$(pwd -P)/$tmpdir"
 }
 
 run () {
-	"$top_builddir/libtool" --mode=execute \
-		-dlopen "$top_builddir/lib/.libs/libman.la" \
-		-dlopen "$top_builddir/libdb/.libs/libmandb.la" \
+	"$abs_top_builddir/libtool" --mode=execute \
+		-dlopen "$abs_top_builddir/lib/.libs/libman.la" \
+		-dlopen "$abs_top_builddir/libdb/.libs/libmandb.la" \
 		"$@"
 }
 
@@ -77,18 +78,19 @@ expect_pass () {
 
 skip () {
 	echo "  SKIP: $1"
+	rm -rf "$abstmpdir"
 	exit 77
 }
 
 finish () {
 	case $failures in
 		0)
-			rm -rf "$tmpdir"
+			rm -rf "$abstmpdir"
 			exit 0
 			;;
 		*)
 			if [ -z "$TEST_FAILURE_KEEP" ]; then
-				rm -rf "$tmpdir"
+				rm -rf "$abstmpdir"
 			fi
 			exit 1
 			;;
