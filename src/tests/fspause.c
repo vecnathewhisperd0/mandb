@@ -32,6 +32,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "dirname.h"
 #include "stat-time.h"
 #include "timespec.h"
 #include "xalloc.h"
@@ -40,6 +41,8 @@
 
 static char *filename;
 static int fd = -1;
+
+char *program_name;
 
 #define MUST(name, cond) \
 	do { \
@@ -83,10 +86,12 @@ static int try_delay (struct stat *st, int delay_ns)
 	return timespec_cmp (start_ts, end_ts) != 0;
 }
 
-int main (int argc ATTRIBUTE_UNUSED, char **argv ATTRIBUTE_UNUSED)
+int main (int argc ATTRIBUTE_UNUSED, char **argv)
 {
 	struct stat st;
 	int delay_ns;
+
+	program_name = base_name (argv[0]);
 
 	filename = xstrdup ("fspause.tmp.XXXXXX");
 	MUST ("mkstemp", (fd = mkstemp (filename)) >= 0);
