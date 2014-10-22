@@ -191,6 +191,8 @@ AC_DEFUN([gl_EARLY],
   # Code from module stdio:
   # Code from module stdlib:
   # Code from module strcase:
+  # Code from module strcasestr:
+  # Code from module strcasestr-simple:
   # Code from module strchrnul:
   # Code from module strdup-posix:
   # Code from module streq:
@@ -717,6 +719,17 @@ AC_SUBST([LTALLOCA])
     AC_LIBOBJ([strncasecmp])
     gl_PREREQ_STRNCASECMP
   fi
+  gl_FUNC_STRCASESTR
+  if test $HAVE_STRCASESTR = 0 || test $REPLACE_STRCASESTR = 1; then
+    AC_LIBOBJ([strcasestr])
+    gl_PREREQ_STRCASESTR
+  fi
+  gl_FUNC_STRCASESTR_SIMPLE
+  if test $HAVE_STRCASESTR = 0 || test $REPLACE_STRCASESTR = 1; then
+    AC_LIBOBJ([strcasestr])
+    gl_PREREQ_STRCASESTR
+  fi
+  gl_STRING_MODULE_INDICATOR([strcasestr])
   gl_FUNC_STRCHRNUL
   if test $HAVE_STRCHRNUL = 0 || test $REPLACE_STRCHRNUL = 1; then
     AC_LIBOBJ([strchrnul])
@@ -1150,7 +1163,9 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdio-write.c
   lib/stdio.in.h
   lib/stdlib.in.h
+  lib/str-two-way.h
   lib/strcasecmp.c
+  lib/strcasestr.c
   lib/strchrnul.c
   lib/strchrnul.valgrind
   lib/strdup.c
@@ -1364,6 +1379,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdio_h.m4
   m4/stdlib_h.m4
   m4/strcase.m4
+  m4/strcasestr.m4
   m4/strchrnul.m4
   m4/strdup.m4
   m4/strerror.m4
