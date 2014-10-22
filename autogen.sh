@@ -6,7 +6,9 @@ if type gnulib-tool >/dev/null 2>&1; then
 	gnulib-tool --update >/dev/null
 	patch -s -p1 <gnulib/argp-domain.patch
 	patch -s -p1 <gnulib/fdutimens-hurd.patch
-	export AUTOPOINT=true
+	AUTOPOINT=true
+	export AUTOPOINT
 fi
-export LIBTOOLIZE_OPTIONS=--quiet
+LIBTOOLIZE_OPTIONS=--quiet
+export LIBTOOLIZE_OPTIONS
 autoreconf -fi "$@"
