@@ -1969,30 +1969,35 @@ static void locale_macros (void *data)
 static inline int do_prompt (const char *name)
 {
 	int ch;
+	FILE *tty = NULL;
 
 	skip = 0;
-	if (!isatty (STDOUT_FILENO) || !isatty (STDIN_FILENO))
+	tty = fopen ("/dev/tty", "r+");
+	if (!tty)
 		return 0;
 
-	fprintf (stderr, _( 
+	fprintf (tty, _( 
 		 "--Man-- next: %s "
 		 "[ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"), 
 		 name);
-	fflush (stderr);
+	fflush (tty);
 
 	do {
-		ch = getchar ();
+		ch = getc (tty);
 		switch (ch) {
 			case '\n':
+				fclose (tty);
 				return 0;
 			case EOF:
 				skip = 1;
+				fclose (tty);
 				return 1;
 			default:
 				break;
 		}
 	} while (1);
 
+	fclose (tty);
 	return 0;
 }
 
