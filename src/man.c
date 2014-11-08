@@ -747,6 +747,8 @@ static void do_extern (int argc, char *argv[])
 	/* Please keep these in the same order as they are in whatis.c. */
 	if (debug_level)
 		pipecmd_arg (cmd, "-d");
+	if (local_man_file)  /* actually apropos/whatis --long */
+		pipecmd_arg (cmd, "-l");
 	if (colon_sep_section_list)
 		pipecmd_args (cmd, "-s", colon_sep_section_list, NULL);
 	if (alt_system_name)
