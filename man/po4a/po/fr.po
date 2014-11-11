@@ -6,9 +6,9 @@
 # David Prévot <david@tilapin.org>, 2010-2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.6.6-pre2\n"
+"Project-Id-Version: man-db-manpages 2.7.0-pre1\n"
 "POT-Creation-Date: 2014-09-16 14:04+0100\n"
-"PO-Revision-Date: 2014-01-19 08:11-0400\n"
+"PO-Revision-Date: 2014-11-11 10:34-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "Language: fr\n"
@@ -461,12 +461,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:232 ../../man/man1/whatis.man1:236
-#, fuzzy
-#| msgid ""
-#| "If $B<MANWIDTH> is set, its value is used as the terminal width (see the "
-#| "B<--long> option).  If it is not set, the terminal width will be "
-#| "calculated using an B<ioctl>(2)  if available, the value of $B<COLUMNS>, "
-#| "or falling back to 80 characters if all else fails."
 msgid ""
 "If $B<MANWIDTH> is set, its value is used as the terminal width (see the B<--"
 "long> option).  If it is not set, the terminal width will be calculated "
@@ -475,8 +469,9 @@ msgid ""
 msgstr ""
 "Si $B<MANWIDTH> est définie, sa valeur est utilisée comme largeur de "
 "terminal (voir l'option B<--long>). Sinon, la largeur du terminal sera "
-"calculée en utilisant un B<ioctl>(2) s'il est disponible, ou d'après la "
-"valeur de $B<COLUMNS>, ou à 80 colonnes si aucune indication n'est trouvée."
+"calculée soit d'après la valeur de $B<COLUMNS>, soit en utilisant un "
+"B<ioctl>(2) s'il est disponible, soit à 80 colonnes si aucune indication "
+"n'est trouvée."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:241
@@ -860,19 +855,6 @@ msgstr "%man% - Interface de consultation des manuels de référence en ligne"
 #.  The apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:67
-#, fuzzy
-#| msgid ""
-#| "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--"
-#| "warnings>\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> "
-#| "I<locale>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
-#| "I<path>\\|] [\\|B<-S> I<list>\\|] [\\|B<-e> I<extension>\\|] [\\|B<-i>\\||"
-#| "\\|B<-I>\\|] [\\|B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--names-only>"
-#| "\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<--no-subpages>\\|] [\\|B<-P> "
-#| "I<pager>\\|] [\\|B<-r> I<prompt>\\|] [\\|B<-7>\\|] [\\|B<-E> I<encoding>"
-#| "\\|] [\\|B<--no-hyphenation>\\|] [\\|B<--no-justification>\\|] [\\|B<-p> "
-#| "I<string>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|I<device>\\|]\\|] [\\|B<-H>\\|"
-#| "[\\|I<browser>\\|]\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|"
-#| "[\\|I<section>\\|] I<page>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -896,51 +878,35 @@ msgstr ""
 "no-hyphenation>\\|] [\\|B<--no-justification>\\|] [\\|B<-p> I<chaîne>\\|] "
 "[\\|B<-t>\\|] [\\|B<-T>\\|[\\|I<périphérique>\\|]\\|] [\\|B<-H>\\|[\\|"
 "I<navigateur>\\|]\\|] [\\|B<-X>\\|[\\|I<ppp>\\|]\\|] [\\|B<-Z>\\|] [\\|[\\|"
-"I<section>\\|] I<page>\\ .\\|.\\|.\\|]\\ .\\|.\\|."
+"I<section>\\|] I<page>\\ .\\|.\\|.\\|]\\ .\\|.\\|.\\&"
 
 #.  The --global-apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:75
-#, fuzzy
-#| msgid "B<%man%> B<-k> [\\|I<apropos> I<options>\\|] I<regexp> \\&.\\|.\\|."
 msgid "B<%man%> B<-k> [\\|I<apropos> I<options>\\|] I<regexp> \\&.\\|.\\|.\\&"
 msgstr ""
 "B<%man%> B<-k> [\\|I<options d'apropos>\\|] I<expression_rationnelle> \\&."
-"\\|.\\|."
+"\\|.\\|.\\&"
 
 #.  The whatis command line
 #. type: Plain text
 #: ../../man/man1/man.man1:86
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<list>\\|] [\\|B<-i>"
-#| "\\||\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|."
 msgid ""
 "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<list>\\|] [\\|B<-i>\\||"
 "\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|.\\&"
 msgstr ""
 "B<%man%> B<-K> [\\|B<-w>\\||\\|B<-W>\\|] [\\|B<-S> I<liste>\\|] [\\|B<-i>\\||"
-"\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|."
+"\\|B<-I>\\|] [\\|I<--regex>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|.\\&"
 
 #.  The --local command line
 #. type: Plain text
 #: ../../man/man1/man.man1:94
-#, fuzzy
-#| msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|."
 msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|.\\&"
-msgstr "B<%man%> B<-f> [\\|I<options de whatis>\\|] I<page> \\&.\\|.\\|."
+msgstr "B<%man%> B<-f> [\\|I<options de whatis>\\|] I<page> \\&.\\|.\\|.\\&"
 
 #.  The --where/--where-cat command line
 #. type: Plain text
 #: ../../man/man1/man.man1:127
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-l> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--"
-#| "warnings>\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> "
-#| "I<locale>\\|] [\\|B<-P> I<pager>\\|] [\\|B<-r> I<prompt>\\|] [\\|B<-7>"
-#| "\\|] [\\|B<-E> I<encoding>\\|] [\\|B<-p> I<string>\\|] [\\|B<-t>\\|] [\\|"
-#| "B<-T>\\|[\\|I<device>\\|]\\|] [\\|B<-H>\\|[\\|I<browser>\\|]\\|] [\\|B<-X>"
-#| "\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] I<file> \\&.\\|.\\|."
 msgid ""
 "B<%man%> B<-l> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--"
 "warnings>\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> "
@@ -954,35 +920,27 @@ msgstr ""
 "L> I<locale>\\|] [\\|B<-P> I<afficheur>\\|] [\\|B<-r> I<invite>\\|] [\\|B<-7>"
 "\\|] [\\|B<-E> I<encodage>\\|] [\\|B<-p> I<chaîne>\\|] [\\|B<-t>\\|] [\\|B<-"
 "T>\\|[\\|I<périphérique>\\|]\\|] [\\|B<-H>\\|[\\|I<navigateur>\\|]\\|] [\\|"
-"B<-X>\\|[\\|I<ppp>\\|]\\|] [\\|B<-Z>\\|] I<fichier> \\&.\\|.\\|."
+"B<-X>\\|[\\|I<ppp>\\|]\\|] [\\|B<-Z>\\|] I<fichier> \\&.\\|.\\|.\\&"
 
 #.  The --catman command line
 #. type: Plain text
 #: ../../man/man1/man.man1:137
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>"
-#| "\\|] I<page> \\&.\\|.\\|."
 msgid ""
 "B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] "
 "I<page> \\&.\\|.\\|.\\&"
 msgstr ""
 "B<%man%> B<-w>\\||\\|B<-W> [\\|B<-C> I<fichier>\\|] [\\|B<-d>\\|] [\\|B<-D>"
-"\\|] I<page> \\&.\\|.\\|."
+"\\|] I<page> \\&.\\|.\\|.\\&"
 
 #.  --help and --version
 #. type: Plain text
 #: ../../man/man1/man.man1:147
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-c> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] I<page> "
-#| "\\&.\\|.\\|."
 msgid ""
 "B<%man%> B<-c> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] I<page> \\&."
 "\\|.\\|.\\&"
 msgstr ""
 "B<%man%> B<-c> [\\|B<-C> I<fichier>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] I<page> "
-"\\&.\\|.\\|."
+"\\&.\\|.\\|.\\&"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:150
@@ -991,17 +949,6 @@ msgstr "B<%man%> [\\|B<-?V>\\|]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:181
-#, fuzzy
-#| msgid ""
-#| "B<%man%> is the system's manual pager. Each I<page> argument given to B<"
-#| "%man%> is normally the name of a program, utility or function.  The "
-#| "I<manual page> associated with each of these arguments is then found and "
-#| "displayed. A I<section>, if provided, will direct B<%man%> to look only "
-#| "in that I<section> of the manual.  The default action is to search in all "
-#| "of the available I<sections> following a pre-defined order (\"%sections%"
-#| "\" by default, unless overridden by the B<SECTION> directive in I<"
-#| "%manpath_config_file%>), and to show only the first I<page> found, even "
-#| "if I<page> exists in several I<sections>."
 msgid ""
 "B<%man%> is the system's manual pager.  Each I<page> argument given to B<%man"
 "%> is normally the name of a program, utility or function.  The I<manual "
@@ -1053,10 +1000,9 @@ msgstr "Appels de bibliothèque (fonctions fournies par les bibliothèques des p
 
 #. type: tbl table
 #: ../../man/man1/man.man1:198
-#, fuzzy, no-wrap
-#| msgid "Special files (usually found in I</dev>)"
+#, no-wrap
 msgid "Special files (usually found in I</dev\\/>)"
-msgstr "Fichiers spéciaux (situés généralement dans I</dev>)"
+msgstr "Fichiers spéciaux (situés généralement dans I</dev\\/>)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:201
@@ -1072,10 +1018,7 @@ msgstr "Jeux"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:207
-#, fuzzy, no-wrap
-#| msgid ""
-#| "Miscellaneous (including macro packages and conventions),\n"
-#| "e.g. B<man>(7), B<groff>(7)"
+#, no-wrap
 msgid ""
 "Miscellaneous (including macro packages and conventions),\n"
 "e.g.\\& B<man>(7), B<groff>(7)"
@@ -1270,10 +1213,9 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/man.man1:310
-#, fuzzy, no-wrap
-#| msgid "B<%man%\\ -l\\ -T>I<dvi\\ ./foo.1x.gz>B<\\ E<gt>\\ >I<./foo.1x.dvi>"
+#, no-wrap
 msgid "B<%man% -l -T>I<dvi ./foo.1x.gz>B< E<gt> >I<./foo.1x.dvi>"
-msgstr "B<%man%\\ -l\\ -T>I<dvi\\ ./toto.1x.gz>B<\\ E<gt>\\ >I<./toto.1x.dvi>"
+msgstr "B<%man% -l -T>I<dvi ./toto.1x.gz>B< E<gt> >I<./toto.1x.dvi>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:326
@@ -1581,14 +1523,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:520
-#, fuzzy
-#| msgid ""
-#| "The filters are deciphered by a number of means. Firstly, the command "
-#| "line option B<-p> or the environment variable $B<MANROFFSEQ> is "
-#| "interrogated. If B<-p> was not used and the environment variable was not "
-#| "set, the initial line of the nroff file is parsed for a preprocessor "
-#| "string.  To contain a valid preprocessor string, the first line must "
-#| "resemble"
 msgid ""
 "The filters are deciphered by a number of means.  Firstly, the command line "
 "option B<-p> or the environment variable $B<MANROFFSEQ> is interrogated.  If "
@@ -1679,10 +1613,9 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/man.man1:577
-#, fuzzy, no-wrap
-#| msgid "B<--warnings>[=I<warnings>]"
+#, no-wrap
 msgid "B<--warnings>[=I<warnings\\/>]"
-msgstr "B<--warnings>[=I<avertissements>]"
+msgstr "B<--warnings>[=I<avertissements\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:589
@@ -1707,16 +1640,12 @@ msgstr "Modes opératoires principaux"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:598
-#, fuzzy
-#| msgid ""
-#| "Equivalent to B<%whatis%>.  Display a short description from the manual "
-#| "page, if available. See B<%whatis%>(1)  for details."
 msgid ""
 "Equivalent to B<%whatis%>.  Display a short description from the manual "
 "page, if available.  See B<%whatis%>(1)  for details."
 msgstr ""
 "Équivalent à B<%whatis%>. Affiche, si elle est disponible, une courte "
-"description de la page de manuel. Voir B<%whatis%>(1) pour obtenir des "
+"description de la page de manuel. Consultez B<%whatis%>(1) pour obtenir des "
 "précisions."
 
 #. type: Plain text
@@ -2370,10 +2299,9 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/man.man1:1101
-#, fuzzy, no-wrap
-#| msgid "B<-T>[I<device>], B<--troff-device>[=I<device>]"
+#, no-wrap
 msgid "B<-T>[I<device\\/>], B<--troff-device>[=I<device\\/>]"
-msgstr "B<-T>[I<périphérique>], B<--troff-device>[=I<périphérique>]"
+msgstr "B<-T>[I<périphérique\\/>], B<--troff-device>[=I<périphérique\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1113
@@ -2391,10 +2319,9 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/man.man1:1113
-#, fuzzy, no-wrap
-#| msgid "B<-H>[I<browser>], B<--html>[=I<browser>]"
+#, no-wrap
 msgid "B<-H>[I<browser\\/>], B<--html>[=I<browser\\/>]"
-msgstr "B<-H>[I<navigateur>], B<--html>[=I<navigateur>]"
+msgstr "B<-H>[I<navigateur\\/>], B<--html>[=I<navigateur\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1129
@@ -2415,10 +2342,9 @@ msgstr ""
 
 #. type: TP
 #: ../../man/man1/man.man1:1129
-#, fuzzy, no-wrap
-#| msgid "B<-X>[I<dpi>], B<--gxditview>[=I<dpi>]"
+#, no-wrap
 msgid "B<-X>[I<dpi\\/>], B<--gxditview>[=I<dpi\\/>]"
-msgstr "B<-X>[I<ppp>], B<--gxditview>[=I<ppp>]"
+msgstr "B<-X>[I<ppp\\/>], B<--gxditview>[=I<ppp\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1143
@@ -2557,14 +2483,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1297
-#, fuzzy
-#| msgid ""
-#| "If $B<MANOPT> is set, it will be parsed prior to B<%man%'s> command line "
-#| "and is expected to be in a similar format.  As all of the other B<%man%> "
-#| "specific environment variables can be expressed as command line options, "
-#| "and are thus candidates for being included in $B<MANOPT> it is expected "
-#| "that they will become obsolete.  N.B. All spaces that should be "
-#| "interpreted as part of an option's argument must be escaped."
 msgid ""
 "If $B<MANOPT> is set, it will be parsed prior to B<%man%'s> command line and "
 "is expected to be in a similar format.  As all of the other B<%man%> "
@@ -2585,15 +2503,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1311
-#, fuzzy
-#| msgid ""
-#| "If $B<MANWIDTH> is set, its value is used as the line length for which "
-#| "manual pages should be formatted.  If it is not set, manual pages will be "
-#| "formatted with a line length appropriate to the current terminal (using "
-#| "an B<ioctl>(2)  if available, the value of $B<COLUMNS>, or falling back "
-#| "to 80 characters if neither is available).  Cat pages will only be saved "
-#| "when the default formatting can be used, that is when the terminal line "
-#| "length is between 66 and 80 characters."
 msgid ""
 "If $B<MANWIDTH> is set, its value is used as the line length for which "
 "manual pages should be formatted.  If it is not set, manual pages will be "
@@ -2607,11 +2516,11 @@ msgstr ""
 "largeur de la ligne pour toutes les pages de manuel qui seront formatées. Si "
 "elle est vide, les pages de manuel seront formatées avec une largeur de "
 "ligne appropriée au terminal utilisé. Cette largeur sera déterminée soit "
-"grâce à un B<ioctl>(2) s'il est disponible, soit d'après la valeur de "
-"$B<COLUMNS>, soit à 80 colonnes si aucune indication n'est trouvée. Les "
-"pages «\\ cat\\ » ne seront enregistrées que si la mise en forme par défaut "
-"est utilisée, c'est-à-dire quand la largeur de ligne du terminal est "
-"comprise entre 66 et 80 colonnes."
+"d'après la valeur de $B<COLUMNS>, soit grâce à un B<ioctl>(2) s'il est "
+"disponible, soit à 80 colonnes si aucune indication n'est trouvée. Les pages "
+"«\\ cat\\ » ne seront enregistrées que si la mise en forme par défaut est "
+"utilisée, c'est-à-dire quand la largeur de ligne du terminal est comprise "
+"entre 66 et 80 colonnes."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1322
@@ -2690,13 +2599,11 @@ msgstr "HISTORIQUE"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1385
-#, fuzzy
-#| msgid ""
-#| "1990, 1991 - Originally written by John W. Eaton (jwe@che.utexas.edu)."
 msgid ""
 "1990, 1991 \\(en Originally written by John W.\\& Eaton (jwe@che.utexas.edu)."
 msgstr ""
-"1990, 1991 - Première version écrite par John W. Eaton (jwe@che.utexas.edu)."
+"1990, 1991 \\(en Première version écrite par John W.\\& Eaton (jwe@che."
+"utexas.edu)."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1388
@@ -2709,42 +2616,28 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1392
-#, fuzzy
-#| msgid ""
-#| "30th April 1994 - 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk)  "
-#| "has been developing and maintaining this package with the help of a few "
-#| "dedicated people."
 msgid ""
 "30th April 1994 \\(en 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk)  "
 "has been developing and maintaining this package with the help of a few "
 "dedicated people."
 msgstr ""
-"30 avril 1994 - 23 février 2000\\ : Wilf. (G.Wilford@ee.surrey.ac.uk) "
-"adéveloppé et assuré la maintenance de ce programme avec l'aide de quelques "
+"30 avril 1994 \\(en 23 février 2000\\ : Wilf. (G.Wilford@ee.surrey.ac.uk) a "
+"développé et assuré la maintenance de ce programme avec l'aide de quelques "
 "personnes motivées."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1396
-#, fuzzy
-#| msgid ""
-#| "30th October 1996 - 30th March 2001: Fabrizio Polacco "
-#| "E<lt>fpolacco@debian.orgE<gt> maintained and enhanced this package for "
-#| "the Debian project, with the help of all the community."
 msgid ""
 "30th October 1996 \\(en 30th March 2001: Fabrizio Polacco "
 "E<lt>fpolacco@debian.orgE<gt> maintained and enhanced this package for the "
 "Debian project, with the help of all the community."
 msgstr ""
-"30 octobre 1996 - 30 mars 2001\\ : Fabrizio Polacco E<lt>fpolacco@debian."
+"30 octobre 1996 \\(en 30 mars 2001\\ : Fabrizio Polacco E<lt>fpolacco@debian."
 "orgE<gt> a assuré la maintenance et développé ce programme pour le projet "
 "Debian avec l'aide de toute la communauté."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1398
-#, fuzzy
-#| msgid ""
-#| "31st March 2001 - present day: Colin Watson E<lt>cjwatson@debian.orgE<gt> "
-#| "is now developing and maintaining man-db."
 msgid ""
 "31st March 2001 \\(en present day: Colin Watson E<lt>cjwatson@debian."
 "orgE<gt> is now developing and maintaining man-db."
@@ -4025,6 +3918,56 @@ msgid ""
 msgstr ""
 "La section B<ANALYSE WHATIS> autrefois incluse dans cette page de manuel est "
 "maintenant incorporée à B<lexgrog>(1)."
+
+#~ msgid ""
+#~ "$mtime$ -E<gt> \"795987034\"\n"
+#~ "$version$ -E<gt> \"2.3.1\"\n"
+#~ "apropos -E<gt> \"1 1 795981542 A - - search the manual page names and "
+#~ "descriptions\"\n"
+#~ "catman -E<gt> \"8 8 795981544 A - - create or update the pre-formatted "
+#~ "manual pages\"\n"
+#~ "man -E<gt> \"1 1 795981542 A - - an interface to the on-line reference "
+#~ "manuals\"\n"
+#~ "mandb -E<gt> \"8 8 795981544 A - - create or update the manual page index "
+#~ "caches\"\n"
+#~ "manpath -E<gt> \" 1 5\"\n"
+#~ "manpath~1 -E<gt> \"1 1 795981542 A - - determine search path for manual "
+#~ "pages\"\n"
+#~ "manpath~5 -E<gt> \"5 5 795981543 A - - format of the /etc/man_db.config "
+#~ "file\"\n"
+#~ "whatis -E<gt> \"1 1 795981543 A - - search the manual page names\"\n"
+#~ "zsoelim -E<gt> \"1 1 795981543 A - - satisfy .so requests in roff input"
+#~ "\"\n"
+#~ msgstr ""
+#~ "Exemple de sorties générées par accessdb\\ :\n"
+#~ "\n"
+#~ "NdT\\ : La commande accessdb utilise la base de données d'indexation. "
+#~ "Or, \n"
+#~ "celle-ci ne prend en compte que les pages de manuel en dialecte \n"
+#~ "anglo-américain. Pour cette raison, les résultats ci-dessous n'ont pas \n"
+#~ "été traduits. Toutefois, ceci ne présage en rien de l'absence, dans "
+#~ "votre \n"
+#~ "système, de ces pages traduites dans votre langue.\n"
+#~ "\n"
+#~ "$mtime$ -E<gt> \"1134451650\"\n"
+#~ "$version$ -E<gt> \"2.4.1\"\n"
+#~ "apropos -E<gt> \"- 1 1 1104942616 A - - gz search the manual page names "
+#~ "and descriptions\"\n"
+#~ "catman -E<gt> \"- 8 8 1104942616 A - - gz create or update the pre-"
+#~ "formated manual pages\"\n"
+#~ "man -E<gt> \"- 1 1 1104942616 A - t gz an interface to the on-line "
+#~ "reference manuals\"\n"
+#~ "mandb -E<gt> \"- 8 8 1104942616 A - t gz create or update the manual page "
+#~ "index caches\"\n"
+#~ "manpath -E<gt> \" manpath 1 manpath 5\"\n"
+#~ "manpath~1 -E<gt> \"- 1 1 1104942616 A - - gz determine search path for "
+#~ "manual pages\"\n"
+#~ "manpath~5 -E<gt> \"- 5 5 1104942616 A - - gz format of the /etc/manpath."
+#~ "config file\"\n"
+#~ "whatis -E<gt> \"- 1 1 1104942616 A - - gz display manual page descriptions"
+#~ "\"\n"
+#~ "zsoelim -E<gt> \"- 1 1 1104942616 A - - gz satisfy .so requests in roff "
+#~ "input\"\n"
 
 #~ msgid ""
 #~ "If you want to override B<%man%>'s prompt string processing completely, "
