@@ -439,7 +439,7 @@ static void display (struct mandata *info, const char *page)
 
 	line_len = get_line_length ();
 
-	if (strlen (page_name) > (size_t) (line_len / 2))
+	if (!long_output && strlen (page_name) > (size_t) (line_len / 2))
 		string = xasprintf ("%.*s...", line_len / 2 - 3, page_name);
 	else
 		string = xstrdup (page_name);
