@@ -647,6 +647,8 @@ am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+HAVE_GNULIB_PO_FALSE
+HAVE_GNULIB_PO_TRUE
 CROSS_COMPILING_FALSE
 CROSS_COMPILING_TRUE
 TRANS_ZSOELIM_UPPER
@@ -13260,10 +13262,6 @@ CC="$lt_save_CC"
 # Only expand once:
 
 
-
-if test ! -f "$srcdir/gnulib/po/Makefile.in.in"; then
-	as_fn_error $? "you must run ./autogen.sh before ./configure when building from revision control" "$LINENO" 5
-fi
 
 ac_config_headers="$ac_config_headers config.h"
 
@@ -46357,8 +46355,22 @@ else
 fi
 
 
-ac_config_files="$ac_config_files Makefile gnulib/lib/Makefile gnulib/po/Makefile.in init/Makefile init/systemd/Makefile lib/Makefile src/Makefile src/man_db.conf src/tests/Makefile man/Makefile man/replace.sin man/po4a/Makefile man/da/Makefile man/de/Makefile man/es/Makefile man/fr/Makefile man/id/Makefile man/it/Makefile man/ja/Makefile man/nl/Makefile man/pl/Makefile man/ru/Makefile man/zh_CN/Makefile manual/Makefile libdb/Makefile docs/Makefile tools/Makefile include/comp_src.h include/manconfig.h po/Makefile.in"
+# Are Gnulib translations available?
+ if test -f "$srcdir/gnulib/po/POTFILES.in"; then
+  HAVE_GNULIB_PO_TRUE=
+  HAVE_GNULIB_PO_FALSE='#'
+else
+  HAVE_GNULIB_PO_TRUE='#'
+  HAVE_GNULIB_PO_FALSE=
+fi
 
+
+ac_config_files="$ac_config_files Makefile gnulib/lib/Makefile init/Makefile init/systemd/Makefile lib/Makefile src/Makefile src/man_db.conf src/tests/Makefile man/Makefile man/replace.sin man/po4a/Makefile man/da/Makefile man/de/Makefile man/es/Makefile man/fr/Makefile man/id/Makefile man/it/Makefile man/ja/Makefile man/nl/Makefile man/pl/Makefile man/ru/Makefile man/zh_CN/Makefile manual/Makefile libdb/Makefile docs/Makefile tools/Makefile include/comp_src.h include/manconfig.h po/Makefile.in"
+
+if test -f "$srcdir/gnulib/po/Makefile.in.in"; then
+	ac_config_files="$ac_config_files gnulib/po/Makefile.in"
+
+fi
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -46591,6 +46603,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${CROSS_COMPILING_TRUE}" && test -z "${CROSS_COMPILING_FALSE}"; then
   as_fn_error $? "conditional \"CROSS_COMPILING\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_GNULIB_PO_TRUE}" && test -z "${HAVE_GNULIB_PO_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_GNULIB_PO\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -47475,7 +47491,6 @@ do
     "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "gnulib/lib/Makefile") CONFIG_FILES="$CONFIG_FILES gnulib/lib/Makefile" ;;
-    "gnulib/po/Makefile.in") CONFIG_FILES="$CONFIG_FILES gnulib/po/Makefile.in" ;;
     "init/Makefile") CONFIG_FILES="$CONFIG_FILES init/Makefile" ;;
     "init/systemd/Makefile") CONFIG_FILES="$CONFIG_FILES init/systemd/Makefile" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
@@ -47503,6 +47518,7 @@ do
     "include/comp_src.h") CONFIG_FILES="$CONFIG_FILES include/comp_src.h" ;;
     "include/manconfig.h") CONFIG_FILES="$CONFIG_FILES include/manconfig.h" ;;
     "po/Makefile.in") CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
+    "gnulib/po/Makefile.in") CONFIG_FILES="$CONFIG_FILES gnulib/po/Makefile.in" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

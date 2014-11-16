@@ -13,10 +13,6 @@ AC_GNU_SOURCE
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT([disable-static])
 
-if test ! -f "$srcdir/gnulib/po/Makefile.in.in"; then
-	AC_MSG_ERROR([you must run ./autogen.sh before ./configure when building from revision control])
-fi
-
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
 
@@ -438,9 +434,11 @@ MAN_TRANS_SUBST([zsoelim])
 # If we're cross-compiling, tests won't work.
 AM_CONDITIONAL([CROSS_COMPILING], [test "x$cross_compiling" = xyes])
 
+# Are Gnulib translations available?
+AM_CONDITIONAL([HAVE_GNULIB_PO], [test -f "$srcdir/gnulib/po/POTFILES.in"])
+
 AC_CONFIG_FILES([Makefile
 	gnulib/lib/Makefile
-	gnulib/po/Makefile.in
 	init/Makefile
 	init/systemd/Makefile
 	lib/Makefile
@@ -468,4 +466,7 @@ AC_CONFIG_FILES([Makefile
 	include/comp_src.h
 	include/manconfig.h
 	po/Makefile.in])
+if test -f "$srcdir/gnulib/po/Makefile.in.in"; then
+	AC_CONFIG_FILES([gnulib/po/Makefile.in])
+fi
 AC_OUTPUT

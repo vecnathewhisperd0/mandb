@@ -20,7 +20,11 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-SUBDIRS = docs gnulib/lib gnulib/po init lib libdb src man manual po tools
+if HAVE_GNULIB_PO
+GNULIB_PO = gnulib/po
+endif
+
+SUBDIRS = docs gnulib/lib $(GNULIB_PO) init lib libdb src man manual po tools
 
 dist_noinst_DATA = FAQ NEWS README include/README
 

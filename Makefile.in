@@ -367,7 +367,8 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = docs gnulib/lib gnulib/po init lib libdb src man manual \
+	po tools
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -1399,7 +1400,8 @@ unlzma = @unlzma@
 unxz = @unxz@
 vgrind = @vgrind@
 xz = @xz@
-SUBDIRS = docs gnulib/lib gnulib/po init lib libdb src man manual po tools
+@HAVE_GNULIB_PO_TRUE@GNULIB_PO = gnulib/po
+SUBDIRS = docs gnulib/lib $(GNULIB_PO) init lib libdb src man manual po tools
 dist_noinst_DATA = FAQ NEWS README include/README
 
 # These macro files are imported by gnulib-tool, but at present not used. We
