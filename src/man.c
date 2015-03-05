@@ -613,6 +613,48 @@ static void gripe_no_name (const char *sect)
 	exit (FAIL);
 }
 
+/* In case we're set-id, double-check that our standard file descriptors are
+ * open in a standard way.  See:
+ *
+ *   http://austingroupbugs.net/view.php?id=173
+ */
+static void check_standard_fds (void)
+{
+	int flags, mode;
+
+	/* We can't even write an error message in this case, so check it
+	 * first.
+	 */
+	flags = fcntl (2, F_GETFL);
+	if (flags < 0)
+		exit (FATAL);
+	mode = flags & O_ACCMODE;
+	if (mode != O_WRONLY && mode != O_RDWR)
+		exit (FATAL);
+
+	flags = fcntl (0, F_GETFL);
+	if (flags < 0) {
+		fprintf (stderr, "stdin not open!\n");
+		exit (FATAL);
+	}
+	mode = flags & O_ACCMODE;
+	if (mode != O_RDONLY && mode != O_RDWR) {
+		fprintf (stderr, "stdin not open for reading!\n");
+		exit (FATAL);
+	}
+
+	flags = fcntl (1, F_GETFL);
+	if (flags < 0) {
+		fprintf (stderr, "stdout not open!\n");
+		exit (FATAL);
+	}
+	mode = flags & O_ACCMODE;
+	if (mode != O_WRONLY && mode != O_RDWR) {
+		fprintf (stderr, "stdout not open for reading!\n");
+		exit (FATAL);
+	}
+}
+
 static struct termios tms;
 static int tms_set = 0;
 
@@ -3808,6 +3850,8 @@ int main (int argc, char *argv[])
 
 	program_name = base_name (argv[0]);
 
+	check_standard_fds ();
+
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
 
@@ -3826,19 +3870,6 @@ int main (int argc, char *argv[])
 #if defined _AIX || defined __sgi
 	global_argv = argv;
 #endif
-
-	{ /* opens base streams in case someone like "info" closed them */
-		struct stat buf;
-		if (STDIN_FILENO < 0 ||
-		    ((fstat (STDIN_FILENO, &buf) < 0) && (errno == EBADF))) 
-			freopen ("/dev/null", "r", stdin);
-		if (STDOUT_FILENO < 0 ||
-		    ((fstat (STDOUT_FILENO, &buf) < 0) && (errno == EBADF)))
-			freopen ("/dev/null", "w", stdout);
-		if (STDERR_FILENO < 0 ||
-		    ((fstat (STDERR_FILENO, &buf) < 0) && (errno == EBADF)))
-			freopen ("/dev/null", "w", stderr);
-	}
 
 	/* This will enable us to do some profiling and know where gmon.out
 	 * will end up.  Must restore_cwd (&cwd) before we return.
