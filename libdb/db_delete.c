@@ -68,11 +68,11 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 	cont = MYDBM_FETCH (dbf, key);
 
 	if (!MYDBM_DPTR (cont)) {			/* 0 entries */
-		free (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (key);
 		return NO_ENTRY;
 	} else if (*MYDBM_DPTR (cont) != '\t') {	/* 1 entry */
 		MYDBM_DELETE (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (cont));
+		MYDBM_FREE_DPTR (cont);
 	} else {					/* 2+ entries */
 		char **names, **ext;
 		char *multi_content = NULL;
@@ -92,8 +92,8 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		if (i >= refs) {
 			free (names);
 			free (ext);
-			MYDBM_FREE (MYDBM_DPTR (cont));
-			free (MYDBM_DPTR (key));
+			MYDBM_FREE_DPTR (cont);
+			MYDBM_FREE_DPTR (key);
 			return NO_ENTRY;
 		}
 
@@ -105,7 +105,7 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 			gripe_corrupt_data ();
 		}
 		MYDBM_DELETE (dbf, multi_key);
-		free (MYDBM_DPTR (multi_key));
+		MYDBM_FREE_DPTR (multi_key);
 
 		/* refs *may* be 1 if all manual pages with this name
 		   have been deleted. In this case, we'll have to remove
@@ -114,9 +114,9 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		if (refs == 1) {
 			free (names);
 			free (ext);
-			MYDBM_FREE (MYDBM_DPTR (cont));
+			MYDBM_FREE_DPTR (cont);
 			MYDBM_DELETE (dbf, key);
-			free (MYDBM_DPTR (key));
+			MYDBM_FREE_DPTR (key);
 			return 0;
 		}
 
@@ -127,7 +127,7 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 							   "\t", names[j],
 							   "\t", ext[j], NULL);
 
-		MYDBM_FREE (MYDBM_DPTR (cont));
+		MYDBM_FREE_DPTR (cont);
 
 		/* if refs = 2 do something else. Doesn't really matter as
 		   the gdbm db file does not shrink any after a deletion
@@ -142,6 +142,6 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		free (ext);
 	}
 
-	free (MYDBM_DPTR (key));
+	MYDBM_FREE_DPTR (key);
 	return 0;
 }

@@ -798,12 +798,12 @@ static void do_apropos (MYDBM_FILE dbf,
 nextpage:
 #ifndef BTREE
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (cont));
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (cont);
+		MYDBM_FREE_DPTR (key);
 		key = nextkey; 
 #else /* BTREE */
-		MYDBM_FREE (MYDBM_DPTR (cont));
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (cont);
+		MYDBM_FREE_DPTR (key);
 		end = btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
 		info.addr = NULL; /* == MYDBM_DPTR (cont), freed above */

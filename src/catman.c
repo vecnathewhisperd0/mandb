@@ -319,11 +319,11 @@ static int parse_for_sec (const char *manpath, const char *section)
 			
 			/* we don't need the content ever again */
 			assert (MYDBM_DPTR (content)); /* just to be sure */
-			MYDBM_FREE (MYDBM_DPTR (content));
+			MYDBM_FREE_DPTR (content);
 		}
 
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (key);
 		key = nextkey;
 	}
 

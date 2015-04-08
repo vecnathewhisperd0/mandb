@@ -94,8 +94,8 @@ man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, int flags)
 		memset (&key, 0, sizeof key);
 		MYDBM_SET (key, xstrdup (VER_KEY));
 		content = MYDBM_FETCH (wrap, key);
-		free (MYDBM_DPTR (key));
-		free (MYDBM_DPTR (content));
+		MYDBM_FREE_DPTR (key);
+		MYDBM_FREE_DPTR (content);
 	}
 
 	opening = 0;
@@ -112,7 +112,7 @@ static void parent_sortkey_hashtable_free (void *defn)
 static void sortkey_hashtable_free (void *defn)
 {
 	struct sortkey *key = (struct sortkey *) defn;
-	free (MYDBM_DPTR (key->key));
+	MYDBM_FREE_DPTR (key->key);
 	free (key);
 }
 

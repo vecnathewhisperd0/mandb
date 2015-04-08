@@ -47,7 +47,7 @@ int dbver_rd (MYDBM_FILE dbfile)
 
 	content = MYDBM_FETCH (dbfile, key);
 
-	free (MYDBM_DPTR (key));
+	MYDBM_FREE_DPTR (key);
 
 	if (MYDBM_DPTR (content) == NULL) {
 		debug (_("warning: %s has no version identifier\n"), database);
@@ -55,10 +55,10 @@ int dbver_rd (MYDBM_FILE dbfile)
 	} else if (!STREQ (MYDBM_DPTR (content), VER_ID)) {
 		debug (_("warning: %s is version %s, expecting %s\n"),
 		       database, MYDBM_DPTR (content), VER_ID);
-		MYDBM_FREE (MYDBM_DPTR (content));
+		MYDBM_FREE_DPTR (content);
 		return 1;
 	} else {
-		MYDBM_FREE (MYDBM_DPTR (content));
+		MYDBM_FREE_DPTR (content);
 		return 0;
 	}
 }
@@ -78,6 +78,6 @@ void dbver_wr (MYDBM_FILE dbfile)
 		       _("fatal: unable to insert version identifier into %s"),
 		       database);
 
-	free (MYDBM_DPTR (key));
-	free (MYDBM_DPTR (content));
+	MYDBM_FREE_DPTR (key);
+	MYDBM_FREE_DPTR (content);
 }

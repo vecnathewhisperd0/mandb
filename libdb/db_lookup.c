@@ -277,7 +277,7 @@ static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
 
 	MYDBM_SET (key, name_to_key (page));
 	cont = MYDBM_FETCH (dbf, key);
-	free (MYDBM_DPTR (key));
+	MYDBM_FREE_DPTR (key);
 
 	if (MYDBM_DPTR (cont) == NULL) {	/* No entries at all */
 		return info;			/* indicate no entries */
@@ -345,7 +345,7 @@ static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
 				       MYDBM_DPTR (key));
 				gripe_corrupt_data ();
 			}
-			free (MYDBM_DPTR (key));
+			MYDBM_FREE_DPTR (key);
 
 			/* allocate info struct, fill it in and
 			   point info to the next in the list */
@@ -360,7 +360,7 @@ static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
 
 		free (names);
 		free (ext);
-		MYDBM_FREE (MYDBM_DPTR (cont));
+		MYDBM_FREE_DPTR (cont);
 		return ret;
 	}
 }
@@ -475,12 +475,12 @@ nextpage_tab:
 nextpage:
 #ifndef BTREE
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (cont));
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (cont);
+		MYDBM_FREE_DPTR (key);
 		key = nextkey;
 #else /* BTREE */
-		MYDBM_FREE (MYDBM_DPTR (cont));
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (cont);
+		MYDBM_FREE_DPTR (key);
 		end = btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
 		info.addr = NULL;

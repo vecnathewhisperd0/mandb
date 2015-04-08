@@ -87,7 +87,6 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #  define MYDBM_GET_TIME(db)		man_gdbm_get_time(db)
 #  define MYDBM_SET_TIME(db, time)	man_gdbm_set_time(db, time)
 #  define MYDBM_REORG(db)		gdbm_reorganize((db)->file)
-#  define MYDBM_FREE(x)			free(x)
 
 # elif defined(NDBM) && !defined(GDBM) && !defined(BTREE)
 
@@ -127,7 +126,6 @@ extern int ndbm_flclose(DBM *db);
 #  define MYDBM_GET_TIME(db)		ndbm_get_time(db)
 #  define MYDBM_SET_TIME(db, time)	ndbm_set_time(db, time)
 #  define MYDBM_REORG(db)		/* nothing - not implemented */
-#  define MYDBM_FREE(x)			free (x)
 
 # elif defined(BTREE) && !defined(NDBM) && !defined(GDBM)
 
@@ -170,7 +168,6 @@ extern void btree_set_time(DB *db, const struct timespec time);
 #  define MYDBM_GET_TIME(db)		btree_get_time(db)
 #  define MYDBM_SET_TIME(db, time)	btree_set_time(db, time)
 #  define MYDBM_REORG(db)		/* nothing - not implemented */
-#  define MYDBM_FREE(x)			free(x)
 
 # else /* not GDBM or NDBM or BTREE */
 #  error Define either GDBM, NDBM or BTREE before including mydbm.h
@@ -178,6 +175,7 @@ extern void btree_set_time(DB *db, const struct timespec time);
 
 #define MYDBM_RESET_DSIZE(d)		(MYDBM_DSIZE(d) = strlen(MYDBM_DPTR(d)) + 1)
 #define MYDBM_SET(d, value)		do { MYDBM_SET_DPTR(d, value); MYDBM_RESET_DSIZE(d); } while (0)
+#define MYDBM_FREE_DPTR(d)		do { free (MYDBM_DPTR (d)); MYDBM_SET_DPTR (d, NULL); } while (0)
 
 extern char *database;
 

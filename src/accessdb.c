@@ -148,10 +148,10 @@ int main (int argc, char *argv[])
 			*t = ' ';
 		printf ("%s -> \"%s\"\n", nicekey, MYDBM_DPTR (content));
 		free (nicekey); 
-		MYDBM_FREE (MYDBM_DPTR (content));
+		MYDBM_FREE_DPTR (content);
 next:
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (key);
 		key = nextkey;
 	}
 

@@ -609,12 +609,12 @@ static int sanity_check_db (MYDBM_FILE dbf)
 		if (!MYDBM_DPTR (content)) {
 			debug ("warning: %s has a key with no content (%s); "
 			       "rebuilding\n", database, MYDBM_DPTR (key));
-			MYDBM_FREE (MYDBM_DPTR (key));
+			MYDBM_FREE_DPTR (key);
 			return 0;
 		}
-		MYDBM_FREE (MYDBM_DPTR (content));
+		MYDBM_FREE_DPTR (content);
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (key);
 		key = nextkey;
 	}
 
@@ -699,10 +699,10 @@ void purge_pointers (MYDBM_FILE dbf, const char *name)
 
 pointers_contentnext:
 		free (nicekey);
-		MYDBM_FREE (MYDBM_DPTR (content));
+		MYDBM_FREE_DPTR (content);
 pointers_next:
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (key);
 		key = nextkey;
 	}
 }
@@ -933,7 +933,7 @@ int purge_missing (const char *manpath, const char *catpath,
 		/* Ignore db identifier keys. */
 		if (*MYDBM_DPTR (key) == '$') {
 			nextkey = MYDBM_NEXTKEY (dbf, key);
-			MYDBM_FREE (MYDBM_DPTR (key));
+			MYDBM_FREE_DPTR (key);
 			key = nextkey;
 			continue;
 		}
@@ -941,7 +941,7 @@ int purge_missing (const char *manpath, const char *catpath,
 		content = MYDBM_FETCH (dbf, key);
 		if (!MYDBM_DPTR (content)) {
 			nextkey = MYDBM_NEXTKEY (dbf, key);
-			MYDBM_FREE (MYDBM_DPTR (key));
+			MYDBM_FREE_DPTR (key);
 			key = nextkey;
 			continue;
 		}
@@ -957,9 +957,9 @@ int purge_missing (const char *manpath, const char *catpath,
 			if (check_multi_key (nicekey, MYDBM_DPTR (content)))
 				MYDBM_DELETE (dbf, key);
 			free (nicekey);
-			MYDBM_FREE (MYDBM_DPTR (content));
+			MYDBM_FREE_DPTR (content);
 			nextkey = MYDBM_NEXTKEY (dbf, key);
-			MYDBM_FREE (MYDBM_DPTR (key));
+			MYDBM_FREE_DPTR (key);
 			key = nextkey;
 			continue;
 		}
@@ -997,7 +997,7 @@ int purge_missing (const char *manpath, const char *catpath,
 
 		free_mandata_elements (&entry);
 		nextkey = MYDBM_NEXTKEY (dbf, key);
-		MYDBM_FREE (MYDBM_DPTR (key));
+		MYDBM_FREE_DPTR (key);
 		key = nextkey;
 	}
 
