@@ -46255,12 +46255,77 @@ else
 fi
 
       test "$db" = "yes" && break
+    done
+else
+  db=no
+fi
+
+
+  if test "$db" = no
+  then
+    ac_fn_c_check_header_mongrel "$LINENO" "gdbm-ndbm.h" "ac_cv_header_gdbm_ndbm_h" "$ac_includes_default"
+if test "x$ac_cv_header_gdbm_ndbm_h" = xyes; then :
+
+      for lib in gdbm_compat c dbm
+      do
+	as_ac_Lib=`$as_echo "ac_cv_lib_$lib''_dbm_fetch" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for dbm_fetch in -l$lib" >&5
+$as_echo_n "checking for dbm_fetch in -l$lib... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$lib  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dbm_fetch ();
+int
+main ()
+{
+return dbm_fetch ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  eval "$as_ac_Lib=yes"
+else
+  eval "$as_ac_Lib=no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+  test "$lib" = "c" || DBLIBS="-l$lib"
+
+$as_echo "#define NDBM 1" >>confdefs.h
+
+		      DBTYPE=ndbm
+
+		     db=yes
+else
+  db=no
+fi
+
+	test "$db" = "yes" && break
       done
 else
   db=no
 fi
 
 
+  fi
 fi
 
 if test "$db" != "yes"

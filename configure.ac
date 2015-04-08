@@ -395,7 +395,20 @@ then
 		    AC_SUBST([DBTYPE], [ndbm])]
 		   db=yes, db=no)
       test "$db" = "yes" && break
+    done], db=no)
+  if test "$db" = no
+  then
+    AC_CHECK_HEADER([gdbm-ndbm.h], [
+      for lib in gdbm_compat c dbm
+      do
+	AC_CHECK_LIB([$lib], [dbm_fetch],
+		     test "$lib" = "c" || DBLIBS="-l$lib"
+		     [AC_DEFINE([NDBM], [1], [Define if you have, and want to use, ndbm interface routines.])
+		      AC_SUBST([DBTYPE], [ndbm])]
+		     db=yes, db=no)
+	test "$db" = "yes" && break
       done], db=no)
+  fi
 fi 
 
 if test "$db" != "yes"
