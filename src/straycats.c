@@ -63,7 +63,7 @@
 
 static char *catdir, *mandir;
 
-static int check_for_stray (void)
+static int check_for_stray (MYDBM_FILE dbf)
 {
 	DIR *cdir;
 	struct dirent *catlist;
@@ -193,7 +193,8 @@ static int check_for_stray (void)
 			/* see if we already have it, before going any 
 			   further */
 			mandir_base = base_name (mandir);
-			exists = dblookup_exact (mandir_base, info.ext, 1);
+			exists = dblookup_exact (dbf, mandir_base, info.ext,
+						 1);
 #ifndef FAVOUR_STRAYCATS
 			if (exists && exists->id != WHATIS_CAT)
 #else /* FAVOUR_STRAYCATS */
@@ -270,7 +271,7 @@ static int check_for_stray (void)
 						(mandir_base, lg.whatis);
 					if (descs) {
 						store_descriptions
-							(descs, &info,
+							(dbf, descs, &info,
 							 NULL, mandir_base,
 							 NULL);
 						free_descriptions (descs);
@@ -297,7 +298,7 @@ next_name:
 	return strays;
 }
 
-static int open_catdir (void)
+static int open_catdir (MYDBM_FILE dbf)
 {
 	DIR *cdir;
 	struct dirent *catlist;
@@ -331,7 +332,7 @@ static int open_catdir (void)
 		*(t1 = mandir + manlen) = 'm';
 		*(t1 + 2) = 'n';
 
-		strays += check_for_stray ();
+		strays += check_for_stray (dbf);
 
 		*(catdir + catlen) = *(mandir + manlen) = '\0';
 	}
@@ -341,6 +342,7 @@ static int open_catdir (void)
 
 int straycats (const char *manpath)
 {
+	MYDBM_FILE dbf;
 	char *catpath;
 	int strays;
 
@@ -360,7 +362,7 @@ int straycats (const char *manpath)
 	/* look in the usual catpath location */
 	mandir = xstrdup (manpath);
 	catdir = xstrdup (manpath);
-	strays = open_catdir (); 
+	strays = open_catdir (dbf); 
 
 	/* look in the alternate catpath location if we have one 
 	   and it's different from the usual catpath */
@@ -372,7 +374,7 @@ int straycats (const char *manpath)
 		*mandir = *catdir = '\0';
 		mandir = appendstr (mandir, manpath, NULL);
 		catdir = appendstr (catdir, catpath, NULL);
-		strays += open_catdir ();
+		strays += open_catdir (dbf);
 	}
 
 	free (mandir);
@@ -382,6 +384,5 @@ int straycats (const char *manpath)
 		free (catpath);
 
 	MYDBM_CLOSE (dbf);
-	dbf = NULL;
 	return strays;
 }

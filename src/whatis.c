@@ -86,7 +86,6 @@ static int num_keywords;
 char *program_name;
 int am_apropos;
 char *database;
-MYDBM_FILE dbf;
 int quiet = 1;
 
 #ifdef HAVE_ICONV
@@ -354,7 +353,7 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 	free (whatis_file);
 }
 
-static struct mandata *resolve_pointers (struct mandata *info,
+static struct mandata *resolve_pointers (MYDBM_FILE dbf, struct mandata *info,
 					 const char *page)
 {
 	int rounds;
@@ -369,7 +368,7 @@ static struct mandata *resolve_pointers (struct mandata *info,
 	 * arbitrary: it's just there to avoid an infinite loop.
 	 */
 	newpage = info->pointer;
-	info = dblookup_exact (newpage, info->ext, 1);
+	info = dblookup_exact (dbf, newpage, info->ext, 1);
 	for (rounds = 0; rounds < 10; rounds++) {
 		struct mandata *newinfo;
 
@@ -382,7 +381,7 @@ static struct mandata *resolve_pointers (struct mandata *info,
 		     STREQ (info->pointer, newpage)))
 			return info;
 
-		newinfo = dblookup_exact (info->pointer, info->ext, 1);
+		newinfo = dblookup_exact (dbf, info->pointer, info->ext, 1);
 		free_mandata_struct (info);
 		info = newinfo;
 	}
@@ -412,7 +411,7 @@ static char *get_whatis (struct mandata *info, const char *page)
 }
 
 /* print out any matches found */
-static void display (struct mandata *info, const char *page)
+static void display (MYDBM_FILE dbf, struct mandata *info, const char *page)
 {
 	struct mandata *newinfo;
 	char *string, *whatis, *string_conv;
@@ -420,7 +419,7 @@ static void display (struct mandata *info, const char *page)
 	char *key;
 	int line_len, rest;
 
-	newinfo = resolve_pointers (info, page);
+	newinfo = resolve_pointers (dbf, info, page);
 	whatis = get_whatis (newinfo, page);
 	if (newinfo == NULL)
 		newinfo = info;
@@ -477,16 +476,17 @@ out:
 }
 
 /* lookup the page and display the results */
-static inline int do_whatis_section (const char *page, const char *section)
+static inline int do_whatis_section (MYDBM_FILE dbf,
+				     const char *page, const char *section)
 {
 	struct mandata *info;
 	int count = 0;
 
-	info = dblookup_all (page, section, 0);
+	info = dblookup_all (dbf, page, section, 0);
 	while (info) {
 		struct mandata *pinfo;
 			
-		display (info, page);
+		display (dbf, info, page);
 		count++;
 		pinfo = info->next;	/* go on to next structure */
 		free_mandata_elements (info);
@@ -526,7 +526,8 @@ static int suitable_manpath (const char *manpath, const char *page_dir)
 	return ret;
 }
 
-static void do_whatis (const char * const *pages, int num_pages,
+static void do_whatis (MYDBM_FILE dbf,
+		       const char * const *pages, int num_pages,
 		       const char *manpath, int *found)
 {
 	int i;
@@ -564,11 +565,11 @@ static void do_whatis (const char * const *pages, int num_pages,
 			char * const *section;
 
 			for (section = sections; *section; ++section) {
-				if (do_whatis_section (page, *section))
+				if (do_whatis_section (dbf, page, *section))
 					found[i] = 1;
 			}
 		} else {
-			if (do_whatis_section (page, NULL))
+			if (do_whatis_section (dbf, page, NULL))
 				found[i] = 1;
 		}
 
@@ -693,7 +694,8 @@ static void parse_whatis (const char * const *pages, char * const *lowpages,
 #undef BTREE
 
 /* scan for the page, print any matches */
-static void do_apropos (const char * const *pages, int num_pages, int *found)
+static void do_apropos (MYDBM_FILE dbf,
+			const char * const *pages, int num_pages, int *found)
 {
 	datum key, cont;
 	char **lowpages;
@@ -789,7 +791,7 @@ static void do_apropos (const char * const *pages, int num_pages, int *found)
 			parse_name (pages, num_pages,
 				    MYDBM_DPTR (key), found, found_here);
 		if (combine (num_pages, found_here))
-			display (&info, MYDBM_DPTR (key));
+			display (dbf, &info, MYDBM_DPTR (key));
 
 		if (tab)
 			*tab = '\t';
@@ -821,6 +823,8 @@ static int search (const char * const *pages, int num_pages)
 	int any_found, i;
 
 	for (mp = manpathlist; *mp; mp++) {
+		MYDBM_FILE dbf;
+
 		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);
 		
 		if (catpath) {
@@ -842,17 +846,16 @@ static int search (const char * const *pages, int num_pages)
 		}
 
 		if (am_apropos)
-			do_apropos (pages, num_pages, found);
+			do_apropos (dbf, pages, num_pages, found);
 		else {
 			if (regex_opt || wildcard)
-				do_apropos (pages, num_pages, found);
+				do_apropos (dbf, pages, num_pages, found);
 			else
-				do_whatis (pages, num_pages, *mp, found);
+				do_whatis (dbf, pages, num_pages, *mp, found);
 		}
 		free (database);
 		database = NULL;
 		MYDBM_CLOSE (dbf);
-		dbf = NULL;
 	}
 
 	chkr_garbage_detector ();

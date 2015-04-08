@@ -60,7 +60,7 @@ static int is_prefix (const char *path, const char *dir)
 /* Take a list of descriptions returned by parse_descriptions() and store
  * it into the database.
  */
-void store_descriptions (const struct page_description *head,
+void store_descriptions (MYDBM_FILE dbf, const struct page_description *head,
 			 struct mandata *info,
 			 const char *path, const char *base,
 			 struct ult_trace *trace)
@@ -140,7 +140,7 @@ void store_descriptions (const struct page_description *head,
 		}
 
 		debug ("name = '%s', id = %c\n", desc->name, info->id);
-		if (dbstore (info, desc->name) > 0) {
+		if (dbstore (dbf, info, desc->name) > 0) {
 			gripe_bad_store (base, info->ext);
 			break;
 		}

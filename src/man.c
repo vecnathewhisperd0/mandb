@@ -190,7 +190,6 @@ static char *manpathlist[MAXDIRS];
 int quiet = 1;
 char *program_name;
 char *database = NULL;
-MYDBM_FILE dbf; 
 extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
 extern int disable_cache;
@@ -3074,12 +3073,13 @@ out:
 static void dbdelete_wrapper (const char *page, struct mandata *info)
 {
 	if (!catman) {
+		MYDBM_FILE dbf;
+
 		dbf = MYDBM_RWOPEN (database);
 		if (dbf) {
-			if (dbdelete (page, info) == 1)
+			if (dbdelete (dbf, page, info) == 1)
 				debug ("%s(%s) not in db!\n", page, info->ext);
 			MYDBM_CLOSE (dbf);
-			dbf = NULL;
 		}
 	}
 }
@@ -3307,6 +3307,8 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	data = hashtable_lookup (db_hash, manpath, strlen (manpath));
 
 	if (!data) {
+		MYDBM_FILE dbf;
+
 		dbf = MYDBM_RDOPEN (database);
 		if (dbf && dbver_rd (dbf)) {
 			MYDBM_CLOSE (dbf);
@@ -3319,10 +3321,10 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			   otherwise NULL retrieves all available */
 			if (regex_opt || wildcard)
 				data = dblookup_pattern
-					(name, section, match_case,
+					(dbf, name, section, match_case,
 					 regex_opt, !names_only);
 			else
-				data = dblookup_all (name, section,
+				data = dblookup_all (dbf, name, section,
 						     match_case);
 			hashtable_install (db_hash, manpath, strlen (manpath),
 					   data);

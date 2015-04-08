@@ -72,15 +72,16 @@ struct mandata {
 }; 
 
 /* used by the world */
-extern struct mandata *dblookup_all (const char *page, const char *section,
-				     int match_case);
-extern struct mandata *dblookup_exact (const char *page, const char *section,
-				       int match_case);
-extern struct mandata *dblookup_pattern (const char *page, const char *section,
-					 int match_case, int pattern_regex,
+extern struct mandata *dblookup_all (MYDBM_FILE dbf, const char *page,
+				     const char *section, int match_case);
+extern struct mandata *dblookup_exact (MYDBM_FILE dbf, const char *page,
+				       const char *section, int match_case);
+extern struct mandata *dblookup_pattern (MYDBM_FILE dbf, const char *page,
+					 const char *section, int match_case,
+					 int pattern_regex,
 					 int try_descriptions);
-extern int dbstore (struct mandata *in, const char *base);
-extern int dbdelete (const char *name, struct mandata *in);
+extern int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base);
+extern int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);
 extern void free_mandata_elements (struct mandata *pinfo);
 extern void free_mandata_struct (struct mandata *pinfo);

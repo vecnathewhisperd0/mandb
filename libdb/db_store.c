@@ -79,7 +79,8 @@ int compare_ids (char a, char b, int promote_links)
  * be replaced with some new contents. Check that names and section
  * extensions match before calling this.
  */
-static int replace_if_necessary (struct mandata *newdata,
+static int replace_if_necessary (MYDBM_FILE dbf,
+				 struct mandata *newdata,
 				 struct mandata *olddata,
 				 datum newkey, datum newcont)
 {
@@ -189,7 +190,7 @@ static datum make_content (struct mandata *in)
 
  return errorcode or 0 on success.
 */
-int dbstore (struct mandata *in, const char *base)
+int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 {
 	datum oldkey, oldcont;
 
@@ -243,7 +244,7 @@ int dbstore (struct mandata *in, const char *base)
 			MYDBM_FREE (MYDBM_DPTR (oldcont));
 			cont = MYDBM_FETCH (dbf, newkey);
 			split_content (MYDBM_DPTR (cont), &info);
-			ret = replace_if_necessary (in, &info,
+			ret = replace_if_necessary (dbf, in, &info,
 						    newkey, newcont);
 			/* MYDBM_FREE (MYDBM_DPTR (cont)); */
 			free_mandata_elements (&info);
@@ -305,7 +306,8 @@ int dbstore (struct mandata *in, const char *base)
 			if (!STREQ (base, MYDBM_DPTR (oldkey)))
 				in->name = xstrdup (base);
 			newcont = make_content (in);
-			ret = replace_if_necessary (in, &old, oldkey, newcont);
+			ret = replace_if_necessary (dbf, in, &old,
+						    oldkey, newcont);
 			/* MYDBM_FREE (MYDBM_DPTR (oldcont)); */
 			free_mandata_elements (&old);
 			free (MYDBM_DPTR (newcont));

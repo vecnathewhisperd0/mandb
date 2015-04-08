@@ -117,7 +117,7 @@ static void gripe_rwopen_failed (void)
  * otherwise cache it in case we trace another manpage back to it. Next,
  * store it in the db along with any references found in the whatis.
  */
-void test_manfile (const char *file, const char *path)
+void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 {
 	char *manpage_base;
 	const char *ult;
@@ -157,7 +157,7 @@ void test_manfile (const char *file, const char *path)
 	 * save both an ult_src() and a find_name(), amongst other wastes of
 	 * time.
 	 */
-	exists = dblookup_exact (manpage_base, info.ext, 1);
+	exists = dblookup_exact (dbf, manpage_base, info.ext, 1);
 
 	/* Ensure we really have the actual page. Gzip keeps the mtime the
 	 * same when it compresses, so we have to compare compression
@@ -181,7 +181,7 @@ void test_manfile (const char *file, const char *path)
 						      exists, "man");
 			if (!abs_filename) {
 				if (!opt_test)
-					dbdelete (manpage_base, exists);
+					dbdelete (dbf, manpage_base, exists);
 			} else {
 				gripe_multi_extensions (path, exists->sec,
 							manpage_base,
@@ -284,7 +284,7 @@ void test_manfile (const char *file, const char *path)
 			parse_descriptions (manpage_base, lg.whatis);
 		if (descs) {
 			if (!opt_test)
-				store_descriptions (descs, &info,
+				store_descriptions (dbf, descs, &info,
 						    path, manpage_base,
 						    &whatis->trace);
 			free_descriptions (descs);
@@ -305,7 +305,8 @@ void test_manfile (const char *file, const char *path)
 		free (lg.whatis);
 }
 
-static inline void add_dir_entries (const char *path, char *infile)
+static inline void add_dir_entries (MYDBM_FILE dbf,
+				    const char *path, char *infile)
 {
 	char *manpage;
 	int len;
@@ -351,7 +352,7 @@ static inline void add_dir_entries (const char *path, char *infile)
 
 	for (i = 0; i < names_len; ++i) {
 		manpage = appendstr (manpage, names[i], NULL);
-		test_manfile (manpage, path);
+		test_manfile (dbf, manpage, path);
 		*(manpage + len) = '\0';
 		free (names[i]);
 	}
@@ -457,6 +458,7 @@ static int testmandirs (const char *path, const char *catpath,
 	while( (mandir = readdir (dir)) ) {
 		struct stat stbuf;
 		struct timespec mtime;
+		MYDBM_FILE dbf;
 
 		if (strncmp (mandir->d_name, "man", 3) != 0)
 			continue;
@@ -480,11 +482,6 @@ static int testmandirs (const char *path, const char *catpath,
 
 		debug ("\tsubdirectory %s has been 'modified'\n",
 		       mandir->d_name);
-
-		if (dbf) {
-			MYDBM_CLOSE (dbf);
-			dbf = NULL;
-		}
 
 		if (create && !created) {
 			/* We seem to have something to do, so create the
@@ -533,9 +530,8 @@ static int testmandirs (const char *path, const char *catpath,
 			if (!tty)
 				fprintf (stderr, "\n");
 		}
-		add_dir_entries (path, mandir->d_name);
+		add_dir_entries (dbf, path, mandir->d_name);
 		MYDBM_CLOSE (dbf);
-		dbf = NULL;
 		amount++;
 	}
 	closedir (dir);
@@ -546,6 +542,7 @@ static int testmandirs (const char *path, const char *catpath,
 /* update the modification timestamp of `database' */
 static void update_db_time (void)
 {
+	MYDBM_FILE dbf;
 	struct timespec now;
 
 	/* Open the db in RW to update its mtime */
@@ -573,7 +570,6 @@ static void update_db_time (void)
 	MYDBM_SET_TIME (dbf, now);
 
 	MYDBM_CLOSE (dbf);
-	dbf = NULL;
 }
 
 /* routine to prepare/create the db prior to calling testmandirs() */
@@ -598,7 +594,7 @@ int create_db (const char *manpath, const char *catpath)
 }
 
 /* Make sure an existing database is essentially sane. */
-static int sanity_check_db (void)
+static int sanity_check_db (MYDBM_FILE dbf)
 {
 	datum key;
 
@@ -629,40 +625,39 @@ static int sanity_check_db (void)
    filesystem */
 int update_db (const char *manpath, const char *catpath)
 {
+	MYDBM_FILE dbf;
+	struct timespec mtime;
+	int new;
+
 	dbf = MYDBM_RDOPEN (database);
-	if (dbf && !sanity_check_db ()) {
+	if (dbf && !sanity_check_db (dbf)) {
 		MYDBM_CLOSE (dbf);
 		dbf = NULL;
 	}
-	if (dbf) {
-		struct timespec mtime = MYDBM_GET_TIME (dbf);
-		int new;
-
-		debug ("update_db(): %ld.%09ld\n",
-		       (long) mtime.tv_sec, mtime.tv_nsec);
-		new = testmandirs (manpath, catpath, mtime, 0);
-
-		if (new) {
-			update_db_time ();
-			if (!quiet)
-				fputs (_("done.\n"), stderr);
-		}
-		
-		return new;
+	if (!dbf) {
+		debug ("failed to open %s O_RDONLY\n", database);
+		return EOF;
 	}
-		
-	debug ("failed to open %s O_RDONLY\n", database);
-		
-	return EOF;
+	mtime = MYDBM_GET_TIME (dbf);
+	MYDBM_CLOSE (dbf);
+
+	debug ("update_db(): %ld.%09ld\n", (long) mtime.tv_sec, mtime.tv_nsec);
+	new = testmandirs (manpath, catpath, mtime, 0);
+
+	if (new) {
+		update_db_time ();
+		if (!quiet)
+			fputs (_("done.\n"), stderr);
+	}
+
+	return new;
 }
 
 /* Purge any entries pointing to name. This currently assumes that pointers
  * are always shallow, which may not be a good assumption yet; it should be
  * close, though.
- *
- * Assumes that the appropriate database is already open on dbf.
  */
-void purge_pointers (const char *name)
+void purge_pointers (MYDBM_FILE dbf, const char *name)
 {
 	datum key = MYDBM_FIRSTKEY (dbf);
 
@@ -696,7 +691,7 @@ void purge_pointers (const char *name)
 
 		if (STREQ (entry.pointer, name)) {
 			if (!opt_test)
-				dbdelete (nicekey, &entry);
+				dbdelete (dbf, nicekey, &entry);
 			else
 				debug ("%s(%s): pointer vanished, "
 				       "would delete\n", nicekey, entry.ext);
@@ -757,8 +752,8 @@ static int count_glob_matches (const char *name, const char *ext,
 /* Decide whether to purge a reference to a "normal" (ULT_MAN or SO_MAN)
  * page.
  */
-static int purge_normal (const char *name, struct mandata *info,
-			 char **found)
+static int purge_normal (MYDBM_FILE dbf, const char *name,
+			 struct mandata *info, char **found)
 {
 	struct timespec t;
 
@@ -771,7 +766,7 @@ static int purge_normal (const char *name, struct mandata *info,
 		return 0;
 
 	if (!opt_test)
-		dbdelete (name, info);
+		dbdelete (dbf, name, info);
 	else
 		debug ("%s(%s): missing page, would delete\n",
 		       name, info->ext);
@@ -780,8 +775,8 @@ static int purge_normal (const char *name, struct mandata *info,
 }
 
 /* Decide whether to purge a reference to a WHATIS_MAN or WHATIS_CAT page. */
-static int purge_whatis (const char *path, int cat, const char *name,
-			 struct mandata *info, char **found,
+static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
+			 const char *name, struct mandata *info, char **found,
 			 struct timespec db_mtime)
 {
 	/* TODO: On some systems, the cat page extension differs from the
@@ -808,7 +803,7 @@ static int purge_whatis (const char *path, int cat, const char *name,
 		 * says; that's fixed now, so delete and force a rescan.
 		 */
 		if (!opt_test)
-			dbdelete (name, info);
+			dbdelete (dbf, name, info);
 		else
 			debug ("%s(%s): whatis with empty pointer, "
 			       "would delete\n", name, info->ext);
@@ -837,7 +832,7 @@ static int purge_whatis (const char *path, int cat, const char *name,
 			return 0;
 
 		if (!opt_test)
-			dbdelete (name, info);
+			dbdelete (dbf, name, info);
 		else
 			debug ("%s(%s): whatis target was deleted, "
 			       "would delete\n", name, info->ext);
@@ -895,6 +890,7 @@ int purge_missing (const char *manpath, const char *catpath,
 #endif
 	struct stat st;
 	int db_exists;
+	MYDBM_FILE dbf;
 	datum key;
 	int count = 0;
 	struct timespec db_mtime;
@@ -918,7 +914,7 @@ int purge_missing (const char *manpath, const char *catpath,
 		gripe_rwopen_failed ();
 		return 0;
 	}
-	if (!sanity_check_db ()) {
+	if (!sanity_check_db (dbf)) {
 		MYDBM_CLOSE (dbf);
 		dbf = NULL;
 		return 0;
@@ -989,12 +985,12 @@ int purge_missing (const char *manpath, const char *catpath,
 		 */
 		if (entry.id == ULT_MAN || entry.id == SO_MAN ||
 		    entry.id == STRAY_CAT)
-			count += purge_normal (nicekey, &entry, found);
+			count += purge_normal (dbf, nicekey, &entry, found);
 		else if (entry.id == WHATIS_MAN)
-			count += purge_whatis (manpath, 0, nicekey,
+			count += purge_whatis (dbf, manpath, 0, nicekey,
 					       &entry, found, db_mtime);
 		else	/* entry.id == WHATIS_CAT */
-			count += purge_whatis (catpath, 1, nicekey,
+			count += purge_whatis (dbf, catpath, 1, nicekey,
 					       &entry, found, db_mtime);
 
 		free (nicekey);
@@ -1013,6 +1009,5 @@ int purge_missing (const char *manpath, const char *catpath,
 		 */
 		MYDBM_SET_TIME (dbf, db_mtime);
 	MYDBM_CLOSE (dbf);
-	dbf = NULL;
 	return count;
 }

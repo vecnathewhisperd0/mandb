@@ -74,7 +74,6 @@
 char *program_name;
 int quiet = 1;
 extern int opt_test;		/* don't update db */
-MYDBM_FILE dbf;
 char *manp;
 char *database = NULL;
 extern char *extension;		/* for globbing.c */
@@ -348,6 +347,8 @@ static inline void do_chown (uid_t uid)
 /* Update a single file in an existing database. */
 static int update_one_file (const char *manpath, const char *filename)
 {
+	MYDBM_FILE dbf;
+
 	dbf = MYDBM_RWOPEN (database);
 	if (dbf) {
 		struct mandata info;
@@ -356,16 +357,15 @@ static int update_one_file (const char *manpath, const char *filename)
 		memset (&info, 0, sizeof (struct mandata));
 		manpage = filename_info (filename, &info, "");
 		if (info.name) {
-			dbdelete (info.name, &info);
-			purge_pointers (info.name);
+			dbdelete (dbf, info.name, &info);
+			purge_pointers (dbf, info.name);
 			free (info.name);
 		}
 		free (manpage);
 
-		test_manfile (filename, manpath);
+		test_manfile (dbf, filename, manpath);
 	}
 	MYDBM_CLOSE (dbf);
-	dbf = NULL;
 
 	return 1;
 }

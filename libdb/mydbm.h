@@ -180,7 +180,6 @@ extern void btree_set_time(DB *db, const struct timespec time);
 #define MYDBM_SET(d, value)		do { MYDBM_SET_DPTR(d, value); MYDBM_RESET_DSIZE(d); } while (0)
 
 extern char *database;
-extern MYDBM_FILE dbf;
 
 /* db_lookup.c */
 extern datum copy_datum (datum dat);

@@ -82,7 +82,7 @@
 /* globals */
 char *program_name;
 int quiet = 1;
-MYDBM_FILE dbf;
+MYDBM_FILE dbf_close_post_fork;
 char *manp;
 extern char *user_config_file;
 char *database;
@@ -164,22 +164,11 @@ static char *locale;
 
 static char *manpathlist[MAXDIRS];
 
-/* open db for reading, return 0 for success, errcode for failure */
-static int rdopen_db (void)
-{ 
-	dbf = MYDBM_RDOPEN (database);
-	if (dbf == NULL) {
-		error (0, errno, _("cannot read database %s"), database);
-		return 1;
-	}
-	return 0;
-}
-
 static void post_fork (void)
 {
 	pop_all_cleanups ();
-	if (dbf)
-		MYDBM_CLOSE (dbf);
+	if (dbf_close_post_fork)
+		MYDBM_CLOSE (dbf_close_post_fork);
 }
 
 /* Execute man with the appropriate catman args.  Always frees cmd.
@@ -233,13 +222,22 @@ static inline size_t add_arg (pipecmd *cmd, datum key)
    ultimate source files. */
 static int parse_for_sec (const char *manpath, const char *section)
 {
+	MYDBM_FILE dbf;
 	pipecmd *basecmd, *cmd;
 	datum key;
 	size_t arg_size, initial_bit;
 	int message = 1, first_arg;
 
-	if (rdopen_db () || dbver_rd (dbf))
+	dbf = MYDBM_RDOPEN (database);
+	if (!dbf) {
+		error (0, errno, _("cannot read database %s"), database);
 		return 1;
+	}
+	if (dbver_rd (dbf)) {
+		MYDBM_CLOSE (dbf);
+		return 1;
+	}
+	dbf_close_post_fork = dbf;
 
 	basecmd = pipecmd_new (MAN);
 	pipecmd_clearenv (basecmd);
@@ -329,8 +327,8 @@ static int parse_for_sec (const char *manpath, const char *section)
 		key = nextkey;
 	}
 
+	dbf_close_post_fork = NULL;
 	MYDBM_CLOSE (dbf);
-	dbf = NULL;
 	if (pipecmd_get_nargs (cmd) > first_arg)
 		catman (cmd);
 	else

@@ -266,8 +266,8 @@ int list_extensions (char *data, char ***names, char ***ext)
  2) One data item exists. Item is returned as first in set of structures.
  3) Many items exist. They are all returned, in a multiple structure set.
  */
-static struct mandata *dblookup (const char *page, const char *section,
-				 int flags)
+static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
+				 const char *section, int flags)
 {
 	struct mandata *info = NULL;
 	datum key, cont;
@@ -365,21 +365,23 @@ static struct mandata *dblookup (const char *page, const char *section,
 	}
 }
 
-struct mandata *dblookup_all (const char *page, const char *section,
-			      int match_case)
+struct mandata *dblookup_all (MYDBM_FILE dbf, const char *page,
+			      const char *section, int match_case)
 {
-	return dblookup (page, section, ALL | (match_case ? MATCH_CASE : 0));
+	return dblookup (dbf, page, section,
+			 ALL | (match_case ? MATCH_CASE : 0));
 }
 
-struct mandata *dblookup_exact (const char *page, const char *section,
-				int match_case)
+struct mandata *dblookup_exact (MYDBM_FILE dbf, const char *page,
+				const char *section, int match_case)
 {
-	return dblookup (page, section, EXACT | (match_case ? MATCH_CASE : 0));
+	return dblookup (dbf, page, section,
+			 EXACT | (match_case ? MATCH_CASE : 0));
 }
 
-struct mandata *dblookup_pattern (const char *pattern, const char *section,
-				  int match_case, int pattern_regex,
-				  int try_descriptions)
+struct mandata *dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
+				  const char *section, int match_case,
+				  int pattern_regex, int try_descriptions)
 {
 	struct mandata *ret = NULL, *tail = NULL;
 	datum key, cont;

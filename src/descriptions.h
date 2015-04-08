@@ -32,7 +32,8 @@ struct ult_trace;
 
 extern struct page_description *parse_descriptions (const char *base,
 						    const char *whatis);
-extern void store_descriptions (const struct page_description *head,
+extern void store_descriptions (MYDBM_FILE dbf,
+				const struct page_description *head,
 				struct mandata *info,
 				const char *path, const char *base,
 				struct ult_trace *trace);

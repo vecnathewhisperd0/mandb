@@ -53,7 +53,7 @@
 
 #define NO_ENTRY	1;
 
-int dbdelete (const char *name, struct mandata *info)
+int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 {
 	datum key, cont;
 
