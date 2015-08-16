@@ -6,6 +6,12 @@ Major changes since man-db 2.7.1:
 	Fixes:
 	------
 
+	o 'man -k' and 'man -f' now pass any provided -l option through to
+	  the underlying apropos/whatis programs.
+
+	o apropos and whatis no longer truncate names if long output was
+	  requested.
+
 	o The database handle is no longer stored in a global variable,
 	  fixing a class of possible double-close bugs.
 
