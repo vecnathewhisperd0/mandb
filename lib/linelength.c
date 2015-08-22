@@ -34,6 +34,13 @@
 #include <unistd.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#ifndef _PATH_TTY
+# define _PATH_TTY "/dev/tty"
+#endif /* _PATH_TTY */
 
 static int line_length = -1;
 
@@ -42,7 +49,7 @@ int get_line_length (void)
 	const char *columns;
 	int width;
 #ifdef TIOCGWINSZ
-	int stdin_tty, stdout_tty;
+	int dev_tty, tty_fd = -1;
 #endif
 
 	if (line_length != -1)
@@ -72,14 +79,25 @@ int get_line_length (void)
 	 * may well be because the user is trying something like
 	 * 'MAN_KEEP_STDERR=1 man foo >/dev/null' to see just the error
 	 * messages, so use the window size from stdin as a fallback.
+	 * In some cases we may have neither (e.g. if man is running inside
+	 * lesspipe); /dev/tty should be a reliable way to get to the
+	 * current tty if it exists.
 	 */
-	stdin_tty = isatty (STDIN_FILENO);
-	stdout_tty = isatty (STDOUT_FILENO);
-	if (stdin_tty || stdout_tty) {
+	dev_tty = open (_PATH_TTY, O_RDONLY);
+	if (dev_tty >= 0)
+		tty_fd = dev_tty;
+	else if (isatty (STDOUT_FILENO))
+		tty_fd = STDOUT_FILENO;
+	else if (isatty (STDIN_FILENO))
+		tty_fd = STDIN_FILENO;
+	if (tty_fd >= 0) {
+		int ret;
 		struct winsize wsz;
 
-		if (ioctl (stdout_tty ? STDOUT_FILENO : STDIN_FILENO,
-			   TIOCGWINSZ, &wsz))
+		ret = ioctl (tty_fd, TIOCGWINSZ, &wsz);
+		if (dev_tty >= 0)
+			close (dev_tty);
+		if (ret)
 			perror ("TIOCGWINSZ failed");
 		else if (wsz.ws_col)
 			return line_length = wsz.ws_col;
