@@ -1510,6 +1510,52 @@ static void add_output_iconv (pipeline *p,
 	}
 }
 
+/* Pipeline command to squeeze multiple blank lines into one.
+ *
+ */
+static void squeeze_blank_lines (void *data ATTRIBUTE_UNUSED)
+{
+	char *line = NULL;
+	size_t len = 0;
+
+	while (getline (&line, &len, stdin) != -1) {
+		int in_blank_line  = 1;
+		int got_blank_line = 0;
+
+		while (in_blank_line) {
+			char *p;
+			for (p = line; *p; ++p) {
+				if (!CTYPE (isspace, *p)) {
+					in_blank_line = 0;
+					break;
+				}
+			}
+
+			if (in_blank_line) {
+				got_blank_line = 1;
+				free (line);
+				line = NULL;
+				len  = 0;
+				if (getline (&line, &len, stdin) == -1)
+					break;
+			}
+		}
+
+		if (got_blank_line && putchar ('\n') < 0)
+			break;
+
+		if (!in_blank_line && fputs (line, stdout) < 0)
+			break;
+
+		free (line);
+		line = NULL;
+		len  = 0;
+	}
+
+	free (line);
+	return;
+}
+
 /* Return pipeline to display file provided on stdin.
  *
  * TODO: htmlout case is pretty weird now. I'd like the intelligence to be
@@ -1535,6 +1581,14 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 		if ((!man_keep_formatting || !*man_keep_formatting) &&
 		    !isatty (STDOUT_FILENO))
 			add_col (p, locale_charset, "-b", "-p", "-x", NULL);
+	}
+
+	/* emulate pager -s, the sed code is just for information */
+	{
+		pipecmd *cmd;
+		const char *name = "sed -e '/^[[:space:]]*$/{ N; /^[[:space:]]*\\n[[:space:]]*$/D; }'";
+		cmd = pipecmd_new_function (name, &squeeze_blank_lines, NULL, NULL);
+		pipeline_command (p, cmd);
 	}
 
 	if (isatty (STDOUT_FILENO)) {

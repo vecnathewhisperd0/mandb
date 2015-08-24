@@ -73,7 +73,6 @@ test -n "$browser" && browser="exec $browser"
 AC_CHECK_PROGS([tr], [tr])
 AC_CHECK_PROGS([grep], [grep])
 MAN_CHECK_PROGS([pager], [PAGER], [use PAGER as default pager], [pager less more])
-test -n "$pager" && pager="$pager -s"
 
 # Define below (in list of preference) *roff macros to check for.
 macros="andoc an doc"
