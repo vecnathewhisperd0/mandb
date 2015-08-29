@@ -441,7 +441,7 @@ static void cleanup (void *dummy ATTRIBUTE_UNUSED)
 	"#\thttp://www.brynosaurus.com/cachedir/\n"
 
 /* sort out the database names */
-static int mandb (const char *catpath, const char *manpath)
+static int mandb (const char *catpath, const char *manpath, int global_manpath)
 {
 	int ret, amount;
 	char *dbname;
@@ -468,6 +468,11 @@ static int mandb (const char *catpath, const char *manpath)
 			if (cachedir_tag_file) {
 				fputs (CACHEDIR_TAG, cachedir_tag_file);
 				fclose (cachedir_tag_file);
+#ifdef SECURE_MAN_UID
+				if (global_manpath && euid == 0)
+					xchown (cachedir_tag,
+						man_owner->pw_uid, -1);
+#endif
 				xchmod (cachedir_tag, DBMODE);
 			}
 		} else
@@ -596,7 +601,7 @@ static int process_manpath (const char *manpath, int global_manpath,
 	push_cleanup (cleanup, NULL, 0);
 	push_cleanup (cleanup_sigsafe, NULL, 1);
 	if (run_mandb) {
-		int ret = mandb (catpath, manpath);
+		int ret = mandb (catpath, manpath, global_manpath);
 		if (ret < 0) {
 			amount = ret;
 			goto out;
