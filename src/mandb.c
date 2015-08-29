@@ -38,6 +38,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>	/* for chmod() */
 #include <dirent.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <signal.h>
 
@@ -444,8 +445,7 @@ static int mandb (const char *catpath, const char *manpath)
 {
 	int ret, amount;
 	char *dbname;
-	char *cachedir_tag;
-	struct stat st;
+	int should_create;
 
 	dbname = mkdbname (catpath);
 	database = xasprintf ("%s/%d", catpath, getpid ());
@@ -454,34 +454,45 @@ static int mandb (const char *catpath, const char *manpath)
 		printf (_("Processing manual pages under %s...\n"), manpath);
 
 	if (!STREQ (catpath, manpath)) {
+		char *cachedir_tag;
+		int fd;
+
 		cachedir_tag = xasprintf ("%s/CACHEDIR.TAG", catpath);
-		if (stat (cachedir_tag, &st) == -1 && errno == ENOENT) {
+		fd = open (cachedir_tag, O_RDONLY);
+		if (fd < 0) {
 			FILE *cachedir_tag_file;
 
+			if (errno != ENOENT)
+				xremove (cachedir_tag);
 			cachedir_tag_file = fopen (cachedir_tag, "w");
 			if (cachedir_tag_file) {
 				fputs (CACHEDIR_TAG, cachedir_tag_file);
 				fclose (cachedir_tag_file);
+				xchmod (cachedir_tag, DBMODE);
 			}
-		}
+		} else
+			close (fd);
 		free (cachedir_tag);
 	}
+
+	should_create = (create || force_rescan || opt_test);
 
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	dbfile = xasprintf ("%s.db", dbname);
 	free (dbname);
 	tmpdbfile = xasprintf ("%s.db", database);
-	if (create || force_rescan || opt_test) {
+	if (!should_create) {
+		if (xcopy (dbfile, tmpdbfile) < 0)
+			should_create = 1;
+	}
+	if (should_create) {
 		xremove (tmpdbfile);
 		ret = create_db (manpath, catpath);
 		if (ret < 0)
 			return ret;
 		amount = ret;
 	} else {
-		ret = xcopy (dbfile, tmpdbfile);
-		if (ret < 0)
-			return ret;
 		ret = update_db_wrapper (manpath, catpath);
 		if (ret < 0)
 			return ret;
@@ -493,7 +504,12 @@ static int mandb (const char *catpath, const char *manpath)
 	free (dbname);
 	tmpdirfile = xasprintf ("%s.dir", database);
 	tmppagfile = xasprintf ("%s.pag", database);
-	if (create || force_rescan || opt_test) {
+	if (!should_create) {
+		if (xcopy (dirfile, tmpdirfile) < 0 ||
+		    xcopy (pagfile, tmppagfile) < 0)
+			should_create = 1;
+	}
+	if (should_create) {
 		xremove (tmpdirfile);
 		xremove (tmppagfile);
 		ret = create_db (manpath, catpath);
@@ -501,12 +517,6 @@ static int mandb (const char *catpath, const char *manpath)
 			return ret;
 		amount = ret;
 	} else {
-		ret = xcopy (dirfile, tmpdirfile);
-		if (ret < 0)
-			return ret;
-		ret = xcopy (pagfile, tmppagfile);
-		if (ret < 0)
-			return ret;
 		ret = update_db_wrapper (manpath, catpath);
 		if (ret < 0)
 			return ret;
@@ -516,16 +526,17 @@ static int mandb (const char *catpath, const char *manpath)
 #else /* !NDBM */
 	xfile = dbname; /* steal memory */
 	xtmpfile = database;
-	if (create || force_rescan || opt_test) {
+	if (!should_create) {
+		if (xcopy (xfile, xtmpfile) < 0)
+			should_create = 1;
+	}
+	if (should_create) {
 		xremove (xtmpfile);
 		ret = create_db (manpath, catpath);
 		if (ret < 0)
 			return ret;
 		amount = ret;
 	} else {
-		ret = xcopy (xfile, xtmpfile);
-		if (ret < 0)
-			return ret;
 		ret = update_db_wrapper (manpath, catpath);
 		if (ret < 0)
 			return ret;
