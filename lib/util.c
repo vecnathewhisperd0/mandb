@@ -63,7 +63,7 @@
  *   a is man_page, b is cat_page
  *
  *   a and b have different times  returns  1/3  (ret & 1) == 1
- *   a and b have same times       returns  0/2  !(ret & 1) == 1
+ *   a and b have same times       returns  0/2  (!(ret & 1)) == 1
  *   a is zero in length           returns  + 2 (for Wilf. and his stray cats)
  *   b is zero in length           returns  + 4
  *   stat on a fails               returns   -1

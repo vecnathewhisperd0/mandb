@@ -2529,7 +2529,7 @@ static char *find_cat_file (const char *path, const char *original,
 	cat_file = convert_name (original, 1);
 	if (cat_file) {
 		status = is_changed (original, cat_file);
-		if (status != -2 && !(status & 1) == 1) {
+		if (status != -2 && (!(status & 1)) == 1) {
 			debug ("found valid FSSTND cat file %s\n", cat_file);
 			return cat_file;
 		}
