@@ -2071,6 +2071,8 @@ static inline int do_prompt (const char *name)
 	FILE *tty = NULL;
 
 	skip = 0;
+	if (!isatty (STDOUT_FILENO) || !isatty (STDIN_FILENO))
+		return 0; /* noninteractive */
 	tty = fopen ("/dev/tty", "r+");
 	if (!tty)
 		return 0;
