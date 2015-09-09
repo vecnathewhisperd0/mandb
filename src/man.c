@@ -1605,10 +1605,12 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 	}
 
 	if (pager_cmd) {
-		if (cwd.desc >= 0)
-			pipecmd_fchdir (pager_cmd, cwd.desc);
-		else
-			pipecmd_chdir (pager_cmd, cwd.name);
+		if (have_cwd) {
+			if (cwd.desc >= 0)
+				pipecmd_fchdir (pager_cmd, cwd.desc);
+			else
+				pipecmd_chdir (pager_cmd, cwd.name);
+		}
 		setenv_less (pager_cmd, title);
 		pipeline_command (p, pager_cmd);
 	}
