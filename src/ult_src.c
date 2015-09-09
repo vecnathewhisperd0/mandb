@@ -370,6 +370,7 @@ const char *ult_src (const char *name, const char *path,
 
 		include = test_for_include (buffer);
 		if (include) {
+			char *new_name;
 			const char *ult;
 
 			free (base);
@@ -379,7 +380,12 @@ const char *ult_src (const char *name, const char *path,
 			debug ("ult_src: points to %s\n", base);
 
 			recurse++;
-			ult = ult_src (base, path, NULL, flags, trace);
+			/* Take a copy; it's unwise to pass base directly to
+			 * a recursive call, as it may be freed.
+			 */
+			new_name = xstrdup (base);
+			ult = ult_src (new_name, path, NULL, flags, trace);
+			free (new_name);
 			recurse--;
 
 			pipeline_wait (decomp);
