@@ -338,8 +338,7 @@ const char *ult_src (const char *name, const char *path,
 			struct compression *comp = comp_file (base);
 
 			if (comp) {
-				if (base)
-					free (base);
+				free (base);
 				base = comp->stem;
 				comp->stem = NULL; /* steal memory */
 			} else {
