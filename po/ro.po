@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.4.2-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2015-08-16 11:05+0100\n"
+"POT-Creation-Date: 2015-09-09 16:34+0100\n"
 "PO-Revision-Date: 2003-10-27 08:40+0200\n"
 "Last-Translator: Eugen Hoanca <eugenh@urban-grafx.ro>\n"
 "Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "nu se poate seta uid efectiv"
 
-#: lib/security.c:101 src/mandb.c:808
+#: lib/security.c:101 src/mandb.c:824
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "utilizatorul man setuidat \"%s\" nu existã"
@@ -93,7 +93,7 @@ msgid "The man database defaults to %s%s."
 msgstr ""
 
 #: src/accessdb.c:63 src/catman.c:98 src/globbing_test.c:58
-#: src/lexgrog_test.c:68 src/man.c:280 src/manconv_main.c:94 src/mandb.c:107
+#: src/lexgrog_test.c:68 src/man.c:280 src/manconv_main.c:94 src/mandb.c:108
 #: src/manpath.c:65 src/whatis.c:122 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr ""
@@ -115,12 +115,12 @@ msgstr ""
 msgid "set search path for manual pages to PATH"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:279 src/mandb.c:115 src/manpath.c:67
+#: src/catman.c:100 src/man.c:279 src/mandb.c:116 src/manpath.c:67
 #: src/whatis.c:134
 msgid "FILE"
 msgstr ""
 
-#: src/catman.c:100 src/man.c:279 src/mandb.c:115 src/manpath.c:67
+#: src/catman.c:100 src/man.c:279 src/mandb.c:116 src/manpath.c:67
 #: src/whatis.c:134
 #, fuzzy
 msgid "use this user configuration file"
@@ -185,7 +185,7 @@ msgstr "avertisment: %s: se ignorã fiºierul vid."
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "avertisment: %s: analiza(parse) whatis pentru %s(%s) eºuatã"
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:865
+#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:881
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -196,7 +196,7 @@ msgstr "nu se poate cãuta directorul %s"
 msgid "warning: cannot create catdir %s"
 msgstr "avertisment: nu se poate crea catdir %s"
 
-#: src/check_mandirs.c:453 src/man.c:1829
+#: src/check_mandirs.c:453 src/man.c:1885
 #, c-format
 msgid "can't change to directory %s"
 msgstr "nu se poate schimba în directorul %s"
@@ -265,9 +265,9 @@ msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "avertisment: whatis pentru %s depãºeºte %d octeþi, se trunchiazã."
 msgstr[1] "avertisment: whatis pentru %s depãºeºte %d octeþi, se trunchiazã."
 
-#: src/lexgrog.l:816 src/man.c:2181 src/man.c:2263 src/man.c:2360
-#: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:347
-#: src/ult_src.c:361 src/zsoelim.l:498
+#: src/lexgrog.l:816 src/man.c:2239 src/man.c:2321 src/man.c:2418
+#: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
+#: src/ult_src.c:360 src/zsoelim.l:498
 #, c-format
 msgid "can't open %s"
 msgstr "nu se poate deschide %s"
@@ -525,69 +525,69 @@ msgstr ""
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "se ignorã preprocesorul necunoscut `%c'"
 
-#: src/man.c:1615 src/mandb.c:326
+#: src/man.c:1671 src/mandb.c:327
 #, c-format
 msgid "can't chown %s"
 msgstr "nu se poate face chown pe %s"
 
-#: src/man.c:1627 src/mandb.c:223
+#: src/man.c:1683 src/mandb.c:224
 #, c-format
 msgid "can't chmod %s"
 msgstr "nu se poate face chmod pe %s"
 
-#: src/man.c:1638 src/mandb.c:214
+#: src/man.c:1694 src/mandb.c:215
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "nu se poate redenumi %s în %s"
 
-#: src/man.c:1655
+#: src/man.c:1711
 #, c-format
 msgid "can't set times on %s"
 msgstr "nu se poate seta timpul pe %s"
 
-#: src/man.c:1664
+#: src/man.c:1720
 #, c-format
 msgid "can't unlink %s"
 msgstr "nu se poate scoate linkul(unlink) la %s"
 
-#: src/man.c:1715
+#: src/man.c:1771
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "nu se poate crea un nume de fiºier temporar"
 
-#: src/man.c:1827
+#: src/man.c:1883
 #, fuzzy, c-format
 msgid "can't create temporary directory"
 msgstr "nu se poate crea un nume de fiºier temporar"
 
-#: src/man.c:1839
+#: src/man.c:1895
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "nu se poate deschide fiºierul de configurare al cãii de man %s"
 
-#: src/man.c:1869 src/man.c:1906 src/man.c:3644
+#: src/man.c:1925 src/man.c:1962 src/man.c:3702
 #, fuzzy, c-format
 msgid "can't restore previous working directory"
 msgstr "nu se poate crea un nume de fiºier temporar"
 
-#: src/man.c:1876 src/man.c:1911
+#: src/man.c:1932 src/man.c:1967
 #, c-format
 msgid "can't remove directory %s"
 msgstr "nu se poate ºterge directorul %s"
 
-#: src/man.c:2023
+#: src/man.c:2081
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- urmãtor: %s [ vizualizare (return) | omitere (Ctrl-D) | ieºire (Ctrl-"
 "C) ]\n"
 
-#: src/man.c:2071
+#: src/man.c:2129
 #, c-format
 msgid "can't chdir to %s"
 msgstr "nu se poate schimba directorul(chdir) în %s"
 
-#: src/man.c:2305
+#: src/man.c:2363
 #, c-format
 msgid ""
 "\n"
@@ -596,27 +596,27 @@ msgstr ""
 "\n"
 "nu se poate scrie în %s în modul catman"
 
-#: src/man.c:2386
+#: src/man.c:2444
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Nu pot converti %s în nume cat"
 
-#: src/man.c:3111
+#: src/man.c:3169
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: încrederea în referinþele whatis este învechitã\n"
 
-#: src/man.c:3261 src/man.c:4030
+#: src/man.c:3319 src/man.c:4088
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "comanda mandb a eºuat cu stare de ieºire %d"
 
-#: src/man.c:3466
+#: src/man.c:3524
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "eroare internã: candidatul tip %d depãºeºte domeniul"
 
-#: src/man.c:3960
+#: src/man.c:4018
 msgid " Manual page "
 msgstr " Paginã de manual "
 
@@ -663,53 +663,53 @@ msgstr ""
 msgid "must specify an output encoding"
 msgstr ""
 
-#: src/mandb.c:104
+#: src/mandb.c:105
 msgid "[MANPATH]"
 msgstr ""
 
-#: src/mandb.c:108
+#: src/mandb.c:109
 msgid "work quietly, except for 'bogus' warning"
 msgstr ""
 
-#: src/mandb.c:109
+#: src/mandb.c:110
 msgid "don't look for or add stray cats to the dbs"
 msgstr ""
 
-#: src/mandb.c:110
+#: src/mandb.c:111
 msgid "don't purge obsolete entries from the dbs"
 msgstr ""
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "produce user databases only"
 msgstr ""
 
-#: src/mandb.c:112
+#: src/mandb.c:113
 msgid "create dbs from scratch, rather than updating"
 msgstr ""
 
-#: src/mandb.c:113
+#: src/mandb.c:114
 msgid "check manual pages for correctness"
 msgstr ""
 
-#: src/mandb.c:114
+#: src/mandb.c:115
 msgid "FILENAME"
 msgstr ""
 
-#: src/mandb.c:114
+#: src/mandb.c:115
 msgid "update just the entry for this filename"
 msgstr ""
 
-#: src/mandb.c:207
+#: src/mandb.c:208
 #, c-format
 msgid "can't remove %s"
 msgstr "nu se poate ºterge %s"
 
-#: src/mandb.c:271
+#: src/mandb.c:272
 #, c-format
 msgid "can't write to %s"
 msgstr "nu se poate scrie în %s"
 
-#: src/mandb.c:276
+#: src/mandb.c:277
 #, c-format
 msgid "can't read from %s"
 msgstr "nu se poate citi din %s"
@@ -719,19 +719,19 @@ msgstr "nu se poate citi din %s"
 msgid "Processing manual pages under %s...\n"
 msgstr "Se proceseazã paginile de manual sub %s...\n"
 
-#: src/mandb.c:648 src/mandb.c:674
+#: src/mandb.c:664 src/mandb.c:690
 #, fuzzy, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Se verificã cat-urile rãtãcite sub %s...\n"
 
-#: src/mandb.c:830
+#: src/mandb.c:846
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "avertisment: nu existã directive MANDB_MAP în %s, se foloseºte calea voastrã "
 "de man"
 
-#: src/mandb.c:902
+#: src/mandb.c:918
 #, fuzzy, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -742,28 +742,28 @@ msgstr[1] ""
 "%d subdirectoare man conþin pagini de manual noi.\n"
 "%d pagini de manual au fost adãugate.\n"
 
-#: src/mandb.c:907
+#: src/mandb.c:923
 #, fuzzy, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] " Paginã de manual "
 msgstr[1] " Paginã de manual "
 
-#: src/mandb.c:911
+#: src/mandb.c:927
 #, fuzzy, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d cat-uri rãtãcite au fost adãugate.\n"
 msgstr[1] "%d cat-uri rãtãcite au fost adãugate.\n"
 
-#: src/mandb.c:916
+#: src/mandb.c:932
 #, fuzzy, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d intrãri vechi în baza de date au fost eliminate.\n"
 msgstr[1] "%d intrãri vechi în baza de date au fost eliminate.\n"
 
-#: src/mandb.c:934
+#: src/mandb.c:950
 #, fuzzy, c-format
 msgid "No databases created."
 msgstr "Nici o bazã de date înnoitã (updated)."

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.1-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2015-08-16 11:05+0100\n"
+"POT-Creation-Date: 2015-09-09 16:34+0100\n"
 "PO-Revision-Date: 2012-04-25 21:22-0700\n"
 "Last-Translator: Arun Persaud <arun@nubati.net>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "effektive Benutzerkennung kann nicht gesetzt werden"
 
-#: lib/security.c:101 src/mandb.c:808
+#: lib/security.c:101 src/mandb.c:824
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "Der von »man« verwandte Benutzer »%s« existiert nicht"
@@ -100,7 +100,7 @@ msgid "The man database defaults to %s%s."
 msgstr "Die Handbuchdatenbank benutzt standardmäßig %s%s."
 
 #: src/accessdb.c:63 src/catman.c:98 src/globbing_test.c:58
-#: src/lexgrog_test.c:68 src/man.c:280 src/manconv_main.c:94 src/mandb.c:107
+#: src/lexgrog_test.c:68 src/man.c:280 src/manconv_main.c:94 src/mandb.c:108
 #: src/manpath.c:65 src/whatis.c:122 src/zsoelim_main.c:66
 msgid "emit debugging messages"
 msgstr "Hinweise zur Fehlersuche werden ausgegeben"
@@ -122,12 +122,12 @@ msgstr "PFAD"
 msgid "set search path for manual pages to PATH"
 msgstr "Suchpfad für Handbuchseiten auf PFAD setzen"
 
-#: src/catman.c:100 src/man.c:279 src/mandb.c:115 src/manpath.c:67
+#: src/catman.c:100 src/man.c:279 src/mandb.c:116 src/manpath.c:67
 #: src/whatis.c:134
 msgid "FILE"
 msgstr "DATEI"
 
-#: src/catman.c:100 src/man.c:279 src/mandb.c:115 src/manpath.c:67
+#: src/catman.c:100 src/man.c:279 src/mandb.c:116 src/manpath.c:67
 #: src/whatis.c:134
 msgid "use this user configuration file"
 msgstr "diese Benutzerkonfigurationsdatei verwenden"
@@ -193,7 +193,7 @@ msgstr "Warnung: %s: leere Datei wird ignoriert"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "Warnung: %s: whatis-Verarbeitung für %s(%s) fehlgeschlagen"
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:865
+#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:881
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -204,7 +204,7 @@ msgstr "Verzeichnis %s kann nicht durchsucht werden"
 msgid "warning: cannot create catdir %s"
 msgstr "Warnung: »cat«-Verzeichnis %s kann nicht angelegt werden"
 
-#: src/check_mandirs.c:453 src/man.c:1829
+#: src/check_mandirs.c:453 src/man.c:1885
 #, c-format
 msgid "can't change to directory %s"
 msgstr "Es konnte nicht ins Verzeichnis %s gewechselt werden"
@@ -276,9 +276,9 @@ msgstr[0] ""
 msgstr[1] ""
 "Warnung: whatis-Eintrag für %s ist größer als %d Bytes, verkürze ihn."
 
-#: src/lexgrog.l:816 src/man.c:2181 src/man.c:2263 src/man.c:2360
-#: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:347
-#: src/ult_src.c:361 src/zsoelim.l:498
+#: src/lexgrog.l:816 src/man.c:2239 src/man.c:2321 src/man.c:2418
+#: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
+#: src/ult_src.c:360 src/zsoelim.l:498
 #, c-format
 msgid "can't open %s"
 msgstr "%s kann nicht geöffnet werden"
@@ -547,71 +547,71 @@ msgstr "Siehe auch »%s« für Hilfe, wenn Handbuchseiten nicht verfügbar sind.
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "Ignoriere unbekannten Präprozessor »%c«"
 
-#: src/man.c:1615 src/mandb.c:326
+#: src/man.c:1671 src/mandb.c:327
 #, c-format
 msgid "can't chown %s"
 msgstr "Besitzer und/oder Gruppe von %s können nicht geändert werden"
 
-#: src/man.c:1627 src/mandb.c:223
+#: src/man.c:1683 src/mandb.c:224
 #, c-format
 msgid "can't chmod %s"
 msgstr "Zugriffsrechte von %s können nicht geändert werden"
 
-#: src/man.c:1638 src/mandb.c:214
+#: src/man.c:1694 src/mandb.c:215
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s kann nicht in %s umbenannt werden"
 
-#: src/man.c:1655
+#: src/man.c:1711
 #, c-format
 msgid "can't set times on %s"
 msgstr "Es können keine Zeiten für %s gesetzt werden"
 
-#: src/man.c:1664
+#: src/man.c:1720
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s kann nicht gelöscht werden"
 
-#: src/man.c:1715
+#: src/man.c:1771
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "Es kann keine temporäre »cat«-Datei für %s erzeugt werden"
 
 # (mes) NEU
-#: src/man.c:1827
+#: src/man.c:1883
 #, c-format
 msgid "can't create temporary directory"
 msgstr "Temporäres Verzeichnis kann nicht erzeugt werden."
 
-#: src/man.c:1839
+#: src/man.c:1895
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "Temporäre Datei %s kann nicht geöffnet werden"
 
 # (mes) NEU
-#: src/man.c:1869 src/man.c:1906 src/man.c:3644
+#: src/man.c:1925 src/man.c:1962 src/man.c:3702
 #, fuzzy, c-format
 msgid "can't restore previous working directory"
 msgstr "Temporäres Verzeichnis kann nicht erzeugt werden."
 
-#: src/man.c:1876 src/man.c:1911
+#: src/man.c:1932 src/man.c:1967
 #, c-format
 msgid "can't remove directory %s"
 msgstr "Verzeichnis %s kann nicht entfernt werden"
 
-#: src/man.c:2023
+#: src/man.c:2081
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- nächste: %s [ Anzeigen (Return) | Überspringen (Strg+D) | Beenden "
 "(Strg+C) ]\n"
 
-#: src/man.c:2071
+#: src/man.c:2129
 #, c-format
 msgid "can't chdir to %s"
 msgstr "Es kann nicht ins Verzeichnis %s gewechselt werden"
 
-#: src/man.c:2305
+#: src/man.c:2363
 #, c-format
 msgid ""
 "\n"
@@ -620,27 +620,27 @@ msgstr ""
 "\n"
 "im »catman«-Modus kann nicht nach %s geschrieben werden"
 
-#: src/man.c:2386
+#: src/man.c:2444
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "%s kann nicht in »cat«-Namen umgewandelt werden"
 
-#: src/man.c:3111
+#: src/man.c:3169
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: es wird davon abgeraten, auf »whatis«-Referenzen zu vertrauen\n"
 
-#: src/man.c:3261 src/man.c:4030
+#: src/man.c:3319 src/man.c:4088
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "»mandb«-Befehl schlug fehl mit Beendigungs-Status %d"
 
-#: src/man.c:3466
+#: src/man.c:3524
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "interner Fehler: Kandidatentyp %d außerhalb des Bereichs"
 
-#: src/man.c:3960
+#: src/man.c:4018
 msgid " Manual page "
 msgstr " Handbuchseite "
 
@@ -687,54 +687,54 @@ msgstr "es muss eine Eingabekodierung angegeben werden"
 msgid "must specify an output encoding"
 msgstr "es muss eine Ausgabekodierung angegeben werden"
 
-#: src/mandb.c:104
+#: src/mandb.c:105
 msgid "[MANPATH]"
 msgstr "[HANDBUCHPFAD]"
 
-#: src/mandb.c:108
+#: src/mandb.c:109
 msgid "work quietly, except for 'bogus' warning"
 msgstr "still arbeiten, mit Ausnahme von »fehlerhaften« Warnungen"
 
-#: src/mandb.c:109
+#: src/mandb.c:110
 msgid "don't look for or add stray cats to the dbs"
 msgstr ""
 "nicht nach herrenlosen »cat«-Datein suchen oder zu den Datenbanken hinzufügen"
 
-#: src/mandb.c:110
+#: src/mandb.c:111
 msgid "don't purge obsolete entries from the dbs"
 msgstr "keine veralteten Einträge aus den Datenbanken löschen"
 
-#: src/mandb.c:111
+#: src/mandb.c:112
 msgid "produce user databases only"
 msgstr "nur Benutzerdatenbanken erzeugen"
 
-#: src/mandb.c:112
+#: src/mandb.c:113
 msgid "create dbs from scratch, rather than updating"
 msgstr "Datenbanken von Grund auf neu generieren, statt sie zu aktualisieren"
 
-#: src/mandb.c:113
+#: src/mandb.c:114
 msgid "check manual pages for correctness"
 msgstr "Handbuchseiten auf Korrektheit überprüfen"
 
-#: src/mandb.c:114
+#: src/mandb.c:115
 msgid "FILENAME"
 msgstr "DATEINAME"
 
-#: src/mandb.c:114
+#: src/mandb.c:115
 msgid "update just the entry for this filename"
 msgstr "nur den Eintrag für diesen Dateinamen aktualisieren"
 
-#: src/mandb.c:207
+#: src/mandb.c:208
 #, c-format
 msgid "can't remove %s"
 msgstr "%s kann nicht entfernt werden"
 
-#: src/mandb.c:271
+#: src/mandb.c:272
 #, c-format
 msgid "can't write to %s"
 msgstr "es kann nicht nach %s geschrieben werden"
 
-#: src/mandb.c:276
+#: src/mandb.c:277
 #, c-format
 msgid "can't read from %s"
 msgstr "%s kann nicht ausgelesen werden"
@@ -744,46 +744,46 @@ msgstr "%s kann nicht ausgelesen werden"
 msgid "Processing manual pages under %s...\n"
 msgstr "Handbuchseiten unter %s werden verarbeitet ...\n"
 
-#: src/mandb.c:648 src/mandb.c:674
+#: src/mandb.c:664 src/mandb.c:690
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "veraltetes »cat«-Verzeichnis %s wird entfernt ...\n"
 
-#: src/mandb.c:830
+#: src/mandb.c:846
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "Warnung: keine MANDB_MAP-Anweisungen in %s, ihr Handbuchpfad wird verwendet"
 
-#: src/mandb.c:902
+#: src/mandb.c:918
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d Handbuchverzeichnis enthielt neuere Handbuchseiten.\n"
 msgstr[1] "%d Handbuchverzeichnisse enthielten neuere Handbuchseiten.\n"
 
-#: src/mandb.c:907
+#: src/mandb.c:923
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d Handbuchseite wurde hinzugefügt.\n"
 msgstr[1] "%d Handbuchseiten wurden hinzugefügt.\n"
 
-#: src/mandb.c:911
+#: src/mandb.c:927
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d herrenlose »cat«-Datei wurde hinzugefügt.\n"
 msgstr[1] "%d herrenlose »cat«-Dateien wurden hinzugefügt.\n"
 
-#: src/mandb.c:916
+#: src/mandb.c:932
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d alter Datenbankeintrag wurde entfernt.\n"
 msgstr[1] "%d alte Datenbankeinträge wurden entfernt.\n"
 
-#: src/mandb.c:934
+#: src/mandb.c:950
 #, c-format
 msgid "No databases created."
 msgstr "Keine Datenbanken erstellt."
