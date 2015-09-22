@@ -1238,6 +1238,8 @@ void create_pathlist (const char *manp, char **mp)
 		     ++dupcheck) {
 			char *dupcheck_target = canonicalize_file_name
 				(*dupcheck);
+			if (!dupcheck_target)
+				continue;
 			if (!STREQ (target, dupcheck_target)) {
 				free (dupcheck_target);
 				continue;
