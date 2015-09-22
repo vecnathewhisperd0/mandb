@@ -34,18 +34,17 @@ endif
 replace.sed: $(top_builddir)/man/replace.sin
 	$(AM_V_GEN)sed -e 's,%REPLACE_CONFIG_FILE%,$(config_file),g' $(top_builddir)/man/replace.sin > $@
 
-.man1.1: replace.sed
+$(MANS): replace.sed
+
+.man1.1:
 	$(AM_V_at)$(MKDIR_P) man1
-	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
 	$(AM_V_GEN)program=`echo '$@' | sed -e 's/\.1//' -e 's,.*/,,' -e '$(program_transform_name)'`; \
 	sed -f replace.sed -e "s,%program%,$$program,g" $< > $@
-.man5.5: replace.sed
+.man5.5:
 	$(AM_V_at)$(MKDIR_P) man5
-	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
 	$(AM_V_GEN)sed -f replace.sed $< > $@
-.man8.8: replace.sed
+.man8.8:
 	$(AM_V_at)$(MKDIR_P) man8
-	@$(MAKE) $(AM_MAKEFLAGS) replace.sed
 	$(AM_V_GEN)program=`echo '$@' | sed -e 's/\.8//' -e 's,.*/,,' -e '$(program_transform_name)'`; \
 	sed -f replace.sed -e "s,%program%,$$program,g" $< > $@
 
