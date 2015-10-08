@@ -1858,7 +1858,7 @@ static void format_display (pipeline *decomp,
 			    pipeline *format_cmd, pipeline *disp_cmd,
 			    const char *man_file)
 {
-	int status;
+	int format_status = 0, disp_status = 0;
 #ifdef TROFF_IS_GROFF
 	struct saved_cwd old_cwd = { -1, NULL };
 	int have_old_cwd = 0;
@@ -1898,7 +1898,7 @@ static void format_display (pipeline *decomp,
 		pipeline_connect (decomp, format_cmd, NULL);
 		pipeline_pump (decomp, format_cmd, NULL);
 		pipeline_wait (decomp);
-		status = pipeline_wait (format_cmd);
+		format_status = pipeline_wait (format_cmd);
 	} else
 #endif /* TROFF_IS_GROFF */
 	    if (format_cmd) {
@@ -1906,20 +1906,20 @@ static void format_display (pipeline *decomp,
 		pipeline_connect (format_cmd, disp_cmd, NULL);
 		pipeline_pump (decomp, format_cmd, disp_cmd, NULL);
 		pipeline_wait (decomp);
-		pipeline_wait (format_cmd);
-		status = pipeline_wait (disp_cmd);
+		format_status = pipeline_wait (format_cmd);
+		disp_status = pipeline_wait (disp_cmd);
 	} else {
 		pipeline_connect (decomp, disp_cmd, NULL);
 		pipeline_pump (decomp, disp_cmd, NULL);
 		pipeline_wait (decomp);
-		status = pipeline_wait (disp_cmd);
+		disp_status = pipeline_wait (disp_cmd);
 	}
 
 #ifdef TROFF_IS_GROFF
 	if (format_cmd && htmlout) {
 		char *browser_list, *candidate;
 
-		if (status) {
+		if (format_status) {
 			if (have_old_cwd && restore_cwd (&old_cwd) < 0) {
 				error (0, errno,
 				       _("can't restore previous working "
@@ -1933,7 +1933,7 @@ static void format_display (pipeline *decomp,
 				       htmldir);
 			free (htmlfile);
 			free (htmldir);
-			gripe_system (format_cmd, status);
+			gripe_system (format_cmd, format_status);
 		}
 
 		browser_list = xstrdup (html_pager);
@@ -1942,8 +1942,8 @@ static void format_display (pipeline *decomp,
 			pipeline *browser;
 			debug ("Trying browser: %s\n", candidate);
 			browser = make_browser (candidate, htmlfile);
-			status = do_system_drop_privs (browser);
-			if (!status)
+			disp_status = do_system_drop_privs (browser);
+			if (!disp_status)
 				break;
 		}
 		if (!candidate) {
@@ -1970,9 +1970,12 @@ static void format_display (pipeline *decomp,
 		free (htmldir);
 	} else
 #endif /* TROFF_IS_GROFF */
-	/* TODO: check format_cmd status too? */
-	    if (status && status != (SIGPIPE + 0x80) * 256)
-		gripe_system (disp_cmd, status);
+	{
+		if (format_status && format_status != (SIGPIPE + 0x80) * 256)
+			gripe_system (format_cmd, format_status);
+		if (disp_status && disp_status != (SIGPIPE + 0x80) * 256)
+			gripe_system (disp_cmd, disp_status);
+	}
 
 	regain_effective_privs ();
 }
