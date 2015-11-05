@@ -2148,7 +2148,7 @@ static int display (const char *dir, const char *man_file,
 		else
 			decomp = decompress_fdopen (dup (STDIN_FILENO));
 
-		if (no_hyphenation) {
+		if (!recode && no_hyphenation) {
 			pipecmd *hcmd = pipecmd_new_function (
 				"echo .nh && echo .de hy && echo ..",
 				disable_hyphenation, NULL, NULL);
@@ -2156,7 +2156,7 @@ static int display (const char *dir, const char *man_file,
 			++seq_ncmds;
 		}
 
-		if (no_justification) {
+		if (!recode && no_justification) {
 			pipecmd *jcmd = pipecmd_new_function (
 				"echo .na && echo .de ad && echo ..",
 				disable_justification, NULL, NULL);
@@ -2168,7 +2168,7 @@ static int display (const char *dir, const char *man_file,
 		/* This only works with preconv, since the per-locale macros
 		 * may change the assumed input encoding.
 		 */
-		if (*man_file && get_groff_preconv ()) {
+		if (!recode && *man_file && get_groff_preconv ()) {
 			char *page_lang = lang_dir (man_file);
 
 			if (page_lang && *page_lang &&
