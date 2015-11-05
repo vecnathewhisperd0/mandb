@@ -252,6 +252,13 @@ W	[ \t]
 			ECHO;
 		}
 
+<lfname>\n	{
+			no_newline = 0;
+			putchar ('\n');
+			LINE++;
+			BEGIN (INITIAL);
+		}
+
 <lfnumber,lfname>.	{
 			no_newline = 1;
 			error (OK, 0,
@@ -261,8 +268,8 @@ W	[ \t]
 			putchar (*yytext);
 			BEGIN (INITIAL);
 		}
-		
-<lfnumber,lfname>\n	{
+
+<lfnumber>\n	{
 			no_newline = 0;
 			error (OK, 0,
 			       _("%s:%d: warning: newline in .lf request, "
@@ -271,7 +278,7 @@ W	[ \t]
 			putchar ('\n');
 			LINE++;
 			BEGIN (INITIAL);
-			}
+		}
 
 <<EOF>>	{
 		pipeline_wait (PIPE);

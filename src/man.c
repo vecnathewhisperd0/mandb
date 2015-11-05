@@ -695,6 +695,7 @@ static void heirloom_line_length (void *data)
 	printf (".ll %sn\n", (const char *) data);
 	/* TODO: This fails to do anything useful.  Why? */
 	printf (".lt %sn\n", (const char *) data);
+	printf (".lf 1\n");
 }
 #endif /* HEIRLOOM_NROFF */
 
@@ -2024,14 +2025,16 @@ static void disable_hyphenation (void *data ATTRIBUTE_UNUSED)
 {
 	fputs (".nh\n"
 	       ".de hy\n"
-	       "..\n", stdout);
+	       "..\n"
+	       ".lf 1\n", stdout);
 }
 
 static void disable_justification (void *data ATTRIBUTE_UNUSED)
 {
 	fputs (".na\n"
 	       ".de ad\n"
-	       "..\n", stdout);
+	       "..\n"
+	       ".lf 1\n", stdout);
 }
 
 #ifdef TROFF_IS_GROFF
@@ -2060,7 +2063,8 @@ static void locale_macros (void *data)
 		/* set the hyphenation language anyway, to make sure groff
 		 * only hyphenates languages it knows about
 		 */
-		".hla %s\n", macro_lang, hyphen_lang);
+		".hla %s\n"
+		".lf 1\n", macro_lang, hyphen_lang);
 }
 #endif /* TROFF_IS_GROFF */
 
