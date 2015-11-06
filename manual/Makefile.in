@@ -1568,7 +1568,7 @@ $(MANUAL).pp: $(ME_FILES) version
 	dvips -f -t a4 $< > $@
 
 .pp.cat:
-	nroff -me $< > $@
+	LC_ALL=C nroff -me $< > $@
 
 .pp.html:
 	$(TROFF) -me -Thtml -P-I$* $< > $@
