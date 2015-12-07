@@ -190,7 +190,7 @@ struct dbpaths {
 #  endif /* BERKELEY_DB */
 #else /* !NDBM */
 	char *xfile;
-	const char *xtmpfile;
+	char *xtmpfile;
 #endif /* NDBM */
 };
 
@@ -316,7 +316,7 @@ static void finish_up (struct dbpaths *dbpaths)
 #else /* not NDBM */
 	xrename (dbpaths->xtmpfile, dbpaths->xfile);
 	xchmod (dbpaths->xfile, DBMODE);
-	/* dbpaths->xtmpfile == database, so freed elsewhere */
+	free (dbpaths->xtmpfile);
 	dbpaths->xtmpfile = NULL;
 #endif /* NDBM */
 }
@@ -409,34 +409,28 @@ static void cleanup_sigsafe (void *arg)
 #endif /* NDBM */
 }
 
-/* remove incomplete databases */
+/* free database names */
 static void cleanup (void *arg)
 {
 	struct dbpaths *dbpaths = arg;
 
 #ifdef NDBM
 #  ifdef BERKELEY_DB
-	if (dbpaths->tmpdbfile) {
-		free (dbpaths->tmpdbfile);
-		dbpaths->tmpdbfile = NULL;
-	}
+	free (dbpaths->dbfile);
+	free (dbpaths->tmpdbfile);
+	dbpaths->dbfile = dbpaths->tmpdbfile = NULL;
 #  else /* !BERKELEY_DB NDBM */
-	if (dbpaths->tmpdirfile) {
-		free (dbpaths->tmpdirfile);
-		dbpaths->tmpdirfile = NULL;
-	}
-	if (dbpaths->tmppagfile) {
-		free (dbpaths->tmppagfile);
-		dbpaths->tmppagfile = NULL;
-	}
+	free (dbpaths->dirfile);
+	free (dbpaths->pagfile);
+	free (dbpaths->tmpdirfile);
+	free (dbpaths->tmppagfile);
+	dbpaths->dirfile = dbpaths->pagfile = NULL;
+	dbpaths->tmpdirfile = dbpaths->tmppagfile = NULL;
 #  endif /* BERKELEY_DB NDBM */
 #else /* !NDBM */
-	if (dbpaths->xtmpfile) {
-		/* dbpaths->xtmpfile == database, so freed elsewhere */
-		dbpaths->xtmpfile = NULL;
-	}
 	free (dbpaths->xfile);
-	dbpaths->xfile = NULL;
+	free (dbpaths->xtmpfile);
+	dbpaths->xfile = dbpaths->xtmpfile = NULL;
 #endif /* NDBM */
 }
 
@@ -537,7 +531,7 @@ static int mandb (struct dbpaths *dbpaths,
 #  endif /* BERKELEY_DB NDBM */
 #else /* !NDBM */
 	dbpaths->xfile = dbname; /* steal memory */
-	dbpaths->xtmpfile = database;
+	dbpaths->xtmpfile = xstrdup (database);
 	if (!should_create) {
 		if (xcopy (dbpaths->xfile, dbpaths->xtmpfile) < 0)
 			should_create = 1;
