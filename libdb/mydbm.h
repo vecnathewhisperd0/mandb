@@ -44,7 +44,7 @@
 #  include <gdbm.h>
 
 #  ifndef HAVE_GDBM_EXISTS
-extern inline int gdbm_exists(GDBM_FILE db, datum key);
+extern int gdbm_exists (GDBM_FILE db, datum key);
 #  endif /* !HAVE_GDBM_EXISTS */
 
 /* gdbm_nextkey() is not lexicographically sorted, so we need to keep the

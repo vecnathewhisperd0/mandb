@@ -305,8 +305,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		free (lg.whatis);
 }
 
-static inline void add_dir_entries (MYDBM_FILE dbf,
-				    const char *path, char *infile)
+static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 {
 	char *manpage;
 	int len;

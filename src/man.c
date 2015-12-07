@@ -160,7 +160,7 @@ struct candidate {
 #define CANDIDATE_FILESYSTEM 0
 #define CANDIDATE_DATABASE   1
 
-static inline void gripe_system (pipeline *p, int status)
+static void gripe_system (pipeline *p, int status)
 {
 	error (CHILD_FAIL, 0, _("command exited with status %d: %s"),
 	       status, pipeline_tostring (p));
@@ -748,7 +748,7 @@ static pipecmd *add_roff_line_length (pipecmd *cmd, int *save_cat_p)
 }
 #endif /* TROFF_IS_GROFF || HEIRLOOM_NROFF */
 
-static inline void gripe_no_man (const char *name, const char *sec)
+static void gripe_no_man (const char *name, const char *sec)
 {
 	/* On AIX and IRIX, fall back to the vendor supplied browser. */
 #if defined _AIX || defined __sgi
@@ -810,7 +810,7 @@ static void do_extern (int argc, char *argv[])
 }
 
 /* lookup $MANOPT and if available, put in *argv[] format for argp */
-static inline char **manopt_to_env (int *argc)
+static char **manopt_to_env (int *argc)
 {
 	char *manopt, *manopt_copy, *opt_start, **argv;
 
@@ -860,7 +860,7 @@ static inline char **manopt_to_env (int *argc)
 }
 
 /* Return char array with 'less' special chars escaped. Uses static storage. */
-static inline const char *escape_less (const char *string)
+static const char *escape_less (const char *string)
 {
 	static char *escaped_string; 
 	char *ptr;
@@ -957,7 +957,7 @@ static char *locale_manpath (const char *manpath)
  * The list of sections in config.h simply allows us to specify oddly
  * named directories like .../man3f.  Yuk.
  */
-static inline const char *is_section (const char *name)
+static const char *is_section (const char *name)
 {
 	const char **vs;
 
@@ -2072,7 +2072,7 @@ static void locale_macros (void *data)
    return 1 to skip
    return 0 to view
  */
-static inline int do_prompt (const char *name)
+static int do_prompt (const char *name)
 {
 	int ch;
 	FILE *tty = NULL;
@@ -2445,8 +2445,8 @@ static int display (const char *dir, const char *man_file,
 	return found;
 }
 
-static inline void gripe_converting_name (const char *name) ATTRIBUTE_NORETURN;
-static inline void gripe_converting_name (const char *name)
+static void gripe_converting_name (const char *name) ATTRIBUTE_NORETURN;
+static void gripe_converting_name (const char *name)
 {
 	error (FATAL, 0, _("Can't convert %s to cat name"), name);
 	abort (); /* error should have exited; help compilers prove noreturn */

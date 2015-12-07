@@ -171,8 +171,7 @@ static void post_fork (void)
 		MYDBM_CLOSE (dbf_close_post_fork);
 }
 
-/* Execute man with the appropriate catman args.  Always frees cmd.
-   If we inline this function, gcc v2.6.2 gives us `clobber' warnings ?? */
+/* Execute man with the appropriate catman args.  Always frees cmd. */
 static void catman (pipecmd *cmd)
 {
 	pipeline *p;
@@ -197,7 +196,7 @@ static void catman (pipecmd *cmd)
 /* Add key to this command, stripping off tab-and-following if necessary.
  * Return length of argument.
  */
-static inline size_t add_arg (pipecmd *cmd, datum key)
+static size_t add_arg (pipecmd *cmd, datum key)
 {
 	char *tab;
 	size_t len;
@@ -339,7 +338,7 @@ static int parse_for_sec (const char *manpath, const char *section)
 	return 0;
 }
 
-static inline int check_access (const char *directory)
+static int check_access (const char *directory)
 {
 	if (access (directory, W_OK)) {
 		error (0, errno, _("cannot write within %s"), directory);

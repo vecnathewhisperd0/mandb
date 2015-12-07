@@ -476,8 +476,8 @@ out:
 }
 
 /* lookup the page and display the results */
-static inline int do_whatis_section (MYDBM_FILE dbf,
-				     const char *page, const char *section)
+static int do_whatis_section (MYDBM_FILE dbf,
+			      const char *page, const char *section)
 {
 	struct mandata *info;
 	int count = 0;

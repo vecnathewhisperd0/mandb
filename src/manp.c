@@ -102,8 +102,8 @@ char *user_config_file = NULL;
 int disable_cache;
 int min_cat_width = 80, max_cat_width = 80, cat_width = 0;
 
-static inline char *has_mandir (const char *p);
-static inline char *fsstnd (const char *path);
+static char *has_mandir (const char *p);
+static char *fsstnd (const char *path);
 static char *def_path (int flag);
 static void add_dir_to_list (char **lp, const char *dir);
 static char **add_dir_to_path_list (char **mphead, char **mp, const char *p);
@@ -325,19 +325,19 @@ static char *pathappend (char *oldpath, const char *appendage)
 		return xstrdup (appendage);
 }
 
-static inline void gripe_reading_mp_config (const char *file)
+static void gripe_reading_mp_config (const char *file)
 {
 	error (FAIL, 0,
 	       _("can't make sense of the manpath configuration file %s"),
 	       file);
 }
 
-static inline void gripe_stat_file (const char *file)
+static void gripe_stat_file (const char *file)
 {
 	debug_error (_("warning: %s"), file);
 }
 
-static inline void gripe_not_directory (const char *dir)
+static void gripe_not_directory (const char *dir)
 {
 	if (!quiet)
 		error (0, 0, _("warning: %s isn't a directory"), dir);
@@ -1121,7 +1121,7 @@ static void add_dir_to_list (char **lp, const char *dir)
 /* path does not exist in config file: check to see if path/../man,
    path/man, path/../share/man, or path/share/man exist.  If so return
    it, if not return NULL. */
-static inline char *has_mandir (const char *path)
+static char *has_mandir (const char *path)
 {
 	char *newpath;
 
@@ -1373,7 +1373,7 @@ int is_global_mandir (const char *dir)
 
 /* Accept a manpath (not a full pathname to a file) and return an FSSTND 
    equivalent catpath */
-static inline char *fsstnd (const char *path)
+static char *fsstnd (const char *path)
 {
 	char *manpath;
 	char *catpath;

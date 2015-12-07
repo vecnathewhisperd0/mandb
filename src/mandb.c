@@ -202,14 +202,14 @@ static char *manpathlist[MAXDIRS];
 extern int pages;
 
 /* remove() with error checking */
-static inline void xremove (const char *path)
+static void xremove (const char *path)
 {
 	if (remove (path) == -1 && errno != ENOENT)
 		error (0, errno, _("can't remove %s"), path);
 }
 
 /* rename() with error checking */
-static inline void xrename (const char *from, const char *to)
+static void xrename (const char *from, const char *to)
 {
 	if (rename (from, to) == -1 && errno != ENOENT) {
 		error (0, errno, _("can't rename %s to %s"), from, to);
@@ -218,7 +218,7 @@ static inline void xrename (const char *from, const char *to)
 }
 
 /* chmod() with error checking */
-static inline void xchmod (const char *path, mode_t mode)
+static void xchmod (const char *path, mode_t mode)
 {
 	if (chmod (path, mode) == -1) {
 		error (0, errno, _("can't chmod %s"), path);
@@ -294,7 +294,7 @@ static int xcopy (const char *from, const char *to)
 }
 
 /* rename and chmod the database */
-static inline void finish_up (void)
+static void finish_up (void)
 {
 #ifdef NDBM
 #  ifdef BERKELEY_DB
@@ -321,7 +321,7 @@ static inline void finish_up (void)
 
 #ifdef SECURE_MAN_UID
 /* chown() with error checking */
-static inline void xchown (const char *path, uid_t owner, uid_t group)
+static void xchown (const char *path, uid_t owner, uid_t group)
 {
 	if (chown (path, owner, group) == -1) {
 		error (0, errno, _("can't chown %s"), path);
@@ -330,7 +330,7 @@ static inline void xchown (const char *path, uid_t owner, uid_t group)
 }
 
 /* change the owner of global man databases */
-static inline void do_chown (uid_t uid)
+static void do_chown (uid_t uid)
 {
 #  ifdef NDBM
 #    ifdef BERKELEY_DB
@@ -372,7 +372,7 @@ static int update_one_file (const char *manpath, const char *filename)
 }
 
 /* dont actually create any dbs, just do an update */
-static inline int update_db_wrapper (const char *manpath, const char *catpath)
+static int update_db_wrapper (const char *manpath, const char *catpath)
 {
 	int amount;
 
