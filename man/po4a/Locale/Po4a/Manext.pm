@@ -90,11 +90,11 @@ NEXT_LINE:
     } elsif ($self->{manext_shift_tbl_state} == 2) {
         # Theoretically s/@/\t/g should be enough, but for some reason
         # Locale::Po4a::Man splits on /\\t/ rather than on /\t/.
-        if ($line =~ /T{$/) {
+        if ($line =~ /T\{$/) {
             my ($l2, $r2) = $self->SUPER::shiftline();
             while (defined $l2) {
                 $line .= $l2;
-                last if $l2 =~ /^T}/;
+                last if $l2 =~ /^T\}/;
                 ($l2, $r2) = $self->SUPER::shiftline();
             }
         }
@@ -141,7 +141,7 @@ sub translate {
     my %options = @_;
 
     if (defined $type and $type eq 'tbl table') {
-        if ($str =~ /^T{\n?(.*)T}(\n?)$/s) {
+        if ($str =~ /^T\{\n?(.*)T\}(\n?)$/s) {
             my $inner = $1;
             chomp $inner;
             return "T{\n" .
