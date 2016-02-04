@@ -614,6 +614,12 @@ Search terms may be simple strings (the default), or regular expressions if
 the
 .B \-\-regex
 option is used.
+.IP
+Note that this searches the
+.I sources
+of the manual pages, not the rendered text, and so may include false
+positives due to things like comments in source files.
+Searching the rendered text would be much slower.
 .TP
 .if !'po4a'hide' .BR \-l ", " \-\-local\-file
 Activate `local' mode.
