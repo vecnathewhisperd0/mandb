@@ -344,7 +344,8 @@ am_libman_la_OBJECTS = libman_la-appendstr.lo libman_la-cleanup.lo \
 	libman_la-linelength.lo libman_la-lower.lo \
 	libman_la-orderfiles.lo libman_la-pathsearch.lo \
 	libman_la-security.lo libman_la-tempfile.lo libman_la-util.lo \
-	libman_la-wordfnmatch.lo libman_la-xregcomp.lo
+	libman_la-wordfnmatch.lo libman_la-xchown.lo \
+	libman_la-xregcomp.lo
 libman_la_OBJECTS = $(am_libman_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -1442,6 +1443,8 @@ libman_la_SOURCES = \
 	util.c \
 	wordfnmatch.c \
 	wordfnmatch.h \
+	xchown.c \
+	xchown.h \
 	xregcomp.c \
 	xregcomp.h
 
@@ -1545,6 +1548,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-tempfile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-wordfnmatch.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-xchown.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libman_la-xregcomp.Plo@am__quote@
 
 .c.o:
@@ -1665,6 +1669,13 @@ libman_la-wordfnmatch.lo: wordfnmatch.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='wordfnmatch.c' object='libman_la-wordfnmatch.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_la-wordfnmatch.lo `test -f 'wordfnmatch.c' || echo '$(srcdir)/'`wordfnmatch.c
+
+libman_la-xchown.lo: xchown.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_la-xchown.lo -MD -MP -MF $(DEPDIR)/libman_la-xchown.Tpo -c -o libman_la-xchown.lo `test -f 'xchown.c' || echo '$(srcdir)/'`xchown.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libman_la-xchown.Tpo $(DEPDIR)/libman_la-xchown.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xchown.c' object='libman_la-xchown.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libman_la-xchown.lo `test -f 'xchown.c' || echo '$(srcdir)/'`xchown.c
 
 libman_la-xregcomp.lo: xregcomp.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libman_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libman_la-xregcomp.lo -MD -MP -MF $(DEPDIR)/libman_la-xregcomp.Tpo -c -o libman_la-xregcomp.lo `test -f 'xregcomp.c' || echo '$(srcdir)/'`xregcomp.c

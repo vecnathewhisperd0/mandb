@@ -1925,7 +1925,8 @@ static void format_display (pipeline *decomp,
 				error (0, errno,
 				       _("can't restore previous working "
 					 "directory"));
-				chdir ("/");
+				/* last resort */
+				if (chdir ("/")) { /* ignore errors */ }
 			}
 			free_cwd (&old_cwd);
 			if (remove_directory (htmldir, 0) == -1)
@@ -1961,7 +1962,8 @@ static void format_display (pipeline *decomp,
 		if (have_old_cwd && restore_cwd (&old_cwd) < 0) {
 			error (0, errno,
 			       _("can't restore previous working directory"));
-			chdir ("/");
+			/* last resort */
+			if (chdir ("/")) { /* ignore errors */ }
 		}
 		free_cwd (&old_cwd);
 		if (remove_directory (htmldir, 0) == -1)

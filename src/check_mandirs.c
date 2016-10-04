@@ -56,6 +56,7 @@
 #include "hashtable.h"
 #include "orderfiles.h"
 #include "security.h"
+#include "xchown.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -388,7 +389,7 @@ static void mkcatdirs (const char *mandir, const char *catdir)
 				debug ("created base catdir %s\n", catdir);
 #ifdef SECURE_MAN_UID
 			if (ruid == 0)
-				chown (catdir, man_owner->pw_uid, 0);
+				xchown (catdir, man_owner->pw_uid, 0);
 #endif /* SECURE_MAN_UID */
 			drop_effective_privs ();
 		}
@@ -413,8 +414,8 @@ static void mkcatdirs (const char *mandir, const char *catdir)
 						debug (" cat%d", j);
 #ifdef SECURE_MAN_UID
 					if (ruid == 0)
-						chown (catname,
-						       man_owner->pw_uid, 0);
+						xchown (catname,
+							man_owner->pw_uid, 0);
 #endif /* SECURE_MAN_UID */
 				}
 			}
