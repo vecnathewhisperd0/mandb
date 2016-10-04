@@ -3810,6 +3810,47 @@ executable_out:
 }
 
 /*
+ * Splits a "name[.section]" into { "name", "section" }.
+ * Section would be NULL if not present.
+ * *ret_name and *ret_section must be able to hold page_name string.
+ * */
+static void split_page_name (const char *page_name,
+			     char **ret_name,
+			     char **ret_section)
+{
+	char *dot;
+	char *name_to_split;
+
+	name_to_split = xstrdup (page_name);
+	dot = strrchr (name_to_split, '.');
+
+	if (!dot) {
+		strcpy (*ret_name, page_name);
+		*ret_section = NULL;
+	} else if (is_section (dot + 1)) {
+		int name_len;
+
+		name_len = dot - name_to_split;
+		memcpy (*ret_name, name_to_split, name_len);
+		(*ret_name)[name_len] = 0;
+		strcpy (*ret_section, dot + 1);
+	}
+
+	free (name_to_split);
+}
+
+static void locate_page_in_manpath (const char *page_section,
+				    const char *page_name,
+				    struct candidate **candidates,
+				    int *found)
+{
+	char **mp;
+
+	for (mp = manpathlist; *mp; mp++)
+		*found += locate_page (*mp, page_section, page_name, candidates);
+}
+
+/*
  * Search for manual pages.
  *
  * If preformatted manual pages are supported, look for the formatted
@@ -3825,6 +3866,7 @@ executable_out:
  */
 static int man (const char *name, int *found)
 {
+	char *page_name, *page_section;
 	struct candidate *candidates = NULL, *cand, *candnext;
 
 	*found = 0;
@@ -3837,22 +3879,27 @@ static int man (const char *name, int *found)
 		return status;
 	}
 
-	if (section) {
-		char **mp;
-
-		for (mp = manpathlist; *mp; mp++)
-			*found += locate_page (*mp, section, name, &candidates);
-	} else {
+	if (section)
+		locate_page_in_manpath (section, name, &candidates, found);
+	else {
 		const char **sp;
 
 		for (sp = section_list; *sp; sp++) {
-			char **mp;
-
-			for (mp = manpathlist; *mp; mp++)
-				*found += locate_page (*mp, *sp, name,
-						       &candidates);
+			locate_page_in_manpath (*sp, name, &candidates, found);
 		}
 	}
+
+	page_name = xstrdup (name);
+	page_section = xstrdup (name);
+
+	split_page_name (name, &page_name, &page_section);
+
+	if (!*found && page_section)
+		locate_page_in_manpath (page_section, page_name, &candidates,
+					found);
+
+	free (page_name);
+	free (page_section);
 
 	sort_candidates (&candidates);
 
