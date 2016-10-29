@@ -18,6 +18,8 @@ fi
 init
 fake_config /usr/share/man
 mkdir -p "${tmpdir}/usr/share/man/${OVERRIDE}/man1"
+MANPATH="$tmpdir/usr/share/man"
+export MANPATH
 
 
 write_page abc 1 "${tmpdir}/usr/share/man/man1/abc.1" \
