@@ -3812,31 +3812,23 @@ executable_out:
 /*
  * Splits a "name[.section]" into { "name", "section" }.
  * Section would be NULL if not present.
- * *ret_name and *ret_section must be able to hold page_name string.
+ * The caller is responsible for freeing *ret_name and *ret_section.
  * */
 static void split_page_name (const char *page_name,
 			     char **ret_name,
 			     char **ret_section)
 {
 	char *dot;
-	char *name_to_split;
 
-	name_to_split = xstrdup (page_name);
-	dot = strrchr (name_to_split, '.');
+	dot = strrchr (page_name, '.');
 
-	if (!dot) {
-		strcpy (*ret_name, page_name);
+	if (dot && is_section (dot + 1)) {
+		*ret_name = xstrndup (page_name, dot - page_name);
+		*ret_section = xstrdup (dot + 1);
+	} else {
+		*ret_name = xstrdup (page_name);
 		*ret_section = NULL;
-	} else if (is_section (dot + 1)) {
-		int name_len;
-
-		name_len = dot - name_to_split;
-		memcpy (*ret_name, name_to_split, name_len);
-		(*ret_name)[name_len] = 0;
-		strcpy (*ret_section, dot + 1);
 	}
-
-	free (name_to_split);
 }
 
 static void locate_page_in_manpath (const char *page_section,
@@ -3888,9 +3880,6 @@ static int man (const char *name, int *found)
 			locate_page_in_manpath (*sp, name, &candidates, found);
 		}
 	}
-
-	page_name = xstrdup (name);
-	page_section = xstrdup (name);
 
 	split_page_name (name, &page_name, &page_section);
 
