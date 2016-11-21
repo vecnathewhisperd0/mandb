@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.5.1-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2015-11-06 15:42+0000\n"
+"POT-Creation-Date: 2016-11-21 03:04+0000\n"
 "PO-Revision-Date: 2008-01-16 17:49-0600\n"
 "Last-Translator: Ming Hua <minghua-guest@users.alioth.debian.org>\n"
 "Language-Team: Chinese (simplified) <translation-team-zh-cn@lists."
@@ -33,10 +33,15 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "无法设置等效 uid"
 
-#: lib/security.c:101 src/mandb.c:824
+#: lib/security.c:101 src/mandb.c:827
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "不存在用来将 man 程序 setuid 的用户 %s"
+
+#: lib/xchown.c:38 src/man.c:1672 src/mandb.c:329
+#, c-format
+msgid "can't chown %s"
+msgstr "无法 chown %s"
 
 #  need-proofread
 #: lib/xregcomp.c:47
@@ -140,24 +145,24 @@ msgstr "文件"
 msgid "use this user configuration file"
 msgstr "使用该用户设置文件"
 
-#: src/catman.c:194
+#: src/catman.c:193
 #, c-format
 msgid "man command failed with exit status %d"
 msgstr "man 命令失败，退出状态代码为 %d"
 
-#: src/catman.c:233
+#: src/catman.c:232
 #, c-format
 msgid "cannot read database %s"
 msgstr "无法读取数据库 %s"
 
 #  need-proofread
-#: src/catman.c:276
+#: src/catman.c:275
 #, c-format
 msgid "NULL content for key: %s"
 msgstr "关于 %s 词条的内容为空"
 
 #  need-proofread
-#: src/catman.c:291
+#: src/catman.c:290
 #, c-format
 msgid ""
 "\n"
@@ -166,43 +171,43 @@ msgstr ""
 "\n"
 "正在更新 man 目录树 %2$s 中第 %1$s 节的 cat 文件\n"
 
-#: src/catman.c:345
+#: src/catman.c:344
 #, c-format
 msgid "cannot write within %s"
 msgstr "无法在 %s 里写入"
 
-#: src/catman.c:422
+#: src/catman.c:421
 #, c-format
 msgid "unable to update %s"
 msgstr "无法更新 %s"
 
 #  need-proofread
-#: src/check_mandirs.c:95
+#: src/check_mandirs.c:96
 #, c-format
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "警告：%s/man%s/%s.%s*：互相竞争的扩展"
 
-#: src/check_mandirs.c:109 src/check_mandirs.c:563
+#: src/check_mandirs.c:110 src/check_mandirs.c:563
 #, c-format
 msgid "can't update index cache %s"
 msgstr "无法更新索引缓存 %s"
 
-#: src/check_mandirs.c:237
+#: src/check_mandirs.c:238
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
 msgstr "警告：%s：坏的符号链接或坏的 ROFF“.so”请求"
 
-#: src/check_mandirs.c:295
+#: src/check_mandirs.c:296
 #, c-format
 msgid "warning: %s: ignoring empty file"
 msgstr "警告：%s：忽略空文件"
 
-#: src/check_mandirs.c:299 src/straycats.c:280
+#: src/check_mandirs.c:300 src/straycats.c:280
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "警告：%s：用 whatis 解读 %s(%s) 失败"
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:881
+#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:884
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -287,7 +292,7 @@ msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "警告：对 %s 的 whatis 操作结果超过 %d 字节，正在截断。"
 msgstr[1] "警告：对 %s 的 whatis 操作结果超过 %d 字节，正在截断。"
 
-#: src/lexgrog.l:816 src/man.c:2246 src/man.c:2328 src/man.c:2425
+#: src/lexgrog.l:816 src/man.c:2248 src/man.c:2330 src/man.c:2427
 #: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
@@ -554,17 +559,12 @@ msgstr "当没有手册页时，可以用 %s 命令来寻求帮助。\n"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "忽略未知的预处理器 `%c'"
 
-#: src/man.c:1672 src/mandb.c:327
-#, c-format
-msgid "can't chown %s"
-msgstr "无法 chown %s"
-
-#: src/man.c:1684 src/mandb.c:224
+#: src/man.c:1684 src/mandb.c:226
 #, c-format
 msgid "can't chmod %s"
 msgstr "无法 chmod %s"
 
-#: src/man.c:1695 src/mandb.c:215
+#: src/man.c:1695 src/mandb.c:217
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "无法将 %s 改名为 %s"
@@ -595,28 +595,28 @@ msgstr "无法为 %s 创建临时 cat 文件"
 msgid "can't open temporary file %s"
 msgstr "无法打开临时文件 %s"
 
-#: src/man.c:1926 src/man.c:1963 src/man.c:3709
+#: src/man.c:1926 src/man.c:1964 src/man.c:3711
 #, fuzzy, c-format
 msgid "can't restore previous working directory"
 msgstr "无法为 %s 创建临时 cat 文件"
 
-#: src/man.c:1933 src/man.c:1968
+#: src/man.c:1934 src/man.c:1970
 #, c-format
 msgid "can't remove directory %s"
 msgstr "无法移除目录 %s"
 
-#: src/man.c:2088
+#: src/man.c:2090
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- 下一页: %s [ 查看 (return) | 跳过 (Ctrl-D) | 退出 (Ctrl-C) ]\n"
 
 #  need-proofread
-#: src/man.c:2136
+#: src/man.c:2138
 #, c-format
 msgid "can't chdir to %s"
 msgstr "无法进入到 %s 目录中"
 
-#: src/man.c:2370
+#: src/man.c:2372
 #, c-format
 msgid ""
 "\n"
@@ -625,23 +625,23 @@ msgstr ""
 "\n"
 "无法在 catman 模式下对 %s 写入"
 
-#: src/man.c:2451
+#: src/man.c:2453
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "无法把 %s 转换为 cat 名称"
 
 #  need-proofread
-#: src/man.c:3176
+#: src/man.c:3178
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s：依赖于 whatis 引用是已被废弃的做法\n"
 
-#: src/man.c:3326 src/man.c:4095
+#: src/man.c:3328 src/man.c:4133
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb 命令失败，退出状态代码为 %d"
 
-#: src/man.c:3531
+#: src/man.c:3533
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "内部错误：候选类型 %d 超出正常范围"
@@ -649,7 +649,7 @@ msgstr "内部错误：候选类型 %d 超出正常范围"
 #  I'm not sure this should be translated.  It comes from a less prompt string
 #  but seems to be only part of it.  (Ming)
 #  need-proofread
-#: src/man.c:4025
+#: src/man.c:4063
 msgid " Manual page "
 msgstr " Manual page "
 
@@ -735,37 +735,37 @@ msgstr "文件名"
 msgid "update just the entry for this filename"
 msgstr "仅更新该文件名对应的条目"
 
-#: src/mandb.c:208
+#: src/mandb.c:210
 #, c-format
 msgid "can't remove %s"
 msgstr "无法移除 %s"
 
-#: src/mandb.c:272
+#: src/mandb.c:274
 #, c-format
 msgid "can't write to %s"
 msgstr "无法对 %s 写入"
 
-#: src/mandb.c:277
+#: src/mandb.c:279
 #, c-format
 msgid "can't read from %s"
 msgstr "无法从 %s 读取"
 
-#: src/mandb.c:454
+#: src/mandb.c:455
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "正在处理 %s 下的手册页...\n"
 
-#: src/mandb.c:664 src/mandb.c:690
+#: src/mandb.c:667 src/mandb.c:693
 #, fuzzy, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "正在 %s 下查找流浪猫...\n"
 
-#: src/mandb.c:846
+#: src/mandb.c:849
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "警告：在 %s 中没有 MANDB_MAP 指令，使用您的手册路径设置"
 
-#: src/mandb.c:918
+#: src/mandb.c:921
 #, fuzzy, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -779,14 +779,14 @@ msgstr[1] ""
 #  I'm not sure this should be translated.  It comes from a less prompt string
 #  but seems to be only part of it.  (Ming)
 #  need-proofread
-#: src/mandb.c:923
+#: src/mandb.c:926
 #, fuzzy, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] " Manual page "
 msgstr[1] " Manual page "
 
-#: src/mandb.c:927
+#: src/mandb.c:930
 #, fuzzy, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -794,14 +794,14 @@ msgstr[0] "添加了 %d 只流浪猫。\n"
 msgstr[1] "添加了 %d 只流浪猫。\n"
 
 #  need-proofread
-#: src/mandb.c:932
+#: src/mandb.c:935
 #, fuzzy, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "删除了 %d 条旧数据库条目。\n"
 msgstr[1] "删除了 %d 条旧数据库条目。\n"
 
-#: src/mandb.c:950
+#: src/mandb.c:953
 #, c-format
 msgid "No databases created."
 msgstr "未创建任何数据库。"
