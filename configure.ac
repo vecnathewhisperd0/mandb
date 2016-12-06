@@ -25,6 +25,7 @@ AC_SUBST([roff_version])dnl
 # We have to be a bit naughty here and supply options.
 # The autoconf literature states that only features that can be separately
 # 'built' should use --enable and friends. Oh well...
+MAN_ARG_CACHE_OWNER
 MAN_ARG_SETUID
 MAN_ARG_UNDOC
 MAN_ARG_DEVICE

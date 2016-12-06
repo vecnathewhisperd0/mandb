@@ -1524,6 +1524,7 @@ AC_SUBST([am__untar])
 
 m4_include([m4/man-arg-automatic-create.m4])
 m4_include([m4/man-arg-automatic-update.m4])
+m4_include([m4/man-arg-cache-owner.m4])
 m4_include([m4/man-arg-cats.m4])
 m4_include([m4/man-arg-config-file.m4])
 m4_include([m4/man-arg-db.m4])

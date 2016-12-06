@@ -173,10 +173,11 @@ apropos$(EXEEXT): whatis$(EXEEXT)
 all-am: apropos$(EXEEXT)
 
 install-exec-hook:
-	-test -z "$(man_owner)" || \
-	chown $(man_owner) \
-		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
-		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
+	if [ "$(man_owner)" ] && [ "$(man_mode)" = 4755 ]; then \
+		chown $(man_owner) \
+			$(DESTDIR)$(bindir)/$(TRANS_MAN) \
+			$(DESTDIR)$(bindir)/$(TRANS_MANDB); \
+	fi
 	chmod $(man_mode) \
 		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
 		$(DESTDIR)$(bindir)/$(TRANS_MANDB)

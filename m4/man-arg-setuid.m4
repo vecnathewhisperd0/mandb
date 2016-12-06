@@ -1,31 +1,27 @@
-# man-arg-setuid.m4 serial 1
+# man-arg-setuid.m4 serial 2
 dnl MAN_ARG_SETUID
 dnl Add an --enable-setuid option.
 
 AC_DEFUN([MAN_ARG_SETUID],
 [
 AC_ARG_ENABLE([setuid],
-[AS_HELP_STRING([--enable-setuid[=ARG]], [install man setuid to user ARG [ARG=man]])
+[AS_HELP_STRING([--enable-setuid], [install man setuid])
 AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 	  [if test "$enableval" = "yes" 
 	   then
-		enableval=man
-	   fi
-	   if test "$enableval" = "no" 
+		if test -z "$man_owner"
+		then
+			AC_MSG_ERROR([--enable-setuid is incompatible with --disable-cache-owner])
+		fi
+		man_mode="4755"
+		AC_MSG_NOTICE([Man will be installed setuid $man_owner])
+	   elif test "$enableval" = "no" 
 	   then
-		man_owner=
 		man_mode="755"
 		AC_MSG_NOTICE([Man will not be installed setuid])
 	   else
-		man_owner=$enableval
-		man_mode="4755"
-		AC_MSG_NOTICE([Man will be installed setuid $enableval])
-	   	AC_DEFINE_UNQUOTED([SECURE_MAN_UID], ["$man_owner"],
-				   [Define as the setuid owner of man or undefine if not installing setuid.])
+		AC_MSG_ERROR([--enable-setuid=$enableval is no longer valid; consider --enable-cache-owner=$enableval --enable-setuid instead])
 	   fi],
-	  [man_owner=man
-	   man_mode="4755"
-	   AC_DEFINE_UNQUOTED([SECURE_MAN_UID], ["$man_owner"])])
-AC_SUBST([man_owner])
+	  [man_mode="4755"])
 AC_SUBST([man_mode])
 ])

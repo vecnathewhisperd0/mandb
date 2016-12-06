@@ -1678,6 +1678,7 @@ with_aix_soname
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
+enable_cache_owner
 enable_setuid
 enable_undoc
 with_device
@@ -2374,7 +2375,11 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-setuid=ARG     install man setuid to user ARG [ARG=man]
+  --enable-cache-owner=ARG
+                          make system-wide cache files be owned by user ARG
+                          [arg=man]
+  --disable-cache-owner   don't constrain ownership of system-wide cache files
+  --enable-setuid         install man setuid
   --disable-setuid        don't install man setuid
   --enable-undoc=COMMAND  suggest COMMAND for missing manual pages
   --enable-automatic-create
@@ -13782,23 +13787,21 @@ roff_version=`echo 2.7.5 | sed 's/-/\\-/g'`
 # The autoconf literature states that only features that can be separately
 # 'built' should use --enable and friends. Oh well...
 
-# Check whether --enable-setuid was given.
-if test "${enable_setuid+set}" = set; then :
-  enableval=$enable_setuid; if test "$enableval" = "yes"
+# Check whether --enable-cache-owner was given.
+if test "${enable_cache_owner+set}" = set; then :
+  enableval=$enable_cache_owner; if test "$enableval" = "yes"
 	   then
 		enableval=man
 	   fi
 	   if test "$enableval" = "no"
 	   then
 		man_owner=
-		man_mode="755"
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: Man will not be installed setuid" >&5
-$as_echo "$as_me: Man will not be installed setuid" >&6;}
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: System-wide cache files will have unconstrained ownership" >&5
+$as_echo "$as_me: System-wide cache files will have unconstrained ownership" >&6;}
 	   else
 		man_owner=$enableval
-		man_mode="4755"
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: Man will be installed setuid $enableval" >&5
-$as_echo "$as_me: Man will be installed setuid $enableval" >&6;}
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: System-wide cache files will be owned by $enableval" >&5
+$as_echo "$as_me: System-wide cache files will be owned by $enableval" >&6;}
 
 cat >>confdefs.h <<_ACEOF
 #define SECURE_MAN_UID "$man_owner"
@@ -13807,13 +13810,37 @@ _ACEOF
 	   fi
 else
   man_owner=man
-	   man_mode="4755"
 	   cat >>confdefs.h <<_ACEOF
 #define SECURE_MAN_UID "$man_owner"
 _ACEOF
 
 fi
 
+
+
+
+# Check whether --enable-setuid was given.
+if test "${enable_setuid+set}" = set; then :
+  enableval=$enable_setuid; if test "$enableval" = "yes"
+	   then
+		if test -z "$man_owner"
+		then
+			as_fn_error $? "--enable-setuid is incompatible with --disable-cache-owner" "$LINENO" 5
+		fi
+		man_mode="4755"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: Man will be installed setuid $man_owner" >&5
+$as_echo "$as_me: Man will be installed setuid $man_owner" >&6;}
+	   elif test "$enableval" = "no"
+	   then
+		man_mode="755"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: Man will not be installed setuid" >&5
+$as_echo "$as_me: Man will not be installed setuid" >&6;}
+	   else
+		as_fn_error $? "--enable-setuid=$enableval is no longer valid; consider --enable-cache-owner=$enableval --enable-setuid instead" "$LINENO" 5
+	   fi
+else
+  man_mode="4755"
+fi
 
 
 

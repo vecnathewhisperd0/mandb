@@ -97,6 +97,7 @@ subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/man-arg-automatic-create.m4 \
 	$(top_srcdir)/m4/man-arg-automatic-update.m4 \
+	$(top_srcdir)/m4/man-arg-cache-owner.m4 \
 	$(top_srcdir)/m4/man-arg-cats.m4 \
 	$(top_srcdir)/m4/man-arg-config-file.m4 \
 	$(top_srcdir)/m4/man-arg-db.m4 \
@@ -2209,10 +2210,11 @@ apropos$(EXEEXT): whatis$(EXEEXT)
 all-am: apropos$(EXEEXT)
 
 install-exec-hook:
-	-test -z "$(man_owner)" || \
-	chown $(man_owner) \
-		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
-		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
+	if [ "$(man_owner)" ] && [ "$(man_mode)" = 4755 ]; then \
+		chown $(man_owner) \
+			$(DESTDIR)$(bindir)/$(TRANS_MAN) \
+			$(DESTDIR)$(bindir)/$(TRANS_MANDB); \
+	fi
 	chmod $(man_mode) \
 		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
 		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
