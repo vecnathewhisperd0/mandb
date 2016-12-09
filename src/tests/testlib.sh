@@ -8,10 +8,20 @@ MAN_TEST_DISABLE_SYSTEM_CONFIG=1
 export MAN_TEST_DISABLE_SYSTEM_CONFIG
 
 init () {
-	tmpdir="tmp-${0##*/}"
-	mkdir -p "$tmpdir" || exit $?
+	# Create a temporary directory in /tmp or ./ ,
+	# put path to it into $tmpdir and $abstmpdir,
+	# remove it on exit.
+	{
+		tmpdir=$(mktemp -d) &&
+		abstmpdir="$tmpdir" &&
+		test -d "$tmpdir"
+	} || {
+		tmpdir="tmp-${0##*/}"
+		abstmpdir="$(pwd -P)/$tmpdir"
+		mkdir "$tmpdir"
+	} ||
+		exit $?
 	trap 'rm -rf "$tmpdir"' HUP INT QUIT TERM
-	abstmpdir="$(pwd -P)/$tmpdir"
 }
 
 run () {

@@ -29,12 +29,12 @@ write_page abc 1 "${tmpdir}/usr/share/man/${OVERRIDE}/man1/abc.1" \
 
 if [ -n "$OVERRIDE_DIR" ]; then
 cat >"$tmpdir/1.exp" <<EOF
-$(pwd -P)/${tmpdir}/usr/share/man/${OVERRIDE}/man1/abc.1
-$(pwd -P)/${tmpdir}/usr/share/man/man1/abc.1
+$abstmpdir/usr/share/man/${OVERRIDE}/man1/abc.1
+$abstmpdir/usr/share/man/man1/abc.1
 EOF
 else
 cat >"$tmpdir/1.exp" <<EOF
-$(pwd -P)/${tmpdir}/usr/share/man/man1/abc.1
+$abstmpdir/usr/share/man/man1/abc.1
 EOF
 fi
 

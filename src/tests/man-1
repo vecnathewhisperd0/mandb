@@ -21,8 +21,8 @@ mkdir -p "$tmpdir/usr/local/man/man1"
 ln -s ../../../share/man/man1/md5sum.textutils.1.gz \
 	"$tmpdir/usr/local/man/man1/md5sum.1.gz"
 cat >"$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/man/man1/md5sum.textutils.1.gz
-$(pwd -P)/$tmpdir/usr/share/man/man1/md5sum.1.gz
+$abstmpdir/usr/share/man/man1/md5sum.textutils.1.gz
+$abstmpdir/usr/share/man/man1/md5sum.1.gz
 EOF
 run $MAN -C "$tmpdir/manpath.config" -aw md5sum >"$tmpdir/1.out"
 expect_pass 'symlinks with matching names win' \

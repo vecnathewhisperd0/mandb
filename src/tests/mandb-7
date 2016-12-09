@@ -12,7 +12,6 @@ fake_config /usr/share/man
 mkdir -p "$tmpdir/usr/share/man"
 mkdir -p "$tmpdir/usr/dir/man"
 mkdir -p "$tmpdir/var/cache/man"
-abstmpdir="$(pwd -P)/$tmpdir"
 echo "MANDATORY_MANPATH	$abstmpdir/usr/share/man" > "$tmpdir/manpath.config"
 echo "MANDATORY_MANPATH	$abstmpdir/usr/dir/man" >> "$tmpdir/manpath.config"
 echo "MANDB_MAP $abstmpdir/usr/share/man $abstmpdir/var/cache/man" >> "$tmpdir/manpath.config"

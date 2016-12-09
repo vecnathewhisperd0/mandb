@@ -22,7 +22,7 @@ write_page "$page_name" 2 "$tmpdir/usr/share/man/man2/${page_name}.2.gz" \
         UTF-8 gz '' "$page_name \- $page_name() syscall manual page"
 
 cat >"$tmpdir/2.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/man/man2/${page_name}.2.gz
+$abstmpdir/usr/share/man/man2/${page_name}.2.gz
 EOF
 
 run $MAN -C "$tmpdir/manpath.config" -aw "$page_name".2 >"$tmpdir/2.out"
@@ -35,7 +35,7 @@ expect_pass '"man name.2" is the same as "man 2 name"' \
 )
 
 cat >"$tmpdir/2p.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/man/man2/${page_name}.2p.gz
+$abstmpdir/usr/share/man/man2/${page_name}.2p.gz
 EOF
 
 run $MAN -C "$tmpdir/manpath.config" -aw "$page_name".2p >"$tmpdir/2p.out"

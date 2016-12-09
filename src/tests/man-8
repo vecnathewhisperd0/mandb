@@ -17,7 +17,7 @@ cat >"$tmpdir/fake-program" <<EOF
 exec cat
 EOF
 chmod +x "$tmpdir/fake-program"
-PATH="$(pwd -P)/$tmpdir:$PATH"
+PATH="$abstmpdir:$PATH"
 export PATH
 
 cat >>"$tmpdir/manpath.config" <<EOF

@@ -37,7 +37,7 @@ expect_pass 'wildcards: -M option: without wildcards: check missing man page' \
 run $MAN -C "$tmpdir/manpath.config" \
     -aw -M "${Mpath}" manx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/man/man1/manx.1.gz
+$abstmpdir/usr/share/man/man1/manx.1.gz
 EOF
 expect_pass 'wildcards: -M option: without wildcards: check existing man page' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -54,7 +54,7 @@ expect_pass 'wildcards: -M option: with wildcards: check missing man page' \
 run $MAN -C "$tmpdir/manpath.config" \
     -aw -M "${Mpath}" manpathx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/prog/a/man/man1/manpathx.1.gz
+$abstmpdir/usr/share/prog/a/man/man1/manpathx.1.gz
 EOF
 expect_pass 'wildcards: -M option: with wildcards: check existing man page' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -64,7 +64,7 @@ Mpath="$tmpdir/usr/share/prog/[ab]/man"
 run $MAN -C "$tmpdir/manpath.config" \
     -aw -M "${Mpath}" whatisx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/prog/b/man/man1/whatisx.1.gz
+$abstmpdir/usr/share/prog/b/man/man1/whatisx.1.gz
 EOF
 expect_pass 'wildcards: -M option: with wildcards: check existing man page II' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -86,7 +86,7 @@ expect_pass 'wildcards: MANPATH: without wildcards: check missing man page' \
 run $MAN -C "$tmpdir/manpath.config" \
     -aw manx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/man/man1/manx.1.gz
+$abstmpdir/usr/share/man/man1/manx.1.gz
 EOF
 expect_pass 'wildcards: MANPATH: without wildcards: check existing man page' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -104,7 +104,7 @@ expect_pass 'wildcards: MANPATH: with wildcards: check missing man page' \
 run $MAN -C "$tmpdir/manpath.config" \
     -aw manpathx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/prog/a/man/man1/manpathx.1.gz
+$abstmpdir/usr/share/prog/a/man/man1/manpathx.1.gz
 EOF
 expect_pass 'wildcards: MANPATH: with wildcards: check existing man page' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -115,7 +115,7 @@ export MANPATH
 run $MAN -C "$tmpdir/manpath.config" \
     -aw whatisx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/prog/b/man/man1/whatisx.1.gz
+$abstmpdir/usr/share/prog/b/man/man1/whatisx.1.gz
 EOF
 expect_pass 'wildcards: MANPATH: with wildcards: check existing man page II' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -138,7 +138,7 @@ expect_pass 'wildcards: MANDATORY_MANPATH: without wildcards: check missing man 
 run $MAN -C "$tmpdir/manpath.config" \
     -aw manx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/man/man1/manx.1.gz
+$abstmpdir/usr/share/man/man1/manx.1.gz
 EOF
 expect_pass 'wildcards: MANDATORY_MANPATH: without wildcards: check existing man page' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -155,7 +155,7 @@ expect_pass 'wildcards: MANDATORY_MANPATH: with wildcards: check missing man pag
 run $MAN -C "$tmpdir/manpath.config" \
     -aw manpathx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/prog/a/man/man1/manpathx.1.gz
+$abstmpdir/usr/share/prog/a/man/man1/manpathx.1.gz
 EOF
 expect_pass 'wildcards: MANDATORY_MANPATH: with wildcards: check existing man page' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
@@ -165,7 +165,7 @@ fake_config "/usr/share/prog/[ab]/man"
 run $MAN -C "$tmpdir/manpath.config" \
     -aw whatisx > "$tmpdir/1.out"
 cat > "$tmpdir/1.exp" <<EOF
-$(pwd -P)/$tmpdir/usr/share/prog/b/man/man1/whatisx.1.gz
+$abstmpdir/usr/share/prog/b/man/man1/whatisx.1.gz
 EOF
 expect_pass 'wildcards: MANDATORY_MANPATH: with wildcards: check existing man page II' \
     'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
