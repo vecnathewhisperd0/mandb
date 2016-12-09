@@ -13,7 +13,7 @@ AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 		then
 			AC_MSG_ERROR([--enable-setuid is incompatible with --disable-cache-owner])
 		fi
-		man_mode="4755"
+		man_mode="6755"
 		AC_MSG_NOTICE([Man will be installed setuid $man_owner])
 	   elif test "$enableval" = "no" 
 	   then
@@ -26,7 +26,7 @@ AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 	   then
 		man_mode="755"
 	   else
-		man_mode="4755"
+		man_mode="6755"
 	   fi])
 AC_SUBST([man_mode])
 ])

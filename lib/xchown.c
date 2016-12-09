@@ -37,3 +37,13 @@ void xchown (const char *path, uid_t owner, gid_t group)
 	if (rc)
 		error (FATAL, 0, _("can't chown %s"), path);
 }
+
+#ifdef HAVE_LCHOWN
+void xlchown (const char *path, uid_t owner, gid_t group)
+{
+	int rc;
+	rc = lchown (path, owner, group);
+	if (rc)
+		error (FATAL, 0, _("can't chown %s"), path);
+}
+#endif

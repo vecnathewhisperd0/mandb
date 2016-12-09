@@ -322,27 +322,18 @@ static void finish_up (struct dbpaths *dbpaths)
 }
 
 #ifdef SECURE_MAN_UID
-/* chown() with error checking */
-static void check_chown (const char *path, uid_t owner, uid_t group)
-{
-	if (chown (path, owner, group) == -1) {
-		error (0, errno, _("can't chown %s"), path);
-		check_remove (path);
-	}
-}
-
 /* change the owner of global man databases */
-static void do_chown (struct dbpaths *dbpaths, uid_t uid)
+static void do_chown (struct dbpaths *dbpaths)
 {
 #  ifdef NDBM
 #    ifdef BERKELEY_DB
-	check_chown (dbpaths->dbfile, uid, -1);
+	chown_if_possible (dbpaths->dbfile);
 #    else /* not BERKELEY_DB */
-	check_chown (dbpaths->dirfile, uid, -1);
-	check_chown (dbpaths->pagfile, uid, -1);
+	chown_if_possible (dbpaths->dirfile);
+	chown_if_possible (dbpaths->pagfile);
 #    endif /* BERKELEY_DB */
 #  else /* not NDBM */
-	check_chown (dbpaths->xfile, uid, -1);
+	chown_if_possible (dbpaths->xfile);
 #  endif /* NDBM */
 }
 #endif /* SECURE_MAN_UID */
@@ -470,15 +461,12 @@ static int mandb (struct dbpaths *dbpaths,
 			if (cachedir_tag_file) {
 				fputs (CACHEDIR_TAG, cachedir_tag_file);
 				fclose (cachedir_tag_file);
-#ifdef SECURE_MAN_UID
-				if (global_manpath && euid == 0)
-					check_chown (cachedir_tag,
-						     man_owner->pw_uid, -1);
-#endif
-				check_chmod (cachedir_tag, DBMODE);
 			}
 		} else
 			close (fd);
+		if (global_manpath)
+			chown_if_possible (cachedir_tag);
+		check_chmod (cachedir_tag, DBMODE);
 		free (cachedir_tag);
 	}
 
@@ -613,13 +601,12 @@ static int process_manpath (const char *manpath, int global_manpath,
 		amount += ret;
 	}
 
-	if (!opt_test && amount) {
+	if (!opt_test && amount)
 		finish_up (dbpaths);
 #ifdef SECURE_MAN_UID
-		if (global_manpath && euid == 0)
-			do_chown (dbpaths, man_owner->pw_uid);
+	if (global_manpath)
+		do_chown (dbpaths);
 #endif /* SECURE_MAN_UID */
-	}
 
 out:
 	cleanup_sigsafe (dbpaths);

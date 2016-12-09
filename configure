@@ -13827,7 +13827,7 @@ if test "${enable_setuid+set}" = set; then :
 		then
 			as_fn_error $? "--enable-setuid is incompatible with --disable-cache-owner" "$LINENO" 5
 		fi
-		man_mode="4755"
+		man_mode="6755"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: Man will be installed setuid $man_owner" >&5
 $as_echo "$as_me: Man will be installed setuid $man_owner" >&6;}
 	   elif test "$enableval" = "no"
@@ -13843,7 +13843,7 @@ else
 	   then
 		man_mode="755"
 	   else
-		man_mode="4755"
+		man_mode="6755"
 	   fi
 fi
 
@@ -43571,12 +43571,13 @@ fi
 
 done
 
-for ac_func in posix_fadvise
+for ac_func in lchown posix_fadvise
 do :
-  ac_fn_c_check_func "$LINENO" "posix_fadvise" "ac_cv_func_posix_fadvise"
-if test "x$ac_cv_func_posix_fadvise" = xyes; then :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_POSIX_FADVISE 1
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
 _ACEOF
 
 fi

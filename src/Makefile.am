@@ -173,8 +173,8 @@ apropos$(EXEEXT): whatis$(EXEEXT)
 all-am: apropos$(EXEEXT)
 
 install-exec-hook:
-	if [ "$(man_owner)" ] && [ "$(man_mode)" = 4755 ]; then \
-		chown $(man_owner) \
+	if [ "$(man_owner)" ] && [ "$(man_mode)" = 6755 ]; then \
+		chown $(man_owner):$(man_owner) \
 			$(DESTDIR)$(bindir)/$(TRANS_MAN) \
 			$(DESTDIR)$(bindir)/$(TRANS_MANDB); \
 	fi

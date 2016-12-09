@@ -61,6 +61,9 @@
 uid_t ruid;				/* initial real user id */
 uid_t euid;				/* initial effective user id */
 uid_t uid;				/* current euid */
+gid_t rgid;				/* initial real group id */
+gid_t egid;				/* initial effective group id */
+gid_t gid;				/* current egid */
 
 static struct passwd *man_owner;
 
@@ -79,6 +82,9 @@ void init_security (void)
 	ruid = getuid ();
 	uid = euid = geteuid ();
 	debug ("ruid=%d, euid=%d\n", (int) ruid, (int) euid);
+	rgid = getgid ();
+	gid = egid = getegid ();
+	debug ("rgid=%d, egid=%d\n", (int) rgid, (int) egid);
 	priv_drop_count = 0;
 	drop_effective_privs ();
 }
@@ -119,6 +125,7 @@ void drop_effective_privs (void)
 		if (idpriv_temp_drop ())
 			gripe_set_euid ();
 		uid = ruid;
+		gid = rgid;
 	}
 
 	priv_drop_count++;
@@ -146,6 +153,7 @@ void regain_effective_privs (void)
 			gripe_set_euid ();
 
 		uid = euid;
+		gid = egid;
 	}
 #endif /* SECURE_MAN_UID */
 }

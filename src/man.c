@@ -1667,7 +1667,8 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 			status = 0;
 		} else {
 			struct passwd *man_owner = get_man_owner ();
-			status = chown (tmp_cat, man_owner->pw_uid, -1);
+			status = chown (tmp_cat, man_owner->pw_uid,
+					man_owner->pw_gid);
 			if (status)
 				error (0, errno, _("can't chown %s"), tmp_cat);
 		}

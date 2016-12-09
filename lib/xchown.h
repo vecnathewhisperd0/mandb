@@ -22,5 +22,8 @@
 #define _XCHOWN_H
 
 void xchown (const char *path, uid_t owner, gid_t group);
+#ifdef HAVE_LCHOWN
+void xlchown (const char *path, uid_t owner, gid_t group);
+#endif /* HAVE_LCHOWN */
 
 #endif /* _XCHOWN_H */

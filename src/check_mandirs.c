@@ -362,23 +362,48 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 }
 
 #ifdef SECURE_MAN_UID
-extern uid_t ruid;			/* initial real user id */
+extern uid_t uid;			/* current effective user id */
+extern gid_t gid;			/* current effective group id */
+
+/* Fix a path's ownership if possible and necessary. */
+void chown_if_possible (const char *path)
+{
+	struct stat st;
+	struct passwd *man_owner = get_man_owner ();
+
+	if (lstat (path, &st) != 0)
+		return;
+
+	if ((uid == 0 ||
+	     (uid == man_owner->pw_uid && st.st_uid == man_owner->pw_uid &&
+	      gid == man_owner->pw_gid)) &&
+	    (st.st_uid != man_owner->pw_uid ||
+	     st.st_gid != man_owner->pw_gid)) {
+		debug ("fixing ownership of %s\n", path);
+#ifdef HAVE_LCHOWN
+		xlchown (path, man_owner->pw_uid, man_owner->pw_gid);
+#else
+		xchown (path, man_owner->pw_uid, man_owner->pw_gid);
+#endif
+	}
+}
+#else /* !SECURE_MAN_UID */
+void chown_if_possible (const char *path)
+{
+}
 #endif /* SECURE_MAN_UID */
 
 /* create the catman hierarchy if it doesn't exist */
 static void mkcatdirs (const char *mandir, const char *catdir)
 {
 	char *manname, *catname;
-#ifdef SECURE_MAN_UID
-	struct passwd *man_owner = get_man_owner ();
-#endif
 
 	if (catdir) {
 		int oldmask = umask (022);
 		/* first the base catdir */
 		if (is_directory (catdir) != 1) {
 			regain_effective_privs ();
-			if (mkdir (catdir, S_ISGID | 0755) < 0) {
+			if (mkdir (catdir, 0755) < 0) {
 				if (!quiet)
 					error (0, 0,
 					       _("warning: cannot create catdir %s"),
@@ -387,10 +412,7 @@ static void mkcatdirs (const char *mandir, const char *catdir)
 				       catdir);
 			} else
 				debug ("created base catdir %s\n", catdir);
-#ifdef SECURE_MAN_UID
-			if (ruid == 0)
-				xchown (catdir, man_owner->pw_uid, 0);
-#endif /* SECURE_MAN_UID */
+			chown_if_possible (catdir);
 			drop_effective_privs ();
 		}
 		/* then the hierarchy */
@@ -405,18 +427,13 @@ static void mkcatdirs (const char *mandir, const char *catdir)
 				manname[strlen (manname) - 1] = '0' + j;
 				if ((is_directory (manname) == 1)
 				 && (is_directory (catname) != 1)) {
-					if (mkdir (catname,
-						   S_ISGID | 0755) < 0) {
+					if (mkdir (catname, 0755) < 0) {
 						if (!quiet)
 							error (0, 0, _("warning: cannot create catdir %s"), catname);
 						debug ("warning: cannot create catdir %s\n", catname);
 					} else
 						debug (" cat%d", j);
-#ifdef SECURE_MAN_UID
-					if (ruid == 0)
-						xchown (catname,
-							man_owner->pw_uid, 0);
-#endif /* SECURE_MAN_UID */
+					chown_if_possible (catname);
 				}
 			}
 			debug ("\n");
@@ -425,6 +442,45 @@ static void mkcatdirs (const char *mandir, const char *catdir)
 		free (catname);
 		free (manname);
 		umask (oldmask);
+	}
+}
+
+/* We used to install cat directories with the setgid bit set, but this
+ * wasn't very useful and introduces the ability to escalate privileges to
+ * that group:
+ *   http://www.halfdog.net/Security/2015/SetgidDirectoryPrivilegeEscalation/
+ */
+static void fix_permissions (const char *dir)
+{
+	struct stat st;
+
+	if (stat (dir, &st) == 0) {
+		if ((st.st_mode & S_ISGID) != 0) {
+			int status;
+
+			debug ("removing setgid bit from %s\n", dir);
+			status = chmod (dir, st.st_mode & ~S_ISGID);
+			if (status)
+				error (0, errno, _("can't chmod %s"), dir);
+		}
+
+		chown_if_possible (dir);
+	}
+}
+
+static void fix_permissions_tree (const char *catdir)
+{
+	if (is_directory (catdir) == 1) {
+		char *catname;
+		int i;
+
+		fix_permissions (catdir);
+		catname = xasprintf ("%s/cat1", catdir);
+		for (i = 1; i <= 9; ++i) {
+			catname[strlen (catname) - 1] = '0' + i;
+			fix_permissions (catname);
+		}
+		free (catname);
 	}
 }
 
@@ -442,6 +498,9 @@ static int testmandirs (const char *path, const char *catpath,
 	int created = 0;
 
 	debug ("Testing %s for new files\n", path);
+
+	if (catpath)
+		fix_permissions_tree (catpath);
 
 	dir = opendir (path);
 	if (!dir) {
