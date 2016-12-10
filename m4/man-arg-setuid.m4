@@ -1,4 +1,4 @@
-# man-arg-setuid.m4 serial 2
+# man-arg-setuid.m4 serial 3
 dnl MAN_ARG_SETUID
 dnl Add an --enable-setuid option.
 
@@ -22,6 +22,11 @@ AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 	   else
 		AC_MSG_ERROR([--enable-setuid=$enableval is no longer valid; consider --enable-cache-owner=$enableval --enable-setuid instead])
 	   fi],
-	  [man_mode="4755"])
+	  [if test -z "$man_owner"
+	   then
+		man_mode="755"
+	   else
+		man_mode="4755"
+	   fi])
 AC_SUBST([man_mode])
 ])
