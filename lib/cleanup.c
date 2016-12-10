@@ -234,12 +234,24 @@ push_cleanup (cleanup_fun fun, void *arg, int sigsafe)
 }
 
 
-/* Pop top cleanup function from the cleanup stack. */
+/* Remove topmost cleanup function from the cleanup stack that matches the
+ * given values.
+ */
 void
-pop_cleanup (void)
+pop_cleanup (cleanup_fun fun, void *arg)
 {
+  unsigned i, j;
+
   assert (tos > 0);
-  --tos;
+
+  for (i = tos; i > 0; --i) {
+    if (stack[i-1].fun == fun && stack[i-1].arg == arg) {
+      for (j = i; j < tos; ++j)
+        stack[j-1] = stack[j];
+      --tos;
+      break;
+    }
+  }
 
   if (tos == 0) untrap_abnormal_exits();
 }

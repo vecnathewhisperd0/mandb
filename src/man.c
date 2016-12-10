@@ -1807,7 +1807,7 @@ static int close_cat_stream (pipeline *cat_p, const char *cat_file,
 		status |= commit_tmp_cat (cat_file, tmp_cat_file,
 					  delete || status);
 		if (!debug_level)
-			pop_cleanup ();
+			pop_cleanup ((cleanup_fun) unlink, tmp_cat_file);
 	}
 	free (tmp_cat_file);
 	return status;
@@ -2019,7 +2019,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 
 	close (tmp_cat_fd);
 	commit_tmp_cat (cat_file, tmpcat, status);
-	pop_cleanup();
+	pop_cleanup ((cleanup_fun) unlink, tmpcat);
 	free (tmpcat);
 }
 

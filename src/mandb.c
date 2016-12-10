@@ -622,9 +622,9 @@ static int process_manpath (const char *manpath, int global_manpath,
 
 out:
 	cleanup_sigsafe (&dbpaths);
-	pop_cleanup ();
+	pop_cleanup (cleanup_sigsafe, &dbpaths);
 	cleanup (&dbpaths);
-	pop_cleanup ();
+	pop_cleanup (cleanup, &dbpaths);
 	free (database);
 	database = NULL;
 
