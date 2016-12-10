@@ -432,6 +432,7 @@ static void cleanup (void *arg)
 	free (dbpaths->xtmpfile);
 	dbpaths->xfile = dbpaths->xtmpfile = NULL;
 #endif /* NDBM */
+	free (dbpaths);
 }
 
 #define CACHEDIR_TAG \
@@ -560,7 +561,7 @@ static int process_manpath (const char *manpath, int global_manpath,
 	struct tried_catdirs_entry *tried;
 	struct stat st;
 	int run_mandb = 0;
-	struct dbpaths dbpaths;
+	struct dbpaths *dbpaths;
 	int amount = 0;
 
 	if (global_manpath) { 	/* system db */
@@ -600,11 +601,11 @@ static int process_manpath (const char *manpath, int global_manpath,
 		database = NULL;
 	}
 
-	memset (&dbpaths, 0, sizeof dbpaths);
-	push_cleanup (cleanup, &dbpaths, 0);
-	push_cleanup (cleanup_sigsafe, &dbpaths, 1);
+	dbpaths = XZALLOC (struct dbpaths);
+	push_cleanup (cleanup, dbpaths, 0);
+	push_cleanup (cleanup_sigsafe, dbpaths, 1);
 	if (run_mandb) {
-		int ret = mandb (&dbpaths, catpath, manpath, global_manpath);
+		int ret = mandb (dbpaths, catpath, manpath, global_manpath);
 		if (ret < 0) {
 			amount = ret;
 			goto out;
@@ -613,18 +614,18 @@ static int process_manpath (const char *manpath, int global_manpath,
 	}
 
 	if (!opt_test && amount) {
-		finish_up (&dbpaths);
+		finish_up (dbpaths);
 #ifdef SECURE_MAN_UID
 		if (global_manpath && euid == 0)
-			do_chown (&dbpaths, man_owner->pw_uid);
+			do_chown (dbpaths, man_owner->pw_uid);
 #endif /* SECURE_MAN_UID */
 	}
 
 out:
-	cleanup_sigsafe (&dbpaths);
-	pop_cleanup (cleanup_sigsafe, &dbpaths);
-	cleanup (&dbpaths);
-	pop_cleanup (cleanup, &dbpaths);
+	cleanup_sigsafe (dbpaths);
+	pop_cleanup (cleanup_sigsafe, dbpaths);
+	cleanup (dbpaths);
+	pop_cleanup (cleanup, dbpaths);
 	free (database);
 	database = NULL;
 
