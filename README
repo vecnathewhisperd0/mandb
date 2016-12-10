@@ -84,14 +84,18 @@ options is extracted from the man-db manual.  It is strongly recommended
 that relevant sections of the manual are read if any of these options are
 used.
 
---enable-setuid[=ARG]
-     By default, man will be installed as a setuid program to user man.  Use
-     this option with an argument to change the setuid owner.
+--enable-cache-owner[=ARG]
+     By default, system-wide cache files will be owned by user man.  Use this
+     option with an argument to change the cache file owner.
+
+--disable-cache-owner
+     Use this option to leave the ownership of system-wide cache files
+     unconstrained.  Users will be allowed to modify them.
 
 --disable-setuid
-     Use this option to install man as a non-setuid program and to change the
-     default cat and database files' access flags to allow users to modify
-     them.
+     By default, man will be installed as a setuid program to the user that
+     owns the system-wide cache files.  Use this option to install man as a
+     non-setuid program instead.
 
 --enable-mandirs=OS
      By default, man-db supports manual page directories in any of several

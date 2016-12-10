@@ -83,8 +83,8 @@ will be completely passive in its action, i.e. no index databases will be
 written to and no cat files are ever produced.
 .br
 To use the \*M utilities in this mode, supply the options
-\(oq\-\-disable\-setuid \-\-disable\-automatic\-update \-\-disable\-cats\(cq
-to
+\(oq\-\-disable\-cache\-owner \-\-disable\-setuid
+\-\-disable\-automatic\-update \-\-disable\-cats\(cq to
 .b configure ,
 or build \*M as in mode (1) and install the binaries without the setuid
 bit set.
@@ -102,7 +102,8 @@ Cat files are produced and stored in world writable cat directories and have
 world write access themselves.
 .br
 To use the \*M utilities in this mode, supply the options
-\(oq\-\-disable\-setuid \-\-disable\-automatic\-update\(cq to
+\(oq\-\-disable\-cache\-owner \-\-disable\-setuid
+\-\-disable\-automatic\-update\(cq to
 .b configure ,
 edit
 .i include/manconfig.h
@@ -131,7 +132,7 @@ the setuid installation and operation of
 is modified by supplying either of the following options to
 .b configure :
 .bu
-\-\-enable\-setuid=USER
+\-\-enable\-setuid
 .bu
 \-\-disable\-setuid
 .lp

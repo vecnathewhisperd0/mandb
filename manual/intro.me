@@ -259,16 +259,21 @@ Options that are specific to the \*M package are described below.
 MAN\-OPTIONS\-BEGIN
 \}
 .lp
-.ip \-\-enable\-setuid[=ARG]
+.ip \-\-enable\-cache\-owner[=ARG]
+By default, system-wide cache files will be owned by user man.
+Use this option with an argument to change the cache file owner.
+.ip \-\-disable\-cache\-owner
+Use this option to leave the ownership of system-wide cache files
+unconstrained.
+Users will be allowed to modify them.
+.ip \-\-disable\-setuid
 By default,
 .b man
-will be installed as a setuid program to user man.
-Use this option with an argument to change the setuid owner.
-.ip \-\-disable\-setuid
+will be installed as a setuid program to the user that owns the
+system-wide cache files.
 Use this option to install
 .b man
-as a non-setuid program and to change the default cat and database files'
-access flags to allow users to modify them.
+as a non-setuid program instead.
 .ip \-\-enable\-mandirs=OS
 By default, \*M supports manual page directories in any of several layouts
 used by free and proprietary versions of \*U.
