@@ -49,7 +49,10 @@ use warnings;
 use vars qw(@ISA);
 @ISA = qw(Locale::Po4a::Man);
 
+use version;
+
 use Locale::Po4a::Man;
+use Locale::Po4a::TransTractor;
 
 sub initialize {
     my $self = shift;
@@ -57,13 +60,17 @@ sub initialize {
 
     $self->{manext_shift_tbl_state} = 0;
     $self->{manext_shift_tbl_lines} = [];
-    $self->{manext_translate_tbl_table} = 0;
     $self->{manext_push_tbl_state} = 0;
     $self->{manext_push_tbl_line} = '';
 }
 
 sub shiftline {
     my $self = shift;
+
+    if (version->parse($Locale::Po4a::TransTractor::VERSION) >= '0.47') {
+        return $self->SUPER::shiftline();
+    }
+
     my ($line, $ref);
 
     if (@{$self->{manext_shift_tbl_lines}}) {
@@ -113,6 +120,12 @@ NEXT_LINE:
 
 sub pushline {
     my ($self, $line) = (shift, shift);
+
+    if (version->parse($Locale::Po4a::TransTractor::VERSION) >= '0.47') {
+        $self->SUPER::pushline($line);
+        return;
+    }
+
     if ($line =~ /^\.TS/) {
         $self->{manext_push_tbl_state} = 1;
     } elsif ($line =~ /^\.TE/) {
@@ -141,14 +154,31 @@ sub translate {
     my %options = @_;
 
     if (defined $type and $type eq 'tbl table') {
-        if ($str =~ /^T\{\n?(.*)T\}(\n?)$/s) {
-            my $inner = $1;
-            chomp $inner;
-            return "T{\n" .
-                   $self->SUPER::translate($inner, $ref, $type, %options) .
-                   "\nT}$2";
+        if (version->parse($Locale::Po4a::TransTractor::VERSION) < '0.47') {
+            if ($str =~ /^T\{\n?(.*)T\}(\n?)$/s) {
+                my $inner = $1;
+                chomp $inner;
+                return "T{\n" .
+                       $self->SUPER::translate($inner, $ref, $type, %options) .
+                       "\nT}$2";
+            }
+        } else {
+            my $postline = '';
+            if (chomp $str) {
+                $postline = "\n";
+            }
+            if ($str =~ /@/) {
+                return join('@', map {
+                    $self->translate($_, $ref, 'tbl table manext')
+                } split (/@/, $str, -1)) . $postline;
+            } else {
+                return $self->translate($str, $ref, 'tbl table manext') .
+                       $postline;
+            }
         }
+    }
 
+    if (defined $type and $type =~ /^tbl table(?: manext)$/) {
         # Do not translate horizontal rules.
         return $str if $str =~ /^[-_=]$/;
 
@@ -175,6 +205,8 @@ sub translate {
         # Do not translate symbols used in the --ascii translation table in
         # man(1).
         return $str if $str =~ /^[o'x]$/;
+
+        $type =~ s/ manext$//;
     }
 
     return $self->SUPER::translate($str, $ref, $type, %options);
