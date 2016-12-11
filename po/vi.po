@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.6-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2016-11-21 03:04+0000\n"
+"POT-Creation-Date: 2016-12-11 01:26+0000\n"
 "PO-Revision-Date: 2014-01-12 16:01+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
@@ -22,17 +22,17 @@ msgstr ""
 "X-Generator: Poedit 1.5.5\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: lib/security.c:74
+#: lib/security.c:77
 #, c-format
 msgid "can't set effective uid"
 msgstr "không thể đặt UID chịu tác động"
 
-#: lib/security.c:101 src/mandb.c:827
+#: lib/security.c:107 src/mandb.c:815
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "không có người dùng hướng dẫn \"setuid\" \"%s\""
 
-#: lib/xchown.c:38 src/man.c:1672 src/mandb.c:329
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1673
 #, c-format
 msgid "can't chown %s"
 msgstr "không thể \"chown\" (thay đổi quyền sở hữu) %s"
@@ -175,7 +175,7 @@ msgstr "không thể cập nhật %s"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "cảnh báo: \"%s/man%s/%s.%s*\": phần mở rộng cạnh tranh với nhau"
 
-#: src/check_mandirs.c:110 src/check_mandirs.c:563
+#: src/check_mandirs.c:110 src/check_mandirs.c:622
 #, c-format
 msgid "can't update index cache %s"
 msgstr "không thể cập nhật bộ nhớ tạm mục lục %s"
@@ -196,38 +196,43 @@ msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr ""
 "cảnh báo: %s: việc phân tách kiểu \"whatis\" (là gì?) cho \"%s(%s)\" bị lỗi"
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:884
+#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:872
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
 msgstr "không thể tìm kiếm trong danh mục %s"
 
-#: src/check_mandirs.c:384 src/check_mandirs.c:411
+#: src/check_mandirs.c:409 src/check_mandirs.c:432
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "cảnh báo: không thể tạo catdir (thư mục \"cat\") %s"
 
-#: src/check_mandirs.c:453 src/man.c:1886
+#: src/check_mandirs.c:464 src/man.c:1685 src/mandb.c:226
+#, c-format
+msgid "can't chmod %s"
+msgstr "không thể \"chmod\" (thay đổi chế độ đọc ghi) %s"
+
+#: src/check_mandirs.c:512 src/man.c:1887
 #, c-format
 msgid "can't change to directory %s"
 msgstr "không thể chuyển sang thư mục %s"
 
-#: src/check_mandirs.c:503
+#: src/check_mandirs.c:562
 #, c-format
 msgid "can't create index cache %s"
 msgstr "không thể tạo bộ nhớ tạm mục lục %s"
 
-#: src/check_mandirs.c:528
+#: src/check_mandirs.c:587
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr ""
 "Đang cập nhật bộ nhớ tạm mục lục cho đường dẫn \"%s/%s\". Vui lòng chờ..."
 
-#: src/check_mandirs.c:590 src/check_mandirs.c:650
+#: src/check_mandirs.c:649 src/check_mandirs.c:709
 msgid "done.\n"
 msgstr "hoàn tất.\n"
 
-#: src/check_mandirs.c:910
+#: src/check_mandirs.c:969
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Đang tẩy các mục tin cơ sở dữ liệu cũ trong %s...\n"
@@ -278,7 +283,7 @@ msgstr[0] ""
 "cảnh báo: thông tin \"whatis\" (là gì?) cho %s vượt quá %d byte nên đang cắt "
 "bớt nó."
 
-#: src/lexgrog.l:816 src/man.c:2248 src/man.c:2330 src/man.c:2427
+#: src/lexgrog.l:816 src/man.c:2249 src/man.c:2331 src/man.c:2428
 #: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
@@ -543,62 +548,57 @@ msgstr "Hãy xem \"%s\" để tìm trợ giúp khi trang hướng dẫn không s
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "đang bỏ qua bộ tiền xử lý trước không hiểu \"%c\""
 
-#: src/man.c:1684 src/mandb.c:226
-#, c-format
-msgid "can't chmod %s"
-msgstr "không thể \"chmod\" (thay đổi chế độ đọc ghi) %s"
-
-#: src/man.c:1695 src/mandb.c:217
+#: src/man.c:1696 src/mandb.c:217
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "không thể thay đổi tên %s thành %s"
 
-#: src/man.c:1712
+#: src/man.c:1713
 #, c-format
 msgid "can't set times on %s"
 msgstr "không thể đặt thời gian trên %s"
 
-#: src/man.c:1721
+#: src/man.c:1722
 #, c-format
 msgid "can't unlink %s"
 msgstr "không thể bỏ liên kết %s"
 
-#: src/man.c:1772
+#: src/man.c:1773
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "không thể tạo \"cat\" tạm cho %s"
 
-#: src/man.c:1884
+#: src/man.c:1885
 #, c-format
 msgid "can't create temporary directory"
 msgstr "không thể tạo thư mục tạm thời"
 
-#: src/man.c:1896
+#: src/man.c:1897
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "không thể mở tập tin tạm %s"
 
-#: src/man.c:1926 src/man.c:1964 src/man.c:3711
+#: src/man.c:1927 src/man.c:1965 src/man.c:3712
 #, fuzzy, c-format
 msgid "can't restore previous working directory"
 msgstr "không thể tạo thư mục tạm thời"
 
-#: src/man.c:1934 src/man.c:1970
+#: src/man.c:1935 src/man.c:1971
 #, c-format
 msgid "can't remove directory %s"
 msgstr "không thể gỡ bỏ thư mục %s"
 
-#: src/man.c:2090
+#: src/man.c:2091
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- kế: %s [ xem (enter) | nhảy qua (Ctrl-D) | thoát (Ctrl-C) ]\n"
 
-#: src/man.c:2138
+#: src/man.c:2139
 #, c-format
 msgid "can't chdir to %s"
 msgstr "không thể chdir (chuyển đổi thư mục) sang %s"
 
-#: src/man.c:2372
+#: src/man.c:2373
 #, c-format
 msgid ""
 "\n"
@@ -607,28 +607,28 @@ msgstr ""
 "\n"
 "không thể ghi vào %s trong chế độ \"catman\""
 
-#: src/man.c:2453
+#: src/man.c:2454
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Không thể chuyển đổi %s sang tên \"cat\""
 
-#: src/man.c:3178
+#: src/man.c:3179
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: nhờ các \"ref\" (tham chiếu) của lệnh \"whatis\" bị phản đối\n"
 
-#: src/man.c:3328 src/man.c:4133
+#: src/man.c:3329 src/man.c:4134
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr ""
 "lệnh \"mandb\" (cơ sở dữ liệu hướng dẫn) gặp lỗi với trạng thái thoát là %d"
 
-#: src/man.c:3533
+#: src/man.c:3534
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "lỗi nội bộ: kiểu ứng cử %d nằm ngoài phạm vi"
 
-#: src/man.c:4063
+#: src/man.c:4064
 msgid " Manual page "
 msgstr " Trang hướng dẫn "
 
@@ -726,48 +726,48 @@ msgstr "không thể ghi vào %s"
 msgid "can't read from %s"
 msgstr "không thể đọc từ %s"
 
-#: src/mandb.c:455
+#: src/mandb.c:447
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Đang xử lý các trang hướng dẫn dưới %s...\n"
 
-#: src/mandb.c:667 src/mandb.c:693
+#: src/mandb.c:655 src/mandb.c:681
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Đang gỡ bỏ các thư mục “cat” không dùng nữa %s...\n"
 
-#: src/mandb.c:849
+#: src/mandb.c:837
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "cảnh báo: không có chỉ thị \"MANDB_MAP\" trong “%s” nên sẽ dùng đường dẫn "
 "hướng dẫn của bạn."
 
-#: src/mandb.c:921
+#: src/mandb.c:909
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d thư mục con hướng dẫn chứa trang hướng dẫn mới hơn.\n"
 
-#: src/mandb.c:926
+#: src/mandb.c:914
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d trang hướng dẫn được thêm vào.\n"
 
-#: src/mandb.c:930
+#: src/mandb.c:918
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d trang \"cat\" thất lạc đã được thêm vào.\n"
 
-#: src/mandb.c:935
+#: src/mandb.c:923
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d mục tin cơ sở dữ liệu cũ bị tẩy.\n"
 
-#: src/mandb.c:953
+#: src/mandb.c:941
 #, c-format
 msgid "No databases created."
 msgstr "Chưa tạo cơ sở dữ liệu."

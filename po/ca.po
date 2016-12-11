@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.7.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2016-11-21 03:04+0000\n"
+"POT-Creation-Date: 2016-12-11 01:26+0000\n"
 "PO-Revision-Date: 2015-08-04 08:34+0200\n"
 "Last-Translator: Jordi Mallach <jordi@gnu.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
-#: lib/security.c:74
+#: lib/security.c:77
 #, c-format
 msgid "can't set effective uid"
 msgstr "no es pot establir l'uid efectiu"
 
-#: lib/security.c:101 src/mandb.c:827
+#: lib/security.c:107 src/mandb.c:815
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "l'usuari man setuid «%s» no existeix"
 
-#: lib/xchown.c:38 src/man.c:1672 src/mandb.c:329
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1673
 #, c-format
 msgid "can't chown %s"
 msgstr "no es pot fer «chown» a %s"
@@ -178,7 +178,7 @@ msgstr "no es pot actualitzar %s"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "avís: %s/man%s/%s.%s*: extensions en competència"
 
-#: src/check_mandirs.c:110 src/check_mandirs.c:563
+#: src/check_mandirs.c:110 src/check_mandirs.c:622
 #, c-format
 msgid "can't update index cache %s"
 msgstr "no es pot actualitzar la memòria cau d'índex %s"
@@ -199,39 +199,44 @@ msgstr "avís: %s: es descarta un fitxer buit"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "avís: %s: l'anàlisi de whatis per a %s(%s) ha fallat"
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:884
+#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:872
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
 msgstr "no es pot cercar el directori %s"
 
-#: src/check_mandirs.c:384 src/check_mandirs.c:411
+#: src/check_mandirs.c:409 src/check_mandirs.c:432
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "avís: no es pot crear el directori de cat %s"
 
-#: src/check_mandirs.c:453 src/man.c:1886
+#: src/check_mandirs.c:464 src/man.c:1685 src/mandb.c:226
+#, c-format
+msgid "can't chmod %s"
+msgstr "no es pot fer «chmod» a %s"
+
+#: src/check_mandirs.c:512 src/man.c:1887
 #, c-format
 msgid "can't change to directory %s"
 msgstr "no es pot canviar al directori %s"
 
-#: src/check_mandirs.c:503
+#: src/check_mandirs.c:562
 #, c-format
 msgid "can't create index cache %s"
 msgstr "no es pot crear la memòria cau d'índex %s"
 
 # S'està... Per/per a/de?  ivb
-#: src/check_mandirs.c:528
+#: src/check_mandirs.c:587
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "S'està actualitzant la memòria cau d'índex del camí «%s/%s». Espereu…"
 
-#: src/check_mandirs.c:590 src/check_mandirs.c:650
+#: src/check_mandirs.c:649 src/check_mandirs.c:709
 msgid "done.\n"
 msgstr "fet.\n"
 
 # S'estan...  ivb
-#: src/check_mandirs.c:910
+#: src/check_mandirs.c:969
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "S'estan purgant entrades antigues de la base de dades en %s…\n"
@@ -285,7 +290,7 @@ msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "avís: el whatis per a %s s'excedeix en %d octet, es truncarà."
 msgstr[1] "avís: el whatis per a %s s'excedeix en %d octets, es truncarà."
 
-#: src/lexgrog.l:816 src/man.c:2248 src/man.c:2330 src/man.c:2427
+#: src/lexgrog.l:816 src/man.c:2249 src/man.c:2331 src/man.c:2428
 #: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
@@ -556,12 +561,7 @@ msgstr ""
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "es descarta el preprocessador desconegut «%c»"
 
-#: src/man.c:1684 src/mandb.c:226
-#, c-format
-msgid "can't chmod %s"
-msgstr "no es pot fer «chmod» a %s"
-
-#: src/man.c:1695 src/mandb.c:217
+#: src/man.c:1696 src/mandb.c:217
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "no es pot reanomenar %s a %s"
@@ -569,53 +569,53 @@ msgstr "no es pot reanomenar %s a %s"
 # Segurament es referirà a l'{a,m,c}time; hores/dates?  ivb
 # I en eixe cas, què sugereixes? jm
 # Allò que s'use majoritàriament pel cas, només era per assegurar-me.  ivb
-#: src/man.c:1712
+#: src/man.c:1713
 #, c-format
 msgid "can't set times on %s"
 msgstr "no es poden establir les hores en %s"
 
-#: src/man.c:1721
+#: src/man.c:1722
 #, c-format
 msgid "can't unlink %s"
 msgstr "no es pot desenllaçar %s"
 
-#: src/man.c:1772
+#: src/man.c:1773
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "no es pot crear un fitxer cat temporal per a %s"
 
-#: src/man.c:1884
+#: src/man.c:1885
 #, c-format
 msgid "can't create temporary directory"
 msgstr "no es pot crear un directori temporal"
 
-#: src/man.c:1896
+#: src/man.c:1897
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "no es pot obrir el fitxer temporal %s"
 
-#: src/man.c:1926 src/man.c:1964 src/man.c:3711
+#: src/man.c:1927 src/man.c:1965 src/man.c:3712
 #, fuzzy, c-format
 msgid "can't restore previous working directory"
 msgstr "no es pot crear un directori temporal"
 
-#: src/man.c:1934 src/man.c:1970
+#: src/man.c:1935 src/man.c:1971
 #, c-format
 msgid "can't remove directory %s"
 msgstr "no es pot eliminar el directori %s"
 
-#: src/man.c:2090
+#: src/man.c:2091
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- següent: %s [ visualitza (retorn) | omet (Ctrl-D) | surt (Ctrl-C ]\n"
 
-#: src/man.c:2138
+#: src/man.c:2139
 #, c-format
 msgid "can't chdir to %s"
 msgstr "no es pot canviar de directori a %s"
 
-#: src/man.c:2372
+#: src/man.c:2373
 #, c-format
 msgid ""
 "\n"
@@ -624,29 +624,29 @@ msgstr ""
 "\n"
 "no es pot escriure a %s en el mode catman"
 
-#: src/man.c:2453
+#: src/man.c:2454
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "No es pot convertir %s a nom cat"
 
 # Lo de sempre, deprecated? jm
-#: src/man.c:3178
+#: src/man.c:3179
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: basar-se en referències whatis està desaconsellat\n"
 
-#: src/man.c:3328 src/man.c:4133
+#: src/man.c:3329 src/man.c:4134
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "l'ordre de mandb ha fallat amb l'estat d'eixida %d"
 
-#: src/man.c:3533
+#: src/man.c:3534
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 "s'ha produït un error intern: el candidat de tipus %d està fora de rang"
 
-#: src/man.c:4063
+#: src/man.c:4064
 msgid " Manual page "
 msgstr " Pàgina de manual "
 
@@ -745,53 +745,53 @@ msgid "can't read from %s"
 msgstr "no es pot llegir de %s"
 
 # Si es refereix a un directori, «sota».  ivb
-#: src/mandb.c:455
+#: src/mandb.c:447
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Processant pàgines de manual sota %s…\n"
 
 # S'estan...  ivb
-#: src/mandb.c:667 src/mandb.c:693
+#: src/mandb.c:655 src/mandb.c:681
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "S'està suprimint el directori de cats obsolet %s…\n"
 
 # s'està utilitzant/s'utilitza/s'utilitzarà  ivb
-#: src/mandb.c:849
+#: src/mandb.c:837
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "avís: no hi ha directives MANDB_MAP en %s, s'utilitzarà el vostre camí de man"
 
-#: src/mandb.c:921
+#: src/mandb.c:909
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d subdirectori de man contenia pàgines de manual més noves.\n"
 msgstr[1] "%d subdirectoris de man contenien pàgines de manual més noves.\n"
 
-#: src/mandb.c:926
+#: src/mandb.c:914
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "S'ha afegit %d pàgina de manual.\n"
 msgstr[1] "S'han afegit %d pàgines de manual.\n"
 
-#: src/mandb.c:930
+#: src/mandb.c:918
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "S'ha afegit %d cat orfe.\n"
 msgstr[1] "S'han afegit %d cats orfes.\n"
 
-#: src/mandb.c:935
+#: src/mandb.c:923
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "S'ha purgat %d entrada vella de la base de dades.\n"
 msgstr[1] "S'han purgat %d entrades velles de la base de dades.\n"
 
-#: src/mandb.c:953
+#: src/mandb.c:941
 #, c-format
 msgid "No databases created."
 msgstr "No s'ha creat cap base de dades."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.3.20\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2016-11-21 03:04+0000\n"
+"POT-Creation-Date: 2016-12-11 01:26+0000\n"
 "PO-Revision-Date: 2002-07-03 21:52+0200\n"
 "Last-Translator: David Martínez <ender@debian.org>\n"
 "Language-Team: debian-l10n-spanish@lists.debian.org\n"
@@ -15,17 +15,17 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: lib/security.c:74
+#: lib/security.c:77
 #, c-format
 msgid "can't set effective uid"
 msgstr "no se puede asignar el uid efectivo."
 
-#: lib/security.c:101 src/mandb.c:827
+#: lib/security.c:107 src/mandb.c:815
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "el usuario setuid a man \"%s\" no existe."
 
-#: lib/xchown.c:38 src/man.c:1672 src/mandb.c:329
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1673
 #, c-format
 msgid "can't chown %s"
 msgstr "no se puede realizar el chown %s."
@@ -169,7 +169,7 @@ msgstr "no se puede actualizar %s."
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "aviso: %s/man%s/%s.%s*: extensiones en conflicto."
 
-#: src/check_mandirs.c:110 src/check_mandirs.c:563
+#: src/check_mandirs.c:110 src/check_mandirs.c:622
 #, c-format
 msgid "can't update index cache %s"
 msgstr "no se puede actualizar el caché de índices %s."
@@ -189,37 +189,42 @@ msgstr "aviso: %s: ignorando fichero vacío."
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "aviso: %s: falló la exploración de whatis para %s(%s)."
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:884
+#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:872
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
 msgstr "no se puede buscar en el directorio %s."
 
-#: src/check_mandirs.c:384 src/check_mandirs.c:411
+#: src/check_mandirs.c:409 src/check_mandirs.c:432
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "aviso: no se pudo crear directorio para «cat» %s."
 
-#: src/check_mandirs.c:453 src/man.c:1886
+#: src/check_mandirs.c:464 src/man.c:1685 src/mandb.c:226
+#, c-format
+msgid "can't chmod %s"
+msgstr "no se puede realizar el chmod %s."
+
+#: src/check_mandirs.c:512 src/man.c:1887
 #, c-format
 msgid "can't change to directory %s"
 msgstr "no se puede entrar en el directorio %s."
 
-#: src/check_mandirs.c:503
+#: src/check_mandirs.c:562
 #, c-format
 msgid "can't create index cache %s"
 msgstr "no se puede crear el caché de índices %s."
 
-#: src/check_mandirs.c:528
+#: src/check_mandirs.c:587
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Actualizando el caché de índices para la ruta `%s/%s'. Aguarde..."
 
-#: src/check_mandirs.c:590 src/check_mandirs.c:650
+#: src/check_mandirs.c:649 src/check_mandirs.c:709
 msgid "done.\n"
 msgstr "listo.\n"
 
-#: src/check_mandirs.c:910
+#: src/check_mandirs.c:969
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Purgando entradas antiguas en la base de datos en %s...\n"
@@ -269,7 +274,7 @@ msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "aviso: whatis para %s excede de %d bytes, se truncará el exceso."
 msgstr[1] "aviso: whatis para %s excede de %d bytes, se truncará el exceso."
 
-#: src/lexgrog.l:816 src/man.c:2248 src/man.c:2330 src/man.c:2427
+#: src/lexgrog.l:816 src/man.c:2249 src/man.c:2331 src/man.c:2428
 #: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
@@ -531,63 +536,58 @@ msgstr ""
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "se ignora el preprocesador desconocido `%c'."
 
-#: src/man.c:1684 src/mandb.c:226
-#, c-format
-msgid "can't chmod %s"
-msgstr "no se puede realizar el chmod %s."
-
-#: src/man.c:1695 src/mandb.c:217
+#: src/man.c:1696 src/mandb.c:217
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "no se puede cambiar el nombre %s a %s."
 
-#: src/man.c:1712
+#: src/man.c:1713
 #, c-format
 msgid "can't set times on %s"
 msgstr "no se puede cambiar la fecha de %s."
 
-#: src/man.c:1721
+#: src/man.c:1722
 #, c-format
 msgid "can't unlink %s"
 msgstr "no se puede eliminar %s."
 
-#: src/man.c:1772
+#: src/man.c:1773
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "no se puede crear un nombre de fichero temporal."
 
-#: src/man.c:1884
+#: src/man.c:1885
 #, fuzzy, c-format
 msgid "can't create temporary directory"
 msgstr "no se puede crear un nombre de fichero temporal."
 
-#: src/man.c:1896
+#: src/man.c:1897
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "no se puede abrir el fichero de configuración de rutas de man %s."
 
-#: src/man.c:1926 src/man.c:1964 src/man.c:3711
+#: src/man.c:1927 src/man.c:1965 src/man.c:3712
 #, fuzzy, c-format
 msgid "can't restore previous working directory"
 msgstr "no se puede crear un nombre de fichero temporal."
 
-#: src/man.c:1934 src/man.c:1970
+#: src/man.c:1935 src/man.c:1971
 #, c-format
 msgid "can't remove directory %s"
 msgstr "no se puede borrar el directorio %s."
 
-#: src/man.c:2090
+#: src/man.c:2091
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- próxima: %s [ ver (return) | siguiente (Ctrl-D) | salir (Ctrl-C) ]\n"
 
-#: src/man.c:2138
+#: src/man.c:2139
 #, c-format
 msgid "can't chdir to %s"
 msgstr "no se puede cambiar al directorio %s."
 
-#: src/man.c:2372
+#: src/man.c:2373
 #, c-format
 msgid ""
 "\n"
@@ -596,27 +596,27 @@ msgstr ""
 "\n"
 "no se puede escribir en %s en modo catman."
 
-#: src/man.c:2453
+#: src/man.c:2454
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "No se puede convertir %s a un nombre de tipo cat."
 
-#: src/man.c:3178
+#: src/man.c:3179
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: depender de las referencias de whatis está en desuso.\n"
 
-#: src/man.c:3328 src/man.c:4133
+#: src/man.c:3329 src/man.c:4134
 #, fuzzy, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "la orden man falló con código de salida %d."
 
-#: src/man.c:3533
+#: src/man.c:3534
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 
-#: src/man.c:4063
+#: src/man.c:4064
 msgid " Manual page "
 msgstr "Página de manual "
 
@@ -714,24 +714,24 @@ msgstr "no se puede escribir en %s."
 msgid "can't read from %s"
 msgstr "no se puede crear %s."
 
-#: src/mandb.c:455
+#: src/mandb.c:447
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Procesando las páginas de manual bajo %s...\n"
 
-#: src/mandb.c:667 src/mandb.c:693
+#: src/mandb.c:655 src/mandb.c:681
 #, fuzzy, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Controlando si hay páginas cat sin fuentes bajo %s...\n"
 
 # manpath es algo específico, debe estar presente. nl
-#: src/mandb.c:849
+#: src/mandb.c:837
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "aviso: no hay directivas MANDB_MAP en %s, se utilizará su ruta man (manpath)"
 
-#: src/mandb.c:921
+#: src/mandb.c:909
 #, fuzzy, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -742,28 +742,28 @@ msgstr[1] ""
 "%d subdirectorios man tenían páginas de manual más recientes.\n"
 "Se añadieron %d páginas de manual.\n"
 
-#: src/mandb.c:926
+#: src/mandb.c:914
 #, fuzzy, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "Página de manual "
 msgstr[1] "Página de manual "
 
-#: src/mandb.c:930
+#: src/mandb.c:918
 #, fuzzy, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "Se añadieron %d «cats» sin fuentes.\n"
 msgstr[1] "Se añadieron %d «cats» sin fuentes.\n"
 
-#: src/mandb.c:935
+#: src/mandb.c:923
 #, fuzzy, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "Se han eliminado %d entradas antiguas en la base de datos.\n"
 msgstr[1] "Se han eliminado %d entradas antiguas en la base de datos.\n"
 
-#: src/mandb.c:953
+#: src/mandb.c:941
 #, c-format
 msgid "No databases created."
 msgstr ""

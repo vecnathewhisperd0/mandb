@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.7.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2016-11-21 03:04+0000\n"
+"POT-Creation-Date: 2016-12-11 01:26+0000\n"
 "PO-Revision-Date: 2015-07-28 21:52+0300\n"
 "Last-Translator: Lauri Nurmi <lanurmi@iki.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.3\n"
 
-#: lib/security.c:74
+#: lib/security.c:77
 #, c-format
 msgid "can't set effective uid"
 msgstr "voimassaolevaa UID:ta ei voi asettaa"
 
-#: lib/security.c:101 src/mandb.c:827
+#: lib/security.c:107 src/mandb.c:815
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr ""
 
-#: lib/xchown.c:38 src/man.c:1672 src/mandb.c:329
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1673
 #, c-format
 msgid "can't chown %s"
 msgstr ""
@@ -171,7 +171,7 @@ msgstr ""
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr ""
 
-#: src/check_mandirs.c:110 src/check_mandirs.c:563
+#: src/check_mandirs.c:110 src/check_mandirs.c:622
 #, c-format
 msgid "can't update index cache %s"
 msgstr ""
@@ -191,37 +191,42 @@ msgstr "varoitus: %s: ei huomioida tyhjää tiedostoa"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr ""
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:884
+#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:872
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
 msgstr ""
 
-#: src/check_mandirs.c:384 src/check_mandirs.c:411
+#: src/check_mandirs.c:409 src/check_mandirs.c:432
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr ""
 
-#: src/check_mandirs.c:453 src/man.c:1886
+#: src/check_mandirs.c:464 src/man.c:1685 src/mandb.c:226
+#, c-format
+msgid "can't chmod %s"
+msgstr ""
+
+#: src/check_mandirs.c:512 src/man.c:1887
 #, c-format
 msgid "can't change to directory %s"
 msgstr ""
 
-#: src/check_mandirs.c:503
+#: src/check_mandirs.c:562
 #, c-format
 msgid "can't create index cache %s"
 msgstr ""
 
-#: src/check_mandirs.c:528
+#: src/check_mandirs.c:587
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr ""
 
-#: src/check_mandirs.c:590 src/check_mandirs.c:650
+#: src/check_mandirs.c:649 src/check_mandirs.c:709
 msgid "done.\n"
 msgstr "valmis.\n"
 
-#: src/check_mandirs.c:910
+#: src/check_mandirs.c:969
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr ""
@@ -271,7 +276,7 @@ msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/lexgrog.l:816 src/man.c:2248 src/man.c:2330 src/man.c:2427
+#: src/lexgrog.l:816 src/man.c:2249 src/man.c:2331 src/man.c:2428
 #: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
@@ -530,89 +535,84 @@ msgstr ""
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ei huomioida tuntematonta esikäsittelintä \"%c\""
 
-#: src/man.c:1684 src/mandb.c:226
-#, c-format
-msgid "can't chmod %s"
-msgstr ""
-
-#: src/man.c:1695 src/mandb.c:217
+#: src/man.c:1696 src/mandb.c:217
 #, c-format
 msgid "can't rename %s to %s"
 msgstr ""
 
-#: src/man.c:1712
+#: src/man.c:1713
 #, c-format
 msgid "can't set times on %s"
 msgstr ""
 
-#: src/man.c:1721
+#: src/man.c:1722
 #, c-format
 msgid "can't unlink %s"
 msgstr ""
 
-#: src/man.c:1772
+#: src/man.c:1773
 #, fuzzy, c-format
 msgid "can't create temporary cat for %s"
 msgstr "varoitus: väliaikaistiedostoa %s ei voi luoda"
 
-#: src/man.c:1884
+#: src/man.c:1885
 #, fuzzy, c-format
 msgid "can't create temporary directory"
 msgstr "nykyistä hakemistoa ei voi määrittää"
 
-#: src/man.c:1896
+#: src/man.c:1897
 #, fuzzy, c-format
 msgid "can't open temporary file %s"
 msgstr "opastepolkujen asetustiedostoa %s ei voi avata"
 
-#: src/man.c:1926 src/man.c:1964 src/man.c:3711
+#: src/man.c:1927 src/man.c:1965 src/man.c:3712
 #, fuzzy, c-format
 msgid "can't restore previous working directory"
 msgstr "nykyistä hakemistoa ei voi määrittää"
 
-#: src/man.c:1934 src/man.c:1970
+#: src/man.c:1935 src/man.c:1971
 #, c-format
 msgid "can't remove directory %s"
 msgstr ""
 
-#: src/man.c:2090
+#: src/man.c:2091
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 
-#: src/man.c:2138
+#: src/man.c:2139
 #, c-format
 msgid "can't chdir to %s"
 msgstr ""
 
-#: src/man.c:2372
+#: src/man.c:2373
 #, c-format
 msgid ""
 "\n"
 "cannot write to %s in catman mode"
 msgstr ""
 
-#: src/man.c:2453
+#: src/man.c:2454
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr ""
 
-#: src/man.c:3178
+#: src/man.c:3179
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr ""
 
-#: src/man.c:3328 src/man.c:4133
+#: src/man.c:3329 src/man.c:4134
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb-komento epäonnistui paluuarvolla %d"
 
-#: src/man.c:3533
+#: src/man.c:3534
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 
-#: src/man.c:4063
+#: src/man.c:4064
 msgid " Manual page "
 msgstr " Opastesivu "
 
@@ -710,50 +710,50 @@ msgstr "tiedostoon %s ei voi kirjoittaa"
 msgid "can't read from %s"
 msgstr "tiedostosta %s ei voi lukea"
 
-#: src/mandb.c:455
+#: src/mandb.c:447
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Käsitellään opastesivuja hakemistossa %s...\n"
 
-#: src/mandb.c:667 src/mandb.c:693
+#: src/mandb.c:655 src/mandb.c:681
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Poistetaan vanhentunut cat-hakemisto %s...\n"
 
-#: src/mandb.c:849
+#: src/mandb.c:837
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 
-#: src/mandb.c:921
+#: src/mandb.c:909
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d man-alihakemisto sisälsi uudempia opastesivuja.\n"
 msgstr[1] "%d man-alihakemistoa sisälsi uudempia opastesivuja.\n"
 
-#: src/mandb.c:926
+#: src/mandb.c:914
 #, fuzzy, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] " Opastesivu "
 msgstr[1] " Opastesivu "
 
-#: src/mandb.c:930
+#: src/mandb.c:918
 #, fuzzy, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d jotain .. ööö.. kulkukissaa lisättiin.\n"
 msgstr[1] "%d jotain .. ööö.. kulkukissaa lisättiin.\n"
 
-#: src/mandb.c:935
+#: src/mandb.c:923
 #, fuzzy, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d vanhaa tietokantamerkintää poistettiin.\n"
 msgstr[1] "%d vanhaa tietokantamerkintää poistettiin.\n"
 
-#: src/mandb.c:953
+#: src/mandb.c:941
 #, c-format
 msgid "No databases created."
 msgstr "Tietokantoja ei luotu."

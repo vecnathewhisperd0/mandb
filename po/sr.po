@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.6.6-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2016-11-21 03:04+0000\n"
+"POT-Creation-Date: 2016-12-11 01:26+0000\n"
 "PO-Revision-Date: 2014-01-16 09:51+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: lib/security.c:74
+#: lib/security.c:77
 #, c-format
 msgid "can't set effective uid"
 msgstr "не могу да подесим стварни јиб"
 
-#: lib/security.c:101 src/mandb.c:827
+#: lib/security.c:107 src/mandb.c:815
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "подесииб ман корисник „%s“ не постоји"
 
-#: lib/xchown.c:38 src/man.c:1672 src/mandb.c:329
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1673
 #, c-format
 msgid "can't chown %s"
 msgstr "не могу да променим власника „%s“"
@@ -171,7 +171,7 @@ msgstr "не могу да ажурирам „%s“"
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "упозорење: %s/man%s/%s.%s*: конкурентна проширења"
 
-#: src/check_mandirs.c:110 src/check_mandirs.c:563
+#: src/check_mandirs.c:110 src/check_mandirs.c:622
 #, c-format
 msgid "can't update index cache %s"
 msgstr "не могу да ажурирам оставу индекса „%s“"
@@ -191,37 +191,42 @@ msgstr "упозорење: %s: занемарујем празну датоте
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "упозорење: %s: није успела обрада шта-је за %s(%s)"
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:448 src/mandb.c:884
+#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:872
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
 msgstr "не могу да претражим директоријум „%s“"
 
-#: src/check_mandirs.c:384 src/check_mandirs.c:411
+#: src/check_mandirs.c:409 src/check_mandirs.c:432
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "упозорење: не могу да направим катдир „%s“"
 
-#: src/check_mandirs.c:453 src/man.c:1886
+#: src/check_mandirs.c:464 src/man.c:1685 src/mandb.c:226
+#, c-format
+msgid "can't chmod %s"
+msgstr "не могу да променим режим „%s“"
+
+#: src/check_mandirs.c:512 src/man.c:1887
 #, c-format
 msgid "can't change to directory %s"
 msgstr "не могу да пређем у директоријум „%s“"
 
-#: src/check_mandirs.c:503
+#: src/check_mandirs.c:562
 #, c-format
 msgid "can't create index cache %s"
 msgstr "не могу да направим оставу индекса „%s“"
 
-#: src/check_mandirs.c:528
+#: src/check_mandirs.c:587
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Ажурирам оставу индекса за путању „%s/%s“. Сачекајте..."
 
-#: src/check_mandirs.c:590 src/check_mandirs.c:650
+#: src/check_mandirs.c:649 src/check_mandirs.c:709
 msgid "done.\n"
 msgstr "готово.\n"
 
-#: src/check_mandirs.c:910
+#: src/check_mandirs.c:969
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Избацујем старе уносе базе података у „%s“...\n"
@@ -272,7 +277,7 @@ msgstr[0] "упозорење: шта-је за „%s“ премашује %d �
 msgstr[1] "упозорење: шта-је за „%s“ премашује %d бајта, скраћујем."
 msgstr[2] "упозорење: шта-је за „%s“ премашује %d бајтова, скраћујем."
 
-#: src/lexgrog.l:816 src/man.c:2248 src/man.c:2330 src/man.c:2427
+#: src/lexgrog.l:816 src/man.c:2249 src/man.c:2331 src/man.c:2428
 #: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
@@ -536,64 +541,59 @@ msgstr "Погледајте „%s“ за помоћ када странице 
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "занемарујем неознати препроцесор „%c“"
 
-#: src/man.c:1684 src/mandb.c:226
-#, c-format
-msgid "can't chmod %s"
-msgstr "не могу да променим режим „%s“"
-
-#: src/man.c:1695 src/mandb.c:217
+#: src/man.c:1696 src/mandb.c:217
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "не могу да преименујем „%s“ у „%s“"
 
-#: src/man.c:1712
+#: src/man.c:1713
 #, c-format
 msgid "can't set times on %s"
 msgstr "не могу да подесим времена на „%s“"
 
-#: src/man.c:1721
+#: src/man.c:1722
 #, c-format
 msgid "can't unlink %s"
 msgstr "не могу да развежем „%s“"
 
-#: src/man.c:1772
+#: src/man.c:1773
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "не могу да направим привремени кат за „%s“"
 
-#: src/man.c:1884
+#: src/man.c:1885
 #, c-format
 msgid "can't create temporary directory"
 msgstr "не могу да направим привремени директоријум"
 
-#: src/man.c:1896
+#: src/man.c:1897
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "не могу да отворим привремену датотеку „%s“"
 
-#: src/man.c:1926 src/man.c:1964 src/man.c:3711
+#: src/man.c:1927 src/man.c:1965 src/man.c:3712
 #, fuzzy, c-format
 msgid "can't restore previous working directory"
 msgstr "не могу да направим привремени директоријум"
 
-#: src/man.c:1934 src/man.c:1970
+#: src/man.c:1935 src/man.c:1971
 #, c-format
 msgid "can't remove directory %s"
 msgstr "не могу да уклоним директоријум „%s“"
 
-#: src/man.c:2090
+#: src/man.c:2091
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Ман-- следеће: %s [ преглед (повратница) | прескочи (Ктрл-Д) | изађи (Ктрл-"
 "Ц) ]\n"
 
-#: src/man.c:2138
+#: src/man.c:2139
 #, c-format
 msgid "can't chdir to %s"
 msgstr "не могу да се пребацим у „%s“"
 
-#: src/man.c:2372
+#: src/man.c:2373
 #, c-format
 msgid ""
 "\n"
@@ -602,27 +602,27 @@ msgstr ""
 "\n"
 "не могу да пишем у „%s“ у катман режиму"
 
-#: src/man.c:2453
+#: src/man.c:2454
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Не могу да претворим „%s“ у кат назив"
 
-#: src/man.c:3178
+#: src/man.c:3179
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: ослањање на упуте шта-је је застарело\n"
 
-#: src/man.c:3328 src/man.c:4133
+#: src/man.c:3329 src/man.c:4134
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "наредба мандб није успела са излазним стањем „%d“"
 
-#: src/man.c:3533
+#: src/man.c:3534
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "унутрашња грешка: врста кандидата „%d“ је ван опсега"
 
-#: src/man.c:4063
+#: src/man.c:4064
 msgid " Manual page "
 msgstr " Страница упутства "
 
@@ -720,22 +720,22 @@ msgstr "не могу да пишем у „%s“"
 msgid "can't read from %s"
 msgstr "не могу да читам из „%s“"
 
-#: src/mandb.c:455
+#: src/mandb.c:447
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Обрађујем странице упутства под „%s“...\n"
 
-#: src/mandb.c:667 src/mandb.c:693
+#: src/mandb.c:655 src/mandb.c:681
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Уклањам застареле кат директоријуме „%s“...\n"
 
-#: src/mandb.c:849
+#: src/mandb.c:837
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "упозорење: нема МАНБП_МАП смерница у „%s“, користим вашу ман-путању"
 
-#: src/mandb.c:921
+#: src/mandb.c:909
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -743,7 +743,7 @@ msgstr[0] "%d ман подиректоријум је садржао новиј
 msgstr[1] "%d ман подиректоријума су садржала новије странице упутства.\n"
 msgstr[2] "%d ман подиректоријума је садржало новије странице упутства.\n"
 
-#: src/mandb.c:926
+#: src/mandb.c:914
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
@@ -751,7 +751,7 @@ msgstr[0] "%d страница упутства је додата.\n"
 msgstr[1] "%d странице упутства су додате.\n"
 msgstr[2] "%d страница упутства је додато.\n"
 
-#: src/mandb.c:930
+#: src/mandb.c:918
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -759,7 +759,7 @@ msgstr[0] "%d залутали кат је додат.\n"
 msgstr[1] "%d залутала ката су додата.\n"
 msgstr[2] "%d залуталих катова је додато.\n"
 
-#: src/mandb.c:935
+#: src/mandb.c:923
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
@@ -767,7 +767,7 @@ msgstr[0] "%d стари унос базе података је избачен.
 msgstr[1] "%d стара уноса базе података су избачена.\n"
 msgstr[2] "%d старих уноса базе података је избачено.\n"
 
-#: src/mandb.c:953
+#: src/mandb.c:941
 #, c-format
 msgid "No databases created."
 msgstr "Нису направљене базе података."
