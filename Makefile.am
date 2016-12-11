@@ -53,9 +53,12 @@ EXTRA_DIST += \
 	gnulib/m4/uintmax_t.m4 \
 	gnulib/m4/visibility.m4
 
+# Installing in --enable-setuid mode (the default) requires root; disable
+# this so that distcheck can be run as non-root.
 # The default for systemdtmpfilesdir is intentionally not prefix-sensitive,
 # but we need to adjust it in order for distcheck to pass.
 AM_DISTCHECK_CONFIGURE_FLAGS = \
+	--disable-setuid \
 	--with-systemdtmpfilesdir=\$${prefix}/lib/tmpfiles.d
 
 # We deliberately leave the configuration file in place on uninstall, since
