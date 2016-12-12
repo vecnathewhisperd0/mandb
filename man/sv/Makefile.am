@@ -19,7 +19,7 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-LINGUA = nl
+LINGUA = sv
 PO4A_LINGUA = yes
 
 EXTRA_DIST = translator.add
