@@ -449,6 +449,7 @@ static int mandb (struct dbpaths *dbpaths,
 	if (!STREQ (catpath, manpath)) {
 		char *cachedir_tag;
 		int fd;
+		int cachedir_tag_exists = 0;
 
 		cachedir_tag = xasprintf ("%s/CACHEDIR.TAG", catpath);
 		fd = open (cachedir_tag, O_RDONLY);
@@ -459,14 +460,19 @@ static int mandb (struct dbpaths *dbpaths,
 				check_remove (cachedir_tag);
 			cachedir_tag_file = fopen (cachedir_tag, "w");
 			if (cachedir_tag_file) {
+				cachedir_tag_exists = 1;
 				fputs (CACHEDIR_TAG, cachedir_tag_file);
 				fclose (cachedir_tag_file);
 			}
-		} else
+		} else {
+			cachedir_tag_exists = 1;
 			close (fd);
-		if (global_manpath)
-			chown_if_possible (cachedir_tag);
-		check_chmod (cachedir_tag, DBMODE);
+		}
+		if (cachedir_tag_exists) {
+			if (global_manpath)
+				chown_if_possible (cachedir_tag);
+			check_chmod (cachedir_tag, DBMODE);
+		}
 		free (cachedir_tag);
 	}
 
