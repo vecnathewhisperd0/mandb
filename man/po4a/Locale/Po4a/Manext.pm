@@ -209,6 +209,11 @@ sub translate {
         $type =~ s/ manext$//;
     }
 
+    if (not defined $type and $self->{type} eq 'TH') {
+        # Do not translate page names and other similar headings.
+        return $str if $str =~ /^%.*%$/ or $str =~ /^[A-Z]+$/;
+    }
+
     return $self->SUPER::translate($str, $ref, $type, %options);
 }
 
