@@ -1,149 +1,158 @@
-# man-db: translation to Brazilian Portuguese (pt_BR)
-# Copyright (C) 2002 Free Software Foundation, Inc.
+# Brazilian Portuguese translation for man-db
+# Copyright (C) 2016 Colin Watson (msgids)
+# Copyright (C) 2016 Free Software Foundation, Inc.
+# This file is distributed under the same license as the man-db package.
 # Alexandre Folle de Menezes <afmenez@terra.com.br>, 2003.
-#
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2016.
+# .
+# Nota:
+# - P√°gina cat (cat page) √© uma p√°gina de manual formatada para terminal do tipo vt100;
+# - P√°gina cat errante (stray cat page) √© uma p√°gina cat que n√£o possui uma p√°gina de manual parente no sistema (e.g.: apenas a p√°gina cat foi fornecida ou a p√°gina de manual foi removida ap√≥s a p√°gina cat ter sido criada
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.4.1\n"
+"Project-Id-Version: man-db 2.7.6.1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2016-12-12 12:10+0000\n"
-"PO-Revision-Date: 2003-02-22 18:45-0300\n"
-"Last-Translator: Alexandre Folle de Menezes <afmenez@terra.com.br>\n"
-"Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
+"PO-Revision-Date: 2016-12-12 15:31-0200\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
+"Language-Team: Brazilian Portuguese <ldpbr-translation@lists.sourceforge."
+"net>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Virtaal 1.0.0-beta1\n"
 
 #: lib/security.c:77
 #, c-format
 msgid "can't set effective uid"
-msgstr "impossÌvel setar o uid efetivo"
+msgstr "n√£o foi poss√≠vel definir o uid efetivo"
 
 #: lib/security.c:107 src/mandb.c:821
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
-msgstr "o usu·rio man setuid \"%s\" n„o existe"
+msgstr "o usu√°rio man setuid \"%s\" n√£o existe"
 
 #: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1673
 #, c-format
 msgid "can't chown %s"
-msgstr "impossÌvel fazer chown em %s"
+msgstr "n√£o foi poss√≠vel fazer chown em %s"
 
 #: lib/xregcomp.c:47
 #, c-format
 msgid "fatal: regex `%s': %s"
-msgstr "fatal: regex `%s': %s"
+msgstr "fatal: regex \"%s\": %s"
 
 #: libdb/db_delete.c:103
 #, c-format
 msgid "multi key %s does not exist"
-msgstr "a multi-chave %s n„o existe"
+msgstr "a multichave %s n√£o existe"
 
 #: libdb/db_lookup.c:72
 #, c-format
 msgid "can't lock index cache %s"
-msgstr "impossÌvel travar o cache de Ìndice %s"
+msgstr "n√£o foi poss√≠vel travar o cache de √≠ndice %s"
 
 #: libdb/db_lookup.c:79
 #, c-format
 msgid "index cache %s corrupt"
-msgstr "o cache de Ìndice %s est· corrompido"
+msgstr "o cache de √≠ndice %s est√° corrompido"
 
 #: libdb/db_lookup.c:85
 #, c-format
 msgid "cannot replace key %s"
-msgstr "impossÌvel substituir a chave %s"
+msgstr "n√£o foi poss√≠vel substituir a chave %s"
 
 #: libdb/db_lookup.c:182 libdb/db_lookup.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
-msgstr[0] "apenas %d campos no conte˙do"
-msgstr[1] "apenas %d campos no conte˙do"
+msgstr[0] "apenas %d campo no conte√∫do"
+msgstr[1] "apenas %d campos no conte√∫do"
 
 #: libdb/db_lookup.c:344
 #, c-format
 msgid "bad fetch on multi key %s"
-msgstr "busca ruim na multi-chave %s"
+msgstr "busca ruim na multichave %s"
 
 #: libdb/db_lookup.c:417 src/whatis.c:741
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
-msgstr "Banco de Dados %s corrompido; refazer com mandb --create"
+msgstr "Banco de dados %s corrompido; reconstrua-o com mandb --create"
 
 #: libdb/db_ver.c:53
 #, c-format
 msgid "warning: %s has no version identifier\n"
-msgstr "aviso: %s n„o tem identificador de vers„o\n"
+msgstr "aviso: %s n√£o possui identificador de vers√£o\n"
 
 #: libdb/db_ver.c:56
 #, c-format
 msgid "warning: %s is version %s, expecting %s\n"
-msgstr "aviso: %s È vers„o %s, esperava-se %s\n"
+msgstr "aviso: %s √© vers√£o %s, esperava-se %s\n"
 
 #: libdb/db_ver.c:78
 #, c-format
 msgid "fatal: unable to insert version identifier into %s"
-msgstr "fatal: incapaz de inserir o identificador de vers„o em %s"
+msgstr "fatal: n√£o foi poss√≠vel de inserir o identificador de vers√£o em %s"
 
 #: src/accessdb.c:59
 msgid "[MAN DATABASE]"
-msgstr ""
+msgstr "[BANDO-DE-DADOS MAN]"
 
 #: src/accessdb.c:60
 #, c-format
 msgid "The man database defaults to %s%s."
-msgstr ""
+msgstr "O banco de dados man tem como padr√£o %s%s."
 
 #: src/accessdb.c:63 src/catman.c:98 src/globbing_test.c:58
 #: src/lexgrog_test.c:68 src/man.c:280 src/manconv_main.c:94 src/mandb.c:108
 #: src/manpath.c:65 src/whatis.c:122 src/zsoelim_main.c:66
 msgid "emit debugging messages"
-msgstr ""
+msgstr "emite mensagens de depura√ß√£o"
 
 #: src/accessdb.c:130
 #, c-format
 msgid "can't open %s for reading"
-msgstr "impossÌvel abrir %s para leitura"
+msgstr "n√£o foi poss√≠vel abrir %s para leitura"
 
 #: src/catman.c:95
 msgid "[SECTION...]"
-msgstr ""
+msgstr "[SE√á√ÉO...]"
 
 #: src/catman.c:99 src/man.c:301 src/whatis.c:132
 msgid "PATH"
-msgstr ""
+msgstr "CAMINHO"
 
 #: src/catman.c:99 src/man.c:301 src/whatis.c:132
 msgid "set search path for manual pages to PATH"
-msgstr ""
+msgstr "define o caminho de pesquisa por p√°ginas de manual com CAMINHO"
 
 #: src/catman.c:100 src/man.c:279 src/mandb.c:116 src/manpath.c:67
 #: src/whatis.c:134
 msgid "FILE"
-msgstr ""
+msgstr "ARQUIVO"
 
 #: src/catman.c:100 src/man.c:279 src/mandb.c:116 src/manpath.c:67
 #: src/whatis.c:134
-#, fuzzy
 msgid "use this user configuration file"
-msgstr "impossÌvel abrir o arquivo de configuraÁ„o do manpath %s"
+msgstr "usa esse arquivo de configura√ß√£o de usu√°rio"
 
 #: src/catman.c:193
 #, c-format
 msgid "man command failed with exit status %d"
-msgstr "o comando man falhou com estado de saÌda %d"
+msgstr "o comando man falhou com estado de sa√≠da %d"
 
 #: src/catman.c:232
 #, c-format
 msgid "cannot read database %s"
-msgstr "impossÌvel ler o banco de dados %s"
+msgstr "n√£o foi poss√≠vel ler o banco de dados %s"
 
 #: src/catman.c:275
 #, c-format
 msgid "NULL content for key: %s"
-msgstr "Conte˙do NULL para chave: %s"
+msgstr "conte√∫do NULL para a chave: %s"
 
 #: src/catman.c:290
 #, c-format
@@ -152,32 +161,32 @@ msgid ""
 "Updating cat files for section %s of man hierarchy %s\n"
 msgstr ""
 "\n"
-"Atualizando arquivos cat para seÁ„o %s da hierarquia man %s\n"
+"Atualizando arquivos cat para se√ß√£o %s da hierarquia man %s\n"
 
 #: src/catman.c:344
 #, c-format
 msgid "cannot write within %s"
-msgstr "impossÌvel escrever dentro de %s"
+msgstr "n√£o foi poss√≠vel escrever dentro de %s"
 
 #: src/catman.c:421
 #, c-format
 msgid "unable to update %s"
-msgstr "incapaz de atualizar %s"
+msgstr "n√£o foi poss√≠vel de atualizar %s"
 
 #: src/check_mandirs.c:96
 #, c-format
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
-msgstr "aviso: %s/man%s/%s.%s*: extensıes conflitantes"
+msgstr "aviso: %s/man%s/%s.%s*: extens√µes conflitantes"
 
 #: src/check_mandirs.c:110 src/check_mandirs.c:622
 #, c-format
 msgid "can't update index cache %s"
-msgstr "impossÌvel atualizar cache de Ìndice %s"
+msgstr "n√£o foi poss√≠vel atualizar cache de √≠ndice %s"
 
 #: src/check_mandirs.c:238
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
-msgstr "aviso: %s: link simbÛlico ruim ou requisiÁ„o `.so' ROFF"
+msgstr "aviso: %s: link simb√≥lico ruim ou requisi√ß√£o \".so\" ROFF"
 
 #: src/check_mandirs.c:296
 #, c-format
@@ -187,38 +196,38 @@ msgstr "aviso: %s: ignorando arquivo vazio"
 #: src/check_mandirs.c:300 src/straycats.c:280
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
-msgstr "aviso: %s: exame whatis para %s(%s) falhou"
+msgstr "aviso: %s: an√°lise por whatis para %s(%s) falhou"
 
 #: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:878
 #: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
-msgstr "impossÌvel buscar no diretÛrio %s"
+msgstr "n√£o foi poss√≠vel pesquisar no diret√≥rio %s"
 
 #: src/check_mandirs.c:409 src/check_mandirs.c:432
 #, c-format
 msgid "warning: cannot create catdir %s"
-msgstr "aviso: impossÌvel criar o catdir %s"
+msgstr "aviso: n√£o foi poss√≠vel criar o catdir %s"
 
 #: src/check_mandirs.c:464 src/man.c:1685 src/mandb.c:226
 #, c-format
 msgid "can't chmod %s"
-msgstr "impossÌvel fazer chmod em %s"
+msgstr "n√£o foi poss√≠vel fazer chmod em %s"
 
 #: src/check_mandirs.c:512 src/man.c:1887
 #, c-format
 msgid "can't change to directory %s"
-msgstr "impossÌvel mudar para o diretÛrio %s"
+msgstr "n√£o foi poss√≠vel mudar para o diret√≥rio %s"
 
 #: src/check_mandirs.c:562
 #, c-format
 msgid "can't create index cache %s"
-msgstr "impossÌvel criar cache de Ìndice %s"
+msgstr "n√£o foi poss√≠vel criar cache de √≠ndice %s"
 
 #: src/check_mandirs.c:587
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
-msgstr "Atualizando o cache de Ìndice para o caminho `%s/%s'. Aguarde..."
+msgstr "Atualizando o cache de √≠ndice para o caminho \"%s/%s\". Aguarde..."
 
 #: src/check_mandirs.c:649 src/check_mandirs.c:709
 msgid "done.\n"
@@ -227,51 +236,51 @@ msgstr "feito.\n"
 #: src/check_mandirs.c:969
 #, c-format
 msgid "Purging old database entries in %s...\n"
-msgstr "Descartando entradas antigas do banco de dados em %s...\n"
+msgstr "Descartando entradas antigas de banco de dados em %s...\n"
 
 #: src/descriptions_store.c:47
 #, c-format
 msgid "warning: failed to store entry for %s(%s)"
-msgstr "aviso: falhou ao armazenar entradas para %s(%s)"
+msgstr "aviso: falha ao armazenar entradas para %s(%s)"
 
 #: src/filenames.c:48 src/straycats.c:123 src/straycats.c:152
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
-msgstr "aviso: %s: ignorando nome de arquivo inv·lido"
+msgstr "aviso: %s: ignorando nome de arquivo inv√°lido"
 
 #: src/globbing_test.c:55
 msgid "PATH SECTION NAME"
-msgstr ""
+msgstr "CAMINHO SE√á√ÉO NOME"
 
 #: src/globbing_test.c:59 src/man.c:304
 msgid "EXTENSION"
-msgstr ""
+msgstr "EXTENS√ÉO"
 
 #: src/globbing_test.c:59 src/man.c:305
 msgid "limit search to extension type EXTENSION"
-msgstr ""
+msgstr "limita a pesquisa ao tipo de extens√£o EXTENS√ÉO"
 
 #: src/globbing_test.c:60 src/man.c:306
 msgid "look for pages case-insensitively (default)"
-msgstr ""
+msgstr "procura por p√°ginas sem diferenciar mai√∫sculo de min√∫sculo (padr√£o)"
 
 #: src/globbing_test.c:61 src/man.c:307
 msgid "look for pages case-sensitively"
-msgstr ""
+msgstr "procura por p√°ginas diferenciando mai√∫sculo de min√∫sculo"
 
 #: src/globbing_test.c:62
 msgid "interpret page name as a regex"
-msgstr ""
+msgstr "interpreta o nome da p√°ginas como uma express√£o regular"
 
 #: src/globbing_test.c:63
 msgid "the page name contains wildcards"
-msgstr ""
+msgstr "o nome da p√°gina cont√©m caracteres curingas"
 
 #: src/lexgrog.l:665
-#, fuzzy, c-format
+#, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
-msgstr[0] "aviso: whatis para %s excede %d bytes, truncando."
+msgstr[0] "aviso: whatis para %s excede %d byte, truncando."
 msgstr[1] "aviso: whatis para %s excede %d bytes, truncando."
 
 #: src/lexgrog.l:816 src/man.c:2249 src/man.c:2331 src/man.c:2428
@@ -279,186 +288,187 @@ msgstr[1] "aviso: whatis para %s excede %d bytes, truncando."
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
 msgid "can't open %s"
-msgstr "impossÌvel abrir %s"
+msgstr "n√£o foi poss√≠vel abrir %s"
 
 #: src/lexgrog_test.c:64 src/zsoelim_main.c:63
 msgid "FILE..."
-msgstr ""
+msgstr "ARQUIVO..."
 
 #: src/lexgrog_test.c:65
 msgid "The defaults are --man and --whatis."
-msgstr ""
+msgstr "Os padr√µes s√£o --man e --whatis."
 
 #: src/lexgrog_test.c:69
 msgid "parse as man page"
-msgstr ""
+msgstr "analisa como uma p√°gina man"
 
 #: src/lexgrog_test.c:70
 msgid "parse as cat page"
-msgstr ""
+msgstr "analisa como uma p√°gina cat"
 
 #: src/lexgrog_test.c:71
 msgid "show whatis information"
-msgstr ""
+msgstr "mostra informa√ß√£o whatis"
 
 #: src/lexgrog_test.c:72
 msgid "show guessed series of preprocessing filters"
-msgstr ""
+msgstr "mostra s√©ries adivinhadas de filtros de pr√©-processamento"
 
 #: src/lexgrog_test.c:73 src/man.c:296 src/man.c:321
 msgid "ENCODING"
-msgstr ""
+msgstr "CODIFICA√á√ÉO"
 
 #: src/lexgrog_test.c:73 src/man.c:321
 msgid "use selected output encoding"
-msgstr ""
+msgstr "usa a codifica√ß√£o de sa√≠da selecionada"
 
 #: src/lexgrog_test.c:117 src/man.c:548 src/man.c:557
-#, fuzzy, c-format
+#, c-format
 msgid "%s: incompatible options"
-msgstr ": opÁıes incompatÌveis"
+msgstr "%s: op√ß√µes incompat√≠veis"
 
 #: src/man.c:165
 #, c-format
 msgid "command exited with status %d: %s"
-msgstr "o comando encerrou com estado %d: %s"
+msgstr "o comando saiu com status %d: %s"
 
 #: src/man.c:263
 msgid "[SECTION] PAGE..."
-msgstr ""
+msgstr "[SE√á√ÉO] P√ÅGINA..."
 
 #: src/man.c:281
 msgid "reset all options to their default values"
-msgstr ""
+msgstr "redefine todas op√ß√µes para seus valores padr√£o"
 
 #: src/man.c:282
 msgid "WARNINGS"
-msgstr ""
+msgstr "AVISOS"
 
 #: src/man.c:283
 msgid "enable warnings from groff"
-msgstr ""
+msgstr "habilita avisos do groff"
 
 #: src/man.c:285
 msgid "Main modes of operation:"
-msgstr ""
+msgstr "Modos principais de opera√ß√£o:"
 
 #: src/man.c:286
 msgid "equivalent to whatis"
-msgstr ""
+msgstr "equivalente a whatis"
 
 #: src/man.c:287
 msgid "equivalent to apropos"
-msgstr ""
+msgstr "equivalente a apropos"
 
 #: src/man.c:288
 msgid "search for text in all pages"
-msgstr ""
+msgstr "pesquisa pelo texto em todas as p√°ginas"
 
 #: src/man.c:289
 msgid "print physical location of man page(s)"
-msgstr ""
+msgstr "emite localiza√ß√£o f√≠sica da(s) p√°gina(s) man"
 
 #: src/man.c:292
 msgid "print physical location of cat file(s)"
-msgstr ""
+msgstr "emite localiza√ß√£o f√≠sica do(s) arquivo(s) cat"
 
 #: src/man.c:294
 msgid "interpret PAGE argument(s) as local filename(s)"
-msgstr ""
+msgstr "interpreta argumento(s) P√ÅGINA como nome(s) de arquivo(s) local(is)"
 
 #: src/man.c:295
 msgid "used by catman to reformat out of date cat pages"
-msgstr ""
+msgstr "usado por catman para reformatar p√°ginas cat desatualizadas"
 
 #: src/man.c:296
 msgid "output source page encoded in ENCODING"
-msgstr ""
+msgstr "emite a p√°gina fonte codificada em CODIFICA√á√ÉO"
 
 #: src/man.c:298
-#, fuzzy
 msgid "Finding manual pages:"
-msgstr " Pagina de manual "
+msgstr "Localizando as p√°ginas de manual:"
 
 #: src/man.c:299 src/whatis.c:133
 msgid "LOCALE"
-msgstr ""
+msgstr "LOCALIDADE"
 
 #: src/man.c:299
 msgid "define the locale for this particular man search"
-msgstr ""
+msgstr "define a localidade para esta pesquisa de man em particular"
 
 #: src/man.c:300 src/manpath.c:68 src/whatis.c:131
 msgid "SYSTEM"
-msgstr ""
+msgstr "SISTEMA"
 
 #: src/man.c:300 src/manpath.c:68 src/whatis.c:131
 msgid "use manual pages from other systems"
-msgstr ""
+msgstr "usa p√°ginas de manual para outros sistemas"
 
 #: src/man.c:302 src/whatis.c:129
 msgid "LIST"
-msgstr ""
+msgstr "LISTA"
 
 #: src/man.c:302
 msgid "use colon separated section list"
-msgstr ""
+msgstr "usa lista de se√ß√µes separada por dois-pontos"
 
 #: src/man.c:308
 msgid "show all pages matching regex"
-msgstr ""
+msgstr "mostra todas as p√°ginas que coincidem com a express√£o regular"
 
 #: src/man.c:309
 msgid "show all pages matching wildcard"
-msgstr ""
+msgstr "mostra todas as p√°ginas que coincidem com o caractere curinga"
 
 #: src/man.c:310
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
+"faz --regex e --wildcard coincidirem apenas nomes de p√°ginas, e n√£o "
+"descri√ß√µes"
 
 #: src/man.c:312
 msgid "find all matching manual pages"
-msgstr ""
+msgstr "localiza todas as p√°ginas de manual correspondentes"
 
 #: src/man.c:313
 msgid "force a cache consistency check"
-msgstr ""
+msgstr "for√ßa uma verifica√ß√£o de consist√™ncia de cache"
 
 #: src/man.c:315
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
-msgstr ""
+msgstr "n√£o tenta subp√°ginas, ex.: \"man foo bar\" => \"man foo-bar\""
 
 #: src/man.c:317
 msgid "Controlling formatted output:"
-msgstr ""
+msgstr "Controlando sa√≠da formatada:"
 
 #: src/man.c:318
 msgid "PAGER"
-msgstr ""
+msgstr "PAGINADOR"
 
 #: src/man.c:318
 msgid "use program PAGER to display output"
-msgstr ""
+msgstr "usa o programa PAGINADOR para exibir a sa√≠da"
 
 #: src/man.c:319 src/man.c:328
 msgid "STRING"
-msgstr ""
+msgstr "TEXTO"
 
 #: src/man.c:319
 msgid "provide the `less' pager with a prompt"
-msgstr ""
+msgstr "fornece ao paginador \"less\" com uma pergunta"
 
 #: src/man.c:320
 msgid "display ASCII translation of certain latin1 chars"
-msgstr ""
+msgstr "exibe a tradu√ß√£o ASCII de certos caracteres latin1"
 
 #: src/man.c:323
 msgid "turn off hyphenation"
-msgstr ""
+msgstr "desliga hifeniza√ß√£o"
 
 #: src/man.c:326
 msgid "turn off justification"
-msgstr ""
+msgstr "desliga justifica√ß√£o"
 
 #: src/man.c:328
 msgid ""
@@ -466,126 +476,129 @@ msgid ""
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 msgstr ""
+"TEXTO indica quais pr√©-processadores ser√£o executados:\n"
+"e - [n]eqn, p - pic, t - tbl,\n"
+"g - grap, r - refer, v - vgrind"
 
 #: src/man.c:332
 #, c-format
 msgid "use %s to format pages"
-msgstr ""
+msgstr "usa %s para formatar p√°ginas"
 
 #: src/man.c:333
 msgid "DEVICE"
-msgstr ""
+msgstr "DISPOSITIVO"
 
 #: src/man.c:334
 #, c-format
 msgid "use %s with selected device"
-msgstr ""
+msgstr "usa %s com o dispositivo selecionado"
 
 #: src/man.c:335
 msgid "BROWSER"
-msgstr ""
+msgstr "NAVEGADOR"
 
 #: src/man.c:336
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
-msgstr ""
+msgstr "usa %s ou NAVEGADOR para exibir a sa√≠da HTML"
 
 #: src/man.c:337
 msgid "RESOLUTION"
-msgstr ""
+msgstr "RESOLU√á√ÉO"
 
 #: src/man.c:339
-#, fuzzy
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 msgstr ""
-"                            -X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12."
+"usa groff e exibe por meio de gxditview (X11):\n"
+"-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
 #: src/man.c:341
-#, fuzzy
 msgid "use groff and force it to produce ditroff"
-msgstr "-Z, --ditroff               usa groff e forÁa a produzir ditroff."
+msgstr "usa groff e for√ßa-o a produzir ditroff"
 
 #: src/man.c:604 src/man.c:771
-#, fuzzy, c-format
+#, c-format
 msgid "No manual entry for %s\n"
-msgstr "Nenhuma entrada de manual para %s"
+msgstr "Nenhuma entrada de manual para %s\n"
 
 #: src/man.c:606
-#, fuzzy, c-format
+#, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
-msgstr "Qual a p·gina de manual desejada da seÁ„o %s?\n"
+msgstr "(Alternativamente, qual a p√°gina de manual desejada da se√ß√£o %s?)\n"
 
 #: src/man.c:610
 msgid "What manual page do you want?\n"
-msgstr "Qual a p·gina de manual desejada?\n"
+msgstr "Qual a p√°gina de manual desejada?\n"
 
 #: src/man.c:768
-#, fuzzy, c-format
+#, c-format
 msgid "No manual entry for %s in section %s\n"
-msgstr "Nenhuma entrada de manual para %s"
+msgstr "Nenhuma entrada de manual para %s na se√ß√£o %s\n"
 
 #: src/man.c:777
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
-"Veja '%s' para ajuda quando as p·ginas de manual n„o estiverem disponÌveis.\n"
+"Veja \"%s\" para ajuda quando as p√°ginas de manual n√£o estiverem "
+"dispon√≠veis.\n"
 
 #: src/man.c:1342
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
-msgstr "igorando preprocessador desconhecido '%c'"
+msgstr "ignorando pr√©-processador desconhecido \"%c\""
 
 #: src/man.c:1696 src/mandb.c:217
 #, c-format
 msgid "can't rename %s to %s"
-msgstr "impossÌvel renomear %s para %s"
+msgstr "n√£o foi poss√≠vel renomear %s para %s"
 
 #: src/man.c:1713
 #, c-format
 msgid "can't set times on %s"
-msgstr "impossÌvel setar os hor·rios de %s"
+msgstr "n√£o foi poss√≠vel definir os hor√°rios de %s"
 
 #: src/man.c:1722
 #, c-format
 msgid "can't unlink %s"
-msgstr "impossÌvel remover %s"
+msgstr "n√£o foi poss√≠vel remover o link %s"
 
 #: src/man.c:1773
-#, fuzzy, c-format
+#, c-format
 msgid "can't create temporary cat for %s"
-msgstr "impossÌvel criar um nome de arquivo tempor·rio"
+msgstr "n√£o foi poss√≠vel criar o cat tempor√°rio para %s"
 
 #: src/man.c:1885
-#, fuzzy, c-format
+#, c-format
 msgid "can't create temporary directory"
-msgstr "impossÌvel criar um nome de arquivo tempor·rio"
+msgstr "n√£o foi poss√≠vel criar o diret√≥rio tempor√°rio"
 
 #: src/man.c:1897
-#, fuzzy, c-format
+#, c-format
 msgid "can't open temporary file %s"
-msgstr "impossÌvel abrir o arquivo de configuraÁ„o do manpath %s"
+msgstr "n√£o foi poss√≠vel abrir o arquivo tempor√°rio %s"
 
 #: src/man.c:1927 src/man.c:1965 src/man.c:3712
-#, fuzzy, c-format
+#, c-format
 msgid "can't restore previous working directory"
-msgstr "impossÌvel criar um nome de arquivo tempor·rio"
+msgstr "n√£o foi poss√≠vel restaurar o diret√≥rio de trabalho anterior"
 
 #: src/man.c:1935 src/man.c:1971
 #, c-format
 msgid "can't remove directory %s"
-msgstr "impossÌvel remover o diretÛrio %s"
+msgstr "n√£o foi poss√≠vel remover o diret√≥rio %s"
 
 #: src/man.c:2091
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
-msgstr "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
+msgstr "--Man-- pr√≥xima: %s [ ver (Enter) | pular (Ctrl-D) | sair (Ctrl-C) ]\n"
 
 #: src/man.c:2139
 #, c-format
 msgid "can't chdir to %s"
-msgstr "impossÌvel chdir para %s"
+msgstr "n√£o foi poss√≠vel fazer chdir para %s"
 
 #: src/man.c:2373
 #, c-format
@@ -594,182 +607,178 @@ msgid ""
 "cannot write to %s in catman mode"
 msgstr ""
 "\n"
-"impossÌvel escrever em %s no modo catman"
+"n√£o foi poss√≠vel escrever em %s no modo catman"
 
 #: src/man.c:2454
 #, c-format
 msgid "Can't convert %s to cat name"
-msgstr "ImpossÌvel converter %s para um nome 'cat'"
+msgstr "N√£o foi poss√≠vel converter %s para um nome cat"
 
 #: src/man.c:3179
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
-msgstr "%s: uso de whatis refs est· obsoleto\n"
+msgstr "%s: o uso de whatis refs est√° obsoleto\n"
 
 #: src/man.c:3329 src/man.c:4134
-#, fuzzy, c-format
+#, c-format
 msgid "mandb command failed with exit status %d"
-msgstr "o comando man falhou com estado de saÌda %d"
+msgstr "o comando mandb falhou com status de sa√≠da %d"
 
 #: src/man.c:3534
 #, c-format
 msgid "internal error: candidate type %d out of range"
-msgstr ""
+msgstr "erro interno: tipo de candidato %d fora da faixa"
 
 #: src/man.c:4064
 msgid " Manual page "
-msgstr " Pagina de manual "
+msgstr " P√°gina de manual "
 
 #: src/manconv.c:232 src/manconv.c:253 src/manconv.c:348
-#, fuzzy, c-format
+#, c-format
 msgid "can't write to standard output"
-msgstr "impossÌvel escrever dentro de %s"
+msgstr "n√£o foi poss√≠vel escrever para a sa√≠da padr√£o"
 
 #: src/manconv.c:279
 msgid "iconv: incomplete character at end of buffer"
-msgstr ""
+msgstr "iconv: caractere incompleto no final do buffer"
 
 #: src/manconv_main.c:88
 msgid "-f CODE[:...] -t CODE [FILENAME]"
-msgstr ""
+msgstr "-f C√ìDIGO[:...] -t C√ìDIGO [NOME-DE-ARQUIVO]"
 
 #: src/manconv_main.c:91
 msgid "CODE[:...]"
-msgstr ""
+msgstr "C√ìDIGO[:...]"
 
 #: src/manconv_main.c:92
 msgid "possible encodings of original text"
-msgstr ""
+msgstr "codifica√ß√µes poss√≠veis do texto original"
 
 #: src/manconv_main.c:93
 msgid "CODE"
-msgstr ""
+msgstr "C√ìDIGO"
 
 #: src/manconv_main.c:93
 msgid "encoding for output"
-msgstr ""
+msgstr "codifica√ß√£o para a sa√≠da"
 
 #: src/manconv_main.c:95 src/manpath.c:66
 msgid "produce fewer warnings"
-msgstr ""
+msgstr "produz menos avisos"
 
 #: src/manconv_main.c:130 src/manconv_main.c:139
 #, c-format
 msgid "must specify an input encoding"
-msgstr ""
+msgstr "deve-se especificar uma codifica√ß√£o de entrada"
 
 #: src/manconv_main.c:134
 #, c-format
 msgid "must specify an output encoding"
-msgstr ""
+msgstr "deve-se especificar uma codifica√ß√£o de sa√≠da"
 
 #: src/mandb.c:105
 msgid "[MANPATH]"
-msgstr ""
+msgstr "[CAMINHO-MAN]"
 
 #: src/mandb.c:109
 msgid "work quietly, except for 'bogus' warning"
-msgstr ""
+msgstr "trabalha silenciosamente, exceto para aviso de erro"
 
 #: src/mandb.c:110
 msgid "don't look for or add stray cats to the dbs"
-msgstr ""
+msgstr "n√£o procura ou adiciona cats errantes aos bancos de dados"
 
 #: src/mandb.c:111
 msgid "don't purge obsolete entries from the dbs"
-msgstr ""
+msgstr "n√£o descarta entradas obsoletas dos bancos de dados"
 
 #: src/mandb.c:112
 msgid "produce user databases only"
-msgstr ""
+msgstr "produz apenas bancos de dados de usu√°rio"
 
 #: src/mandb.c:113
 msgid "create dbs from scratch, rather than updating"
-msgstr ""
+msgstr "cria banco de dados do zero, ao inv√©s de atualiz√°-los"
 
 #: src/mandb.c:114
 msgid "check manual pages for correctness"
-msgstr ""
+msgstr "verifica a exatid√£o de p√°ginas de manual"
 
 #: src/mandb.c:115
 msgid "FILENAME"
-msgstr ""
+msgstr "NOME-DE-ARQUIVO"
 
 #: src/mandb.c:115
 msgid "update just the entry for this filename"
-msgstr ""
+msgstr "atualiza apenas a entrada deste nome de arquivo"
 
 #: src/mandb.c:210
 #, c-format
 msgid "can't remove %s"
-msgstr "impossÌvel remover %s"
+msgstr "n√£o foi poss√≠vel remover %s"
 
 #: src/mandb.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "can't write to %s"
-msgstr "impossÌvel escrever dentro de %s"
+msgstr "n√£o posso escrever em %s"
 
 #: src/mandb.c:279
-#, fuzzy, c-format
+#, c-format
 msgid "can't read from %s"
-msgstr "impossÌvel criar %s"
+msgstr "n√£o foi poss√≠vel ler de %s"
 
 #: src/mandb.c:447
 #, c-format
 msgid "Processing manual pages under %s...\n"
-msgstr "Processando as p·ginas de manual sob %s...\n"
+msgstr "Processando as p√°ginas de manual sob %s...\n"
 
 #: src/mandb.c:661 src/mandb.c:687
-#, fuzzy, c-format
+#, c-format
 msgid "Removing obsolete cat directory %s...\n"
-msgstr "Verificando por vira-latas sob %s...\n"
+msgstr "Removendo diret√≥rio cat obsoleto %s...\n"
 
 #: src/mandb.c:843
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
-msgstr "aviso: nenhuma diretiva MANDB_MAP em %s, usando o seu manpath"
+msgstr "aviso: nenhuma diretiva MANDB_MAP em %s, usando o seu caminho man"
 
 #: src/mandb.c:915
-#, fuzzy, c-format
+#, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
-msgstr[0] ""
-"%d subdiretorios man continham p·ginas de manual novas.\n"
-"%d p·ginas de manual foram adicionadas.\n"
-msgstr[1] ""
-"%d subdiretorios man continham p·ginas de manual novas.\n"
-"%d p·ginas de manual foram adicionadas.\n"
+msgstr[0] "%d subdiret√≥rio man continha p√°ginas de manual novas.\n"
+msgstr[1] "%d subdiret√≥rios man continham p√°ginas de manual novas.\n"
 
 #: src/mandb.c:920
-#, fuzzy, c-format
+#, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
-msgstr[0] " Pagina de manual "
-msgstr[1] " Pagina de manual "
+msgstr[0] "%d p√°gina de manual foi adicionada.\n"
+msgstr[1] "%d p√°ginas de manual foram adicionadas.\n"
 
 #: src/mandb.c:924
-#, fuzzy, c-format
+#, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
-msgstr[0] "%d vira-latas foram adicionados.\n"
-msgstr[1] "%d vira-latas foram adicionados.\n"
+msgstr[0] "%d cat errante foi adicionado.\n"
+msgstr[1] "%d cats errantes foram adicionados.\n"
 
 #: src/mandb.c:929
-#, fuzzy, c-format
+#, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
-msgstr[0] "%d entradas antigas no banco de dados foram descartadas.\n"
+msgstr[0] "%d entrada antiga no banco de dados foi descartada.\n"
 msgstr[1] "%d entradas antigas no banco de dados foram descartadas.\n"
 
 #: src/mandb.c:947
 #, c-format
 msgid "No databases created."
-msgstr ""
+msgstr "Nenhum banco de dados criado."
 
 #: src/manp.c:331
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
-msgstr "o arquivo de configuraÁ„o %s nıa faz sentido"
+msgstr "n√£o h√° sentido algum no arquivo de configura√ß√£o de caminho man %s"
 
 #: src/manp.c:337
 #, c-format
@@ -779,17 +788,17 @@ msgstr "aviso: %s"
 #: src/manp.c:343
 #, c-format
 msgid "warning: %s isn't a directory"
-msgstr "aviso: %s n„o È um diretÛrio"
+msgstr "aviso: %s n√£o √© um diret√≥rio"
 
 #: src/manp.c:348
 #, c-format
 msgid "manpath list too long"
-msgstr ""
+msgstr "lista de caminho man muito longa"
 
 #: src/manp.c:679
 #, c-format
 msgid "warning: $PATH not set"
-msgstr "aviso: $PATH n„o setado"
+msgstr "aviso: $PATH n√£o definido"
 
 #: src/manp.c:686
 #, c-format
@@ -799,80 +808,81 @@ msgstr "aviso: $PATH vazio"
 #: src/manp.c:714
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
-msgstr "aviso: $MANPATH setado, adicionando %s no inÌcio"
+msgstr "aviso: $MANPATH definido, acrescentando %s ao in√≠cio"
 
 #: src/manp.c:725
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
-msgstr "aviso: $MANPATH setado, adicionando %s no final"
+msgstr "aviso: $MANPATH definido, acrescentando %s ao final"
 
 #: src/manp.c:737
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
-msgstr "aviso: $MANPATH setado, inserindo %s"
+msgstr "aviso: $MANPATH definido, inserindo %s"
 
 #: src/manp.c:751
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
-msgstr "aviso: $MANPATH setado, ignorando %s"
+msgstr "aviso: $MANPATH definido, ignorando %s"
 
 #: src/manp.c:813
 #, c-format
 msgid "can't parse directory list `%s'"
-msgstr "impossÌvel analisar a lista de diretÛrios `%s'"
+msgstr "n√£o foi poss√≠vel analisar a lista de diret√≥rios \"%s\""
 
 #: src/manp.c:876
 #, c-format
 msgid "can't open the manpath configuration file %s"
-msgstr "impossÌvel abrir o arquivo de configuraÁ„o do manpath %s"
+msgstr "n√£o foi poss√≠vel abrir o arquivo de configura√ß√£o do caminho man %s"
 
 #: src/manp.c:915
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
-msgstr "aviso: diretÛrio obrigatÛrio %s n„o existe"
+msgstr "aviso: diret√≥rio obrigat√≥rio %s n√£o existe"
 
 #: src/manp.c:1184
 #, c-format
 msgid "can't determine current directory"
-msgstr "impossÌvel determinar o diretÛrio corrente"
+msgstr "n√£o foi poss√≠vel determinar o diret√≥rio atual"
 
 #: src/manp.c:1384
 #, c-format
 msgid "warning: %s does not begin with %s"
-msgstr "aviso: %s n„o comeÁa com %s"
+msgstr "aviso: %s n√£o come√ßa com %s"
 
 #: src/manpath.c:63
 msgid "show relative catpaths"
-msgstr ""
+msgstr "mostra caminhos cat relativos"
 
 #: src/manpath.c:64
 msgid "show the entire global manpath"
-msgstr ""
+msgstr "mostra o caminho man global inteiro"
 
 #: src/manpath.c:126
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
-msgstr "aviso: nenhum manpath global setado no arquivo de configuraÁ„o %s"
+msgstr ""
+"aviso: nenhum caminho man global definido no arquivo de configura√ß√£o %s"
 
 #: src/straycats.c:247 src/ult_src.c:124
 #, c-format
 msgid "warning: %s is a dangling symlink"
-msgstr "warning: %s È um symlink perdido"
+msgstr "aviso: %s √© um link simb√≥lico perdido"
 
 #: src/straycats.c:250 src/ult_src.c:127 src/ult_src.c:287
 #, c-format
 msgid "can't resolve %s"
-msgstr "impossÌvel resolver %s"
+msgstr "n√£o foi poss√≠vel resolver %s"
 
 #: src/straycats.c:315
 #, c-format
 msgid "Checking for stray cats under %s...\n"
-msgstr "Verificando por vira-latas sob %s...\n"
+msgstr "Verificando por cats errantes sob %s...\n"
 
 #: src/straycats.c:355
 #, c-format
 msgid "warning: can't update index cache %s"
-msgstr "aviso: impossÌvel atualizar o cache de Ìndice %s"
+msgstr "aviso: n√£o foi poss√≠vel atualizar o cache de √≠ndice %s"
 
 #: src/ult_src.c:325
 #, c-format
@@ -881,53 +891,53 @@ msgstr "%s referencia a si mesmo"
 
 #: src/whatis.c:118
 msgid "KEYWORD..."
-msgstr ""
+msgstr "PALAVRA-CHAVE..."
 
 #: src/whatis.c:119
 msgid "The --regex option is enabled by default."
-msgstr ""
+msgstr "A op√ß√£o --regex est√° habilitada por padr√£o."
 
 #: src/whatis.c:123
 msgid "print verbose warning messages"
-msgstr ""
+msgstr "emite mensagens de aviso detalhadas"
 
 #: src/whatis.c:124
 msgid "interpret each keyword as a regex"
-msgstr ""
+msgstr "interpreta cada palavra-chave como uma express√£o regular"
 
 #: src/whatis.c:125
 msgid "search each keyword for exact match"
-msgstr ""
+msgstr "pesquisa cada palavra-chave por correspond√™ncia exata"
 
 #: src/whatis.c:126
 msgid "the keyword(s) contain wildcards"
-msgstr ""
+msgstr "a(s) palavra-chave(s) n√£o podem conter caracteres coringas"
 
 #: src/whatis.c:127
 msgid "require all keywords to match"
-msgstr ""
+msgstr "exige correspond√™ncia de todas as palavra-chaves"
 
 #: src/whatis.c:128
 msgid "do not trim output to terminal width"
-msgstr ""
+msgstr "n√£o corta a sa√≠da para a largura do terminal"
 
 #: src/whatis.c:129
 msgid "search only these sections (colon-separated)"
-msgstr ""
+msgstr "pesquisa apenas nestas se√ß√µes (separadas por dois-pontos)"
 
 #: src/whatis.c:133
 msgid "define the locale for this search"
-msgstr ""
+msgstr "define a localidade para esta pesquisa"
 
 #: src/whatis.c:230
 #, c-format
 msgid "%s what?\n"
-msgstr "%s o que?\n"
+msgstr "%s o qu√™?\n"
 
 #: src/whatis.c:390 src/whatis.c:408
 #, c-format
 msgid "warning: %s contains a pointer loop"
-msgstr "aviso: %s contÈm um laÁo de ponteiros"
+msgstr "aviso: %s cont√©m um la√ßo de ponteiros"
 
 #: src/whatis.c:402 src/whatis.c:410
 msgid "(unknown subject)"
@@ -942,181 +952,124 @@ msgstr "%s: nada apropriado.\n"
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr ""
+"%s:%d: requisi√ß√µes de .so aninhadas com muita profundidade ou s√£o recursivas"
 
 #: src/zsoelim.l:183
 #, c-format
 msgid "%s:%d: warning: failed .so request"
-msgstr ""
+msgstr "%s:%d: aviso: requisi√ß√£o .so falhou"
 
 #: src/zsoelim.l:205
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
-msgstr ""
+msgstr "%s:%d: aviso: nova-linha na requisi√ß√£o de .so, ignorando"
 
 #: src/zsoelim.l:265
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
-msgstr ""
+msgstr "%s:%d: aviso: requisi√ß√£o de .lf malformada, ignorando"
 
 #: src/zsoelim.l:275
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
-msgstr ""
+msgstr "%s:%d: aviso: nova-linha na requisi√ß√£o de .lf, ignorando"
 
 #: src/zsoelim.l:316
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
-msgstr ""
+msgstr "%s:%d: aspas n√£o terminadas na requisi√ß√£o de roff"
 
 #: src/zsoelim_main.c:67
 msgid "compatibility switch (ignored)"
-msgstr ""
+msgstr "troca de compatibilidade (ignorado)"
 
-#~ msgid "can't fork"
-#~ msgstr "impossÌvel fazer fork"
+#~ msgid "key %s is missing name component - is this an old db?"
+#~ msgstr "a chave %s n√£o nome do componente - este √© um bd antigo?"
+
+#~ msgid "cannot insert unused key %s"
+#~ msgstr "n√£o foi poss√≠vel inserir chave a n√£o usada %s"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage: accessdb [man_database]\n"
+#~ "\tman_database defaults to %s"
+#~ msgstr ""
+#~ "\n"
+#~ "Uso: accessdb [man_database]\n"
+#~ "\tman_database usa %s por padr√£o"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "usage: %s [-dhV] [-M manpath] [section] ...\n"
+#~ msgstr "uso: %s [-dhV] [-M manpath] [se√ß√£o] ...\n"
+
+#~ msgid ""
+#~ "-d --debug                  produce debugging info.\n"
+#~ "-M --manpath path           set search path for manual pages to `path'.\n"
+#~ "-V --version                show version.\n"
+#~ "-h --help                   show this usage message.\n"
+#~ msgstr ""
+#~ "-d --debug                  produz informa√ß√£o de depura√ß√£o.\n"
+#~ "-M --manpath caminho        seta o caminho de busca por p√°ginas de "
+#~ "manual\n"
+#~ "                            para `caminho'.\n"
+#~ "-V --version                mostra vers√£o.\n"
+#~ "-h --help                   mostra esta mensagem.\n"
 
 #~ msgid "fork failed"
 #~ msgstr "o \"fork\" falhou"
 
 #~ msgid "can't get man command's exit status"
-#~ msgstr "impossÌvel acessar o estado de saÌda do comando man"
+#~ msgstr "n√£o foi poss√≠vel acessar o estado de sa√≠da do comando man"
 
 #~ msgid "unable to reset cursor position in %s"
-#~ msgstr "impossÌvel resetar posiÁ„o do cursor em %s"
+#~ msgstr "n√£o foi poss√≠vel restaurar posi√ß√£o do cursor em %s"
 
-#, fuzzy
-#~ msgid "can't execute %s"
-#~ msgstr "impossÌvel executar %s"
-
-#, fuzzy
-#~ msgid "pipe failed"
-#~ msgstr "o \"fork\" falhou"
-
-#, fuzzy
-#~ msgid "dup2 failed"
-#~ msgstr "o \"fork\" falhou"
-
-#, fuzzy
-#~ msgid "close failed"
-#~ msgstr "o \"fork\" falhou"
-
-#~ msgid "can't get passwd structure for uid 0"
-#~ msgstr "impossÌvel obter estrutura de senhas para uid 0"
-
-#~ msgid "cannot insert unused key %s"
-#~ msgstr "impossÌvel inserir chave a n„o usada %s"
-
-#~ msgid "Don't know which program should I run being >%s<\n"
-#~ msgstr "N„o sei que programa deve ser rodado como >%s<\n"
-
-#~ msgid "%s: Failed su to user %s\n"
-#~ msgstr "%s: Falhou o \"su\" para usu·rio %s\n"
-
-#, fuzzy
-#~ msgid "can't create index cache directory %s"
-#~ msgstr "impossÌvel criar cache de Ìndice %s"
-
-#~ msgid "-m -c: incompatible options"
-#~ msgstr "-m -c: opÁıes incompatÌveis"
-
-#, fuzzy
-#~ msgid "usage: %s [-hV] [man database]\n"
-#~ msgstr "uso: %s [-dqspuc|-h|-V] [manpath]\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "-V, --version               show version.\n"
-#~ "-h, --help                  show this usage message.\n"
-#~ "\n"
-#~ "The man database defaults to %s%s.\n"
-#~ msgstr ""
-#~ "-V, --version               mostra vers„o.\n"
-#~ "-h, --help                  mostra esta mensagem de uso."
-
-#, fuzzy
-#~ msgid "usage: %s [-dhV] [-C file] [-M manpath] [section] ...\n"
-#~ msgstr "uso: %s [-dhV] [-M manpath] [seÁ„o] ...\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "-d, --debug                 produce debugging info.\n"
-#~ "-M, --manpath path          set search path for manual pages to `path'.\n"
-#~ "-C, --config-file file      use this user configuration file.\n"
-#~ "-V, --version               show version.\n"
-#~ "-h, --help                  show this usage message.\n"
-#~ msgstr ""
-#~ "-d, --debug                 produz informaÁ„o de depuraÁ„o.\n"
-#~ "-M, --manpath caminho       seta o caminho de busca por p·ginas de "
-#~ "manual\n"
-#~ "                            para `caminho'.\n"
-#~ "-V, --version               mostra vers„o.\n"
-#~ "-h, --help                  mostra esta mensagem.\n"
-
-#, fuzzy
-#~ msgid "usage: %s [-deiIhV] path section name\n"
-#~ msgstr "uso: %s [-dqspuc|-h|-V] [manpath]\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "-d, --debug                 emit debugging messages.\n"
-#~ "-e, --extension             limit search to extension type `extension'.\n"
-#~ "-i, --ignore-case           look for pages case-insensitively (default).\n"
-#~ "-I, --match-case            look for pages case-sensitively.\n"
-#~ "-V, --version               show version.\n"
-#~ "-h, --help                  show this usage message.\n"
-#~ msgstr ""
-#~ "-d, --debug                 produz informaÁ„o de depuraÁ„o.\n"
-#~ "-M, --manpath caminho       seta o caminho de busca por p·ginas de "
-#~ "manual\n"
-#~ "                            para `caminho'.\n"
-#~ "-V, --version               mostra vers„o.\n"
-#~ "-h, --help                  mostra esta mensagem.\n"
-
-#, fuzzy
-#~ msgid "usage: %s [-mcwfhV] [-E encoding] file ...\n"
+#~ msgid "usage: %s [-mcwfhV] file ...\n"
 #~ msgstr "uso: %s [-mcwfhV] arquivo ...\n"
 
-#, fuzzy
 #~ msgid ""
-#~ "-m, --man                   parse as man page.\n"
-#~ "-c, --cat                   parse as cat page.\n"
-#~ "-w, --whatis                show whatis information.\n"
-#~ "-f, --filters               show guessed series of preprocessing "
+#~ "-m --man                    parse as man page.\n"
+#~ "-c --cat                    parse as cat page.\n"
+#~ "-w --whatis                 show whatis information.\n"
+#~ "-f --filters                show guessed series of preprocessing "
 #~ "filters.\n"
-#~ "-E, --encoding encoding     override character set.\n"
-#~ "-V, --version               show version.\n"
-#~ "-h, --help                  show this usage message.\n"
+#~ "-V --version                show version.\n"
+#~ "-h --help                   show this usage message.\n"
 #~ "\n"
 #~ "The defaults are --man and --whatis.\n"
 #~ msgstr ""
-#~ "-m --man                    analisar como p·gina man.\n"
-#~ "-c --cat                    analisar como p·gina cat.\n"
-#~ "-w --whatis                 mostra informaÁ„o whatis.\n"
-#~ "-f --filters                mostra a sÈrie adivinhada de filtros de "
+#~ "-m --man                    analisar como p√°gina man.\n"
+#~ "-c --cat                    analisar como p√°gina cat.\n"
+#~ "-w --whatis                 mostra informa√ß√£o whatis.\n"
+#~ "-f --filters                mostra a s√©rie adivinhada de filtros de "
 #~ "preprocessamento.\n"
-#~ "-V --version                mostra vers„o.\n"
+#~ "-V --version                mostra vers√£o.\n"
 #~ "-h --help                   mostra esta ajuda.\n"
 #~ "\n"
-#~ "Os padrıes s„o --man e --whatis.\n"
+#~ "Os padr√µes s√£o --man e --whatis.\n"
 
-#, fuzzy
+#~ msgid "-m -c: incompatible options"
+#~ msgstr "-m -c: op√ß√µes incompat√≠veis"
+
+#~ msgid "can't popen"
+#~ msgstr "n√£o foi poss√≠vel pabrir"
+
 #~ msgid ""
-#~ "usage: %s [-c|-f|-k|-w|-tZT device] [-i|-I] [-adlhu7V] [-Mpath] [-"
-#~ "Ppager]\n"
-#~ "           [-Cfile] [-Slist] [-msystem] [-pstring] [-Llocale] [-"
-#~ "eextension]\n"
-#~ "           [section] page ...\n"
+#~ "usage: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-"
+#~ "Slist]\n"
+#~ "           [-msystem] [-pstring] [-Llocale] [-eextension] [section] "
+#~ "page ...\n"
 #~ msgstr ""
 #~ "uso: %s [-c|-f|-k|-w|-tZT device] [-adlhu7V] [-Mpath] [-Ppager] [-Slist]\n"
 #~ "           [-msystem] [-pstring] [-Llocale] [-eextension] [section] "
 #~ "page ...\n"
 
-#, fuzzy
 #~ msgid ""
-#~ "usage: %s [-c|-f|-k|-w] [-i|-I] [-adlhu7V] [-Mpath] [-Ppager]\n"
-#~ "           [-Cfile] [-Slist] [-msystem] [-pstring] [-Llocale] [-"
-#~ "eextension]\n"
-#~ "           [section] page ...\n"
+#~ "usage: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-"
+#~ "msystem]\n"
+#~ "           [-pstring] [-Llocale] [-eextension] [section] page ...\n"
 #~ msgstr ""
 #~ "uso: %s [-c|-f|-k|-w] [-adlhu7V] [-Mpath] [-Ppager] [-Slist] [-msystem]\n"
 #~ "           [-pstring] [-Llocale] [-eextension] [section] page ...\n"
@@ -1128,8 +1081,6 @@ msgstr ""
 #~ "-f, --whatis                equivalent to whatis.\n"
 #~ "-k, --apropos               equivalent to apropos.\n"
 #~ "-w, --where, --location     print physical location of man page(s).\n"
-#~ "-W, --where-cat,\n"
-#~ "    --location-cat          print physical location of cat file(s).\n"
 #~ "-l, --local-file            interpret `page' argument(s) as local "
 #~ "filename(s).\n"
 #~ "-u, --update                force a cache consistency check.\n"
@@ -1143,32 +1094,29 @@ msgstr ""
 #~ "-E, --encoding encoding     use the selected nroff device and display in "
 #~ "pager."
 #~ msgstr ""
-#~ "-a, --all                   busca todas as p·ginas de manual "
+#~ "-a, --all                   busca todas as p√°ginas de manual "
 #~ "coincidentes.\n"
-#~ "-d, --debug                 emite mensagens de depuraÁ„o.\n"
-#~ "-e, --extension             limita busca para extens„o do tipo "
+#~ "-d, --debug                 emite mensagens de depura√ß√£o.\n"
+#~ "-e, --extension             limita busca para extens√£o do tipo "
 #~ "`extension'.\n"
 #~ "-f, --whatis                equivalente ao whatis.\n"
 #~ "-k, --apropos               equivalente ao apropos.\n"
-#~ "-w, --where, --location     imprime localizaÁ„o fÌsica da(s) p·gina(s) "
+#~ "-w, --where, --location     imprime localiza√ß√£o f√≠sica da(s) p√°gina(s) "
 #~ "man.\n"
-#~ "-W, --where-cat,\n"
-#~ "    --location-cat          imprime localizaÁ„o fÌsica do(s) arquivo(s) "
-#~ "cat.\n"
 #~ "-l, --local-file            interpreta `page' argumento(s) como nome(s) "
 #~ "de\n"
 #~ "                            arquivo(s) local(is).\n"
-#~ "-u, --update                forÁa uma checagem de consistÍncia do cache.\n"
-#~ "-i, --ignore-case           busca por p·ginas sem diferenciar mai˙sculas "
+#~ "-u, --update                for√ßa uma checagem de consist√™ncia do cache.\n"
+#~ "-i, --ignore-case           busca por p√°ginas sem diferenciar mai√∫sculas "
 #~ "e\n"
-#~ "                            min˙sculas (padr„o).\n"
-#~ "-I, --match-case            busca por p·ginas diferenciando mai˙sculas e\n"
-#~ "                            min˙sculas.\n"
+#~ "                            min√∫sculas (padr√£o).\n"
+#~ "-I, --match-case            busca por p√°ginas diferenciando mai√∫sculas e\n"
+#~ "                            min√∫sculas.\n"
 #~ "-r, --prompt string         fornece o paginador `less' com uma mensagem\n"
 #~ "-c, --catman                usedo pelo catman para reformatar a partir "
 #~ "de\n"
-#~ "                            p·ginas cat.\n"
-#~ "-7, --ascii                 mostra a traduÁ„o ASCII de caracteres "
+#~ "                            p√°ginas cat.\n"
+#~ "-7, --ascii                 mostra a tradu√ß√£o ASCII de caracteres "
 #~ "latin1.\n"
 #~ "-E, --encoding encoding     usa o dispositivo nroff selecionado e mostra "
 #~ "no\n"
@@ -1178,29 +1126,22 @@ msgstr ""
 #~ "-t, --troff                 use %s to format pages.\n"
 #~ "-T, --troff-device device   use %s with selected device.\n"
 #~ msgstr ""
-#~ "-t, --troff                 usa %s para formatar as p·ginas.\n"
+#~ "-t, --troff                 usa %s para formatar as p√°ginas.\n"
 #~ "-T, --troff-device device   usa %s com o dispositivo selecionado.\n"
 
 #~ msgid ""
 #~ "-H, --html                  use lynx or argument to display html output.\n"
-#~ "-Z, --ditroff               use groff and force it to produce ditroff.\n"
-#~ "-X, --gxditview             use groff and display through gxditview "
-#~ "(X11):\n"
-#~ "                            -X = -TX75, -X100 = -TX100, -X100-12 = -"
-#~ "TX100-12."
 #~ msgstr ""
-#~ "-H, --html                  usa o lynx ou argumento para mostrar a saÌda "
+#~ "-H, --html                  usa o lynx ou argumento para mostrar a sa√≠da "
 #~ "html.\n"
-#~ "-Z, --ditroff               usa groff e forÁa a produzir ditroff.\n"
-#~ "-X, --gxditview             usa groff e mostra atravÈs do gxditview "
-#~ "(X11):\n"
-#~ "                            -X = -TX75, -X100 = -TX100, -X100-12 = -"
-#~ "TX100-12."
 
-#, fuzzy
+#~ msgid ""
+#~ "-X, --gxditview             use groff and display through gditview (X11):"
+#~ msgstr ""
+#~ "-X, --gxditview             usa groff e mostra atrav√©s do gditview (X11):"
+
 #~ msgid ""
 #~ "-D, --default               reset all options to their default values.\n"
-#~ "-C, --config-file file      use this user configuration file.\n"
 #~ "-M, --manpath path          set search path for manual pages to `path'.\n"
 #~ "-P, --pager pager           use program `pager' to display output.\n"
 #~ "-S, --sections list         use colon separated section list.\n"
@@ -1208,264 +1149,176 @@ msgstr ""
 #~ "system(s).\n"
 #~ "-L, --locale locale         define the locale for this particular man "
 #~ "search.\n"
-#~ "-p, --preprocessor string   string indicates which preprocessors to run.\n"
-#~ "                             e - [n]eqn   p - pic    t - tbl\n"
-#~ "                             g - grap     r - refer  v - vgrind\n"
-#~ "-V, --version               show version.\n"
-#~ "-h, --help                  show this usage message."
+#~ "-p, --preprocessor string   string indicates which preprocessors to run."
 #~ msgstr ""
-#~ "-D, --default               reseta todas as opÁıes aos seus valores "
-#~ "padr„o.\n"
-#~ "-M, --manpath caminho       seta o caminho de busca de p·ginas de manual\n"
+#~ "-D, --default               reseta todas as op√ß√µes aos seus valores "
+#~ "padr√£o.\n"
+#~ "-M, --manpath caminho       seta o caminho de busca de p√°ginas de manual\n"
 #~ "                            para `caminho'.\n"
 #~ "-P, --pager paginador       usa o programa `paginador' para mostrar a "
-#~ "saÌda.\n"
-#~ "-S, --sections list         usa listas de seÁ„o separadas por dois "
+#~ "sa√≠da.\n"
+#~ "-S, --sections list         usa listas de se√ß√£o separadas por dois "
 #~ "pontos.\n"
-#~ "-m, --systems sistema       busca por p·ginas man de outro(s) sistema(s) "
+#~ "-m, --systems sistema       busca por p√°ginas man de outro(s) sistema(s) "
 #~ "Unix.\n"
 #~ "-L, --locale locale         define o locale para esta busca man em "
 #~ "particualr.\n"
-#~ "-p, --preprocessor string   a string indica que preprocessador usar.\n"
-#~ "                             e - [n]eqn   p - pic    t - tbl\n"
-#~ "                             g - grap     r - refer  v - vgrind\n"
-#~ "-V, --version               mostra vers„o.\n"
+#~ "-p, --preprocessor string   a string indica que preprocessador usar."
+
+#~ msgid ""
+#~ "-V, --version               show version.\n"
+#~ "-h, --help                  show this usage message."
+#~ msgstr ""
+#~ "-V, --version               mostra vers√£o.\n"
 #~ "-h, --help                  mostra esta mensagem de uso."
-
-#, fuzzy
-#~ msgid ""
-#~ "-f, --from-code     possible encodings of original text.\n"
-#~ "-t, --to-code       encoding for output.\n"
-#~ "-d, --debug         emit debugging messages.\n"
-#~ "-V, --version       show version.\n"
-#~ "-h, --help          show this usage message.\n"
-#~ msgstr ""
-#~ "-d, --debug                 produz informaÁ„o de depuraÁ„o.\n"
-#~ "-M, --manpath caminho       seta o caminho de busca por p·ginas de "
-#~ "manual\n"
-#~ "                            para `caminho'.\n"
-#~ "-V, --version               mostra vers„o.\n"
-#~ "-h, --help                  mostra esta mensagem.\n"
-
-#, fuzzy
-#~ msgid "usage: %s [-dqspuct|-h|-V] [-C file] [-f filename] [manpath]\n"
-#~ msgstr "uso: %s [-dqspuc|-h|-V] [manpath]\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "-d, --debug                 produce debugging info.\n"
-#~ "-q, --quiet                 work quietly, except for 'bogus' warning.\n"
-#~ "-s, --no-straycats          don't look for or add stray cats to the dbs.\n"
-#~ "-p, --no-purge              don't purge obsolete entries from the dbs.\n"
-#~ "-u, --user-db               produce user databases only.\n"
-#~ "-c, --create                create dbs from scratch, rather than "
-#~ "updating.\n"
-#~ "-t, --test                  check manual pages for correctness.\n"
-#~ "-f, --filename              update just the entry for this filename.\n"
-#~ "-C, --config-file           use this user configuration file.\n"
-#~ "-V, --version               show version.\n"
-#~ "-h, --help                  show this usage message.\n"
-#~ msgstr ""
-#~ "-d, --debug                 produz informaÁ„o de depuraÁ„o.\n"
-#~ "-q, --quiet                 produz menos avisos.\n"
-#~ "-s, --no-straycats          n„o procura ou adiciona 'vira-latas' aos "
-#~ "bds.\n"
-#~ "-p, --no-purge              n„o descarta entradas obsoletas dos bds.\n"
-#~ "-u, --user-db               produz apenas bancos de dados de usu·rio.\n"
-#~ "-c, --create                cria bds do zero, ao invÈs de atualizar.\n"
-#~ "-V, --version               mostra vers„o.\n"
-#~ "-h, --help                  mostra esta mensagem de ajuda.\n"
-
-#, fuzzy
-#~ msgid "usage: %s [[-gcdq] [-C file] [-m system]] | [-V] | [-h]\n"
-#~ msgstr "uso: %s [[-gcdq] [-m sistema]] | [-V] | [-h]\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "-c, --catpath               show relative catpaths.\n"
-#~ "-g, --global                show the entire global manpath.\n"
-#~ "-d, --debug                 produce debugging info.\n"
-#~ "-q, --quiet                 produce fewer warnings.\n"
-#~ "-C, --config-file file      use this user configuration file.\n"
-#~ "-m, --systems system        express which `systems' to use.\n"
-#~ "-V, --version               show version.\n"
-#~ "-h, --help                  show this usage message.\n"
-#~ msgstr ""
-#~ "-c, --catpath               mostra os catpaths relativos.\n"
-#~ "-g, --global                mostra todo o manpath global.\n"
-#~ "-d, --debug                 produz informaÁ„o de depuraÁ„o.\n"
-#~ "-q, --quiet                 produz menos avisos.\n"
-#~ "-m, --systems sistema       indica que `sistemas' usar.\n"
-#~ "-V, --version               mostra vers„o.\n"
-#~ "-h, --help                  mostra esta mensagem de ajuda.\n"
-
-#~ msgid "%s, version %s, %s\n"
-#~ msgstr "%s, vers„o %s, %s\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "usage: %s [-dalhV] [-r|-w|-e] [-s section] [-m systems] [-M manpath]\n"
-#~ "               [-L locale] [-C file] keyword ...\n"
-#~ msgstr ""
-#~ "uso: %s [-d] [-r|-w|-e] [-m sistemas] [-M manpath] | [-h] | [-V] palavra-"
-#~ "chave ...\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "-d, --debug                produce debugging info.\n"
-#~ "-v, --verbose              print verbose warning messages.\n"
-#~ "-r, --regex                interpret each keyword as a regex (default).\n"
-#~ "-e, --exact                search each keyword for exact match.\n"
-#~ "-w, --wildcard             the keyword(s) contain wildcards.\n"
-#~ "-a, --and                  require all keywords to match.\n"
-#~ "-l, --long                 do not trim output to terminal width.\n"
-#~ "-s, --section section      search only this section.\n"
-#~ "-m, --systems system       include alternate systems' man pages.\n"
-#~ "-M, --manpath path         set search path for manual pages to `path'.\n"
-#~ "-L, --locale locale        define the locale for this search.\n"
-#~ "-C, --config-file file     use this user configuration file.\n"
-#~ "-V, --version              show version.\n"
-#~ "-h, --help                 show this usage message.\n"
-#~ msgstr ""
-#~ "-d, --debug                produce debugging info.\n"
-#~ "-r, --regex                interpreta cada palavra-chave como uma "
-#~ "express„o regular (padr„o).\n"
-#~ "-e, --exact                busca cada palavra-chave por uma coincidÍncia "
-#~ "exata.\n"
-#~ "-w, --wildcard             a(s) plavra-chave(s) contÈm coringas.\n"
-#~ "-m, --systems sistema      inclui p·ginas de manual de sistemas "
-#~ "alternativos.\n"
-#~ "-M, --manpath caminho      seta o caminho de procura por p·ginas de "
-#~ "manual para `caminho'.\n"
-#~ "-V, --version              mostra vers„o.\n"
-#~ "-h, --help                 mostra esta mensagem de uso.\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "usage: %s [-dlhV] [-r|-w] [-s section] [-m systems] [-M manpath]\n"
-#~ "              [-L locale] [-C file] keyword ...\n"
-#~ msgstr ""
-#~ "uso: %s [-d] [-r|-w|-e] [-m sistemas] [-M manpath] | [-h] | [-V] palavra-"
-#~ "chave ...\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "-d, --debug                produce debugging info.\n"
-#~ "-v, --verbose              print verbose warning messages.\n"
-#~ "-r, --regex                interpret each keyword as a regex.\n"
-#~ "-w, --wildcard             the keyword(s) contain wildcards.\n"
-#~ "-l, --long                 do not trim output to terminal width.\n"
-#~ "-s, --section section      search only this section.\n"
-#~ "-m, --systems system       include alternate systems' man pages.\n"
-#~ "-M, --manpath path         set search path for manual pages to `path'.\n"
-#~ "-L, --locale locale        define the locale for this search.\n"
-#~ "-C, --config-file file     use this user configuration file.\n"
-#~ "-V, --version              show version.\n"
-#~ "-h, --help                 show this usage message.\n"
-#~ msgstr ""
-#~ "-d, --debug                produz informaÁ„o de depuraÁ„o.\n"
-#~ "-r, --regex                interpreta cada palavra chave como express„o "
-#~ "regular.\n"
-#~ "-w, --wildcard             a(s) palavra(s)-chave contÈm coringas.\n"
-#~ "-m, --systems system       inclui p·ginas de man do sistema "
-#~ "alternativas.\n"
-#~ "-M, --manpath path         seta o caminho de busca por p·ginas man para "
-#~ "`path'.\n"
-#~ "-V, --version              mostra vers„o.\n"
-#~ "-h, --help                 mostra esta mensagem de uso.\n"
-
-#~ msgid "can't create a temporary filename"
-#~ msgstr "impossÌvel criar um nome de arquivo tempor·rio"
-
-#~ msgid "command '%s' failed with exit status %d"
-#~ msgstr "o comando '%s' falhou com estado de saÌda %d"
-
-#~ msgid "error trying to read from stdin"
-#~ msgstr "erro tentando ler da entrada padr„o (stdin)"
-
-#~ msgid "error writing to temporary file %s"
-#~ msgstr "erro escrevendo no arquivo tempor·rio %s"
-
-#~ msgid "Still saving the page, please wait...\n"
-#~ msgstr "Ainda salvando a p·gina, por favor aguarde...\n"
-
-#, fuzzy
-#~ msgid "can't open %s for writing"
-#~ msgstr "impossÌvel abrir %s para leitura"
-
-#~ msgid "warning: can't create temp file %s"
-#~ msgstr "aviso: impossÌvel criar arquivo tempor·rio %s"
-
-#~ msgid "warning: can't read the fallback whatis text database."
-#~ msgstr "aviso: impossÌvel ler o banco de dados texto de reserva \"whatis\""
-
-#~ msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
-#~ msgstr " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 
 #~ msgid "No source manual entry for %s"
 #~ msgstr "Nenhuma entrada de fonte de manual para %s"
 
 #~ msgid " in section %s\n"
-#~ msgstr " na seÁ„o %s\n"
+#~ msgstr " na se√ß√£o %s\n"
 
-#~ msgid "Reformatting %s, please wait...\n"
-#~ msgstr "Reformatando %s, por favor aguarde...\n"
+#~ msgid " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
+#~ msgstr " ?ltline %lt?L/%L.:byte %bB?s/%s..?e (END):?pB %pB\\%.."
 
-#~ msgid "can't popen"
-#~ msgstr "impossÌvel pabrir"
+#~ msgid "error trying to read from stdin"
+#~ msgstr "erro tentando ler da entrada padr√£o (stdin)"
 
-#, fuzzy
-#~ msgid "can't get mandb command's exit status"
-#~ msgstr "impossÌvel acessar o estado de saÌda do comando man"
+#~ msgid "error writing to temporary file %s"
+#~ msgstr "erro escrevendo no arquivo tempor√°rio %s"
 
 #~ msgid "can't create pipe"
-#~ msgstr "impossÌvel criar pipe"
+#~ msgstr "n√£o foi poss√≠vel criar pipe"
 
 #~ msgid "can't create %s"
-#~ msgstr "impossÌvel criar %s"
+#~ msgstr "n√£o foi poss√≠vel criar %s"
+
+#~ msgid "can't fork"
+#~ msgstr "n√£o foi poss√≠vel fazer fork"
 
 #~ msgid "can't dup2"
-#~ msgstr "impossÌvel fazer dup2"
+#~ msgstr "n√£o foi poss√≠vel fazer dup2"
 
 #~ msgid "can't exec %s"
-#~ msgstr "impossÌvel executar %s"
+#~ msgstr "n√£o foi poss√≠vel executar %s"
 
 #~ msgid "waiting for pid %u"
 #~ msgstr "esperando pelo pid %u"
 
-#, fuzzy
+#~ msgid "Still saving the page, please wait...\n"
+#~ msgstr "Ainda salvando a p√°gina, por favor aguarde...\n"
+
+#~ msgid "Reformatting %s, please wait...\n"
+#~ msgstr "Reformatando %s, por favor aguarde...\n"
+
+#~ msgid "usage: %s [-dqspuc|-h|-V] [manpath]\n"
+#~ msgstr "uso: %s [-dqspuc|-h|-V] [manpath]\n"
+
 #~ msgid ""
-#~ "usage: %s [-dhV] [-r|-w] [-m systems] [-M manpath] [-C file] keyword ...\n"
+#~ "-d --debug                  produce debugging info.\n"
+#~ "-q --quiet                  work quietly, except for 'bogus' warning.\n"
+#~ "-s --no-straycats           don't look for or add stray cats to the dbs.\n"
+#~ "-p --no-purge               don't purge obsolete entries from the dbs.\n"
+#~ "-u --user-db                produce user databases only.\n"
+#~ "-c --create                 create dbs from scratch, rather than "
+#~ "updating.\n"
+#~ "-V --version                show version.\n"
+#~ "-h --help                   show this usage message.\n"
+#~ msgstr ""
+#~ "-d --debug                  produz informa√ß√£o de depura√ß√£o.\n"
+#~ "-q --quiet                  produz menos avisos.\n"
+#~ "-s --no-straycats           n√£o procura ou adiciona 'vira-latas' aos "
+#~ "bds.\n"
+#~ "-p --no-purge               n√£o descarta entradas obsoletas dos bds.\n"
+#~ "-u --user-db                produz apenas bancos de dados de usu√°rio.\n"
+#~ "-c --create                 cria bds do zero, ao inv√©s de atualizar.\n"
+#~ "-V --version                mostra vers√£o.\n"
+#~ "-h --help                   mostra esta mensagem de ajuda.\n"
+
+#~ msgid "usage: %s [[-gcdq] [-m system]] | [-V] | [-h]\n"
+#~ msgstr "uso: %s [[-gcdq] [-m sistema]] | [-V] | [-h]\n"
+
+#~ msgid ""
+#~ "-c --catpath                show relative catpaths.\n"
+#~ "-g --global                 show the entire global manpath.\n"
+#~ "-d --debug                  produce debugging info.\n"
+#~ "-q --quiet                  produce fewer warnings.\n"
+#~ "-m --systems system         express which `systems' to use.\n"
+#~ "-V --version                show version.\n"
+#~ "-h --help                   show this usage message.\n"
+#~ msgstr ""
+#~ "-c --catpath                mostra os catpaths relativos.\n"
+#~ "-g --global                 mostra todo o manpath global.\n"
+#~ "-d --debug                  produz informa√ß√£o de depura√ß√£o.\n"
+#~ "-q --quiet                  produz menos avisos.\n"
+#~ "-m --systems sistema        indica que `sistemas' usar.\n"
+#~ "-V --version                mostra vers√£o.\n"
+#~ "-h --help                   mostra esta mensagem de ajuda.\n"
+
+#~ msgid "warning: can't create temp file %s"
+#~ msgstr "aviso: n√£o foi poss√≠vl criar arquivo tempor√°rio %s"
+
+#~ msgid "%s, version %s, %s\n"
+#~ msgstr "%s, vers√£o %s, %s\n"
+
+#~ msgid ""
+#~ "usage: %s [-d] [-r|-w|-e] [-m systems] [-M manpath] | [-h] | [-V] "
+#~ "keyword ...\n"
+#~ msgstr ""
+#~ "uso: %s [-d] [-r|-w|-e] [-m sistemas] [-M manpath] | [-h] | [-V] palavra-"
+#~ "chave ...\n"
+
+#~ msgid ""
+#~ "-d --debug\t\tproduce debugging info.\n"
+#~ "-r --regex \t\tinterpret each keyword as a regex (default).\n"
+#~ "-e --exact \t\tsearch each keyword for exact match.\n"
+#~ "-w --wildcard\t\tthe keyword(s) contain wildcards.\n"
+#~ "-m --systems system\tinclude alternate systems man pages.\n"
+#~ "-M --manpath path\tset search path for manual pages to `path'.\n"
+#~ "-V --version\t\tshow version.\n"
+#~ "-h --help\t\tshow this usage message.\n"
+#~ msgstr ""
+#~ "-d --debug\t\tproduce debugging info.\n"
+#~ "-r --regex \t\tinterpreta cada palavra-chave como uma express√£o regular "
+#~ "(padr√£o).\n"
+#~ "-e --exact \t\tbusca cada palavra-chave por uma coincid√™ncia exata.\n"
+#~ "-w --wildcard\t\ta(s) plavra-chave(s) cont√©m coringas.\n"
+#~ "-m --systems sistema\tinclui p√°ginas de manual de sistemas alternativos.\n"
+#~ "-M --manpath caminho\tseta o caminho de procura por p√°ginas de manual "
+#~ "para `caminho'.\n"
+#~ "-V --version\t\tmostra vers√£o.\n"
+#~ "-h --help\t\tmostra esta mensagem de uso.\n"
+
+#~ msgid ""
+#~ "usage: %s [-d] [-r|-w] [-m systems] [-M manpath] | [-h] | [-V] "
+#~ "keyword ...\n"
 #~ msgstr ""
 #~ "uso: %s [-d] [-r|-w] [-m sistemas] [-M manpath] | [-h] | [-V] palavra-"
 #~ "chave ...\n"
 
-#, fuzzy
-#~ msgid "couldn't exec %s"
-#~ msgstr "impossÌvel executar %s"
-
-#~ msgid "key %s is missing name component - is this an old db?"
-#~ msgstr "a chave %s n„o nome do componente - este È um bd antigo?"
-
 #~ msgid ""
-#~ "\n"
-#~ "Usage: accessdb [man_database]\n"
-#~ "\tman_database defaults to %s"
+#~ "-d --debug\t\tproduce debugging info.\n"
+#~ "-r --regex \t\tinterpret each keyword as a regex.\n"
+#~ "-w --wildcard\t\tthe keyword(s) contain wildcards.\n"
+#~ "-m --systems system\tinclude alternate systems man pages.\n"
+#~ "-M --manpath path\tset search path for manual pages to `path'.\n"
+#~ "-V --version\t\tshow version.\n"
+#~ "-h --help\t\tshow this usage message.\n"
 #~ msgstr ""
-#~ "\n"
-#~ "Uso: accessdb [man_database]\n"
-#~ "\tman_database usa %s por padr„o"
+#~ "-d --debug\t\tproduz informa√ß√£o de depura√ß√£o.\n"
+#~ "-r --regex \t\tinterpreta cada palavra chave como express√£o regular.\n"
+#~ "-w --wildcard\t\ta(s) palavra(s)-chave cont√©m coringas.\n"
+#~ "-m --systems system\tinclui p√°ginas de man do sistema alternativas.\n"
+#~ "-M --manpath path\tseta o caminho de busca por p√°ginas man para `path'.\n"
+#~ "-V --version\t\tmostra vers√£o.\n"
+#~ "-h --help\t\tmostra esta mensagem.\n"
 
-#~ msgid "\n"
-#~ msgstr "\n"
-
-#~ msgid ""
-#~ "-H, --html                  use lynx or argument to display html output.\n"
+#~ msgid "warning: can't read the fallback whatis text database."
 #~ msgstr ""
-#~ "-H, --html                  usa o lynx ou argumento para mostrar a saÌda "
-#~ "html.\n"
+#~ "aviso: n√£o foi poss√≠vel ler o banco de dados texto de reserva \"whatis\""
 
-#~ msgid ""
-#~ "-X, --gxditview             use groff and display through gditview (X11):"
-#~ msgstr ""
-#~ "-X, --gxditview             usa groff e mostra atravÈs do gditview (X11):"
+#~ msgid "Don't know which program should I run being >%s<\n"
+#~ msgstr "N√£o sei que programa deve ser rodado como >%s<\n"
+
+#~ msgid "%s: Failed su to user %s\n"
+#~ msgstr "%s: Falhou o \"su\" para usu√°rio %s\n"
