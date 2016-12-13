@@ -2184,13 +2184,14 @@ static int display (const char *dir, const char *man_file,
 				name = xasprintf ("echo .mso %s.tmac",
 						  bits.language);
 				lcmd = pipecmd_new_function (
-					name, locale_macros, free, page_lang);
+					name, locale_macros, free,
+					xstrdup (bits.language));
 				pipecmd_sequence_command (seq, lcmd);
 				++seq_ncmds;
 				free (name);
 				free_locale_bits (&bits);
-			} else
-				free (page_lang);
+			}
+			free (page_lang);
 		}
 #endif /* TROFF_IS_GROFF */
 
