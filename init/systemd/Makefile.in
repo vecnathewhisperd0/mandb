@@ -300,8 +300,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/man-arg-automatic-create.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-DIST_COMMON = $(srcdir)/Makefile.am $(dist_systemdtmpfiles_DATA) \
-	$(am__DIST_COMMON)
+DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
@@ -353,7 +352,7 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 am__installdirs = "$(DESTDIR)$(systemdtmpfilesdir)"
-DATA = $(dist_systemdtmpfiles_DATA)
+DATA = $(nodist_systemdtmpfiles_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 am__DIST_COMMON = $(srcdir)/Makefile.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -1348,7 +1347,9 @@ unlzma = @unlzma@
 unxz = @unxz@
 vgrind = @vgrind@
 xz = @xz@
-dist_systemdtmpfiles_DATA = man-db.conf
+EXTRA_DIST = man-db.conf.in
+CLEANFILES = man-db.conf
+nodist_systemdtmpfiles_DATA = man-db.conf
 all: all-am
 
 .SUFFIXES:
@@ -1387,9 +1388,9 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-dist_systemdtmpfilesDATA: $(dist_systemdtmpfiles_DATA)
+install-nodist_systemdtmpfilesDATA: $(nodist_systemdtmpfiles_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(dist_systemdtmpfiles_DATA)'; test -n "$(systemdtmpfilesdir)" || list=; \
+	@list='$(nodist_systemdtmpfiles_DATA)'; test -n "$(systemdtmpfilesdir)" || list=; \
 	if test -n "$$list"; then \
 	  echo " $(MKDIR_P) '$(DESTDIR)$(systemdtmpfilesdir)'"; \
 	  $(MKDIR_P) "$(DESTDIR)$(systemdtmpfilesdir)" || exit 1; \
@@ -1403,9 +1404,9 @@ install-dist_systemdtmpfilesDATA: $(dist_systemdtmpfiles_DATA)
 	  $(INSTALL_DATA) $$files "$(DESTDIR)$(systemdtmpfilesdir)" || exit $$?; \
 	done
 
-uninstall-dist_systemdtmpfilesDATA:
+uninstall-nodist_systemdtmpfilesDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_systemdtmpfiles_DATA)'; test -n "$(systemdtmpfilesdir)" || list=; \
+	@list='$(nodist_systemdtmpfiles_DATA)'; test -n "$(systemdtmpfilesdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(systemdtmpfilesdir)'; $(am__uninstall_files_from_dir)
 tags TAGS:
@@ -1474,6 +1475,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -1502,7 +1504,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dist_systemdtmpfilesDATA
+install-data-am: install-nodist_systemdtmpfilesDATA
 
 install-dvi: install-dvi-am
 
@@ -1546,25 +1548,28 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-dist_systemdtmpfilesDATA
+uninstall-am: uninstall-nodist_systemdtmpfilesDATA
 
 .MAKE: install-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	cscopelist-am ctags-am distclean distclean-generic \
 	distclean-libtool distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am \
-	install-dist_systemdtmpfilesDATA install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-nodist_systemdtmpfilesDATA install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags-am uninstall \
-	uninstall-am uninstall-dist_systemdtmpfilesDATA
+	uninstall-am uninstall-nodist_systemdtmpfilesDATA
 
 .PRECIOUS: Makefile
 
+
+man-db.conf: man-db.conf.in
+	sed -e "s,[@]man_owner[@],$(man_owner),g" $< > $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

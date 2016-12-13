@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ##
-## Copyright (C) 2014 Colin Watson.
+## Copyright (C) 2014, 2016 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -18,4 +18,11 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-dist_systemdtmpfiles_DATA = man-db.conf
+EXTRA_DIST = man-db.conf.in
+
+CLEANFILES = man-db.conf
+
+nodist_systemdtmpfiles_DATA = man-db.conf
+
+man-db.conf: man-db.conf.in
+	sed -e "s,[@]man_owner[@],$(man_owner),g" $< > $@
