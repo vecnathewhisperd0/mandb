@@ -18,10 +18,10 @@ AS_HELP_STRING([--disable-cache-owner], [don't constrain ownership of system-wid
 	   else
 		man_owner=$enableval
 		AC_MSG_NOTICE([System-wide cache files will be owned by $enableval])
-	   	AC_DEFINE_UNQUOTED([SECURE_MAN_UID], ["$man_owner"],
+	   	AC_DEFINE_UNQUOTED([MAN_OWNER], ["$man_owner"],
 				   [Define as the owner of system-wide cache files.])
 	   fi],
 	  [man_owner=man
-	   AC_DEFINE_UNQUOTED([SECURE_MAN_UID], ["$man_owner"])])
+	   AC_DEFINE_UNQUOTED([MAN_OWNER], ["$man_owner"])])
 AC_SUBST([man_owner])
 ])

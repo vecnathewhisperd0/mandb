@@ -70,7 +70,7 @@
 #include "error.h"
 #include "cleanup.h"
 
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 # include "security.h"
 #endif
 
@@ -145,7 +145,7 @@ static struct list *iterate_over_list (struct list *prev, char *key, int flag)
 	return NULL;
 }
 
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 /* Must not return DEFINEs set in ~/.manpath. This is used to fetch
  * definitions used in raised-privilege code; if in doubt, be conservative!
  *

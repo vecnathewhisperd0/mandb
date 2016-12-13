@@ -361,7 +361,7 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 	free (manpage);
 }
 
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 extern uid_t uid;			/* current effective user id */
 extern gid_t gid;			/* current effective group id */
 
@@ -387,11 +387,11 @@ void chown_if_possible (const char *path)
 #endif
 	}
 }
-#else /* !SECURE_MAN_UID */
+#else /* !MAN_OWNER */
 void chown_if_possible (const char *path)
 {
 }
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 
 /* create the catman hierarchy if it doesn't exist */
 static void mkcatdirs (const char *mandir, const char *catdir)

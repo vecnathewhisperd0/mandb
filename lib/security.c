@@ -45,7 +45,7 @@
 
 #include "security.h"
 
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 
    /*
     * This is the name of the user that the preformatted man pages belong to.
@@ -110,7 +110,7 @@ struct passwd *get_man_owner (void)
 	return man_owner;
 }
 
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 
 /* 
  * function to gain user privs by either (a) dropping effective privs 
@@ -119,7 +119,7 @@ struct passwd *get_man_owner (void)
  */
 void drop_effective_privs (void)
 {
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 	if (uid != ruid) {
 		debug ("drop_effective_privs()\n");
 		if (idpriv_temp_drop ())
@@ -130,7 +130,7 @@ void drop_effective_privs (void)
 
 	priv_drop_count++;
 	debug ("++priv_drop_count = %d\n", priv_drop_count);
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 }
 
 /* 
@@ -139,7 +139,7 @@ void drop_effective_privs (void)
  */
 void regain_effective_privs (void)
 {
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 	if (priv_drop_count) {
 		priv_drop_count--;
 		debug ("--priv_drop_count = %d\n", priv_drop_count);
@@ -155,10 +155,10 @@ void regain_effective_privs (void)
 		uid = euid;
 		gid = egid;
 	}
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 }
 
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 void do_system_drop_privs_child (void *data)
 {
 	pipeline *p = data;
@@ -167,7 +167,7 @@ void do_system_drop_privs_child (void *data)
 		gripe_set_euid ();
 	exit (pipeline_run (p));
 }
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 
 /* The safest way to execute a pipeline with no effective privileges is to
  * fork, permanently drop privileges in the child, run the pipeline from the
@@ -181,7 +181,7 @@ void do_system_drop_privs_child (void *data)
  */
 int do_system_drop_privs (pipeline *p)
 {
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 	pipecmd *child_cmd;
 	pipeline *child;
 	int status;
@@ -193,7 +193,7 @@ int do_system_drop_privs (pipeline *p)
 
 	pipeline_free (p);
 	return status;
-#else  /* !SECURE_MAN_UID */
+#else  /* !MAN_OWNER */
 	return pipeline_run (p);
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 }

@@ -108,10 +108,10 @@ int have_cwd;
 #include "zsoelim.h"
 #include "manconv_client.h"
 
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 extern uid_t ruid;
 extern uid_t euid;
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 
 /* the default preprocessor sequence */
 #ifndef DEFAULT_MANROFFSEQ
@@ -1660,7 +1660,7 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 {
 	int status = 0;
 
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 	if (!delete && global_manpath && euid == 0) {
 		if (debug_level) {
 			debug ("fixing temporary cat's ownership\n");
@@ -1673,7 +1673,7 @@ static int commit_tmp_cat (const char *cat_file, const char *tmp_cat,
 				error (0, errno, _("can't chown %s"), tmp_cat);
 		}
 	}
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 
 	if (!delete && !status) {
 		if (debug_level) {
@@ -4003,10 +4003,10 @@ int main (int argc, char *argv[])
 	if (argp_parse (&argp, argc, argv, ARGP_NO_ARGS, &first_arg, 0))
 		exit (FAIL);
 
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 	/* record who we are and drop effective privs for later use */
 	init_security ();
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 
 	read_config_file (local_man_file || user_config_file);
 
@@ -4015,9 +4015,9 @@ int main (int argc, char *argv[])
 		do_extern (argc, argv);
 
 	get_term (); /* stores terminal settings */
-#ifdef SECURE_MAN_UID
+#ifdef MAN_OWNER
 	debug ("real user = %d; effective user = %d\n", ruid, euid);
-#endif /* SECURE_MAN_UID */
+#endif /* MAN_OWNER */
 
 	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
