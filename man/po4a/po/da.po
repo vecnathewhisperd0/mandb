@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.7.6.1\n"
 "POT-Creation-Date: 2016-12-13 04:01+0000\n"
-"PO-Revision-Date: 2016-12-12 07:50+0200\n"
+"PO-Revision-Date: 2016-12-13 07:50+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -1199,6 +1199,17 @@ msgid ""
 "will allow %man% to `forget' about the options specified in $B<MANOPT> "
 "although they must still have been valid."
 msgstr ""
+"Hvis angivet, bliver diverse miljøvariabler forhandlet for at bestemme "
+"operationen af B<%man%>. Det er muligt at angive variablen »catch all« "
+"$B<MANOPT> til enhver streng i kommandolinjeformat med den undtagelse at "
+"eventuelle mellemrum brugt som del af et tilvalgs argument skal have "
+"undvigesekvens (forudstillet med en skråstreg). B<%man%> vil fortolke "
+"$B<MANOPT> før fortolkning af sin egen kommandolinje. Disse tilvalg der "
+"kræver et argument vil blive overskrevet af de samme tilvalg fundet på "
+"kommandolinjen. For at nulstille hele tilvalgssættet i $B<MANOPT>, B<-D> kan "
+"specificeres som opstartsindstilling for kommandolinjen. Dette vil tillade "
+"%man% at »glemme« tilvalgene specificeret i $B<MANOPT> selvom de stadig må "
+"have været gyldige.."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:395
@@ -1266,6 +1277,8 @@ msgid ""
 "E<lt>I<language>E<gt>[\\|B<_>E<lt>I<territory>E<gt>\\|[\\|B<."
 ">E<lt>I<character-set>E<gt>\\|[\\|B<,>E<lt>I<version>E<gt>\\|]\\|]\\|]"
 msgstr ""
+"E<lt>I<language>E<gt>[\\|B<_>E<lt>I<territory>E<gt>\\|[\\|B<."
+">E<lt>I<tegnsæt>E<gt>\\|[\\|B<,>E<lt>I<version>E<gt>\\|]\\|]\\|]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:466
@@ -1292,6 +1305,8 @@ msgid ""
 "For information regarding other features and extensions available with this "
 "manual pager, please read the documents supplied with the package."
 msgstr ""
+"For information om andre funktioner og udvidelser tilgængelige med denne "
+"manualtekstviser, så læs venligst dokumenterne leveret med denne pakke."
 
 #. type: SH
 #: ../../man/man1/man.man1:476
@@ -1344,6 +1359,11 @@ msgid ""
 "line of the nroff file is parsed for a preprocessor string.  To contain a "
 "valid preprocessor string, the first line must resemble"
 msgstr ""
+"Filtrene tydes vis et antal metoder. Først tydes kommandolinjetilvalget B<-"
+"p> eller miljøvariablen $B<MANROFFSEQ>. Hvis B<-p> ikke blev brugt og "
+"miljøvariablen ikke var angivet, så fortolkes opstartslinjen for nroff-filen "
+"for en forbrænderstrenge. For at indeholde en gyldig forbrænderstreng, så "
+"skal den første linje ligne"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:528
