@@ -28,6 +28,7 @@ POFILES = \
 	po/nl.po \
 	po/pl.po \
 	po/ru.po \
+	po/sr.po \
 	po/sv.po \
 	po/zh_CN.po
 
