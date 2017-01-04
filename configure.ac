@@ -470,6 +470,7 @@ AC_CONFIG_FILES([Makefile
 	man/ja/Makefile
 	man/nl/Makefile
 	man/pl/Makefile
+	man/pt_BR/Makefile
 	man/ru/Makefile
 	man/sr/Makefile
 	man/sv/Makefile
