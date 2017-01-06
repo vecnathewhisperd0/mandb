@@ -14,6 +14,13 @@ Improvements:
  * Make the man-db manual build reproducible.
  * Add some hardening options to the `systemd` service.
 
+Fixes:
+
+ * If an override directory is configured using `--with-override-dir`, it is
+   now applied more consistently when building the manpath, and whether a
+   page was found in an override directory is considered when sorting
+   candidates for display.
+
 man-db 2.10.1 (10 February 2022)
 ================================
 

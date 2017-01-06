@@ -912,23 +912,6 @@ static char *def_path (enum config_flag flag)
 }
 
 /*
- * If specified with configure, append OVERRIDE_DIR to dir param and add it
- * to list.
- */
-static void insert_override_dir (gl_list_t list, const char *dir)
-{
-	char *override_dir = NULL;
-
-	if (!strlen (OVERRIDE_DIR))
-		return;
-
-	if ((override_dir = xasprintf ("%s/%s", dir, OVERRIDE_DIR))) {
-		add_dir_to_list (list, override_dir);
-		free (override_dir);
-	}
-}
-
-/*
  * For each directory in the user's path, see if it is one of the
  * directories listed in the man_db.config file.  If so, and it is
  * not already in the manpath, add it.  If the directory is not listed
@@ -976,7 +959,6 @@ char *get_manpath_from_path (const char *path, int mandatory)
 			if (!manpath_map_found)
 				debug ("is in the config file\n");
 			manpath_map_found = true;
-			insert_override_dir (tmplist, config_item->cont);
 			add_dir_to_list (tmplist, config_item->cont);
 		}
 
@@ -997,11 +979,8 @@ char *get_manpath_from_path (const char *path, int mandatory)
 		debug ("adding mandatory man directories\n");
 
 		GL_LIST_FOREACH (config, config_item) {
-			if (config_item->flag == MANDATORY) {
-				insert_override_dir (tmplist,
-						     config_item->key);
+			if (config_item->flag == MANDATORY)
 				add_dir_to_list (tmplist, config_item->key);
-			}
 		}
 	}
 
@@ -1083,35 +1062,27 @@ static void add_man_subdirs (gl_list_t list, const char *path)
 	char *subdir = strrchr (path, '/');
 	if (subdir) {
 		newpath = xasprintf ("%.*s/man", (int) (subdir - path), path);
-		if (is_directory (newpath) == 1) {
-			insert_override_dir (list, newpath);
+		if (is_directory (newpath) == 1)
 			add_dir_to_list (list, newpath);
-		}
 		free (newpath);
 	}
 
 	newpath = xasprintf ("%s/man", path);
-	if (is_directory (newpath) == 1) {
-		insert_override_dir (list, newpath);
+	if (is_directory (newpath) == 1)
 		add_dir_to_list (list, newpath);
-	}
 	free (newpath);
 
 	if (subdir) {
 		newpath = xasprintf ("%.*s/share/man",
 				     (int) (subdir - path), path);
-		if (is_directory (newpath) == 1) {
-			insert_override_dir (list, newpath);
+		if (is_directory (newpath) == 1)
 			add_dir_to_list (list, newpath);
-		}
 		free (newpath);
 	}
 
 	newpath = xasprintf ("%s/share/man", path);
-	if (is_directory (newpath) == 1) {
-		insert_override_dir (list, newpath);
+	if (is_directory (newpath) == 1)
 		add_dir_to_list (list, newpath);
-	}
 	free (newpath);
 }
 
@@ -1208,21 +1179,31 @@ gl_list_t create_pathlist (const char *manp)
 	 * pairs for easier handling.  add_dir_to_path_list only adds items
 	 * if they do not have the same canonicalized path as an existing
 	 * item, thereby eliminating duplicates due to symlinks.
+	 * For each entry, add corresponding OVERRIDE_DIR if configured.
 	 */
 
 	canonicalized_list = gl_list_create_empty
 		(GL_LINKEDHASH_LIST, canonicalized_path_equals,
 		 canonicalized_path_hash, canonicalized_path_free, false);
 	for (p = manp;; p = end + 1) {
+		char *element;
+
 		end = strchr (p, ':');
-		if (end) {
-			char *element = xstrndup (p, end - p);
-			add_dir_to_path_list (canonicalized_list, element);
-			free (element);
-		} else {
-			add_dir_to_path_list (canonicalized_list, p);
-			break;
+		element = end ? xstrndup (p, end - p) : xstrdup (p);
+
+		if (*OVERRIDE_DIR) {
+			char *element_override = xasprintf
+				("%s/%s", element, OVERRIDE_DIR);
+			add_dir_to_path_list
+				(canonicalized_list, element_override);
+			free (element_override);
 		}
+
+		add_dir_to_path_list (canonicalized_list, element);
+		free (element);
+
+		if (!end)
+			break;
 	}
 
 	list = new_string_list (GL_ARRAY_LIST, false);

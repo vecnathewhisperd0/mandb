@@ -2730,6 +2730,38 @@ static bool duplicate_candidates (struct candidate *left,
 	return ret;
 }
 
+/* Return zero if the candidates are in different base paths or if both
+ * candidates or neither are in OVERRIDE_DIR relative to their base path;
+ * negative if left is in OVERRIDE_DIR and right is not; or positive if
+ * right is in OVERRIDE_DIR and left is not.
+ */
+static int compare_override_dir (const struct candidate *left,
+				 const struct candidate *right)
+{
+	size_t left_len, right_len;
+
+	if (!*OVERRIDE_DIR)
+		return 0;
+
+	left_len = strlen (left->path);
+	right_len = strlen (right->path);
+	if (left_len == right_len ||
+	    !STRNEQ (left->path, right->path, MIN (left_len, right_len)))
+		return 0;
+
+	if (left_len > right_len) {
+		if (left->path[right_len] == '/' &&
+		    STREQ (left->path + right_len + 1, OVERRIDE_DIR))
+			return -1;
+	} else {
+		if (right->path[left_len] == '/' &&
+		    STREQ (right->path + left_len + 1, OVERRIDE_DIR))
+			return 1;
+	}
+
+	return 0;
+}
+
 static int compare_candidates (const struct candidate *left,
 			       const struct candidate *right)
 {
@@ -2816,6 +2848,14 @@ static int compare_candidates (const struct candidate *left,
 	 * lexically.
 	 */
 	cmp = strcmp (lsource->ext, rsource->ext);
+	if (cmp)
+		return cmp;
+
+	/* If one candidate is in OVERRIDE_DIR within the same base path as
+	 * the other candidate, then the candidate in OVERRIDE_DIR comes
+	 * first.
+	 */
+	cmp = compare_override_dir (left, right);
 	if (cmp)
 		return cmp;
 
