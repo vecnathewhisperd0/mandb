@@ -15673,6 +15673,8 @@ fi
   # Code from module mbsrtowcs:
   # Code from module mbtowc:
   # Code from module memchr:
+  # Code from module memmem:
+  # Code from module memmem-simple:
   # Code from module mempcpy:
   # Code from module memrchr:
   # Code from module minmax:
@@ -24847,6 +24849,135 @@ $as_echo "$gl_cv_func_memchr_works" >&6; }
       REPLACE_MEMCHR=1
     fi
   fi
+
+
+      ac_fn_c_check_decl "$LINENO" "memmem" "ac_cv_have_decl_memmem" "$ac_includes_default"
+if test "x$ac_cv_have_decl_memmem" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_MEMMEM $ac_have_decl
+_ACEOF
+
+
+
+
+
+
+  for ac_func in memmem
+do :
+  ac_fn_c_check_func "$LINENO" "memmem" "ac_cv_func_memmem"
+if test "x$ac_cv_func_memmem" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_MEMMEM 1
+_ACEOF
+
+fi
+done
+
+  if test $ac_cv_func_memmem = yes; then
+    HAVE_MEMMEM=1
+  else
+    HAVE_MEMMEM=0
+  fi
+
+  :
+
+
+
+
+
+  if test $ac_cv_have_decl_memmem = no; then
+    HAVE_DECL_MEMMEM=0
+  else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether memmem works" >&5
+$as_echo_n "checking whether memmem works... " >&6; }
+if ${gl_cv_func_memmem_works_always+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "$cross_compiling" = yes; then :
+                                      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifdef __GNU_LIBRARY__
+ #include <features.h>
+ #if ((__GLIBC__ == 2 && ((__GLIBC_MINOR > 0 && __GLIBC_MINOR__ < 9) \
+                          || __GLIBC_MINOR__ > 12)) \
+      || (__GLIBC__ > 2)) \
+     || defined __UCLIBC__
+  Lucky user
+ #endif
+#elif defined __CYGWIN__
+ #include <cygwin/version.h>
+ #if CYGWIN_VERSION_DLL_COMBINED > CYGWIN_VERSION_DLL_MAKE_COMBINED (1007, 7)
+  Lucky user
+ #endif
+#else
+  Lucky user
+#endif
+
+_ACEOF
+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+  $EGREP "Lucky user" >/dev/null 2>&1; then :
+  gl_cv_func_memmem_works_always="guessing yes"
+else
+  gl_cv_func_memmem_works_always="guessing no"
+fi
+rm -f conftest*
+
+
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <string.h> /* for memmem */
+#define P "_EF_BF_BD"
+#define HAYSTACK "F_BD_CE_BD" P P P P "_C3_88_20" P P P "_C3_A7_20" P
+#define NEEDLE P P P P P
+
+int
+main ()
+{
+
+    int result = 0;
+    if (memmem (HAYSTACK, strlen (HAYSTACK), NEEDLE, strlen (NEEDLE)))
+      result |= 1;
+    /* Check for empty needle behavior.  */
+    {
+      const char *haystack = "AAA";
+      if (memmem (haystack, 3, NULL, 0) != haystack)
+        result |= 2;
+    }
+    return result;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  gl_cv_func_memmem_works_always=yes
+else
+  gl_cv_func_memmem_works_always=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_memmem_works_always" >&5
+$as_echo "$gl_cv_func_memmem_works_always" >&6; }
+    case "$gl_cv_func_memmem_works_always" in
+      *yes) ;;
+      *)
+        REPLACE_MEMMEM=1
+        ;;
+    esac
+  fi
+  :
 
 
       ac_fn_c_check_decl "$LINENO" "memrchr" "ac_cv_have_decl_memrchr" "$ac_includes_default"
@@ -35435,6 +35566,256 @@ done
 
 
 $as_echo "#define GNULIB_TEST_MEMCHR 1" >>confdefs.h
+
+
+
+
+
+  if test $HAVE_DECL_MEMMEM = 1 && test $REPLACE_MEMMEM = 0; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether memmem works in linear time" >&5
+$as_echo_n "checking whether memmem works in linear time... " >&6; }
+if ${gl_cv_func_memmem_works_fast+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "$cross_compiling" = yes; then :
+                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <features.h>
+#ifdef __GNU_LIBRARY__
+ #if ((__GLIBC__ == 2 && __GLIBC_MINOR__ >= 9) || (__GLIBC__ > 2)) \
+     && !defined __UCLIBC__
+  Lucky user
+ #endif
+#endif
+#ifdef __CYGWIN__
+ #include <cygwin/version.h>
+ #if CYGWIN_VERSION_DLL_COMBINED > CYGWIN_VERSION_DLL_MAKE_COMBINED (1007, 0)
+  Lucky user
+ #endif
+#endif
+
+_ACEOF
+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+  $EGREP "Lucky user" >/dev/null 2>&1; then :
+  gl_cv_func_memmem_works_fast="guessing yes"
+else
+  gl_cv_func_memmem_works_fast="guessing no"
+fi
+rm -f conftest*
+
+
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <signal.h> /* for signal */
+#include <string.h> /* for memmem */
+#include <stdlib.h> /* for malloc */
+#include <unistd.h> /* for alarm */
+static void quit (int sig) { exit (sig + 128); }
+
+int
+main ()
+{
+
+    int result = 0;
+    size_t m = 1000000;
+    char *haystack = (char *) malloc (2 * m + 1);
+    char *needle = (char *) malloc (m + 1);
+    /* Failure to compile this test due to missing alarm is okay,
+       since all such platforms (mingw) also lack memmem.  */
+    signal (SIGALRM, quit);
+    alarm (5);
+    /* Check for quadratic performance.  */
+    if (haystack && needle)
+      {
+        memset (haystack, 'A', 2 * m);
+        haystack[2 * m] = 'B';
+        memset (needle, 'A', m);
+        needle[m] = 'B';
+        if (!memmem (haystack, 2 * m + 1, needle, m + 1))
+          result |= 1;
+      }
+    return result;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  gl_cv_func_memmem_works_fast=yes
+else
+  gl_cv_func_memmem_works_fast=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_memmem_works_fast" >&5
+$as_echo "$gl_cv_func_memmem_works_fast" >&6; }
+    case "$gl_cv_func_memmem_works_fast" in
+      *yes) ;;
+      *)
+        REPLACE_MEMMEM=1
+        ;;
+    esac
+  fi
+
+  if test $HAVE_MEMMEM = 0 || test $REPLACE_MEMMEM = 1; then
+
+
+
+
+
+
+
+
+  gl_LIBOBJS="$gl_LIBOBJS memmem.$ac_objext"
+
+  fi
+
+
+
+
+  for ac_func in memmem
+do :
+  ac_fn_c_check_func "$LINENO" "memmem" "ac_cv_func_memmem"
+if test "x$ac_cv_func_memmem" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_MEMMEM 1
+_ACEOF
+
+fi
+done
+
+  if test $ac_cv_func_memmem = yes; then
+    HAVE_MEMMEM=1
+  else
+    HAVE_MEMMEM=0
+  fi
+
+  :
+
+
+
+
+
+  if test $ac_cv_have_decl_memmem = no; then
+    HAVE_DECL_MEMMEM=0
+  else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether memmem works" >&5
+$as_echo_n "checking whether memmem works... " >&6; }
+if ${gl_cv_func_memmem_works_always+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "$cross_compiling" = yes; then :
+                                      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifdef __GNU_LIBRARY__
+ #include <features.h>
+ #if ((__GLIBC__ == 2 && ((__GLIBC_MINOR > 0 && __GLIBC_MINOR__ < 9) \
+                          || __GLIBC_MINOR__ > 12)) \
+      || (__GLIBC__ > 2)) \
+     || defined __UCLIBC__
+  Lucky user
+ #endif
+#elif defined __CYGWIN__
+ #include <cygwin/version.h>
+ #if CYGWIN_VERSION_DLL_COMBINED > CYGWIN_VERSION_DLL_MAKE_COMBINED (1007, 7)
+  Lucky user
+ #endif
+#else
+  Lucky user
+#endif
+
+_ACEOF
+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+  $EGREP "Lucky user" >/dev/null 2>&1; then :
+  gl_cv_func_memmem_works_always="guessing yes"
+else
+  gl_cv_func_memmem_works_always="guessing no"
+fi
+rm -f conftest*
+
+
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <string.h> /* for memmem */
+#define P "_EF_BF_BD"
+#define HAYSTACK "F_BD_CE_BD" P P P P "_C3_88_20" P P P "_C3_A7_20" P
+#define NEEDLE P P P P P
+
+int
+main ()
+{
+
+    int result = 0;
+    if (memmem (HAYSTACK, strlen (HAYSTACK), NEEDLE, strlen (NEEDLE)))
+      result |= 1;
+    /* Check for empty needle behavior.  */
+    {
+      const char *haystack = "AAA";
+      if (memmem (haystack, 3, NULL, 0) != haystack)
+        result |= 2;
+    }
+    return result;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  gl_cv_func_memmem_works_always=yes
+else
+  gl_cv_func_memmem_works_always=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gl_cv_func_memmem_works_always" >&5
+$as_echo "$gl_cv_func_memmem_works_always" >&6; }
+    case "$gl_cv_func_memmem_works_always" in
+      *yes) ;;
+      *)
+        REPLACE_MEMMEM=1
+        ;;
+    esac
+  fi
+  :
+
+  if test $HAVE_MEMMEM = 0 || test $REPLACE_MEMMEM = 1; then
+
+
+
+
+
+
+
+
+  gl_LIBOBJS="$gl_LIBOBJS memmem.$ac_objext"
+
+  fi
+
+
+
+
+
+          GNULIB_MEMMEM=1
+
+
+
+
+
+$as_echo "#define GNULIB_TEST_MEMMEM 1" >>confdefs.h
 
 
 

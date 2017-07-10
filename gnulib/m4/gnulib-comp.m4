@@ -129,6 +129,8 @@ AC_DEFUN([gl_EARLY],
   # Code from module mbsrtowcs:
   # Code from module mbtowc:
   # Code from module memchr:
+  # Code from module memmem:
+  # Code from module memmem-simple:
   # Code from module mempcpy:
   # Code from module memrchr:
   # Code from module minmax:
@@ -531,6 +533,15 @@ AC_SUBST([LTALLOCA])
     gl_PREREQ_MEMCHR
   fi
   gl_STRING_MODULE_INDICATOR([memchr])
+  gl_FUNC_MEMMEM
+  if test $HAVE_MEMMEM = 0 || test $REPLACE_MEMMEM = 1; then
+    AC_LIBOBJ([memmem])
+  fi
+  gl_FUNC_MEMMEM_SIMPLE
+  if test $HAVE_MEMMEM = 0 || test $REPLACE_MEMMEM = 1; then
+    AC_LIBOBJ([memmem])
+  fi
+  gl_STRING_MODULE_INDICATOR([memmem])
   gl_FUNC_MEMPCPY
   if test $HAVE_MEMPCPY = 0; then
     AC_LIBOBJ([mempcpy])
@@ -1091,6 +1102,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/mbtowc.c
   lib/memchr.c
   lib/memchr.valgrind
+  lib/memmem.c
   lib/mempcpy.c
   lib/memrchr.c
   lib/minmax.h
@@ -1319,6 +1331,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mbstate_t.m4
   m4/mbtowc.m4
   m4/memchr.m4
+  m4/memmem.m4
   m4/mempcpy.m4
   m4/memrchr.m4
   m4/minmax.m4
