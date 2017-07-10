@@ -438,7 +438,7 @@ vgrind_request	\.vS
 <CAT_NAME>-{eol}{blank_eol}*		/* strip continuations */
 
  /* convert to DASH */
-<MAN_NAME>{next}{blank}*\\\((mi|hy|em){blank}*	|
+<MAN_NAME>{next}{blank}*\\\((mi|hy|em|en){blank}*	|
 <MAN_NAME>{next}{blank_eol}+[-\\]-{blank}*	|
 <MAN_NAME>{next}{blank_eol}*[-\\]-{blank}+	|
 <CAT_NAME>{next}{blank}+-{1,2}{blank_eol}+	|
