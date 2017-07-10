@@ -974,15 +974,54 @@ static const char *is_section (const char *name)
 }
 
 /* Snarf pre-processors from file, return string or NULL on failure */
-static char *get_preprocessors_from_file (pipeline *decomp)
+static char *get_preprocessors_from_file (pipeline *decomp, int prefixes)
 {
 #ifdef PP_COOKIE
-	const char *line;
+	const size_t block = 4096;
+	int i;
+	char *line = NULL;
+	size_t previous_len = 0;
 
 	if (!decomp)
 		return NULL;
 
-	line = pipeline_peekline (decomp);
+	/* Prefixes are inserted into the stream by man itself, and we must
+	 * skip over them to find any preprocessors line that exists.  Each
+	 * one ends with an .lf macro.
+	 */
+	for (i = 0; ; ++i) {
+		size_t len = block * (i + 1);
+		const char *buffer, *scan, *end;
+		int j;
+
+		scan = buffer = pipeline_peek (decomp, &len);
+		if (!buffer || len == 0)
+			return NULL;
+
+		for (j = 0; j < prefixes; ++j) {
+			scan = memmem (scan, len - (scan - buffer),
+				       "\n.lf ", strlen ("\n.lf "));
+			if (!scan)
+				break;
+			++scan;
+			scan = memchr (scan, '\n', len - (scan - buffer));
+			if (!scan)
+				break;
+			++scan;
+		}
+		if (!scan)
+			continue;
+
+		end = memchr (scan, '\n', len - (scan - buffer));
+		if (!end && len == previous_len)
+			/* end of file, no newline found */
+			end = buffer + len - 1;
+		if (end) {
+			line = xstrndup (scan, end - scan + 1);
+			break;
+		}
+		previous_len = len;
+	}
 	if (!line)
 		return NULL;
 
@@ -999,7 +1038,8 @@ static char *get_preprocessors_from_file (pipeline *decomp)
 
 
 /* Determine pre-processors, set save_cat and return string */
-static char *get_preprocessors (pipeline *decomp, const char *dbfilters)
+static char *get_preprocessors (pipeline *decomp, const char *dbfilters,
+				int prefixes)
 {
 	char *pp_string;
 	const char *pp_source;
@@ -1015,7 +1055,8 @@ static char *get_preprocessors (pipeline *decomp, const char *dbfilters)
 		pp_string = xstrdup (preprocessors);
 		pp_source = "command line";
 		save_cat = 0;
-	} else if ((pp_string = get_preprocessors_from_file (decomp))) {
+	} else if ((pp_string = get_preprocessors_from_file (decomp,
+							     prefixes))) {
 		pp_source = "file";
 		save_cat = 1;
 	} else if ((env = getenv ("MANROFFSEQ"))) {
@@ -1067,10 +1108,9 @@ static void add_col (pipeline *p, const char *locale_charset, ...)
 
 /* Return pipeline to format file to stdout. */
 static pipeline *make_roff_command (const char *dir, const char *file,
-				    pipeline *decomp, const char *dbfilters,
+				    pipeline *decomp, const char *pp_string,
 				    char **result_encoding)
 {
-	char *raw_pp_string, *pp_string;
 	const char *roff_opt;
 	char *fmt_prog;
 	pipeline *p = pipeline_new ();
@@ -1080,8 +1120,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	const char *locale_charset = NULL;
 
 	*result_encoding = xstrdup ("UTF-8"); /* optimistic default */
-
-	pp_string = raw_pp_string = get_preprocessors (decomp, dbfilters);
 
 	roff_opt = getenv ("MANROFFOPT");
 	if (!roff_opt)
@@ -1397,7 +1435,6 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	}
 
 	free (page_encoding);
-	free (raw_pp_string);
 	return p;
 }
 
@@ -2125,6 +2162,7 @@ static int display (const char *dir, const char *man_file,
 {
 	int found;
 	static int prompt;
+	int prefixes = 0;
 	pipeline *format_cmd;	/* command to format man_file to stdout */
 	char *formatted_encoding = NULL;
 	int display_to_stdout;
@@ -2144,7 +2182,6 @@ static int display (const char *dir, const char *man_file,
 	/* define format_cmd */
 	if (man_file) {
 		pipecmd *seq = pipecmd_new_sequence ("decompressor", NULL);
-		int seq_ncmds = 0;
 
 		if (*man_file)
 			decomp = decompress_open (man_file);
@@ -2156,7 +2193,7 @@ static int display (const char *dir, const char *man_file,
 				"echo .nh && echo .de hy && echo ..",
 				disable_hyphenation, NULL, NULL);
 			pipecmd_sequence_command (seq, hcmd);
-			++seq_ncmds;
+			++prefixes;
 		}
 
 		if (!recode && no_justification) {
@@ -2164,7 +2201,7 @@ static int display (const char *dir, const char *man_file,
 				"echo .na && echo .de ad && echo ..",
 				disable_justification, NULL, NULL);
 			pipecmd_sequence_command (seq, jcmd);
-			++seq_ncmds;
+			++prefixes;
 		}
 
 #ifdef TROFF_IS_GROFF
@@ -2187,7 +2224,7 @@ static int display (const char *dir, const char *man_file,
 					name, locale_macros, free,
 					xstrdup (bits.language));
 				pipecmd_sequence_command (seq, lcmd);
-				++seq_ncmds;
+				++prefixes;
 				free (name);
 				free_locale_bits (&bits);
 			}
@@ -2195,7 +2232,7 @@ static int display (const char *dir, const char *man_file,
 		}
 #endif /* TROFF_IS_GROFF */
 
-		if (seq_ncmds) {
+		if (prefixes) {
 			assert (pipeline_get_ncommands (decomp) <= 1);
 			if (pipeline_get_ncommands (decomp)) {
 				pipecmd_sequence_command
@@ -2212,11 +2249,15 @@ static int display (const char *dir, const char *man_file,
 	}
 
 	if (decomp) {
+		char *pp_string;
+
 		pipeline_start (decomp);
+		pp_string = get_preprocessors (decomp, dbfilters, prefixes);
 		format_cmd = make_roff_command (dir, man_file, decomp,
-						dbfilters,
+						pp_string,
 						&formatted_encoding);
 		debug ("formatted_encoding = %s\n", formatted_encoding);
+		free (pp_string);
 	} else {
 		format_cmd = NULL;
 		decomp_errno = errno;
