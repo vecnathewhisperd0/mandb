@@ -1,3 +1,26 @@
+man-db 2.7.7
+============
+
+Major changes since man-db 2.7.6.1:
+
+	Fixes:
+	------
+
+	o Fix locale macro loading for Chinese to load the macro file
+	  corresponding to just the language part of the user's locale.
+
+	o Honour --enable-cache-owner in generated systemd tmpfiles snippet
+	  rather than hardcoding "man".
+
+	o If man adds prefixes to a page to handle such things as disabling
+	  hyphenation, then take account of those when looking for a
+	  preprocessor line at the start of the page.
+
+	Improvements:
+	-------------
+
+	o Treat "\(en" as another synonym for "\-" in NAME sections.
+
 man-db 2.7.6.1 (12 December 2016)
 =================================
 
