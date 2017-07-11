@@ -31,6 +31,7 @@ POFILES = \
 	po/ru.po \
 	po/sr.po \
 	po/sv.po \
+	po/tr.po \
 	po/zh_CN.po
 
 EXTRA_DIST = po4a.cfg Locale/Po4a/Manext.pm po/$(DOMAIN).pot $(POFILES)
