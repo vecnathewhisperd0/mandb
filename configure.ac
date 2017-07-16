@@ -22,6 +22,10 @@ AC_SUBST([date])dnl
 roff_version=`echo AC_PACKAGE_VERSION | sed 's/-/\\-/g'`
 AC_SUBST([roff_version])dnl
 
+# Explicitly check for pkg-config early on, since otherwise the conditional
+# call in MAN_ARG_SYSTEMDTMPFILESDIR is problematic.
+PKG_PROG_PKG_CONFIG
+
 # We have to be a bit naughty here and supply options.
 # The autoconf literature states that only features that can be separately
 # 'built' should use --enable and friends. Oh well...
