@@ -1,4 +1,4 @@
-# man-arg-sections.m4 serial 1
+# man-arg-sections.m4 serial 2
 dnl MAN_ARG_SECTIONS
 dnl Add a --with-sections option.
 
@@ -12,6 +12,6 @@ AC_ARG_WITH([sections],
 	 else
 		sections="$withval"
 	 fi],
-	[: ${sections=1 n l 8 3 2 5 4 9 6 7}])
+	[: ${sections=1 n l 8 3 0 2 5 4 9 6 7}])
 AC_SUBST([sections])dnl
 ])
