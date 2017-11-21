@@ -4120,18 +4120,18 @@ int main (int argc, char *argv[])
 	debug ("\nusing %s as pager\n", pager);
 
 	if (first_arg == argc) {
-		/* http://twitter.com/#!/marnanel/status/132280557190119424 */
-		time_t now = time (NULL);
-		struct tm *localnow = localtime (&now);
-		if (localnow &&
-		    localnow->tm_hour == 0 && localnow->tm_min == 30)
-			fprintf (stderr, "gimme gimme gimme\n");
-
 		if (print_where) {
 			manp = get_manpath ("");
 			printf ("%s\n", manp);
 			exit (OK);
 		} else {
+			/* http://twitter.com/#!/marnanel/status/132280557190119424 */
+			time_t now = time (NULL);
+			struct tm *localnow = localtime (&now);
+			if (localnow &&
+			    localnow->tm_hour == 0 && localnow->tm_min == 30)
+				fprintf (stderr, "gimme gimme gimme\n");
+
 			free_cwd (&cwd);
 			free (internal_locale);
 			free (program_name);
