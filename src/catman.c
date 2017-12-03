@@ -73,6 +73,7 @@
 #include "cleanup.h"
 #include "error.h"
 #include "pipeline.h"
+#include "sandbox.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -86,6 +87,8 @@ MYDBM_FILE dbf_close_post_fork;
 char *manp;
 extern char *user_config_file;
 char *database;
+man_sandbox *sandbox;  /* unused, but needed by libman */
+
 static const char **sections;
 
 const char *argp_program_version = "catman " PACKAGE_VERSION;

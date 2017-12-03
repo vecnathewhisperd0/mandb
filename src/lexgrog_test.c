@@ -44,6 +44,7 @@
 #include "cleanup.h"
 #include "error.h"
 #include "pipeline.h"
+#include "sandbox.h"
 #include "security.h"
 
 #include "descriptions.h"
@@ -51,6 +52,7 @@
 
 char *program_name;
 int quiet = 1;
+man_sandbox *sandbox;
 
 static int parse_man = 0, parse_cat = 0, show_whatis = 0, show_filters = 0;
 static const char *encoding = NULL;
@@ -138,6 +140,7 @@ int main (int argc, char **argv)
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
+	sandbox = sandbox_init ();
 	init_locale ();
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))

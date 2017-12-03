@@ -351,7 +351,7 @@ AC_TYPE_UID_T
 AC_TYPE_SIZE_T
 
 # Check for pipeline library.
-PKG_CHECK_MODULES([libpipeline], [libpipeline >= 1.4.0])
+PKG_CHECK_MODULES([libpipeline], [libpipeline >= 1.5.0])
 
 # Find a suitable database interface header and library.
 #
@@ -425,6 +425,9 @@ then
     fi
 fi
 AC_SUBST([DBLIBS])
+
+# Check for libseccomp library.
+MAN_LIBSECCOMP
 
 dnl MAN_ECHO_VAR(ENV-VARIABLE)
 define([MAN_ECHO_VAR], [AC_MSG_NOTICE([default $1 = "$$1"])])dnl

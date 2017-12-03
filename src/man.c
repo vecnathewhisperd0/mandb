@@ -97,6 +97,7 @@ int have_cwd;
 #include "security.h"
 #include "encodings.h"
 #include "orderfiles.h"
+#include "sandbox.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -194,6 +195,7 @@ extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
 extern int disable_cache;
 extern int min_cat_width, max_cat_width, cat_width;
+man_sandbox *sandbox;
 
 /* locals */
 static const char *alt_system_name;
@@ -656,10 +658,11 @@ static void check_standard_fds (void)
 
 static struct termios tms;
 static int tms_set = 0;
+static pid_t tms_pid = 0;
 
 static void set_term (void)
 {
-	if (tms_set)
+	if (tms_set && getpid () == tms_pid)
 		tcsetattr (STDIN_FILENO, TCSANOW, &tms);
 }
 
@@ -668,8 +671,18 @@ static void get_term (void)
 	if (isatty (STDOUT_FILENO)) {
 		debug ("is a tty\n");
 		tcgetattr (STDIN_FILENO, &tms);
-		if (!tms_set++)
+		if (!tms_set++) {
+			/* Work around pipecmd_exec calling exit(3) rather
+			 * than _exit(2), which means our atexit-registered
+			 * functions are called at the end of each child
+			 * process created using pipecmd_new_function and
+			 * friends.  It would probably be good to fix this
+			 * in libpipeline at some point, but it would
+			 * require care to avoid breaking compatibility.
+			 */
+			tms_pid = getpid ();
 			atexit (set_term);
+		}
 	}
 }
 
@@ -1095,6 +1108,7 @@ static void add_col (pipeline *p, const char *locale_charset, ...)
 	va_start (argv, locale_charset);
 	pipecmd_argv (cmd, argv);
 	va_end (argv);
+	sandbox_attach (sandbox, cmd);
 
 	if (locale_charset)
 		col_locale = find_charset_locale (locale_charset);
@@ -1177,6 +1191,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			cmd = pipecmd_new_function (ZSOELIM, &zsoelim_stdin,
 						    zsoelim_stdin_data_free,
 						    zsoelim_data);
+			sandbox_attach (sandbox, cmd);
 			pipeline_command (p, cmd);
 		}
 
@@ -1244,9 +1259,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		if (recode)
 			add_manconv (p, page_encoding, recode);
 		else if (groff_preconv) {
+			pipecmd *preconv_cmd;
 			add_manconv (p, page_encoding, "UTF-8");
-			pipeline_command_args
-				(p, groff_preconv, "-e", "UTF-8", NULL);
+			preconv_cmd = pipecmd_new_args
+				(groff_preconv, "-e", "UTF-8", NULL);
+			sandbox_attach (sandbox, preconv_cmd);
+			pipeline_command (p, preconv_cmd);
 		} else if (roff_encoding)
 			add_manconv (p, page_encoding, roff_encoding);
 		else
@@ -1405,6 +1423,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 					pipecmd_arg (cmd, "-P-g");
 			}
 
+			sandbox_attach_permissive (sandbox, cmd);
 			pipeline_command (p, cmd);
 
 			if (*pp_string == ' ' || *pp_string == '-')
@@ -1541,9 +1560,12 @@ static void add_output_iconv (pipeline *p,
 	debug ("add_output_iconv: source %s, target %s\n", source, target);
 	if (source && target && !STREQ (source, target)) {
 		char *target_translit = xasprintf ("%s//TRANSLIT", target);
-		pipeline_command_args (p, "iconv", "-c",
-				       "-f", source, "-t", target_translit,
-				       NULL);
+		pipecmd *iconv_cmd;
+		iconv_cmd = pipecmd_new_args
+			("iconv", "-c", "-f", source, "-t", target_translit,
+			 NULL);
+		sandbox_attach (sandbox, iconv_cmd);
+		pipeline_command (p, iconv_cmd);
 		free (target_translit);
 	}
 }
@@ -1631,8 +1653,11 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 
 	if (isatty (STDOUT_FILENO)) {
 		if (ascii) {
-			pipeline_command_argstr
-				(p, get_def_user ("tr", TR TR_SET1 TR_SET2));
+			pipecmd *tr_cmd;
+			tr_cmd = pipecmd_new_argstr
+				(get_def_user ("tr", TR TR_SET1 TR_SET2));
+			sandbox_attach (sandbox, tr_cmd);
+			pipeline_command (p, tr_cmd);
 			pager_cmd = pipecmd_new_argstr (pager);
 		} else
 #ifdef TROFF_IS_GROFF
@@ -1820,6 +1845,7 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 	/* fork the compressor */
 	comp_cmd = pipecmd_new_argstr (get_def ("compressor", COMPRESSOR));
 	pipecmd_nice (comp_cmd, 10);
+	sandbox_attach (sandbox, comp_cmd);
 	pipeline_command (cat_p, comp_cmd);
 #  endif
 	/* pipeline_start will close tmp_cat_fd */
@@ -2027,13 +2053,17 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 			    pipeline *format_cmd, const char *encoding)
 {
 	char *tmpcat = tmp_cat_filename (cat_file);
+#ifdef COMP_CAT
+	pipecmd *comp_cmd;
+#endif /* COMP_CAT */
 	int status;
 
 	add_output_iconv (format_cmd, encoding, "UTF-8");
 
 #ifdef COMP_CAT
-	pipeline_command_argstr (format_cmd,
-				 get_def ("compressor", COMPRESSOR));
+	comp_cmd = pipecmd_new_argstr (get_def ("compressor", COMPRESSOR));
+	sandbox_attach (sandbox, comp_cmd);
+	pipeline_command (format_cmd, comp_cmd);
 #endif /* COMP_CAT */
 
 	maybe_discard_stderr (format_cmd);
@@ -4002,6 +4032,7 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
+	sandbox = sandbox_init ();
 
 	umask (022);
 	init_locale ();

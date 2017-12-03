@@ -44,12 +44,14 @@
 #include "error.h"
 #include "pipeline.h"
 #include "decompress.h"
+#include "sandbox.h"
 
 #include "manp.h"
 #include "zsoelim.h"
 
 char *program_name;
 int quiet = 1;
+man_sandbox *sandbox;
 
 static char *manpathlist[MAXDIRS];
 
@@ -108,6 +110,7 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
+	sandbox = sandbox_init ();
 	init_locale ();
 
 	internal_locale = setlocale (LC_MESSAGES, NULL);

@@ -41,11 +41,13 @@
 #include "error.h"
 #include "pipeline.h"
 #include "decompress.h"
+#include "sandbox.h"
 
 #include "manconv.h"
 
 char *program_name;
 int quiet = 0;
+man_sandbox *sandbox;
 
 static const char *from_codes;
 static char *to_code;
@@ -154,6 +156,7 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
+	sandbox = sandbox_init ();
 	init_locale ();
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))

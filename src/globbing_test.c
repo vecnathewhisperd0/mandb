@@ -39,8 +39,10 @@
 
 #include "error.h"
 #include "globbing.h"
+#include "sandbox.h"
 
 char *program_name;
+man_sandbox *sandbox;  /* unused, but needed by libman */
 
 extern const char *extension;
 static int match_case = 0;

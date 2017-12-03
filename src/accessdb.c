@@ -43,11 +43,13 @@
 #include "manconfig.h"
 
 #include "error.h"
+#include "sandbox.h"
 
 #include "mydbm.h"
 
 char *program_name;
 const char *cat_root;
+man_sandbox *sandbox;  /* unused, but needed by libman */
 
 /* for db_storage.c */
 char *database;

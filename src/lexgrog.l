@@ -51,6 +51,7 @@
 #include "decompress.h"
 #include "security.h"
 #include "encodings.h"
+#include "sandbox.h"
 
 #include "manconv_client.h"
 
@@ -58,6 +59,8 @@
 #define MAX_NAME		8192
 
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof ((array)[0]))
+
+extern man_sandbox *sandbox;
 
 struct macro {
 	const char *name;
@@ -830,8 +833,12 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	if (page_encoding)
 		add_manconv (p, page_encoding, "UTF-8");
 	free (page_encoding);
-	if (p_lg->type && *COL)
-		pipeline_command_args (p, COL, "-b", "-p", "-x", NULL);
+	if (p_lg->type && *COL) {
+		pipecmd *col_cmd;
+		col_cmd = pipecmd_new_args (COL, "-b", "-p", "-x", NULL);
+		sandbox_attach (sandbox, col_cmd);
+		pipeline_command (p, col_cmd);
+	}
 	pipeline_start (p);
 
 	ret = find_name_decompressed (p, filename, p_lg);

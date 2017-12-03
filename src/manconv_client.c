@@ -34,6 +34,7 @@
 
 #include "pipeline.h"
 #include "decompress.h"
+#include "sandbox.h"
 
 #ifdef MAN_OWNER
 #  include "idpriv.h"
@@ -42,6 +43,8 @@
 
 #include "manconv.h"
 #include "manconv_client.h"
+
+extern man_sandbox *sandbox;
 
 struct manconv_codes {
 	char **from;
@@ -139,5 +142,6 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 	cmd = pipecmd_new_function (name, &manconv_stdin, &free_manconv_codes,
 				    codes);
 	free (name);
+	sandbox_attach (sandbox, cmd);
 	pipeline_command (p, cmd);
 }

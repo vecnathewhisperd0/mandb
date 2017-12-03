@@ -51,6 +51,7 @@
 #include "decompress.h"
 #include "encodings.h"
 #include "orderfiles.h"
+#include "sandbox.h"
 #include "security.h"
 
 #include "mydbm.h"
@@ -60,6 +61,8 @@
 #include "manp.h"
 #include "manconv_client.h"
 #include "ult_src.h"
+
+extern man_sandbox *sandbox;
 
 static char *catdir, *mandir;
 
@@ -238,6 +241,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 						col_locale);
 				free (col_locale);
 			}
+			sandbox_attach (sandbox, col_cmd);
 			pipeline_command (decomp, col_cmd);
 
 			fullpath = canonicalize_file_name (catdir);

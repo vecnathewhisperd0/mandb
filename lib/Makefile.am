@@ -29,7 +29,8 @@ libman_la_CPPFLAGS = \
 	-I$(top_srcdir)/gnulib/lib \
 	-I$(top_builddir)/gnulib/lib \
 	-DLOCALEDIR=\"$(localedir)\" \
-	$(libpipeline_CFLAGS)
+	$(libpipeline_CFLAGS) \
+	$(libseccomp_CFLAGS)
 
 libman_la_SOURCES = \
 	appendstr.c \
@@ -50,6 +51,8 @@ libman_la_SOURCES = \
 	orderfiles.h \
 	pathsearch.c \
 	pathsearch.h \
+	sandbox.c \
+	sandbox.h \
 	security.c \
 	security.h \
 	tempfile.c \
@@ -67,4 +70,5 @@ libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
 libman_la_LDFLAGS = \
 	-avoid-version -release $(VERSION) -rpath $(pkglibdir) \
 	-no-undefined \
-	$(libpipeline_LIBS)
+	$(libpipeline_LIBS) \
+	$(libseccomp_LIBS)

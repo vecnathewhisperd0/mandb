@@ -669,6 +669,8 @@ TRANS_CATMAN_UPPER
 TRANS_CATMAN
 TRANS_APROPOS_UPPER
 TRANS_APROPOS
+libseccomp_LIBS
+libseccomp_CFLAGS
 DBLIBS
 DBTYPE
 libpipeline_LIBS
@@ -1731,7 +1733,9 @@ PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 libpipeline_CFLAGS
-libpipeline_LIBS'
+libpipeline_LIBS
+libseccomp_CFLAGS
+libseccomp_LIBS'
 
 
 # Initialize some variables set by options.
@@ -2476,6 +2480,10 @@ Some influential environment variables:
               C compiler flags for libpipeline, overriding pkg-config
   libpipeline_LIBS
               linker flags for libpipeline, overriding pkg-config
+  libseccomp_CFLAGS
+              C compiler flags for libseccomp, overriding pkg-config
+  libseccomp_LIBS
+              linker flags for libseccomp, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -46530,12 +46538,12 @@ if test -n "$libpipeline_CFLAGS"; then
     pkg_cv_libpipeline_CFLAGS="$libpipeline_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpipeline >= 1.4.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpipeline >= 1.4.0") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpipeline >= 1.5.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpipeline >= 1.5.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_libpipeline_CFLAGS=`$PKG_CONFIG --cflags "libpipeline >= 1.4.0" 2>/dev/null`
+  pkg_cv_libpipeline_CFLAGS=`$PKG_CONFIG --cflags "libpipeline >= 1.5.0" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -46547,12 +46555,12 @@ if test -n "$libpipeline_LIBS"; then
     pkg_cv_libpipeline_LIBS="$libpipeline_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpipeline >= 1.4.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpipeline >= 1.4.0") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpipeline >= 1.5.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpipeline >= 1.5.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_libpipeline_LIBS=`$PKG_CONFIG --libs "libpipeline >= 1.4.0" 2>/dev/null`
+  pkg_cv_libpipeline_LIBS=`$PKG_CONFIG --libs "libpipeline >= 1.5.0" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -46573,14 +46581,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        libpipeline_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpipeline >= 1.4.0" 2>&1`
+	        libpipeline_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpipeline >= 1.5.0" 2>&1`
         else
-	        libpipeline_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpipeline >= 1.4.0" 2>&1`
+	        libpipeline_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpipeline >= 1.5.0" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$libpipeline_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (libpipeline >= 1.4.0) were not met:
+	as_fn_error $? "Package requirements (libpipeline >= 1.5.0) were not met:
 
 $libpipeline_PKG_ERRORS
 
@@ -47282,6 +47290,82 @@ then
     else
       as_fn_error $? "Fatal: $db: unsupported database library" "$LINENO" 5
     fi
+fi
+
+
+# Check for libseccomp library.
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libseccomp" >&5
+$as_echo_n "checking for libseccomp... " >&6; }
+
+if test -n "$libseccomp_CFLAGS"; then
+    pkg_cv_libseccomp_CFLAGS="$libseccomp_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libseccomp\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libseccomp") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_libseccomp_CFLAGS=`$PKG_CONFIG --cflags "libseccomp" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$libseccomp_LIBS"; then
+    pkg_cv_libseccomp_LIBS="$libseccomp_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libseccomp\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libseccomp") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_libseccomp_LIBS=`$PKG_CONFIG --libs "libseccomp" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        libseccomp_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libseccomp" 2>&1`
+        else
+	        libseccomp_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libseccomp" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$libseccomp_PKG_ERRORS" >&5
+
+	:
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	:
+else
+	libseccomp_CFLAGS=$pkg_cv_libseccomp_CFLAGS
+	libseccomp_LIBS=$pkg_cv_libseccomp_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define HAVE_LIBSECCOMP 1" >>confdefs.h
+
 fi
 
 

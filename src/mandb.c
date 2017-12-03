@@ -64,6 +64,7 @@
 #include "cleanup.h"
 #include "hashtable.h"
 #include "pipeline.h"
+#include "sandbox.h"
 #include "security.h"
 
 #include "mydbm.h"
@@ -84,6 +85,8 @@ extern char *user_config_file;	/* for manp.c */
 #ifdef MAN_OWNER
 struct passwd *man_owner;
 #endif
+man_sandbox *sandbox;
+
 static int purged = 0;
 static int strays = 0;
 
@@ -783,6 +786,7 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
+	sandbox = sandbox_init ();
 	init_locale ();
 
 #ifdef SIGPIPE

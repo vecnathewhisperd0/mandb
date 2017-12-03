@@ -44,11 +44,13 @@
 #include "manconfig.h"
 
 #include "error.h"
+#include "sandbox.h"
 
 #include "manp.h"
 
 char *program_name;
 int quiet = 0;
+man_sandbox *sandbox;  /* unused, but needed by libman */
 
 static int cat = 0;
 static int global = 0;

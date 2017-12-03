@@ -71,6 +71,7 @@
 #include "wordfnmatch.h"
 #include "xregcomp.h"
 #include "encodings.h"
+#include "sandbox.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -87,6 +88,7 @@ char *program_name;
 int am_apropos;
 char *database;
 int quiet = 1;
+man_sandbox *sandbox;
 
 #ifdef HAVE_ICONV
 iconv_t conv_to_locale;
@@ -339,6 +341,7 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 			pipecmd_argstr (grep_cmd, flags);
 			pipecmd_args (grep_cmd, anchored_page, whatis_file,
 				      NULL);
+			sandbox_attach (sandbox, grep_cmd);
 			grep_pl = pipeline_new_commands (grep_cmd, NULL);
 
 			if (pipeline_run (grep_pl) == 0)
@@ -902,6 +905,7 @@ int main (int argc, char *argv[])
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
+	sandbox = sandbox_init ();
 	init_locale ();
 
 	internal_locale = setlocale (LC_MESSAGES, NULL);

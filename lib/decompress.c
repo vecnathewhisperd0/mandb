@@ -42,6 +42,7 @@
 #include "comp_src.h"
 #include "pipeline.h"
 #include "decompress.h"
+#include "sandbox.h"
 
 #ifdef HAVE_LIBZ
 
@@ -68,6 +69,8 @@ static void decompress_zlib (void *data ATTRIBUTE_UNUSED)
 
 #endif /* HAVE_LIBZ */
 
+extern man_sandbox *sandbox;
+
 pipeline *decompress_open (const char *filename)
 {
 	pipecmd *cmd;
@@ -89,6 +92,7 @@ pipeline *decompress_open (const char *filename)
 		char *name = xasprintf ("zcat < %s", filename);
 		cmd = pipecmd_new_function (name, &decompress_zlib, NULL,
 					    NULL);
+		sandbox_attach (sandbox, cmd);
 		free (name);
 		p = pipeline_new_commands (cmd, NULL);
 		goto got_pipeline;
@@ -105,6 +109,7 @@ pipeline *decompress_open (const char *filename)
 
 			cmd = pipecmd_new_argstr (comp->prog);
 			pipecmd_arg (cmd, filename);
+			sandbox_attach (sandbox, cmd);
 			p = pipeline_new_commands (cmd, NULL);
 			goto got_pipeline;
 		}
@@ -116,6 +121,7 @@ pipeline *decompress_open (const char *filename)
 	if (ext) {
 		cmd = pipecmd_new_argstr (GUNZIP " -S \"\"");
 		pipecmd_arg (cmd, filename);
+		sandbox_attach (sandbox, cmd);
 		p = pipeline_new_commands (cmd, NULL);
 		goto got_pipeline;
 	}
@@ -138,6 +144,7 @@ pipeline *decompress_fdopen (int fd)
 
 #ifdef HAVE_LIBZ
 	cmd = pipecmd_new_function ("zcat", &decompress_zlib, NULL, NULL);
+	sandbox_attach (sandbox, cmd);
 	p = pipeline_new_commands (cmd, NULL);
 #else /* HAVE_LIBZ */
 	p = pipeline_new ();
