@@ -139,21 +139,21 @@ INSTALL
 
 Running configure.
 
-	o READ `docs/INSTALL.autoconf' regarding ./configure options
+	* READ `docs/INSTALL.autoconf' regarding ./configure options
 
-	o RUN `./configure --help' to see what --enable and --with
+	* RUN `./configure --help' to see what --enable and --with
 	  options may be useful.
 
-	o RUN `./configure' with the appropriate options and environment
+	* RUN `./configure' with the appropriate options and environment
 	  variable settings
 
 BROWSE or EDIT the following files that were created by the configuration
 process.
 
-	o `include/manconfig.h' regarding paths to support programs,
+	* `include/manconfig.h' regarding paths to support programs,
 	  the default section list and other specific definitions.
 
-	o `include/comp_src.h' if the default compressor support is
+	* `include/comp_src.h' if the default compressor support is
 	  inadequate for your requirements.  (usually .Z [compress], 
 	  .z, .gz [gzip])
 
@@ -167,40 +167,40 @@ NLS manual pages, support for which is compiled in by default.
 
 Running make.
 
-	o RUN `make' to compile man-db with the set of translations chosen
+	* RUN `make' to compile man-db with the set of translations chosen
 	  when running `./configure'.
 
 Sort out the man-db configuration file.
 
-	o RUN `./src/man -l man/man5/manpath.5' from the root of this
+	* RUN `./src/man -l man/man5/manpath.5' from the root of this
 	  distribution to read the man-db configuration file details.
 
-	o EDIT `./src/man_db.conf' to your local requirements.
+	* EDIT `./src/man_db.conf' to your local requirements.
 
 Install the package.
 
-	o (gain superuser privileges for the rest of the steps)
+	* (gain superuser privileges for the rest of the steps)
 
-	o RUN `make install' to install the utilities and manual pages.
+	* RUN `make install' to install the utilities and manual pages.
 
 Initialise the `index' databases for all manpaths marked as global in the
 man-db configuration file.
 
-	o RUN `mandb' (This step is equivalent to running straycats and 
+	* RUN `mandb' (This step is equivalent to running straycats and 
 	  makewhatis too).
 
 The following steps are optional / dependent on local conventions.
 
-	o ACKNOWLEDGE any warnings emitted by mandb. Bogus manual pages
+	* ACKNOWLEDGE any warnings emitted by mandb. Bogus manual pages
 	  are not included in the database and may be a waste of space.
 	  Those pages without correctly formatted `whatis' lines are
 	  included, but will have a whatis entry of "(unknown)"
 
-	o CD tools and RUN `mkcatdirs -t' to see if you have all of the
+	* CD tools and RUN `mkcatdirs -t' to see if you have all of the
 	  required cat directories.  `mkcatdirs' without an option will 
 	  display a usage message.
 
-	o CD tools and RUN `checkman' with an argument of colon separated
+	* CD tools and RUN `checkman' with an argument of colon separated
 	  manual page hierarchies to cross check for duplicated manual
 	  pages.  If no argument is given, your default $MANPATH will be
 	  used.
@@ -215,7 +215,7 @@ The following steps are optional / dependent on local conventions.
 	  At this point, running checkman again may yield further duplicates 
 	  that were ignored the first time.
  
-	o RUN `catman' with appropriate options to create any/all cat files
+	* RUN `catman' with appropriate options to create any/all cat files
 	  that you would like pre-formatted.
 
 
