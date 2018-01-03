@@ -410,6 +410,8 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("syncfs");
 
 	/* Extra syscalls not in any of systemd's sets. */
+	SC_ALLOW ("arm_fadvise64_64");
+	SC_ALLOW ("arm_sync_file_range");
 	SC_ALLOW ("brk");
 	SC_ALLOW ("fadvise64");
 	SC_ALLOW ("fadvise64_64");
