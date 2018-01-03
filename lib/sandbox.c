@@ -73,6 +73,14 @@ struct man_sandbox {
 };
 
 #ifdef HAVE_LIBSECCOMP
+static int seccomp_filter_unavailable = 0;
+
+static void gripe_seccomp_filter_unavailable (void)
+{
+	debug ("seccomp filtering requires a kernel configured with "
+	       "CONFIG_SECCOMP_FILTER\n");
+}
+
 /* Can we load a seccomp filter into this process?
  *
  * This guard allows us to call sandbox_load in code paths that may
@@ -82,6 +90,11 @@ static int can_load_seccomp (void)
 {
 	const char *man_disable_seccomp, *ld_preload;
 	int seccomp_status;
+
+	if (seccomp_filter_unavailable) {
+		gripe_seccomp_filter_unavailable ();
+		return 0;
+	}
 
 	man_disable_seccomp = getenv ("MAN_DISABLE_SECCOMP");
 	if (man_disable_seccomp && *man_disable_seccomp) {
@@ -483,8 +496,21 @@ void sandbox_load (void *data) {
 			ctx = sandbox_op->sandbox->permissive_ctx;
 		else
 			ctx = sandbox_op->sandbox->ctx;
-		if (seccomp_load (ctx) < 0)
-			error (FATAL, errno, "can't load seccomp filter");
+		if (seccomp_load (ctx) < 0) {
+			if (errno == EINVAL) {
+				/* The kernel doesn't give us particularly
+				 * fine-grained errors.  This could in
+				 * theory be an invalid BPF program, but
+				 * it's much more likely that the running
+				 * kernel doesn't support seccomp filtering.
+				 */
+				gripe_seccomp_filter_unavailable ();
+				/* Don't try this again. */
+				seccomp_filter_unavailable = 1;
+			} else
+				error (FATAL, errno,
+				       "can't load seccomp filter");
+		}
 	}
 #endif /* HAVE_LIBSECCOMP */
 }
