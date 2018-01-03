@@ -417,6 +417,7 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("fadvise64_64");
 	if (permissive) SC_ALLOW ("ioctl");
 	SC_ALLOW ("mprotect");
+	SC_ALLOW ("sync_file_range2");
 	SC_ALLOW ("sysinfo");
 	SC_ALLOW ("uname");
 
