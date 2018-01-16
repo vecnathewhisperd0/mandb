@@ -4028,6 +4028,89 @@ static const char **get_section_list (void)
 	}
 }
 
+/*
+ * Returns the first token of a libpipeline/sh-style command. See SUSv4TC2:
+ * 2.2 Shell Command Language: Quoting.
+ *
+ * Free the returned value.
+ *
+ * Examples:
+ * sh_lang_first_word ("echo 3") returns "echo"
+ * sh_lang_first_word ("'e ho' 3") returns "e ho"
+ * sh_lang_first_word ("e\\cho 3") returns "echo"
+ * sh_lang_first_word ("e\\\ncho 3") returns "echo"
+ * sh_lang_first_word ("\"echo t\" 3") returns "echo t"
+ * sh_lang_first_word ("\"ech\\o t\" 3") returns "ech\\o t"
+ * sh_lang_first_word ("\"ech\\\\o t\" 3") returns "ech\\o t"
+ * sh_lang_first_word ("\"ech\\\no t\" 3") returns "echo t"
+ * sh_lang_first_word ("\"ech\\$ t\" 3") returns "ech$ t"
+ * sh_lang_first_word ("\"ech\\` t\" 3") returns "ech` t"
+ * sh_lang_first_word ("e\"ch\"o 3") returns "echo"
+ * sh_lang_first_word ("e'ch'o 3") returns "echo"
+ */
+static char *sh_lang_first_word (const char *cmd)
+{
+	int i, o = 0;
+	char *ret = xmalloc (strlen (cmd) + 1);
+
+	for (i = 0; cmd[i] != '\0'; i++) {
+		if (cmd[i] == '\\') {
+			/* Escape Character (Backslash) */
+			i++;
+			if (cmd[i] == '\0') {
+				break;
+			}
+			if (cmd[i] != '\n') {
+				ret[o] = cmd[i];
+				o++;
+			}
+		} else if (cmd[i] == '\'') {
+			/* Single-Quotes */
+			i++;
+			while (cmd[i] != '\0' && cmd[i] != '\'') {
+				ret[o] = cmd[i];
+				o++;
+				i++;
+			}
+		} else if (cmd[i] == '"') {
+			/* Double-Quotes */
+			i++;
+			while (cmd[i] != '\0' && cmd[i] != '"') {
+				if (cmd[i] == '\\') {
+					if (cmd[i+1] == '$' ||
+					    cmd[i+1] == '`' ||
+					    cmd[i+1] == '"' ||
+					    cmd[i+1] == '\\') {
+						i++;
+						ret[o] = cmd[i];
+						o++;
+					} else if (cmd[i+1] == '\n') {
+						i++;
+					} else {
+						ret[o] = cmd[i];
+						o++;
+					}
+				} else {
+					ret[o] = cmd[i];
+					o++;
+				}
+
+				i++;
+			}
+		} else if (cmd[i] == '\t' || cmd[i] == ' ' || cmd[i] == '\n' ||
+			   cmd[i] == '#') {
+			break;
+		} else {
+			ret[o] = cmd[i];
+			o++;
+		}
+	}
+
+	ret[o] = '\0';
+
+	return ret;
+}
+
 int main (int argc, char *argv[])
 {
 	int argc_env, exit_status = OK;
@@ -4120,13 +4203,24 @@ int main (int argc, char *argv[])
 	if (htmlout)
 		pager = html_pager;
 #endif /* TROFF_IS_GROFF */
+
 	if (pager == NULL) {
 		pager = getenv ("MANPAGER");
-		if (pager == NULL) {
-			pager = getenv ("PAGER");
-			if (pager == NULL)
-				pager = get_def_user ("pager", PAGER);
+	}
+	if (pager == NULL) {
+		pager = getenv ("PAGER");
+	}
+	if (pager == NULL) {
+		pager = get_def_user ("pager", NULL);
+	}
+	if (pager == NULL) {
+		char *pager_program = sh_lang_first_word (PAGER);
+		if (pathsearch_executable (pager_program)) {
+			pager = PAGER;
+		} else {
+			pager = "";
 		}
+		free (pager_program);
 	}
 	if (*pager == '\0')
 		pager = get_def_user ("cat", CAT);

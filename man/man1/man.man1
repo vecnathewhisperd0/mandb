@@ -874,7 +874,12 @@ Specify which output pager to use.
 By default,
 .B %man%
 uses
-.BR "%pager%" .
+.BR "%pager%" ,
+falling back to
+.B %cat%
+if
+.B %pager%
+is not found or is not executable.
 This option overrides the
 .RB $ MANPAGER
 environment variable, which in turn overrides the
@@ -1240,7 +1245,11 @@ is used in preference), its value is used as the name of the program used to
 display the manual page.
 By default,
 .B %pager%
-is used.
+is used, falling back to
+.B %cat%
+if
+.B %pager%
+is not found or is not executable.
 
 The value may be a simple command name or a command with arguments, and may
 use shell quoting (backslashes, single quotes, or double quotes).
