@@ -347,6 +347,13 @@ static struct argp_option options[] = {
 	{ 0 }
 };
 
+static void init_html_pager (void)
+{
+	html_pager = getenv ("BROWSER");
+	if (!html_pager)
+		html_pager = WEB_BROWSER;
+}
+
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
 	static int apropos, whatis; /* retain values between calls */
@@ -371,7 +378,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			ditroff = 0;
 			gxditview = NULL;
 			htmlout = 0;
-			html_pager = NULL;
+			init_html_pager ();
 #endif
 			roff_device = want_encoding = extension = pager =
 				locale = alt_system_name = external =
@@ -584,6 +591,7 @@ static char *help_filter (int key, const char *text,
 # ifdef TROFF_IS_GROFF
 		case 'H':
 			browser = html_pager;
+			assert (browser);
 			if (STRNEQ (browser, "exec ", 5))
 				browser += 5;
 			return xasprintf (text, browser);
@@ -4058,11 +4066,8 @@ int main (int argc, char *argv[])
 
 #ifdef TROFF_IS_GROFF
 	/* used in --help, so initialise early */
-	if (!html_pager) {
-		html_pager = getenv ("BROWSER");
-		if (!html_pager)
-			html_pager = WEB_BROWSER;
-	}
+	if (!html_pager)
+		init_html_pager ();
 #endif /* TROFF_IS_GROFF */
 
 	/* First of all, find out if $MANOPT is set. If so, put it in 
