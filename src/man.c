@@ -4057,53 +4057,39 @@ static char *sh_lang_first_word (const char *cmd)
 		if (cmd[i] == '\\') {
 			/* Escape Character (Backslash) */
 			i++;
-			if (cmd[i] == '\0') {
+			if (cmd[i] == '\0')
 				break;
-			}
-			if (cmd[i] != '\n') {
-				ret[o] = cmd[i];
-				o++;
-			}
+			if (cmd[i] != '\n')
+				ret[o++] = cmd[i];
 		} else if (cmd[i] == '\'') {
 			/* Single-Quotes */
 			i++;
-			while (cmd[i] != '\0' && cmd[i] != '\'') {
-				ret[o] = cmd[i];
-				o++;
-				i++;
-			}
+			while (cmd[i] != '\0' && cmd[i] != '\'')
+				ret[o++] = cmd[i++];
 		} else if (cmd[i] == '"') {
 			/* Double-Quotes */
 			i++;
 			while (cmd[i] != '\0' && cmd[i] != '"') {
 				if (cmd[i] == '\\') {
-					if (cmd[i+1] == '$' ||
-					    cmd[i+1] == '`' ||
-					    cmd[i+1] == '"' ||
-					    cmd[i+1] == '\\') {
+					if (cmd[i + 1] == '$' ||
+					    cmd[i + 1] == '`' ||
+					    cmd[i + 1] == '"' ||
+					    cmd[i + 1] == '\\')
+						ret[o++] = cmd[++i];
+					else if (cmd[i + 1] == '\n')
 						i++;
-						ret[o] = cmd[i];
-						o++;
-					} else if (cmd[i+1] == '\n') {
-						i++;
-					} else {
-						ret[o] = cmd[i];
-						o++;
-					}
-				} else {
-					ret[o] = cmd[i];
-					o++;
-				}
+					else
+						ret[o++] = cmd[i];
+				} else
+					ret[o++] = cmd[i];
 
 				i++;
 			}
 		} else if (cmd[i] == '\t' || cmd[i] == ' ' || cmd[i] == '\n' ||
-			   cmd[i] == '#') {
+			   cmd[i] == '#')
 			break;
-		} else {
-			ret[o] = cmd[i];
-			o++;
-		}
+		else
+			ret[o++] = cmd[i];
 	}
 
 	ret[o] = '\0';
@@ -4204,22 +4190,18 @@ int main (int argc, char *argv[])
 		pager = html_pager;
 #endif /* TROFF_IS_GROFF */
 
-	if (pager == NULL) {
+	if (pager == NULL)
 		pager = getenv ("MANPAGER");
-	}
-	if (pager == NULL) {
+	if (pager == NULL)
 		pager = getenv ("PAGER");
-	}
-	if (pager == NULL) {
+	if (pager == NULL)
 		pager = get_def_user ("pager", NULL);
-	}
 	if (pager == NULL) {
 		char *pager_program = sh_lang_first_word (PAGER);
-		if (pathsearch_executable (pager_program)) {
+		if (pathsearch_executable (pager_program))
 			pager = PAGER;
-		} else {
+		else
 			pager = "";
-		}
 		free (pager_program);
 	}
 	if (*pager == '\0')
