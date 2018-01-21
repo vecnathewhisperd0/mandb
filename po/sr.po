@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.7.6.1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2016-12-12 12:10+0000\n"
+"POT-Creation-Date: 2018-01-16 13:39+0000\n"
 "PO-Revision-Date: 2016-12-18 06:38+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -23,12 +23,12 @@ msgstr ""
 msgid "can't set effective uid"
 msgstr "не могу да подесим стварни јиб"
 
-#: lib/security.c:107 src/mandb.c:821
+#: lib/security.c:107 src/mandb.c:825
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "подесииб ман корисник „%s“ не постоји"
 
-#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1673
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1743
 #, c-format
 msgid "can't chown %s"
 msgstr "не могу да променим власника „%s“"
@@ -71,7 +71,7 @@ msgstr[2] "само %d поља у садржају"
 msgid "bad fetch on multi key %s"
 msgstr "лоша набавка на вишеструком кључу „%s“"
 
-#: libdb/db_lookup.c:417 src/whatis.c:741
+#: libdb/db_lookup.c:417 src/whatis.c:744
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "База података „%s“ је оштећена; изградите поново са „mandb --create“"
@@ -91,64 +91,64 @@ msgstr "упозорење: „%s“ је у издању %s, очекивах %
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "кобно: не могу да уметнем одредника издања у „%s“"
 
-#: src/accessdb.c:59
+#: src/accessdb.c:61
 msgid "[MAN DATABASE]"
 msgstr "[БАЗА ПОДАТАКА МАН-а]"
 
-#: src/accessdb.c:60
+#: src/accessdb.c:62
 #, c-format
 msgid "The man database defaults to %s%s."
 msgstr "База података мана се пребацује на %s%s."
 
-#: src/accessdb.c:63 src/catman.c:98 src/globbing_test.c:58
-#: src/lexgrog_test.c:68 src/man.c:280 src/manconv_main.c:94 src/mandb.c:108
-#: src/manpath.c:65 src/whatis.c:122 src/zsoelim_main.c:66
+#: src/accessdb.c:65 src/catman.c:101 src/globbing_test.c:60
+#: src/lexgrog_test.c:70 src/man.c:282 src/manconv_main.c:96 src/mandb.c:111
+#: src/manpath.c:67 src/whatis.c:124 src/zsoelim_main.c:68
 msgid "emit debugging messages"
 msgstr "исписује поруке за исправљање грешака"
 
-#: src/accessdb.c:130
+#: src/accessdb.c:132
 #, c-format
 msgid "can't open %s for reading"
 msgstr "не могу да отворим „%s“ за читање"
 
-#: src/catman.c:95
+#: src/catman.c:98
 msgid "[SECTION...]"
 msgstr "[ОДЕЉАК...]"
 
-#: src/catman.c:99 src/man.c:301 src/whatis.c:132
+#: src/catman.c:102 src/man.c:303 src/whatis.c:134
 msgid "PATH"
 msgstr "ПУТАЊА"
 
-#: src/catman.c:99 src/man.c:301 src/whatis.c:132
+#: src/catman.c:102 src/man.c:303 src/whatis.c:134
 msgid "set search path for manual pages to PATH"
 msgstr "поставља путању претраге за странице упутства на ПУТАЊУ"
 
-#: src/catman.c:100 src/man.c:279 src/mandb.c:116 src/manpath.c:67
-#: src/whatis.c:134
+#: src/catman.c:103 src/man.c:281 src/mandb.c:119 src/manpath.c:69
+#: src/whatis.c:136
 msgid "FILE"
 msgstr "ДАТОТЕКА"
 
-#: src/catman.c:100 src/man.c:279 src/mandb.c:116 src/manpath.c:67
-#: src/whatis.c:134
+#: src/catman.c:103 src/man.c:281 src/mandb.c:119 src/manpath.c:69
+#: src/whatis.c:136
 msgid "use this user configuration file"
 msgstr "користи ову корисничку датотеку подешавања"
 
-#: src/catman.c:193
+#: src/catman.c:196
 #, c-format
 msgid "man command failed with exit status %d"
 msgstr "наредба мана није успела са излазним стањем „%d“"
 
-#: src/catman.c:232
+#: src/catman.c:235
 #, c-format
 msgid "cannot read database %s"
 msgstr "не могу да прочитам базу података „%s“"
 
-#: src/catman.c:275
+#: src/catman.c:278
 #, c-format
 msgid "NULL content for key: %s"
 msgstr "НИШТАВАН садржај за кључ: %s"
 
-#: src/catman.c:290
+#: src/catman.c:293
 #, c-format
 msgid ""
 "\n"
@@ -157,12 +157,12 @@ msgstr ""
 "\n"
 "Ажурирам кат датотеке за одељак %s манове хијерархије %s\n"
 
-#: src/catman.c:344
+#: src/catman.c:347
 #, c-format
 msgid "cannot write within %s"
 msgstr "не могу да пишем у „%s“"
 
-#: src/catman.c:421
+#: src/catman.c:424
 #, c-format
 msgid "unable to update %s"
 msgstr "не могу да ажурирам „%s“"
@@ -187,13 +187,13 @@ msgstr "упозорење: %s: лоша симболичка веза или Р
 msgid "warning: %s: ignoring empty file"
 msgstr "упозорење: %s: занемарујем празну датотеку"
 
-#: src/check_mandirs.c:300 src/straycats.c:280
+#: src/check_mandirs.c:300 src/straycats.c:284
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "упозорење: %s: није успела обрада шта-је за %s(%s)"
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:878
-#: src/straycats.c:77 src/straycats.c:310 src/ult_src.c:80
+#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:882
+#: src/straycats.c:80 src/straycats.c:314 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
 msgstr "не могу да претражим директоријум „%s“"
@@ -203,12 +203,12 @@ msgstr "не могу да претражим директоријум „%s“"
 msgid "warning: cannot create catdir %s"
 msgstr "упозорење: не могу да направим катдир „%s“"
 
-#: src/check_mandirs.c:464 src/man.c:1685 src/mandb.c:226
+#: src/check_mandirs.c:464 src/man.c:1755 src/mandb.c:229
 #, c-format
 msgid "can't chmod %s"
 msgstr "не могу да променим режим „%s“"
 
-#: src/check_mandirs.c:512 src/man.c:1887
+#: src/check_mandirs.c:512 src/man.c:1958
 #, c-format
 msgid "can't change to directory %s"
 msgstr "не могу да пређем у директоријум „%s“"
@@ -237,40 +237,40 @@ msgstr "Избацујем старе уносе базе података у �
 msgid "warning: failed to store entry for %s(%s)"
 msgstr "упозорење: нисам успео да ускладиштим унос за %s(%s)"
 
-#: src/filenames.c:48 src/straycats.c:123 src/straycats.c:152
+#: src/filenames.c:48 src/straycats.c:126 src/straycats.c:155
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "упозорење: %s: занемарујем нетачан назив датотеке"
 
-#: src/globbing_test.c:55
+#: src/globbing_test.c:57
 msgid "PATH SECTION NAME"
 msgstr "ПУТАЊА ОДЕЉАК НАЗИВ"
 
-#: src/globbing_test.c:59 src/man.c:304
+#: src/globbing_test.c:61 src/man.c:306
 msgid "EXTENSION"
 msgstr "ПРОШИРЕЊЕ"
 
-#: src/globbing_test.c:59 src/man.c:305
+#: src/globbing_test.c:61 src/man.c:307
 msgid "limit search to extension type EXTENSION"
 msgstr "ограничава претрагу на врсту проширења ПРОШИРЕЊЕ"
 
-#: src/globbing_test.c:60 src/man.c:306
+#: src/globbing_test.c:62 src/man.c:308
 msgid "look for pages case-insensitively (default)"
 msgstr "тражи странице без обзира на величину слова (основно)"
 
-#: src/globbing_test.c:61 src/man.c:307
+#: src/globbing_test.c:63 src/man.c:309
 msgid "look for pages case-sensitively"
 msgstr "тражи странице с обзиром на величину слова"
 
-#: src/globbing_test.c:62
+#: src/globbing_test.c:64
 msgid "interpret page name as a regex"
 msgstr "тумачи назив странице као регуларни израз"
 
-#: src/globbing_test.c:63
+#: src/globbing_test.c:65
 msgid "the page name contains wildcards"
 msgstr "назив странице садржи џокере"
 
-#: src/lexgrog.l:665
+#: src/lexgrog.l:668
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
@@ -278,193 +278,193 @@ msgstr[0] "упозорење: шта-је за „%s“ премашује %d �
 msgstr[1] "упозорење: шта-је за „%s“ премашује %d бајта, скраћујем."
 msgstr[2] "упозорење: шта-је за „%s“ премашује %d бајтова, скраћујем."
 
-#: src/lexgrog.l:816 src/man.c:2249 src/man.c:2331 src/man.c:2428
-#: src/manconv_main.c:165 src/straycats.c:221 src/ult_src.c:346
+#: src/lexgrog.l:819 src/man.c:2329 src/man.c:2411 src/man.c:2508
+#: src/manconv_main.c:168 src/straycats.c:224 src/ult_src.c:346
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
 msgid "can't open %s"
 msgstr "не могу да отворим „%s“"
 
-#: src/lexgrog_test.c:64 src/zsoelim_main.c:63
+#: src/lexgrog_test.c:66 src/zsoelim_main.c:65
 msgid "FILE..."
 msgstr "ДАТОТЕКА..."
 
-#: src/lexgrog_test.c:65
+#: src/lexgrog_test.c:67
 msgid "The defaults are --man and --whatis."
 msgstr "Основно је „--man“ и „--whatis“."
 
-#: src/lexgrog_test.c:69
+#: src/lexgrog_test.c:71
 msgid "parse as man page"
 msgstr "обрађује као ман страницу"
 
-#: src/lexgrog_test.c:70
+#: src/lexgrog_test.c:72
 msgid "parse as cat page"
 msgstr "обрађује као кат страницу"
 
-#: src/lexgrog_test.c:71
+#: src/lexgrog_test.c:73
 msgid "show whatis information"
 msgstr "приказује шта-је податке"
 
-#: src/lexgrog_test.c:72
+#: src/lexgrog_test.c:74
 msgid "show guessed series of preprocessing filters"
 msgstr "приказује погођене серије пропусника предобраде"
 
-#: src/lexgrog_test.c:73 src/man.c:296 src/man.c:321
+#: src/lexgrog_test.c:75 src/man.c:298 src/man.c:323
 msgid "ENCODING"
 msgstr "КОДИРАЊЕ"
 
-#: src/lexgrog_test.c:73 src/man.c:321
+#: src/lexgrog_test.c:75 src/man.c:323
 msgid "use selected output encoding"
 msgstr "користи изабрано кодирање излаза"
 
-#: src/lexgrog_test.c:117 src/man.c:548 src/man.c:557
+#: src/lexgrog_test.c:119 src/man.c:557 src/man.c:566
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s: несагласне опције"
 
-#: src/man.c:165
+#: src/man.c:166
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "наредба је изашла са стањем %d: %s"
 
-#: src/man.c:263
+#: src/man.c:265
 msgid "[SECTION] PAGE..."
 msgstr "[ОДЕЉАК] СТРАНИЦА..."
 
-#: src/man.c:281
+#: src/man.c:283
 msgid "reset all options to their default values"
 msgstr "враћа све опције на њихове основне вредности"
 
-#: src/man.c:282
+#: src/man.c:284
 msgid "WARNINGS"
 msgstr "УПОЗОРЕЊА"
 
-#: src/man.c:283
+#: src/man.c:285
 msgid "enable warnings from groff"
 msgstr "укључује упозорења из гроф-а"
 
-#: src/man.c:285
+#: src/man.c:287
 msgid "Main modes of operation:"
 msgstr "Главни режими рада:"
 
-#: src/man.c:286
+#: src/man.c:288
 msgid "equivalent to whatis"
 msgstr "исто што и шта-је"
 
-#: src/man.c:287
+#: src/man.c:289
 msgid "equivalent to apropos"
 msgstr "исто што и „apropos“"
 
-#: src/man.c:288
+#: src/man.c:290
 msgid "search for text in all pages"
 msgstr "тражи текст на свим страницама"
 
-#: src/man.c:289
+#: src/man.c:291
 msgid "print physical location of man page(s)"
 msgstr "исписује физичко место ман странице(а)"
 
-#: src/man.c:292
+#: src/man.c:294
 msgid "print physical location of cat file(s)"
 msgstr "исписује физичко место кат датотеке(а)"
 
-#: src/man.c:294
+#: src/man.c:296
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr "тумачи аргумент(е) СТРАНИЦЕ као месни(е) назив(е) датотеке"
 
-#: src/man.c:295
+#: src/man.c:297
 msgid "used by catman to reformat out of date cat pages"
 msgstr "користи га катман да поново обликује застареле кат странице"
 
-#: src/man.c:296
+#: src/man.c:298
 msgid "output source page encoded in ENCODING"
 msgstr "излазна страница извора је кодирана у КОДИРАЊУ"
 
-#: src/man.c:298
+#: src/man.c:300
 msgid "Finding manual pages:"
 msgstr "Проналажење страница упутства:"
 
-#: src/man.c:299 src/whatis.c:133
+#: src/man.c:301 src/whatis.c:135
 msgid "LOCALE"
 msgstr "ЈЕЗИК"
 
-#: src/man.c:299
+#: src/man.c:301
 msgid "define the locale for this particular man search"
 msgstr "одређује језик за ову нарочиту претрагу мана"
 
-#: src/man.c:300 src/manpath.c:68 src/whatis.c:131
+#: src/man.c:302 src/manpath.c:70 src/whatis.c:133
 msgid "SYSTEM"
 msgstr "СИСТЕМ"
 
-#: src/man.c:300 src/manpath.c:68 src/whatis.c:131
+#: src/man.c:302 src/manpath.c:70 src/whatis.c:133
 msgid "use manual pages from other systems"
 msgstr "користи странице упутства са других система"
 
-#: src/man.c:302 src/whatis.c:129
+#: src/man.c:304 src/whatis.c:131
 msgid "LIST"
 msgstr "СПИСАК"
 
-#: src/man.c:302
+#: src/man.c:304
 msgid "use colon separated section list"
 msgstr "користи двотачком раздвојени списак одељка"
 
-#: src/man.c:308
+#: src/man.c:310
 msgid "show all pages matching regex"
 msgstr "приказује све странице које одговарају регуларном изразу"
 
-#: src/man.c:309
+#: src/man.c:311
 msgid "show all pages matching wildcard"
 msgstr "приказује све странице које одговарају џокерима"
 
-#: src/man.c:310
+#: src/man.c:312
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
 "„make --regex“ и „--wildcard“ поклапају само називе страница, а не описе"
 
-#: src/man.c:312
+#: src/man.c:314
 msgid "find all matching manual pages"
 msgstr "проналази све одговарајуће странице упутства"
 
-#: src/man.c:313
+#: src/man.c:315
 msgid "force a cache consistency check"
 msgstr "приморава проверу доследности оставе"
 
-#: src/man.c:315
+#: src/man.c:317
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
 msgstr "не покушава подстранице, нпр. „man foo bar“ => „man foo-bar“"
 
-#: src/man.c:317
+#: src/man.c:319
 msgid "Controlling formatted output:"
 msgstr "Управљање обликованим излазом:"
 
-#: src/man.c:318
+#: src/man.c:320
 msgid "PAGER"
 msgstr "СТРАНИЧАР"
 
-#: src/man.c:318
+#: src/man.c:320
 msgid "use program PAGER to display output"
 msgstr "користи програм СТРАНИЧАР за приказивање излаза"
 
-#: src/man.c:319 src/man.c:328
+#: src/man.c:321 src/man.c:330
 msgid "STRING"
 msgstr "НИСКА"
 
-#: src/man.c:319
+#: src/man.c:321
 msgid "provide the `less' pager with a prompt"
 msgstr "обезбеђује страничара „less“ са упитом"
 
-#: src/man.c:320
+#: src/man.c:322
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "приказује АСКРИ превод неких латин1 знакова"
 
-#: src/man.c:323
+#: src/man.c:325
 msgid "turn off hyphenation"
 msgstr "искључује преламање"
 
-#: src/man.c:326
+#: src/man.c:328
 msgid "turn off justification"
 msgstr "искључује поравнавање"
 
-#: src/man.c:328
+#: src/man.c:330
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
@@ -474,34 +474,34 @@ msgstr ""
 "e — [n]eqn,  p — pic,    t — tbl,\n"
 "g — grap,    r — refer,  v — vgrind"
 
-#: src/man.c:332
+#: src/man.c:334
 #, c-format
 msgid "use %s to format pages"
 msgstr "користи „%s“ за обликовање страница"
 
-#: src/man.c:333
+#: src/man.c:335
 msgid "DEVICE"
 msgstr "УРЕЂАЈ"
 
-#: src/man.c:334
+#: src/man.c:336
 #, c-format
 msgid "use %s with selected device"
 msgstr "користи „%s“ са изабраним уређајем"
 
-#: src/man.c:335
+#: src/man.c:337
 msgid "BROWSER"
 msgstr "ПРЕГЛЕДНИК"
 
-#: src/man.c:336
+#: src/man.c:338
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr "користи „%s“ или ПРЕГЛЕДНИК за приказивање ХТМЛ излаза"
 
-#: src/man.c:337
+#: src/man.c:339
 msgid "RESOLUTION"
 msgstr "РЕЗОЛУЦИЈА"
 
-#: src/man.c:339
+#: src/man.c:341
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
@@ -509,92 +509,92 @@ msgstr ""
 "користи грофа и приказује кроз гиксдитпреглед (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:341
+#: src/man.c:343
 msgid "use groff and force it to produce ditroff"
 msgstr "користи гроф и приморава га да произведе дитроф"
 
-#: src/man.c:604 src/man.c:771
+#: src/man.c:614 src/man.c:792
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "Нема уноса упутства за „%s“\n"
 
-#: src/man.c:606
+#: src/man.c:616
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "(Илити, коју страницу упутства желите из одељка %s?)\n"
 
-#: src/man.c:610
+#: src/man.c:620
 msgid "What manual page do you want?\n"
 msgstr "Коју страницу упутства желите?\n"
 
-#: src/man.c:768
+#: src/man.c:789
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Нема уноса упутства за „%s“ у одељку %s\n"
 
-#: src/man.c:777
+#: src/man.c:798
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Погледајте „%s“ за помоћ када странице упутства нису доступне.\n"
 
-#: src/man.c:1342
+#: src/man.c:1406
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "занемарујем неознати препроцесор „%c“"
 
-#: src/man.c:1696 src/mandb.c:217
+#: src/man.c:1766 src/mandb.c:220
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "не могу да преименујем „%s“ у „%s“"
 
-#: src/man.c:1713
+#: src/man.c:1783
 #, c-format
 msgid "can't set times on %s"
 msgstr "не могу да подесим времена на „%s“"
 
-#: src/man.c:1722
+#: src/man.c:1792
 #, c-format
 msgid "can't unlink %s"
 msgstr "не могу да развежем „%s“"
 
-#: src/man.c:1773
+#: src/man.c:1843
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "не могу да направим привремени кат за „%s“"
 
-#: src/man.c:1885
+#: src/man.c:1956
 #, c-format
 msgid "can't create temporary directory"
 msgstr "не могу да направим привремени директоријум"
 
-#: src/man.c:1897
+#: src/man.c:1968
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "не могу да отворим привремену датотеку „%s“"
 
-#: src/man.c:1927 src/man.c:1965 src/man.c:3712
+#: src/man.c:1998 src/man.c:2036 src/man.c:3792
 #, c-format
 msgid "can't restore previous working directory"
 msgstr "не могу да повратим претходни радни директоријум"
 
-#: src/man.c:1935 src/man.c:1971
+#: src/man.c:2006 src/man.c:2042
 #, c-format
 msgid "can't remove directory %s"
 msgstr "не могу да уклоним директоријум „%s“"
 
-#: src/man.c:2091
+#: src/man.c:2166
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Ман-- следеће: %s [ преглед (повратница) | прескочи (Ктрл-Д) | изађи (Ктрл-"
 "Ц) ]\n"
 
-#: src/man.c:2139
+#: src/man.c:2215
 #, c-format
 msgid "can't chdir to %s"
 msgstr "не могу да се пребацим у „%s“"
 
-#: src/man.c:2373
+#: src/man.c:2453
 #, c-format
 msgid ""
 "\n"
@@ -603,27 +603,27 @@ msgstr ""
 "\n"
 "не могу да пишем у „%s“ у катман режиму"
 
-#: src/man.c:2454
+#: src/man.c:2534
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Не могу да претворим „%s“ у кат назив"
 
-#: src/man.c:3179
+#: src/man.c:3259
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: ослањање на упуте шта-је је застарело\n"
 
-#: src/man.c:3329 src/man.c:4134
+#: src/man.c:3409 src/man.c:4281
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "наредба мандб није успела са излазним стањем „%d“"
 
-#: src/man.c:3534
+#: src/man.c:3614
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "унутрашња грешка: врста кандидата „%d“ је ван опсега"
 
-#: src/man.c:4064
+#: src/man.c:4218
 msgid " Manual page "
 msgstr " Страница упутства "
 
@@ -636,107 +636,107 @@ msgstr "не могу да пишем на стандардни излаз"
 msgid "iconv: incomplete character at end of buffer"
 msgstr "иконв: непотпун знак на крају међумеморије"
 
-#: src/manconv_main.c:88
+#: src/manconv_main.c:90
 msgid "-f CODE[:...] -t CODE [FILENAME]"
 msgstr "-f КОД[:...] -t КОД [НАЗИВ ДАТОТЕКЕ]"
 
-#: src/manconv_main.c:91
+#: src/manconv_main.c:93
 msgid "CODE[:...]"
 msgstr "КОД[:...]"
 
-#: src/manconv_main.c:92
+#: src/manconv_main.c:94
 msgid "possible encodings of original text"
 msgstr "могућа кодирања изворног текста"
 
-#: src/manconv_main.c:93
+#: src/manconv_main.c:95
 msgid "CODE"
 msgstr "КОД"
 
-#: src/manconv_main.c:93
+#: src/manconv_main.c:95
 msgid "encoding for output"
 msgstr "кодирање за излаз"
 
-#: src/manconv_main.c:95 src/manpath.c:66
+#: src/manconv_main.c:97 src/manpath.c:68
 msgid "produce fewer warnings"
 msgstr "производи мања упозорења"
 
-#: src/manconv_main.c:130 src/manconv_main.c:139
+#: src/manconv_main.c:132 src/manconv_main.c:141
 #, c-format
 msgid "must specify an input encoding"
 msgstr "морате навести кодирање улаза"
 
-#: src/manconv_main.c:134
+#: src/manconv_main.c:136
 #, c-format
 msgid "must specify an output encoding"
 msgstr "морате навести кодирање излаза"
 
-#: src/mandb.c:105
+#: src/mandb.c:108
 msgid "[MANPATH]"
 msgstr "[МАНПУТАЊА]"
 
-#: src/mandb.c:109
+#: src/mandb.c:112
 msgid "work quietly, except for 'bogus' warning"
 msgstr "ради тихо, осим за „bogus“ упозорење"
 
-#: src/mandb.c:110
+#: src/mandb.c:113
 msgid "don't look for or add stray cats to the dbs"
 msgstr "не тражи или не додаје залутале катсе у базе података"
 
-#: src/mandb.c:111
+#: src/mandb.c:114
 msgid "don't purge obsolete entries from the dbs"
 msgstr "не избацује застареле уносе из база података"
 
-#: src/mandb.c:112
+#: src/mandb.c:115
 msgid "produce user databases only"
 msgstr "производи само корисничке базе података"
 
-#: src/mandb.c:113
+#: src/mandb.c:116
 msgid "create dbs from scratch, rather than updating"
 msgstr "прави базе података од почетка, уместо да их освежава"
 
-#: src/mandb.c:114
+#: src/mandb.c:117
 msgid "check manual pages for correctness"
 msgstr "проверава странице упутства за исправношћу"
 
-#: src/mandb.c:115
+#: src/mandb.c:118
 msgid "FILENAME"
 msgstr "ДАТОТЕКА"
 
-#: src/mandb.c:115
+#: src/mandb.c:118
 msgid "update just the entry for this filename"
 msgstr "ажурира само унос за ову датотеку"
 
-#: src/mandb.c:210
+#: src/mandb.c:213
 #, c-format
 msgid "can't remove %s"
 msgstr "не могу да уклоним „%s“"
 
-#: src/mandb.c:274
+#: src/mandb.c:277
 #, c-format
 msgid "can't write to %s"
 msgstr "не могу да пишем у „%s“"
 
-#: src/mandb.c:279
+#: src/mandb.c:282
 #, c-format
 msgid "can't read from %s"
 msgstr "не могу да читам из „%s“"
 
-#: src/mandb.c:447
+#: src/mandb.c:450
 #, c-format
 msgid "Processing manual pages under %s...\n"
 msgstr "Обрађујем странице упутства под „%s“...\n"
 
-#: src/mandb.c:661 src/mandb.c:687
+#: src/mandb.c:664 src/mandb.c:690
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Уклањам застареле кат директоријуме „%s“...\n"
 
-#: src/mandb.c:843
+#: src/mandb.c:847
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "упозорење: нема МАНБП_МАП смерница у „%s“, користим вашу ман-путању"
 
-#: src/mandb.c:915
+#: src/mandb.c:919
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -744,7 +744,7 @@ msgstr[0] "%d ман подиректоријум је садржао новиј
 msgstr[1] "%d ман подиректоријума су садржала новије странице упутства.\n"
 msgstr[2] "%d ман подиректоријума је садржало новије странице упутства.\n"
 
-#: src/mandb.c:920
+#: src/mandb.c:924
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
@@ -752,7 +752,7 @@ msgstr[0] "%d страница упутства је додата.\n"
 msgstr[1] "%d странице упутства су додате.\n"
 msgstr[2] "%d страница упутства је додато.\n"
 
-#: src/mandb.c:924
+#: src/mandb.c:928
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -760,7 +760,7 @@ msgstr[0] "%d залутали кат је додат.\n"
 msgstr[1] "%d залутала ката су додата.\n"
 msgstr[2] "%d залуталих катова је додато.\n"
 
-#: src/mandb.c:929
+#: src/mandb.c:933
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
@@ -768,7 +768,7 @@ msgstr[0] "%d стари унос базе података је избачен.
 msgstr[1] "%d стара уноса базе података су избачена.\n"
 msgstr[2] "%d старих уноса базе података је избачено.\n"
 
-#: src/mandb.c:947
+#: src/mandb.c:951
 #, c-format
 msgid "No databases created."
 msgstr "Нису направљене базе података."
@@ -848,35 +848,35 @@ msgstr "не могу да одредим текући директоријум"
 msgid "warning: %s does not begin with %s"
 msgstr "упозорење: „%s“ не почиње са „%s“"
 
-#: src/manpath.c:63
+#: src/manpath.c:65
 msgid "show relative catpaths"
 msgstr "показује односне катпутање"
 
-#: src/manpath.c:64
+#: src/manpath.c:66
 msgid "show the entire global manpath"
 msgstr "показује читаву општу манпутању"
 
-#: src/manpath.c:126
+#: src/manpath.c:128
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
 msgstr "упозорење: нису подешене опште манпутање у датотеци подешавања „%s“"
 
-#: src/straycats.c:247 src/ult_src.c:124
+#: src/straycats.c:251 src/ult_src.c:124
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "упозорење: „%s“ је апсолутна симболичка веза"
 
-#: src/straycats.c:250 src/ult_src.c:127 src/ult_src.c:287
+#: src/straycats.c:254 src/ult_src.c:127 src/ult_src.c:287
 #, c-format
 msgid "can't resolve %s"
 msgstr "не могу да решим „%s“"
 
-#: src/straycats.c:315
+#: src/straycats.c:319
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "Тражим залутале катсе под „%s“...\n"
 
-#: src/straycats.c:355
+#: src/straycats.c:359
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "упозорење: не могу да ажурирам оставу индекса „%s“"
@@ -886,61 +886,61 @@ msgstr "упозорење: не могу да ажурирам оставу и�
 msgid "%s is self referencing"
 msgstr "„%s“ је само упутна"
 
-#: src/whatis.c:118
+#: src/whatis.c:120
 msgid "KEYWORD..."
 msgstr "КЉУЧНА РЕЧ..."
 
-#: src/whatis.c:119
+#: src/whatis.c:121
 msgid "The --regex option is enabled by default."
 msgstr "Опција „--regex“ је унапред изабрана."
 
-#: src/whatis.c:123
+#: src/whatis.c:125
 msgid "print verbose warning messages"
 msgstr "исписује опширне поруке упозорења"
 
-#: src/whatis.c:124
+#: src/whatis.c:126
 msgid "interpret each keyword as a regex"
 msgstr "тумачи сваку кључну реч као регуларни израз"
 
-#: src/whatis.c:125
+#: src/whatis.c:127
 msgid "search each keyword for exact match"
 msgstr "тражи сваку кључну реч за тачним поклапањем"
 
-#: src/whatis.c:126
+#: src/whatis.c:128
 msgid "the keyword(s) contain wildcards"
 msgstr "кључна реч садржи џокера"
 
-#: src/whatis.c:127
+#: src/whatis.c:129
 msgid "require all keywords to match"
 msgstr "захтева све кључне речи за подударање"
 
-#: src/whatis.c:128
+#: src/whatis.c:130
 msgid "do not trim output to terminal width"
 msgstr "не крати излаз на ширину терминала"
 
-#: src/whatis.c:129
+#: src/whatis.c:131
 msgid "search only these sections (colon-separated)"
 msgstr "претаржује само ове одељке (раздвојене двотачком)"
 
-#: src/whatis.c:133
+#: src/whatis.c:135
 msgid "define the locale for this search"
 msgstr "одређује језик за ову претрагу"
 
-#: src/whatis.c:230
+#: src/whatis.c:232
 #, c-format
 msgid "%s what?\n"
 msgstr "%s шта?\n"
 
-#: src/whatis.c:390 src/whatis.c:408
+#: src/whatis.c:393 src/whatis.c:411
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "упозорење: „%s“ садржи петљу показивача"
 
-#: src/whatis.c:402 src/whatis.c:410
+#: src/whatis.c:405 src/whatis.c:413
 msgid "(unknown subject)"
 msgstr "(непознат субјекат)"
 
-#: src/whatis.c:868
+#: src/whatis.c:871
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ништа одговарајуће.\n"
@@ -975,6 +975,6 @@ msgstr "%s:%d: упозорење: нови ред у „.lf“ захтеву, 
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: неокончани цитат у роф захтеву"
 
-#: src/zsoelim_main.c:67
+#: src/zsoelim_main.c:69
 msgid "compatibility switch (ignored)"
 msgstr "пребацивање сагласности (занемарено)"
