@@ -1,13 +1,13 @@
 # Swedish messages for man-db-manpages.
-# Copyright © 2015 Free Software Foundation, Inc.
+# Copyright © 2015, 2016, 2018 Free Software Foundation, Inc.
 # This file is distributed under the same license as the man-db package.
-# Sebastian Rasmussen <sebras@gmail.com>, 2015.
+# Sebastian Rasmussen <sebras@gmail.com>, 2015, 2016, 2018
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages-2.7.6.1\n"
+"Project-Id-Version: man-db-manpages-2.8.0-pre2\n"
 "POT-Creation-Date: 2018-01-22 10:13+0000\n"
-"PO-Revision-Date: 2016-12-26 17:34+0100\n"
+"PO-Revision-Date: 2018-01-22 22:44+0100\n"
 "Last-Translator: Sebastian Rasmussen <sebras@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #. type: TH
 #: ../../man/man1/apropos.man1:12 ../../man/man1/lexgrog.man1:9
@@ -1903,12 +1903,6 @@ msgstr "B<-P\\ >I<sidvisare>,\\ B<--pager=>I<sidvisare>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:892
-#, fuzzy
-#| msgid ""
-#| "Specify which output pager to use.  By default, B<%man%> uses B<%pager"
-#| "%>.  This option overrides the $B<MANPAGER> environment variable, which "
-#| "in turn overrides the $B<PAGER> environment variable.  It is not used in "
-#| "conjunction with B<-f> or B<-k>."
 msgid ""
 "Specify which output pager to use.  By default, B<%man%> uses B<%pager%>, "
 "falling back to B<%cat%> if B<%pager%> is not found or is not executable.  "
@@ -1917,9 +1911,10 @@ msgid ""
 "with B<-f> or B<-k>."
 msgstr ""
 "Ange vilken utmatningssidvisare som ska användas.  Som standard använder B<"
-"%man%> B<%pager%>.  Denna flagga åsidosätter miljövariabeln $B<MANPAGER>, "
-"vilken i sin tur åsidosätter miljövariabeln $B<PAGER>.  Den används inte i "
-"samband med B<-f> eller B<-k>."
+"%man%> B<%pager%>, om B<%pager%> inte finns eller är körbar används B<%cat"
+"%>.  Denna flagga åsidosätter miljövariabeln $B<MANPAGER>, vilken i sin tur "
+"åsidosätter miljövariabeln $B<PAGER>.  Den används inte i samband med B<-f> "
+"eller B<-k>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:898 ../../man/man1/man.man1:1259
@@ -2361,11 +2356,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1253
-#, fuzzy
-#| msgid ""
-#| "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
-#| "its value is used as the name of the program used to display the manual "
-#| "page.  By default, B<%pager%> is used."
 msgid ""
 "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
 "its value is used as the name of the program used to display the manual "
@@ -2374,7 +2364,8 @@ msgid ""
 msgstr ""
 "Om $B<MANPAGER> eller $B<PAGER> är satt ($B<MANPAGER> används i första hand) "
 "så kommer dess värde att användas som namnet på det program som används för "
-"att visa manualsidan.  Som standard kommer B<%pager%> att användas."
+"att visa manualsidan.  Som standard kommer B<%pager%> att användas, om B<"
+"%pager%> inte hittas eller är körbar används B<%cat%>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1278
