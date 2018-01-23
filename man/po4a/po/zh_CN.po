@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages-2.7.6.1\n"
+"Project-Id-Version: man-db-manpages-2.8.0-pre2\n"
 "POT-Creation-Date: 2018-01-22 10:13+0000\n"
-"PO-Revision-Date: 2017-11-25 20:25+0800\n"
+"PO-Revision-Date: 2018-01-23 10:06+0800\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.5\n"
 "X-Poedit-Bookmarks: -1,102,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #. type: TH
@@ -1743,12 +1743,6 @@ msgstr "B<-P\\ >I<分页程序>,\\ B<--pager=>I<分页程序>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:892
-#, fuzzy
-#| msgid ""
-#| "Specify which output pager to use.  By default, B<%man%> uses B<%pager"
-#| "%>.  This option overrides the $B<MANPAGER> environment variable, which "
-#| "in turn overrides the $B<PAGER> environment variable.  It is not used in "
-#| "conjunction with B<-f> or B<-k>."
 msgid ""
 "Specify which output pager to use.  By default, B<%man%> uses B<%pager%>, "
 "falling back to B<%cat%> if B<%pager%> is not found or is not executable.  "
@@ -1756,9 +1750,9 @@ msgid ""
 "overrides the $B<PAGER> environment variable.  It is not used in conjunction "
 "with B<-f> or B<-k>."
 msgstr ""
-"指定使用哪个输出分页程序。B<%man%> 默认使用 B<%pager%>。此选项会覆盖 "
-"$B<MANPAGER> 环境变量，进一步覆盖 $B<PAGER> 环境变量。它不和 B<-f> 或 B<-k> "
-"合用。"
+"指定使用哪个输出分页程序。B<%man%> 默认使用 B<%pager%>，在无法找到 B<%pager"
+"%> 或它不是可执行文件时则会回退到使用 B<%cat%>。此选项会覆盖 $B<MANPAGER> 环"
+"境变量，进一步覆盖 $B<PAGER> 环境变量。它不和 B<-f> 或 B<-k> 合用。"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:898 ../../man/man1/man.man1:1259
@@ -2161,11 +2155,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1253
-#, fuzzy
-#| msgid ""
-#| "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
-#| "its value is used as the name of the program used to display the manual "
-#| "page.  By default, B<%pager%> is used."
 msgid ""
 "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
 "its value is used as the name of the program used to display the manual "
@@ -2173,7 +2162,8 @@ msgid ""
 "%> is not found or is not executable."
 msgstr ""
 "如果设置了 $B<MANPAGER> 或 $B<PAGER> (优先使用 $B<MANPAGER>)，它的值会用作显"
-"示手册页的程序的名称。默认使用 B<%pager%>。"
+"示手册页的程序的名称。默认使用 B<%pager%>，如果无法找到 B<%pager%> 或它不是可"
+"执行文件的话则会回退到使用 B<%cat%>。"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1278
