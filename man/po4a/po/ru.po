@@ -4,19 +4,20 @@
 # This file is distributed under the same license as the man-db package.
 #
 # Yuri Kozlov <yuray@komyakino.ru>, 2008, 2009, 2010, 2011, 2012.
-# Yuri Kozlov <yuray@komyakino.ru>, 2008, 2013, 2014.
+# Yuri Kozlov <yuray@komyakino.ru>, 2008, 2013, 2014, 2018.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.7.0-pre1\n"
+"Project-Id-Version: man-db-manpages 2.8.0-pre2\n"
 "POT-Creation-Date: 2018-01-22 10:13+0000\n"
-"PO-Revision-Date: 2014-09-19 04:37+0400\n"
+"PO-Revision-Date: 2018-01-23 05:49+0300\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
-"Language-Team: Russian <gnu@mx.ru>\n"
+"Language-Team: Russian <gnu@d07.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"X-Generator: Lokalize 2.0\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -805,19 +806,6 @@ msgstr "%man% - доступ к справочным страницам"
 #.  The apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:67
-#, fuzzy
-#| msgid ""
-#| "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--"
-#| "warnings>\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> "
-#| "I<locale>\\|] [\\|B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
-#| "I<path>\\|] [\\|B<-S> I<list>\\|] [\\|B<-e> I<extension>\\|] [\\|B<-i>\\||"
-#| "\\|B<-I>\\|] [\\|B<--regex>\\||\\|B<--wildcard>\\|] [\\|B<--names-only>"
-#| "\\|] [\\|B<-a>\\|] [\\|B<-u>\\|] [\\|B<--no-subpages>\\|] [\\|B<-P> "
-#| "I<pager>\\|] [\\|B<-r> I<prompt>\\|] [\\|B<-7>\\|] [\\|B<-E> I<encoding>"
-#| "\\|] [\\|B<--no-hyphenation>\\|] [\\|B<--no-justification>\\|] [\\|B<-p> "
-#| "I<string>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|I<device>\\|]\\|] [\\|B<-H>\\|"
-#| "[\\|I<browser>\\|]\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>\\|] [\\|"
-#| "[\\|I<section>\\|] I<page>\\ .\\|.\\|.\\|]\\ .\\|.\\|.\\&"
 msgid ""
 "B<%man%> [\\|B<-C> I<file>\\|] [\\|B<-d>\\|] [\\|B<-D>\\|] [\\|B<--warnings>"
 "\\|[\\|=I<warnings>\\|]\\|] [\\|B<-R> I<encoding>\\|] [\\|B<-L> I<locale>"
@@ -841,7 +829,8 @@ msgstr ""
 "I<кодировка>\\|] [\\|B<--no-hyphenation>\\|] [\\|B<--no-justification>\\|] "
 "[\\|B<-p> I<строка>\\|] [\\|B<-t>\\|] [\\|B<-T>\\|[\\|I<устройство>\\|]\\|] "
 "[\\|B<-H>\\|[\\|I<браузер>\\|]\\|] [\\|B<-X>\\|[\\|I<dpi>\\|]\\|] [\\|B<-Z>"
-"\\|] [\\|[\\|I<раздел>\\|] I<страница>\\ .\\|.\\|.\\|]\\ .\\|.\\|.\\&"
+"\\|] [\\|[\\|I<раздел>\\|] I<страница>[.\\|I<раздел>\\|]\\ \\|.\\|.\\|."
+"\\|]\\ .\\|.\\|.\\&"
 
 #.  The --global-apropos command line
 #. type: Plain text
@@ -1142,17 +1131,14 @@ msgstr "Показать справочную страницу для I<пара
 
 #. type: TP
 #: ../../man/man1/man.man1:287
-#, fuzzy, no-wrap
-#| msgid "B<%man%\\ -f>I<\\ smail>"
+#, no-wrap
 msgid "B<%man% >I<man>.I<7>"
-msgstr "B<%man%\\ -f>I<\\ smail>"
+msgstr "B<%man% >I<man>.I<7>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:292
-#, fuzzy
-#| msgid "Display the manual page for the I<item> (program)  I<ls>."
 msgid "Display the manual page for macro package I<man> from section I<7>."
-msgstr "Показать справочную страницу для I<параметра> (программы) I<ls>."
+msgstr "Показать справочную страницу пакета макросов I<man> из раздела I<7>."
 
 #. type: TP
 #: ../../man/man1/man.man1:292
@@ -1636,6 +1622,10 @@ msgid ""
 "text, and so may include false positives due to things like comments in "
 "source files.  Searching the rendered text would be much slower."
 msgstr ""
+"Заметим, что данный поиск выполняется по I<исходному тексту> справочных "
+"страниц, а не по отображаемому тексту, и поэтому может включать ложные "
+"результаты, например, из-за комментариев в исходных файлах. Поиск по "
+"отображаемому тексту выполнялся бы медленнее."
 
 #.  Compressed nroff source files with a supported compression
 #.  extension will be decompressed by man prior to being displaying via the
@@ -1939,12 +1929,6 @@ msgstr "B<-P\\ >I<пейджер>,\\ B<--pager=>I<пейджер>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:892
-#, fuzzy
-#| msgid ""
-#| "Specify which output pager to use.  By default, B<%man%> uses B<%pager"
-#| "%>.  This option overrides the $B<MANPAGER> environment variable, which "
-#| "in turn overrides the $B<PAGER> environment variable.  It is not used in "
-#| "conjunction with B<-f> or B<-k>."
 msgid ""
 "Specify which output pager to use.  By default, B<%man%> uses B<%pager%>, "
 "falling back to B<%cat%> if B<%pager%> is not found or is not executable.  "
@@ -1953,9 +1937,10 @@ msgid ""
 "with B<-f> or B<-k>."
 msgstr ""
 "Указывает, какой пейджер использовать для вывода. По умолчанию, B<%man%> "
-"использует B<%pager%>. Этот параметр заменяет значение переменной окружения "
-"$B<MANPAGER> которая, в свою очередь, заменяет значение переменной окружения "
-"$B<PAGER>. Не используется вместе с B<-f> или B<-k>."
+"использует B<%pager%> и применяет B<%cat%>, если B<%pager%> не найден или не "
+"является исполняемым файлом. Этот параметр заменяет значение переменной "
+"окружения $B<MANPAGER> которая, в свою очередь, заменяет значение переменной "
+"окружения $B<PAGER>. Не используется вместе с B<-f> или B<-k>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:898 ../../man/man1/man.man1:1259
@@ -2404,11 +2389,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1253
-#, fuzzy
-#| msgid ""
-#| "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
-#| "its value is used as the name of the program used to display the manual "
-#| "page.  By default, B<%pager%> is used."
 msgid ""
 "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
 "its value is used as the name of the program used to display the manual "
@@ -2417,7 +2397,8 @@ msgid ""
 msgstr ""
 "Если установлена переменная окружения $B<MANPAGER> или $B<PAGER> "
 "($B<MANPAGER> просматривается первой), то в ней задано имя программы для "
-"отображения справочной страницы. По умолчанию, используется B<%pager%>."
+"отображения справочной страницы. По умолчанию, используется B<%pager%> или B<"
+"%cat%>, если B<%pager%> не найден или не является исполняемым файлом."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1278
@@ -3816,6 +3797,12 @@ msgstr ""
 
 #~ msgid "%thmandb%"
 #~ msgstr "%thmandb%"
+
+#~ msgid "GNU gdbm v E<gt>= 1.6"
+#~ msgstr "GNU gdbm v E<gt>= 1.6"
+
+#~ msgid "GNU gdbm v E<lt>  1.6"
+#~ msgstr "GNU gdbm v E<lt>  1.6"
 
 #~ msgid ""
 #~ "$mtime$ -E<gt> \"795987034\"\n"
