@@ -8,14 +8,14 @@
 # Nils Magnus <magnus@informatik.uni-kl.de>
 # Erik Pfannenstein <debianignatz@gmx.de>, 2010.
 # Martin Eberhard Schauer <Martin.E.Schauer@gmx.de>, 2010 - 2012.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2014, 2016.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2014, 2016, 2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.7.6.1\n"
+"Project-Id-Version: man-db-manpages 2.8.0-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2018-01-22 10:13+0000\n"
-"PO-Revision-Date: 2016-12-12 16:51+0100\n"
+"PO-Revision-Date: 2018-01-25 19:38+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
 "Language: de\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.6\n"
 
 # #-#-#-#-#  apropos.1.po (man-db 2.5.7)  #-#-#-#-#
 # Alle Programme aus dem Paket man-db haben diese Beschreibung, die in der
@@ -2060,12 +2060,6 @@ msgstr "B<-P\\ >I<Anzeigeprogramm>,\\ B<--pager=>I<Anzeigeprogramm>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:892
-#, fuzzy
-#| msgid ""
-#| "Specify which output pager to use.  By default, B<%man%> uses B<%pager"
-#| "%>.  This option overrides the $B<MANPAGER> environment variable, which "
-#| "in turn overrides the $B<PAGER> environment variable.  It is not used in "
-#| "conjunction with B<-f> or B<-k>."
 msgid ""
 "Specify which output pager to use.  By default, B<%man%> uses B<%pager%>, "
 "falling back to B<%cat%> if B<%pager%> is not found or is not executable.  "
@@ -2074,10 +2068,11 @@ msgid ""
 "with B<-f> or B<-k>."
 msgstr ""
 "Gibt an, welches Anzeigeprogramm verwendet werden soll. Standardmäßig "
-"verwendet B<%man%> B<%pager%>. Diese Option überschreibt die "
-"Umgebungsvariable $B<MANPAGER>, welche wiederum die Umgebungsvariable "
-"$B<PAGER> überschreibt. Die Option wird nicht zusammen mit B<-f> oder B<-k> "
-"verwendet."
+"verwendet B<%man%> B<%pager%>, wobei auf B<%cat%> ausgewichen wird, falls B<"
+"%pager%> nicht gefunden wurde oder nicht ausführbar ist. Diese Option "
+"überschreibt die Umgebungsvariable $B<MANPAGER>, welche wiederum die "
+"Umgebungsvariable $B<PAGER> überschreibt. Die Option wird nicht zusammen mit "
+"B<-f> oder B<-k> verwendet."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:898 ../../man/man1/man.man1:1259
@@ -2537,11 +2532,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1253
-#, fuzzy
-#| msgid ""
-#| "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
-#| "its value is used as the name of the program used to display the manual "
-#| "page.  By default, B<%pager%> is used."
 msgid ""
 "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
 "its value is used as the name of the program used to display the manual "
@@ -2550,7 +2540,8 @@ msgid ""
 msgstr ""
 "Wenn $B<MANPAGER> oder $B<PAGER> gesetzt ist ($B<MANPAGER> wird bevorzugt "
 "verwendet), legt dieser Wert das Anzeigeprogramm für die Handbuchseite fest. "
-"Standardmäßig wird B<%pager%> verwendet."
+"Standardmäßig wird B<%pager%> verwendet, wobei auf B<%cat%> ausgewichen "
+"wird, falls B<%pager%> nicht gefunden wurde oder nicht ausführbar ist."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1278
@@ -3761,7 +3752,7 @@ msgstr ""
 "aktualisieren. Ist keine Datenbank vorhanden, wird sie erstellt. Diese "
 "Option zwingt B<%mandb%> dazu, die Datenbank von Grund auf neu zu erstellen "
 "und impliziert B<--no-purge>. Dieses kann notwendig sein, wenn eine "
-"Datenbank beschädigt oder das Datenbank-Schema geändert wird. "
+"Datenbank beschädigt oder das Datenbank-Schema geändert wird."
 
 #. type: Plain text
 #: ../../man/man8/mandb.man8:111
@@ -3934,52 +3925,3 @@ msgid ""
 msgstr ""
 "Der frühere Abschnitt B<WAS BEDEUTET PARSEN> ist jetzt Teil von "
 "B<lexgrog>(1)."
-
-#~ msgid "%thapropos%"
-#~ msgstr "%thapropos%"
-
-#~ msgid "%date%"
-#~ msgstr "%date%"
-
-#~ msgid "%version%"
-#~ msgstr "%version%"
-
-#~ msgid "LEXGROG"
-#~ msgstr "LEXGROG"
-
-#~ msgid "%thman%"
-#~ msgstr "%thman%"
-
-#~ msgid "%thmanconv%"
-#~ msgstr "%thmanconv%"
-
-#~ msgid "%thmanpath%"
-#~ msgstr "%thmanpath%"
-
-#~ msgid "%thwhatis%"
-#~ msgstr "%thwhatis%"
-
-#~ msgid "%thzsoelim%"
-#~ msgstr "%thzsoelim%"
-
-#~ msgid "MANPATH"
-#~ msgstr "MANPATH"
-
-#~ msgid "%manpath_config_file%"
-#~ msgstr "%manpath_config_file%"
-
-#~ msgid "ACCESSDB"
-#~ msgstr "ACCESSDB"
-
-#~ msgid "%thcatman%"
-#~ msgstr "%thcatman%"
-
-#~ msgid "%thmandb%"
-#~ msgstr "%thmandb%"
-
-# Oder doch Hash-Tabelle?
-#~ msgid "GNU gdbm v E<gt>= 1.6"
-#~ msgstr "GNU gdbm v E<gt>= 1.6"
-
-#~ msgid "GNU gdbm v E<lt>  1.6"
-#~ msgstr "GNU gdbm v E<lt>  1.6"
