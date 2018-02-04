@@ -51,6 +51,7 @@
 #include <fcntl.h>
 
 #ifdef HAVE_LIBSECCOMP
+#  include <sys/ioctl.h>
 #  include <sys/prctl.h>
 #  include <seccomp.h>
 #endif /* HAVE_LIBSECCOMP */
@@ -428,7 +429,10 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("brk");
 	SC_ALLOW ("fadvise64");
 	SC_ALLOW ("fadvise64_64");
-	if (permissive) SC_ALLOW ("ioctl");
+	if (permissive)
+		SC_ALLOW ("ioctl");
+	else
+		SC_ALLOW_ARG_1 ("ioctl", SCMP_A1 (SCMP_CMP_EQ, TCGETS));
 	SC_ALLOW ("mprotect");
 	SC_ALLOW ("sync_file_range2");
 	SC_ALLOW ("sysinfo");
