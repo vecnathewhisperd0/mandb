@@ -53,6 +53,7 @@
 #ifdef HAVE_LIBSECCOMP
 #  include <sys/ioctl.h>
 #  include <sys/prctl.h>
+#  include <termios.h>
 #  include <seccomp.h>
 #endif /* HAVE_LIBSECCOMP */
 
