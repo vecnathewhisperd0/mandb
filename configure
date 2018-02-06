@@ -1718,6 +1718,7 @@ with_included_regex
 enable_nls
 with_libiconv_prefix
 with_libintl_prefix
+with_libseccomp
 '
       ac_precious_vars='build_alias
 host_alias
@@ -2459,6 +2460,7 @@ Optional Packages:
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
+  --without-libseccomp    do not confine subprocesses using seccomp
 
 Some influential environment variables:
   CC          C compiler command
@@ -47295,6 +47297,15 @@ fi
 
 # Check for libseccomp library.
 
+# Check whether --with-libseccomp was given.
+if test "${with_libseccomp+set}" = set; then :
+  withval=$with_libseccomp;
+else
+  with_libseccomp=check
+fi
+
+	if test "x$with_libseccomp" != "xno"; then
+
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libseccomp" >&5
 $as_echo_n "checking for libseccomp... " >&6; }
@@ -47353,11 +47364,15 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$libseccomp_PKG_ERRORS" >&5
 
-	:
+	if test "x$with_libseccomp" = "xyes"; then
+				as_fn_error $? "--with-libseccomp given but cannot find libseccomp" "$LINENO" 5
+			 fi
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	:
+	if test "x$with_libseccomp" = "xyes"; then
+				as_fn_error $? "--with-libseccomp given but cannot find libseccomp" "$LINENO" 5
+			 fi
 else
 	libseccomp_CFLAGS=$pkg_cv_libseccomp_CFLAGS
 	libseccomp_LIBS=$pkg_cv_libseccomp_LIBS
@@ -47367,6 +47382,7 @@ $as_echo "yes" >&6; }
 $as_echo "#define HAVE_LIBSECCOMP 1" >>confdefs.h
 
 fi
+	fi
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: default CC = \"$CC\"" >&5
