@@ -69,10 +69,7 @@
 
 #include "error.h"
 #include "cleanup.h"
-
-#ifdef MAN_OWNER
-# include "security.h"
-#endif
+#include "security.h"
 
 #include "manp.h"
 #include "globbing.h"
@@ -145,7 +142,6 @@ static struct list *iterate_over_list (struct list *prev, char *key, int flag)
 	return NULL;
 }
 
-#ifdef MAN_OWNER
 /* Must not return DEFINEs set in ~/.manpath. This is used to fetch
  * definitions used in raised-privilege code; if in doubt, be conservative!
  *
@@ -161,7 +157,6 @@ const char *get_def (const char *thing, const char *def)
 	config_def = get_from_list (thing, DEFINE);
 	return config_def ? config_def : def;
 }
-#endif
 
 const char *get_def_user (const char *thing, const char *def)
 {

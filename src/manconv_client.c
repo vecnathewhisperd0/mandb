@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "idpriv.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
@@ -35,11 +36,7 @@
 #include "pipeline.h"
 #include "decompress.h"
 #include "sandbox.h"
-
-#ifdef MAN_OWNER
-#  include "idpriv.h"
-#  include "security.h"
-#endif /* MAN_OWNER */
+#include "security.h"
 
 #include "manconv.h"
 #include "manconv_client.h"
@@ -63,7 +60,6 @@ static void manconv_stdin (void *data)
 	pipeline_free (p);
 }
 
-#ifdef MAN_OWNER
 static void manconv_pre_exec (void *data)
 {
 	/* We must drop privileges before loading the sandbox, since our
@@ -72,7 +68,6 @@ static void manconv_pre_exec (void *data)
 	drop_privs (NULL);
 	sandbox_load (data);
 }
-#endif /* MAN_OWNER */
 
 static void free_manconv_codes (void *data)
 {
@@ -116,7 +111,6 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 	if (quiet >= 2)
 		name = appendstr (name, " -q", NULL);
 
-#ifdef MAN_OWNER
 	/* iconv_open may not work correctly in setuid processes; in GNU
 	 * libc, gconv modules may be linked against other gconv modules and
 	 * rely on RPATH $ORIGIN to load those modules from the correct
@@ -142,16 +136,12 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 			pipecmd_arg (cmd, "-q");
 		pipecmd_pre_exec (cmd, manconv_pre_exec, sandbox_free,
 				  sandbox);
-		free (name);
 		free_manconv_codes (codes);
-		pipeline_command (p, cmd);
-		return;
+	} else {
+		cmd = pipecmd_new_function (name, &manconv_stdin,
+					    &free_manconv_codes, codes);
+		pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 	}
-#endif /* MAN_OWNER */
-
-	cmd = pipecmd_new_function (name, &manconv_stdin, &free_manconv_codes,
-				    codes);
 	free (name);
-	pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 	pipeline_command (p, cmd);
 }

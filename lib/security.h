@@ -30,4 +30,6 @@ extern void regain_effective_privs (void);
 extern void drop_privs (void *data);
 extern void init_security (void);
 extern int running_setuid (void);
+#ifdef MAN_OWNER
 extern struct passwd *get_man_owner (void);
+#endif /* MAN_OWNER */

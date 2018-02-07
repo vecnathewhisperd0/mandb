@@ -54,6 +54,7 @@
     * they live in are writeable by this user.
     */
 
+#  include <pwd.h>
 #  include <unistd.h>
 
 #  include "idpriv.h"
@@ -77,8 +78,11 @@ static void gripe_set_euid (void)
 	error (FATAL, errno, _("can't set effective uid"));
 }
 
+#endif /* MAN_OWNER */
+
 void init_security (void)
 {
+#ifdef MAN_OWNER
 	ruid = getuid ();
 	uid = euid = geteuid ();
 	debug ("ruid=%d, euid=%d\n", (int) ruid, (int) euid);
@@ -87,13 +91,19 @@ void init_security (void)
 	debug ("rgid=%d, egid=%d\n", (int) rgid, (int) egid);
 	priv_drop_count = 0;
 	drop_effective_privs ();
+#endif /* MAN_OWNER */
 }
 
 int running_setuid (void)
 {
+#ifdef MAN_OWNER
 	return ruid != euid;
+#else /* !MAN_OWNER */
+	return 0;
+#endif
 }
 
+#ifdef MAN_OWNER
 /* Return a pointer to the password entry structure for MAN_OWNER. This
  * structure will be statically stored.
  */
@@ -109,7 +119,6 @@ struct passwd *get_man_owner (void)
 	assert (man_owner);
 	return man_owner;
 }
-
 #endif /* MAN_OWNER */
 
 /* 

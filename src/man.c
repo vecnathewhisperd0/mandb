@@ -4158,10 +4158,8 @@ int main (int argc, char *argv[])
 	if (argp_parse (&argp, argc, argv, ARGP_NO_ARGS, &first_arg, 0))
 		exit (FAIL);
 
-#ifdef MAN_OWNER
 	/* record who we are and drop effective privs for later use */
 	init_security ();
-#endif /* MAN_OWNER */
 
 	read_config_file (local_man_file || user_config_file);
 

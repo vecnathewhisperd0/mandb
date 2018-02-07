@@ -146,12 +146,10 @@ int main (int argc, char **argv)
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
 
-#ifdef MAN_OWNER
 	/* We aren't setuid, but this allows generic code in lexgrog.l to
 	 * use drop_effective_privs/regain_effective_privs.
 	 */
 	init_security ();
-#endif /* MAN_OWNER */
 
 	if (parse_man)
 		type = 0;

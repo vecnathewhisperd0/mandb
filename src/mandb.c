@@ -813,17 +813,11 @@ int main (int argc, char *argv[])
 	}
 #endif /* __profile__ */
 
-#ifdef MAN_OWNER
 	/* record who we are and drop effective privs for later use */
 	init_security ();
-#endif /* MAN_OWNER */
 
 #ifdef MAN_OWNER
-	man_owner = getpwnam (MAN_OWNER);
-	if (man_owner == NULL)
-		error (FAIL, 0,
-		       _("the setuid man user \"%s\" does not exist"),
-		       MAN_OWNER);
+	man_owner = get_man_owner ();
 	if (!user && euid != 0 && euid != man_owner->pw_uid)
 		user = 1;
 #endif /* MAN_OWNER */
