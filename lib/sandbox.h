@@ -23,15 +23,16 @@
 #ifndef MAN_SANDBOX_H
 #define MAN_SANDBOX_H
 
-#include "pipeline.h"
-
 struct man_sandbox;
 typedef struct man_sandbox man_sandbox;
 
 extern man_sandbox *sandbox_init (void);
-extern void sandbox_attach (man_sandbox *sandbox, pipecmd *cmd);
-extern void sandbox_attach_permissive (man_sandbox *sandbox, pipecmd *cmd);
+
+/* These functions take a man_sandbox * argument, but have more generic
+ * types suitable for use with pipecmd_pre_exec.
+ */
 extern void sandbox_load (void *data);
+extern void sandbox_load_permissive (void *data);
 extern void sandbox_free (void *data);
 
 #endif /* MAN_SANDBOX_H */

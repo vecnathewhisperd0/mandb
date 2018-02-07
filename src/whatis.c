@@ -341,7 +341,8 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 			pipecmd_argstr (grep_cmd, flags);
 			pipecmd_args (grep_cmd, anchored_page, whatis_file,
 				      NULL);
-			sandbox_attach (sandbox, grep_cmd);
+			pipecmd_pre_exec (grep_cmd, sandbox_load, sandbox_free,
+					  sandbox);
 			grep_pl = pipeline_new_commands (grep_cmd, NULL);
 
 			if (pipeline_run (grep_pl) == 0)

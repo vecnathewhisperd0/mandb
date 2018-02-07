@@ -1116,7 +1116,7 @@ static void add_col (pipeline *p, const char *locale_charset, ...)
 	va_start (argv, locale_charset);
 	pipecmd_argv (cmd, argv);
 	va_end (argv);
-	sandbox_attach (sandbox, cmd);
+	pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 
 	if (locale_charset)
 		col_locale = find_charset_locale (locale_charset);
@@ -1199,7 +1199,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			cmd = pipecmd_new_function (ZSOELIM, &zsoelim_stdin,
 						    zsoelim_stdin_data_free,
 						    zsoelim_data);
-			sandbox_attach (sandbox, cmd);
+			pipecmd_pre_exec (cmd, sandbox_load, sandbox_free,
+					  sandbox);
 			pipeline_command (p, cmd);
 		}
 
@@ -1271,7 +1272,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			add_manconv (p, page_encoding, "UTF-8");
 			preconv_cmd = pipecmd_new_args
 				(groff_preconv, "-e", "UTF-8", NULL);
-			sandbox_attach (sandbox, preconv_cmd);
+			pipecmd_pre_exec (preconv_cmd, sandbox_load,
+					  sandbox_free, sandbox);
 			pipeline_command (p, preconv_cmd);
 		} else if (roff_encoding)
 			add_manconv (p, page_encoding, roff_encoding);
@@ -1431,7 +1433,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 					pipecmd_arg (cmd, "-P-g");
 			}
 
-			sandbox_attach_permissive (sandbox, cmd);
+			pipecmd_pre_exec (cmd, sandbox_load_permissive,
+					  sandbox_free, sandbox);
 			pipeline_command (p, cmd);
 
 			if (*pp_string == ' ' || *pp_string == '-')
@@ -1572,7 +1575,8 @@ static void add_output_iconv (pipeline *p,
 		iconv_cmd = pipecmd_new_args
 			("iconv", "-c", "-f", source, "-t", target_translit,
 			 NULL);
-		sandbox_attach (sandbox, iconv_cmd);
+		pipecmd_pre_exec (iconv_cmd, sandbox_load, sandbox_free,
+				  sandbox);
 		pipeline_command (p, iconv_cmd);
 		free (target_translit);
 	}
@@ -1664,7 +1668,8 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 			pipecmd *tr_cmd;
 			tr_cmd = pipecmd_new_argstr
 				(get_def_user ("tr", TR TR_SET1 TR_SET2));
-			sandbox_attach (sandbox, tr_cmd);
+			pipecmd_pre_exec (tr_cmd, sandbox_load, sandbox_free,
+					  sandbox);
 			pipeline_command (p, tr_cmd);
 			pager_cmd = pipecmd_new_argstr (pager);
 		} else
@@ -1853,7 +1858,7 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 	/* fork the compressor */
 	comp_cmd = pipecmd_new_argstr (get_def ("compressor", COMPRESSOR));
 	pipecmd_nice (comp_cmd, 10);
-	sandbox_attach (sandbox, comp_cmd);
+	pipecmd_pre_exec (comp_cmd, sandbox_load, sandbox_free, sandbox);
 	pipeline_command (cat_p, comp_cmd);
 #  endif
 	/* pipeline_start will close tmp_cat_fd */
@@ -2070,7 +2075,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 
 #ifdef COMP_CAT
 	comp_cmd = pipecmd_new_argstr (get_def ("compressor", COMPRESSOR));
-	sandbox_attach (sandbox, comp_cmd);
+	pipecmd_pre_exec (comp_cmd, sandbox_load, sandbox_free, sandbox);
 	pipeline_command (format_cmd, comp_cmd);
 #endif /* COMP_CAT */
 

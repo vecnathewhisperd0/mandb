@@ -241,7 +241,8 @@ static int check_for_stray (MYDBM_FILE dbf)
 						col_locale);
 				free (col_locale);
 			}
-			sandbox_attach (sandbox, col_cmd);
+			pipecmd_pre_exec (col_cmd, sandbox_load, sandbox_free,
+					  sandbox);
 			pipeline_command (decomp, col_cmd);
 
 			fullpath = canonicalize_file_name (catdir);

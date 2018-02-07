@@ -142,6 +142,6 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 	cmd = pipecmd_new_function (name, &manconv_stdin, &free_manconv_codes,
 				    codes);
 	free (name);
-	sandbox_attach (sandbox, cmd);
+	pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 	pipeline_command (p, cmd);
 }

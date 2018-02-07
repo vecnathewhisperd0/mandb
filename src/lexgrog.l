@@ -836,7 +836,8 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	if (p_lg->type && *COL) {
 		pipecmd *col_cmd;
 		col_cmd = pipecmd_new_args (COL, "-b", "-p", "-x", NULL);
-		sandbox_attach (sandbox, col_cmd);
+		pipecmd_pre_exec (col_cmd, sandbox_load, sandbox_free,
+				  sandbox);
 		pipeline_command (p, col_cmd);
 	}
 	pipeline_start (p);
