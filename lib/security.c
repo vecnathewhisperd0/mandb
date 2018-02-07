@@ -158,42 +158,11 @@ void regain_effective_privs (void)
 #endif /* MAN_OWNER */
 }
 
-#ifdef MAN_OWNER
-void do_system_drop_privs_child (void *data)
+/* Pipeline command pre-exec hook to permanently drop privileges. */
+void drop_privs (void *data ATTRIBUTE_UNUSED)
 {
-	pipeline *p = data;
-
+#ifdef MAN_OWNER
 	if (idpriv_drop ())
 		gripe_set_euid ();
-	exit (pipeline_run (p));
-}
-#endif /* MAN_OWNER */
-
-/* The safest way to execute a pipeline with no effective privileges is to
- * fork, permanently drop privileges in the child, run the pipeline from the
- * child, and wait for it to die.
- *
- * It is possible to use saved IDs to avoid the fork, since effective IDs
- * are copied to saved IDs on execve; we used to do this.  However, forking
- * is not expensive enough to justify the extra code.
- *
- * Note that this frees the supplied pipeline.
- */
-int do_system_drop_privs (pipeline *p)
-{
-#ifdef MAN_OWNER
-	pipecmd *child_cmd;
-	pipeline *child;
-	int status;
-
-	child_cmd = pipecmd_new_function ("unprivileged child",
-					  do_system_drop_privs_child, NULL, p);
-	child = pipeline_new_commands (child_cmd, NULL);
-	status = pipeline_run (child);
-
-	pipeline_free (p);
-	return status;
-#else  /* !MAN_OWNER */
-	return pipeline_run (p);
 #endif /* MAN_OWNER */
 }

@@ -27,7 +27,7 @@
 /* security.c */
 extern void drop_effective_privs (void);
 extern void regain_effective_privs (void);
-extern int do_system_drop_privs (struct pipeline *p);
+extern void drop_privs (void *data);
 extern void init_security (void);
 extern int running_setuid (void);
 extern struct passwd *get_man_owner (void);

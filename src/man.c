@@ -1481,6 +1481,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 static pipeline *make_browser (const char *pattern, const char *file)
 {
 	pipeline *p;
+	pipecmd *cmd;
 	char *browser = xmalloc (1);
 	int found_percent_s = 0;
 	char *percent;
@@ -1526,7 +1527,9 @@ static pipeline *make_browser (const char *pattern, const char *file)
 		free (esc_file);
 	}
 
-	p = pipeline_new_command_args ("/bin/sh", "-c", browser, NULL);
+	cmd = pipecmd_new_args ("/bin/sh", "-c", browser, NULL);
+	pipecmd_pre_exec (cmd, drop_privs, NULL, NULL);
+	p = pipeline_new_commands (cmd, NULL);
 	pipeline_ignore_signals (p, 1);
 	free (browser);
 
@@ -2021,7 +2024,7 @@ static void format_display (pipeline *decomp,
 			pipeline *browser;
 			debug ("Trying browser: %s\n", candidate);
 			browser = make_browser (candidate, htmlfile);
-			disp_status = do_system_drop_privs (browser);
+			disp_status = pipeline_run (browser);
 			if (!disp_status)
 				break;
 		}
