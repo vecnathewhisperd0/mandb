@@ -69,7 +69,7 @@ distuninstallcheck_listfiles = \
 # Note that autopoint installs into the first directory here. Yes, this
 # means that it installs into gnulib/m4, so we always run gnulib-tool after
 # autopoint, at least for now. See
-# http://lists.gnu.org/archive/html/bug-gnulib/2009-03/msg00154.html and
+# https://lists.gnu.org/archive/html/bug-gnulib/2009-03/msg00154.html and
 # thread.
 ACLOCAL_AMFLAGS = -I gnulib/m4 -I m4
 

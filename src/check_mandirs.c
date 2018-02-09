@@ -448,7 +448,7 @@ static void mkcatdirs (const char *mandir, const char *catdir)
 /* We used to install cat directories with the setgid bit set, but this
  * wasn't very useful and introduces the ability to escalate privileges to
  * that group:
- *   http://www.halfdog.net/Security/2015/SetgidDirectoryPrivilegeEscalation/
+ *   https://www.halfdog.net/Security/2015/SetgidDirectoryPrivilegeEscalation/
  */
 static void fix_permissions (const char *dir)
 {

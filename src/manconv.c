@@ -23,7 +23,7 @@
  */
 
 /* This program arose during a discussion with Adam Borowski. See:
- *   http://lists.debian.org/debian-mentors/2007/09/msg00245.html
+ *   https://lists.debian.org/debian-mentors/2007/09/msg00245.html
  * It behaves like iconv, but allows multiple source encodings and
  * attempts to guess the first one that works. An Emacs-style
  * "-*- coding:" declaration overrides this.

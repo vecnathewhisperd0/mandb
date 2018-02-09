@@ -1473,7 +1473,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
  * http://www.tuxedo.org/~esr/BROWSER/.
  *
  * (Actually, I really implement
- * http://www.dwheeler.com/browse/secure_browser.html, but it's
+ * https://www.dwheeler.com/browse/secure_browser.html, but it's
  * backward-compatible.)
  *
  * TODO: Is there any way to use the pipeline library better here?
