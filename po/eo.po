@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.7.6.1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2018-02-04 17:04+0000\n"
+"POT-Creation-Date: 2018-02-09 12:10+0000\n"
 "PO-Revision-Date: 2017-01-27 23:30-0300\n"
 "Last-Translator: Felipe Castro <fefcas@gmail.com>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
@@ -19,17 +19,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: lib/security.c:77
+#: lib/security.c:78
 #, c-format
 msgid "can't set effective uid"
 msgstr "ne eblas difini la faktan uid"
 
-#: lib/security.c:107 src/mandb.c:825
+#: lib/security.c:117
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "la man-uzanto kun setuid \"%s\" ne ekzistas"
 
-#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1743
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1751
 #, c-format
 msgid "can't chown %s"
 msgstr "ne eblas apliki chown %s"
@@ -71,7 +71,7 @@ msgstr[1] "nur %d kampoj en enhavo"
 msgid "bad fetch on multi key %s"
 msgstr "malĝusta havigo per plur-ŝlosilo %s"
 
-#: libdb/db_lookup.c:417 src/whatis.c:744
+#: libdb/db_lookup.c:417 src/whatis.c:745
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "La datumbazon %s fuŝas; rekonstruu per mandb --create"
@@ -187,13 +187,13 @@ msgstr "averto: %s: malĝusta symlink aŭ peto de ROFF '.so'"
 msgid "warning: %s: ignoring empty file"
 msgstr "averto: %s: ni preteratentas malplenan dosieron"
 
-#: src/check_mandirs.c:300 src/straycats.c:284
+#: src/check_mandirs.c:300 src/straycats.c:285
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "averto: %s: analizo de whatis por %s(%s) fiaskis"
 
-#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:882
-#: src/straycats.c:80 src/straycats.c:314 src/ult_src.c:80
+#: src/check_mandirs.c:328 src/check_mandirs.c:507 src/mandb.c:876
+#: src/straycats.c:80 src/straycats.c:315 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
 msgstr "ne eblas serĉi la dosierujon %s"
@@ -203,12 +203,12 @@ msgstr "ne eblas serĉi la dosierujon %s"
 msgid "warning: cannot create catdir %s"
 msgstr "averto: ne eblas krei la catdir %s"
 
-#: src/check_mandirs.c:464 src/man.c:1755 src/mandb.c:229
+#: src/check_mandirs.c:464 src/man.c:1763 src/mandb.c:229
 #, c-format
 msgid "can't chmod %s"
 msgstr "ne eblas apliki chmod %s"
 
-#: src/check_mandirs.c:512 src/man.c:1958
+#: src/check_mandirs.c:512 src/man.c:1966
 #, c-format
 msgid "can't change to directory %s"
 msgstr "ne eblas ŝanĝi al la dosierujo %s"
@@ -277,7 +277,7 @@ msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "averto: whatis por %s troigas %d bajton, ni tranĉas."
 msgstr[1] "averto: whatis por %s troigas %d bajtojn, ni tranĉas."
 
-#: src/lexgrog.l:819 src/man.c:2329 src/man.c:2411 src/man.c:2508
+#: src/lexgrog.l:819 src/man.c:2337 src/man.c:2419 src/man.c:2516
 #: src/manconv_main.c:168 src/straycats.c:224 src/ult_src.c:346
 #: src/ult_src.c:360 src/zsoelim.l:505
 #, c-format
@@ -536,63 +536,63 @@ msgstr "Neniu manlibra elemento por %s en sekcio %s\n"
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Konsultu '%s' por helpo kiam manlibraj paĝoj ne disponeblas.\n"
 
-#: src/man.c:1406
+#: src/man.c:1408
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ni preteratentas nekonatan antaŭprocezilon '%c'"
 
-#: src/man.c:1766 src/mandb.c:220
+#: src/man.c:1774 src/mandb.c:220
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "ne eblas renomigi %s al %s"
 
-#: src/man.c:1783
+#: src/man.c:1791
 #, c-format
 msgid "can't set times on %s"
 msgstr "ne eblas difini horon en %s"
 
-#: src/man.c:1792
+#: src/man.c:1800
 #, c-format
 msgid "can't unlink %s"
 msgstr "ne eblas forigi %s"
 
-#: src/man.c:1843
+#: src/man.c:1851
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "ne eblas krei provizoran cat por %s"
 
-#: src/man.c:1956
+#: src/man.c:1964
 #, c-format
 msgid "can't create temporary directory"
 msgstr "ne eblas krei provizoran dosierujon"
 
-#: src/man.c:1968
+#: src/man.c:1976
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "ne eblas malfermi la provizoran dosieron %s"
 
-#: src/man.c:1998 src/man.c:2036 src/man.c:3792
+#: src/man.c:2006 src/man.c:2044 src/man.c:3800
 #, c-format
 msgid "can't restore previous working directory"
 msgstr "ne eblas restarigi antaŭan kurantan dosierujon"
 
-#: src/man.c:2006 src/man.c:2042
+#: src/man.c:2014 src/man.c:2050
 #, c-format
 msgid "can't remove directory %s"
 msgstr "ne eblas forigi la dosierujon %s"
 
-#: src/man.c:2166
+#: src/man.c:2174
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- sekva: %s [ vidi (enigklavo) | salti (Ctrl-D) | eliri (Ctrl-C) ]\n"
 
-#: src/man.c:2215
+#: src/man.c:2223
 #, c-format
 msgid "can't chdir to %s"
 msgstr "ne eblas apliki chdir al %s"
 
-#: src/man.c:2453
+#: src/man.c:2461
 #, c-format
 msgid ""
 "\n"
@@ -601,27 +601,27 @@ msgstr ""
 "\n"
 "ne eblas skribi al %s sub reĝimo catman"
 
-#: src/man.c:2534
+#: src/man.c:2542
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Ne eblas konverti %s al cat-nomo"
 
-#: src/man.c:3259
+#: src/man.c:3267
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: fini je whatis refs estas malrekomendinde\n"
 
-#: src/man.c:3409 src/man.c:4281
+#: src/man.c:3417 src/man.c:4287
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "komando mandb fiaskis kun elir-stato %d"
 
-#: src/man.c:3614
+#: src/man.c:3622
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "interna eraro: kanditata tipo %d estas for de intervalo"
 
-#: src/man.c:4218
+#: src/man.c:4224
 msgid " Manual page "
 msgstr " Manlibra paĝo "
 
@@ -729,115 +729,115 @@ msgstr "Procezado de manlibraj paĝoj sub %s...\n"
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Forigado de malaktuala cat-dosierujo %s...\n"
 
-#: src/mandb.c:847
+#: src/mandb.c:841
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "averto: neniu instrukcio MANDB_MAP en %s, ni uzas vian man-vojon"
 
-#: src/mandb.c:919
+#: src/mandb.c:913
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d man-subdosierujo enhavis pli novajn manlibrajn paĝojn.\n"
 msgstr[1] "%d man-subdosierujoj enhavis pli novajn manlibrajn paĝojn.\n"
 
-#: src/mandb.c:924
+#: src/mandb.c:918
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d manlibra paĝo estis aldonata.\n"
 msgstr[1] "%d manlibraj paĝoj estis aldonataj.\n"
 
-#: src/mandb.c:928
+#: src/mandb.c:922
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d perdita cat estis aldonata.\n"
 msgstr[1] "%d perditaj cat estis aldonataj.\n"
 
-#: src/mandb.c:933
+#: src/mandb.c:927
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d malnova datumbaza elemento estis forpurigata.\n"
 msgstr[1] "%d malnovaj datumbazaj elementoj estis forpurigataj.\n"
 
-#: src/mandb.c:951
+#: src/mandb.c:945
 #, c-format
 msgid "No databases created."
 msgstr "Neniu datumbazo estis kreata."
 
-#: src/manp.c:331
+#: src/manp.c:326
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "ne eblas kompreni la man-vojan agordan dosieron %s"
 
-#: src/manp.c:337
+#: src/manp.c:332
 #, c-format
 msgid "warning: %s"
 msgstr "averto: %s"
 
-#: src/manp.c:343
+#: src/manp.c:338
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "averto: %s ne estas dosierujo"
 
-#: src/manp.c:348
+#: src/manp.c:343
 #, c-format
 msgid "manpath list too long"
 msgstr "man-voja listo tro longas"
 
-#: src/manp.c:679
+#: src/manp.c:674
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "averto: $PATH ne estas difinita"
 
-#: src/manp.c:686
+#: src/manp.c:681
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "averto: malplena $PATH"
 
-#: src/manp.c:714
+#: src/manp.c:709
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "averto: $MANPATH estas difinita, ni antaŭmetas %s"
 
-#: src/manp.c:725
+#: src/manp.c:720
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "averto: $MANPATH estas difinita, ni postmetas %s"
 
-#: src/manp.c:737
+#: src/manp.c:732
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "averto: $MANPATH estas difinita, ni enmetas %s"
 
-#: src/manp.c:751
+#: src/manp.c:746
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "averto: $MANPATH estas difinita, ni preteratentas %s"
 
-#: src/manp.c:813
+#: src/manp.c:808
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "ne eblas analizi dosierujan liston '%s'"
 
-#: src/manp.c:876
+#: src/manp.c:871
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "ne eblas malfermi la man-vojan agordan dosieron %s"
 
-#: src/manp.c:915
+#: src/manp.c:910
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "averto: la deviga dosierujo %s ne ekzistas"
 
-#: src/manp.c:1184
+#: src/manp.c:1179
 #, c-format
 msgid "can't determine current directory"
 msgstr "ne eblas determini la nunan dosierujon"
 
-#: src/manp.c:1384
+#: src/manp.c:1379
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "averto: %s ne komenciĝas per %s"
@@ -855,22 +855,22 @@ msgstr "montri la tutan mallokan man-vojon"
 msgid "warning: no global manpaths set in config file %s"
 msgstr "averto: neniu malloka man-vojo estas difinita en la agorda dosiero %s"
 
-#: src/straycats.c:251 src/ult_src.c:124
+#: src/straycats.c:252 src/ult_src.c:124
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "averto: %s estas sentrafa simbol-ligilo"
 
-#: src/straycats.c:254 src/ult_src.c:127 src/ult_src.c:287
+#: src/straycats.c:255 src/ult_src.c:127 src/ult_src.c:287
 #, c-format
 msgid "can't resolve %s"
 msgstr "ne eblas solvi %s"
 
-#: src/straycats.c:319
+#: src/straycats.c:320
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "Kontrolo pri perditaj cat sub %s...\n"
 
-#: src/straycats.c:359
+#: src/straycats.c:360
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "averto: ne eblas ĝisdatigi la indeksan kaŝmemoron %s"
@@ -925,16 +925,16 @@ msgstr "difini la lokaĵaron por tiu ĉi serĉo"
 msgid "%s what?\n"
 msgstr "%s kio?\n"
 
-#: src/whatis.c:393 src/whatis.c:411
+#: src/whatis.c:394 src/whatis.c:412
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "averto: %s enhavas adresmontrilan ciklon"
 
-#: src/whatis.c:405 src/whatis.c:413
+#: src/whatis.c:406 src/whatis.c:414
 msgid "(unknown subject)"
 msgstr "(nekonata temo)"
 
-#: src/whatis.c:871
+#: src/whatis.c:872
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: nenio taŭga.\n"
