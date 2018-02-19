@@ -54,6 +54,7 @@
 #ifdef HAVE_LIBSECCOMP
 #  include <sys/ioctl.h>
 #  include <sys/prctl.h>
+#  include <sys/socket.h>
 #  include <termios.h>
 #  include <seccomp.h>
 #endif /* HAVE_LIBSECCOMP */
@@ -189,6 +190,7 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 		| O_TMPFILE
 #endif /* O_TMPFILE */
 		;
+	const char *ld_preload;
 
 	debug ("initialising seccomp filter (permissive: %d)\n", permissive);
 	ctx = seccomp_init (SCMP_ACT_TRAP);
@@ -441,6 +443,20 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("sync_file_range2");
 	SC_ALLOW ("sysinfo");
 	SC_ALLOW ("uname");
+
+	/* Some antivirus programs use an LD_PRELOAD wrapper that wants to
+	 * talk to a private daemon using a Unix-domain socket.  We really
+	 * don't want to allow these syscalls in general, but if such a
+	 * thing is in use we probably have no choice.
+	 */
+	ld_preload = getenv ("LD_PRELOAD");
+	if (ld_preload && strstr (ld_preload, "/libesets_pac.so") != NULL) {
+		SC_ALLOW ("connect");
+		SC_ALLOW ("recvmsg");
+		SC_ALLOW ("sendto");
+		SC_ALLOW ("setsockopt");
+		SC_ALLOW_ARG_1 ("socket", SCMP_A0 (SCMP_CMP_EQ, AF_UNIX));
+	}
 
 	return ctx;
 }

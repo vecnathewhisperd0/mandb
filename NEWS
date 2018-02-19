@@ -13,6 +13,10 @@ Major changes since man-db 2.8.1:
 	* Make seccomp sandbox allow ioctl(fd, TIOCGWINSZ), since that's used
 	  by musl.
 
+	* Work around the proprietary "ESET File Security" antivirus program in
+	  seccomp sandbox: if this is in use then we need to allow some
+	  socket-related system calls.
+
 man-db 2.8.1 (9 February 2018)
 ==============================
 
