@@ -432,8 +432,10 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("fadvise64_64");
 	if (permissive)
 		SC_ALLOW ("ioctl");
-	else
+	else {
 		SC_ALLOW_ARG_1 ("ioctl", SCMP_A1 (SCMP_CMP_EQ, TCGETS));
+		SC_ALLOW_ARG_1 ("ioctl", SCMP_A1 (SCMP_CMP_EQ, TIOCGWINSZ));
+	}
 	SC_ALLOW ("mprotect");
 	SC_ALLOW ("mremap");
 	SC_ALLOW ("sync_file_range2");
