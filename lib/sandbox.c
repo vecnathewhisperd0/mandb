@@ -53,6 +53,7 @@
 
 #ifdef HAVE_LIBSECCOMP
 #  include <sys/ioctl.h>
+#  include <sys/mman.h>
 #  include <sys/prctl.h>
 #  include <sys/socket.h>
 #  include <termios.h>
@@ -83,6 +84,42 @@ static void gripe_seccomp_filter_unavailable (void)
 	       "CONFIG_SECCOMP_FILTER\n");
 }
 
+static int search_ld_preload (const char *needle)
+{
+	const char *ld_preload_env;
+	int fd = -1;
+	struct stat st;
+	char *ld_preload_file = NULL;
+	int ret = 0;
+
+	ld_preload_env = getenv ("LD_PRELOAD");
+	if (ld_preload_env && strstr (ld_preload_env, needle) != NULL) {
+		ret = 1;
+		goto out;
+	}
+
+	fd = open ("/etc/ld.so.preload", O_RDONLY);
+	if (fd >= 0 && fstat (fd, &st) >= 0 && st.st_size)
+		ld_preload_file = mmap (NULL, st.st_size, PROT_READ,
+					MAP_PRIVATE | MAP_FILE, fd, 0);
+	/* This isn't very accurate: /etc/ld.so.preload may contain
+	 * comments.  On the other hand, glibc says "it should only be used
+	 * for emergencies and testing".  File a bug if this is a problem
+	 * for you.
+	 */
+	if (ld_preload_file &&
+	    memmem (ld_preload_file, st.st_size,
+		    needle, strlen (needle)) != NULL)
+		ret = 1;
+
+out:
+	if (ld_preload_file)
+		munmap (ld_preload_file, st.st_size);
+	if (fd >= 0)
+		close (fd);
+	return ret;
+}
+
 /* Can we load a seccomp filter into this process?
  *
  * This guard allows us to call sandbox_load in code paths that may
@@ -90,7 +127,7 @@ static void gripe_seccomp_filter_unavailable (void)
  */
 static int can_load_seccomp (void)
 {
-	const char *man_disable_seccomp, *ld_preload;
+	const char *man_disable_seccomp;
 	int seccomp_status;
 
 	if (seccomp_filter_unavailable) {
@@ -115,8 +152,7 @@ static int can_load_seccomp (void)
 	 * file.  Since the goal of this is only to disable the seccomp
 	 * filter under Valgrind, this will do for now.
 	 */
-	ld_preload = getenv ("LD_PRELOAD");
-	if (ld_preload && strstr (ld_preload, "/vgpreload") != NULL) {
+	if (search_ld_preload ("/vgpreload")) {
 		debug ("seccomp filter disabled while running under "
 		       "Valgrind\n");
 		return 0;
@@ -190,7 +226,6 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 		| O_TMPFILE
 #endif /* O_TMPFILE */
 		;
-	const char *ld_preload;
 
 	debug ("initialising seccomp filter (permissive: %d)\n", permissive);
 	ctx = seccomp_init (SCMP_ACT_TRAP);
@@ -449,8 +484,7 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	 * don't want to allow these syscalls in general, but if such a
 	 * thing is in use we probably have no choice.
 	 */
-	ld_preload = getenv ("LD_PRELOAD");
-	if (ld_preload && strstr (ld_preload, "/libesets_pac.so") != NULL) {
+	if (search_ld_preload ("/libesets_pac.so")) {
 		SC_ALLOW ("connect");
 		SC_ALLOW ("recvmsg");
 		SC_ALLOW ("sendto");
