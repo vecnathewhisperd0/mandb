@@ -484,7 +484,7 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	 * don't want to allow these syscalls in general, but if such a
 	 * thing is in use we probably have no choice.
 	 */
-	if (search_ld_preload ("/libesets_pac.so")) {
+	if (search_ld_preload ("libesets_pac.so")) {
 		SC_ALLOW ("connect");
 		SC_ALLOW ("recvmsg");
 		SC_ALLOW ("sendto");
