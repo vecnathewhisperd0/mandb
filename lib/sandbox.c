@@ -87,37 +87,38 @@ static void gripe_seccomp_filter_unavailable (void)
 static int search_ld_preload (const char *needle)
 {
 	const char *ld_preload_env;
-	int fd = -1;
-	struct stat st;
-	char *ld_preload_file = NULL;
-	int ret = 0;
+	static char *ld_preload_file = NULL;
 
 	ld_preload_env = getenv ("LD_PRELOAD");
-	if (ld_preload_env && strstr (ld_preload_env, needle) != NULL) {
-		ret = 1;
-		goto out;
-	}
+	if (ld_preload_env && strstr (ld_preload_env, needle) != NULL)
+		return 1;
 
-	fd = open ("/etc/ld.so.preload", O_RDONLY);
-	if (fd >= 0 && fstat (fd, &st) >= 0 && st.st_size)
-		ld_preload_file = mmap (NULL, st.st_size, PROT_READ,
-					MAP_PRIVATE | MAP_FILE, fd, 0);
+	if (!ld_preload_file) {
+		int fd;
+		struct stat st;
+		char *mapped = NULL;
+
+		fd = open ("/etc/ld.so.preload", O_RDONLY);
+		if (fd >= 0 && fstat (fd, &st) >= 0 && st.st_size)
+			mapped = mmap (NULL, st.st_size, PROT_READ,
+				       MAP_PRIVATE | MAP_FILE, fd, 0);
+		if (mapped) {
+			ld_preload_file = xstrndup (mapped, st.st_size);
+			munmap (mapped, st.st_size);
+		} else
+			ld_preload_file = xstrdup ("");
+		if (fd >= 0)
+			close (fd);
+	}
 	/* This isn't very accurate: /etc/ld.so.preload may contain
 	 * comments.  On the other hand, glibc says "it should only be used
 	 * for emergencies and testing".  File a bug if this is a problem
 	 * for you.
 	 */
-	if (ld_preload_file &&
-	    memmem (ld_preload_file, st.st_size,
-		    needle, strlen (needle)) != NULL)
-		ret = 1;
+	if (strstr (ld_preload_file, needle) != NULL)
+		return 1;
 
-out:
-	if (ld_preload_file)
-		munmap (ld_preload_file, st.st_size);
-	if (fd >= 0)
-		close (fd);
-	return ret;
+	return 0;
 }
 
 /* Can we load a seccomp filter into this process?
@@ -483,8 +484,12 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	 * talk to a private daemon using a Unix-domain socket.  We really
 	 * don't want to allow these syscalls in general, but if such a
 	 * thing is in use we probably have no choice.
+	 *
+	 * snoopy is an execve monitoring tool that may log messages to
+	 * /dev/log.
 	 */
-	if (search_ld_preload ("libesets_pac.so")) {
+	if (search_ld_preload ("libesets_pac.so") ||
+	    search_ld_preload ("libsnoopy.so")) {
 		SC_ALLOW ("connect");
 		SC_ALLOW ("recvmsg");
 		SC_ALLOW ("sendto");
