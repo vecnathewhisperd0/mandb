@@ -572,12 +572,16 @@ void _sandbox_load (man_sandbox *sandbox, int permissive) {
 			ctx = sandbox->ctx;
 		adjust_seccomp_filter (ctx);
 		if (seccomp_load (ctx) < 0) {
-			if (errno == EINVAL) {
+			if (errno == EINVAL || errno == EFAULT) {
 				/* The kernel doesn't give us particularly
-				 * fine-grained errors.  This could in
+				 * fine-grained errors.  EINVAL could in
 				 * theory be an invalid BPF program, but
 				 * it's much more likely that the running
 				 * kernel doesn't support seccomp filtering.
+				 * EFAULT normally means a programming
+				 * error, but it could also be returned here
+				 * by some versions of qemu-user
+				 * (https://bugs.launchpad.net/bugs/1726394).
 				 */
 				gripe_seccomp_filter_unavailable ();
 				/* Don't try this again. */

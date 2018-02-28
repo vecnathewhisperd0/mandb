@@ -21,6 +21,10 @@ Major changes since man-db 2.8.1:
 	  sandbox: if this is in use then we need to allow some
 	  socket-related system calls.
 
+	* Interpret EFAULT from seccomp_load as meaning that seccomp is
+	  unavailable, since this can be returned by some versions of
+	  qemu-user.
+
 man-db 2.8.1 (9 February 2018)
 ==============================
 
