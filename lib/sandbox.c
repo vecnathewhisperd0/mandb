@@ -53,8 +53,10 @@
 
 #ifdef HAVE_LIBSECCOMP
 #  include <sys/ioctl.h>
+#  include <sys/ipc.h>
 #  include <sys/mman.h>
 #  include <sys/prctl.h>
+#  include <sys/shm.h>
 #  include <sys/socket.h>
 #  include <termios.h>
 #  include <seccomp.h>
@@ -495,6 +497,17 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 		SC_ALLOW ("sendto");
 		SC_ALLOW ("setsockopt");
 		SC_ALLOW_ARG_1 ("socket", SCMP_A0 (SCMP_CMP_EQ, AF_UNIX));
+	}
+	/* ESET also appears to do some additional fiddling with shared
+	 * memory, and checks for the existence of its daemon process.  We
+	 * try to constrain this as much as we can.
+	 */
+	if (search_ld_preload ("libesets_pac.so")) {
+		SC_ALLOW_ARG_1 ("shmat", SCMP_A2 (SCMP_CMP_EQ, SHM_RDONLY));
+		SC_ALLOW_ARG_1 ("shmctl", SCMP_A1 (SCMP_CMP_EQ, IPC_STAT));
+		SC_ALLOW ("shmdt");
+		SC_ALLOW_ARG_1 ("shmget", SCMP_A2 (SCMP_CMP_EQ, 0));
+		SC_ALLOW_ARG_1 ("kill", SCMP_A1 (SCMP_CMP_EQ, 0));
 	}
 
 	return ctx;
