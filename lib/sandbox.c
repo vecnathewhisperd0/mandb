@@ -220,7 +220,7 @@ static int can_load_seccomp (void)
  * files.  Confining these further requires additional tools that can do
  * path-based filtering or similar, such as AppArmor.
  */
-scmp_filter_ctx make_seccomp_filter (int permissive)
+static scmp_filter_ctx make_seccomp_filter (int permissive)
 {
 	scmp_filter_ctx ctx;
 	mode_t mode_mask = S_ISUID | S_ISGID | S_IXUSR | S_IXGRP | S_IXOTH;
@@ -546,7 +546,7 @@ man_sandbox *sandbox_init (void)
 	return sandbox;
 }
 
-void _sandbox_load (man_sandbox *sandbox, int permissive) {
+static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 #ifdef HAVE_LIBSECCOMP
 	if (can_load_seccomp ()) {
 		scmp_filter_ctx ctx;
