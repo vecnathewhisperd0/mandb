@@ -8,6 +8,9 @@ Major changes since man-db 2.8.2:
 
 	* Make seccomp sandbox allow madvise, since that's used by lbzip2.
 
+	* Make seccomp sandbox allow kill and tgkill outright, since groff
+	  uses kill to pass on signals to its child processes.
+
 man-db 2.8.2 (28 February 2018)
 ===============================
 

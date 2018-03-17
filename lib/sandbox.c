@@ -483,6 +483,14 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("sysinfo");
 	SC_ALLOW ("uname");
 
+	/* Allow killing processes and threads.  This is unfortunate but
+	 * unavoidable: groff uses kill to explicitly pass on SIGPIPE to its
+	 * child processes, and we can't do any more sophisticated filtering
+	 * in seccomp.
+	 */
+	SC_ALLOW ("kill");
+	SC_ALLOW ("tgkill");
+
 	/* Some antivirus programs use an LD_PRELOAD wrapper that wants to
 	 * talk to a private daemon using a Unix-domain socket.  We really
 	 * don't want to allow these syscalls in general, but if such a
@@ -508,31 +516,9 @@ scmp_filter_ctx make_seccomp_filter (int permissive)
 		SC_ALLOW_ARG_1 ("shmctl", SCMP_A1 (SCMP_CMP_EQ, IPC_STAT));
 		SC_ALLOW ("shmdt");
 		SC_ALLOW_ARG_1 ("shmget", SCMP_A2 (SCMP_CMP_EQ, 0));
-		SC_ALLOW_ARG_1 ("kill", SCMP_A1 (SCMP_CMP_EQ, 0));
 	}
 
 	return ctx;
-}
-
-/* Adjust an existing seccomp filter for the current process.
- *
- * This is playing with fire: seccomp_rule_add allocates memory, so is
- * formally unsafe in a pre-exec hook.  On the other hand, seccomp_load
- * allocates memory too.  To fix this, we need to export the seccomp filter
- * to a fixed memory structure first and then fill in the gaps here.  We may
- * need to stop using libseccomp, since it doesn't really provide this kind
- * of facility.
- */
-void adjust_seccomp_filter (scmp_filter_ctx ctx)
-{
-	pid_t pid;
-
-	/* Allow sending signals, but only to the current process or to
-	 * threads in the current thread group.
-	 */
-	pid = getpid ();
-	SC_ALLOW_ARG_1 ("kill", SCMP_A0 (SCMP_CMP_EQ, pid));
-	SC_ALLOW_ARG_1 ("tgkill", SCMP_A0 (SCMP_CMP_EQ, pid));
 }
 
 #undef SC_ALLOW_ARG_2
@@ -571,7 +557,6 @@ void _sandbox_load (man_sandbox *sandbox, int permissive) {
 			ctx = sandbox->permissive_ctx;
 		else
 			ctx = sandbox->ctx;
-		adjust_seccomp_filter (ctx);
 		if (seccomp_load (ctx) < 0) {
 			if (errno == EINVAL || errno == EFAULT) {
 				/* The kernel doesn't give us particularly
