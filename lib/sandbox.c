@@ -235,6 +235,24 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	if (!ctx)
 		error (FATAL, errno, "can't initialise seccomp filter");
 
+	/* Allow sibling architectures for x86, since people sometimes mix
+	 * and match architectures there for performance reasons.
+	 */
+	switch (seccomp_arch_native ()) {
+		case SCMP_ARCH_X86:
+			seccomp_arch_add (ctx, SCMP_ARCH_X86_64);
+			seccomp_arch_add (ctx, SCMP_ARCH_X32);
+			break;
+		case SCMP_ARCH_X86_64:
+			seccomp_arch_add (ctx, SCMP_ARCH_X86);
+			seccomp_arch_add (ctx, SCMP_ARCH_X32);
+			break;
+		case SCMP_ARCH_X32:
+			seccomp_arch_add (ctx, SCMP_ARCH_X86);
+			seccomp_arch_add (ctx, SCMP_ARCH_X86_64);
+			break;
+	}
+
 	/* This sandbox is intended to allow operations that might
 	 * reasonably be needed in simple data-transforming pipes: it should
 	 * allow the process to do most reasonable things to itself, to read
