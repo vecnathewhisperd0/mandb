@@ -56,9 +56,6 @@
 
 #include <limits.h>
 
-struct saved_cwd cwd;
-int have_cwd;
-
 #if HAVE_FCNTL_H
 #  include <fcntl.h>
 #endif
@@ -73,7 +70,6 @@ int have_cwd;
 #include "dirname.h"
 #include "minmax.h"
 #include "regex.h"
-#include "save-cwd.h"
 #include "stat-time.h"
 #include "utimens.h"
 #include "xvasprintf.h"
@@ -1684,12 +1680,6 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 	}
 
 	if (pager_cmd) {
-		if (have_cwd) {
-			if (cwd.desc >= 0)
-				pipecmd_fchdir (pager_cmd, cwd.desc);
-			else
-				pipecmd_chdir (pager_cmd, cwd.name);
-		}
 		setenv_less (pager_cmd, title);
 		pipeline_command (p, pager_cmd);
 	}
@@ -1821,6 +1811,14 @@ static void maybe_discard_stderr (pipeline *p)
 		discard_stderr (p);
 }
 
+static void chdir_commands (pipeline *p, const char *dir)
+{
+	int i;
+
+	for (i = 0; i < pipeline_get_ncommands (p); ++i)
+		pipecmd_chdir (pipeline_get_command (p, i), dir);
+}
+
 #ifdef MAN_CATS
 
 /* Return pipeline to write formatted manual page to for saving as cat file. */
@@ -1941,8 +1939,6 @@ static void format_display (pipeline *decomp,
 {
 	int format_status = 0, disp_status = 0;
 #ifdef TROFF_IS_GROFF
-	struct saved_cwd old_cwd = { -1, NULL };
-	int have_old_cwd = 0;
 	char *htmldir = NULL, *htmlfile = NULL;
 #endif /* TROFF_IS_GROFF */
 
@@ -1956,15 +1952,12 @@ static void format_display (pipeline *decomp,
 		char *man_base, *man_ext;
 		int htmlfd;
 
-		if (save_cwd (&old_cwd) == 0)
-			have_old_cwd = 1;
 		htmldir = create_tempdir ("hman");
 		if (!htmldir)
 			error (FATAL, errno,
 			       _("can't create temporary directory"));
-		if (chdir (htmldir) == -1)
-			error (FATAL, errno, _("can't change to directory %s"),
-			       htmldir);
+		chdir_commands (format_cmd, htmldir);
+		chdir_commands (disp_cmd, htmldir);
 		man_base = base_name (man_file);
 		man_ext = strchr (man_base, '.');
 		if (man_ext)
@@ -2001,14 +1994,6 @@ static void format_display (pipeline *decomp,
 		char *browser_list, *candidate;
 
 		if (format_status) {
-			if (have_old_cwd && restore_cwd (&old_cwd) < 0) {
-				error (0, errno,
-				       _("can't restore previous working "
-					 "directory"));
-				/* last resort */
-				if (chdir ("/")) { /* ignore errors */ }
-			}
-			free_cwd (&old_cwd);
 			if (remove_directory (htmldir, 0) == -1)
 				error (0, errno,
 				       _("can't remove directory %s"),
@@ -2039,13 +2024,6 @@ static void format_display (pipeline *decomp,
 				       "HTML output");
 		}
 		free (browser_list);
-		if (have_old_cwd && restore_cwd (&old_cwd) < 0) {
-			error (0, errno,
-			       _("can't restore previous working directory"));
-			/* last resort */
-			if (chdir ("/")) { /* ignore errors */ }
-		}
-		free_cwd (&old_cwd);
 		if (remove_directory (htmldir, 0) == -1)
 			error (0, errno, _("can't remove directory %s"),
 			       htmldir);
@@ -2220,16 +2198,6 @@ static int display (const char *dir, const char *man_file,
 	pipeline *decomp = NULL;
 	int decomp_errno = 0;
 
-	/* if dir is set chdir to it */
-	if (dir) {
-		debug ("chdir %s\n", dir);
-
-		if (chdir (dir)) {
-			error (0, errno, _("can't chdir to %s"), dir);
-			return 0;
-		}
-	}
-
 	/* define format_cmd */
 	if (man_file) {
 		pipecmd *seq = pipecmd_new_sequence ("decompressor", NULL);
@@ -2307,6 +2275,8 @@ static int display (const char *dir, const char *man_file,
 		format_cmd = make_roff_command (dir, man_file, decomp,
 						pp_string,
 						&formatted_encoding);
+		if (dir)
+			chdir_commands (format_cmd, dir);
 		debug ("formatted_encoding = %s\n", formatted_encoding);
 		free (pp_string);
 	} else {
@@ -3798,17 +3768,6 @@ static int local_man_loop (const char *argv)
 	else {
 		struct stat st;
 
-		if (have_cwd) {
-			debug ("restore_cwd: %d %s\n", cwd.desc, cwd.name);
-			if (restore_cwd (&cwd) < 0) {
-				error (0, errno,
-				       _("can't restore previous working "
-					 "directory"));
-				regain_effective_privs ();
-				return 0;
-			}
-		}
-
 		/* Check that the file exists and isn't e.g. a directory */
 		if (stat (argv, &st)) {
 			error (0, errno, "%s", argv);
@@ -4140,12 +4099,6 @@ int main (int argc, char *argv[])
 	global_argv = argv;
 #endif
 
-	/* This will enable us to do some profiling and know where gmon.out
-	 * will end up.  Must restore_cwd (&cwd) before we return.
-	 */
-	if (save_cwd (&cwd) == 0)
-		have_cwd = 1;
-
 #ifdef TROFF_IS_GROFF
 	/* used in --help, so initialise early */
 	if (!html_pager)
@@ -4248,7 +4201,6 @@ int main (int argc, char *argv[])
 			printf ("%s\n", manp);
 			exit (OK);
 		} else {
-			free_cwd (&cwd);
 			free (internal_locale);
 			free (program_name);
 			gripe_no_name (NULL);
@@ -4274,7 +4226,6 @@ int main (int argc, char *argv[])
 			exit_status = local_man_loop (argv[first_arg]);
 			++first_arg;
 		}
-		free_cwd (&cwd);
 		free (internal_locale);
 		free (program_name);
 		exit (exit_status);
@@ -4432,13 +4383,8 @@ int main (int argc, char *argv[])
 
 	drop_effective_privs ();
 
-	/* For profiling */
-	if (have_cwd)
-		restore_cwd (&cwd);
-
 	free (database);
 	free_pathlist (manpathlist);
-	free_cwd (&cwd);
 	free (internal_locale);
 	free (program_name);
 	exit (exit_status);

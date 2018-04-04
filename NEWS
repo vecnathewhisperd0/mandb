@@ -18,6 +18,10 @@ Major changes since man-db 2.8.2:
 	* Fix version check in locale macro loading to tolerate groff
 	  release candidates.
 
+	* man now only changes working directory in child processes, so
+	  never fails due to being unable to change back to its original
+	  working directory.
+
 man-db 2.8.2 (28 February 2018)
 ===============================
 
