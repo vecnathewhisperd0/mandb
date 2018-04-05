@@ -94,6 +94,11 @@ static char *help_filter (int key, const char *text,
 			  void *input ATTRIBUTE_UNUSED)
 {
 	switch (key) {
+		case ARGP_KEY_HELP_PRE_DOC:
+			/* We have no pre-options help text, but the input
+			 * text may contain header junk due to gettext ("").
+			 */
+			return NULL;
 		case ARGP_KEY_HELP_POST_DOC:
 			return xasprintf (text, cat_root, MAN_DB);
 		default:

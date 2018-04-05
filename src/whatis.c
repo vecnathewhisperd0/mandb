@@ -239,7 +239,22 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp apropos_argp = { options, parse_opt, args_doc, apropos_doc };
+static char *help_filter (int key, const char *text,
+			  void *input ATTRIBUTE_UNUSED)
+{
+	switch (key) {
+		case ARGP_KEY_HELP_PRE_DOC:
+			/* We have no pre-options help text, but the input
+			 * text may contain header junk due to gettext ("").
+			 */
+			return NULL;
+		default:
+			return (char *) text;
+	}
+}
+
+static struct argp apropos_argp = { options, parse_opt, args_doc, apropos_doc,
+				    0, help_filter };
 static struct argp whatis_argp = { options, parse_opt, args_doc };
 
 static char *locale_manpath (const char *manpath)
