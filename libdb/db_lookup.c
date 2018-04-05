@@ -116,7 +116,7 @@ void dbprintf (const struct mandata *info)
 	       "whatis:    %s\n\n",
 	       dash_if_unset (info->name),
 	       info->ext, info->sec, info->comp,
-	       info->id, (long) info->mtime.tv_sec, info->mtime.tv_nsec,
+	       info->id, (long) info->mtime.tv_sec, (long) info->mtime.tv_nsec,
 	       info->pointer, info->filter, info->whatis);
 }
 

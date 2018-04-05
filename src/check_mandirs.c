@@ -534,8 +534,8 @@ static int testmandirs (const char *path, const char *catpath,
 			debug ("%s modified %ld.%09ld, "
 			       "db modified %ld.%09ld\n",
 			       mandir->d_name,
-			       (long) mtime.tv_sec, mtime.tv_nsec,
-			       (long) last.tv_sec, last.tv_nsec);
+			       (long) mtime.tv_sec, (long) mtime.tv_nsec,
+			       (long) last.tv_sec, (long) last.tv_nsec);
 			continue;
 		}
 
@@ -700,7 +700,8 @@ int update_db (const char *manpath, const char *catpath)
 	mtime = MYDBM_GET_TIME (dbf);
 	MYDBM_CLOSE (dbf);
 
-	debug ("update_db(): %ld.%09ld\n", (long) mtime.tv_sec, mtime.tv_nsec);
+	debug ("update_db(): %ld.%09ld\n",
+	       (long) mtime.tv_sec, (long) mtime.tv_nsec);
 	new = testmandirs (manpath, catpath, mtime, 0);
 
 	if (new) {

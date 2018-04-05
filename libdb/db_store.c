@@ -143,7 +143,7 @@ static datum make_content (struct mandata *in)
 		in->ext,
 		in->sec,
 		(long) in->mtime.tv_sec,
-		in->mtime.tv_nsec,
+		(long) in->mtime.tv_nsec,
 		in->id,
 		in->pointer,
 		in->filter,

@@ -3385,8 +3385,8 @@ static int maybe_update_file (const char *manpath, const char *name,
 
 	debug ("%s needs to be recached: %ld.%09ld %ld.%09ld\n",
 	       file,
-	       (long) info->mtime.tv_sec, info->mtime.tv_nsec,
-	       (long) file_mtime.tv_sec, file_mtime.tv_nsec);
+	       (long) info->mtime.tv_sec, (long) info->mtime.tv_nsec,
+	       (long) file_mtime.tv_sec, (long) file_mtime.tv_nsec);
 	status = run_mandb (0, manpath, file);
 	if (status)
 		error (0, 0, _("mandb command failed with exit status %d"),
