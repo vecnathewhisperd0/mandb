@@ -108,7 +108,6 @@ pipeline *decompress_open (const char *filename)
 				continue;
 
 			cmd = pipecmd_new_argstr (comp->prog);
-			pipecmd_arg (cmd, filename);
 			pipecmd_pre_exec (cmd, sandbox_load, sandbox_free,
 					  sandbox);
 			p = pipeline_new_commands (cmd, NULL);
@@ -120,8 +119,7 @@ pipeline *decompress_open (const char *filename)
 	/* HP-UX */
 	ext = strstr (filename, ".Z/");
 	if (ext) {
-		cmd = pipecmd_new_argstr (GUNZIP " -S \"\"");
-		pipecmd_arg (cmd, filename);
+		cmd = pipecmd_new_argstr (GUNZIP);
 		pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 		p = pipeline_new_commands (cmd, NULL);
 		goto got_pipeline;
