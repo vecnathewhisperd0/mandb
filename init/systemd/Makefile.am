@@ -25,4 +25,4 @@ CLEANFILES = man-db.conf
 nodist_systemdtmpfiles_DATA = man-db.conf
 
 man-db.conf: man-db.conf.in
-	sed -e "s,[@]man_owner[@],$(man_owner),g" $< > $@
+	sed -e "s,[@]cache_top_owner[@],$(cache_top_owner),g" $< > $@

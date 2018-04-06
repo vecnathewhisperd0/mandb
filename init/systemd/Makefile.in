@@ -1270,6 +1270,7 @@ build_vendor = @build_vendor@
 builddir = @builddir@
 bunzip2 = @bunzip2@
 bzip2 = @bzip2@
+cache_top_owner = @cache_top_owner@
 cat = @cat@
 col = @col@
 compress = @compress@
@@ -1573,7 +1574,7 @@ uninstall-am: uninstall-nodist_systemdtmpfilesDATA
 
 
 man-db.conf: man-db.conf.in
-	sed -e "s,[@]man_owner[@],$(man_owner),g" $< > $@
+	sed -e "s,[@]cache_top_owner[@],$(cache_top_owner),g" $< > $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -1543,6 +1543,7 @@ config_file_dirname
 config_file_basename
 config_file
 man_mode
+cache_top_owner
 man_owner
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
@@ -13929,10 +13930,12 @@ if test "${enable_cache_owner+set}" = set; then :
 	   if test "$enableval" = "no"
 	   then
 		man_owner=
+		cache_top_owner=root
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: System-wide cache files will have unconstrained ownership" >&5
 $as_echo "$as_me: System-wide cache files will have unconstrained ownership" >&6;}
 	   else
 		man_owner=$enableval
+		cache_top_owner=$enableval
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: System-wide cache files will be owned by $enableval" >&5
 $as_echo "$as_me: System-wide cache files will be owned by $enableval" >&6;}
 
@@ -13943,11 +13946,13 @@ _ACEOF
 	   fi
 else
   man_owner=man
+	   cache_top_owner=man
 	   cat >>confdefs.h <<_ACEOF
 #define MAN_OWNER "$man_owner"
 _ACEOF
 
 fi
+
 
 
 
