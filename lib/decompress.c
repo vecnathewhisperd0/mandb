@@ -88,12 +88,9 @@ pipeline *decompress_open (const char *filename)
 #ifdef HAVE_LIBZ
 	filename_len = strlen (filename);
 	if (filename_len > 3 && STREQ (filename + filename_len - 3, ".gz")) {
-		/* informational only; no shell quoting concerns */
-		char *name = xasprintf ("zcat < %s", filename);
-		cmd = pipecmd_new_function (name, &decompress_zlib, NULL,
+		cmd = pipecmd_new_function ("zcat", &decompress_zlib, NULL,
 					    NULL);
 		pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
-		free (name);
 		p = pipeline_new_commands (cmd, NULL);
 		goto got_pipeline;
 	}
