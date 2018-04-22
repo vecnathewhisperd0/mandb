@@ -497,6 +497,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("madvise");
 	SC_ALLOW ("mprotect");
 	SC_ALLOW ("mremap");
+	SC_ALLOW ("sched_getaffinity");
 	SC_ALLOW ("sync_file_range2");
 	SC_ALLOW ("sysinfo");
 	SC_ALLOW ("uname");
