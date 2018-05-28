@@ -39,13 +39,13 @@ endif
 
 AM_CPPFLAGS = \
 	-I$(top_builddir)/include \
-	-I$(top_builddir)/gnulib/lib \
-	-I$(top_srcdir)/gnulib/lib
+	-I$(top_builddir)/gl/lib \
+	-I$(top_srcdir)/gl/lib
 AM_CFLAGS = $(WARN_CFLAGS)
 check_PROGRAMS = fspause
 fspause_SOURCES = fspause.c
 fspause_LDADD = \
-	$(top_builddir)/gnulib/lib/libgnu.la \
+	$(top_builddir)/gl/lib/libgnu.la \
 	$(LIB_NANOSLEEP)
 
 dist_check_SCRIPTS = testlib.sh $(ALL_TESTS)

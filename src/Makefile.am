@@ -39,8 +39,8 @@ EXTRA_DIST = lexgrog.c zsoelim.c
 
 AM_CPPFLAGS = \
 	-I$(top_builddir)/include \
-	-I$(top_builddir)/gnulib/lib \
-	-I$(top_srcdir)/gnulib/lib \
+	-I$(top_builddir)/gl/lib \
+	-I$(top_srcdir)/gl/lib \
 	-I$(top_srcdir)/lib \
 	-I$(top_srcdir)/libdb \
 	-DCONFIG_FILE=\"$(config_file)\" \
@@ -55,7 +55,7 @@ AM_CFLAGS = \
 	$(WARN_CFLAGS) \
 	$(libpipeline_CFLAGS)
 
-LIBMAN = $(top_builddir)/lib/libman.la $(top_builddir)/gnulib/lib/libgnu.la \
+LIBMAN = $(top_builddir)/lib/libman.la $(top_builddir)/gl/lib/libgnu.la \
 	 @LTLIBINTL@
 LIBMANDB = $(top_builddir)/libdb/libmandb.la $(LIBMAN) $(DBLIBS)
 

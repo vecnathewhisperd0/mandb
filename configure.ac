@@ -337,7 +337,7 @@ AC_CHECK_FUNCS([lchown posix_fadvise])
 
 # Internationalization support.
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.18.1])
+AM_GNU_GETTEXT_VERSION([0.18.3])
 AC_SUBST([LINGUAS])
 AM_ICONV
 MAN_PO4A
@@ -455,10 +455,10 @@ MAN_TRANS_SUBST([zsoelim])
 AM_CONDITIONAL([CROSS_COMPILING], [test "x$cross_compiling" = xyes])
 
 # Are Gnulib translations available?
-AM_CONDITIONAL([HAVE_GNULIB_PO], [test -f "$srcdir/gnulib/po/POTFILES.in"])
+AM_CONDITIONAL([HAVE_GNULIB_PO], [test -f "$srcdir/gl/po/POTFILES.in"])
 
 AC_CONFIG_FILES([Makefile
-	gnulib/lib/Makefile
+	gl/lib/Makefile
 	init/Makefile
 	init/systemd/Makefile
 	lib/Makefile
@@ -490,7 +490,7 @@ AC_CONFIG_FILES([Makefile
 	include/comp_src.h
 	include/manconfig.h
 	po/Makefile.in])
-if test -f "$srcdir/gnulib/po/Makefile.in.in"; then
-	AC_CONFIG_FILES([gnulib/po/Makefile.in])
+if test -f "$srcdir/gl/po/Makefile.in.in"; then
+	AC_CONFIG_FILES([gl/po/Makefile.in])
 fi
 AC_OUTPUT

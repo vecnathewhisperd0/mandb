@@ -26,8 +26,8 @@ AM_CFLAGS = $(WARN_CFLAGS)
 
 libmandb_la_CPPFLAGS = \
 	-I$(top_builddir)/include \
-	-I$(top_srcdir)/gnulib/lib \
-	-I$(top_builddir)/gnulib/lib \
+	-I$(top_srcdir)/gl/lib \
+	-I$(top_builddir)/gl/lib \
 	-I$(top_srcdir)/lib
 
 libmandb_la_SOURCES = \

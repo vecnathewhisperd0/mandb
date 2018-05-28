@@ -26,8 +26,8 @@ AM_CFLAGS = $(WARN_CFLAGS)
 
 libman_la_CPPFLAGS = \
 	-I$(top_builddir)/include \
-	-I$(top_srcdir)/gnulib/lib \
-	-I$(top_builddir)/gnulib/lib \
+	-I$(top_srcdir)/gl/lib \
+	-I$(top_builddir)/gl/lib \
 	-DLOCALEDIR=\"$(localedir)\" \
 	$(libpipeline_CFLAGS) \
 	$(libseccomp_CFLAGS)
@@ -64,7 +64,7 @@ libman_la_SOURCES = \
 	xregcomp.c \
 	xregcomp.h
 
-libman_la_LIBADD = ../gnulib/lib/libgnu.la $(LTLIBOBJS) \
+libman_la_LIBADD = ../gl/lib/libgnu.la $(LTLIBOBJS) \
 	$(LIBCOMPRESS) @LTLIBINTL@
 
 libman_la_LDFLAGS = \
