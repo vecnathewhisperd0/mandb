@@ -22,6 +22,7 @@ DOMAIN = man-db-manpages
 POFILES = \
 	po/da.po \
 	po/de.po \
+	po/es.po \
 	po/fr.po \
 	po/id.po \
 	po/ja.po \
