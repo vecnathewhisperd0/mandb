@@ -29,7 +29,7 @@
 #include <stdlib.h>
 
 #include "argp.h"
-#include "dirname.h"
+#include "progname.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -41,7 +41,6 @@
 #include "globbing.h"
 #include "sandbox.h"
 
-char *program_name;
 man_sandbox *sandbox;  /* unused, but needed by libman */
 
 extern const char *extension;
@@ -107,7 +106,7 @@ int main (int argc, char **argv)
 {
 	int i;
 
-	program_name = base_name (argv[0]);
+	set_program_name (argv[0]);
 
 	init_debug ();
 	init_locale ();

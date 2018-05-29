@@ -29,7 +29,7 @@
 #include <unistd.h>
 
 #include "argp.h"
-#include "dirname.h"
+#include "progname.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -45,7 +45,6 @@
 
 #include "manconv.h"
 
-char *program_name;
 int quiet = 0;
 man_sandbox *sandbox;
 
@@ -152,7 +151,7 @@ int main (int argc, char *argv[])
 	pipeline *p;
 	char **try_from_code;
 
-	program_name = base_name (argv[0]);
+	set_program_name (argv[0]);
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);

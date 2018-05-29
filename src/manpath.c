@@ -35,7 +35,7 @@
 #include <limits.h>
 
 #include "argp.h"
-#include "dirname.h"
+#include "progname.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -48,7 +48,6 @@
 
 #include "manp.h"
 
-char *program_name;
 int quiet = 0;
 man_sandbox *sandbox;  /* unused, but needed by libman */
 
@@ -111,7 +110,7 @@ int main (int argc, char *argv[])
 {
 	char *path_string;
 
-	program_name = base_name (argv[0]);
+	set_program_name (argv[0]);
 
 	init_debug ();
 	init_locale ();

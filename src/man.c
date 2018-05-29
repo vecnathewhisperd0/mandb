@@ -69,6 +69,7 @@
 #include "argp.h"
 #include "dirname.h"
 #include "minmax.h"
+#include "progname.h"
 #include "regex.h"
 #include "stat-time.h"
 #include "utimens.h"
@@ -185,7 +186,6 @@ static char *manpathlist[MAXDIRS];
 
 /* globals */
 int quiet = 1;
-char *program_name;
 char *database = NULL;
 extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
@@ -840,7 +840,7 @@ static char **manopt_to_env (int *argc)
 	/* allocate space for the program name */
 	*argc = 0;
 	argv = XNMALLOC (*argc + 3, char *);
-	argv[(*argc)++] = program_name;
+	argv[(*argc)++] = base_name (program_name);
 	
 	/* for each [ \t]+ delimited string, allocate an array space and fill
 	   it in. An escaped space is treated specially */	
@@ -4075,7 +4075,7 @@ int main (int argc, char *argv[])
 	char **argv_env;
 	const char *tmp;
 
-	program_name = base_name (argv[0]);
+	set_program_name (argv[0]);
 
 	check_standard_fds ();
 
@@ -4202,7 +4202,6 @@ int main (int argc, char *argv[])
 			exit (OK);
 		} else {
 			free (internal_locale);
-			free (program_name);
 			gripe_no_name (NULL);
 		}
 	}
@@ -4227,7 +4226,6 @@ int main (int argc, char *argv[])
 			++first_arg;
 		}
 		free (internal_locale);
-		free (program_name);
 		exit (exit_status);
 	}
 
@@ -4386,6 +4384,5 @@ int main (int argc, char *argv[])
 	free (database);
 	free_pathlist (manpathlist);
 	free (internal_locale);
-	free (program_name);
 	exit (exit_status);
 }

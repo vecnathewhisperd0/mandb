@@ -57,6 +57,7 @@
 #include "argp.h"
 #include "dirname.h"
 #include "fnmatch.h"
+#include "progname.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
@@ -84,7 +85,6 @@ extern char *user_config_file;
 static char **keywords;
 static int num_keywords;
 
-char *program_name;
 int am_apropos;
 char *database;
 int quiet = 1;
@@ -894,13 +894,15 @@ static int search (const char * const *pages, int num_pages)
 
 int main (int argc, char *argv[])
 {
+	char *program_base_name;
 #ifdef HAVE_ICONV
 	char *locale_charset;
 #endif
 	int status = OK;
 
-	program_name = base_name (argv[0]);
-	if (STREQ (program_name, APROPOS_NAME)) {
+	set_program_name (argv[0]);
+	program_base_name = base_name (program_name);
+	if (STREQ (program_base_name, APROPOS_NAME)) {
 		am_apropos = 1;
 		argp_program_version = "apropos " PACKAGE_VERSION;
 	} else {
@@ -918,6 +920,7 @@ int main (int argc, char *argv[])
 				optionp->flags |= OPTION_HIDDEN;
 		}
 	}
+	free (program_base_name);
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
@@ -999,6 +1002,5 @@ int main (int argc, char *argv[])
 	free_pathlist (manpathlist);
 	free (manp);
 	free (internal_locale);
-	free (program_name);
 	exit (status);
 }

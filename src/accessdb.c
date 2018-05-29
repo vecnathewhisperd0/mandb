@@ -33,7 +33,7 @@
 #include <stdlib.h>
 
 #include "argp.h"
-#include "dirname.h"
+#include "progname.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"
@@ -47,7 +47,6 @@
 
 #include "mydbm.h"
 
-char *program_name;
 const char *cat_root;
 man_sandbox *sandbox;  /* unused, but needed by libman */
 
@@ -115,7 +114,7 @@ int main (int argc, char *argv[])
 	datum key;
 	int ret = OK;
 
-	program_name = base_name (argv[0]);
+	set_program_name (argv[0]);
 
 	init_debug ();
 	init_locale ();

@@ -32,7 +32,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "dirname.h"
+#include "progname.h"
 #include "stat-time.h"
 #include "timespec.h"
 #include "xalloc.h"
@@ -41,8 +41,6 @@
 
 static char *filename;
 static int fd = -1;
-
-char *program_name;
 
 #define MUST(name, cond) \
 	do { \
@@ -91,7 +89,7 @@ int main (int argc ATTRIBUTE_UNUSED, char **argv)
 	struct stat st;
 	int delay_ns;
 
-	program_name = base_name (argv[0]);
+	set_program_name (argv[0]);
 
 	filename = xstrdup ("fspause.tmp.XXXXXX");
 	MUST ("mkstemp", (fd = mkstemp (filename)) >= 0);

@@ -48,6 +48,7 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "progname.h"
 #include "stat-time.h"
 #include "timespec.h"
 #include "utimens.h"
@@ -73,7 +74,6 @@
 #include "filenames.h"
 #include "manp.h"
 
-char *program_name;
 int quiet = 1;
 extern int opt_test;		/* don't update db */
 char *manp;
@@ -782,7 +782,7 @@ int main (int argc, char *argv[])
 	char *cwd;
 #endif /* __profile__ */
 
-	program_name = base_name (argv[0]);
+	set_program_name (argv[0]);
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
@@ -947,6 +947,5 @@ next_manpath:
 		if (must_create && STREQ (must_create, "1"))
 			exit (FAIL);
 	}
-	free (program_name);
 	exit (OK);
 }

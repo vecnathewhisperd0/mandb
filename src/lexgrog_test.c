@@ -33,7 +33,7 @@
 #include <sys/stat.h>
 
 #include "argp.h"
-#include "dirname.h"
+#include "progname.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -50,7 +50,6 @@
 #include "descriptions.h"
 #include "ult_src.h"
 
-char *program_name;
 int quiet = 1;
 man_sandbox *sandbox;
 
@@ -151,7 +150,7 @@ int main (int argc, char **argv)
 	int i;
 	int some_failed = 0;
 
-	program_name = base_name (argv[0]);
+	set_program_name (argv[0]);
 
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
