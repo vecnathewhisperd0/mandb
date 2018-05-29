@@ -22,7 +22,6 @@ TESTS_ENVIRONMENT = PATH=$(abs_builddir)/..:$$PATH; export PATH; \
 		    DBTYPE=$(DBTYPE); export DBTYPE; \
 		    MANDIR_LAYOUT=$(MANDIR_LAYOUT); export MANDIR_LAYOUT; \
 		    abs_top_builddir=$(abs_top_builddir); export abs_top_builddir; \
-		    @LOCALCHARSET_TESTS_ENVIRONMENT@; export CHARSETALIASDIR; \
 		    OVERRIDE_DIR="$(override_dir)"; export OVERRIDE_DIR;
 # Each test must use the configure-detected shell, not necessarily /bin/sh.
 AM_LOG_FLAGS = $(SHELL)

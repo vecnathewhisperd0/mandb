@@ -10,8 +10,6 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_PREREQ([2.59])
 AC_CONFIG_SRCDIR([src/man.c])
 AC_GNU_SOURCE
-m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
-LT_INIT([disable-static])
 
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
@@ -72,6 +70,8 @@ then
 fi
 AC_PROG_INSTALL
 AC_PROG_LN_S
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+LT_INIT([disable-static])
 AC_CHECK_PROGS([cat], [cat])
 MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx elinks w3m])
 test -n "$browser" && browser="exec $browser"
