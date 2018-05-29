@@ -142,8 +142,7 @@ void free_mandata_elements (struct mandata *pinfo)
 		 * caller; why do we free it here?
 		 */
 		free (pinfo->addr);		/* free the 'content' */
-	if (pinfo->name)
-		free (pinfo->name);		/* free the real name */
+	free (pinfo->name);			/* free the real name */
 }
 
 /* Go through the linked list of structures, free()ing the 'content' and the

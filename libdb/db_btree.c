@@ -192,7 +192,7 @@ static datum btree_findkey (DB *db, u_int flags)
 		}
 	}
 	if (!loop_check_hash)
-		loop_check_hash = hashtable_create (&plain_hashtable_free);
+		loop_check_hash = hashtable_create (&free);
 
 	if (((db->seq) (db, (DBT *) &key, (DBT *) &data, flags))) {
 		memset (&key, 0, sizeof key);

@@ -302,8 +302,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	}
 
 	free (manpage);
-	if (lg.whatis)
-		free (lg.whatis);
+	free (lg.whatis);
 }
 
 static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
@@ -800,8 +799,7 @@ static int count_glob_matches (const char *name, const char *ext,
 		if (buf) {
 			if (STREQ (ext, info.ext))
 				++count;
-			if (info.name)
-				free (info.name);
+			free (info.name);
 			free (buf);
 		}
 	}

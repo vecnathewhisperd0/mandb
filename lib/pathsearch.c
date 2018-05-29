@@ -87,8 +87,7 @@ static int pathsearch (const char *name, const mode_t bits)
 	}
 
 	free (path);
-	if (cwd)
-		free (cwd);
+	free (cwd);
 	return ret;
 }
 
@@ -126,7 +125,6 @@ int directory_on_path (const char *dir)
 	}
 
 	free (path);
-	if (cwd)
-		free (cwd);
+	free (cwd);
 	return ret;
 }

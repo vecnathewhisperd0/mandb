@@ -201,8 +201,7 @@ int main (int argc, char **argv)
 
 			file = ult_src (files[i], path ? path : ".",
 					&statbuf, SO_LINK, NULL);
-			if (path)
-				free (path);
+			free (path);
 		}
 
 		if (file && find_name (file, "-", &lg, encoding)) {

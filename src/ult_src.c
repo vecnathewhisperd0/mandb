@@ -273,8 +273,7 @@ const char *ult_src (const char *name, const char *path,
 
 	if (recurse == 0) {
 		struct stat new_buf;
-		if (base)
-			free (base);
+		free (base);
 		base = xstrdup (name);
 
 		debug ("\nult_src: File %s in mantree %s\n", name, path);

@@ -626,8 +626,7 @@ static char *add_system_manpath (const char *systems, const char *manpathlist)
 				/* reset newdir */
 				*newdir = '\0';
 			}
-			if (newdir)
-				free (newdir);
+			free (newdir);
 		} else
 			manpath = pathappend (manpath, manpathlist);
 	}

@@ -287,8 +287,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 				free (catdir_base);
 			}
 
-			if (lg.whatis)
-				free (lg.whatis);
+			free (lg.whatis);
 			pipeline_free (decomp);
 next_exists:
 			free_mandata_struct (exists);
@@ -385,8 +384,7 @@ int straycats (const char *manpath)
 	free (mandir);
 	free (catdir);
 
-	if (catpath)
-		free (catpath);
+	free (catpath);
 
 	MYDBM_CLOSE (dbf);
 	return strays;

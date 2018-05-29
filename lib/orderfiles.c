@@ -96,7 +96,7 @@ void order_files (const char *dir, char **basenames, size_t n_basenames)
 	 * a small number of contiguous blocks, which seems a reasonable
 	 * assumption for manual pages.
 	 */
-	physical_offsets = hashtable_create (plain_hashtable_free);
+	physical_offsets = hashtable_create (&free);
 	for (i = 0; i < n_basenames; ++i) {
 		struct {
 			struct fiemap fiemap;

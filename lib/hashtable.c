@@ -67,12 +67,6 @@ void null_hashtable_free (void *defn ATTRIBUTE_UNUSED)
 {
 }
 
-void plain_hashtable_free (void *defn)
-{
-	if (defn)
-		free (defn);
-}
-
 /* Create a hashtable. */
 struct hashtable *hashtable_create (hashtable_free_ptr free_defn)
 {

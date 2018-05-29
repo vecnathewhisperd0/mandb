@@ -3187,8 +3187,7 @@ static int display_filesystem (struct candidate *candp)
 
 		cat_file = find_cat_file (candp->path, filename, man_file);
 		found = display (candp->path, man_file, cat_file, title, NULL);
-		if (cat_file)
-			free (cat_file);
+		free (cat_file);
 		free (lang);
 		lang = NULL;
 	}
@@ -3268,8 +3267,7 @@ static int display_database (struct candidate *candp)
 			cat_file = find_cat_file (candp->path, file, man_file);
 			found += display (candp->path, man_file, cat_file,
 					  title, in->filter);
-			if (cat_file)
-				free (cat_file);
+			free (cat_file);
 			free (lang);
 			lang = NULL;
 			free (file);
@@ -3316,8 +3314,7 @@ static int display_database (struct candidate *candp)
 					return found; /* zero */
 				}
 			} else {
-				if (catpath)
-					free (catpath);
+				free (catpath);
 				free (title);
 				return found; /* zero */
 			}
@@ -3994,8 +3991,7 @@ static const char **get_section_list (void)
 		sections[i] = NULL;
 		return sections;
 	} else {
-		if (sections)
-			free (sections);
+		free (sections);
 		return config_sections;
 	}
 }

@@ -153,8 +153,7 @@ void free_descriptions (struct page_description *head)
 
 	while (desc) {
 		free (desc->name);
-		if (desc->whatis)
-			free (desc->whatis);
+		free (desc->whatis);
 		prev = desc;
 		desc = desc->next;
 		free (prev);
