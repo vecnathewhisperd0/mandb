@@ -133,8 +133,8 @@ extern uid_t euid;
 char *lang;
 
 /* external formatter programs, one for use without -t, and one with -t */
-#define NFMT_PROG "./mandb_nfmt"
-#define TFMT_PROG "./mandb_tfmt"
+#define NFMT_PROG "mandb_nfmt"
+#define TFMT_PROG "mandb_tfmt"
 #undef ALT_EXT_FORMAT	/* allow external formatters located in cat hierarchy */
 
 static int global_manpath = -1;	/* global or user manual page hierarchy? */
@@ -1130,7 +1130,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				    char **result_encoding)
 {
 	const char *roff_opt;
-	char *fmt_prog;
+	char *fmt_prog = NULL;
 	pipeline *p = pipeline_new ();
 	pipecmd *cmd;
 	char *page_encoding = NULL;
@@ -1143,42 +1143,40 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	if (!roff_opt)
 		roff_opt = "";
 
-#ifdef ALT_EXT_FORMAT
-	/* Check both external formatter locations */
 	if (dir && !recode) {
+#ifdef ALT_EXT_FORMAT
 		char *catpath = get_catpath
 			(dir, global_manpath ? SYSTEM_CAT : USER_CAT);
 
-		/* If we have an alternate catpath */
+		/* If we have an alternate catpath, look for an external
+		 * formatter there.
+		 */
 		if (catpath) {
 			fmt_prog = appendstr (catpath, "/",
 					      troff ? TFMT_PROG : NFMT_PROG, 
 					      NULL);
 			if (!CAN_ACCESS (fmt_prog, X_OK)) {
 				free (fmt_prog);
-				fmt_prog = xstrdup (troff ? TFMT_PROG :
-							    NFMT_PROG);
-				if (!CAN_ACCESS (fmt_prog, X_OK)) {
-					free (fmt_prog);
-					fmt_prog = NULL;
-				}
+				fmt_prog = NULL;
 			}
-		/* If we don't */
-		} else {
+		}
 #endif /* ALT_EXT_FORMAT */
 
-			fmt_prog = xstrdup (troff ? TFMT_PROG : NFMT_PROG);
+		/* If the page is in a proper manual page hierarchy (as
+		 * opposed to being read using --local-file or similar),
+		 * look for an external formatter there.
+		 */
+		if (!fmt_prog) {
+			fmt_prog = appendstr (NULL, dir, "/",
+					      troff ? TFMT_PROG : NFMT_PROG,
+					      NULL);
 			if (!CAN_ACCESS (fmt_prog, X_OK)) {
 				free (fmt_prog);
 				fmt_prog = NULL;
 			}
-
-#ifdef ALT_EXT_FORMAT
 		}
-	} else
-		fmt_prog = NULL;
-#endif /* ALT_EXT_FORMAT */
-	
+	}
+
 	if (fmt_prog)
 		debug ("External formatter %s\n", fmt_prog);
 				
