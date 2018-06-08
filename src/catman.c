@@ -342,7 +342,7 @@ static int parse_for_sec (const char *manpath, const char *section)
 
 static int check_access (const char *directory)
 {
-	if (access (directory, W_OK)) {
+	if (!CAN_ACCESS (directory, W_OK)) {
 		error (0, errno, _("cannot write within %s"), directory);
 		return 1;
 	}

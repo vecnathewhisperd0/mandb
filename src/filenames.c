@@ -63,7 +63,7 @@ char *make_filename (const char *path, const char *name,
 		file = appendstr (file, ".", in->comp, NULL);
 
 	debug ("Checking physical location: %s\n", file);
-	if (access (file, R_OK) != 0) {
+	if (!CAN_ACCESS (file, R_OK)) {
 		free (file);
 		return NULL;
 	}

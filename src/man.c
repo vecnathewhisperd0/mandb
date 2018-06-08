@@ -1154,11 +1154,11 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			fmt_prog = appendstr (catpath, "/",
 					      troff ? TFMT_PROG : NFMT_PROG, 
 					      NULL);
-			if (access (fmt_prog, X_OK)) {
+			if (!CAN_ACCESS (fmt_prog, X_OK)) {
 				free (fmt_prog);
 				fmt_prog = xstrdup (troff ? TFMT_PROG :
 							    NFMT_PROG);
-				if (access (fmt_prog, X_OK)) {
+				if (!CAN_ACCESS (fmt_prog, X_OK)) {
 					free (fmt_prog);
 					fmt_prog = NULL;
 				}
@@ -1168,7 +1168,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #endif /* ALT_EXT_FORMAT */
 
 			fmt_prog = xstrdup (troff ? TFMT_PROG : NFMT_PROG);
-			if (access (fmt_prog, X_OK)) {
+			if (!CAN_ACCESS (fmt_prog, X_OK)) {
 				free (fmt_prog);
 				fmt_prog = NULL;
 			}
@@ -2315,7 +2315,7 @@ static int display (const char *dir, const char *man_file,
 		if (*man_file == '\0')
 			found = 1;
 		else
-			found = !access (man_file, R_OK);
+			found = CAN_ACCESS (man_file, R_OK);
 		if (found) {
 			int status;
 			if (prompt && do_prompt (title)) {
@@ -2404,7 +2404,8 @@ static int display (const char *dir, const char *man_file,
 		if (format == 1 && *man_file == '\0')
 			found = 1;
 		else
-			found = !access (format ? man_file : cat_file, R_OK);
+			found = CAN_ACCESS
+				(format ? man_file : cat_file, R_OK);
 
 		debug ("format: %d, save_cat: %d, found: %d\n",
 		       format, save_cat, found);

@@ -403,6 +403,9 @@ extern int quiet;		/* be quiet(er) if 1 */
  */
 #define CTYPE(func,arg) (func((unsigned char)(arg)))
 
+/* access(2), but with boolean semantics. */
+#define CAN_ACCESS(pathname, mode)	(access (pathname, mode) == 0)
+
 /* FSSTND directories */
 #define CAT_ROOT	"/var/catman"		/* required by fsstnd() */
 #define MAN_ROOT	"/usr" 			/* required by fsstnd() */

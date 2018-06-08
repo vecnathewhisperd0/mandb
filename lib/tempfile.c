@@ -38,24 +38,24 @@ static const char *path_search (void)
 
 	if (getuid () == geteuid () && getgid () == getegid ()) {
 		dir = getenv ("TMPDIR");
-		if (!dir || access (dir, W_OK) == -1)
+		if (!dir || !CAN_ACCESS (dir, W_OK))
 			dir = NULL;
 		if (!dir) {
 			dir = getenv ("TMP");
-			if (!dir || access (dir, W_OK) == -1)
+			if (!dir || !CAN_ACCESS (dir, W_OK))
 				dir = NULL;
 		}
 	}
 #ifdef P_tmpdir
 	if (!dir) {
 		dir = P_tmpdir;
-		if (!dir || access (dir, W_OK) == -1)
+		if (!dir || !CAN_ACCESS (dir, W_OK))
 			dir = NULL;
 	}
 #endif
 	if (!dir) {
 		dir = "/tmp";
-		if (access (dir, W_OK) == -1)
+		if (!CAN_ACCESS (dir, W_OK))
 			dir = NULL;
 	}
 

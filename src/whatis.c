@@ -325,7 +325,7 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 {
 	char *whatis_file = xasprintf ("%s/whatis", manpath);
 
-	if (access (whatis_file, R_OK) == 0) {
+	if (CAN_ACCESS (whatis_file, R_OK)) {
 		const char *flags;
 		int i;
 

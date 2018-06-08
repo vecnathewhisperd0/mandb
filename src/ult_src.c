@@ -191,14 +191,14 @@ static char *find_include (const char *name, const char *path,
 	/* If the original path from above doesn't exist, try to create new
 	 * path as if the "include" was relative to the current man page.
 	 */
-	if (access (ret, F_OK) == 0)
+	if (CAN_ACCESS (ret, F_OK))
 		return ret;
 
 	dirname = dir_name (name);
 	temp_file = xasprintf ("%s/%s", dirname, include);
 	free (dirname);
 
-	if (access (temp_file, F_OK) == 0) {
+	if (CAN_ACCESS (temp_file, F_OK)) {
 		/* Just plain include. */
 		free (ret);
 		ret = canonicalize_file_name (temp_file);
@@ -209,7 +209,7 @@ static char *find_include (const char *name, const char *path,
 		int i;
 
 		free (temp_file_asterisk);
-		if (access (candidate_files[0], F_OK) == 0) {
+		if (CAN_ACCESS (candidate_files[0], F_OK)) {
 			free (ret);
 			ret = canonicalize_file_name (candidate_files[0]);
 		}
