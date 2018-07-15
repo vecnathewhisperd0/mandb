@@ -23,6 +23,11 @@ Major changes since man-db 2.8.3:
 	  change means that "man -l" will never use an external formatter
 	  (which was never documented behaviour and was surely a bad idea).
 
+	* Make seccomp sandbox allow some shared memory operations across
+	  the board rather than just when ESET File Security is in use; the
+	  Astrill VPN seems to require something similar, and there are
+	  doubtless other such preload hacks.
+
 man-db 2.8.3 (5 April 2018)
 ===========================
 
