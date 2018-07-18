@@ -22,6 +22,8 @@
 LINGUA = es
 PO4A_LINGUA = yes
 
+EXTRA_DIST = translator.add
+
 man1_MANS = \
 	man1/apropos.1 \
 	man1/lexgrog.1 \
