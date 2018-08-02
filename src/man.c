@@ -1817,6 +1817,14 @@ static void chdir_commands (pipeline *p, const char *dir)
 		pipecmd_chdir (pipeline_get_command (p, i), dir);
 }
 
+static void cleanup_unlink (void *arg)
+{
+	const char *path = arg;
+
+	if (unlink (path))
+		error (0, errno, _("can't unlink %s"), path);
+}
+
 #ifdef MAN_CATS
 
 /* Return pipeline to write formatted manual page to for saving as cat file. */
@@ -1849,7 +1857,7 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 	}
 
 	if (!debug_level)
-		push_cleanup ((cleanup_fun) unlink, tmp_cat_file, 1);
+		push_cleanup (cleanup_unlink, tmp_cat_file, 1);
 
 	cat_p = pipeline_new ();
 	add_output_iconv (cat_p, encoding, "UTF-8");
@@ -1883,7 +1891,7 @@ static int close_cat_stream (pipeline *cat_p, const char *cat_file,
 		status |= commit_tmp_cat (cat_file, tmp_cat_file,
 					  delete || status);
 		if (!debug_level)
-			pop_cleanup ((cleanup_fun) unlink, tmp_cat_file);
+			pop_cleanup (cleanup_unlink, tmp_cat_file);
 	}
 	free (tmp_cat_file);
 	return status;
@@ -2061,7 +2069,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 	maybe_discard_stderr (format_cmd);
 	pipeline_want_out (format_cmd, tmp_cat_fd);
 
-	push_cleanup ((cleanup_fun) unlink, tmpcat, 1);
+	push_cleanup (cleanup_unlink, tmpcat, 1);
 
 	/* save the cat as real user
 	 * (1) required for user man hierarchy
@@ -2079,7 +2087,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 
 	close (tmp_cat_fd);
 	commit_tmp_cat (cat_file, tmpcat, status);
-	pop_cleanup ((cleanup_fun) unlink, tmpcat);
+	pop_cleanup (cleanup_unlink, tmpcat);
 	free (tmpcat);
 }
 
