@@ -28,6 +28,7 @@
 /* below this line are routines only useful for the BTREE interface */
 #ifdef BTREE
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
