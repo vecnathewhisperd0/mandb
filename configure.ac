@@ -331,6 +331,10 @@ dnl To add more decompressors just follow the scheme above.
 AC_ISC_POSIX
 dnl AC_PROG_LEX calls AC_TRY_LINK: must come after above 3
 AC_PROG_LEX
+if test "$LEX" = ":" && (test ! -e src/lexgrog.c || test ! -e src/zsoelim.c)
+then
+	AC_MSG_ERROR([flex is required when building from revision control])
+fi
 gl_INIT
 AC_CHECK_HEADERS([fcntl.h sys/file.h linux/fiemap.h])
 AC_CHECK_FUNCS([lchown posix_fadvise])
