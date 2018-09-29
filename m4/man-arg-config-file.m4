@@ -13,7 +13,7 @@ AC_ARG_WITH([config-file],
 		config_file=$withval
 	 fi],
 	[: ${config_file=\$\{sysconfdir\}/man_db.conf}])
-config_file_basename=${withval##*/}
+config_file_basename=${config_file##*/}
 config_file_dirname=`AS_DIRNAME(["$config_file"])`
 AC_SUBST([config_file])
 AC_SUBST([config_file_basename])
