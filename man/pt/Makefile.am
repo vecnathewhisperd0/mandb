@@ -1,7 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ##
-## Copyright (C) 1994, 1995 Graeme Wilford.
-## Copyright (C) 2001, 2002, 2003, 2007 Colin Watson.
+## Copyright (C) 2018 Colin Watson.
 ##
 ## This file is part of man-db.
 ##
@@ -19,27 +18,10 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-SUBDIRS = $(MAN_SUBDIRS)
-DIST_SUBDIRS = \
-	po4a \
-	da \
-	de \
-	es \
-	fr \
-	id \
-	it \
-	ja \
-	nl \
-	pl \
-	pt \
-	pt_BR \
-	ru \
-	sr \
-	sv \
-	tr \
-	zh_CN
+LINGUA = pt
+PO4A_LINGUA = yes
 
-LINGUA = .
+EXTRA_DIST = translator.add
 
 man1_MANS = \
 	man1/apropos.1 \
@@ -56,6 +38,5 @@ man8_MANS = \
 	man8/catman.8 \
 	man8/mandb.8
 
-EXTRA_DIST = LINGUAS LINGUAS.po4a check-man
+include $(top_srcdir)/man/Rules.man
 
-include $(srcdir)/Rules.man
