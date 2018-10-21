@@ -20,7 +20,23 @@
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 SUBDIRS = $(MAN_SUBDIRS)
-DIST_SUBDIRS = po4a da de es fr id it ja nl pl pt_BR ru sr sv tr zh_CN
+DIST_SUBDIRS = \
+	po4a \
+	da \
+	de \
+	es \
+	fr \
+	id \
+	it \
+	ja \
+	nl \
+	pl \
+	pt_BR \
+	ru \
+	sr \
+	sv \
+	tr \
+	zh_CN
 
 LINGUA = .
 
