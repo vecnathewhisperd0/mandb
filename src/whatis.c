@@ -829,6 +829,8 @@ nextpage:
 		free_mandata_elements (&info);
 	}
 
+	free (found_here);
+
 	for (i = 0; i < num_pages; ++i)
 		free (lowpages[i]);
 	free (lowpages);

@@ -49,10 +49,17 @@
 static void decompress_zlib (void *data ATTRIBUTE_UNUSED)
 {
 	gzFile zlibfile;
+	int fd;
 
-	zlibfile = gzdopen (dup (STDIN_FILENO), "r");
-	if (!zlibfile)
+	fd = dup (STDIN_FILENO);
+	if (fd < 0)
 		return;
+
+	zlibfile = gzdopen (fd, "r");
+	if (!zlibfile) {
+		close (fd);
+		return;
+	}
 
 	for (;;) {
 		char buffer[4096];

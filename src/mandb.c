@@ -558,7 +558,7 @@ static int process_manpath (const char *manpath, int global_manpath,
 	struct tried_catdirs_entry *tried;
 	struct stat st;
 	int run_mandb = 0;
-	struct dbpaths *dbpaths;
+	struct dbpaths *dbpaths = NULL;
 	int amount = 0;
 
 	if (global_manpath) { 	/* system db */
@@ -575,7 +575,7 @@ static int process_manpath (const char *manpath, int global_manpath,
 	hashtable_install (tried_catdirs, catpath, strlen (catpath), tried);
 
 	if (stat (manpath, &st) < 0 || !S_ISDIR (st.st_mode))
-		return 0;
+		goto out;
 	tried->seen = 1;
 
 	if (single_filename) {
@@ -618,10 +618,13 @@ static int process_manpath (const char *manpath, int global_manpath,
 #endif /* MAN_OWNER */
 
 out:
-	cleanup_sigsafe (dbpaths);
-	pop_cleanup (cleanup_sigsafe, dbpaths);
-	cleanup (dbpaths);
-	pop_cleanup (cleanup, dbpaths);
+	if (dbpaths) {
+		cleanup_sigsafe (dbpaths);
+		pop_cleanup (cleanup_sigsafe, dbpaths);
+		cleanup (dbpaths);
+		pop_cleanup (cleanup, dbpaths);
+	}
+
 	free (database);
 	database = NULL;
 

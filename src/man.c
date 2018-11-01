@@ -1458,6 +1458,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		pipeline_command (p, cmd);
 	}
 
+	free (fmt_prog);
 	free (page_encoding);
 	return p;
 }

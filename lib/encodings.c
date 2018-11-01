@@ -605,8 +605,10 @@ char *find_charset_locale (const char *charset)
 				if (setlocale (LC_CTYPE, locale)) {
 					free (encoding);
 					goto out;
-				} else
+				} else {
+					free (locale);
 					locale = NULL;
+				}
 			}
 			free (encoding);
 		}
