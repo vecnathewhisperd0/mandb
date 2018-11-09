@@ -244,14 +244,15 @@ static pipeline *decomp;
 
 %x MAN_PRENAME
 %x MAN_NAME
-%x MAN_NAME_AT
-%x MAN_NAME_BSX
-%x MAN_NAME_BX
-%x MAN_NAME_BX_RELEASE
-%x MAN_NAME_DQ
-%x MAN_NAME_FX
-%x MAN_NAME_NX
-%x MAN_NAME_OX
+%x MAN_DESC
+%x MAN_DESC_AT
+%x MAN_DESC_BSX
+%x MAN_DESC_BX
+%x MAN_DESC_BX_RELEASE
+%x MAN_DESC_DQ
+%x MAN_DESC_FX
+%x MAN_DESC_NX
+%x MAN_DESC_OX
 %x CAT_NAME
 %x CAT_FILE
 %x MAN_FILE
@@ -395,7 +396,7 @@ vgrind_request	\.vS
 	BEGIN (MAN_NAME);
 }
 
-<MAN_NAME>{
+<MAN_NAME,MAN_DESC>{
 	{bol}{sec_request}{blank}*	| 	/* Another section */
 	{bol}\.X{upper}{blank}+		|	/* special - hpux */
 	{bol}\.sp{blank}*		|	/* vertical spacing */
@@ -420,7 +421,7 @@ vgrind_request	\.vS
 }
 
  /* ROFF request removal */
-<MAN_NAME>{
+<MAN_NAME,MAN_DESC>{
  /* some include quoting; dealing with this is unpleasant */
 	{bol}{typeface}{blank}+\"	{
 		newline_found ();
@@ -441,13 +442,13 @@ vgrind_request	\.vS
 }
 
  /* No-op requests */
-<MAN_NAME>{
+<MAN_NAME,MAN_DESC>{
 	{bol}\.{blank}*$		newline_found ();
 	{bol}\.\.$			newline_found ();
 }
 
  /* Toggle fill mode */
-<MAN_NAME>{
+<MAN_NAME,MAN_DESC>{
 	{bol}\.nf.*			fill_mode = 0;
 	{bol}\.fi.*			fill_mode = 1;
 }
@@ -459,16 +460,19 @@ vgrind_request	\.vS
 	{next}{blank}*\\\((mi|hy|em|en){blank}*	|
 	{next}{blank_eol}+[-\\]-{blank}*	|
 	{next}{blank_eol}*[-\\]-{blank}+	|
-	{bol}\.Nd{blank}*			add_separator_to_whatis ();
+	{bol}\.Nd{blank}*			{
+		add_separator_to_whatis ();
+		BEGIN (MAN_DESC);
+	}
 }
 <CAT_NAME>{next}{blank}+-{1,2}{blank_eol}+	add_separator_to_whatis ();
 
  /* escape sequences and special characters */
-<MAN_NAME>{
+<MAN_NAME,MAN_DESC>{
  	{next}\\[\\e]			add_char_to_whatis ('\\');
  	{next}\\('|\(aa)		add_char_to_whatis ('\'');
  	{next}\\(`|\(ga)		add_char_to_whatis ('`');
-	{next}\\-			add_char_to_whatis ('-');
+	{next}\\(-|\((mi|hy|em|en))	add_char_to_whatis ('-');
 	{next}\\\.			add_char_to_whatis ('.');
 	{next}((\\[ 0t~])|[ ]|\t)*	add_char_to_whatis (' ');
 	{next}\\\((ru|ul)		add_char_to_whatis ('_');
@@ -504,22 +508,22 @@ vgrind_request	\.vS
  /* some people rather ambitiously use non-trivial mdoc macros in NAME
     sections; cope with those that have been seen in the wild, and a few
     more */
-<MAN_NAME>{
-	{bol}\.At{blank}*		BEGIN (MAN_NAME_AT);
-	{bol}\.Bsx{blank}*		BEGIN (MAN_NAME_BSX);
-	{bol}\.Bx{blank}*		BEGIN (MAN_NAME_BX);
-	{bol}\.Fx{blank}*		BEGIN (MAN_NAME_FX);
-	{bol}\.Nx{blank}*		BEGIN (MAN_NAME_NX);
-	{bol}\.Ox{blank}*		BEGIN (MAN_NAME_OX);
+<MAN_DESC>{
+	{bol}\.At{blank}*		BEGIN (MAN_DESC_AT);
+	{bol}\.Bsx{blank}*		BEGIN (MAN_DESC_BSX);
+	{bol}\.Bx{blank}*		BEGIN (MAN_DESC_BX);
+	{bol}\.Fx{blank}*		BEGIN (MAN_DESC_FX);
+	{bol}\.Nx{blank}*		BEGIN (MAN_DESC_NX);
+	{bol}\.Ox{blank}*		BEGIN (MAN_DESC_OX);
 	{bol}\.Ux{blank}*		add_word_to_whatis ("UNIX");
 
 	{bol}\.Dq{blank}*	{
 		add_word_to_whatis ("\"");
-		BEGIN (MAN_NAME_DQ);
+		BEGIN (MAN_DESC_DQ);
 	}
 }
 
-<MAN_NAME_AT>{
+<MAN_DESC_AT>{
 	32v{blank}*		mdoc_text ("Version 32V AT&T UNIX");
 	v1{blank}*		mdoc_text ("Version 1 AT&T UNIX");
 	v2{blank}*		mdoc_text ("Version 2 AT&T UNIX");
@@ -539,11 +543,11 @@ vgrind_request	\.vS
 	}
 }
 
-<MAN_NAME_BSX>{
+<MAN_DESC_BSX>{
 	{word}		{
 		add_word_to_whatis ("BSD/OS");
 		add_wordn_to_whatis (yytext, yyleng);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 	.|{eol}		{
 		yyless (0);
@@ -551,14 +555,14 @@ vgrind_request	\.vS
 	}
 }
 
-<MAN_NAME_BX>{
+<MAN_DESC_BX>{
 	-alpha{blank}*		mdoc_text ("BSD (currently in alpha test)");
 	-beta{blank}*		mdoc_text ("BSD (currently in beta test)");
 	-devel{blank}*		mdoc_text ("BSD (currently under development");
 	{word}{blank}*	{
 		add_wordn_to_whatis (yytext, yyleng);
 		add_str_to_whatis ("BSD", 3);
-		BEGIN (MAN_NAME_BX_RELEASE);
+		BEGIN (MAN_DESC_BX_RELEASE);
 	}
 	.|{eol}		{
 		yyless (0);
@@ -566,40 +570,40 @@ vgrind_request	\.vS
 	}
 }
 
-<MAN_NAME_BX_RELEASE>{
+<MAN_DESC_BX_RELEASE>{
 	[Rr]eno{blank}*		{
 		add_str_to_whatis ("-Reno", 5);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 	[Tt]ahoe{blank}*	{
 		add_str_to_whatis ("-Tahoe", 6);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 	[Ll]ite{blank}*		{
 		add_str_to_whatis ("-Lite", 5);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 	[Ll]ite2{blank}*	{
 		add_str_to_whatis ("-Lite2", 6);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 	.|{eol}			{
 		yyless (0);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 }
 
-<MAN_NAME_DQ>.*		{
+<MAN_DESC_DQ>.*		{
 	add_str_to_whatis (yytext, yyleng);
 	add_char_to_whatis ('"');
-	BEGIN (MAN_NAME);
+	BEGIN (MAN_DESC);
 }
 
-<MAN_NAME_FX>{
+<MAN_DESC_FX>{
 	{word}		{
 		add_word_to_whatis ("FreeBSD");
 		add_wordn_to_whatis (yytext, yyleng);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 	.|{eol}		{
 		yyless (0);
@@ -607,11 +611,11 @@ vgrind_request	\.vS
 	}
 }
 
-<MAN_NAME_NX>{
+<MAN_DESC_NX>{
 	{word}		{
 		add_word_to_whatis ("NetBSD");
 		add_wordn_to_whatis (yytext, yyleng);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 	.|{eol}		{
 		yyless (0);
@@ -619,11 +623,11 @@ vgrind_request	\.vS
 	}
 }
 
-<MAN_NAME_OX>{
+<MAN_DESC_OX>{
 	{word}		{
 		add_word_to_whatis ("OpenBSD");
 		add_wordn_to_whatis (yytext, yyleng);
-		BEGIN (MAN_NAME);
+		BEGIN (MAN_DESC);
 	}
 	.|{eol}		{
 		yyless (0);
@@ -637,7 +641,7 @@ vgrind_request	\.vS
  /* a ROFF break request, a paragraph request, or an indentation change
     usually means we have multiple whatis definitions, provide a separator
     for later processing */
-<MAN_NAME>{
+<MAN_NAME,MAN_DESC>{
 	{bol}\.br{blank}*		|
 	{bol}\.LP{blank}*		|
 	{bol}\.PP{blank}*		|
@@ -645,28 +649,31 @@ vgrind_request	\.vS
 	{bol}\.IP{blank}.*		|
 	{bol}\.HP{blank}.*		|
 	{bol}\.RS{blank}.*		|
-	{bol}\.RE{blank}.*		add_char_to_whatis ((char) 0x11);
+	{bol}\.RE{blank}.*		{
+		add_char_to_whatis ((char) 0x11);
+		BEGIN (MAN_NAME);
+	}
 }
 
  /* any other roff request we don't recognise terminates definitions */
-<MAN_NAME>{bol}['.]		{
+<MAN_NAME,MAN_DESC>{bol}['.]	{
 	*p_name = '\0';
 	BEGIN (MAN_REST);
 }
 
  /* pass words as a chunk. speed optimization */
-<MAN_NAME>[[:alnum:]]*		add_str_to_whatis (yytext, yyleng);
+<MAN_NAME,MAN_DESC>[[:alnum:]]*		add_str_to_whatis (yytext, yyleng);
 
- /* normalise the period (,) separators */
+ /* normalise the comma (,) separators */
 <CAT_NAME>{blank}*,[ \t\r\n]*		|
-<MAN_NAME>{blank}*,{blank}*		add_str_to_whatis (", ", 2);
+<MAN_NAME,MAN_DESC>{blank}*,{blank}*	add_str_to_whatis (", ", 2);
 
-<CAT_NAME,MAN_NAME>{bol}.	{
+<CAT_NAME,MAN_NAME,MAN_DESC>{bol}.	{
 	newline_found ();
 	add_char_to_whatis (yytext[yyleng - 1]);
 }
 
-<CAT_NAME,MAN_NAME>.			add_char_to_whatis (*yytext);
+<CAT_NAME,MAN_NAME,MAN_DESC>.		add_char_to_whatis (*yytext);
 
  /* default EOF rule */
 <<EOF>>	return 1;
@@ -789,7 +796,7 @@ static void add_perldoc_to_whatis (const char *string, size_t length)
 static void mdoc_text (const char *string)
 {
 	add_word_to_whatis (string);
-	BEGIN (MAN_NAME);
+	BEGIN (MAN_DESC);
 }
 
 static void newline_found (void)
@@ -800,8 +807,10 @@ static void newline_found (void)
 	if (p_name != newname && *(p_name - 1) != ' ') {
 		if (fill_mode)
 			add_char_to_whatis (' ');
-		else
+		else {
 			add_char_to_whatis ((char) 0x11);
+			BEGIN (MAN_NAME);
+		}
 	}
 	waiting_for_quote = 0;
 }
