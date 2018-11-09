@@ -26,7 +26,7 @@ TESTS_ENVIRONMENT = PATH=$(abs_builddir)/..:$$PATH; export PATH; \
 # Each test must use the configure-detected shell, not necessarily /bin/sh.
 AM_LOG_FLAGS = $(SHELL)
 ALL_TESTS = \
-	lexgrog-1 \
+	lexgrog-1 lexgrog-2 \
 	man-1 man-2 man-3 man-4 man-5 man-6 man-7 man-8 man-9 man-10 man-11 \
 	manconv-1 manconv-2 manconv-3 \
 	mandb-1 mandb-2 mandb-3 mandb-4 mandb-5 mandb-6 mandb-7 \
