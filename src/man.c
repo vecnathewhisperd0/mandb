@@ -655,7 +655,7 @@ static void check_standard_fds (void)
 	}
 	mode = flags & O_ACCMODE;
 	if (mode != O_WRONLY && mode != O_RDWR) {
-		fprintf (stderr, "stdout not open for reading!\n");
+		fprintf (stderr, "stdout not open for writing!\n");
 		exit (FATAL);
 	}
 }
