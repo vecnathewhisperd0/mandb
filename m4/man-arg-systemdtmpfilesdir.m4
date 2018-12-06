@@ -1,11 +1,11 @@
-# man-arg-systemdtmpfilesdir.m4 serial 2
+# man-arg-systemdtmpfilesdir.m4 serial 3
 dnl MAN_ARG_SYSTEMDTMPFILESDIR
 dnl Add a --with-systemdtmpfilesdir option.
 
 AC_DEFUN([MAN_ARG_SYSTEMDTMPFILESDIR],
 [
 AC_ARG_WITH([systemdtmpfilesdir],
-[AS_HELP_STRING([--with-systemdtmpfilesdir=DIR], [Directory for systemd tmpfiles configuration])],
+[AS_HELP_STRING([--with-systemdtmpfilesdir=DIR], [Directory for systemd tmpfiles configuration (disable with "no")])],
 	[], [dnl
 	# The default is not prefix-sensitive, since systemd's prefix is not
 	# necessarily the same as man-db's.
@@ -14,4 +14,5 @@ AC_ARG_WITH([systemdtmpfilesdir],
 		      [], [with_systemdtmpfilesdir=/usr/lib/tmpfiles.d])
 	m4_popdef([AC_ARG_VAR])])
 AC_SUBST([systemdtmpfilesdir], [$with_systemdtmpfilesdir])
+AM_CONDITIONAL([INSTALL_SYSTEMD_TMPFILES], [test "$with_systemdtmpfilesdir" != "no"])
 ])

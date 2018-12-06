@@ -1,11 +1,11 @@
-# man-arg-systemdsystemunitdir.m4 serial 1
+# man-arg-systemdsystemunitdir.m4 serial 2
 dnl MAN_ARG_SYSTEMDSYSTEMUNITDIR
 dnl Add a --with-systemdsystemunitdir option.
 
 AC_DEFUN([MAN_ARG_SYSTEMDSYSTEMUNITDIR],
 [
 AC_ARG_WITH([systemdsystemunitdir],
-[AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [Directory for systemd service files])],
+[AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [Directory for systemd service files (disable with "no")])],
 	[], [dnl
 	# The default is not prefix-sensitive, since systemd's prefix is not
 	# necessarily the same as man-db's.
@@ -14,4 +14,5 @@ AC_ARG_WITH([systemdsystemunitdir],
 		      [], [with_systemdsystemunitdir=/lib/systemd/system])
 	m4_popdef([AC_ARG_VAR])])
 AC_SUBST([systemdsystemunitdir], [$with_systemdsystemunitdir])
+AM_CONDITIONAL([INSTALL_SYSTEMD_TIMER], [test "$with_systemdsystemunitdir" != "no"])
 ])
