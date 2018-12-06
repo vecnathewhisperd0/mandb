@@ -21,7 +21,8 @@ roff_version=`echo AC_PACKAGE_VERSION | sed 's/-/\\-/g'`
 AC_SUBST([roff_version])dnl
 
 # Explicitly check for pkg-config early on, since otherwise the conditional
-# call in MAN_ARG_SYSTEMDTMPFILESDIR is problematic.
+# calls in MAN_ARG_SYSTEMDTMPFILESDIR and MAN_ARG_SYSTEMDSYSTEMUNITDIR are
+# problematic.
 PKG_PROG_PKG_CONFIG
 
 # We have to be a bit naughty here and supply options.
@@ -39,6 +40,7 @@ MAN_ARG_AUTOMATIC_UPDATE
 MAN_ARG_CATS
 MAN_ARG_OVERRIDE_DIR
 MAN_ARG_SYSTEMDTMPFILESDIR
+MAN_ARG_SYSTEMDSYSTEMUNITDIR
 MAN_ARG_MANDIRS
 
 # Check $PATH for the following programs and append suitable options.
