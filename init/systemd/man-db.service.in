@@ -5,6 +5,7 @@ ConditionACPower=true
 
 [Service]
 Type=oneshot
+# Recover from deletion, per FHS.
 ExecStart=+/usr/bin/install -d -o man -g man -m 0755 /var/cache/man
 # Expunge old catman pages which have not been read in a week.
 ExecStart=/usr/bin/find /var/cache/man -type f -name *.gz -atime +6 -delete
