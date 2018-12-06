@@ -38,5 +38,7 @@ systemdsystemunit_DATA = man-db.timer
 nodist_systemdsystemunit_DATA = man-db.service
 
 man-db.service: man-db.service.in
-	sed -e "s,[@]bindir[@],$(bindir),g" $< > $@
+	sed -e "s,[@]bindir[@],$(bindir),g" \
+	    -e "s,[@]cache_top_owner[@],$(cache_top_owner),g" \
+	    $< > $@
 endif
