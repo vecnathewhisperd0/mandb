@@ -97,19 +97,19 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 		codes->from = XNMALLOC (2, char *);
 		codes->from[0] = xstrdup (source);
 		codes->from[1] = NULL;
-		name = appendstr (name, source, NULL);
+		name = appendstr (name, source, (void *) 0);
 	} else {
 		codes->from = XNMALLOC (3, char *);
 		codes->from[0] = xstrdup ("UTF-8");
 		codes->from[1] = xstrdup (source);
 		codes->from[2] = NULL;
-		name = appendstr (name, "UTF-8:", source, NULL);
+		name = appendstr (name, "UTF-8:", source, (void *) 0);
 	}
 	codes->to = xasprintf ("%s//IGNORE", target);
 	/* informational only; no shell quoting concerns */
-	name = appendstr (name, " -t ", codes->to, NULL);
+	name = appendstr (name, " -t ", codes->to, (void *) 0);
 	if (quiet >= 2)
-		name = appendstr (name, " -q", NULL);
+		name = appendstr (name, " -q", (void *) 0);
 
 	/* iconv_open may not work correctly in setuid processes; in GNU
 	 * libc, gconv modules may be linked against other gconv modules and
@@ -123,15 +123,15 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 		char **from_code;
 		char *sources = NULL;
 
-		cmd = pipecmd_new_args (MANCONV, "-f", NULL);
+		cmd = pipecmd_new_args (MANCONV, "-f", (void *) 0);
 		for (from_code = codes->from; *from_code; ++from_code) {
-			sources = appendstr (sources, *from_code, NULL);
+			sources = appendstr (sources, *from_code, (void *) 0);
 			if (*(from_code + 1))
-				sources = appendstr (sources, ":", NULL);
+				sources = appendstr (sources, ":", (void *) 0);
 		}
 		pipecmd_arg (cmd, sources);
 		free (sources);
-		pipecmd_args (cmd, "-t", codes->to, NULL);
+		pipecmd_args (cmd, "-t", codes->to, (void *) 0);
 		if (quiet >= 2)
 			pipecmd_arg (cmd, "-q");
 		pipecmd_pre_exec (cmd, manconv_pre_exec, sandbox_free,

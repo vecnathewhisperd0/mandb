@@ -313,7 +313,8 @@ static char *pathappend (char *oldpath, const char *appendage)
 			       oldpath, appendage,
 			       oldpath, *app_dedup ? ":" : "", app_dedup);
 		if (*app_dedup)
-			oldpath = appendstr (oldpath, ":", app_dedup, NULL);
+			oldpath = appendstr (oldpath, ":", app_dedup,
+					     (void *) 0);
 		free (app_dedup);
 		return oldpath;
 	} else
@@ -552,7 +553,8 @@ char *add_nls_manpaths (const char *manpathlist, const char *locales)
 		if (locale_manpath) {
 			if (manpath)
 				manpath = appendstr (manpath, ":",
-						     locale_manpath, NULL);
+						     locale_manpath,
+						     (void *) 0);
 			else
 				manpath = xstrdup (locale_manpath);
 			free (locale_manpath);
@@ -565,7 +567,7 @@ char *add_nls_manpaths (const char *manpathlist, const char *locales)
 	if (locale_manpath) {
 		if (manpath)
 			manpath = appendstr (manpath, ":",
-					     locale_manpath, NULL);
+					     locale_manpath, (void *) 0);
 		else
 			manpath = xstrdup (locale_manpath);
 		free (locale_manpath);
@@ -610,7 +612,7 @@ static char *add_system_manpath (const char *systems, const char *manpathlist)
 				} else
 					element = xstrdup (path);
 				newdir = appendstr (newdir, element, "/",
-						    one_system, NULL);
+						    one_system, (void *) 0);
 				free (element);
 
 				status = is_directory (newdir);
@@ -1176,7 +1178,7 @@ static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
 				if (!cwd)
 					error (FATAL, errno,
 							_("can't determine current directory"));
-				*mp = appendstr (cwd, "/", d, NULL);
+				*mp = appendstr (cwd, "/", d, (void *) 0);
 			} else
 				*mp = xstrdup (d);
 
@@ -1325,7 +1327,8 @@ char *get_catpath (const char *name, int cattype)
 				suffix = strrchr (name, '/');
 				if (!suffix)
 					return appendstr (catpath,
-							  name + manlen, NULL);
+							  name + manlen,
+							  (void *) 0);
 
 				while (suffix > name + manlen)
 					if (*--suffix == '/')
@@ -1336,14 +1339,16 @@ char *get_catpath (const char *name, int cattype)
 					++suffix;
 				infix = xstrndup (name + manlen,
 						  suffix - (name + manlen));
-				catpath = appendstr (catpath, infix, NULL);
+				catpath = appendstr (catpath, infix,
+						     (void *) 0);
 				free (infix);
 				if (STRNEQ (suffix, "man", 3)) {
 					suffix += 3;
 					catpath = appendstr (catpath, "cat",
-							     NULL);
+							     (void *) 0);
 				}
-				catpath = appendstr (catpath, suffix, NULL);
+				catpath = appendstr (catpath, suffix,
+						     (void *) 0);
 			  	return catpath;
 			}
 		}

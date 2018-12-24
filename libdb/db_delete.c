@@ -125,7 +125,8 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 			if (i != j)
 				multi_content = appendstr (multi_content,
 							   "\t", names[j],
-							   "\t", ext[j], NULL);
+							   "\t", ext[j],
+							   (void *) 0);
 
 		MYDBM_FREE_DPTR (cont);
 

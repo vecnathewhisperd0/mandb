@@ -363,7 +363,7 @@ char **look_for_file (const char *hier, const char *sec,
 		if (path)
 			*path = '\0';
 		path = appendstr (path, hier, cat ? "/cat" : "/man",
-				  sec, ".Z", NULL);
+				  sec, ".Z", (void *) 0);
 		pattern = make_pattern (name, sec, opts);
 
 		match_in_directory (path, pattern, opts, &gbuf, NULL);
@@ -375,7 +375,7 @@ char **look_for_file (const char *hier, const char *sec,
 		if (path)
 			*path = '\0';
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
-				  NULL);
+				  (void *) 0);
 		if (opts & LFF_REGEX)
 			pattern = xasprintf ("%s\\..*", name);
 		else
@@ -391,7 +391,7 @@ char **look_for_file (const char *hier, const char *sec,
 			*path = '\0';
 		/* TODO: This needs to be man/sec*, not just man/sec. */
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
-				  NULL);
+				  (void *) 0);
 		pattern = make_pattern (name, sec, opts);
 
 		match_in_directory (path, pattern, opts, &gbuf, NULL);
@@ -403,13 +403,13 @@ char **look_for_file (const char *hier, const char *sec,
 		if (path)
 			*path = '\0';
 		if (cat) {
-			path = appendstr (path, hier, "/cat", sec, NULL);
+			path = appendstr (path, hier, "/cat", sec, (void *) 0);
 			if (opts & LFF_REGEX)
 				pattern = xasprintf ("%s\\.0.*", name);
 			else
 				pattern = xasprintf ("%s.0*", name);
 		} else {
-			path = appendstr (path, hier, "/man", sec, NULL);
+			path = appendstr (path, hier, "/man", sec, (void *) 0);
 			pattern = make_pattern (name, sec, opts);
 		}
 		match_in_directory (path, pattern, opts, &gbuf, NULL);

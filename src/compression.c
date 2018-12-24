@@ -107,7 +107,7 @@ struct compression *comp_file (const char *filename)
 	for (comp = comp_list; comp->ext; comp++) {
 		struct stat buf;
 		
-		compfile = appendstr (compfile, comp->ext, NULL);
+		compfile = appendstr (compfile, comp->ext, (void *) 0);
 
 		if (stat (compfile, &buf) == 0) {
 			comp->stem = compfile;

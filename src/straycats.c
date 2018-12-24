@@ -99,8 +99,8 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 	order_files (catdir, names, names_len);
 
-	mandir = appendstr (mandir, "/", NULL);
-	catdir = appendstr (catdir, "/", NULL);
+	mandir = appendstr (mandir, "/", (void *) 0);
+	catdir = appendstr (catdir, "/", (void *) 0);
 	lenman = strlen (mandir);
 	lencat = strlen (catdir);
 
@@ -116,8 +116,8 @@ static int check_for_stray (MYDBM_FILE dbf)
 		memset (&info, 0, sizeof (struct mandata));
 
 		*(mandir + lenman) = *(catdir + lencat) = '\0';
-		mandir = appendstr (mandir, names[i], NULL);
-		catdir = appendstr (catdir, names[i], NULL);
+		mandir = appendstr (mandir, names[i], (void *) 0);
+		catdir = appendstr (catdir, names[i], (void *) 0);
 
 		ext = strrchr (mandir, '.');
 		if (!ext) {
@@ -318,8 +318,8 @@ static int open_catdir (MYDBM_FILE dbf)
 	if (!quiet)
 		printf (_("Checking for stray cats under %s...\n"), catdir);
 
-	catdir = appendstr (catdir, "/", NULL);
-	mandir = appendstr (mandir, "/", NULL);
+	catdir = appendstr (catdir, "/", (void *) 0);
+	mandir = appendstr (mandir, "/", (void *) 0);
 	catlen = strlen (catdir);
 	manlen = strlen (mandir);
 
@@ -330,8 +330,8 @@ static int open_catdir (MYDBM_FILE dbf)
 		if (strncmp (catlist->d_name, "cat", 3) != 0)
 			continue;
 
-		catdir = appendstr (catdir, catlist->d_name, NULL);
-		mandir = appendstr (mandir, catlist->d_name, NULL);
+		catdir = appendstr (catdir, catlist->d_name, (void *) 0);
+		mandir = appendstr (mandir, catlist->d_name, (void *) 0);
 
 		*(t1 = mandir + manlen) = 'm';
 		*(t1 + 2) = 'n';
@@ -376,8 +376,8 @@ int straycats (const char *manpath)
 		
 	if (catpath && strcmp (catpath, manpath) != 0) {
 		*mandir = *catdir = '\0';
-		mandir = appendstr (mandir, manpath, NULL);
-		catdir = appendstr (catdir, catpath, NULL);
+		mandir = appendstr (mandir, manpath, (void *) 0);
+		catdir = appendstr (catdir, catpath, (void *) 0);
 		strays += open_catdir (dbf);
 	}
 

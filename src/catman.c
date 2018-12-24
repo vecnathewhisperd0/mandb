@@ -188,7 +188,7 @@ static void catman (pipecmd *cmd)
 		return;
 	}
 
-	p = pipeline_new_commands (cmd, NULL);
+	p = pipeline_new_commands (cmd, (void *) 0);
 	status = pipeline_run (p);
 	if (status)
 		error (CHILD_FAIL, 0,
@@ -246,13 +246,13 @@ static int parse_for_sec (const char *manpath, const char *section)
 	/* As we supply a NULL environment to save precious execve() space,
 	   we must also supply a locale if necessary */
 	if (locale) {
-		pipecmd_args (basecmd, "-L", locale, NULL);
+		pipecmd_args (basecmd, "-L", locale, (void *) 0);
 		initial_bit = sizeof "-L" + strlen (locale) + 1;
 	} else
 		initial_bit = 0;
 
-	pipecmd_args (basecmd, "-caM", manpath, NULL);	/* manpath */
-	pipecmd_args (basecmd, "-S", section, NULL);	/* section */
+	pipecmd_args (basecmd, "-caM", manpath, (void *) 0);	/* manpath */
+	pipecmd_args (basecmd, "-S", section, (void *) 0);	/* section */
 
 	initial_bit += sizeof MAN + sizeof "-caM" +
 		       strlen (manpath) + strlen (section) + 2;
@@ -414,7 +414,7 @@ int main (int argc, char *argv[])
 		
 		for (sp = sections; *sp; sp++) {
 			*(catpath + len) = '\0';
-			catpath = appendstr (catpath, "/cat", *sp, NULL);
+			catpath = appendstr (catpath, "/cat", *sp, (void *) 0);
 			if (is_directory (catpath) != 1)
 				continue;
 			if (check_access (catpath))

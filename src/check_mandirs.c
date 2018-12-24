@@ -350,7 +350,7 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 	order_files (infile, names, names_len);
 
 	for (i = 0; i < names_len; ++i) {
-		manpage = appendstr (manpage, names[i], NULL);
+		manpage = appendstr (manpage, names[i], (void *) 0);
 		test_manfile (dbf, manpage, path);
 		*(manpage + len) = '\0';
 		free (names[i]);
