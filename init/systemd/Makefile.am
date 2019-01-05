@@ -27,18 +27,20 @@ CLEANFILES = \
 	man-db.service
 
 if INSTALL_SYSTEMD_TMPFILES
-nodist_systemdtmpfiles_DATA = man-db.conf
+systemdtmpfiles_DATA = man-db.conf
 
 man-db.conf: man-db.conf.in
 	sed -e "s,[@]cache_top_owner[@],$(cache_top_owner),g" $< > $@
 endif
 
 if INSTALL_SYSTEMD_TIMER
-systemdsystemunit_DATA = man-db.timer
-nodist_systemdsystemunit_DATA = man-db.service
+dist_systemdsystemunit_DATA = man-db.timer
+systemdsystemunit_DATA = man-db.service
 
 man-db.service: man-db.service.in
 	sed -e "s,[@]bindir[@],$(bindir),g" \
 	    -e "s,[@]cache_top_owner[@],$(cache_top_owner),g" \
 	    $< > $@
+else
+EXTRA_DIST += man-db.timer
 endif
