@@ -529,6 +529,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	 * /dev/log.
 	 */
 	if (search_ld_preload ("libesets_pac.so") ||
+	    search_ld_preload ("libscep_pac.so") ||
 	    search_ld_preload ("libsnoopy.so")) {
 		SC_ALLOW ("connect");
 		SC_ALLOW ("recvmsg");
@@ -537,7 +538,8 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 		SC_ALLOW_ARG_1 ("socket", SCMP_A0 (SCMP_CMP_EQ, AF_UNIX));
 	}
 	/* ESET sends messages to a System V message queue. */
-	if (search_ld_preload ("libesets_pac.so")) {
+	if (search_ld_preload ("libesets_pac.so") ||
+	    search_ld_preload ("libscep_pac.so")) {
 		SC_ALLOW_ARG_1 ("msgget", SCMP_A1 (SCMP_CMP_EQ, 0));
 		SC_ALLOW ("msgsnd");
 	}
