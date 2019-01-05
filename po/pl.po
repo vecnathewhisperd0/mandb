@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.7.6.1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2018-07-18 13:22+0100\n"
+"POT-Creation-Date: 2019-01-05 09:27+0000\n"
 "PO-Revision-Date: 2016-12-21 20:46+0100\n"
 "Last-Translator: Robert Luberda <robert@debian.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -30,7 +30,7 @@ msgstr "nie można ustawić efektywnego identyfikatora użytkownika"
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "użytkownik \"%s\" nie istnieje"
 
-#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1739
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1742
 #, c-format
 msgid "can't chown %s"
 msgstr "nie można zmienić właściciela %s"
@@ -73,7 +73,7 @@ msgstr[2] "tylko %d pól w zmiennej content"
 msgid "bad fetch on multi key %s"
 msgstr "błąd pobierania klucza wielowymiarowego %s"
 
-#: libdb/db_lookup.c:416 src/whatis.c:760
+#: libdb/db_lookup.c:416 src/whatis.c:761
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr ""
@@ -198,7 +198,7 @@ msgstr "ostrzeżenie: %s: ignorowanie pustego pliku"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "ostrzeżenie: %s: przetwarzanie whatis %s(%s) się nie powiodło"
 
-#: src/check_mandirs.c:327 src/check_mandirs.c:506 src/mandb.c:876
+#: src/check_mandirs.c:327 src/check_mandirs.c:506 src/mandb.c:879
 #: src/straycats.c:80 src/straycats.c:314 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -209,7 +209,7 @@ msgstr "nie można przeszukać katalogu %s"
 msgid "warning: cannot create catdir %s"
 msgstr "ostrzeżenie: błąd tworzenia katalogu preformatowanych stron %s"
 
-#: src/check_mandirs.c:463 src/man.c:1751 src/mandb.c:229
+#: src/check_mandirs.c:463 src/man.c:1754 src/mandb.c:229
 #, c-format
 msgid "can't chmod %s"
 msgstr "nie można zmienić praw dostępu %s"
@@ -276,7 +276,7 @@ msgstr "interpretuje każde nazwę strony jako wyr. regularne"
 msgid "the page name contains wildcards"
 msgstr "nazwa strony zawiera znaki dopasowywania"
 
-#: src/lexgrog.l:668
+#: src/lexgrog.l:691
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
@@ -286,7 +286,7 @@ msgstr[1] ""
 msgstr[2] ""
 "ostrzeżenie: whatis dla argumentu %s przekracza %d bajtów, obcinanie."
 
-#: src/lexgrog.l:819 src/man.c:2310 src/man.c:2392 src/man.c:2490
+#: src/lexgrog.l:844 src/man.c:2323 src/man.c:2405 src/man.c:2503
 #: src/manconv_main.c:167 src/straycats.c:224 src/ult_src.c:345
 #: src/ult_src.c:359 src/zsoelim.l:505
 #, c-format
@@ -554,49 +554,49 @@ msgstr ""
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ignorowanie nieznanego preprocesora \"%c\""
 
-#: src/man.c:1762 src/mandb.c:220
+#: src/man.c:1765 src/mandb.c:220
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "nie można zmienić nazwy %s na %s"
 
-#: src/man.c:1779
+#: src/man.c:1782
 #, c-format
 msgid "can't set times on %s"
 msgstr "nie można ustawić czasów na %s"
 
-#: src/man.c:1788
+#: src/man.c:1791 src/man.c:1828
 #, c-format
 msgid "can't unlink %s"
 msgstr "nie można usunąć %s"
 
-#: src/man.c:1847
+#: src/man.c:1858
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "nie można utworzyć tymczasowego pliku cat dla %s"
 
-#: src/man.c:1956
+#: src/man.c:1968
 #, c-format
 msgid "can't create temporary directory"
 msgstr "nie można utworzyć katalogu tymczasowego"
 
-#: src/man.c:1967
+#: src/man.c:1979
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "nie można otworzyć pliku tymczasowego %s"
 
-#: src/man.c:1997 src/man.c:2026
+#: src/man.c:2009 src/man.c:2038
 #, c-format
 msgid "can't remove directory %s"
 msgstr "nie można usunąć katalogu %s"
 
-#: src/man.c:2155
+#: src/man.c:2167
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- następna: %s [ przeglądaj (return) | pomiń (Ctrl-D) | zakończ (Ctrl-"
 "C) ]\n"
 
-#: src/man.c:2435
+#: src/man.c:2448
 #, c-format
 msgid ""
 "\n"
@@ -605,28 +605,28 @@ msgstr ""
 "\n"
 "nie można zapisać do %s w trybie catman"
 
-#: src/man.c:2516
+#: src/man.c:2529
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Nie można skonwertować %s do nazwy preformatowanej strony podręcznika"
 
-#: src/man.c:3240
+#: src/man.c:3253
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: poleganie na odnośnikach whatis jest niezalecane\n"
 
-#: src/man.c:3388 src/man.c:4236
+#: src/man.c:3401 src/man.c:4250
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "polecenie mandb zakończyło się błędem %d"
 
-#: src/man.c:3593
+#: src/man.c:3606
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr ""
 "błąd wewnętrzny: typ kandydata %d poza zakresem dopuszczalnych wartości"
 
-#: src/man.c:4177
+#: src/man.c:4191
 msgid " Manual page "
 msgstr " Strona podręcznika ekranowego "
 
@@ -729,17 +729,17 @@ msgstr "nie można czytać z %s"
 msgid "Processing manual pages under %s...\n"
 msgstr "Przetwarzanie stron podręcznika w %s...\n"
 
-#: src/mandb.c:664 src/mandb.c:690
+#: src/mandb.c:667 src/mandb.c:693
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Usuwanie przestarzałego katalogu stron preformatowanych %s...\n"
 
-#: src/mandb.c:841
+#: src/mandb.c:844
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "ostrzeżenie: w %s brak dyrektyw MANDB_MAP, używanie ścieżki manpath"
 
-#: src/mandb.c:913
+#: src/mandb.c:916
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -747,7 +747,7 @@ msgstr[0] "%d podkatalog man zawierał nowsze strony podręcznika.\n"
 msgstr[1] "%d podkatalogi man zawierały nowsze strony podręcznika.\n"
 msgstr[2] "%d podkatalogów man zawierało nowsze strony podręcznika.\n"
 
-#: src/mandb.c:918
+#: src/mandb.c:921
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
@@ -755,7 +755,7 @@ msgstr[0] "Dodano %d stronę podręcznika.\n"
 msgstr[1] "Dodano %d strony podręcznika.\n"
 msgstr[2] "Dodano %d stron podręcznika.\n"
 
-#: src/mandb.c:922
+#: src/mandb.c:925
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -763,7 +763,7 @@ msgstr[0] "Dodano %d zabłąkaną preformatowaną stronę podręcznika.\n"
 msgstr[1] "Dodano %d zabłąkane preformatowane strony podręcznika.\n"
 msgstr[2] "Dodano %d zabłąkanych preformatowanych stron podręcznika.\n"
 
-#: src/mandb.c:927
+#: src/mandb.c:930
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
@@ -771,82 +771,82 @@ msgstr[0] "Usunięto %d stary wpis z bazy danych.\n"
 msgstr[1] "Usunięto %d stare wpisy z bazy danych.\n"
 msgstr[2] "Usunięto %d starych wpisów z bazy danych.\n"
 
-#: src/mandb.c:945
+#: src/mandb.c:948
 #, c-format
 msgid "No databases created."
 msgstr "Nie utworzono żadnej bazy danych."
 
-#: src/manp.c:326
+#: src/manp.c:327
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "plik konfiguracyjny manpath %s jest pozbawiony sensu"
 
-#: src/manp.c:332
+#: src/manp.c:333
 #, c-format
 msgid "warning: %s"
 msgstr "ostrzeżenie: %s"
 
-#: src/manp.c:338
+#: src/manp.c:339
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "ostrzeżenie: %s nie jest katalogiem"
 
-#: src/manp.c:343
+#: src/manp.c:344
 #, c-format
 msgid "manpath list too long"
 msgstr "zbyt długa lista ścieżek poszukiwań stron podręcznika"
 
-#: src/manp.c:673
+#: src/manp.c:675
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "ostrzeżenie: nie ustawiono zmiennej $PATH"
 
-#: src/manp.c:680
+#: src/manp.c:682
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "ostrzeżenie: zmienna $PATH jest pusta"
 
-#: src/manp.c:708
+#: src/manp.c:710
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "ostrzeżenie: zmienna $MANPATH jest ustawiona, dodawanie %s na początku"
 
-#: src/manp.c:719
+#: src/manp.c:721
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "ostrzeżenie: zmienna $MANPATH jest ustawiona, dodawania %s na końcu"
 
-#: src/manp.c:731
+#: src/manp.c:733
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "ostrzeżenie: zmienna $MANPATH jest ustawiona, wstawianie %s"
 
-#: src/manp.c:745
+#: src/manp.c:747
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "ostrzeżenie: zmienna $MANPATH jest ustawiona, %s zignorowane"
 
-#: src/manp.c:807
+#: src/manp.c:809
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "nie można przetworzyć listy katalogów \"%s\""
 
-#: src/manp.c:870
+#: src/manp.c:872
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "nie można otworzyć pliku konfiguracyjnego %s"
 
-#: src/manp.c:909
+#: src/manp.c:911
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "ostrzeżenie: obowiązkowy katalog %s nie istnieje"
 
-#: src/manp.c:1178
+#: src/manp.c:1180
 #, c-format
 msgid "can't determine current directory"
 msgstr "nie można określić katalogu bieżącego"
 
-#: src/manp.c:1378
+#: src/manp.c:1383
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "ostrzeżenie: %s nie zaczyna się od %s"
@@ -944,7 +944,7 @@ msgstr "ostrzeżenie: %s zawiera pętlę wskaźników"
 msgid "(unknown subject)"
 msgstr "(temat nieznany)"
 
-#: src/whatis.c:887
+#: src/whatis.c:890
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: nic odpowiedniego.\n"

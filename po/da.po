@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.7.6.1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2018-07-18 13:22+0100\n"
+"POT-Creation-Date: 2019-01-05 09:27+0000\n"
 "PO-Revision-Date: 2016-12-12 23:42+0100\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -41,7 +41,7 @@ msgstr "kan ikke sætte effektivt uid"
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "en manualbruger »%s« som er setuid findes ikke"
 
-#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1739
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1742
 #, c-format
 msgid "can't chown %s"
 msgstr "kan ikke skifte ejer på %s"
@@ -83,7 +83,7 @@ msgstr[1] "kun %d felter i indhold"
 msgid "bad fetch on multi key %s"
 msgstr "fejlagtig hentning på multinøgle %s"
 
-#: libdb/db_lookup.c:416 src/whatis.c:760
+#: libdb/db_lookup.c:416 src/whatis.c:761
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "Databasen %s er beskadiget; genopbyg med mandb --create"
@@ -204,7 +204,7 @@ msgstr "advarsel: %s: ignorerer tom fil"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "advarsel: %s: whatis-tolkning for %s(%s) mislykkedes"
 
-#: src/check_mandirs.c:327 src/check_mandirs.c:506 src/mandb.c:876
+#: src/check_mandirs.c:327 src/check_mandirs.c:506 src/mandb.c:879
 #: src/straycats.c:80 src/straycats.c:314 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -215,7 +215,7 @@ msgstr "kan ikke søge i kataloget %s"
 msgid "warning: cannot create catdir %s"
 msgstr "advarsel: kan ikke oprette katalogmappe %s"
 
-#: src/check_mandirs.c:463 src/man.c:1751 src/mandb.c:229
+#: src/check_mandirs.c:463 src/man.c:1754 src/mandb.c:229
 #, c-format
 msgid "can't chmod %s"
 msgstr "kan ikke ændre rettigheder på %s"
@@ -286,14 +286,14 @@ msgstr "fortolk sidenavn som et regulært udtryk"
 msgid "the page name contains wildcards"
 msgstr "sidenavnet indeholder jokertegn"
 
-#: src/lexgrog.l:668
+#: src/lexgrog.l:691
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "advarsel: whatis for %s overskrider %d byte, forkorter."
 msgstr[1] "advarsel: whatis for %s overskrider %d byte, forkorter."
 
-#: src/lexgrog.l:819 src/man.c:2310 src/man.c:2392 src/man.c:2490
+#: src/lexgrog.l:844 src/man.c:2323 src/man.c:2405 src/man.c:2503
 #: src/manconv_main.c:167 src/straycats.c:224 src/ult_src.c:345
 #: src/ult_src.c:359 src/zsoelim.l:505
 #, c-format
@@ -563,48 +563,48 @@ msgstr "Se »%s« for hjælp når manualsider ikke er tilgængelige.\n"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "ignorerer ukendt forbehandler »%c«"
 
-#: src/man.c:1762 src/mandb.c:220
+#: src/man.c:1765 src/mandb.c:220
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "kan ikke omdøbe %s til %s"
 
-#: src/man.c:1779
+#: src/man.c:1782
 #, c-format
 msgid "can't set times on %s"
 msgstr "kan ikke sætte tider på %s"
 
-#: src/man.c:1788
+#: src/man.c:1791 src/man.c:1828
 #, c-format
 msgid "can't unlink %s"
 msgstr "kan ikke aflænke %s"
 
-#: src/man.c:1847
+#: src/man.c:1858
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "kan ikke oprette midlertidigt katalog for %s"
 
-#: src/man.c:1956
+#: src/man.c:1968
 #, c-format
 msgid "can't create temporary directory"
 msgstr "kan ikke oprette midlertidig mappe"
 
-#: src/man.c:1967
+#: src/man.c:1979
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "kan ikke åbne midlertidig fil %s"
 
-#: src/man.c:1997 src/man.c:2026
+#: src/man.c:2009 src/man.c:2038
 #, c-format
 msgid "can't remove directory %s"
 msgstr "kan ikke fjerne kataloget %s"
 
-#: src/man.c:2155
+#: src/man.c:2167
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- næste: %s [ vis (retur) | overspring (Ctrl-D) | afslut (Ctrl-C) ]\n"
 
-#: src/man.c:2435
+#: src/man.c:2448
 #, c-format
 msgid ""
 "\n"
@@ -613,27 +613,27 @@ msgstr ""
 "\n"
 "kan ikke skrive til %s i tilstanden katalogmanual"
 
-#: src/man.c:2516
+#: src/man.c:2529
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Kan ikke konvertere %s til katalognavn"
 
-#: src/man.c:3240
+#: src/man.c:3253
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: at stole på whatis-referencer er forældet\n"
 
-#: src/man.c:3388 src/man.c:4236
+#: src/man.c:3401 src/man.c:4250
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb-kommandoen mislykkedes med slutstatus %d"
 
-#: src/man.c:3593
+#: src/man.c:3606
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "intern fejl: kandidattype %d uden for gyldigt interval"
 
-#: src/man.c:4177
+#: src/man.c:4191
 msgid " Manual page "
 msgstr " Manualside "
 
@@ -736,120 +736,120 @@ msgstr "kan ikke læse fra %s"
 msgid "Processing manual pages under %s...\n"
 msgstr "Bearbejder manualsider under %s...\n"
 
-#: src/mandb.c:664 src/mandb.c:690
+#: src/mandb.c:667 src/mandb.c:693
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Fjerner forældet katalogside %s...\n"
 
-#: src/mandb.c:841
+#: src/mandb.c:844
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "advarsel: intet MANDB_MAP-direktiv i %s, bruger din manualsøgesti"
 
-#: src/mandb.c:913
+#: src/mandb.c:916
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d manualunderkatalog indeholdt nyere manualsider.\n"
 msgstr[1] "%d manualunderkataloger indeholdt nyere manualsider.\n"
 
-#: src/mandb.c:918
+#: src/mandb.c:921
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d manualside blev tilføjet.\n"
 msgstr[1] "%d manualsider blev tilføjet.\n"
 
-#: src/mandb.c:922
+#: src/mandb.c:925
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d vildfaren katalogside blev tilføjet.\n"
 msgstr[1] "%d vildfarne katalogsider blev tilføjet.\n"
 
-#: src/mandb.c:927
+#: src/mandb.c:930
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d gammel databaseindgang blev tømt.\n"
 msgstr[1] "%d gamle databaseindgange blev tømt.\n"
 
-#: src/mandb.c:945
+#: src/mandb.c:948
 #, c-format
 msgid "No databases created."
 msgstr "Ingen databaser er oprettet."
 
-#: src/manp.c:326
+#: src/manp.c:327
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "kan ikke forstå konfigurationsfilen for manualsøgesti %s"
 
-#: src/manp.c:332
+#: src/manp.c:333
 #, c-format
 msgid "warning: %s"
 msgstr "advarsel: %s"
 
-#: src/manp.c:338
+#: src/manp.c:339
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "advarsel: %s er ikke et katalog"
 
-#: src/manp.c:343
+#: src/manp.c:344
 #, c-format
 msgid "manpath list too long"
 msgstr "manualsøgesti-liste er for lang"
 
-#: src/manp.c:673
+#: src/manp.c:675
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "advarsel: $PATH er ikke sat"
 
-#: src/manp.c:680
+#: src/manp.c:682
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "advarsel: tom $PATH"
 
-#: src/manp.c:708
+#: src/manp.c:710
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "advarsel: $MANPATH er sat, tilføjer %s før"
 
-#: src/manp.c:719
+#: src/manp.c:721
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "advarsel: $MANPATH er sat, tilføjer %s efter"
 
-#: src/manp.c:731
+#: src/manp.c:733
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "advarsel: $MANPATH er sat, indsætter %s"
 
-#: src/manp.c:745
+#: src/manp.c:747
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "advarsel: $MANPATH er sat, ignorerer %s"
 
-#: src/manp.c:807
+#: src/manp.c:809
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "kan ikke tolke mappeliste »%s«"
 
-#: src/manp.c:870
+#: src/manp.c:872
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "kan ikke åbne konfigurationsfilen for manualsøgesti %s"
 
-#: src/manp.c:909
+#: src/manp.c:911
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "advarsel: det obligatoriske katalog %s findes ikke"
 
-#: src/manp.c:1178
+#: src/manp.c:1180
 #, c-format
 msgid "can't determine current directory"
 msgstr "kan ikke bestemme aktuelt katalog"
 
-#: src/manp.c:1378
+#: src/manp.c:1383
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "advarsel: %s begynder ikke med %s"
@@ -947,7 +947,7 @@ msgstr "advarsel: %s indeholder en pegerløkke"
 msgid "(unknown subject)"
 msgstr "(ukendt emne)"
 
-#: src/whatis.c:887
+#: src/whatis.c:890
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ingenting egnet.\n"

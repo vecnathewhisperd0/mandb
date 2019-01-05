@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-2.6.5\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2018-07-18 13:22+0100\n"
+"POT-Creation-Date: 2019-01-05 09:27+0000\n"
 "PO-Revision-Date: 2013-06-27 19:41+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -28,7 +28,7 @@ msgstr "実効 UID を設定できません"
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "setuid された man ユーザー \"%s\" は存在しません"
 
-#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1739
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1742
 #, c-format
 msgid "can't chown %s"
 msgstr "%s の所有者を変更 (chown) できません"
@@ -69,7 +69,7 @@ msgstr[0] "中身が %d フィールドしかありません"
 msgid "bad fetch on multi key %s"
 msgstr "複合キー %s は不正な呼び出しです"
 
-#: libdb/db_lookup.c:416 src/whatis.c:760
+#: libdb/db_lookup.c:416 src/whatis.c:761
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr ""
@@ -193,7 +193,7 @@ msgstr "警告: %s: 空ファイルを無視しています"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "警告: %s: whatis が %s(%s) の解釈に失敗しました"
 
-#: src/check_mandirs.c:327 src/check_mandirs.c:506 src/mandb.c:876
+#: src/check_mandirs.c:327 src/check_mandirs.c:506 src/mandb.c:879
 #: src/straycats.c:80 src/straycats.c:314 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -204,7 +204,7 @@ msgstr "ディレクトリー %s を検索できません"
 msgid "warning: cannot create catdir %s"
 msgstr "警告: cat ディレクトリー %s を作成できません"
 
-#: src/check_mandirs.c:463 src/man.c:1751 src/mandb.c:229
+#: src/check_mandirs.c:463 src/man.c:1754 src/mandb.c:229
 #, c-format
 msgid "can't chmod %s"
 msgstr "%s の許可属性を変更 (chmod) できません"
@@ -271,13 +271,13 @@ msgstr "ページ名を正規表現として解釈する"
 msgid "the page name contains wildcards"
 msgstr "ページ名をワイルドカードとして解釈する"
 
-#: src/lexgrog.l:668
+#: src/lexgrog.l:691
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "警告: %s 用の whatis が %d バイトを超えています。切り詰めます。"
 
-#: src/lexgrog.l:819 src/man.c:2310 src/man.c:2392 src/man.c:2490
+#: src/lexgrog.l:844 src/man.c:2323 src/man.c:2405 src/man.c:2503
 #: src/manconv_main.c:167 src/straycats.c:224 src/ult_src.c:345
 #: src/ult_src.c:359 src/zsoelim.l:505
 #, c-format
@@ -543,48 +543,48 @@ msgstr ""
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "不明な前処理系 `%c' を無視しています"
 
-#: src/man.c:1762 src/mandb.c:220
+#: src/man.c:1765 src/mandb.c:220
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s の名前を %s に変更できません"
 
-#: src/man.c:1779
+#: src/man.c:1782
 #, c-format
 msgid "can't set times on %s"
 msgstr "%s の時刻を設定できません"
 
-#: src/man.c:1788
+#: src/man.c:1791 src/man.c:1828
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s を削除(unlink)できません"
 
-#: src/man.c:1847
+#: src/man.c:1858
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "%s 用の一時的な整形済みファイルを作成できません"
 
-#: src/man.c:1956
+#: src/man.c:1968
 #, c-format
 msgid "can't create temporary directory"
 msgstr "一時ディレクトリを作成できません"
 
-#: src/man.c:1967
+#: src/man.c:1979
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "一時ファイル %s を開けません"
 
-#: src/man.c:1997 src/man.c:2026
+#: src/man.c:2009 src/man.c:2038
 #, c-format
 msgid "can't remove directory %s"
 msgstr "ディレクトリ %s を削除できません"
 
-#: src/man.c:2155
+#: src/man.c:2167
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- 次は: %s [ 閲覧 (return) | スキップ (Ctrl-D) | 終了 (Ctrl-C) ]\n"
 
-#: src/man.c:2435
+#: src/man.c:2448
 #, c-format
 msgid ""
 "\n"
@@ -593,27 +593,27 @@ msgstr ""
 "\n"
 "catman モードで %s に書き込みできません"
 
-#: src/man.c:2516
+#: src/man.c:2529
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "%s を整形済みファイル名に変換できません"
 
-#: src/man.c:3240
+#: src/man.c:3253
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: whatis の参照に頼ることは勧められなくなっています\n"
 
-#: src/man.c:3388 src/man.c:4236
+#: src/man.c:3401 src/man.c:4250
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb コマンドが終了ステータス %d で失敗しました"
 
-#: src/man.c:3593
+#: src/man.c:3606
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "内部エラー: 候補の種類 %d は範囲内にありません"
 
-#: src/man.c:4177
+#: src/man.c:4191
 msgid " Manual page "
 msgstr " マニュアルページ "
 
@@ -718,18 +718,18 @@ msgstr "%s から読み込めません"
 msgid "Processing manual pages under %s...\n"
 msgstr "%s 配下のマニュアルページを処理しています...\n"
 
-#: src/mandb.c:664 src/mandb.c:690
+#: src/mandb.c:667 src/mandb.c:693
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "古い cat ディレクトリ %s を削除しています...\n"
 
-#: src/mandb.c:841
+#: src/mandb.c:844
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "警告: %s に MANDB_MAP の指定はありません。あなたの manpath を使用します"
 
-#: src/mandb.c:913
+#: src/mandb.c:916
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -737,100 +737,100 @@ msgstr[0] ""
 "%d 個のマニュアルページ子ディレクトリに新しいマニュアルページが含まれていまし"
 "た。\n"
 
-#: src/mandb.c:918
+#: src/mandb.c:921
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d 個のマニュアルページが追加されました。\n"
 
-#: src/mandb.c:922
+#: src/mandb.c:925
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "roff のない cat ファイルが %d 個追加されました。\n"
 
-#: src/mandb.c:927
+#: src/mandb.c:930
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d 個の古いデータベース要素が除去されました。\n"
 
-#: src/mandb.c:945
+#: src/mandb.c:948
 #, c-format
 msgid "No databases created."
 msgstr "データベースは作成されませんでした。"
 
-#: src/manp.c:326
+#: src/manp.c:327
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "manpath 設定ファイル %s の内容を解釈できません"
 
-#: src/manp.c:332
+#: src/manp.c:333
 #, c-format
 msgid "warning: %s"
 msgstr "警告: %s"
 
-#: src/manp.c:338
+#: src/manp.c:339
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "警告: %s はディレクトリではありません"
 
-#: src/manp.c:343
+#: src/manp.c:344
 #, c-format
 msgid "manpath list too long"
 msgstr "manpath リストが長すぎます"
 
-#: src/manp.c:673
+#: src/manp.c:675
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "警告: $PATH が設定されていません"
 
-#: src/manp.c:680
+#: src/manp.c:682
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "警告: $PATH が定義されていません"
 
-#: src/manp.c:708
+#: src/manp.c:710
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定に追加します"
 
-#: src/manp.c:719
+#: src/manp.c:721
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定を追加します"
 
-#: src/manp.c:731
+#: src/manp.c:733
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "警告: $MANPATH が設定されています。%s の設定を挿入します"
 
-#: src/manp.c:745
+#: src/manp.c:747
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "警告: $MANPATH が設定されています。%s を無視します"
 
-#: src/manp.c:807
+#: src/manp.c:809
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "ディレクトリリスト `%s' を解析できません"
 
-#: src/manp.c:870
+#: src/manp.c:872
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "manpath 設定ファイル %s をオープンできません"
 
-#: src/manp.c:909
+#: src/manp.c:911
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "警告: 必要なディレクトリ %s が存在しません"
 
-#: src/manp.c:1178
+#: src/manp.c:1180
 #, c-format
 msgid "can't determine current directory"
 msgstr "カレントディレクトリを決定できません"
 
-#: src/manp.c:1378
+#: src/manp.c:1383
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "警告: %s は %s で始まっていません"
@@ -927,7 +927,7 @@ msgstr "警告: %s にはループしているポインタが含まれていま�
 msgid "(unknown subject)"
 msgstr "(不明な題名です)"
 
-#: src/whatis.c:887
+#: src/whatis.c:890
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: 適切なものはありませんでした。\n"

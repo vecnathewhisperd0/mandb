@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.8.0-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2018-07-18 13:22+0100\n"
+"POT-Creation-Date: 2019-01-05 09:27+0000\n"
 "PO-Revision-Date: 2018-01-23 05:37+0300\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@d07.ru>\n"
@@ -30,7 +30,7 @@ msgstr "не удалось установить эффективный uid"
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "setuid man пользователь \"%s\" не существует"
 
-#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1739
+#: lib/xchown.c:38 lib/xchown.c:47 src/man.c:1742
 #, c-format
 msgid "can't chown %s"
 msgstr "не удалось выполнить функцию chown %s"
@@ -73,7 +73,7 @@ msgstr[2] "в содержимом только %d полей"
 msgid "bad fetch on multi key %s"
 msgstr "неверная выборка по многомерному ключу %s"
 
-#: libdb/db_lookup.c:416 src/whatis.c:760
+#: libdb/db_lookup.c:416 src/whatis.c:761
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "База данных %s повреждена; пересборка командой mandb --create"
@@ -195,7 +195,7 @@ msgstr "предупреждение: %s: игнорируется пустой 
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "предупреждение: %s: whatis анализ %s(%s) не удался"
 
-#: src/check_mandirs.c:327 src/check_mandirs.c:506 src/mandb.c:876
+#: src/check_mandirs.c:327 src/check_mandirs.c:506 src/mandb.c:879
 #: src/straycats.c:80 src/straycats.c:314 src/ult_src.c:80
 #, c-format
 msgid "can't search directory %s"
@@ -206,7 +206,7 @@ msgstr "не удалось найти каталог %s"
 msgid "warning: cannot create catdir %s"
 msgstr "предупреждение: не удалось создать cat каталог %s"
 
-#: src/check_mandirs.c:463 src/man.c:1751 src/mandb.c:229
+#: src/check_mandirs.c:463 src/man.c:1754 src/mandb.c:229
 #, c-format
 msgid "can't chmod %s"
 msgstr "не удалось выполнить функцию chmod %s"
@@ -273,7 +273,7 @@ msgstr "считать имя страницы регулярным выраже
 msgid "the page name contains wildcards"
 msgstr "имя страницы содержит групповые символы"
 
-#: src/lexgrog.l:668
+#: src/lexgrog.l:691
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
@@ -284,7 +284,7 @@ msgstr[1] ""
 msgstr[2] ""
 "предупреждение: результат whatis для %s превысил %d байт, обрезается."
 
-#: src/lexgrog.l:819 src/man.c:2310 src/man.c:2392 src/man.c:2490
+#: src/lexgrog.l:844 src/man.c:2323 src/man.c:2405 src/man.c:2503
 #: src/manconv_main.c:167 src/straycats.c:224 src/ult_src.c:345
 #: src/ult_src.c:359 src/zsoelim.l:505
 #, c-format
@@ -548,48 +548,48 @@ msgstr "Смотрите '%s' в справке, если недоступны �
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "игнорирование неизвестного препроцессора `%c'"
 
-#: src/man.c:1762 src/mandb.c:220
+#: src/man.c:1765 src/mandb.c:220
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "не удалось переименовать %s в %s"
 
-#: src/man.c:1779
+#: src/man.c:1782
 #, c-format
 msgid "can't set times on %s"
 msgstr "не удалось установить время доступа для %s"
 
-#: src/man.c:1788
+#: src/man.c:1791 src/man.c:1828
 #, c-format
 msgid "can't unlink %s"
 msgstr "не удалось выполнить функцию unlink %s"
 
-#: src/man.c:1847
+#: src/man.c:1858
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "не удалось создать временный cat файл %s"
 
-#: src/man.c:1956
+#: src/man.c:1968
 #, c-format
 msgid "can't create temporary directory"
 msgstr "не удалось создать временный каталог"
 
-#: src/man.c:1967
+#: src/man.c:1979
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "не удалось открыть временный файл %s"
 
-#: src/man.c:1997 src/man.c:2026
+#: src/man.c:2009 src/man.c:2038
 #, c-format
 msgid "can't remove directory %s"
 msgstr "не удалось удалить каталог %s"
 
-#: src/man.c:2155
+#: src/man.c:2167
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- след: %s [ просм (ввод) | пропуск (Ctrl-D) | выход (Ctrl-C) ]\n"
 
-#: src/man.c:2435
+#: src/man.c:2448
 #, c-format
 msgid ""
 "\n"
@@ -598,27 +598,27 @@ msgstr ""
 "\n"
 "не удалось записать в %s в режиме catman"
 
-#: src/man.c:2516
+#: src/man.c:2529
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Не удалось преобразовать %s в cat имя"
 
-#: src/man.c:3240
+#: src/man.c:3253
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: полагаться на ссылки whatis настоятельно не рекомендуется\n"
 
-#: src/man.c:3388 src/man.c:4236
+#: src/man.c:3401 src/man.c:4250
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "команда mandb завершилась неудачно (код выхода %d)"
 
-#: src/man.c:3593
+#: src/man.c:3606
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "внутренняя ошибка: тип кандидата %d вне диапазона"
 
-#: src/man.c:4177
+#: src/man.c:4191
 msgid " Manual page "
 msgstr " Справочная страница "
 
@@ -721,17 +721,17 @@ msgstr "не удалось прочитать из %s"
 msgid "Processing manual pages under %s...\n"
 msgstr "Обработка справочных страниц в %s...\n"
 
-#: src/mandb.c:664 src/mandb.c:690
+#: src/mandb.c:667 src/mandb.c:693
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Удаляется устаревший каталог cat %s...\n"
 
-#: src/mandb.c:841
+#: src/mandb.c:844
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "предупреждение: нет директивы MANDB_MAP в %s, используется ваш manpath"
 
-#: src/mandb.c:913
+#: src/mandb.c:916
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -739,7 +739,7 @@ msgstr[0] "В %d man-подкаталоге содержатся более но
 msgstr[1] "В %d man-подкаталогах содержатся более новые справочные страницы.\n"
 msgstr[2] "В %d man-подкаталогах содержатся более новые справочные страницы.\n"
 
-#: src/mandb.c:918
+#: src/mandb.c:921
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
@@ -747,7 +747,7 @@ msgstr[0] "Добавлена %d справочная страница.\n"
 msgstr[1] "Добавлено %d справочные страницы.\n"
 msgstr[2] "Добавлено %d справочных страниц.\n"
 
-#: src/mandb.c:922
+#: src/mandb.c:925
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -755,7 +755,7 @@ msgstr[0] "Добавлена %d побочная cat-страница.\n"
 msgstr[1] "Добавлено %d побочные cat-страницы.\n"
 msgstr[2] "Добавлено %d побочных cat-страниц.\n"
 
-#: src/mandb.c:927
+#: src/mandb.c:930
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
@@ -763,84 +763,84 @@ msgstr[0] "Вычищена %d старая запись базы данных.\
 msgstr[1] "Вычищено %d старые записи базы данных.\n"
 msgstr[2] "Вычищено %d старых записей базы данных.\n"
 
-#: src/mandb.c:945
+#: src/mandb.c:948
 #, c-format
 msgid "No databases created."
 msgstr "Базы данных не созданы."
 
-#: src/manp.c:326
+#: src/manp.c:327
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "нет правильного manpath файла настроек %s"
 
-#: src/manp.c:332
+#: src/manp.c:333
 #, c-format
 msgid "warning: %s"
 msgstr "предупреждение: %s"
 
-#: src/manp.c:338
+#: src/manp.c:339
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "предупреждение: %s не является каталогом"
 
-#: src/manp.c:343
+#: src/manp.c:344
 #, c-format
 msgid "manpath list too long"
 msgstr "список manpath слишком длинный"
 
-#: src/manp.c:673
+#: src/manp.c:675
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "предупреждение: переменная среды $PATH не установлена"
 
-#: src/manp.c:680
+#: src/manp.c:682
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "предупреждение: переменная среды $PATH пуста"
 
-#: src/manp.c:708
+#: src/manp.c:710
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr ""
 "предупреждение: найдена переменная среды $MANPATH, добавляется к началу %s"
 
-#: src/manp.c:719
+#: src/manp.c:721
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr ""
 "предупреждение: найдена переменная среды $MANPATH, добавляется в конец %s"
 
-#: src/manp.c:731
+#: src/manp.c:733
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "предупреждение: найдена переменная среды $MANPATH, вставляется в %s"
 
-#: src/manp.c:745
+#: src/manp.c:747
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "предупреждение: найдена переменная среды $MANPATH, игнорируется %s"
 
-#: src/manp.c:807
+#: src/manp.c:809
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "не удалось разобрать список каталогов `%s'"
 
-#: src/manp.c:870
+#: src/manp.c:872
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "не удалось открыть manpath файл настроек %s"
 
-#: src/manp.c:909
+#: src/manp.c:911
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "предупреждение: обязательный каталог %s не существует"
 
-#: src/manp.c:1178
+#: src/manp.c:1180
 #, c-format
 msgid "can't determine current directory"
 msgstr "не удалось определить текущий каталог"
 
-#: src/manp.c:1378
+#: src/manp.c:1383
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "предупреждение: %s не начинается с %s"
@@ -937,7 +937,7 @@ msgstr "warning: %s содержит циклический указатель"
 msgid "(unknown subject)"
 msgstr "(неизвестный объект)"
 
-#: src/whatis.c:887
+#: src/whatis.c:890
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: ничего подходящего не найдено.\n"
