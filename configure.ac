@@ -6,8 +6,8 @@ AC_INIT([man-db], [2.8.4], [cjwatson@debian.org])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([1.11 -Wall -Wno-override -Werror foreign dist-xz no-dist-gzip parallel-tests])
 AM_MAINTAINER_MODE
-m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-AC_PREREQ([2.59])
+AM_SILENT_RULES([yes])
+AC_PREREQ([2.63])
 AC_CONFIG_SRCDIR([src/man.c])
 AC_GNU_SOURCE
 MAN_TAR_SORT_NAME
@@ -73,7 +73,7 @@ then
 fi
 AC_PROG_INSTALL
 AC_PROG_LN_S
-m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+AM_PROG_AR
 LT_INIT([disable-static])
 AC_CHECK_PROGS([cat], [cat])
 MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx elinks w3m])
