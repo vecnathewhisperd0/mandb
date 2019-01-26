@@ -75,8 +75,9 @@
 #include "regex.h"
 #include "stat-time.h"
 #include "utimens.h"
-#include "xvasprintf.h"
 #include "xgetcwd.h"
+#include "xvasprintf.h"
+#include "xstdopen.h"
 
 #include "gettext.h"
 #include <locale.h>
@@ -618,48 +619,6 @@ static void gripe_no_name (const char *sect)
 		fputs (_("What manual page do you want?\n"), stderr);
 
 	exit (FAIL);
-}
-
-/* In case we're set-id, double-check that our standard file descriptors are
- * open in a standard way.  See:
- *
- *   http://austingroupbugs.net/view.php?id=173
- */
-static void check_standard_fds (void)
-{
-	int flags, mode;
-
-	/* We can't even write an error message in this case, so check it
-	 * first.
-	 */
-	flags = fcntl (2, F_GETFL);
-	if (flags < 0)
-		exit (FATAL);
-	mode = flags & O_ACCMODE;
-	if (mode != O_WRONLY && mode != O_RDWR)
-		exit (FATAL);
-
-	flags = fcntl (0, F_GETFL);
-	if (flags < 0) {
-		fprintf (stderr, "stdin not open!\n");
-		exit (FATAL);
-	}
-	mode = flags & O_ACCMODE;
-	if (mode != O_RDONLY && mode != O_RDWR) {
-		fprintf (stderr, "stdin not open for reading!\n");
-		exit (FATAL);
-	}
-
-	flags = fcntl (1, F_GETFL);
-	if (flags < 0) {
-		fprintf (stderr, "stdout not open!\n");
-		exit (FATAL);
-	}
-	mode = flags & O_ACCMODE;
-	if (mode != O_WRONLY && mode != O_RDWR) {
-		fprintf (stderr, "stdout not open for writing!\n");
-		exit (FATAL);
-	}
 }
 
 static struct termios tms;
@@ -4093,8 +4052,6 @@ int main (int argc, char *argv[])
 
 	set_program_name (argv[0]);
 
-	check_standard_fds ();
-
 	init_debug ();
 	pipeline_install_post_fork (pop_all_cleanups);
 	sandbox = sandbox_init ();
@@ -4109,6 +4066,8 @@ int main (int argc, char *argv[])
 	    strcmp (internal_locale, "POSIX"))
 		multiple_locale = getenv ("LANGUAGE");
 	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
+
+	xstdopen ();
 
 /* export argv, it might be needed when invoking the vendor supplied browser */
 #if defined _AIX || defined __sgi
