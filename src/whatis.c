@@ -56,6 +56,7 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "gl_list.h"
 #include "fnmatch.h"
 #include "progname.h"
 #include "xvasprintf.h"
@@ -79,7 +80,7 @@
 
 #include "manp.h"
 
-static char *manpathlist[MAXDIRS];
+static gl_list_t manpathlist;
 
 extern char *user_config_file;
 static char **keywords;
@@ -519,7 +520,7 @@ static int do_whatis_section (MYDBM_FILE dbf,
 static int suitable_manpath (const char *manpath, const char *page_dir)
 {
 	char *page_manp, *pm;
-	char *page_manpathlist[MAXDIRS], **mp;
+	gl_list_t page_manpathlist;
 	int ret;
 
 	page_manp = get_manpath_from_path (page_dir, 0);
@@ -530,18 +531,11 @@ static int suitable_manpath (const char *manpath, const char *page_dir)
 	pm = locale_manpath (page_manp);
 	free (page_manp);
 	page_manp = pm;
-	create_pathlist (page_manp, page_manpathlist);
+	page_manpathlist = create_pathlist (page_manp);
 
-	ret = 0;
-	for (mp = page_manpathlist; *mp; ++mp) {
-		if (STREQ (*mp, manpath)) {
-			ret = 1;
-			break;
-		}
-	}
+	ret = gl_list_search (page_manpathlist, manpath) ? 1 : 0;
 
-	for (mp = page_manpathlist; *mp; ++mp)
-		free (*mp);
+	free_pathlist (page_manpathlist);
 	free (page_manp);
 	return ret;
 }
@@ -841,21 +835,23 @@ nextpage:
 static int search (const char * const *pages, int num_pages)
 {
 	int *found = XCALLOC (num_pages, int);
-	char *catpath, **mp;
+	gl_list_iterator_t mpiter;
+	char *catpath, *mp;
 	int any_found, i;
 
-	for (mp = manpathlist; *mp; mp++) {
+	mpiter = gl_list_iterator (manpathlist);
+	while (gl_list_iterator_next (&mpiter, (const void **) &mp, NULL)) {
 		MYDBM_FILE dbf;
 
-		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);
+		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
 		
 		if (catpath) {
 			database = mkdbname (catpath);
 			free (catpath);
 		} else
-			database = mkdbname (*mp);
+			database = mkdbname (mp);
 
-		debug ("path=%s\n", *mp);
+		debug ("path=%s\n", mp);
 
 		dbf = MYDBM_RDOPEN (database);
 		if (dbf && dbver_rd (dbf)) {
@@ -863,7 +859,7 @@ static int search (const char * const *pages, int num_pages)
 			dbf = NULL;
 		}
 		if (!dbf) {
-			use_grep (pages, num_pages, *mp, found);
+			use_grep (pages, num_pages, mp, found);
 			continue;
 		}
 
@@ -873,12 +869,13 @@ static int search (const char * const *pages, int num_pages)
 			if (regex_opt || wildcard)
 				do_apropos (dbf, pages, num_pages, found);
 			else
-				do_whatis (dbf, pages, num_pages, *mp, found);
+				do_whatis (dbf, pages, num_pages, mp, found);
 		}
 		free (database);
 		database = NULL;
 		MYDBM_CLOSE (dbf);
 	}
+	gl_list_iterator_free (&mpiter);
 
 	chkr_garbage_detector ();
 
@@ -969,7 +966,7 @@ int main (int argc, char *argv[])
 	else
 		free (get_manpath (NULL));
 
-	create_pathlist (manp, manpathlist);
+	manpathlist = create_pathlist (manp);
 
 	display_seen = hashtable_create (&null_hashtable_free);
 

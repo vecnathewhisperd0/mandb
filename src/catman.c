@@ -61,6 +61,7 @@
 #endif /* !ARG_MAX */
 
 #include "argp.h"
+#include "gl_list.h"
 #include "progname.h"
 
 #include "gettext.h"
@@ -164,7 +165,7 @@ static struct argp argp = { options, parse_opt, args_doc };
 
 static char *locale;
 
-static char *manpathlist[MAXDIRS];
+static gl_list_t manpathlist;
 
 static void post_fork (void)
 {
@@ -353,7 +354,8 @@ static int check_access (const char *directory)
 int main (int argc, char *argv[])
 {
 	char *sys_manp;
-	char **mp;
+	gl_list_iterator_t mpiter;
+	char *mp;
 	const char **sp;
 
 	set_program_name (argv[0]);
@@ -388,14 +390,15 @@ int main (int argc, char *argv[])
 
 	debug ("manpath=%s\n", manp);
 
-	/* get the manpath as an array of pointers */
-	create_pathlist (manp, manpathlist); 
-	
-	for (mp = manpathlist; *mp; mp++) {
+	/* get the manpath as a list of pointers */
+	manpathlist = create_pathlist (manp); 
+
+	mpiter = gl_list_iterator (manpathlist);
+	while (gl_list_iterator_next (&mpiter, (const void **) &mp, NULL)) {
 		char *catpath;
 		size_t len;
 
-		catpath = get_catpath (*mp, SYSTEM_CAT | USER_CAT);
+		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
 
 		if (catpath) { 
 			if (is_directory (catpath) != 1) {
@@ -404,10 +407,10 @@ int main (int argc, char *argv[])
 			}
 			database = mkdbname (catpath);
 		} else {
-			if (is_directory (*mp) != 1)
+			if (is_directory (mp) != 1)
 				continue;
-			database = mkdbname (*mp);
-			catpath = xstrdup (*mp);
+			database = mkdbname (mp);
+			catpath = xstrdup (mp);
 		}
 
 		len = strlen (catpath);
@@ -419,14 +422,15 @@ int main (int argc, char *argv[])
 				continue;
 			if (check_access (catpath))
 				continue;
-			if (parse_for_sec (*mp, *sp)) {
-				error (0, 0, _("unable to update %s"), *mp);
+			if (parse_for_sec (mp, *sp)) {
+				error (0, 0, _("unable to update %s"), mp);
 				break;
 			}
 		}
 			
 		free (catpath);
 	}
+	gl_list_iterator_free (&mpiter);
 
 	free_pathlist (manpathlist);
 	free (locale);

@@ -68,6 +68,7 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "gl_list.h"
 #include "minmax.h"
 #include "progname.h"
 #include "regex.h"
@@ -182,7 +183,7 @@ struct string_llist {
 };
 
 
-static char *manpathlist[MAXDIRS];
+static gl_list_t manpathlist;
 
 /* globals */
 int quiet = 1;
@@ -3742,7 +3743,6 @@ static int do_global_apropos (const char *name, int *found)
 {
 	const char **my_section_list;
 	const char **sp;
-	char **mp;
 
 	if (section) {
 		my_section_list = XNMALLOC (2, const char *);
@@ -3751,9 +3751,16 @@ static int do_global_apropos (const char *name, int *found)
 	} else
 		my_section_list = section_list;
 
-	for (sp = my_section_list; *sp; sp++)
-		for (mp = manpathlist; *mp; mp++)
-			*found += do_global_apropos_section (*mp, *sp, name);
+	for (sp = my_section_list; *sp; sp++) {
+		gl_list_iterator_t mpiter;
+		char *mp;
+
+		mpiter = gl_list_iterator (manpathlist);
+		while (gl_list_iterator_next (&mpiter, (const void **) &mp,
+					      NULL))
+			*found += do_global_apropos_section (mp, *sp, name);
+		gl_list_iterator_free (&mpiter);
+	}
 
 	if (section)
 		free (my_section_list);
@@ -3806,7 +3813,7 @@ static int local_man_loop (const char *argv)
 			if (directory_on_path (argv_dir)) {
 				char *argv_base = base_name (argv);
 				char *new_manp, *nm;
-				char **old_manpathlist, **mp;
+				gl_list_t old_manpathlist;
 
 				debug ("recalculating manpath for executable "
 				       "in %s\n", argv_dir);
@@ -3821,18 +3828,13 @@ static int local_man_loop (const char *argv)
 				free (new_manp);
 				new_manp = nm;
 
-				old_manpathlist = XNMALLOC (MAXDIRS, char *);
-				memcpy (old_manpathlist, manpathlist,
-					MAXDIRS * sizeof (*manpathlist));
-				create_pathlist (new_manp, manpathlist);
+				old_manpathlist = manpathlist;
+				manpathlist = create_pathlist (new_manp);
 
 				man (argv_base, &found);
 
-				for (mp = manpathlist; *mp; ++mp)
-					free (*mp);
-				memcpy (manpathlist, old_manpathlist,
-					MAXDIRS * sizeof (*manpathlist));
-				free (old_manpathlist);
+				free_pathlist (manpathlist);
+				manpathlist = old_manpathlist;
 executable_out:
 				free (new_manp);
 				free (argv_base);
@@ -3901,10 +3903,14 @@ static void locate_page_in_manpath (const char *page_section,
 				    struct candidate **candidates,
 				    int *found)
 {
-	char **mp;
+	gl_list_iterator_t iter;
+	char *mp;
 
-	for (mp = manpathlist; *mp; mp++)
-		*found += locate_page (*mp, page_section, page_name, candidates);
+	iter = gl_list_iterator (manpathlist);
+	while (gl_list_iterator_next (&iter, (const void **) &mp, NULL))
+		*found += locate_page (mp, page_section, page_name,
+				       candidates);
+	gl_list_iterator_free (&iter);
 }
 
 /*
@@ -4226,7 +4232,7 @@ int main (int argc, char *argv[])
 
 	debug ("manpath search path (with duplicates) = %s\n", manp);
 
-	create_pathlist (manp, manpathlist);
+	manpathlist = create_pathlist (manp);
 
 	/* man issued with `-l' option */
 	if (local_man_file) {

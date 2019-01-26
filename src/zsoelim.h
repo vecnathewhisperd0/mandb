@@ -20,13 +20,15 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-int zsoelim_open_file (const char *filename, char * const *manpathlist,
+#include "gl_list.h"
+
+int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 		       const char *parent_path);
-void zsoelim_parse_file (char * const *manpathlist, const char *parent_path);
+void zsoelim_parse_file (gl_list_t manpathlist, const char *parent_path);
 
 struct zsoelim_stdin_data;
 
 void zsoelim_stdin (void *data);
 struct zsoelim_stdin_data *zsoelim_stdin_data_new (const char *path,
-						   char * const *manpathlist);
+						   gl_list_t manpathlist);
 void zsoelim_stdin_data_free (void *data);

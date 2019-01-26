@@ -22,6 +22,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "gl_list.h"
+
 struct locale_bits {
 	char *language;
 	char *territory;
@@ -36,8 +38,8 @@ extern void free_locale_bits (struct locale_bits *bits);
 extern char *add_nls_manpaths (const char *manpathlist, const char *locales);
 extern char *get_manpath (const char *systems);
 extern char *get_manpath_from_path (const char *path, int mandatory);
-extern void create_pathlist (const char *manp, char **mp);
-extern void free_pathlist (char **mp);
+extern gl_list_t create_pathlist (const char *manp);
+extern void free_pathlist (gl_list_t list);
 extern char *get_mandb_manpath (void);
 extern char *get_catpath (const char *name, int cattype);
 extern int is_global_mandir (const char *dir);

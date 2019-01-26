@@ -54,11 +54,15 @@
 #include <assert.h>
 #include <errno.h>
 #include <dirent.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #include "canonicalize.h"
+#include "gl_linkedhash_list.h"
+#include "gl_xlist.h"
+#include "hash-pjw-bare.h"
 #include "xgetcwd.h"
 #include "xvasprintf.h"
 
@@ -92,19 +96,34 @@ static struct list *namestore, *tailstore;
 #define MANPATH_MAP	 0
 #define MANDATORY	 1
 
-/* DIRLIST list[MAXDIRS]; */
-static char *tmplist[MAXDIRS];
-
 char *user_config_file = NULL;
 int disable_cache;
 int min_cat_width = 80, max_cat_width = 80, cat_width = 0;
 
-static void add_man_subdirs (const char *p);
+static void add_man_subdirs (gl_list_t list, const char *p);
 static char *fsstnd (const char *path);
 static char *def_path (int flag);
-static void add_dir_to_list (char **lp, const char *dir);
-static char **add_dir_to_path_list (char **mphead, char **mp, const char *p);
+static void add_dir_to_list (gl_list_t list, const char *dir);
+static void add_dir_to_path_list (gl_list_t list, const char *p);
 
+
+static bool string_equals (const void *s1, const void *s2)
+{
+	return STREQ ((const char *) s1, (const char *) s2);
+}
+
+static size_t string_hash (const void *s)
+{
+	return hash_pjw_bare (s, strlen ((const char *) s));
+}
+
+static void string_free (const void *s)
+{
+	/* gl_list declares the argument as const, but there doesn't seem to
+	 * be a good reason for this.
+	 */
+	free ((void *) s);
+}
 
 static void add_to_list (const char *key, const char *cont, int flag)
 {
@@ -337,11 +356,6 @@ static void gripe_not_directory (const char *dir)
 {
 	if (!quiet)
 		error (0, 0, _("warning: %s isn't a directory"), dir);
-}
-
-static void gripe_overlong_list (void)
-{
-	error (FAIL, 0, _("manpath list too long"));
 }
 
 /* accept a manpath list, separated with ':', return the associated 
@@ -928,9 +942,9 @@ static char *def_path (int flag)
 
 /*
  * If specified with configure, append OVERRIDE_DIR to dir param and add it
- * to the lp list.
+ * to list.
  */
-static void insert_override_dir (char **lp, const char *dir)
+static void insert_override_dir (gl_list_t list, const char *dir)
 {
 	char *override_dir = NULL;
 
@@ -938,7 +952,7 @@ static void insert_override_dir (char **lp, const char *dir)
 		return;
 
 	if ((override_dir = xasprintf ("%s/%s", dir, OVERRIDE_DIR))) {
-		add_dir_to_list (lp, override_dir);
+		add_dir_to_list (list, override_dir);
 		free (override_dir);
 	}
 }
@@ -956,14 +970,18 @@ static void insert_override_dir (char **lp, const char *dir)
  */
 char *get_manpath_from_path (const char *path, int mandatory)
 {
+	gl_list_t tmplist;
+	gl_list_iterator_t tmpiter;
 	int len;
 	char *tmppath;
 	char *p;
-	char **lp;
 	char *end;
 	char *manpathlist;
 	struct list *list;
+	char *item;
 
+	tmplist = gl_list_create_empty (GL_LINKEDHASH_LIST, string_equals,
+					string_hash, string_free, false);
 	tmppath = xstrdup (path);
 
 	for (end = p = tmppath; end; p = end + 1) {
@@ -1003,7 +1021,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 
 		} else {
 			debug ("is not in the config file\n");
-			add_man_subdirs (p);
+			add_man_subdirs (tmplist, p);
 		}
 	}
 
@@ -1020,11 +1038,10 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	}
 
 	len = 0;
-	lp = tmplist;
-	while (*lp != NULL) {
-		len += strlen (*lp) + 1;
-		lp++;
-	}
+	tmpiter = gl_list_iterator (tmplist);
+	while (gl_list_iterator_next (&tmpiter, (const void **) &item, NULL))
+		len += strlen (item) + 1;
+	gl_list_iterator_free (&tmpiter);
 
 	if (!len)
 		/* No path elements in configuration file or with
@@ -1035,38 +1052,31 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	manpathlist = xmalloc (len);
 	*manpathlist = '\0';
 
-	lp = tmplist;
 	p = manpathlist;
-	while (*lp != NULL) {
-		len = strlen (*lp);
-		memcpy (p, *lp, len);
-		free (*lp);
-		*lp = NULL;
+	tmpiter = gl_list_iterator (tmplist);
+	while (gl_list_iterator_next (&tmpiter, (const void **) &item, NULL)) {
+		len = strlen (item);
+		memcpy (p, item, len);
 		p += len;
 		*p++ = ':';
-		lp++;
 	}
+	gl_list_iterator_free (&tmpiter);
 
 	p[-1] = '\0';
+
+	gl_list_free (tmplist);
 
 	return manpathlist;
 }
 
 /* Add a directory to the manpath list if it isn't already there. */
-static void add_expanded_dir_to_list (char **lp, const char *dir)
+static void add_expanded_dir_to_list (gl_list_t list, const char *dir)
 {
 	int status;
-	int pos = 0;
 
-	while (*lp != NULL) {
-		if (pos > MAXDIRS - 1)
-			gripe_overlong_list ();
-		if (!strcmp (*lp, dir)) {
-			debug ("%s is already in the manpath\n", dir);
-			return;
-		}
-		lp++;
-		pos++;
+	if (gl_list_search (list, dir)) {
+		debug ("%s is already in the manpath\n", dir);
+		return;
 	}
 
 	/* Not found -- add it. */
@@ -1079,8 +1089,7 @@ static void add_expanded_dir_to_list (char **lp, const char *dir)
 		gripe_not_directory (dir);
 	else if (status == 1) {
 		debug ("adding %s to manpath\n", dir);
-
-		*lp = xstrdup (dir);
+		gl_list_add_last (list, xstrdup (dir));
 	}
 }
 
@@ -1088,14 +1097,14 @@ static void add_expanded_dir_to_list (char **lp, const char *dir)
  * Add a directory to the manpath list if it isn't already there, expanding
  * wildcards.
  */
-static void add_dir_to_list (char **lp, const char *dir)
+static void add_dir_to_list (gl_list_t list, const char *dir)
 {
 	char **expanded_dirs;
 	int i;
 
 	expanded_dirs = expand_path (dir);
 	for (i = 0; expanded_dirs[i]; i++) {
-		add_expanded_dir_to_list (lp, expanded_dirs[i]);
+		add_expanded_dir_to_list (list, expanded_dirs[i]);
 		free (expanded_dirs[i]);
 	}
 	free (expanded_dirs);
@@ -1104,7 +1113,7 @@ static void add_dir_to_list (char **lp, const char *dir)
 /* path does not exist in config file: check to see if path/../man,
    path/man, path/../share/man, or path/share/man exist, and add them to the
    list if they do. */
-static void add_man_subdirs (const char *path)
+static void add_man_subdirs (gl_list_t list, const char *path)
 {
 	char *newpath;
 	int found = 0;
@@ -1116,8 +1125,8 @@ static void add_man_subdirs (const char *path)
 	if (subdir) {
 		newpath = xasprintf ("%.*s/man", (int) (subdir - path), path);
 		if (is_directory (newpath) == 1) {
-			insert_override_dir (tmplist, newpath);
-			add_dir_to_list (tmplist, newpath);
+			insert_override_dir (list, newpath);
+			add_dir_to_list (list, newpath);
 			found = 1;
 		}
 		free (newpath);
@@ -1125,8 +1134,8 @@ static void add_man_subdirs (const char *path)
 
 	newpath = xasprintf ("%s/man", path);
 	if (is_directory (newpath) == 1) {
-		insert_override_dir (tmplist, newpath);
-		add_dir_to_list (tmplist, newpath);
+		insert_override_dir (list, newpath);
+		add_dir_to_list (list, newpath);
 		found = 1;
 	}
 	free (newpath);
@@ -1135,8 +1144,8 @@ static void add_man_subdirs (const char *path)
 		newpath = xasprintf ("%.*s/share/man",
 				     (int) (subdir - path), path);
 		if (is_directory (newpath) == 1) {
-			insert_override_dir (tmplist, newpath);
-			add_dir_to_list (tmplist, newpath);
+			insert_override_dir (list, newpath);
+			add_dir_to_list (list, newpath);
 			found = 1;
 		}
 		free (newpath);
@@ -1144,8 +1153,8 @@ static void add_man_subdirs (const char *path)
 
 	newpath = xasprintf ("%s/share/man", path);
 	if (is_directory (newpath) == 1) {
-		insert_override_dir (tmplist, newpath);
-		add_dir_to_list (tmplist, newpath);
+		insert_override_dir (list, newpath);
+		add_dir_to_list (list, newpath);
 		found = 1;
 	}
 	free (newpath);
@@ -1155,13 +1164,10 @@ static void add_man_subdirs (const char *path)
 		       "share/man subdirectories\n");
 }
 
-static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
+static void add_dir_to_path_list (gl_list_t list, const char *p)
 {
 	int status, i;
 	char *cwd, *d, **expanded_dirs;
-
-	if (mp - mphead > MAXDIRS - 1)
-		gripe_overlong_list ();
 
 	expanded_dirs = expand_path (p);
 	for (i = 0; expanded_dirs[i]; i++) {
@@ -1174,68 +1180,73 @@ static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
 		else if (status == 0)
 			gripe_not_directory (d);
 		else {
+			char *path;
+
 			/* deal with relative paths */
 			if (*d != '/') {
 				cwd = xgetcwd ();
 				if (!cwd)
 					error (FATAL, errno,
 							_("can't determine current directory"));
-				*mp = appendstr (cwd, "/", d, (void *) 0);
+				path = appendstr (cwd, "/", d, (void *) 0);
 			} else
-				*mp = xstrdup (d);
+				path = xstrdup (d);
 
-			debug ("adding %s to manpathlist\n", *mp);
-			mp++;
+			debug ("adding %s to manpathlist\n", path);
+			gl_list_add_last (list, path);
 		}
 		free (d);
 	}
 	free (expanded_dirs);
-
-	return mp;
 }
 
-void create_pathlist (const char *manp, char **mp)
+gl_list_t create_pathlist (const char *manp)
 {
+	gl_list_t list;
+	gl_list_iterator_t iter;
+	gl_list_node_t node;
 	const char *p, *end;
-	char **mphead = mp;
 
 	/* Expand the manpath into a list for easier handling. */
 
+	list = gl_list_create_empty (GL_LINKEDHASH_LIST, string_equals,
+				     string_hash, string_free, true);
 	for (p = manp;; p = end + 1) {
 		end = strchr (p, ':');
 		if (end) {
 			char *element = xstrndup (p, end - p);
-			mp = add_dir_to_path_list (mphead, mp, element);
+			add_dir_to_path_list (list, element);
 			free (element);
 		} else {
-			mp = add_dir_to_path_list (mphead, mp, p);
+			add_dir_to_path_list (list, p);
 			break;
 		}
 	}
-	*mp = NULL;
 
 	/* Eliminate duplicates due to symlinks. */
-	mp = mphead;
-	while (*mp) {
+	iter = gl_list_iterator (list);
+	while (gl_list_iterator_next (&iter, (const void **) &p, &node)) {
 		char *target;
-		char **dupcheck;
-		int found_dup = 0;
+		gl_list_iterator_t dupcheck_iter;
+		const char *dupcheck;
+		gl_list_node_t dupcheck_node;
 
 		/* After resolving all symlinks, is the target also in the
 		 * manpath?
 		 */
-		target = canonicalize_file_name (*mp);
-		if (!target) {
-			++mp;
+		target = canonicalize_file_name (p);
+		if (!target)
 			continue;
-		}
 		/* Only check up to the current list position, to keep item
 		 * order stable across deduplication.
 		 */
-		for (dupcheck = mphead; *dupcheck && dupcheck != mp;
-		     ++dupcheck) {
+		dupcheck_iter = gl_list_iterator (list);
+		while (gl_list_iterator_next (&dupcheck_iter,
+					      (const void **) &dupcheck,
+					      &dupcheck_node) &&
+		       dupcheck_node != node) {
 			char *dupcheck_target = canonicalize_file_name
-				(*dupcheck);
+				(dupcheck);
 			if (!dupcheck_target)
 				continue;
 			if (!STREQ (target, dupcheck_target)) {
@@ -1243,43 +1254,39 @@ void create_pathlist (const char *manp, char **mp)
 				continue;
 			}
 			free (dupcheck_target);
-			debug ("Removing duplicate manpath entry %s (%td) -> "
-			       "%s (%td)\n",
-			       *mp, mp - mphead,
-			       *dupcheck, dupcheck - mphead);
-			free (*mp);
-			for (dupcheck = mp; *(dupcheck + 1); ++dupcheck)
-				*dupcheck = *(dupcheck + 1);
-			*dupcheck = NULL;
-			found_dup = 1;
+			debug ("Removing duplicate manpath entry %s -> %s\n",
+			       p, dupcheck);
+			gl_list_remove_node (list, node);
 			break;
 		}
+		gl_list_iterator_free (&dupcheck_iter);
 		free (target);
-		if (!found_dup)
-			++mp;
 	}
+	gl_list_iterator_free (&iter);
 
 	if (debug_level) {
-		int first = 1;
+		bool first = true;
 
 		debug ("final search path = ");
-		for (mp = mphead; *mp; ++mp) {
+		iter = gl_list_iterator (list);
+		while (gl_list_iterator_next (&iter, (const void **) &p,
+					      NULL)) {
 			if (first) {
-				debug ("%s", *mp);
-				first = 0;
+				debug ("%s", p);
+				first = false;
 			} else
-				debug (":%s", *mp);
+				debug (":%s", p);
 		}
+		gl_list_iterator_free (&iter);
 		debug ("\n");
 	}
+
+	return list;
 }
 
-void free_pathlist (char **mp)
+void free_pathlist (gl_list_t list)
 {
-	while (*mp) {
-		free (*mp);
-		*mp++ = NULL;
-	}
+	gl_list_free (list);
 }
 
 /* Routine to get list of named system and user manpaths (in reverse order). */

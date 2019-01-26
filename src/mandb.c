@@ -48,6 +48,7 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "gl_list.h"
 #include "progname.h"
 #include "stat-time.h"
 #include "timespec.h"
@@ -202,7 +203,7 @@ extern uid_t ruid;
 extern uid_t euid;
 #endif /* MAN_OWNER */
 
-static char *manpathlist[MAXDIRS];
+static gl_list_t manpathlist;
 
 extern int pages;
 
@@ -775,7 +776,8 @@ int main (int argc, char *argv[])
 {
 	char *sys_manp;
 	int amount = 0;
-	char **mp;
+	gl_list_iterator_t mpiter;
+	char *mp;
 	struct hashtable *tried_catdirs;
 #ifdef SIGPIPE
 	struct sigaction sa;
@@ -848,16 +850,17 @@ int main (int argc, char *argv[])
 
 	debug ("manpath=%s\n", manp);
 
-	/* get the manpath as an array of pointers */
-	create_pathlist (manp, manpathlist); 
+	/* get the manpath as a list of pointers */
+	manpathlist = create_pathlist (manp); 
 
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();
 
 	tried_catdirs = hashtable_create (tried_catdirs_free);
 
-	for (mp = manpathlist; *mp; mp++) {
-		int global_manpath = is_global_mandir (*mp);
+	mpiter = gl_list_iterator (manpathlist);
+	while (gl_list_iterator_next (&mpiter, (const void **) &mp, NULL)) {
+		int global_manpath = is_global_mandir (mp);
 		int ret;
 		DIR *dir;
 		struct dirent *subdirent;
@@ -869,14 +872,14 @@ int main (int argc, char *argv[])
 			drop_effective_privs ();
 		}
 
-		ret = process_manpath (*mp, global_manpath, tried_catdirs);
+		ret = process_manpath (mp, global_manpath, tried_catdirs);
 		if (ret < 0)
 			exit (FATAL);
 		amount += ret;
 
-		dir = opendir (*mp);
+		dir = opendir (mp);
 		if (!dir) {
-			error (0, errno, _("can't search directory %s"), *mp);
+			error (0, errno, _("can't search directory %s"), mp);
 			goto next_manpath;
 		}
 
@@ -890,7 +893,7 @@ int main (int argc, char *argv[])
 			if (STRNEQ (subdirent->d_name, "man", 3))
 				continue;
 
-			subdirpath = xasprintf ("%s/%s", *mp,
+			subdirpath = xasprintf ("%s/%s", mp,
 						subdirent->d_name);
 			ret = process_manpath (subdirpath, global_manpath,
 					       tried_catdirs);
@@ -908,6 +911,7 @@ next_manpath:
 
 		chkr_garbage_detector ();
 	}
+	gl_list_iterator_free (&mpiter);
 
 	purge_catdirs (tried_catdirs);
 	hashtable_free (tried_catdirs);

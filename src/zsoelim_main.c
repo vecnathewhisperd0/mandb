@@ -30,6 +30,7 @@
 #include <stdlib.h>
 
 #include "argp.h"
+#include "gl_list.h"
 #include "progname.h"
 #include "xvasprintf.h"
 
@@ -52,7 +53,7 @@
 int quiet = 1;
 man_sandbox *sandbox;
 
-static char *manpathlist[MAXDIRS];
+static gl_list_t manpathlist;
 
 static char **files;
 static int num_files;
@@ -140,7 +141,7 @@ int main (int argc, char *argv[])
 	manp = add_nls_manpaths (get_manpath (NULL), all_locales);
 	free (all_locales);
 
-	create_pathlist (manp, manpathlist);
+	manpathlist = create_pathlist (manp);
 
 	/* parse files in command line order */
 	for (i = 0; i < num_files; ++i) {
