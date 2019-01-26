@@ -61,6 +61,7 @@
 #include <unistd.h>
 
 #include "canonicalize.h"
+#include "gl_array_list.h"
 #include "gl_linkedhash_list.h"
 #include "gl_xlist.h"
 #include "hash-pjw-bare.h"
@@ -79,14 +80,13 @@
 #include "manp.h"
 #include "globbing.h"
 
-struct list {
+struct config_item {
 	char *key;
 	char *cont;
 	int flag;
-	struct list *next;
 };
 
-static struct list *namestore, *tailstore;
+static gl_list_t config;
 
 #define SECTION_USER	-6
 #define SECTION		-5
@@ -126,40 +126,41 @@ static void string_free (const void *s)
 	free ((void *) s);
 }
 
-static void add_to_list (const char *key, const char *cont, int flag)
+static void config_item_free (const void *elt)
 {
-	struct list *list = XMALLOC (struct list);
-	list->key = xstrdup (key);
-	list->cont = xstrdup (cont);
-	list->flag = flag;
-	list->next = NULL;
-	if (tailstore)
-		tailstore->next = list;
-	tailstore = list;
-	if (!namestore)
-		namestore = list;
+	/* gl_list declares the argument as const, but there doesn't seem to
+	 * be a good reason for this.
+	 */
+	struct config_item *item = (struct config_item *) elt;
+	free (item->key);
+	free (item->cont);
+	free (item);
 }
 
-static const char *get_from_list (const char *key, int flag)
+static void add_config (const char *key, const char *cont, int flag)
 {
-	struct list *list;
-
-	for (list = namestore; list; list = list->next)
-		if (flag == list->flag && STREQ (key, list->key))
-			return list->cont;
-
-	return NULL;
+	struct config_item *item = XMALLOC (struct config_item);
+	item->key = xstrdup (key);
+	item->cont = xstrdup (cont);
+	item->flag = flag;
+	gl_list_add_last (config, item);
 }
 
-static struct list *iterate_over_list (struct list *prev, char *key, int flag)
+static const char *get_config (const char *key, int flag)
 {
-	struct list *list;
+	gl_list_iterator_t iter;
+	const struct config_item *item;
+	char *cont = NULL;
 
-	for (list = prev ? prev->next : namestore; list; list = list->next)
-		if (flag == list->flag && STREQ (key, list->key))
-			return list;
+	iter = gl_list_iterator (config);
+	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+		if (flag == item->flag && STREQ (key, item->key)) {
+			cont = item->cont;
+			break;
+		}
+	gl_list_iterator_free (&iter);
 
-	return NULL;
+	return cont;
 }
 
 /* Must not return DEFINEs set in ~/.manpath. This is used to fetch
@@ -174,25 +175,28 @@ const char *get_def (const char *thing, const char *def)
 	if (!running_setuid ())
 		return get_def_user (thing, def);
 
-	config_def = get_from_list (thing, DEFINE);
+	config_def = get_config (thing, DEFINE);
 	return config_def ? config_def : def;
 }
 
 const char *get_def_user (const char *thing, const char *def)
 {
-	const char *config_def = get_from_list (thing, DEFINE_USER);
+	const char *config_def = get_config (thing, DEFINE_USER);
 	if (!config_def)
-		config_def = get_from_list (thing, DEFINE);
+		config_def = get_config (thing, DEFINE);
 	return config_def ? config_def : def;
 }
 
 static void print_list (void)
 {
-	struct list *list;
+	gl_list_iterator_t iter;
+	const struct config_item *item;
 
-	for (list = namestore; list; list = list->next)
+	iter = gl_list_iterator (config);
+	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
 		debug ("`%s'\t`%s'\t`%d'\n",
-		       list->key, list->cont, list->flag);
+		       item->key, item->cont, item->flag);
+	gl_list_iterator_free (&iter);
 }
 
 static void add_sections (char *sections, int user)
@@ -202,7 +206,7 @@ static void add_sections (char *sections, int user)
 
 	for (sect = strtok (section_list, " "); sect;
 	     sect = strtok (NULL, " ")) {
-		add_to_list (sect, "", user ? SECTION_USER : SECTION);
+		add_config (sect, "", user ? SECTION_USER : SECTION);
 		debug ("Added section `%s'.\n", sect);
 	}
 	free (section_list);
@@ -210,17 +214,20 @@ static void add_sections (char *sections, int user)
 
 const char **get_sections (void)
 {
-	struct list *list;
+	gl_list_iterator_t iter;
+	const struct config_item *item;
 	int length_user = 0, length = 0;
 	const char **sections, **sectionp;
 	int flag;
 
-	for (list = namestore; list; list = list->next) {
-		if (list->flag == SECTION_USER)
+	iter = gl_list_iterator (config);
+	while (gl_list_iterator_next (&iter, (const void **) &item, NULL)) {
+		if (item->flag == SECTION_USER)
 			length_user++;
-		else if (list->flag == SECTION)
+		else if (item->flag == SECTION)
 			length++;
 	}
+	gl_list_iterator_free (&iter);
 	if (length_user) {
 		sections = xnmalloc (length_user + 1, sizeof *sections);
 		flag = SECTION_USER;
@@ -229,17 +236,19 @@ const char **get_sections (void)
 		flag = SECTION;
 	}
 	sectionp = sections;
-	for (list = namestore; list; list = list->next)
-		if (list->flag == flag)
-			*sectionp++ = list->key;
+	iter = gl_list_iterator (config);
+	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+		if (item->flag == flag)
+			*sectionp++ = item->key;
+	gl_list_iterator_free (&iter);
 	*sectionp = NULL;
 	return sections;
 }
 
 static void add_def (char *thing, char *config_def, int flag, int user)
 {
-	add_to_list (thing, flag == 2 ? config_def : "",
-		     user ? DEFINE_USER : DEFINE);
+	add_config (thing, flag == 2 ? config_def : "",
+		    user ? DEFINE_USER : DEFINE);
 
 	debug ("Defined `%s' as `%s'.\n", thing, config_def);
 }
@@ -249,7 +258,7 @@ static void add_manpath_map (const char *path, const char *mandir)
 	if (!path || !mandir)
 		return;
 
-	add_to_list (path, mandir, MANPATH_MAP);
+	add_config (path, mandir, MANPATH_MAP);
 
 	debug ("Path `%s' mapped to mandir `%s'.\n", path, mandir);
 }
@@ -274,7 +283,7 @@ static void add_mandb_map (const char *mandir, const char *catdir,
 	if (!tmpcatdir)
 		return;
 
-	add_to_list (mandir, tmpcatdir, user ? MANDB_MAP_USER : MANDB_MAP);
+	add_config (mandir, tmpcatdir, user ? MANDB_MAP_USER : MANDB_MAP);
 
 	debug ("%s mandir `%s', catdir `%s'.\n",
 	       user ? "User" : "Global", mandir, tmpcatdir);
@@ -287,7 +296,7 @@ static void add_mandatory (const char *mandir)
 	if (!mandir)
 		return;
 
-	add_to_list (mandir, "", MANDATORY);
+	add_config (mandir, "", MANDATORY);
 
 	debug ("Mandatory mandir `%s'.\n", mandir);
 }
@@ -367,9 +376,9 @@ char *cat_manpath (char *manp)
 	const char *path, *catdir;
 
 	for (path = strsep (&manp, ":"); path; path = strsep (&manp, ":")) {
-		catdir = get_from_list (path, MANDB_MAP_USER);
+		catdir = get_config (path, MANDB_MAP_USER);
 		if (!catdir)
-			catdir = get_from_list (path, MANDB_MAP);
+			catdir = get_config (path, MANDB_MAP);
 		catp = catdir ? pathappend (catp, catdir) 
 			      : pathappend (catp, path);
 	}
@@ -771,7 +780,7 @@ char *get_manpath (const char *systems)
 }
 
 /* Parse the manpath.config file, extracting appropriate information. */
-static void add_to_dirlist (FILE *config, int user)
+static void add_to_dirlist (FILE *config_file, int user)
 {
 	char *bp;
 	char *buf = NULL;
@@ -780,7 +789,7 @@ static void add_to_dirlist (FILE *config, int user)
 	int val;
 	int c;
 
-	while (getline (&buf, &n, config) >= 0) {
+	while (getline (&buf, &n, config_file) >= 0) {
 		bp = buf;
 
 		while (CTYPE (isspace, *bp))
@@ -835,28 +844,20 @@ next:
 
 static void free_config_file (void *unused ATTRIBUTE_UNUSED)
 {
-	struct list *list = namestore, *prev;
-
-	while (list) {
-		free (list->key);
-		free (list->cont);
-		prev = list;
-		list = list->next;
-		free (prev);
-	}
-
-	namestore = tailstore = NULL;
+	gl_list_free (config);
 }
 
 void read_config_file (int optional)
 {
 	static int done = 0;
 	char *dotmanpath = NULL;
-	FILE *config;
+	FILE *config_file;
 
 	if (done)
 		return;
 
+	config = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
+				       config_item_free, true);
 	push_cleanup (free_config_file, NULL, 0);
 
 	if (user_config_file)
@@ -867,18 +868,18 @@ void read_config_file (int optional)
 			dotmanpath = xasprintf ("%s/.manpath", home);
 	}
 	if (dotmanpath) {
-		config = fopen (dotmanpath, "r");
-		if (config != NULL) {
+		config_file = fopen (dotmanpath, "r");
+		if (config_file != NULL) {
 			debug ("From the config file %s:\n\n", dotmanpath);
-			add_to_dirlist (config, 1);
-			fclose (config);
+			add_to_dirlist (config_file, 1);
+			fclose (config_file);
 		}
 		free (dotmanpath);
 	}
 
 	if (getenv ("MAN_TEST_DISABLE_SYSTEM_CONFIG") == NULL) {
-		config = fopen (CONFIG_FILE, "r");
-		if (config == NULL) {
+		config_file = fopen (CONFIG_FILE, "r");
+		if (config_file == NULL) {
 			if (optional)
 				debug ("can't open %s; continuing anyway\n",
 				       CONFIG_FILE);
@@ -890,8 +891,8 @@ void read_config_file (int optional)
 		} else {
 			debug ("From the config file %s:\n\n", CONFIG_FILE);
 
-			add_to_dirlist (config, 0);
-			fclose (config);
+			add_to_dirlist (config_file, 0);
+			fclose (config_file);
 		}
 	}
 
@@ -908,14 +909,16 @@ void read_config_file (int optional)
 static char *def_path (int flag)
 {
 	char *manpath = NULL;
-	struct list *list; 
+	gl_list_iterator_t iter;
+	const struct config_item *item;
 
-	for (list = namestore; list; list = list->next)
-		if (list->flag == flag) {
+	iter = gl_list_iterator (config);
+	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+		if (item->flag == flag) {
 			char **expanded_dirs;
 			int i;
 
-			expanded_dirs = expand_path (list->key);
+			expanded_dirs = expand_path (item->key);
 			for (i = 0; expanded_dirs[i]; i++) {
 				int status = is_directory (expanded_dirs[i]);
 
@@ -933,6 +936,7 @@ static char *def_path (int flag)
 			}
 			free (expanded_dirs);
 		}
+	gl_list_iterator_free (&iter);
 
 	/* If we have complete config file failure... */
 	if (!manpath)
@@ -973,12 +977,13 @@ char *get_manpath_from_path (const char *path, int mandatory)
 {
 	gl_list_t tmplist;
 	gl_list_iterator_t tmpiter;
+	gl_list_iterator_t config_iter;
+	const struct config_item *config_item;
 	int len;
 	char *tmppath;
 	char *p;
 	char *end;
 	char *manpathlist;
-	struct list *list;
 	char *item;
 
 	tmplist = gl_list_create_empty (GL_LINKEDHASH_LIST, string_equals,
@@ -986,7 +991,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	tmppath = xstrdup (path);
 
 	for (end = p = tmppath; end; p = end + 1) {
-		struct list *mandir_list;
+		bool manpath_map_found = false;
 
 		end = strchr (p, ':');
 		if (end)
@@ -998,29 +1003,30 @@ char *get_manpath_from_path (const char *path, int mandatory)
 
 		debug ("\npath directory %s ", p);
 
-		mandir_list = iterate_over_list (NULL, p, MANPATH_MAP);
-
-		/*
-      		 * The directory we're working on is in the config file.
-      		 * If we haven't added it to the list yet, do.
-      		 */
-
-		if (mandir_list) {
-			debug ("is in the config file\n");
-			while (mandir_list) {
-				insert_override_dir (tmplist,
-						     mandir_list->cont);
-				add_dir_to_list (tmplist, mandir_list->cont);
-				mandir_list = iterate_over_list
-					(mandir_list, p, MANPATH_MAP);
-			}
+		/* If the directory we're working on has MANPATH_MAP entries
+		 * in the config file, add them to the list.
+		 */
+		config_iter = gl_list_iterator (config);
+		while (gl_list_iterator_next (&config_iter,
+					      (const void **) &config_item,
+					      NULL)) {
+			if (MANPATH_MAP != config_item->flag ||
+			    !STREQ (p, config_item->key))
+				continue;
+			if (!manpath_map_found)
+				debug ("is in the config file\n");
+			manpath_map_found = true;
+			insert_override_dir (tmplist, config_item->cont);
+			add_dir_to_list (tmplist, config_item->cont);
+		}
+		gl_list_iterator_free (&config_iter);
 
 		 /* The directory we're working on isn't in the config file.  
 		    See if it has ../man, man, ../share/man, or share/man
 		    subdirectories.  If so, and they haven't been added to
 		    the list, do. */
 
-		} else {
+		if (!manpath_map_found) {
 			debug ("is not in the config file\n");
 			add_man_subdirs (tmplist, p);
 		}
@@ -1031,11 +1037,17 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	if (mandatory) {
 		debug ("\nadding mandatory man directories\n\n");
 
-		for (list = namestore; list; list = list->next)
-			if (list->flag == MANDATORY) {
-				insert_override_dir (tmplist, list->key);
-				add_dir_to_list (tmplist, list->key);
+		config_iter = gl_list_iterator (config);
+		while (gl_list_iterator_next (&config_iter,
+					      (const void **) &config_item,
+					      NULL)) {
+			if (config_item->flag == MANDATORY) {
+				insert_override_dir (tmplist,
+						     config_item->key);
+				add_dir_to_list (tmplist, config_item->key);
 			}
+		}
+		gl_list_iterator_free (&config_iter);
 	}
 
 	len = 0;
@@ -1294,11 +1306,14 @@ void free_pathlist (gl_list_t list)
 char *get_mandb_manpath (void)
 {
 	char *manpath = NULL;
-	struct list *list;
+	gl_list_iterator_t iter;
+	const struct config_item *item;
 
-	for (list = namestore; list; list = list->next)
-		if (list->flag == MANDB_MAP || list->flag == MANDB_MAP_USER)
-			manpath = pathappend (manpath, list->key);
+	iter = gl_list_iterator (config);
+	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+		if (item->flag == MANDB_MAP || item->flag == MANDB_MAP_USER)
+			manpath = pathappend (manpath, item->key);
+	gl_list_iterator_free (&iter);
 
 	return manpath;
 }
@@ -1318,16 +1333,19 @@ char *get_mandb_manpath (void)
  */
 char *get_catpath (const char *name, int cattype)
 {
-	struct list *list;
+	gl_list_iterator_t iter;
+	const struct config_item *item;
+	char *ret = NULL;
 
-	for (list = namestore; list; list = list->next)
-		if (((cattype & SYSTEM_CAT) && list->flag == MANDB_MAP) ||
-		    ((cattype & USER_CAT)   && list->flag == MANDB_MAP_USER)) {
-			size_t manlen = strlen (list->key);
-			if (STRNEQ (name, list->key, manlen)) {
+	iter = gl_list_iterator (config);
+	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+		if (((cattype & SYSTEM_CAT) && item->flag == MANDB_MAP) ||
+		    ((cattype & USER_CAT)   && item->flag == MANDB_MAP_USER)) {
+			size_t manlen = strlen (item->key);
+			if (STRNEQ (name, item->key, manlen)) {
 				const char *suffix;
 				char *infix;
-				char *catpath = xstrdup (list->cont);
+				char *catpath = xstrdup (item->cont);
 
 				/* For NLS subdirectories (e.g.
 				 * /usr/share/man/de -> /var/cache/man/de),
@@ -1335,10 +1353,12 @@ char *get_catpath (const char *name, int cattype)
 				 * long as this strictly follows the key.
 				 */
 				suffix = strrchr (name, '/');
-				if (!suffix)
-					return appendstr (catpath,
-							  name + manlen,
-							  (void *) 0);
+				if (!suffix) {
+					ret = appendstr (catpath,
+							 name + manlen,
+							 (void *) 0);
+					break;
+				}
 
 				while (suffix > name + manlen)
 					if (*--suffix == '/')
@@ -1359,11 +1379,13 @@ char *get_catpath (const char *name, int cattype)
 				}
 				catpath = appendstr (catpath, suffix,
 						     (void *) 0);
-			  	return catpath;
+			  	ret = catpath;
+				break;
 			}
 		}
+	gl_list_iterator_free (&iter);
 
-	return NULL;
+	return ret;
 }
 
 /* Check to see if the supplied man directory is a system-wide mandir.
@@ -1371,13 +1393,20 @@ char *get_catpath (const char *name, int cattype)
  */
 bool is_global_mandir (const char *dir)
 {
-	struct list *list;
+	gl_list_iterator_t iter;
+	const struct config_item *item;
+	bool ret = false;
 
-	for (list = namestore; list; list = list->next)
-		if (list->flag == MANDB_MAP &&
-		    STRNEQ (dir, list->key, strlen (list->key)))
-		    	return true;
-	return false;
+	iter = gl_list_iterator (config);
+	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+		if (item->flag == MANDB_MAP &&
+		    STRNEQ (dir, item->key, strlen (item->key))) {
+		    	ret = true;
+			break;
+		}
+	gl_list_iterator_free (&iter);
+
+	return ret;
 }
 
 /* Accept a manpath (not a full pathname to a file) and return an FSSTND 
