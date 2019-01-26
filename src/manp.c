@@ -80,22 +80,24 @@
 #include "manp.h"
 #include "globbing.h"
 
+enum config_flag {
+	MANDATORY,
+	MANPATH_MAP,
+	MANDB_MAP,
+	MANDB_MAP_USER,
+	DEFINE,
+	DEFINE_USER,
+	SECTION,
+	SECTION_USER
+};
+
 struct config_item {
 	char *key;
 	char *cont;
-	int flag;
+	enum config_flag flag;
 };
 
 static gl_list_t config;
-
-#define SECTION_USER	-6
-#define SECTION		-5
-#define DEFINE_USER	-4
-#define DEFINE		-3
-#define MANDB_MAP_USER	-2
-#define MANDB_MAP	-1
-#define MANPATH_MAP	 0
-#define MANDATORY	 1
 
 char *user_config_file = NULL;
 int disable_cache;
@@ -103,7 +105,7 @@ int min_cat_width = 80, max_cat_width = 80, cat_width = 0;
 
 static void add_man_subdirs (gl_list_t list, const char *p);
 static char *fsstnd (const char *path);
-static char *def_path (int flag);
+static char *def_path (enum config_flag flag);
 static void add_dir_to_list (gl_list_t list, const char *dir);
 static void add_dir_to_path_list (gl_list_t list, const char *p);
 
@@ -137,7 +139,8 @@ static void config_item_free (const void *elt)
 	free (item);
 }
 
-static void add_config (const char *key, const char *cont, int flag)
+static void add_config (const char *key, const char *cont,
+			enum config_flag flag)
 {
 	struct config_item *item = XMALLOC (struct config_item);
 	item->key = xstrdup (key);
@@ -146,7 +149,7 @@ static void add_config (const char *key, const char *cont, int flag)
 	gl_list_add_last (config, item);
 }
 
-static const char *get_config (const char *key, int flag)
+static const char *get_config (const char *key, enum config_flag flag)
 {
 	gl_list_iterator_t iter;
 	const struct config_item *item;
@@ -187,6 +190,32 @@ const char *get_def_user (const char *thing, const char *def)
 	return config_def ? config_def : def;
 }
 
+static const char *describe_flag (enum config_flag flag)
+{
+	switch (flag) {
+		case MANDATORY:
+			return "MANDATORY";
+		case MANPATH_MAP:
+			return "MANPATH_MAP";
+		case MANDB_MAP:
+			return "MANDB_MAP";
+		case MANDB_MAP_USER:
+			return "MANDB_MAP_USER";
+		case DEFINE:
+			return "DEFINE";
+		case DEFINE_USER:
+			return "DEFINE_USER";
+		case SECTION:
+			return "SECTION";
+		case SECTION_USER:
+			return "SECTION_USER";
+		default:
+			error (FATAL, 0, "impossible config_flag value %d",
+			       flag);
+			abort (); /* error should have exited */
+	}
+}
+
 static void print_list (void)
 {
 	gl_list_iterator_t iter;
@@ -194,8 +223,8 @@ static void print_list (void)
 
 	iter = gl_list_iterator (config);
 	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
-		debug ("`%s'\t`%s'\t`%d'\n",
-		       item->key, item->cont, item->flag);
+		debug ("`%s'\t`%s'\t`%s'\n",
+		       item->key, item->cont, describe_flag (item->flag));
 	gl_list_iterator_free (&iter);
 }
 
@@ -218,7 +247,7 @@ const char **get_sections (void)
 	const struct config_item *item;
 	int length_user = 0, length = 0;
 	const char **sections, **sectionp;
-	int flag;
+	enum config_flag flag;
 
 	iter = gl_list_iterator (config);
 	while (gl_list_iterator_next (&iter, (const void **) &item, NULL)) {
@@ -245,10 +274,9 @@ const char **get_sections (void)
 	return sections;
 }
 
-static void add_def (char *thing, char *config_def, int flag, int user)
+static void add_def (const char *thing, const char *config_def, int user)
 {
-	add_config (thing, flag == 2 ? config_def : "",
-		    user ? DEFINE_USER : DEFINE);
+	add_config (thing, config_def, user ? DEFINE_USER : DEFINE);
 
 	debug ("Defined `%s' as `%s'.\n", thing, config_def);
 }
@@ -263,19 +291,14 @@ static void add_manpath_map (const char *path, const char *mandir)
 	debug ("Path `%s' mapped to mandir `%s'.\n", path, mandir);
 }
 
-static void add_mandb_map (const char *mandir, const char *catdir,
-			   int flag, int user)
+static void add_mandb_map (const char *mandir, const char *catdir, int user)
 {
 	char *tmpcatdir;
-
-	assert (flag > 0);
 
 	if (!mandir)
 		return;
 
-	if (flag == 1)
-		tmpcatdir = xstrdup (mandir);
-	else if (STREQ (catdir, "FSSTND"))
+	if (STREQ (catdir, "FSSTND"))
 		tmpcatdir = fsstnd (mandir);
 	else
 		tmpcatdir = xstrdup (catdir);
@@ -814,10 +837,10 @@ static void add_to_dirlist (FILE *config_file, int user)
 			add_manpath_map (key, cont);
 		else if ((c = sscanf (bp, "MANDB_MAP %511s %511s",
 				      key, cont)) > 0) 
-			add_mandb_map (key, cont, c, user);
+			add_mandb_map (key, c == 2 ? cont : key, user);
 		else if ((c = sscanf (bp, "DEFINE %511s %511[^\n]",
 				      key, cont)) > 0)
-			add_def (key, cont, c, user);
+			add_def (key, c == 2 ? cont : "", user);
 		else if (sscanf (bp, "SECTION %511[^\n]", cont) == 1)
 			add_sections (cont, user);
 		else if (sscanf (bp, "SECTIONS %511[^\n]", cont) == 1)
@@ -906,7 +929,7 @@ void read_config_file (int optional)
  * Construct the default manpath.  This picks up mandatory manpaths
  * only.
  */
-static char *def_path (int flag)
+static char *def_path (enum config_flag flag)
 {
 	char *manpath = NULL;
 	gl_list_iterator_t iter;
