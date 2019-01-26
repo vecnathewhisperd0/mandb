@@ -49,18 +49,8 @@
 #include <errno.h>
 #include <termios.h>
 #include <unistd.h>
-
-#ifndef R_OK
-#  define R_OK		4
-#  define X_OK		1
-#endif /* !R_OK */
-
 #include <limits.h>
-
-#if HAVE_FCNTL_H
-#  include <fcntl.h>
-#endif
-
+#include <fcntl.h>
 #include <ctype.h>
 #include <signal.h>
 #include <time.h>

@@ -339,7 +339,7 @@ then
 	AC_MSG_ERROR([flex is required when building from revision control])
 fi
 gl_INIT
-AC_CHECK_HEADERS([fcntl.h sys/file.h linux/fiemap.h])
+AC_CHECK_HEADERS([sys/file.h linux/fiemap.h])
 AC_CHECK_FUNCS([lchown posix_fadvise])
 
 # Internationalization support.

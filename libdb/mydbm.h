@@ -90,11 +90,8 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 
 # elif defined(NDBM) && !defined(GDBM) && !defined(BTREE)
 
+#  include <fcntl.h>
 #  include <ndbm.h>
-
-#  if HAVE_FCNTL_H
-#   include <fcntl.h>
-#  endif
 
 /* Berkeley db routines emulate ndbm but don't add .dir & .pag, just .db! */
 #  ifdef _DB_H_ /* has Berkeley db.h been included? */

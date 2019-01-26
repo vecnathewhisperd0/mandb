@@ -28,16 +28,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include <sys/file.h> /* for flock() */
 #include <sys/types.h> /* for open() */
 #include <sys/stat.h>
-
-#if HAVE_FCNTL_H
-#  include <fcntl.h>
-#endif
-
-#include <unistd.h>
 
 #include "stat-time.h"
 #include "timespec.h"
