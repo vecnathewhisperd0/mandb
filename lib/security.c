@@ -27,6 +27,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -94,12 +95,12 @@ void init_security (void)
 #endif /* MAN_OWNER */
 }
 
-int running_setuid (void)
+bool running_setuid (void)
 {
 #ifdef MAN_OWNER
 	return ruid != euid;
 #else /* !MAN_OWNER */
-	return 0;
+	return false;
 #endif
 }
 

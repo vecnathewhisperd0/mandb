@@ -20,4 +20,6 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-int word_fnmatch (const char *lowpattern, const char *string);
+#include <stdbool.h>
+
+bool word_fnmatch (const char *lowpattern, const char *string);

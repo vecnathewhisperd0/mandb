@@ -22,6 +22,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <stdbool.h>
 #include <pwd.h>
 
 /* security.c */
@@ -29,7 +30,7 @@ extern void drop_effective_privs (void);
 extern void regain_effective_privs (void);
 extern void drop_privs (void *data);
 extern void init_security (void);
-extern int running_setuid (void);
+extern bool running_setuid (void);
 #ifdef MAN_OWNER
 extern struct passwd *get_man_owner (void);
 #endif /* MAN_OWNER */

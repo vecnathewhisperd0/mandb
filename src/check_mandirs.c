@@ -31,6 +31,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -652,12 +653,12 @@ int create_db (const char *manpath, const char *catpath)
 }
 
 /* Make sure an existing database is essentially sane. */
-static int sanity_check_db (MYDBM_FILE dbf)
+static bool sanity_check_db (MYDBM_FILE dbf)
 {
 	datum key;
 
 	if (dbver_rd (dbf))
-		return 0;
+		return false;
 
 	key = MYDBM_FIRSTKEY (dbf);
 	while (MYDBM_DPTR (key) != NULL) {
@@ -668,7 +669,7 @@ static int sanity_check_db (MYDBM_FILE dbf)
 			debug ("warning: %s has a key with no content (%s); "
 			       "rebuilding\n", database, MYDBM_DPTR (key));
 			MYDBM_FREE_DPTR (key);
-			return 0;
+			return false;
 		}
 		MYDBM_FREE_DPTR (content);
 		nextkey = MYDBM_NEXTKEY (dbf, key);
@@ -676,7 +677,7 @@ static int sanity_check_db (MYDBM_FILE dbf)
 		key = nextkey;
 	}
 
-	return 1;
+	return true;
 }
 
 /* routine to update the db, ensure that it is consistent with the 

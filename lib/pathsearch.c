@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -37,26 +38,26 @@
 #include "manconfig.h"
 #include "pathsearch.h"
 
-static int pathsearch (const char *name, const mode_t bits)
+static bool pathsearch (const char *name, const mode_t bits)
 {
 	char *cwd = NULL;
 	char *path = getenv ("PATH");
 	char *pathtok;
 	const char *element;
 	struct stat st;
-	int ret = 0;
+	bool ret = false;
 
 	if (!path)
 		/* Eh? Oh well. */
-		return 0;
+		return false;
 
 	if (strchr (name, '/')) {
 		/* Qualified name; look directly. */
 		if (stat (name, &st) == -1)
-			return 0;
+			return false;
 		if (S_ISREG (st.st_mode) && (st.st_mode & bits))
-			return 1;
-		return 0;
+			return true;
+		return false;
 	}
 
 	pathtok = path = xstrdup (path);
@@ -81,7 +82,7 @@ static int pathsearch (const char *name, const mode_t bits)
 		free (filename);
 
 		if (S_ISREG (st.st_mode) && (st.st_mode & bits)) {
-			ret = 1;
+			ret = true;
 			break;
 		}
 	}
@@ -91,22 +92,22 @@ static int pathsearch (const char *name, const mode_t bits)
 	return ret;
 }
 
-int pathsearch_executable (const char *name)
+bool pathsearch_executable (const char *name)
 {
 	return pathsearch (name, 0111);
 }
 
-int directory_on_path (const char *dir)
+bool directory_on_path (const char *dir)
 {
 	char *cwd = NULL;
 	char *path = getenv ("PATH");
 	char *pathtok;
 	const char *element;
-	int ret = 0;
+	bool ret = false;
 
 	if (!path)
 		/* Eh? Oh well. */
-		return 0;
+		return false;
 
 	pathtok = path = xstrdup (path);
 
@@ -119,7 +120,7 @@ int directory_on_path (const char *dir)
 		}
 
 		if (STREQ (element, dir)) {
-			ret = 1;
+			ret = true;
 			break;
 		}
 	}

@@ -20,6 +20,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <stdbool.h>
+
 const char *get_groff_preconv (void);
 char *get_page_encoding (const char *lang);
 const char *get_source_encoding (const char *lang);
@@ -28,7 +30,7 @@ const char *get_locale_charset (void);
 char *find_charset_locale (const char *charset);
 const char *get_default_device (const char *locale_charset,
 				const char *source_encoding);
-int is_roff_device (const char *device);
+bool is_roff_device (const char *device);
 const char *get_roff_encoding (const char *device,
 			       const char *source_encoding);
 const char *get_output_encoding (const char *device);

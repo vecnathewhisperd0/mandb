@@ -40,6 +40,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -138,7 +139,7 @@ char *lang;
 #define TFMT_PROG "mandb_tfmt"
 #undef ALT_EXT_FORMAT	/* allow external formatters located in cat hierarchy */
 
-static int global_manpath = -1;	/* global or user manual page hierarchy? */
+static bool global_manpath;	/* global or user manual page hierarchy? */
 static int skip;		/* page exists but has been skipped */
 
 #if defined _AIX || defined __sgi
@@ -2693,25 +2694,25 @@ static int get_ult_flags (char from_db, char id)
 }
 
 /* Is this candidate substantially a duplicate of a previous one?
- * Returns non-zero if so, otherwise zero.
+ * Returns true if so, otherwise false.
  */
-static int duplicate_candidates (struct candidate *left,
-				 struct candidate *right)
+static bool duplicate_candidates (struct candidate *left,
+				  struct candidate *right)
 {
 	const char *slash1, *slash2;
 	struct locale_bits bits1, bits2;
-	int ret;
+	bool ret;
 
 	if (left->ult && right->ult && STREQ (left->ult, right->ult))
-		return 1; /* same ultimate source file */
+		return true; /* same ultimate source file */
 
 	if (!STREQ (left->source->name, right->source->name) ||
 	    !STREQ (left->source->sec, right->source->sec) ||
 	    !STREQ (left->source->ext, right->source->ext))
-		return 0; /* different name/section/extension */
+		return false; /* different name/section/extension */
 
 	if (STREQ (left->path, right->path))
-		return 1; /* same path */
+		return true; /* same path */
 
 	/* Figure out if we've had a sufficiently similar candidate for this
 	 * language already.
@@ -2721,7 +2722,7 @@ static int duplicate_candidates (struct candidate *left,
 	if (!slash1 || !slash2 ||
 	    !STRNEQ (left->path, right->path,
 		     MAX (slash1 - left->path, slash2 - right->path)))
-		return 0; /* different path base */
+		return false; /* different path base */
 
 	unpack_locale_bits (++slash1, &bits1);
 	unpack_locale_bits (++slash2, &bits2);
@@ -2729,12 +2730,12 @@ static int duplicate_candidates (struct candidate *left,
 	if (!STREQ (bits1.language, bits2.language) ||
 	    !STREQ (bits1.territory, bits2.territory) ||
 	    !STREQ (bits1.modifier, bits2.modifier))
-		ret = 0; /* different language/territory/modifier */
+		ret = false; /* different language/territory/modifier */
 	else
 		/* Everything seems to be the same; we can find nothing to
 		 * choose between them.
 		 */
-		ret = 1;
+		ret = true;
 
 	free_locale_bits (&bits1);
 	free_locale_bits (&bits2);

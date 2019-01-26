@@ -30,6 +30,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -438,7 +439,8 @@ static void cleanup (void *arg)
 
 /* sort out the database names */
 static int mandb (struct dbpaths *dbpaths,
-		  const char *catpath, const char *manpath, int global_manpath)
+		  const char *catpath, const char *manpath,
+		  bool global_manpath)
 {
 	int ret, amount;
 	char *dbname;
@@ -552,7 +554,7 @@ static int mandb (struct dbpaths *dbpaths,
 	return amount;
 }
 
-static int process_manpath (const char *manpath, int global_manpath,
+static int process_manpath (const char *manpath, bool global_manpath,
 			    struct hashtable *tried_catdirs)
 {
 	char *catpath;
@@ -860,7 +862,7 @@ int main (int argc, char *argv[])
 
 	mpiter = gl_list_iterator (manpathlist);
 	while (gl_list_iterator_next (&mpiter, (const void **) &mp, NULL)) {
-		int global_manpath = is_global_mandir (mp);
+		bool global_manpath = is_global_mandir (mp);
 		int ret;
 		DIR *dir;
 		struct dirent *subdirent;

@@ -47,6 +47,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/types.h>
@@ -1368,15 +1369,15 @@ char *get_catpath (const char *name, int cattype)
 /* Check to see if the supplied man directory is a system-wide mandir.
  * Obviously, user directories must not be included here.
  */
-int is_global_mandir (const char *dir)
+bool is_global_mandir (const char *dir)
 {
 	struct list *list;
 
 	for (list = namestore; list; list = list->next)
 		if (list->flag == MANDB_MAP &&
 		    STRNEQ (dir, list->key, strlen (list->key)))
-		    	return 1;
-	return 0;
+		    	return true;
+	return false;
 }
 
 /* Accept a manpath (not a full pathname to a file) and return an FSSTND 

@@ -25,6 +25,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -640,27 +641,27 @@ out:
 
 /* Can we take this input encoding and produce this output encoding, perhaps
  * with the help of some iconv pipes? */
-static int compatible_encodings (const char *input, const char *output)
+static bool compatible_encodings (const char *input, const char *output)
 {
 	if (STREQ (input, output))
-		return 1;
+		return true;
 
 	/* If the input is ASCII, recoding should be easy. Try it. */
 	if (STREQ (input, "ANSI_X3.4-1968"))
-		return 1;
+		return true;
 
 	/* If the input is UTF-8, it's either a simple recoding of whatever
 	 * we want or else it probably won't work at all no matter what we
 	 * do. We might as well try it for now.
 	 */
 	if (STREQ (input, "UTF-8"))
-		return 1;
+		return true;
 
 	/* If the output is ASCII, this is probably because the caller
 	 * explicitly asked for it, so we have little choice but to try.
 	 */
 	if (STREQ (output, "ANSI_X3.4-1968"))
-		return 1;
+		return true;
 
 #ifdef MULTIBYTE_GROFF
 	/* Special case for some CJK UTF-8 locales, which take UTF-8 input
@@ -673,10 +674,10 @@ static int compatible_encodings (const char *input, const char *output)
 	     STREQ (input, "EUC-KR") ||
 	     STREQ (input, "EUC-TW")) &&
 	    STREQ (output, "UTF-8"))
-		return 1;
+		return true;
 #endif /* MULTIBYTE_GROFF */
 
-	return 0;
+	return false;
 }
 
 /* Return the default groff device for the given character set. This may be
@@ -723,16 +724,16 @@ const char *get_default_device (const char *charset_from_locale,
 }
 
 /* Is this a known *roff device name? */
-int is_roff_device (const char *device)
+bool is_roff_device (const char *device)
 {
 	const struct device_entry *entry;
 
 	for (entry = device_table; entry->roff_device; ++entry) {
 		if (STREQ (entry->roff_device, device))
-			return 1;
+			return true;
 	}
 
-	return 0;
+	return false;
 }
 
 /* Find the input encoding expected by groff, and set the LESSCHARSET

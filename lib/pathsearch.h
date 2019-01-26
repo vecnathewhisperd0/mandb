@@ -23,12 +23,14 @@
 #ifndef PATHSEARCH_H
 #define PATHSEARCH_H
 
-/* Return non-zero if NAME is found as an executable regular file on the
- * $PATH.
- */
-int pathsearch_executable (const char *name);
+#include <stdbool.h>
 
-/* Return non-zero if DIR matches an entry on the $PATH. */
-int directory_on_path (const char *dir);
+/* Return true if NAME is found as an executable regular file on the $PATH,
+ * otherwise false.
+ */
+bool pathsearch_executable (const char *name);
+
+/* Return true if DIR matches an entry on the $PATH, otherwise false. */
+bool directory_on_path (const char *dir);
 
 #endif /* PATHSEARCH_H */

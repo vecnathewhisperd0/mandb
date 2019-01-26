@@ -26,6 +26,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
 #include <ctype.h>
@@ -405,7 +406,7 @@ struct mandata *dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 #endif /* !BTREE */
 		struct mandata info;
 		char *tab;
-		int got_match;
+		bool got_match;
 
 		memset (&info, 0, sizeof (info));
 

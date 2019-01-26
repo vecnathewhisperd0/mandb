@@ -34,6 +34,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -517,23 +518,23 @@ static int do_whatis_section (MYDBM_FILE dbf,
 	return count;
 }
 
-static int suitable_manpath (const char *manpath, const char *page_dir)
+static bool suitable_manpath (const char *manpath, const char *page_dir)
 {
 	char *page_manp, *pm;
 	gl_list_t page_manpathlist;
-	int ret;
+	bool ret;
 
 	page_manp = get_manpath_from_path (page_dir, 0);
 	if (!page_manp || !*page_manp) {
 		free (page_manp);
-		return 0;
+		return false;
 	}
 	pm = locale_manpath (page_manp);
 	free (page_manp);
 	page_manp = pm;
 	page_manpathlist = create_pathlist (page_manp);
 
-	ret = gl_list_search (page_manpathlist, manpath) ? 1 : 0;
+	ret = gl_list_search (page_manpathlist, manpath) ? true : false;
 
 	free_pathlist (page_manpathlist);
 	free (page_manp);
@@ -591,24 +592,24 @@ static void do_whatis (MYDBM_FILE dbf,
 	}
 }
 
-static int any_set (int num_pages, int *found_here)
+static bool any_set (int num_pages, int *found_here)
 {
 	int i;
 
 	for (i = 0; i < num_pages; ++i)
 		if (found_here[i])
-			return 1;
-	return 0;
+			return true;
+	return false;
 }
 
-static int all_set (int num_pages, int *found_here)
+static bool all_set (int num_pages, int *found_here)
 {
 	int i;
 
 	for (i = 0; i < num_pages; ++i)
 		if (!found_here[i])
-			return 0;
-	return 1;
+			return false;
+	return true;
 }
 
 static void parse_name (const char * const *pages, int num_pages,
@@ -642,8 +643,8 @@ static void parse_name (const char * const *pages, int num_pages,
 	}
 }
 
-/* return 1 on word match */
-static int match (const char *lowpage, const char *whatis)
+/* return true on word match */
+static bool match (const char *lowpage, const char *whatis)
 {
 	char *lowwhatis = lower (whatis);
 	size_t len = strlen (lowpage);
@@ -659,13 +660,13 @@ static int match (const char *lowpage, const char *whatis)
 		if ((p == begin || (!CTYPE (islower, *left) && *left != '_')) &&
 		    (!*right || (!CTYPE (islower, *right) && *right != '_'))) {
 		    	free (begin);
-		    	return 1;
+		    	return true;
 		}
 		lowwhatis = p + 1;
 	}
 
 	free (begin);
-	return 0;
+	return false;
 }
 
 static void parse_whatis (const char * const *pages, char * const *lowpages,
@@ -714,7 +715,7 @@ static void do_apropos (MYDBM_FILE dbf,
 	datum key, cont;
 	char **lowpages;
 	int *found_here;
-	int (*combine) (int, int *);
+	bool (*combine) (int, int *);
 	int i;
 #ifndef BTREE
 	datum nextkey;

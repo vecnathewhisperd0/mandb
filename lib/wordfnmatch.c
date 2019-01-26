@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -37,7 +38,7 @@
 /* TODO: How on earth do we allow multiple-word matches without
  * reimplementing fnmatch()?
  */
-int word_fnmatch (const char *lowpattern, const char *string)
+bool word_fnmatch (const char *lowpattern, const char *string)
 {
 	char *lowstring = lower (string);
 	char *begin = lowstring, *p;
@@ -53,12 +54,12 @@ int word_fnmatch (const char *lowpattern, const char *string)
 			*p = '\0';
 			if (fnmatch (lowpattern, begin, 0) == 0) {
 				free (lowstring);
-				return 1;
+				return true;
 			}
 			begin = p + 1;
 		}
 	}
 
 	free (lowstring);
-	return 0;
+	return false;
 }
