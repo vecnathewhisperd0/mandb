@@ -99,7 +99,7 @@ char *user_config_file = NULL;
 int disable_cache;
 int min_cat_width = 80, max_cat_width = 80, cat_width = 0;
 
-static char *has_mandir (const char *p);
+static void add_man_subdirs (const char *p);
 static char *fsstnd (const char *path);
 static char *def_path (int flag);
 static void add_dir_to_list (char **lp, const char *dir);
@@ -958,7 +958,6 @@ char *get_manpath_from_path (const char *path, int mandatory)
 {
 	int len;
 	char *tmppath;
-	char *t;
 	char *p;
 	char **lp;
 	char *end;
@@ -997,26 +996,14 @@ char *get_manpath_from_path (const char *path, int mandatory)
 					(mandir_list, p, MANPATH_MAP);
 			}
 
-      		 /* The directory we're working on isn't in the config file.  
-      		    See if it has ../man or man subdirectories.  
-      		    If so, and it hasn't been added to the list, do. */
+		 /* The directory we're working on isn't in the config file.  
+		    See if it has ../man, man, ../share/man, or share/man
+		    subdirectories.  If so, and they haven't been added to
+		    the list, do. */
 
 		} else {
 			debug ("is not in the config file\n");
-
-		 	t = has_mandir (p);
-		 	if (t) {
-				debug ("but does have a ../man, man, "
-				       "../share/man, or share/man "
-				       "subdirectory\n");
-
-				insert_override_dir (tmplist, t);
-				add_dir_to_list (tmplist, t);
-				free (t);
-		 	} else
-				debug ("and doesn't have ../man, man, "
-				       "../share/man, or share/man "
-				       "subdirectories\n");
+			add_man_subdirs (p);
 		}
 	}
 
@@ -1115,11 +1102,12 @@ static void add_dir_to_list (char **lp, const char *dir)
 }
 
 /* path does not exist in config file: check to see if path/../man,
-   path/man, path/../share/man, or path/share/man exist.  If so return
-   it, if not return NULL. */
-static char *has_mandir (const char *path)
+   path/man, path/../share/man, or path/share/man exist, and add them to the
+   list if they do. */
+static void add_man_subdirs (const char *path)
 {
 	char *newpath;
+	int found = 0;
 
 	/* don't assume anything about path, especially that it ends in 
 	   "bin" or even has a '/' in it! */
@@ -1127,30 +1115,44 @@ static char *has_mandir (const char *path)
 	char *subdir = strrchr (path, '/');
 	if (subdir) {
 		newpath = xasprintf ("%.*s/man", (int) (subdir - path), path);
-		if (is_directory (newpath) == 1)
-			return newpath;
+		if (is_directory (newpath) == 1) {
+			insert_override_dir (tmplist, newpath);
+			add_dir_to_list (tmplist, newpath);
+			found = 1;
+		}
 		free (newpath);
 	}
 
 	newpath = xasprintf ("%s/man", path);
-	if (is_directory (newpath) == 1)
-		return newpath;
+	if (is_directory (newpath) == 1) {
+		insert_override_dir (tmplist, newpath);
+		add_dir_to_list (tmplist, newpath);
+		found = 1;
+	}
 	free (newpath);
 
 	if (subdir) {
 		newpath = xasprintf ("%.*s/share/man",
 				     (int) (subdir - path), path);
-		if (is_directory (newpath) == 1)
-			return newpath;
+		if (is_directory (newpath) == 1) {
+			insert_override_dir (tmplist, newpath);
+			add_dir_to_list (tmplist, newpath);
+			found = 1;
+		}
 		free (newpath);
 	}
 
 	newpath = xasprintf ("%s/share/man", path);
-	if (is_directory (newpath) == 1)
-		return newpath;
+	if (is_directory (newpath) == 1) {
+		insert_override_dir (tmplist, newpath);
+		add_dir_to_list (tmplist, newpath);
+		found = 1;
+	}
 	free (newpath);
 
-	return NULL;
+	if (!found)
+		debug ("and doesn't have ../man, man, ../share/man, or "
+		       "share/man subdirectories\n");
 }
 
 static char **add_dir_to_path_list (char **mphead, char **mp, const char *p)
