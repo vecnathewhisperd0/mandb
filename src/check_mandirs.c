@@ -57,7 +57,6 @@
 #include "hashtable.h"
 #include "orderfiles.h"
 #include "security.h"
-#include "xchown.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -380,11 +379,8 @@ void chown_if_possible (const char *path)
 	    (st.st_uid != man_owner->pw_uid ||
 	     st.st_gid != man_owner->pw_gid)) {
 		debug ("fixing ownership of %s\n", path);
-#ifdef HAVE_LCHOWN
-		xlchown (path, man_owner->pw_uid, man_owner->pw_gid);
-#else
-		xchown (path, man_owner->pw_uid, man_owner->pw_gid);
-#endif
+		if (lchown (path, man_owner->pw_uid, man_owner->pw_gid) < 0)
+			error (FATAL, 0, _("can't chown %s"), path);
 	}
 }
 #else /* !MAN_OWNER */

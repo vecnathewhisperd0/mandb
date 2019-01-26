@@ -59,8 +59,6 @@ libman_la_SOURCES = \
 	util.c \
 	wordfnmatch.c \
 	wordfnmatch.h \
-	xchown.c \
-	xchown.h \
 	xregcomp.c \
 	xregcomp.h
 

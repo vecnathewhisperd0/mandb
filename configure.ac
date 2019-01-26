@@ -340,7 +340,7 @@ then
 fi
 gl_INIT
 AC_CHECK_HEADERS([sys/file.h linux/fiemap.h])
-AC_CHECK_FUNCS([lchown posix_fadvise])
+AC_CHECK_FUNCS([posix_fadvise])
 
 # Internationalization support.
 AM_GNU_GETTEXT([external])
