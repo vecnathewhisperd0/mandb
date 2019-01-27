@@ -64,7 +64,6 @@
 #include "gl_array_list.h"
 #include "gl_linkedhash_list.h"
 #include "gl_xlist.h"
-#include "hash-pjw-bare.h"
 #include "xgetcwd.h"
 #include "xvasprintf.h"
 
@@ -75,6 +74,7 @@
 
 #include "error.h"
 #include "cleanup.h"
+#include "gl-container-helpers.h"
 #include "security.h"
 
 #include "manp.h"
@@ -109,24 +109,6 @@ static char *def_path (enum config_flag flag);
 static void add_dir_to_list (gl_list_t list, const char *dir);
 static void add_dir_to_path_list (gl_list_t list, const char *p);
 
-
-static bool string_equals (const void *s1, const void *s2)
-{
-	return STREQ ((const char *) s1, (const char *) s2);
-}
-
-static size_t string_hash (const void *s)
-{
-	return hash_pjw_bare (s, strlen ((const char *) s));
-}
-
-static void string_free (const void *s)
-{
-	/* gl_list declares the argument as const, but there doesn't seem to
-	 * be a good reason for this.
-	 */
-	free ((void *) s);
-}
 
 static void config_item_free (const void *elt)
 {
@@ -1010,7 +992,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	char *item;
 
 	tmplist = gl_list_create_empty (GL_LINKEDHASH_LIST, string_equals,
-					string_hash, string_free, false);
+					string_hash, plain_free, false);
 	tmppath = xstrdup (path);
 
 	for (end = p = tmppath; end; p = end + 1) {
@@ -1246,7 +1228,7 @@ gl_list_t create_pathlist (const char *manp)
 	/* Expand the manpath into a list for easier handling. */
 
 	list = gl_list_create_empty (GL_LINKEDHASH_LIST, string_equals,
-				     string_hash, string_free, true);
+				     string_hash, plain_free, true);
 	for (p = manp;; p = end + 1) {
 		end = strchr (p, ':');
 		if (end) {
