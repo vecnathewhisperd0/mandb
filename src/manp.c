@@ -133,17 +133,15 @@ static void add_config (const char *key, const char *cont,
 
 static const char *get_config (const char *key, enum config_flag flag)
 {
-	gl_list_iterator_t iter;
 	const struct config_item *item;
 	char *cont = NULL;
 
-	iter = gl_list_iterator (config);
-	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+	GL_LIST_FOREACH_START (config, item)
 		if (flag == item->flag && STREQ (key, item->key)) {
 			cont = item->cont;
 			break;
 		}
-	gl_list_iterator_free (&iter);
+	GL_LIST_FOREACH_END (config);
 
 	return cont;
 }
@@ -200,14 +198,12 @@ static const char *describe_flag (enum config_flag flag)
 
 static void print_list (void)
 {
-	gl_list_iterator_t iter;
 	const struct config_item *item;
 
-	iter = gl_list_iterator (config);
-	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+	GL_LIST_FOREACH_START (config, item)
 		debug ("`%s'\t`%s'\t`%s'\n",
 		       item->key, item->cont, describe_flag (item->flag));
-	gl_list_iterator_free (&iter);
+	GL_LIST_FOREACH_END (config);
 }
 
 static void add_sections (char *sections, int user)
@@ -225,20 +221,17 @@ static void add_sections (char *sections, int user)
 
 const char **get_sections (void)
 {
-	gl_list_iterator_t iter;
 	const struct config_item *item;
 	int length_user = 0, length = 0;
 	const char **sections, **sectionp;
 	enum config_flag flag;
 
-	iter = gl_list_iterator (config);
-	while (gl_list_iterator_next (&iter, (const void **) &item, NULL)) {
+	GL_LIST_FOREACH_START (config, item) {
 		if (item->flag == SECTION_USER)
 			length_user++;
 		else if (item->flag == SECTION)
 			length++;
-	}
-	gl_list_iterator_free (&iter);
+	} GL_LIST_FOREACH_END (config);
 	if (length_user) {
 		sections = xnmalloc (length_user + 1, sizeof *sections);
 		flag = SECTION_USER;
@@ -247,11 +240,10 @@ const char **get_sections (void)
 		flag = SECTION;
 	}
 	sectionp = sections;
-	iter = gl_list_iterator (config);
-	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+	GL_LIST_FOREACH_START (config, item)
 		if (item->flag == flag)
 			*sectionp++ = item->key;
-	gl_list_iterator_free (&iter);
+	GL_LIST_FOREACH_END (config);
 	*sectionp = NULL;
 	return sections;
 }
@@ -914,11 +906,9 @@ void read_config_file (int optional)
 static char *def_path (enum config_flag flag)
 {
 	char *manpath = NULL;
-	gl_list_iterator_t iter;
 	const struct config_item *item;
 
-	iter = gl_list_iterator (config);
-	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+	GL_LIST_FOREACH_START (config, item)
 		if (item->flag == flag) {
 			char **expanded_dirs;
 			int i;
@@ -941,7 +931,7 @@ static char *def_path (enum config_flag flag)
 			}
 			free (expanded_dirs);
 		}
-	gl_list_iterator_free (&iter);
+	GL_LIST_FOREACH_END (config);
 
 	/* If we have complete config file failure... */
 	if (!manpath)
@@ -981,8 +971,6 @@ static void insert_override_dir (gl_list_t list, const char *dir)
 char *get_manpath_from_path (const char *path, int mandatory)
 {
 	gl_list_t tmplist;
-	gl_list_iterator_t tmpiter;
-	gl_list_iterator_t config_iter;
 	const struct config_item *config_item;
 	int len;
 	char *tmppath;
@@ -1011,10 +999,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 		/* If the directory we're working on has MANPATH_MAP entries
 		 * in the config file, add them to the list.
 		 */
-		config_iter = gl_list_iterator (config);
-		while (gl_list_iterator_next (&config_iter,
-					      (const void **) &config_item,
-					      NULL)) {
+		GL_LIST_FOREACH_START (config, config_item) {
 			if (MANPATH_MAP != config_item->flag ||
 			    !STREQ (p, config_item->key))
 				continue;
@@ -1023,8 +1008,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 			manpath_map_found = true;
 			insert_override_dir (tmplist, config_item->cont);
 			add_dir_to_list (tmplist, config_item->cont);
-		}
-		gl_list_iterator_free (&config_iter);
+		} GL_LIST_FOREACH_END (config);
 
 		 /* The directory we're working on isn't in the config file.  
 		    See if it has ../man, man, ../share/man, or share/man
@@ -1042,24 +1026,19 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	if (mandatory) {
 		debug ("\nadding mandatory man directories\n\n");
 
-		config_iter = gl_list_iterator (config);
-		while (gl_list_iterator_next (&config_iter,
-					      (const void **) &config_item,
-					      NULL)) {
+		GL_LIST_FOREACH_START (config, config_item) {
 			if (config_item->flag == MANDATORY) {
 				insert_override_dir (tmplist,
 						     config_item->key);
 				add_dir_to_list (tmplist, config_item->key);
 			}
-		}
-		gl_list_iterator_free (&config_iter);
+		} GL_LIST_FOREACH_END (config);
 	}
 
 	len = 0;
-	tmpiter = gl_list_iterator (tmplist);
-	while (gl_list_iterator_next (&tmpiter, (const void **) &item, NULL))
+	GL_LIST_FOREACH_START (tmplist, item)
 		len += strlen (item) + 1;
-	gl_list_iterator_free (&tmpiter);
+	GL_LIST_FOREACH_END (tmplist);
 
 	if (!len)
 		/* No path elements in configuration file or with
@@ -1071,14 +1050,12 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	*manpathlist = '\0';
 
 	p = manpathlist;
-	tmpiter = gl_list_iterator (tmplist);
-	while (gl_list_iterator_next (&tmpiter, (const void **) &item, NULL)) {
+	GL_LIST_FOREACH_START (tmplist, item) {
 		len = strlen (item);
 		memcpy (p, item, len);
 		p += len;
 		*p++ = ':';
-	}
-	gl_list_iterator_free (&tmpiter);
+	} GL_LIST_FOREACH_END (tmplist);
 
 	p[-1] = '\0';
 
@@ -1286,16 +1263,13 @@ gl_list_t create_pathlist (const char *manp)
 		bool first = true;
 
 		debug ("final search path = ");
-		iter = gl_list_iterator (list);
-		while (gl_list_iterator_next (&iter, (const void **) &p,
-					      NULL)) {
+		GL_LIST_FOREACH_START (list, p) {
 			if (first) {
 				debug ("%s", p);
 				first = false;
 			} else
 				debug (":%s", p);
-		}
-		gl_list_iterator_free (&iter);
+		} GL_LIST_FOREACH_END (list);
 		debug ("\n");
 	}
 
@@ -1311,14 +1285,12 @@ void free_pathlist (gl_list_t list)
 char *get_mandb_manpath (void)
 {
 	char *manpath = NULL;
-	gl_list_iterator_t iter;
 	const struct config_item *item;
 
-	iter = gl_list_iterator (config);
-	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+	GL_LIST_FOREACH_START (config, item)
 		if (item->flag == MANDB_MAP || item->flag == MANDB_MAP_USER)
 			manpath = pathappend (manpath, item->key);
-	gl_list_iterator_free (&iter);
+	GL_LIST_FOREACH_END (config);
 
 	return manpath;
 }
@@ -1338,12 +1310,10 @@ char *get_mandb_manpath (void)
  */
 char *get_catpath (const char *name, int cattype)
 {
-	gl_list_iterator_t iter;
 	const struct config_item *item;
 	char *ret = NULL;
 
-	iter = gl_list_iterator (config);
-	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+	GL_LIST_FOREACH_START (config, item)
 		if (((cattype & SYSTEM_CAT) && item->flag == MANDB_MAP) ||
 		    ((cattype & USER_CAT)   && item->flag == MANDB_MAP_USER)) {
 			size_t manlen = strlen (item->key);
@@ -1388,7 +1358,7 @@ char *get_catpath (const char *name, int cattype)
 				break;
 			}
 		}
-	gl_list_iterator_free (&iter);
+	GL_LIST_FOREACH_END (config);
 
 	return ret;
 }
@@ -1398,18 +1368,16 @@ char *get_catpath (const char *name, int cattype)
  */
 bool is_global_mandir (const char *dir)
 {
-	gl_list_iterator_t iter;
 	const struct config_item *item;
 	bool ret = false;
 
-	iter = gl_list_iterator (config);
-	while (gl_list_iterator_next (&iter, (const void **) &item, NULL))
+	GL_LIST_FOREACH_START (config, item)
 		if (item->flag == MANDB_MAP &&
 		    STRNEQ (dir, item->key, strlen (item->key))) {
 		    	ret = true;
 			break;
 		}
-	gl_list_iterator_free (&iter);
+	GL_LIST_FOREACH_END (config);
 
 	return ret;
 }

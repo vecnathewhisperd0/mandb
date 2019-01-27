@@ -71,6 +71,7 @@
 #include "manconfig.h"
 
 #include "error.h"
+#include "glcontainers.h"
 #include "pipeline.h"
 #include "decompress.h"
 
@@ -394,7 +395,6 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 		NAME = xstrdup (filename);
 	} else {
 		char *compfile;
-		gl_list_iterator_t mpiter;
 		const char *mp;
 
 		/* If there is no parent path, try opening directly first. */
@@ -426,10 +426,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 				free (compfile);
 			}
 
-			mpiter = gl_list_iterator (manpathlist);
-			while (gl_list_iterator_next (&mpiter,
-						      (const void **) &mp,
-						      NULL)) {
+			GL_LIST_FOREACH_START (manpathlist, mp) {
 				if (parent_path && STREQ (mp, parent_path))
 					continue;
 
@@ -442,8 +439,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 				}
 
 				free (compfile);
-			}
-			gl_list_iterator_free (&mpiter);
+			} GL_LIST_FOREACH_END (manpathlist);
 		} else {
 			/* File name with no directory part.  Try searching
 			 * the manpath.
@@ -476,10 +472,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 				}
 			}
 
-			mpiter = gl_list_iterator (manpathlist);
-			while (gl_list_iterator_next (&mpiter,
-						      (const void **) &mp,
-						      NULL)) {
+			GL_LIST_FOREACH_START (manpathlist, mp) {
 				if (parent_path && STREQ (mp, parent_path))
 					continue;
 
@@ -492,8 +485,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 						goto out;
 					}
 				}
-			}
-			gl_list_iterator_free (&mpiter);
+			} GL_LIST_FOREACH_END (manpathlist);
 
 			free (name);
 		}

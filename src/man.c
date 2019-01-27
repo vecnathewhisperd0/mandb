@@ -78,6 +78,7 @@
 
 #include "error.h"
 #include "cleanup.h"
+#include "glcontainers.h"
 #include "hashtable.h"
 #include "pipeline.h"
 #include "pathsearch.h"
@@ -3702,14 +3703,11 @@ static int do_global_apropos (const char *name, int *found)
 		my_section_list = section_list;
 
 	for (sp = my_section_list; *sp; sp++) {
-		gl_list_iterator_t mpiter;
 		char *mp;
 
-		mpiter = gl_list_iterator (manpathlist);
-		while (gl_list_iterator_next (&mpiter, (const void **) &mp,
-					      NULL))
+		GL_LIST_FOREACH_START (manpathlist, mp)
 			*found += do_global_apropos_section (mp, *sp, name);
-		gl_list_iterator_free (&mpiter);
+		GL_LIST_FOREACH_END (manpathlist);
 	}
 
 	if (section)
@@ -3853,14 +3851,12 @@ static void locate_page_in_manpath (const char *page_section,
 				    struct candidate **candidates,
 				    int *found)
 {
-	gl_list_iterator_t iter;
 	char *mp;
 
-	iter = gl_list_iterator (manpathlist);
-	while (gl_list_iterator_next (&iter, (const void **) &mp, NULL))
+	GL_LIST_FOREACH_START (manpathlist, mp)
 		*found += locate_page (mp, page_section, page_name,
 				       candidates);
-	gl_list_iterator_free (&iter);
+	GL_LIST_FOREACH_END (manpathlist);
 }
 
 /*

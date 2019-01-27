@@ -66,6 +66,7 @@
 
 #include "cleanup.h"
 #include "error.h"
+#include "glcontainers.h"
 #include "pipeline.h"
 #include "pathsearch.h"
 #include "linelength.h"
@@ -836,12 +837,10 @@ nextpage:
 static int search (const char * const *pages, int num_pages)
 {
 	int *found = XCALLOC (num_pages, int);
-	gl_list_iterator_t mpiter;
 	char *catpath, *mp;
 	int any_found, i;
 
-	mpiter = gl_list_iterator (manpathlist);
-	while (gl_list_iterator_next (&mpiter, (const void **) &mp, NULL)) {
+	GL_LIST_FOREACH_START (manpathlist, mp) {
 		MYDBM_FILE dbf;
 
 		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
@@ -875,8 +874,7 @@ static int search (const char * const *pages, int num_pages)
 		free (database);
 		database = NULL;
 		MYDBM_CLOSE (dbf);
-	}
-	gl_list_iterator_free (&mpiter);
+	} GL_LIST_FOREACH_END (manpathlist);
 
 	chkr_garbage_detector ();
 

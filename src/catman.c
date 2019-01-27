@@ -73,6 +73,7 @@
 
 #include "cleanup.h"
 #include "error.h"
+#include "glcontainers.h"
 #include "pipeline.h"
 #include "sandbox.h"
 
@@ -354,7 +355,6 @@ static int check_access (const char *directory)
 int main (int argc, char *argv[])
 {
 	char *sys_manp;
-	gl_list_iterator_t mpiter;
 	char *mp;
 	const char **sp;
 
@@ -393,8 +393,7 @@ int main (int argc, char *argv[])
 	/* get the manpath as a list of pointers */
 	manpathlist = create_pathlist (manp); 
 
-	mpiter = gl_list_iterator (manpathlist);
-	while (gl_list_iterator_next (&mpiter, (const void **) &mp, NULL)) {
+	GL_LIST_FOREACH_START (manpathlist, mp) {
 		char *catpath;
 		size_t len;
 
@@ -429,8 +428,7 @@ int main (int argc, char *argv[])
 		}
 			
 		free (catpath);
-	}
-	gl_list_iterator_free (&mpiter);
+	} GL_LIST_FOREACH_END (manpathlist);
 
 	free_pathlist (manpathlist);
 	free (locale);

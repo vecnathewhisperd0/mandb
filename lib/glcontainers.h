@@ -34,4 +34,14 @@ bool string_equals (const void *s1, const void *s2);
 size_t string_hash (const void *s);
 void plain_free (const void *s);
 
+#define GL_LIST_FOREACH_START(list, item) \
+	do { \
+		gl_list_iterator_t list##_iter = gl_list_iterator (list); \
+		while (gl_list_iterator_next (&list##_iter, \
+					      (const void **) &item, NULL))
+
+#define GL_LIST_FOREACH_END(list) \
+		gl_list_iterator_free (&list##_iter); \
+	} while (0)
+
 #endif /* MAN_GLCONTAINERS_H */

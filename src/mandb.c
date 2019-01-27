@@ -65,6 +65,7 @@
 
 #include "error.h"
 #include "cleanup.h"
+#include "glcontainers.h"
 #include "hashtable.h"
 #include "pipeline.h"
 #include "sandbox.h"
@@ -778,7 +779,6 @@ int main (int argc, char *argv[])
 {
 	char *sys_manp;
 	int amount = 0;
-	gl_list_iterator_t mpiter;
 	char *mp;
 	struct hashtable *tried_catdirs;
 #ifdef SIGPIPE
@@ -860,8 +860,7 @@ int main (int argc, char *argv[])
 
 	tried_catdirs = hashtable_create (tried_catdirs_free);
 
-	mpiter = gl_list_iterator (manpathlist);
-	while (gl_list_iterator_next (&mpiter, (const void **) &mp, NULL)) {
+	GL_LIST_FOREACH_START (manpathlist, mp) {
 		bool global_manpath = is_global_mandir (mp);
 		int ret;
 		DIR *dir;
@@ -912,8 +911,7 @@ next_manpath:
 			regain_effective_privs ();
 
 		chkr_garbage_detector ();
-	}
-	gl_list_iterator_free (&mpiter);
+	} GL_LIST_FOREACH_END (manpathlist);
 
 	purge_catdirs (tried_catdirs);
 	hashtable_free (tried_catdirs);
