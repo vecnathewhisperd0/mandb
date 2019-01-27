@@ -1,5 +1,5 @@
 /*
- * gl-container-helpers.c: common Gnulib container helpers
+ * glcontainers.c: common Gnulib container helpers
  *
  * Copyright (C) 2019 Colin Watson.
  *

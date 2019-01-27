@@ -74,7 +74,7 @@
 
 #include "error.h"
 #include "cleanup.h"
-#include "gl-container-helpers.h"
+#include "glcontainers.h"
 #include "security.h"
 
 #include "manp.h"

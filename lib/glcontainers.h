@@ -1,5 +1,5 @@
 /*
- * gl-container-helpers.h: interface to common Gnulib container helpers
+ * glcontainers.h: interface to common Gnulib container helpers
  *
  * Copyright (C) 2019 Colin Watson.
  *
@@ -20,8 +20,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef MAN_GL_CONTAINER_HELPERS_H
-#define MAN_GL_CONTAINER_HELPERS_H
+#ifndef MAN_GLCONTAINERS_H
+#define MAN_GLCONTAINERS_H
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -34,4 +34,4 @@ bool string_equals (const void *s1, const void *s2);
 size_t string_hash (const void *s);
 void plain_free (const void *s);
 
-#endif /* MAN_GL_CONTAINER_HELPERS_H */
+#endif /* MAN_GLCONTAINERS_H */
