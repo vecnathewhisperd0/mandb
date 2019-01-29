@@ -59,6 +59,13 @@ case $host_os in
 		dnl environment:
 		CFLAGS="$CFLAGS -YPOSIX"
 		;;
+	*darwin*)
+		dnl libman intentionally has an undefined "sandbox" symbol
+		dnl which is supplied by each application.  The Darwin
+		dnl linker refuses to do this by default, and needs some
+		dnl help.
+		CFLAGS="$CFLAGS -Wl,-flat_namespace,-undefined,suppress"
+		;;
 esac
 if test "$GCC" = yes
 then
