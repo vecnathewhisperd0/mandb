@@ -44,6 +44,8 @@
 #include <unistd.h>
 
 #include "dirname.h"
+#include "gl_array_list.h"
+#include "gl_xlist.h"
 #include "stat-time.h"
 #include "timespec.h"
 #include "xvasprintf.h"
@@ -54,6 +56,7 @@
 #include "manconfig.h"
 
 #include "error.h"
+#include "glcontainers.h"
 #include "hashtable.h"
 #include "orderfiles.h"
 #include "security.h"
@@ -311,8 +314,8 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 	int len;
 	struct dirent *newdir;
 	DIR *dir;
-	char **names;
-	size_t names_len, names_max, i;
+	gl_list_t names;
+	const char *name;
 
 	manpage = xasprintf ("%s/%s/", path, infile);
 	len = strlen (manpage);
@@ -329,9 +332,8 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
                 return;
         }
 
-	names_len = 0;
-	names_max = 1024;
-	names = XNMALLOC (names_max, char *);
+	names = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
+				      string_hash, plain_free, false);
 
         /* strlen(newdir->d_name) could be replaced by newdir->d_reclen */
 
@@ -339,24 +341,19 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 		if (*newdir->d_name == '.' &&
 		    strlen (newdir->d_name) < (size_t) 3)
 			continue;
-		if (names_len >= names_max) {
-			names_max *= 2;
-			names = xnrealloc (names, names_max, sizeof (char *));
-		}
-		names[names_len++] = xstrdup (newdir->d_name);
+		gl_list_add_last (names, xstrdup (newdir->d_name));
 	}
 	closedir (dir);
 
-	order_files (infile, names, names_len);
+	order_files (infile, &names);
 
-	for (i = 0; i < names_len; ++i) {
-		manpage = appendstr (manpage, names[i], (void *) 0);
+	GL_LIST_FOREACH_START (names, name) {
+		manpage = appendstr (manpage, name, (void *) 0);
 		test_manfile (dbf, manpage, path);
 		*(manpage + len) = '\0';
-		free (names[i]);
-	}
+	} GL_LIST_FOREACH_END (names);
 
-	free (names);
+	gl_list_free (names);
 	free (manpage);
 }
 
@@ -768,38 +765,38 @@ pointers_next:
  * out that this is better handled in look_for_file() itself.
  */
 static int count_glob_matches (const char *name, const char *ext,
-			       char **source, struct timespec db_mtime)
+			       gl_list_t source, struct timespec db_mtime)
 {
-	char **walk;
+	const char *walk;
 	int count = 0;
 
-	for (walk = source; walk && *walk; ++walk) {
+	GL_LIST_FOREACH_START (source, walk) {
 		struct mandata info;
 		struct stat statbuf;
 		char *buf;
 
 		memset (&info, 0, sizeof (struct mandata));
 
-		if (stat (*walk, &statbuf) == -1) {
+		if (stat (walk, &statbuf) == -1) {
 			debug ("count_glob_matches: excluding %s "
-			       "because stat failed\n", *walk);
+			       "because stat failed\n", walk);
 			continue;
 		}
 		if (db_mtime.tv_sec != (time_t) -1 &&
 		    timespec_cmp (get_stat_mtime (&statbuf), db_mtime) <= 0) {
 			debug ("count_glob_matches: excluding %s, "
-			       "no newer than database\n", *walk);
+			       "no newer than database\n", walk);
 			continue;
 		}
 
-		buf = filename_info (*walk, &info, name);
+		buf = filename_info (walk, &info, name);
 		if (buf) {
 			if (STREQ (ext, info.ext))
 				++count;
 			free (info.name);
 			free (buf);
 		}
-	}
+	} GL_LIST_FOREACH_END (source);
 
 	return count;
 }
@@ -808,7 +805,7 @@ static int count_glob_matches (const char *name, const char *ext,
  * page.
  */
 static int purge_normal (MYDBM_FILE dbf, const char *name,
-			 struct mandata *info, char **found)
+			 struct mandata *info, gl_list_t found)
 {
 	struct timespec t;
 
@@ -831,8 +828,8 @@ static int purge_normal (MYDBM_FILE dbf, const char *name,
 
 /* Decide whether to purge a reference to a WHATIS_MAN or WHATIS_CAT page. */
 static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
-			 const char *name, struct mandata *info, char **found,
-			 struct timespec db_mtime)
+			 const char *name, struct mandata *info,
+			 gl_list_t found, struct timespec db_mtime)
 {
 	/* TODO: On some systems, the cat page extension differs from the
 	 * man page extension, so this may be too strict.
@@ -871,9 +868,10 @@ static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
 		return 1;
 	} else {
 		/* Does the real page still exist? */
-		char **real_found;
+		gl_list_t real_found;
 		int save_debug = debug_level;
 		struct timespec t;
+		int count;
 
 		debug_level = 0;
 		real_found = look_for_file (path, info->ext,
@@ -882,8 +880,10 @@ static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
 
 		t.tv_sec = -1;
 		t.tv_nsec = -1;
-		if (count_glob_matches (info->pointer, info->ext, real_found,
-					t))
+		count = count_glob_matches (info->pointer, info->ext,
+					    real_found, t);
+		gl_list_free (real_found);
+		if (count)
 			return 0;
 
 		if (!opt_test)
@@ -983,7 +983,7 @@ int purge_missing (const char *manpath, const char *catpath,
 		struct mandata entry;
 		char *nicekey, *tab;
 		int save_debug;
-		char **found;
+		gl_list_t found;
 
 		/* Ignore db identifier keys. */
 		if (*MYDBM_DPTR (key) == '$') {
@@ -1048,6 +1048,7 @@ int purge_missing (const char *manpath, const char *catpath,
 			count += purge_whatis (dbf, catpath, 1, nicekey,
 					       &entry, found, db_mtime);
 
+		gl_list_free (found);
 		free (nicekey);
 
 		free_mandata_elements (&entry);

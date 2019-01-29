@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include "argp.h"
+#include "gl_list.h"
 #include "progname.h"
 
 #include "gettext.h"
@@ -38,6 +39,7 @@
 #include "manconfig.h"
 
 #include "error.h"
+#include "glcontainers.h"
 #include "globbing.h"
 #include "sandbox.h"
 
@@ -115,16 +117,18 @@ int main (int argc, char **argv)
 		exit (FAIL);
 
 	for (i = 0; i <= 1; i++) {
-		char **files;
+		gl_list_t files;
+		const char *file;
 
 		files = look_for_file (remaining_args[0], remaining_args[1],
 				       remaining_args[2], i,
 				       (match_case ? LFF_MATCHCASE : 0) |
 				       (regex_opt ? LFF_REGEX : 0) |
 				       (wildcard ? LFF_WILDCARD : 0));
-		if (files)
-			while (*files)
-				printf ("%s\n", *files++);
+		GL_LIST_FOREACH_START (files, file)
+			printf ("%s\n", file);
+		GL_LIST_FOREACH_END (files);
+		gl_list_free (files);
 	}
 	return 0;
 }

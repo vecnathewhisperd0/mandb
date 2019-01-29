@@ -20,4 +20,6 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-void order_files (const char *dir, char **basenames, size_t n_basenames);
+#include "gl_list.h"
+
+void order_files (const char *dir, gl_list_t *basenamesp);

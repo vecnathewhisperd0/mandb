@@ -20,6 +20,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "gl_list.h"
+
 enum look_for_file_opts {
 	LFF_MATCHCASE = 1,
 	LFF_REGEX = 2,
@@ -27,8 +29,8 @@ enum look_for_file_opts {
 };
 
 /* globbing.c */
-extern char **look_for_file (const char *hier, const char *sec,
-			     const char *unesc_name, int cat, int opts);
+extern gl_list_t look_for_file (const char *hier, const char *sec,
+				const char *unesc_name, int cat, int opts);
 
 /* Expand path with wildcards into list of all existing directories. */
 extern char **expand_path (const char *path);

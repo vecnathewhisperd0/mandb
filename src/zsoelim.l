@@ -445,8 +445,8 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 			 * the manpath.
 			 */
 			char *name, *sec, *dot;
-			char **names;
-			char **np;
+			gl_list_t names;
+			const char *found_name;
 
 			name = xstrdup (filename);
 			dot = strchr (name, '.');
@@ -463,13 +463,15 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 			if (parent_path) {
 				names = look_for_file (parent_path, sec, name,
 						       0, LFF_MATCHCASE);
-				for (np = names; np && *np; ++np) {
-					decomp = decompress_open (*np);
+				GL_LIST_FOREACH_START (names, found_name) {
+					decomp = decompress_open (found_name);
 					if (decomp) {
-						NAME = xstrdup (*np);
+						NAME = xstrdup (found_name);
+						gl_list_free (names);
 						goto out;
 					}
-				}
+				} GL_LIST_FOREACH_END (names);
+				gl_list_free (names);
 			}
 
 			GL_LIST_FOREACH_START (manpathlist, mp) {
@@ -478,13 +480,16 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 
 				names = look_for_file (mp, sec, name,
 						       0, LFF_MATCHCASE);
-				for (np = names; np && *np; ++np) {
-					decomp = decompress_open (*np);
+				GL_LIST_FOREACH_START (names, found_name) {
+					decomp = decompress_open (found_name);
 					if (decomp) {
-						NAME = xstrdup (*np);
+						NAME = xstrdup (found_name);
+						gl_list_free (names);
+						free (name);
 						goto out;
 					}
-				}
+				} GL_LIST_FOREACH_END (names);
+				gl_list_free (names);
 			} GL_LIST_FOREACH_END (manpathlist);
 
 			free (name);

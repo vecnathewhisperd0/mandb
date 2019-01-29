@@ -3038,8 +3038,8 @@ static int try_section (const char *path, const char *sec, const char *name,
 			struct candidate **cand_head)
 {
 	int found = 0;
-	char **names = NULL, **np;
-	size_t names_len = 0;
+	gl_list_t names = NULL;
+	const char *found_name;
 	char cat = 0;
 	int lff_opts = (match_case ? LFF_MATCHCASE : 0) |
 		       (regex_opt ? LFF_REGEX : 0) |
@@ -3053,7 +3053,7 @@ static int try_section (const char *path, const char *sec, const char *name,
   	 */
 
 	names = look_for_file (path, sec, name, 0, lff_opts);
-	if (!names)
+	if (!gl_list_size (names))
 		/*
     		 * No files match.  
     		 * See if there's a preformatted page around that
@@ -3065,18 +3065,17 @@ static int try_section (const char *path, const char *sec, const char *name,
 			return 1;
 
 		if (!troff && !want_encoding && !recode) {
+			gl_list_free (names);
 			names = look_for_file (path, sec, name, 1, lff_opts);
 			cat = 1;
 		}
 	}
 
-	for (np = names; np && *np; np++)
-		++names_len;
-	order_files (path, names, names_len);
+	order_files (path, &names);
 
-	for (np = names; np && *np; np++) {
+	GL_LIST_FOREACH_START (names, found_name) {
 		struct mandata *info = infoalloc ();
-		char *info_buffer = filename_info (*np, info, name);
+		char *info_buffer = filename_info (found_name, info, name);
 		const char *ult;
 		int f;
 
@@ -3090,16 +3089,16 @@ static int try_section (const char *path, const char *sec, const char *name,
 		 * must be either ULT_MAN or SO_MAN. ult_src() can tell us
 		 * which.
 		 */
-		ult = ult_src (*np, path, NULL, ult_flags, NULL);
+		ult = ult_src (found_name, path, NULL, ult_flags, NULL);
 		if (!ult) {
 			/* already warned */
-			debug ("try_section(): bad link %s\n", *np);
+			debug ("try_section(): bad link %s\n", found_name);
 			free (info_buffer);
 			info->addr = NULL;
 			free_mandata_struct (info);
 			continue;
 		}
-		if (STREQ (ult, *np))
+		if (STREQ (ult, found_name))
 			info->id = ULT_MAN;
 		else
 			info->id = SO_MAN;
@@ -3116,8 +3115,9 @@ static int try_section (const char *path, const char *sec, const char *name,
 			free_mandata_struct (info);
 		}
 		/* Don't free info and info_buffer here. */
-	}
+	} GL_LIST_FOREACH_END (names);
 
+	gl_list_free (names);
 	return found;
 }
 
@@ -3625,8 +3625,8 @@ static int do_global_apropos_section (const char *path, const char *sec,
 				      const char *name)
 {
 	int found = 0;
-	char **names, **np;
-	size_t names_len = 0;
+	gl_list_t names;
+	const char *found_name;
 	regex_t search;
 
 	global_manpath = is_global_mandir (path);
@@ -3636,6 +3636,7 @@ static int do_global_apropos_section (const char *path, const char *sec,
 	debug ("searching in %s, section %s\n", path, sec);
 
 	names = look_for_file (path, sec, "*", 0, LFF_WILDCARD);
+
 	if (regex_opt)
 		xregcomp (&search, name,
 			  REG_EXTENDED | REG_NOSUB |
@@ -3643,33 +3644,31 @@ static int do_global_apropos_section (const char *path, const char *sec,
 	else
 		memset (&search, 0, sizeof search);
 
-	for (np = names; np && *np; ++np)
-		++names_len;
-	order_files (path, names, names_len);
+	order_files (path, &names);
 
-	for (np = names; np && *np; ++np) {
+	GL_LIST_FOREACH_START (names, found_name) {
 		struct mandata *info;
 		char *info_buffer;
 		char *title = NULL;
 		const char *man_file;
 		char *cat_file = NULL;
 
-		if (!grep (*np, name, &search))
+		if (!grep (found_name, name, &search))
 			continue;
 
 		info = infoalloc ();
-		info_buffer = filename_info (*np, info, NULL);
+		info_buffer = filename_info (found_name, info, NULL);
 		if (!info_buffer)
 			goto next;
 		info->addr = info_buffer;
 
 		title = xasprintf ("%s(%s)", strchr (info_buffer, '\0') + 1,
 				   info->ext);
-		man_file = ult_src (*np, path, NULL, ult_flags, NULL);
+		man_file = ult_src (found_name, path, NULL, ult_flags, NULL);
 		if (!man_file)
 			goto next;
 		lang = lang_dir (man_file);
-		cat_file = find_cat_file (path, *np, man_file);
+		cat_file = find_cat_file (path, found_name, man_file);
 		if (display (path, man_file, cat_file, title, NULL))
 			found = 1;
 		free (lang);
@@ -3679,7 +3678,9 @@ next:
 		free (cat_file);
 		free (title);
 		free_mandata_struct (info);
-	}
+	} GL_LIST_FOREACH_END (names);
+
+	gl_list_free (names);
 
 	if (regex_opt)
 		regfree (&search);

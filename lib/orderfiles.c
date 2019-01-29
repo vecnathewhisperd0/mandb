@@ -44,8 +44,12 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "gl_rbtree_list.h"
+#include "gl_xlist.h"
+
 #include "manconfig.h"
 
+#include "glcontainers.h"
 #include "hashtable.h"
 
 struct hashtable *physical_offsets = NULL;
@@ -53,8 +57,8 @@ struct hashtable *physical_offsets = NULL;
 #if defined(HAVE_LINUX_FIEMAP_H)
 int compare_physical_offsets (const void *a, const void *b)
 {
-	const char *left = *(const char **) a;
-	const char *right = *(const char **) b;
+	const char *left = (const char *) a;
+	const char *right = (const char *) b;
 	uint64_t *left_offset_p = hashtable_lookup (physical_offsets,
 						    left, strlen (left));
 	uint64_t *right_offset_p = hashtable_lookup (physical_offsets,
@@ -70,12 +74,13 @@ int compare_physical_offsets (const void *a, const void *b)
 		return 0;
 }
 
-void order_files (const char *dir, char **basenames, size_t n_basenames)
+void order_files (const char *dir, gl_list_t *basenamesp)
 {
+	gl_list_t basenames = *basenamesp, sorted_basenames;
 	int dir_fd_open_flags;
 	int dir_fd;
 	struct statfs fs;
-	size_t i;
+	const char *name;
 
 	dir_fd_open_flags = O_SEARCH | O_DIRECTORY;
 #ifdef O_PATH
@@ -97,14 +102,17 @@ void order_files (const char *dir, char **basenames, size_t n_basenames)
 	 * assumption for manual pages.
 	 */
 	physical_offsets = hashtable_create (&free);
-	for (i = 0; i < n_basenames; ++i) {
+	sorted_basenames = gl_list_create_empty (GL_RBTREE_LIST,
+						 string_equals, string_hash,
+						 plain_free, false);
+	GL_LIST_FOREACH_START (basenames, name) {
 		struct {
 			struct fiemap fiemap;
 			struct fiemap_extent extent;
 		} fm;
 		int fd;
 
-		fd = openat (dir_fd, basenames[i], O_RDONLY);
+		fd = openat (dir_fd, name, O_RDONLY);
 		if (fd < 0)
 			continue;
 
@@ -117,24 +125,27 @@ void order_files (const char *dir, char **basenames, size_t n_basenames)
 		if (ioctl (fd, FS_IOC_FIEMAP, (unsigned long) &fm) == 0) {
 			uint64_t *offset = XMALLOC (uint64_t);
 			*offset = fm.fiemap.fm_extents[0].fe_physical;
-			hashtable_install (physical_offsets, basenames[i],
-					   strlen (basenames[i]), offset);
+			hashtable_install (physical_offsets, name,
+					   strlen (name), offset);
 		}
 
 		close (fd);
-	}
-	qsort (basenames, n_basenames, sizeof *basenames,
-	       compare_physical_offsets);
+		gl_sortedlist_add (sorted_basenames, compare_physical_offsets,
+				   xstrdup (name));
+	} GL_LIST_FOREACH_END (basenames);
 	hashtable_free (physical_offsets);
 	physical_offsets = NULL;
 	close (dir_fd);
+	gl_list_free (basenames);
+	*basenamesp = sorted_basenames;
 }
 #elif defined(HAVE_POSIX_FADVISE)
-void order_files (const char *dir, char **basenames, size_t n_basenames)
+void order_files (const char *dir, gl_list_t *basenamesp)
 {
+	gl_list_t basenames = *basenamesp;
 	int dir_fd_open_flags;
 	int dir_fd;
-	size_t i;
+	const char *name;
 
 	dir_fd_open_flags = O_SEARCH | O_DIRECTORY;
 #ifdef O_PATH
@@ -147,18 +158,18 @@ void order_files (const char *dir, char **basenames, size_t n_basenames)
 	/* While we can't actually order the files, we can at least ask the
 	 * kernel to preload them.
 	 */
-	for (i = 0; i < n_basenames; ++i) {
-		int fd = openat (dir_fd, basenames[i], O_RDONLY | O_NONBLOCK);
+	GL_LIST_FOREACH_START (basenames, name) {
+		int fd = openat (dir_fd, name, O_RDONLY | O_NONBLOCK);
 		if (fd >= 0) {
 			posix_fadvise (fd, 0, 0, POSIX_FADV_WILLNEED);
 			close (fd);
 		}
-	}
+	} GL_LIST_FOREACH_END (basenames);
 
 	close (dir_fd);
 }
 #else
-void order_files (const char *dir, char **basenames, size_t n_basenames)
+void order_files (const char *dir, gl_list_t *basenamesp)
 {
 }
 #endif
