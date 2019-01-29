@@ -33,4 +33,4 @@ extern gl_list_t look_for_file (const char *hier, const char *sec,
 				const char *unesc_name, int cat, int opts);
 
 /* Expand path with wildcards into list of all existing directories. */
-extern char **expand_path (const char *path);
+extern gl_list_t expand_path (const char *path);

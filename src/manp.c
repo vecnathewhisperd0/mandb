@@ -910,26 +910,25 @@ static char *def_path (enum config_flag flag)
 
 	GL_LIST_FOREACH_START (config, item)
 		if (item->flag == flag) {
-			char **expanded_dirs;
-			int i;
+			gl_list_t expanded_dirs;
+			const char *expanded_dir;
 
 			expanded_dirs = expand_path (item->key);
-			for (i = 0; expanded_dirs[i]; i++) {
-				int status = is_directory (expanded_dirs[i]);
+			GL_LIST_FOREACH_START (expanded_dirs, expanded_dir) {
+				int status = is_directory (expanded_dir);
 
 				if (status < 0)
-					gripe_stat_file (expanded_dirs[i]);
+					gripe_stat_file (expanded_dir);
 				else if (status == 0 && !quiet)
 					error (0, 0,
 					       _("warning: mandatory "
 						 "directory %s doesn't exist"),
-					       expanded_dirs[i]);
+					       expanded_dir);
 				else if (status == 1)
-					manpath = pathappend
-						(manpath, expanded_dirs[i]);
-				free (expanded_dirs[i]);
-			}
-			free (expanded_dirs);
+					manpath = pathappend (manpath,
+							      expanded_dir);
+			} GL_LIST_FOREACH_END (expanded_dirs);
+			gl_list_free (expanded_dirs);
 		}
 	GL_LIST_FOREACH_END (config);
 
@@ -1094,15 +1093,14 @@ static void add_expanded_dir_to_list (gl_list_t list, const char *dir)
  */
 static void add_dir_to_list (gl_list_t list, const char *dir)
 {
-	char **expanded_dirs;
-	int i;
+	gl_list_t expanded_dirs;
+	const char *expanded_dir;
 
 	expanded_dirs = expand_path (dir);
-	for (i = 0; expanded_dirs[i]; i++) {
-		add_expanded_dir_to_list (list, expanded_dirs[i]);
-		free (expanded_dirs[i]);
-	}
-	free (expanded_dirs);
+	GL_LIST_FOREACH_START (expanded_dirs, expanded_dir)
+		add_expanded_dir_to_list (list, expanded_dir);
+	GL_LIST_FOREACH_END (expanded_dirs);
+	gl_list_free (expanded_dirs);
 }
 
 /* path does not exist in config file: check to see if path/../man,
@@ -1161,38 +1159,36 @@ static void add_man_subdirs (gl_list_t list, const char *path)
 
 static void add_dir_to_path_list (gl_list_t list, const char *p)
 {
-	int status, i;
-	char *cwd, *d, **expanded_dirs;
+	gl_list_t expanded_dirs;
+	char *expanded_dir;
 
 	expanded_dirs = expand_path (p);
-	for (i = 0; expanded_dirs[i]; i++) {
-		d = expanded_dirs[i];
-
-		status = is_directory (d);
+	GL_LIST_FOREACH_START (expanded_dirs, expanded_dir) {
+		int status = is_directory (expanded_dir);
 
 		if (status < 0)
-			gripe_stat_file (d);
+			gripe_stat_file (expanded_dir);
 		else if (status == 0)
-			gripe_not_directory (d);
+			gripe_not_directory (expanded_dir);
 		else {
 			char *path;
 
 			/* deal with relative paths */
-			if (*d != '/') {
-				cwd = xgetcwd ();
+			if (*expanded_dir != '/') {
+				char *cwd = xgetcwd ();
 				if (!cwd)
 					error (FATAL, errno,
 							_("can't determine current directory"));
-				path = appendstr (cwd, "/", d, (void *) 0);
+				path = appendstr (cwd, "/", expanded_dir,
+						  (void *) 0);
 			} else
-				path = xstrdup (d);
+				path = xstrdup (expanded_dir);
 
 			debug ("adding %s to manpathlist\n", path);
 			gl_list_add_last (list, path);
 		}
-		free (d);
-	}
-	free (expanded_dirs);
+	} GL_LIST_FOREACH_END (expanded_dirs);
+	gl_list_free (expanded_dirs);
 }
 
 gl_list_t create_pathlist (const char *manp)

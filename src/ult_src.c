@@ -205,17 +205,18 @@ static char *find_include (const char *name, const char *path,
 	} else {
 		/* Try globbing - the file suffix might be missing. */
 		char *temp_file_asterisk = xasprintf ("%s*", temp_file);
-		char **candidate_files = expand_path (temp_file_asterisk);
-		int i;
+		gl_list_t candidate_files = expand_path (temp_file_asterisk);
 
 		free (temp_file_asterisk);
-		if (CAN_ACCESS (candidate_files[0], F_OK)) {
-			free (ret);
-			ret = canonicalize_file_name (candidate_files[0]);
+		if (gl_list_size (candidate_files)) {
+			const char *candidate_file = gl_list_get_at
+				(candidate_files, 0);
+			if (CAN_ACCESS (candidate_file, F_OK)) {
+				free (ret);
+				ret = canonicalize_file_name (candidate_file);
+			}
 		}
-		for (i = 0; candidate_files[i]; i++)
-			free (candidate_files[i]);
-		free (candidate_files);
+		gl_list_free (candidate_files);
 	}
 	free (temp_file);
 

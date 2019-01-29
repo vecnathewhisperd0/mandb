@@ -381,27 +381,25 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 	return matched;
 }
 
-char **expand_path (const char *path)
+gl_list_t expand_path (const char *path)
 {
 	int res = 0;
-	char **result = NULL;
+	gl_list_t result;
 	glob_t globbuf;
-	size_t i;
+
+	result = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
+				       string_hash, plain_free, false);
 
 	res = glob (path, GLOB_NOCHECK, NULL, &globbuf);
 	/* if glob failed, return the given path */
-	if (res != 0) {
-		result = XNMALLOC (2, char *);
-		result[0] = xstrdup (path);
-		result[1] = NULL;
-		return result;
+	if (res != 0)
+		gl_list_add_last (result, xstrdup (path));
+	else {
+		size_t i;
+		for (i = 0; i < globbuf.gl_pathc; ++i)
+			gl_list_add_last (result,
+					  xstrdup (globbuf.gl_pathv[i]));
 	}
-
-	result = XNMALLOC (globbuf.gl_pathc + 1, char *);
-	for (i = 0; i < globbuf.gl_pathc; i++) {
-		result[i] = xstrdup (globbuf.gl_pathv[i]);
-	}
-	result[globbuf.gl_pathc] = NULL;
 
 	globfree (&globbuf);
 
