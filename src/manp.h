@@ -48,4 +48,4 @@ extern bool is_global_mandir (const char *dir);
 extern void read_config_file (int optional);
 extern const char *get_def (const char *thing, const char *def);
 extern const char *get_def_user (const char *thing, const char *def);
-extern const char **get_sections (void);
+extern gl_list_t get_sections (void);

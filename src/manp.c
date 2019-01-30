@@ -219,11 +219,11 @@ static void add_sections (char *sections, int user)
 	free (section_list);
 }
 
-const char **get_sections (void)
+gl_list_t get_sections (void)
 {
 	const struct config_item *item;
 	int length_user = 0, length = 0;
-	const char **sections, **sectionp;
+	gl_list_t sections;
 	enum config_flag flag;
 
 	GL_LIST_FOREACH_START (config, item) {
@@ -232,19 +232,16 @@ const char **get_sections (void)
 		else if (item->flag == SECTION)
 			length++;
 	} GL_LIST_FOREACH_END (config);
-	if (length_user) {
-		sections = xnmalloc (length_user + 1, sizeof *sections);
+	sections = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
+					 string_hash, plain_free, true);
+	if (length_user)
 		flag = SECTION_USER;
-	} else {
-		sections = xnmalloc (length + 1, sizeof *sections);
+	else
 		flag = SECTION;
-	}
-	sectionp = sections;
 	GL_LIST_FOREACH_START (config, item)
 		if (item->flag == flag)
-			*sectionp++ = item->key;
+			gl_list_add_last (sections, xstrdup (item->key));
 	GL_LIST_FOREACH_END (config);
-	*sectionp = NULL;
 	return sections;
 }
 

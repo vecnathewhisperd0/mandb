@@ -59,7 +59,9 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "gl_array_list.h"
 #include "gl_list.h"
+#include "gl_xlist.h"
 #include "minmax.h"
 #include "progname.h"
 #include "regex.h"
@@ -189,7 +191,7 @@ man_sandbox *sandbox;
 
 /* locals */
 static const char *alt_system_name;
-static const char **section_list;		
+static gl_list_t section_list;		
 static const char *section;
 static char *colon_sep_section_list;
 static const char *preprocessors;
@@ -928,17 +930,17 @@ static char *locale_manpath (const char *manpath)
  */
 static const char *is_section (const char *name)
 {
-	const char **vs;
+	const char *vs;
 
-	for (vs = section_list; *vs; vs++) {
-		if (STREQ (*vs, name))
+	GL_LIST_FOREACH_START (section_list, vs) {
+		if (STREQ (vs, name))
 			return name;
 		/* allow e.g. 3perl but disallow 8139too and libfoo */
-		if (strlen (*vs) == 1 && CTYPE (isdigit, **vs) &&
+		if (strlen (vs) == 1 && CTYPE (isdigit, *vs) &&
 		    strlen (name) > 1 && !CTYPE (isdigit, name[1]) &&
-		    STRNEQ (*vs, name, 1))
+		    STRNEQ (vs, name, 1))
 			return name;
-	}
+	} GL_LIST_FOREACH_END (section_list);
 	return NULL;
 }
 
@@ -2696,7 +2698,6 @@ static int compare_candidates (const struct candidate *left,
 			       const struct candidate *right)
 {
 	const struct mandata *lsource = left->source, *rsource = right->source;
-	int sec_left = 0, sec_right = 0;
 	int cmp;
 	const char *slash1, *slash2;
 
@@ -2723,7 +2724,7 @@ static int compare_candidates (const struct candidate *left,
 	 * moved out of order with respect to their parent sections.
 	 */
 	if (strcmp (lsource->ext, rsource->ext)) {
-		const char **sp;
+		size_t index_left, index_right;
 
 		/* If the user asked for an explicit section, sort exact
 		 * matches first.
@@ -2739,24 +2740,30 @@ static int compare_candidates (const struct candidate *left,
 		}
 
 		/* Find out whether lsource->ext is ahead of rsource->ext in
-		 * section_list.
+		 * section_list.  Sections missing from section_list are
+		 * sorted to the end.
 		 */
-		for (sp = section_list; *sp; ++sp) {
-			if (!*(*sp + 1)) {
-				/* No extension */
-				if (!sec_left  && **sp == *(lsource->ext))
-					sec_left  = sp - section_list + 1;
-				if (!sec_right && **sp == *(rsource->ext))
-					sec_right = sp - section_list + 1;
-			} else if (STREQ (*sp, lsource->ext)) {
-				sec_left  = sp - section_list + 1;
-			} else if (STREQ (*sp, rsource->ext)) {
-				sec_right = sp - section_list + 1;
-			}
-			/* Keep looking for a more specific match */
+		index_left = gl_list_indexof (section_list, lsource->ext);
+		if (index_left == (size_t) -1 && strlen (lsource->ext) > 1) {
+			char *sec_left = xstrndup (lsource->ext, 1);
+			index_left = gl_list_indexof (section_list, sec_left);
+			free (sec_left);
+			if (index_left == (size_t) -1)
+				index_left = gl_list_size (section_list);
 		}
-		if (sec_left != sec_right)
-			return sec_left - sec_right;
+		index_right = gl_list_indexof (section_list, rsource->ext);
+		if (index_right == (size_t) -1 && strlen (rsource->ext) > 1) {
+			char *sec_right = xstrndup (rsource->ext, 1);
+			index_right = gl_list_indexof (section_list,
+						       sec_right);
+			free (sec_right);
+			if (index_right == (size_t) -1)
+				index_right = gl_list_size (section_list);
+		}
+		if (index_left < index_right)
+			return -1;
+		else if (index_left > index_right)
+			return 1;
 
 		cmp = strcmp (lsource->sec, rsource->sec);
 		if (cmp)
@@ -3693,26 +3700,26 @@ next:
 
 static int do_global_apropos (const char *name, int *found)
 {
-	const char **my_section_list;
-	const char **sp;
+	gl_list_t my_section_list;
+	const char *sec;
 
 	if (section) {
-		my_section_list = XNMALLOC (2, const char *);
-		my_section_list[0] = section;
-		my_section_list[1] = NULL;
+		my_section_list = gl_list_create_empty (GL_ARRAY_LIST, NULL,
+							NULL, NULL, false);
+		gl_list_add_last (my_section_list, section);
 	} else
 		my_section_list = section_list;
 
-	for (sp = my_section_list; *sp; sp++) {
+	GL_LIST_FOREACH_START (my_section_list, sec) {
 		char *mp;
 
 		GL_LIST_FOREACH_START (manpathlist, mp)
-			*found += do_global_apropos_section (mp, *sp, name);
+			*found += do_global_apropos_section (mp, sec, name);
 		GL_LIST_FOREACH_END (manpathlist);
-	}
+	} GL_LIST_FOREACH_END (my_section_list);
 
 	if (section)
-		free (my_section_list);
+		gl_list_free (my_section_list);
 
 	return *found ? OK : NOT_FOUND;
 }
@@ -3892,11 +3899,11 @@ static int man (const char *name, int *found)
 	if (section)
 		locate_page_in_manpath (section, name, &candidates, found);
 	else {
-		const char **sp;
+		const char *sec;
 
-		for (sp = section_list; *sp; sp++) {
-			locate_page_in_manpath (*sp, name, &candidates, found);
-		}
+		GL_LIST_FOREACH_START (section_list, sec)
+			locate_page_in_manpath (sec, name, &candidates, found);
+		GL_LIST_FOREACH_END (section_list);
 	}
 
 	split_page_name (name, &page_name, &page_section);
@@ -3922,20 +3929,20 @@ static int man (const char *name, int *found)
 }
 
 
-static const char **get_section_list (void)
+static gl_list_t get_section_list (void)
 {
-	int i = 0;
-	const char **config_sections;
-	const char **sections = NULL;
+	gl_list_t config_sections, sections;
 	const char *sec;
 
 	/* Section list from configuration file, or STD_SECTIONS if it's
 	 * empty.
 	 */
 	config_sections = get_sections ();
-	if (!*config_sections) {
-		free (config_sections);
-		config_sections = std_sections;
+	if (!gl_list_size (config_sections)) {
+		int i;
+		for (i = 0; std_sections[i]; ++i)
+			gl_list_add_last (config_sections,
+					  xstrdup (std_sections[i]));
 	}
 
 	if (colon_sep_section_list == NULL)
@@ -3947,17 +3954,17 @@ static const char **get_section_list (void)
 	 * man's -s option takes a comma-separated list, so we accept that
 	 * too for compatibility.
 	 */
+	sections = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
+					 string_hash, plain_free, true);
 	for (sec = strtok (colon_sep_section_list, ":,"); sec; 
-	     sec = strtok (NULL, ":,")) {
-		sections = xnrealloc (sections, i + 2, sizeof *sections);
- 		sections[i++] = sec;
- 	}
+	     sec = strtok (NULL, ":,"))
+		gl_list_add_last (sections, xstrdup (sec));
 
-	if (i > 0) {
-		sections[i] = NULL;
+	if (gl_list_size (sections)) {
+		gl_list_free (config_sections);
 		return sections;
 	} else {
-		free (sections);
+		gl_list_free (sections);
 		return config_sections;
 	}
 }
@@ -4344,6 +4351,7 @@ int main (int argc, char *argv[])
 	drop_effective_privs ();
 
 	free (database);
+	gl_list_free (section_list);
 	free_pathlist (manpathlist);
 	free (internal_locale);
 	exit (exit_status);
