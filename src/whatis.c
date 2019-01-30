@@ -324,7 +324,7 @@ static char *simple_convert (iconv_t conv, char *string)
  * legacy mechanism.
  */
 static void use_grep (const char * const *pages, int num_pages, char *manpath,
-		      int *found)
+		      bool *found)
 {
 	char *whatis_file = xasprintf ("%s/whatis", manpath);
 
@@ -364,7 +364,7 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 			grep_pl = pipeline_new_commands (grep_cmd, (void *) 0);
 
 			if (pipeline_run (grep_pl) == 0)
-				found[i] = 1;
+				found[i] = true;
 
 			free (anchored_page);
 		}
@@ -544,7 +544,7 @@ static bool suitable_manpath (const char *manpath, const char *page_dir)
 
 static void do_whatis (MYDBM_FILE dbf,
 		       const char * const *pages, int num_pages,
-		       const char *manpath, int *found)
+		       const char *manpath, bool *found)
 {
 	int i;
 
@@ -582,18 +582,18 @@ static void do_whatis (MYDBM_FILE dbf,
 
 			for (section = sections; *section; ++section) {
 				if (do_whatis_section (dbf, page, *section))
-					found[i] = 1;
+					found[i] = true;
 			}
 		} else {
 			if (do_whatis_section (dbf, page, NULL))
-				found[i] = 1;
+				found[i] = true;
 		}
 
 		free (page);
 	}
 }
 
-static bool any_set (int num_pages, int *found_here)
+static bool any_set (int num_pages, bool *found_here)
 {
 	int i;
 
@@ -603,7 +603,7 @@ static bool any_set (int num_pages, int *found_here)
 	return false;
 }
 
-static bool all_set (int num_pages, int *found_here)
+static bool all_set (int num_pages, bool *found_here)
 {
 	int i;
 
@@ -614,7 +614,7 @@ static bool all_set (int num_pages, int *found_here)
 }
 
 static void parse_name (const char * const *pages, int num_pages,
-			const char *dbname, int *found, int *found_here)
+			const char *dbname, bool *found, bool *found_here)
 { 
 	int i;
 
@@ -622,7 +622,7 @@ static void parse_name (const char * const *pages, int num_pages,
 		for (i = 0; i < num_pages; ++i) {
 			if (regexec (&preg[i], dbname, 0,
 				     (regmatch_t *) 0, 0) == 0)
-				found[i] = found_here[i] = 1;
+				found[i] = found_here[i] = true;
 		}
 		return;
 	}
@@ -632,7 +632,7 @@ static void parse_name (const char * const *pages, int num_pages,
 
 		for (i = 0; i < num_pages; ++i) {
 			if (STREQ (lowdbname, pages[i]))
-				found[i] = found_here[i] = 1;
+				found[i] = found_here[i] = true;
 		}
 		free (lowdbname);
 		return;
@@ -640,7 +640,7 @@ static void parse_name (const char * const *pages, int num_pages,
 
 	for (i = 0; i < num_pages; ++i) {
 		if (fnmatch (pages[i], dbname, 0) == 0)
-			found[i] = found_here[i] = 1;
+			found[i] = found_here[i] = true;
 	}
 }
 
@@ -672,7 +672,7 @@ static bool match (const char *lowpage, const char *whatis)
 
 static void parse_whatis (const char * const *pages, char * const *lowpages,
 			  int num_pages, const char *whatis,
-			  int *found, int *found_here)
+			  bool *found, bool *found_here)
 { 
 	int i;
 
@@ -680,7 +680,7 @@ static void parse_whatis (const char * const *pages, char * const *lowpages,
 		for (i = 0; i < num_pages; ++i) {
 			if (regexec (&preg[i], whatis, 0,
 				     (regmatch_t *) 0, 0) == 0)
-				found[i] = found_here[i] = 1;
+				found[i] = found_here[i] = true;
 		}
 		return;
 	}
@@ -689,10 +689,10 @@ static void parse_whatis (const char * const *pages, char * const *lowpages,
 		for (i = 0; i < num_pages; ++i) {
 			if (exact) {
 				if (fnmatch (pages[i], whatis, 0) == 0)
-					found[i] = found_here[i] = 1;
+					found[i] = found_here[i] = true;
 			} else {
 				if (word_fnmatch (pages[i], whatis))
-					found[i] = found_here[i] = 1;
+					found[i] = found_here[i] = true;
 			}
 		}
 		return;
@@ -700,7 +700,7 @@ static void parse_whatis (const char * const *pages, char * const *lowpages,
 
 	for (i = 0; i < num_pages; ++i) {
 		if (match (lowpages[i], whatis))
-			found[i] = found_here[i] = 1;
+			found[i] = found_here[i] = true;
 	}
 }
 
@@ -711,12 +711,12 @@ static void parse_whatis (const char * const *pages, char * const *lowpages,
 
 /* scan for the page, print any matches */
 static void do_apropos (MYDBM_FILE dbf,
-			const char * const *pages, int num_pages, int *found)
+			const char * const *pages, int num_pages, bool *found)
 {
 	datum key, cont;
 	char **lowpages;
-	int *found_here;
-	bool (*combine) (int, int *);
+	bool *found_here;
+	bool (*combine) (int, bool *);
 	int i;
 #ifndef BTREE
 	datum nextkey;
@@ -729,7 +729,7 @@ static void do_apropos (MYDBM_FILE dbf,
 		lowpages[i] = lower (pages[i]);
 		debug ("lower(%s) = \"%s\"\n", pages[i], lowpages[i]);
 	}
-	found_here = XNMALLOC (num_pages, int);
+	found_here = XNMALLOC (num_pages, bool);
 	combine = require_all ? all_set : any_set;
 
 #ifndef BTREE
@@ -834,11 +834,12 @@ nextpage:
 }
 
 /* loop through the man paths, searching for a match */
-static int search (const char * const *pages, int num_pages)
+static bool search (const char * const *pages, int num_pages)
 {
-	int *found = XCALLOC (num_pages, int);
+	bool *found = XCALLOC (num_pages, bool);
 	char *catpath, *mp;
-	int any_found, i;
+	bool any_found;
+	int i;
 
 	GL_LIST_FOREACH_START (manpathlist, mp) {
 		MYDBM_FILE dbf;
@@ -878,10 +879,10 @@ static int search (const char * const *pages, int num_pages)
 
 	chkr_garbage_detector ();
 
-	any_found = 0;
+	any_found = false;
 	for (i = 0; i < num_pages; ++i) {
 		if (found[i])
-			any_found = 1;
+			any_found = true;
 		else
 			fprintf (stderr, _("%s: nothing appropriate.\n"),
 				 pages[i]);
