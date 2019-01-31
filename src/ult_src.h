@@ -22,22 +22,18 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "gl_list.h"
+
 #define SO_LINK		0001
 #define SOFT_LINK	0002
 #define HARD_LINK	0004
 
-/* Trace of the link chain from a given file.  Any names listed here should
- * not have WHATIS_MAN entries created for them.
- */
-struct ult_trace {
-	char **names;
-	size_t len;
-	size_t max;
-};
-
 struct stat;
 
+/* If ult_trace is non-NULL, it should be a gl_list_t of const char * which
+ * ult_src populates with the trace of the link chain from a given file.
+ * Any names listed here should not have WHATIS_MAN entries created for
+ * them.
+ */
 extern const char *ult_src (const char *name, const char *path,
-			    struct stat *buf, int flags,
-			    struct ult_trace *trace);
-extern void free_ult_trace (struct ult_trace *trace);
+			    struct stat *buf, int flags, gl_list_t trace);

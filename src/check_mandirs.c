@@ -79,7 +79,7 @@ static struct hashtable *whatis_hash = NULL;
 
 struct whatis_hashent {
 	char *whatis;
-	struct ult_trace trace;
+	gl_list_t trace;
 };
 
 static void whatis_hashtable_free (void *defn)
@@ -87,7 +87,7 @@ static void whatis_hashtable_free (void *defn)
 	struct whatis_hashent *hashent = defn;
 
 	free (hashent->whatis);
-	free_ult_trace (&hashent->trace);
+	gl_list_free (hashent->trace);
 	free (hashent);
 }
 
@@ -130,12 +130,11 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	struct mandata info, *exists;
 	struct stat buf;
 	size_t len;
-	struct ult_trace ult_trace;
+	gl_list_t ult_trace = NULL;
 	struct whatis_hashent *whatis;
 
 	memset (&lg, 0, sizeof (struct lexgrog));
 	memset (&info, 0, sizeof (struct mandata));
-	memset (&ult_trace, 0, sizeof (struct ult_trace));
 
 	manpage = filename_info (file, &info, NULL);
 	if (!manpage)
@@ -231,8 +230,11 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		 * looking for whatis info in files containing only '.so
 		 * manx/foo.x', which will give us an unobtainable whatis
 		 * for the entry. */
+		ult_trace = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
+						  string_hash, plain_free,
+						  true);
 		ult = ult_src (file, path, &buf,
-			       SO_LINK | SOFT_LINK | HARD_LINK, &ult_trace);
+			       SO_LINK | SOFT_LINK | HARD_LINK, ult_trace);
 	}
 
 	if (!ult) {
@@ -274,7 +276,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		whatis = XMALLOC (struct whatis_hashent);
 		whatis->whatis = lg.whatis ? xstrdup (lg.whatis) : NULL;
 		/* We filled out ult_trace above. */
-		memcpy (&whatis->trace, &ult_trace, sizeof (ult_trace));
+		whatis->trace = ult_trace;
 		hashtable_install (whatis_hash, ult, strlen (ult), whatis);
 	}
 
@@ -290,7 +292,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 			if (!opt_test)
 				store_descriptions (dbf, descs, &info,
 						    path, manpage_base,
-						    &whatis->trace);
+						    whatis->trace);
 			free_descriptions (descs);
 		}
 	} else if (quiet < 2) {

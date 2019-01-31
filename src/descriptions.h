@@ -20,6 +20,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "gl_list.h"
+
 #include "db_storage.h"
 
 struct page_description {
@@ -28,13 +30,11 @@ struct page_description {
 	struct page_description *next;
 };
 
-struct ult_trace;
-
 extern struct page_description *parse_descriptions (const char *base,
 						    const char *whatis);
 extern void store_descriptions (MYDBM_FILE dbf,
 				const struct page_description *head,
 				struct mandata *info,
 				const char *path, const char *base,
-				struct ult_trace *trace);
+				gl_list_t trace);
 extern void free_descriptions (struct page_description *head);

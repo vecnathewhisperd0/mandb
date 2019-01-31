@@ -46,6 +46,7 @@
 #include "canonicalize.h"
 #include "dirname.h"
 #include "error.h"
+#include "gl_xlist.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"
@@ -223,26 +224,6 @@ static char *find_include (const char *name, const char *path,
 	return ret;
 }
 
-static void ult_trace (struct ult_trace *trace, const char *s)
-{
-	if (!trace)
-		return;
-	if (trace->len >= trace->max) {
-		trace->max *= 2;
-		trace->names = xnrealloc (trace->names, trace->max,
-					  sizeof (char *));
-	}
-	trace->names[trace->len++] = xstrdup (s);
-}
-
-void free_ult_trace (struct ult_trace *trace)
-{
-	size_t i;
-	for (i = 0; i < trace->len; ++i)
-		free (trace->names[i]);
-	free (trace->names);
-}
-
 /*
  * recursive function which finds the ultimate source file by following
  * any ".so filename" directives in the first line of the man pages.
@@ -252,21 +233,15 @@ void free_ult_trace (struct ult_trace *trace)
  * flags is a combination of SO_LINK | SOFT_LINK | HARD_LINK
  */
 const char *ult_src (const char *name, const char *path,
-		     struct stat *buf, int flags, struct ult_trace *trace)
+		     struct stat *buf, int flags, gl_list_t trace)
 {
 	static char *base;		/* must be static */
 	static short recurse; 		/* must be static */
 
 	/* initialise the function */
 
-	if (trace) {
-		if (!trace->names) {
-			trace->len = 0;
-			trace->max = 16;
-			trace->names = XNMALLOC (trace->max, char *);
-		}
-		ult_trace (trace, name);
-	}
+	if (trace)
+		gl_list_add_last (trace, name);
 
 	/* as ult_softlink() & ult_hardlink() do all of their respective
 	 * resolving in one call, only need to sort them out once
@@ -401,6 +376,6 @@ const char *ult_src (const char *name, const char *path,
 
 	/* We have the ultimate source */
 	if (trace)
-		ult_trace (trace, base);
+		gl_list_add_last (trace, base);
 	return base;
 }

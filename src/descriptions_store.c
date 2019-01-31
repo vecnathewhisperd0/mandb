@@ -31,9 +31,12 @@
 #include "gettext.h"
 #define _(String) gettext (String)
 
+#include "error.h"
+#include "gl_list.h"
+
 #include "manconfig.h"
 
-#include "error.h"
+#include "glcontainers.h"
 
 #include "db_storage.h"
 
@@ -63,16 +66,16 @@ static int is_prefix (const char *path, const char *dir)
 void store_descriptions (MYDBM_FILE dbf, const struct page_description *head,
 			 struct mandata *info,
 			 const char *path, const char *base,
-			 struct ult_trace *trace)
+			 gl_list_t trace)
 {
 	const struct page_description *desc;
 	char save_id = info->id;
-	size_t i;
+	const char *trace_name;
 
 	if (trace) {
-		for (i = 0; i < trace->len; ++i)
-			debug ("trace->names[%zu] = '%s'\n",
-			       i, trace->names[i]);
+		GL_LIST_FOREACH_START (trace, trace_name)
+			debug ("trace: '%s'\n", trace_name);
+		GL_LIST_FOREACH_END (trace);
 	}
 
 	for (desc = head; desc; desc = desc->next) {
@@ -88,11 +91,12 @@ void store_descriptions (MYDBM_FILE dbf, const struct page_description *head,
 			info->whatis = desc->whatis;
 			found_real_page = 1;
 		} else if (trace) {
-			for (i = 0; i < trace->len; ++i) {
+			size_t i = 0;
+			GL_LIST_FOREACH_START (trace, trace_name) {
 				struct mandata trace_info;
 				char *buf;
 
-				buf = filename_info (trace->names[i],
+				buf = filename_info (trace_name,
 						     &trace_info, "");
 				if (trace_info.name &&
 				    STREQ (trace_info.name, desc->name)) {
@@ -106,7 +110,7 @@ void store_descriptions (MYDBM_FILE dbf, const struct page_description *head,
 						free (buf);
 						break;
 					}
-					if (i == trace->len - 1 &&
+					if (i == gl_list_size (trace) - 1 &&
 					    save_id == SO_MAN)
 						info->id = ULT_MAN;
 					else
@@ -118,7 +122,8 @@ void store_descriptions (MYDBM_FILE dbf, const struct page_description *head,
 
 				free (trace_info.name);
 				free (buf);
-			}
+				++i;
+			} GL_LIST_FOREACH_END (trace);
 		}
 
 		if (found_external) {
