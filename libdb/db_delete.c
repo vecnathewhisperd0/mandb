@@ -30,12 +30,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "error.h"
+#include "gl_list.h"
+
 #include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "glcontainers.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -74,30 +77,29 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		MYDBM_DELETE (dbf, key);
 		MYDBM_FREE_DPTR (cont);
 	} else {					/* 2+ entries */
-		char **names, **ext;
+		gl_list_t refs;
+		struct name_ext this_ref, *ref;
+		size_t this_index;
 		char *multi_content = NULL;
 		datum multi_key;
-		int refs, i, j;
 
 		/* Extract all of the extensions associated with
 		   this key */
 
-		refs = list_extensions (MYDBM_DPTR (cont) + 1, &names, &ext);
+		refs = list_extensions (MYDBM_DPTR (cont) + 1);
 
-		for (i = 0; i < refs; ++i)
-			if (STREQ (names[i], name) &&
-			    STREQ (ext[i], info->ext))
-				break;
+		this_ref.name = name;
+		this_ref.ext = info->ext;
+		this_index = gl_list_indexof (refs, &this_ref);
 
-		if (i >= refs) {
-			free (names);
-			free (ext);
+		if (this_index == (size_t) -1) {
+			gl_list_free (refs);
 			MYDBM_FREE_DPTR (cont);
 			MYDBM_FREE_DPTR (key);
 			return NO_ENTRY;
 		}
 
-		multi_key = make_multi_key (names[i], ext[i]);
+		multi_key = make_multi_key (name, info->ext);
 		if (!MYDBM_EXISTS (dbf, multi_key)) {
 			error (0, 0,
 			       _( "multi key %s does not exist"),
@@ -106,14 +108,13 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		}
 		MYDBM_DELETE (dbf, multi_key);
 		MYDBM_FREE_DPTR (multi_key);
+		gl_list_remove_at (refs, this_index);
 
-		/* refs *may* be 1 if all manual pages with this name
-		   have been deleted. In this case, we'll have to remove
-		   the key too */
+		/* If all manual pages with this name have been deleted,
+		   we'll have to remove the key too. */
 
-		if (refs == 1) {
-			free (names);
-			free (ext);
+		if (!gl_list_size (refs)) {
+			gl_list_free (refs);
 			MYDBM_FREE_DPTR (cont);
 			MYDBM_DELETE (dbf, key);
 			MYDBM_FREE_DPTR (key);
@@ -121,26 +122,19 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		}
 
 		/* create our new multi content */
-		for (j = 0; j < refs; ++j)
-			if (i != j)
-				multi_content = appendstr (multi_content,
-							   "\t", names[j],
-							   "\t", ext[j],
-							   (void *) 0);
+		GL_LIST_FOREACH_START (refs, ref)
+			multi_content = appendstr (multi_content,
+						   "\t", ref->name,
+						   "\t", ref->ext,
+						   (void *) 0);
+		GL_LIST_FOREACH_END (refs);
 
 		MYDBM_FREE_DPTR (cont);
-
-		/* if refs = 2 do something else. Doesn't really matter as
-		   the gdbm db file does not shrink any after a deletion
-		   anyway */
-
 		MYDBM_SET (cont, multi_content);
-
 		if (MYDBM_REPLACE (dbf, key, cont))
 			gripe_replace_key (MYDBM_DPTR (key));
 
-		free (names);
-		free (ext);
+		gl_list_free (refs);
 	}
 
 	MYDBM_FREE_DPTR (key);

@@ -34,7 +34,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "error.h"
 #include "fnmatch.h"
+#include "gl_array_list.h"
+#include "gl_xlist.h"
 #include "regex.h"
 #include "xvasprintf.h"
 
@@ -43,7 +46,7 @@
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "glcontainers.h"
 #include "lower.h"
 #include "wordfnmatch.h"
 #include "xregcomp.h"
@@ -222,36 +225,41 @@ void split_content (char *cont_ptr, struct mandata *pinfo)
 	pinfo->next = (struct mandata *) NULL;
 }
 
+static bool name_ext_equals (const void *elt1, const void *elt2)
+{
+	const struct name_ext *ref1 = elt1, *ref2 = elt2;
+	return STREQ (ref1->name, ref2->name) && STREQ (ref1->ext, ref2->ext);
+}
+
 /* Extract all of the names/extensions associated with this key. Each case
  * variant of a name will be returned separately.
  *
- * names and ext should be pointers to valid memory which will be filled in
- * with the address of the allocated arrays of names and extensions. The
- * caller is expected to free these arrays.
+ * This returns a newly-allocated list of struct name_ext, which the caller
+ * is expected to free.
  */
-int list_extensions (char *data, char ***names, char ***ext)
+gl_list_t list_extensions (char *data)
 {
-	int count = 0;
-	int bound = 4;	/* most multi keys will have fewer than this */
+	gl_list_t list = gl_list_create_empty (GL_ARRAY_LIST, name_ext_equals,
+					       NULL, plain_free, true);
+	char *name;
 
-	*names = xnmalloc (bound, sizeof **names);
-	*ext   = xnmalloc (bound, sizeof **ext);
-	while (((*names)[count] = strsep (&data, "\t")) != NULL) {
-		(*ext)[count] = strsep (&data, "\t");
-		if ((*ext)[count])
-			++count;
-		else
+	while ((name = strsep (&data, "\t")) != NULL) {
+		char *ext;
+		struct name_ext *name_ext;
+
+		ext = strsep (&data, "\t");
+		if (!ext)
 			break;
 
-		if (count >= bound) {
-			bound *= 2;
-			*names = xnrealloc (*names, bound, sizeof **names);
-			*ext   = xnrealloc (*ext,   bound, sizeof **ext);
-		}
+		name_ext = XMALLOC (struct name_ext);
+		/* Don't copy these; they will point into the given string. */
+		name_ext->name = name;
+		name_ext->ext = ext;
+		gl_list_add_last (list, name_ext);
 	}
 
-	debug ("found %d names/extensions\n", count);
-	return count;
+	debug ("found %zd names/extensions\n", gl_list_size (list));
+	return list;
 }
 
 /* These should be bitwise-ored together. */
@@ -301,19 +309,19 @@ static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
 		free_mandata_struct (info);
 		return NULL;
 	} else {				/* multiple entries */
-		char **names, **ext;
+		gl_list_t refs;
+		struct name_ext *ref;
 		struct mandata *ret = NULL;
-		int refs, i;
 
 		/* Extract all of the case-variant-names/extensions
 		 * associated with this key.
 		 */
 
-		refs = list_extensions (MYDBM_DPTR (cont) + 1, &names, &ext);
+		refs = list_extensions (MYDBM_DPTR (cont) + 1);
 
 		/* Make the multi keys and look them up */
 
-		for (i = 0; i < refs; ++i) {
+		GL_LIST_FOREACH_START (refs, ref) {
 			datum multi_cont;
 
 			memset (&multi_cont, 0, sizeof multi_cont);
@@ -322,22 +330,22 @@ static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
 			 * suitable.
 			 */
 
-			if ((flags & MATCH_CASE) && !STREQ (names[i], page))
+			if ((flags & MATCH_CASE) && !STREQ (ref->name, page))
 				continue;
 
 			if (section != NULL) {
 				if (flags & EXACT) {
-					if (!STREQ (section, ext[i]))
+					if (!STREQ (section, ref->ext))
 						continue;
 				} else {
-					if (!STRNEQ (section, ext[i],
+					if (!STRNEQ (section, ref->ext,
 						     strlen (section)))
 						continue;
 				}
 			}
 
 			/* So the key is suitable ... */
-			key = make_multi_key (names[i], ext[i]);
+			key = make_multi_key (ref->name, ref->ext);
 			debug ("multi key lookup (%s)\n", MYDBM_DPTR (key));
 			multi_cont = MYDBM_FETCH (dbf, key);
 			if (MYDBM_DPTR (multi_cont) == NULL) {
@@ -355,11 +363,10 @@ static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
 				info = info->next = infoalloc ();
 			split_content (MYDBM_DPTR (multi_cont), info);
 			if (!info->name)
-				info->name = xstrdup (names[i]);
-		}
+				info->name = xstrdup (ref->name);
+		} GL_LIST_FOREACH_END (refs);
 
-		free (names);
-		free (ext);
+		gl_list_free (refs);
 		MYDBM_FREE_DPTR (cont);
 		return ret;
 	}

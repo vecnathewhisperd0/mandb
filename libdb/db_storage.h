@@ -26,6 +26,8 @@
 #ifndef DB_STORAGE_H
 #define DB_STORAGE_H
 
+#include "gl_list.h"
+
 /* These definitions give an inherent precedence to each particular type
    of manual page:
    
@@ -71,6 +73,11 @@ struct mandata {
 	struct timespec mtime;		/* mod time for file */
 }; 
 
+struct name_ext {
+	const char *name;
+	const char *ext;
+};
+
 /* used by the world */
 extern struct mandata *dblookup_all (MYDBM_FILE dbf, const char *page,
 				     const char *section, int match_case);
@@ -97,7 +104,8 @@ extern datum make_multi_key (const char *page, const char *ext);
 #define infoalloc() XZALLOC (struct mandata)
 
 extern char *name_to_key (const char *name);
-extern int list_extensions (char *data, char ***names, char ***ext);
+/* Returns a list of struct name_ext. */
+extern gl_list_t list_extensions (char *data);
 extern void gripe_replace_key (const char *data);
 extern const char *dash_if_unset (const char *str);
 
