@@ -195,12 +195,8 @@ static int check_for_stray (MYDBM_FILE dbf)
 			mandir_base = base_name (mandir);
 			exists = dblookup_exact (dbf, mandir_base, info.ext,
 						 1);
-#ifndef FAVOUR_STRAYCATS
-			if (exists && exists->id != WHATIS_CAT)
-#else /* FAVOUR_STRAYCATS */
-			if (exists && exists->id != WHATIS_CAT &&
-			    exists->id != WHATIS_MAN)
-#endif /* !FAVOUR_STRAYCATS */
+			if (exists &&
+			    compare_ids (STRAY_CAT, exists->id, 0) >= 0)
 				goto next_exists;
 			debug ("%s(%s) is not in the db.\n",
 			       mandir_base, info.ext);
