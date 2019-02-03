@@ -39,18 +39,20 @@
 #include <sys/types.h> /* for open() */
 #include <sys/stat.h>
 
+#include "gl_hash_set.h"
+#include "gl_xset.h"
 #include "stat-time.h"
 #include "timespec.h"
 
 #include "manconfig.h"
 
 #include "error.h"
-#include "hashtable.h"
+#include "glcontainers.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
 
-struct hashtable *loop_check_hash;
+gl_set_t loop_check;
 
 /* the Berkeley database libraries do nothing to arbitrate between concurrent
    database accesses, so we do a simple flock(). If the db is opened in
@@ -178,26 +180,28 @@ int btree_exists (DB *db, datum key)
 static datum btree_findkey (DB *db, u_int flags)
 {
 	datum key, data;
+	char *loop_check_key;
 
 	memset (&key, 0, sizeof key);
 	memset (&data, 0, sizeof data);
 
 	if (flags == R_FIRST) {
-		if (loop_check_hash) {
-			hashtable_free (loop_check_hash);
-			loop_check_hash = NULL;
+		if (loop_check) {
+			gl_set_free (loop_check);
+			loop_check = NULL;
 		}
 	}
-	if (!loop_check_hash)
-		loop_check_hash = hashtable_create (&free);
+	if (!loop_check)
+		loop_check = gl_set_create_empty (GL_HASH_SET, string_equals,
+						  string_hash, plain_free);
 
 	if (((db->seq) (db, (DBT *) &key, (DBT *) &data, flags))) {
 		memset (&key, 0, sizeof key);
 		return key;
 	}
 
-	if (hashtable_lookup (loop_check_hash,
-			      MYDBM_DPTR (key), MYDBM_DSIZE (key))) {
+	loop_check_key = xstrndup (MYDBM_DPTR (key), MYDBM_DSIZE (key));
+	if (gl_set_search (loop_check, loop_check_key)) {
 		/* We've seen this key already, which is broken. Return NULL
 		 * so the caller doesn't go round in circles.
 		 */
@@ -205,11 +209,11 @@ static datum btree_findkey (DB *db, u_int flags)
 		       "Attempting to recover ...\n",
 		       (int) MYDBM_DSIZE (key), MYDBM_DPTR (key));
 		memset (&key, 0, sizeof key);
+		free (loop_check_key);
 		return key;
 	}
 
-	hashtable_install (loop_check_hash,
-			   MYDBM_DPTR (key), MYDBM_DSIZE (key), NULL);
+	gl_set_add (loop_check, loop_check_key);
 
 	return copy_datum (key);
 }

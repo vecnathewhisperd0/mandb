@@ -44,25 +44,24 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "gl_hash_map.h"
 #include "gl_rbtree_list.h"
 #include "gl_xlist.h"
+#include "gl_xmap.h"
 
 #include "manconfig.h"
 
 #include "glcontainers.h"
-#include "hashtable.h"
-
-struct hashtable *physical_offsets = NULL;
 
 #if defined(HAVE_LINUX_FIEMAP_H)
+gl_map_t physical_offsets = NULL;
+
 int compare_physical_offsets (const void *a, const void *b)
 {
 	const char *left = (const char *) a;
 	const char *right = (const char *) b;
-	uint64_t *left_offset_p = hashtable_lookup (physical_offsets,
-						    left, strlen (left));
-	uint64_t *right_offset_p = hashtable_lookup (physical_offsets,
-						     right, strlen (right));
+	const uint64_t *left_offset_p = gl_map_get (physical_offsets, left);
+	const uint64_t *right_offset_p = gl_map_get (physical_offsets, right);
 	uint64_t left_offset = left_offset_p ? *left_offset_p : UINT64_MAX;
 	uint64_t right_offset = right_offset_p ? *right_offset_p : UINT64_MAX;
 
@@ -101,7 +100,8 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	 * a small number of contiguous blocks, which seems a reasonable
 	 * assumption for manual pages.
 	 */
-	physical_offsets = hashtable_create (&free);
+	physical_offsets = gl_map_create_empty (GL_HASH_MAP, string_equals,
+						string_hash, NULL, plain_free);
 	sorted_basenames = gl_list_create_empty (GL_RBTREE_LIST,
 						 string_equals, string_hash,
 						 plain_free, false);
@@ -125,15 +125,18 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 		if (ioctl (fd, FS_IOC_FIEMAP, (unsigned long) &fm) == 0) {
 			uint64_t *offset = XMALLOC (uint64_t);
 			*offset = fm.fiemap.fm_extents[0].fe_physical;
-			hashtable_install (physical_offsets, name,
-					   strlen (name), offset);
+			/* Borrow the key from basenames; since
+			 * physical_offsets has a shorter lifetime, we don't
+			 * need to duplicate it.
+			 */
+			gl_map_put (physical_offsets, name, offset);
 		}
 
 		close (fd);
 		gl_sortedlist_add (sorted_basenames, compare_physical_offsets,
 				   xstrdup (name));
 	} GL_LIST_FOREACH_END (basenames);
-	hashtable_free (physical_offsets);
+	gl_map_free (physical_offsets);
 	physical_offsets = NULL;
 	close (dir_fd);
 	gl_list_free (basenames);

@@ -60,8 +60,10 @@
 #include "argp.h"
 #include "dirname.h"
 #include "gl_array_list.h"
+#include "gl_hash_map.h"
 #include "gl_list.h"
 #include "gl_xlist.h"
+#include "gl_xmap.h"
 #include "minmax.h"
 #include "progname.h"
 #include "regex.h"
@@ -81,7 +83,6 @@
 #include "error.h"
 #include "cleanup.h"
 #include "glcontainers.h"
-#include "hashtable.h"
 #include "pipeline.h"
 #include "pathsearch.h"
 #include "linelength.h"
@@ -203,7 +204,7 @@ static char *less;
 static const char *std_sections[] = STD_SECTIONS;
 static char *manp;
 static const char *external;
-static struct hashtable *db_hash = NULL;
+static gl_map_t db_map = NULL;
 
 static int troff;
 static const char *roff_device = NULL;
@@ -3314,11 +3315,6 @@ static int display_database_check (struct candidate *candp)
 	return exists;
 }
 
-static void db_hashtable_free (void *defn)
-{
-	free_mandata_struct (defn);
-}
-
 #ifdef MAN_DB_UPDATES
 static int maybe_update_file (const char *manpath, const char *name,
 			      struct mandata *info)
@@ -3399,11 +3395,14 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	} else
 		database = mkdbname (manpath);
 
-	if (!db_hash)
-		db_hash = hashtable_create (&db_hashtable_free);
+	if (!db_map)
+		db_map = gl_map_create_empty (GL_HASH_MAP, string_equals,
+					      string_hash, plain_free,
+					      (gl_mapvalue_dispose_fn)
+					      free_mandata_struct);
 
 	/* Have we looked here already? */
-	data = hashtable_lookup (db_hash, manpath, strlen (manpath));
+	data = (struct mandata *) gl_map_get (db_map, manpath);
 
 	if (!data) {
 		MYDBM_FILE dbf;
@@ -3425,8 +3424,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			else
 				data = dblookup_all (dbf, name, section,
 						     match_case);
-			hashtable_install (db_hash, manpath, strlen (manpath),
-					   data);
+			gl_map_put (db_map, xstrdup (manpath), data);
 			MYDBM_CLOSE (dbf);
 			dbf = NULL;
 #ifdef MAN_DB_CREATES
@@ -3437,9 +3435,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 				data = infoalloc ();
 				data->next = NULL;
 				data->addr = NULL;
-				hashtable_install (db_hash,
-						   manpath, strlen (manpath),
-						   data);
+				gl_map_put (db_map, xstrdup (manpath), data);
 				return TRY_DATABASE_OPEN_FAILED;
 			}
 			return TRY_DATABASE_CREATED;
@@ -3449,8 +3445,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			data = infoalloc ();
 			data->next = (struct mandata *) NULL;
 			data->addr = NULL;
-			hashtable_install (db_hash, manpath, strlen (manpath),
-					   data);
+			gl_map_put (db_map, xstrdup (manpath), data);
 			return TRY_DATABASE_OPEN_FAILED;
 		}
 	}
@@ -3475,7 +3470,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 				found_stale = 1;
 
 	if (found_stale) {
-		hashtable_remove (db_hash, manpath, strlen (manpath));
+		gl_map_remove (db_map, manpath);
 		return TRY_DATABASE_UPDATED;
 	}
 #endif /* MAN_DB_UPDATES */
@@ -4274,8 +4269,10 @@ int main (int argc, char *argv[])
 		}
 
 		/* clean out the cache of database lookups for each man page */
-		hashtable_free (db_hash);
-		db_hash = NULL;
+		if (db_map) {
+			gl_map_free (db_map);
+			db_map = NULL;
+		}
 
 		if (section && maybe_section) {
 			if (status != OK && !catman) {
@@ -4299,8 +4296,10 @@ int main (int argc, char *argv[])
 				}
 				if (!found_subpage)
 					status = man (tmp, &found);
-				hashtable_free (db_hash);
-				db_hash = NULL;
+				if (db_map) {
+					gl_map_free (db_map);
+					db_map = NULL;
+				}
 				/* ... but don't gripe about it if it doesn't
 				 * work!
 				 */
@@ -4345,8 +4344,10 @@ int main (int argc, char *argv[])
 
 		chkr_garbage_detector ();
 	}
-	hashtable_free (db_hash);
-	db_hash = NULL;
+	if (db_map) {
+		gl_map_free (db_map);
+		db_map = NULL;
+	}
 
 	drop_effective_privs ();
 

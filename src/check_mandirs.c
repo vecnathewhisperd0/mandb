@@ -45,7 +45,9 @@
 
 #include "dirname.h"
 #include "gl_array_list.h"
+#include "gl_hash_map.h"
 #include "gl_xlist.h"
+#include "gl_xmap.h"
 #include "stat-time.h"
 #include "timespec.h"
 #include "xvasprintf.h"
@@ -57,7 +59,6 @@
 
 #include "error.h"
 #include "glcontainers.h"
-#include "hashtable.h"
 #include "orderfiles.h"
 #include "security.h"
 
@@ -75,20 +76,20 @@ int opt_test;		/* don't update db */
 int pages;
 int force_rescan = 0;
 
-static struct hashtable *whatis_hash = NULL;
+gl_map_t whatis_map = NULL;
 
-struct whatis_hashent {
+struct whatis {
 	char *whatis;
 	gl_list_t trace;
 };
 
-static void whatis_hashtable_free (void *defn)
+static void whatis_free (const void *value)
 {
-	struct whatis_hashent *hashent = defn;
+	struct whatis *whatis = (struct whatis *) value;
 
-	free (hashent->whatis);
-	gl_list_free (hashent->trace);
-	free (hashent);
+	free (whatis->whatis);
+	gl_list_free (whatis->trace);
+	free (whatis);
 }
 
 static void gripe_multi_extensions (const char *path, const char *sec, 
@@ -131,7 +132,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	struct stat buf;
 	size_t len;
 	gl_list_t ult_trace = NULL;
-	struct whatis_hashent *whatis;
+	const struct whatis *whatis;
 
 	memset (&lg, 0, sizeof (struct lexgrog));
 	memset (&info, 0, sizeof (struct mandata));
@@ -217,10 +218,12 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		return;
 	}
 
-	if (!whatis_hash)
-		whatis_hash = hashtable_create (&whatis_hashtable_free);
+	if (!whatis_map)
+		whatis_map = gl_map_create_empty (GL_HASH_MAP, string_equals,
+						  string_hash, plain_free,
+						  whatis_free);
 
-	whatis = hashtable_lookup (whatis_hash, ult, strlen (ult));
+	whatis = gl_map_get (whatis_map, ult);
 	if (!whatis) {
 		if (!STRNEQ (ult, file, len))
 			debug ("\ntest_manfile(): link not in cache:\n"
@@ -266,6 +269,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	else {
 		/* Cache miss; go and get the whatis info in its raw state. */
 		char *file_base = base_name (file);
+		struct whatis *new_whatis;
 
 		lg.type = MANPAGE;
 		drop_effective_privs ();
@@ -273,11 +277,12 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		free (file_base);
 		regain_effective_privs ();
 
-		whatis = XMALLOC (struct whatis_hashent);
-		whatis->whatis = lg.whatis ? xstrdup (lg.whatis) : NULL;
+		new_whatis = XMALLOC (struct whatis);
+		new_whatis->whatis = lg.whatis ? xstrdup (lg.whatis) : NULL;
 		/* We filled out ult_trace above. */
-		whatis->trace = ult_trace;
-		hashtable_install (whatis_hash, ult, strlen (ult), whatis);
+		new_whatis->trace = ult_trace;
+		gl_map_put (whatis_map, xstrdup (ult), new_whatis);
+		whatis = new_whatis;
 	}
 
 	debug ("\"%s\"\n", lg.whatis);

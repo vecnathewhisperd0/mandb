@@ -44,4 +44,15 @@ void plain_free (const void *s);
 		gl_list_iterator_free (&list##_iter); \
 	} while (0)
 
+#define GL_MAP_FOREACH_START(map, key, value) \
+	do { \
+		gl_map_iterator_t map##_iter = gl_map_iterator (map); \
+		while (gl_map_iterator_next (&map##_iter, \
+					     (const void **) &key, \
+					     (const void **) &value))
+
+#define GL_MAP_FOREACH_END(map) \
+		gl_map_iterator_free (&map##_iter); \
+	} while (0)
+
 #endif /* MAN_GLCONTAINERS_H */

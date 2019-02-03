@@ -43,8 +43,6 @@ libman_la_SOURCES = \
 	encodings.h \
 	glcontainers.c \
 	glcontainers.h \
-	hashtable.c \
-	hashtable.h \
 	linelength.c \
 	linelength.h \
 	lower.c \

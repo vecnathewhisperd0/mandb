@@ -49,7 +49,9 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "gl_hash_map.h"
 #include "gl_list.h"
+#include "gl_xmap.h"
 #include "progname.h"
 #include "stat-time.h"
 #include "timespec.h"
@@ -66,7 +68,6 @@
 #include "error.h"
 #include "cleanup.h"
 #include "glcontainers.h"
-#include "hashtable.h"
 #include "pipeline.h"
 #include "sandbox.h"
 #include "security.h"
@@ -556,7 +557,7 @@ static int mandb (struct dbpaths *dbpaths,
 }
 
 static int process_manpath (const char *manpath, bool global_manpath,
-			    struct hashtable *tried_catdirs)
+			    gl_map_t tried_catdirs)
 {
 	char *catpath;
 	struct tried_catdirs_entry *tried;
@@ -576,7 +577,7 @@ static int process_manpath (const char *manpath, bool global_manpath,
 	tried = XMALLOC (struct tried_catdirs_entry);
 	tried->manpath = xstrdup (manpath);
 	tried->seen = 0;
-	hashtable_install (tried_catdirs, catpath, strlen (catpath), tried);
+	gl_map_put (tried_catdirs, xstrdup (catpath), tried);
 
 	if (stat (manpath, &st) < 0 || !S_ISDIR (st.st_mode))
 		goto out;
@@ -652,21 +653,21 @@ static int is_lang_dir (const char *base)
 	       (!base[2] || base[2] < 'a' || base[2] > 'z');
 }
 
-static void tried_catdirs_free (void *defn)
+static void tried_catdirs_free (const void *value)
 {
-	struct tried_catdirs_entry *tried = defn;
+	struct tried_catdirs_entry *tried =
+		(struct tried_catdirs_entry *) value;
 
 	free (tried->manpath);
 	free (tried);
 }
 
-static void purge_catdir (const struct hashtable *tried_catdirs,
-			  const char *path)
+static void purge_catdir (gl_map_t tried_catdirs, const char *path)
 {
 	struct stat st;
 
 	if (stat (path, &st) == 0 && S_ISDIR (st.st_mode) &&
-	    !hashtable_lookup (tried_catdirs, path, strlen (path))) {
+	    !gl_map_get (tried_catdirs, path)) {
 		if (!quiet)
 			printf (_("Removing obsolete cat directory %s...\n"),
 				path);
@@ -718,14 +719,12 @@ static void purge_catsubdirs (const char *manpath, const char *catpath)
  * the usual NLS pattern (two lower-case letters followed by nothing or a
  * non-letter).
  */
-static void purge_catdirs (const struct hashtable *tried_catdirs)
+static void purge_catdirs (gl_map_t tried_catdirs)
 {
-	struct hashtable_iter *iter = NULL;
-	const struct nlist *elt;
+	const char *path;
+	struct tried_catdirs_entry *tried;
 
-	while ((elt = hashtable_iterate (tried_catdirs, &iter)) != NULL) {
-		const char *path = elt->name;
-		struct tried_catdirs_entry *tried = elt->defn;
+	GL_MAP_FOREACH_START (tried_catdirs, path, tried) {
 		char *base;
 		DIR *dir;
 		struct dirent *subdirent;
@@ -745,6 +744,7 @@ static void purge_catdirs (const struct hashtable *tried_catdirs)
 			continue;
 		while ((subdirent = readdir (dir)) != NULL) {
 			char *subdirpath;
+			const struct tried_catdirs_entry *subtried;
 
 			if (STREQ (subdirent->d_name, ".") ||
 			    STREQ (subdirent->d_name, ".."))
@@ -757,22 +757,22 @@ static void purge_catdirs (const struct hashtable *tried_catdirs)
 			subdirpath = xasprintf ("%s/%s", path,
 					        subdirent->d_name);
 
-			tried = hashtable_lookup (tried_catdirs, subdirpath,
-						  strlen (subdirpath));
-			if (tried && tried->seen) {
+			subtried = gl_map_get (tried_catdirs, subdirpath);
+			if (subtried && subtried->seen) {
 				debug ("Seen mandir for %s; not deleting\n",
 				       subdirpath);
 				/* However, we may still need to purge cat*
 				 * subdirectories.
 				 */
-				purge_catsubdirs (tried->manpath, subdirpath);
+				purge_catsubdirs (subtried->manpath,
+						  subdirpath);
 			} else
 				purge_catdir (tried_catdirs, subdirpath);
 
 			free (subdirpath);
 		}
 		closedir (dir);
-	}
+	} GL_MAP_FOREACH_END (tried_catdirs);
 }
 
 int main (int argc, char *argv[])
@@ -780,7 +780,7 @@ int main (int argc, char *argv[])
 	char *sys_manp;
 	int amount = 0;
 	char *mp;
-	struct hashtable *tried_catdirs;
+	gl_map_t tried_catdirs;
 #ifdef SIGPIPE
 	struct sigaction sa;
 #endif /* SIGPIPE */
@@ -858,7 +858,9 @@ int main (int argc, char *argv[])
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();
 
-	tried_catdirs = hashtable_create (tried_catdirs_free);
+	tried_catdirs = gl_map_create_empty (GL_HASH_MAP, string_equals,
+					     string_hash, plain_free,
+					     tried_catdirs_free);
 
 	GL_LIST_FOREACH_START (manpathlist, mp) {
 		bool global_manpath = is_global_mandir (mp);
@@ -914,7 +916,7 @@ next_manpath:
 	} GL_LIST_FOREACH_END (manpathlist);
 
 	purge_catdirs (tried_catdirs);
-	hashtable_free (tried_catdirs);
+	gl_map_free (tried_catdirs);
 
 	if (!quiet) {
 		printf (ngettext ("%d man subdirectory contained newer "

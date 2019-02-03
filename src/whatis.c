@@ -57,7 +57,9 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "gl_hash_set.h"
 #include "gl_list.h"
+#include "gl_xset.h"
 #include "fnmatch.h"
 #include "progname.h"
 #include "xvasprintf.h"
@@ -70,7 +72,6 @@
 #include "pipeline.h"
 #include "pathsearch.h"
 #include "linelength.h"
-#include "hashtable.h"
 #include "lower.h"
 #include "wordfnmatch.h"
 #include "xregcomp.h"
@@ -114,7 +115,7 @@ static const char *alt_systems = "";
 static const char *locale = NULL;
 static char *multiple_locale = NULL, *internal_locale;
 
-static struct hashtable *display_seen = NULL;
+static gl_set_t display_seen = NULL;
 
 const char *argp_program_version; /* initialised in main */
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
@@ -454,9 +455,9 @@ static void display (MYDBM_FILE dbf, struct mandata *info, const char *page)
 		page_name = page;
 
 	key = xasprintf ("%s (%s)", page_name, newinfo->ext);
-	if (hashtable_lookup_structure (display_seen, key, strlen (key)))
+	if (gl_set_search (display_seen, key))
 		goto out;
-	hashtable_install (display_seen, key, strlen (key), NULL);
+	gl_set_add (display_seen, xstrdup (key));
 
 	line_len = get_line_length ();
 
@@ -968,7 +969,8 @@ int main (int argc, char *argv[])
 
 	manpathlist = create_pathlist (manp);
 
-	display_seen = hashtable_create (&null_hashtable_free);
+	display_seen = gl_set_create_empty (GL_HASH_SET, string_equals,
+					    string_hash, plain_free);
 
 #ifdef HAVE_ICONV
 	locale_charset = xasprintf ("%s//IGNORE", get_locale_charset ());
@@ -998,7 +1000,7 @@ int main (int argc, char *argv[])
 	if (conv_to_locale != (iconv_t) -1)
 		iconv_close (conv_to_locale);
 #endif /* HAVE_ICONV */
-	hashtable_free (display_seen);
+	gl_set_free (display_seen);
 	free_pathlist (manpathlist);
 	free (manp);
 	free (internal_locale);

@@ -34,22 +34,22 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "gl_hash_map.h"
+#include "gl_rbtree_list.h"
+#include "gl_xlist.h"
+#include "gl_xmap.h"
+#include "hash-pjw-bare.h"
 #include "stat-time.h"
 #include "timespec.h"
 
 #include "manconfig.h"
 
-#include "hashtable.h"
 #include "cleanup.h"
+#include "glcontainers.h"
 
 #include "mydbm.h"
 
-static struct hashtable *parent_sortkey_hash;
-
-struct sortkey {
-	datum key;
-	struct sortkey *next;
-};
+static gl_map_t parent_keys;
 
 /* setjmp/longjmp handling to defend against _gdbm_fatal exiting under our
  * feet.  Not thread-safe, but there is no plan for man-db to ever use
@@ -103,129 +103,112 @@ man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, int flags)
 	return wrap;
 }
 
-static void parent_sortkey_hashtable_free (void *defn)
+static int datum_compare (const void *a, const void *b)
 {
-	/* Automatically free child hashtables on removal. */
-	hashtable_free ((struct hashtable *) defn);
-}
-
-static void sortkey_hashtable_free (void *defn)
-{
-	struct sortkey *key = (struct sortkey *) defn;
-	MYDBM_FREE_DPTR (key->key);
-	free (key);
-}
-
-static int sortkey_compare (const void *a, const void *b)
-{
-	const struct sortkey **left = (const struct sortkey **) a;
-	const struct sortkey **right = (const struct sortkey **) b;
+	const datum *left = (const datum *) a;
+	const datum *right = (const datum *) b;
 	int cmp;
 	size_t minsize;
 
 	/* Sentinel NULL elements sort to the end. */
-	if (!MYDBM_DPTR ((*left)->key))
+	if (!MYDBM_DPTR (*left))
 		return 1;
-	else if (!MYDBM_DPTR ((*right)->key))
+	else if (!MYDBM_DPTR (*right))
 		return -1;
 
-	if (MYDBM_DSIZE ((*left)->key) < MYDBM_DSIZE ((*right)->key))
-		minsize = MYDBM_DSIZE ((*left)->key);
+	if (MYDBM_DSIZE (*left) < MYDBM_DSIZE (*right))
+		minsize = MYDBM_DSIZE (*left);
 	else
-		minsize = MYDBM_DSIZE ((*right)->key);
-	cmp = strncmp (MYDBM_DPTR ((*left)->key), MYDBM_DPTR ((*right)->key),
-		       minsize);
+		minsize = MYDBM_DSIZE (*right);
+	cmp = strncmp (MYDBM_DPTR (*left), MYDBM_DPTR (*right), minsize);
 	if (cmp)
 		return cmp;
-	else if (MYDBM_DSIZE ((*left)->key) < MYDBM_DSIZE ((*right)->key))
+	else if (MYDBM_DSIZE (*left) < MYDBM_DSIZE (*right))
 		return 1;
-	else if (MYDBM_DSIZE ((*left)->key) > MYDBM_DSIZE ((*right)->key))
+	else if (MYDBM_DSIZE (*left) > MYDBM_DSIZE (*right))
 		return -1;
 	else
 		return 0;
 }
 
+static bool datum_equals (const void *a, const void *b)
+{
+	return datum_compare (a, b) == 0;
+}
+
+static size_t datum_hash (const void *value)
+{
+	const datum *d = value;
+	return hash_pjw_bare (MYDBM_DPTR (*d), MYDBM_DSIZE (*d));
+}
+
+static void datum_free (const void *value)
+{
+	MYDBM_FREE_DPTR (*(datum *) value);
+}
+
 static datum empty_datum = { NULL, 0 };
 
-/* We keep a hashtable of filenames to sorted lists of keys. Each list is
- * stored both with links from each element to the next and in a hashtable,
- * so that both sequential access and random access are quick. This is
- * necessary for a reasonable ordered implementation of nextkey.
+/* We keep a map of filenames to sorted lists of keys.  Each list is stored
+ * using a hash-based implementation that allows lookup by name and
+ * traversal to the next item in O(log n) time, which is necessary for a
+ * reasonable ordered implementation of nextkey.
  */
 datum man_gdbm_firstkey (man_gdbm_wrapper wrap)
 {
-	struct hashtable *sortkey_hash;
-	struct sortkey **keys, *firstkey;
-	int numkeys = 0, maxkeys = 256;
-	int i;
+	gl_list_t keys;
+	datum *key;
 
-	/* Build the raw list of keys and sort it. */
-	keys = xnmalloc (maxkeys, sizeof *keys);
-	keys[0] = xmalloc (sizeof **keys);
-	keys[0]->key = gdbm_firstkey (wrap->file);
-	while (MYDBM_DPTR (keys[numkeys]->key)) {
-		if (++numkeys >= maxkeys) {
-			maxkeys *= 2;
-			keys = xnrealloc (keys, maxkeys, sizeof *keys);
-		}
-		keys[numkeys] = xmalloc (sizeof **keys);
-		keys[numkeys]->key =
-			gdbm_nextkey (wrap->file, keys[numkeys - 1]->key);
+	/* Build the raw sorted list of keys. */
+	keys = gl_list_create_empty (GL_RBTREE_LIST, datum_equals, datum_hash,
+				     datum_free, false);
+	key = XMALLOC (datum);
+	*key = gdbm_firstkey (wrap->file);
+	while (MYDBM_DPTR (*key)) {
+		datum *next;
+
+		gl_sortedlist_add (keys, datum_compare, key);
+		next = XMALLOC (datum);
+		*next = gdbm_nextkey (wrap->file, *key);
+		key = next;
 	}
-	free (keys[numkeys]);
-	keys[numkeys] = NULL;	/* simplifies the empty case */
-	qsort (keys, numkeys, sizeof *keys, &sortkey_compare);
 
-	/* Link the elements together and insert them into a hash. */
-	sortkey_hash = hashtable_create (&sortkey_hashtable_free);
-	for (i = 0; i < numkeys; ++i) {
-		if (i < numkeys - 1)
-			keys[i]->next = keys[i + 1];
-		else
-			keys[i]->next = NULL;
-		hashtable_install (sortkey_hash,
-				   MYDBM_DPTR (keys[i]->key),
-				   MYDBM_DSIZE (keys[i]->key),
-				   keys[i]);
-	}
-	firstkey = keys[0];
-	free (keys);	/* element memory now owned by hashtable */
-
-	if (!parent_sortkey_hash) {
-		parent_sortkey_hash = hashtable_create
-			(&parent_sortkey_hashtable_free);
-		push_cleanup ((cleanup_fun) hashtable_free,
-			      parent_sortkey_hash, 0);
+	if (!parent_keys) {
+		parent_keys = gl_map_create_empty (GL_HASH_MAP, string_equals,
+						   string_hash, plain_free,
+						   (gl_listelement_dispose_fn)
+						   gl_list_free);
+		push_cleanup ((cleanup_fun) gl_map_free, parent_keys, 0);
 	}
 
 	/* Remember this structure for use by nextkey. */
-	hashtable_install (parent_sortkey_hash,
-			   wrap->name, strlen (wrap->name), sortkey_hash);
+	gl_map_put (parent_keys, xstrdup (wrap->name), keys);
 
-	if (firstkey)
-		return copy_datum (firstkey->key);
+	if (gl_list_size (keys))
+		return copy_datum (*(datum *) gl_list_get_at (keys, 0));
 	else
-		return empty_datum; /* dptr is NULL, so no copy needed */
+		return empty_datum;
 }
 
 datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key)
 {
-	struct hashtable *sortkey_hash;
-	struct sortkey *sortkey;
+	gl_list_t keys;
+	gl_list_node_t node, next_node;
 
-	if (!parent_sortkey_hash)
+	if (!parent_keys)
 		return empty_datum;
-	sortkey_hash = hashtable_lookup (parent_sortkey_hash,
-					 wrap->name, strlen (wrap->name));
-	if (!sortkey_hash)
-		return empty_datum;
-
-	sortkey = hashtable_lookup (sortkey_hash,
-				    MYDBM_DPTR (key), MYDBM_DSIZE (key));
-	if (!sortkey || !sortkey->next)
+	keys = (gl_list_t) gl_map_get (parent_keys, wrap->name);
+	if (!keys)
 		return empty_datum;
 
-	return copy_datum (sortkey->next->key);
+	node = gl_sortedlist_search (keys, datum_compare, &key);
+	if (!node)
+		return empty_datum;
+	next_node = gl_list_next_node (keys, node);
+	if (!next_node)
+		return empty_datum;
+
+	return copy_datum (*(datum *) gl_list_node_value (keys, next_node));
 }
 
 struct timespec man_gdbm_get_time (man_gdbm_wrapper wrap)
@@ -255,14 +238,8 @@ void man_gdbm_close (man_gdbm_wrapper wrap)
 	if (!wrap)
 		return;
 
-	if (parent_sortkey_hash) {
-		struct hashtable *sortkey_hash =
-			hashtable_lookup (parent_sortkey_hash,
-					  wrap->name, strlen (wrap->name));
-		if (sortkey_hash)
-			hashtable_remove (parent_sortkey_hash,
-					  wrap->name, strlen (wrap->name));
-	}
+	if (parent_keys)
+		gl_map_remove (parent_keys, wrap->name);
 
 	free (wrap->name);
 	gdbm_close (wrap->file);

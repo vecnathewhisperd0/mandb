@@ -37,7 +37,9 @@
 
 #include "fnmatch.h"
 #include "gl_array_list.h"
+#include "gl_hash_map.h"
 #include "gl_xlist.h"
+#include "gl_xmap.h"
 #include "regex.h"
 #include "xvasprintf.h"
 
@@ -45,7 +47,6 @@
 
 #include "error.h"
 #include "glcontainers.h"
-#include "hashtable.h"
 #include "cleanup.h"
 #include "xregcomp.h"
 
@@ -113,23 +114,23 @@ static int parse_layout (const char *layout)
 	}
 }
 
-struct dirent_hashent {
+struct dirent_names {
 	char **names;
 	size_t names_len, names_max;
 };
 
-static void dirent_hashtable_free (void *defn)
+static void dirent_names_free (const void *value)
 {
-	struct dirent_hashent *hashent = defn;
+	struct dirent_names *cache = (struct dirent_names *) value;
 	size_t i;
 
-	for (i = 0; i < hashent->names_len; ++i)
-		free (hashent->names[i]);
-	free (hashent->names);
-	free (hashent);
+	for (i = 0; i < cache->names_len; ++i)
+		free (cache->names[i]);
+	free (cache->names);
+	free (cache);
 }
 
-static struct hashtable *dirent_hash = NULL;
+static gl_map_t dirent_map = NULL;
 
 static int cache_compare (const void *a, const void *b)
 {
@@ -138,17 +139,19 @@ static int cache_compare (const void *a, const void *b)
 	return strcasecmp (left, right);
 }
 
-static struct dirent_hashent *update_directory_cache (const char *path)
+static struct dirent_names *update_directory_cache (const char *path)
 {
-	struct dirent_hashent *cache;
+	struct dirent_names *cache;
 	DIR *dir;
 	struct dirent *entry;
 
-	if (!dirent_hash) {
-		dirent_hash = hashtable_create (&dirent_hashtable_free);
-		push_cleanup ((cleanup_fun) hashtable_free, dirent_hash, 0);
+	if (!dirent_map) {
+		dirent_map = gl_map_create_empty (GL_HASH_MAP, string_equals,
+						  string_hash, plain_free,
+						  dirent_names_free);
+		push_cleanup ((cleanup_fun) gl_map_free, dirent_map, 0);
 	}
-	cache = hashtable_lookup (dirent_hash, path, strlen (path));
+	cache = (struct dirent_names *) gl_map_get (dirent_map, path);
 
 	/* Check whether we've got this one already. */
 	if (cache) {
@@ -164,7 +167,7 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 		return NULL;
 	}
 
-	cache = XMALLOC (struct dirent_hashent);
+	cache = XMALLOC (struct dirent_names);
 	cache->names_len = 0;
 	cache->names_max = 1024;
 	cache->names = XNMALLOC (cache->names_max, char *);
@@ -183,7 +186,7 @@ static struct dirent_hashent *update_directory_cache (const char *path)
 	qsort (cache->names, cache->names_len, sizeof *cache->names,
 	       &cache_compare);
 
-	hashtable_install (dirent_hash, path, strlen (path), cache);
+	gl_map_put (dirent_map, xstrdup (path), cache);
 	closedir (dir);
 
 	return cache;
@@ -204,7 +207,7 @@ static int pattern_compare (const void *a, const void *b)
 static void match_in_directory (const char *path, const char *pattern,
 				int opts, gl_list_t matched)
 {
-	struct dirent_hashent *cache;
+	struct dirent_names *cache;
 	int flags;
 	regex_t preg;
 	struct pattern_bsearch pattern_start = { NULL, -1 };
