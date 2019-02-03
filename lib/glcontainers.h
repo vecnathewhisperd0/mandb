@@ -26,6 +26,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "gl_list.h"
+#include "gl_map.h"
+#include "gl_set.h"
+
 /* These types are compatible with those required by Gnulib container
  * initialisation.
  */
@@ -33,6 +37,16 @@
 bool string_equals (const void *s1, const void *s2);
 size_t string_hash (const void *s);
 void plain_free (const void *s);
+
+/* Convenience functions. */
+
+gl_list_t new_string_list (gl_list_implementation_t implementation,
+			   bool allow_duplicates);
+gl_map_t new_string_map (gl_map_implementation_t implementation,
+			 gl_mapvalue_dispose_fn vdispose_fn);
+gl_set_t new_string_set (gl_set_implementation_t implementation);
+
+/* Iterator macros. */
 
 #define GL_LIST_FOREACH_START(list, item) \
 	do { \

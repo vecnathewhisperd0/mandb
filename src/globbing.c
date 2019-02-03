@@ -146,9 +146,7 @@ static struct dirent_names *update_directory_cache (const char *path)
 	struct dirent *entry;
 
 	if (!dirent_map) {
-		dirent_map = gl_map_create_empty (GL_HASH_MAP, string_equals,
-						  string_hash, plain_free,
-						  dirent_names_free);
+		dirent_map = new_string_map (GL_HASH_MAP, dirent_names_free);
 		push_cleanup ((cleanup_fun) gl_map_free, dirent_map, 0);
 	}
 	cache = (struct dirent_names *) gl_map_get (dirent_map, path);
@@ -281,8 +279,7 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 	static int layout = -1;
 	char *name;
 
-	matched = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
-					string_hash, plain_free, false);
+	matched = new_string_list (GL_ARRAY_LIST, false);
 
 	/* This routine only does a minimum amount of matching. It does not
 	   find cat files in the alternate cat directory. */
@@ -303,8 +300,7 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 		gl_list_t dirs;
 		const char *dir;
 
-		dirs = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
-					     string_hash, plain_free, false);
+		dirs = new_string_list (GL_ARRAY_LIST, false);
 		pattern = xasprintf ("%s\t*", cat ? "cat" : "man");
 		*strrchr (pattern, '\t') = *sec;
 		match_in_directory (hier, pattern, LFF_MATCHCASE, dirs);
@@ -390,8 +386,7 @@ gl_list_t expand_path (const char *path)
 	gl_list_t result;
 	glob_t globbuf;
 
-	result = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
-				       string_hash, plain_free, false);
+	result = new_string_list (GL_ARRAY_LIST, false);
 
 	res = glob (path, GLOB_NOCHECK, NULL, &globbuf);
 	/* if glob failed, return the given path */

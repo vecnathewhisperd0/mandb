@@ -192,8 +192,7 @@ static datum btree_findkey (DB *db, u_int flags)
 		}
 	}
 	if (!loop_check)
-		loop_check = gl_set_create_empty (GL_HASH_SET, string_equals,
-						  string_hash, plain_free);
+		loop_check = new_string_set (GL_HASH_SET);
 
 	if (((db->seq) (db, (DBT *) &key, (DBT *) &data, flags))) {
 		memset (&key, 0, sizeof key);

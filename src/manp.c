@@ -232,8 +232,7 @@ gl_list_t get_sections (void)
 		else if (item->flag == SECTION)
 			length++;
 	} GL_LIST_FOREACH_END (config);
-	sections = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
-					 string_hash, plain_free, true);
+	sections = new_string_list (GL_ARRAY_LIST, true);
 	if (length_user)
 		flag = SECTION_USER;
 	else
@@ -975,8 +974,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	char *manpathlist;
 	char *item;
 
-	tmplist = gl_list_create_empty (GL_LINKEDHASH_LIST, string_equals,
-					string_hash, plain_free, false);
+	tmplist = new_string_list (GL_LINKEDHASH_LIST, false);
 	tmppath = xstrdup (path);
 
 	for (end = p = tmppath; end; p = end + 1) {
@@ -1197,8 +1195,7 @@ gl_list_t create_pathlist (const char *manp)
 
 	/* Expand the manpath into a list for easier handling. */
 
-	list = gl_list_create_empty (GL_LINKEDHASH_LIST, string_equals,
-				     string_hash, plain_free, true);
+	list = new_string_list (GL_LINKEDHASH_LIST, true);
 	for (p = manp;; p = end + 1) {
 		end = strchr (p, ':');
 		if (end) {

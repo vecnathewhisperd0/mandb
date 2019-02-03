@@ -219,9 +219,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	}
 
 	if (!whatis_map)
-		whatis_map = gl_map_create_empty (GL_HASH_MAP, string_equals,
-						  string_hash, plain_free,
-						  whatis_free);
+		whatis_map = new_string_map (GL_HASH_MAP, whatis_free);
 
 	whatis = gl_map_get (whatis_map, ult);
 	if (!whatis) {
@@ -233,9 +231,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		 * looking for whatis info in files containing only '.so
 		 * manx/foo.x', which will give us an unobtainable whatis
 		 * for the entry. */
-		ult_trace = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
-						  string_hash, plain_free,
-						  true);
+		ult_trace = new_string_list (GL_ARRAY_LIST, true);
 		ult = ult_src (file, path, &buf,
 			       SO_LINK | SOFT_LINK | HARD_LINK, ult_trace);
 	}
@@ -339,8 +335,7 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
                 return;
         }
 
-	names = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
-				      string_hash, plain_free, false);
+	names = new_string_list (GL_ARRAY_LIST, false);
 
         /* strlen(newdir->d_name) could be replaced by newdir->d_reclen */
 

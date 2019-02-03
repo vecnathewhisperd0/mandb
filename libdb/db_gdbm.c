@@ -174,10 +174,9 @@ datum man_gdbm_firstkey (man_gdbm_wrapper wrap)
 	}
 
 	if (!parent_keys) {
-		parent_keys = gl_map_create_empty (GL_HASH_MAP, string_equals,
-						   string_hash, plain_free,
-						   (gl_listelement_dispose_fn)
-						   gl_list_free);
+		parent_keys = new_string_map (GL_HASH_MAP,
+					      (gl_listelement_dispose_fn)
+					      gl_list_free);
 		push_cleanup ((cleanup_fun) gl_map_free, parent_keys, 0);
 	}
 

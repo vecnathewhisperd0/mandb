@@ -969,8 +969,7 @@ int main (int argc, char *argv[])
 
 	manpathlist = create_pathlist (manp);
 
-	display_seen = gl_set_create_empty (GL_HASH_SET, string_equals,
-					    string_hash, plain_free);
+	display_seen = new_string_set (GL_HASH_SET);
 
 #ifdef HAVE_ICONV
 	locale_charset = xasprintf ("%s//IGNORE", get_locale_charset ());

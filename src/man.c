@@ -3396,10 +3396,9 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 		database = mkdbname (manpath);
 
 	if (!db_map)
-		db_map = gl_map_create_empty (GL_HASH_MAP, string_equals,
-					      string_hash, plain_free,
-					      (gl_mapvalue_dispose_fn)
-					      free_mandata_struct);
+		db_map = new_string_map (GL_HASH_MAP,
+					 (gl_mapvalue_dispose_fn)
+					 free_mandata_struct);
 
 	/* Have we looked here already? */
 	data = (struct mandata *) gl_map_get (db_map, manpath);
@@ -3949,8 +3948,7 @@ static gl_list_t get_section_list (void)
 	 * man's -s option takes a comma-separated list, so we accept that
 	 * too for compatibility.
 	 */
-	sections = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
-					 string_hash, plain_free, true);
+	sections = new_string_list (GL_ARRAY_LIST, true);
 	for (sec = strtok (colon_sep_section_list, ":,"); sec; 
 	     sec = strtok (NULL, ":,"))
 		gl_list_add_last (sections, xstrdup (sec));

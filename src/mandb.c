@@ -858,9 +858,7 @@ int main (int argc, char *argv[])
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();
 
-	tried_catdirs = gl_map_create_empty (GL_HASH_MAP, string_equals,
-					     string_hash, plain_free,
-					     tried_catdirs_free);
+	tried_catdirs = new_string_map (GL_HASH_MAP, tried_catdirs_free);
 
 	GL_LIST_FOREACH_START (manpathlist, mp) {
 		bool global_manpath = is_global_mandir (mp);

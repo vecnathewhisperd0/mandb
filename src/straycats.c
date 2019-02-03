@@ -84,8 +84,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 		return 0;
 	}
 
-	names = gl_list_create_empty (GL_ARRAY_LIST, string_equals,
-				      string_hash, plain_free, false);
+	names = new_string_list (GL_ARRAY_LIST, false);
 
 	while ((catlist = readdir (cdir)) != NULL) {
 		if (*catlist->d_name == '.' && 

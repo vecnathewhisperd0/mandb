@@ -102,9 +102,7 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	 */
 	physical_offsets = gl_map_create_empty (GL_HASH_MAP, string_equals,
 						string_hash, NULL, plain_free);
-	sorted_basenames = gl_list_create_empty (GL_RBTREE_LIST,
-						 string_equals, string_hash,
-						 plain_free, false);
+	sorted_basenames = new_string_list (GL_RBTREE_LIST, false);
 	GL_LIST_FOREACH_START (basenames, name) {
 		struct {
 			struct fiemap fiemap;
