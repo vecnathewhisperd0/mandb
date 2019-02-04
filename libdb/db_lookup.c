@@ -149,19 +149,12 @@ void free_mandata_elements (struct mandata *pinfo)
 	free (pinfo->name);			/* free the real name */
 }
 
-/* Go through the linked list of structures, free()ing the 'content' and the
- * structs themselves.
- */
+/* Free a mandata structure and its elements. */
 void free_mandata_struct (struct mandata *pinfo)
 {
-	while (pinfo) {
-		struct mandata *next;
-
-		next = pinfo->next;
+	if (pinfo)
 		free_mandata_elements (pinfo);
-		free (pinfo);			/* free the structure */
-		pinfo = next;
-	}
+	free (pinfo);
 }
 
 /* Get the key that should be used for a given name. The caller is
@@ -222,7 +215,6 @@ void split_content (char *cont_ptr, struct mandata *pinfo)
 	pinfo->whatis = *(data);
 
 	pinfo->addr = cont_ptr;
-	pinfo->next = (struct mandata *) NULL;
 }
 
 static bool name_ext_equals (const void *elt1, const void *elt2)
@@ -270,15 +262,21 @@ gl_list_t list_extensions (char *data)
 /*
  There are three possibilities on lookup:
 
- 1) No data exists, lookup will fail, returned structure will be NULL.
- 2) One data item exists. Item is returned as first in set of structures.
- 3) Many items exist. They are all returned, in a multiple structure set.
+ 1) No data exists, lookup will fail, zero-length list will be returned.
+ 2) One data item exists. Item is returned as first in list of structures.
+ 3) Many items exist. They are all returned, in a multiple structure list.
  */
-static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
-				 const char *section, int flags)
+static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
+			   const char *section, int flags)
 {
+	gl_list_t infos;
 	struct mandata *info = NULL;
 	datum key, cont;
+
+	infos = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
+				      (gl_listelement_dispose_fn)
+				      free_mandata_struct,
+				      true);
 
 	memset (&key, 0, sizeof key);
 	memset (&cont, 0, sizeof cont);
@@ -287,31 +285,34 @@ static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
 	cont = MYDBM_FETCH (dbf, key);
 	MYDBM_FREE_DPTR (key);
 
-	if (MYDBM_DPTR (cont) == NULL) {	/* No entries at all */
-		return info;			/* indicate no entries */
-	} else if (*MYDBM_DPTR (cont) != '\t') {	/* Just one entry */
+	if (MYDBM_DPTR (cont) == NULL)		/* No entries at all */
+		;
+	else if (*MYDBM_DPTR (cont) != '\t') {	/* Just one entry */
+		bool matches = false;
+
 		info = infoalloc ();
 		split_content (MYDBM_DPTR (cont), info);
 		if (!info->name)
 			info->name = xstrdup (page);
 		if (!(flags & MATCH_CASE) || STREQ (info->name, page)) {
 			if (section == NULL)
-				return info;
-			if (flags & EXACT) {
+				matches = true;
+			else if (flags & EXACT) {
 				if (STREQ (section, info->ext))
-					return info;
+					matches = true;
 			} else {
 				if (STRNEQ (section, info->ext,
 					    strlen (section)))
-					return info;
+					matches = true;
 			}
 		}
-		free_mandata_struct (info);
-		return NULL;
-	} else {				/* multiple entries */
+		if (matches)
+			gl_list_add_last (infos, info);
+		else
+			free_mandata_struct (info);
+	} else {				/* Multiple entries */
 		gl_list_t refs;
 		struct name_ext *ref;
-		struct mandata *ret = NULL;
 
 		/* Extract all of the case-variant-names/extensions
 		 * associated with this key.
@@ -355,25 +356,23 @@ static struct mandata *dblookup (MYDBM_FILE dbf, const char *page,
 			}
 			MYDBM_FREE_DPTR (key);
 
-			/* allocate info struct, fill it in and
-			   point info to the next in the list */
-			if (!ret)
-				ret = info = infoalloc ();
-			else
-				info = info->next = infoalloc ();
+			/* Allocate info struct and add it to the list. */
+			info = infoalloc ();
 			split_content (MYDBM_DPTR (multi_cont), info);
 			if (!info->name)
 				info->name = xstrdup (ref->name);
+			gl_list_add_last (infos, info);
 		} GL_LIST_FOREACH_END (refs);
 
 		gl_list_free (refs);
 		MYDBM_FREE_DPTR (cont);
-		return ret;
 	}
+
+	return infos;
 }
 
-struct mandata *dblookup_all (MYDBM_FILE dbf, const char *page,
-			      const char *section, int match_case)
+gl_list_t dblookup_all (MYDBM_FILE dbf, const char *page,
+			const char *section, int match_case)
 {
 	return dblookup (dbf, page, section,
 			 ALL | (match_case ? MATCH_CASE : 0));
@@ -382,17 +381,32 @@ struct mandata *dblookup_all (MYDBM_FILE dbf, const char *page,
 struct mandata *dblookup_exact (MYDBM_FILE dbf, const char *page,
 				const char *section, int match_case)
 {
-	return dblookup (dbf, page, section,
-			 EXACT | (match_case ? MATCH_CASE : 0));
+	gl_list_t infos = dblookup (dbf, page, section,
+				    EXACT | (match_case ? MATCH_CASE : 0));
+	struct mandata *info = NULL;
+
+	if (gl_list_size (infos)) {
+		/* Return the first item and free the rest of the list. */
+		info = (struct mandata *) gl_list_get_at (infos, 0);
+		gl_list_set_at (infos, 0, NULL);	/* steal memory */
+	}
+	gl_list_free (infos);
+	return info;
 }
 
-struct mandata *dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
-				  const char *section, int match_case,
-				  int pattern_regex, int try_descriptions)
+gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
+			    const char *section, int match_case,
+			    int pattern_regex, int try_descriptions)
 {
-	struct mandata *ret = NULL, *tail = NULL;
+	gl_list_t infos;
+	struct mandata *tail = NULL;
 	datum key, cont;
 	regex_t preg;
+
+	infos = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
+				      (gl_listelement_dispose_fn)
+				      free_mandata_struct,
+				      true);
 
 	if (pattern_regex)
 		xregcomp (&preg, pattern,
@@ -468,13 +482,11 @@ struct mandata *dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 		if (!got_match)
 			goto nextpage_tab;
 
-		if (!ret)
-			ret = tail = infoalloc ();
-		else
-			tail = tail->next = infoalloc ();
+		tail = infoalloc ();
 		memcpy (tail, &info, sizeof (info));
 		info.name = NULL; /* steal memory */
 		MYDBM_SET_DPTR (cont, NULL); /* == info.addr */
+		gl_list_add_last (infos, tail);
 
 nextpage_tab:
 		if (tab)
@@ -497,5 +509,5 @@ nextpage:
 	if (pattern_regex)
 		regfree (&preg);
 
-	return ret;
+	return infos;
 }

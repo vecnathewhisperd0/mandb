@@ -503,20 +503,16 @@ out:
 static int do_whatis_section (MYDBM_FILE dbf,
 			      const char *page, const char *section)
 {
+	gl_list_t infos;
 	struct mandata *info;
 	int count = 0;
 
-	info = dblookup_all (dbf, page, section, 0);
-	while (info) {
-		struct mandata *pinfo;
-			
+	infos = dblookup_all (dbf, page, section, 0);
+	GL_LIST_FOREACH_START (infos, info) {
 		display (dbf, info, page);
 		count++;
-		pinfo = info->next;	/* go on to next structure */
-		free_mandata_elements (info);
-	 	free (info);
-		info = pinfo;
-	}
+	} GL_LIST_FOREACH_END (infos);
+	gl_list_free (infos);
 	return count;
 }
 

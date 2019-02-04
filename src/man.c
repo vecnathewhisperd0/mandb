@@ -3373,12 +3373,22 @@ static int maybe_update_file (const char *manpath, const char *name,
 #define TRY_DATABASE_UPDATED      -3
 #endif /* MAN_DB_UPDATES */
 
+static void db_map_value_free (const void *value)
+{
+	/* The value may be NULL to indicate that opening the database at
+	 * this location already failed.
+	 */
+	if (value)
+		gl_list_free ((gl_list_t) value);
+}
+
 /* Look for a page in the database. If db not accessible, return -1,
    otherwise return number of pages found. */
 static int try_db (const char *manpath, const char *sec, const char *name,
 		   struct candidate **cand_head)
 {
-	struct mandata *loc, *data;
+	gl_list_t matches;
+	struct mandata *loc;
 	char *catpath;
 	int found = 0;
 #ifdef MAN_DB_UPDATES
@@ -3396,14 +3406,10 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 		database = mkdbname (manpath);
 
 	if (!db_map)
-		db_map = new_string_map (GL_HASH_MAP,
-					 (gl_mapvalue_dispose_fn)
-					 free_mandata_struct);
+		db_map = new_string_map (GL_HASH_MAP, db_map_value_free);
 
-	/* Have we looked here already? */
-	data = (struct mandata *) gl_map_get (db_map, manpath);
-
-	if (!data) {
+	/* If we haven't looked here already, do so now. */
+	if (!gl_map_search (db_map, manpath, (const void **) &matches)) {
 		MYDBM_FILE dbf;
 
 		dbf = MYDBM_RDOPEN (database);
@@ -3417,13 +3423,13 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			/* if section is set, only return those that match,
 			   otherwise NULL retrieves all available */
 			if (regex_opt || wildcard)
-				data = dblookup_pattern
+				matches = dblookup_pattern
 					(dbf, name, section, match_case,
 					 regex_opt, !names_only);
 			else
-				data = dblookup_all (dbf, name, section,
-						     match_case);
-			gl_map_put (db_map, xstrdup (manpath), data);
+				matches = dblookup_all (dbf, name, section,
+							match_case);
+			gl_map_put (db_map, xstrdup (manpath), matches);
 			MYDBM_CLOSE (dbf);
 			dbf = NULL;
 #ifdef MAN_DB_CREATES
@@ -3431,42 +3437,34 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			/* create one */
 			debug ("Failed to open %s O_RDONLY\n", database);
 			if (run_mandb (1, manpath, NULL)) {
-				data = infoalloc ();
-				data->next = NULL;
-				data->addr = NULL;
-				gl_map_put (db_map, xstrdup (manpath), data);
+				gl_map_put (db_map, xstrdup (manpath), NULL);
 				return TRY_DATABASE_OPEN_FAILED;
 			}
 			return TRY_DATABASE_CREATED;
 #endif /* MAN_DB_CREATES */
 		} else {
 			debug ("Failed to open %s O_RDONLY\n", database);
-			data = infoalloc ();
-			data->next = (struct mandata *) NULL;
-			data->addr = NULL;
-			gl_map_put (db_map, xstrdup (manpath), data);
+			gl_map_put (db_map, xstrdup (manpath), NULL);
 			return TRY_DATABASE_OPEN_FAILED;
 		}
+		assert (matches != NULL);
 	}
 
-	/* if we already know that there is nothing here, get on with it */
-	if (!data)
-		return 0;
-
-	/* We already tried (and failed) to open this db before */
-	if (!data->addr)
+	/* We already tried (and failed) to open this db before. */
+	if (!matches)
 		return TRY_DATABASE_OPEN_FAILED;
 
 #ifdef MAN_DB_UPDATES
 	/* Check that all the entries found are up to date. If not, the
 	 * caller should try again.
 	 */
-	for (loc = data; loc; loc = loc->next)
+	GL_LIST_FOREACH_START (matches, loc)
 		if (STREQ (sec, loc->sec) &&
 		    (!extension || STREQ (extension, loc->ext)
 				|| STREQ (extension, loc->ext + strlen (sec))))
 			if (maybe_update_file (manpath, name, loc))
 				found_stale = 1;
+	GL_LIST_FOREACH_END (matches);
 
 	if (found_stale) {
 		gl_map_remove (db_map, manpath);
@@ -3476,12 +3474,13 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 
 	/* cycle through the mandata structures (there's usually only 
 	   1 or 2) and see what we have w.r.t. the current section */
-	for (loc = data; loc; loc = loc->next)
+	GL_LIST_FOREACH_START (matches, loc)
 		if (STREQ (sec, loc->sec) &&
 		    (!extension || STREQ (extension, loc->ext)
 				|| STREQ (extension, loc->ext + strlen (sec))))
 			found += add_candidate (cand_head, CANDIDATE_DATABASE,
 						0, name, manpath, NULL, loc);
+	GL_LIST_FOREACH_END (matches);
 
 	return found;
 }

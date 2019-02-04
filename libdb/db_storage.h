@@ -54,7 +54,6 @@
 #include "mydbm.h"
 
 struct mandata {
-	struct mandata *next;		/* ptr to next structure, if any */
 	char *addr;			/* ptr to memory containing the fields */
 
 	char *name;			/* Name of page, if != key */
@@ -79,14 +78,13 @@ struct name_ext {
 };
 
 /* used by the world */
-extern struct mandata *dblookup_all (MYDBM_FILE dbf, const char *page,
-				     const char *section, int match_case);
+extern gl_list_t dblookup_all (MYDBM_FILE dbf, const char *page,
+			       const char *section, int match_case);
 extern struct mandata *dblookup_exact (MYDBM_FILE dbf, const char *page,
 				       const char *section, int match_case);
-extern struct mandata *dblookup_pattern (MYDBM_FILE dbf, const char *page,
-					 const char *section, int match_case,
-					 int pattern_regex,
-					 int try_descriptions);
+extern gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *page,
+				   const char *section, int match_case,
+				   int pattern_regex, int try_descriptions);
 extern int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base);
 extern int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);
