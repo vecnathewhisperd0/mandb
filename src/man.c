@@ -172,13 +172,6 @@ enum opts {
 	OPT_MAX
 };
 
-struct string_llist;
-struct string_llist {
-	const char *name;
-	struct string_llist *next;
-};
-
-
 static gl_list_t manpathlist;
 
 /* globals */
@@ -211,7 +204,7 @@ static const char *roff_device = NULL;
 static const char *want_encoding = NULL;
 #ifdef NROFF_WARNINGS
 static const char default_roff_warnings[] = "mac";
-static struct string_llist *roff_warnings = NULL;
+static gl_list_t roff_warnings;
 #endif /* NROFF_WARNINGS */
 static int global_apropos;
 static int print_where, print_where_cat;
@@ -387,13 +380,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				const char *warning;
 
 				for (warning = strtok (s, ","); warning;
-				     warning = strtok (NULL, ",")) {
-					struct string_llist *new;
-					new = xmalloc (sizeof *new);
-					new->name = xstrdup (warning);
-					new->next = roff_warnings;
-					roff_warnings = new;
-				}
+				     warning = strtok (NULL, ","))
+					gl_list_add_last (roff_warnings,
+							  xstrdup (warning));
 
 				free (s);
 			}
@@ -1266,7 +1255,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 		do {
 #ifdef NROFF_WARNINGS
-			struct string_llist *cur;
+			const char *warning;
 #endif /* NROFF_WARNINGS */
 			int wants_dev = 0; /* filter wants a dev argument */
 			int wants_post = 0; /* postprocessor arguments */
@@ -1334,9 +1323,9 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #endif /* TROFF_IS_GROFF || HEIRLOOM_NROFF */
 
 #ifdef NROFF_WARNINGS
-				for (cur = roff_warnings; cur;
-				     cur = cur->next)
-					pipecmd_argf (cmd, "-w%s", cur->name);
+				GL_LIST_FOREACH_START (roff_warnings, warning)
+					pipecmd_argf (cmd, "-w%s", warning);
+				GL_LIST_FOREACH_END (roff_warnings);
 #endif /* NROFF_WARNINGS */
 
 #ifdef HEIRLOOM_NROFF
@@ -4065,6 +4054,10 @@ int main (int argc, char *argv[])
 	if (!html_pager)
 		init_html_pager ();
 #endif /* TROFF_IS_GROFF */
+
+#ifdef NROFF_WARNINGS
+	roff_warnings = new_string_list (GL_ARRAY_LIST, true);
+#endif /* NROFF_WARNINGS */
 
 	/* First of all, find out if $MANOPT is set. If so, put it in 
 	   *argv[] format for argp to play with. */
