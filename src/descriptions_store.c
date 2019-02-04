@@ -63,22 +63,20 @@ static int is_prefix (const char *path, const char *dir)
 /* Take a list of descriptions returned by parse_descriptions() and store
  * it into the database.
  */
-void store_descriptions (MYDBM_FILE dbf, const struct page_description *head,
-			 struct mandata *info,
-			 const char *path, const char *base,
-			 gl_list_t trace)
+void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
+			 const char *path, const char *base, gl_list_t trace)
 {
 	const struct page_description *desc;
 	char save_id = info->id;
 	const char *trace_name;
 
-	if (trace) {
+	if (gl_list_size (descs) && trace) {
 		GL_LIST_FOREACH_START (trace, trace_name)
 			debug ("trace: '%s'\n", trace_name);
 		GL_LIST_FOREACH_END (trace);
 	}
 
-	for (desc = head; desc; desc = desc->next) {
+	GL_LIST_FOREACH_START (descs, desc) {
 		/* Either it's the real thing or merely a reference. Get the
 		 * id and pointer right in either case.
 		 */
@@ -149,5 +147,5 @@ void store_descriptions (MYDBM_FILE dbf, const struct page_description *head,
 			gripe_bad_store (base, info->ext);
 			break;
 		}
-	}
+	} GL_LIST_FOREACH_END (descs);
 }

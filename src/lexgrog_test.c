@@ -33,6 +33,8 @@
 #include <sys/stat.h>
 
 #include "argp.h"
+#include "error.h"
+#include "gl_list.h"
 #include "progname.h"
 
 #include "gettext.h"
@@ -42,7 +44,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
-#include "error.h"
+#include "glcontainers.h"
 #include "pipeline.h"
 #include "sandbox.h"
 #include "security.h"
@@ -205,10 +207,9 @@ int main (int argc, char **argv)
 		}
 
 		if (file && find_name (file, "-", &lg, encoding)) {
-			struct page_description *descs =
-				parse_descriptions (NULL, lg.whatis);
+			gl_list_t descs = parse_descriptions (NULL, lg.whatis);
 			const struct page_description *desc;
-			for (desc = descs; desc; desc = desc->next) {
+			GL_LIST_FOREACH_START (descs, desc) {
 				if (!desc->name || !desc->whatis)
 					continue;
 				found = 1;
@@ -219,8 +220,8 @@ int main (int argc, char **argv)
 					printf (": \"%s - %s\"",
 						desc->name, desc->whatis);
 				printf ("\n");
-			}
-			free_descriptions (descs);
+			} GL_LIST_FOREACH_END (descs);
+			gl_list_free (descs);
 			free (lg.filters);
 			free (lg.whatis);
 		}

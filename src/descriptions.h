@@ -27,14 +27,11 @@
 struct page_description {
 	char *name;
 	char *whatis;
-	struct page_description *next;
 };
 
-extern struct page_description *parse_descriptions (const char *base,
-						    const char *whatis);
-extern void store_descriptions (MYDBM_FILE dbf,
-				const struct page_description *head,
+/* Returns a list of struct page_description. */
+extern gl_list_t parse_descriptions (const char *base, const char *whatis);
+extern void store_descriptions (MYDBM_FILE dbf, gl_list_t descs,
 				struct mandata *info,
 				const char *path, const char *base,
 				gl_list_t trace);
-extern void free_descriptions (struct page_description *head);

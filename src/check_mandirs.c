@@ -287,15 +287,11 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	info.pointer = NULL;	/* direct page, so far */
 	info.filter = lg.filters;
 	if (lg.whatis) {
-		struct page_description *descs =
-			parse_descriptions (manpage_base, lg.whatis);
-		if (descs) {
-			if (!opt_test)
-				store_descriptions (dbf, descs, &info,
-						    path, manpage_base,
-						    whatis->trace);
-			free_descriptions (descs);
-		}
+		gl_list_t descs = parse_descriptions (manpage_base, lg.whatis);
+		if (!opt_test)
+			store_descriptions (dbf, descs, &info, path,
+					    manpage_base, whatis->trace);
+		gl_list_free (descs);
 	} else if (quiet < 2) {
 		(void) stat (ult, &buf);
 		if (buf.st_size == 0)

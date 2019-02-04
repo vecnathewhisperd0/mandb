@@ -263,17 +263,14 @@ static int check_for_stray (MYDBM_FILE dbf)
 				if (find_name_decompressed (decomp,
 							    catdir_base,
 							    &lg)) {
-					struct page_description *descs;
+					gl_list_t descs;
 					strays++;
 					descs = parse_descriptions
 						(mandir_base, lg.whatis);
-					if (descs) {
-						store_descriptions
-							(dbf, descs, &info,
-							 NULL, mandir_base,
-							 NULL);
-						free_descriptions (descs);
-					}
+					store_descriptions (dbf, descs, &info,
+							    NULL, mandir_base,
+							    NULL);
+					gl_list_free (descs);
 				} else if (quiet < 2)
 					error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
 					       catdir, mandir_base, info.sec);

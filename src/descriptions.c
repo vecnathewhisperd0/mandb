@@ -27,21 +27,36 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "gl_array_list.h"
+#include "gl_xlist.h"
+
 #include "manconfig.h"
 #include "descriptions.h"
 
+/* Free a page description. */
+void page_description_free (const void *value)
+{
+	struct page_description *desc = (struct page_description *) value;
+
+	free (desc->name);
+	free (desc->whatis);
+	free (desc);
+}
+
 /* Parse the description in a whatis line returned by find_name() into a
- * sequence of names and whatis descriptions.
+ * list of names and whatis descriptions.
  */
-struct page_description *parse_descriptions (const char *base,
-					     const char *whatis)
+gl_list_t parse_descriptions (const char *base, const char *whatis)
 {
 	const char *sep, *nextsep;
-	struct page_description *desc = NULL, *head = NULL;
+	gl_list_t descs;
 	int seen_base = 0;
 
+	descs = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
+				      page_description_free, true);
+
 	if (!whatis)
-		return NULL;
+		return descs;
 
 	sep = whatis;
 
@@ -74,7 +89,7 @@ struct page_description *parse_descriptions (const char *base,
 		dash = strstr (record, " - ");
 		if (dash)
 			names = xstrndup (record, dash - record);
-		else if (!desc)
+		else if (!gl_list_size (descs))
 			/* Some pages have a NAME section with just the page
 			 * name and no whatis.  We might as well include
 			 * this.
@@ -93,6 +108,7 @@ struct page_description *parse_descriptions (const char *base,
 		for (token = strtok (names, ","); token;
 		     token = strtok (NULL, ",")) {
 			char *name = trim_spaces (token);
+			struct page_description *desc;
 
 			/* Skip name tokens containing whitespace. They are
 			 * almost never useful as manual page names.
@@ -103,16 +119,10 @@ struct page_description *parse_descriptions (const char *base,
 			}
 
 			/* Allocate new description node. */
-			if (head) {
-				desc->next = xmalloc (sizeof *desc);
-				desc = desc->next;
-			} else {
-				desc = xmalloc (sizeof *desc);
-				head = desc;
-			}
+			desc = xmalloc (sizeof *desc);
 			desc->name   = name; /* steal memory */
 			desc->whatis = dash ? trim_spaces (dash + 3) : NULL;
-			desc->next   = NULL;
+			gl_list_add_last (descs, desc);
 
 			if (base && STREQ (base, desc->name))
 				seen_base = 1;
@@ -129,33 +139,18 @@ next:
 	 * list.
 	 */
 	if (base && !seen_base) {
-		if (head) {
-			desc->next = xmalloc (sizeof *desc);
-			desc = desc->next;
-			desc->whatis =
-				head->whatis ? xstrdup (head->whatis) : NULL;
-		} else {
-			desc = xmalloc (sizeof *desc);
-			head = desc;
-			desc->whatis = NULL;
-		}
+		struct page_description *desc = xmalloc (sizeof *desc);
+
 		desc->name = xstrdup (base);
-		desc->next = NULL;
+		desc->whatis = NULL;
+		if (gl_list_size (descs)) {
+			const struct page_description *first =
+				gl_list_get_at (descs, 0);
+			if (first->whatis)
+				desc->whatis = xstrdup (first->whatis);
+		}
+		gl_list_add_last (descs, desc);
 	}
 
-	return head;
-}
-
-/* Free a description list and all its contents. */
-void free_descriptions (struct page_description *head)
-{
-	struct page_description *desc = head, *prev;
-
-	while (desc) {
-		free (desc->name);
-		free (desc->whatis);
-		prev = desc;
-		desc = desc->next;
-		free (prev);
-	}
+	return descs;
 }
