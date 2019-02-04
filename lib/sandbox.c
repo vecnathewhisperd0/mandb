@@ -631,6 +631,7 @@ void sandbox_free (void *data) {
 
 #ifdef HAVE_LIBSECCOMP
 	seccomp_release (sandbox->ctx);
+	seccomp_release (sandbox->permissive_ctx);
 #endif /* HAVE_LIBSECCOMP */
 
 	free (sandbox);
