@@ -27,6 +27,7 @@
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -51,8 +52,8 @@
 int quiet = 0;
 man_sandbox *sandbox;  /* unused, but needed by libman */
 
-static int cat = 0;
-static int global = 0;
+static bool cat = false;
+static bool global = false;
 static const char *alt_system = "";
 extern char *user_config_file;
 
@@ -75,14 +76,14 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
 	switch (key) {
 		case 'c':
-			cat = 1;
+			cat = true;
 			return 0;
 		case 'g':
-			global = 1;
+			global = true;
 			quiet = 1;
 			return 0;
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'q':
 			quiet = 1;

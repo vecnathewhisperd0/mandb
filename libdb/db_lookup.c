@@ -372,14 +372,14 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 }
 
 gl_list_t dblookup_all (MYDBM_FILE dbf, const char *page,
-			const char *section, int match_case)
+			const char *section, bool match_case)
 {
 	return dblookup (dbf, page, section,
 			 ALL | (match_case ? MATCH_CASE : 0));
 }
 
 struct mandata *dblookup_exact (MYDBM_FILE dbf, const char *page,
-				const char *section, int match_case)
+				const char *section, bool match_case)
 {
 	gl_list_t infos = dblookup (dbf, page, section,
 				    EXACT | (match_case ? MATCH_CASE : 0));
@@ -395,8 +395,8 @@ struct mandata *dblookup_exact (MYDBM_FILE dbf, const char *page,
 }
 
 gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
-			    const char *section, int match_case,
-			    int pattern_regex, int try_descriptions)
+			    const char *section, bool match_case,
+			    bool pattern_regex, bool try_descriptions)
 {
 	gl_list_t infos;
 	struct mandata *tail = NULL;

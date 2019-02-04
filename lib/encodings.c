@@ -742,13 +742,13 @@ bool is_roff_device (const char *device)
 const char *get_roff_encoding (const char *device, const char *source_encoding)
 {
 	const struct device_entry *entry;
-	int found = 0;
+	bool found = false;
 	const char *roff_encoding = NULL;
 
 	if (device) {
 		for (entry = device_table; entry->roff_device; ++entry) {
 			if (STREQ (entry->roff_device, device)) {
-				found = 1;
+				found = true;
 				roff_encoding = entry->roff_encoding;
 				break;
 			}

@@ -79,11 +79,11 @@
 #include "manp.h"
 
 int quiet = 1;
-extern int opt_test;		/* don't update db */
+extern bool opt_test;		/* don't update db */
 char *manp;
 char *database = NULL;
 extern char *extension;		/* for globbing.c */
-extern int force_rescan;	/* for check_mandirs.c */
+extern bool force_rescan;	/* for check_mandirs.c */
 static char *single_filename = NULL;
 extern char *user_config_file;	/* for manp.c */
 #ifdef MAN_OWNER
@@ -94,10 +94,10 @@ man_sandbox *sandbox;
 static int purged = 0;
 static int strays = 0;
 
-static int check_for_strays = 1;
-static int purge = 1;
-static int user;
-static int create;
+static bool check_for_strays = true;
+static bool purge = true;
+static bool user;
+static bool create;
 static const char *arg_manp;
 
 struct tried_catdirs_entry {
@@ -131,32 +131,32 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
 	switch (key) {
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'q':
 			++quiet_temp;
 			return 0;
 		case 's':
-			check_for_strays = 0;
+			check_for_strays = false;
 			return 0;
 		case 'p':
-			purge = 0;
+			purge = false;
 			return 0;
 		case 'u':
-			user = 1;
+			user = true;
 			return 0;
 		case 'c':
-			create = 1;
-			purge = 0;
+			create = true;
+			purge = false;
 			return 0;
 		case 't':
-			opt_test = 1;
+			opt_test = true;
 			return 0;
 		case 'f':
 			single_filename = arg;
-			create = 0;
-			purge = 0;
-			check_for_strays = 0;
+			create = false;
+			purge = false;
+			check_for_strays = false;
 			return 0;
 		case 'C':
 			user_config_file = arg;
@@ -595,7 +595,7 @@ static int process_manpath (const char *manpath, bool global_manpath,
 	} else
 		run_mandb = 1;
 
-	force_rescan = 0;
+	force_rescan = false;
 	if (purge) {
 		database = mkdbname (catpath);
 		purged += purge_missing (manpath, catpath, run_mandb);
@@ -826,7 +826,7 @@ int main (int argc, char *argv[])
 #ifdef MAN_OWNER
 	man_owner = get_man_owner ();
 	if (!user && euid != 0 && euid != man_owner->pw_uid)
-		user = 1;
+		user = true;
 #endif /* MAN_OWNER */
 
 	read_config_file (user);

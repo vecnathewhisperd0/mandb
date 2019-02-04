@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -80,14 +81,14 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 		/* Either it's the real thing or merely a reference. Get the
 		 * id and pointer right in either case.
 		 */
-		int found_real_page = 0;
-		int found_external = 0;
+		bool found_real_page = false;
+		bool found_external = false;
 
 		if (STREQ (base, desc->name)) {
 			info->id = save_id;
 			info->pointer = NULL;
 			info->whatis = desc->whatis;
-			found_real_page = 1;
+			found_real_page = true;
 		} else if (trace) {
 			size_t i = 0;
 			GL_LIST_FOREACH_START (trace, trace_name) {
@@ -103,7 +104,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 						 * hierarchy; skip this
 						 * description.
 						 */
-						found_external = 1;
+						found_external = true;
 						free (trace_info.name);
 						free (buf);
 						break;
@@ -115,7 +116,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 						info->id = save_id;
 					info->pointer = NULL;
 					info->whatis = desc->whatis;
-					found_real_page = 1;
+					found_real_page = true;
 				}
 
 				free (trace_info.name);

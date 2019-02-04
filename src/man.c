@@ -179,7 +179,7 @@ int quiet = 1;
 char *database = NULL;
 extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
-extern int disable_cache;
+extern bool disable_cache;
 extern int min_cat_width, max_cat_width, cat_width;
 man_sandbox *sandbox;
 
@@ -199,31 +199,31 @@ static char *manp;
 static const char *external;
 static gl_map_t db_map = NULL;
 
-static int troff;
+static bool troff;
 static const char *roff_device = NULL;
 static const char *want_encoding = NULL;
 #ifdef NROFF_WARNINGS
 static const char default_roff_warnings[] = "mac";
 static gl_list_t roff_warnings;
 #endif /* NROFF_WARNINGS */
-static int global_apropos;
-static int print_where, print_where_cat;
-static int catman;
-static int local_man_file;
-static int findall;
-static int update;
-static int match_case;
-static int regex_opt;
-static int wildcard;
-static int names_only;
+static bool global_apropos;
+static bool print_where, print_where_cat;
+static bool catman;
+static bool local_man_file;
+static bool findall;
+static bool update;
+static bool match_case;
+static bool regex_opt;
+static bool wildcard;
+static bool names_only;
 static int ult_flags = SO_LINK | SOFT_LINK | HARD_LINK;
 static const char *recode = NULL;
-static int no_hyphenation;
-static int no_justification;
-static int subpages = 1;
+static bool no_hyphenation;
+static bool no_justification;
+static bool subpages = true;
 
-static int ascii;		/* insert tr in the output pipe */
-static int save_cat; 		/* security breach? Can we save the cat? */
+static bool ascii;		/* insert tr in the output pipe */
+static bool save_cat; 		/* security breach? Can we save the cat? */
 
 static int first_arg;
 
@@ -238,9 +238,9 @@ static struct timespec man_modtime;	/* modtime of man page, for
 					 * commit_tmp_cat() */
 
 # ifdef TROFF_IS_GROFF
-static int ditroff;
+static bool ditroff;
 static const char *gxditview;
-static int htmlout;
+static bool htmlout;
 static const char *html_pager;
 # endif /* TROFF_IS_GROFF */
 
@@ -342,7 +342,7 @@ static void init_html_pager (void)
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
-	static int apropos, whatis; /* retain values between calls */
+	static bool apropos, whatis; /* retain values between calls */
 
 	/* Please keep these keys in the same order as in options above. */
 	switch (key) {
@@ -350,7 +350,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			user_config_file = arg;
 			return 0;
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'D':
 			/* discard all preset options */
@@ -359,11 +359,11 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				print_where = print_where_cat =
 				ascii = match_case =
 				regex_opt = wildcard = names_only =
-				no_hyphenation = no_justification = 0;
+				no_hyphenation = no_justification = false;
 #ifdef TROFF_IS_GROFF
-			ditroff = 0;
+			ditroff = false;
 			gxditview = NULL;
-			htmlout = 0;
+			htmlout = false;
 			init_html_pager ();
 #endif
 			roff_device = want_encoding = extension = pager =
@@ -391,26 +391,26 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
 		case 'f':
 			external = WHATIS;
-			whatis = 1;
+			whatis = true;
 			return 0;
 		case 'k':
 			external = APROPOS;
-			apropos = 1;
+			apropos = true;
 			return 0;
 		case 'K':
-			global_apropos = 1;
+			global_apropos = true;
 			return 0;
 		case 'w':
-			print_where = 1;
+			print_where = true;
 			return 0;
 		case 'W':
-			print_where_cat = 1;
+			print_where_cat = true;
 			return 0;
 		case 'l':
-			local_man_file = 1;
+			local_man_file = true;
 			return 0;
 		case 'c':
-			catman = 1;
+			catman = true;
 			return 0;
 		case 'R':
 			recode = arg;
@@ -435,30 +435,30 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			extension = arg;
 			return 0;
 		case 'i':
-			match_case = 0;
+			match_case = false;
 			return 0;
 		case 'I':
-			match_case = 1;
+			match_case = true;
 			return 0;
 		case OPT_REGEX:
-			regex_opt = 1;
-			findall = 1;
+			regex_opt = true;
+			findall = true;
 			return 0;
 		case OPT_WILDCARD:
-			wildcard = 1;
-			findall = 1;
+			wildcard = true;
+			findall = true;
 			return 0;
 		case OPT_NAMES:
-			names_only = 1;
+			names_only = true;
 			return 0;
 		case 'a':
-			findall = 1;
+			findall = true;
 			return 0;
 		case 'u':
-			update = 1;
+			update = true;
 			return 0;
 		case OPT_NO_SUBPAGES:
-			subpages = 0;
+			subpages = false;
 			return 0;
 
 		case 'P':
@@ -468,7 +468,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			prompt_string = arg;
 			return 0;
 		case '7':
-			ascii = 1;
+			ascii = true;
 			return 0;
 		case 'E':
 			want_encoding = arg;
@@ -476,17 +476,17 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				roff_device = want_encoding;
 			return 0;
 		case OPT_NO_HYPHENATION:
-			no_hyphenation = 1;
+			no_hyphenation = true;
 			return 0;
 		case OPT_NO_JUSTIFICATION:
-			no_justification = 1;
+			no_justification = true;
 			return 0;
 		case 'p':
 			preprocessors = arg;
 			return 0;
 #ifdef HAS_TROFF
 		case 't':
-			troff = 1;
+			troff = true;
 			return 0;
 		case 'T':
 			/* Traditional nroff knows -T; troff does not (gets
@@ -494,27 +494,27 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			 * does -T imply -t?
 			 */
 			roff_device = (arg ? arg : "ps");
-			troff = 1;
+			troff = true;
 			return 0;
 		case 'H':
 # ifdef TROFF_IS_GROFF
 			if (arg)
 				html_pager = arg;
-			htmlout = 1;
-			troff = 1;
+			htmlout = true;
+			troff = true;
 			roff_device = "html";
 # endif /* TROFF_IS_GROFF */
 			return 0;
 		case 'X':
 # ifdef TROFF_IS_GROFF
-			troff = 1;
+			troff = true;
 			gxditview = (arg ? arg : "75");
 # endif /* TROFF_IS_GROFF */
 			return 0;
 		case 'Z':
 # ifdef TROFF_IS_GROFF
-			ditroff = 1;
-			troff = 1;
+			ditroff = true;
+			troff = true;
 # endif /* TROFF_IS_GROFF */
 			return 0;
 #endif /* HAS_TROFF */
@@ -525,8 +525,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			break;
 		case ARGP_KEY_SUCCESS:
 			/* check for incompatible options */
-			if (troff + whatis + apropos + catman +
-			    (print_where || print_where_cat) > 1) {
+			if ((int) troff + (int) whatis + (int) apropos +
+			    (int) catman +
+			    (int) (print_where || print_where_cat) > 1) {
 				char *badopts = xasprintf
 					("%s%s%s%s%s%s",
 					 troff ? "-[tTZH] " : "",
@@ -539,7 +540,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 					    _("%s: incompatible options"),
 					    badopts);
 			}
-			if (regex_opt + wildcard > 1) {
+			if ((int) regex_opt + (int) wildcard > 1) {
 				char *badopts = xasprintf
 					("%s%s",
 					 regex_opt ? "--regex " : "",
@@ -660,7 +661,7 @@ static void heirloom_line_length (void *data)
 }
 #endif /* HEIRLOOM_NROFF */
 
-static pipecmd *add_roff_line_length (pipecmd *cmd, int *save_cat_p)
+static pipecmd *add_roff_line_length (pipecmd *cmd, bool *save_cat_p)
 {
 	int length;
 	pipecmd *ret = NULL;
@@ -677,7 +678,7 @@ static pipecmd *add_roff_line_length (pipecmd *cmd, int *save_cat_p)
 			debug ("Terminal width %d not within cat page range "
 			       "[%d, %d]\n",
 			       line_length, min_cat_width, max_cat_width);
-			*save_cat_p = 0;
+			*save_cat_p = false;
 		}
 	}
 
@@ -1011,27 +1012,27 @@ static char *get_preprocessors (pipeline *decomp, const char *dbfilters,
 	if (dbfilters && (dbfilters[0] != '-') && !preprocessors) {
 		pp_string = xstrdup (dbfilters);
 		pp_source = "database";
-		save_cat = 1;
+		save_cat = true;
 	} else if (preprocessors) {
 		pp_string = xstrdup (preprocessors);
 		pp_source = "command line";
-		save_cat = 0;
+		save_cat = false;
 	} else if ((pp_string = get_preprocessors_from_file (decomp,
 							     prefixes))) {
 		pp_source = "file";
-		save_cat = 1;
+		save_cat = true;
 	} else if ((env = getenv ("MANROFFSEQ"))) {
 		pp_string = xstrdup (env);
 		pp_source = "environment";
-		save_cat = 0;
+		save_cat = false;
 	} else if (!dbfilters) {
 		pp_string = xstrdup (DEFAULT_MANROFFSEQ);
 		pp_source = "default";
-		save_cat = 1;
+		save_cat = true;
 	} else {
 		pp_string = xstrdup ("");
 		pp_source = "no filters";
-		save_cat = 1;
+		save_cat = true;
 	}
 
 	debug ("pre-processors `%s' from %s\n", pp_string, pp_source);
@@ -1303,7 +1304,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				if (troff) {
 					cmd = pipecmd_new_argstr
 						(get_def ("troff", TROFF));
-					save_cat = 0;
+					save_cat = false;
 				} else
 					cmd = pipecmd_new_argstr
 						(get_def ("nroff", NROFF));
@@ -1422,7 +1423,7 @@ static pipeline *make_browser (const char *pattern, const char *file)
 	pipeline *p;
 	pipecmd *cmd;
 	char *browser = xmalloc (1);
-	int found_percent_s = 0;
+	bool found_percent_s = false;
 	char *percent;
 	char *esc_file;
 
@@ -1446,7 +1447,7 @@ static pipeline *make_browser (const char *pattern, const char *file)
 				browser = appendstr (browser, esc_file,
 						     (void *) 0);
 				free (esc_file);
-				found_percent_s = 1;
+				found_percent_s = true;
 				break;
 			default:
 				len = strlen (browser); /* cannot be NULL */
@@ -2148,7 +2149,7 @@ static int display (const char *dir, const char *man_file,
 	int prefixes = 0;
 	pipeline *format_cmd;	/* command to format man_file to stdout */
 	char *formatted_encoding = NULL;
-	int display_to_stdout;
+	bool display_to_stdout;
 	pipeline *decomp = NULL;
 	int decomp_errno = 0;
 
@@ -2252,10 +2253,10 @@ static int display (const char *dir, const char *man_file,
 	display_to_stdout = troff;
 #ifdef TROFF_IS_GROFF
 	if (htmlout)
-		display_to_stdout = 0;
+		display_to_stdout = false;
 #endif
 	if (recode)
-		display_to_stdout = 1;
+		display_to_stdout = true;
 
 	if (display_to_stdout) {
 		/* If we're reading stdin via '-l -', man_file is "". See
@@ -2311,7 +2312,7 @@ static int display (const char *dir, const char *man_file,
 		    || local_man_file
 		    || recode
 		    || disable_cache)
-			save_cat = 0;
+			save_cat = false;
 
 		if (!man_file) {
 			/* Stray cat. */
@@ -2319,7 +2320,7 @@ static int display (const char *dir, const char *man_file,
 			format = 0;
 		} else if (!cat_file) {
 			assert (man_file);
-			save_cat = 0;
+			save_cat = false;
 			format = 1;
 		} else if (format && save_cat) {
 			char *cat_dir;
@@ -2363,7 +2364,7 @@ static int display (const char *dir, const char *man_file,
 				(format ? man_file : cat_file, R_OK);
 
 		debug ("format: %d, save_cat: %d, found: %d\n",
-		       format, save_cat, found);
+		       format, (int) save_cat, found);
 
 		if (!found) {
 			pipeline_free (format_cmd);
@@ -3381,7 +3382,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	char *catpath;
 	int found = 0;
 #ifdef MAN_DB_UPDATES
-	int found_stale = 0;
+	bool found_stale = false;
 #endif /* MAN_DB_UPDATES */
 
 	/* find out where our db for this manpath should be */
@@ -3452,7 +3453,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 		    (!extension || STREQ (extension, loc->ext)
 				|| STREQ (extension, loc->ext + strlen (sec))))
 			if (maybe_update_file (manpath, name, loc))
-				found_stale = 1;
+				found_stale = true;
 	GL_LIST_FOREACH_END (matches);
 
 	if (found_stale) {
@@ -3713,10 +3714,10 @@ static int man (const char *name, int *found);
 static int local_man_loop (const char *argv)
 {
 	int exit_status = OK;
-	int local_mf = local_man_file;
+	bool local_mf = local_man_file;
 
 	drop_effective_privs ();
-	local_man_file = 1;
+	local_man_file = true;
 	if (strcmp (argv, "-") == 0)
 		display (NULL, "", NULL, "(stdin)", NULL);
 	else {
@@ -4233,14 +4234,14 @@ int main (int argc, char *argv[])
 		if (global_apropos)
 			status = do_global_apropos (nextarg, &found);
 		else {
-			int found_subpage = 0;
+			bool found_subpage = false;
 			if (subpages && first_arg < argc) {
 				char *subname = xasprintf (
 					"%s-%s", nextarg, argv[first_arg]);
 				status = man (subname, &found);
 				free (subname);
 				if (status == OK) {
-					found_subpage = 1;
+					found_subpage = true;
 					++first_arg;
 				}
 			}
@@ -4250,7 +4251,7 @@ int main (int argc, char *argv[])
 				status = man (subname, &found);
 				free (subname);
 				if (status == OK) {
-					found_subpage = 1;
+					found_subpage = true;
 					++first_arg;
 				}
 			}
@@ -4269,7 +4270,7 @@ int main (int argc, char *argv[])
 				/* Maybe the section wasn't a section after
 				 * all? e.g. 'man 9wm fvwm'.
 				 */
-				int found_subpage = 0;
+				bool found_subpage = false;
 				debug ("\nRetrying section %s as name\n",
 				       section);
 				tmp = section;
@@ -4280,7 +4281,7 @@ int main (int argc, char *argv[])
 					status = man (subname, &found);
 					free (subname);
 					if (status == OK) {
-						found_subpage = 1;
+						found_subpage = true;
 						++first_arg;
 					}
 				}

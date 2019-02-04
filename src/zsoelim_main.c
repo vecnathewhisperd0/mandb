@@ -27,6 +27,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "argp.h"
@@ -76,7 +77,7 @@ static error_t parse_opt (int key, char *arg ATTRIBUTE_UNUSED,
 {
 	switch (key) {
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'C':
 			return 0; /* compatibility with GNU soelim */

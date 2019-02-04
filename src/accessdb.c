@@ -27,6 +27,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
@@ -70,7 +71,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
 	switch (key) {
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,

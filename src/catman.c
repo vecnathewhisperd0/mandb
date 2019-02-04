@@ -31,6 +31,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <assert.h>
 #include <sys/types.h>
@@ -112,7 +113,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
 	switch (key) {
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'M':
 			manp = arg;

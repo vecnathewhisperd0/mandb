@@ -100,7 +100,7 @@ struct config_item {
 static gl_list_t config;
 
 char *user_config_file = NULL;
-int disable_cache;
+bool disable_cache;
 int min_cat_width = 80, max_cat_width = 80, cat_width = 0;
 
 static void add_man_subdirs (gl_list_t list, const char *p);
@@ -714,7 +714,7 @@ char *get_manpath (const char *systems)
 	char *manpathlist;
 
 	/* need to read config file even if MANPATH set, for mandb(8) */
-	read_config_file (0);
+	read_config_file (false);
 
 	manpathlist = getenv ("MANPATH");
 	if (manpathlist && *manpathlist) {
@@ -795,7 +795,7 @@ static void add_to_dirlist (FILE *config_file, int user)
 		if (*bp == '#' || *bp == '\0')
 			goto next;
 		else if (strncmp (bp, "NOCACHE", 7) == 0)
-			disable_cache = 1;
+			disable_cache = true;
 		else if (strncmp (bp, "NO", 2) == 0)
 			goto next;	/* match any word starting with NO */
 		else if (sscanf (bp, "MANBIN %*s") == 1)
@@ -840,7 +840,7 @@ static void free_config_file (void *unused ATTRIBUTE_UNUSED)
 	gl_list_free (config);
 }
 
-void read_config_file (int optional)
+void read_config_file (bool optional)
 {
 	static int done = 0;
 	char *dotmanpath = NULL;

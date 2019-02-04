@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -111,7 +112,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 						     (void *) 0);
 			return 0;
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'q':
 			quiet = 1;

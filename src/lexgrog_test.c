@@ -26,6 +26,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -55,7 +56,8 @@
 int quiet = 1;
 man_sandbox *sandbox;
 
-static int parse_man = 0, parse_cat = 0, show_whatis = 0, show_filters = 0;
+static bool parse_man = false, parse_cat = false;
+static bool show_whatis = false, show_filters = false;
 static const char *encoding = NULL;
 static char **files;
 static int num_files;
@@ -82,19 +84,19 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
 	switch (key) {
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'm':
-			parse_man = 1;
+			parse_man = true;
 			return 0;
 		case 'c':
-			parse_cat = 1;
+			parse_cat = true;
 			return 0;
 		case 'w':
-			show_whatis = 1;
+			show_whatis = true;
 			return 0;
 		case 'f':
-			show_filters = 1;
+			show_filters = true;
 			return 0;
 		case 'E':
 			encoding = arg;
@@ -121,9 +123,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 					    "-m -c");
 			/* defaults: --man, --whatis */
 			if (!parse_man && !parse_cat)
-				parse_man = 1;
+				parse_man = true;
 			if (!show_whatis && !show_filters)
-				show_whatis = 1;
+				show_whatis = true;
 			return 0;
 	}
 	return ARGP_ERR_UNKNOWN;
@@ -150,7 +152,7 @@ int main (int argc, char **argv)
 {
 	int type = 0;
 	int i;
-	int some_failed = 0;
+	bool some_failed = false;
 
 	set_program_name (argv[0]);
 
@@ -175,7 +177,7 @@ int main (int argc, char **argv)
 	for (i = 0; i < num_files; ++i) {
 		lexgrog lg;
 		const char *file;
-		int found = 0;
+		bool found = false;
 
 		lg.type = type;
 
@@ -212,7 +214,7 @@ int main (int argc, char **argv)
 			GL_LIST_FOREACH_START (descs, desc) {
 				if (!desc->name || !desc->whatis)
 					continue;
-				found = 1;
+				found = true;
 				printf ("%s", files[i]);
 				if (show_filters)
 					printf (" (%s)", lg.filters);
@@ -228,7 +230,7 @@ int main (int argc, char **argv)
 
 		if (!found) {
 			printf ("%s: parse failed\n", files[i]);
-			some_failed = 1;
+			some_failed = true;
 		}
 	}
 

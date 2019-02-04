@@ -72,9 +72,9 @@
 #include "ult_src.h"
 #include "check_mandirs.h"
 
-int opt_test;		/* don't update db */
+bool opt_test;		/* don't update db */
 int pages;
-int force_rescan = 0;
+bool force_rescan = false;
 
 gl_map_t whatis_map = NULL;
 
@@ -161,7 +161,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	 * save both an ult_src() and a find_name(), amongst other wastes of
 	 * time.
 	 */
-	exists = dblookup_exact (dbf, manpage_base, info.ext, 1);
+	exists = dblookup_exact (dbf, manpage_base, info.ext, true);
 
 	/* Ensure we really have the actual page. Gzip keeps the mtime the
 	 * same when it compresses, so we have to compare compression
@@ -205,8 +205,8 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	 */
 	{
 		/* Avoid too much noise in debug output */
-		int save_debug = debug_level;
-		debug_level = 0;
+		bool save_debug = debug_level;
+		debug_level = false;
 		ult = ult_src (file, path, &buf, SOFT_LINK | HARD_LINK, NULL);
 		debug_level = save_debug;
 	}
@@ -844,7 +844,7 @@ static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
 			debug ("%s(%s): whatis replaced by real page; "
 			       "forcing a rescan just in case\n",
 			       name, info->ext);
-		force_rescan = 1;
+		force_rescan = true;
 		return 0;
 	} else if (STREQ (info->pointer, "-")) {
 		/* This is broken; a WHATIS_MAN should never have an empty
@@ -862,16 +862,16 @@ static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
 			debug ("%s(%s): whatis had empty pointer; "
 			       "forcing a rescan just in case\n",
 			       name, info->ext);
-		force_rescan = 1;
+		force_rescan = true;
 		return 1;
 	} else {
 		/* Does the real page still exist? */
 		gl_list_t real_found;
-		int save_debug = debug_level;
+		bool save_debug = debug_level;
 		struct timespec t;
 		int count;
 
-		debug_level = 0;
+		debug_level = false;
 		real_found = look_for_file (path, info->ext,
 					    info->pointer, cat, LFF_MATCHCASE);
 		debug_level = save_debug;
@@ -918,7 +918,7 @@ static int check_multi_key (const char *name, const char *content)
 		if (!valid) {
 			debug ("%s: broken multi key \"%s\", "
 			       "forcing a rescan\n", name, content);
-			force_rescan = 1;
+			force_rescan = true;
 			return 1;
 		}
 
@@ -980,7 +980,7 @@ int purge_missing (const char *manpath, const char *catpath,
 		datum content, nextkey;
 		struct mandata entry;
 		char *nicekey, *tab;
-		int save_debug;
+		bool save_debug;
 		gl_list_t found;
 
 		/* Ignore db identifier keys. */
@@ -1020,7 +1020,7 @@ int purge_missing (const char *manpath, const char *catpath,
 		split_content (MYDBM_DPTR (content), &entry);
 
 		save_debug = debug_level;
-		debug_level = 0;	/* look_for_file() is quite noisy */
+		debug_level = false;	/* look_for_file() is quite noisy */
 		if (entry.id <= WHATIS_MAN)
 			found = look_for_file (manpath, entry.ext,
 					       entry.name ? entry.name

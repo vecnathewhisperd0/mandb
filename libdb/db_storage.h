@@ -79,12 +79,12 @@ struct name_ext {
 
 /* used by the world */
 extern gl_list_t dblookup_all (MYDBM_FILE dbf, const char *page,
-			       const char *section, int match_case);
+			       const char *section, bool match_case);
 extern struct mandata *dblookup_exact (MYDBM_FILE dbf, const char *page,
-				       const char *section, int match_case);
+				       const char *section, bool match_case);
 extern gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *page,
-				   const char *section, int match_case,
-				   int pattern_regex, int try_descriptions);
+				   const char *section, bool match_case,
+				   bool pattern_regex, bool try_descriptions);
 extern int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base);
 extern int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);

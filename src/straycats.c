@@ -194,7 +194,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			   further */
 			mandir_base = base_name (mandir);
 			exists = dblookup_exact (dbf, mandir_base, info.ext,
-						 1);
+						 true);
 			if (exists &&
 			    compare_ids (STRAY_CAT, exists->id, 0) >= 0)
 				goto next_exists;

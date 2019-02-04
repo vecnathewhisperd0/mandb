@@ -89,7 +89,7 @@ extern char *user_config_file;
 static char **keywords;
 static int num_keywords;
 
-int am_apropos;
+bool am_apropos;
 char *database;
 int quiet = 1;
 man_sandbox *sandbox;
@@ -99,14 +99,14 @@ iconv_t conv_to_locale;
 #endif /* HAVE_ICONV */
 
 static regex_t *preg;  
-static int regex_opt;
-static int exact;
+static bool regex_opt;
+static bool exact;
 
-static int wildcard;
+static bool wildcard;
 
-static int require_all;
+static bool require_all;
 
-static int long_output;
+static bool long_output;
 
 static char **sections;
 
@@ -171,33 +171,33 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
 	switch (key) {
 		case 'd':
-			debug_level = 1;
+			debug_level = true;
 			return 0;
 		case 'v':
 			quiet = 0;
 			return 0;
 		case 'r':
-			regex_opt = 1;
+			regex_opt = true;
 			return 0;
 		case 'e':
 			/* Only makes sense for apropos, but has
 			 * historically been accepted by whatis anyway.
 			 */
-			regex_opt = 0;
-			exact = 1;
+			regex_opt = false;
+			exact = true;
 			return 0;
 		case 'w':
-			regex_opt = 0;
-			wildcard = 1;
+			regex_opt = false;
+			wildcard = true;
 			return 0;
 		case 'a':
 			if (am_apropos)
-				require_all = 1;
+				require_all = true;
 			else
 				argp_usage (state);
 			return 0;
 		case 'l':
-			long_output = 1;
+			long_output = true;
 			return 0;
 		case 's':
 			sections = split_sections (arg);
@@ -216,11 +216,11 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'f':
 			/* helpful override if program name detection fails */
-			am_apropos = 0;
+			am_apropos = false;
 			return 0;
 		case 'k':
 			/* helpful override if program name detection fails */
-			am_apropos = 1;
+			am_apropos = true;
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
@@ -237,7 +237,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			exit (FAIL);
 		case ARGP_KEY_SUCCESS:
 			if (am_apropos && !exact && !wildcard)
-				regex_opt = 1;
+				regex_opt = true;
 			return 0;
 	}
 	return ARGP_ERR_UNKNOWN;
@@ -391,7 +391,7 @@ static struct mandata *resolve_pointers (MYDBM_FILE dbf, struct mandata *info,
 	 * arbitrary: it's just there to avoid an infinite loop.
 	 */
 	newpage = info->pointer;
-	info = dblookup_exact (dbf, newpage, info->ext, 1);
+	info = dblookup_exact (dbf, newpage, info->ext, true);
 	for (rounds = 0; rounds < 10; rounds++) {
 		struct mandata *newinfo;
 
@@ -404,7 +404,7 @@ static struct mandata *resolve_pointers (MYDBM_FILE dbf, struct mandata *info,
 		     STREQ (info->pointer, newpage)))
 			return info;
 
-		newinfo = dblookup_exact (dbf, info->pointer, info->ext, 1);
+		newinfo = dblookup_exact (dbf, info->pointer, info->ext, true);
 		free_mandata_struct (info);
 		info = newinfo;
 	}
@@ -507,7 +507,7 @@ static int do_whatis_section (MYDBM_FILE dbf,
 	struct mandata *info;
 	int count = 0;
 
-	infos = dblookup_all (dbf, page, section, 0);
+	infos = dblookup_all (dbf, page, section, false);
 	GL_LIST_FOREACH_START (infos, info) {
 		display (dbf, info, page);
 		count++;
@@ -900,11 +900,11 @@ int main (int argc, char *argv[])
 	set_program_name (argv[0]);
 	program_base_name = base_name (program_name);
 	if (STREQ (program_base_name, APROPOS_NAME)) {
-		am_apropos = 1;
+		am_apropos = true;
 		argp_program_version = "apropos " PACKAGE_VERSION;
 	} else {
 		struct argp_option *optionp;
-		am_apropos = 0;
+		am_apropos = false;
 		argp_program_version = "whatis " PACKAGE_VERSION;
 		for (optionp = (struct argp_option *) whatis_argp.options;
 		     optionp->name || optionp->key || optionp->arg ||

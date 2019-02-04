@@ -23,6 +23,7 @@
 #  include "config.h"
 #endif
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -31,13 +32,13 @@
 
 #include "manconfig.h"
 
-int debug_level = 0;
+bool debug_level = false;
 
 void init_debug (void)
 {
 	const char *man_debug = getenv ("MAN_DEBUG");
 	if (man_debug && STREQ (man_debug, "1"))
-		debug_level = 1;
+		debug_level = true;
 }
 
 static void vdebug (const char *message, va_list args)
