@@ -178,5 +178,7 @@ int main (int argc, char *argv[])
 
 	pipeline_wait (p);
 
+	sandbox_free (sandbox);
+
 	return 0;
 }

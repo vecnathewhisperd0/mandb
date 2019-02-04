@@ -999,5 +999,6 @@ int main (int argc, char *argv[])
 	free_pathlist (manpathlist);
 	free (manp);
 	free (internal_locale);
+	sandbox_free (sandbox);
 	exit (status);
 }

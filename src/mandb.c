@@ -954,5 +954,6 @@ next_manpath:
 		if (must_create && STREQ (must_create, "1"))
 			exit (FAIL);
 	}
+	sandbox_free (sandbox);
 	exit (OK);
 }

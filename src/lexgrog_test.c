@@ -231,6 +231,8 @@ int main (int argc, char **argv)
 		}
 	}
 
+	sandbox_free (sandbox);
+
 	if (some_failed)
 		return FATAL;
 	else

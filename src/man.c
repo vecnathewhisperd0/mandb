@@ -4352,5 +4352,6 @@ int main (int argc, char *argv[])
 	gl_list_free (section_list);
 	free_pathlist (manpathlist);
 	free (internal_locale);
+	sandbox_free (sandbox);
 	exit (exit_status);
 }
