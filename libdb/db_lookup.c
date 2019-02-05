@@ -47,7 +47,6 @@
 #include "manconfig.h"
 
 #include "glcontainers.h"
-#include "lower.h"
 #include "wordfnmatch.h"
 #include "xregcomp.h"
 
@@ -162,7 +161,13 @@ void free_mandata_struct (struct mandata *pinfo)
  */
 char *name_to_key (const char *name)
 {
-	return lower (name);
+	char *low, *p;
+
+	p = low = xmalloc (strlen (name) + 1);
+	while (*name)
+		*p++ = CTYPE (tolower, *name++);
+	*p = *name;
+	return low;
 }
 
 /* return char ptr array to the data's fields */

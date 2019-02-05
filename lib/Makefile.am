@@ -45,8 +45,6 @@ libman_la_SOURCES = \
 	glcontainers.h \
 	linelength.c \
 	linelength.h \
-	lower.c \
-	lower.h \
 	orderfiles.c \
 	orderfiles.h \
 	pathsearch.c \
