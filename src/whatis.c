@@ -72,7 +72,6 @@
 #include "pipeline.h"
 #include "pathsearch.h"
 #include "linelength.h"
-#include "lower.h"
 #include "wordfnmatch.h"
 #include "xregcomp.h"
 #include "encodings.h"
@@ -625,51 +624,44 @@ static void parse_name (const char * const *pages, int num_pages,
 	}
 
 	if (am_apropos && !wildcard) {
-		char *lowdbname = lower (dbname);
-
 		for (i = 0; i < num_pages; ++i) {
-			if (STREQ (lowdbname, pages[i]))
+			if (strcasecmp (dbname, pages[i]) == 0)
 				found[i] = found_here[i] = true;
 		}
-		free (lowdbname);
 		return;
 	}
 
 	for (i = 0; i < num_pages; ++i) {
-		if (fnmatch (pages[i], dbname, 0) == 0)
+		if (fnmatch (pages[i], dbname, FNM_CASEFOLD) == 0)
 			found[i] = found_here[i] = true;
 	}
 }
 
 /* return true on word match */
-static bool match (const char *lowpage, const char *whatis)
+static bool match (const char *page, const char *whatis)
 {
-	char *lowwhatis = lower (whatis);
-	size_t len = strlen (lowpage);
-	char *p, *begin;
+	size_t len = strlen (page);
+	const char *begin;
+	char *p;
 
-	begin = lowwhatis;
+	begin = whatis;
 	
 	/* check for string match, then see if it is a _word_ */
-	while (lowwhatis && (p = strstr (lowwhatis, lowpage))) {
+	while (whatis && (p = strcasestr (whatis, page))) {
 		char *left = p - 1; 
 		char *right = p + len;
 
-		if ((p == begin || (!CTYPE (islower, *left) && *left != '_')) &&
-		    (!*right || (!CTYPE (islower, *right) && *right != '_'))) {
-		    	free (begin);
+		if ((p == begin || (!CTYPE (isalpha, *left) && *left != '_')) &&
+		    (!*right || (!CTYPE (isalpha, *right) && *right != '_')))
 		    	return true;
-		}
-		lowwhatis = p + 1;
+		whatis = p + 1;
 	}
 
-	free (begin);
 	return false;
 }
 
-static void parse_whatis (const char * const *pages, char * const *lowpages,
-			  int num_pages, const char *whatis,
-			  bool *found, bool *found_here)
+static void parse_whatis (const char * const *pages, int num_pages,
+			  const char *whatis, bool *found, bool *found_here)
 { 
 	int i;
 
@@ -696,7 +688,7 @@ static void parse_whatis (const char * const *pages, char * const *lowpages,
 	}
 
 	for (i = 0; i < num_pages; ++i) {
-		if (match (lowpages[i], whatis))
+		if (match (pages[i], whatis))
 			found[i] = found_here[i] = true;
 	}
 }
@@ -711,21 +703,14 @@ static void do_apropos (MYDBM_FILE dbf,
 			const char * const *pages, int num_pages, bool *found)
 {
 	datum key, cont;
-	char **lowpages;
 	bool *found_here;
 	bool (*combine) (int, bool *);
-	int i;
 #ifndef BTREE
 	datum nextkey;
 #else /* BTREE */
 	int end;
 #endif /* !BTREE */
 
-	lowpages = XNMALLOC (num_pages, char *);
-	for (i = 0; i < num_pages; ++i) {
-		lowpages[i] = lower (pages[i]);
-		debug ("lower(%s) = \"%s\"\n", pages[i], lowpages[i]);
-	}
 	found_here = XNMALLOC (num_pages, bool);
 	combine = require_all ? all_set : any_set;
 
@@ -790,19 +775,17 @@ static void do_apropos (MYDBM_FILE dbf,
 			 *tab = '\0';
 
 		memset (found_here, 0, num_pages * sizeof (*found_here));
+		parse_name (pages, num_pages,
+			    MYDBM_DPTR (key), found, found_here);
 		if (am_apropos) {
 			char *whatis;
 
-			parse_name ((const char **) lowpages, num_pages,
-				    MYDBM_DPTR (key), found, found_here);
 			whatis = info.whatis ? xstrdup (info.whatis) : NULL;
 			if (!combine (num_pages, found_here) && whatis)
-				parse_whatis (pages, lowpages, num_pages,
+				parse_whatis (pages, num_pages,
 					      whatis, found, found_here);
 			free (whatis);
-		} else
-			parse_name (pages, num_pages,
-				    MYDBM_DPTR (key), found, found_here);
+		}
 		if (combine (num_pages, found_here))
 			display (dbf, &info, MYDBM_DPTR (key));
 
@@ -824,10 +807,6 @@ nextpage:
 	}
 
 	free (found_here);
-
-	for (i = 0; i < num_pages; ++i)
-		free (lowpages[i]);
-	free (lowpages);
 }
 
 /* loop through the man paths, searching for a match */
