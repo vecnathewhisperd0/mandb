@@ -1,4 +1,4 @@
-# man-gnu-nroff.m4 serial 2
+# man-gnu-nroff.m4 serial 3
 dnl
 dnl Check to see if nroff is GNU nroff, take nroff path as arg.
 dnl
@@ -9,7 +9,7 @@ AC_CACHE_VAL([man_cv_prog_gnu_nroff],
   [if test `$1 <<EOF | tr -d '\n'
 \\n(.g
 EOF
-` -eq 1
+` = 1
    then
 	man_cv_prog_gnu_nroff=yes
    else
