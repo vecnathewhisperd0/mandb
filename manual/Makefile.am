@@ -39,6 +39,8 @@ dist_noinst_DATA = \
 	$(ME_FILES) \
 	options-only.me \
 	print-options
+
+if BUILD_MANUAL
 noinst_DATA = \
 	$(MANUAL).cat \
 	$(MANUAL).ps
@@ -103,3 +105,4 @@ install-data-hook:
 
 uninstall-hook:
 	rm -rf "$(DESTDIR)$(docdir)"
+endif
