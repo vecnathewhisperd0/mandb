@@ -573,8 +573,8 @@ man_sandbox *sandbox_init (void)
 	return sandbox;
 }
 
-static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 #ifdef HAVE_LIBSECCOMP
+static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 	if (can_load_seccomp ()) {
 		scmp_filter_ctx ctx;
 
@@ -604,8 +604,13 @@ static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 				       "can't load seccomp filter");
 		}
 	}
-#endif /* HAVE_LIBSECCOMP */
 }
+#else /* !HAVE_LIBSECCOMP */
+static void _sandbox_load (man_sandbox *sandbox ATTRIBUTE_UNUSED,
+			   int permissive ATTRIBUTE_UNUSED)
+{
+}
+#endif /* HAVE_LIBSECCOMP */
 
 /* Enter a sandbox for processing untrusted data. */
 void sandbox_load (void *data)
