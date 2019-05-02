@@ -60,25 +60,25 @@ version: $(top_srcdir)/configure.ac
 	echo '.ds V $(roff_version)' > $@
 
 $(MANUAL).pp: $(ME_FILES) version
-	$(SOELIM) -I$(srcdir) man_db.me | tbl > $@.new && mv $@.new $@
+	$(SOELIM) -I$(srcdir) man_db.me | tbl > $@.new && mv -f $@.new $@
 
 .pp.dvi:
-	$(TROFF) -me -Tdvi $< > $@.new && mv $@.new $@
+	$(TROFF) -me -Tdvi $< > $@.new && mv -f $@.new $@
 
 .pp.ps:
-	$(TROFF) -me -Tps $< > $@.new && mv $@.new $@
+	$(TROFF) -me -Tps $< > $@.new && mv -f $@.new $@
 
 .pp.tdvi:
-	$(TROFF) -me -Tdvi $< | grodvi -d > $@.new && mv $@.new $@
+	$(TROFF) -me -Tdvi $< | grodvi -d > $@.new && mv -f $@.new $@
 
 .tdvi.tps:
-	dvips -f -t a4 $< > $@.new && mv $@.new $@
+	dvips -f -t a4 $< > $@.new && mv -f $@.new $@
 
 .pp.cat:
-	LC_ALL=C nroff -me $< > $@.new && mv $@.new $@
+	LC_ALL=C nroff -me $< > $@.new && mv -f $@.new $@
 
 .pp.html:
-	$(TROFF) -me -Thtml -P-I$* $< > $@.new && mv $@.new $@
+	$(TROFF) -me -Thtml -P-I$* $< > $@.new && mv -f $@.new $@
 
 # Automake defines these targets already, so we need to use -local.
 dvi-local: $(MANUAL).dvi
