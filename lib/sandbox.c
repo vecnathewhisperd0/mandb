@@ -265,7 +265,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	 * Since I currently know of no library with suitable syscall lists,
 	 * the syscall lists here are taken from
 	 * systemd:src/shared/seccomp-util.c, last updated from commit
-	 * 67eb5b380a7b7eed82f658190bff4ca2d83e9abe (2017-11-30).
+	 * bca5a0eaccc849a669b4279e4bfcc6507083a07b (2019-08-01).
 	 */
 
 	/* systemd: SystemCallFilter=@default */
@@ -305,6 +305,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("pause");
 	SC_ALLOW ("prlimit64");
 	SC_ALLOW ("restart_syscall");
+	SC_ALLOW ("rseq");
 	SC_ALLOW ("rt_sigreturn");
 	SC_ALLOW ("sched_yield");
 	SC_ALLOW ("set_robust_list");
