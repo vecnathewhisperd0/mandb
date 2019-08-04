@@ -241,7 +241,7 @@ const char *ult_src (const char *name, const char *path,
 	/* initialise the function */
 
 	if (trace)
-		gl_list_add_last (trace, name);
+		gl_list_add_last (trace, xstrdup (name));
 
 	/* as ult_softlink() & ult_hardlink() do all of their respective
 	 * resolving in one call, only need to sort them out once
@@ -376,6 +376,6 @@ const char *ult_src (const char *name, const char *path,
 
 	/* We have the ultimate source */
 	if (trace)
-		gl_list_add_last (trace, base);
+		gl_list_add_last (trace, xstrdup (base));
 	return base;
 }
