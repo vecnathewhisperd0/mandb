@@ -535,6 +535,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	    search_ld_preload ("libsnoopy.so")) {
 		SC_ALLOW ("connect");
 		SC_ALLOW ("recvmsg");
+		SC_ALLOW ("sendmsg");
 		SC_ALLOW ("sendto");
 		SC_ALLOW ("setsockopt");
 		SC_ALLOW_ARG_1 ("socket", SCMP_A0 (SCMP_CMP_EQ, AF_UNIX));
