@@ -9,6 +9,10 @@ Major changes since man-db 2.8.6.1:
 	* Further workarounds for ESET File Security: allow sendmsg when it
 	  is in use.
 
+	* The seccomp sandbox now causes disallowed system calls to return
+	  EPERM rather than raising SIGSYS, in the hope of being less
+	  disruptive to preload hacks.
+
 man-db 2.8.6.1 (5 August 2019)
 ==============================
 
