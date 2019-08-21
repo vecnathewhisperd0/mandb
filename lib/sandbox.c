@@ -488,6 +488,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("brk");
 	SC_ALLOW ("fadvise64");
 	SC_ALLOW ("fadvise64_64");
+	SC_ALLOW ("getrandom");
 	if (permissive)
 		SC_ALLOW ("ioctl");
 	else {
