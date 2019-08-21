@@ -232,7 +232,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 		;
 
 	debug ("initialising seccomp filter (permissive: %d)\n", permissive);
-	ctx = seccomp_init (SCMP_ACT_TRAP);
+	ctx = seccomp_init (SCMP_ACT_ERRNO (EPERM));
 	if (!ctx)
 		error (FATAL, errno, "can't initialise seccomp filter");
 
