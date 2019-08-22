@@ -2311,7 +2311,9 @@ static int display (const char *dir, const char *man_file,
 #endif
 		    || local_man_file
 		    || recode
-		    || disable_cache)
+		    || disable_cache
+		    || no_hyphenation
+		    || no_justification)
 			save_cat = false;
 
 		if (!man_file) {
