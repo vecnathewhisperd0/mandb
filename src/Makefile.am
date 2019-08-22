@@ -62,13 +62,13 @@ LIBMANDB = $(top_builddir)/libdb/libmandb.la $(LIBMAN) $(DBLIBS)
 accessdb_LDADD = $(LIBMANDB)
 catman_LDADD = $(LIBMANDB) $(libpipeline_LIBS)
 globbing_LDADD = $(LIBMAN)
-lexgrog_LDADD = $(LIBMAN) $(libpipeline_LIBS) $(LTLIBICONV)
-man_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
-manconv_LDADD = $(LIBMAN) $(libpipeline_LIBS) $(LTLIBICONV)
-mandb_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
+lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
+man_LDADD = $(LIBMANDB) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
+manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
+mandb_LDADD = $(LIBMANDB) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 manpath_LDADD = $(LIBMAN)
 whatis_LDADD = $(LIBMANDB) $(libpipeline_LIBS) $(LTLIBICONV)
-zsoelim_LDADD = $(LIBMAN) $(libpipeline_LIBS)
+zsoelim_LDADD = $(LIBMAN) $(LIBCOMPRESS) $(libpipeline_LIBS)
 
 accessdb_SOURCES = \
 	accessdb.c
@@ -84,6 +84,8 @@ globbing_SOURCES = \
 	globbing_test.c
 lexgrog_SOURCES = \
 	compression.c \
+	decompress.c \
+	decompress.h \
 	descriptions.c \
 	descriptions.h \
 	filenames.c \
@@ -100,6 +102,8 @@ lexgrog_SOURCES = \
 	ult_src.h
 man_SOURCES = \
 	compression.c \
+	decompress.c \
+	decompress.h \
 	filenames.c \
 	filenames.h \
 	globbing.c \
@@ -116,6 +120,8 @@ man_SOURCES = \
 	zsoelim.h \
 	zsoelim.l
 manconv_SOURCES = \
+	decompress.c \
+	decompress.h \
 	manconv.c \
 	manconv.h \
 	manconv_main.c
@@ -123,6 +129,8 @@ mandb_SOURCES = \
 	check_mandirs.c \
 	check_mandirs.h \
 	compression.c \
+	decompress.c \
+	decompress.h \
 	descriptions.c \
 	descriptions.h \
 	descriptions_store.c \
@@ -156,6 +164,8 @@ whatis_SOURCES = \
 	manp.h \
 	whatis.c
 zsoelim_SOURCES = \
+	decompress.c \
+	decompress.h \
 	globbing.c \
 	globbing.h \
 	manp.c \

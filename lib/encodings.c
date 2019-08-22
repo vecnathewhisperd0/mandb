@@ -39,7 +39,6 @@
 
 #include "pathsearch.h"
 #include "pipeline.h"
-#include "decompress.h"
 
 #include "encodings.h"
 

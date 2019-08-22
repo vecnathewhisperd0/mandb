@@ -37,8 +37,6 @@ libman_la_SOURCES = \
 	cleanup.c \
 	cleanup.h \
 	debug.c \
-	decompress.c \
-	decompress.h \
 	encodings.c \
 	encodings.h \
 	glcontainers.c \
@@ -61,7 +59,7 @@ libman_la_SOURCES = \
 	xregcomp.h
 
 libman_la_LIBADD = ../gl/lib/libgnu.la $(LTLIBOBJS) \
-	$(LIBCOMPRESS) @LTLIBINTL@
+	@LTLIBINTL@
 
 libman_la_LDFLAGS = \
 	-avoid-version -release $(VERSION) -rpath $(pkglibdir) \
