@@ -158,8 +158,6 @@ manpath_SOURCES = \
 whatis_SOURCES = \
 	globbing.c \
 	globbing.h \
-	manconv.c \
-	manconv.h \
 	manp.c \
 	manp.h \
 	whatis.c
