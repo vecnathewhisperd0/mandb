@@ -170,7 +170,8 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	close (dir_fd);
 }
 #else
-void order_files (const char *dir, gl_list_t *basenamesp)
+void order_files (const char *dir ATTRIBUTE_UNUSED,
+		  gl_list_t *basenamesp ATTRIBUTE_UNUSED)
 {
 }
 #endif
