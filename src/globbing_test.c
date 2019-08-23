@@ -42,9 +42,6 @@
 #include "error.h"
 #include "glcontainers.h"
 #include "globbing.h"
-#include "sandbox.h"
-
-man_sandbox *sandbox;  /* unused, but needed by libman */
 
 extern const char *extension;
 static bool match_case = false;

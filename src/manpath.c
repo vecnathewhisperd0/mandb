@@ -45,12 +45,10 @@
 #include "manconfig.h"
 
 #include "error.h"
-#include "sandbox.h"
 
 #include "manp.h"
 
 int quiet = 0;
-man_sandbox *sandbox;  /* unused, but needed by libman */
 
 static bool cat = false;
 static bool global = false;
