@@ -45,17 +45,23 @@
 #include "db_storage.h"
 
 /* release the lock and close the database */
-int ndbm_flclose (DBM *db)
+void man_ndbm_close (man_ndbm_wrapper wrap)
 {
-	flock (dbm_dirfno (db), LOCK_UN);
-	dbm_close (db);
-	return 0;
+	if (!wrap)
+		return;
+
+	free (wrap->name);
+	flock (dbm_dirfno (wrap->file), LOCK_UN);
+	dbm_close (wrap->file);
+	free (wrap);
 }
 
 /* open a ndbm type database, with file locking. */
-DBM* ndbm_flopen (char *filename, int flags, int mode)
+man_ndbm_wrapper man_ndbm_open (const char *name, int flags, int mode)
 {
-	DBM *db;
+	man_ndbm_wrapper wrap;
+	char *name_copy;
+	DBM *file;
 	int lock_op;
 	int lock_failed;
 
@@ -66,44 +72,56 @@ DBM* ndbm_flopen (char *filename, int flags, int mode)
 		lock_op = LOCK_SH | LOCK_NB;
 	}
 
+	/* At least GDBM's version of dbm_open declares the file name
+	 * parameter as non-const.  This is probably incorrect, but take a
+	 * copy just in case.
+	 */
+	name_copy = xstrdup (name);
+
 	if (flags & O_TRUNC) {
 		/* opening the db is destructive, need to lock first */
 		char *dir_fname;
 		int dir_fd;
 
-		db = NULL;
+		file = NULL;
 		lock_failed = 1;
-		dir_fname = xasprintf ("%s.dir", filename);
+		dir_fname = xasprintf ("%s.dir", name);
 		dir_fd = open (dir_fname, flags & ~O_TRUNC, mode);
 		free (dir_fname);
 		if (dir_fd != -1) {
 			if (!(lock_failed = flock (dir_fd, lock_op)))
-				db = dbm_open (filename, flags, mode);
+				file = dbm_open (name_copy, flags, mode);
 			close (dir_fd);
 		}
 	} else {
-		db = dbm_open (filename, flags, mode);
-		if (db)
-			lock_failed = flock (dbm_dirfno (db), lock_op);
+		file = dbm_open (name_copy, flags, mode);
+		if (file)
+			lock_failed = flock (dbm_dirfno (file), lock_op);
 	}
 
-	if (!db)
+	free (name_copy);
+
+	if (!file)
 		return NULL;
 
 	if (lock_failed) {
-		gripe_lock (filename);
-		dbm_close (db);
+		gripe_lock (name);
+		dbm_close (file);
 		return NULL;
 	}
 
-	return db;
+	wrap = xmalloc (sizeof *wrap);
+	wrap->name = xstrdup (name);
+	wrap->file = file;
+
+	return wrap;
 }
 
-struct timespec ndbm_get_time (DBM *db)
+struct timespec man_ndbm_get_time (man_ndbm_wrapper wrap)
 {
 	struct stat st;
 
-	if (fstat (dbm_dirfno (db), &st) < 0) {
+	if (fstat (dbm_dirfno (wrap->file), &st) < 0) {
 		struct timespec t;
 		t.tv_sec = -1;
 		t.tv_nsec = -1;
@@ -112,13 +130,13 @@ struct timespec ndbm_get_time (DBM *db)
 	return get_stat_mtime (&st);
 }
 
-void ndbm_set_time (DBM *db, const struct timespec time)
+void man_ndbm_set_time (man_ndbm_wrapper wrap, const struct timespec time)
 {
 	struct timespec times[2];
 
 	times[0] = time;
 	times[1] = time;
-	futimens (dbm_dirfno (db), times);
+	futimens (dbm_dirfno (wrap->file), times);
 }
 
 #endif /* NDBM */

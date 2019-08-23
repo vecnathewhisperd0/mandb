@@ -719,7 +719,7 @@ static void do_apropos (MYDBM_FILE dbf,
 	while (MYDBM_DPTR (key)) {
 		cont = MYDBM_FETCH (dbf, key);
 #else /* BTREE */
-	end = btree_nextkeydata (dbf, &key, &cont);
+	end = man_btree_nextkeydata (dbf, &key, &cont);
 	while (!end) {
 #endif /* !BTREE */
 		char *tab;
@@ -800,7 +800,7 @@ nextpage:
 #else /* BTREE */
 		MYDBM_FREE_DPTR (cont);
 		MYDBM_FREE_DPTR (key);
-		end = btree_nextkeydata (dbf, &key, &cont);
+		end = man_btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
 		info.addr = NULL; /* == MYDBM_DPTR (cont), freed above */
 		free_mandata_elements (&info);

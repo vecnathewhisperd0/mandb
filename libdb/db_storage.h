@@ -94,7 +94,7 @@ extern void split_content (char *cont_ptr, struct mandata *pinfo);
 extern int compare_ids (char a, char b, int promote_links);
 
 /* local to db routines */
-extern void gripe_lock (char *filename);
+extern void gripe_lock (const char *filename);
 extern void gripe_corrupt_data (void);
 extern datum make_multi_key (const char *page, const char *ext);
 

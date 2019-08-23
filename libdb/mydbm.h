@@ -98,30 +98,35 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #   define BERKELEY_DB
 #  endif /* _DB_H_ */
 
-extern DBM *ndbm_flopen(char *file, int flags, int mode);
-extern struct timespec ndbm_get_time(DBM *db);
-extern void ndbm_set_time(DBM *db, const struct timespec time);
-extern int ndbm_flclose(DBM *db);
+typedef struct {
+	char *name;
+	DBM *file;
+} *man_ndbm_wrapper;
+
+extern man_ndbm_wrapper man_ndbm_open (const char *name, int flags, int mode);
+extern struct timespec man_ndbm_get_time (man_ndbm_wrapper wrap);
+extern void man_ndbm_set_time (man_ndbm_wrapper wrap, const struct timespec time);
+extern void man_ndbm_close (man_ndbm_wrapper wrap);
 
 #  define DB_EXT				""
-#  define MYDBM_FILE 			DBM*
+#  define MYDBM_FILE 			man_ndbm_wrapper
 #  define MYDBM_DPTR(d)			((d).dptr)
 #  define MYDBM_SET_DPTR(d, value)	((d).dptr = (value))
 #  define MYDBM_DSIZE(d)		((d).dsize)
-#  define MYDBM_CTRWOPEN(file)		ndbm_flopen(file, O_TRUNC|O_CREAT|O_RDWR, DBMODE)
-#  define MYDBM_CRWOPEN(file)             ndbm_flopen(file, O_CREAT|O_RDWR, DBMODE)
-#  define MYDBM_RWOPEN(file)		ndbm_flopen(file, O_RDWR, DBMODE)
-#  define MYDBM_RDOPEN(file)		ndbm_flopen(file, O_RDONLY, DBMODE)
-#  define MYDBM_INSERT(db, key, cont)	dbm_store(db, key, cont, DBM_INSERT)
-#  define MYDBM_REPLACE(db, key, cont)   dbm_store(db, key, cont, DBM_REPLACE)
-#  define MYDBM_EXISTS(db, key)		(dbm_fetch(db, key).dptr != NULL)
-#  define MYDBM_DELETE(db, key)		dbm_delete(db, key)
-#  define MYDBM_FETCH(db, key) 		copy_datum(dbm_fetch(db, key))
-#  define MYDBM_CLOSE(db)		ndbm_flclose(db)
-#  define MYDBM_FIRSTKEY(db)		copy_datum(dbm_firstkey(db))
-#  define MYDBM_NEXTKEY(db, key)		copy_datum(dbm_nextkey(db))
-#  define MYDBM_GET_TIME(db)		ndbm_get_time(db)
-#  define MYDBM_SET_TIME(db, time)	ndbm_set_time(db, time)
+#  define MYDBM_CTRWOPEN(file)		man_ndbm_open(file, O_TRUNC|O_CREAT|O_RDWR, DBMODE)
+#  define MYDBM_CRWOPEN(file)		man_ndbm_open(file, O_CREAT|O_RDWR, DBMODE)
+#  define MYDBM_RWOPEN(file)		man_ndbm_open(file, O_RDWR, DBMODE)
+#  define MYDBM_RDOPEN(file)		man_ndbm_open(file, O_RDONLY, DBMODE)
+#  define MYDBM_INSERT(db, key, cont)	dbm_store((db)->file, key, cont, DBM_INSERT)
+#  define MYDBM_REPLACE(db, key, cont)	dbm_store((db)->file, key, cont, DBM_REPLACE)
+#  define MYDBM_EXISTS(db, key)		(dbm_fetch((db)->file, key).dptr != NULL)
+#  define MYDBM_DELETE(db, key)		dbm_delete((db)->file, key)
+#  define MYDBM_FETCH(db, key)		copy_datum(dbm_fetch((db)->file, key))
+#  define MYDBM_CLOSE(db)		man_ndbm_close(db)
+#  define MYDBM_FIRSTKEY(db)		copy_datum(dbm_firstkey((db)->file))
+#  define MYDBM_NEXTKEY(db, key)	copy_datum(dbm_nextkey((db)->file))
+#  define MYDBM_GET_TIME(db)		man_ndbm_get_time(db)
+#  define MYDBM_SET_TIME(db, time)	man_ndbm_set_time(db, time)
 #  define MYDBM_REORG(db)		/* nothing - not implemented */
 
 # elif defined(BTREE) && !defined(NDBM) && !defined(GDBM)
@@ -131,39 +136,48 @@ extern int ndbm_flclose(DBM *db);
 #  include <limits.h>
 #  include BDB_H
 
+typedef struct {
+	char *name;
+	DB *file;
+} *man_btree_wrapper;
+
 typedef DBT datum;
 
-extern DB *btree_flopen(char *filename, int flags, int mode);
-extern int btree_close(DB *db);
-extern int btree_exists(DB *db, datum key);
-extern datum btree_fetch(DB *db, datum key);
-extern int btree_insert(DB *db, datum key, datum cont);
-extern datum btree_firstkey(DB *db);
-extern datum btree_nextkey(DB *db);
-extern int btree_replace(DB *db, datum key, datum content);
-extern int btree_nextkeydata(DB *db, datum *key, datum *cont);
-extern struct timespec btree_get_time(DB *db);
-extern void btree_set_time(DB *db, const struct timespec time);
+extern man_btree_wrapper man_btree_open (const char *filename, int flags,
+					 int mode);
+extern void man_btree_close (man_btree_wrapper wrap);
+extern int man_btree_exists (man_btree_wrapper wrap, datum key);
+extern datum man_btree_fetch (man_btree_wrapper wrap, datum key);
+extern int man_btree_insert (man_btree_wrapper wrap, datum key, datum cont);
+extern datum man_btree_firstkey (man_btree_wrapper wrap);
+extern datum man_btree_nextkey (man_btree_wrapper wrap);
+extern int man_btree_replace (man_btree_wrapper wrap,
+			      datum key, datum content);
+extern int man_btree_nextkeydata (man_btree_wrapper wrap,
+				  datum *key, datum *cont);
+extern struct timespec man_btree_get_time (man_btree_wrapper wrap);
+extern void man_btree_set_time (man_btree_wrapper wrap,
+				const struct timespec time);
 
 #  define DB_EXT			".bt"
-#  define MYDBM_FILE			DB*
+#  define MYDBM_FILE			man_btree_wrapper
 #  define MYDBM_DPTR(d)			((char *) (d).data)
 #  define MYDBM_SET_DPTR(d, value)	((d).data = (char *) (value))
 #  define MYDBM_DSIZE(d)		((d).size)
-#  define MYDBM_CTRWOPEN(file)		btree_flopen(file, O_TRUNC|O_CREAT|O_RDWR, DBMODE)
-#  define MYDBM_CRWOPEN(file)             btree_flopen(file, O_CREAT|O_RDWR, DBMODE)
-#  define MYDBM_RWOPEN(file)		btree_flopen(file, O_RDWR, DBMODE)
-#  define MYDBM_RDOPEN(file)		btree_flopen(file, O_RDONLY, DBMODE)
-#  define MYDBM_INSERT(db, key, cont)	btree_insert(db, key, cont)
-#  define MYDBM_REPLACE(db, key, cont)	btree_replace(db, key, cont)
-#  define MYDBM_EXISTS(db, key)		btree_exists(db, key)
-#  define MYDBM_DELETE(db, key)		((db->del)(db, &key, 0) ? -1 : 0)
-#  define MYDBM_FETCH(db, key)		btree_fetch(db, key)
-#  define MYDBM_CLOSE(db)		btree_close(db)
-#  define MYDBM_FIRSTKEY(db)		btree_firstkey(db)
-#  define MYDBM_NEXTKEY(db, key)	btree_nextkey(db)
-#  define MYDBM_GET_TIME(db)		btree_get_time(db)
-#  define MYDBM_SET_TIME(db, time)	btree_set_time(db, time)
+#  define MYDBM_CTRWOPEN(file)		man_btree_open(file, O_TRUNC|O_CREAT|O_RDWR, DBMODE)
+#  define MYDBM_CRWOPEN(file)		man_btree_open(file, O_CREAT|O_RDWR, DBMODE)
+#  define MYDBM_RWOPEN(file)		man_btree_open(file, O_RDWR, DBMODE)
+#  define MYDBM_RDOPEN(file)		man_btree_open(file, O_RDONLY, DBMODE)
+#  define MYDBM_INSERT(db, key, cont)	man_btree_insert(db, key, cont)
+#  define MYDBM_REPLACE(db, key, cont)	man_btree_replace(db, key, cont)
+#  define MYDBM_EXISTS(db, key)		man_btree_exists(db, key)
+#  define MYDBM_DELETE(db, key)		(((db)->file->del)((db)->file, &key, 0) ? -1 : 0)
+#  define MYDBM_FETCH(db, key)		man_btree_fetch(db, key)
+#  define MYDBM_CLOSE(db)		man_btree_close(db)
+#  define MYDBM_FIRSTKEY(db)		man_btree_firstkey(db)
+#  define MYDBM_NEXTKEY(db, key)	man_btree_nextkey(db)
+#  define MYDBM_GET_TIME(db)		man_btree_get_time(db)
+#  define MYDBM_SET_TIME(db, time)	man_btree_set_time(db, time)
 #  define MYDBM_REORG(db)		/* nothing - not implemented */
 
 # else /* not GDBM or NDBM or BTREE */

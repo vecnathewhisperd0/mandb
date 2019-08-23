@@ -61,16 +61,22 @@ gl_set_t loop_check;
    blocking method is used ": Try again". This adopts GNU dbm's approach. */
 
 /* release the lock and close the database */
-int btree_close (DB *db)
+void man_btree_close (man_btree_wrapper wrap)
 {
-	(void) flock ((db->fd) (db), LOCK_UN);
-	return (db->close) (db);
+	if (!wrap)
+		return;
+
+	free (wrap->name);
+	(void) flock ((wrap->file->fd) (wrap->file), LOCK_UN);
+	(wrap->file->close) (wrap->file);
+	free (wrap);
 }
 
 /* open a btree type database, with file locking. */
-DB *btree_flopen (char *filename, int flags, int mode)
+man_btree_wrapper man_btree_open (const char *name, int flags, int mode)
 {
-	DB *db;
+	man_btree_wrapper wrap;
+	DB *file;
 	BTREEINFO b;
 	int lock_op;
 	int lock_failed;
@@ -102,7 +108,7 @@ DB *btree_flopen (char *filename, int flags, int mode)
 		 * and ignore the database if it's zero-length.
 		 */
 		struct stat iszero;
-		if (stat (filename, &iszero) < 0)
+		if (stat (name, &iszero) < 0)
 			return NULL;
 		if (iszero.st_size == 0) {
 			errno = EINVAL;
@@ -114,54 +120,59 @@ DB *btree_flopen (char *filename, int flags, int mode)
 		/* opening the db is destructive, need to lock first */
 		int fd;
 
-		db = NULL;
+		file = NULL;
 		lock_failed = 1;
-		fd = open (filename, flags & ~O_TRUNC, mode);
+		fd = open (name, flags & ~O_TRUNC, mode);
 		if (fd != -1) {
 			if (!(lock_failed = flock (fd, lock_op)))
-				db = dbopen (filename, flags, mode,
-					     DB_BTREE, &b);
+				file = dbopen (name, flags, mode,
+					       DB_BTREE, &b);
 			close (fd);
 		}
 	} else {
-		db = dbopen (filename, flags, mode, DB_BTREE, &b);
-		if (db)
-			lock_failed = flock ((db->fd) (db), lock_op);
+		file = dbopen (name, flags, mode, DB_BTREE, &b);
+		if (file)
+			lock_failed = flock ((file->fd) (file), lock_op);
 	}
 
-	if (!db)
+	if (!file)
 		return NULL;
 
 	if (lock_failed) {
-		gripe_lock (filename);
-		btree_close (db);
+		gripe_lock (name);
+		(file->close) (file);
 		return NULL;
 	}
 
-	return db;
+	wrap = xmalloc (sizeof *wrap);
+	wrap->name = xstrdup (name);
+	wrap->file = file;
+
+	return wrap;
 }
 
 /* do a replace when we have the duplicate flag set on the database -
    we must do a del and insert, as a direct insert will not wipe out the
    old entry */
-int btree_replace (DB *db, datum key, datum cont)
+int man_btree_replace (man_btree_wrapper wrap, datum key, datum cont)
 {
-	return (db->put) (db, (DBT *) &key, (DBT *) &cont, 0);
+	return (wrap->file->put) (wrap->file, (DBT *) &key, (DBT *) &cont, 0);
 }
 
-int btree_insert (DB *db, datum key, datum cont)
+int man_btree_insert (man_btree_wrapper wrap, datum key, datum cont)
 {
-	return (db->put) (db, (DBT *) &key, (DBT *) &cont, R_NOOVERWRITE);
+	return (wrap->file->put) (wrap->file, (DBT *) &key, (DBT *) &cont,
+				  R_NOOVERWRITE);
 }
 
 /* generic fetch routine for the btree database */
-datum btree_fetch (DB *db, datum key)
+datum man_btree_fetch (man_btree_wrapper wrap, datum key)
 {
 	datum data;
 
 	memset (&data, 0, sizeof data);
 
-	if ((db->get) (db, (DBT *) &key, (DBT *) &data, 0)) {
+	if ((wrap->file->get) (wrap->file, (DBT *) &key, (DBT *) &data, 0)) {
 		memset (&data, 0, sizeof data);
 		return data;
 	}
@@ -170,14 +181,15 @@ datum btree_fetch (DB *db, datum key)
 }
 
 /* return 1 if the key exists, 0 otherwise */
-int btree_exists (DB *db, datum key)
+int man_btree_exists (man_btree_wrapper wrap, datum key)
 {
 	datum data;
-	return ((db->get) (db, (DBT *) &key, (DBT *) &data, 0) ? 0 : 1);
+	return ((wrap->file->get) (wrap->file, (DBT *) &key, (DBT *) &data,
+				   0) ? 0 : 1);
 }
 
 /* initiate a sequential access */
-static datum btree_findkey (DB *db, u_int flags)
+static datum man_btree_findkey (man_btree_wrapper wrap, u_int flags)
 {
 	datum key, data;
 	char *loop_check_key;
@@ -194,7 +206,8 @@ static datum btree_findkey (DB *db, u_int flags)
 	if (!loop_check)
 		loop_check = new_string_set (GL_HASH_SET);
 
-	if (((db->seq) (db, (DBT *) &key, (DBT *) &data, flags))) {
+	if (((wrap->file->seq) (wrap->file, (DBT *) &key, (DBT *) &data,
+				flags))) {
 		memset (&key, 0, sizeof key);
 		return key;
 	}
@@ -218,26 +231,27 @@ static datum btree_findkey (DB *db, u_int flags)
 }
 
 /* return the first key in the db */
-datum btree_firstkey (DB *db)
+datum man_btree_firstkey (man_btree_wrapper wrap)
 {
-	return btree_findkey (db, R_FIRST);
+	return man_btree_findkey (wrap, R_FIRST);
 }
 
 /* return the next key in the db. NB. This routine only works if the cursor
-   has been previously set by btree_firstkey() since it was last opened. So
+   has been previously set by man_btree_firstkey() since it was last opened. So
    if we close/reopen a db mid search, we have to manually set up the
    cursor again. */
-datum btree_nextkey (DB *db)
+datum man_btree_nextkey (man_btree_wrapper wrap)
 {
-	return btree_findkey (db, R_NEXT);
+	return man_btree_findkey (wrap, R_NEXT);
 }
 
 /* compound nextkey routine, initialising key and content */
-int btree_nextkeydata (DB *db, datum *key, datum *cont)
+int man_btree_nextkeydata (man_btree_wrapper wrap, datum *key, datum *cont)
 {
 	int status;
 
-	if ((status = (db->seq) (db, (DBT *) key, (DBT *) cont, R_NEXT)) != 0)
+	if ((status = (wrap->file->seq) (wrap->file, (DBT *) key, (DBT *) cont,
+					 R_NEXT)) != 0)
 		return status;
 
 	*key = copy_datum (*key);
@@ -246,11 +260,11 @@ int btree_nextkeydata (DB *db, datum *key, datum *cont)
 	return 0;
 }
 
-struct timespec btree_get_time (DB *db)
+struct timespec man_btree_get_time (man_btree_wrapper wrap)
 {
 	struct stat st;
 
-	if (fstat ((db->fd) (db), &st) < 0) {
+	if (fstat ((wrap->file->fd) (wrap->file), &st) < 0) {
 		struct timespec t;
 		t.tv_sec = -1;
 		t.tv_nsec = -1;
@@ -259,13 +273,13 @@ struct timespec btree_get_time (DB *db)
 	return get_stat_mtime (&st);
 }
 
-void btree_set_time (DB *db, const struct timespec time)
+void man_btree_set_time (man_btree_wrapper wrap, const struct timespec time)
 {
 	struct timespec times[2];
 
 	times[0] = time;
 	times[1] = time;
-	futimens ((db->fd) (db), times);
+	futimens ((wrap->file->fd) (wrap->file), times);
 }
 
 #endif /* BTREE */
