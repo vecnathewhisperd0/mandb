@@ -46,7 +46,7 @@
 
 #ifdef HAVE_LIBZ
 
-static void decompress_zlib (void *data ATTRIBUTE_UNUSED)
+static void decompress_zlib (void *data _GL_UNUSED)
 {
 	gzFile zlibfile;
 	int fd;

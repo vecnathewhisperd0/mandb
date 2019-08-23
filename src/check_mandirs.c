@@ -379,7 +379,7 @@ void chown_if_possible (const char *path)
 	}
 }
 #else /* !MAN_OWNER */
-void chown_if_possible (const char *path ATTRIBUTE_UNUSED)
+void chown_if_possible (const char *path _GL_UNUSED)
 {
 }
 #endif /* MAN_OWNER */

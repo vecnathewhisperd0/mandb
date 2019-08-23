@@ -169,7 +169,7 @@ void regain_effective_privs (void)
 }
 
 /* Pipeline command pre-exec hook to permanently drop privileges. */
-void drop_privs (void *data ATTRIBUTE_UNUSED)
+void drop_privs (void *data _GL_UNUSED)
 {
 #ifdef MAN_OWNER
 	if (idpriv_drop ())

@@ -554,8 +554,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	return ARGP_ERR_UNKNOWN;
 }
 
-static char *help_filter (int key, const char *text,
-			  void *input ATTRIBUTE_UNUSED)
+static char *help_filter (int key, const char *text, void *input _GL_UNUSED)
 {
 #ifdef HAS_TROFF
 # ifdef TROFF_IS_GROFF
@@ -1529,7 +1528,7 @@ static void add_output_iconv (pipeline *p,
 /* Pipeline command to squeeze multiple blank lines into one.
  *
  */
-static void squeeze_blank_lines (void *data ATTRIBUTE_UNUSED)
+static void squeeze_blank_lines (void *data _GL_UNUSED)
 {
 	char *line = NULL;
 	size_t len = 0;
@@ -2040,7 +2039,7 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 	free (tmpcat);
 }
 
-static void disable_hyphenation (void *data ATTRIBUTE_UNUSED)
+static void disable_hyphenation (void *data _GL_UNUSED)
 {
 	fputs (".nh\n"
 	       ".de hy\n"
@@ -2048,7 +2047,7 @@ static void disable_hyphenation (void *data ATTRIBUTE_UNUSED)
 	       ".lf 1\n", stdout);
 }
 
-static void disable_justification (void *data ATTRIBUTE_UNUSED)
+static void disable_justification (void *data _GL_UNUSED)
 {
 	fputs (".na\n"
 	       ".de ad\n"

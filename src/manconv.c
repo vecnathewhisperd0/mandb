@@ -336,8 +336,8 @@ void manconv (pipeline *p, char * const *from, const char *to)
 /* If we don't have iconv, there isn't much we can do; just pass everything
  * through unchanged.
  */
-void manconv (pipeline *p, char * const *from ATTRIBUTE_UNUSED,
-	      const char *to ATTRIBUTE_UNUSED)
+void manconv (pipeline *p, char * const *from _GL_UNUSED,
+	      const char *to _GL_UNUSED)
 {
 	for (;;) {
 		size_t len = 4096;

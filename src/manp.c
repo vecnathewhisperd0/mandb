@@ -835,7 +835,7 @@ next:
 	free (buf);
 }
 
-static void free_config_file (void *unused ATTRIBUTE_UNUSED)
+static void free_config_file (void *unused _GL_UNUSED)
 {
 	gl_list_free (config);
 }
