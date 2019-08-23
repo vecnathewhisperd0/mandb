@@ -333,7 +333,7 @@ static int open_catdir (MYDBM_FILE dbf)
 	return strays;
 }
 
-int straycats (const char *manpath)
+int straycats (const char *database, const char *manpath)
 {
 	MYDBM_FILE dbf;
 	char *catpath;

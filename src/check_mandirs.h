@@ -25,8 +25,11 @@
 /* check_mandirs.c */
 extern void test_manfile (MYDBM_FILE dbf, const char *file, const char *path);
 extern void chown_if_possible (const char *path);
-extern int create_db (const char *manpath, const char *catpath);
-extern int update_db (const char *manpath, const char *catpath);
+extern int create_db (const char *database,
+		      const char *manpath, const char *catpath);
+extern int update_db (const char *database,
+		      const char *manpath, const char *catpath);
 extern void purge_pointers (MYDBM_FILE dbf, const char *name);
-extern int purge_missing (const char *manpath, const char *catpath,
+extern int purge_missing (const char *database,
+			  const char *manpath, const char *catpath,
 			  int will_run_mandb);

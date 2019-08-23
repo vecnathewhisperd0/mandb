@@ -188,8 +188,6 @@ extern void man_btree_set_time (man_btree_wrapper wrap,
 #define MYDBM_SET(d, value)		do { MYDBM_SET_DPTR(d, value); MYDBM_RESET_DSIZE(d); } while (0)
 #define MYDBM_FREE_DPTR(d)		do { free (MYDBM_DPTR (d)); MYDBM_SET_DPTR (d, NULL); } while (0)
 
-extern char *database;
-
 /* db_lookup.c */
 extern datum copy_datum (datum dat);
 

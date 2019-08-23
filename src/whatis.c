@@ -89,7 +89,6 @@ static char **keywords;
 static int num_keywords;
 
 bool am_apropos;
-char *database;
 int quiet = 1;
 man_sandbox *sandbox;
 
@@ -818,6 +817,7 @@ static bool search (const char * const *pages, int num_pages)
 	int i;
 
 	GL_LIST_FOREACH_START (manpathlist, mp) {
+		char *database;
 		MYDBM_FILE dbf;
 
 		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
@@ -848,9 +848,8 @@ static bool search (const char * const *pages, int num_pages)
 			else
 				do_whatis (dbf, pages, num_pages, mp, found);
 		}
-		free (database);
-		database = NULL;
 		MYDBM_CLOSE (dbf);
+		free (database);
 	} GL_LIST_FOREACH_END (manpathlist);
 
 	chkr_garbage_detector ();

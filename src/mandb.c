@@ -81,7 +81,6 @@
 int quiet = 1;
 extern bool opt_test;		/* don't update db */
 char *manp;
-char *database = NULL;
 extern char *extension;		/* for globbing.c */
 extern bool force_rescan;	/* for check_mandirs.c */
 static char *single_filename = NULL;
@@ -346,7 +345,8 @@ static void do_chown (struct dbpaths *dbpaths)
 #endif /* MAN_OWNER */
 
 /* Update a single file in an existing database. */
-static int update_one_file (const char *manpath, const char *filename)
+static int update_one_file (const char *database,
+			    const char *manpath, const char *filename)
 {
 	MYDBM_FILE dbf;
 
@@ -372,18 +372,19 @@ static int update_one_file (const char *manpath, const char *filename)
 }
 
 /* dont actually create any dbs, just do an update */
-static int update_db_wrapper (const char *manpath, const char *catpath)
+static int update_db_wrapper (const char *database,
+			      const char *manpath, const char *catpath)
 {
 	int amount;
 
 	if (single_filename)
-		return update_one_file (manpath, single_filename);
+		return update_one_file (database, manpath, single_filename);
 
-	amount = update_db (manpath, catpath);
+	amount = update_db (database, manpath, catpath);
 	if (amount != EOF)
 		return amount;
 
-	return create_db (manpath, catpath);
+	return create_db (database, manpath, catpath);
 }
 
 /* remove incomplete databases */
@@ -444,7 +445,8 @@ static int mandb (struct dbpaths *dbpaths,
 		  const char *catpath, const char *manpath,
 		  bool global_manpath)
 {
-	int ret, amount;
+	char *database;
+	int amount;
 	char *dbname;
 	int should_create;
 
@@ -497,15 +499,13 @@ static int mandb (struct dbpaths *dbpaths,
 	}
 	if (should_create) {
 		check_remove (dbpaths->tmpdbfile);
-		ret = create_db (manpath, catpath);
-		if (ret < 0)
-			return ret;
-		amount = ret;
+		amount = create_db (database, manpath, catpath);
+		if (amount < 0)
+			goto out;
 	} else {
-		ret = update_db_wrapper (manpath, catpath);
-		if (ret < 0)
-			return ret;
-		amount = ret;
+		amount = update_db_wrapper (database, manpath, catpath);
+		if (amount < 0)
+			goto out;
 	}
 #  else /* !BERKELEY_DB NDBM */
 	dbpaths->dirfile = xasprintf ("%s.dir", dbname);
@@ -521,15 +521,13 @@ static int mandb (struct dbpaths *dbpaths,
 	if (should_create) {
 		check_remove (dbpaths->tmpdirfile);
 		check_remove (dbpaths->tmppagfile);
-		ret = create_db (manpath, catpath);
-		if (ret < 0)
-			return ret;
-		amount = ret;
+		amount = create_db (database, manpath, catpath);
+		if (amount < 0)
+			goto out;
 	} else {
-		ret = update_db_wrapper (manpath, catpath);
-		if (ret < 0)
-			return ret;
-		amount = ret;
+		amount = update_db_wrapper (database, manpath, catpath);
+		if (amount < 0)
+			goto out;
 	}
 #  endif /* BERKELEY_DB NDBM */
 #else /* !NDBM */
@@ -541,18 +539,18 @@ static int mandb (struct dbpaths *dbpaths,
 	}
 	if (should_create) {
 		check_remove (dbpaths->xtmpfile);
-		ret = create_db (manpath, catpath);
-		if (ret < 0)
-			return ret;
-		amount = ret;
+		amount = create_db (database, manpath, catpath);
+		if (amount < 0)
+			goto out;
 	} else {
-		ret = update_db_wrapper (manpath, catpath);
-		if (ret < 0)
-			return ret;
-		amount = ret;
+		amount = update_db_wrapper (database, manpath, catpath);
+		if (amount < 0)
+			goto out;
 	}
 #endif /* NDBM */
 
+out:
+	free (database);
 	return amount;
 }
 
@@ -597,10 +595,10 @@ static int process_manpath (const char *manpath, bool global_manpath,
 
 	force_rescan = false;
 	if (purge) {
-		database = mkdbname (catpath);
-		purged += purge_missing (manpath, catpath, run_mandb);
+		char *database = mkdbname (catpath);
+		purged += purge_missing (database,
+					 manpath, catpath, run_mandb);
 		free (database);
-		database = NULL;
 	}
 
 	dbpaths = XZALLOC (struct dbpaths);
@@ -630,14 +628,10 @@ out:
 		pop_cleanup (cleanup, dbpaths);
 	}
 
-	free (database);
-	database = NULL;
-
 	if (check_for_strays && amount > 0) {
-		database = mkdbname (catpath);
-		strays += straycats (manpath);
+		char *database = mkdbname (catpath);
+		strays += straycats (database, manpath);
 		free (database);
-		database = NULL;
 	}
 
 	free (catpath);

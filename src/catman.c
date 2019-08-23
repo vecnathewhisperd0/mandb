@@ -87,7 +87,6 @@ int quiet = 1;
 MYDBM_FILE dbf_close_post_fork;
 char *manp;
 extern char *user_config_file;
-char *database;
 
 static const char **sections;
 
@@ -222,7 +221,8 @@ static size_t add_arg (pipecmd *cmd, datum key)
 
 /* find all pages that are in the supplied manpath and section and that are
    ultimate source files. */
-static int parse_for_sec (const char *manpath, const char *section)
+static int parse_for_sec (const char *database,
+			  const char *manpath, const char *section)
 {
 	MYDBM_FILE dbf;
 	pipecmd *basecmd, *cmd;
@@ -394,7 +394,7 @@ int main (int argc, char *argv[])
 	manpathlist = create_pathlist (manp); 
 
 	GL_LIST_FOREACH_START (manpathlist, mp) {
-		char *catpath;
+		char *catpath, *database;
 		size_t len;
 
 		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
@@ -421,12 +421,13 @@ int main (int argc, char *argv[])
 				continue;
 			if (check_access (catpath))
 				continue;
-			if (parse_for_sec (mp, *sp)) {
+			if (parse_for_sec (database, mp, *sp)) {
 				error (0, 0, _("unable to update %s"), mp);
 				break;
 			}
 		}
-			
+
+		free (database);
 		free (catpath);
 	} GL_LIST_FOREACH_END (manpathlist);
 

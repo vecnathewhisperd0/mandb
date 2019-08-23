@@ -49,7 +49,6 @@
 
 const char *cat_root;
 
-/* for db_storage.c */
 char *database;
 
 const char *argp_program_version = "accessdb " PACKAGE_VERSION;
