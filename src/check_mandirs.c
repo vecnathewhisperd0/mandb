@@ -658,7 +658,7 @@ static bool sanity_check_db (MYDBM_FILE dbf)
 		content = MYDBM_FETCH (dbf, key);
 		if (!MYDBM_DPTR (content)) {
 			debug ("warning: %s has a key with no content (%s); "
-			       "rebuilding\n", database, MYDBM_DPTR (key));
+			       "rebuilding\n", dbf->name, MYDBM_DPTR (key));
 			MYDBM_FREE_DPTR (key);
 			return false;
 		}
@@ -736,7 +736,7 @@ void purge_pointers (MYDBM_FILE dbf, const char *name)
 		if (*MYDBM_DPTR (content) == '\t')
 			goto pointers_contentnext;
 
-		split_content (MYDBM_DPTR (content), &entry);
+		split_content (dbf, MYDBM_DPTR (content), &entry);
 		if (entry.id != SO_MAN && entry.id != WHATIS_MAN)
 			goto pointers_contentnext;
 
@@ -1017,7 +1017,7 @@ int purge_missing (const char *manpath, const char *catpath,
 			continue;
 		}
 
-		split_content (MYDBM_DPTR (content), &entry);
+		split_content (dbf, MYDBM_DPTR (content), &entry);
 
 		save_debug = debug_level;
 		debug_level = false;	/* look_for_file() is quite noisy */

@@ -77,16 +77,16 @@ void gripe_lock (const char *filename)
 #endif /* NDBM || BTREE */
 
 /* issue fatal message, then exit */
-void gripe_corrupt_data (void)
+void gripe_corrupt_data (MYDBM_FILE dbf)
 {
-	error (FATAL, 0, _("index cache %s corrupt"), database);
+	error (FATAL, 0, _("index cache %s corrupt"), dbf->name);
 }
 
 /* deal with situation where we cannot replace a key */
-void gripe_replace_key (const char *data)
+void gripe_replace_key (MYDBM_FILE dbf, const char *data)
 {
 	error (0, 0, _("cannot replace key %s"), data);
-	gripe_corrupt_data ();
+	gripe_corrupt_data (dbf);
 }
 
 static char *copy_if_set (const char *str)
@@ -171,7 +171,7 @@ char *name_to_key (const char *name)
 }
 
 /* return char ptr array to the data's fields */
-static char **split_data (char *content, char *start[])
+static char **split_data (MYDBM_FILE dbf, char *content, char *start[])
 {
         int count;
 
@@ -183,7 +183,7 @@ static char **split_data (char *content, char *start[])
 			       ngettext ("only %d field in content",
 					 "only %d fields in content", count),
 			       count);
-			gripe_corrupt_data ();
+			gripe_corrupt_data (dbf);
 		}
 	}
 
@@ -194,19 +194,19 @@ static char **split_data (char *content, char *start[])
 		       ngettext ("only %d field in content",
 				 "only %d fields in content", FIELDS - 1),
 		       FIELDS - 1);
-		gripe_corrupt_data ();
+		gripe_corrupt_data (dbf);
 	}
 
 	return start;
 }
 
 /* Parse the db-returned data and put it into a mandata format */
-void split_content (char *cont_ptr, struct mandata *pinfo)
+void split_content (MYDBM_FILE dbf, char *cont_ptr, struct mandata *pinfo)
 {
 	char *start[FIELDS];
 	char **data;
 
-	data = split_data (cont_ptr, start);
+	data = split_data (dbf, cont_ptr, start);
 
 	pinfo->name = copy_if_set (*(data++));
 	pinfo->ext = *(data++);
@@ -296,7 +296,7 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 		bool matches = false;
 
 		info = infoalloc ();
-		split_content (MYDBM_DPTR (cont), info);
+		split_content (dbf, MYDBM_DPTR (cont), info);
 		if (!info->name)
 			info->name = xstrdup (page);
 		if (!(flags & MATCH_CASE) || STREQ (info->name, page)) {
@@ -357,13 +357,13 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 			if (MYDBM_DPTR (multi_cont) == NULL) {
 				error (0, 0, _("bad fetch on multi key %s"),
 				       MYDBM_DPTR (key));
-				gripe_corrupt_data ();
+				gripe_corrupt_data (dbf);
 			}
 			MYDBM_FREE_DPTR (key);
 
 			/* Allocate info struct and add it to the list. */
 			info = infoalloc ();
-			split_content (MYDBM_DPTR (multi_cont), info);
+			split_content (dbf, MYDBM_DPTR (multi_cont), info);
 			if (!info->name)
 				info->name = xstrdup (ref->name);
 			gl_list_add_last (infos, info);
@@ -442,7 +442,7 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 			error (FATAL, 0,
 			       _("Database %s corrupted; rebuild with "
 				 "mandb --create"),
-			       database);
+			       dbf->name);
 		}
 
 		if (*MYDBM_DPTR (key) == '$')
@@ -453,7 +453,7 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 
 		/* a real page */
 
-		split_content (MYDBM_DPTR (cont), &info);
+		split_content (dbf, MYDBM_DPTR (cont), &info);
 
 		/* If there's a section given, does it match either the
 		 * section or extension of this page?

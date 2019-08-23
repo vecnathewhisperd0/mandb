@@ -738,7 +738,7 @@ static void do_apropos (MYDBM_FILE dbf,
 			error (FATAL, 0,
 			       _("Database %s corrupted; rebuild with "
 				 "mandb --create"),
-			       database);
+			       dbf->name);
 		}
 
 		if (*MYDBM_DPTR (key) == '$')
@@ -749,7 +749,7 @@ static void do_apropos (MYDBM_FILE dbf,
 
 		/* a real page */
 
-		split_content (MYDBM_DPTR (cont), &info);
+		split_content (dbf, MYDBM_DPTR (cont), &info);
 
 		/* If there are sections given, does any of them match
 		 * either the section or extension of this page?

@@ -104,7 +104,7 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 			error (0, 0,
 			       _( "multi key %s does not exist"),
 			       MYDBM_DPTR (multi_key));
-			gripe_corrupt_data ();
+			gripe_corrupt_data (dbf);
 		}
 		MYDBM_DELETE (dbf, multi_key);
 		MYDBM_FREE_DPTR (multi_key);
@@ -132,7 +132,7 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		MYDBM_FREE_DPTR (cont);
 		MYDBM_SET (cont, multi_content);
 		if (MYDBM_REPLACE (dbf, key, cont))
-			gripe_replace_key (MYDBM_DPTR (key));
+			gripe_replace_key (dbf, MYDBM_DPTR (key));
 
 		gl_list_free (refs);
 	}

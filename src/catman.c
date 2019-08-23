@@ -282,7 +282,8 @@ static int parse_for_sec (const char *manpath, const char *section)
 			if (*MYDBM_DPTR (content) != '\t') { 
 				struct mandata entry;
 
-				split_content (MYDBM_DPTR (content), &entry);
+				split_content (dbf, MYDBM_DPTR (content),
+					       &entry);
 
 				/* Accept if the entry is an ultimate manual
 				   page and the section matches the one we're

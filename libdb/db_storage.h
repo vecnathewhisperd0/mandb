@@ -90,12 +90,13 @@ extern int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);
 extern void free_mandata_elements (struct mandata *pinfo);
 extern void free_mandata_struct (struct mandata *pinfo);
-extern void split_content (char *cont_ptr, struct mandata *pinfo);
+extern void split_content (MYDBM_FILE dbf, char *cont_ptr,
+			   struct mandata *pinfo);
 extern int compare_ids (char a, char b, int promote_links);
 
 /* local to db routines */
 extern void gripe_lock (const char *filename);
-extern void gripe_corrupt_data (void);
+extern void gripe_corrupt_data (MYDBM_FILE dbf);
 extern datum make_multi_key (const char *page, const char *ext);
 
 /* allocate a mandata structure */
@@ -104,7 +105,7 @@ extern datum make_multi_key (const char *page, const char *ext);
 extern char *name_to_key (const char *name);
 /* Returns a list of struct name_ext. */
 extern gl_list_t list_extensions (char *data);
-extern void gripe_replace_key (const char *data);
+extern void gripe_replace_key (MYDBM_FILE dbf, const char *data);
 extern const char *dash_if_unset (const char *str);
 
 #endif
