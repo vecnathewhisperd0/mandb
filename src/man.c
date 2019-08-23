@@ -2470,8 +2470,7 @@ static int display (const char *dir, const char *man_file,
 	return found;
 }
 
-static void gripe_converting_name (const char *name) ATTRIBUTE_NORETURN;
-static void gripe_converting_name (const char *name)
+static _Noreturn void gripe_converting_name (const char *name)
 {
 	error (FATAL, 0, _("Can't convert %s to cat name"), name);
 	abort (); /* error should have exited; help compilers prove noreturn */

@@ -45,7 +45,7 @@ static struct sigaction saved_term_action;
 
 
 /* Run cleanups, then reraise signal with default handler. */
-static void
+static _Noreturn void
 sighandler (int signo)
 {
   struct sigaction act;
