@@ -2,6 +2,13 @@
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
+
+/* Flex emits several functions which might reasonably have various
+ * attributes applied and many unused macros; none of these are our problem.
+ */
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=malloc"
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#pragma GCC diagnostic ignored "-Wunused-macros"
 }
 
 %{

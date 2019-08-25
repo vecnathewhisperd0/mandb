@@ -61,17 +61,20 @@ case $host_os in
 		CFLAGS="$CFLAGS -YPOSIX"
 		;;
 esac
-if test "$GCC" = yes
-then
-	gl_WARN_ADD([-W])
-	gl_WARN_ADD([-Wpointer-arith])
-	gl_WARN_ADD([-Wwrite-strings])
-	gl_WARN_ADD([-Wstrict-prototypes])
-	gl_WARN_ADD([-Wshadow])
-	gl_WARN_ADD([-Wformat-security])
-	gl_WARN_ADD([-Wredundant-decls])
-	gl_WARN_ADD([-Wno-missing-field-initializers])
-fi
+
+# Enable all reasonable GCC warnings.
+gl_MANYWARN_ALL_GCC([warnings])
+nw=
+nw="$nw -Wsystem-headers"
+nw="$nw -Wmissing-field-initializers"
+gl_MANYWARN_COMPLEMENT([warnings], [$warnings], [$nw])
+for w in $warnings; do
+	gl_WARN_ADD([$w])
+done
+gl_WARN_ADD([-Wno-missing-field-initializers])
+# Disable use of VLAs by Gnulib to avoid tripping over -Wvla.
+AC_DEFINE([GNULIB_NO_VLA], [1], [Define to 1 to disable use of VLAs.])
+
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AM_PROG_AR

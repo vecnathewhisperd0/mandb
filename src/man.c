@@ -554,6 +554,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	return ARGP_ERR_UNKNOWN;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static char *help_filter (int key, const char *text, void *input _GL_UNUSED)
 {
 #ifdef HAS_TROFF
@@ -583,6 +585,7 @@ static char *help_filter (int key, const char *text, void *input _GL_UNUSED)
 			return (char *) text;
 	}
 }
+#pragma GCC diagnostic pop
 
 static struct argp argp = { options, parse_opt, args_doc, 0, 0, help_filter };
 

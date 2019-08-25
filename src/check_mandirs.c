@@ -101,11 +101,23 @@ static void gripe_multi_extensions (const char *path, const char *sec,
 		       path, sec, name, ext);
 }
 
+/* Test whether an errno value is EAGAIN or (on systems where it differs)
+ * EWOULDBLOCK.  This is a separate function mainly in order to be able to
+ * control GCC diagnostics in one place.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wlogical-op"
+static inline bool is_eagain (int err)
+{
+	return err == EAGAIN || err == EWOULDBLOCK;
+}
+#pragma GCC diagnostic pop
+
 static void gripe_rwopen_failed (const char *database)
 {
 	if (errno == EACCES || errno == EROFS)
 		debug ("database %s is read-only\n", database);
-	else if (errno == EAGAIN || errno == EWOULDBLOCK)
+	else if (is_eagain (errno))
 		debug ("database %s is locked by another process\n", database);
 	else {
 #ifdef MAN_DB_UPDATES
@@ -600,7 +612,7 @@ static void update_db_time (const char *database)
 	/* we know that this should succeed because we just updated the db! */
 	dbf = MYDBM_RWOPEN (database);
 	if (dbf == NULL) {
-		if (errno == EAGAIN || errno == EWOULDBLOCK)
+		if (is_eagain (errno))
 			/* Another mandb process is probably running.  With
 			 * any luck it will update the mtime ...
 			 */
