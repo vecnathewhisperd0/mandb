@@ -4082,7 +4082,8 @@ int main (int argc, char *argv[])
 
 	get_term (); /* stores terminal settings */
 #ifdef MAN_OWNER
-	debug ("real user = %d; effective user = %d\n", ruid, euid);
+	debug ("real user = %lu; effective user = %lu\n",
+	       (unsigned long) ruid, (unsigned long) euid);
 #endif /* MAN_OWNER */
 
 	/* close this locale and reinitialise if a new locale was 

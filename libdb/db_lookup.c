@@ -255,7 +255,7 @@ gl_list_t list_extensions (char *data)
 		gl_list_add_last (list, name_ext);
 	}
 
-	debug ("found %zd names/extensions\n", gl_list_size (list));
+	debug ("found %zu names/extensions\n", gl_list_size (list));
 	return list;
 }
 

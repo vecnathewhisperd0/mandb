@@ -211,7 +211,7 @@ static size_t add_arg (pipecmd *cmd, datum key)
 		*tab = '\0';
 	pipecmd_arg (cmd, MYDBM_DPTR (key));
 	len = strlen (MYDBM_DPTR (key));
-	debug ("key: '%s' (%zu), len: %zd\n",
+	debug ("key: '%s' (%zu), len: %zu\n",
 	       MYDBM_DPTR (key), (size_t) MYDBM_DSIZE (key), len);
 	if (tab)
 		*tab = '\t';
@@ -298,7 +298,7 @@ static int parse_for_sec (const char *database,
 
 					arg_size += add_arg (cmd, key) + 1;
 
-					debug ("arg space free: %zd bytes\n",
+					debug ("arg space free: %zu bytes\n",
 					       ARG_MAX - arg_size);
 
 					/* Check to see if we have enough room 

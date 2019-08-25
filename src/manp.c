@@ -190,7 +190,7 @@ static const char *describe_flag (enum config_flag flag)
 		case SECTION_USER:
 			return "SECTION_USER";
 		default:
-			error (FATAL, 0, "impossible config_flag value %d",
+			error (FATAL, 0, "impossible config_flag value %u",
 			       flag);
 			abort (); /* error should have exited */
 	}
