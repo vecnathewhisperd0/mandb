@@ -278,9 +278,9 @@ extern void __chkr_garbage_detector (void);
 
 /* GNU gettext needs to know when the locale changes. This macro tells it. */
 #ifdef ENABLE_NLS
+extern int _nl_msg_cat_cntr;
 #  define locale_changed() \
 	do { \
-		extern int _nl_msg_cat_cntr; \
 		++_nl_msg_cat_cntr; \
 	} while (0)
 #else /* !ENABLE_NLS */
