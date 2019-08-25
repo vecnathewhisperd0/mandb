@@ -52,6 +52,7 @@
 #include "manconfig.h"
 
 #include "glcontainers.h"
+#include "orderfiles.h"
 
 #if defined(HAVE_LINUX_FIEMAP_H)
 gl_map_t physical_offsets = NULL;

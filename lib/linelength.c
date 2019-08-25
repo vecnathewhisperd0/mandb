@@ -38,6 +38,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "linelength.h"
+
 #ifndef _PATH_TTY
 # define _PATH_TTY "/dev/tty"
 #endif /* _PATH_TTY */
