@@ -34,7 +34,7 @@
 #include "descriptions.h"
 
 /* Free a page description. */
-void page_description_free (const void *value)
+static void page_description_free (const void *value)
 {
 	struct page_description *desc = (struct page_description *) value;
 

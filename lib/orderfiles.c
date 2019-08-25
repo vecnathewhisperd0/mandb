@@ -57,7 +57,7 @@
 #if defined(HAVE_LINUX_FIEMAP_H)
 gl_map_t physical_offsets = NULL;
 
-int compare_physical_offsets (const void *a, const void *b)
+static int compare_physical_offsets (const void *a, const void *b)
 {
 	const char *left = (const char *) a;
 	const char *right = (const char *) b;
