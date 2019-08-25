@@ -34,7 +34,6 @@
 #include "progname.h"
 
 #include "gettext.h"
-#define _(String) gettext (String)
 #define N_(String) gettext_noop (String)
 
 #include "manconfig.h"

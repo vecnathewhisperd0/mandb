@@ -33,9 +33,6 @@
 #include "timespec.h"
 #include "xvasprintf.h"
 
-#include "gettext.h"
-#define _(String) gettext (String)
-
 #include "manconfig.h"
 
 #include "error.h"

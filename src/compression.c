@@ -39,9 +39,6 @@
 
 #include "xvasprintf.h"
 
-#include "gettext.h"
-#define _(String) gettext (String)
-
 #include "manconfig.h"
 #ifdef COMP_SRC /* must come after manconfig.h */
 
