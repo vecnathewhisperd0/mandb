@@ -32,6 +32,7 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "argp.h"
 #include "progname.h"
@@ -131,6 +132,7 @@ int main (int argc, char *argv[])
 	}
 	if (!dbf)
 		error (FATAL, errno, _("can't open %s for reading"), database);
+	assert (dbf);  /* help the compiler prove that later accesses are OK */
 
 	key = MYDBM_FIRSTKEY (dbf);
 
