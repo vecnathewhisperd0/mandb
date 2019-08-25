@@ -408,7 +408,7 @@ const char *get_groff_preconv (void)
  *
  * The caller should free the returned string when it is finished with it.
  */
-char *get_page_encoding (const char *lang)
+char * _GL_ATTRIBUTE_MALLOC get_page_encoding (const char *lang)
 {
 	const struct directory_entry *entry;
 	const char *dot;
@@ -723,7 +723,7 @@ const char *get_default_device (const char *charset_from_locale,
 }
 
 /* Is this a known *roff device name? */
-bool is_roff_device (const char *device)
+bool _GL_ATTRIBUTE_PURE is_roff_device (const char *device)
 {
 	const struct device_entry *entry;
 
@@ -783,7 +783,7 @@ const char *get_roff_encoding (const char *device, const char *source_encoding)
 /* Find the output encoding that this device will produce, or NULL if it
  * will simply pass through the input encoding.
  */
-const char *get_output_encoding (const char *device)
+const char * _GL_ATTRIBUTE_PURE get_output_encoding (const char *device)
 {
 	const struct device_entry *entry;
 
@@ -795,7 +795,8 @@ const char *get_output_encoding (const char *device)
 }
 
 /* Return the value of LESSCHARSET appropriate for this locale. */
-const char *get_less_charset (const char *charset_from_locale)
+const char * _GL_ATTRIBUTE_PURE get_less_charset (
+	const char *charset_from_locale)
 {
 	const struct less_charset_entry *entry;
 
@@ -813,7 +814,8 @@ const char *get_less_charset (const char *charset_from_locale)
 /* Return the value of JLESSCHARSET appropriate for this locale. May return
  * NULL.
  */
-const char *get_jless_charset (const char *charset_from_locale)
+const char * _GL_ATTRIBUTE_PURE get_jless_charset (
+	const char *charset_from_locale)
 {
 	const struct less_charset_entry *entry;
 

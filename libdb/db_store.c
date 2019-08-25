@@ -49,7 +49,7 @@
  * If promote_links is true, consider SO_MAN equivalent to ULT_MAN. This is
  * appropriate when sorting candidate pages for display.
  */
-int compare_ids (char a, char b, int promote_links)
+int _GL_ATTRIBUTE_CONST compare_ids (char a, char b, int promote_links)
 {
 #ifdef FAVOUR_STRAYCATS
 	if (a == WHATIS_MAN && b == STRAY_CAT)

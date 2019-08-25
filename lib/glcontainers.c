@@ -37,12 +37,12 @@
 
 #include "glcontainers.h"
 
-bool string_equals (const void *s1, const void *s2)
+bool _GL_ATTRIBUTE_PURE string_equals (const void *s1, const void *s2)
 {
 	return STREQ ((const char *) s1, (const char *) s2);
 }
 
-size_t string_hash (const void *s)
+size_t _GL_ATTRIBUTE_PURE string_hash (const void *s)
 {
 	return hash_pjw_bare (s, strlen ((const char *) s));
 }

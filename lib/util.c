@@ -193,7 +193,7 @@ int remove_directory (const char *directory, int recurse)
 /* Returns an allocated copy of s, with leading and trailing spaces
  * removed.
  */
-char *trim_spaces (const char *s)
+char * _GL_ATTRIBUTE_MALLOC trim_spaces (const char *s)
 {
 	int length;
 	while (*s == ' ')

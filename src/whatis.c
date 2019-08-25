@@ -636,7 +636,7 @@ static void parse_name (const char * const *pages, int num_pages,
 }
 
 /* return true on word match */
-static bool match (const char *page, const char *whatis)
+static bool _GL_ATTRIBUTE_PURE match (const char *page, const char *whatis)
 {
 	size_t len = strlen (page);
 	const char *begin;

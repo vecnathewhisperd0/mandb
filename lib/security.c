@@ -95,7 +95,7 @@ void init_security (void)
 #endif /* MAN_OWNER */
 }
 
-bool running_setuid (void)
+bool _GL_ATTRIBUTE_PURE running_setuid (void)
 {
 #ifdef MAN_OWNER
 	return ruid != euid;
