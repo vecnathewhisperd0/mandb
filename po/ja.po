@@ -1,22 +1,27 @@
 # Japanese messages for man-db
-# Copyright (C) 2011 Colin Watson (msgids)
+# Copyright (C) 2019 Colin Watson (msgids)
 # This file is distributed under the same license as the man-db package.
 # UCHIDA Norihiro <KY4N-UCD@asahi-net.or.jp>, 2000.
 # Yasuaki Taniguchi <yasuakit@gmail.com>, 2011.
+# Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>, 2019.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-2.6.5\n"
+"Project-Id-Version: man-db-2.8.0-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2019-08-05 10:12+0100\n"
-"PO-Revision-Date: 2013-06-27 19:41+0900\n"
-"Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
+"PO-Revision-Date: 2019-08-24 23:30+0900\n"
+"Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-Basepath: man-db-2.8.0-pre2\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: lib/security.c:79
 #, c-format
@@ -253,7 +258,7 @@ msgstr "EXTENSION"
 
 #: src/globbing_test.c:63 src/man.c:293
 msgid "limit search to extension type EXTENSION"
-msgstr "検索対象を拡張子が EXTENSION のものに限定する"
+msgstr "検索対象を拡張子 EXTENSION に絞る"
 
 #: src/globbing_test.c:64 src/man.c:294
 msgid "look for pages case-insensitively (default)"
@@ -306,7 +311,7 @@ msgstr "whatis 情報を表示する"
 
 #: src/lexgrog_test.c:77
 msgid "show guessed series of preprocessing filters"
-msgstr "推測した一連の事前処理フィルターを表示"
+msgstr "推定した一連の前処理フィルターを表示する"
 
 #: src/lexgrog_test.c:78 src/man.c:284 src/man.c:309
 msgid "ENCODING"
@@ -430,7 +435,7 @@ msgstr "キャッシュ一貫性の確認を強制する"
 
 #: src/man.c:303
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
-msgstr "サブページの試行、例えば 'man foo bar' => 'man foo-bar' を行わない"
+msgstr "サブページを検索しない (例 'man foo bar' => 'man foo-bar' のような)"
 
 #: src/man.c:305
 msgid "Controlling formatted output:"
@@ -506,7 +511,7 @@ msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 msgstr ""
-"groff を使用し、 gxditview (X11) を通して表示する:\n"
+"groff を使用し、 gxditview (X11) を等して表示する:\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
 #: src/man.c:329
@@ -521,7 +526,7 @@ msgstr "%s というマニュアルはありません\n"
 #: src/man.c:599
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
-msgstr "(セクション %s からどのマニュアルページを代わりに表示しますか?)\n"
+msgstr "(代わりに セクション %s のどのマニュアルページを表示しますか?)\n"
 
 #: src/man.c:603
 msgid "What manual page do you want?\n"
@@ -535,8 +540,7 @@ msgstr "%s というマニュアルはセクション %s にはありません\n
 #: src/man.c:739
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
-msgstr ""
-"マニュアルページが利用できない場合のヘルプについては '%s'を見てください。\n"
+msgstr "マニュアルページがない場合には '%s' をご覧ください。\n"
 
 #: src/man.c:1347
 #, c-format
@@ -601,7 +605,7 @@ msgstr "%s を整形済みファイル名に変換できません"
 #: src/man.c:3203
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
-msgstr "%s: whatis の参照に頼ることは勧められなくなっています\n"
+msgstr "%s: 参照が非推奨のwhatis に依存しています\n"
 
 #: src/man.c:3346 src/man.c:4196
 #, c-format
@@ -611,7 +615,7 @@ msgstr "mandb コマンドが終了ステータス %d で失敗しました"
 #: src/man.c:3548
 #, c-format
 msgid "internal error: candidate type %d out of range"
-msgstr "内部エラー: 候補の種類 %d は範囲内にありません"
+msgstr "内部エラー: 候補タイプ %d が範囲外です"
 
 #: src/man.c:4137
 msgid " Manual page "
@@ -636,7 +640,7 @@ msgstr "CODE[:...]"
 
 #: src/manconv_main.c:94
 msgid "possible encodings of original text"
-msgstr "原文の推定エンコーディング"
+msgstr "原文テキストのあり得るエンコーディング"
 
 #: src/manconv_main.c:95
 msgid "CODE"
@@ -644,11 +648,11 @@ msgstr "CODE"
 
 #: src/manconv_main.c:95
 msgid "encoding for output"
-msgstr "出力用エンコーディング"
+msgstr "出力のエンコーディング"
 
 #: src/manconv_main.c:97 src/manpath.c:68
 msgid "produce fewer warnings"
-msgstr "警告を少なくする"
+msgstr "警告表示を減らします"
 
 #: src/manconv_main.c:132 src/manconv_main.c:141
 #, c-format
@@ -664,31 +668,29 @@ msgstr "出力エンコーディングを指定しなければいけません"
 msgid "[MANPATH]"
 msgstr "[MANPATH]"
 
-# Translator's NOTE: work..., don't look..., produce..., create are from:
-# Translator's NOTE: http://lists.debian.or.jp/debian-doc/199812/msg00016.html
 #: src/mandb.c:116
 msgid "work quietly, except for 'bogus' warning"
-msgstr "'ファイル名の不一致'による警告以外何も出力しない"
+msgstr "静かに動作します、ただし 'bogus' 警告は出力します"
 
 #: src/mandb.c:117
 msgid "don't look for or add stray cats to the dbs"
-msgstr "roff のない cat ファイルを検索、DB へ追加しない"
+msgstr "迷子の cat をデータベースから探したり追加したりしません"
 
 #: src/mandb.c:118
 msgid "don't purge obsolete entries from the dbs"
-msgstr "古くなったエントリーを DB から削除しない"
+msgstr "データベースにある廃止されたエントリーを削除しません"
 
 #: src/mandb.c:119
 msgid "produce user databases only"
-msgstr "ユーザ用データベースのみを生成"
+msgstr "ユーザーのデータベースのみを出力します"
 
 #: src/mandb.c:120
 msgid "create dbs from scratch, rather than updating"
-msgstr "データベースを更新せず、一から作成し直す"
+msgstr "データベースを更新でなく、最初から作成します"
 
 #: src/mandb.c:121
 msgid "check manual pages for correctness"
-msgstr "マニュアルページの正確さをチェック"
+msgstr "マニュアルページの正確さをチェックします"
 
 #: src/mandb.c:122
 msgid "FILENAME"
@@ -696,7 +698,7 @@ msgstr "FILENAME"
 
 #: src/mandb.c:122
 msgid "update just the entry for this filename"
-msgstr "このファイル名の要素だけを更新"
+msgstr "このファイル名に対応するエントリーのみを更新します"
 
 #: src/mandb.c:217
 #, c-format
@@ -747,7 +749,7 @@ msgstr[0] "%d 個のマニュアルページが追加されました。\n"
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
-msgstr[0] "roff のない cat ファイルが %d 個追加されました。\n"
+msgstr[0] "%d の迷子の cat が追加されました。\n"
 
 #: src/mandb.c:934
 #, c-format
@@ -832,11 +834,11 @@ msgstr "警告: %s は %s で始まっていません"
 
 #: src/manpath.c:65
 msgid "show relative catpaths"
-msgstr "相対 catpath を表示"
+msgstr "相対 catpath を表示します"
 
 #: src/manpath.c:66
 msgid "show the entire global manpath"
-msgstr "グローバルな manpath 全体を表示"
+msgstr "グローバル manpath 全体を表示します"
 
 #: src/manpath.c:128
 #, c-format
@@ -886,7 +888,7 @@ msgstr "各キーワードを正規表現として解釈する"
 
 #: src/whatis.c:130
 msgid "search each keyword for exact match"
-msgstr "各検索語に完全に一致するものを検索"
+msgstr "それぞれのキーワードについて完全一致を検索する"
 
 #: src/whatis.c:131
 msgid "the keyword(s) contain wildcards"
@@ -894,7 +896,7 @@ msgstr "キーワードでワイルドカードを使用する"
 
 #: src/whatis.c:132
 msgid "require all keywords to match"
-msgstr "全検索語に一致するものを検索"
+msgstr "すべてのキーワードが一致する必要あり"
 
 #: src/whatis.c:133
 msgid "do not trim output to terminal width"
@@ -961,12 +963,11 @@ msgstr "%s:%d: roff 要求の中に終端されていないクォートがあり
 msgid "compatibility switch (ignored)"
 msgstr "互換性のためのスイッチです (無視されます)"
 
-#~ msgid "manpath list too long"
-#~ msgstr "manpath リストが長すぎます"
-
-#, fuzzy
 #~ msgid "can't restore previous working directory"
-#~ msgstr "一時ディレクトリを作成できません"
+#~ msgstr "直前の作業ディレクトリを復元できません"
 
 #~ msgid "can't chdir to %s"
 #~ msgstr "%s にディレクトリを変更できません"
+
+#~ msgid "manpath list too long"
+#~ msgstr "manpath リストが長すぎます"
