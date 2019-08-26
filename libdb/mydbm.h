@@ -104,6 +104,8 @@ typedef struct {
 } *man_ndbm_wrapper;
 
 extern man_ndbm_wrapper man_ndbm_open (const char *name, int flags, int mode);
+extern datum man_ndbm_firstkey (man_ndbm_wrapper wrap);
+extern datum man_ndbm_nextkey (man_ndbm_wrapper wrap, datum key);
 extern struct timespec man_ndbm_get_time (man_ndbm_wrapper wrap);
 extern void man_ndbm_set_time (man_ndbm_wrapper wrap, const struct timespec time);
 extern void man_ndbm_close (man_ndbm_wrapper wrap);
@@ -123,8 +125,8 @@ extern void man_ndbm_close (man_ndbm_wrapper wrap);
 #  define MYDBM_DELETE(db, key)		dbm_delete((db)->file, key)
 #  define MYDBM_FETCH(db, key)		copy_datum(dbm_fetch((db)->file, key))
 #  define MYDBM_CLOSE(db)		man_ndbm_close(db)
-#  define MYDBM_FIRSTKEY(db)		copy_datum(dbm_firstkey((db)->file))
-#  define MYDBM_NEXTKEY(db, key)	copy_datum(dbm_nextkey((db)->file))
+#  define MYDBM_FIRSTKEY(db)		man_ndbm_firstkey(db)
+#  define MYDBM_NEXTKEY(db, key)	man_ndbm_nextkey(db, key)
 #  define MYDBM_GET_TIME(db)		man_ndbm_get_time(db)
 #  define MYDBM_SET_TIME(db, time)	man_ndbm_set_time(db, time)
 #  define MYDBM_REORG(db)		/* nothing - not implemented */

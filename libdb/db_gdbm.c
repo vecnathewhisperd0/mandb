@@ -34,22 +34,15 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "gl_hash_map.h"
-#include "gl_rbtree_list.h"
-#include "gl_xlist.h"
-#include "gl_xmap.h"
-#include "hash-pjw-bare.h"
 #include "stat-time.h"
 #include "timespec.h"
 
 #include "manconfig.h"
 
 #include "cleanup.h"
-#include "glcontainers.h"
 
+#include "db_xdbm.h"
 #include "mydbm.h"
-
-static gl_map_t parent_keys;
 
 /* setjmp/longjmp handling to defend against _gdbm_fatal exiting under our
  * feet.  Not thread-safe, but there is no plan for man-db to ever use
@@ -103,111 +96,24 @@ man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, int flags)
 	return wrap;
 }
 
-static int datum_compare (const void *a, const void *b)
+static datum unsorted_firstkey (man_gdbm_wrapper wrap)
 {
-	const datum *left = (const datum *) a;
-	const datum *right = (const datum *) b;
-	int cmp;
-	size_t minsize;
-
-	/* Sentinel NULL elements sort to the end. */
-	if (!MYDBM_DPTR (*left))
-		return 1;
-	else if (!MYDBM_DPTR (*right))
-		return -1;
-
-	if (MYDBM_DSIZE (*left) < MYDBM_DSIZE (*right))
-		minsize = MYDBM_DSIZE (*left);
-	else
-		minsize = MYDBM_DSIZE (*right);
-	cmp = strncmp (MYDBM_DPTR (*left), MYDBM_DPTR (*right), minsize);
-	if (cmp)
-		return cmp;
-	else if (MYDBM_DSIZE (*left) < MYDBM_DSIZE (*right))
-		return 1;
-	else if (MYDBM_DSIZE (*left) > MYDBM_DSIZE (*right))
-		return -1;
-	else
-		return 0;
+	return gdbm_firstkey (wrap->file);
 }
 
-static bool datum_equals (const void *a, const void *b)
+static datum unsorted_nextkey (man_gdbm_wrapper wrap, datum key)
 {
-	return datum_compare (a, b) == 0;
+	return gdbm_nextkey (wrap->file, key);
 }
 
-static size_t datum_hash (const void *value)
-{
-	const datum *d = value;
-	return hash_pjw_bare (MYDBM_DPTR (*d), MYDBM_DSIZE (*d));
-}
-
-static void datum_free (const void *value)
-{
-	MYDBM_FREE_DPTR (*(datum *) value);
-}
-
-static datum empty_datum = { NULL, 0 };
-
-/* We keep a map of filenames to sorted lists of keys.  Each list is stored
- * using a hash-based implementation that allows lookup by name and
- * traversal to the next item in O(log n) time, which is necessary for a
- * reasonable ordered implementation of nextkey.
- */
 datum man_gdbm_firstkey (man_gdbm_wrapper wrap)
 {
-	gl_list_t keys;
-	datum *key;
-
-	/* Build the raw sorted list of keys. */
-	keys = gl_list_create_empty (GL_RBTREE_LIST, datum_equals, datum_hash,
-				     datum_free, false);
-	key = XMALLOC (datum);
-	*key = gdbm_firstkey (wrap->file);
-	while (MYDBM_DPTR (*key)) {
-		datum *next;
-
-		gl_sortedlist_add (keys, datum_compare, key);
-		next = XMALLOC (datum);
-		*next = gdbm_nextkey (wrap->file, *key);
-		key = next;
-	}
-
-	if (!parent_keys) {
-		parent_keys = new_string_map (GL_HASH_MAP,
-					      (gl_listelement_dispose_fn)
-					      gl_list_free);
-		push_cleanup ((cleanup_fun) gl_map_free, parent_keys, 0);
-	}
-
-	/* Remember this structure for use by nextkey. */
-	gl_map_put (parent_keys, xstrdup (wrap->name), keys);
-
-	if (gl_list_size (keys))
-		return copy_datum (*(datum *) gl_list_get_at (keys, 0));
-	else
-		return empty_datum;
+	return man_xdbm_firstkey (wrap, unsorted_firstkey, unsorted_nextkey);
 }
 
 datum man_gdbm_nextkey (man_gdbm_wrapper wrap, datum key)
 {
-	gl_list_t keys;
-	gl_list_node_t node, next_node;
-
-	if (!parent_keys)
-		return empty_datum;
-	keys = (gl_list_t) gl_map_get (parent_keys, wrap->name);
-	if (!keys)
-		return empty_datum;
-
-	node = gl_sortedlist_search (keys, datum_compare, &key);
-	if (!node)
-		return empty_datum;
-	next_node = gl_list_next_node (keys, node);
-	if (!next_node)
-		return empty_datum;
-
-	return copy_datum (*(datum *) gl_list_node_value (keys, next_node));
+	return man_xdbm_nextkey (wrap, key);
 }
 
 struct timespec man_gdbm_get_time (man_gdbm_wrapper wrap)
@@ -232,17 +138,14 @@ void man_gdbm_set_time (man_gdbm_wrapper wrap, const struct timespec time)
 	futimens (gdbm_fdesc (wrap->file), times);
 }
 
+static void raw_close (man_gdbm_wrapper wrap)
+{
+	gdbm_close (wrap->file);
+}
+
 void man_gdbm_close (man_gdbm_wrapper wrap)
 {
-	if (!wrap)
-		return;
-
-	if (parent_keys)
-		gl_map_remove (parent_keys, wrap->name);
-
-	free (wrap->name);
-	gdbm_close (wrap->file);
-	free (wrap);
+	man_xdbm_close (wrap, raw_close);
 }
 
 #ifndef HAVE_GDBM_EXISTS

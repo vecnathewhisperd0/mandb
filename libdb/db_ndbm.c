@@ -41,19 +41,20 @@
 
 #include "manconfig.h"
 
-#include "mydbm.h"
 #include "db_storage.h"
+#include "db_xdbm.h"
+#include "mydbm.h"
 
 /* release the lock and close the database */
-void man_ndbm_close (man_ndbm_wrapper wrap)
+static void raw_close (man_ndbm_wrapper wrap)
 {
-	if (!wrap)
-		return;
-
-	free (wrap->name);
 	flock (dbm_dirfno (wrap->file), LOCK_UN);
 	dbm_close (wrap->file);
-	free (wrap);
+}
+
+void man_ndbm_close (man_ndbm_wrapper wrap)
+{
+	man_xdbm_close (wrap, raw_close);
 }
 
 /* open a ndbm type database, with file locking. */
@@ -115,6 +116,26 @@ man_ndbm_wrapper man_ndbm_open (const char *name, int flags, int mode)
 	wrap->file = file;
 
 	return wrap;
+}
+
+static datum unsorted_firstkey (man_ndbm_wrapper wrap)
+{
+	return copy_datum (dbm_firstkey (wrap->file));
+}
+
+static datum unsorted_nextkey (man_ndbm_wrapper wrap, datum key _GL_UNUSED)
+{
+	return copy_datum (dbm_nextkey (wrap->file));
+}
+
+datum man_ndbm_firstkey (man_ndbm_wrapper wrap)
+{
+	return man_xdbm_firstkey (wrap, unsorted_firstkey, unsorted_nextkey);
+}
+
+datum man_ndbm_nextkey (man_ndbm_wrapper wrap, datum key)
+{
+	return man_xdbm_nextkey (wrap, key);
 }
 
 struct timespec man_ndbm_get_time (man_ndbm_wrapper wrap)

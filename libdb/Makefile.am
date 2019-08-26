@@ -39,6 +39,8 @@ libmandb_la_SOURCES = \
 	db_storage.h \
 	db_store.c \
 	db_ver.c \
+	db_xdbm.c \
+	db_xdbm.h \
 	mydbm.h
 
 libmandb_la_LIBADD = ../lib/libman.la $(DBLIBS)
