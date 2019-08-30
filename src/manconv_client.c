@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "gl_array_list.h"
+#include "gl_xlist.h"
 #include "idpriv.h"
 #include "xvasprintf.h"
 
@@ -35,6 +37,7 @@
 
 #include "pipeline.h"
 #include "decompress.h"
+#include "glcontainers.h"
 #include "sandbox.h"
 #include "security.h"
 
@@ -44,7 +47,7 @@
 extern man_sandbox *sandbox;
 
 struct manconv_codes {
-	char **from;
+	gl_list_t from;
 	char *to;
 };
 
@@ -72,11 +75,8 @@ static void manconv_pre_exec (void *data)
 static void free_manconv_codes (void *data)
 {
 	struct manconv_codes *codes = data;
-	char **try_from;
 
-	for (try_from = codes->from; *try_from; ++try_from)
-		free (*try_from);
-	free (codes->from);
+	gl_list_free (codes->from);
 	free (codes->to);
 	free (codes);
 }
@@ -93,16 +93,13 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 	codes = xmalloc (sizeof *codes);
 	/* informational only; no shell quoting concerns */
 	name = xasprintf ("%s -f ", MANCONV);
+	codes->from = new_string_list (GL_ARRAY_LIST, true);
 	if (STREQ (source, "UTF-8")) {
-		codes->from = XNMALLOC (2, char *);
-		codes->from[0] = xstrdup (source);
-		codes->from[1] = NULL;
+		gl_list_add_last (codes->from, xstrdup (source));
 		name = appendstr (name, source, (void *) 0);
 	} else {
-		codes->from = XNMALLOC (3, char *);
-		codes->from[0] = xstrdup ("UTF-8");
-		codes->from[1] = xstrdup (source);
-		codes->from[2] = NULL;
+		gl_list_add_last (codes->from, xstrdup ("UTF-8"));
+		gl_list_add_last (codes->from, xstrdup (source));
 		name = appendstr (name, "UTF-8:", source, (void *) 0);
 	}
 	codes->to = xasprintf ("%s//IGNORE", target);
@@ -120,15 +117,18 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 	 * setuid, we must drop privileges and execute manconv.
 	 */
 	if (running_setuid ()) {
-		char **from_code;
+		gl_list_t from = codes->from;
+		const char *from_code;
 		char *sources = NULL;
+		bool first = true;
 
 		cmd = pipecmd_new_args (MANCONV, "-f", (void *) 0);
-		for (from_code = codes->from; *from_code; ++from_code) {
-			sources = appendstr (sources, *from_code, (void *) 0);
-			if (*(from_code + 1))
+		GL_LIST_FOREACH_START (from, from_code) {
+			if (!first)
 				sources = appendstr (sources, ":", (void *) 0);
-		}
+			sources = appendstr (sources, from_code, (void *) 0);
+			first = false;
+		} GL_LIST_FOREACH_END (from);
 		pipecmd_arg (cmd, sources);
 		free (sources);
 		pipecmd_args (cmd, "-t", codes->to, (void *) 0);

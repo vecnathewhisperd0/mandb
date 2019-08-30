@@ -30,6 +30,8 @@
 #include <unistd.h>
 
 #include "argp.h"
+#include "gl_array_list.h"
+#include "gl_xlist.h"
 #include "progname.h"
 
 #include "gettext.h"
@@ -42,6 +44,7 @@
 #include "error.h"
 #include "pipeline.h"
 #include "decompress.h"
+#include "glcontainers.h"
 #include "sandbox.h"
 
 #include "manconv.h"
@@ -51,36 +54,26 @@ man_sandbox *sandbox;
 
 static const char *from_codes;
 static char *to_code;
-static char **from_code;
+static gl_list_t from_code;
 static const char *filename;
 
-static char **split_codes (const char *codestr)
+static gl_list_t split_codes (const char *codestr)
 {
 	char *codestrtok = xstrdup (codestr);
 	char *codestrtok_ptr = codestrtok;
 	char *tok;
-	size_t codearray_cur = 0, codearray_alloc = 0;
-	char **codearray = NULL;
+	gl_list_t codelist = new_string_list (GL_ARRAY_LIST, true);
 
 	for (tok = strsep (&codestrtok_ptr, ":"); tok;
 	     tok = strsep (&codestrtok_ptr, ":")) {
 		if (!*tok)
 			continue;	/* ignore empty fields */
-		if (codearray_cur >= codearray_alloc)
-			codearray = x2nrealloc
-				(codearray,
-				 &codearray_alloc, sizeof *codearray);
-		codearray[codearray_cur++] = xstrdup (tok);
+		gl_list_add_last (codelist, xstrdup (tok));
 	}
-
-	if (codearray_cur >= codearray_alloc)
-		codearray = x2nrealloc (codearray,
-					&codearray_alloc, sizeof *codearray);
-	codearray[codearray_cur] = NULL;
 
 	free (codestrtok);
 
-	return codearray;
+	return codelist;
 }
 
 const char *argp_program_version = "manconv " PACKAGE_VERSION;
@@ -136,7 +129,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 					    _("must specify an output "
 					      "encoding"));
 			from_code = split_codes (from_codes);
-			if (!from_code || !*from_code)
+			if (!gl_list_size (from_code))
 				argp_error (state,
 					    _("must specify an input "
 					      "encoding"));
@@ -150,7 +143,6 @@ static struct argp argp = { options, parse_opt, args_doc };
 int main (int argc, char *argv[])
 {
 	pipeline *p;
-	char **try_from_code;
 
 	set_program_name (argv[0]);
 
@@ -172,10 +164,8 @@ int main (int argc, char *argv[])
 
 	manconv (p, from_code, to_code);
 
-	for (try_from_code = from_code; *try_from_code; ++try_from_code)
-		free (*try_from_code);
 	free (to_code);
-	free (from_code);
+	gl_list_free (from_code);
 
 	pipeline_wait (p);
 

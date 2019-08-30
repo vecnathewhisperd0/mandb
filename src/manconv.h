@@ -20,4 +20,6 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-void manconv (struct pipeline *p, char * const *from, const char *to);
+#include "gl_list.h"
+
+void manconv (struct pipeline *p, gl_list_t from, const char *to);
