@@ -1,3 +1,19 @@
+man-db 2.9.0
+============
+
+Major changes since man-db 2.8.7:
+
+	Compatibility notes:
+	--------------------
+
+	* Remove the ability to undefine COMP_SRC at build-time to disable
+	  reading compressed manual pages.  This was always only a
+	  micro-optimisation, and it wasn't worth the extra code complexity.
+	  You can still configure without any compressors (either by not
+	  having them available at build time, or by configuring with
+	  "--with-gzip=" etc.) to achieve much the same practical effect,
+	  although the test suite still requires at least gunzip.
+
 man-db 2.8.7 (26 August 2019)
 =============================
 

@@ -79,7 +79,7 @@ char *make_filename (const char *path, const char *name,
  * into, to be freed by the caller, or NULL on error. The buffer will
  * contain either three or four null-terminated strings: the directory name,
  * the base of the file name in that directory, the section extension, and
- * optionally the compression extension (if COMP_SRC is defined).
+ * optionally the compression extension.
  * 
  * Only the fields name, ext, sec, and comp are filled in by this function.
  * name is only set if it differs from req_name; otherwise it remains at
@@ -91,12 +91,9 @@ char *filename_info (const char *file, struct mandata *info,
 	char *manpage = xstrdup (file);
 	char *slash = strrchr (manpage, '/');
 	char *base_name;
+	struct compression *comp;
 
 	memset (info, 0, sizeof (struct mandata));
-
-#ifdef COMP_SRC
-	struct compression *comp;
-#endif
 
 	if (slash) {
 		*slash = '\0';			/* strip '/base_name' */
@@ -109,7 +106,6 @@ char *filename_info (const char *file, struct mandata *info,
 	   a missmatch between the section they are under and the
 	   sectional part of their extension. */
 
-#ifdef COMP_SRC
 	comp = comp_info (base_name, 1);
 	if (comp) {
 		info->comp = comp->ext;
@@ -117,9 +113,6 @@ char *filename_info (const char *file, struct mandata *info,
 		free (comp->stem);
 	} else
 		info->comp = NULL;
-#else /* !COMP_SRC */	
-	info->comp = NULL;
-#endif /* COMP_SRC */
 
 	{
 		char *ext = strrchr (base_name, '.');

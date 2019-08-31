@@ -321,7 +321,6 @@ fi
 if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$xz" || test -n "$lzip" || test -n "$lzma"
 then
 	AC_DEFINE([COMP_CAT], [1], [Define if you have compressors and want to support compressed cat files.])
-	AC_DEFINE([COMP_SRC], [1], [Define if you have compressors and want to support compressed manual source.])
 fi
 AC_SUBST([compressor])
 AC_SUBST([compress_ext])

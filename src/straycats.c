@@ -107,9 +107,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 		char *ext, *section;
 		short found;
 		struct stat buf;
-#ifdef COMP_SRC
 		struct compression *comp;
-#endif
 
 		memset (&info, 0, sizeof (struct mandata));
 
@@ -125,18 +123,9 @@ static int check_for_stray (MYDBM_FILE dbf)
 					 "ignoring bogus filename"),
 				       catdir);
 			continue;
-
-#if defined(COMP_SRC) || defined(COMP_CAT)
-
-#  if defined(COMP_SRC)
 		} else if (comp_info (ext, 0)) {
-#  elif defined(COMP_CAT)
-		} else if (strcmp (ext + 1, COMPRESS_EXT) == 0) {
-#  endif /* COMP_* */
 			*ext = '\0';
 			info.comp = ext + 1;
-#endif /* COMP_SRC || COMP_CAT */
-
 		} else
 			info.comp = NULL;
 
@@ -165,13 +154,10 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 		if (stat (mandir, &buf) == 0) 
 			found = 1;
-#ifdef COMP_SRC 
 		else if ((comp = comp_file (mandir))) {
 			found = 1;
 			free (comp->stem);
-		}
-#endif
-		else 
+		} else 
 			found = 0;
 
 		if (!found) {

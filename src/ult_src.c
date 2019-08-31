@@ -306,7 +306,6 @@ const char *ult_src (const char *name, const char *path,
 		char *decomp_base;
 		pipeline *decomp;
 		char *include;
-#ifdef COMP_SRC
 		struct stat st;
 
 		if (stat (base, &st) < 0) {
@@ -323,7 +322,6 @@ const char *ult_src (const char *name, const char *path,
 				return NULL;
 			}
 		}
-#endif
 
 		/* base may change for recursive calls to ult_src, but
 		 * decompress_open doesn't keep its own copy.

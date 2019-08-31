@@ -40,7 +40,6 @@
 #include "xvasprintf.h"
 
 #include "manconfig.h"
-#ifdef COMP_SRC /* must come after manconfig.h */
 
 #include "error.h"
 #include "pipeline.h"
@@ -78,13 +77,16 @@ struct compression *comp_info (const char *filename, int want_stem)
 		}
 	}
 
-	ext = strstr (filename, ".Z/");
-	if (ext) {
-		if (want_stem)
-			hpux_comp.stem = xstrndup (filename, ext - filename);
-		else
-			hpux_comp.stem = NULL;
-		return &hpux_comp;
+	if (*GUNZIP) {
+		ext = strstr (filename, ".Z/");
+		if (ext) {
+			if (want_stem)
+				hpux_comp.stem = xstrndup (filename,
+							   ext - filename);
+			else
+				hpux_comp.stem = NULL;
+			return &hpux_comp;
+		}
 	}
 
 	return NULL;
@@ -116,5 +118,3 @@ struct compression *comp_file (const char *filename)
 	free (compfile);
 	return NULL;
 }
-
-#endif /* COMP_SRC */

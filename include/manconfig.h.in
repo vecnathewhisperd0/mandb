@@ -215,18 +215,16 @@
 #  define COMPRESS_EXT "@compress_ext@"
 #endif /* COMP_CAT */
 
-#ifdef COMP_SRC
 /* These are the currently supported decompressors. They are used for 
    decompressing cat pages and source nroff. To add further decompressors,
    you will need to edit comp_src.h[.in] . Help is provided in the file */
 
-#  define GUNZIP "@gunzip@"
-#  define UNCOMPRESS "@uncompress@"
-#  define BUNZIP2 "@bunzip2@"
-#  define UNLZMA "@unlzma@"
-#  define UNXZ "@unxz@"
-#  define UNLZIP "@unlzip@"
-#endif /* COMP_SRC */
+#define GUNZIP "@gunzip@"
+#define UNCOMPRESS "@uncompress@"
+#define BUNZIP2 "@bunzip2@"
+#define UNLZMA "@unlzma@"
+#define UNXZ "@unxz@"
+#define UNLZIP "@unlzip@"
 
 /*-----------------------------------------------------------------------*/
 /* The things below here shouldn't really be changed unless you really	 */
@@ -286,10 +284,6 @@ extern int _nl_msg_cat_cntr;
 #else /* !ENABLE_NLS */
 #  define locale_changed()
 #endif /* ENABLE_NLS */
-
-/* This structure definition is only really needed if COMP_SRC==1, but it is
-   used in external declarations quite freely, so it's included
-   unconditionally */
 
 struct compression {
 	/* The following are const because they should be pointers to parts

@@ -2492,17 +2492,13 @@ static char *convert_name (const char *name, int fsstnd)
 {
 	char *to_name, *t1 = NULL;
 	char *t2 = NULL;
-#ifdef COMP_SRC
 	struct compression *comp;
-#endif /* COMP_SRC */
 	char *namestem;
 
-#ifdef COMP_SRC
 	comp = comp_info (name, 1);
 	if (comp)
 		namestem = comp->stem;
 	else
-#endif /* COMP_SRC */
 		namestem = xstrdup (name);
 
 #ifdef COMP_CAT

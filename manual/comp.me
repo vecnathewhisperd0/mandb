@@ -35,15 +35,7 @@ See
 for details and an example.
 .lp
 Support for compressed manual pages is compiled into the \*M utilities by
-default.
-To completely disable this support, edit
-.i config.h
-and comment out the following line
-.lp
-#define COMP_SRC 1
-.lp
-This will enable a minor speed increase, but note that support for stray cats
-with any compression extension other than the default will also be disabled.
+default, depending on the decompressors available at configure time.
 .BS 2 "Compressed cat pages"
 .lp
 \*M compresses cat files by default.
