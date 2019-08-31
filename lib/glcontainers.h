@@ -51,8 +51,10 @@ gl_set_t new_string_set (gl_set_implementation_t implementation);
 #define GL_LIST_FOREACH_START(list, item) \
 	do { \
 		gl_list_iterator_t list##_iter = gl_list_iterator (list); \
+		gl_list_node_t list##_node; \
 		while (gl_list_iterator_next (&list##_iter, \
-					      (const void **) &item, NULL))
+					      (const void **) &item, \
+					      &list##_node))
 
 #define GL_LIST_FOREACH_END(list) \
 		gl_list_iterator_free (&list##_iter); \

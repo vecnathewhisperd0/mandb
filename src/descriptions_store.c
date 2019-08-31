@@ -90,7 +90,6 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			info->whatis = desc->whatis;
 			found_real_page = true;
 		} else if (trace) {
-			size_t i = 0;
 			GL_LIST_FOREACH_START (trace, trace_name) {
 				struct mandata trace_info;
 				char *buf;
@@ -109,7 +108,8 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 						free (buf);
 						break;
 					}
-					if (i == gl_list_size (trace) - 1 &&
+					if (!gl_list_next_node (trace,
+								trace_node) &&
 					    save_id == SO_MAN)
 						info->id = ULT_MAN;
 					else
@@ -121,7 +121,6 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 
 				free (trace_info.name);
 				free (buf);
-				++i;
 			} GL_LIST_FOREACH_END (trace);
 		}
 

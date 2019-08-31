@@ -327,12 +327,10 @@ void manconv (pipeline *p, gl_list_t from, const char *to)
 		try_iconv (p, pp_encoding, to, 1);
 		free (pp_encoding);
 	} else {
-		size_t i = 0, from_size = gl_list_size (from);
 		GL_LIST_FOREACH_START (from, try_from_code) {
-			if (try_iconv (p, try_from_code, to,
-				       i + 1 == from_size) == 0)
+			bool last = !gl_list_next_node (from, from_node);
+			if (try_iconv (p, try_from_code, to, last) == 0)
 				break;
-			++i;
 		} GL_LIST_FOREACH_END (from);
 	}
 }

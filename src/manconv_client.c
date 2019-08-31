@@ -120,14 +120,12 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 		gl_list_t from = codes->from;
 		const char *from_code;
 		char *sources = NULL;
-		bool first = true;
 
 		cmd = pipecmd_new_args (MANCONV, "-f", (void *) 0);
 		GL_LIST_FOREACH_START (from, from_code) {
-			if (!first)
-				sources = appendstr (sources, ":", (void *) 0);
 			sources = appendstr (sources, from_code, (void *) 0);
-			first = false;
+			if (gl_list_next_node (from, from_node))
+				sources = appendstr (sources, ":", (void *) 0);
 		} GL_LIST_FOREACH_END (from);
 		pipecmd_arg (cmd, sources);
 		free (sources);

@@ -1189,8 +1189,6 @@ static void add_dir_to_path_list (gl_list_t list, const char *p)
 gl_list_t create_pathlist (const char *manp)
 {
 	gl_list_t list;
-	gl_list_iterator_t iter;
-	gl_list_node_t node;
 	const char *p, *end;
 
 	/* Expand the manpath into a list for easier handling. */
@@ -1209,12 +1207,13 @@ gl_list_t create_pathlist (const char *manp)
 	}
 
 	/* Eliminate duplicates due to symlinks. */
-	iter = gl_list_iterator (list);
-	while (gl_list_iterator_next (&iter, (const void **) &p, &node)) {
+	GL_LIST_FOREACH_START (list, p) {
 		char *target;
-		gl_list_iterator_t dupcheck_iter;
+		/* Take another reference to this list to allow using iteration
+		 * macros.
+		 */
+		gl_list_t dupcheck_list = list;
 		const char *dupcheck;
-		gl_list_node_t dupcheck_node;
 
 		/* After resolving all symlinks, is the target also in the
 		 * manpath?
@@ -1225,11 +1224,9 @@ gl_list_t create_pathlist (const char *manp)
 		/* Only check up to the current list position, to keep item
 		 * order stable across deduplication.
 		 */
-		dupcheck_iter = gl_list_iterator (list);
-		while (gl_list_iterator_next (&dupcheck_iter,
-					      (const void **) &dupcheck,
-					      &dupcheck_node) &&
-		       dupcheck_node != node) {
+		GL_LIST_FOREACH_START (dupcheck_list, dupcheck) {
+			if (dupcheck_list_node == list_node)
+				break;
 			char *dupcheck_target = canonicalize_file_name
 				(dupcheck);
 			if (!dupcheck_target)
@@ -1241,23 +1238,18 @@ gl_list_t create_pathlist (const char *manp)
 			free (dupcheck_target);
 			debug ("Removing duplicate manpath entry %s -> %s\n",
 			       p, dupcheck);
-			gl_list_remove_node (list, node);
+			gl_list_remove_node (list, list_node);
 			break;
-		}
-		gl_list_iterator_free (&dupcheck_iter);
+		} GL_LIST_FOREACH_END (dupcheck_list);
 		free (target);
-	}
-	gl_list_iterator_free (&iter);
+	} GL_LIST_FOREACH_END (list);
 
 	if (debug_level) {
-		bool first = true;
-
 		debug ("final search path = ");
 		GL_LIST_FOREACH_START (list, p) {
-			if (first) {
+			if (!gl_list_previous_node (list, list_node))
 				debug ("%s", p);
-				first = false;
-			} else
+			else
 				debug (":%s", p);
 		} GL_LIST_FOREACH_END (list);
 		debug ("\n");
