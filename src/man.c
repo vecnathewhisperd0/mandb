@@ -940,7 +940,6 @@ static const char *is_section (const char *name)
 /* Snarf pre-processors from file, return string or NULL on failure */
 static char *get_preprocessors_from_file (pipeline *decomp, int prefixes)
 {
-#ifdef PP_COOKIE
 	const size_t block = 4096;
 	int i;
 	char *line = NULL;
@@ -996,7 +995,6 @@ static char *get_preprocessors_from_file (pipeline *decomp, int prefixes)
 		else
 			return xstrdup (line + 4);
 	}
-#endif
 	return NULL;
 }
 

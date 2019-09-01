@@ -863,8 +863,6 @@ static char *convert_encoding (char *encoding)
 char *check_preprocessor_encoding (pipeline *p)
 {
 	char *pp_encoding = NULL;
-
-#ifdef PP_COOKIE
 	const char *line = pipeline_peekline (p);
 	char *directive = NULL;
 
@@ -911,7 +909,6 @@ char *check_preprocessor_encoding (pipeline *p)
 		}
 	}
 	free (directive);
-#endif /* PP_COOKIE */
 
 	return pp_encoding;
 }
