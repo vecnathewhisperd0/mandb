@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include "gettext.h"
 #include "localcharset.h"
@@ -859,12 +860,19 @@ static char *convert_encoding (char *encoding)
 
 /* Inspect the first line of data in a pipeline for preprocessor encoding
  * declarations.
+ *
+ * If to_encoding and modified_line are both non-NULL, and if the encoding
+ * declaration in the input does not match to_encoding, then return an
+ * encoding declaration line modified to refer to the given to_encoding in
+ * *modified_line.  The caller should free *modified_line.
  */
-char *check_preprocessor_encoding (pipeline *p)
+char *check_preprocessor_encoding (pipeline *p, const char *to_encoding,
+				   char **modified_line)
 {
 	char *pp_encoding = NULL;
 	const char *line = pipeline_peekline (p);
-	char *directive = NULL;
+	const char *directive = NULL, *directive_end, *pp_search;
+	size_t pp_encoding_len = 0;
 
 	/* Some people use .\" incorrectly. We allow it for encoding
 	 * declarations but not for preprocessor declarations.
@@ -872,21 +880,20 @@ char *check_preprocessor_encoding (pipeline *p)
 	if (line &&
 	    (STRNEQ (line, PP_COOKIE, 4) || STRNEQ (line, ".\\\" ", 4))) {
 		const char *newline = strchr (line, '\n');
-		if (newline)
-			directive = xstrndup (line + 4,
-					      newline - (line + 4));
-		else
-			directive = xstrdup (line + 4);
+
+		directive = line + 4;
+		directive_end = newline ? newline : strchr (directive, '\0');
+		pp_search = memmem (directive, directive_end - directive,
+				    "-*-", 3);
 	}
 
-	if (directive && strstr (directive, "-*-")) {
-		const char *pp_search = strstr (directive, "-*-") + 3;
-		while (pp_search && *pp_search) {
+	if (directive && pp_search) {
+		pp_search += 3;
+		while (pp_search && pp_search < directive_end && *pp_search) {
 			while (*pp_search == ' ')
 				++pp_search;
 			if (STRNEQ (pp_search, "coding:", 7)) {
 				const char *pp_encoding_allow;
-				size_t pp_encoding_len;
 				pp_search += 7;
 				while (*pp_search == ' ')
 					++pp_search;
@@ -902,13 +909,25 @@ char *check_preprocessor_encoding (pipeline *p)
 				       pp_encoding);
 				break;
 			} else {
-				pp_search = strchr (pp_search, ';');
+				pp_search = memchr (pp_search, ';',
+						    directive_end - pp_search);
 				if (pp_search)
 					++pp_search;
 			}
 		}
 	}
-	free (directive);
+
+	if (to_encoding && modified_line &&
+	    pp_encoding && strcasecmp (pp_encoding, to_encoding)) {
+		assert (directive_end);
+		assert (pp_search);
+		*modified_line = xasprintf
+			("%.*s%s%.*s\n",
+			 (int) (pp_search - line), line,
+			 to_encoding,
+			 (int) (directive_end - (pp_search + pp_encoding_len)),
+			 pp_search + pp_encoding_len);
+	}
 
 	return pp_encoding;
 }

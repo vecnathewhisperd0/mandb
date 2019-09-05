@@ -321,9 +321,21 @@ void manconv (pipeline *p, gl_list_t from, const char *to)
 {
 	char *pp_encoding;
 	const char *try_from_code;
+	char *plain_to, *modified_pp_line = NULL;
 
-	pp_encoding = check_preprocessor_encoding (p);
+	plain_to = xstrndup (to, strcspn (to, "/"));
+	pp_encoding = check_preprocessor_encoding
+		(p, plain_to, &modified_pp_line);
 	if (pp_encoding) {
+		if (modified_pp_line) {
+			size_t len = strlen (modified_pp_line);
+			pipeline_readline (p);
+			if (fwrite (modified_pp_line, 1, len, stdout) < len ||
+			    ferror (stdout))
+				error (FATAL, 0,
+				       _("can't write to standard output"));
+			free (modified_pp_line);
+		}
 		try_iconv (p, pp_encoding, to, 1);
 		free (pp_encoding);
 	} else {
@@ -333,6 +345,8 @@ void manconv (pipeline *p, gl_list_t from, const char *to)
 				break;
 		} GL_LIST_FOREACH_END (from);
 	}
+
+	free (plain_to);
 }
 
 #else /* !HAVE_ICONV */

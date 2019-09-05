@@ -36,4 +36,5 @@ const char *get_roff_encoding (const char *device,
 const char *get_output_encoding (const char *device);
 const char *get_less_charset (const char *locale_charset);
 const char *get_jless_charset (const char *locale_charset);
-char *check_preprocessor_encoding (struct pipeline *p);
+char *check_preprocessor_encoding (struct pipeline *p, const char *to_code,
+				   char **modified_line);

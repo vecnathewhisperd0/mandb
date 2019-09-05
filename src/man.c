@@ -1143,7 +1143,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			pipeline_command (p, cmd);
 		}
 
-		page_encoding = check_preprocessor_encoding (decomp);
+		page_encoding = check_preprocessor_encoding
+			(decomp, NULL, NULL);
 		if (!page_encoding)
 			page_encoding = get_page_encoding (lang);
 		if (page_encoding && !STREQ (page_encoding, "UTF-8"))
