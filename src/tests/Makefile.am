@@ -41,6 +41,7 @@ ALL_TESTS = \
 	man-suffixed-extension \
 	man-symlinks-with-matching-names \
 	manconv-coding-tags \
+	manconv-guess-from-encoding \
 	manconv-incomplete-char-at-eof \
 	manconv-odd-combinations \
 	mandb-basic \

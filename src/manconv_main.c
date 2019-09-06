@@ -41,6 +41,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
+#include "encodings.h"
 #include "error.h"
 #include "pipeline.h"
 #include "decompress.h"
@@ -59,10 +60,15 @@ static const char *filename;
 
 static gl_list_t split_codes (const char *codestr)
 {
-	char *codestrtok = xstrdup (codestr);
-	char *codestrtok_ptr = codestrtok;
+	char *codestrtok, *codestrtok_ptr;
 	char *tok;
 	gl_list_t codelist = new_string_list (GL_ARRAY_LIST, true);
+
+	if (!codestr)
+		return codelist;
+
+	codestrtok = xstrdup (codestr);
+	codestrtok_ptr = codestrtok;
 
 	for (tok = strsep (&codestrtok_ptr, ":"); tok;
 	     tok = strsep (&codestrtok_ptr, ":")) {
@@ -80,7 +86,7 @@ const char *argp_program_version = "manconv " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("-f CODE[:...] -t CODE [FILENAME]");
+static const char args_doc[] = N_("[-f CODE[:...]] -t CODE [FILENAME]");
 
 static struct argp_option options[] = {
 	{ "from-code",	'f',	N_("CODE[:...]"),
@@ -120,19 +126,11 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			filename = arg;
 			return 0;
 		case ARGP_KEY_SUCCESS:
-			if (!from_codes)
-				argp_error (state,
-					    _("must specify an input "
-					      "encoding"));
 			if (!to_code)
 				argp_error (state,
 					    _("must specify an output "
 					      "encoding"));
 			from_code = split_codes (from_codes);
-			if (!gl_list_size (from_code))
-				argp_error (state,
-					    _("must specify an input "
-					      "encoding"));
 			return 0;
 	}
 	return ARGP_ERR_UNKNOWN;
@@ -161,6 +159,32 @@ int main (int argc, char *argv[])
 	} else
 		p = decompress_fdopen (dup (STDIN_FILENO));
 	pipeline_start (p);
+
+	if (!gl_list_size (from_code)) {
+		char *lang, *page_encoding;
+
+		/* Note that we don't need to explicitly check the page's
+		 * preprocessor encoding here, as the manconv function will
+		 * do that itself and override the requested input encoding
+		 * with it if it finds one.
+		 */
+		lang = lang_dir (filename);
+		page_encoding = get_page_encoding (lang);
+		if (STREQ (page_encoding, "UTF-8")) {
+			/* Steal memory. */
+			gl_list_add_last (from_code, page_encoding);
+			debug ("guessed input encoding %s for %s\n",
+			       page_encoding, filename);
+		} else {
+			gl_list_add_last (from_code, xstrdup ("UTF-8"));
+			/* Steal memory. */
+			gl_list_add_last (from_code, page_encoding);
+			debug ("guessed input encodings UTF-8:%s for %s\n",
+			       page_encoding, filename);
+		}
+
+		free (lang);
+	}
 
 	manconv (p, from_code, to_code);
 

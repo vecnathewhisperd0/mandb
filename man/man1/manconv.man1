@@ -12,7 +12,7 @@
 .SH SYNOPSIS
 .B %manconv%
 .B \-f
-.IR from-code \|[: from-code \|.\|.\|.]
+.RI [\| from-code \|[: from-code \|.\|.\|.]\|]
 .B \-t
 .I to-code
 .RB [\| \-dqhV \|]
@@ -53,6 +53,7 @@ or (if manual page preprocessors are also to be declared):
 Try each of
 .I encodings
 (a colon-separated list) in sequence as the input encoding.
+The default is to guess likely input encodings based on the file name.
 .TP
 \fB\-t\fP \fIencoding\fP, \fB\-\-to\-code\fP \fIencoding\fP
 Convert the manual page to

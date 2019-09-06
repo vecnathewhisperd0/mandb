@@ -67,6 +67,7 @@ gl_MANYWARN_ALL_GCC([warnings])
 nw=
 nw="$nw -Wsystem-headers"
 nw="$nw -Wmissing-field-initializers"
+nw="$nw -Winline"
 gl_MANYWARN_COMPLEMENT([warnings], [$warnings], [$nw])
 for w in $warnings; do
 	gl_WARN_ADD([$w])
