@@ -197,6 +197,14 @@ then
 else
 	troff="(troff not installed)"
 fi
+dnl We want to end up with "-" written as "\-" in manual pages.  This
+dnl requires additional \-escaping corresponding to the following quote
+dnl removal steps:
+dnl   1) the following sed command
+dnl   2) the following assignment
+dnl   2) sed running on the substituted version of man/replace.sin.in
+troff_as_troff_input=`echo "$troff" | sed 's/-/\\\\\\\\-/g'`
+AC_SUBST([troff_as_troff_input])
 
 if test -n "$nroff"
 then
