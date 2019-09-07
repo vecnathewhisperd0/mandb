@@ -45,7 +45,7 @@ or match the exact keyword
 .RB ( \-e ).
 Using these options, it may be necessary to quote the
 .I keyword
-or escape (\\) the special characters to stop the shell from interpreting
+or escape (\e) the special characters to stop the shell from interpreting
 them.
 
 The standard matching rules allow matches to be made against the page name
@@ -174,7 +174,7 @@ Use this user configuration file rather than the default of
 .if !'po4a'hide' .BR \-? ", " \-\-help
 Print a help message and exit.
 .TP
-.if !'po4a'hide' .BR \-\-usage
+.if !'po4a'hide' .B \-\-usage
 Print a short usage message and exit.
 .TP
 .if !'po4a'hide' .BR \-V ", " \-\-version
@@ -230,12 +230,12 @@ search will be as an extended regex
 Nowadays, this is the default behaviour anyway.
 .SH FILES
 .TP
-.if !'po4a'hide' .I /usr/share/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /usr/share/man/index.(bt\^|\^db\^|\^dir\^|\^pag)
 A traditional global
 .I index
 database cache.
 .TP
-.if !'po4a'hide' .I /var/cache/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /var/cache/man/index.(bt\^|\^db\^|\^dir\^|\^pag)
 An FHS
 compliant global
 .I index
@@ -251,7 +251,7 @@ text database.
 .if !'po4a'hide' .BR %mandb% (8)
 .SH AUTHOR
 .nf
-.if !'po4a'hide' Wilf. (G.Wilford@ee.surrey.ac.uk).
+.if !'po4a'hide' Wilf.\& (G.Wilford@ee.surrey.ac.uk).
 .if !'po4a'hide' Fabrizio Polacco (fpolacco@debian.org).
 .if !'po4a'hide' Colin Watson (cjwatson@debian.org).
 .fi
