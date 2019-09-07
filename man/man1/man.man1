@@ -200,7 +200,7 @@ T}
 Special files (usually found in \fI/dev\/\fR)
 T}
 5@T{
-File formats and conventions eg \fI/etc/passwd\fR
+File formats and conventions e.g.\& \fI/etc/passwd\fR
 T}
 6@T{
 Games
@@ -289,7 +289,8 @@ Display the manual page for the
 \fB%man% \fIman\fR.\fI7
 Display the manual page for macro package
 .I man
-from section \fI7\fR.
+from section
+.IR 7 .
 .TP
 .BI %man%\ \-a \ intro
 Display, in succession, all of the available
@@ -328,7 +329,7 @@ with no pager.
 The output could be viewed with a program such as
 .B xdvi
 or further processed into PostScript using a program such as
-.BR dvips.
+.BR dvips .
 .TP
 .BI %man%\ \-k \ printf
 Search the short descriptions and manual page names for the keyword
@@ -478,7 +479,8 @@ manual pager, please read the documents supplied with the package.
 .B %man%
 will search for the desired manual pages within the
 .I index
-database caches. If the
+database caches.
+If the
 .B \-u
 option is given, a cache consistency check is performed to ensure the
 databases accurately reflect the filesystem.
@@ -914,7 +916,7 @@ where
 denotes the manual page name,
 .I sec
 denotes the section it was found under and
-.IR x
+.I x
 the current line number.
 .\"The default options are
 .\".BR \-six8 .
@@ -1178,7 +1180,7 @@ It implies
 .if !'po4a'hide' .BR \-? ", " \-\-help
 Print a help message and exit.
 .TP
-.if !'po4a'hide' .BR \-\-usage
+.if !'po4a'hide' .B \-\-usage
 Print a short usage message and exit.
 .TP
 .if !'po4a'hide' .BR \-V ", " \-\-version
@@ -1375,12 +1377,12 @@ man-db configuration file.
 .if !'po4a'hide' .I /usr/share/man
 A global manual page hierarchy.
 .TP
-.if !'po4a'hide' .I /usr/share/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /usr/share/man/index.(bt\^|\^db\^|\^dir\^|\^pag)
 A traditional global
 .I index
 database cache.
 .TP
-.if !'po4a'hide' .I /var/cache/man/index.(bt|db|dir|pag)
+.if !'po4a'hide' .I /var/cache/man/index.(bt\^|\^db\^|\^dir\^|\^pag)
 An FHS
 compliant global
 .I index
@@ -1402,14 +1404,14 @@ database cache.
 .if !'po4a'hide' .BR %catman% (8),
 .if !'po4a'hide' .BR %mandb% (8),
 the man-db package manual,
-.BR FSSTND
+.B FSSTND
 .SH HISTORY
 1990, 1991 \(en Originally written by John W.\& Eaton (jwe@che.utexas.edu).
 
 Dec 23 1992: Rik Faith (faith@cs.unc.edu) applied bug fixes
 supplied by Willem Kasdorp (wkasdo@nikhefk.nikef.nl).
 
-30th April 1994 \(en 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk)
+30th April 1994 \(en 23rd February 2000: Wilf.\& (G.Wilford@ee.surrey.ac.uk)
 has been developing and maintaining this package
 with the help of a few dedicated people.
 
