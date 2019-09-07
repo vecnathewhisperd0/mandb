@@ -28,6 +28,7 @@ bin_PROGRAMS = \
 	catman \
 	lexgrog \
 	man \
+	man-recode \
 	mandb \
 	manpath \
 	whatis
@@ -64,6 +65,7 @@ catman_LDADD = $(LIBMANDB) $(libpipeline_LIBS)
 globbing_LDADD = $(LIBMAN)
 lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 man_LDADD = $(LIBMANDB) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
+man_recode_LDADD = $(LIBMANDB) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 mandb_LDADD = $(LIBMANDB) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 manpath_LDADD = $(LIBMAN)
@@ -119,6 +121,15 @@ man_SOURCES = \
 	ult_src.h \
 	zsoelim.h \
 	zsoelim.l
+man_recode_SOURCES = \
+	compression.c \
+	decompress.c \
+	decompress.h \
+	man-recode.c \
+	manconv.c \
+	manconv.h \
+	manconv_client.c \
+	manconv_client.h
 manconv_SOURCES = \
 	decompress.c \
 	decompress.h \

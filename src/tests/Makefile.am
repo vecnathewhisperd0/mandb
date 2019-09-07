@@ -37,6 +37,8 @@ ALL_TESTS = \
 	man-mandatory-manpath \
 	man-missing-locales \
 	man-override-dir \
+	man-recode-in-place \
+	man-recode-suffix \
 	man-so-links-same-section \
 	man-suffixed-extension \
 	man-symlinks-with-matching-names \

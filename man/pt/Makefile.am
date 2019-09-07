@@ -27,6 +27,7 @@ man1_MANS = \
 	man1/apropos.1 \
 	man1/lexgrog.1 \
 	man1/man.1 \
+	man1/man-recode.1 \
 	man1/manconv.1 \
 	man1/manpath.1 \
 	man1/whatis.1 \
