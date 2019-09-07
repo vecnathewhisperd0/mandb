@@ -6,15 +6,15 @@
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file COPYING that comes with the
 .\" man-db distribution.
-.\" 
-.\" Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+.\"
+.\" Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
 .\"
 .pc
 .TH %thmandb% 8 "%date%" "%version%" "Manual pager utils"
 .SH NAME
 %mandb% \- create or update the manual page index caches
 .SH SYNOPSIS
-.B %mandb%  
+.B %mandb%
 .RB [\| \-dqsucpt?V \|]
 .RB [\| \-C
 .IR file \|]
@@ -29,25 +29,25 @@
 .SH DESCRIPTION
 .B %mandb%
 is used to initialise or manually update
-.B index 
-database caches that are usually maintained by 
+.B index
+database caches that are usually maintained by
 .BR %man% .
 The caches contain information relevant to the current state of the manual
-page system and the information stored within them is used by the man-db 
+page system and the information stored within them is used by the man-db
 utilities to enhance their speed and functionality.
 
 When creating or updating an
 .BR index ,
 .B %mandb%
-will warn of bad ROFF .so requests, bogus manual page filenames and 
-manual pages from which the 
-.B whatis 
+will warn of bad ROFF .so requests, bogus manual page filenames and
+manual pages from which the
+.B whatis
 cannot be parsed.
 
-Supplying 
-.B %mandb% 
+Supplying
+.B %mandb%
 with an optional colon-delimited path will override the internal system
-manual page hierarchy search path, determined from information found within 
+manual page hierarchy search path, determined from information found within
 the man-db configuration file.
 .SH "DATABASE CACHES"
 .B %mandb%
@@ -73,10 +73,10 @@ Those database types that support asynchronous updates provide enhanced
 speed at the cost of possible corruption in the event of unusual
 termination.
 In an unusual case where this has occurred, it may be necessary to rerun
-.B %mandb% 
-with the 
+.B %mandb%
+with the
 .B \-c
-option to re-create the databases from scratch. 
+option to re-create the databases from scratch.
 .SH OPTIONS
 .TP
 .if !'po4a'hide' .BR \-d ", " \-\-debug
@@ -94,11 +94,11 @@ Do not spend time checking for deleted manual pages and purging them from
 the databases.
 .TP
 .if !'po4a'hide' .BR \-c ", " \-\-create
-By default, 
+By default,
 .B %mandb%
 will try to update any previously created databases.
 If a database does not exist, it will create it.
-This option forces 
+This option forces
 .B %mandb%
 to delete previous databases and re-create them from scratch, and implies
 .B \-\-no-purge.
@@ -156,7 +156,7 @@ Operational error.
 A child process failed.
 .SH DIAGNOSTICS
 The following warning messages can be emitted during database building.
-.TP 
+.TP
 .B <filename>: whatis parse for page(sec) failed
 An attempt to extract whatis line(s) from the given <filename> failed.
 This is usually due to a poorly written manual page, but if many such
@@ -169,9 +169,9 @@ section in
 for more information.
 .TP
 .B <filename>: is a dangling symlink
-<filename> does not exist but is referenced by a symbolic link. 
+<filename> does not exist but is referenced by a symbolic link.
 Further diagnostics are usually emitted to identify the <filename> of the
-offending link. 
+offending link.
 .TP
 .B <filename>: bad symlink or ROFF `.so' request
 <filename> is either a symbolic link to, or contains a ROFF include
@@ -181,7 +181,7 @@ request to, a non existent file.
 The <filename> may or may not be a valid manual page but its name is
 invalid.
 This is usually due to a manual page with sectional extension <x> being put
-in manual page section <y>. 
+in manual page section <y>.
 .TP
 .B <filename_mask>: competing extensions
 The wildcard <filename_mask> is not unique.

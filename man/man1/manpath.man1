@@ -4,7 +4,7 @@
 .\"
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the COPYING file that comes with the
-.\" man-db distribution.  
+.\" man-db distribution.
 .\"
 .\" Sun Jan 22 22:15:17 GMT 1995 Wilf. (G.Wilford@ee.surrey.ac.uk)
 .\"
@@ -13,20 +13,20 @@
 .SH NAME
 %manpath% \- determine search path for manual pages
 .SH SYNOPSIS
-.B %manpath%  
+.B %manpath%
 .RB [\| \-qgdc?V \|]
 .RB [\| \-m
 .IR system \|[\|,.\|.\|.\|]\|]
 .RB [\| \-C
 .IR file \|]
 .SH DESCRIPTION
-If 
+If
 .RB $ MANPATH
-is set, 
+is set,
 .B %manpath%
 will simply display its contents and issue a warning.
-If not, 
-.B %manpath% 
+If not,
+.B %manpath%
 will determine a suitable manual page hierarchy search path and display the
 results.
 
@@ -43,13 +43,13 @@ Do not issue warnings.
 Print debugging information.
 .TP
 .if !'po4a'hide' .BR \-c ", " \-\-catpath
-Produce a catpath as opposed to a manpath. 
+Produce a catpath as opposed to a manpath.
 Once the manpath is determined,
 each path element is converted to its relative catpath.
 .TP
 .if !'po4a'hide' .BR \-g ", " \-\-global
 Produce a manpath consisting of all paths named as `global' within the
-man-db configuration file. 
+man-db configuration file.
 .\"
 .\" Due to the rather silly limit of 6 args per request in some `native'
 .\" *roff compilers, we have do the following to get the two-line
@@ -58,13 +58,13 @@ man-db configuration file.
 .\" (end relative indent).
 .\"
 .PP
-.B \-m 
-.I system\c 
+.B \-m
+.I system\c
 \|[\|,.\|.\|.\|]\|,
-.BI \-\-systems= system\c 
+.BI \-\-systems= system\c
 \|[\|,.\|.\|.\|]
 .RS
-If this system has access to other operating system's manual hierarchies, 
+If this system has access to other operating system's manual hierarchies,
 this option can be used to include them in the output of
 .BR %manpath% .
 To include NewOS's manual page hierarchies use the option
@@ -74,7 +74,7 @@ To include NewOS's manual page hierarchies use the option
 The
 .I system
 specified can be a combination of comma delimited operating system names.
-To include the native operating system's manual page hierarchies, 
+To include the native operating system's manual page hierarchies,
 the system name
 .B man
 must be included in the argument string.
@@ -103,7 +103,7 @@ If
 is set,
 .B %manpath%
 displays its value rather than determining it on the fly.
-If 
+If
 .RB $ MANPATH
 is prefixed by a colon, then the value of the variable is appended
 to the list determined from the content of the configuration files.

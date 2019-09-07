@@ -6,34 +6,34 @@
 .\" License as specified in the file COPYING that comes with the
 .\" man-db distribution.
 .\"
-.\" Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
-.\" 
+.\" Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
+.\"
 .pc
 .TH %thwhatis% 1 "%date%" "%version%" "Manual pager utils"
 .SH NAME
 %whatis% \- display one-line manual page descriptions
 .SH SYNOPSIS
-.B %whatis% 
+.B %whatis%
 .RB [\| \-dlv?V \|]
-.RB [\| \-r \||\| \-w\c 
-\|] 
+.RB [\| \-r \||\| \-w\c
+\|]
 .RB [\| \-s
 .IR list \|]
 .RB [\| \-m
 .IR system \|[\|,.\|.\|.\|]\|]
-.RB [\| \-M 
-.IR path \|] 
+.RB [\| \-M
+.IR path \|]
 .RB [\| \-L
 .IR locale \|]
 .RB [\| \-C
 .IR file \|]
-.I name 
+.I name
 \&.\|.\|.
 .SH DESCRIPTION
-Each manual page has a short description available within it. 
+Each manual page has a short description available within it.
 .B %whatis%
 searches the manual page names and displays the manual page descriptions
-of any 
+of any
 .I name
 matched.
 
@@ -47,26 +47,26 @@ Using these options, it may be necessary to quote the
 or escape (\\) the special characters to stop the shell from interpreting
 them.
 
-.B index 
+.B index
 databases are used during the search, and are updated by the
 .B %mandb%
 program.
 Depending on your installation, this may be run by a periodic cron job, or
 may need to be run manually after new manual pages have been installed.
 To produce an old style text
-.B whatis 
+.B whatis
 database from the relative
-.B index 
+.B index
 database, issue the command:
 
-.B %whatis% \-M 
-.I manpath  
-.B \-w  '*' | sort > 
+.B %whatis% \-M
+.I manpath
+.B \-w  '*' | sort >
 .I manpath/whatis
 
-where 
-.I manpath 
-is a manual page hierarchy such as 
+where
+.I manpath
+is a manual page hierarchy such as
 .IR /usr/man .
 .SH OPTIONS
 .TP
@@ -77,22 +77,22 @@ Print debugging information.
 Print verbose warning messages.
 .TP
 .if !'po4a'hide' .BR \-r ", " \-\-regex
-Interpret each 
-.I name 
+Interpret each
+.I name
 as a regular expression.
-If a 
-.I name 
+If a
+.I name
 matches any part of a page name, a match will be made.
-This option causes 
-.B %whatis% 
+This option causes
+.B %whatis%
 to be somewhat slower due to the nature of database searches.
 .TP
 .if !'po4a'hide' .BR \-w ", " \-\-wildcard
-Interpret each 
-.I name 
+Interpret each
+.I name
 as a pattern containing shell style wildcards.
-For a match to be made, an expanded 
-.I name 
+For a match to be made, an expanded
+.I name
 must match the entire page name.
 This option causes
 .B %whatis%
@@ -125,13 +125,13 @@ pages in that exact part of the manual section.
 .\" (end relative indent).
 .\"
 .PP
-.B \-m 
-.I system\c 
+.B \-m
+.I system\c
 \|[\|,.\|.\|.\|]\|,
-.BI \-\-systems= system\c 
+.BI \-\-systems= system\c
 \|[\|,.\|.\|.\|]
 .RS
-If this system has access to other operating system's manual page names, 
+If this system has access to other operating system's manual page names,
 they can be accessed using this option.
 To search NewOS's manual page names,
 use the option
@@ -247,9 +247,9 @@ compliant global
 database cache.
 .TP
 .if !'po4a'hide' .I /usr/share/man/\|.\|.\|.\|/whatis
-A traditional 
+A traditional
 .B whatis
-text database. 
+text database.
 .SH "SEE ALSO"
 .if !'po4a'hide' .BR %apropos% (1),
 .if !'po4a'hide' .BR %man% (1),

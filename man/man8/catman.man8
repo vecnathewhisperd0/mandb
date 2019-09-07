@@ -6,17 +6,17 @@
 .\" License as specified in the file COPYING that comes with the
 .\" man-db distribution.
 .\"
-.\" Sat Dec 10 14:17:29 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
-.\" 
+.\" Sat Dec 10 14:17:29 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
+.\"
 .pc
 .TH %thcatman% 8 "%date%" "%version%" "Manual pager utils"
 .SH NAME
 %catman% \- create or update the pre-formatted manual pages
 .SH SYNOPSIS
-.B %catman% 
+.B %catman%
 .RB [\| \-d?V \|]
-.RB [\| \-M 
-.IR path \|] 
+.RB [\| \-M
+.IR path \|]
 .RB [\| \-C
 .IR file \|]
 .RI [\| section \|]
@@ -24,7 +24,7 @@
 .SH DESCRIPTION
 .B %catman%
 is used to create an up to date set of pre-formatted manual pages known as
-cat pages. 
+cat pages.
 Cat pages are generally much faster to display than the original
 manual pages, but require extra storage space.
 The decision to support cat pages is that of the local administrator, who
@@ -37,9 +37,9 @@ The default hierarchies are those specified as system hierarchies in the
 man-db configuration file, and the default sections are either the
 colon-delimited contents of the environment variable
 .RB $ MANSECT
-or the standard set compiled into 
+or the standard set compiled into
 .B %man%
-if 
+if
 .RB $ MANSECT
 is undefined.
 Supplying
@@ -50,7 +50,7 @@ the above.
 .B %catman%
 makes use of the
 .B index
-database cache associated with each hierarchy to determine which files 
+database cache associated with each hierarchy to determine which files
 need to be formatted.
 .SH OPTIONS
 .TP
@@ -58,7 +58,7 @@ need to be formatted.
 Print debugging information.
 .TP
 .BI \-M\  path \fR,\ \fB\-\-manpath= path
-Specify an alternate colon-delimited manual page hierarchy search path. 
+Specify an alternate colon-delimited manual page hierarchy search path.
 By default, this is all paths indicated as system hierarchies
 in the man-db configuration file.
 .TP
@@ -108,7 +108,7 @@ compliant global
 database cache.
 .SH "SEE ALSO"
 .if !'po4a'hide' .BR %man% (1),
-.if !'po4a'hide' .BR manpath (5), 
+.if !'po4a'hide' .BR manpath (5),
 .if !'po4a'hide' .BR %mandb% (8)
 .SH AUTHOR
 .nf

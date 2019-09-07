@@ -3,17 +3,17 @@
 .\" Copyright (C), 1994, 1995, Graeme W. Wilford. (Wilf.)
 .\"
 .\" You may distribute under the terms of the GNU General Public
-.\" License as specified in the file COPYING that comes with the 
+.\" License as specified in the file COPYING that comes with the
 .\" man-db distribution.
 .\"
-.\" Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
-.\" 
+.\" Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
+.\"
 .pc
 .TH %thapropos% 1 "%date%" "%version%" "Manual pager utils"
 .SH NAME
 %apropos% \- search the manual page names and descriptions
 .SH SYNOPSIS
-.B %apropos% 
+.B %apropos%
 .RB [\| \-dalv?V  \|]
 .RB [\| \-e \||\| \-w \||\| \-r\c
 \|]
@@ -30,13 +30,13 @@
 .I keyword
 \&.\|.\|.
 .SH DESCRIPTION
-Each manual page has a short description available within it. 
+Each manual page has a short description available within it.
 .B %apropos%
 searches the descriptions for instances of
 .IR keyword .
 
 .I keyword
-is usually a regular expression, as if 
+is usually a regular expression, as if
 .RB ( \-r )
 was used, or
 may contain wildcards
@@ -121,25 +121,25 @@ pages in that exact part of the manual section.
 .\" (end relative indent).
 .\"
 .PP
-.B \-m 
-.I system\c 
+.B \-m
+.I system\c
 \|[\|,.\|.\|.\|]\|,
-.BI \-\-systems= system\c 
+.BI \-\-systems= system\c
 \|[\|,.\|.\|.\|]
 .RS
 If this system has access to other operating system's manual page
-descriptions, they can be searched using this option. 
+descriptions, they can be searched using this option.
 To search NewOS's manual page descriptions, use the option
 .B \-m
 .BR NewOS .
 
-The 
+The
 .I system
 specified can be a combination of comma-delimited operating system names.
-To include a search of the native operating system's 
+To include a search of the native operating system's
 .B whatis
 descriptions, include the system name
-.B man 
+.B man
 in the argument string.
 This option will override the
 .RB $ SYSTEM
@@ -149,12 +149,12 @@ environment variable.
 .BI \-M\  path \fR,\ \fB\-\-manpath= path
 Specify an alternate set of colon-delimited manual page hierarchies to
 search.
-By default, 
+By default,
 .B %program%
-uses the 
+uses the
 .RB $ MANPATH
-environment variable, unless it is empty or unset, in which case it will 
-determine an appropriate manpath based on your 
+environment variable, unless it is empty or unset, in which case it will
+determine an appropriate manpath based on your
 .RB $ PATH
 environment variable.
 This option overrides the contents of
@@ -208,7 +208,7 @@ Nothing was found that matched the criteria specified.
 If
 .RB $ SYSTEM
 is set, it will have the same effect as if it had been specified as the
-argument to the 
+argument to the
 .B \-m
 option.
 .TP
@@ -231,11 +231,11 @@ an
 if available, or falling back to 80 characters if all else fails.
 .TP
 .if !'po4a'hide' .B POSIXLY_CORRECT
-If 
+If
 .RB $ POSIXLY_CORRECT
-is set, even to a null value, the default 
-.B %apropos% 
-search will be as an extended regex 
+is set, even to a null value, the default
+.B %apropos%
+search will be as an extended regex
 .RB ( \-r ).
 Nowadays, this is the default behaviour anyway.
 .SH FILES
@@ -252,7 +252,7 @@ compliant global
 database cache.
 .TP
 .if !'po4a'hide' .I /usr/share/man/\|.\|.\|.\|/whatis
-A traditional 
+A traditional
 .B whatis
 text database.
 .SH "SEE ALSO"
