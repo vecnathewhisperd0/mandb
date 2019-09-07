@@ -105,7 +105,9 @@ results from poorly-written
 .B NAME
 sections.
 .TP
-\fB\-s\fP \fIlist\fP, \fB\-\-sections\fP \fIlist\fP, \fB\-\-section\fP \fIlist\fP
+\fB\-s\fR \fIlist\/\fR, \
+\fB\-\-sections=\fIlist\/\fR, \
+\fB\-\-section=\fIlist\fR
 Search only the given manual sections.
 .I list
 is a colon- or comma-separated list of sections.
@@ -117,20 +119,9 @@ while if an entry in
 .I list
 has an extension, for example "3perl", then the list will only include
 pages in that exact part of the manual section.
-.\"
-.\" Due to the rather silly limit of 6 args per request in some `native'
-.\" *roff compilers, we have do the following to get the two-line
-.\" hanging tag on one line. .PP to begin a new paragraph, then the
-.\" tag, then .RS (start relative indent), the text, finally .RE
-.\" (end relative indent).
-.\"
-.PP
-.B \-m
-.I system\c
-\|[\|,.\|.\|.\|]\|,
-.BI \-\-systems= system\c
-\|[\|,.\|.\|.\|]
-.RS
+.TP
+\fB\-m\fR \fIsystem\fR\|[\|,.\|.\|.\|]\|, \
+\fB\-\-systems=\fIsystem\fR\|[\|,.\|.\|.\|]
 If this system has access to other operating system's manual page names,
 they can be accessed using this option.
 To search NewOS's manual page names,
@@ -148,7 +139,6 @@ in the argument string.
 This option will override the
 .RB $ SYSTEM
 environment variable.
-.RE
 .TP
 .BI \-M\  path \fR,\ \fB\-\-manpath= path
 Specify an alternate set of colon-delimited manual page hierarchies to

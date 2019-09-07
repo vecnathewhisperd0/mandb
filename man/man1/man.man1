@@ -688,20 +688,9 @@ Note that it will not take effect until the search for pages actually
 begins.
 Output such as the help message will always be displayed in the initially
 determined locale.
-.\"
-.\" Due to the rather silly limit of 6 args per request in some `native'
-.\" *roff compilers, we have do the following to get the two-line
-.\" hanging tag on one line. .PP to begin a new paragraph, then the
-.\" tag, then .RS (start relative indent), the text, finally .RE
-.\" (end relative indent).
-.\"
-.PP
-.B \-m
-.I system\c
-\|[\|,.\|.\|.\|]\|,
-.BI \-\-systems= system\c
-\|[\|,.\|.\|.\|]
-.RS
+.TP
+\fB\-m\fR \fIsystem\fR\|[\|,.\|.\|.\|]\|, \
+\fB\-\-systems=\fIsystem\fR\|[\|,.\|.\|.\|]
 If this system has access to other operating system's manual pages, they can
 be accessed using this option.
 To search for a manual page from NewOS's manual page collection,
@@ -719,7 +708,6 @@ in the argument string.
 This option will override the
 .RB $ SYSTEM
 environment variable.
-.RE
 .TP
 .BI \-M\  path \fR,\ \fB\-\-manpath= path
 Specify an alternate manpath to use.
@@ -741,7 +729,9 @@ To view manual pages outside such hierarchies, see the
 .B \-l
 option.
 .TP
-.BI \-S\  list \fR,\ \fB\-s\  list \fR,\ \fB\-\-sections= list
+\fB\-S\fR \fIlist\/\fR, \
+\fB\-s\fR \fIlist\/\fR, \
+\fB\-\-sections=\fIlist\/\fR
 List is a colon- or comma-separated list of `order specific' manual sections
 to search.
 This option overrides the

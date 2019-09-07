@@ -50,20 +50,9 @@ each path element is converted to its relative catpath.
 .if !'po4a'hide' .BR \-g ", " \-\-global
 Produce a manpath consisting of all paths named as `global' within the
 man-db configuration file.
-.\"
-.\" Due to the rather silly limit of 6 args per request in some `native'
-.\" *roff compilers, we have do the following to get the two-line
-.\" hanging tag on one line. .PP to begin a new paragraph, then the
-.\" tag, then .RS (start relative indent), the text, finally .RE
-.\" (end relative indent).
-.\"
-.PP
-.B \-m
-.I system\c
-\|[\|,.\|.\|.\|]\|,
-.BI \-\-systems= system\c
-\|[\|,.\|.\|.\|]
-.RS
+.TP
+\fB\-m\fR \fIsystem\fR\|[\|,.\|.\|.\|]\|, \
+\fB\-\-systems=\fIsystem\fR\|[\|,.\|.\|.\|]
 If this system has access to other operating system's manual hierarchies,
 this option can be used to include them in the output of
 .BR %manpath% .
@@ -81,7 +70,6 @@ must be included in the argument string.
 This option will override the
 .RB $ SYSTEM
 environment variable.
-.RE
 .TP
 .BI \-C\  file \fR,\ \fB\-\-config\-file= file
 Use this user configuration file rather than the default of
