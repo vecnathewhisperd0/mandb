@@ -483,13 +483,34 @@ option was supplied, using the name as a filename and looking for an
 exact match.
 .TP
 .if !'po4a'hide' .BR \-w ", " \-\-where ", " \-\-path ", " \-\-location
-Don't actually display the manual pages, but do print the location(s) of
-the source nroff files that would be formatted.
+Don't actually display the manual page, but do print the location of the
+source nroff file that would be formatted.
+If the
+.B \-a
+option is also used, then print the locations of all source files that match
+the search criteria.
 .TP
 .if !'po4a'hide' .BR \-W ", " \-\-where\-cat ", " \-\-location\-cat
-Don't actually display the manual pages, but do print the location(s) of
-the cat files that would be displayed.
-If \-w and \-W are both specified, print both separated by a space.
+Don't actually display the manual page, but do print the location of the
+preformatted cat file that would be displayed.
+If the
+.B \-a
+option is also used, then print the locations of all preformatted cat files
+that match the search criteria.
+.IP
+If
+.B \-w
+and
+.B \-W
+are both used, then print both source file and cat file separated by a
+space.
+If
+all of
+.BR \-w ,
+.BR \-W ,
+and
+.B \-a
+are used, then do this for each possible match.
 .TP
 .if !'po4a'hide' .BR \-c ", " \-\-catman
 This option is not for general use and should only be used by the
