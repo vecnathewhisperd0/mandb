@@ -603,6 +603,7 @@ static void gripe_no_name (const char *sect)
 			 sect);
 	} else
 		fputs (_("What manual page do you want?\n"), stderr);
+	fputs (_("For example, try 'man man'.\n"), stderr);
 
 	exit (FAIL);
 }
