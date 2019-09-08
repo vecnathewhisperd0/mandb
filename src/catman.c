@@ -388,8 +388,6 @@ int main (int argc, char *argv[])
 			manp = sys_manp;
 	}
 
-	debug ("manpath=%s\n", manp);
-
 	/* get the manpath as a list of pointers */
 	manpathlist = create_pathlist (manp); 
 

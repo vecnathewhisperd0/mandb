@@ -4080,10 +4080,6 @@ int main (int argc, char *argv[])
 		do_extern (argc, argv);
 
 	get_term (); /* stores terminal settings */
-#ifdef MAN_OWNER
-	debug ("real user = %lu; effective user = %lu\n",
-	       (unsigned long) ruid, (unsigned long) euid);
-#endif /* MAN_OWNER */
 
 	/* close this locale and reinitialise if a new locale was 
 	   issued as an argument or in $MANOPT */
@@ -4148,7 +4144,7 @@ int main (int argc, char *argv[])
 		less = getenv ("LESS");
 	setenv ("MAN_ORIG_LESS", less ? less : "", 1);
 
-	debug ("\nusing %s as pager\n", pager);
+	debug ("using %s as pager\n", pager);
 
 	if (first_arg == argc) {
 		if (print_where) {
@@ -4169,8 +4165,6 @@ int main (int argc, char *argv[])
 		free (mp);
 	} else
 		free (get_manpath (NULL));
-
-	debug ("manpath search path (with duplicates) = %s\n", manp);
 
 	manpathlist = create_pathlist (manp);
 

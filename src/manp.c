@@ -170,52 +170,22 @@ const char *get_def_user (const char *thing, const char *def)
 	return config_def ? config_def : def;
 }
 
-static const char *describe_flag (enum config_flag flag)
-{
-	switch (flag) {
-		case MANDATORY:
-			return "MANDATORY";
-		case MANPATH_MAP:
-			return "MANPATH_MAP";
-		case MANDB_MAP:
-			return "MANDB_MAP";
-		case MANDB_MAP_USER:
-			return "MANDB_MAP_USER";
-		case DEFINE:
-			return "DEFINE";
-		case DEFINE_USER:
-			return "DEFINE_USER";
-		case SECTION:
-			return "SECTION";
-		case SECTION_USER:
-			return "SECTION_USER";
-		default:
-			error (FATAL, 0, "impossible config_flag value %u",
-			       flag);
-			abort (); /* error should have exited */
-	}
-}
-
-static void print_list (void)
-{
-	const struct config_item *item;
-
-	GL_LIST_FOREACH_START (config, item)
-		debug ("`%s'\t`%s'\t`%s'\n",
-		       item->key, item->cont, describe_flag (item->flag));
-	GL_LIST_FOREACH_END (config);
-}
-
 static void add_sections (char *sections, int user)
 {
 	char *section_list = xstrdup (sections);
 	char *sect;
+	bool first = true;
 
+	debug ("  Added sections: ");
 	for (sect = strtok (section_list, " "); sect;
 	     sect = strtok (NULL, " ")) {
 		add_config (sect, "", user ? SECTION_USER : SECTION);
-		debug ("Added section `%s'.\n", sect);
+		if (!first)
+			debug (", ");
+		debug ("`%s'", sect);
+		first = false;
 	}
+	debug (".\n");
 	free (section_list);
 }
 
@@ -248,7 +218,7 @@ static void add_def (const char *thing, const char *config_def, int user)
 {
 	add_config (thing, config_def, user ? DEFINE_USER : DEFINE);
 
-	debug ("Defined `%s' as `%s'.\n", thing, config_def);
+	debug ("  Defined `%s' as `%s'.\n", thing, config_def);
 }
 
 static void add_manpath_map (const char *path, const char *mandir)
@@ -258,7 +228,7 @@ static void add_manpath_map (const char *path, const char *mandir)
 
 	add_config (path, mandir, MANPATH_MAP);
 
-	debug ("Path `%s' mapped to mandir `%s'.\n", path, mandir);
+	debug ("  Path `%s' mapped to mandir `%s'.\n", path, mandir);
 }
 
 static void add_mandb_map (const char *mandir, const char *catdir, int user)
@@ -278,7 +248,7 @@ static void add_mandb_map (const char *mandir, const char *catdir, int user)
 
 	add_config (mandir, tmpcatdir, user ? MANDB_MAP_USER : MANDB_MAP);
 
-	debug ("%s mandir `%s', catdir `%s'.\n",
+	debug ("  %s mandir `%s', catdir `%s'.\n",
 	       user ? "User" : "Global", mandir, tmpcatdir);
 
 	free (tmpcatdir);
@@ -291,7 +261,7 @@ static void add_mandatory (const char *mandir)
 
 	add_config (mandir, "", MANDATORY);
 
-	debug ("Mandatory mandir `%s'.\n", mandir);
+	debug ("  Mandatory mandir `%s'.\n", mandir);
 }
 
 /* accept (NULL or oldpath) and new path component. return new path */
@@ -863,7 +833,7 @@ void read_config_file (bool optional)
 	if (dotmanpath) {
 		config_file = fopen (dotmanpath, "r");
 		if (config_file != NULL) {
-			debug ("From the config file %s:\n\n", dotmanpath);
+			debug ("From the config file %s:\n", dotmanpath);
 			add_to_dirlist (config_file, 1);
 			fclose (config_file);
 		}
@@ -882,14 +852,12 @@ void read_config_file (bool optional)
 					 "configuration file %s"),
 				       CONFIG_FILE);
 		} else {
-			debug ("From the config file %s:\n\n", CONFIG_FILE);
+			debug ("From the config file %s:\n", CONFIG_FILE);
 
 			add_to_dirlist (config_file, 0);
 			fclose (config_file);
 		}
 	}
-
-	print_list ();
 
 	done = 1;
 }
@@ -988,7 +956,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 		if (*p == '\0' || strcmp (p, ".") == 0)
 			continue;
 
-		debug ("\npath directory %s ", p);
+		debug ("path directory %s ", p);
 
 		/* If the directory we're working on has MANPATH_MAP entries
 		 * in the config file, add them to the list.
@@ -1018,7 +986,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	free (tmppath);
 
 	if (mandatory) {
-		debug ("\nadding mandatory man directories\n\n");
+		debug ("adding mandatory man directories\n");
 
 		GL_LIST_FOREACH_START (config, config_item) {
 			if (config_item->flag == MANDATORY) {
@@ -1063,10 +1031,8 @@ static void add_expanded_dir_to_list (gl_list_t list, const char *dir)
 {
 	int status;
 
-	if (gl_list_search (list, dir)) {
-		debug ("%s is already in the manpath\n", dir);
+	if (gl_list_search (list, dir))
 		return;
-	}
 
 	/* Not found -- add it. */
 
@@ -1077,7 +1043,7 @@ static void add_expanded_dir_to_list (gl_list_t list, const char *dir)
 	else if (status == 0)
 		gripe_not_directory (dir);
 	else if (status == 1) {
-		debug ("adding %s to manpath\n", dir);
+		debug ("  adding %s to manpath\n", dir);
 		gl_list_add_last (list, xstrdup (dir));
 	}
 }
@@ -1104,7 +1070,6 @@ static void add_dir_to_list (gl_list_t list, const char *dir)
 static void add_man_subdirs (gl_list_t list, const char *path)
 {
 	char *newpath;
-	int found = 0;
 
 	/* don't assume anything about path, especially that it ends in 
 	   "bin" or even has a '/' in it! */
@@ -1115,7 +1080,6 @@ static void add_man_subdirs (gl_list_t list, const char *path)
 		if (is_directory (newpath) == 1) {
 			insert_override_dir (list, newpath);
 			add_dir_to_list (list, newpath);
-			found = 1;
 		}
 		free (newpath);
 	}
@@ -1124,7 +1088,6 @@ static void add_man_subdirs (gl_list_t list, const char *path)
 	if (is_directory (newpath) == 1) {
 		insert_override_dir (list, newpath);
 		add_dir_to_list (list, newpath);
-		found = 1;
 	}
 	free (newpath);
 
@@ -1134,7 +1097,6 @@ static void add_man_subdirs (gl_list_t list, const char *path)
 		if (is_directory (newpath) == 1) {
 			insert_override_dir (list, newpath);
 			add_dir_to_list (list, newpath);
-			found = 1;
 		}
 		free (newpath);
 	}
@@ -1143,13 +1105,8 @@ static void add_man_subdirs (gl_list_t list, const char *path)
 	if (is_directory (newpath) == 1) {
 		insert_override_dir (list, newpath);
 		add_dir_to_list (list, newpath);
-		found = 1;
 	}
 	free (newpath);
-
-	if (!found)
-		debug ("and doesn't have ../man, man, ../share/man, or "
-		       "share/man subdirectories\n");
 }
 
 struct canonicalized_path {
