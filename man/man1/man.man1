@@ -20,7 +20,7 @@
 .B %man%
 .RI [\| "man options" \|]
 .RI [\|[\| section \|]
-.IR page [.\| section \|]\ \|.\|.\|.\|]\ \.\|.\|.\&
+.IR page \ \|.\|.\|.\|]\ \.\|.\|.\&
 .\" The apropos command line
 .br
 .B %man%
@@ -192,11 +192,25 @@ Display the manual page for the
 (program)
 .IR ls .
 .TP
-\fB%man% \fIman\fR.\fI7
+\fB%man%\fR \fIman\fR.\fI7\fR
 Display the manual page for macro package
 .I man
 from section
 .IR 7 .
+(This is an alternative spelling of
+"\fB%man%\fR \fI7 man\fR".)
+.TP
+\fB%man% '\fIman\fR(\fI7\fR)'
+Display the manual page for macro package
+.I man
+from section
+.IR 7 .
+(This is another alternative spelling of
+"\fB%man%\fR \fI7 man\fR".
+It may be more convenient when copying and pasting cross-references to
+manual pages.
+Note that the parentheses must normally be quoted to protect them from the
+shell.)
 .TP
 .BI %man%\ \-a \ intro
 Display, in succession, all of the available
@@ -396,7 +410,7 @@ optionally the device specified with
 as arguments.
 .\" ********************************************************************
 .SH OPTIONS
-Non argument options that are duplicated either on the command line, in
+Non-argument options that are duplicated either on the command line, in
 .RB $ MANOPT ,
 or both, are not harmful.
 For options that require an argument, each duplication will override the

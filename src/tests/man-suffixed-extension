@@ -2,7 +2,9 @@
 
 # Test for:
 #   man chmod.2 => man 2 chmod
+#   man 'chmod(2)' => man 2 chmod
 #   man chmod.2p => man 2p chmod
+#   man 'chmod(2p)' => man 2p chmod
 
 : ${srcdir=.}
 . "$srcdir/testlib.sh"
@@ -28,6 +30,9 @@ EOF
 run $MAN -C "$tmpdir/manpath.config" -aw "$page_name".2 >"$tmpdir/2.out"
 expect_pass '"man name.2" is the same as "man 2 name"' \
         'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
+run $MAN -C "$tmpdir/manpath.config" -aw "$page_name(2)" >"$tmpdir/2.out"
+expect_pass '"man '\''name(2)'\''" is the same as "man 2 name"' \
+        'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
 
 (
         cd "$tmpdir/usr/share/man/man2/"
@@ -40,6 +45,9 @@ EOF
 
 run $MAN -C "$tmpdir/manpath.config" -aw "$page_name".2p >"$tmpdir/2p.out"
 expect_pass '"man name.2p" is the same as "man 2p name"' \
+        'diff -u "$tmpdir/2p.exp" "$tmpdir/2p.out"'
+run $MAN -C "$tmpdir/manpath.config" -aw "$page_name(2p)" >"$tmpdir/2p.out"
+expect_pass '"man '\''name(2p)'\''" is the same as "man 2p name"' \
         'diff -u "$tmpdir/2p.exp" "$tmpdir/2p.out"'
 
 finish
