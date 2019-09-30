@@ -3,10 +3,14 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include "manconfig.h"
+
 /* Flex emits several functions which might reasonably have various
  * attributes applied and many unused macros; none of these are our problem.
  */
-#pragma GCC diagnostic ignored "-Wsuggest-attribute=malloc"
+#if GNUC_PREREQ(8,0)
+#  pragma GCC diagnostic ignored "-Wsuggest-attribute=malloc"
+#endif
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
 #pragma GCC diagnostic ignored "-Wunused-macros"
 }
@@ -50,8 +54,6 @@
 
 #include "gettext.h"
 #define _(String) gettext (String)
-
-#include "manconfig.h"
 
 #include "error.h"
 #include "pipeline.h"
