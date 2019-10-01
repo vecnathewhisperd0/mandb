@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.7.6.1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2019-08-26 15:48+0100\n"
+"POT-Creation-Date: 2019-10-01 00:12+0100\n"
 "PO-Revision-Date: 2017-11-15 17:53+0800\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -110,8 +110,9 @@ msgid "The man database defaults to %s%s."
 msgstr "默认的 man 数据库是 %s%s。"
 
 #: src/accessdb.c:63 src/catman.c:100 src/globbing_test.c:58
-#: src/lexgrog_test.c:73 src/man.c:268 src/manconv_main.c:96 src/mandb.c:114
-#: src/manpath.c:65 src/whatis.c:126 src/zsoelim_main.c:68
+#: src/lexgrog_test.c:73 src/man.c:268 src/man-recode.c:111
+#: src/manconv_main.c:95 src/mandb.c:114 src/manpath.c:65 src/whatis.c:126
+#: src/zsoelim_main.c:68
 msgid "emit debugging messages"
 msgstr "输出调试信息"
 
@@ -174,7 +175,7 @@ msgstr ""
 msgid "cannot write within %s"
 msgstr "无法在 %s 里写入"
 
-#: src/catman.c:425
+#: src/catman.c:423
 #, c-format
 msgid "unable to update %s"
 msgstr "无法更新 %s"
@@ -200,13 +201,13 @@ msgstr "警告：%s：坏的符号链接或坏的 ROFF“.so”请求"
 msgid "warning: %s: ignoring empty file"
 msgstr "警告：%s：忽略空文件"
 
-#: src/check_mandirs.c:314 src/straycats.c:276
+#: src/check_mandirs.c:314 src/straycats.c:262
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "警告：%s：用 whatis 解读 %s(%s) 失败"
 
-#: src/check_mandirs.c:341 src/check_mandirs.c:511 src/mandb.c:877
-#: src/straycats.c:84 src/straycats.c:303 src/ult_src.c:81
+#: src/check_mandirs.c:341 src/check_mandirs.c:511 src/mandb.c:875
+#: src/straycats.c:84 src/straycats.c:289 src/ult_src.c:81
 #, c-format
 msgid "can't search directory %s"
 msgstr "无法搜索目录 %s"
@@ -258,7 +259,7 @@ msgid "warning: failed to store entry for %s(%s)"
 msgstr "警告：为 %s(%s) 存储条目失败"
 
 #  need-proofread
-#: src/filenames.c:48 src/straycats.c:124 src/straycats.c:153
+#: src/filenames.c:48 src/straycats.c:122 src/straycats.c:142
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "警告：%s：忽略错误的文件名"
@@ -291,15 +292,15 @@ msgstr "把页面名称当作正则表达式解读"
 msgid "the page name contains wildcards"
 msgstr "页面名称里包含通配符"
 
-#: src/lexgrog.l:701
+#: src/lexgrog.l:703
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "警告：对 %s 的 whatis 操作结果超过 %d 字节，正在截断。"
 
-#: src/lexgrog.l:854 src/man.c:2270 src/man.c:2354 src/man.c:2452
-#: src/manconv_main.c:168 src/straycats.c:218 src/ult_src.c:321
-#: src/ult_src.c:335 src/zsoelim.l:519
+#: src/lexgrog.l:856 src/man.c:2270 src/man.c:2354 src/man.c:2452
+#: src/man-recode.c:176 src/man-recode.c:201 src/manconv_main.c:158
+#: src/straycats.c:204 src/ult_src.c:320 src/ult_src.c:333 src/zsoelim.l:517
 #, c-format
 msgid "can't open %s"
 msgstr "无法打开 %s"
@@ -341,7 +342,7 @@ msgstr "使用选中的输出编码"
 msgid "%s: incompatible options"
 msgstr "%s：互不相容的选项"
 
-#: src/man.c:160
+#: src/man.c:160 src/man-recode.c:234
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "命令以代码 %d 状态退出：%s"
@@ -532,7 +533,7 @@ msgstr ""
 msgid "use groff and force it to produce ditroff"
 msgstr "使用 groff 并强制它生成 ditroff"
 
-#: src/man.c:599 src/man.c:735
+#: src/man.c:599 src/man.c:736
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "没有 %s 的手册页条目\n"
@@ -546,12 +547,16 @@ msgstr "(换句话问，您需要第 %s 节中的什么手册页？)\n"
 msgid "What manual page do you want?\n"
 msgstr "您需要什么手册页？\n"
 
-#: src/man.c:732
+#: src/man.c:606
+msgid "For example, try 'man man'.\n"
+msgstr ""
+
+#: src/man.c:733
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "在第 %2$s 节中没有关于 %1$s 的手册页条目。\n"
 
-#: src/man.c:741
+#: src/man.c:742
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "当没有手册页时，可以用 %s 命令来寻求帮助。\n"
@@ -561,7 +566,7 @@ msgstr "当没有手册页时，可以用 %s 命令来寻求帮助。\n"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "忽略未知的预处理器 `%c'"
 
-#: src/man.c:1712 src/mandb.c:223
+#: src/man.c:1712 src/man-recode.c:243 src/mandb.c:223
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "无法将 %s 改名为 %s"
@@ -587,7 +592,7 @@ msgstr "无法为 %s 创建临时 cat 文件"
 msgid "can't create temporary directory"
 msgstr "无法创建临时目录"
 
-#: src/man.c:1926
+#: src/man.c:1926 src/man-recode.c:209
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "无法打开临时文件 %s"
@@ -617,17 +622,17 @@ msgid "Can't convert %s to cat name"
 msgstr "无法把 %s 转换为 cat 名称"
 
 #  need-proofread
-#: src/man.c:3206
+#: src/man.c:3202
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s：依赖于 whatis 引用是已被废弃的做法\n"
 
-#: src/man.c:3349 src/man.c:4200
+#: src/man.c:3345 src/man.c:4203
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb 命令失败，退出状态代码为 %d"
 
-#: src/man.c:3551
+#: src/man.c:3547
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "内部错误：候选类型 %d 超出正常范围"
@@ -635,53 +640,80 @@ msgstr "内部错误：候选类型 %d 超出正常范围"
 #  I'm not sure this should be translated.  It comes from a less prompt string
 #  but seems to be only part of it.  (Ming)
 #  need-proofread
-#: src/man.c:4141
+#: src/man.c:4146
 msgid " Manual page "
 msgstr " Manual page "
 
+#: src/man-recode.c:103
+msgid "-t CODE {--suffix SUFFIX | --in-place} FILENAME..."
+msgstr ""
+
+#: src/man-recode.c:106 src/manconv_main.c:94
+msgid "CODE"
+msgstr "编码"
+
+#: src/man-recode.c:106 src/manconv_main.c:94
+msgid "encoding for output"
+msgstr "输出文本所用的编码"
+
+#: src/man-recode.c:108
+msgid "SUFFIX"
+msgstr ""
+
+#: src/man-recode.c:108
+msgid "suffix to append to output file name"
+msgstr ""
+
+#: src/man-recode.c:110
+msgid "overwrite input files in place"
+msgstr ""
+
+#: src/man-recode.c:112 src/manconv_main.c:96 src/manpath.c:66
+msgid "produce fewer warnings"
+msgstr "少显示一些警告"
+
+#: src/man-recode.c:148 src/manconv_main.c:131
+#, c-format
+msgid "must specify an output encoding"
+msgstr "必须指定输出所用的编码"
+
+#: src/man-recode.c:152
+#, c-format
+msgid "must use either --suffix or --in-place"
+msgstr ""
+
+#: src/man-recode.c:156
+#, c-format
+msgid "--suffix and --in-place are mutually exclusive"
+msgstr ""
+
+#: src/man-recode.c:249 src/mandb.c:216
+#, c-format
+msgid "can't remove %s"
+msgstr "无法移除 %s"
+
 #  need-proofread
-#: src/manconv.c:232 src/manconv.c:253 src/manconv.c:348
+#: src/manconv.c:235 src/manconv.c:256 src/manconv.c:336 src/manconv.c:366
 #, c-format
 msgid "can't write to standard output"
 msgstr "无法对标准输出写入"
 
-#: src/manconv.c:279
+#: src/manconv.c:282
 msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv：在缓冲区末尾有不完全的字符"
 
-#: src/manconv_main.c:90
-msgid "-f CODE[:...] -t CODE [FILENAME]"
+#: src/manconv_main.c:89
+#, fuzzy
+msgid "[-f CODE[:...]] -t CODE [FILENAME]"
 msgstr "-f 编码[:...] -t 编码 [文件名]"
 
-#: src/manconv_main.c:93
+#: src/manconv_main.c:92
 msgid "CODE[:...]"
 msgstr "编码[:...]"
 
-#: src/manconv_main.c:94
+#: src/manconv_main.c:93
 msgid "possible encodings of original text"
 msgstr "原始文本可能使用的编码列表"
-
-#: src/manconv_main.c:95
-msgid "CODE"
-msgstr "编码"
-
-#: src/manconv_main.c:95
-msgid "encoding for output"
-msgstr "输出文本所用的编码"
-
-#: src/manconv_main.c:97 src/manpath.c:66
-msgid "produce fewer warnings"
-msgstr "少显示一些警告"
-
-#: src/manconv_main.c:132 src/manconv_main.c:141
-#, c-format
-msgid "must specify an input encoding"
-msgstr "必须指定输入所用的编码"
-
-#: src/manconv_main.c:136
-#, c-format
-msgid "must specify an output encoding"
-msgstr "必须指定输出所用的编码"
 
 #: src/mandb.c:111
 msgid "[MANPATH]"
@@ -719,11 +751,6 @@ msgstr "文件名"
 msgid "update just the entry for this filename"
 msgstr "仅更新该文件名对应的条目"
 
-#: src/mandb.c:216
-#, c-format
-msgid "can't remove %s"
-msgstr "无法移除 %s"
-
 #: src/mandb.c:280
 #, c-format
 msgid "can't write to %s"
@@ -749,7 +776,7 @@ msgstr "正在删除过时的 cat 目录 %s...\n"
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "警告：在 %s 中没有 MANDB_MAP 指令，使用您的手册路径设置"
 
-#: src/mandb.c:914
+#: src/mandb.c:912
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -758,96 +785,96 @@ msgstr[0] "%d 个 man 子目录包含更新的手册页。\n"
 #  I'm not sure this should be translated.  It comes from a less prompt string
 #  but seems to be only part of it.  (Ming)
 #  need-proofread
-#: src/mandb.c:919
+#: src/mandb.c:917
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "添加了 %d 个手册页。\n"
 
-#: src/mandb.c:923
+#: src/mandb.c:921
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "添加了 %d 个孤立 cat 页面。\n"
 
 #  need-proofread
-#: src/mandb.c:928
+#: src/mandb.c:926
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "删除了 %d 条旧数据库条目。\n"
 
-#: src/mandb.c:946
+#: src/mandb.c:944
 #, c-format
 msgid "No databases created."
 msgstr "未创建任何数据库。"
 
-#: src/manp.c:349
+#: src/manp.c:319
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "无法理解手册路径设置文件 %s"
 
-#: src/manp.c:355
+#: src/manp.c:325
 #, c-format
 msgid "warning: %s"
 msgstr "警告：%s"
 
-#: src/manp.c:361
+#: src/manp.c:331
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "警告：%s 不是目录"
 
-#: src/manp.c:692
+#: src/manp.c:662
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "警告：没有设定 $PATH"
 
-#: src/manp.c:699
+#: src/manp.c:669
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "警告：$PATH 为空"
 
-#: src/manp.c:727
+#: src/manp.c:697
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "警告：已经设定了 $MANPATH，在前面加上 %s"
 
-#: src/manp.c:738
+#: src/manp.c:708
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "警告：已经设定了 $MANPATH，在后面加上 %s"
 
-#: src/manp.c:750
+#: src/manp.c:720
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "警告：已经设定了 $MANPATH，在其中插入 %s"
 
-#: src/manp.c:764
+#: src/manp.c:734
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "警告：已经设定了 $MANPATH，忽略 %s"
 
-#: src/manp.c:826
+#: src/manp.c:796
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "无法解析目录列表“%s”"
 
-#: src/manp.c:881
+#: src/manp.c:851
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "无法打开手册路径设置文件 %s"
 
-#: src/manp.c:920
+#: src/manp.c:888
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "警告：必需的目录 %s 不存在"
 
-#: src/manp.c:1176
+#: src/manp.c:1177
 #, c-format
 msgid "can't determine current directory"
 msgstr "无法确定当前目录"
 
-#: src/manp.c:1385
+#: src/manp.c:1358
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "警告：%s 并非以 %s 开始"
@@ -865,22 +892,22 @@ msgstr "显示整个全局手册路径"
 msgid "warning: no global manpaths set in config file %s"
 msgstr "警告：在设置文件 %s 中没有设定全局手册路径"
 
-#: src/straycats.c:246 src/ult_src.c:125
+#: src/straycats.c:232 src/ult_src.c:125
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "警告：%s 是悬空的符号链接"
 
-#: src/straycats.c:249 src/ult_src.c:128 src/ult_src.c:262
+#: src/straycats.c:235 src/ult_src.c:128 src/ult_src.c:262
 #, c-format
 msgid "can't resolve %s"
 msgstr "无法解析 %s"
 
-#: src/straycats.c:308
+#: src/straycats.c:294
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "正在 %s 下查找孤立 cat 页面...\n"
 
-#: src/straycats.c:348
+#: src/straycats.c:334
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "警告：无法更新索引缓存 %s"
@@ -952,32 +979,32 @@ msgstr "(未知的主题)"
 msgid "%s: nothing appropriate.\n"
 msgstr "%s：没有合适结果。\n"
 
-#: src/zsoelim.l:178
+#: src/zsoelim.l:180
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d：.so 请求嵌套太深或形成循环"
 
-#: src/zsoelim.l:193
+#: src/zsoelim.l:195
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d：警告：.so 请求失败"
 
-#: src/zsoelim.l:215
+#: src/zsoelim.l:217
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d：警告：.so 请求中含有换行符，将忽略"
 
-#: src/zsoelim.l:275
+#: src/zsoelim.l:277
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr "%s:%d：警告：不合规格的 .lf 请求，将忽略"
 
-#: src/zsoelim.l:285
+#: src/zsoelim.l:287
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d：警告：.lf 请求中含有换行符，将忽略"
 
-#: src/zsoelim.l:325
+#: src/zsoelim.l:327
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d：roff 请求中含有未结束的引用"
@@ -985,6 +1012,9 @@ msgstr "%s:%d：roff 请求中含有未结束的引用"
 #: src/zsoelim_main.c:69
 msgid "compatibility switch (ignored)"
 msgstr "兼容性选项 (将被忽略)"
+
+#~ msgid "must specify an input encoding"
+#~ msgstr "必须指定输入所用的编码"
 
 #~ msgid "manpath list too long"
 #~ msgstr "手册路径列表过长"

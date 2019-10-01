@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.7.6.1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2019-08-26 15:48+0100\n"
+"POT-Creation-Date: 2019-10-01 00:12+0100\n"
 "PO-Revision-Date: 2017-04-05 11:33+0100\n"
 "Last-Translator: Volkan Gezer <volkangezer@gmail.com>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
@@ -96,8 +96,9 @@ msgid "The man database defaults to %s%s."
 msgstr "Man veritabanı şuna sıfırlanıyor: %s%s."
 
 #: src/accessdb.c:63 src/catman.c:100 src/globbing_test.c:58
-#: src/lexgrog_test.c:73 src/man.c:268 src/manconv_main.c:96 src/mandb.c:114
-#: src/manpath.c:65 src/whatis.c:126 src/zsoelim_main.c:68
+#: src/lexgrog_test.c:73 src/man.c:268 src/man-recode.c:111
+#: src/manconv_main.c:95 src/mandb.c:114 src/manpath.c:65 src/whatis.c:126
+#: src/zsoelim_main.c:68
 msgid "emit debugging messages"
 msgstr "hata ayıklama iletilerini yay"
 
@@ -157,7 +158,7 @@ msgstr ""
 msgid "cannot write within %s"
 msgstr "%s içine yazılamıyor"
 
-#: src/catman.c:425
+#: src/catman.c:423
 #, c-format
 msgid "unable to update %s"
 msgstr "%s güncellenemiyor"
@@ -182,13 +183,13 @@ msgstr "uyarı: %s: bozuk sembolik bağlantı veya ROFF `.so' talebi"
 msgid "warning: %s: ignoring empty file"
 msgstr "uyarı: %s: boş dosya yoksayılıyor"
 
-#: src/check_mandirs.c:314 src/straycats.c:276
+#: src/check_mandirs.c:314 src/straycats.c:262
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "uyarı: %s: %s(%s) için whatis ayıklaması başarısız"
 
-#: src/check_mandirs.c:341 src/check_mandirs.c:511 src/mandb.c:877
-#: src/straycats.c:84 src/straycats.c:303 src/ult_src.c:81
+#: src/check_mandirs.c:341 src/check_mandirs.c:511 src/mandb.c:875
+#: src/straycats.c:84 src/straycats.c:289 src/ult_src.c:81
 #, c-format
 msgid "can't search directory %s"
 msgstr "%s dizini aranamıyor"
@@ -237,7 +238,7 @@ msgstr "%s içindeki eski veritabanı girdileri temizleniyor...\n"
 msgid "warning: failed to store entry for %s(%s)"
 msgstr "uyarı: %s(%s) girdisini saklama başarısız oldu"
 
-#: src/filenames.c:48 src/straycats.c:124 src/straycats.c:153
+#: src/filenames.c:48 src/straycats.c:122 src/straycats.c:142
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "uyarı: %s: sahte dosya adı yoksayılıyor"
@@ -270,16 +271,16 @@ msgstr "sayfa adını düzenli ifade olarak yorumla"
 msgid "the page name contains wildcards"
 msgstr "sayfa adı özel semboller içeriyor"
 
-#: src/lexgrog.l:701
+#: src/lexgrog.l:703
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "uyarı: %s için whatis %d baytı aştı, kırpılıyor."
 msgstr[1] "uyarı: %s için whatis %d baytı aştı, kırpılıyor."
 
-#: src/lexgrog.l:854 src/man.c:2270 src/man.c:2354 src/man.c:2452
-#: src/manconv_main.c:168 src/straycats.c:218 src/ult_src.c:321
-#: src/ult_src.c:335 src/zsoelim.l:519
+#: src/lexgrog.l:856 src/man.c:2270 src/man.c:2354 src/man.c:2452
+#: src/man-recode.c:176 src/man-recode.c:201 src/manconv_main.c:158
+#: src/straycats.c:204 src/ult_src.c:320 src/ult_src.c:333 src/zsoelim.l:517
 #, c-format
 msgid "can't open %s"
 msgstr "%s açılamıyor"
@@ -321,7 +322,7 @@ msgstr "seçilen çıktı kodlamasını kullan"
 msgid "%s: incompatible options"
 msgstr "%s: uyumsuz seçenekler"
 
-#: src/man.c:160
+#: src/man.c:160 src/man-recode.c:234
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "komut %d durumu ile çıktı: %s"
@@ -514,7 +515,7 @@ msgstr ""
 msgid "use groff and force it to produce ditroff"
 msgstr "groff kullan ve ditroff üretmesi için zorla"
 
-#: src/man.c:599 src/man.c:735
+#: src/man.c:599 src/man.c:736
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "Şunun için kılavuz girdisi yok: %s\n"
@@ -528,12 +529,16 @@ msgstr "(Ek olarak, %s bölümünden hangi kılavuz sayfasını istersiniz?)\n"
 msgid "What manual page do you want?\n"
 msgstr "Hangi kılavuz sayfasını istersiniz?\n"
 
-#: src/man.c:732
+#: src/man.c:606
+msgid "For example, try 'man man'.\n"
+msgstr ""
+
+#: src/man.c:733
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "%s için %s bölümünde kılavuz girdisi yok\n"
 
-#: src/man.c:741
+#: src/man.c:742
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Kılavuz sayfaları mevcut olmadığında yardım için bkz. '%s'.\n"
@@ -543,7 +548,7 @@ msgstr "Kılavuz sayfaları mevcut olmadığında yardım için bkz. '%s'.\n"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "bilinmeyen ön işleyici yoksayılıyor `%c'"
 
-#: src/man.c:1712 src/mandb.c:223
+#: src/man.c:1712 src/man-recode.c:243 src/mandb.c:223
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s, %s olarak adlandırılamıyor"
@@ -568,7 +573,7 @@ msgstr "%s için geçici kategori oluşturulamıyor"
 msgid "can't create temporary directory"
 msgstr "geçici dizin oluşturulamıyor"
 
-#: src/man.c:1926
+#: src/man.c:1926 src/man-recode.c:209
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "%s geçici dosyası açılamıyor"
@@ -597,67 +602,94 @@ msgstr ""
 msgid "Can't convert %s to cat name"
 msgstr "%s cat adına dönüştürülemiyor"
 
-#: src/man.c:3206
+#: src/man.c:3202
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: whatis refs'e dayanmak artık kullanılmıyor\n"
 
-#: src/man.c:3349 src/man.c:4200
+#: src/man.c:3345 src/man.c:4203
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb komutu %d çıktı durumu ile başarısız oldu"
 
-#: src/man.c:3551
+#: src/man.c:3547
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "dahili hata: aday türü %d aralık dışında"
 
-#: src/man.c:4141
+#: src/man.c:4146
 msgid " Manual page "
 msgstr "Kılavuz sayfası"
 
-#: src/manconv.c:232 src/manconv.c:253 src/manconv.c:348
+#: src/man-recode.c:103
+msgid "-t CODE {--suffix SUFFIX | --in-place} FILENAME..."
+msgstr ""
+
+#: src/man-recode.c:106 src/manconv_main.c:94
+msgid "CODE"
+msgstr "KOD"
+
+#: src/man-recode.c:106 src/manconv_main.c:94
+msgid "encoding for output"
+msgstr "çıktı için kodlama"
+
+#: src/man-recode.c:108
+msgid "SUFFIX"
+msgstr ""
+
+#: src/man-recode.c:108
+msgid "suffix to append to output file name"
+msgstr ""
+
+#: src/man-recode.c:110
+msgid "overwrite input files in place"
+msgstr ""
+
+#: src/man-recode.c:112 src/manconv_main.c:96 src/manpath.c:66
+msgid "produce fewer warnings"
+msgstr "daha az uyarı üret"
+
+#: src/man-recode.c:148 src/manconv_main.c:131
+#, c-format
+msgid "must specify an output encoding"
+msgstr "bir çıktı kodlaması belirtilmeli"
+
+#: src/man-recode.c:152
+#, c-format
+msgid "must use either --suffix or --in-place"
+msgstr ""
+
+#: src/man-recode.c:156
+#, c-format
+msgid "--suffix and --in-place are mutually exclusive"
+msgstr ""
+
+#: src/man-recode.c:249 src/mandb.c:216
+#, c-format
+msgid "can't remove %s"
+msgstr "%s kaldırılamıyor"
+
+#: src/manconv.c:235 src/manconv.c:256 src/manconv.c:336 src/manconv.c:366
 #, c-format
 msgid "can't write to standard output"
 msgstr "standart çıktıya yazılamıyor"
 
-#: src/manconv.c:279
+#: src/manconv.c:282
 msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv: tampon sonunda eksik karakter"
 
-#: src/manconv_main.c:90
-msgid "-f CODE[:...] -t CODE [FILENAME]"
+#: src/manconv_main.c:89
+#, fuzzy
+msgid "[-f CODE[:...]] -t CODE [FILENAME]"
 msgstr "-f KOD[:...] -t KOD [DOSYAADI]"
 
-#: src/manconv_main.c:93
+#: src/manconv_main.c:92
 msgid "CODE[:...]"
 msgstr "KOD[:...]"
 
-#: src/manconv_main.c:94
+#: src/manconv_main.c:93
 msgid "possible encodings of original text"
 msgstr "özgün metnin muhtemel kodlamaları"
-
-#: src/manconv_main.c:95
-msgid "CODE"
-msgstr "KOD"
-
-#: src/manconv_main.c:95
-msgid "encoding for output"
-msgstr "çıktı için kodlama"
-
-#: src/manconv_main.c:97 src/manpath.c:66
-msgid "produce fewer warnings"
-msgstr "daha az uyarı üret"
-
-#: src/manconv_main.c:132 src/manconv_main.c:141
-#, c-format
-msgid "must specify an input encoding"
-msgstr "bir girdi kodlaması belirtilmeli"
-
-#: src/manconv_main.c:136
-#, c-format
-msgid "must specify an output encoding"
-msgstr "bir çıktı kodlaması belirtilmeli"
 
 #: src/mandb.c:111
 msgid "[MANPATH]"
@@ -695,11 +727,6 @@ msgstr "DOSYAADI"
 msgid "update just the entry for this filename"
 msgstr "bu dosya adı için sadece girdiyi güncelle"
 
-#: src/mandb.c:216
-#, c-format
-msgid "can't remove %s"
-msgstr "%s kaldırılamıyor"
-
 #: src/mandb.c:280
 #, c-format
 msgid "can't write to %s"
@@ -726,105 +753,105 @@ msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "uyarı: %s içinde MANDB_MAP yönergesi yok, yazdığınız manpath kullanılıyor"
 
-#: src/mandb.c:914
+#: src/mandb.c:912
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "%d man alt dizini daha yeni kılavuz sayfaları içeriyor.\n"
 msgstr[1] "%d man alt dizini daha yeni kılavuz sayfaları içeriyor.\n"
 
-#: src/mandb.c:919
+#: src/mandb.c:917
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "%d kılavuz sayfası eklendi.\n"
 msgstr[1] "%d kılavuz sayfası eklendi.\n"
 
-#: src/mandb.c:923
+#: src/mandb.c:921
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "%d stray cat eklendi.\n"
 msgstr[1] "%d stray cat eklendi.\n"
 
-#: src/mandb.c:928
+#: src/mandb.c:926
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "%d eski veritabanı girdisi budandı.\n"
 msgstr[1] "%d eski veritabanı girdisi budandı.\n"
 
-#: src/mandb.c:946
+#: src/mandb.c:944
 #, c-format
 msgid "No databases created."
 msgstr "Hiç veritabanı oluşturulmadı."
 
-#: src/manp.c:349
+#: src/manp.c:319
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "%s manpath yapılandırma dosyası anlaşılamıyor"
 
-#: src/manp.c:355
+#: src/manp.c:325
 #, c-format
 msgid "warning: %s"
 msgstr "uyarı: %s"
 
-#: src/manp.c:361
+#: src/manp.c:331
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "uyarı: %s bir dizin değil"
 
-#: src/manp.c:692
+#: src/manp.c:662
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "uyarı: $PATH ayarlanmamış"
 
-#: src/manp.c:699
+#: src/manp.c:669
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "uyarı: boş $PATH"
 
-#: src/manp.c:727
+#: src/manp.c:697
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr "uyarı: $MANPATH ayarlanmış, %s öne ekleniyor"
 
-#: src/manp.c:738
+#: src/manp.c:708
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr "uyarı: $MANPATH ayarlanmış, %s sona ekleniyor"
 
-#: src/manp.c:750
+#: src/manp.c:720
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "uyarı: $MANPATH ayarlanmış,%s ekleniyor"
 
-#: src/manp.c:764
+#: src/manp.c:734
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "uyarı: $MANPATH ayarlanmış,%s yoksayılıyor"
 
-#: src/manp.c:826
+#: src/manp.c:796
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "`%s' dizin listesi ayrıştırılamıyor"
 
-#: src/manp.c:881
+#: src/manp.c:851
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "%s manpath yapılandırma dosyası açılamıyor"
 
-#: src/manp.c:920
+#: src/manp.c:888
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "uyarı: zorunlu dizin %s mevcut değil"
 
-#: src/manp.c:1176
+#: src/manp.c:1177
 #, c-format
 msgid "can't determine current directory"
 msgstr "geçerli dizine karar verilemiyor"
 
-#: src/manp.c:1385
+#: src/manp.c:1358
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "uyarı: %s, %s ile başlamıyor"
@@ -842,22 +869,22 @@ msgstr "tüm evrensel manpath'i göster"
 msgid "warning: no global manpaths set in config file %s"
 msgstr "uyarı: %s yapılandırma dosyasında ayarlanmış evrensel hiç manpath yok."
 
-#: src/straycats.c:246 src/ult_src.c:125
+#: src/straycats.c:232 src/ult_src.c:125
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "uyarı: %s sarkan bir sembolik bağlantı"
 
-#: src/straycats.c:249 src/ult_src.c:128 src/ult_src.c:262
+#: src/straycats.c:235 src/ult_src.c:128 src/ult_src.c:262
 #, c-format
 msgid "can't resolve %s"
 msgstr "%s çözülemiyor"
 
-#: src/straycats.c:308
+#: src/straycats.c:294
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "%s altında stray cat'ler aranıyor...\n"
 
-#: src/straycats.c:348
+#: src/straycats.c:334
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "uyarı: %s dizin önbelleği güncellenemiyor"
@@ -926,32 +953,32 @@ msgstr "(bilinmeyen konu)"
 msgid "%s: nothing appropriate.\n"
 msgstr "%s: uygun bir şey yok.\n"
 
-#: src/zsoelim.l:178
+#: src/zsoelim.l:180
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d: .so istekleri çok derin yuvalanmış veya içiçe çağrışım yapıyor"
 
-#: src/zsoelim.l:193
+#: src/zsoelim.l:195
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d: uyarı: başarısız .so isteği"
 
-#: src/zsoelim.l:215
+#: src/zsoelim.l:217
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d: uyarı: .so isteğinde yeni satır, yoksayılıyor"
 
-#: src/zsoelim.l:275
+#: src/zsoelim.l:277
 #, c-format
 msgid "%s:%d: warning: malformed .lf request, ignoring"
 msgstr "%s:%d: uyarı: bozuk .lf isteği, yoksayılıyor"
 
-#: src/zsoelim.l:285
+#: src/zsoelim.l:287
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d: uyarı: .lf isteği içinde yeni satır, yoksayılıyor"
 
-#: src/zsoelim.l:325
+#: src/zsoelim.l:327
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: roff isteğinde kapatılmamış kesme işareti"
@@ -959,6 +986,9 @@ msgstr "%s:%d: roff isteğinde kapatılmamış kesme işareti"
 #: src/zsoelim_main.c:69
 msgid "compatibility switch (ignored)"
 msgstr "uyumluluk anahtarı (yoksayıldı)"
+
+#~ msgid "must specify an input encoding"
+#~ msgstr "bir girdi kodlaması belirtilmeli"
 
 #~ msgid "manpath list too long"
 #~ msgstr "manpath listesi çok uzun"
