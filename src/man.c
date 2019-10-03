@@ -2813,7 +2813,7 @@ static int compare_candidates (const struct candidate *left,
 			} \
 		} \
 	} \
-	cmp = strcmp (bits1.territory, bits2.territory); \
+	cmp = strcmp (bits1.elt, bits2.elt); \
 	if (cmp) \
 		/* No help from locale; might as well sort lexically. */ \
 		goto out; \
