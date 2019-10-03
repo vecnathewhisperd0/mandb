@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the man-db package.
 # Copyright (C) 2009 Colin Watson (msgids)
 #
-# Yuri Kozlov <yuray@komyakino.ru>, 2004-2009, 2011, 2012, 2018.
+# Yuri Kozlov <yuray@komyakino.ru>, 2004-2009, 2011, 2012, 2018, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.8.0-pre2\n"
+"Project-Id-Version: man-db 2.9.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2019-10-01 00:12+0100\n"
-"PO-Revision-Date: 2018-01-23 05:37+0300\n"
+"PO-Revision-Date: 2019-10-01 18:48+0300\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@d07.ru>\n"
 "Language: ru\n"
@@ -536,7 +536,7 @@ msgstr "Какая справочная страница вам нужна?\n"
 
 #: src/man.c:606
 msgid "For example, try 'man man'.\n"
-msgstr ""
+msgstr "Например, попробуйте ввести «man man».\n"
 
 #: src/man.c:733
 #, c-format
@@ -546,12 +546,12 @@ msgstr "Нет справочной страницы для %s в разделе
 #: src/man.c:742
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
-msgstr "Смотрите '%s' в справке, если недоступны справочные страницы.\n"
+msgstr "Смотрите «%s» в справке, если недоступны справочные страницы.\n"
 
 #: src/man.c:1349
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
-msgstr "игнорирование неизвестного препроцессора `%c'"
+msgstr "игнорирование неизвестного препроцессора «%c»"
 
 #: src/man.c:1712 src/man-recode.c:243 src/mandb.c:223
 #, c-format
@@ -629,7 +629,7 @@ msgstr " Справочная страница "
 
 #: src/man-recode.c:103
 msgid "-t CODE {--suffix SUFFIX | --in-place} FILENAME..."
-msgstr ""
+msgstr "-t КОДИРОВКА {--suffix СУФФИКС | --in-place} ИМЯ-ФАЙЛА…"
 
 #: src/man-recode.c:106 src/manconv_main.c:94
 msgid "CODE"
@@ -641,15 +641,15 @@ msgstr "кодировка вывода"
 
 #: src/man-recode.c:108
 msgid "SUFFIX"
-msgstr ""
+msgstr "СУФФИКС"
 
 #: src/man-recode.c:108
 msgid "suffix to append to output file name"
-msgstr ""
+msgstr "суффикс, добавляемый к имени выходного файла"
 
 #: src/man-recode.c:110
 msgid "overwrite input files in place"
-msgstr ""
+msgstr "перезаписать сами входные файлы"
 
 #: src/man-recode.c:112 src/manconv_main.c:96 src/manpath.c:66
 msgid "produce fewer warnings"
@@ -663,12 +663,12 @@ msgstr "должна быть указана кодировка выходных
 #: src/man-recode.c:152
 #, c-format
 msgid "must use either --suffix or --in-place"
-msgstr ""
+msgstr "должен быть указан --suffix или --in-place"
 
 #: src/man-recode.c:156
 #, c-format
 msgid "--suffix and --in-place are mutually exclusive"
-msgstr ""
+msgstr "--suffix и --in-place являются взаимоисключающими"
 
 #: src/man-recode.c:249 src/mandb.c:216
 #, c-format
@@ -685,9 +685,8 @@ msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv: неполный символ в конце буфера"
 
 #: src/manconv_main.c:89
-#, fuzzy
 msgid "[-f CODE[:...]] -t CODE [FILENAME]"
-msgstr "-f КОДИРОВКА[:...] -t КОДИРОВКА [ИМЯ-ФАЙЛА]"
+msgstr "[-f КОДИРОВКА[:...]] -t КОДИРОВКА [ИМЯ-ФАЙЛА]"
 
 #: src/manconv_main.c:92
 msgid "CODE[:...]"
@@ -999,17 +998,17 @@ msgstr "%s:%d: незакрытая кавычка в roff запросе"
 msgid "compatibility switch (ignored)"
 msgstr "для совместимости (игнорируется)"
 
-#~ msgid "must specify an input encoding"
-#~ msgstr "должна быть указана кодировка входных данных"
-
-#~ msgid "manpath list too long"
-#~ msgstr "список manpath слишком длинный"
-
 #~ msgid "can't restore previous working directory"
 #~ msgstr "не удалось восстановить предыдущий рабочий каталог"
 
 #~ msgid "can't chdir to %s"
 #~ msgstr "не удалось выполнить функцию chdir в %s"
+
+#~ msgid "must specify an input encoding"
+#~ msgstr "должна быть указана кодировка входных данных"
+
+#~ msgid "manpath list too long"
+#~ msgstr "список manpath слишком длинный"
 
 #~ msgid "badly formed configuration directive: '%s'"
 #~ msgstr "неправильный формат директивы конфигурации: '%s'"
