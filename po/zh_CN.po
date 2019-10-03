@@ -1,6 +1,6 @@
 # Simplified Chinese translations for man-db package
 # Copyright (C) 2008 Colin Watson (msgids)
-# Copyright (C) 2017 Boyuan Yang
+# Copyright (C) 2017, 2019 Boyuan Yang
 # Copyright (C) 2008 Ming Hua
 # This file is distributed under the same license as the man-db package.
 # Ming Hua <minghua-guest@users.alioth.debian.org>, 2007-2008.
@@ -17,10 +17,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.7.6.1\n"
+"Project-Id-Version: man-db 2.9.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2019-10-01 00:12+0100\n"
-"PO-Revision-Date: 2017-11-15 17:53+0800\n"
+"PO-Revision-Date: 2019-10-01 11:13-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #  need-proofread
 #: lib/security.c:79
@@ -549,7 +549,7 @@ msgstr "您需要什么手册页？\n"
 
 #: src/man.c:606
 msgid "For example, try 'man man'.\n"
-msgstr ""
+msgstr "例如，尝试使用“man man”。\n"
 
 #: src/man.c:733
 #, c-format
@@ -646,7 +646,7 @@ msgstr " Manual page "
 
 #: src/man-recode.c:103
 msgid "-t CODE {--suffix SUFFIX | --in-place} FILENAME..."
-msgstr ""
+msgstr "-t 编码 {--suffix 后缀名 | --in-place} 文件名..."
 
 #: src/man-recode.c:106 src/manconv_main.c:94
 msgid "CODE"
@@ -658,15 +658,15 @@ msgstr "输出文本所用的编码"
 
 #: src/man-recode.c:108
 msgid "SUFFIX"
-msgstr ""
+msgstr "后缀名"
 
 #: src/man-recode.c:108
 msgid "suffix to append to output file name"
-msgstr ""
+msgstr "要附加到输出文件名的后缀"
 
 #: src/man-recode.c:110
 msgid "overwrite input files in place"
-msgstr ""
+msgstr "原位覆写输入文件"
 
 #: src/man-recode.c:112 src/manconv_main.c:96 src/manpath.c:66
 msgid "produce fewer warnings"
@@ -680,12 +680,12 @@ msgstr "必须指定输出所用的编码"
 #: src/man-recode.c:152
 #, c-format
 msgid "must use either --suffix or --in-place"
-msgstr ""
+msgstr "必须使用 --suffix 或 --in-place 之一"
 
 #: src/man-recode.c:156
 #, c-format
 msgid "--suffix and --in-place are mutually exclusive"
-msgstr ""
+msgstr "--suffix 和 --in-place 互斥"
 
 #: src/man-recode.c:249 src/mandb.c:216
 #, c-format
@@ -703,9 +703,8 @@ msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv：在缓冲区末尾有不完全的字符"
 
 #: src/manconv_main.c:89
-#, fuzzy
 msgid "[-f CODE[:...]] -t CODE [FILENAME]"
-msgstr "-f 编码[:...] -t 编码 [文件名]"
+msgstr "[-f 编码[:...]] -t 编码 [文件名]"
 
 #: src/manconv_main.c:92
 msgid "CODE[:...]"
@@ -1013,18 +1012,18 @@ msgstr "%s:%d：roff 请求中含有未结束的引用"
 msgid "compatibility switch (ignored)"
 msgstr "兼容性选项 (将被忽略)"
 
-#~ msgid "must specify an input encoding"
-#~ msgstr "必须指定输入所用的编码"
-
-#~ msgid "manpath list too long"
-#~ msgstr "手册路径列表过长"
-
 #~ msgid "can't restore previous working directory"
 #~ msgstr "无法恢复至先前的工作目录"
 
 #  need-proofread
 #~ msgid "can't chdir to %s"
 #~ msgstr "无法进入到 %s 目录中"
+
+#~ msgid "must specify an input encoding"
+#~ msgstr "必须指定输入所用的编码"
+
+#~ msgid "manpath list too long"
+#~ msgstr "手册路径列表过长"
 
 #~ msgid "fork failed"
 #~ msgstr "fork 失败"
