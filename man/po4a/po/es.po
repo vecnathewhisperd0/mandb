@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.9.0-pre1\n"
 "POT-Creation-Date: 2019-10-01 10:31+0100\n"
-"PO-Revision-Date: 2019-10-05 11:00+0200\n"
+"PO-Revision-Date: 2019-10-07 00:35+0200\n"
 "Last-Translator: Antonio Ceballos Roa <aceballos@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
 "Language: es\n"
@@ -442,8 +442,8 @@ msgid ""
 "default behaviour anyway."
 msgstr ""
 "Si se establece $B<POSIXLY_CORRECT>, incluso a un valor nulo, la búsqueda "
-"predeterminada B<%apropos%> será como una expreg extendida (B<-r>).  Por "
-"otro lado, esto es el comportamiento predeterminado en cualquier lugar."
+"predeterminada B<%apropos%> será como una expreg extendida (B<-r>).  De "
+"cualquier modo, actualmente este es el comportamiento predeterminado."
 
 #. type: SH
 #: ../../man/man1/apropos.man1:231 ../../man/man1/man.man1:1241
@@ -457,18 +457,18 @@ msgstr "FICHEROS"
 #: ../../man/man1/apropos.man1:237 ../../man/man1/whatis.man1:232
 #: ../../man/man8/catman.man8:103 ../../man/man8/mandb.man8:207
 msgid "A traditional global I<index> database cache."
-msgstr "Una caché de BD I<indexado> global tradicional."
+msgstr "Una caché de BD I<indexada> global tradicional."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:243 ../../man/man1/whatis.man1:238
 #: ../../man/man8/mandb.man8:200
 msgid "An FHS compliant global I<index> database cache."
-msgstr "Una caché de BD I<indexado> compatible FHS."
+msgstr "Una caché de BD I<indexado> compatible con FHS."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:248 ../../man/man1/whatis.man1:243
 msgid "A traditional B<whatis> text database."
-msgstr "Un texto tradicional B<whatis> de BD."
+msgstr "Una base de datos de texto B<whatis> tradicional."
 
 #. type: SH
 #: ../../man/man1/apropos.man1:248 ../../man/man1/lexgrog.man1:197
@@ -478,7 +478,7 @@ msgstr "Un texto tradicional B<whatis> de BD."
 #: ../../man/man8/catman.man8:109 ../../man/man8/mandb.man8:213
 #, no-wrap
 msgid "SEE ALSO"
-msgstr "VEA ADEMÁS"
+msgstr "VÉASE TAMBIÉN"
 
 #. type: SH
 #: ../../man/man1/apropos.man1:252 ../../man/man1/lexgrog.man1:207
@@ -493,7 +493,7 @@ msgstr "AUTOR"
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:12
 msgid "lexgrog - parse header information in man pages"
-msgstr "lexgrog - interpreta información de cabecera en páginas man"
+msgstr "lexgrog - analiza la información de cabecera en páginas man"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:20
@@ -502,7 +502,7 @@ msgid ""
 "\\|] I<file> \\&.\\|.\\|."
 msgstr ""
 "B<lexgrog> [\\|B<-m>\\||\\|B<-c>\\|] [\\|B<-dfw?V>\\|] [\\|B<-E> "
-"I<codificando>\\|] I<fichero> \\&.\\|.\\|."
+"I<codificación>\\|] I<fichero> \\&.\\|.\\|."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:36
@@ -514,12 +514,12 @@ msgid ""
 "preprocessing filters required by the man page before it is passed to "
 "B<nroff> or B<troff>, or both."
 msgstr ""
-"B<lexgrog> es una interpretación de la tradicional \\(lqgroff guess\\(rq "
-"utilidad en B<lex>.  Lee la lista de ficheros en su línea de órdenes o como "
-"fichero de origen de una página man o como \\(lqcat\\(rq páginas "
-"preformateadas, y enseña su nombre y descripción como se utilizó por "
-"B<apropos> y B<whatis>, la lista de filtros preprocesados requeridos por la "
-"página man antes que sea pasada por B<nroff> o B<troff>, o ambos."
+"B<lexgrog> es una implementación de la tradicional utilidad \\(lqgroff guess"
+"\\(rq en B<lex>.  Lee la lista de ficheros en su línea de órdenes bien como "
+"ficheros fuente de página man, bien como páginas preformateadas \\(lqcat"
+"\\(rq, y muestra su nombre y descripción como se utilizó por B<apropos> y "
+"B<whatis>, la lista de filtros preprocesados requeridos por la página man "
+"antes de que sea pasada por B<nroff> o B<troff>, o ambos."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:45
@@ -531,11 +531,11 @@ msgid ""
 "version will be read automatically."
 msgstr ""
 "Si esta entrada está formateado equivocadamente, B<lexgrog> escribirá  "
-"\\(lqparse fallado\\(rq; esta quizá sea útil para programas externos que "
-"requeirean comprobar páginas man para correcciones.  Si uno de los ficheros "
-"de entrada de B<lexgrog> es \\(lq-\\(rq, leerá desde entrada comúnM si "
-"cualquier fichero entrante está comprimido, una versión descomprimida será "
-"se leerá automáticamente."
+"\\(lqparse fallado\\(rq; esto puede ser útil para programas externos que "
+"necesiten comprobar la corrección de páginas man.  Si uno de los ficheros de "
+"entrada de B<lexgrog> es \\(lq-\\(rq, leerá desde la entrada estándar; si "
+"algún fichero de entrada está comprimido, se leerá automáticamente una "
+"versión descomprimida."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:57
@@ -543,8 +543,8 @@ msgid ""
 "Parse input as man page source files.  This is the default if neither B<--"
 "man> nor B<--cat> is given."
 msgstr ""
-"Interreta entrada como fichero origen de página man.  Esto es lo predefinido "
-"si ni B<--man> ni B<--cat> es dado."
+"Interpreta la entrada como ficheros fuente de página man.  Esto es lo "
+"predefinido si ni B<--man> ni B<--cat> es dado."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:64
@@ -552,8 +552,8 @@ msgid ""
 "Parse input as preformatted man pages (\\(lqcat pages\\(rq).  B<--man> and "
 "B<--cat> may not be given simultaneously."
 msgstr ""
-"Entrada interpretada como páginas (\\(lqcat\\(rq) man preformateada.   B<--"
-"man> y B<--cat> quizá no son dadas simultáneamente."
+"Entrada interpretada como páginas (\\(lqcat\\(rq) man preformateadas.   B<--"
+"man> y B<--cat> pueden no darse simultáneamente."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:75
@@ -562,8 +562,8 @@ msgid ""
 "B<apropos> and B<whatis>.  This is the default if neither B<--whatis> nor "
 "B<--filters> is given."
 msgstr ""
-"Enseña el nombre y descripción desde la cabecera de la página del man, tal "
-"emplado por B<a\\ propósito> y B<qué\\ es>.  Esto es lo predeterminado si ni "
+"Muestra el nombre y la descripción desde la cabecera de la página del man, "
+"tal y como la usan B<apropos> y B<whatis>.  Esto es lo predeterminado si ni "
 "B<--watis> ni B<--filters> está dado."
 
 #. type: Plain text
@@ -572,7 +572,7 @@ msgid ""
 "Display the list of filters needed to preprocess the man page before "
 "formatting with B<nroff> or B<troff>."
 msgstr ""
-"Enseña la lista de filtros necesarios para preprocesar la página man antes "
+"Muestra la lista de filtros necesarios para preprocesar la página man antes "
 "de formatear con B<nroff> o B<troff>."
 
 #. type: TP
@@ -585,7 +585,7 @@ msgstr "B<-E> I<codificación>, B<--encoding> I<codificación>"
 #: ../../man/man1/lexgrog.man1:86
 msgid "Override the guessed character set for the page to I<encoding>."
 msgstr ""
-"Sobrescribe el conjunto de caracteres deseado para la página a "
+"Anula el conjunto de caracteres supuesto para la página sustituyéndolo por "
 "I<codificación>."
 
 #. type: Plain text
@@ -596,7 +596,7 @@ msgstr "Error de uso."
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:106
 msgid "B<lexgrog> failed to parse one or more of its input files."
-msgstr "B<lexgrog> falló al interpretar uno o más de ficheros entrantes."
+msgstr "B<lexgrog> fallo al analizar uno o varios de sus ficheros de entrada."
 
 #. type: SH
 #: ../../man/man1/lexgrog.man1:106 ../../man/man1/man.man1:187
@@ -606,16 +606,7 @@ msgstr "EJEMPLOS"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:116
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  $ lexgrog man.1\n"
-#| "  man.1: \"man - an interface to the on-line reference manuals\"\n"
-#| "  $ lexgrog -fw man.1\n"
-#| "  man.1 (t): \"man - an interface to the on-line reference manuals\"\n"
-#| "  $ lexgrog -c whatis.cat1 \n"
-#| "  whatis.cat1: \"whatis - display manual page descriptions\"\n"
-#| "  $ lexgrog broken.1\n"
-#| "  broken.1: parse failed\n"
+#, no-wrap
 msgid ""
 "  $ lexgrog man.1\n"
 "  man.1: \"man - an interface to the system reference manuals\"\n"
@@ -627,19 +618,19 @@ msgid ""
 "  broken.1: parse failed\n"
 msgstr ""
 "  $ lexgrog man.1\n"
-"  man.1: «man - un interfaz para manuales referenciados por conexión»\n"
+"  man.1: «man - interfaz para los manuales de referencia del sistema»\n"
 "  $ lexgrog -fw man.1\n"
-"  man.1 (t): «man - un interfaz para manuales referenciados por conexión»\n"
-"  $ lexgrog -c whatis.cat1 \n"
-"  whatis.cat1: «whatis - enseña páginas descritas del manual»\n"
+"  man.1 (t): «man - interfaz para los manuales de referencia del sistema»\n"
+"  $ lexgrog -c whatis.cat1\n"
+"  whatis.cat1: «whatis - muestra las descripciones de las páginas del manual»\n"
 "  $ lexgrog broken.1\n"
-"  broken.1: interpretador fallado\n"
+"  broken.1: fallo del analizador\n"
 
 #. type: SH
 #: ../../man/man1/lexgrog.man1:117
 #, no-wrap
 msgid "WHATIS PARSING"
-msgstr "INTERPRETACIÓN QUESOY"
+msgstr "ANÁLISIS WHATIS"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:128
@@ -650,12 +641,12 @@ msgid ""
 "has to cope with a number of different forms that have historically been "
 "used, it may sometimes fail to extract the required information."
 msgstr ""
-"B<%mandb%> (el cual emplea el mismo código que B<lexgrog> interpreta la "
-"sección B<NOMBRE> al techo de cada página del manual buscando nombres y "
-"descripciones de las características documentadas en cada una.  Mientras el "
-"interprete está muy toletante, como tiene ocuparse con un número de formatos "
-"diferentes que tiene históricamente sido empleada, quizá algunas veces "
-"fallan al extraer la información requerida."
+"B<%mandb%> (el cual emplea el mismo código que B<lexgrog>)  analiza la "
+"sección B<NOMBRE> situada en la parte superior de cada página del manual "
+"buscando nombres y descripciones de las características documentadas en cada "
+"una.  Aunque el analizador es bastante toletante, como tiene que hacer "
+"frente a un gran número de formatos diferentes que históricamente se han "
+"empleado, algunas veces puede fallar al extraer la información requerida."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:134
@@ -663,8 +654,8 @@ msgid ""
 "When using the traditional I<man> macro set, a correct B<NAME> section looks "
 "something like this:"
 msgstr ""
-"Cuando utilice la macro tradicional I<man>, una sección correcta B<NOMBRE> "
-"aparecerá algo como esto:"
+"Al utilizar el conjunto de macros tradicional de I<man>, una sección "
+"correcta B<NOMBRE> tiene el siguiente aspecto:"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:140
@@ -674,7 +665,7 @@ msgid ""
 "foo \\e- program to do something>\n"
 msgstr ""
 "CW<\\&.SH NOMBRE\n"
-"rellena \\e- programa para hacer algo>\n"
+"foo \\e- programa que hace algo>\n"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:148
@@ -683,9 +674,10 @@ msgid ""
 "%mandb%> is more tolerant, but for compatibility with other systems it is "
 "nevertheless a good idea to retain the backslash."
 msgstr ""
-"Algunos paginadores manuales requieren la \\(oq\\e-\\(cq esté exactamente "
-"como muestran; B<%mandb%> es más tolerante, pero  para compatibilidad con "
-"otros sistemas no es una buena idea para retener la barra invertida."
+"Algunos paginadores del manual requieren que la \\(oq\\e-\\(cq esté "
+"exactamente como se muestra; B<%mandb%> es más tolerante; sin embargo, por "
+"compatibilidad con otros sistemas, no es buena idea retener la barra "
+"invertida."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:158
@@ -697,13 +689,13 @@ msgid ""
 "different descriptions are being documented in the same manual page, the "
 "following form is therefore used:"
 msgstr ""
-"En el lado izquierdo, quizá hay varios nombres, separados por comas.  Los "
-"nombres conteniendo espacios en blanco serán ignorados para evitar "
-"comportamiento patológico en ciertos formatos de secciones B<NOMBRE>.  El "
-"texto en el lado derecho tiene formato libre, y quizá está desplegado por "
-"múltiples líneas.  Si varias características con descripciones diferentes "
-"están siendo documentadas en la misma página del manual, el siguiente "
-"formato está ya utilizado:"
+"En el lado izquierdo puede haber varios nombres separados por comas.  Los "
+"nombres que contengan espacios en blanco serán ignorados para evitar "
+"comportamiento patológico en ciertas secciones B<NOMBRE> mal formadas.  El "
+"texto en el lado derecho tiene formato libre y puede ocupar varias líneas.  "
+"Si se están documentando diversas características con descripciones "
+"diferentes en la misma página del manual, en tal caso se utiliza la "
+"siguiente forma:"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:166
@@ -725,8 +717,8 @@ msgid ""
 "(A macro which starts a new paragraph, like CW<.PP>, may be used instead of "
 "the break macro CW<.br>.)"
 msgstr ""
-"(Una macro la cual inicia un parágrafo nuevo, como CW<.PP>, quizá está "
-"utilizado en lugar de ruptura de macro CW<.br>.)"
+"(Macro que inicia un párrafo nuevo, como CW<.PP>, puede utilizarse en lugar "
+"de la macro de salto CW<.br>.)"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:178
@@ -734,8 +726,8 @@ msgid ""
 "When using the BSD-derived I<mdoc> macro set, a correct B<NAME> section "
 "looks something like this:"
 msgstr ""
-"Cuando utilice las derivaciones BSD el conjunto de macro I<mdoc>, un "
-"B<NOMBRE> de sección correcto parece algo como esto:"
+"Cuando se utiliza el conjunto de macros I<mdoc> derivadas de BSD, una "
+"sección B<NOMBRE> correcta tiene el siguiente aspecto:"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:185
@@ -746,7 +738,7 @@ msgid ""
 "\\&.Nd program to do something>\n"
 msgstr ""
 "CW<\\&.Sh NOMBRE\n"
-"\\&.Nm lo que sea\n"
+"\\&.Nm foo\n"
 "\\&.Nd programa para hacer algo>\n"
 
 #. type: Plain text
@@ -759,13 +751,13 @@ msgid ""
 "free-form text there rather than \\(oqname \\e- description\\(cq.  However, "
 "any syntax resembling the above should be accepted."
 msgstr ""
-"Hay distintas razones comunes por las que interpretaciones fallan.  Algunas "
+"Hay distintas razones por las que el análisis de whatis suele fallar.  A "
 "veces los autores de las páginas del manual sustituyen  \\(oq.SH NOMBRE\\(cq "
 "por \\(oq.SH MIPROGRAMA\\(cq, y entonces B<%mandb%> no puede encontrar la "
-"sección desde la cual extraer la información que necesita.  Algunas veces "
-"los autores inclyen una sección NOMBRE, pero colocan texto de formato-libre "
-"en lugar de  \\(oqname \\e- description\\(cq.  Sin embargo, cualquier "
-"sintaxis analizada encima debería ser aceptada."
+"sección desde la cual extraer la información que necesita.  A veces los "
+"autores incluyen una sección NOMBRE, pero colocan texto en formato-libre en "
+"lugar de \\(oqname \\e- description\\(cq.  Sin embargo, debería aceptarse "
+"cualquier sintaxis parecida a la de arriba."
 
 #. type: SH
 #: ../../man/man1/lexgrog.man1:202
@@ -780,9 +772,9 @@ msgid ""
 "able to do so correctly if the files are properly installed in a manual page "
 "hierarchy."
 msgstr ""
-"B<lexgrog> trata entender ficheros conteniendo peticiones .so, perot no "
-"serán capaces de hacer tan correctamente si los ficheros son propiamente "
-"instalados dentro de una jerarquía de página del manual."
+"B<lexgrog> trata de analizar ficheros que contienen peticiones .so, pero "
+"solo podrá hacerlo correctamente si los ficheros están debidamente "
+"instalados en la jerarquía de una página del manual."
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:211
@@ -796,68 +788,61 @@ msgid ""
 "Colin Watson wrote the current incarnation of the command-line front-end, as "
 "well as this man page."
 msgstr ""
-"Colin Watson escribió la actual encarnación de la línea de mandatos frontal, "
-"así como esta página del man."
+"Colin Watson escribió la actual encarnación del frontal de la línea de "
+"órdenes, así como esta página del man."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:18
-#, fuzzy
-#| msgid "%man% - an interface to the on-line reference manuals"
 msgid "%man% - an interface to the system reference manuals"
-msgstr "%man% - un interfaz para las referencias de manuales por conexión"
+msgstr "%man% - interfaz de los manuales de referencia del sistema"
 
 #.  The general command line
 #.  The apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:25
-#, fuzzy
-#| msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|.\\&"
 msgid ""
 "B<%man%> [\\|I<man options>\\|] [\\|[\\|I<section>\\|] I<page>\\ \\|.\\|.\\|."
 "\\|]\\ .\\|.\\|.\\&"
-msgstr "B<%man%> B<-f> [\\|I<qué es> I<opciones>\\|] I<página> \\&.\\|.\\|.\\&"
+msgstr ""
+"B<%man%> [\\|I<opciones de man>\\|] [\\|[\\|I<sección>\\|] I<página>\\ \\|."
+"\\|.\\|.\\|]\\ .\\|.\\|.\\&"
 
 #.  The --global-apropos command line
 #. type: Plain text
 #: ../../man/man1/man.man1:32
-#, fuzzy
-#| msgid ""
-#| "B<%man%> B<-k> [\\|I<apropos> I<options>\\|] I<regexp> \\&.\\|.\\|.\\&"
 msgid "B<%man%> B<-k> [\\|I<apropos options>\\|] I<regexp> \\&.\\|.\\|.\\&"
 msgstr ""
-"B<%man%> B<-k> [\\|I<propósito> I<opciones>\\|] I<expreg> \\&.\\|.\\|.\\&"
+"B<%man%> B<-k> [\\|I<opciones de apropos>\\|] I<regexp> \\&.\\|.\\|.\\&"
 
 #.  The whatis command line
 #. type: Plain text
 #: ../../man/man1/man.man1:39
-#, fuzzy
-#| msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|.\\&"
 msgid ""
 "B<%man%> B<-K> [\\|I<man options>\\|] [\\|I<section>\\|] I<term>\\ .\\|.\\|."
 "\\&"
-msgstr "B<%man%> B<-f> [\\|I<qué es> I<opciones>\\|] I<página> \\&.\\|.\\|.\\&"
+msgstr ""
+"B<%man%> B<-K> [\\|I<opciones de man>\\|] [\\|I<sección>\\|] I<term>\\ .\\|."
+"\\|.\\&"
 
 #.  The --local command line
 #. type: Plain text
 #: ../../man/man1/man.man1:47
 msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|.\\&"
-msgstr "B<%man%> B<-f> [\\|I<qué es> I<opciones>\\|] I<página> \\&.\\|.\\|.\\&"
+msgstr "B<%man%> B<-f> [\\|I<whatis> I<opciones>\\|] I<página> \\&.\\|.\\|.\\&"
 
 #.  The --where/--where-cat command line
 #. type: Plain text
 #: ../../man/man1/man.man1:54
-#, fuzzy
-#| msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|.\\&"
 msgid "B<%man%> B<-l> [\\|I<man options>\\|] I<file> \\&.\\|.\\|.\\&"
-msgstr "B<%man%> B<-f> [\\|I<qué es> I<opciones>\\|] I<página> \\&.\\|.\\|.\\&"
+msgstr "B<%man%> B<-l> [\\|I<opciones de man>\\|] I<fichero> \\&.\\|.\\|.\\&"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:60
-#, fuzzy
-#| msgid "B<%man%> B<-f> [\\|I<whatis> I<options>\\|] I<page> \\&.\\|.\\|.\\&"
 msgid ""
 "B<%man%> B<-w>\\||\\|B<-W> [\\|I<man options>\\|] I<page> \\&.\\|.\\|.\\&"
-msgstr "B<%man%> B<-f> [\\|I<qué es> I<opciones>\\|] I<página> \\&.\\|.\\|.\\&"
+msgstr ""
+"B<%man%> B<-w>\\||\\|B<-W> [\\|I<opciones de man>\\|] I<página> \\&.\\|.\\|."
+"\\&"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:88
