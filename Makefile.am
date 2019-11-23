@@ -34,7 +34,6 @@ EXTRA_DIST = \
 	bootstrap \
 	bootstrap.conf \
 	patches/argp-domain.patch \
-	patches/fdutimens-hurd.patch \
 	release.sh
 
 # These macro files are imported by gnulib-tool, but at present not used. We
