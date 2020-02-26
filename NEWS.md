@@ -20,6 +20,8 @@ Improvements:
 
  * Make the man-db manual build reproducible.
  * Add some hardening options to the `systemd` service.
+ * `configure` now has a `--with-snapdir` option, for use on systems where
+   `snapd` is configured to use a directory other than `/snap`.
 
 man-db 2.10.1 (10 February 2022)
 ================================
