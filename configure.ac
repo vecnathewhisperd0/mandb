@@ -327,7 +327,7 @@ if test -n "$lzip"
 then
 	unlzip="$lzip -dc"
 fi
-if test -n "$gzip" || test -n "$compress" || test -n "$bzip2" || test -n "$xz" || test -n "$lzip" || test -n "$lzma"
+if test -n "$compressor"
 then
 	AC_DEFINE([COMP_CAT], [1], [Define if you have compressors and want to support compressed cat files.])
 fi
