@@ -1356,8 +1356,11 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 					pipecmd_argf (cmd,
 						      "-T%s", roff_device);
 #ifdef TROFF_IS_GROFF
-				else if (gxditview)
+				else if (gxditview) {
 					pipecmd_argf (cmd, "-TX%s", gxditview);
+					if (strstr (gxditview, "-12"))
+						pipecmd_argf (cmd, "-rS12");
+				}
 #endif /* TROFF_IS_GROFF */
 			}
 
