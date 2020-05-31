@@ -1367,7 +1367,19 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			if (wants_post) {
 #ifdef TROFF_IS_GROFF
 				if (gxditview)
-					pipecmd_arg (cmd, "-X");
+					/* -X arranges for the correct
+					 * options to be passed to troff.
+					 * Normally it would run gxditview
+					 * as well, but we suppress that
+					 * with -Z so that we can do it
+					 * ourselves; this lets us set a
+					 * better window title, and means
+					 * that we don't have to worry about
+					 * sandboxing text processing and an
+					 * X program in the same way.
+					 */
+					pipecmd_args (cmd, "-X", "-Z",
+						      (void *) 0);
 #endif /* TROFF_IS_GROFF */
 
 				if (roff_device && STREQ (roff_device, "ps"))
@@ -1604,6 +1616,18 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 			add_col (p, locale_charset, "-b", "-p", "-x",
 				 (void *) 0);
 	}
+
+#ifdef TROFF_IS_GROFF
+	if (gxditview) {
+		char *x_resource = xasprintf ("*iconName:%s", title);
+		pipeline_command_args
+			(p, "gxditview",
+			 "-title", title, "-xrm", x_resource, "-",
+			 (void *) 0);
+		free (x_resource);
+		return p;
+	}
+#endif /* TROFF_IS_GROFF */
 
 	/* emulate pager -s, the sed code is just for information */
 	{
@@ -2257,7 +2281,7 @@ static int display (const char *dir, const char *man_file,
 
 	display_to_stdout = troff;
 #ifdef TROFF_IS_GROFF
-	if (htmlout)
+	if (htmlout || gxditview)
 		display_to_stdout = false;
 #endif
 	if (recode)
@@ -2313,6 +2337,7 @@ static int display (const char *dir, const char *man_file,
 		if (want_encoding
 #ifdef TROFF_IS_GROFF
 		    || htmlout
+		    || gxditview
 #endif
 		    || local_man_file
 		    || recode
