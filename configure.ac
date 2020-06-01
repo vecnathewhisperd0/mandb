@@ -327,6 +327,11 @@ if test -n "$lzip"
 then
 	unlzip="$lzip -dc"
 fi
+MAN_CHECK_PROGS([zstd], [ZSTD], [use ZSTD as zstd compression utility], [zstd])
+if test -n "$zstd"
+then
+	unzstd="$zstd -dc"
+fi
 if test -n "$compressor"
 then
 	AC_DEFINE([COMP_CAT], [1], [Define if you have compressors and want to support compressed cat files.])
@@ -339,6 +344,7 @@ AC_SUBST([bunzip2])
 AC_SUBST([unlzma])
 AC_SUBST([unxz])
 AC_SUBST([unlzip])
+AC_SUBST([unzstd])
 MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
 

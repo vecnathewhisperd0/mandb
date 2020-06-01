@@ -77,6 +77,12 @@ struct compression comp_list[] = {
 	{UNLZIP, "lz", NULL},
 #endif /* HAVE_LZIP */
 
+/* If we have zstd, incorporate the following */
+#ifdef HAVE_ZSTD
+	{UNZSTD, "zst", NULL},
+	{UNZSTD, "zstd", NULL},
+#endif /* HAVE_ZSTD */
+
 /*------------------------------------------------------*/
 /* Add your decompressor(s) and extension(s) below here */
 /*------------------------------------------------------*/
