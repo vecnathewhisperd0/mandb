@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.9.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2020-02-25 16:53+0000\n"
+"POT-Creation-Date: 2020-06-01 17:02+0100\n"
 "PO-Revision-Date: 2019-10-01 11:13-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -212,7 +212,7 @@ msgstr "警告：%s：用 whatis 解读 %s(%s) 失败"
 msgid "can't search directory %s"
 msgstr "无法搜索目录 %s"
 
-#: src/check_mandirs.c:390 src/man.c:1689
+#: src/check_mandirs.c:390 src/man.c:1716
 #, c-format
 msgid "can't chown %s"
 msgstr "无法 chown %s"
@@ -222,7 +222,7 @@ msgstr "无法 chown %s"
 msgid "warning: cannot create catdir %s"
 msgstr "警告：无法创建 catdir %s"
 
-#: src/check_mandirs.c:467 src/man.c:1701 src/mandb.c:232
+#: src/check_mandirs.c:467 src/man.c:1728 src/mandb.c:232
 #, c-format
 msgid "can't chmod %s"
 msgstr "无法 chmod %s"
@@ -298,7 +298,7 @@ msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "警告：对 %s 的 whatis 操作结果超过 %d 字节，正在截断。"
 
-#: src/lexgrog.l:856 src/man.c:2270 src/man.c:2354 src/man.c:2452
+#: src/lexgrog.l:856 src/man.c:2297 src/man.c:2382 src/man.c:2480
 #: src/man-recode.c:176 src/man-recode.c:201 src/manconv_main.c:158
 #: src/straycats.c:204 src/ult_src.c:320 src/ult_src.c:333 src/zsoelim.l:517
 #, c-format
@@ -566,48 +566,48 @@ msgstr "当没有手册页时，可以用 %s 命令来寻求帮助。\n"
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "忽略未知的预处理器 `%c'"
 
-#: src/man.c:1712 src/man-recode.c:243 src/mandb.c:223
+#: src/man.c:1739 src/man-recode.c:243 src/mandb.c:223
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "无法将 %s 改名为 %s"
 
 #  need-proofread
-#: src/man.c:1729
+#: src/man.c:1756
 #, c-format
 msgid "can't set times on %s"
 msgstr "无法设定 %s 文件的时间"
 
-#: src/man.c:1738 src/man.c:1775
+#: src/man.c:1765 src/man.c:1802
 #, c-format
 msgid "can't unlink %s"
 msgstr "无法删除 (unlink) %s"
 
-#: src/man.c:1805
+#: src/man.c:1832
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "无法为 %s 创建临时 cat 文件"
 
-#: src/man.c:1915
+#: src/man.c:1942
 #, c-format
 msgid "can't create temporary directory"
 msgstr "无法创建临时目录"
 
-#: src/man.c:1926 src/man-recode.c:209
+#: src/man.c:1953 src/man-recode.c:209
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "无法打开临时文件 %s"
 
-#: src/man.c:1956 src/man.c:1985
+#: src/man.c:1983 src/man.c:2012
 #, c-format
 msgid "can't remove directory %s"
 msgstr "无法移除目录 %s"
 
-#: src/man.c:2114
+#: src/man.c:2141
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- 下一页: %s [ 查看 (return) | 跳过 (Ctrl-D) | 退出 (Ctrl-C) ]\n"
 
-#: src/man.c:2397
+#: src/man.c:2425
 #, c-format
 msgid ""
 "\n"
@@ -616,23 +616,23 @@ msgstr ""
 "\n"
 "无法在 catman 模式下对 %s 写入"
 
-#: src/man.c:2477
+#: src/man.c:2505
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "无法把 %s 转换为 cat 名称"
 
 #  need-proofread
-#: src/man.c:3202
+#: src/man.c:3230
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s：依赖于 whatis 引用是已被废弃的做法\n"
 
-#: src/man.c:3345 src/man.c:4203
+#: src/man.c:3373 src/man.c:4231
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb 命令失败，退出状态代码为 %d"
 
-#: src/man.c:3547
+#: src/man.c:3575
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "内部错误：候选类型 %d 超出正常范围"
@@ -640,7 +640,7 @@ msgstr "内部错误：候选类型 %d 超出正常范围"
 #  I'm not sure this should be translated.  It comes from a less prompt string
 #  but seems to be only part of it.  (Ming)
 #  need-proofread
-#: src/man.c:4146
+#: src/man.c:4174
 msgid " Manual page "
 msgstr " Manual page "
 
