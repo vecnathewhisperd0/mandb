@@ -327,7 +327,7 @@ if test -n "$lzip"
 then
 	unlzip="$lzip -dc"
 fi
-MAN_CHECK_PROGS([zstd], [ZSTD], [use ZSTD as zstd compression utility], [zstd])
+MAN_CHECK_PROGS([zstd], [ZSTD], [use ZSTD as LZ77/entropy-coding compression utility], [zstd])
 if test -n "$zstd"
 then
 	unzstd="$zstd -dc"
