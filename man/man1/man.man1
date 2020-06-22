@@ -316,16 +316,10 @@ locale, usually specified in the
 .B POSIX
 format:
 
-.\"
-.\" Need a \c to make sure we don't get a space where we don't want one
-.\"
-.RI < language >[\|\c
-.B _\c
-.RI < territory >\|[\|\c
-.B .\c
-.RI < character-set >\|[\|\c
-.B ,\c
-.RI < version >\|]\|]\|]
+<\fIlanguage\fR>\
+[\|\fB_\fR<\fIterritory\fR>\|\
+[\|\fB.\fR<\fIcharacter-set\fR>\|\
+[\|\fB,\fR<\fIversion\fR>\|]\|]\|]
 
 If the desired page is available in your
 .IR locale ,
@@ -775,9 +769,7 @@ is used as the pager,
 will attempt to set its prompt and some sensible options.
 The default prompt looks like
 
-.B \ Manual page\c
-.IB \ name ( sec )\c
-.BI \ line \ x
+.BI " Manual page" " name" ( sec ") line" " x"
 
 where
 .I name
