@@ -64,10 +64,19 @@ sub initialize {
     $self->{manext_push_tbl_line} = '';
 }
 
+sub _parse_version {
+    # Parse a po4a version string.  Unfortunately these aren't always
+    # directly parseable using version->parse, because they may have more
+    # than two components without a leading "v".
+    my $version = shift;
+    $version = "v$version" unless $version =~ /^v/;
+    return version->parse($version);
+}
+
 sub shiftline {
     my $self = shift;
 
-    if (version->parse($Locale::Po4a::TransTractor::VERSION) >= '0.47') {
+    if (_parse_version($Locale::Po4a::TransTractor::VERSION) >= 'v0.47') {
         return $self->SUPER::shiftline();
     }
 
@@ -121,7 +130,7 @@ NEXT_LINE:
 sub pushline {
     my ($self, $line) = (shift, shift);
 
-    if (version->parse($Locale::Po4a::TransTractor::VERSION) >= '0.47') {
+    if (_parse_version($Locale::Po4a::TransTractor::VERSION) >= 'v0.47') {
         $self->SUPER::pushline($line);
         return;
     }
@@ -154,7 +163,7 @@ sub translate {
     my %options = @_;
 
     if (defined $type and $type eq 'tbl table') {
-        if (version->parse($Locale::Po4a::TransTractor::VERSION) < '0.47') {
+        if (_parse_version($Locale::Po4a::TransTractor::VERSION) < 'v0.47') {
             if ($str =~ /^T\{\n?(.*)T\}(\n?)$/s) {
                 my $inner = $1;
                 chomp $inner;
