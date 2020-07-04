@@ -55,18 +55,12 @@ can be compiled with support for any one of the following database types.
 
 .TS
 tab (@);
-l lw(20m) l l.
-Name@Type@Async@Filename
+l l l.
+Name@Async@Filename
 _
-Berkeley db@T{
-Binary tree
-T}@Yes@\fIindex.bt\fR
-GNU gdbm@T{
-Hashed
-T}@Yes@\fIindex.db\fR
-UNIX ndbm@T{
-Hashed
-T}@No@\fIindex.(dir|pag)\fR
+Berkeley db@Yes@\fIindex.bt\fR
+GNU gdbm@Yes@\fIindex.db\fR
+UNIX ndbm@No@\fIindex.(dir|pag)\fR
 .TE
 
 Those database types that support asynchronous updates provide enhanced
