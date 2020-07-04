@@ -30,6 +30,7 @@ POFILES = \
 	po/pl.po \
 	po/pt.po \
 	po/pt_BR.po \
+	po/ro.po \
 	po/ru.po \
 	po/sr.po \
 	po/sv.po \

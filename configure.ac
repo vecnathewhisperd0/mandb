@@ -505,6 +505,7 @@ AC_CONFIG_FILES([Makefile
 	man/pl/Makefile
 	man/pt/Makefile
 	man/pt_BR/Makefile
+	man/ro/Makefile
 	man/ru/Makefile
 	man/sr/Makefile
 	man/sv/Makefile
