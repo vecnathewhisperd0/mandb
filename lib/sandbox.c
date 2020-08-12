@@ -232,7 +232,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 		;
 
 	debug ("initialising seccomp filter (permissive: %d)\n", permissive);
-	ctx = seccomp_init (SCMP_ACT_ERRNO (EPERM));
+	ctx = seccomp_init (SCMP_ACT_ERRNO (ENOSYS));
 	if (!ctx)
 		error (FATAL, errno, "can't initialise seccomp filter");
 
@@ -271,6 +271,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	/* systemd: SystemCallFilter=@default */
 	SC_ALLOW ("clock_getres");
 	SC_ALLOW ("clock_gettime");
+	SC_ALLOW ("clock_gettime64");
 	SC_ALLOW ("clock_nanosleep");
 	SC_ALLOW ("execve");
 	SC_ALLOW ("exit");
