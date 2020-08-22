@@ -123,7 +123,7 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 
 		if (ioctl (fd, FS_IOC_FIEMAP, (unsigned long) &fm) == 0) {
 			uint64_t *offset = XMALLOC (uint64_t);
-			*offset = fm.fiemap.fm_extents[0].fe_physical;
+			*offset = fm.extent.fe_physical;
 			/* Borrow the key from basenames; since
 			 * physical_offsets has a shorter lifetime, we don't
 			 * need to duplicate it.
