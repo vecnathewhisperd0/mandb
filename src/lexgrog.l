@@ -470,9 +470,10 @@ vgrind_request	\.vS
 
  /* convert to DASH */
 <MAN_NAME>{
-	{next}{blank}*\\\((mi|hy|em|en){blank}*	|
-	{next}{blank_eol}+[-\\]-{blank}*	|
-	{next}{blank_eol}*[-\\]-{blank}+	|
+	{next}{blank}*\\\((mi|hy|em|en){blank}*		|
+	{next}{blank}*\\\[(mi|hy|em|en)\]{blank}*	|
+	{next}{blank_eol}+[-\\]-{blank}*		|
+	{next}{blank_eol}*[-\\]-{blank}+		|
 	{bol}\.Nd{blank}*			{
 		add_separator_to_whatis ();
 		BEGIN (MAN_DESC);
@@ -486,6 +487,7 @@ vgrind_request	\.vS
  	{next}\\('|\(aa)		add_char_to_whatis ('\'');
  	{next}\\(`|\(ga)		add_char_to_whatis ('`');
 	{next}\\(-|\((mi|hy|em|en))	add_char_to_whatis ('-');
+	{next}\\\[(mi|hy|em|en)\]	add_char_to_whatis ('-');
 	{next}\\\.			add_char_to_whatis ('.');
 	{next}((\\[ 0t~])|[ ]|\t)*	add_char_to_whatis (' ');
 	{next}\\\((ru|ul)		add_char_to_whatis ('_');
