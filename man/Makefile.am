@@ -33,6 +33,7 @@ DIST_SUBDIRS = \
 	pl \
 	pt \
 	pt_BR \
+	ro \
 	ru \
 	sr \
 	sv \
