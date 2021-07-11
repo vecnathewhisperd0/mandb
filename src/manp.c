@@ -281,7 +281,10 @@ static char *pathappend (char *oldpath, const char *appendage)
 			search = strstr (app_dedup, tok);
 			while (search) {
 				char *terminator = search + strlen (tok);
-				if (!*terminator) {
+				if (search > app_dedup && search[-1] != ':')
+					/* Ignore suffix matches. */
+					;
+				else if (!*terminator) {
 					/* End of the string, so chop here. */
 					*search = 0;
 					while (search > app_dedup &&
