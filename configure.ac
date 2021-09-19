@@ -9,10 +9,10 @@ AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
 AC_PREREQ([2.63])
 AC_CONFIG_SRCDIR([src/man.c])
-AC_GNU_SOURCE
+AC_USE_SYSTEM_EXTENSIONS
 MAN_TAR_SORT_NAME
 
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CANONICAL_HOST
 
 # Define below date and version information to be put into man pages etc.
@@ -349,8 +349,6 @@ MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
 
 # Check for various header files and associated libraries.
-AC_ISC_POSIX
-dnl AC_PROG_LEX calls AC_TRY_LINK: must come after above 3
 AC_PROG_LEX
 if test "$LEX" = ":" && (test ! -e src/lexgrog.c || test ! -e src/zsoelim.c)
 then
