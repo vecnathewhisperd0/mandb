@@ -1,5 +1,7 @@
 # The man-db manual pager suite
 
+  https://gitlab.com/cjwatson/man-db
+
 Please read the man-db manual, included in the manual subdirectory of this
 distribution.  It contains configuration details and other aspects of this
 manual pager suite that are not duplicated or relevant in this README.
@@ -304,5 +306,9 @@ system's man(1) manual page may provide an answer.
 The current maintainer of man-db is Colin Watson <cjwatson@debian.org>.
 Please feel free to contact me with any queries or problems you may have.
 You can report bugs here:
+
+  https://gitlab.com/cjwatson/man-db/-/issues
+
+Bugs from before the migration to GitLab may be found here:
 
   https://savannah.nongnu.org/bugs/?group=man-db
