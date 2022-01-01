@@ -277,9 +277,8 @@ int main (int argc, char *argv[])
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
 
-	GL_LIST_FOREACH_START (filenames, filename)
+	GL_LIST_FOREACH (filenames, filename)
 		recode (filename);
-	GL_LIST_FOREACH_END (filenames);
 
 	free (to_code);
 

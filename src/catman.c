@@ -391,7 +391,7 @@ int main (int argc, char *argv[])
 	/* get the manpath as a list of pointers */
 	manpathlist = create_pathlist (manp);
 
-	GL_LIST_FOREACH_START (manpathlist, mp) {
+	GL_LIST_FOREACH (manpathlist, mp) {
 		char *catpath, *database;
 		size_t len;
 
@@ -427,7 +427,7 @@ int main (int argc, char *argv[])
 
 		free (database);
 		free (catpath);
-	} GL_LIST_FOREACH_END (manpathlist);
+	}
 
 	free_pathlist (manpathlist);
 	free (locale);

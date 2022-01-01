@@ -431,7 +431,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 				free (compfile);
 			}
 
-			GL_LIST_FOREACH_START (manpathlist, mp) {
+			GL_LIST_FOREACH (manpathlist, mp) {
 				if (parent_path && STREQ (mp, parent_path))
 					continue;
 
@@ -444,7 +444,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 				}
 
 				free (compfile);
-			} GL_LIST_FOREACH_END (manpathlist);
+			}
 		} else {
 			/* File name with no directory part.  Try searching
 			 * the manpath.
@@ -468,24 +468,24 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 			if (parent_path) {
 				names = look_for_file (parent_path, sec, name,
 						       0, LFF_MATCHCASE);
-				GL_LIST_FOREACH_START (names, found_name) {
+				GL_LIST_FOREACH (names, found_name) {
 					decomp = decompress_open (found_name);
 					if (decomp) {
 						NAME = xstrdup (found_name);
 						gl_list_free (names);
 						goto out;
 					}
-				} GL_LIST_FOREACH_END (names);
+				}
 				gl_list_free (names);
 			}
 
-			GL_LIST_FOREACH_START (manpathlist, mp) {
+			GL_LIST_FOREACH (manpathlist, mp) {
 				if (parent_path && STREQ (mp, parent_path))
 					continue;
 
 				names = look_for_file (mp, sec, name,
 						       0, LFF_MATCHCASE);
-				GL_LIST_FOREACH_START (names, found_name) {
+				GL_LIST_FOREACH (names, found_name) {
 					decomp = decompress_open (found_name);
 					if (decomp) {
 						NAME = xstrdup (found_name);
@@ -493,9 +493,9 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 						free (name);
 						goto out;
 					}
-				} GL_LIST_FOREACH_END (names);
+				}
 				gl_list_free (names);
-			} GL_LIST_FOREACH_END (manpathlist);
+			}
 
 			free (name);
 		}

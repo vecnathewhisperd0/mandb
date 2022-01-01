@@ -102,7 +102,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 	lenman = strlen (mandir);
 	lencat = strlen (catdir);
 
-	GL_LIST_FOREACH_START (names, name) {
+	GL_LIST_FOREACH (names, name) {
 		struct mandata info;
 		char *ext, *section;
 		short found;
@@ -272,7 +272,7 @@ next_exists:
 		}
 next_section:
 		free (section);
-	} GL_LIST_FOREACH_END (names);
+	}
 	gl_list_free (names);
 	return strays;
 }

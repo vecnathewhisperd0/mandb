@@ -72,12 +72,11 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 	const char *trace_name;
 
 	if (gl_list_size (descs) && trace) {
-		GL_LIST_FOREACH_START (trace, trace_name)
+		GL_LIST_FOREACH (trace, trace_name)
 			debug ("trace: '%s'\n", trace_name);
-		GL_LIST_FOREACH_END (trace);
 	}
 
-	GL_LIST_FOREACH_START (descs, desc) {
+	GL_LIST_FOREACH (descs, desc) {
 		/* Either it's the real thing or merely a reference. Get the
 		 * id and pointer right in either case.
 		 */
@@ -90,7 +89,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			info->whatis = desc->whatis;
 			found_real_page = true;
 		} else if (trace) {
-			GL_LIST_FOREACH_START (trace, trace_name) {
+			GL_LIST_FOREACH (trace, trace_name) {
 				struct mandata trace_info;
 				char *buf;
 
@@ -121,7 +120,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 
 				free (trace_info.name);
 				free (buf);
-			} GL_LIST_FOREACH_END (trace);
+			}
 		}
 
 		if (found_external) {
@@ -147,5 +146,5 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			gripe_bad_store (base, info->ext);
 			break;
 		}
-	} GL_LIST_FOREACH_END (descs);
+	}
 }

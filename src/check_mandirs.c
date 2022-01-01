@@ -357,11 +357,11 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 
 	order_files (infile, &names);
 
-	GL_LIST_FOREACH_START (names, name) {
+	GL_LIST_FOREACH (names, name) {
 		manpage = appendstr (manpage, name, (void *) 0);
 		test_manfile (dbf, manpage, path);
 		*(manpage + len) = '\0';
-	} GL_LIST_FOREACH_END (names);
+	}
 
 	gl_list_free (names);
 	free (manpage);
@@ -781,7 +781,7 @@ static int count_glob_matches (const char *name, const char *ext,
 	const char *walk;
 	int count = 0;
 
-	GL_LIST_FOREACH_START (source, walk) {
+	GL_LIST_FOREACH (source, walk) {
 		struct mandata info;
 		struct stat statbuf;
 		char *buf;
@@ -807,7 +807,7 @@ static int count_glob_matches (const char *name, const char *ext,
 			free (info.name);
 			free (buf);
 		}
-	} GL_LIST_FOREACH_END (source);
+	}
 
 	return count;
 }

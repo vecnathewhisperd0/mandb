@@ -339,11 +339,11 @@ void manconv (pipeline *p, gl_list_t from, const char *to)
 		try_iconv (p, pp_encoding, to, 1);
 		free (pp_encoding);
 	} else {
-		GL_LIST_FOREACH_START (from, try_from_code) {
+		GL_LIST_FOREACH (from, try_from_code) {
 			bool last = !gl_list_next_node (from, from_node);
 			if (try_iconv (p, try_from_code, to, last) == 0)
 				break;
-		} GL_LIST_FOREACH_END (from);
+		}
 	}
 
 	free (plain_to);

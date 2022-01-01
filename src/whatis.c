@@ -505,10 +505,10 @@ static int do_whatis_section (MYDBM_FILE dbf,
 	int count = 0;
 
 	infos = dblookup_all (dbf, page, section, false);
-	GL_LIST_FOREACH_START (infos, info) {
+	GL_LIST_FOREACH (infos, info) {
 		display (dbf, info, page);
 		count++;
-	} GL_LIST_FOREACH_END (infos);
+	}
 	gl_list_free (infos);
 	return count;
 }
@@ -815,7 +815,7 @@ static bool search (const char * const *pages, int num_pages)
 	bool any_found;
 	int i;
 
-	GL_LIST_FOREACH_START (manpathlist, mp) {
+	GL_LIST_FOREACH (manpathlist, mp) {
 		char *database;
 		MYDBM_FILE dbf;
 
@@ -849,7 +849,7 @@ static bool search (const char * const *pages, int num_pages)
 		}
 		MYDBM_CLOSE (dbf);
 		free (database);
-	} GL_LIST_FOREACH_END (manpathlist);
+	}
 
 	chkr_garbage_detector ();
 

@@ -122,11 +122,11 @@ void add_manconv (pipeline *p, const char *source, const char *target)
 		char *sources = NULL;
 
 		cmd = pipecmd_new_args (MANCONV, "-f", (void *) 0);
-		GL_LIST_FOREACH_START (from, from_code) {
+		GL_LIST_FOREACH (from, from_code) {
 			sources = appendstr (sources, from_code, (void *) 0);
 			if (gl_list_next_node (from, from_node))
 				sources = appendstr (sources, ":", (void *) 0);
-		} GL_LIST_FOREACH_END (from);
+		}
 		pipecmd_arg (cmd, sources);
 		free (sources);
 		pipecmd_args (cmd, "-t", codes->to, (void *) 0);

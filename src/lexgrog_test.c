@@ -210,7 +210,7 @@ int main (int argc, char **argv)
 		if (file && find_name (file, "-", &lg, encoding)) {
 			gl_list_t descs = parse_descriptions (NULL, lg.whatis);
 			const struct page_description *desc;
-			GL_LIST_FOREACH_START (descs, desc) {
+			GL_LIST_FOREACH (descs, desc) {
 				if (!desc->name || !desc->whatis)
 					continue;
 				found = true;
@@ -221,7 +221,7 @@ int main (int argc, char **argv)
 					printf (": \"%s - %s\"",
 						desc->name, desc->whatis);
 				printf ("\n");
-			} GL_LIST_FOREACH_END (descs);
+			}
 			gl_list_free (descs);
 			free (lg.filters);
 			free (lg.whatis);

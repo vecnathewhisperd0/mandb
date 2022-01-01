@@ -327,7 +327,7 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 
 		/* Make the multi keys and look them up */
 
-		GL_LIST_FOREACH_START (refs, ref) {
+		GL_LIST_FOREACH (refs, ref) {
 			datum multi_cont;
 
 			memset (&multi_cont, 0, sizeof multi_cont);
@@ -367,7 +367,7 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 			if (!info->name)
 				info->name = xstrdup (ref->name);
 			gl_list_add_last (infos, info);
-		} GL_LIST_FOREACH_END (refs);
+		}
 
 		gl_list_free (refs);
 		MYDBM_FREE_DPTR (cont);

@@ -13,7 +13,7 @@ Check manual/README for details of the formatters required.
  * Read ChangeLog for details of recent source code changes.
  * Read docs/TODO for future plans.
 
-The C source requires an ANSI C compiler.
+The C source requires an C99 compiler.
 
 
 ## Copyright and licensing

@@ -926,7 +926,7 @@ static const char *is_section (const char *name)
 {
 	const char *vs;
 
-	GL_LIST_FOREACH_START (section_list, vs) {
+	GL_LIST_FOREACH (section_list, vs) {
 		if (STREQ (vs, name))
 			return name;
 		/* allow e.g. 3perl but disallow 8139too and libfoo */
@@ -934,7 +934,7 @@ static const char *is_section (const char *name)
 		    strlen (name) > 1 && !CTYPE (isdigit, name[1]) &&
 		    STRNEQ (vs, name, 1))
 			return name;
-	} GL_LIST_FOREACH_END (section_list);
+	}
 	return NULL;
 }
 
@@ -1326,9 +1326,8 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #endif /* TROFF_IS_GROFF || HEIRLOOM_NROFF */
 
 #ifdef NROFF_WARNINGS
-				GL_LIST_FOREACH_START (roff_warnings, warning)
+				GL_LIST_FOREACH (roff_warnings, warning)
 					pipecmd_argf (cmd, "-w%s", warning);
-				GL_LIST_FOREACH_END (roff_warnings);
 #endif /* NROFF_WARNINGS */
 
 #ifdef HEIRLOOM_NROFF
@@ -3098,7 +3097,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 
 	order_files (path, &names);
 
-	GL_LIST_FOREACH_START (names, found_name) {
+	GL_LIST_FOREACH (names, found_name) {
 		struct mandata *info = infoalloc ();
 		char *info_buffer = filename_info (found_name, info, name);
 		const char *ult;
@@ -3140,7 +3139,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 			free_mandata_struct (info);
 		}
 		/* Don't free info and info_buffer here. */
-	} GL_LIST_FOREACH_END (names);
+	}
 
 	gl_list_free (names);
 	return found;
@@ -3475,13 +3474,12 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	/* Check that all the entries found are up to date. If not, the
 	 * caller should try again.
 	 */
-	GL_LIST_FOREACH_START (matches, loc)
+	GL_LIST_FOREACH (matches, loc)
 		if (STREQ (sec, loc->sec) &&
 		    (!extension || STREQ (extension, loc->ext)
 				|| STREQ (extension, loc->ext + strlen (sec))))
 			if (maybe_update_file (manpath, name, loc))
 				found_stale = true;
-	GL_LIST_FOREACH_END (matches);
 
 	if (found_stale) {
 		gl_map_remove (db_map, manpath);
@@ -3491,13 +3489,12 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 
 	/* cycle through the mandata structures (there's usually only
 	   1 or 2) and see what we have w.r.t. the current section */
-	GL_LIST_FOREACH_START (matches, loc)
+	GL_LIST_FOREACH (matches, loc)
 		if (STREQ (sec, loc->sec) &&
 		    (!extension || STREQ (extension, loc->ext)
 				|| STREQ (extension, loc->ext + strlen (sec))))
 			found += add_candidate (cand_head, CANDIDATE_DATABASE,
 						0, name, manpath, NULL, loc);
-	GL_LIST_FOREACH_END (matches);
 
 	return found;
 }
@@ -3663,7 +3660,7 @@ static int do_global_apropos_section (const char *path, const char *sec,
 
 	order_files (path, &names);
 
-	GL_LIST_FOREACH_START (names, found_name) {
+	GL_LIST_FOREACH (names, found_name) {
 		struct mandata *info;
 		char *info_buffer;
 		char *title = NULL;
@@ -3695,7 +3692,7 @@ next:
 		free (cat_file);
 		free (title);
 		free_mandata_struct (info);
-	} GL_LIST_FOREACH_END (names);
+	}
 
 	gl_list_free (names);
 
@@ -3720,13 +3717,12 @@ static int do_global_apropos (const char *name, int *found)
 	} else
 		my_section_list = section_list;
 
-	GL_LIST_FOREACH_START (my_section_list, sec) {
+	GL_LIST_FOREACH (my_section_list, sec) {
 		char *mp;
 
-		GL_LIST_FOREACH_START (manpathlist, mp)
+		GL_LIST_FOREACH (manpathlist, mp)
 			*found += do_global_apropos_section (mp, sec, name);
-		GL_LIST_FOREACH_END (manpathlist);
-	} GL_LIST_FOREACH_END (my_section_list);
+	}
 
 	if (section)
 		gl_list_free (my_section_list);
@@ -3884,10 +3880,9 @@ static void locate_page_in_manpath (const char *page_section,
 {
 	char *mp;
 
-	GL_LIST_FOREACH_START (manpathlist, mp)
+	GL_LIST_FOREACH (manpathlist, mp)
 		*found += locate_page (mp, page_section, page_name,
 				       candidates);
-	GL_LIST_FOREACH_END (manpathlist);
 }
 
 /*
@@ -3924,9 +3919,8 @@ static int man (const char *name, int *found)
 	else {
 		const char *sec;
 
-		GL_LIST_FOREACH_START (section_list, sec)
+		GL_LIST_FOREACH (section_list, sec)
 			locate_page_in_manpath (sec, name, &candidates, found);
-		GL_LIST_FOREACH_END (section_list);
 	}
 
 	split_page_name (name, &page_name, &page_section);

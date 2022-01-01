@@ -718,7 +718,7 @@ static void purge_catdirs (gl_map_t tried_catdirs)
 	const char *path;
 	struct tried_catdirs_entry *tried;
 
-	GL_MAP_FOREACH_START (tried_catdirs, path, tried) {
+	GL_MAP_FOREACH (tried_catdirs, path, tried) {
 		char *base;
 		DIR *dir;
 		struct dirent *subdirent;
@@ -766,7 +766,7 @@ static void purge_catdirs (gl_map_t tried_catdirs)
 			free (subdirpath);
 		}
 		closedir (dir);
-	} GL_MAP_FOREACH_END (tried_catdirs);
+	}
 }
 
 int main (int argc, char *argv[])
@@ -852,7 +852,7 @@ int main (int argc, char *argv[])
 
 	tried_catdirs = new_string_map (GL_HASH_MAP, tried_catdirs_free);
 
-	GL_LIST_FOREACH_START (manpathlist, mp) {
+	GL_LIST_FOREACH (manpathlist, mp) {
 		bool global_manpath = is_global_mandir (mp);
 		int ret;
 		DIR *dir;
@@ -903,7 +903,7 @@ next_manpath:
 			regain_effective_privs ();
 
 		chkr_garbage_detector ();
-	} GL_LIST_FOREACH_END (manpathlist);
+	}
 
 	purge_catdirs (tried_catdirs);
 	gl_map_free (tried_catdirs);

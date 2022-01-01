@@ -136,12 +136,11 @@ static const char *get_config (const char *key, enum config_flag flag)
 	const struct config_item *item;
 	char *cont = NULL;
 
-	GL_LIST_FOREACH_START (config, item)
+	GL_LIST_FOREACH (config, item)
 		if (flag == item->flag && STREQ (key, item->key)) {
 			cont = item->cont;
 			break;
 		}
-	GL_LIST_FOREACH_END (config);
 
 	return cont;
 }
@@ -196,21 +195,20 @@ gl_list_t get_sections (void)
 	gl_list_t sections;
 	enum config_flag flag;
 
-	GL_LIST_FOREACH_START (config, item) {
+	GL_LIST_FOREACH (config, item) {
 		if (item->flag == SECTION_USER)
 			length_user++;
 		else if (item->flag == SECTION)
 			length++;
-	} GL_LIST_FOREACH_END (config);
+	}
 	sections = new_string_list (GL_ARRAY_LIST, true);
 	if (length_user)
 		flag = SECTION_USER;
 	else
 		flag = SECTION;
-	GL_LIST_FOREACH_START (config, item)
+	GL_LIST_FOREACH (config, item)
 		if (item->flag == flag)
 			gl_list_add_last (sections, xstrdup (item->key));
-	GL_LIST_FOREACH_END (config);
 	return sections;
 }
 
@@ -875,13 +873,13 @@ static char *def_path (enum config_flag flag)
 	char *manpath = NULL;
 	const struct config_item *item;
 
-	GL_LIST_FOREACH_START (config, item)
+	GL_LIST_FOREACH (config, item)
 		if (item->flag == flag) {
 			gl_list_t expanded_dirs;
 			const char *expanded_dir;
 
 			expanded_dirs = expand_path (item->key);
-			GL_LIST_FOREACH_START (expanded_dirs, expanded_dir) {
+			GL_LIST_FOREACH (expanded_dirs, expanded_dir) {
 				int status = is_directory (expanded_dir);
 
 				if (status < 0)
@@ -894,10 +892,9 @@ static char *def_path (enum config_flag flag)
 				else if (status == 1)
 					manpath = pathappend (manpath,
 							      expanded_dir);
-			} GL_LIST_FOREACH_END (expanded_dirs);
+			}
 			gl_list_free (expanded_dirs);
 		}
-	GL_LIST_FOREACH_END (config);
 
 	/* If we have complete config file failure... */
 	if (!manpath)
@@ -964,7 +961,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 		/* If the directory we're working on has MANPATH_MAP entries
 		 * in the config file, add them to the list.
 		 */
-		GL_LIST_FOREACH_START (config, config_item) {
+		GL_LIST_FOREACH (config, config_item) {
 			if (MANPATH_MAP != config_item->flag ||
 			    !STREQ (p, config_item->key))
 				continue;
@@ -973,7 +970,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 			manpath_map_found = true;
 			insert_override_dir (tmplist, config_item->cont);
 			add_dir_to_list (tmplist, config_item->cont);
-		} GL_LIST_FOREACH_END (config);
+		}
 
 		 /* The directory we're working on isn't in the config file.
 		    See if it has ../man, man, ../share/man, or share/man
@@ -991,19 +988,18 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	if (mandatory) {
 		debug ("adding mandatory man directories\n");
 
-		GL_LIST_FOREACH_START (config, config_item) {
+		GL_LIST_FOREACH (config, config_item) {
 			if (config_item->flag == MANDATORY) {
 				insert_override_dir (tmplist,
 						     config_item->key);
 				add_dir_to_list (tmplist, config_item->key);
 			}
-		} GL_LIST_FOREACH_END (config);
+		}
 	}
 
 	len = 0;
-	GL_LIST_FOREACH_START (tmplist, item)
+	GL_LIST_FOREACH (tmplist, item)
 		len += strlen (item) + 1;
-	GL_LIST_FOREACH_END (tmplist);
 
 	if (!len)
 		/* No path elements in configuration file or with
@@ -1015,12 +1011,12 @@ char *get_manpath_from_path (const char *path, int mandatory)
 	*manpathlist = '\0';
 
 	p = manpathlist;
-	GL_LIST_FOREACH_START (tmplist, item) {
+	GL_LIST_FOREACH (tmplist, item) {
 		len = strlen (item);
 		memcpy (p, item, len);
 		p += len;
 		*p++ = ':';
-	} GL_LIST_FOREACH_END (tmplist);
+	}
 
 	p[-1] = '\0';
 
@@ -1061,9 +1057,8 @@ static void add_dir_to_list (gl_list_t list, const char *dir)
 	const char *expanded_dir;
 
 	expanded_dirs = expand_path (dir);
-	GL_LIST_FOREACH_START (expanded_dirs, expanded_dir)
+	GL_LIST_FOREACH (expanded_dirs, expanded_dir)
 		add_expanded_dir_to_list (list, expanded_dir);
-	GL_LIST_FOREACH_END (expanded_dirs);
 	gl_list_free (expanded_dirs);
 }
 
@@ -1161,7 +1156,7 @@ static void add_dir_to_path_list (gl_list_t list, const char *p)
 	char *expanded_dir;
 
 	expanded_dirs = expand_path (p);
-	GL_LIST_FOREACH_START (expanded_dirs, expanded_dir) {
+	GL_LIST_FOREACH (expanded_dirs, expanded_dir) {
 		int status = is_directory (expanded_dir);
 
 		if (status < 0)
@@ -1191,7 +1186,7 @@ static void add_dir_to_path_list (gl_list_t list, const char *p)
 				canonicalized_path_free (cp);
 			free (path);
 		}
-	} GL_LIST_FOREACH_END (expanded_dirs);
+	}
 	gl_list_free (expanded_dirs);
 }
 
@@ -1223,18 +1218,17 @@ gl_list_t create_pathlist (const char *manp)
 	}
 
 	list = new_string_list (GL_ARRAY_LIST, false);
-	GL_LIST_FOREACH_START (canonicalized_list, cp)
+	GL_LIST_FOREACH (canonicalized_list, cp)
 		gl_list_add_last (list, xstrdup (cp->path));
-	GL_LIST_FOREACH_END (canonicalized_list);
 
 	if (debug_level) {
 		debug ("final search path = ");
-		GL_LIST_FOREACH_START (list, p) {
+		GL_LIST_FOREACH (list, p) {
 			if (!gl_list_previous_node (list, list_node))
 				debug ("%s", p);
 			else
 				debug (":%s", p);
-		} GL_LIST_FOREACH_END (list);
+		}
 		debug ("\n");
 	}
 
@@ -1253,10 +1247,9 @@ char *get_mandb_manpath (void)
 	char *manpath = NULL;
 	const struct config_item *item;
 
-	GL_LIST_FOREACH_START (config, item)
+	GL_LIST_FOREACH (config, item)
 		if (item->flag == MANDB_MAP || item->flag == MANDB_MAP_USER)
 			manpath = pathappend (manpath, item->key);
-	GL_LIST_FOREACH_END (config);
 
 	return manpath;
 }
@@ -1279,7 +1272,7 @@ char *get_catpath (const char *name, int cattype)
 	const struct config_item *item;
 	char *ret = NULL;
 
-	GL_LIST_FOREACH_START (config, item)
+	GL_LIST_FOREACH (config, item)
 		if (((cattype & SYSTEM_CAT) && item->flag == MANDB_MAP) ||
 		    ((cattype & USER_CAT)   && item->flag == MANDB_MAP_USER)) {
 			size_t manlen = strlen (item->key);
@@ -1324,7 +1317,6 @@ char *get_catpath (const char *name, int cattype)
 				break;
 			}
 		}
-	GL_LIST_FOREACH_END (config);
 
 	return ret;
 }
@@ -1337,13 +1329,12 @@ bool is_global_mandir (const char *dir)
 	const struct config_item *item;
 	bool ret = false;
 
-	GL_LIST_FOREACH_START (config, item)
+	GL_LIST_FOREACH (config, item)
 		if (item->flag == MANDB_MAP &&
 		    STRNEQ (dir, item->key, strlen (item->key))) {
 		    	ret = true;
 			break;
 		}
-	GL_LIST_FOREACH_END (config);
 
 	return ret;
 }

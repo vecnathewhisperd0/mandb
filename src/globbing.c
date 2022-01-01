@@ -307,11 +307,11 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 		free (pattern);
 
 		pattern = make_pattern (name, sec, opts);
-		GL_LIST_FOREACH_START (dirs, dir) {
+		GL_LIST_FOREACH (dirs, dir) {
 			if (path)
 				*path = '\0';
 			match_in_directory (dir, pattern, opts, matched);
-		} GL_LIST_FOREACH_END (dirs);
+		}
 		free (pattern);
 		gl_list_free (dirs);
 	}

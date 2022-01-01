@@ -122,9 +122,8 @@ int main (int argc, char **argv)
 				       (match_case ? LFF_MATCHCASE : 0) |
 				       (regex_opt ? LFF_REGEX : 0) |
 				       (wildcard ? LFF_WILDCARD : 0));
-		GL_LIST_FOREACH_START (files, file)
+		GL_LIST_FOREACH (files, file)
 			printf ("%s\n", file);
-		GL_LIST_FOREACH_END (files);
 		gl_list_free (files);
 	}
 	return 0;

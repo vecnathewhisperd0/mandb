@@ -43,6 +43,7 @@ libman_la_SOURCES = \
 	glcontainers.h \
 	linelength.c \
 	linelength.h \
+	mp.h \
 	orderfiles.c \
 	orderfiles.h \
 	pathsearch.c \
