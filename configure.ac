@@ -349,7 +349,9 @@ MAN_COMPRESS_LIB([z], [gzopen])
 dnl To add more decompressors just follow the scheme above.
 
 # Check for various header files and associated libraries.
-AC_PROG_LEX
+dnl The "noyywrap" argument is new in Autoconf 2.70, but this also works
+dnl fine with older versions that ignore the argument.
+AC_PROG_LEX([noyywrap])
 if test "$LEX" = ":" && (test ! -e src/lexgrog.c || test ! -e src/zsoelim.c)
 then
 	AC_MSG_ERROR([flex is required when building from revision control])
