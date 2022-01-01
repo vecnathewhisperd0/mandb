@@ -16,7 +16,7 @@ EOF
 	man_cv_prog_gnu_nroff=no
    fi])
 
-if test "$man_cv_prog_gnu_nroff" = "yes" 
+if test "$man_cv_prog_gnu_nroff" = "yes"
 then
 	AC_DEFINE([GNU_NROFF], [1], [Define if nroff is GNU nroff.])
 fi

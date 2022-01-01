@@ -20,7 +20,7 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifdef HAVE_CONFIG_H
@@ -155,7 +155,7 @@ int main (int argc, char *argv[])
 		while ( (t = strchr (MYDBM_DPTR (content), '\t')) )
 			*t = ' ';
 		printf ("%s -> \"%s\"\n", nicekey, MYDBM_DPTR (content));
-		free (nicekey); 
+		free (nicekey);
 		MYDBM_FREE_DPTR (content);
 next:
 		nextkey = MYDBM_NEXTKEY (dbf, key);

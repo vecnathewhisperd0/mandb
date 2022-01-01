@@ -88,7 +88,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 	names = new_string_list (GL_ARRAY_LIST, false);
 
 	while ((catlist = readdir (cdir)) != NULL) {
-		if (*catlist->d_name == '.' && 
+		if (*catlist->d_name == '.' &&
 		    strlen (catlist->d_name) < (size_t) 3)
 			continue;
 		gl_list_add_last (names, xstrdup (catlist->d_name));
@@ -135,7 +135,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 		*(mandir + lenman - 1) = '/';
 
 		/* check for bogosity */
-		
+
 		if (!ext || strncmp (ext + 1, section, strlen (section)) != 0) {
 			if (quiet < 2)
 				error (0, 0,
@@ -152,12 +152,12 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 		debug ("Testing for existence: %s\n", mandir);
 
-		if (stat (mandir, &buf) == 0) 
+		if (stat (mandir, &buf) == 0)
 			found = 1;
 		else if ((comp = comp_file (mandir))) {
 			found = 1;
 			free (comp->stem);
-		} else 
+		} else
 			found = 0;
 
 		if (!found) {
@@ -177,7 +177,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			*(ext++) = '\0';
 			info.ext = ext;
 
-			/* see if we already have it, before going any 
+			/* see if we already have it, before going any
 			   further */
 			mandir_base = base_name (mandir);
 			exists = dblookup_exact (dbf, mandir_base, info.ext,
@@ -341,14 +341,14 @@ int straycats (const char *database, const char *manpath)
 	/* look in the usual catpath location */
 	mandir = xstrdup (manpath);
 	catdir = xstrdup (manpath);
-	strays = open_catdir (dbf); 
+	strays = open_catdir (dbf);
 
-	/* look in the alternate catpath location if we have one 
+	/* look in the alternate catpath location if we have one
 	   and it's different from the usual catpath */
 
 	if (catpath)
 		debug ("catpath: %s, manpath: %s\n", catpath, manpath);
-		
+
 	if (catpath && strcmp (catpath, manpath) != 0) {
 		*mandir = *catdir = '\0';
 		mandir = appendstr (mandir, manpath, (void *) 0);

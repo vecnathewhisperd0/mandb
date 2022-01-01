@@ -1,6 +1,6 @@
 /*
  * whatis.c: search the index or whatis database(s) for words.
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011,
  *               2012 Colin Watson.
@@ -21,11 +21,11 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * routines for whatis and apropos programs. Whatis looks up the 
- * keyword for the description, apropos searches the entire database 
+ * routines for whatis and apropos programs. Whatis looks up the
+ * keyword for the description, apropos searches the entire database
  * for word matches.
  *
- * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  *
  * CJW: Add more safety in the face of corrupted databases.
  */
@@ -96,7 +96,7 @@ man_sandbox *sandbox;
 iconv_t conv_to_locale;
 #endif /* HAVE_ICONV */
 
-static regex_t *preg;  
+static regex_t *preg;
 static bool regex_opt;
 static bool exact;
 
@@ -413,8 +413,8 @@ static struct mandata *resolve_pointers (MYDBM_FILE dbf, struct mandata *info,
 
 /* fill_in_whatis() is really a ../libdb/db_lookup.c routine but whatis.c
    is the only file that actually requires access to the whatis text... */
-   
-/* Take mandata struct (earlier returned from a dblookup()) and return 
+
+/* Take mandata struct (earlier returned from a dblookup()) and return
    the relative whatis */
 static char *get_whatis (struct mandata *info, const char *page)
 {
@@ -609,7 +609,7 @@ static bool all_set (int num_pages, bool *found_here)
 
 static void parse_name (const char * const *pages, int num_pages,
 			const char *dbname, bool *found, bool *found_here)
-{ 
+{
 	int i;
 
 	if (regex_opt) {
@@ -643,10 +643,10 @@ static bool _GL_ATTRIBUTE_PURE match (const char *page, const char *whatis)
 	char *p;
 
 	begin = whatis;
-	
+
 	/* check for string match, then see if it is a _word_ */
 	while (whatis && (p = strcasestr (whatis, page))) {
-		char *left = p - 1; 
+		char *left = p - 1;
 		char *right = p + len;
 
 		if ((p == begin || (!CTYPE (isalpha, *left) && *left != '_')) &&
@@ -660,7 +660,7 @@ static bool _GL_ATTRIBUTE_PURE match (const char *page, const char *whatis)
 
 static void parse_whatis (const char * const *pages, int num_pages,
 			  const char *whatis, bool *found, bool *found_here)
-{ 
+{
 	int i;
 
 	if (regex_opt) {
@@ -769,7 +769,7 @@ static void do_apropos (MYDBM_FILE dbf,
 		}
 
 		tab = strrchr (MYDBM_DPTR (key), '\t');
-		if (tab) 
+		if (tab)
 			 *tab = '\0';
 
 		memset (found_here, 0, num_pages * sizeof (*found_here));
@@ -794,7 +794,7 @@ nextpage:
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE_DPTR (cont);
 		MYDBM_FREE_DPTR (key);
-		key = nextkey; 
+		key = nextkey;
 #else /* BTREE */
 		MYDBM_FREE_DPTR (cont);
 		MYDBM_FREE_DPTR (key);
@@ -820,7 +820,7 @@ static bool search (const char * const *pages, int num_pages)
 		MYDBM_FILE dbf;
 
 		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
-		
+
 		if (catpath) {
 			database = mkdbname (catpath);
 			free (catpath);
@@ -915,7 +915,7 @@ int main (int argc, char *argv[])
 
 	read_config_file (user_config_file != NULL);
 
-	/* close this locale and reinitialise if a new locale was 
+	/* close this locale and reinitialise if a new locale was
 	   issued as an argument or in $MANOPT */
 	if (locale) {
 		free (internal_locale);

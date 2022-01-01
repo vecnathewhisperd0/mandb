@@ -31,7 +31,7 @@ test_only=
 if test "$1" = "-t" || test "$1" = "--test"
 then
 	test_only=yes
-else 
+else
 	if test "$1" && test "$2" && test "$3"
 	then
 		test_only=no
@@ -43,7 +43,7 @@ fi
 
 ( test "$1" = "-h" || test "$1" = "--help" ) && help=yes || help=
 
-if test "$help" || test -z "$test_only" 
+if test "$help" || test -z "$test_only"
 then
 	cat << EOF
 usage: $progname -h | -t | owner group mode
@@ -74,11 +74,11 @@ do
 		test -d "$subdir" &&
 		subdirs="$subdirs `echo ${subdir} | sed -e 's,man,cat,'`"
 	done
-	
+
 	echo "Cat page hierarchy:	$catdir"
 	echo "Cat sections:		$subdirs"
 
-	if test -d "$catdir" 
+	if test -d "$catdir"
 	then
 	  subs_needed=
 	  subs_ok=
@@ -86,13 +86,13 @@ do
 	  do
 		cd $catdir
 	 	test -d "$subdir" &&
-		subs_ok="$subs_ok $subdir" || 
+		subs_ok="$subs_ok $subdir" ||
 		subs_needed="$subs_needed $subdir"
 	  done
 
 	  echo "  already present:	$subs_ok"
 	  echo "  need to be created:	$subs_needed"
-	
+
 	  catdirs=
 	  for subdir in $subs_needed
 	  do
@@ -102,7 +102,7 @@ do
 	  echo "  Cat directory not present, no subdirectories will be created"
 	  catdirs=
 	fi
- 
+
 	cd $here
 	if test "$test_only" = "no" && test "$catdirs"
 	then
@@ -120,4 +120,3 @@ do
 
 	echo " "
 done
-

@@ -92,7 +92,7 @@ static void whatis_free (const void *value)
 	free (whatis);
 }
 
-static void gripe_multi_extensions (const char *path, const char *sec, 
+static void gripe_multi_extensions (const char *path, const char *sec,
 				    const char *name, const char *ext)
 {
 	if (quiet < 2)
@@ -190,8 +190,8 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		} else {
 			char *abs_filename;
 
-			/* see if the cached file actually exists. It's 
-			   evident at this point that we have multiple 
+			/* see if the cached file actually exists. It's
+			   evident at this point that we have multiple
 			   comp extensions */
 			abs_filename = make_filename (path, NULL,
 						      exists, "man");
@@ -265,7 +265,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		info.id = SO_MAN;	/* .so, sym or hard linked file */
 
 	/* Ok, here goes: Use a hash tree to store the ult_srcs with
-	 * their whatis. Anytime after, check the hash tree, if it's there, 
+	 * their whatis. Anytime after, check the hash tree, if it's there,
 	 * use it. This saves us a find_name() which is a real hog.
 	 *
 	 * Use the full path in ult as the hash key so we don't have to
@@ -684,7 +684,7 @@ static bool sanity_check_db (MYDBM_FILE dbf)
 	return true;
 }
 
-/* routine to update the db, ensure that it is consistent with the 
+/* routine to update the db, ensure that it is consistent with the
    filesystem */
 int update_db (const char *database, const char *manpath, const char *catpath)
 {

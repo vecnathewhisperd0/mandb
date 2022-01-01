@@ -47,7 +47,7 @@ static void gripe_bogus_manpage (const char *manpage)
 	if (quiet < 2)
 		error (0, 0, _("warning: %s: ignoring bogus filename"),
 		       manpage);
-}	  	  
+}
 
 char *make_filename (const char *path, const char *name,
 		     struct mandata *in, const char *type)
@@ -74,13 +74,13 @@ char *make_filename (const char *path, const char *name,
 /* Fill in a mandata structure with information about a file name.
  * file is the name to examine. info points to the structure to be filled
  * in. req_name is the page name that was requested.
- * 
+ *
  * Returns either a pointer to the buffer which the fields in info point
  * into, to be freed by the caller, or NULL on error. The buffer will
  * contain either three or four null-terminated strings: the directory name,
  * the base of the file name in that directory, the section extension, and
  * optionally the compression extension.
- * 
+ *
  * Only the fields name, ext, sec, and comp are filled in by this function.
  * name is only set if it differs from req_name; otherwise it remains at
  * NULL.

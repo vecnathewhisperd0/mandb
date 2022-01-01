@@ -41,4 +41,3 @@ man8_MANS = \
 	man8/mandb.8
 
 include $(top_srcdir)/man/Rules.man
-

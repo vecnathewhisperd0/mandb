@@ -211,7 +211,7 @@ char *lang_dir (const char *filename)
 	const char *sm;	/* the second "/man?/" dir */
 
 	ld = xstrdup ("");
-	if (!filename) 
+	if (!filename)
 		return ld;
 
 	/* Check whether filename is in a man page hierarchy. */

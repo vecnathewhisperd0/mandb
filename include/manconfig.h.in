@@ -40,8 +40,8 @@
 /* STD_SECTIONS must contain all of your man hierarchy subdirectories. The
    order is important. Manual pages will be displayed in this order. Ie
    if "1" comes before "2", then a kill(1) will be displayed in preference to
-   kill(2), or if `man --all kill', it will be displayed first. Section names 
-   may be multi-character, but this is non-standard and probably best 
+   kill(2), or if `man --all kill', it will be displayed first. Section names
+   may be multi-character, but this is non-standard and probably best
    avoided. */
 
 #define STD_SECTIONS { \
@@ -66,7 +66,7 @@
 #define PP_COOKIE "'\\\" "
 
 /* uncomment the following line if manual pages require tbl by default */
-#ifndef DEFAULT_MANROFFSEQ   
+#ifndef DEFAULT_MANROFFSEQ
 #define DEFAULT_MANROFFSEQ   "t"
 #endif
 
@@ -80,17 +80,17 @@
 /* CATMODE is the mode of the formatted cat pages that we create. The man-db
    package can be run in 4 main modes, 3 of which are relatively secure and
    allow the cats to be non world writable. The `wide open' mode requires
-   CATMODE to be 0666. Edit if necessary, after reading the man-db manual */ 
+   CATMODE to be 0666. Edit if necessary, after reading the man-db manual */
 
 #define CATMODE		0644 /* u=rw,go=r */
 
-/* DBMODE is the mode of the created databases. As with CATMODE, secure 
-   operation requires that the db's don't have world write access. In the 
-   unlikely event that this is required, change to 0666. 
+/* DBMODE is the mode of the created databases. As with CATMODE, secure
+   operation requires that the db's don't have world write access. In the
+   unlikely event that this is required, change to 0666.
      For increased speed, at the cost of buffer cache, set the sticky bit
-   on databases so that they remain memory resident. To do this, OR the 
+   on databases so that they remain memory resident. To do this, OR the
    required mode with 1000 and prepend a 0, eg 01644 */
-   
+
 #define DBMODE		0644 /* u=rw,go=r */
 
 /* The name of the databases. DB_EXT depends on the database type in use */
@@ -188,11 +188,11 @@
 #  define APROPOS_REGEX_GREP_FLAGS	"-iE"
 #endif
 
-/* GNU less flags (i)gnore case on search 
+/* GNU less flags (i)gnore case on search
  *                (x8) set tab stops to 8 spaces
  *                (R)aw control chars (but keep track of screen appearance)
  *                (m)ore display style
- * 
+ *
  * If you change this, be sure to match the format with
  * man.c:make_display_command().
  */
@@ -215,7 +215,7 @@
 #  define COMPRESS_EXT "@compress_ext@"
 #endif /* COMP_CAT */
 
-/* These are the currently supported decompressors. They are used for 
+/* These are the currently supported decompressors. They are used for
    decompressing cat pages and source nroff. To add further decompressors,
    you will need to edit comp_src.h[.in] . Help is provided in the file */
 

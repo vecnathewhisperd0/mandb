@@ -1,6 +1,6 @@
 /*
- * security.c: Routines to aid secure uid operations 
- *  
+ * security.c: Routines to aid secure uid operations
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2001, 2003, 2004, 2007, 2010, 2011 Colin Watson.
  *
@@ -20,7 +20,7 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Mon Aug  8 20:35:30 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifdef HAVE_CONFIG_H
@@ -122,8 +122,8 @@ struct passwd *get_man_owner (void)
 }
 #endif /* MAN_OWNER */
 
-/* 
- * function to gain user privs by either (a) dropping effective privs 
+/*
+ * function to gain user privs by either (a) dropping effective privs
  * completely (saved ids) or (b) reversing euid w/ uid.
  * Ignore if superuser.
  */
@@ -143,7 +143,7 @@ void drop_effective_privs (void)
 #endif /* MAN_OWNER */
 }
 
-/* 
+/*
  * function to (re)gain setuid privs by (a) setting euid from suid or (b)
  * (re)reversing uid w/ euid. Ignore if superuser.
  */

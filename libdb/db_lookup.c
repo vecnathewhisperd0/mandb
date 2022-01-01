@@ -463,7 +463,7 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 			goto nextpage;
 
 		tab = strrchr (MYDBM_DPTR (key), '\t');
-		if (tab) 
+		if (tab)
 			 *tab = '\0';
 
 		if (!info.name)

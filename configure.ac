@@ -100,13 +100,13 @@ then
 	then
 		MAN_PROG_HEIRLOOM_NROFF([$nroff])
 	fi
-	if test -n "$nroff_device" 
+	if test -n "$nroff_device"
 	then
 		AC_MSG_CHECKING([that nroff works with argument$nroff_device])
 		# We cannot cache this result as it can change between runs
 		# of configure.
 		if $nroff $nroff_device </dev/null >/dev/null 2>&1 3>&1
-		then 
+		then
 			AC_MSG_RESULT([yes])
 		else
 			AC_MSG_RESULT([no])
@@ -115,7 +115,7 @@ then
 	fi
 	AC_MSG_CHECKING([for appropriate nroff macro])
 	AC_CACHE_VAL([man_cv_prog_nroff_macro], [
-	
+
 	for macro in $macros
 	do
 		if $nroff -m$macro $nroff_device </dev/null >/dev/null 2>&1 3>&1
@@ -124,7 +124,7 @@ then
 			break
 		fi
 	done])
-	
+
 	if test -n "$man_cv_prog_nroff_macro"
 	then
 		if test "$man_cv_prog_heirloom_nroff" = "yes"
@@ -258,7 +258,7 @@ MAN_CHECK_PROGS([neqn], [NEQN], [use NEQN to preprocess equations for character 
 # should be acceptable. -Tlatin1 is ignored by some eqn implementations.
 if test -z "$neqn"
 then
-	test -n "$eqn" && 
+	test -n "$eqn" &&
 	(test -n "$nroff_device" && neqn="$eqn -T$nroff_device" || neqn="$eqn -Tascii")
 fi
 MAN_CHECK_PROGS([tbl], [TBL], [use TBL to preprocess tables], [tbl gtbl])
@@ -385,11 +385,11 @@ then
     for lib in gdbm c dbm
     do
       AC_CHECK_LIB([$lib], [gdbm_fetch],
-		   test "$lib" = "c" || DBLIBS="-l$lib" 
+		   test "$lib" = "c" || DBLIBS="-l$lib"
 		   [AC_DEFINE([GDBM], [1], [Define if you have, and want to use, gdbm interface routines.])
 		    AC_SUBST([DBTYPE], [gdbm])]
 		   db=yes, db=no)
-      if test "$db" = "yes" 
+      if test "$db" = "yes"
       then
         man_save_LIBS="$LIBS"
         LIBS="$LIBS $DBLIBS"
@@ -436,10 +436,10 @@ then
 	test "$db" = "yes" && break
       done], db=no)
   fi
-fi 
+fi
 
 if test "$db" != "yes"
-then 
+then
     if test "$db" = "no"
     then
       AC_MSG_ERROR([Fatal: no supported database library/header found])

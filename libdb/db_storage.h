@@ -1,6 +1,6 @@
 /*
  * db_storage.h: define mandata structure, some macros and prototypes
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2002, 2003, 2007, 2008 Colin Watson.
  *
@@ -20,7 +20,7 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifndef DB_STORAGE_H
@@ -30,7 +30,7 @@
 
 /* These definitions give an inherent precedence to each particular type
    of manual page:
-   
+
    ULT_MAN:	ultimate manual page, the full source nroff file.
    SO_MAN:	source nroff file containing .so request to an ULT_MAN.
    WHATIS_MAN:	virtual `whatis referenced' page pointing to an ULT_MAN.
@@ -70,7 +70,7 @@ struct mandata {
 	const char *filter;		/* filters needed for the page */
 	const char *whatis;		/* whatis description for page */
 	struct timespec mtime;		/* mod time for file */
-}; 
+};
 
 struct name_ext {
 	const char *name;

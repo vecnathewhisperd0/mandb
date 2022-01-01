@@ -1,6 +1,6 @@
 /*
  * catman.c: create and/or update cat files
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008, 2009, 2010, 2011
  *               Colin Watson.
@@ -21,7 +21,7 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Thu Dec  8 00:03:12 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Thu Dec  8 00:03:12 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 /* MAX_ARGS must be >= 7, 5 for options, 1 for page and 1 for NULL */
@@ -39,7 +39,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <limits.h>  
+#include <limits.h>
 
 #ifndef NAME_MAX
 #  if defined(_POSIX_VERSION) && defined(_POSIX_NAME_MAX)
@@ -268,7 +268,7 @@ static int parse_for_sec (const char *database,
 		datum nextkey;
 
 		/* ignore db identifier keys */
-		if (*MYDBM_DPTR (key) != '$') { 
+		if (*MYDBM_DPTR (key) != '$') {
 			datum content;
 
 			content = MYDBM_FETCH (dbf, key);
@@ -279,7 +279,7 @@ static int parse_for_sec (const char *database,
 				       MYDBM_DPTR (key));
 
 			/* ignore overflow entries */
-			if (*MYDBM_DPTR (content) != '\t') { 
+			if (*MYDBM_DPTR (content) != '\t') {
 				struct mandata entry;
 
 				split_content (dbf, MYDBM_DPTR (content),
@@ -288,7 +288,7 @@ static int parse_for_sec (const char *database,
 				/* Accept if the entry is an ultimate manual
 				   page and the section matches the one we're
 				   currently dealing with */
-				if (entry.id == ULT_MAN && 
+				if (entry.id == ULT_MAN &&
 				    strcmp (entry.sec, section) == 0) {
 					if (message) {
 						printf (_("\nUpdating cat files for section %s of man hierarchy %s\n"),
@@ -301,10 +301,10 @@ static int parse_for_sec (const char *database,
 					debug ("arg space free: %zu bytes\n",
 					       ARG_MAX - arg_size);
 
-					/* Check to see if we have enough room 
-					   to add another max sized filename 
-					   and that we haven't run out of array 
-					   space too */ 
+					/* Check to see if we have enough room
+					   to add another max sized filename
+					   and that we haven't run out of array
+					   space too */
 				    	if (arg_size >= ARG_MAX - NAME_MAX ||
 				    	    pipecmd_get_nargs (cmd) ==
 						    MAX_ARGS) {
@@ -319,7 +319,7 @@ static int parse_for_sec (const char *database,
 				entry.addr = NULL;
 				free_mandata_elements (&entry);
 			}
-			
+
 			/* we don't need the content ever again */
 			assert (MYDBM_DPTR (content)); /* just to be sure */
 			MYDBM_FREE_DPTR (content);
@@ -351,7 +351,7 @@ static int check_access (const char *directory)
 
 	return 0;
 }
-		
+
 int main (int argc, char *argv[])
 {
 	char *sys_manp;
@@ -389,7 +389,7 @@ int main (int argc, char *argv[])
 	}
 
 	/* get the manpath as a list of pointers */
-	manpathlist = create_pathlist (manp); 
+	manpathlist = create_pathlist (manp);
 
 	GL_LIST_FOREACH_START (manpathlist, mp) {
 		char *catpath, *database;
@@ -397,7 +397,7 @@ int main (int argc, char *argv[])
 
 		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
 
-		if (catpath) { 
+		if (catpath) {
 			if (is_directory (catpath) != 1) {
 				free (catpath);
 				continue;
@@ -411,7 +411,7 @@ int main (int argc, char *argv[])
 		}
 
 		len = strlen (catpath);
-		
+
 		for (sp = sections; *sp; sp++) {
 			*(catpath + len) = '\0';
 			catpath = appendstr (catpath, "/cat", *sp, (void *) 0);

@@ -1,6 +1,6 @@
 /*
  * zsoelim_main.c: eliminate .so includes within *roff source
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 1997 Fabrizio Polacco.
  * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010

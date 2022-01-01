@@ -7,7 +7,7 @@ AC_DEFUN([MAN_ARG_SETUID],
 AC_ARG_ENABLE([setuid],
 [AS_HELP_STRING([--enable-setuid], [install man setuid])
 AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
-	  [if test "$enableval" = "yes" 
+	  [if test "$enableval" = "yes"
 	   then
 		if test -z "$man_owner"
 		then
@@ -15,7 +15,7 @@ AS_HELP_STRING([--disable-setuid], [don't install man setuid])],
 		fi
 		man_mode="6755"
 		AC_MSG_NOTICE([Man will be installed setuid $man_owner])
-	   elif test "$enableval" = "no" 
+	   elif test "$enableval" = "no"
 	   then
 		man_mode="755"
 		AC_MSG_NOTICE([Man will not be installed setuid])

@@ -11,8 +11,8 @@
 .\" License as specified in the file COPYING that comes with the
 .\" man-db distribution.
 .\"
-.\" Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
-.\" 
+.\" Sat Oct 29 13:09:31 GMT 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
+.\"
 .\"" for hilit19
 .TH MANPATH 5 "%date%" "%version%" "%manpath_config_file%"
 .SH NOME
@@ -43,24 +43,24 @@ generato automaticamente dovrebbe contenere. Tipicamente include
 .IR /usr/man .
 .TP
 .BI MANPATH_MAP \ elemento_percorso\ elemento_percorso_man
-Righe di questo tipo definiscono la mappatura da 
-.RB $ PATH 
+Righe di questo tipo definiscono la mappatura da
+.RB $ PATH
 a
 .RB $ MANPATH .
 Per ognuno degli
 .I elemento_percorso
 trovati nella variabile
-.RB $ PATH 
-dell'utente, 
+.RB $ PATH
+dell'utente,
 .I elemento_percorso_man
 sarà aggiunto a
-.RB $ MANPATH . 
+.RB $ MANPATH .
 .TP
 \fBMANDB_MAP \fIelemento_percorso_man \fR\|[\|\fIelemento_percorso_cat\fR \|]
 Righe di questo tipo indicano quali percorsi man devono essere
 trattati come globali e opzionalmente, dove dovrebbero essere salvati
 i loro file cat. Questo campo è particolarmente importante se
-.B man 
+.B man
 è un programma setuid, in quanto indica a quali gerarchie di pagine di
 manuale accedere come utente setuid e a quali come l'utente invocante.
 
@@ -68,7 +68,7 @@ Le gerarchie di pagine di manuale sono solitamente quelle
 immagazzinate sotto a
 .I /usr
 come, ad esempio,
-.IR /usr/man , 
+.IR /usr/man ,
 .I /usr/local/man
 e
 .IR /usr/X11R6/man .
@@ -85,7 +85,7 @@ impossibile specificare una valida gerarchia di directory per il loro
 salvataggio. Per osservare il
 .B Linux FSSTND
 la parola chiave
-.RB ` FSSTND ' 
+.RB ` FSSTND '
 può essere usata al posto di una reale directory.
 
 Sfortunatamente, è necessario specificare

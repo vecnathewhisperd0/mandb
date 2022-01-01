@@ -50,13 +50,13 @@ do
 
 	file1=
 	file2=
-	
+
 	for file in `man -aw -M $manpath $args |sed -e 's/\([^ ]*\).*/\1/'`
 	do
 		if test "$file1"
 		then
 			file2=$file
-			break 
+			break
 		else
 			file1=$file
 		fi
@@ -67,7 +67,7 @@ do
 	if test "$file1" -nt "$file2"
 	then
 		echo "$file1 is newer than $file2" >&2
-		echo "$file2" 
+		echo "$file2"
 	elif test "$file2" -nt "$file1"
 	then
 		echo "$file2 is newer than $file1" >&2

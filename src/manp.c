@@ -39,7 +39,7 @@
  * Wed May  4 15:44:47 BST 1994 Wilf. (G.Wilford@ee.surrey.ac.uk): changes
  * to get_dirlist() and manpath().
  *
- * This whole code segment is unfriendly and could do with a complete 
+ * This whole code segment is unfriendly and could do with a complete
  * overhaul.
  */
 
@@ -334,7 +334,7 @@ static void gripe_not_directory (const char *dir)
 		error (0, 0, _("warning: %s isn't a directory"), dir);
 }
 
-/* accept a manpath list, separated with ':', return the associated 
+/* accept a manpath list, separated with ':', return the associated
    catpath list */
 char *cat_manpath (char *manp)
 {
@@ -345,12 +345,12 @@ char *cat_manpath (char *manp)
 		catdir = get_config (path, MANDB_MAP_USER);
 		if (!catdir)
 			catdir = get_config (path, MANDB_MAP);
-		catp = catdir ? pathappend (catp, catdir) 
+		catp = catdir ? pathappend (catp, catdir)
 			      : pathappend (catp, path);
 	}
 
 	return catp;
-}		
+}
 
 /* Unpack a glibc-style locale into its component parts.
  *
@@ -670,7 +670,7 @@ static char *guess_manpath (const char *systems)
 			/* Things aren't going to work well here either... */
 			if (!quiet)
 				error (0, 0, _("warning: empty $PATH"));
-			
+
 			return add_system_manpath (systems,
 						   def_path (MANDATORY));
 		}
@@ -774,12 +774,12 @@ static void add_to_dirlist (FILE *config_file, int user)
 		else if (sscanf (bp, "MANBIN %*s") == 1)
 			goto next;
 		else if (sscanf (bp, "MANDATORY_MANPATH %511s", key) == 1)
-			add_mandatory (key);	
+			add_mandatory (key);
 		else if (sscanf (bp, "MANPATH_MAP %511s %511s",
-			 key, cont) == 2) 
+			 key, cont) == 2)
 			add_manpath_map (key, cont);
 		else if ((c = sscanf (bp, "MANDB_MAP %511s %511s",
-				      key, cont)) > 0) 
+				      key, cont)) > 0)
 			add_mandb_map (key, c == 2 ? cont : key, user);
 		else if ((c = sscanf (bp, "DEFINE %511s %511[^\n]",
 				      key, cont)) > 0)
@@ -975,7 +975,7 @@ char *get_manpath_from_path (const char *path, int mandatory)
 			add_dir_to_list (tmplist, config_item->cont);
 		} GL_LIST_FOREACH_END (config);
 
-		 /* The directory we're working on isn't in the config file.  
+		 /* The directory we're working on isn't in the config file.
 		    See if it has ../man, man, ../share/man, or share/man
 		    subdirectories.  If so, and they haven't been added to
 		    the list, do. */
@@ -1074,9 +1074,9 @@ static void add_man_subdirs (gl_list_t list, const char *path)
 {
 	char *newpath;
 
-	/* don't assume anything about path, especially that it ends in 
+	/* don't assume anything about path, especially that it ends in
 	   "bin" or even has a '/' in it! */
-	   
+
 	char *subdir = strrchr (path, '/');
 	if (subdir) {
 		newpath = xasprintf ("%.*s/man", (int) (subdir - path), path);
@@ -1266,8 +1266,8 @@ char *get_mandb_manpath (void)
  * Return catdir mapping or NULL if it isn't a global/user mandir (as
  * appropriate).
  *
- * This routine would seem to work correctly for nls subdirs and would 
- * specify the (correct) consistent catpath even if not defined in the 
+ * This routine would seem to work correctly for nls subdirs and would
+ * specify the (correct) consistent catpath even if not defined in the
  * config file.
  *
  * Do not return user catpaths when cattype == 0! This is used to decide
@@ -1348,14 +1348,14 @@ bool is_global_mandir (const char *dir)
 	return ret;
 }
 
-/* Accept a manpath (not a full pathname to a file) and return an FSSTND 
+/* Accept a manpath (not a full pathname to a file) and return an FSSTND
    equivalent catpath */
 static char *fsstnd (const char *path)
 {
 	char *manpath;
 	char *catpath;
 	char *element;
-	
+
 	if (strncmp (path, MAN_ROOT, sizeof MAN_ROOT - 1) != 0) {
 		if (!quiet)
 			error (0, 0, _("warning: %s does not begin with %s"),
@@ -1367,19 +1367,19 @@ static char *fsstnd (const char *path)
 	manpath = xstrdup (path);
 	catpath = xmalloc (strlen (path) + sizeof CAT_ROOT - 3);
 
-	/* start with CAT_ROOT */ 
+	/* start with CAT_ROOT */
 	(void) strcpy (catpath, CAT_ROOT);
 
 	/* split up path into elements and deal with accordingly */
 	for (element = strtok (manpath, "/"); element;
 	     element = strtok (NULL, "/")) {
 		if (strncmp (element, "man", 3) == 0) {
-			if (*(element + 3)) { 
+			if (*(element + 3)) {
 				*element = 'c';
 				*(element + 2) = 't';
 			} else
 				continue;
-		} 
+		}
 		(void) strcat (catpath, "/");
 		(void) strcat (catpath, element);
 	}

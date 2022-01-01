@@ -19,7 +19,7 @@
 
 /*
  * zsoelim.l: eliminate .so includes within *roff source
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 1997 Fabrizio Polacco.
  * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011
@@ -46,7 +46,7 @@
  * 100% of compressed source files correctly. A replacement tmac.andoc was
  * considered, but would not have been portable to all systems.
  *
- * Wed Oct 12 18:46:11 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Wed Oct 12 18:46:11 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  *
  * Tue, 14 Oct 1997 Fabrizio Polacco <fpolacco@debian.org>
  * - added changes that were done to .c instead of -l source
@@ -139,13 +139,13 @@ W	[ \t]
 
 %%
 
-^\.de{W}*.+	{	
+^\.de{W}*.+	{
 			no_newline = 1;
 			ECHO;
 			BEGIN (de);	/* Now we're inside of a macro definition: ends with a comment */
 		}
 
-^\.so{W}*	{	
+^\.so{W}*	{
 			no_newline = 1;
 			BEGIN (so);	/* Now we're in the .so environment */
 		}
@@ -172,11 +172,11 @@ W	[ \t]
 			putchar ('\n');
 			LINE++;
 		}
-		
+
 
 <so>\"?[^ \t\n\"]+\"?	{ 	/* file names including whitespace ?  */
-			if (so_stack_ptr == MAX_SO_DEPTH - 1) 
-				error (FATAL, 0, 
+			if (so_stack_ptr == MAX_SO_DEPTH - 1)
+				error (FATAL, 0,
 				       _("%s:%d: .so requests nested too "
 				         "deeply or are recursive"),
 				       NAME, LINE);
@@ -191,7 +191,7 @@ W	[ \t]
 					       so_parent_path)) {
 				--so_stack_ptr;
 #ifndef __alpha
-				error (OK, 0, 
+				error (OK, 0,
 				       _("%s:%d: warning: failed .so request"),
 				       NAME, LINE);
 				printf (".so %s\n", yytext);
@@ -210,7 +210,7 @@ W	[ \t]
 			no_newline = 0;
 			BEGIN (INITIAL);
 		}
-		
+
 <so>\n		{
 			no_newline = 0;
 			error (OK, 0,
@@ -256,7 +256,7 @@ W	[ \t]
 			if (NAME)
 				free (NAME);
 			NAME = xstrdup (yytext);
-			BEGIN (end_request); 
+			BEGIN (end_request);
 		}
 
 <lfname>{W}+	{

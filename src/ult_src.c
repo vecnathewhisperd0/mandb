@@ -136,7 +136,7 @@ static char *ult_softlink (const char *fullpath)
 	return resolved_path;
 }
 
-/* Test 'buffer' to see if it contains a .so include. If so and it's not an 
+/* Test 'buffer' to see if it contains a .so include. If so and it's not an
  * absolute filename, return newly allocated string whose contents are the
  * include.
  */
@@ -153,19 +153,19 @@ static char *test_for_include (const char *buffer)
 	if (strncmp (buffer, ".so", 3) == 0) {
 		buffer += 3;
 
-		/* strip out any whitespace between the command and 
+		/* strip out any whitespace between the command and
 		   it's argumant */
 		while (CTYPE (isspace, *buffer))
 			buffer++;
 
 		/* If .so's argument is an absolute filename, it could be
 		 * either (i) a macro inclusion, (ii) a non local manual page
-		 * or (iii) a (somewhat bogus) reference to a local manual 
+		 * or (iii) a (somewhat bogus) reference to a local manual
 		 * page.
-		 * 
+		 *
 		 * If (i) or (ii), we must not follow the reference. (iii) is
-		 * a problem with the manual page, thus we don't want to 
-		 * follow any absolute inclusions in our quest for the 
+		 * a problem with the manual page, thus we don't want to
+		 * follow any absolute inclusions in our quest for the
 		 * ultimate source file */
 		if (*buffer != '/') {
 			const char *end = buffer;

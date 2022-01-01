@@ -1,6 +1,6 @@
 /*
  * sandbox.h: Interface to process sandboxing
- *  
+ *
  * Copyright (C) 2017 Colin Watson.
  *
  * This file is part of man-db.

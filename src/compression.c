@@ -1,6 +1,6 @@
 /*
  * compression.c: code to find decompressor / compression extension
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2001, 2002 Colin Watson.
  *
@@ -20,7 +20,7 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Sat Aug 20 15:01:02 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Sat Aug 20 15:01:02 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifdef HAVE_CONFIG_H
@@ -44,13 +44,13 @@
 #include "error.h"
 #include "pipeline.h"
 
-/* Take filename as arg, return structure containing decompressor 
-   and extension, or NULL if no comp extension found. 
+/* Take filename as arg, return structure containing decompressor
+   and extension, or NULL if no comp extension found.
    If want_stem, set comp->stem to the filename without extension, which
    the caller should free.
 
    eg.
-   	filename = /usr/man/man1/foo.1.gz 
+   	filename = /usr/man/man1/foo.1.gz
 
 	comp->prog = "/usr/bin/gzip -dc";
    	comp->ext = "gz";
@@ -102,10 +102,10 @@ struct compression *comp_file (const char *filename)
 
 	compfile = xasprintf ("%s.", filename);
 	len = strlen (compfile);
-	
+
 	for (comp = comp_list; comp->ext; comp++) {
 		struct stat buf;
-		
+
 		compfile = appendstr (compfile, comp->ext, (void *) 0);
 
 		if (stat (compfile, &buf) == 0) {

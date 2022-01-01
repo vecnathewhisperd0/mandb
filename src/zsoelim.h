@@ -1,6 +1,6 @@
 /*
  * zsoelim.h: interface to eliminating .so includes within *roff source
- *  
+ *
  * Copyright (C) 2008 Colin Watson.
  *
  * This file is part of man-db.

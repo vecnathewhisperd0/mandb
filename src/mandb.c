@@ -1,6 +1,6 @@
 /*
  * mandb.c: used to create and initialise global man database.
- *  
+ *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011,
  *               2012 Colin Watson.
@@ -21,7 +21,7 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  *
  * CJW: Security fixes. Make --test work. Purge old database entries.
  */
@@ -453,7 +453,7 @@ static int mandb (struct dbpaths *dbpaths,
 	dbname = mkdbname (catpath);
 	database = xasprintf ("%s/%d", catpath, getpid ());
 
-	if (!quiet) 
+	if (!quiet)
 		printf (_("Processing manual pages under %s...\n"), manpath);
 
 	if (!STREQ (catpath, manpath)) {
@@ -845,7 +845,7 @@ int main (int argc, char *argv[])
 	}
 
 	/* get the manpath as a list of pointers */
-	manpathlist = create_pathlist (manp); 
+	manpathlist = create_pathlist (manp);
 
 	/* finished manpath processing, regain privs */
 	regain_effective_privs ();

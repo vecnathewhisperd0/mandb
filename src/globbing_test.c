@@ -1,6 +1,6 @@
 /*
  * globbing_test.c: test program for file-finding functions
- *  
+ *
  * Copyright (C) 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008 Colin Watson.
  *

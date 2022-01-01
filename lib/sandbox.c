@@ -1,6 +1,6 @@
 /*
  * sandbox.c: Process sandboxing
- *  
+ *
  * Copyright (C) 2017 Colin Watson.
  *
  * This file is part of man-db.

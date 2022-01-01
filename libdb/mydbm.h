@@ -23,7 +23,7 @@
  *
  * Currently satisfies:
  *
- *	*hash based* 
+ *	*hash based*
  *		GNU dbm: 	(gdbm & ndbm)
  *		Berkeley db: 	(ndbm)
  *		`native': 	(ndbm)
@@ -31,7 +31,7 @@
  *	*binary tree based*
  *		Berkeley db: 	(BTREE)
  *
- * Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Tue Apr 26 12:56:44 BST 1994  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifndef MYDBM_H

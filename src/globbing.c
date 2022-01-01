@@ -1,6 +1,6 @@
 /*
  * globbing.c: interface to the POSIX glob routines
- *  
+ *
  * Copyright (C) 1995 Graeme W. Wilford. (Wilf.)
  * Copyright (C) 2001, 2002, 2003, 2006, 2007, 2008 Colin Watson.
  *
@@ -20,7 +20,7 @@
  * along with man-db; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Mon Mar 13 20:27:36 GMT 1995  Wilf. (G.Wilford@ee.surrey.ac.uk) 
+ * Mon Mar 13 20:27:36 GMT 1995  Wilf. (G.Wilford@ee.surrey.ac.uk)
  */
 
 #ifdef HAVE_CONFIG_H

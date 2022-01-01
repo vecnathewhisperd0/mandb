@@ -185,7 +185,7 @@ man_sandbox *sandbox;
 
 /* locals */
 static const char *alt_system_name;
-static gl_list_t section_list;		
+static gl_list_t section_list;
 static const char *section;
 static char *colon_sep_section_list;
 static const char *preprocessors;
@@ -789,9 +789,9 @@ static char **manopt_to_env (int *argc)
 	*argc = 0;
 	argv = XNMALLOC (*argc + 3, char *);
 	argv[(*argc)++] = base_name (program_name);
-	
+
 	/* for each [ \t]+ delimited string, allocate an array space and fill
-	   it in. An escaped space is treated specially */	
+	   it in. An escaped space is treated specially */
 	while (*manopt) {
 		switch (*manopt) {
 			case ' ':
@@ -818,7 +818,7 @@ static char **manopt_to_env (int *argc)
 
 	if (*opt_start)
 		argv[(*argc)++] = xstrdup (opt_start);
-	argv[*argc] = NULL;			
+	argv[*argc] = NULL;
 
 	free (manopt_copy);
 	return argv;
@@ -827,13 +827,13 @@ static char **manopt_to_env (int *argc)
 /* Return char array with 'less' special chars escaped. Uses static storage. */
 static const char *escape_less (const char *string)
 {
-	static char *escaped_string; 
+	static char *escaped_string;
 	char *ptr;
 
 	/* 2*strlen will always be long enough to hold the escaped string */
-	ptr = escaped_string = xrealloc (escaped_string, 
+	ptr = escaped_string = xrealloc (escaped_string,
 					 2 * strlen (string) + 1);
-	
+
 	while (*string) {
 		if (*string == '?' ||
 		    *string == ':' ||
@@ -916,7 +916,7 @@ static char *locale_manpath (const char *manpath)
 }
 
 /*
- * Check to see if the argument is a valid section number. 
+ * Check to see if the argument is a valid section number.
  * If the name matches one of
  * the sections listed in section_list, we'll assume that it's a section.
  * The list of sections in config.h simply allows us to specify oddly
@@ -1099,7 +1099,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		 */
 		if (catpath) {
 			fmt_prog = appendstr (catpath, "/",
-					      troff ? TFMT_PROG : NFMT_PROG, 
+					      troff ? TFMT_PROG : NFMT_PROG,
 					      (void *) 0);
 			if (!CAN_ACCESS (fmt_prog, X_OK)) {
 				free (fmt_prog);
@@ -1125,7 +1125,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 
 	if (fmt_prog)
 		debug ("External formatter %s\n", fmt_prog);
-				
+
 	if (!fmt_prog) {
 		/* we don't have an external formatter script */
 		const char *source_encoding, *roff_encoding;
@@ -2121,7 +2121,7 @@ static void locale_macros (void *data)
 }
 #endif /* TROFF_IS_GROFF */
 
-/* allow user to skip a page or quit after viewing desired page 
+/* allow user to skip a page or quit after viewing desired page
    return 1 to skip
    return 0 to view
  */
@@ -2137,9 +2137,9 @@ static int do_prompt (const char *name)
 	if (!tty)
 		return 0;
 
-	fprintf (tty, _( 
+	fprintf (tty, _(
 		 "--Man-- next: %s "
-		 "[ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"), 
+		 "[ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"),
 		 name);
 	fflush (tty);
 
@@ -2456,7 +2456,7 @@ static int display (const char *dir, const char *man_file,
 							 disp_cmd,
 							 cat_file,
 							 formatted_encoding);
-			} else 
+			} else
 #endif /* MAN_CATS */
 				/* don't save cat */
 				format_display (decomp, format_cmd, disp_cmd,
@@ -3080,7 +3080,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 	names = look_for_file (path, sec, name, 0, lff_opts);
 	if (!gl_list_size (names))
 		/*
-    		 * No files match.  
+    		 * No files match.
     		 * See if there's a preformatted page around that
     		 * we can display.
     		 */
@@ -3204,7 +3204,7 @@ static void dbdelete_wrapper (const char *page, struct mandata *info)
 }
 #endif /* MAN_DB_UPDATES */
 
-/* This started out life as try_section, but a lot of that routine is 
+/* This started out life as try_section, but a lot of that routine is
    redundant wrt the db cache. */
 static int display_database (struct candidate *candp)
 {
@@ -3217,7 +3217,7 @@ static int display_database (struct candidate *candp)
 	debug ("trying a db located file.\n");
 	dbprintf (in);
 
-	/* if the pointer holds some data, this is a reference to the 
+	/* if the pointer holds some data, this is a reference to the
 	   real page, use that instead. */
 	if (*in->pointer != '-')
 		name = in->pointer;
@@ -3297,7 +3297,7 @@ static int display_database (struct candidate *candp)
 						      in, "cat");
 				free (catpath);
 				if (!file) {
-					/* don't delete here, 
+					/* don't delete here,
 					   return==0 will do that */
 					free (title);
 					return found; /* zero */
@@ -3489,7 +3489,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	}
 #endif /* MAN_DB_UPDATES */
 
-	/* cycle through the mandata structures (there's usually only 
+	/* cycle through the mandata structures (there's usually only
 	   1 or 2) and see what we have w.r.t. the current section */
 	GL_LIST_FOREACH_START (matches, loc)
 		if (STREQ (sec, loc->sec) &&
@@ -3510,7 +3510,7 @@ static int locate_page (const char *manpath, const char *sec, const char *name,
 {
 	int found, db_ok;
 
-	/* sort out whether we want to treat this hierarchy as 
+	/* sort out whether we want to treat this hierarchy as
 	   global or user. Differences:
 
 	   global: if setuid, use privs; don't create db.
@@ -3978,7 +3978,7 @@ static gl_list_t get_section_list (void)
 	 * too for compatibility.
 	 */
 	sections = new_string_list (GL_ARRAY_LIST, true);
-	for (sec = strtok (colon_sep_section_list, ":,"); sec; 
+	for (sec = strtok (colon_sep_section_list, ":,"); sec;
 	     sec = strtok (NULL, ":,"))
 		gl_list_add_last (sections, xstrdup (sec));
 
@@ -4100,7 +4100,7 @@ int main (int argc, char *argv[])
 	roff_warnings = new_string_list (GL_ARRAY_LIST, true);
 #endif /* NROFF_WARNINGS */
 
-	/* First of all, find out if $MANOPT is set. If so, put it in 
+	/* First of all, find out if $MANOPT is set. If so, put it in
 	   *argv[] format for argp to play with. */
 	argv_env = manopt_to_env (&argc_env);
 	if (argv_env)
@@ -4122,7 +4122,7 @@ int main (int argc, char *argv[])
 
 	get_term (); /* stores terminal settings */
 
-	/* close this locale and reinitialise if a new locale was 
+	/* close this locale and reinitialise if a new locale was
 	   issued as an argument or in $MANOPT */
 	if (locale) {
 		free (internal_locale);

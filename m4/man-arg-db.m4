@@ -6,7 +6,7 @@ AC_DEFUN([MAN_ARG_DB],
 [
 AC_ARG_WITH([db],
 [AS_HELP_STRING([--with-db=LIBRARY], [use database library LIBRARY (db5, db4, db3, db2, db1, db, gdbm, ndbm)])],
-	[if test "$withval" = "yes" || test "$withval" = "no" 
+	[if test "$withval" = "yes" || test "$withval" = "no"
 	 then
 	 	AC_MSG_ERROR([--with-db requires an argument])
 	 else
