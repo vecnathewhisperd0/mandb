@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "attribute.h"
 #include "error.h"
 #include "fnmatch.h"
 #include "gl_array_list.h"
@@ -97,7 +98,7 @@ static char *copy_if_set (const char *str)
 		return xstrdup (str);
 }
 
-const char * _GL_ATTRIBUTE_CONST dash_if_unset (const char *str)
+const char * ATTRIBUTE_CONST dash_if_unset (const char *str)
 {
 	if (str)
 		return str;

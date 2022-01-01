@@ -44,6 +44,7 @@
 #include <unistd.h>
 #include <locale.h>
 
+#include "attribute.h"
 #include "stat-time.h"
 #include "timespec.h"
 #include "xvasprintf.h"
@@ -193,7 +194,7 @@ int remove_directory (const char *directory, int recurse)
 /* Returns an allocated copy of s, with leading and trailing spaces
  * removed.
  */
-char * _GL_ATTRIBUTE_MALLOC trim_spaces (const char *s)
+char * ATTRIBUTE_MALLOC trim_spaces (const char *s)
 {
 	int length;
 	while (*s == ' ')

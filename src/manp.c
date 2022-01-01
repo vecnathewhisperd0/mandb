@@ -60,6 +60,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "attribute.h"
 #include "canonicalize.h"
 #include "gl_array_list.h"
 #include "gl_linkedhash_list.h"
@@ -1126,14 +1127,14 @@ static struct canonicalized_path *canonicalized_path_new (const char *path)
 	return cp;
 }
 
-static bool _GL_ATTRIBUTE_PURE canonicalized_path_equals (const void *elt1,
-							  const void *elt2)
+static bool ATTRIBUTE_PURE canonicalized_path_equals (const void *elt1,
+						      const void *elt2)
 {
 	const struct canonicalized_path *cp1 = elt1, *cp2 = elt2;
 	return string_equals (cp1->canon_path, cp2->canon_path);
 }
 
-static size_t _GL_ATTRIBUTE_PURE canonicalized_path_hash (const void *elt)
+static size_t ATTRIBUTE_PURE canonicalized_path_hash (const void *elt)
 {
 	const struct canonicalized_path *cp = elt;
 	return string_hash (cp->canon_path);

@@ -35,6 +35,7 @@
 #include <errno.h>
 #include <sys/types.h>
 
+#include "attribute.h"
 #include "gettext.h"
 #define _(String) gettext (String)
 
@@ -95,7 +96,7 @@ void init_security (void)
 #endif /* MAN_OWNER */
 }
 
-bool _GL_ATTRIBUTE_PURE running_setuid (void)
+bool ATTRIBUTE_PURE running_setuid (void)
 {
 #ifdef MAN_OWNER
 	return ruid != euid;

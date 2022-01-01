@@ -56,6 +56,7 @@
 #include "regex.h"
 
 #include "argp.h"
+#include "attribute.h"
 #include "dirname.h"
 #include "gl_hash_set.h"
 #include "gl_list.h"
@@ -636,7 +637,7 @@ static void parse_name (const char * const *pages, int num_pages,
 }
 
 /* return true on word match */
-static bool _GL_ATTRIBUTE_PURE match (const char *page, const char *whatis)
+static bool ATTRIBUTE_PURE match (const char *page, const char *whatis)
 {
 	size_t len = strlen (page);
 	const char *begin;

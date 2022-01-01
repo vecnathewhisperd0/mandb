@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "attribute.h"
 #include "timespec.h"
 #include "xvasprintf.h"
 
@@ -49,7 +50,7 @@
  * If promote_links is true, consider SO_MAN equivalent to ULT_MAN. This is
  * appropriate when sorting candidate pages for display.
  */
-int _GL_ATTRIBUTE_CONST compare_ids (char a, char b, int promote_links)
+int ATTRIBUTE_CONST compare_ids (char a, char b, int promote_links)
 {
 #ifdef FAVOUR_STRAYCATS
 	if (a == WHATIS_MAN && b == STRAY_CAT)
