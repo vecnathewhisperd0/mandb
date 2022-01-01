@@ -193,6 +193,12 @@ static bool can_load_seccomp (void)
 			error (FATAL, errno, "can't add seccomp rule"); \
 	} while (0)
 
+#define SC_ALLOW_PERMISSIVE(name) \
+	do { \
+		if (permissive) \
+			SC_ALLOW (name); \
+	} while (0)
+
 #define SC_ALLOW_ARG_1(name, cmp1) \
 	do { \
 		int nr = seccomp_syscall_resolve_name (name); \
@@ -362,16 +368,16 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	SC_ALLOW ("fstatfs64");
 	SC_ALLOW ("ftruncate");
 	SC_ALLOW ("ftruncate64");
-	if (permissive) SC_ALLOW ("futimesat");
+	SC_ALLOW_PERMISSIVE ("futimesat");
 	SC_ALLOW ("getcwd");
 	SC_ALLOW ("getdents");
 	SC_ALLOW ("getdents64");
-	if (permissive) SC_ALLOW ("link");
-	if (permissive) SC_ALLOW ("linkat");
+	SC_ALLOW_PERMISSIVE ("link");
+	SC_ALLOW_PERMISSIVE ("linkat");
 	SC_ALLOW ("lstat");
 	SC_ALLOW ("lstat64");
-	if (permissive) SC_ALLOW ("mkdir");
-	if (permissive) SC_ALLOW ("mkdirat");
+	SC_ALLOW_PERMISSIVE ("mkdir");
+	SC_ALLOW_PERMISSIVE ("mkdirat");
 	SC_ALLOW ("mmap");
 	SC_ALLOW ("mmap2");
 	SC_ALLOW ("munmap");
@@ -410,24 +416,24 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	}
 	SC_ALLOW ("readlink");
 	SC_ALLOW ("readlinkat");
-	if (permissive) SC_ALLOW ("rename");
-	if (permissive) SC_ALLOW ("renameat");
-	if (permissive) SC_ALLOW ("renameat2");
-	if (permissive) SC_ALLOW ("rmdir");
+	SC_ALLOW_PERMISSIVE ("rename");
+	SC_ALLOW_PERMISSIVE ("renameat");
+	SC_ALLOW_PERMISSIVE ("renameat2");
+	SC_ALLOW_PERMISSIVE ("rmdir");
 	SC_ALLOW ("stat");
 	SC_ALLOW ("stat64");
 	SC_ALLOW ("statfs");
 	SC_ALLOW ("statfs64");
 	SC_ALLOW ("statx");
-	if (permissive) SC_ALLOW ("symlink");
-	if (permissive) SC_ALLOW ("symlinkat");
-	if (permissive) SC_ALLOW ("truncate");
-	if (permissive) SC_ALLOW ("truncateat");
-	if (permissive) SC_ALLOW ("unlink");
-	if (permissive) SC_ALLOW ("unlinkat");
-	if (permissive) SC_ALLOW ("utime");
-	if (permissive) SC_ALLOW ("utimensat");
-	if (permissive) SC_ALLOW ("utimes");
+	SC_ALLOW_PERMISSIVE ("symlink");
+	SC_ALLOW_PERMISSIVE ("symlinkat");
+	SC_ALLOW_PERMISSIVE ("truncate");
+	SC_ALLOW_PERMISSIVE ("truncateat");
+	SC_ALLOW_PERMISSIVE ("unlink");
+	SC_ALLOW_PERMISSIVE ("unlinkat");
+	SC_ALLOW_PERMISSIVE ("utime");
+	SC_ALLOW_PERMISSIVE ("utimensat");
+	SC_ALLOW_PERMISSIVE ("utimes");
 
 	/* systemd: SystemCallFilter=@io-event */
 	SC_ALLOW ("_newselect");
