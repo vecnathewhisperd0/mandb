@@ -41,8 +41,8 @@ void init_debug (void)
 		debug_level = true;
 }
 
-static void ATTRIBUTE_FORMAT_PRINTF (1, 0) vdebug (const char *message,
-						   va_list args)
+static void _GL_ATTRIBUTE_FORMAT_PRINTF_SYSTEM (1, 0) vdebug
+	(const char *message, va_list args)
 {
 	if (debug_level)
 		vfprintf (stderr, message, args);
