@@ -523,7 +523,8 @@ const char *get_source_encoding (const char *lang)
 	return fallback_source_encoding;
 }
 
-const char *get_canonical_charset_name (const char *charset)
+const char * ATTRIBUTE_NONNULL ((1)) ATTRIBUTE_RETURNS_NONNULL
+	get_canonical_charset_name (const char *charset)
 {
 	const struct charset_alias_entry *entry;
 	char *charset_upper = xstrdup (charset);
@@ -543,7 +544,7 @@ const char *get_canonical_charset_name (const char *charset)
 }
 
 /* Return the current locale's character set. */
-const char *get_locale_charset (void)
+const char * ATTRIBUTE_RETURNS_NONNULL get_locale_charset (void)
 {
 	const char *charset;
 	char *saved_locale;
@@ -563,10 +564,9 @@ const char *get_locale_charset (void)
 	setlocale (LC_CTYPE, saved_locale);
 	free (saved_locale);
 
-	if (charset && *charset)
-		return get_canonical_charset_name (charset);
-	else
-		return NULL;
+	if (!charset || !*charset)
+		charset = "ANSI_X3.4-1968";
+	return get_canonical_charset_name (charset);
 }
 
 /* Find a locale with this character set. This is a non-portable operation,
