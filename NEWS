@@ -15,6 +15,9 @@ Major changes since man-db 2.9.4:
 	* Manpath deduplication no longer mishandles the case where another
 	  entry in the manpath is a suffix of a candidate path to append.
 
+	* Fix potential crash in path searching if getcwd fails for reasons
+	  other than running out of memory.
+
 man-db 2.9.4 (8 February 2021)
 ==============================
 
