@@ -25,6 +25,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,6 +96,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				argp_usage (state);
 			remaining_args = state->argv + state->next;
 			return 0;
+		case ARGP_KEY_NO_ARGS:
+			argp_usage (state);
+			break;
 	}
 	return ARGP_ERR_UNKNOWN;
 }
@@ -112,6 +116,7 @@ int main (int argc, char **argv)
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
+	assert (remaining_args);
 
 	for (i = 0; i <= 1; i++) {
 		gl_list_t files;
