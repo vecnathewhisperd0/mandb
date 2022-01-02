@@ -7,7 +7,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([1.11 -Wall -Wno-override -Werror foreign dist-xz no-dist-gzip parallel-tests])
 AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
-AC_PREREQ([2.63])
+AC_PREREQ([2.64])
 AC_CONFIG_SRCDIR([src/man.c])
 AC_USE_SYSTEM_EXTENSIONS
 MAN_TAR_SORT_NAME
@@ -62,19 +62,37 @@ case $host_os in
 		;;
 esac
 
-# Enable all reasonable GCC warnings.
-gl_MANYWARN_ALL_GCC([warnings])
-nw=
-nw="$nw -Wsystem-headers"
-nw="$nw -Wmissing-field-initializers"
-nw="$nw -Winline"
-gl_MANYWARN_COMPLEMENT([warnings], [$warnings], [$nw])
-for w in $warnings; do
-	gl_WARN_ADD([$w])
-done
-gl_WARN_ADD([-Wno-missing-field-initializers])
-# Disable use of VLAs by Gnulib to avoid tripping over -Wvla.
-AC_DEFINE([GNULIB_NO_VLA], [1], [Define to 1 to disable use of VLAs.])
+AC_ARG_ENABLE([gcc-warnings],
+  [AS_HELP_STRING([--enable-gcc-warnings=TYPE],
+    [control generation of GCC warnings.  The TYPE 'no' disables
+     warnings; 'yes' generates cheap warnings if available (default);
+     'expensive' in addition generates expensive-to-compute warnings
+     if available])],
+  [case $enableval in
+     no|yes|expensive) ;;
+     *) AC_MSG_ERROR([bad value $enableval for gcc-warnings option]) ;;
+   esac
+   man_gcc_warnings=$enableval],
+  [man_gcc_warnings=yes]
+)
+if test "$man_gcc_warnings" != no; then
+	# Enable all reasonable GCC warnings.
+	gl_MANYWARN_ALL_GCC([warnings])
+	nw=
+	nw="$nw -Wsystem-headers"
+	nw="$nw -Wmissing-field-initializers"
+	nw="$nw -Winline"
+	if test "$man_gcc_warnings" != expensive; then
+		nw="$nw -fanalyzer"
+	fi
+	gl_MANYWARN_COMPLEMENT([warnings], [$warnings], [$nw])
+	for w in $warnings; do
+		gl_WARN_ADD([$w])
+	done
+	gl_WARN_ADD([-Wno-missing-field-initializers])
+	# Disable use of VLAs by Gnulib to avoid tripping over -Wvla.
+	AC_DEFINE([GNULIB_NO_VLA], [1], [Define to 1 to disable use of VLAs.])
+fi
 
 AC_PROG_INSTALL
 AC_PROG_LN_S

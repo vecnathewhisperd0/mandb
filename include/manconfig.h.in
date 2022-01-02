@@ -288,7 +288,7 @@ extern struct compression comp_list[];
 #include "attribute.h"
 #include "xalloc.h"
 #include "xstrndup.h"
-extern char *create_tempdir (const char *template) NODISCARD;
+NODISCARD extern char *create_tempdir (const char *template);
 
 extern bool debug_level;	/* shows whether -d issued */
 extern void init_debug (void);
@@ -322,7 +322,7 @@ extern char *trim_spaces (const char *s);
 extern char *lang_dir (const char *filename);
 extern void init_locale (void);
 
-extern char *appendstr (char *, ...) ATTRIBUTE_SENTINEL () NODISCARD;
+NODISCARD extern char *appendstr (char *, ...) ATTRIBUTE_SENTINEL ();
 
 extern int quiet;		/* be quiet(er) if 1 */
 
