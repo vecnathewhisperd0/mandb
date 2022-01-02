@@ -462,6 +462,7 @@ static int mandb (struct dbpaths *dbpaths,
 		int cachedir_tag_exists = 0;
 
 		cachedir_tag = xasprintf ("%s/CACHEDIR.TAG", catpath);
+		assert (cachedir_tag);
 		fd = open (cachedir_tag, O_RDONLY);
 		if (fd < 0) {
 			FILE *cachedir_tag_file;
@@ -685,7 +686,9 @@ static void purge_catsubdirs (const char *manpath, const char *catpath)
 			continue;
 
 		mandir = xasprintf ("%s/man%s", manpath, ent->d_name + 3);
+		assert (mandir);
 		catdir = xasprintf ("%s/%s", catpath, ent->d_name);
+		assert (catdir);
 
 		if (stat (mandir, &st) != 0 && errno == ENOENT) {
 			if (!quiet)

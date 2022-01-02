@@ -31,6 +31,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
@@ -329,6 +330,7 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 	const char *name;
 
 	manpage = xasprintf ("%s/%s/", path, infile);
+	assert (manpage);
 	len = strlen (manpage);
 
 	/*
@@ -479,6 +481,7 @@ static void fix_permissions_tree (const char *catdir)
 
 		fix_permissions (catdir);
 		catname = xasprintf ("%s/cat1", catdir);
+		assert (catname);
 		for (i = 1; i <= 9; ++i) {
 			catname[strlen (catname) - 1] = '0' + i;
 			fix_permissions (catname);

@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <string.h>
@@ -82,6 +83,7 @@ static bool pathsearch (const char *name, const mode_t bits)
 		}
 
 		filename = xasprintf ("%s/%s", element, name);
+		assert (filename);
 		if (stat (filename, &st) == -1) {
 			free (filename);
 			continue;

@@ -295,6 +295,7 @@ static char *pathappend (char *oldpath, const char *appendage)
 					*search = 0;
 					newapp = xasprintf ("%s%s", app_dedup,
 							    terminator + 1);
+					assert (newapp);
 					free (app_dedup);
 					app_dedup = newapp;
 				}

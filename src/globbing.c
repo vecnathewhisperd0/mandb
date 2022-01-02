@@ -27,6 +27,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
@@ -302,6 +303,7 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 
 		dirs = new_string_list (GL_ARRAY_LIST, false);
 		pattern = xasprintf ("%s\t*", cat ? "cat" : "man");
+		assert (pattern);
 		*strrchr (pattern, '\t') = *sec;
 		match_in_directory (hier, pattern, LFF_MATCHCASE, dirs);
 		free (pattern);

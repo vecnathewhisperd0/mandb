@@ -35,6 +35,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -164,6 +165,7 @@ int remove_directory (const char *directory, int recurse)
 		if (STREQ (entry->d_name, ".") || STREQ (entry->d_name, ".."))
 			continue;
 		path = xasprintf ("%s/%s", directory, entry->d_name);
+		assert (path);
 		if (stat (path, &st) == -1) {
 			free (path);
 			closedir (handle);

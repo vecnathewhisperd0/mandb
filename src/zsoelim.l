@@ -57,6 +57,7 @@
 #define MAX_SO_DEPTH 	10		/* max .so recursion depth */
 #undef ACCEPT_QUOTES			/* accept quoted roff requests */
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -405,6 +406,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 		/* If there is no parent path, try opening directly first. */
 		if (!parent_path) {
 			compfile = xasprintf ("%s.", filename);
+			assert (compfile);
 
 			decomp = try_compressed (&compfile);
 			if (decomp) {
@@ -421,6 +423,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 			if (parent_path) {
 				compfile = xasprintf ("%s/%s.", parent_path,
 						      filename);
+				assert (compfile);
 
 				decomp = try_compressed (&compfile);
 				if (decomp) {
@@ -436,6 +439,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 					continue;
 
 				compfile = xasprintf ("%s/%s.", mp, filename);
+				assert (compfile);
 
 				decomp = try_compressed (&compfile);
 				if (decomp) {
@@ -503,6 +507,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 		/* If there is a parent path, try opening directly last. */
 		if (parent_path) {
 			compfile = xasprintf ("%s.", filename);
+			assert (compfile);
 
 			decomp = try_compressed (&compfile);
 			if (decomp) {

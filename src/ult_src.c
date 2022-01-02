@@ -188,6 +188,7 @@ static char *find_include (const char *name, const char *path,
 	 * case it went outside the mantree.
 	 */
 	ret = xasprintf ("%s/%s", path, include);
+	assert (ret);
 
 	/* If the original path from above doesn't exist, try to create new
 	 * path as if the "include" was relative to the current man page.
@@ -197,6 +198,7 @@ static char *find_include (const char *name, const char *path,
 
 	dirname = dir_name (name);
 	temp_file = xasprintf ("%s/%s", dirname, include);
+	assert (temp_file);
 	free (dirname);
 
 	if (CAN_ACCESS (temp_file, F_OK)) {

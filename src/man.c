@@ -4264,6 +4264,7 @@ int main (int argc, char *argv[])
 			if (subpages && first_arg < argc) {
 				char *subname = xasprintf (
 					"%s-%s", nextarg, argv[first_arg]);
+				assert (subname);
 				status = man (subname, &found);
 				free (subname);
 				if (status == OK) {
@@ -4274,6 +4275,7 @@ int main (int argc, char *argv[])
 			if (!found_subpage && subpages && first_arg < argc) {
 				char *subname = xasprintf (
 					"%s_%s", nextarg, argv[first_arg]);
+				assert (subname);
 				status = man (subname, &found);
 				free (subname);
 				if (status == OK) {

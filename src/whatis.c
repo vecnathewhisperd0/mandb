@@ -34,6 +34,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -326,6 +327,7 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 		      bool *found)
 {
 	char *whatis_file = xasprintf ("%s/whatis", manpath);
+	assert (whatis_file);
 
 	if (CAN_ACCESS (whatis_file, R_OK)) {
 		const char *flags;

@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -73,6 +74,7 @@ char *create_tempdir (const char *template)
 	if (!dir)
 		return NULL;
 	created_dirname = xasprintf ("%s/%sXXXXXX", dir, template);
+	assert (created_dirname);
 	if (!mkdtemp (created_dirname))
 		return NULL;
 	return created_dirname;

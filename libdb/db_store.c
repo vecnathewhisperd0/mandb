@@ -25,6 +25,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -123,6 +124,7 @@ static datum make_content (struct mandata *in)
 {
 	datum cont;
 	static const char dash[] = "-";
+	char *value;
 
 	memset (&cont, 0, sizeof cont);
 
@@ -135,7 +137,7 @@ static datum make_content (struct mandata *in)
 	if (!in->whatis)
 		in->whatis = dash + 1;
 
-	MYDBM_SET (cont, xasprintf (
+	value = xasprintf (
 		"%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s",
 		dash_if_unset (in->name),
 		in->ext,
@@ -146,7 +148,9 @@ static datum make_content (struct mandata *in)
 		in->pointer,
 		in->filter,
 		in->comp,
-		in->whatis));
+		in->whatis);
+	assert (value);
+	MYDBM_SET (cont, value);
 
 #ifdef NDBM
 	/* limit of 4096 bytes of data using ndbm */
@@ -191,6 +195,7 @@ static datum make_content (struct mandata *in)
 int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 {
 	datum oldkey, oldcont;
+	char *value;
 
 	memset (&oldkey, 0, sizeof oldkey);
 	memset (&oldcont, 0, sizeof oldcont);
@@ -261,8 +266,10 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		MYDBM_FREE_DPTR (newkey);
 		MYDBM_FREE_DPTR (newcont);
 
-		MYDBM_SET (newcont, xasprintf (
-			"%s\t%s\t%s", MYDBM_DPTR (oldcont), base, in->ext));
+		value = xasprintf (
+			"%s\t%s\t%s", MYDBM_DPTR (oldcont), base, in->ext);
+		assert (value);
+		MYDBM_SET (newcont, value);
 		MYDBM_FREE_DPTR (oldcont);
 
 		/* Try to replace the old simple data with the new stuff */
@@ -350,8 +357,10 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 
 		/* Now build a simple reference to the above two items */
 
-		MYDBM_SET (newcont, xasprintf (
-			"\t%s\t%s\t%s\t%s", old_name, old.ext, base, in->ext));
+		value = xasprintf (
+			"\t%s\t%s\t%s\t%s", old_name, old.ext, base, in->ext);
+		assert (value);
+		MYDBM_SET (newcont, value);
 
 		if (MYDBM_REPLACE (dbf, oldkey, newcont))
 			gripe_replace_key (dbf, MYDBM_DPTR (oldkey));

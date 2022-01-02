@@ -27,6 +27,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdio.h>
 #include <errno.h>
 #include <signal.h>
@@ -101,6 +102,7 @@ struct compression *comp_file (const char *filename)
 	struct compression *comp;
 
 	compfile = xasprintf ("%s.", filename);
+	assert (compfile);
 	len = strlen (compfile);
 
 	for (comp = comp_list; comp->ext; comp++) {

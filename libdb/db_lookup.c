@@ -26,6 +26,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
@@ -130,9 +131,12 @@ void dbprintf (const struct mandata *info)
 datum make_multi_key (const char *page, const char *ext)
 {
 	datum key;
+	char *value;
 
+	value = xasprintf ("%s\t%s", page, ext);
+	assert (value);
 	memset (&key, 0, sizeof key);
-	MYDBM_SET (key, xasprintf ("%s\t%s", page, ext));
+	MYDBM_SET (key, value);
 	return key;
 }
 
