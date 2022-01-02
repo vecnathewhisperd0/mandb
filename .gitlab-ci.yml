@@ -1,6 +1,9 @@
 default:
   image: debian:unstable
 
+variables:
+  GIT_DEPTH: 0
+
 stages:
   - bootstrap
   - build
@@ -24,7 +27,7 @@ bootstrap:
   stage: bootstrap
   before_script:
     - apt -qq update
-    - apt -y -qq install autoconf automake autopoint gettext git libtool pkg-config
+    - apt -y -qq install autoconf automake autopoint gettext git libtool pkg-config wget
   script:
     - if test -d gnulib-src; then git -C gnulib-src pull; else git clone git://git.sv.gnu.org/gnulib gnulib-src; fi
     - rm -rf bootstrapped
@@ -42,10 +45,13 @@ build-distcheck:
   stage: build
   before_script:
     - apt -qq update
-    - apt -y -qq install build-essential bsdextrautils flex groff libgdbm-dev libpipeline-dev pkg-config po4a zlib1g-dev
+    - apt -y -qq install build-essential bsdextrautils flex git groff libgdbm-dev libpipeline-dev pkg-config po4a zlib1g-dev
   script:
     - (cd bootstrapped && ./configure)
     - make -C bootstrapped distcheck V=1
+  artifacts:
+    paths:
+      - "bootstrapped/*.tar.xz"
 
 build-out-of-tree:
   stage: build
