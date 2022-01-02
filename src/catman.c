@@ -268,7 +268,12 @@ static int parse_for_sec (const char *database,
 		datum nextkey;
 
 		/* ignore db identifier keys */
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
+#endif
 		if (*MYDBM_DPTR (key) != '$') {
+#pragma GCC diagnostic pop
 			datum content;
 
 			content = MYDBM_FETCH (dbf, key);
@@ -279,7 +284,12 @@ static int parse_for_sec (const char *database,
 				       MYDBM_DPTR (key));
 
 			/* ignore overflow entries */
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
+#endif
 			if (*MYDBM_DPTR (content) != '\t') {
+#pragma GCC diagnostic pop
 				struct mandata entry;
 
 				split_content (dbf, MYDBM_DPTR (content),

@@ -678,9 +678,14 @@ static bool sanity_check_db (MYDBM_FILE dbf)
 			MYDBM_FREE_DPTR (key);
 			return false;
 		}
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-double-free"
+#endif
 		MYDBM_FREE_DPTR (content);
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE_DPTR (key);
+#pragma GCC diagnostic pop
 		key = nextkey;
 	}
 
@@ -735,9 +740,14 @@ void purge_pointers (MYDBM_FILE dbf, const char *name)
 		struct mandata entry;
 		char *nicekey, *tab;
 
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
+#endif
 		/* Ignore db identifier keys. */
 		if (*MYDBM_DPTR (key) == '$')
 			goto pointers_next;
+#pragma GCC diagnostic pop
 
 		content = MYDBM_FETCH (dbf, key);
 		if (!MYDBM_DPTR (content))
@@ -749,8 +759,13 @@ void purge_pointers (MYDBM_FILE dbf, const char *name)
 		if (tab)
 			*tab = '\0';
 
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
+#endif
 		if (*MYDBM_DPTR (content) == '\t')
 			goto pointers_contentnext;
+#pragma GCC diagnostic pop
 
 		split_content (dbf, MYDBM_DPTR (content), &entry);
 		if (entry.id != SO_MAN && entry.id != WHATIS_MAN)
@@ -1000,6 +1015,10 @@ int purge_missing (const char *database,
 		bool save_debug;
 		gl_list_t found;
 
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
+#endif
 		/* Ignore db identifier keys. */
 		if (*MYDBM_DPTR (key) == '$') {
 			nextkey = MYDBM_NEXTKEY (dbf, key);
@@ -1007,6 +1026,7 @@ int purge_missing (const char *database,
 			key = nextkey;
 			continue;
 		}
+#pragma GCC diagnostic pop
 
 		content = MYDBM_FETCH (dbf, key);
 		if (!MYDBM_DPTR (content)) {
@@ -1022,6 +1042,10 @@ int purge_missing (const char *database,
 		if (tab)
 			*tab = '\0';
 
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
+#endif
 		/* Deal with multi keys. */
 		if (*MYDBM_DPTR (content) == '\t') {
 			if (check_multi_key (nicekey, MYDBM_DPTR (content)))
@@ -1033,6 +1057,7 @@ int purge_missing (const char *database,
 			key = nextkey;
 			continue;
 		}
+#pragma GCC diagnostic pop
 
 		split_content (dbf, MYDBM_DPTR (content), &entry);
 

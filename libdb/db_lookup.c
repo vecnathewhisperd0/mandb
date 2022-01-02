@@ -453,8 +453,13 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 		if (*MYDBM_DPTR (key) == '$')
 			goto nextpage;
 
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
+#endif
 		if (*MYDBM_DPTR (cont) == '\t')
 			goto nextpage;
+#pragma GCC diagnostic pop
 
 		/* a real page */
 

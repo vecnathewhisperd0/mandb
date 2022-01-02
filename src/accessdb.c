@@ -156,10 +156,15 @@ int main (int argc, char *argv[])
 			*t = ' ';
 		printf ("%s -> \"%s\"\n", nicekey, MYDBM_DPTR (content));
 		free (nicekey);
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-double-free"
+#endif
 		MYDBM_FREE_DPTR (content);
 next:
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE_DPTR (key);
+#pragma GCC diagnostic pop
 		key = nextkey;
 	}
 

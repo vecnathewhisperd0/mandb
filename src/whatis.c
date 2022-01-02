@@ -742,11 +742,16 @@ static void do_apropos (MYDBM_FILE dbf,
 			       dbf->name);
 		}
 
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
+#endif
 		if (*MYDBM_DPTR (key) == '$')
 			goto nextpage;
 
 		if (*MYDBM_DPTR (cont) == '\t')
 			goto nextpage;
+#pragma GCC diagnostic pop
 
 		/* a real page */
 
@@ -793,6 +798,10 @@ static void do_apropos (MYDBM_FILE dbf,
 		if (tab)
 			*tab = '\t';
 nextpage:
+#pragma GCC diagnostic push
+#if GNUC_PREREQ(10,0)
+#  pragma GCC diagnostic ignored "-Wanalyzer-double-free"
+#endif
 #ifndef BTREE
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE_DPTR (cont);
@@ -803,6 +812,7 @@ nextpage:
 		MYDBM_FREE_DPTR (key);
 		end = man_btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
+#pragma GCC diagnostic pop
 		info.addr = NULL; /* == MYDBM_DPTR (cont), freed above */
 		free_mandata_elements (&info);
 	}
