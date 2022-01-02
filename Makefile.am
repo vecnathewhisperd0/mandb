@@ -76,7 +76,7 @@ ACLOCAL_AMFLAGS = -I gl/m4 -I m4
 
 dist-hook: gen-ChangeLog
 
-gen_start_date = '2013-12-09 00:52'
+gen_start_date = 2013-12-09 00:52
 .PHONY: gen-ChangeLog
 gen-ChangeLog:
 	$(AM_V_GEN)if test -d .git; then \
