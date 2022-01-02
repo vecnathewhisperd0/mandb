@@ -122,6 +122,7 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		}
 
 		/* create our new multi content */
+		multi_content = xstrdup ("");
 		GL_LIST_FOREACH (refs, ref)
 			multi_content = appendstr (multi_content,
 						   "\t", ref->name,
