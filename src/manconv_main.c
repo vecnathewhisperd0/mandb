@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -151,6 +152,7 @@ int main (int argc, char *argv[])
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
+	assert (from_code);
 
 	if (filename) {
 		p = decompress_open (filename);
