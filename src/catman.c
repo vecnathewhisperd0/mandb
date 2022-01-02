@@ -383,7 +383,7 @@ int main (int argc, char *argv[])
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
 
-	for (sp = sections; *sp; sp++)
+	for (sp = sections; sp && *sp; sp++)
 		debug ("sections: %s\n", *sp);
 
 	/* Deal with the MANPATH */
@@ -422,7 +422,7 @@ int main (int argc, char *argv[])
 
 		len = strlen (catpath);
 
-		for (sp = sections; *sp; sp++) {
+		for (sp = sections; sp && *sp; sp++) {
 			*(catpath + len) = '\0';
 			catpath = appendstr (catpath, "/cat", *sp, (void *) 0);
 			if (is_directory (catpath) != 1)
