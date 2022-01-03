@@ -21,6 +21,7 @@ Improvements:
    `libseccomp`.
  * Document `MAN_DISABLE_SECCOMP` and `PIPELINE_DEBUG` environment variables
    in `man(1)`.
+ * Add `man-pages(7)` reference to `man(1)`.
 
 man-db 2.9.4 (8 February 2021)
 ==============================
