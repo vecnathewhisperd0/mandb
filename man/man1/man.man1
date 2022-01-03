@@ -1219,6 +1219,26 @@ However, some users want to see them anyway, so, if
 .RB $ MAN_KEEP_STDERR
 is set to any non-empty value, error output will be displayed as usual.
 .TP
+.if !'po4a'hide' .B MAN_DISABLE_SECCOMP
+On Linux,
+.B %man%
+normally confines subprocesses that handle untrusted data using a
+.BR seccomp (2)
+sandbox.
+This makes it safer to run complex parsing code over arbitrary manual pages.
+If this goes wrong for some reason unrelated to the content of the page
+being displayed, you can set
+.RB $ MAN_DISABLE_SECCOMP
+to any non-empty value to disable the sandbox.
+.TP
+.if !'po4a'hide' .B PIPELINE_DEBUG
+If the
+.RB $ PIPELINE_DEBUG
+environment variable is set to "1", then
+.B %man%
+will print debugging messages to standard error describing each subprocess
+it runs.
+.TP
 .if !'po4a'hide' .BR LANG , " LC_MESSAGES"
 Depending on system and implementation, either or both of
 .RB $ LANG

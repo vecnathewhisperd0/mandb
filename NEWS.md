@@ -19,6 +19,8 @@ Improvements:
 
  * Reduce overhead of `MAN_DISABLE_SECCOMP=1` compared to building without
    `libseccomp`.
+ * Document `MAN_DISABLE_SECCOMP` and `PIPELINE_DEBUG` environment variables
+   in `man(1)`.
 
 man-db 2.9.4 (8 February 2021)
 ==============================
