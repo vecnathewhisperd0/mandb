@@ -15,6 +15,11 @@ Fixes:
    than running out of memory.
  * Fix crash in `globbing` test tool if run with no non-option arguments.
 
+Improvements:
+
+ * Reduce overhead of `MAN_DISABLE_SECCOMP=1` compared to building without
+   `libseccomp`.
+
 man-db 2.9.4 (8 February 2021)
 ==============================
 
