@@ -237,6 +237,9 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 #endif /* O_TMPFILE */
 		;
 
+	if (!can_load_seccomp ())
+		return NULL;
+
 	debug ("initialising seccomp filter (permissive: %d)\n", permissive);
 	ctx = seccomp_init (SCMP_ACT_ERRNO (ENOSYS));
 	if (!ctx)
@@ -590,12 +593,14 @@ static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 	if (can_load_seccomp ()) {
 		scmp_filter_ctx ctx;
 
-		debug ("loading seccomp filter (permissive: %d)\n",
-		       permissive);
 		if (permissive)
 			ctx = sandbox->permissive_ctx;
 		else
 			ctx = sandbox->ctx;
+		if (!ctx)
+			return;
+		debug ("loading seccomp filter (permissive: %d)\n",
+		       permissive);
 		if (seccomp_load (ctx) < 0) {
 			if (errno == EINVAL || errno == EFAULT) {
 				/* The kernel doesn't give us particularly
@@ -647,8 +652,10 @@ void sandbox_free (void *data) {
 	man_sandbox *sandbox = data;
 
 #ifdef HAVE_LIBSECCOMP
-	seccomp_release (sandbox->ctx);
-	seccomp_release (sandbox->permissive_ctx);
+	if (sandbox->ctx)
+		seccomp_release (sandbox->ctx);
+	if (sandbox->permissive_ctx)
+		seccomp_release (sandbox->permissive_ctx);
 #endif /* HAVE_LIBSECCOMP */
 
 	free (sandbox);
