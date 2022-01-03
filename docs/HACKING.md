@@ -129,8 +129,13 @@ problem would not be a surprise.
 Sending patches
 ---------------
 
-Please send patches in unified diff format (use `git diff`, or GNU diff with
-the -u option) to man-db-devel@nongnu.org (see [subscription
+GitLab merge requests are preferred. Create an account on gitlab.com,
+[fork](https://gitlab.com/cjwatson/man-db/-/forks/new) the repository to
+your own account, push your branch, and create a merge request.
+
+If you can't or don't want to use GitLab merge requests, then you can fall
+back to sending patches in unified diff format (use `git diff`, or GNU diff
+with the -u option) to man-db-devel@nongnu.org (see [subscription
 instructions](https://lists.nongnu.org/mailman/listinfo/man-db-devel)).
 
 
