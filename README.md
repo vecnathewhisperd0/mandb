@@ -9,7 +9,7 @@ Check manual/README for details of the formatters required.
 
  * Read docs/INSTALL.autoconf for generic options to configure.
  * Read docs/INSTALL.quick if you know all about man-db.
- * Read NEWS for visible changes since the last public release.
+ * Read NEWS.md for visible changes since the last public release.
  * Read ChangeLog for details of recent source code changes.
  * Read docs/TODO for future plans.
 
