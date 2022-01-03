@@ -139,29 +139,23 @@ Release process
 1. Update the AC_INIT version number in configure.ac to "x.y.z-pre1". Commit
    and tag.
 
-2. Run ./release.sh to produce a preliminary tarball for translators. This
-   doesn't have to be particularly well-tested or even compile; it's only
-   there to provide context for po/man-db.pot. Send this to the Translation
-   Project robot.
+2. Pushing the tag should cause the GitLab CI machinery to upload a
+   preliminary tarball for translators to the package registry
+   (https://gitlab.com/cjwatson/man-db/-/packages). Send this to the
+   Translation Project robot, to provide context for po/man-db.pot.
 
 3. Wait a couple of weeks for a reasonable number of translation updates to
    arrive. During this time, test until your eyeballs fall out, but try to
    avoid changing any translated messages.
 
-4. Ensure that NEWS.md and docs/man-db.lsm are up to date. Commit.
+4. Once you're ready to release, update NEWS.md, docs/man-db.lsm, and the
+   AC_INIT version number and 'date' in configure.ac. Commit and tag.
 
-5. Update the AC_INIT version number and 'date' in configure.ac, but don't
-   commit yet.
+5. Pushing the tag should cause the GitLab CI machinery to upload the
+   release tarball to the package registry
+   (https://gitlab.com/cjwatson/man-db/-/packages). GPG-sign that tarball,
+   and upload the tarball and its signature to Savannah so that the URLs in
+   the newly-created GitLab release notes
+   (https://gitlab.com/cjwatson/man-db/-/releases) are valid.
 
-6. Run ./release.sh, which will spit out a tarball. Test it.
-
-7. Commit the changes from step 5.
-
-8. Tag everything.
-
-9. Run ./release.sh. This is the distribution tarball; test it as thoroughly
-   as you can.
-
-10. Upload the tarball to Savannah.
-
-11. Announce to wherever seems appropriate.
+6. Announce to wherever seems appropriate.

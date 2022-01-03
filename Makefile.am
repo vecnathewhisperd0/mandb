@@ -33,8 +33,7 @@ EXTRA_DIST = \
 	ChangeLog-2013 \
 	bootstrap \
 	bootstrap.conf \
-	patches/argp-domain.patch \
-	release.sh
+	patches/argp-domain.patch
 
 # These macro files are imported by gnulib-tool, but at present not used. We
 # include them in the distribution anyway for maximum consistency.
