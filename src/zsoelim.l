@@ -274,9 +274,9 @@ W	[ \t]
 
 <lfnumber,lfname>.	{
 			no_newline = 1;
-			error (OK, 0,
-			       _("%s:%d: warning: malformed .lf request, "
-			         "ignoring"),
+			debug (
+			       "%s:%d: warning: unhandled .lf request; "
+			       "line numbers may be wrong\n",
 			       NAME, LINE);
 			putchar (*yytext);
 			BEGIN (INITIAL);

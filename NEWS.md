@@ -15,6 +15,9 @@ Fixes:
    than running out of memory.
  * Fix crash in `globbing` test tool if run with no non-option arguments.
  * `lexgrog` now produces output in the user's locale.
+ * Downgrade "malformed .lf request" warning to a debug message and rephrase
+   it somewhat, since `.lf` requests can use `*roff` arithmetic expressions
+   and we can't reasonably parse those.
 
 Improvements:
 
