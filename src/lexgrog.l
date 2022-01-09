@@ -293,6 +293,7 @@ comment		['.]\\{dbl_quote}
   * including non-ASCII characters must be written out as (a|b|c|d) rather
   * than [abcd].
   */
+ /* ИМЕ also works for mk */
 bg_name		ИМЕ
 cs_name		(J[Mm](É|é|\\\('[Ee]|E|e)[Nn][Oo]|N(Á|á)[Zz][Ee][Vv])
 da_name		N[Aa][Vv][Nn]
