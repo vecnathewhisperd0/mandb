@@ -32,6 +32,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "attribute.h"
 #include "progname.h"
 #include "stat-time.h"
 #include "timespec.h"
@@ -84,7 +85,7 @@ static int try_delay (struct stat *st, int delay_ns)
 	return timespec_cmp (start_ts, end_ts) != 0;
 }
 
-int main (int argc _GL_UNUSED, char **argv)
+int main (int argc MAYBE_UNUSED, char **argv)
 {
 	struct stat st;
 	int delay_ns;

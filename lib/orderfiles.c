@@ -44,6 +44,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "attribute.h"
 #include "gl_hash_map.h"
 #include "gl_rbtree_list.h"
 #include "gl_xlist.h"
@@ -171,7 +172,8 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	close (dir_fd);
 }
 #else
-void order_files (const char *dir _GL_UNUSED, gl_list_t *basenamesp _GL_UNUSED)
+void order_files (const char *dir MAYBE_UNUSED,
+		  gl_list_t *basenamesp MAYBE_UNUSED)
 {
 }
 #endif

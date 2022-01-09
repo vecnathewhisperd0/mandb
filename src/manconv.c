@@ -46,6 +46,7 @@
 #endif /* HAVE_ICONV */
 
 #include "argp.h"
+#include "attribute.h"
 #include "gl_list.h"
 
 #include "gettext.h"
@@ -354,8 +355,8 @@ void manconv (pipeline *p, gl_list_t from, const char *to)
 /* If we don't have iconv, there isn't much we can do; just pass everything
  * through unchanged.
  */
-void manconv (pipeline *p, gl_list_t from _GL_UNUSED,
-	      const char *to _GL_UNUSED)
+void manconv (pipeline *p, gl_list_t from MAYBE_UNUSED,
+	      const char *to MAYBE_UNUSED)
 {
 	for (;;) {
 		size_t len = 4096;

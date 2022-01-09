@@ -44,6 +44,7 @@
 #include <dirent.h>
 #include <unistd.h>
 
+#include "attribute.h"
 #include "dirname.h"
 #include "gl_array_list.h"
 #include "gl_hash_map.h"
@@ -393,7 +394,7 @@ void chown_if_possible (const char *path)
 	}
 }
 #else /* !MAN_OWNER */
-void chown_if_possible (const char *path _GL_UNUSED)
+void chown_if_possible (const char *path MAYBE_UNUSED)
 {
 }
 #endif /* MAN_OWNER */

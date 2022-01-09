@@ -236,7 +236,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	return ARGP_ERR_UNKNOWN;
 }
 
-static char *help_filter (int key, const char *text, void *input _GL_UNUSED)
+static char *help_filter (int key, const char *text, void *input MAYBE_UNUSED)
 {
 	switch (key) {
 		case ARGP_KEY_HELP_PRE_DOC:

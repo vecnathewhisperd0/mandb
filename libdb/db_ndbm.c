@@ -35,6 +35,7 @@
 #include <sys/types.h> /* for open() */
 #include <sys/stat.h>
 
+#include "attribute.h"
 #include "stat-time.h"
 #include "timespec.h"
 #include "xvasprintf.h"
@@ -123,7 +124,7 @@ static datum unsorted_firstkey (man_ndbm_wrapper wrap)
 	return copy_datum (dbm_firstkey (wrap->file));
 }
 
-static datum unsorted_nextkey (man_ndbm_wrapper wrap, datum key _GL_UNUSED)
+static datum unsorted_nextkey (man_ndbm_wrapper wrap, datum key MAYBE_UNUSED)
 {
 	return copy_datum (dbm_nextkey (wrap->file));
 }

@@ -31,6 +31,7 @@
 #include <stdlib.h>
 
 #include "argp.h"
+#include "attribute.h"
 #include "gl_list.h"
 #include "progname.h"
 #include "xvasprintf.h"
@@ -71,7 +72,7 @@ static struct argp_option options[] = {
 	{ 0 }
 };
 
-static error_t parse_opt (int key, char *arg _GL_UNUSED,
+static error_t parse_opt (int key, char *arg MAYBE_UNUSED,
 			  struct argp_state *state)
 {
 	switch (key) {

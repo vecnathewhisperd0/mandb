@@ -32,6 +32,8 @@
 #  include <iconv.h>
 #endif /* HAVE_ICONV */
 
+#include "attribute.h"
+
 #include "manconfig.h"
 
 #include "cleanup.h"
@@ -43,7 +45,7 @@
 static bool conv_to_locale_initialized = false;
 static iconv_t conv_to_locale = (iconv_t) -1;
 
-static void close_conv_to_locale (void *ignored _GL_UNUSED)
+static void close_conv_to_locale (void *ignored MAYBE_UNUSED)
 {
 	iconv_close (conv_to_locale);
 }

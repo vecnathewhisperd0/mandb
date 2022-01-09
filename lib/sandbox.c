@@ -63,9 +63,10 @@
 #  include <seccomp.h>
 #endif /* HAVE_LIBSECCOMP */
 
-#include "manconfig.h"
-
+#include "attribute.h"
 #include "error.h"
+
+#include "manconfig.h"
 
 #include "sandbox.h"
 
@@ -623,8 +624,8 @@ static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 	}
 }
 #else /* !HAVE_LIBSECCOMP */
-static void _sandbox_load (man_sandbox *sandbox _GL_UNUSED,
-			   int permissive _GL_UNUSED)
+static void _sandbox_load (man_sandbox *sandbox MAYBE_UNUSED,
+			   int permissive MAYBE_UNUSED)
 {
 }
 #endif /* HAVE_LIBSECCOMP */

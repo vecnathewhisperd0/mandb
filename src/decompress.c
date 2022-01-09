@@ -36,6 +36,7 @@
 #  include "zlib.h"
 #endif /* HAVE_LIBZ */
 
+#include "attribute.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
@@ -46,7 +47,7 @@
 
 #ifdef HAVE_LIBZ
 
-static void decompress_zlib (void *data _GL_UNUSED)
+static void decompress_zlib (void *data MAYBE_UNUSED)
 {
 	gzFile zlibfile;
 	int fd;

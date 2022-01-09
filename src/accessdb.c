@@ -35,6 +35,7 @@
 #include <assert.h>
 
 #include "argp.h"
+#include "attribute.h"
 #include "progname.h"
 #include "xvasprintf.h"
 
@@ -90,7 +91,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
-static char *help_filter (int key, const char *text, void *input _GL_UNUSED)
+static char *help_filter (int key, const char *text, void *input MAYBE_UNUSED)
 {
 	switch (key) {
 		case ARGP_KEY_HELP_PRE_DOC:
