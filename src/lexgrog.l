@@ -293,6 +293,7 @@ comment		['.]\\{dbl_quote}
   * including non-ASCII characters must be written out as (a|b|c|d) rather
   * than [abcd].
   */
+ar_name		(اﻹسم|الإسم)
  /* ИМЕ also works for mk */
 bg_name		ИМЕ
 cs_name		(J[Mm](É|é|\\\('[Ee]|E|e)[Nn][Oo]|N(Á|á)[Zz][Ee][Vv])
@@ -301,6 +302,7 @@ de_name		B[Ee][Zz][Ee][Ii][Cc][Hh][Nn][Uu][Nn][Gg]
 en_name		N[Aa][Mm][Ee]
 eo_name		N[Oo][Mm][Oo]
 es_name		N[Oo][Mm][Bb][Rr][Ee]
+fa_name		نام
 fi_name		N[Ii][Mm][Ii]
 fr_name		N[Oo][Mm]
 hu_name		N(É|é|E|e)[Vv]
@@ -325,7 +327,7 @@ uk_name		НАЗВА
 vi_name		TÊN
 zh_CN_name	名{blank}?(称|字){blank}?.*
 zh_TW_name	(名{blank}?(稱|字)|命令名){blank}?.*
-name		({bg_name}|{cs_name}|{da_name}|{de_name}|{en_name}|{eo_name}|{es_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{ko_name}|{latin_name}|{lt_name}|{nl_name}|{pl_name}|{ro_name}|{ru_name}|{sk_name}|{sr_name}|{srlatin_name}|{sv_name}|{ta_name}|{tr_name}|{uk_name}|{vi_name}|{zh_CN_name}|{zh_TW_name})
+name		({ar_name}|{bg_name}|{cs_name}|{da_name}|{de_name}|{en_name}|{eo_name}|{es_name}|{fa_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{ko_name}|{latin_name}|{lt_name}|{nl_name}|{pl_name}|{ro_name}|{ru_name}|{sk_name}|{sr_name}|{srlatin_name}|{sv_name}|{ta_name}|{tr_name}|{uk_name}|{vi_name}|{zh_CN_name}|{zh_TW_name})
 name_sec	{dbl_quote}?{style_change}?{name}{style_change}?({blank}*{dbl_quote})?
 
  /* eptgrv : eqn, pic, tbl, grap, refer, vgrind */

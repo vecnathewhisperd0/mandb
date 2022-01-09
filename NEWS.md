@@ -26,6 +26,7 @@ Improvements:
  * Document `MAN_DISABLE_SECCOMP` and `PIPELINE_DEBUG` environment variables
    in `man(1)`.
  * Add `man-pages(7)` reference to `man(1)`.
+ * Recognize Arabic and Persian translations of the `NAME` section.
 
 man-db 2.9.4 (8 February 2021)
 ==============================
