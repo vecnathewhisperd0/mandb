@@ -924,9 +924,9 @@ Fixes:
 Improvements:
 
  * The `--encoding` option to `man` can now take a true character encoding
-   rather than a *roff device; the latter was an unreliable, inflexible, and
-   awkward way to select an output encoding.  The old semantics are still
-   supported for backward compatibility.
+   rather than a `*roff` device; the latter was an unreliable, inflexible,
+   and awkward way to select an output encoding.  The old semantics are
+   still supported for backward compatibility.
  * Whatis parsing stops at `.ie` or `.if` conditionals.
  * CJK locale specifications where the codeset component is equivalent to
    but not stringwise-identical to UTF-8 (e.g.  `zh_CN.utf8`) are handled
