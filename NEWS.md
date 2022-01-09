@@ -14,6 +14,7 @@ Fixes:
  * Fix potential crash in path searching if `getcwd` fails for reasons other
    than running out of memory.
  * Fix crash in `globbing` test tool if run with no non-option arguments.
+ * `lexgrog` now produces output in the user's locale.
 
 Improvements:
 

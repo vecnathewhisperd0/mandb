@@ -48,10 +48,6 @@
 #define _(String) gettext (String)
 #define N_(String) gettext_noop (String)
 
-#ifdef HAVE_ICONV
-#  include <iconv.h>
-#endif /* HAVE_ICONV */
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "regex.h"
@@ -82,6 +78,7 @@
 #include "mydbm.h"
 #include "db_storage.h"
 
+#include "convert.h"
 #include "manp.h"
 
 static gl_list_t manpathlist;
@@ -93,10 +90,6 @@ static int num_keywords;
 bool am_apropos;
 int quiet = 1;
 man_sandbox *sandbox;
-
-#ifdef HAVE_ICONV
-iconv_t conv_to_locale;
-#endif /* HAVE_ICONV */
 
 static regex_t *preg;
 static bool regex_opt;
@@ -284,39 +277,6 @@ static char *locale_manpath (const char *manpath)
 	return new_manpath;
 }
 
-#ifdef HAVE_ICONV
-static char *simple_convert (iconv_t conv, char *string)
-{
-	if (conv != (iconv_t) -1) {
-		size_t string_conv_alloc = strlen (string) + 1;
-		char *string_conv = xmalloc (string_conv_alloc);
-		for (;;) {
-			char *inptr = string, *outptr = string_conv;
-			size_t inleft = strlen (string);
-			size_t outleft = string_conv_alloc - 1;
-			if (iconv (conv, (ICONV_CONST char **) &inptr, &inleft,
-				   &outptr, &outleft) == (size_t) -1 &&
-			    errno == E2BIG) {
-				string_conv_alloc <<= 1;
-				string_conv = xrealloc (string_conv,
-							string_conv_alloc);
-			} else {
-				/* Either we succeeded, or we've done our
-				 * best; go ahead and print what we've got.
-				 */
-				string_conv[string_conv_alloc - 1 - outleft] =
-					'\0';
-				break;
-			}
-		}
-		return string_conv;
-	} else
-		return xstrdup (string);
-}
-#else /* !HAVE_ICONV */
-#  define simple_convert(conv, string) xstrdup (string)
-#endif /* HAVE_ICONV */
-
 /* Do the old thing, if we cannot find the relevant database.
  * This invokes grep once per argument; we can't do much about this because
  * we need to know which arguments failed.  The only way to speed this up
@@ -486,7 +446,7 @@ static void display (MYDBM_FILE dbf, struct mandata *info, const char *page)
 	} else
 		string = appendstr (string, whatis, "\n", (void *) 0);
 
-	string_conv = simple_convert (conv_to_locale, string);
+	string_conv = convert_to_locale (string);
 	fputs (string_conv, stdout);
 
 	free (string_conv);
@@ -882,9 +842,6 @@ static bool search (const char * const *pages, int num_pages)
 int main (int argc, char *argv[])
 {
 	char *program_base_name;
-#ifdef HAVE_ICONV
-	char *locale_charset;
-#endif
 	int status = OK;
 
 	set_program_name (argv[0]);
@@ -957,12 +914,6 @@ int main (int argc, char *argv[])
 
 	display_seen = new_string_set (GL_HASH_SET);
 
-#ifdef HAVE_ICONV
-	locale_charset = xasprintf ("%s//IGNORE", get_locale_charset ());
-	conv_to_locale = iconv_open (locale_charset, "UTF-8");
-	free (locale_charset);
-#endif /* HAVE_ICONV */
-
 	if (regex_opt) {
 		int i;
 		preg = XNMALLOC (num_keywords, regex_t);
@@ -981,10 +932,6 @@ int main (int argc, char *argv[])
 		free (preg);
 	}
 
-#ifdef HAVE_ICONV
-	if (conv_to_locale != (iconv_t) -1)
-		iconv_close (conv_to_locale);
-#endif /* HAVE_ICONV */
 	gl_set_free (display_seen);
 	free_pathlist (manpathlist);
 	free (manp);

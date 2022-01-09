@@ -86,6 +86,8 @@ globbing_SOURCES = \
 	globbing_test.c
 lexgrog_SOURCES = \
 	compression.c \
+	convert.c \
+	convert.h \
 	decompress.c \
 	decompress.h \
 	descriptions.c \
@@ -167,6 +169,8 @@ manpath_SOURCES = \
 	manp.h \
 	manpath.c
 whatis_SOURCES = \
+	convert.c \
+	convert.h \
 	globbing.c \
 	globbing.h \
 	manp.c \

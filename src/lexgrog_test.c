@@ -50,6 +50,7 @@
 #include "sandbox.h"
 #include "security.h"
 
+#include "convert.h"
 #include "descriptions.h"
 #include "ult_src.h"
 
@@ -217,9 +218,16 @@ int main (int argc, char **argv)
 				printf ("%s", files[i]);
 				if (show_filters)
 					printf (" (%s)", lg.filters);
-				if (show_whatis)
+				if (show_whatis) {
+					char *name_conv = convert_to_locale
+						(desc->name);
+					char *whatis_conv = convert_to_locale
+						(desc->whatis);
 					printf (": \"%s - %s\"",
-						desc->name, desc->whatis);
+						name_conv, whatis_conv);
+					free (whatis_conv);
+					free (name_conv);
+				}
 				printf ("\n");
 			}
 			gl_list_free (descs);
