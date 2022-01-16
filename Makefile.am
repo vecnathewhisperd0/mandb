@@ -26,7 +26,7 @@ endif
 
 SUBDIRS = docs gl/lib $(GNULIB_PO) init lib libdb src man manual po tools
 
-dist_noinst_DATA = FAQ README.md include/README
+dist_noinst_DATA = FAQ README.md
 
 EXTRA_DIST = \
 	.gitignore \
