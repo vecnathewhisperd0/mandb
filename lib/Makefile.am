@@ -25,7 +25,7 @@ dist_noinst_DATA = README
 AM_CFLAGS = $(WARN_CFLAGS)
 
 libman_la_CPPFLAGS = \
-	-I$(top_builddir)/include \
+	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/gl/lib \
 	-I$(top_builddir)/gl/lib \
 	-DLOCALEDIR=\"$(localedir)\" \

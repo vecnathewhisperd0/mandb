@@ -39,7 +39,7 @@ noinst_DATA = man_db.conf
 EXTRA_DIST = lexgrog.c zsoelim.c
 
 AM_CPPFLAGS = \
-	-I$(top_builddir)/include \
+	-I$(top_srcdir)/include \
 	-I$(top_builddir)/gl/lib \
 	-I$(top_srcdir)/gl/lib \
 	-I$(top_srcdir)/lib \

@@ -60,7 +60,7 @@ TESTS = $(ALL_TESTS)
 endif
 
 AM_CPPFLAGS = \
-	-I$(top_builddir)/include \
+	-I$(top_srcdir)/include \
 	-I$(top_builddir)/gl/lib \
 	-I$(top_srcdir)/gl/lib
 AM_CFLAGS = $(WARN_CFLAGS)
