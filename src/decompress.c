@@ -124,7 +124,7 @@ pipeline *decompress_open (const char *filename)
 	/* HP-UX */
 	ext = strstr (filename, ".Z/");
 	if (ext) {
-		cmd = pipecmd_new_argstr (GUNZIP);
+		cmd = pipecmd_new_argstr (PROG_GUNZIP);
 		pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 		p = pipeline_new_commands (cmd, (void *) 0);
 		goto got_pipeline;

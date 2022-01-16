@@ -338,7 +338,7 @@ static void init_html_pager (void)
 {
 	html_pager = getenv ("BROWSER");
 	if (!html_pager)
-		html_pager = WEB_BROWSER;
+		html_pager = PROG_BROWSER;
 }
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
@@ -1052,7 +1052,7 @@ static void add_col (pipeline *p, const char *locale_charset, ...)
 	va_list argv;
 	char *col_locale = NULL;
 
-	cmd = pipecmd_new (COL);
+	cmd = pipecmd_new (PROG_COL);
 	va_start (argv, locale_charset);
 	pipecmd_argv (cmd, argv);
 	va_end (argv);
@@ -1268,34 +1268,34 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			case 'e':
 				if (troff)
 					cmd = pipecmd_new_argstr
-						(get_def ("eqn", EQN));
+						(get_def ("eqn", PROG_EQN));
 				else
 					cmd = pipecmd_new_argstr
-						(get_def ("neqn", NEQN));
+						(get_def ("neqn", PROG_NEQN));
 				wants_dev = 1;
 				break;
 			case 'g':
 				cmd = pipecmd_new_argstr
-					(get_def ("grap", GRAP));
+					(get_def ("grap", PROG_GRAP));
 				break;
 			case 'p':
 				cmd = pipecmd_new_argstr
-					(get_def ("pic", PIC));
+					(get_def ("pic", PROG_PIC));
 				break;
 			case 't':
 				cmd = pipecmd_new_argstr
-					(get_def ("tbl", TBL));
+					(get_def ("tbl", PROG_TBL));
 #ifndef GNU_NROFF
 				using_tbl = 1;
 #endif /* GNU_NROFF */
 				break;
 			case 'v':
 				cmd = pipecmd_new_argstr
-					(get_def ("vgrind", VGRIND));
+					(get_def ("vgrind", PROG_VGRIND));
 				break;
 			case 'r':
 				cmd = pipecmd_new_argstr
-					(get_def ("refer", REFER));
+					(get_def ("refer", PROG_REFER));
 				break;
 			case ' ':
 			case '-':
@@ -1303,11 +1303,13 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				/* done with preprocessors, now add roff */
 				if (troff) {
 					cmd = pipecmd_new_argstr
-						(get_def ("troff", TROFF));
+						(get_def ("troff",
+							  PROG_TROFF));
 					save_cat = false;
 				} else
 					cmd = pipecmd_new_argstr
-						(get_def ("nroff", NROFF));
+						(get_def ("nroff",
+							  PROG_NROFF));
 
 #ifdef TROFF_IS_GROFF
 				if (troff && ditroff)
@@ -1394,7 +1396,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				break;
 		} while (*pp_string++);
 
-		if (!troff && *COL) {
+		if (!troff && *PROG_COL) {
 			const char *man_keep_formatting =
 				getenv ("MAN_KEEP_FORMATTING");
 			if ((!man_keep_formatting || !*man_keep_formatting) &&
@@ -1403,7 +1405,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				setenv ("GROFF_NO_SGR", "1", 1);
 #ifndef GNU_NROFF
 			/* tbl needs col */
-			else if (using_tbl && !troff && *COL)
+			else if (using_tbl && !troff && *PROG_COL)
 				add_col (p, locale_charset, (void *) 0);
 #endif /* GNU_NROFF */
 		}
@@ -1602,7 +1604,7 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 	if (!troff && (!want_encoding || !is_roff_device (want_encoding)))
 		add_output_iconv (p, encoding, locale_charset);
 
-	if (!troff && *COL) {
+	if (!troff && *PROG_COL) {
 		/* get rid of special characters if not writing to a
 		 * terminal
 		 */
@@ -1638,7 +1640,7 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 		if (ascii) {
 			pipecmd *tr_cmd;
 			tr_cmd = pipecmd_new_argstr
-				(get_def_user ("tr", TR TR_SET1 TR_SET2));
+				(get_def_user ("tr", PROG_TR TR_SET1 TR_SET2));
 			pipecmd_pre_exec (tr_cmd, sandbox_load, sandbox_free,
 					  sandbox);
 			pipeline_command (p, tr_cmd);
@@ -1837,7 +1839,8 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 	add_output_iconv (cat_p, encoding, "UTF-8");
 #  ifdef COMP_CAT
 	/* fork the compressor */
-	comp_cmd = pipecmd_new_argstr (get_def ("compressor", COMPRESSOR));
+	comp_cmd = pipecmd_new_argstr
+		(get_def ("compressor", PROG_COMPRESSOR));
 	pipecmd_nice (comp_cmd, 10);
 	pipecmd_pre_exec (comp_cmd, sandbox_load, sandbox_free, sandbox);
 	pipeline_command (cat_p, comp_cmd);
@@ -2036,7 +2039,8 @@ static void display_catman (const char *cat_file, pipeline *decomp,
 	add_output_iconv (format_cmd, encoding, "UTF-8");
 
 #ifdef COMP_CAT
-	comp_cmd = pipecmd_new_argstr (get_def ("compressor", COMPRESSOR));
+	comp_cmd = pipecmd_new_argstr
+		(get_def ("compressor", PROG_COMPRESSOR));
 	pipecmd_pre_exec (comp_cmd, sandbox_load, sandbox_free, sandbox);
 	pipeline_command (format_cmd, comp_cmd);
 #endif /* COMP_CAT */
@@ -3069,7 +3073,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 
 	debug ("trying section %s with globbing\n", sec);
 
-#ifndef NROFF_MISSING /* #ifdef NROFF */
+#ifndef NROFF_MISSING /* #ifdef PROG_NROFF */
 	/*
   	 * Look for man page source files.
   	 */
@@ -3229,7 +3233,7 @@ static int display_database (struct candidate *candp)
 	title = xasprintf ("%s(%s)",
 			   in->name ? in->name : candp->req_name, in->ext);
 
-#ifndef NROFF_MISSING /* #ifdef NROFF */
+#ifndef NROFF_MISSING /* #ifdef PROG_NROFF */
 	/*
   	 * Look for man page source files.
   	 */
@@ -4145,15 +4149,15 @@ int main (int argc, char *argv[])
 	if (pager == NULL)
 		pager = get_def_user ("pager", NULL);
 	if (pager == NULL) {
-		char *pager_program = sh_lang_first_word (PAGER);
+		char *pager_program = sh_lang_first_word (PROG_PAGER);
 		if (pathsearch_executable (pager_program))
-			pager = PAGER;
+			pager = PROG_PAGER;
 		else
 			pager = "";
 		free (pager_program);
 	}
 	if (*pager == '\0')
-		pager = get_def_user ("cat", CAT);
+		pager = get_def_user ("cat", PROG_CAT);
 
 	if (prompt_string == NULL)
 		prompt_string = getenv ("MANLESS");

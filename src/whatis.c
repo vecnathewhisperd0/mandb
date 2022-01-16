@@ -315,8 +315,8 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 			else
 				anchored_page = xasprintf ("^%s", pages[i]);
 
-			grep_cmd = pipecmd_new_argstr (get_def_user ("grep",
-								     GREP));
+			grep_cmd = pipecmd_new_argstr
+				(get_def_user ("grep", PROG_GREP));
 			pipecmd_argstr (grep_cmd, flags);
 			pipecmd_args (grep_cmd, anchored_page, whatis_file,
 				      (void *) 0);

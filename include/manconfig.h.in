@@ -100,68 +100,68 @@
 /* The locations of the following files were determined by ../configure so
    some of them may be incorrect. Edit as necessary */
 
-#ifndef PAGER
-#  define PAGER		"@pager@"
+#ifndef PROG_PAGER
+#  define PROG_PAGER	"@pager@"
 #endif
 
-#ifndef CAT
-#  define CAT		"@cat@"
+#ifndef PROG_CAT
+#  define PROG_CAT	"@cat@"
 #endif
 
-#ifndef WEB_BROWSER
-#  define WEB_BROWSER	"@browser@"
+#ifndef PROG_BROWSER
+#  define PROG_BROWSER	"@browser@"
 #endif
 
-#ifndef TR
-#  define TR		"@tr@"
+#ifndef PROG_TR
+#  define PROG_TR	"@tr@"
 #endif
 
-#ifndef GREP
-#  define GREP		"@grep@"
+#ifndef PROG_GREP
+#  define PROG_GREP	"@grep@"
 #endif
 
 #ifdef HAS_TROFF
-#  ifndef TROFF
-#    define TROFF 	"@troff@"
+#  ifndef PROG_TROFF
+#    define PROG_TROFF 	"@troff@"
 #  endif
 #endif
 
 #ifndef NROFF_MISSING
-#  ifndef NROFF
-#    define NROFF 	"@nroff@"
+#  ifndef PROG_NROFF
+#    define PROG_NROFF 	"@nroff@"
 #  endif
 #endif
 
-#ifndef EQN
-#  define EQN 		"@eqn@"
+#ifndef PROG_EQN
+#  define PROG_EQN 	"@eqn@"
 #endif
 
-#ifndef NEQN
-#  define NEQN		"@neqn@"
+#ifndef PROG_NEQN
+#  define PROG_NEQN	"@neqn@"
 #endif
 
-#ifndef TBL
-#  define TBL 		"@tbl@"
+#ifndef PROG_TBL
+#  define PROG_TBL 	"@tbl@"
 #endif
 
-#ifndef COL
-#  define COL 		"@col@"
+#ifndef PROG_COL
+#  define PROG_COL 	"@col@"
 #endif
 
-#ifndef VGRIND
-#  define VGRIND 	"@vgrind@"
+#ifndef PROG_VGRIND
+#  define PROG_VGRIND 	"@vgrind@"
 #endif
 
-#ifndef REFER
-#  define REFER 	"@refer@"
+#ifndef PROG_REFER
+#  define PROG_REFER 	"@refer@"
 #endif
 
-#ifndef GRAP
-#  define GRAP 		"@grap@"
+#ifndef PROG_GRAP
+#  define PROG_GRAP 	"@grap@"
 #endif
 
-#ifndef PIC
-#  define PIC 		"@pic@"
+#ifndef PROG_PIC
+#  define PROG_PIC 	"@pic@"
 #endif
 
 #ifndef OVERRIDE_DIR
@@ -211,7 +211,7 @@
    be gzip or compress and the extension: .gz or .Z . Please make sure that
    all of your cat pages have the same extension (whatever that may be) */
 
-#  define COMPRESSOR "@compressor@"
+#  define PROG_COMPRESSOR "@compressor@"
 #  define COMPRESS_EXT "@compress_ext@"
 #endif /* COMP_CAT */
 
@@ -219,13 +219,13 @@
    decompressing cat pages and source nroff. To add further decompressors,
    you will need to edit comp_src.h[.in] . Help is provided in the file */
 
-#define GUNZIP "@gunzip@"
-#define UNCOMPRESS "@uncompress@"
-#define BUNZIP2 "@bunzip2@"
-#define UNLZMA "@unlzma@"
-#define UNXZ "@unxz@"
-#define UNLZIP "@unlzip@"
-#define UNZSTD "@unzstd@"
+#define PROG_GUNZIP "@gunzip@"
+#define PROG_UNCOMPRESS "@uncompress@"
+#define PROG_BUNZIP2 "@bunzip2@"
+#define PROG_UNLZMA "@unlzma@"
+#define PROG_UNXZ "@unxz@"
+#define PROG_UNLZIP "@unlzip@"
+#define PROG_UNZSTD "@unzstd@"
 
 /*-----------------------------------------------------------------------*/
 /* The things below here shouldn't really be changed unless you really	 */

@@ -46,41 +46,41 @@ struct compression comp_list[] = {
 
 /* If we have gzip, incorporate the following */
 #ifdef HAVE_GZIP
-	{GUNZIP, "gz", NULL},
-	{GUNZIP, "z", NULL},
+	{PROG_GUNZIP, "gz", NULL},
+	{PROG_GUNZIP, "z", NULL},
 #endif /* HAVE_GZIP */
 
 /* If we have compress, incorporate the following */
 #ifdef HAVE_COMPRESS
-	{UNCOMPRESS, "Z", NULL},
+	{PROG_UNCOMPRESS, "Z", NULL},
 /* Else if we have gzip, incorporate the following */
 #elif defined (HAVE_GZIP)
-	{GUNZIP, "Z", NULL},
+	{PROG_GUNZIP, "Z", NULL},
 #endif /* HAVE_COMPRESS || HAVE_GZIP */
 
 /* If we have bzip2, incorporate the following */
 #ifdef HAVE_BZIP2
-	{BUNZIP2, "bz2", NULL},
+	{PROG_BUNZIP2, "bz2", NULL},
 #endif /* HAVE_BZIP2 */
 
 /* If we have xz, incorporate the following */
 #ifdef HAVE_XZ
-	{UNXZ, "xz", NULL},
-	{UNXZ, "lzma", NULL},
+	{PROG_UNXZ, "xz", NULL},
+	{PROG_UNXZ, "lzma", NULL},
 /* Else if we have lzma, incorporate the following */
 #elif defined (HAVE_LZMA)
-	{UNLZMA, "lzma", NULL},
+	{PROG_UNLZMA, "lzma", NULL},
 #endif /* HAVE_XZ || HAVE_LZMA */
 
 /* If we have lzip, incorporate the following */
 #ifdef HAVE_LZIP
-	{UNLZIP, "lz", NULL},
+	{PROG_UNLZIP, "lz", NULL},
 #endif /* HAVE_LZIP */
 
 /* If we have zstd, incorporate the following */
 #ifdef HAVE_ZSTD
-	{UNZSTD, "zst", NULL},
-	{UNZSTD, "zstd", NULL},
+	{PROG_UNZSTD, "zst", NULL},
+	{PROG_UNZSTD, "zstd", NULL},
 #endif /* HAVE_ZSTD */
 
 /*------------------------------------------------------*/

@@ -888,9 +888,10 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	if (page_encoding)
 		add_manconv (p, page_encoding, "UTF-8");
 	free (page_encoding);
-	if (p_lg->type && *COL) {
+	if (p_lg->type && *PROG_COL) {
 		pipecmd *col_cmd;
-		col_cmd = pipecmd_new_args (COL, "-b", "-p", "-x", (void *) 0);
+		col_cmd = pipecmd_new_args
+			(PROG_COL, "-b", "-p", "-x", (void *) 0);
 		pipecmd_pre_exec (col_cmd, sandbox_load, sandbox_free,
 				  sandbox);
 		pipeline_command (p, col_cmd);

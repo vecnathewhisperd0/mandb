@@ -60,7 +60,8 @@
 struct compression *comp_info (const char *filename, int want_stem)
 {
 	const char *ext;
-	static struct compression hpux_comp = {GUNZIP " -S \"\"", "", NULL};
+	static struct compression hpux_comp =
+		{PROG_GUNZIP " -S \"\"", "", NULL};
 
 	ext = strrchr (filename, '.');
 
@@ -78,7 +79,7 @@ struct compression *comp_info (const char *filename, int want_stem)
 		}
 	}
 
-	if (*GUNZIP) {
+	if (*PROG_GUNZIP) {
 		ext = strstr (filename, ".Z/");
 		if (ext) {
 			if (want_stem)

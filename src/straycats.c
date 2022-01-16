@@ -214,7 +214,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			free (lang);
 
 			col_cmd = pipecmd_new_argstr
-				(get_def_user ("col", COL));
+				(get_def_user ("col", PROG_COL));
 			pipecmd_arg (col_cmd, "-bx");
 			col_locale = find_charset_locale ("UTF-8");
 			if (col_locale) {
