@@ -53,6 +53,7 @@
 
 #include "convert.h"
 #include "descriptions.h"
+#include "lexgrog.h"
 #include "ult_src.h"
 
 int quiet = 1;

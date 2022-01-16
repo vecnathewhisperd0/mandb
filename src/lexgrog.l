@@ -62,10 +62,22 @@
 #include "encodings.h"
 #include "sandbox.h"
 
+#include "lexgrog.h"
 #include "manconv_client.h"
 
 #define YY_READ_BUF_SIZE	1024
 #define MAX_NAME		8192
+
+/* defines the ordered list of filters detected by lexgrog */
+enum {
+	TBL_FILTER = 0,	/* tbl */
+	EQN_FILTER,	/* eqn */
+	PIC_FILTER,	/* pic */
+	GRAP_FILTER,	/* grap */
+	REF_FILTER,	/* refer */
+	VGRIND_FILTER,	/* vgrind */
+	MAX_FILTERS	/* delimiter */
+};
 
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof ((array)[0]))
 

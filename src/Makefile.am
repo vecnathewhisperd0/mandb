@@ -96,6 +96,7 @@ lexgrog_SOURCES = \
 	filenames.h \
 	globbing.c \
 	globbing.h \
+	lexgrog.h \
 	lexgrog.l \
 	lexgrog_test.c \
 	manconv.c \
@@ -151,6 +152,7 @@ mandb_SOURCES = \
 	filenames.h \
 	globbing.c \
 	globbing.h \
+	lexgrog.h \
 	lexgrog.l \
 	manconv.c \
 	manconv.h \

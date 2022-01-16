@@ -70,6 +70,7 @@
 #include "descriptions.h"
 #include "filenames.h"
 #include "globbing.h"
+#include "lexgrog.h"
 #include "manp.h"
 #include "ult_src.h"
 #include "check_mandirs.h"

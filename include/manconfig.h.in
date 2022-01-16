@@ -306,13 +306,6 @@ extern struct compression *comp_file (const char *filename);
 /* straycats.c */
 extern int straycats (const char *database, const char *manpath);
 
-/* lexgrog.l */
-struct lexgrog;
-extern int find_name (const char *file, const char *filename,
-		      struct lexgrog *p_lg, const char *encoding);
-extern int find_name_decompressed (struct pipeline *p, const char *filename,
-				   struct lexgrog *p_lg);
-
 /* util.c */
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);
@@ -366,21 +359,5 @@ extern int quiet;		/* be quiet(er) if 1 */
 /* some special database keys used for storing important info */
 #define VER_KEY         "$version$"	/* version key */
 #define VER_ID          "2.5.0"		/* version content */
-
-/* defines the ordered list of filters detected by lexgrog */
-enum	{ TBL_FILTER=0	/* tbl */
-	, EQN_FILTER	/* eqn */
-	, PIC_FILTER	/* pic */
-	, GRAP_FILTER	/* grap */
-	, REF_FILTER	/* refer */
-	, VGRIND_FILTER	/* vgrind */
-	, MAX_FILTERS	/* delimiter */
-	};
-
-typedef struct lexgrog {
-	int type;
-	char *whatis;
-	char *filters;
-} lexgrog;
 
 #endif /* MANCONFIG_H */

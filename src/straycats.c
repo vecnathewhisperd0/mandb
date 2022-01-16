@@ -62,6 +62,7 @@
 #include "db_storage.h"
 
 #include "descriptions.h"
+#include "lexgrog.h"
 #include "manp.h"
 #include "manconv_client.h"
 #include "ult_src.h"
