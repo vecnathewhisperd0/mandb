@@ -201,9 +201,6 @@ struct pipeline;
 extern struct compression *comp_info (const char *filename, int want_stem);
 extern struct compression *comp_file (const char *filename);
 
-/* straycats.c */
-extern int straycats (const char *database, const char *manpath);
-
 /* util.c */
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);

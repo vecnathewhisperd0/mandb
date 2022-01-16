@@ -162,6 +162,7 @@ mandb_SOURCES = \
 	manp.c \
 	manp.h \
 	straycats.c \
+	straycats.h \
 	ult_src.c \
 	ult_src.h
 manpath_SOURCES = \

@@ -77,6 +77,7 @@
 #include "check_mandirs.h"
 #include "filenames.h"
 #include "manp.h"
+#include "straycats.h"
 
 int quiet = 1;
 extern bool opt_test;		/* don't update db */

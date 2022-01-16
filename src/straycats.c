@@ -65,6 +65,7 @@
 #include "lexgrog.h"
 #include "manp.h"
 #include "manconv_client.h"
+#include "straycats.h"
 #include "ult_src.h"
 
 extern man_sandbox *sandbox;
