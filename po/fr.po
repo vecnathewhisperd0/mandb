@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.9.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2021-02-08 22:15+0000\n"
+"POT-Creation-Date: 2022-01-16 15:44+0000\n"
 "PO-Revision-Date: 2019-10-02 04:21+0200\n"
 "Last-Translator: Stéphane Aulery <lkppo@free.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -22,12 +22,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1\n"
 "X-Generator: Lokalize 1.2\n"
 
-#: lib/security.c:79
+#: lib/pathsearch.c:81 lib/pathsearch.c:131 src/manp.c:1177
+#, c-format
+msgid "can't determine current directory"
+msgstr "impossible de déterminer quel est le répertoire courant"
+
+#: lib/security.c:80
 #, c-format
 msgid "can't set effective uid"
 msgstr "impossible de positionner le propriétaire (UID) effectif"
 
-#: lib/security.c:118
+#: lib/security.c:119
 #, c-format
 msgid "the setuid man user \"%s\" does not exist"
 msgstr "l'utilisateur man privilégié (setuid) « %s » n'existe pas"
@@ -42,34 +47,34 @@ msgstr "erreur fatale : expression rationnelle « %s » : %s"
 msgid "multi key %s does not exist"
 msgstr "la clef multiple %s n'existe pas"
 
-#: libdb/db_lookup.c:75
+#: libdb/db_lookup.c:77
 #, c-format
 msgid "can't lock index cache %s"
 msgstr "impossible de verrouiller le cache d'index %s"
 
-#: libdb/db_lookup.c:82
+#: libdb/db_lookup.c:84
 #, c-format
 msgid "index cache %s corrupt"
 msgstr "le cache d'index %s est endommagé"
 
-#: libdb/db_lookup.c:88
+#: libdb/db_lookup.c:90
 #, c-format
 msgid "cannot replace key %s"
 msgstr "impossible de remplacer la clef %s"
 
-#: libdb/db_lookup.c:183 libdb/db_lookup.c:194
+#: libdb/db_lookup.c:188 libdb/db_lookup.c:199
 #, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
 msgstr[0] "il n'y a qu'un champ dans le contenu"
 msgstr[1] "il n'y a que %d champs dans le contenu"
 
-#: libdb/db_lookup.c:358
+#: libdb/db_lookup.c:363
 #, c-format
 msgid "bad fetch on multi key %s"
 msgstr "mauvais accès sur la clef multiple %s"
 
-#: libdb/db_lookup.c:443 src/whatis.c:737
+#: libdb/db_lookup.c:448 src/whatis.c:700
 #, c-format
 msgid "Database %s corrupted; rebuild with mandb --create"
 msgstr "La base %s est corrompue, reconstruisez-la avec mandb --create"
@@ -89,23 +94,23 @@ msgstr "attention : %s a pour version %s au lieu de %s\n"
 msgid "fatal: unable to insert version identifier into %s"
 msgstr "erreur fatale : impossible d'insérer l'identifiant de version dans %s"
 
-#: src/accessdb.c:59
+#: src/accessdb.c:60
 msgid "[MAN DATABASE]"
 msgstr "[BASE DE DONNÉES DE MAN]"
 
-#: src/accessdb.c:60
+#: src/accessdb.c:61
 #, c-format
 msgid "The man database defaults to %s%s."
 msgstr "La base de données par défaut est %s%s."
 
-#: src/accessdb.c:63 src/catman.c:100 src/globbing_test.c:58
-#: src/lexgrog_test.c:73 src/man.c:268 src/man-recode.c:111
-#: src/manconv_main.c:95 src/mandb.c:114 src/manpath.c:65 src/whatis.c:126
-#: src/zsoelim_main.c:68
+#: src/accessdb.c:64 src/catman.c:100 src/globbing_test.c:59
+#: src/lexgrog_test.c:76 src/man.c:269 src/man-recode.c:111
+#: src/manconv_main.c:96 src/mandb.c:114 src/manpath.c:65 src/whatis.c:121
+#: src/zsoelim_main.c:69
 msgid "emit debugging messages"
 msgstr "affichage des messages de débogage"
 
-#: src/accessdb.c:137
+#: src/accessdb.c:138
 #, c-format
 msgid "can't open %s for reading"
 msgstr "impossible d'ouvrir %s en lecture"
@@ -114,21 +119,21 @@ msgstr "impossible d'ouvrir %s en lecture"
 msgid "[SECTION...]"
 msgstr "[SECTION...]"
 
-#: src/catman.c:101 src/man.c:289 src/whatis.c:136
+#: src/catman.c:101 src/man.c:290 src/whatis.c:131
 msgid "PATH"
 msgstr "CHEMIN"
 
-#: src/catman.c:101 src/man.c:289 src/whatis.c:136
+#: src/catman.c:101 src/man.c:290 src/whatis.c:131
 msgid "set search path for manual pages to PATH"
 msgstr "configure le chemin de recherche des pages de manuel à CHEMIN"
 
-#: src/catman.c:102 src/man.c:267 src/mandb.c:122 src/manpath.c:67
-#: src/whatis.c:138
+#: src/catman.c:102 src/man.c:268 src/mandb.c:122 src/manpath.c:67
+#: src/whatis.c:133
 msgid "FILE"
 msgstr "FICHIER"
 
-#: src/catman.c:102 src/man.c:267 src/mandb.c:122 src/manpath.c:67
-#: src/whatis.c:138
+#: src/catman.c:102 src/man.c:268 src/mandb.c:122 src/manpath.c:67
+#: src/whatis.c:133
 msgid "use this user configuration file"
 msgstr "utilise ce fichier de configuration utilisateur"
 
@@ -142,12 +147,12 @@ msgstr "la commande man a échoué avec %d comme code de retour"
 msgid "cannot read database %s"
 msgstr "impossible de lire la base de données %s"
 
-#: src/catman.c:278
+#: src/catman.c:283
 #, c-format
 msgid "NULL content for key: %s"
 msgstr "contenu vide (NULL) pour la clef : %s"
 
-#: src/catman.c:294
+#: src/catman.c:304
 #, c-format
 msgid ""
 "\n"
@@ -156,82 +161,82 @@ msgstr ""
 "\n"
 "Mise à jour des fichiers préformatés pour la section %s de %s\n"
 
-#: src/catman.c:348
+#: src/catman.c:358
 #, c-format
 msgid "cannot write within %s"
 msgstr "impossible d'écrire dans %s"
 
-#: src/catman.c:423
+#: src/catman.c:433
 #, c-format
 msgid "unable to update %s"
 msgstr "impossible de mettre %s à jour"
 
-#: src/check_mandirs.c:100
+#: src/check_mandirs.c:103
 #, c-format
 msgid "warning: %s/man%s/%s.%s*: competing extensions"
 msgstr "attention : %s/man%s/%s.%s* : extensions en conflit"
 
-#: src/check_mandirs.c:126 src/check_mandirs.c:626
+#: src/check_mandirs.c:129 src/check_mandirs.c:631
 #, c-format
 msgid "can't update index cache %s"
 msgstr "impossible de mettre à jour le cache d'index %s"
 
-#: src/check_mandirs.c:254
+#: src/check_mandirs.c:257
 #, c-format
 msgid "warning: %s: bad symlink or ROFF `.so' request"
 msgstr "attention : %s : lien symbolique ou directive ROFF « .so » incorrect"
 
-#: src/check_mandirs.c:310
+#: src/check_mandirs.c:313
 #, c-format
 msgid "warning: %s: ignoring empty file"
 msgstr "attention : %s : fichier vide ignoré"
 
-#: src/check_mandirs.c:314 src/straycats.c:262
+#: src/check_mandirs.c:317 src/straycats.c:263
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "attention : %s : la recherche de whatis sur %s(%s) a échoué"
 
-#: src/check_mandirs.c:341 src/check_mandirs.c:511 src/mandb.c:875
-#: src/straycats.c:84 src/straycats.c:289 src/ult_src.c:81
+#: src/check_mandirs.c:345 src/check_mandirs.c:516 src/mandb.c:878
+#: src/straycats.c:85 src/straycats.c:290 src/ult_src.c:81
 #, c-format
 msgid "can't search directory %s"
 msgstr "impossible de chercher dans le répertoire %s"
 
-#: src/check_mandirs.c:390 src/man.c:1716
+#: src/check_mandirs.c:394 src/man.c:1715
 #, c-format
 msgid "can't chown %s"
 msgstr "impossible de changer le propriétaire de %s"
 
-#: src/check_mandirs.c:412 src/check_mandirs.c:435
+#: src/check_mandirs.c:416 src/check_mandirs.c:439
 #, c-format
 msgid "warning: cannot create catdir %s"
 msgstr "attention : impossible de créer le répertoire de pages préformatées %s"
 
-#: src/check_mandirs.c:467 src/man.c:1728 src/mandb.c:232
+#: src/check_mandirs.c:471 src/man.c:1727 src/mandb.c:232
 #, c-format
 msgid "can't chmod %s"
 msgstr "impossible de changer les droits de %s"
 
-#: src/check_mandirs.c:516
+#: src/check_mandirs.c:521
 #, c-format
 msgid "can't change to directory %s"
 msgstr "impossible d'aller dans le répertoire %s"
 
-#: src/check_mandirs.c:566
+#: src/check_mandirs.c:571
 #, c-format
 msgid "can't create index cache %s"
 msgstr "impossible de créer le cache d'index %s"
 
-#: src/check_mandirs.c:591
+#: src/check_mandirs.c:596
 #, c-format
 msgid "Updating index cache for path `%s/%s'. Wait..."
 msgstr "Mise à jour du cache d'index pour le chemin « %s/%s ». Attendez…"
 
-#: src/check_mandirs.c:653 src/check_mandirs.c:714
+#: src/check_mandirs.c:658 src/check_mandirs.c:724
 msgid "done.\n"
 msgstr "terminé.\n"
 
-#: src/check_mandirs.c:977
+#: src/check_mandirs.c:997
 #, c-format
 msgid "Purging old database entries in %s...\n"
 msgstr "Effacement des entrées inutiles de %s en cours…\n"
@@ -241,236 +246,236 @@ msgstr "Effacement des entrées inutiles de %s en cours…\n"
 msgid "warning: failed to store entry for %s(%s)"
 msgstr "attention : impossible de stocker l'entrée pour %s(%s)"
 
-#: src/filenames.c:48 src/straycats.c:122 src/straycats.c:142
+#: src/filenames.c:48 src/straycats.c:123 src/straycats.c:143
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
 msgstr "attention : %s : nom de fichier erroné, ignoré"
 
-#: src/globbing_test.c:55
+#: src/globbing_test.c:56
 msgid "PATH SECTION NAME"
 msgstr "CHEMIN SECTION NOM"
 
-#: src/globbing_test.c:59 src/man.c:292
+#: src/globbing_test.c:60 src/man.c:293
 msgid "EXTENSION"
 msgstr "EXTENSION"
 
-#: src/globbing_test.c:59 src/man.c:293
+#: src/globbing_test.c:60 src/man.c:294
 msgid "limit search to extension type EXTENSION"
 msgstr "limite la recherche aux extensions EXTENSION"
 
-#: src/globbing_test.c:60 src/man.c:294
+#: src/globbing_test.c:61 src/man.c:295
 msgid "look for pages case-insensitively (default)"
 msgstr "recherche les pages sans distinguer la casse (par défaut)"
 
-#: src/globbing_test.c:61 src/man.c:295
+#: src/globbing_test.c:62 src/man.c:296
 msgid "look for pages case-sensitively"
 msgstr "recherche les pages en distinguant la casse"
 
-#: src/globbing_test.c:62
+#: src/globbing_test.c:63
 msgid "interpret page name as a regex"
 msgstr "considère le nom de page comme une expression rationnelle"
 
-#: src/globbing_test.c:63
+#: src/globbing_test.c:64
 msgid "the page name contains wildcards"
 msgstr "le nom de page contient des caractères joker"
 
-#: src/lexgrog.l:706
+#: src/lexgrog.l:721
 #, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "attention : whatis pour %s dépasse d'un octet, excédent tronqué."
 msgstr[1] "attention : whatis pour %s dépasse de %d octets, excédent tronqué."
 
-#: src/lexgrog.l:859 src/man.c:2297 src/man.c:2382 src/man.c:2480
-#: src/man-recode.c:176 src/man-recode.c:201 src/manconv_main.c:158
-#: src/straycats.c:204 src/ult_src.c:320 src/ult_src.c:333 src/zsoelim.l:517
+#: src/lexgrog.l:874 src/man.c:2298 src/man.c:2383 src/man.c:2481
+#: src/man-recode.c:176 src/man-recode.c:201 src/manconv_main.c:160
+#: src/straycats.c:205 src/ult_src.c:322 src/ult_src.c:335 src/zsoelim.l:522
 #, c-format
 msgid "can't open %s"
 msgstr "impossible d'ouvrir %s"
 
-#: src/lexgrog_test.c:69 src/zsoelim_main.c:65
+#: src/lexgrog_test.c:72 src/zsoelim_main.c:66
 msgid "FILE..."
 msgstr "FICHIER..."
 
-#: src/lexgrog_test.c:70
+#: src/lexgrog_test.c:73
 msgid "The defaults are --man and --whatis."
 msgstr "Les options par défaut sont --man et --whatis."
 
-#: src/lexgrog_test.c:74
+#: src/lexgrog_test.c:77
 msgid "parse as man page"
 msgstr "lit les fichiers en tant que pages de manuel"
 
-#: src/lexgrog_test.c:75
+#: src/lexgrog_test.c:78
 msgid "parse as cat page"
 msgstr "lit les fichiers en tant que pages préformattées"
 
-#: src/lexgrog_test.c:76
+#: src/lexgrog_test.c:79
 msgid "show whatis information"
 msgstr "affiche les renseignements comme whatis"
 
-#: src/lexgrog_test.c:77
+#: src/lexgrog_test.c:80
 msgid "show guessed series of preprocessing filters"
 msgstr "affiche la liste supposée des filtres de pré-traitement"
 
-#: src/lexgrog_test.c:78 src/man.c:284 src/man.c:309
+#: src/lexgrog_test.c:81 src/man.c:285 src/man.c:310
 msgid "ENCODING"
 msgstr "ENCODAGE"
 
-#: src/lexgrog_test.c:78 src/man.c:309
+#: src/lexgrog_test.c:81 src/man.c:310
 msgid "use selected output encoding"
 msgstr "utilise l'encodage d'affichage choisi"
 
-#: src/lexgrog_test.c:122 src/man.c:540 src/man.c:549
+#: src/lexgrog_test.c:125 src/man.c:538 src/man.c:547
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s : options incompatibles"
 
-#: src/man.c:160 src/man-recode.c:234
+#: src/man.c:161 src/man-recode.c:234
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "commande terminée avec %d comme code de retour : %s"
 
-#: src/man.c:251
+#: src/man.c:252
 msgid "[SECTION] PAGE..."
 msgstr "[SECTION] PAGE..."
 
-#: src/man.c:269
+#: src/man.c:270
 msgid "reset all options to their default values"
 msgstr "réinitialise les valeurs par défaut des options"
 
-#: src/man.c:270
+#: src/man.c:271
 msgid "WARNINGS"
 msgstr "AVERTISSEMENTS"
 
-#: src/man.c:271
+#: src/man.c:272
 msgid "enable warnings from groff"
 msgstr "active les avertissements de groff"
 
-#: src/man.c:273
+#: src/man.c:274
 msgid "Main modes of operation:"
 msgstr "Modes opératoires principaux :"
 
-#: src/man.c:274
+#: src/man.c:275
 msgid "equivalent to whatis"
 msgstr "équivalent à whatis"
 
-#: src/man.c:275
+#: src/man.c:276
 msgid "equivalent to apropos"
 msgstr "équivalent à apropos"
 
-#: src/man.c:276
+#: src/man.c:277
 msgid "search for text in all pages"
 msgstr "recherche le texte dans toutes les pages"
 
-#: src/man.c:277
+#: src/man.c:278
 msgid "print physical location of man page(s)"
 msgstr "affiche l'emplacement des pages du manuel"
 
-#: src/man.c:280
+#: src/man.c:281
 msgid "print physical location of cat file(s)"
 msgstr "affiche l'emplacement des fichiers « cat »"
 
-#: src/man.c:282
+#: src/man.c:283
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr "interprète l'argument PAGE comme un nom de fichier"
 
-#: src/man.c:283
+#: src/man.c:284
 msgid "used by catman to reformat out of date cat pages"
 msgstr "utilisé par catman pour reformater les pages trop vieilles"
 
-#: src/man.c:284
+#: src/man.c:285
 msgid "output source page encoded in ENCODING"
 msgstr "affiche le code source converti en ENCODAGE"
 
-#: src/man.c:286
+#: src/man.c:287
 msgid "Finding manual pages:"
 msgstr "Recherche des pages de manuel :"
 
-#: src/man.c:287 src/whatis.c:137
+#: src/man.c:288 src/whatis.c:132
 msgid "LOCALE"
 msgstr "LOCALE"
 
-#: src/man.c:287
+#: src/man.c:288
 msgid "define the locale for this particular man search"
 msgstr "définit la locale pour cette recherche de manuel"
 
-#: src/man.c:288 src/manpath.c:68 src/whatis.c:135
+#: src/man.c:289 src/manpath.c:68 src/whatis.c:130
 msgid "SYSTEM"
 msgstr "SYSTÈME"
 
-#: src/man.c:288 src/manpath.c:68 src/whatis.c:135
+#: src/man.c:289 src/manpath.c:68 src/whatis.c:130
 msgid "use manual pages from other systems"
 msgstr "utilise les pages de manuel d'autres systèmes"
 
-#: src/man.c:290 src/whatis.c:133
+#: src/man.c:291 src/whatis.c:128
 msgid "LIST"
 msgstr "LISTE"
 
-#: src/man.c:290
+#: src/man.c:291
 msgid "use colon separated section list"
 msgstr "utilise la liste des sections séparées par des deux-points"
 
-#: src/man.c:296
+#: src/man.c:297
 msgid "show all pages matching regex"
 msgstr "montre toutes les pages correspondant à l'expression rationnelle"
 
-#: src/man.c:297
+#: src/man.c:298
 msgid "show all pages matching wildcard"
 msgstr "montre toutes les pages correspondant au caractère joker"
 
-#: src/man.c:298
+#: src/man.c:299
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
 "correspond seulement aux noms de pages avec --regex et --wildcard, pas aux "
 "descriptions"
 
-#: src/man.c:300
+#: src/man.c:301
 msgid "find all matching manual pages"
 msgstr "trouve toutes les pages correspondantes"
 
-#: src/man.c:301
+#: src/man.c:302
 msgid "force a cache consistency check"
 msgstr "force une vérification de cohérence du cache"
 
-#: src/man.c:303
+#: src/man.c:304
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
 msgstr ""
 "ne prend pas en compte les sous-commandes, par exemple « man truc bidule » "
 "=> « man truc-bidule »"
 
-#: src/man.c:305
+#: src/man.c:306
 msgid "Controlling formatted output:"
 msgstr "Contrôle du format d'affichage :"
 
-#: src/man.c:306
+#: src/man.c:307
 msgid "PAGER"
 msgstr "AFFICHEUR"
 
-#: src/man.c:306
+#: src/man.c:307
 msgid "use program PAGER to display output"
 msgstr "utilise de programme AFFICHEUR pour l'affichage"
 
-#: src/man.c:307 src/man.c:316
+#: src/man.c:308 src/man.c:317
 msgid "STRING"
 msgstr "CHAÎNE"
 
-#: src/man.c:307
+#: src/man.c:308
 msgid "provide the `less' pager with a prompt"
 msgstr "donne une chaîne d'invite à « less »"
 
-#: src/man.c:308
+#: src/man.c:309
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "affiche un équivalent ASCII de certains caractères latin1"
 
-#: src/man.c:311
+#: src/man.c:312
 msgid "turn off hyphenation"
 msgstr "désactive la césure"
 
-#: src/man.c:314
+#: src/man.c:315
 msgid "turn off justification"
 msgstr "désactive la justification"
 
-#: src/man.c:316
+#: src/man.c:317
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
@@ -480,34 +485,34 @@ msgstr ""
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 
-#: src/man.c:320
+#: src/man.c:321
 #, c-format
 msgid "use %s to format pages"
 msgstr "utilise %s pour formater les pages"
 
-#: src/man.c:321
+#: src/man.c:322
 msgid "DEVICE"
 msgstr "PÉRIPHÉRIQUE"
 
-#: src/man.c:322
+#: src/man.c:323
 #, c-format
 msgid "use %s with selected device"
 msgstr "utilise %s avec le périphérique sélectionné"
 
-#: src/man.c:323
+#: src/man.c:324
 msgid "BROWSER"
 msgstr "NAVIGATEUR"
 
-#: src/man.c:324
+#: src/man.c:325
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr "utilise %s ou NAVIGATEUR pour l'affichage HTML"
 
-#: src/man.c:325
+#: src/man.c:326
 msgid "RESOLUTION"
 msgstr "RÉSOLUTION"
 
-#: src/man.c:327
+#: src/man.c:328
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
@@ -515,61 +520,61 @@ msgstr ""
 "utilise groff et affiche avec gditview (X11) :\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:329
+#: src/man.c:330
 msgid "use groff and force it to produce ditroff"
 msgstr "utilise groff en le forçant à produire ditroff"
 
-#: src/man.c:599 src/man.c:736
+#: src/man.c:597 src/man.c:734
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "Aucune entrée de manuel pour %s\n"
 
-#: src/man.c:601
+#: src/man.c:599
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "(Sinon, quelle page de manuel de la section %s voulez-vous ?)\n"
 
-#: src/man.c:605
+#: src/man.c:603
 msgid "What manual page do you want?\n"
 msgstr "Quelle page de manuel voulez-vous ?\n"
 
-#: src/man.c:606
+#: src/man.c:604
 msgid "For example, try 'man man'.\n"
 msgstr "Par exemple, essayez « man man ».\n"
 
-#: src/man.c:733
+#: src/man.c:731
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Aucune entrée de manuel pour %s en section %s\n"
 
-#: src/man.c:742
+#: src/man.c:740
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr ""
 "voir « %s » pour obtenir de l'aide quand les pages de manuel ne sont pas "
 "disponibles.\n"
 
-#: src/man.c:1349
+#: src/man.c:1348
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "le préprocesseur « %c » est inconnu et ignoré"
 
-#: src/man.c:1739 src/man-recode.c:243 src/mandb.c:223
+#: src/man.c:1738 src/man-recode.c:243 src/mandb.c:223
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "impossible de renommer %s en %s"
 
-#: src/man.c:1756
+#: src/man.c:1755
 #, c-format
 msgid "can't set times on %s"
 msgstr "impossible de changer la date de %s"
 
-#: src/man.c:1765 src/man.c:1802
+#: src/man.c:1764 src/man.c:1801
 #, c-format
 msgid "can't unlink %s"
 msgstr "impossible de supprimer %s"
 
-#: src/man.c:1832
+#: src/man.c:1831
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "impossible de créer une page « cat » temporaire pour %s"
@@ -589,14 +594,14 @@ msgstr "impossible d'ouvrir le fichier temporaire %s"
 msgid "can't remove directory %s"
 msgstr "impossible de supprimer le répertoire %s"
 
-#: src/man.c:2141
+#: src/man.c:2142
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- prochain : %s [ voir (entrée) | passer (Ctrl-D) | quitter (Ctrl-"
 "C) ]\n"
 
-#: src/man.c:2425
+#: src/man.c:2426
 #, c-format
 msgid ""
 "\n"
@@ -605,28 +610,28 @@ msgstr ""
 "\n"
 "impossible d'écrire vers %s en mode catman"
 
-#: src/man.c:2505
+#: src/man.c:2506
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Impossible de convertir %s en nom de page préformatée"
 
-#: src/man.c:3230
+#: src/man.c:3231
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr ""
 "%s : il est conseillé de ne plus se baser sur les références de whatis\n"
 
-#: src/man.c:3373 src/man.c:4231
+#: src/man.c:3374 src/man.c:4227
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "la commande mandb a échoué avec le code de retour %d"
 
-#: src/man.c:3575
+#: src/man.c:3574
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "erreur interne : le type candidat %d est hors de portée"
 
-#: src/man.c:4174
+#: src/man.c:4170
 msgid " Manual page "
 msgstr " Page de manuel "
 
@@ -634,11 +639,11 @@ msgstr " Page de manuel "
 msgid "-t CODE {--suffix SUFFIX | --in-place} FILENAME..."
 msgstr "-t CODE {--suffix SUFFIXE | --in-place} NOM_DE_FICHIER..."
 
-#: src/man-recode.c:106 src/manconv_main.c:94
+#: src/man-recode.c:106 src/manconv_main.c:95
 msgid "CODE"
 msgstr "CODE"
 
-#: src/man-recode.c:106 src/manconv_main.c:94
+#: src/man-recode.c:106 src/manconv_main.c:95
 msgid "encoding for output"
 msgstr "encodage de l'affichage"
 
@@ -654,11 +659,11 @@ msgstr "suffixe à ajouter au nom du fichier de sortie"
 msgid "overwrite input files in place"
 msgstr "écrase le fichier en entrée"
 
-#: src/man-recode.c:112 src/manconv_main.c:96 src/manpath.c:66
+#: src/man-recode.c:112 src/manconv_main.c:97 src/manpath.c:66
 msgid "produce fewer warnings"
 msgstr "crée moins d'avertissements"
 
-#: src/man-recode.c:148 src/manconv_main.c:131
+#: src/man-recode.c:148 src/manconv_main.c:132
 #, c-format
 msgid "must specify an output encoding"
 msgstr "l'encodage de sortie doit être précisé"
@@ -678,24 +683,24 @@ msgstr "--suffix et --in-place sont mutuellement exclusif"
 msgid "can't remove %s"
 msgstr "impossible de supprimer %s"
 
-#: src/manconv.c:235 src/manconv.c:256 src/manconv.c:336 src/manconv.c:366
+#: src/manconv.c:236 src/manconv.c:257 src/manconv.c:337 src/manconv.c:367
 #, c-format
 msgid "can't write to standard output"
 msgstr "impossible d'écrire vers la sortie standard"
 
-#: src/manconv.c:282
+#: src/manconv.c:283
 msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv : caractère incomplet en fin de tampon"
 
-#: src/manconv_main.c:89
+#: src/manconv_main.c:90
 msgid "[-f CODE[:...]] -t CODE [FILENAME]"
 msgstr "[-f CODE[:...]] -t CODE [NOM_DE_FICHIER]"
 
-#: src/manconv_main.c:92
+#: src/manconv_main.c:93
 msgid "CODE[:...]"
 msgstr "CODE[:...]"
 
-#: src/manconv_main.c:93
+#: src/manconv_main.c:94
 msgid "possible encodings of original text"
 msgstr "encodages possibles du texte d'origine"
 
@@ -750,119 +755,114 @@ msgstr "impossible de lire à partir de %s"
 msgid "Processing manual pages under %s...\n"
 msgstr "Traitement des pages du manuel sous %s…\n"
 
-#: src/mandb.c:666 src/mandb.c:692
+#: src/mandb.c:667 src/mandb.c:695
 #, c-format
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Suppression du répertoire « cat » obsolète %s…\n"
 
-#: src/mandb.c:842
+#: src/mandb.c:845
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr ""
 "attention : aucune directive MANDB_MAP dans %s, votre fichier manpath est "
 "utilisé"
 
-#: src/mandb.c:912
+#: src/mandb.c:913
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "Un sous-répertoire de manuel contient de nouvelles pages.\n"
 msgstr[1] "%d sous-répertoires de manuel contiennent de nouvelles pages.\n"
 
-#: src/mandb.c:917
+#: src/mandb.c:918
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "Une page de manuel a été ajoutée.\n"
 msgstr[1] "%d pages de manuel ont été ajoutées.\n"
 
-#: src/mandb.c:921
+#: src/mandb.c:922
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "Une page sans source a été ajoutée.\n"
 msgstr[1] "%d pages sans source ont été ajoutées.\n"
 
-#: src/mandb.c:926
+#: src/mandb.c:927
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "Une entrée inutile de la base a été supprimée.\n"
 msgstr[1] "%d entrées inutiles de la base ont été supprimées.\n"
 
-#: src/mandb.c:944
+#: src/mandb.c:945
 #, c-format
 msgid "No databases created."
 msgstr "Aucune base de données créée."
 
-#: src/manp.c:319
+#: src/manp.c:322
 #, c-format
 msgid "can't make sense of the manpath configuration file %s"
 msgstr "le fichier de configuration de manpath %s est bizarre"
 
-#: src/manp.c:325
+#: src/manp.c:328
 #, c-format
 msgid "warning: %s"
 msgstr "attention : %s"
 
-#: src/manp.c:331
+#: src/manp.c:334
 #, c-format
 msgid "warning: %s isn't a directory"
 msgstr "attention : %s n'est pas un répertoire"
 
-#: src/manp.c:662
+#: src/manp.c:665
 #, c-format
 msgid "warning: $PATH not set"
 msgstr "attention : la variable $PATH n'est pas positionnée"
 
-#: src/manp.c:669
+#: src/manp.c:672
 #, c-format
 msgid "warning: empty $PATH"
 msgstr "attention : la variable $PATH est vide"
 
-#: src/manp.c:697
+#: src/manp.c:700
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
 msgstr ""
 "attention : la variable $MANPATH est positionnée, elle est précédée de %s"
 
-#: src/manp.c:708
+#: src/manp.c:711
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
 msgstr ""
 "attention : la variable $MANPATH est positionnée, elle est suivie de %s"
 
-#: src/manp.c:720
+#: src/manp.c:723
 #, c-format
 msgid "warning: $MANPATH set, inserting %s"
 msgstr "attention : la variable $MANPATH est positionnée, %s est inséré"
 
-#: src/manp.c:734
+#: src/manp.c:737
 #, c-format
 msgid "warning: $MANPATH set, ignoring %s"
 msgstr "attention : la variable $MANPATH est positionnée, %s est ignoré"
 
-#: src/manp.c:796
+#: src/manp.c:799
 #, c-format
 msgid "can't parse directory list `%s'"
 msgstr "impossible de parcourir la liste de répertoire « %s »"
 
-#: src/manp.c:851
+#: src/manp.c:854
 #, c-format
 msgid "can't open the manpath configuration file %s"
 msgstr "impossible d'ouvrir le fichier de configuration de manpath %s"
 
-#: src/manp.c:888
+#: src/manp.c:891
 #, c-format
 msgid "warning: mandatory directory %s doesn't exist"
 msgstr "attention : le répertoire requis %s n'existe pas"
 
-#: src/manp.c:1177
-#, c-format
-msgid "can't determine current directory"
-msgstr "impossible de déterminer quel est le répertoire courant"
-
-#: src/manp.c:1358
+#: src/manp.c:1354
 #, c-format
 msgid "warning: %s does not begin with %s"
 msgstr "attention : %s ne commence pas par %s"
@@ -882,120 +882,119 @@ msgstr ""
 "attention : aucun chemin de pages de manuel dans le fichier de configuration "
 "%s"
 
-#: src/straycats.c:232 src/ult_src.c:125
+#: src/straycats.c:233 src/ult_src.c:125
 #, c-format
 msgid "warning: %s is a dangling symlink"
 msgstr "attention : %s est un lien symbolique flottant"
 
-#: src/straycats.c:235 src/ult_src.c:128 src/ult_src.c:262
+#: src/straycats.c:236 src/ult_src.c:128 src/ult_src.c:264
 #, c-format
 msgid "can't resolve %s"
 msgstr "impossible de résoudre %s"
 
-#: src/straycats.c:294
+#: src/straycats.c:295
 #, c-format
 msgid "Checking for stray cats under %s...\n"
 msgstr "Recherche des fichiers préformatés sans sources sous %s…\n"
 
-#: src/straycats.c:334
+#: src/straycats.c:335
 #, c-format
 msgid "warning: can't update index cache %s"
 msgstr "attention : impossible de mettre à jour le cache d'index %s"
 
-#: src/ult_src.c:300
+#: src/ult_src.c:302
 #, c-format
 msgid "%s is self referencing"
 msgstr "%s s'auto-référence"
 
-#: src/whatis.c:122
+#: src/whatis.c:117
 msgid "KEYWORD..."
 msgstr "MOT-CLEF..."
 
-#: src/whatis.c:123
+#: src/whatis.c:118
 msgid "The --regex option is enabled by default."
 msgstr "L'option --regex est activée par défaut. "
 
-#: src/whatis.c:127
+#: src/whatis.c:122
 msgid "print verbose warning messages"
 msgstr "affiche des messages d'avertissement étendus"
 
-#: src/whatis.c:128
+#: src/whatis.c:123
 msgid "interpret each keyword as a regex"
 msgstr "interprète chaque mot-clef comme une expression régulière"
 
-#: src/whatis.c:129
+#: src/whatis.c:124
 msgid "search each keyword for exact match"
 msgstr "recherche une correspondance exacte de chaque mot-clef"
 
-#: src/whatis.c:130
+#: src/whatis.c:125
 msgid "the keyword(s) contain wildcards"
 msgstr "les mots-clefs contiennent des jokers"
 
-#: src/whatis.c:131
+#: src/whatis.c:126
 msgid "require all keywords to match"
 msgstr "tous les mots-clefs doivent correspondre"
 
-#: src/whatis.c:132
+#: src/whatis.c:127
 msgid "do not trim output to terminal width"
 msgstr "ne réduit pas l'affichage à la largeur du terminal"
 
-#: src/whatis.c:133
+#: src/whatis.c:128
 msgid "search only these sections (colon-separated)"
 msgstr "recherche limitée à ces sections (séparées par des deux-points)"
 
-#: src/whatis.c:137
+#: src/whatis.c:132
 msgid "define the locale for this search"
 msgstr "définit la locale pour cette recherche"
 
-#: src/whatis.c:234
+#: src/whatis.c:229
 #, c-format
 msgid "%s what?\n"
 msgstr "%s comment ?\n"
 
-#: src/whatis.c:410 src/whatis.c:428
+#: src/whatis.c:373 src/whatis.c:391
 #, c-format
 msgid "warning: %s contains a pointer loop"
 msgstr "attention : %s contient une référence circulaire"
 
-#: src/whatis.c:422 src/whatis.c:430
+#: src/whatis.c:385 src/whatis.c:393
 msgid "(unknown subject)"
 msgstr "(sujet inconnu)"
 
-#: src/whatis.c:861
+#: src/whatis.c:832
 #, c-format
 msgid "%s: nothing appropriate.\n"
 msgstr "%s : rien d'adéquat\n"
 
-#: src/zsoelim.l:180
+#: src/zsoelim.l:181
 #, c-format
 msgid "%s:%d: .so requests nested too deeply or are recursive"
 msgstr "%s:%d : requêtes .so imbriquées trop profondément ou récursivement"
 
-#: src/zsoelim.l:195
+#: src/zsoelim.l:196
 #, c-format
 msgid "%s:%d: warning: failed .so request"
 msgstr "%s:%d: attention : requête .so échouée"
 
-#: src/zsoelim.l:217
+#: src/zsoelim.l:218
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
 msgstr "%s:%d: attention : retour à la ligne dans une requête .so, ignorée"
 
-#: src/zsoelim.l:277
-#, c-format
-msgid "%s:%d: warning: malformed .lf request, ignoring"
-msgstr "%s:%d: attention : anomalie dans la requête .lf , ignorée"
-
-#: src/zsoelim.l:287
+#: src/zsoelim.l:288
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
 msgstr "%s:%d: attention : retour à la ligne dans une requête .lf, ignorée"
 
-#: src/zsoelim.l:327
+#: src/zsoelim.l:328
 #, c-format
 msgid "%s:%d: unterminated quote in roff request"
 msgstr "%s:%d: guillemet non fermé dans une requête roff"
 
-#: src/zsoelim_main.c:69
+#: src/zsoelim_main.c:70
 msgid "compatibility switch (ignored)"
 msgstr "changement de compatibilité (ignoré)"
+
+#, c-format
+#~ msgid "%s:%d: warning: malformed .lf request, ignoring"
+#~ msgstr "%s:%d: attention : anomalie dans la requête .lf , ignorée"
