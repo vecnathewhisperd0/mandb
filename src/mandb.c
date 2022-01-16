@@ -904,8 +904,6 @@ int main (int argc, char *argv[])
 next_manpath:
 		if (!global_manpath)
 			regain_effective_privs ();
-
-		chkr_garbage_detector ();
 	}
 
 	purge_catdirs (tried_catdirs);

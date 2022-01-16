@@ -4365,8 +4365,6 @@ int main (int argc, char *argv[])
 		}
 
 		maybe_section = 0;
-
-		chkr_garbage_detector ();
 	}
 	if (db_map) {
 		gl_map_free (db_map);

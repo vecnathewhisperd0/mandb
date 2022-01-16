@@ -151,14 +151,6 @@
 #  define GNUC_PREREQ(maj,min) 0
 #endif
 
-/* If running checker, support the garbage detector, else don't */
-#ifdef __CHECKER__
-extern void __chkr_garbage_detector (void);
-#  define chkr_garbage_detector() __chkr_garbage_detector()
-#else
-#  define chkr_garbage_detector()
-#endif
-
 /* GNU gettext needs to know when the locale changes. This macro tells it. */
 #ifdef ENABLE_NLS
 extern int _nl_msg_cat_cntr;

@@ -824,8 +824,6 @@ static bool search (const char * const *pages, int num_pages)
 		free (database);
 	}
 
-	chkr_garbage_detector ();
-
 	any_found = false;
 	for (i = 0; i < num_pages; ++i) {
 		if (found[i])
