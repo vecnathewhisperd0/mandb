@@ -38,6 +38,7 @@
 # define MYDBM_H
 
 # include "timespec.h"
+# include "xvasprintf.h"
 
 # if defined(GDBM) && !defined(NDBM) && !defined(BTREE)
 
@@ -196,5 +197,8 @@ extern datum copy_datum (datum dat);
 /* db_ver.c */
 extern void dbver_wr(MYDBM_FILE dbfile);
 extern int dbver_rd(MYDBM_FILE dbfile);
+
+#define MAN_DB		"/index" DB_EXT
+#define mkdbname(path)	xasprintf ("%s%s", path, MAN_DB)
 
 #endif /* MYDBM_H */

@@ -20,4 +20,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "pipeline.h"
+
+struct pipeline;
+
 void add_manconv (struct pipeline *p, const char *source, const char *target);

@@ -40,6 +40,8 @@
 #include "gl_xlist.h"
 #include "progname.h"
 #include "tempname.h"
+#include "xalloc.h"
+#include "xvasprintf.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)

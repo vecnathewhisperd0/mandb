@@ -74,6 +74,7 @@
 #include "error.h"
 #include "gl_linkedhash_list.h"
 #include "gl_xlist.h"
+#include "xalloc.h"
 #include "xgetcwd.h"
 #include "xvasprintf.h"
 

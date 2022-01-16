@@ -24,6 +24,8 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stddef.h>
+
 #include "regex.h"
 
 #include "gettext.h"
@@ -33,6 +35,7 @@
 #include "manconfig.h"
 
 #include "error.h"
+#include "xalloc.h"
 #include "xregcomp.h"
 
 void xregcomp (regex_t *preg, const char *regex, int cflags)

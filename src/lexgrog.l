@@ -52,11 +52,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "error.h"
+#include "xalloc.h"
+
 #include "gettext.h"
 #define _(String) gettext (String)
 
 #include "encodings.h"
-#include "error.h"
 #include "pipeline.h"
 #include "sandbox.h"
 #include "security.h"

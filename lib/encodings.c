@@ -30,12 +30,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <assert.h>
+#include <locale.h>
+#include <ctype.h>
 
 #include "attribute.h"
 #include "gettext.h"
 #include "localcharset.h"
-#include <locale.h>
-#include <ctype.h>
+#include "xalloc.h"
+#include "xstrndup.h"
+#include "xvasprintf.h"
 
 #include "manconfig.h"
 

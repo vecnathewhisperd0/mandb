@@ -30,6 +30,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "xalloc.h"
+
 #include "manconfig.h"		/* for FATAL */
 #include "cleanup.h"
 

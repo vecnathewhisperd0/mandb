@@ -24,6 +24,8 @@
 #define MANPAGE		0
 #define CATPAGE		1
 
+struct pipeline;
+
 typedef struct lexgrog {
 	int type;
 	char *whatis;

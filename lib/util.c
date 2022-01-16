@@ -48,6 +48,8 @@
 #include "attribute.h"
 #include "stat-time.h"
 #include "timespec.h"
+#include "xalloc.h"
+#include "xstrndup.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"

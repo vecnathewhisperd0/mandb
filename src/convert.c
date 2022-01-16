@@ -33,6 +33,8 @@
 #endif /* HAVE_ICONV */
 
 #include "attribute.h"
+#include "xalloc.h"
+#include "xvasprintf.h"
 
 #include "manconfig.h"
 

@@ -22,4 +22,6 @@
 
 #include "gl_list.h"
 
+struct pipeline;
+
 void manconv (struct pipeline *p, gl_list_t from, const char *to);

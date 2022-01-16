@@ -71,9 +71,11 @@
 #include "regex.h"
 #include "stat-time.h"
 #include "utimens.h"
+#include "xalloc.h"
 #include "xgetcwd.h"
-#include "xvasprintf.h"
 #include "xstdopen.h"
+#include "xstrndup.h"
+#include "xvasprintf.h"
 
 #include "gettext.h"
 #include <locale.h>

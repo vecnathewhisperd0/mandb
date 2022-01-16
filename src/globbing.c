@@ -43,6 +43,8 @@
 #include "gl_xlist.h"
 #include "gl_xmap.h"
 #include "regex.h"
+#include "xalloc.h"
+#include "xstrndup.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"

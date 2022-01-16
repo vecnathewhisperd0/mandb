@@ -30,6 +30,7 @@
 #include <unistd.h>
 
 #include "error.h"
+#include "xalloc.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"

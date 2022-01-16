@@ -21,18 +21,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/*--------------------------------------------------------------------------*/
-/* This file contains the paths/binary locations of the programs used by    */
-/* these utilities and various C pre-processor definitions that modify the  */
-/* behaviour of the man-db suite. You may like to check that all of the     */
-/* formatters are from the same package. Ie, that we are not using a native */
-/* UNIX nroff with GNU tbl.                                                 */
-/*--------------------------------------------------------------------------*/
-
 #ifndef MANCONFIG_H
 #define MANCONFIG_H
-
-#include "xvasprintf.h"
 
 /* STD_SECTIONS must contain all of your man hierarchy subdirectories. The
    order is important. Manual pages will be displayed in this order. Ie
@@ -89,10 +79,6 @@
    required mode with 1000 and prepend a 0, eg 01644 */
 
 #define DBMODE		0644 /* u=rw,go=r */
-
-/* The name of the databases. DB_EXT depends on the database type in use */
-#define MAN_DB		"/index" DB_EXT
-#define mkdbname(path)	xasprintf ("%s%s", path, MAN_DB)
 
 /*------------------------------------------------------------------*/
 /* The following definitions are best left alone by the uninitiated */
@@ -174,17 +160,6 @@ struct compression {
 };
 
 extern struct compression comp_list[];
-
-/*-------------------------------------*/
-/* Now for some function prototypes... */
-/*-------------------------------------*/
-
-/* some library function declarations */
-#include <stddef.h>	/* for size_t */
-#include "xalloc.h"
-#include "xstrndup.h"
-
-struct pipeline;
 
 extern int quiet;		/* be quiet(er) if 1 */
 

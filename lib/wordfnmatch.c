@@ -29,6 +29,7 @@
 #include <ctype.h>
 
 #include "fnmatch.h"
+#include "xalloc.h"
 
 #include "manconfig.h"
 

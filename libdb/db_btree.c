@@ -43,6 +43,8 @@
 #include "gl_xset.h"
 #include "stat-time.h"
 #include "timespec.h"
+#include "xalloc.h"
+#include "xstrndup.h"
 
 #include "manconfig.h"
 

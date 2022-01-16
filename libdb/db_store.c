@@ -34,6 +34,7 @@
 #include "attribute.h"
 #include "error.h"
 #include "timespec.h"
+#include "xalloc.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"

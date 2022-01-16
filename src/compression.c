@@ -39,6 +39,7 @@
 #include <fcntl.h>
 
 #include "error.h"
+#include "xstrndup.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"

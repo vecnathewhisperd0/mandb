@@ -66,7 +66,9 @@
 #include "gl_array_list.h"
 #include "gl_linkedhash_list.h"
 #include "gl_xlist.h"
+#include "xalloc.h"
 #include "xgetcwd.h"
+#include "xstrndup.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"

@@ -38,6 +38,7 @@
 #define _(String) gettext (String)
 
 #include "error.h"
+#include "xalloc.h"
 #include "xgetcwd.h"
 #include "xvasprintf.h"
 

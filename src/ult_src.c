@@ -47,6 +47,8 @@
 #include "dirname.h"
 #include "error.h"
 #include "gl_xlist.h"
+#include "xalloc.h"
+#include "xstrndup.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"

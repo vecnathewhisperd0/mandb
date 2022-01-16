@@ -49,6 +49,8 @@
 #include "attribute.h"
 #include "error.h"
 #include "gl_list.h"
+#include "xalloc.h"
+#include "xstrndup.h"
 
 #include "gettext.h"
 #include <locale.h>

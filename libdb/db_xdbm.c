@@ -33,6 +33,7 @@
 #include "gl_xlist.h"
 #include "gl_xmap.h"
 #include "hash-pjw-bare.h"
+#include "xalloc.h"
 
 #include "manconfig.h"
 

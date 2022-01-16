@@ -35,6 +35,7 @@
 #include "error.h"
 #include "gl_list.h"
 #include "progname.h"
+#include "xalloc.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"

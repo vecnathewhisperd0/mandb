@@ -32,6 +32,7 @@
 
 #include "error.h"
 #include "gl_list.h"
+#include "xalloc.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)

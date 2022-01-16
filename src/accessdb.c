@@ -38,6 +38,7 @@
 #include "attribute.h"
 #include "error.h"
 #include "progname.h"
+#include "xalloc.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"

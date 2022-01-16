@@ -23,6 +23,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include "xalloc.h"
+
 #include "manconfig.h"
 
 #include "appendstr.h"

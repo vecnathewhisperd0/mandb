@@ -34,6 +34,7 @@
 
 #include "error.h"
 #include "gl_list.h"
+#include "xalloc.h"
 
 #include "manconfig.h"
 

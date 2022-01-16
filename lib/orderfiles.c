@@ -49,6 +49,7 @@
 #include "gl_rbtree_list.h"
 #include "gl_xlist.h"
 #include "gl_xmap.h"
+#include "xalloc.h"
 
 #include "manconfig.h"
 

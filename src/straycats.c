@@ -44,6 +44,7 @@
 #include "error.h"
 #include "gl_array_list.h"
 #include "gl_xlist.h"
+#include "xalloc.h"
 
 #include "gettext.h"
 #define _(String) gettext (String)

@@ -61,6 +61,7 @@
 #include "gl_xset.h"
 #include "fnmatch.h"
 #include "progname.h"
+#include "xalloc.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"

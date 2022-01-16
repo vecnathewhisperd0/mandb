@@ -57,6 +57,7 @@
 #include "stat-time.h"
 #include "timespec.h"
 #include "utimens.h"
+#include "xalloc.h"
 #include "xgetcwd.h"
 #include "xvasprintf.h"
 

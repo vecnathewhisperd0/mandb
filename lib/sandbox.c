@@ -65,6 +65,8 @@
 
 #include "attribute.h"
 #include "error.h"
+#include "xalloc.h"
+#include "xstrndup.h"
 
 #include "manconfig.h"
 

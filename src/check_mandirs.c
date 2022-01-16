@@ -53,6 +53,7 @@
 #include "gl_xmap.h"
 #include "stat-time.h"
 #include "timespec.h"
+#include "xalloc.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"
