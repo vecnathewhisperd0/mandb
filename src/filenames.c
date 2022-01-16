@@ -37,6 +37,7 @@
 
 #include "manconfig.h"
 
+#include "appendstr.h"
 #include "debug.h"
 
 #include "db_storage.h"

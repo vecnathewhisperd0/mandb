@@ -34,6 +34,7 @@ libman_la_CPPFLAGS = \
 
 libman_la_SOURCES = \
 	appendstr.c \
+	appendstr.h \
 	cleanup.c \
 	cleanup.h \
 	debug.c \

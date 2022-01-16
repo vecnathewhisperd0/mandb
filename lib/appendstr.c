@@ -25,6 +25,8 @@
 
 #include "manconfig.h"
 
+#include "appendstr.h"
+
 /* append strings to first argument, which is realloced to the correct size
    first arg may be NULL */
 char *appendstr (char *str, ...)

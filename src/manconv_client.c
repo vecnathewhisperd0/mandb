@@ -36,6 +36,8 @@
 #include "manconfig.h"
 
 #include "pipeline.h"
+
+#include "appendstr.h"
 #include "decompress.h"
 #include "glcontainers.h"
 #include "sandbox.h"

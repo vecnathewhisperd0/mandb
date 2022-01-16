@@ -181,13 +181,10 @@ extern struct compression comp_list[];
 
 /* some library function declarations */
 #include <stddef.h>	/* for size_t */
-#include "attribute.h"
 #include "xalloc.h"
 #include "xstrndup.h"
 
 struct pipeline;
-
-NODISCARD extern char *appendstr (char *, ...) ATTRIBUTE_SENTINEL ();
 
 extern int quiet;		/* be quiet(er) if 1 */
 

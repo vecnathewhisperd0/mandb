@@ -81,6 +81,7 @@
 #include <locale.h>
 #define _(String) gettext (String)
 
+#include "appendstr.h"
 #include "debug.h"
 #include "glcontainers.h"
 #include "pipeline.h"

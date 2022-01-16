@@ -82,6 +82,7 @@
 
 #include "manconfig.h"
 
+#include "appendstr.h"
 #include "cleanup.h"
 #include "debug.h"
 #include "glcontainers.h"

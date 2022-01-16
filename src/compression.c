@@ -38,12 +38,14 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "error.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
 
-#include "error.h"
 #include "pipeline.h"
+
+#include "appendstr.h"
 
 #include "compression.h"
 

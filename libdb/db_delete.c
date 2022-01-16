@@ -38,6 +38,7 @@
 
 #include "manconfig.h"
 
+#include "appendstr.h"
 #include "debug.h"
 #include "glcontainers.h"
 
