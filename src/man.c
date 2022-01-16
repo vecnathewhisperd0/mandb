@@ -93,6 +93,7 @@
 #include "encodings.h"
 #include "orderfiles.h"
 #include "sandbox.h"
+#include "tempfile.h"
 #include "util.h"
 
 #include "mydbm.h"

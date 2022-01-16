@@ -33,6 +33,8 @@
 
 #include "manconfig.h"
 
+#include "tempfile.h"
+
 static const char *path_search (void)
 {
 	const char *dir = NULL;
