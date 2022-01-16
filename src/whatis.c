@@ -55,6 +55,7 @@
 #include "argp.h"
 #include "attribute.h"
 #include "dirname.h"
+#include "error.h"
 #include "gl_hash_set.h"
 #include "gl_list.h"
 #include "gl_xset.h"
@@ -65,7 +66,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "pathsearch.h"

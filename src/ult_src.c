@@ -56,6 +56,8 @@
 
 #include "pipeline.h"
 
+#include "debug.h"
+
 #include "compression.h"
 #include "decompress.h"
 #include "globbing.h"

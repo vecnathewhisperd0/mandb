@@ -36,6 +36,7 @@
 #include <limits.h>
 
 #include "argp.h"
+#include "error.h"
 #include "progname.h"
 
 #include "gettext.h"
@@ -44,7 +45,7 @@
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "debug.h"
 #include "util.h"
 
 #include "manp.h"

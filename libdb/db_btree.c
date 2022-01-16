@@ -46,6 +46,7 @@
 
 #include "manconfig.h"
 
+#include "debug.h"
 #include "error.h"
 #include "glcontainers.h"
 

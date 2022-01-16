@@ -32,8 +32,6 @@
 #ifndef MANCONFIG_H
 #define MANCONFIG_H
 
-#include <stdbool.h>
-
 #include "xvasprintf.h"
 
 /* STD_SECTIONS must contain all of your man hierarchy subdirectories. The
@@ -186,13 +184,6 @@ extern struct compression comp_list[];
 #include "attribute.h"
 #include "xalloc.h"
 #include "xstrndup.h"
-
-extern bool debug_level;	/* shows whether -d issued */
-extern void init_debug (void);
-extern void debug (const char *message, ...)
-	ATTRIBUTE_FORMAT ((__printf__, 1, 2));
-extern void debug_error (const char *message, ...)
-	ATTRIBUTE_FORMAT ((__printf__, 1, 2));
 
 struct pipeline;
 

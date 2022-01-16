@@ -31,6 +31,7 @@
 #include <stdlib.h>
 
 #include "argp.h"
+#include "error.h"
 #include "gl_list.h"
 #include "progname.h"
 
@@ -39,7 +40,7 @@
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "util.h"
 

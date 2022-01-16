@@ -41,6 +41,7 @@
 
 #include "canonicalize.h"
 #include "dirname.h"
+#include "error.h"
 #include "gl_array_list.h"
 #include "gl_xlist.h"
 
@@ -49,7 +50,7 @@
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "decompress.h"

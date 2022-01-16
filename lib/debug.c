@@ -1,5 +1,6 @@
 /*
  * debug.c: debugging messages
+ *
  * Copyright (C) 2007 Colin Watson.
  *
  * This file is part of man-db.
@@ -33,6 +34,8 @@
 #include "attribute.h"
 
 #include "manconfig.h"
+
+#include "debug.h"
 
 bool debug_level = false;
 

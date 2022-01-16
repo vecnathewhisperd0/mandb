@@ -32,6 +32,7 @@
 
 #include "manconfig.h"
 
+#include "debug.h"
 #include "util.h"
 
 #include "descriptions.h"

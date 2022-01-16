@@ -32,6 +32,7 @@
 
 #include "argp.h"
 #include "attribute.h"
+#include "error.h"
 #include "gl_list.h"
 #include "progname.h"
 #include "xvasprintf.h"
@@ -43,7 +44,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
-#include "error.h"
+#include "debug.h"
 #include "pipeline.h"
 #include "sandbox.h"
 #include "util.h"

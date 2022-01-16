@@ -35,6 +35,7 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "error.h"
 #include "gl_array_list.h"
 #include "gl_xlist.h"
 #include "progname.h"
@@ -49,8 +50,8 @@
 #include "pipeline.h"
 
 #include "cleanup.h"
+#include "debug.h"
 #include "encodings.h"
-#include "error.h"
 #include "glcontainers.h"
 #include "sandbox.h"
 #include "util.h"

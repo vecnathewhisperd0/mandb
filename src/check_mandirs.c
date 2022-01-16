@@ -46,6 +46,7 @@
 
 #include "attribute.h"
 #include "dirname.h"
+#include "error.h"
 #include "gl_array_list.h"
 #include "gl_hash_map.h"
 #include "gl_xlist.h"
@@ -59,7 +60,7 @@
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "orderfiles.h"
 #include "security.h"

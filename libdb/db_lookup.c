@@ -48,6 +48,7 @@
 
 #include "manconfig.h"
 
+#include "debug.h"
 #include "glcontainers.h"
 #include "wordfnmatch.h"
 #include "xregcomp.h"

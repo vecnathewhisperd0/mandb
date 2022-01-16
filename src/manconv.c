@@ -47,6 +47,7 @@
 
 #include "argp.h"
 #include "attribute.h"
+#include "error.h"
 #include "gl_list.h"
 
 #include "gettext.h"
@@ -55,8 +56,9 @@
 
 #include "manconfig.h"
 
-#include "error.h"
 #include "pipeline.h"
+
+#include "debug.h"
 #include "encodings.h"
 #include "glcontainers.h"
 

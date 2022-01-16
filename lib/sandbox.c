@@ -68,6 +68,7 @@
 
 #include "manconfig.h"
 
+#include "debug.h"
 #include "sandbox.h"
 
 struct man_sandbox {

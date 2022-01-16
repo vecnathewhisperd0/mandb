@@ -62,6 +62,7 @@
 #endif /* !ARG_MAX */
 
 #include "argp.h"
+#include "error.h"
 #include "gl_list.h"
 #include "progname.h"
 
@@ -73,7 +74,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "util.h"

@@ -31,9 +31,11 @@
 #include "gettext.h"
 #define _(String) gettext (String)
 
+#include "error.h"
+
 #include "manconfig.h"
 
-#include "error.h"
+#include "debug.h"
 
 #include "mydbm.h"
 

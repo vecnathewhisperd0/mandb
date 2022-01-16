@@ -62,6 +62,7 @@
 
 #include "attribute.h"
 #include "canonicalize.h"
+#include "error.h"
 #include "gl_array_list.h"
 #include "gl_linkedhash_list.h"
 #include "gl_xlist.h"
@@ -74,7 +75,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "security.h"
 #include "util.h"

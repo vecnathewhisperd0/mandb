@@ -36,6 +36,7 @@
 
 #include "argp.h"
 #include "attribute.h"
+#include "error.h"
 #include "progname.h"
 #include "xvasprintf.h"
 
@@ -45,7 +46,7 @@
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "debug.h"
 #include "util.h"
 
 #include "mydbm.h"

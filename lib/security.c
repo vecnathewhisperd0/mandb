@@ -45,6 +45,7 @@
 #include "cleanup.h"
 #include "pipeline.h"
 
+#include "debug.h"
 #include "security.h"
 
 #ifdef MAN_OWNER

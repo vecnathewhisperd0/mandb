@@ -32,12 +32,13 @@
 #include <unistd.h>
 
 #include "attribute.h"
+#include "error.h"
 #include "timespec.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "debug.h"
 
 #include "mydbm.h"
 #include "db_storage.h"

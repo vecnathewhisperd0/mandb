@@ -36,6 +36,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+#include "error.h"
 #include "fnmatch.h"
 #include "gl_array_list.h"
 #include "gl_hash_map.h"
@@ -47,7 +48,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "util.h"
 #include "xregcomp.h"

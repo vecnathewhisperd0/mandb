@@ -49,6 +49,7 @@
 
 #include "argp.h"
 #include "dirname.h"
+#include "error.h"
 #include "gl_hash_map.h"
 #include "gl_list.h"
 #include "gl_xmap.h"
@@ -66,7 +67,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "sandbox.h"

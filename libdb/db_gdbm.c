@@ -40,6 +40,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
+#include "debug.h"
 
 #include "db_xdbm.h"
 #include "mydbm.h"

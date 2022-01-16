@@ -37,6 +37,7 @@
 
 #include "manconfig.h"
 
+#include "debug.h"
 #include "glcontainers.h"
 
 #include "db_storage.h"

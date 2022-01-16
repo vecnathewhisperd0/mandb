@@ -39,10 +39,11 @@
 
 #include "manconfig.h"
 
-#include "pathsearch.h"
 #include "pipeline.h"
 
+#include "debug.h"
 #include "encodings.h"
+#include "pathsearch.h"
 
 
 /* Due to historical limitations in groff (which may be removed in the

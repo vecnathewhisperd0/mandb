@@ -71,6 +71,7 @@
 #define PIPE	so_pipe[so_stack_ptr]
 
 #include "dirname.h"
+#include "error.h"
 #include "gl_linkedhash_list.h"
 #include "gl_xlist.h"
 #include "xgetcwd.h"
@@ -80,7 +81,7 @@
 #include <locale.h>
 #define _(String) gettext (String)
 
-#include "error.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "decompress.h"

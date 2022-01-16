@@ -31,6 +31,7 @@
 #include <unistd.h>
 
 #include "argp.h"
+#include "error.h"
 #include "gl_array_list.h"
 #include "gl_xlist.h"
 #include "progname.h"
@@ -42,8 +43,8 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
+#include "debug.h"
 #include "encodings.h"
-#include "error.h"
 #include "pipeline.h"
 #include "glcontainers.h"
 #include "sandbox.h"

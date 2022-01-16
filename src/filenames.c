@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "error.h"
 #include "xvasprintf.h"
 
 #include "gettext.h"
@@ -36,7 +37,7 @@
 
 #include "manconfig.h"
 
-#include "error.h"
+#include "debug.h"
 
 #include "db_storage.h"
 

@@ -46,6 +46,7 @@
 #include "manconfig.h"
 
 #include "cleanup.h"
+#include "debug.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "sandbox.h"

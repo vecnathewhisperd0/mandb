@@ -37,6 +37,7 @@ libman_la_SOURCES = \
 	cleanup.c \
 	cleanup.h \
 	debug.c \
+	debug.h \
 	encodings.c \
 	encodings.h \
 	glcontainers.c \
