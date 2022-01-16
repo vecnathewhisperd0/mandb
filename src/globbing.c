@@ -46,9 +46,10 @@
 
 #include "manconfig.h"
 
+#include "cleanup.h"
 #include "error.h"
 #include "glcontainers.h"
-#include "cleanup.h"
+#include "util.h"
 #include "xregcomp.h"
 
 #include "globbing.h"

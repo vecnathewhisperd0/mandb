@@ -56,6 +56,7 @@
 
 #include "error.h"
 #include "pipeline.h"
+#include "util.h"
 
 /*
  * Does file a have a different timestamp to file b?

@@ -73,10 +73,11 @@
 
 #include "manconfig.h"
 
-#include "error.h"
 #include "cleanup.h"
+#include "error.h"
 #include "glcontainers.h"
 #include "security.h"
+#include "util.h"
 
 #include "manp.h"
 #include "globbing.h"

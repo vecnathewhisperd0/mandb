@@ -76,6 +76,7 @@
 #include "error.h"
 #include "glcontainers.h"
 #include "pipeline.h"
+#include "util.h"
 
 #include "mydbm.h"
 #include "db_storage.h"

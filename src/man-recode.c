@@ -53,6 +53,7 @@
 #include "error.h"
 #include "glcontainers.h"
 #include "sandbox.h"
+#include "util.h"
 
 #include "compression.h"
 #include "decompress.h"

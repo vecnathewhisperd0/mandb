@@ -45,6 +45,7 @@
 #include "manconfig.h"
 
 #include "error.h"
+#include "util.h"
 
 #include "manp.h"
 

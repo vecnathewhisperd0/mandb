@@ -50,6 +50,7 @@
 #include "pipeline.h"
 #include "sandbox.h"
 #include "security.h"
+#include "util.h"
 
 #include "convert.h"
 #include "descriptions.h"

@@ -31,6 +31,9 @@
 #include "gl_xlist.h"
 
 #include "manconfig.h"
+
+#include "util.h"
+
 #include "descriptions.h"
 
 /* Free a page description. */

@@ -45,10 +45,11 @@
 #include "encodings.h"
 #include "error.h"
 #include "pipeline.h"
-#include "decompress.h"
 #include "glcontainers.h"
 #include "sandbox.h"
+#include "util.h"
 
+#include "decompress.h"
 #include "manconv.h"
 
 int quiet = 0;

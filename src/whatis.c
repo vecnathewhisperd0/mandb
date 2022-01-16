@@ -74,6 +74,7 @@
 #include "xregcomp.h"
 #include "encodings.h"
 #include "sandbox.h"
+#include "util.h"
 
 #include "mydbm.h"
 #include "db_storage.h"

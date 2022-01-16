@@ -41,6 +41,8 @@
 
 #include "error.h"
 #include "glcontainers.h"
+#include "util.h"
+
 #include "globbing.h"
 
 extern const char *extension;

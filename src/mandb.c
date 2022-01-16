@@ -65,12 +65,13 @@
 
 #include "manconfig.h"
 
-#include "error.h"
 #include "cleanup.h"
+#include "error.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "sandbox.h"
 #include "security.h"
+#include "util.h"
 
 #include "mydbm.h"
 

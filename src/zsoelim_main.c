@@ -45,9 +45,10 @@
 #include "cleanup.h"
 #include "error.h"
 #include "pipeline.h"
-#include "decompress.h"
 #include "sandbox.h"
+#include "util.h"
 
+#include "decompress.h"
 #include "manp.h"
 #include "zsoelim.h"
 

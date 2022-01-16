@@ -63,6 +63,7 @@
 #include "glcontainers.h"
 #include "orderfiles.h"
 #include "security.h"
+#include "util.h"
 
 #include "mydbm.h"
 #include "db_storage.h"

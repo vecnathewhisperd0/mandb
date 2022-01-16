@@ -55,13 +55,14 @@
 #include "gettext.h"
 #define _(String) gettext (String)
 
+#include "encodings.h"
 #include "error.h"
 #include "pipeline.h"
-#include "decompress.h"
-#include "security.h"
-#include "encodings.h"
 #include "sandbox.h"
+#include "security.h"
+#include "util.h"
 
+#include "decompress.h"
 #include "lexgrog.h"
 #include "manconv_client.h"
 
