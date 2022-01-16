@@ -1,8 +1,8 @@
-/* @configure_input@
- *
+/*
  * comp_src.h: structure used by decompress.c
  *
  * Copyright (C) 1994 Graeme W. Wilford. (Wilf.)
+ * Copyright (C) 2003-2022 Colin Watson.
  *
  * This file is part of man-db.
  *

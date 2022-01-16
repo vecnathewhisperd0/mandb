@@ -64,7 +64,7 @@ As of May 13th, 2001, the last public release of the Filesystem Hierarchy
 Standard proposed the root of the manual page hierarchy as `/usr/share` and
 the root of the writable cat hierarchy as `/var/cache/man` for the purposes
 of man-to-cat filename translation.  As such, the following are defined in
-`./include/manconfig.h.in`:
+`./include/manconfig.h`:
 
 ```c
 #define FHS_CAT_ROOT    "/var/cache/man"        /* required by fsstnd() */
@@ -172,8 +172,8 @@ Configure man-db:
 **Browse** or **edit** the following files that were created by the
 configuration process:
 
-* `include/manconfig.h` regarding paths to support programs,
-  the default section list and other specific definitions.
+* `include/manconfig.h` regarding the default section list and other
+  specific definitions.
 
 * `include/comp_src.h` if the default compressor support is
   inadequate for your requirements.  (Usually `.Z` [compress],

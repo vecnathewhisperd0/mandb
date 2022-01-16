@@ -1,9 +1,8 @@
-/* @configure_input@
- *
- * manconfig.h.in: definitions and declarations used throughout man-db
+/*
+ * manconfig.h: definitions and declarations used throughout man-db
  *
  * Copyright (C) 1994, 1995 Graeme W. Wilford. (Wilf.)
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001-2022 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -97,77 +96,6 @@
 #define MAN_DB		"/index" DB_EXT
 #define mkdbname(path)	xasprintf ("%s%s", path, MAN_DB)
 
-/* The locations of the following files were determined by ../configure so
-   some of them may be incorrect. Edit as necessary */
-
-#ifndef PROG_PAGER
-#  define PROG_PAGER	"@pager@"
-#endif
-
-#ifndef PROG_CAT
-#  define PROG_CAT	"@cat@"
-#endif
-
-#ifndef PROG_BROWSER
-#  define PROG_BROWSER	"@browser@"
-#endif
-
-#ifndef PROG_TR
-#  define PROG_TR	"@tr@"
-#endif
-
-#ifndef PROG_GREP
-#  define PROG_GREP	"@grep@"
-#endif
-
-#ifdef HAS_TROFF
-#  ifndef PROG_TROFF
-#    define PROG_TROFF 	"@troff@"
-#  endif
-#endif
-
-#ifndef NROFF_MISSING
-#  ifndef PROG_NROFF
-#    define PROG_NROFF 	"@nroff@"
-#  endif
-#endif
-
-#ifndef PROG_EQN
-#  define PROG_EQN 	"@eqn@"
-#endif
-
-#ifndef PROG_NEQN
-#  define PROG_NEQN	"@neqn@"
-#endif
-
-#ifndef PROG_TBL
-#  define PROG_TBL 	"@tbl@"
-#endif
-
-#ifndef PROG_COL
-#  define PROG_COL 	"@col@"
-#endif
-
-#ifndef PROG_VGRIND
-#  define PROG_VGRIND 	"@vgrind@"
-#endif
-
-#ifndef PROG_REFER
-#  define PROG_REFER 	"@refer@"
-#endif
-
-#ifndef PROG_GRAP
-#  define PROG_GRAP 	"@grap@"
-#endif
-
-#ifndef PROG_PIC
-#  define PROG_PIC 	"@pic@"
-#endif
-
-#ifndef OVERRIDE_DIR
-#  define OVERRIDE_DIR	"@override_dir@"
-#endif
-
 /*------------------------------------------------------------------*/
 /* The following definitions are best left alone by the uninitiated */
 /*------------------------------------------------------------------*/
@@ -204,28 +132,6 @@
 #  define TR_SET1	" \'\\255\\267\\264\\327\'"
 #  define TR_SET2	" \'\\055\\157\\047\\170\'"
 #endif
-
-#ifdef COMP_CAT
-/* This is the default compressor and compressed extension.
-   These are used for compressing cat pages. The compressor is likely to
-   be gzip or compress and the extension: .gz or .Z . Please make sure that
-   all of your cat pages have the same extension (whatever that may be) */
-
-#  define PROG_COMPRESSOR "@compressor@"
-#  define COMPRESS_EXT "@compress_ext@"
-#endif /* COMP_CAT */
-
-/* These are the currently supported decompressors. They are used for
-   decompressing cat pages and source nroff. To add further decompressors,
-   you will need to edit comp_src.h[.in] . Help is provided in the file */
-
-#define PROG_GUNZIP "@gunzip@"
-#define PROG_UNCOMPRESS "@uncompress@"
-#define PROG_BUNZIP2 "@bunzip2@"
-#define PROG_UNLZMA "@unlzma@"
-#define PROG_UNXZ "@unxz@"
-#define PROG_UNLZIP "@unlzip@"
-#define PROG_UNZSTD "@unzstd@"
 
 /*-----------------------------------------------------------------------*/
 /* The things below here shouldn't really be changed unless you really	 */
