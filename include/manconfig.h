@@ -221,9 +221,6 @@ extern int quiet;		/* be quiet(er) if 1 */
 /* Some general definitions */
 /*--------------------------*/
 
-#define MANPAGE		0
-#define CATPAGE		1
-
 /* exit codes */
 #define OK		0	/* success */
 #define FAIL		1	/* usage or syntax error */

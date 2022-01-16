@@ -21,6 +21,9 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#define MANPAGE		0
+#define CATPAGE		1
+
 typedef struct lexgrog {
 	int type;
 	char *whatis;

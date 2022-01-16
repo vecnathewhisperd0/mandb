@@ -152,7 +152,7 @@ static struct argp argp = { options, parse_opt, args_doc, doc, 0,
 
 int main (int argc, char **argv)
 {
-	int type = 0;
+	int type = MANPAGE;
 	int i;
 	bool some_failed = false;
 
@@ -172,9 +172,9 @@ int main (int argc, char **argv)
 	init_security ();
 
 	if (parse_man)
-		type = 0;
+		type = MANPAGE;
 	else
-		type = 1;
+		type = CATPAGE;
 
 	for (i = 0; i < num_files; ++i) {
 		lexgrog lg;

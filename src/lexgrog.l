@@ -888,7 +888,7 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	if (page_encoding)
 		add_manconv (p, page_encoding, "UTF-8");
 	free (page_encoding);
-	if (p_lg->type && *PROG_COL) {
+	if (p_lg->type == CATPAGE && *PROG_COL) {
 		pipecmd *col_cmd;
 		col_cmd = pipecmd_new_args
 			(PROG_COL, "-b", "-p", "-x", (void *) 0);
@@ -916,7 +916,7 @@ int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
 	fill_mode = 1;
 	waiting_for_quote = 0;
 
-	if (p_lg->type)
+	if (p_lg->type == CATPAGE)
 		BEGIN (CAT_FILE);
 	else
 		BEGIN (MAN_FILE);
