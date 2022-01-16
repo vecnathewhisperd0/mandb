@@ -55,8 +55,9 @@
 #include "manconfig.h"
 
 #include "pipeline.h"
-#include "decompress.h"
 
+#include "compression.h"
+#include "decompress.h"
 #include "globbing.h"
 #include "ult_src.h"
 

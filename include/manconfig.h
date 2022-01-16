@@ -197,10 +197,6 @@ extern void debug_error (const char *message, ...)
 
 struct pipeline;
 
-/* compression.c */
-extern struct compression *comp_info (const char *filename, int want_stem);
-extern struct compression *comp_file (const char *filename);
-
 /* util.c */
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);

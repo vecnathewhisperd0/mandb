@@ -61,6 +61,7 @@
 #include "mydbm.h"
 #include "db_storage.h"
 
+#include "compression.h"
 #include "descriptions.h"
 #include "lexgrog.h"
 #include "manp.h"

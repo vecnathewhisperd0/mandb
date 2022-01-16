@@ -97,6 +97,7 @@
 #include "mydbm.h"
 #include "db_storage.h"
 
+#include "compression.h"
 #include "filenames.h"
 #include "globbing.h"
 #include "ult_src.h"

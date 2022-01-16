@@ -54,6 +54,7 @@
 #include "glcontainers.h"
 #include "sandbox.h"
 
+#include "compression.h"
 #include "decompress.h"
 #include "manconv_client.h"
 
