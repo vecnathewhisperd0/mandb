@@ -874,7 +874,7 @@ char *check_preprocessor_encoding (pipeline *p, const char *to_encoding,
 {
 	char *pp_encoding = NULL;
 	const char *line = pipeline_peekline (p);
-	const char *directive = NULL, *directive_end, *pp_search;
+	const char *directive = NULL, *directive_end = NULL, *pp_search = NULL;
 	size_t pp_encoding_len = 0;
 
 	/* Some people use .\" incorrectly. We allow it for encoding
