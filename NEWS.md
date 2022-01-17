@@ -27,6 +27,9 @@ Improvements:
    in `man(1)`.
  * Add `man-pages(7)` reference to `man(1)`.
  * Recognize Arabic and Persian translations of the `NAME` section.
+ * Delay the `systemd` timer using `RandomizedDelaySec`, so that multiple
+   containers/VMs on the same host are less prone to running `mandb` all at
+   the same time.
 
 man-db 2.9.4 (8 February 2021)
 ==============================
