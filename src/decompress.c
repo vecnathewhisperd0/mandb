@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,6 +38,7 @@
 #endif /* HAVE_LIBZ */
 
 #include "attribute.h"
+#include "xalloc.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
@@ -44,6 +46,28 @@
 #include "pipeline.h"
 #include "decompress.h"
 #include "sandbox.h"
+
+enum decompress_tag {
+	DECOMPRESS_PIPELINE
+};
+
+struct decompress {
+	enum decompress_tag tag;
+	union {
+		pipeline *p;
+	} u;
+};
+
+/* Create a new pipeline-based decompressor.  Takes ownership of p. */
+static decompress *decompress_new_pipeline (pipeline *p)
+{
+	decompress *d = XMALLOC (decompress);
+
+	d->tag = DECOMPRESS_PIPELINE;
+	d->u.p = p;
+
+	return d;
+}
 
 #ifdef HAVE_LIBZ
 
@@ -79,7 +103,7 @@ static void decompress_zlib (void *data MAYBE_UNUSED)
 
 extern man_sandbox *sandbox;
 
-pipeline *decompress_open (const char *filename)
+decompress *decompress_open (const char *filename)
 {
 	pipecmd *cmd;
 	pipeline *p;
@@ -136,10 +160,10 @@ pipeline *decompress_open (const char *filename)
 got_pipeline:
 	pipeline_want_infile (p, filename);
 	pipeline_want_out (p, -1);
-	return p;
+	return decompress_new_pipeline (p);
 }
 
-pipeline *decompress_fdopen (int fd)
+decompress *decompress_fdopen (int fd)
 {
 	pipeline *p;
 #ifdef HAVE_LIBZ
@@ -156,5 +180,62 @@ pipeline *decompress_fdopen (int fd)
 
 	pipeline_want_in (p, fd);
 	pipeline_want_out (p, -1);
-	return p;
+	return decompress_new_pipeline (p);
+}
+
+pipeline * ATTRIBUTE_PURE decompress_get_pipeline (decompress *d)
+{
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	return d->u.p;
+}
+
+void decompress_start (decompress *d)
+{
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	pipeline_start (d->u.p);
+}
+
+const char *decompress_read (decompress *d, size_t *len)
+{
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	return pipeline_read (d->u.p, len);
+}
+
+const char *decompress_peek (decompress *d, size_t *len)
+{
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	return pipeline_peek (d->u.p, len);
+}
+
+void decompress_peek_skip (decompress *d, size_t len)
+{
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	pipeline_peek_skip (d->u.p, len);
+}
+
+const char *decompress_readline (decompress *d)
+{
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	return pipeline_readline (d->u.p);
+}
+
+const char *decompress_peekline (decompress *d)
+{
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	return pipeline_peekline (d->u.p);
+}
+
+int decompress_wait (decompress *d)
+{
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	return pipeline_wait (d->u.p);
+}
+
+void decompress_free (decompress *d)
+{
+	if (!d)
+		return;
+	assert (d->tag == DECOMPRESS_PIPELINE);
+	pipeline_free (d->u.p);
+	free (d);
 }

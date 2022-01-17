@@ -24,7 +24,7 @@
 #define MANPAGE		0
 #define CATPAGE		1
 
-struct pipeline;
+#include "decompress.h"
 
 typedef struct lexgrog {
 	int type;
@@ -34,5 +34,5 @@ typedef struct lexgrog {
 
 extern int find_name (const char *file, const char *filename,
 		      lexgrog *p_lg, const char *encoding);
-extern int find_name_decompressed (struct pipeline *p, const char *filename,
+extern int find_name_decompressed (decompress *d, const char *filename,
 				   lexgrog *p_lg);

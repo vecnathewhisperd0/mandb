@@ -56,8 +56,6 @@
 
 #include "manconfig.h"
 
-#include "pipeline.h"
-
 #include "debug.h"
 
 #include "compression.h"
@@ -311,7 +309,7 @@ const char *ult_src (const char *name, const char *path,
 	if (flags & SO_LINK) {
 		const char *buffer;
 		char *decomp_base;
-		pipeline *decomp;
+		decompress *decomp;
 		char *include;
 		struct stat st;
 
@@ -341,11 +339,11 @@ const char *ult_src (const char *name, const char *path,
 			free (decomp_base);
 			return NULL;
 		}
-		pipeline_start (decomp);
+		decompress_start (decomp);
 
 		/* make sure that we skip over any comments */
 		do {
-			buffer = pipeline_readline (decomp);
+			buffer = decompress_readline (decomp);
 		} while (buffer && STRNEQ (buffer, ".\\\"", 3));
 
 		include = test_for_include (buffer);
@@ -368,14 +366,14 @@ const char *ult_src (const char *name, const char *path,
 			free (new_name);
 			recurse--;
 
-			pipeline_wait (decomp);
-			pipeline_free (decomp);
+			decompress_wait (decomp);
+			decompress_free (decomp);
 			free (decomp_base);
 			return ult;
 		}
 
-		pipeline_wait (decomp);
-		pipeline_free (decomp);
+		decompress_wait (decomp);
+		decompress_free (decomp);
 		free (decomp_base);
 	}
 

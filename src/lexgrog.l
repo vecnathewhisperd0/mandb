@@ -245,11 +245,11 @@ static char filters[MAX_FILTERS];
 static int fill_mode;
 static int waiting_for_quote;
 
-static pipeline *decomp;
+static decompress *decomp;
 
 #define YY_INPUT(buf,result,max_size) { \
 	size_t size = max_size; \
-	const char *block = pipeline_read (decomp, &size); \
+	const char *block = decompress_read (decomp, &size); \
 	if (block && size != 0) { \
 		memcpy (buf, block, size); \
 		buf[size] = '\0'; \
@@ -852,11 +852,11 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	       const char *encoding)
 {
 	int ret;
-	pipeline *p;
+	decompress *d;
 	char *page_encoding = NULL;
 
 	if (strcmp (file, "-") == 0) {
-		p = decompress_fdopen (dup (STDIN_FILENO));
+		d = decompress_fdopen (dup (STDIN_FILENO));
 	} else {
 		struct stat st;
 		char *lang;
@@ -872,8 +872,8 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 		}
 
 		drop_effective_privs ();
-		p = decompress_open (file);
-		if (!p) {
+		d = decompress_open (file);
+		if (!d) {
 			error (0, errno, _("can't open %s"), file);
 			regain_effective_privs ();
 			return 0;
@@ -889,7 +889,8 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	if (!page_encoding && encoding)
 		page_encoding = xstrdup (encoding);
 	if (page_encoding)
-		add_manconv (p, page_encoding, "UTF-8");
+		add_manconv (decompress_get_pipeline (d),
+			     page_encoding, "UTF-8");
 	free (page_encoding);
 	if (p_lg->type == CATPAGE && *PROG_COL) {
 		pipecmd *col_cmd;
@@ -897,20 +898,20 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 			(PROG_COL, "-b", "-p", "-x", (void *) 0);
 		pipecmd_pre_exec (col_cmd, sandbox_load, sandbox_free,
 				  sandbox);
-		pipeline_command (p, col_cmd);
+		pipeline_command (decompress_get_pipeline (d), col_cmd);
 	}
-	pipeline_start (p);
+	decompress_start (d);
 
-	ret = find_name_decompressed (p, filename, p_lg);
-	pipeline_free (p);
+	ret = find_name_decompressed (d, filename, p_lg);
+	decompress_free (d);
 	return ret;
 }
 
-int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
+int find_name_decompressed (decompress *d, const char *filename, lexgrog *p_lg)
 {
 	int ret;
 
-	decomp = p;
+	decomp = d;
 
 	fname = filename;
 	*(p_name = newname) = '\0';
@@ -931,7 +932,7 @@ int find_name_decompressed (pipeline *p, const char *filename, lexgrog *p_lg)
 
 	regain_effective_privs ();
 
-	pipeline_wait (decomp);
+	decompress_wait (decomp);
 
 	if (ret)
 		return 0;

@@ -60,11 +60,10 @@
 
 #include "manconfig.h"
 
-#include "pipeline.h"
-
 #include "debug.h"
 #include "glcontainers.h"
 
+#include "decompress.h"
 #include "manconv.h"
 
 /* Encoding conversions from groff-1.20/src/preproc/preconv/preconv.cpp.
@@ -147,19 +146,19 @@ static char *convert_encoding (char *encoding)
 	return encoding;
 }
 
-/* Inspect the first line of data in a pipeline for preprocessor encoding
- * declarations.
+/* Inspect the first line of data from a decompressor for preprocessor
+ * encoding declarations.
  *
  * If to_encoding and modified_line are both non-NULL, and if the encoding
  * declaration in the input does not match to_encoding, then return an
  * encoding declaration line modified to refer to the given to_encoding in
  * *modified_line.  The caller should free *modified_line.
  */
-char *check_preprocessor_encoding (pipeline *p, const char *to_encoding,
+char *check_preprocessor_encoding (decompress *decomp, const char *to_encoding,
 				   char **modified_line)
 {
 	char *pp_encoding = NULL;
-	const char *line = pipeline_peekline (p);
+	const char *line = decompress_peekline (decomp);
 	const char *directive = NULL, *directive_end = NULL, *pp_search = NULL;
 	size_t pp_encoding_len = 0;
 
@@ -258,8 +257,8 @@ static off_t locate_error (const char *try_from_code,
 	return ret;
 }
 
-static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
-		      bool last)
+static int try_iconv (decompress *decomp, const char *try_from_code,
+		      const char *to, bool last)
 {
 	char *try_to_code = xstrdup (to);
 	static const size_t buf_size = 65536;
@@ -295,7 +294,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		}
 	}
 
-	input = pipeline_peek (p, &input_size);
+	input = decompress_peek (decomp, &input_size);
 	if (input_size < buf_size) {
 		/* End of file, error, or just a short read? Repeat until we
 		 * have either a full buffer or EOF/error.
@@ -303,7 +302,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		while (input_size < buf_size) {
 			size_t old_input_size = input_size;
 			input_size = buf_size;
-			input = pipeline_peek (p, &input_size);
+			input = decompress_peek (decomp, &input_size);
 			if (input_size == old_input_size)
 				break;
 		}
@@ -447,7 +446,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		}
 
 		if (inptr != input) {
-			pipeline_peek_skip (p, input_size - inleft);
+			decompress_peek_skip (decomp, input_size - inleft);
 			input_pos += input_size - inleft;
 		}
 
@@ -458,11 +457,11 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		 */
 		if (!utf8left) {
 			input_size = buf_size;
-			input = pipeline_peek (p, &input_size);
+			input = decompress_peek (decomp, &input_size);
 			while (input_size < buf_size) {
 				size_t old_input_size = input_size;
 				input_size = buf_size;
-				input = pipeline_peek (p, &input_size);
+				input = decompress_peek (decomp, &input_size);
 				if (input_size == old_input_size)
 					break;
 			}
@@ -477,7 +476,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 	return ret;
 }
 
-void manconv (pipeline *p, gl_list_t from, const char *to)
+void manconv (decompress *decomp, gl_list_t from, const char *to)
 {
 	char *pp_encoding;
 	const char *try_from_code;
@@ -485,23 +484,23 @@ void manconv (pipeline *p, gl_list_t from, const char *to)
 
 	plain_to = xstrndup (to, strcspn (to, "/"));
 	pp_encoding = check_preprocessor_encoding
-		(p, plain_to, &modified_pp_line);
+		(decomp, plain_to, &modified_pp_line);
 	if (pp_encoding) {
 		if (modified_pp_line) {
 			size_t len = strlen (modified_pp_line);
-			pipeline_readline (p);
+			decompress_readline (decomp);
 			if (fwrite (modified_pp_line, 1, len, stdout) < len ||
 			    ferror (stdout))
 				error (FATAL, 0,
 				       _("can't write to standard output"));
 			free (modified_pp_line);
 		}
-		try_iconv (p, pp_encoding, to, 1);
+		try_iconv (decomp, pp_encoding, to, 1);
 		free (pp_encoding);
 	} else {
 		GL_LIST_FOREACH (from, try_from_code) {
 			bool last = !gl_list_next_node (from, from_node);
-			if (try_iconv (p, try_from_code, to, last) == 0)
+			if (try_iconv (decomp, try_from_code, to, last) == 0)
 				break;
 		}
 	}
@@ -514,12 +513,12 @@ void manconv (pipeline *p, gl_list_t from, const char *to)
 /* If we don't have iconv, there isn't much we can do; just pass everything
  * through unchanged.
  */
-void manconv (pipeline *p, gl_list_t from MAYBE_UNUSED,
+void manconv (decompress *decomp, gl_list_t from MAYBE_UNUSED,
 	      const char *to MAYBE_UNUSED)
 {
 	for (;;) {
 		size_t len = 4096;
-		const char *buffer = pipeline_read (p, &len);
+		const char *buffer = decompress_read (decomp, &len);
 		if (len == 0)
 			break;
 		if (fwrite (buffer, 1, len, stdout) < len || ferror (stdout))

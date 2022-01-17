@@ -22,8 +22,8 @@
 
 #include "gl_list.h"
 
-struct pipeline;
+#include "decompress.h"
 
-char *check_preprocessor_encoding (struct pipeline *p, const char *to_code,
+char *check_preprocessor_encoding (decompress *decomp, const char *to_code,
 				   char **modified_line);
-void manconv (struct pipeline *p, gl_list_t from, const char *to);
+void manconv (decompress *decomp, gl_list_t from, const char *to);

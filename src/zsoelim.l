@@ -85,7 +85,6 @@
 #include "appendstr.h"
 #include "debug.h"
 #include "glcontainers.h"
-#include "pipeline.h"
 #include "decompress.h"
 
 #include "globbing.h"
@@ -101,7 +100,7 @@ static void zap_quotes (void);
 static YY_BUFFER_STATE so_stack[MAX_SO_DEPTH];
 static char *so_name[MAX_SO_DEPTH];
 static int so_line[MAX_SO_DEPTH];
-static pipeline *so_pipe[MAX_SO_DEPTH];
+static decompress *so_pipe[MAX_SO_DEPTH];
 static int so_stack_ptr;
 static int no_newline;
 static gl_list_t so_manpathlist;
@@ -114,11 +113,11 @@ struct zsoelim_stdin_data {
 
 /* The flex documentation says that yyin is only used by YY_INPUT, so we
  * should safely be able to abuse it as a handy way to keep track of the
- * current 'pipeline *' rather than the usual 'FILE *'.
+ * current 'decompress *' rather than the usual 'FILE *'.
  */
 #define YY_INPUT(buf,result,max_size) { \
 	size_t size = max_size; \
-	const char *block = pipeline_read ((pipeline *) yyin, &size); \
+	const char *block = decompress_read ((decompress *) yyin, &size); \
 	if (block && size != 0) { \
 		memcpy (buf, block, size); \
 		buf[size] = '\0'; \
@@ -297,8 +296,8 @@ W	[ \t]
 		}
 
 <<EOF>>	{
-		pipeline_wait (PIPE);
-		pipeline_free (PIPE);
+		decompress_wait (PIPE);
+		decompress_free (PIPE);
 		PIPE = NULL;
 		free (NAME);
 		NAME = NULL;
@@ -347,11 +346,11 @@ void zsoelim_parse_file (gl_list_t manpathlist, const char *parent_path)
 	/* Skip over the first line if it's something that manconv might
 	 * need to know about.
 	 */
-	line = pipeline_peekline ((pipeline *) yyin);
+	line = decompress_peekline ((decompress *) yyin);
 	if (line &&
 	    (STRNEQ (line, PP_COOKIE, 4) || STRNEQ (line, ".\\\" ", 4))) {
 		fputs (line, stdout);
-		pipeline_peek_skip ((pipeline *) yyin, strlen (line));
+		decompress_peek_skip ((decompress *) yyin, strlen (line));
 		++linenum;
 	}
 
@@ -360,11 +359,11 @@ void zsoelim_parse_file (gl_list_t manpathlist, const char *parent_path)
 	yylex ();
 }
 
-static pipeline *try_compressed (char **filename)
+static decompress *try_compressed (char **filename)
 {
 	struct compression *comp;
 	size_t len = strlen (*filename);
-	pipeline *decomp;
+	decompress *decomp;
 
 	/* Try the uncompressed name first. */
 	(*filename)[len - 1] = '\0';
@@ -391,7 +390,7 @@ static pipeline *try_compressed (char **filename)
 int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 		       const char *parent_path)
 {
-	pipeline *decomp;
+	decompress *decomp;
 
 	if (parent_path)
 		debug ("opening %s (parent path: %s)\n",
@@ -529,9 +528,9 @@ out:
 
 	debug ("opened %s\n", NAME);
 
-	pipeline_start (decomp);
+	decompress_start (decomp);
 	PIPE = decomp;
-	/* only used by YY_INPUT, which casts it back to 'pipeline *' */
+	/* only used by YY_INPUT, which casts it back to 'decompress *' */
 	yyin = (FILE *) decomp;
 
 	return 0;

@@ -39,11 +39,11 @@
 #include "pipeline.h"
 
 #include "appendstr.h"
-#include "decompress.h"
 #include "glcontainers.h"
 #include "sandbox.h"
 #include "security.h"
 
+#include "decompress.h"
 #include "manconv.h"
 #include "manconv_client.h"
 
@@ -57,13 +57,13 @@ struct manconv_codes {
 static void manconv_stdin (void *data)
 {
 	struct manconv_codes *codes = data;
-	pipeline *p;
+	decompress *decomp;
 
-	p = decompress_fdopen (dup (STDIN_FILENO));
-	pipeline_start (p);
-	manconv (p, codes->from, codes->to);
-	pipeline_wait (p);
-	pipeline_free (p);
+	decomp = decompress_fdopen (dup (STDIN_FILENO));
+	decompress_start (decomp);
+	manconv (decomp, codes->from, codes->to);
+	decompress_wait (decomp);
+	decompress_free (decomp);
 }
 
 static void manconv_pre_exec (void *data)

@@ -168,7 +168,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			found = 0;
 
 		if (!found) {
-			pipeline *decomp;
+			decompress *decomp;
 			struct mandata *exists;
 			lexgrog lg;
 			char *lang, *page_encoding;
@@ -215,7 +215,8 @@ static int check_for_stray (MYDBM_FILE dbf)
 			lang = lang_dir (mandir);
 			page_encoding = get_page_encoding (lang);
 			if (page_encoding)
-				add_manconv (decomp, page_encoding, "UTF-8");
+				add_manconv (decompress_get_pipeline (decomp),
+					     page_encoding, "UTF-8");
 			free (page_encoding);
 			free (lang);
 
@@ -230,7 +231,8 @@ static int check_for_stray (MYDBM_FILE dbf)
 			}
 			pipecmd_pre_exec (col_cmd, sandbox_load, sandbox_free,
 					  sandbox);
-			pipeline_command (decomp, col_cmd);
+			pipeline_command (decompress_get_pipeline (decomp),
+					  col_cmd);
 
 			fullpath = canonicalize_file_name (catdir);
 			if (!fullpath) {
@@ -247,7 +249,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 				free (fullpath);
 				drop_effective_privs ();
-				pipeline_start (decomp);
+				decompress_start (decomp);
 				regain_effective_privs ();
 
 				strays++;
@@ -272,7 +274,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			}
 
 			free (lg.whatis);
-			pipeline_free (decomp);
+			decompress_free (decomp);
 next_exists:
 			free_mandata_struct (exists);
 			free (mandir_base);
