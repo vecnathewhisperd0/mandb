@@ -5,7 +5,6 @@ m4_pattern_forbid([^MAN_])
 AC_INIT([man-db], [2.9.4], [cjwatson@debian.org])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([1.11 -Wall -Wno-override -Werror foreign dist-xz no-dist-gzip parallel-tests])
-AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
 AC_PREREQ([2.64])
 AC_CONFIG_SRCDIR([src/man.c])
