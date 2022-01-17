@@ -60,6 +60,7 @@
 
 #include "compression.h"
 #include "decompress.h"
+#include "manconv.h"
 #include "manconv_client.h"
 
 int quiet = 0;

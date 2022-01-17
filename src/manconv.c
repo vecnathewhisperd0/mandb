@@ -33,6 +33,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -51,6 +52,7 @@
 #include "gl_list.h"
 #include "xalloc.h"
 #include "xstrndup.h"
+#include "xvasprintf.h"
 
 #include "gettext.h"
 #include <locale.h>
@@ -61,10 +63,163 @@
 #include "pipeline.h"
 
 #include "debug.h"
-#include "encodings.h"
 #include "glcontainers.h"
 
 #include "manconv.h"
+
+/* Encoding conversions from groff-1.20/src/preproc/preconv/preconv.cpp.
+ * I've only included those not already recognised by GNU libiconv.
+ */
+struct conversion_entry {
+	const char *from;
+	const char *to;
+};
+
+static struct conversion_entry conversion_table[] = {
+	{ "chinese-big5",			"Big5" },
+	{ "chinese-euc",			"GB2312" },
+	{ "chinese-iso-8bit",			"GB2312" },
+	{ "cn-gb-2312",				"GB2312" },
+	{ "cp878",				"KOI8-R" },
+	{ "cyrillic-iso-8bit",			"ISO-8859-5" },
+	{ "cyrillic-koi8",			"KOI8-R" },
+	{ "euc-china",				"GB2312" },
+	{ "euc-japan",				"EUC-JP" },
+	{ "euc-japan-1990",			"EUC-JP" },
+	{ "euc-kr",				"EUC-KR" },
+	{ "greek-iso-8bit",			"ISO-8859-7" },
+	{ "iso-latin-1",			"ISO-8859-1" },
+	{ "iso-latin-2",			"ISO-8859-2" },
+	{ "iso-latin-5",			"ISO-8859-9" },
+	{ "iso-latin-7",			"ISO-8859-13" },
+	{ "iso-latin-9",			"ISO-8859-15" },
+	{ "japanese-iso-8bit",			"EUC-JP" },
+	{ "japanese-euc",			"EUC-JP" },
+	{ "jis8",				"EUC-JP" },
+	{ "korean-euc",				"EUC-KR" },
+	{ "korean-iso-8bit",			"EUC-KR" },
+	{ "latin-0",				"ISO-8859-15" },
+	{ "latin-1",				"ISO-8859-1" },
+	{ "latin-2",				"ISO-8859-2" },
+	{ "latin-5",				"ISO-8859-9" },
+	{ "latin-7",				"ISO-8859-13" },
+	{ "mule-utf-16",			"UTF-16" },
+	{ "mule-utf-16be",			"UTF-16BE" },
+	{ "mule-utf-16-be",			"UTF-16BE" },
+	{ "mule-utf-16be-with-signature",	"UTF-16" },
+	{ "mule-utf-16le",			"UTF-16LE" },
+	{ "mule-utf-16-le",			"UTF-16LE" },
+	{ "mule-utf-16le-with-signature",	"UTF-16" },
+	{ "mule-utf-8",				"UTF-8" },
+	{ "utf-16-be",				"UTF-16BE" },
+	{ "utf-16be-with-signature",		"UTF-16" },
+	{ "utf-16-be-with-signature",		"UTF-16" },
+	{ "utf-16-le",				"UTF-16LE" },
+	{ "utf-16le-with-signature",		"UTF-16" },
+	{ "utf-16-le-with-signature",		"UTF-16" },
+	{ NULL,					NULL }
+};
+
+/* Convert Emacs-style coding tags to ones that libiconv understands. */
+static char *convert_encoding (char *encoding)
+{
+	size_t encoding_len = strlen (encoding);
+	const struct conversion_entry *entry;
+
+#define STRIP(s, l) do { \
+	if (encoding_len > (l) && \
+	    !strcasecmp (encoding + encoding_len - (l), (s))) \
+		encoding[encoding_len - (l)] = '\0'; \
+} while (0)
+
+	STRIP ("-dos", 4);
+	STRIP ("-mac", 4);
+	STRIP ("-unix", 5);
+
+#undef STRIP
+
+	for (entry = conversion_table; entry->from; ++entry)
+		if (!strcasecmp (entry->from, encoding)) {
+			free (encoding);
+			return xstrdup (entry->to);
+		}
+
+	return encoding;
+}
+
+/* Inspect the first line of data in a pipeline for preprocessor encoding
+ * declarations.
+ *
+ * If to_encoding and modified_line are both non-NULL, and if the encoding
+ * declaration in the input does not match to_encoding, then return an
+ * encoding declaration line modified to refer to the given to_encoding in
+ * *modified_line.  The caller should free *modified_line.
+ */
+char *check_preprocessor_encoding (pipeline *p, const char *to_encoding,
+				   char **modified_line)
+{
+	char *pp_encoding = NULL;
+	const char *line = pipeline_peekline (p);
+	const char *directive = NULL, *directive_end = NULL, *pp_search = NULL;
+	size_t pp_encoding_len = 0;
+
+	/* Some people use .\" incorrectly. We allow it for encoding
+	 * declarations but not for preprocessor declarations.
+	 */
+	if (line &&
+	    (STRNEQ (line, PP_COOKIE, 4) || STRNEQ (line, ".\\\" ", 4))) {
+		const char *newline = strchr (line, '\n');
+
+		directive = line + 4;
+		directive_end = newline ? newline : strchr (directive, '\0');
+		pp_search = memmem (directive, directive_end - directive,
+				    "-*-", 3);
+	}
+
+	if (directive && pp_search) {
+		pp_search += 3;
+		while (pp_search && pp_search < directive_end && *pp_search) {
+			while (*pp_search == ' ')
+				++pp_search;
+			if (STRNEQ (pp_search, "coding:", 7)) {
+				const char *pp_encoding_allow;
+				pp_search += 7;
+				while (*pp_search == ' ')
+					++pp_search;
+				pp_encoding_allow = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+						    "abcdefghijklmnopqrstuvwxyz"
+						    "0123456789-_/:.()";
+				pp_encoding_len = strspn (pp_search,
+							  pp_encoding_allow);
+				pp_encoding = xstrndup (pp_search,
+							pp_encoding_len);
+				pp_encoding = convert_encoding (pp_encoding);
+				debug ("preprocessor encoding: %s\n",
+				       pp_encoding);
+				break;
+			} else {
+				pp_search = memchr (pp_search, ';',
+						    directive_end - pp_search);
+				if (pp_search)
+					++pp_search;
+			}
+		}
+	}
+
+	if (to_encoding && modified_line &&
+	    pp_encoding && strcasecmp (pp_encoding, to_encoding)) {
+		assert (directive_end);
+		assert (pp_search);
+		*modified_line = xasprintf
+			("%.*s%s%.*s\n",
+			 (int) (pp_search - line), line,
+			 to_encoding,
+			 (int) (directive_end - (pp_search + pp_encoding_len)),
+			 pp_search + pp_encoding_len);
+	}
+
+	return pp_encoding;
+}
 
 #ifdef HAVE_ICONV
 

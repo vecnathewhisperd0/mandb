@@ -22,8 +22,6 @@
 
 #include <stdbool.h>
 
-struct pipeline;
-
 const char *get_groff_preconv (void);
 char *get_page_encoding (const char *lang);
 const char *get_source_encoding (const char *lang);
@@ -38,5 +36,3 @@ const char *get_roff_encoding (const char *device,
 const char *get_output_encoding (const char *device);
 const char *get_less_charset (const char *locale_charset);
 const char *get_jless_charset (const char *locale_charset);
-char *check_preprocessor_encoding (struct pipeline *p, const char *to_code,
-				   char **modified_line);

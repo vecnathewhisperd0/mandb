@@ -109,6 +109,7 @@
 #include "ult_src.h"
 #include "manp.h"
 #include "zsoelim.h"
+#include "manconv.h"
 #include "manconv_client.h"
 
 #ifdef MAN_OWNER

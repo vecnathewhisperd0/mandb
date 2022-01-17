@@ -24,4 +24,6 @@
 
 struct pipeline;
 
+char *check_preprocessor_encoding (struct pipeline *p, const char *to_code,
+				   char **modified_line);
 void manconv (struct pipeline *p, gl_list_t from, const char *to);
