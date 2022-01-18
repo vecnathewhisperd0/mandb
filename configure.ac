@@ -185,7 +185,6 @@ else
 	TROFF=troff
 fi
 AC_SUBST([TROFF])
-AC_DEFINE_UNQUOTED([PROG_TROFF], ["$troff"], [Program to use as troff.])
 if test -n "$troff"
 then
 	AC_DEFINE([HAS_TROFF], [1], [Define if you have troff.])
@@ -222,6 +221,7 @@ then
 else
 	troff="(troff not installed)"
 fi
+AC_DEFINE_UNQUOTED([PROG_TROFF], ["$troff"], [Program to use as troff.])
 dnl We want to end up with "-" written as "\-" in manual pages.  This
 dnl requires additional \-escaping corresponding to the following quote
 dnl removal steps:
