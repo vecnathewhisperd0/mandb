@@ -1,4 +1,4 @@
-# man-arg-override-dir.m4 serial 2
+# man-arg-override-dir.m4 serial 3
 dnl MAN_ARG_OVERRIDE_DIR
 dnl Add an --enable-override-dir option.
 
@@ -15,6 +15,6 @@ AC_ARG_WITH([override-dir],
 	[: ${override_dir=""}])
 AC_SUBST([override_dir])
 AC_DEFINE_UNQUOTED(
-	[OVERRIDE_DIR], ["$$override_dir"],
+	[OVERRIDE_DIR], ["$override_dir"],
 	[Relative override directory inside man path.])
 ])
