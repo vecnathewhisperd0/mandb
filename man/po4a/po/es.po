@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the man-db package.
 # Francisco Javier Serrador <fserrador@gmail.com>, 2018
 # Antonio Ceballos Roa <aceballos@gmail.com>, 2019
+# Alejandro Cendejas Tena <alex.cendejas@gmail.com>, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.9.0-pre1\n"
 "POT-Creation-Date: 2022-01-03 23:47+0000\n"
-"PO-Revision-Date: 2019-10-21 01:24+0200\n"
-"Last-Translator: Antonio Ceballos Roa <aceballos@gmail.com>\n"
+"PO-Revision-Date: 2022-01-19 09:50-0600\n"
+"Last-Translator: Alejandro Cendejas Tena <alex.cendejas@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -867,13 +868,13 @@ msgid ""
 "I<sections>."
 msgstr ""
 "B<%man%> es el paginador de manuales del sistema.  Cada argumento de "
-"I<página> argumento dado a B<%man%> normalmente es el nombre de un programa, "
-"utilidad o función. La I<página del manual> asociada con cada uno de estos "
-"argumentos es, pues, encontrada y mostrada.  Si se proporciona una "
-"I<sección>, B<%man%> mirará solo en esa I<sección> del manual.  La acción "
-"predeterminada es buscar en todas las I<secciones> disponibles siguiendo un "
-"orden predefinido (véase B<DEFAULTS>), y mostrar solo la primera I<página> "
-"encontrada, incluso si la I<página> existe en de varias I<secciones>."
+"I<página> dado a B<%man%> normalmente es el nombre de un programa, utilidad "
+"o función. La I<página de manual> asociada con cada uno de estos argumentos "
+"es, pues, encontrada y mostrada.  Si se proporciona una I<sección>, B<%man%> "
+"mirará solo en esa I<sección> del manual.  La acción predeterminada es "
+"buscar en todas las I<secciones> disponibles siguiendo un orden predefinido "
+"(véase B<DEFAULTS>), y mostrar solo la primera I<página> encontrada, incluso "
+"si la I<página> existe en varias I<secciones>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:92
@@ -894,7 +895,7 @@ msgstr "Programas ejecutables u órdenes de la shell"
 #: ../../man/man1/man.man1:101
 #, no-wrap
 msgid "System calls (functions provided by the kernel)"
-msgstr "Llamadas al sistema (funciones proporcionados por el núcleo)"
+msgstr "Llamadas al sistema (funciones proporcionadas por el núcleo)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:104
@@ -923,9 +924,6 @@ msgstr "Juegos"
 #. type: tbl table
 #: ../../man/man1/man.man1:117
 #, fuzzy, no-wrap
-#| msgid ""
-#| "Miscellaneous (including macro packages and conventions),\n"
-#| "e.g.\\& B<man>(7), B<groff>(7)"
 msgid ""
 "Miscellaneous (including macro packages and conventions),\n"
 "e.g.\\& B<man>(7), B<groff>(7), B<man-pages>(7)"
@@ -1006,7 +1004,7 @@ msgstr "[\\|B<-abc>\\|]"
 #: ../../man/man1/man.man1:165
 #, no-wrap
 msgid "any or all arguments within [ ] are optional."
-msgstr "cualquiera de los argumentos dentro de [ ] o todos ellos son opcionales."
+msgstr "todos o cualquiera de los argumentos dentro de [ ] son opcionales."
 
 #. type: tbl table
 #: ../../man/man1/man.man1:166
@@ -1111,8 +1109,8 @@ msgid ""
 msgstr ""
 "Muestra la página de manual del paquete de macros I<man> desde la sección "
 "I<7>.  (Esta es otra ortografía alternativa de \"B<%man%> I<7 man>\".  Puede "
-"ser ás cómodo cuando se copian y pegan referencias cruzadas en las páginas "
-"del manual.  Obsérvese que los paréntesis normalmente deben entrecomillarse "
+"ser más cómodo cuando se copian y pegan referencias cruzadas en las páginas "
+"del manual.  Nótese que los paréntesis normalmente deben entrecomillarse "
 "para protegerlos de la shell.)"
 
 #. type: TP
@@ -1241,7 +1239,7 @@ msgid ""
 msgstr ""
 "Hay varias variables de entorno que, si están asignadas, se consultan para "
 "determinar el comportamiento de B<%man%>.  A la variable \"atrápalo todo\" "
-"$B<MANOPT> se le puede asignar una cadena cualquier en formato de línea de "
+"$B<MANOPT> se le puede asignar una cadena cualquiera en formato de línea de "
 "órdenes, con la excepción de que cualquier espacio utilizado como parte del "
 "argumento de una opción debe estar escapado (precedido de diagonal hacia "
 "atrás).  B<%man%> analiza $B<MANOPT> antes de analizar su propia línea de "
@@ -1276,7 +1274,7 @@ msgid ""
 msgstr ""
 "Este paquete admite páginas de manual en varios idiomas, lo cual se controla "
 "por medio de su I<localización>.  Si esto no lo configura automáticamente su "
-"sistema, posiblemente tenga que establecer usted $B<LC_MESSAGES>, $B<LANG> u "
+"sistema, posiblemente tenga usted que establecer $B<LC_MESSAGES>, $B<LANG> u "
 "otras variables de entorno que dependen del sistema, para indicar su "
 "localización preferida, generalmente especificada en formato B<POSIX>:"
 
@@ -1333,7 +1331,7 @@ msgid ""
 "manual pager, please read the documents supplied with the package."
 msgstr ""
 "Para información relacionada con otras características y extensiones "
-"disponibles con este paginador del manual, lea los documentos suministrado "
+"disponibles con este paginador del manual, lea los documentos suministrados "
 "con el paquete."
 
 #. type: SH
@@ -1430,7 +1428,7 @@ msgid ""
 "each duplication will override the previous argument value."
 msgstr ""
 "Las opciones sin argumento que estén duplicadas en la línea de órdenes, en "
-"$B<MANOPT> o en ambas son inocuas.  Para opciones que requieran argumento "
+"$B<MANOPT> o en ambas son inocuas.  Para opciones que requieran argumento, "
 "cada duplicado anulará el valor del argumento anterior."
 
 #. type: SS
@@ -1456,7 +1454,7 @@ msgstr ""
 #: ../../man/man1/man.man1:430
 #, no-wrap
 msgid "B<--warnings>[=I<warnings\\/>]"
-msgstr "B<--warnings>[=I<avisos\\/>]"
+msgstr "B<--warnings>[=I<advertencias\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:442
@@ -1469,8 +1467,8 @@ msgid ""
 msgstr ""
 "Activa advertencias desde I<groff>.  Esto puede utilizarse para realizar "
 "comprobaciones de corrección sobre el texto fuente de las páginas de "
-"manual.  I<warnings> es una lista de nombres de advertencias separadas por "
-"comas; si no se proporciona, lo predeterminado es «mac».  Véase el nodo "
+"manual.  I<advertencias> es una lista de nombres de advertencias separadas "
+"por comas; si no se proporciona, lo predeterminado es «mac».  Véase el nodo "
 "\\(lqAdvertencias\\(rq en B<info groff> para una lista de nombres de "
 "advertencias disponibles."
 
@@ -1510,9 +1508,9 @@ msgid ""
 msgstr ""
 "Buscar texto en todas las páginas de manual.  Esta es una búsqueda de fuerza "
 "bruta, y es probable que tarde un poco; si puede, debería especificar una "
-"sección para reducir el número de páginas en que buscar.  Los términos "
-"buscados pueden ser cadenas simples (lo predeterminado) o expresiones "
-"regulares si se utiliza la opción B<--regex>."
+"sección para reducir el número de páginas en las cuales buscar.  Los "
+"términos buscados pueden ser cadenas simples (lo predeterminado) o "
+"expresiones regulares si se utiliza la opción B<--regex>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:476
@@ -1521,8 +1519,8 @@ msgid ""
 "text, and so may include false positives due to things like comments in "
 "source files.  Searching the rendered text would be much slower."
 msgstr ""
-"Adviértase que esta búsqueda se realiza en los I<fuentes> de las páginas de "
-"manual, no el texto presentado, y por lo tanto puede incluir falsos "
+"Nótese que esta búsqueda se realiza en los ficheros I<fuente> de las páginas "
+"de manual, no en el texto presentado, y por lo tanto puede incluir falsos "
 "positivos debido a cosas como comentarios en los ficheros fuente.  Sería "
 "mucho más lento buscar en el texto procesado y presentado."
 
@@ -1542,13 +1540,13 @@ msgid ""
 "exact match."
 msgstr ""
 "Activa el modo \"local\".  Formatea y muestra los ficheros de manual locales "
-"en vez de buscando por la colección de manuales del sistema.  Cada argumento "
+"en vez de buscar por la colección de manuales del sistema.  Cada argumento "
 "de página de manual se interpretará como un fichero fuente nroff en el "
 "formato correcto.  No se generará ningún fichero cat.  Si '-' está listado "
 "como uno de los argumentos, la entrada se tomará de stdin.  Cuando no se usa "
 "esta opción y man no encuentra la página requerida, antes de mostrar el "
 "mensaje de error, intenta comportarse como si esta opción hubiera sido "
-"suministrada, utilizando el nombre como nombre de fichero y buscando "
+"suministrada, utilizando el nombre como nombre de fichero y buscando una "
 "coincidencia exacta."
 
 #. type: Plain text
@@ -1618,7 +1616,7 @@ msgstr ""
 "convertida a la I<codificación> especificada.  Si ya sabe la codificación "
 "del fichero fuente, también puede utilizar B<%manconv%>(1)  directamente.  "
 "Sin embargo, esta opción permite convertir varias páginas de manual a una "
-"codificación única sin necesidad de explícitar la codificación de cada una, "
+"codificación única sin necesidad de explicitar la codificación de cada una, "
 "siempre que estuvieran ya instaladas en una estructura similar a la "
 "jerarquía de página del manual."
 
@@ -1685,7 +1683,7 @@ msgid ""
 "manual page system\").  To view manual pages outside such hierarchies, see "
 "the B<-l> option."
 msgstr ""
-"Una ruta especificada como un manpath debe ser la raíz de una jerarguía de "
+"Una ruta especificada como un manpath debe ser la raíz de una jerarquía de "
 "página man estructurada en secciones como se describe en el manual de man-db "
 "(en «El sistema de páginas de manual»).  Para ver páginas del manual fuera "
 "de tales jerarquías, véase la opción B<-l>."
@@ -1742,7 +1740,7 @@ msgstr ""
 "Normalmente, B<%man%> mostrará B<exit>(3)  preferentemente, no "
 "B<exit>(3tcl).  Para negociar esta situación y evitar tener que saber en qué "
 "sección reside la página requerida, ahora se le puede dar a B<%man%> una "
-"cadena I<sub-extensión> que indique a qué paquete debe pertenecer la "
+"cadena de I<sub-extensión> que indique a qué paquete debe pertenecer la "
 "página.  Utilizando el ejemplo anterior, suministrar la opción B<-e\\ tcl> a "
 "B<%man%> restringirá la búsqueda a páginas que tengan una extensión B<*tcl>."
 
@@ -1768,7 +1766,7 @@ msgid ""
 msgstr ""
 "Muestra todas las páginas en las que alguna parte de los nombres o las "
 "descripciones coincida con cada argumento de I<página> como expresión "
-"regular. tal como B<apropos>(1).  Como no suele haber ninguna forma "
+"regular, tal como B<apropos>(1).  Como no suele haber ninguna forma "
 "razonable de tomar la «mejor» página cuando se busca una expresión regular, "
 "esta opción implica B<-a>."
 
@@ -1784,7 +1782,7 @@ msgid ""
 msgstr ""
 "Muestra todas las páginas en las que alguna parte de los nombres o las "
 "descripciones coincida con cada argumento de I<página> con comodines como "
-"los de la shell. tal como B<apropos>(1)  B<--wildcard>.  El argumento de "
+"los de la shell, tal como B<apropos>(1)  B<--wildcard>.  El argumento de "
 "I<página> debe coincidir con el nombre o la descripción en su totalidad o "
 "coincidir con los límites de palabra en la descripción.  Como no suele haber "
 "ninguna forma razonable de tomar la «mejor» página cuando se busca un "
@@ -1798,7 +1796,7 @@ msgid ""
 msgstr ""
 "Si se utiliza la opción B<--regex> o B<--wildcard>, solo intenta "
 "conicidencias con los nombres de página, no con las descripciones de página, "
-"tal con B<whatis>(1).  En caso contrario, no tiene efecto."
+"tal como con B<whatis>(1).  En caso contrario, no tiene efecto."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:699
@@ -2100,11 +2098,11 @@ msgid ""
 "hyphenation, so words will only be hyphenated if they already contain "
 "hyphens."
 msgstr ""
-"Normalmente, B<nroff> parte texto con guiones automáticamente en los saltos "
-"de línea incluso en palabras que no contienen guiones, si es necesario "
-"hacerlo para disponer las palabras en una línea sin espaciado excesivo.  "
-"Esta opción desactiva los guiones automáticos, por lo que las palabras solo "
-"serán partidas con guiones si ya tienen guiones."
+"Normalmente, B<nroff> parte el texto con guiones automáticamente en los "
+"saltos de línea incluso en palabras que no contienen guiones, si es "
+"necesario hacerlo para disponer las palabras en una línea sin espaciado "
+"excesivo.  Esta opción desactiva los guiones automáticos, por lo que las "
+"palabras solo serán partidas con guiones si ya tienen guiones."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:937
@@ -2143,10 +2141,10 @@ msgid ""
 "filling."
 msgstr ""
 "Si está escribiendo una página de manual y simplemente quiere impedir que "
-"B<nroff> juntifique cierto párrafo, no utilice esta opción; es mejor que "
+"B<nroff> justifique cierto párrafo, no utilice esta opción; es mejor que "
 "consulte la documentación de B<nroff>; por ejemplo, puede utilizar las "
 "peticiones de  \".na\", \".nf\", \".fi\" y \".ad\" para desactivar "
-"temporalmente los ajuntes y rellenos."
+"temporalmente los ajustes y rellenos."
 
 #. type: TP
 #: ../../man/man1/man.man1:951
@@ -2216,12 +2214,12 @@ msgid ""
 "B<lynx>).  This option implies B<-t>, and will only work with B<GNU> "
 "B<troff>."
 msgstr ""
-"Esta opción hace que B<groff> produzca salida HTML y muestra esa salida en "
+"Esta opción hace que B<groff> produzca salida HTML y muestre esa salida en "
 "un navegador web.  La elección del navegador está determinada por el "
-"argumento opcional I<browser> si se proporciona, por la variable de entorno "
-"$B<BROWSER> o por uno predefinido en tiempo de compilación si aquella se ha "
-"anulado (habitualmente B<lynx>).  Esta opción implica B<-t> y solo funciona "
-"con B<GNU> B<troff>."
+"argumento opcional I<navegador> si se proporciona, por la variable de "
+"entorno $B<BROWSER> o por uno predefinido en tiempo de compilación si "
+"aquella se ha anulado (habitualmente B<lynx>).  Esta opción implica B<-t> y "
+"solo funciona con B<GNU> B<troff>."
 
 #. type: TP
 #: ../../man/man1/man.man1:1008
