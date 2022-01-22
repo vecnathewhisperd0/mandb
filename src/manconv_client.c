@@ -84,28 +84,30 @@ static void free_manconv_codes (void *data)
 	free (codes);
 }
 
-void add_manconv (pipeline *p, const char *source, const char *target)
+void add_manconv (pipeline *p,
+		  const char *source_encoding, const char *target_encoding)
 {
 	struct manconv_codes *codes;
 	char *name;
 	pipecmd *cmd;
 
-	if (STREQ (source, "UTF-8") && STREQ (target, "UTF-8"))
+	if (STREQ (source_encoding, "UTF-8") &&
+	    STREQ (target_encoding, "UTF-8"))
 		return;
 
 	codes = xmalloc (sizeof *codes);
 	/* informational only; no shell quoting concerns */
 	name = xasprintf ("%s -f ", MANCONV);
 	codes->from = new_string_list (GL_ARRAY_LIST, true);
-	if (STREQ (source, "UTF-8")) {
-		gl_list_add_last (codes->from, xstrdup (source));
-		name = appendstr (name, source, (void *) 0);
+	if (STREQ (source_encoding, "UTF-8")) {
+		gl_list_add_last (codes->from, xstrdup (source_encoding));
+		name = appendstr (name, source_encoding, (void *) 0);
 	} else {
 		gl_list_add_last (codes->from, xstrdup ("UTF-8"));
-		gl_list_add_last (codes->from, xstrdup (source));
-		name = appendstr (name, "UTF-8:", source, (void *) 0);
+		gl_list_add_last (codes->from, xstrdup (source_encoding));
+		name = appendstr (name, "UTF-8:", source_encoding, (void *) 0);
 	}
-	codes->to = xasprintf ("%s//IGNORE", target);
+	codes->to = xasprintf ("%s//IGNORE", target_encoding);
 	/* informational only; no shell quoting concerns */
 	name = appendstr (name, " -t ", codes->to, (void *) 0);
 	if (quiet >= 2)

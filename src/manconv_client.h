@@ -24,4 +24,5 @@
 
 struct pipeline;
 
-void add_manconv (struct pipeline *p, const char *source, const char *target);
+void add_manconv (struct pipeline *p,
+		  const char *source_encoding, const char *target_encoding);
