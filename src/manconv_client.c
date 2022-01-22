@@ -61,7 +61,11 @@ static void manconv_stdin (void *data)
 
 	decomp = decompress_fdopen (dup (STDIN_FILENO));
 	decompress_start (decomp);
-	manconv (decomp, codes->from, codes->to);
+	if (manconv (decomp, codes->from, codes->to) != 0)
+		/* manconv already wrote an error message to stderr.  Just
+		 * exit non-zero.
+		 */
+		exit (FATAL);
 	decompress_wait (decomp);
 	decompress_free (decomp);
 }

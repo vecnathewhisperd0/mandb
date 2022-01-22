@@ -26,4 +26,4 @@
 
 char *check_preprocessor_encoding (decompress *decomp, const char *to_code,
 				   char **modified_line);
-void manconv (decompress *decomp, gl_list_t from, const char *to);
+int manconv (decompress *decomp, gl_list_t from, const char *to);

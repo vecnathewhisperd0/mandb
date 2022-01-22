@@ -192,7 +192,11 @@ int main (int argc, char *argv[])
 		free (lang);
 	}
 
-	manconv (decomp, from_code, to_code);
+	if (manconv (decomp, from_code, to_code) != 0)
+		/* manconv already wrote an error message to stderr.  Just
+		 * exit non-zero.
+		 */
+		exit (FATAL);
 
 	free (to_code);
 	gl_list_free (from_code);
