@@ -6,9 +6,9 @@
 # Alejandro Cendejas Tena <alex.cendejas@gmail.com>, 2022
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.9.0-pre1\n"
+"Project-Id-Version: man-db-manpages 2.10.0-pre1\n"
 "POT-Creation-Date: 2022-01-24 11:17+0000\n"
-"PO-Revision-Date: 2022-01-19 09:50-0600\n"
+"PO-Revision-Date: 2022-01-24 10:36-0600\n"
 "Last-Translator: Alejandro Cendejas Tena <alex.cendejas@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
 "Language: es\n"
@@ -244,10 +244,6 @@ msgstr "B<-m> I<sistema>\\|[\\|,.\\|.\\|.\\|]\\|, B<--systems=>I<sistema>\\|[\\|
 #. type: Plain text
 #: ../../man/man1/apropos.man1:126
 #, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual page "
-#| "descriptions, they can be searched using this option.  To search NewOS's "
-#| "manual page descriptions, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual page "
 "descriptions, they can be searched using this option.  To search NewOS's "
@@ -413,7 +409,7 @@ msgid ""
 "If $B<SYSTEM> is set, it will have the same effect as if it had been "
 "specified as the argument to the B<-m> option."
 msgstr ""
-"Si se establece $B<SYSTEM>, tendrá el mismo efecto que si se hubiera "
+"Si $B<SYSTEM> está establecida, tendrá el mismo efecto que si se hubiera "
 "especificado como el argumento de la opción B<-m>."
 
 #. type: Plain text
@@ -423,8 +419,8 @@ msgid ""
 "If $B<MANPATH> is set, its value is interpreted as the colon-delimited "
 "manual page hierarchy search path to use."
 msgstr ""
-"Si se establece $B<MANPATH>, su valor se interpreta como la ruta de búsqueda "
-"de jerarquía de páginas de manual delimitadas por dos puntos."
+"Si $B<MANPATH> está establecida, su valor se interpreta como la ruta de "
+"búsqueda de jerarquía de páginas de manual delimitadas por dos puntos."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:217 ../../man/man1/man.man1:1078
@@ -434,6 +430,9 @@ msgid ""
 "See the B<SEARCH PATH> section of B<manpath>(5)  for the default behaviour "
 "and details of how this environment variable is handled."
 msgstr ""
+"Vea la sección B<RUTA DE BÚSQUEDA> de B<manpagh>(5) para conocer el "
+"comportamiento predeterminado y los detalles acerca de cómo se utiliza esta "
+"variable de entorno."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:229 ../../man/man1/whatis.man1:233
@@ -443,7 +442,7 @@ msgid ""
 "using the value of $B<COLUMNS>, and B<ioctl>(2)  if available, or falling "
 "back to 80 characters if all else fails."
 msgstr ""
-"Si se establece $B<MANWIDTH>, su valor se utiliza como la anchura del "
+"Si $B<MANWIDTH> está establecida, su valor se utiliza como la anchura del "
 "terminal (vea la opción B<--long>).  Si no está establecida, la anchura del "
 "terminal se calculará utilizando el valor de $B<COLUMNS> y B<ioctl>(2) o, en "
 "su defecto, se toman 80 caracteres si falla todo lo demás."
@@ -455,9 +454,10 @@ msgid ""
 "%> search will be as an extended regex (B<-r>).  Nowadays, this is the "
 "default behaviour anyway."
 msgstr ""
-"Si se establece $B<POSIXLY_CORRECT>, incluso a un valor nulo, la búsqueda "
-"predeterminada B<%apropos%> será como una expreg extendida (B<-r>).  De "
-"cualquier modo, actualmente este es el comportamiento predeterminado."
+"Si $B<POSIXLY_CORRECT> está establecida, incluso a un valor nulo, la "
+"búsqueda predeterminada B<%apropos%> será como una expreg extendida (B<-"
+"r>).  De cualquier modo, actualmente este es el comportamiento "
+"predeterminado."
 
 #. type: SH
 #: ../../man/man1/apropos.man1:238 ../../man/man1/man.man1:1260
@@ -1654,10 +1654,6 @@ msgstr "Encontrando páginas de manual"
 #. type: Plain text
 #: ../../man/man1/man.man1:571
 #, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual pages, they "
-#| "can be accessed using this option.  To search for a manual page from "
-#| "NewOS's manual page collection, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual pages, they can "
 "be accessed using this option.  To search for a manual page from NewOS's "
@@ -1924,8 +1920,9 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:773
+#, fuzzy
 msgid "B< Manual page>I< name>B<(>I<sec>B<) line>I< x>"
-msgstr "B< Página de manual>I< nombre>B<(>I<sec>B<) línea>I< x>"
+msgstr "B<\\ Página de manual>I<\\ nombre>B<(>I<sec>B<)>B<\\ línea>I<\\ x>"
 
 #. The default options are
 #. .BR \-six8 .
@@ -2298,7 +2295,7 @@ msgid ""
 "If $B<MANPATH> is set, its value is used as the path to search for manual "
 "pages."
 msgstr ""
-"Si se establece $B<MANPATH>, su valor se emplea como ruta para buscar "
+"Si $B<MANPATH> está establecida, su valor se emplea como ruta para buscar "
 "páginas de manual."
 
 #. type: Plain text
@@ -2329,7 +2326,7 @@ msgid ""
 "The default is \"%sections%\", unless overridden by the B<SECTION> directive "
 "in I<%manpath_config_file%>."
 msgstr ""
-"Si $B<MANSECT> está establecido, su valor es una lista de secciones "
+"Si $B<MANSECT> está establecida, su valor es una lista de secciones "
 "delimitadas por dos puntos y se emplea para determinar en qué secciones de "
 "manual buscar y en qué orden.  Lo predeterminado es \"%sections%\", salvo "
 "que esté anulado por la directiva B<SECCIÓN> en I<%manpath_config_file%>."
@@ -2357,7 +2354,7 @@ msgid ""
 "prompt string\\(rq, set $B<MANLESS> to \\(oqB<-Psmy\\ prompt\\ string>"
 "\\(cq.  Using the B<-r> option overrides this environment variable."
 msgstr ""
-"Si está establecida $B<MANLESS>, su valor se emplea como indicador "
+"Si $B<MANLESS> está establecida, su valor se emplea como indicador "
 "predefinido para el paginador B<less>, como si se hubiera pasado utilizando "
 "la opción B<-r> (así, siempre que aparezca el texto B<$MAN_PN> se expande de "
 "la misma manera).  Por ejemplo, si desea establecer el texto del indicador "
@@ -2374,7 +2371,7 @@ msgid ""
 "output from B<groff>, I<%%> is replaced by a single percent sign (%), and I<"
 "%c> is replaced by a colon (:)."
 msgstr ""
-"Si está establecido $B<BROWSER>, su valor es una lista de órdenes "
+"Si $B<BROWSER> está establecida, su valor es una lista de órdenes "
 "delimitadas por dos puntos, cada una de las cuales se emplea, a su vez, para "
 "intentar arrancar un navegador web para B<man> B<--html>.  En cada orden, I<"
 "%s> se sustituye por un nombre de fichero que contiene la salida HTML de "
@@ -2469,6 +2466,12 @@ msgid ""
 "unrelated to the content of the page being displayed, you can set "
 "$B<MAN_DISABLE_SECCOMP> to any non-empty value to disable the sandbox."
 msgstr ""
+"En Linux, B<%man%> normalmente aísla subprocesos que manejan información no "
+"confiable usando un entorno aislado B<seccomp>. Esto hace más seguro "
+"ejecutar código de análisis complejo sobre páginas de manual. Si esto sale "
+"mal por alguna razón que no esté relacionada con el contenido de la página "
+"mostrada, puede usted asignar a $B<MAN_DISABLE_SECCOMP> cualquier valor no "
+"vacío para deshabilitar el aislamiento."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1248
@@ -2477,6 +2480,9 @@ msgid ""
 "%> will print debugging messages to standard error describing each "
 "subprocess it runs."
 msgstr ""
+"Si la variable de entorno $B<PIPELINE_DEBUG> se establece en \"1\", entonces "
+"B<%man%> enviará mensajes de depuración al flujo de error estándar "
+"describiendo cada subproceso que ejecute."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1260
@@ -2796,10 +2802,6 @@ msgstr ""
 #. type: Plain text
 #: ../../man/man1/manpath.man1:63
 #, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual hierarchies, "
-#| "this option can be used to include them in the output of B<%manpath%>.  "
-#| "To include NewOS's manual page hierarchies use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual hierarchies, "
 "this option can be used to include them in the output of B<%manpath%>.  To "
@@ -2830,6 +2832,8 @@ msgid ""
 "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
 "determining it on the fly."
 msgstr ""
+"Si $B<MANPATH> está establecida, B<%manpath%> muestra su valor en lugar de "
+"determinarlo al momento."
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:15
@@ -2925,10 +2929,6 @@ msgstr ""
 #. type: Plain text
 #: ../../man/man1/whatis.man1:131
 #, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual page names, "
-#| "they can be accessed using this option.  To search NewOS's manual page "
-#| "names, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual page names, "
 "they can be accessed using this option.  To search NewOS's manual page "
@@ -3051,7 +3051,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:26
 #, no-wrap
 msgid "SEARCH PATH"
-msgstr ""
+msgstr "RUTA DE BÚSQUEDA"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:35
@@ -3059,6 +3059,8 @@ msgid ""
 "By default, man-db examines the user's $B<PATH>.  For each I<path_element> "
 "found there, it adds I<manpath_element> to the search path."
 msgstr ""
+"Por defecto, man-db busca en la variable $B<PATH> del usuario. Por cada "
+"I<path_element> encontrado, agrega I<manpath_element> a la ruta de búsqueda."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:47
@@ -3068,6 +3070,10 @@ msgid ""
 "man>, I<path_element/../share/man>, and I<path_element/share/man> that exist "
 "as directories to the search path."
 msgstr ""
+"Si no hay una línea B<MANPATH_MAP> en el archivo de configuración para un "
+"I<path_element> en particular, entonces agrega todos los I<path_element/../"
+"man>, I<path_element/man>, I<path_element/../share/man> y I<path_element/"
+"share/man> que existan como directorios a la ruta de búsqueda."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:51
@@ -3075,6 +3081,8 @@ msgid ""
 "It then adds any B<MANDATORY_MANPATH> entries from the configuration file to "
 "the search path."
 msgstr ""
+"Después agrega todas las entradas B<MANDATORY_MANPATH> del archivo de "
+"configuración a la ruta de búsqueda."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:73
@@ -3091,6 +3099,18 @@ msgid ""
 "then the final search path will be I</usr/share/man/newOS:/usr/share/man:/"
 "usr/local/man/newOS:/usr/local/man>."
 msgstr ""
+"Por último, si se utiliza la opción B<--systems>, o si la variable de "
+"entorno $B<SYSTEM> está establecida, entonces esta debería consistir en una "
+"secuencia de nombres de sistemas operativos separados por comas o por el "
+"signo de dos puntos. Esto actúa como una plantilla, expandiendo la ruta de "
+"búsqueda otr avez para permitir acceso a páginas de manual de otros sistemas "
+"operativos: por cada nombre de sistema, man-db busca ese nombre como un "
+"subdirectorio de cada entrada en la ruta de búsqueda, y lo agrega a la ruta "
+"de búsqueda, si existe. El nombre de sistema B<man> agrega la ruta de "
+"búsqueda normal sin subdirectorios. Por ejemplo, si la ruta de búsqueda "
+"hubiera sido I</usr/share/man:/usr/local/man>, y $B<SYSTEM> está establecida "
+"a I<newOS:man>, entonces la ruta de búsqueda final será I</usr/share/man/"
+"newOS:/usr/share/man:/usr/local/man/newOS:/usr/local/man>."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:83
@@ -3101,19 +3121,16 @@ msgid ""
 "names separated by colons.  It overrides the default search path described "
 "above."
 msgstr ""
+"La variable de entorno $B<MANPATH> anula las rutas de búsqueda por defecto "
+"de la página de manual de man-db. La mayoría de los usuarios no deberían "
+"necesitar establecerla. Su sintaxis es similar a la variable de entorno "
+"$B<PATH>: consiste en una secuencia de nombres de directorio separados por "
+"el símbolo de dos puntos. Anula la ruta de búsqueda por defecto descrita "
+"arriba."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:96
 #, fuzzy
-#| msgid ""
-#| "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
-#| "determining it on the fly.  If $B<MANPATH> is prefixed by a colon, then "
-#| "the value of the variable is appended to the list determined from the "
-#| "content of the configuration files.  If the colon comes at the end of the "
-#| "value in the variable, then the determined list is appended to the "
-#| "content of the variable.  If the value of the variable contains a double "
-#| "colon (B<::>), then the determined list is inserted in the middle of the "
-#| "value, between the two colons."
 msgid ""
 "If the value of $B<MANPATH> starts with a colon, then the default search "
 "path is added at its start.  If the value of $B<MANPATH> ends with a colon, "
@@ -3123,10 +3140,10 @@ msgid ""
 msgstr ""
 "Si $B<MANPATH> está establecida, $B<%manpath%> muestra su valor en vez de "
 "determinarlo sobre la marcha.  Si $B<MANPATH> está prefijado por dos puntos, "
-"esntonces el valor de la variable es agragado a la lista determinada a "
+"esntonces el valor de la variable es agregado a la lista determinada a "
 "partir del contenido de los ficheros de configuración.  Si los dos puntos "
 "están al final del valor de la variable, entonces la lista determinada es "
-"agragada al contenido de la variable.  Si el valor de la variable contiene "
+"agregada al contenido de la variable.  Si el valor de la variable contiene "
 "dos puntos dobles (B<::>), entonces la lista determinada es insertada en "
 "medio del valor, entre cada uno de los signos de dos puntos."
 
@@ -3875,14 +3892,11 @@ msgstr ""
 "La sección B<ANÁLISIS> anteriormente en esta página de manual ahora es parte "
 "de B<lexgrog>(1)."
 
-#, no-wrap
 #~ msgid "Type"
 #~ msgstr "Tipo"
 
-#, no-wrap
 #~ msgid "Binary tree"
 #~ msgstr "Árbol binario"
 
-#, no-wrap
 #~ msgid "Hashed"
 #~ msgstr "Firmado Hash"
