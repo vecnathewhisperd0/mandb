@@ -65,6 +65,11 @@ bool decompress_is_pipeline (decompress *d);
  */
 pipeline *decompress_get_pipeline (decompress *d);
 
+/* Return the start of the buffer stored in an in-process decompressor.
+ * Raises an assertion failure if this is not an in-process decompressor.
+ */
+const char *decompress_inprocess_buf (decompress *d);
+
 /* Return the total number of uncompressed bytes stored in an in-process
  * decompressor.  Raises an assertion failure if this is not an in-process
  * decompressor.

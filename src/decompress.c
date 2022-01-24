@@ -282,6 +282,12 @@ pipeline * ATTRIBUTE_PURE decompress_get_pipeline (decompress *d)
 	return d->u.p;
 }
 
+const char * ATTRIBUTE_PURE decompress_inprocess_buf (decompress *d)
+{
+	assert (d->tag == DECOMPRESS_INPROCESS);
+	return d->u.inprocess.buf;
+}
+
 size_t ATTRIBUTE_PURE decompress_inprocess_len (decompress *d)
 {
 	assert (d->tag == DECOMPRESS_INPROCESS);

@@ -46,6 +46,7 @@
 #include "decompress.h"
 #include "manconv.h"
 #include "manconv_client.h"
+#include "utf8.h"
 
 extern man_sandbox *sandbox;
 
@@ -176,7 +177,20 @@ int manconv_inprocess (decompress *d,
 	if (STREQ (source_encoding, "UTF-8"))
 		gl_list_add_last (from, xstrdup (source_encoding));
 	else {
-		gl_list_add_last (from, xstrdup ("UTF-8"));
+		if (STREQ (target_encoding, "UTF-8")) {
+			/* If the target encoding is UTF-8, then instead of
+			 * starting with trial conversion from UTF-8 to
+			 * UTF-8, we can start by simply performing UTF-8
+			 * validation, avoiding a copy.  (The source
+			 * encoding cannot be UTF-8 in this case, since we
+			 * already checked that the source and target
+			 * encodings are different.)
+			 */
+			if (utf8_validate_len (decompress_inprocess_buf (d),
+					       decompress_inprocess_len (d)))
+				goto out;
+		} else
+			gl_list_add_last (from, xstrdup ("UTF-8"));
 		gl_list_add_last (from, xstrdup (source_encoding));
 	}
 	to = xasprintf ("%s//IGNORE", target_encoding);
@@ -198,7 +212,8 @@ int manconv_inprocess (decompress *d,
 		ret = -1;
 	}
 
-	gl_list_free (from);
 	free (to);
+out:
+	gl_list_free (from);
 	return ret;
 }
