@@ -23,6 +23,76 @@ If the environment variable
 .RB $ MANPATH
 is already set, the information contained within %manpath_config_file% will
 not override it.
+.SH SEARCH PATH
+By default, man-db examines the user's
+.RB $ PATH .
+For each
+.I path_element
+found there,
+it adds
+.I manpath_element
+to the search path.
+
+If there is no
+.B MANPATH_MAP
+line in the configuration file for a given
+.IR path_element ,
+then it adds all of
+.IR path_element/../man ,
+.IR path_element/man ,
+.IR path_element/../share/man ,
+and
+.IR path_element/share/man
+that exist as directories to the search path.
+
+It then adds any
+.B MANDATORY_MANPATH
+entries from the configuration file to the search path.
+
+Finally, if the
+.B \-\-systems
+option is used or the
+.RB $ SYSTEM
+environment variable is set, then that should consist of a sequence of
+operating system names separated by commas or colons.
+This acts as a template, expanding the search path once more to allow access
+to other operating systems' manual pages: for each system name, man-db looks
+for that name as a subdirectory of each entry in the search path, and adds
+it to the final search path if it exists.
+A system name of
+.B man
+inserts the normal search path without subdirectories.
+For example, if the search path would otherwise have been
+.IR /usr/share/man:/usr/local/man ,
+and
+.RB $ SYSTEM
+is set to
+.IR newOS:man ,
+then the final search path will be
+.IR /usr/share/man/newOS:/usr/share/man:/usr/local/man/newOS:/usr/local/man .
+
+The
+.RB $ MANPATH
+environment variable overrides man-db's default manual page search paths.
+Most users should not need to set it.
+Its syntax is similar to the
+.RB $ PATH
+environment variable: it consists of a sequence of directory names separated
+by colons.
+It overrides the default search path described above.
+
+If the value of
+.RB $ MANPATH
+starts with a colon, then the default search path is added at its start.
+If the value of
+.RB $ MANPATH
+ends with a colon, then the default search path is added at its end.
+If the value of
+.RB $ MANPATH
+contains a double colon
+.RB ( :: ),
+then the default search path is inserted in the middle of the value, between
+the two colons.
 .SH FORMAT
 The following field types are currently recognised:
 .TP
