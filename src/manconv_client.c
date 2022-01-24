@@ -95,8 +95,7 @@ void add_manconv (pipeline *p,
 	char *name;
 	pipecmd *cmd;
 
-	if (STREQ (source_encoding, "UTF-8") &&
-	    STREQ (target_encoding, "UTF-8"))
+	if (STREQ (source_encoding, target_encoding))
 		return;
 
 	codes = xmalloc (sizeof *codes);
