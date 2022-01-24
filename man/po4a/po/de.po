@@ -10,13 +10,13 @@
 # Erik Pfannenstein <debianignatz@gmx.de>, 2010.
 # Martin Eberhard Schauer <Martin.E.Schauer@gmx.de>, 2010 - 2012.
 # Helge Kreutzmann <debian@helgefjell.de>, 2018.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2014, 2016, 2018-2021.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2014, 2016, 2018-2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.9.0-pre1\n"
+"Project-Id-Version: man-db-manpages 2.10.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2022-01-24 11:17+0000\n"
-"PO-Revision-Date: 2021-09-18 21:58+0200\n"
+"PO-Revision-Date: 2022-01-24 19:56+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
 "Language: de\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.08.0\n"
+"X-Generator: Lokalize 21.12.1\n"
 
 # #-#-#-#-#  apropos.1.po (man-db 2.5.7)  #-#-#-#-#
 # Alle Programme aus dem Paket man-db haben diese Beschreibung, die in der
@@ -299,11 +299,6 @@ msgstr "B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|, B<--systems=>I<System>\\|[\\|,.
 # descriptions -> könnten die descriptions nicht wegfallen?
 #. type: Plain text
 #: ../../man/man1/apropos.man1:126
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual page "
-#| "descriptions, they can be searched using this option.  To search NewOS's "
-#| "manual page descriptions, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual page "
 "descriptions, they can be searched using this option.  To search NewOS's "
@@ -517,6 +512,9 @@ msgid ""
 "See the B<SEARCH PATH> section of B<manpath>(5)  for the default behaviour "
 "and details of how this environment variable is handled."
 msgstr ""
+"Siehe den Abschnitt B<SUCHPFAD> in der Handbuchseite B<manpath>(5) für das "
+"Standardverhalten und Details dazu, wie mit dieser Umgebungsvariable "
+"umgegangen wird."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:229 ../../man/man1/whatis.man1:233
@@ -1038,16 +1036,13 @@ msgstr "Spiele"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:117
-#, fuzzy, no-wrap
-#| msgid ""
-#| "Miscellaneous (including macro packages and conventions),\n"
-#| "e.g.\\& B<man>(7), B<groff>(7)"
+#, no-wrap
 msgid ""
 "Miscellaneous (including macro packages and conventions),\n"
 "e.g.\\& B<man>(7), B<groff>(7), B<man-pages>(7)"
 msgstr ""
 "Verschiedenes (einschließlich Makropaketen und Konventionen),\n"
-"z. B.\\& B<man>(7), B<groff>(7)"
+"z. B.\\& B<man>(7), B<groff>(7), B<man-pages>(7)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:120
@@ -1775,11 +1770,6 @@ msgstr "Handbuchseiten finden"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:571
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual pages, they "
-#| "can be accessed using this option.  To search for a manual page from "
-#| "NewOS's manual page collection, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual pages, they can "
 "be accessed using this option.  To search for a manual page from NewOS's "
@@ -2603,6 +2593,13 @@ msgid ""
 "unrelated to the content of the page being displayed, you can set "
 "$B<MAN_DISABLE_SECCOMP> to any non-empty value to disable the sandbox."
 msgstr ""
+"Unter Linux sperrt B<%man%> normalerweise Unterprozesse, die nicht "
+"vertrauenswürdige Daten verarbeiten, in einer B<seccomp>(2)-Sandbox ein. "
+"Dadurch wird es sicherer, komplexen Auswertungscode über beliebige "
+"Handbuchseiten hinweg auszuführen. Falls dies aus irgendeinem Grund "
+"fehlschlägt, der nicht auf den Inhalt der anzuzeigenden Handbuchseite "
+"zurückzuführen wäre, können Sie $B<MAN_DISABLE_SECCOMP> auf einen beliebigen "
+"von Null verschiedenen Wert setzen, um die Sandbox zu deaktivieren."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1248
@@ -2611,6 +2608,9 @@ msgid ""
 "%> will print debugging messages to standard error describing each "
 "subprocess it runs."
 msgstr ""
+"Falls die Umgebungsvariable $B<PIPELINE_DEBUG> auf »1« gesetzt ist, dann "
+"schreibt B<%man%> Debugging-Meldungen in die Standardfehlerausgabe, die "
+"jeden ausgeführten Unterprozess beschreiben."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1260
@@ -2931,11 +2931,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/manpath.man1:63
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual hierarchies, "
-#| "this option can be used to include them in the output of B<%manpath%>.  "
-#| "To include NewOS's manual page hierarchies use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual hierarchies, "
 "this option can be used to include them in the output of B<%manpath%>.  To "
@@ -2957,7 +2952,7 @@ msgstr ""
 "Das angegebene I<System> kann eine durch Kommata gegliederte Aufzählung von "
 "Betriebssystemnamen sein. Die normalen Seiten werden durch den "
 "Betriebssystemnamen B<man> angesprochen. Diese Option überschreibt die "
-"Umgebungsvariable $B<SYSTEM.>"
+"Umgebungsvariable $B<SYSTEM>."
 
 #. type: Plain text
 #: ../../man/man1/manpath.man1:95
@@ -2965,6 +2960,8 @@ msgid ""
 "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
 "determining it on the fly."
 msgstr ""
+"Falls die Umgebungsvariable $B<MANPATH> gesetzt ist, zeigt B<%manpath%> "
+"deren Inhalt an, statt den Pfad selbst zu ermitteln."
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:15
@@ -3000,10 +2997,10 @@ msgid ""
 "Using these options, it may be necessary to quote the I<name> or escape "
 "(\\e) the special characters to stop the shell from interpreting them."
 msgstr ""
-"I<Name> kann Platzhalter (Wildcards, B<-w>) oder reguläre Ausdrücke (B<-r>) "
-"enthalten. Bei der Nutzung dieser Optionen kann es erforderlich sein, den "
-"I<Namen> mit Anführungszeichen und Sonderzeichen mit Escape-Sequenzen (\\e) "
-"vor der Verarbeitung durch die Shell zu schützen."
+"Der I<Name> kann Platzhalter (Wildcards, B<-w>) oder reguläre Ausdrücke (B<-"
+"r>) enthalten. Bei der Nutzung dieser Optionen kann es erforderlich sein, "
+"den I<Namen> mit Anführungszeichen und Sonderzeichen mit Escape-Sequenzen "
+"(\\e) vor der Verarbeitung durch die Shell zu schützen."
 
 # FIXME: perhaps B<%whatis%>
 #
@@ -3021,7 +3018,7 @@ msgstr ""
 "wird die Datenbank periodisch per Cron-Job aktualisiert - oder Sie müssen "
 "nach der Installation neuer Handbuchseiten B<%mandb%> manuell starten. Um "
 "aus der relativen B<Index>-Datenbank eine althergebrachte B<whatis>-"
-"Textdatenbank zu erzeugen, geben Sie den folgenden Befehl ein"
+"Textdatenbank zu erzeugen, geben Sie den folgenden Befehl ein:"
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:66
@@ -3060,11 +3057,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:131
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual page names, "
-#| "they can be accessed using this option.  To search NewOS's manual page "
-#| "names, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual page names, "
 "they can be accessed using this option.  To search NewOS's manual page "
@@ -3087,7 +3079,7 @@ msgstr ""
 "Betriebssystemnamen sein. Um auch die Handbuchseiten des eigenen "
 "Betriebssystems mit zu durchsuchen, geben Sie auch den Systemnamen B<man> "
 "als Argument mit ein. Diese Option überschreibt die Umgebungsvariable "
-"$B<SYSTEM.>"
+"$B<SYSTEM>."
 
 #. type: Plain text
 #: ../../man/man1/zsoelim.man1:15
@@ -3188,7 +3180,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:26
 #, no-wrap
 msgid "SEARCH PATH"
-msgstr ""
+msgstr "SUCHPFAD"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:35
@@ -3196,6 +3188,9 @@ msgid ""
 "By default, man-db examines the user's $B<PATH>.  For each I<path_element> "
 "found there, it adds I<manpath_element> to the search path."
 msgstr ""
+"Standardmäßig wertet man-db die Umgebungsvariable $B<PATH> des Benutzers "
+"aus. Für jeden gefundenen I<Pfad-Bestandteil> wird ein I<Hierarchie-"
+"Bestandteil> zum suchpfad hinzugefügt."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:47
@@ -3205,6 +3200,10 @@ msgid ""
 "man>, I<path_element/../share/man>, and I<path_element/share/man> that exist "
 "as directories to the search path."
 msgstr ""
+"Falls es in der Konfigurationsdatei für einen gegebenen I<Pfad-Bestandteil> "
+"keine B<MANPATH_MAP>-Zeile gibt, dann wird alles der Formen I<Pfad-"
+"Bestandteil/../man>, I<Pfad-Bestandteil/man> und I<Pfad-Bestandteil/share/"
+"man>, was als Verzeichnis existiert, zum Suchpfad hinzugefügt."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:51
@@ -3212,6 +3211,8 @@ msgid ""
 "It then adds any B<MANDATORY_MANPATH> entries from the configuration file to "
 "the search path."
 msgstr ""
+"Dann werden alle B<MANDATORY_MANPATH>-Einträge aus der Konfigurationsdatei "
+"zum Suchpfad hinzugefügt."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:73
@@ -3228,6 +3229,16 @@ msgid ""
 "then the final search path will be I</usr/share/man/newOS:/usr/share/man:/"
 "usr/local/man/newOS:/usr/local/man>."
 msgstr ""
+"Zum Schluss, sofern die Option B<--systems> verwendet wird oder die "
+"Umgebungsvariable $B<SYSTEM> gesetzt ist, sollte es aus einer Folge von "
+"Betriebssystemnamen bestehen, die durch Kommata getrennt sind. Dies fungiert "
+"als Vorlage, wobei der Suchpfad erweitert wird, um auf die Handbuchseiten "
+"anderer Betriebssysteme zugreifen zu können: Für jeden Systemnamen sucht man-"
+"db nach diesem Namen als Unterverzeichnis jedes der Einträge im Suchpfad und "
+"fügt, sofern er existiert, ihn zum finalen Suchpfad hinzu. Wenn der Suchpfad "
+"beispielsweise I</usr/share/man:/usr/local/man> wäre und $B<SYSTEM> auf "
+"I<newOS:man> gesetzt ist, wäre der finale Suchpfad I</usr/share/man/newOS:/"
+"usr/share/man:/usr/local/man/newOS:/usr/local/man>."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:83
@@ -3238,20 +3249,16 @@ msgid ""
 "names separated by colons.  It overrides the default search path described "
 "above."
 msgstr ""
+"Die Umgebungsvariable $B<MANPATH> setzt die standardmäßigen Handbuchseiten-"
+"Suchpfade von man-db außer Kraft. Für die meisten Benutzer sollte es nicht "
+"notwendig sein, diese zu setzen. Deren Syntax ist ähnlich der "
+"Umgebungsvariable $B<PATH>: Sie besteht aus einer Folge von "
+"Verzeichnisnamen, die durch Kommata getrennt sind. Sie setzt den vorstehend "
+"beschriebenen standardmäßigen Suchpfad außer Kraft."
 
 # FIXME: configuration file or files?
 #. type: Plain text
 #: ../../man/man5/manpath.man5:96
-#, fuzzy
-#| msgid ""
-#| "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
-#| "determining it on the fly.  If $B<MANPATH> is prefixed by a colon, then "
-#| "the value of the variable is appended to the list determined from the "
-#| "content of the configuration files.  If the colon comes at the end of the "
-#| "value in the variable, then the determined list is appended to the "
-#| "content of the variable.  If the value of the variable contains a double "
-#| "colon (B<::>), then the determined list is inserted in the middle of the "
-#| "value, between the two colons."
 msgid ""
 "If the value of $B<MANPATH> starts with a colon, then the default search "
 "path is added at its start.  If the value of $B<MANPATH> ends with a colon, "
@@ -3259,14 +3266,12 @@ msgid ""
 "$B<MANPATH> contains a double colon (B<::>), then the default search path is "
 "inserted in the middle of the value, between the two colons."
 msgstr ""
-"Wenn $B<MANPATH> gesetzt ist, zeigt B<% manpath%> den Wert an, statt selbst "
-"einen Wert zu bestimmen.. Wenn $B<MANPATH> ein Doppelpunkt vorangestellt "
-"ist, wird der Wert der Variablen an die Liste angefügt, welche mit dem "
-"Inhalt der Konfigurationsdateien bestimmt wurde. Steht der Doppelpunkt am "
-"Ende des Wertes der Variablen, wird die ermittelte Liste an den Wert der "
-"Variablen angehängt. Wenn der Wert der Variablen einen doppelten Doppelpunkt "
-"(B<::>) enthält, dann wird die Liste  zwischen den beiden Doppelpunkten "
-"eingefügt."
+"Wenn der Wert von $B<MANPATH> mit einem Doppelpunkt beginnt, wird der "
+"standardmäßige Suchpfad am Anfang eingefügt. Endet der Wert mit einem "
+"Doppelpunkt, wird der standardmäßige Suchpfad am Ende angehängt. Enthält der "
+"wert von $B<MANPATH> einen doppelten Doppelpunkt (B<::>), dann wird der "
+"standardmäßige Suchpfad in der Mitte des Wertes zwischen den beiden "
+"Doppelpunkten eingefügt."
 
 #. type: SH
 #: ../../man/man5/manpath.man5:96
@@ -4031,15 +4036,12 @@ msgstr ""
 "Der frühere Abschnitt B<WAS BEDEUTET PARSEN> ist jetzt Teil von "
 "B<lexgrog>(1)."
 
-#, no-wrap
 #~ msgid "Type"
 #~ msgstr "Typ"
 
-#, no-wrap
 #~ msgid "Binary tree"
 #~ msgstr "Binärbaum"
 
-#, no-wrap
 #~ msgid "Hashed"
 #~ msgstr "Hash-Tabelle"
 
