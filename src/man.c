@@ -2200,7 +2200,7 @@ static int display (const char *dir, const char *man_file,
 						     (void *) 0);
 
 		if (*man_file)
-			decomp = decompress_open (man_file);
+			decomp = decompress_open (man_file, 0);
 		else
 			decomp = decompress_fdopen (dup (STDIN_FILENO));
 
@@ -2490,7 +2490,7 @@ static int display (const char *dir, const char *man_file,
 				return 0;
 			}
 
-			decomp_cat = decompress_open (cat_file);
+			decomp_cat = decompress_open (cat_file, 0);
 			if (!decomp_cat) {
 				error (0, errno, _("can't open %s"), cat_file);
 				pipeline_free (format_cmd);
@@ -3626,7 +3626,7 @@ static int grep (const char *file, const char *string, const regex_t *search)
 	if (stat (file, &st) < 0)
 		return 0;
 
-	decomp = decompress_open (file);
+	decomp = decompress_open (file, DECOMPRESS_ALLOW_INPROCESS);
 	if (!decomp)
 		return 0;
 	decompress_start (decomp);

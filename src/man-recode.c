@@ -178,7 +178,7 @@ static void recode (const char *filename)
 	char *page_encoding;
 	int status;
 
-	decomp = decompress_open (filename);
+	decomp = decompress_open (filename, 0);
 	if (!decomp)
 		error (FAIL, 0, _("can't open %s"), filename);
 

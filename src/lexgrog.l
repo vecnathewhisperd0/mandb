@@ -66,6 +66,7 @@
 
 #include "decompress.h"
 #include "lexgrog.h"
+#include "manconv.h"
 #include "manconv_client.h"
 
 #define YY_READ_BUF_SIZE	1024
@@ -851,14 +852,16 @@ static void newline_found (void)
 int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	       const char *encoding)
 {
-	int ret;
+	int ret = 0;
 	decompress *d;
 	char *page_encoding = NULL;
+	bool run_col = p_lg->type == CATPAGE && *PROG_COL;
 
 	if (strcmp (file, "-") == 0) {
 		d = decompress_fdopen (dup (STDIN_FILENO));
 	} else {
 		struct stat st;
+		int decompress_flags;
 		char *lang;
 
 		if (stat (file, &st)) {
@@ -872,7 +875,14 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 		}
 
 		drop_effective_privs ();
-		d = decompress_open (file);
+		decompress_flags = 0;
+		/* If we're looking at a cat page, then we need to run col
+		 * over it, which doesn't work conveniently with an
+		 * in-process decompressor.
+		 */
+		if (!run_col)
+			decompress_flags |= DECOMPRESS_ALLOW_INPROCESS;
+		d = decompress_open (file, decompress_flags);
 		if (!d) {
 			error (0, errno, _("can't open %s"), file);
 			regain_effective_privs ();
@@ -888,11 +898,17 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	}
 	if (!page_encoding && encoding)
 		page_encoding = xstrdup (encoding);
-	if (page_encoding)
-		add_manconv (decompress_get_pipeline (d),
-			     page_encoding, "UTF-8");
-	free (page_encoding);
-	if (p_lg->type == CATPAGE && *PROG_COL) {
+	if (page_encoding) {
+		if (decompress_is_pipeline (d))
+			add_manconv (decompress_get_pipeline (d),
+				     page_encoding, "UTF-8");
+		else if (manconv_inprocess (d, page_encoding, "UTF-8") != 0)
+			/* manconv should already have written to stderr, so
+			 * just return zero (i.e. no result).
+			 */
+			goto out;
+	}
+	if (run_col) {
 		pipecmd *col_cmd;
 		col_cmd = pipecmd_new_args
 			(PROG_COL, "-b", "-p", "-x", (void *) 0);
@@ -903,6 +919,9 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	decompress_start (d);
 
 	ret = find_name_decompressed (d, filename, p_lg);
+
+out:
+	free (page_encoding);
 	decompress_free (d);
 	return ret;
 }

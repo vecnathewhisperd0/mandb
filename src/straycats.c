@@ -205,7 +205,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			info.mtime.tv_nsec = 0;
 
 			drop_effective_privs ();
-			decomp = decompress_open (catdir);
+			decomp = decompress_open (catdir, 0);
 			regain_effective_privs ();
 			if (!decomp) {
 				error (0, errno, _("can't open %s"), catdir);

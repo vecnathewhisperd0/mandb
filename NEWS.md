@@ -1,5 +1,5 @@
-man-db 2.9.5
-============
+man-db 2.10.0
+=============
 
 Build:
 
@@ -30,6 +30,9 @@ Improvements:
  * Delay the `systemd` timer using `RandomizedDelaySec`, so that multiple
    containers/VMs on the same host are less prone to running `mandb` all at
    the same time.
+ * Significantly improve `mandb(8)` and `man -K` performance in the common
+   case where pages are of moderate size and compressed using `zlib`: `mandb
+   -c` goes from 344 seconds to 10 seconds on a test system.
 
 man-db 2.9.4 (8 February 2021)
 ==============================

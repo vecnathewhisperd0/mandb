@@ -220,18 +220,26 @@ char *check_preprocessor_encoding (decompress *decomp, const char *to_encoding,
 	return pp_encoding;
 }
 
-static int add_output (const char *inbuf, size_t inlen)
+static int add_output (const char *inbuf, size_t inlen,
+		       struct manconv_outbuf *outbuf)
 {
 	int ret = 0;
-	int errno_save = errno;
 
-	if (fwrite (inbuf, 1, inlen, stdout) < inlen ||
-	    ferror (stdout)) {
-		error (0, 0, _("can't write to standard output"));
-		ret = -1;
+	if (outbuf) {
+		if (outbuf->len + inlen >= outbuf->max)
+			error (FATAL, 0, "out of space in output buffer");
+		memcpy (outbuf->buf + outbuf->len, inbuf, inlen);
+		outbuf->len += inlen;
+	} else {
+		int errno_save = errno;
+		if (fwrite (inbuf, 1, inlen, stdout) < inlen ||
+		    ferror (stdout)) {
+			error (0, 0, _("can't write to standard output"));
+			ret = -1;
+		}
+		errno = errno_save;
 	}
 
-	errno = errno_save;
 	return ret;
 }
 
@@ -279,7 +287,8 @@ typedef enum {
 } tried_iconv;
 
 static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
-			      const char *to, bool last)
+			      const char *to, bool last,
+			      struct manconv_outbuf *outbuf)
 {
 	char *try_to_code = xstrdup (to);
 	static const size_t buf_size = 65536;
@@ -408,7 +417,7 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 
 		if (outptr != output) {
 			/* We have something to write out. */
-			if (add_output (output, outleft) != 0) {
+			if (add_output (output, outleft, outbuf) != 0) {
 				ret = TRIED_ICONV_FATAL;
 				goto out;
 			}
@@ -426,7 +435,8 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 
 			if (outptr != output) {
 				/* We have something to write out. */
-				if (add_output (output, outleft) != 0) {
+				if (add_output (output, outleft,
+						outbuf) != 0) {
 					ret = TRIED_ICONV_FATAL;
 					goto out;
 				}
@@ -493,7 +503,8 @@ out:
 	return ret;
 }
 
-int manconv (decompress *decomp, gl_list_t from, const char *to)
+int manconv (decompress *decomp, gl_list_t from, const char *to,
+	     struct manconv_outbuf *outbuf)
 {
 	char *pp_encoding;
 	const char *try_from_code;
@@ -508,18 +519,19 @@ int manconv (decompress *decomp, gl_list_t from, const char *to)
 		if (modified_pp_line) {
 			size_t len = strlen (modified_pp_line);
 			decompress_readline (decomp);
-			if (add_output (modified_pp_line, len) != 0) {
+			if (add_output (modified_pp_line, len, outbuf) != 0) {
 				ret = -1;
 				goto out;
 			}
 		}
-		tried = try_iconv (decomp, pp_encoding, to, 1);
+		tried = try_iconv (decomp, pp_encoding, to, 1, outbuf);
 		if (tried == TRIED_ICONV_FATAL)
 			ret = -1;
 	} else {
 		GL_LIST_FOREACH (from, try_from_code) {
 			bool last = !gl_list_next_node (from, from_node);
-			tried = try_iconv (decomp, try_from_code, to, last);
+			tried = try_iconv (decomp, try_from_code, to, last,
+					   outbuf);
 			if (tried == TRIED_ICONV_OK)
 				break;
 			else if (tried == TRIED_ICONV_FATAL) {
@@ -542,14 +554,14 @@ out:
  * through unchanged.
  */
 int manconv (decompress *decomp, gl_list_t from MAYBE_UNUSED,
-	     const char *to MAYBE_UNUSED)
+	     const char *to MAYBE_UNUSED, struct manconv_outbuf *outbuf)
 {
 	for (;;) {
 		size_t len = 4096;
 		const char *buffer = decompress_read (decomp, &len);
 		if (len == 0)
 			break;
-		if (add_output (buffer, len) != 0)
+		if (add_output (buffer, len, outbuf) != 0)
 			return -1;
 	}
 	return 0;

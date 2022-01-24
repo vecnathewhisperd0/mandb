@@ -332,7 +332,8 @@ const char *ult_src (const char *name, const char *path,
 		 * decompress_open doesn't keep its own copy.
 		 */
 		decomp_base = xstrdup (base);
-		decomp = decompress_open (decomp_base);
+		decomp = decompress_open (decomp_base,
+					  DECOMPRESS_ALLOW_INPROCESS);
 		if (!decomp) {
 			if (quiet < 2)
 				error (0, errno, _("can't open %s"), base);

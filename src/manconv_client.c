@@ -61,7 +61,7 @@ static void manconv_stdin (void *data)
 
 	decomp = decompress_fdopen (dup (STDIN_FILENO));
 	decompress_start (decomp);
-	if (manconv (decomp, codes->from, codes->to) != 0)
+	if (manconv (decomp, codes->from, codes->to, NULL) != 0)
 		/* manconv already wrote an error message to stderr.  Just
 		 * exit non-zero.
 		 */
@@ -150,4 +150,55 @@ void add_manconv (pipeline *p,
 	}
 	free (name);
 	pipeline_command (p, cmd);
+}
+
+/* Convert the result of in-process decompression to a target encoding.
+ *
+ * This converts the buffered result of decompression to a new buffer, then
+ * replaces the decompress object's buffer with the converted one for use by
+ * later stages of processing.
+ *
+ * Returns zero on success or non-zero on failure.
+ */
+int manconv_inprocess (decompress *d,
+		       const char *source_encoding,
+		       const char *target_encoding)
+{
+	gl_list_t from;
+	char *to;
+	struct manconv_outbuf outbuf;
+	int ret = 0;
+
+	if (STREQ (source_encoding, target_encoding))
+		return 0;
+
+	from = new_string_list (GL_ARRAY_LIST, true);
+	if (STREQ (source_encoding, "UTF-8"))
+		gl_list_add_last (from, xstrdup (source_encoding));
+	else {
+		gl_list_add_last (from, xstrdup ("UTF-8"));
+		gl_list_add_last (from, xstrdup (source_encoding));
+	}
+	to = xasprintf ("%s//IGNORE", target_encoding);
+
+	outbuf.len = 0;
+	/* UTF-8 uses at most four bytes per Unicode code point.  We assume
+	 * that this conversion will be no worse than 1:4.
+	 */
+	outbuf.max = decompress_inprocess_len (d) * 4;
+	outbuf.buf = xmalloc (outbuf.max);
+
+	if (manconv (d, from, to, &outbuf) == 0)
+		decompress_inprocess_replace (d, outbuf.buf, outbuf.len);
+	else {
+		/* manconv already wrote an error message to stderr.  Just
+		 * return non-zero.
+		 */
+		free (outbuf.buf);
+		ret = -1;
+	}
+
+	gl_list_free (from);
+	free (to);
+	return ret;
 }

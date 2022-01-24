@@ -368,7 +368,7 @@ static decompress *try_compressed (char **filename)
 	/* Try the uncompressed name first. */
 	(*filename)[len - 1] = '\0';
 	debug ("trying %s\n", *filename);
-	decomp = decompress_open (*filename);
+	decomp = decompress_open (*filename, DECOMPRESS_ALLOW_INPROCESS);
 	if (decomp)
 		return decomp;
 	(*filename)[len - 1] = '.';
@@ -376,7 +376,8 @@ static decompress *try_compressed (char **filename)
 	for (comp = comp_list; comp->ext; ++comp) {
 		*filename = appendstr (*filename, comp->ext, NULL);
 		debug ("trying %s\n", *filename);
-		decomp = decompress_open (*filename);
+		decomp = decompress_open (*filename,
+					  DECOMPRESS_ALLOW_INPROCESS);
 		if (decomp)
 			return decomp;
 		(*filename)[len] = '\0';
@@ -475,7 +476,9 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 				names = look_for_file (parent_path, sec, name,
 						       0, LFF_MATCHCASE);
 				GL_LIST_FOREACH (names, found_name) {
-					decomp = decompress_open (found_name);
+					decomp = decompress_open
+						(found_name,
+						 DECOMPRESS_ALLOW_INPROCESS);
 					if (decomp) {
 						NAME = xstrdup (found_name);
 						gl_list_free (names);
@@ -492,7 +495,9 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 				names = look_for_file (mp, sec, name,
 						       0, LFF_MATCHCASE);
 				GL_LIST_FOREACH (names, found_name) {
-					decomp = decompress_open (found_name);
+					decomp = decompress_open
+						(found_name,
+						 DECOMPRESS_ALLOW_INPROCESS);
 					if (decomp) {
 						NAME = xstrdup (found_name);
 						gl_list_free (names);

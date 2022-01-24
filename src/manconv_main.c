@@ -159,7 +159,7 @@ int main (int argc, char *argv[])
 	assert (from_code);
 
 	if (filename) {
-		decomp = decompress_open (filename);
+		decomp = decompress_open (filename, 0);
 		if (!decomp)
 			error (FAIL, 0, _("can't open %s"), filename);
 	} else
@@ -192,7 +192,7 @@ int main (int argc, char *argv[])
 		free (lang);
 	}
 
-	if (manconv (decomp, from_code, to_code) != 0)
+	if (manconv (decomp, from_code, to_code, NULL) != 0)
 		/* manconv already wrote an error message to stderr.  Just
 		 * exit non-zero.
 		 */
