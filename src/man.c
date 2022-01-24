@@ -945,7 +945,7 @@ static const char *is_section (const char *name)
 }
 
 /* Snarf pre-processors from file, return string or NULL on failure */
-static char *get_preprocessors_from_file (pipeline *decomp, int prefixes)
+static char *get_preprocessors_from_file (decompress *decomp, int prefixes)
 {
 	const size_t block = 4096;
 	int i;
@@ -964,7 +964,7 @@ static char *get_preprocessors_from_file (pipeline *decomp, int prefixes)
 		const char *buffer, *scan, *end;
 		int j;
 
-		scan = buffer = pipeline_peek (decomp, &len);
+		scan = buffer = decompress_peek (decomp, &len);
 		if (!buffer || len == 0)
 			return NULL;
 
@@ -1007,7 +1007,7 @@ static char *get_preprocessors_from_file (pipeline *decomp, int prefixes)
 
 
 /* Determine pre-processors, set save_cat and return string */
-static char *get_preprocessors (pipeline *decomp, const char *dbfilters,
+static char *get_preprocessors (decompress *decomp, const char *dbfilters,
 				int prefixes)
 {
 	char *pp_string;
@@ -1078,7 +1078,7 @@ static void add_col (pipeline *p, const char *locale_charset, ...)
 
 /* Return pipeline to format file to stdout. */
 static pipeline *make_roff_command (const char *dir, const char *file,
-				    pipeline *decomp, const char *pp_string,
+				    decompress *decomp, const char *pp_string,
 				    char **result_encoding)
 {
 	const char *roff_opt;
@@ -1886,11 +1886,12 @@ static int close_cat_stream (pipeline *cat_p, const char *cat_file,
  * format a manual page with format_cmd, display it with disp_cmd, and
  * save it to cat_file
  */
-static int format_display_and_save (pipeline *decomp,
+static int format_display_and_save (decompress *d,
 				    pipeline *format_cmd,
 				    pipeline *disp_cmd,
 				    const char *cat_file, const char *encoding)
 {
+	pipeline *decomp = decompress_get_pipeline (d);
 	pipeline *sav_p = open_cat_stream (cat_file, encoding);
 	int instat;
 
@@ -1925,10 +1926,11 @@ static int format_display_and_save (pipeline *decomp,
  * Handle temporary file creation if necessary.
  * TODO: merge with format_display_and_save
  */
-static void format_display (pipeline *decomp,
+static void format_display (decompress *d,
 			    pipeline *format_cmd, pipeline *disp_cmd,
 			    const char *man_file)
 {
+	pipeline *decomp = decompress_get_pipeline (d);
 	int format_status = 0, disp_status = 0;
 #ifdef TROFF_IS_GROFF
 	char *htmldir = NULL, *htmlfile = NULL;
@@ -2035,10 +2037,11 @@ static void format_display (pipeline *decomp,
 
 /* "Display" a page in catman mode, which amounts to saving it. */
 /* TODO: merge with format_display_and_save? */
-static void display_catman (const char *cat_file, pipeline *decomp,
+static void display_catman (const char *cat_file, decompress *d,
 			    pipeline *format_cmd, const char *encoding)
 {
 	char *tmpcat = tmp_cat_filename (cat_file);
+	pipeline *decomp = decompress_get_pipeline (d);
 #ifdef COMP_CAT
 	pipecmd *comp_cmd;
 #endif /* COMP_CAT */
@@ -2188,7 +2191,7 @@ static int display (const char *dir, const char *man_file,
 	pipeline *format_cmd;	/* command to format man_file to stdout */
 	char *formatted_encoding = NULL;
 	bool display_to_stdout;
-	pipeline *decomp = NULL;
+	decompress *decomp = NULL;
 	int decomp_errno = 0;
 
 	/* define format_cmd */
@@ -2197,7 +2200,7 @@ static int display (const char *dir, const char *man_file,
 						     (void *) 0);
 
 		if (*man_file)
-			decomp = decompress_open (man_file);
+			decomp = decompress_open (man_file, 0);
 		else
 			decomp = decompress_fdopen (dup (STDIN_FILENO));
 
@@ -2246,16 +2249,18 @@ static int display (const char *dir, const char *man_file,
 #endif /* TROFF_IS_GROFF */
 
 		if (prefixes) {
-			assert (pipeline_get_ncommands (decomp) <= 1);
-			if (pipeline_get_ncommands (decomp)) {
+			pipeline *decomp_p = decompress_get_pipeline (decomp);
+
+			assert (pipeline_get_ncommands (decomp_p) <= 1);
+			if (pipeline_get_ncommands (decomp_p)) {
 				pipecmd_sequence_command
 					(seq,
-					 pipeline_get_command (decomp, 0));
-				pipeline_set_command (decomp, 0, seq);
+					 pipeline_get_command (decomp_p, 0));
+				pipeline_set_command (decomp_p, 0, seq);
 			} else {
 				pipecmd_sequence_command
 					(seq, pipecmd_new_passthrough ());
-				pipeline_command (decomp, seq);
+				pipeline_command (decomp_p, seq);
 			}
 		} else
 			pipecmd_free (seq);
@@ -2264,7 +2269,7 @@ static int display (const char *dir, const char *man_file,
 	if (decomp) {
 		char *pp_string;
 
-		pipeline_start (decomp);
+		decompress_start (decomp);
 		pp_string = get_preprocessors (decomp, dbfilters, prefixes);
 		format_cmd = make_roff_command (dir, man_file, decomp,
 						pp_string,
@@ -2311,17 +2316,18 @@ static int display (const char *dir, const char *man_file,
 		else
 			found = CAN_ACCESS (man_file, R_OK);
 		if (found) {
+			pipeline *decomp_p = decompress_get_pipeline (decomp);
 			int status;
 			if (prompt && do_prompt (title)) {
 				pipeline_free (format_cmd);
-				pipeline_free (decomp);
+				decompress_free (decomp);
 				free (formatted_encoding);
 				return 0;
 			}
 			drop_effective_privs ();
-			pipeline_connect (decomp, format_cmd, (void *) 0);
-			pipeline_pump (decomp, format_cmd, (void *) 0);
-			pipeline_wait (decomp);
+			pipeline_connect (decomp_p, format_cmd, (void *) 0);
+			pipeline_pump (decomp_p, format_cmd, (void *) 0);
+			pipeline_wait (decomp_p);
 			status = pipeline_wait (format_cmd);
 			regain_effective_privs ();
 			if (status != 0)
@@ -2409,7 +2415,7 @@ static int display (const char *dir, const char *man_file,
 
 		if (!found) {
 			pipeline_free (format_cmd);
-			pipeline_free (decomp);
+			decompress_free (decomp);
 			return found;
 		}
 
@@ -2445,7 +2451,7 @@ static int display (const char *dir, const char *man_file,
 
 			if (prompt && do_prompt (title)) {
 				pipeline_free (format_cmd);
-				pipeline_free (decomp);
+				decompress_free (decomp);
 				free (formatted_encoding);
 				if (local_man_file)
 					return 1;
@@ -2476,32 +2482,32 @@ static int display (const char *dir, const char *man_file,
 		} else {
 			/* display preformatted cat */
 			pipeline *disp_cmd;
-			pipeline *decomp_cat;
+			decompress *decomp_cat;
 
 			if (prompt && do_prompt (title)) {
 				pipeline_free (format_cmd);
-				pipeline_free (decomp);
+				decompress_free (decomp);
 				return 0;
 			}
 
-			decomp_cat = decompress_open (cat_file);
+			decomp_cat = decompress_open (cat_file, 0);
 			if (!decomp_cat) {
 				error (0, errno, _("can't open %s"), cat_file);
 				pipeline_free (format_cmd);
-				pipeline_free (decomp);
+				decompress_free (decomp);
 				return 0;
 			}
 			disp_cmd = make_display_command ("UTF-8", title);
 			format_display (decomp_cat, NULL, disp_cmd, man_file);
 			pipeline_free (disp_cmd);
-			pipeline_free (decomp_cat);
+			decompress_free (decomp_cat);
 		}
 	}
 
 	free (formatted_encoding);
 
 	pipeline_free (format_cmd);
-	pipeline_free (decomp);
+	decompress_free (decomp);
 
 	if (!prompt)
 		prompt = found;
@@ -3610,7 +3616,7 @@ static int display_pages (struct candidate *candidates)
 static int grep (const char *file, const char *string, const regex_t *search)
 {
 	struct stat st;
-	pipeline *decomp;
+	decompress *decomp;
 	const char *line;
 	int ret = 0;
 
@@ -3620,11 +3626,11 @@ static int grep (const char *file, const char *string, const regex_t *search)
 	if (stat (file, &st) < 0)
 		return 0;
 
-	decomp = decompress_open (file);
+	decomp = decompress_open (file, DECOMPRESS_ALLOW_INPROCESS);
 	if (!decomp)
 		return 0;
-	pipeline_start (decomp);
-	while ((line = pipeline_readline (decomp)) != NULL) {
+	decompress_start (decomp);
+	while ((line = decompress_readline (decomp)) != NULL) {
 		if (regex_opt) {
 			if (regexec (search, line,
 				     0, (regmatch_t *) 0, 0) == 0) {
@@ -3641,7 +3647,7 @@ static int grep (const char *file, const char *string, const regex_t *search)
 		}
 	}
 
-	pipeline_free (decomp);
+	decompress_free (decomp);
 	return ret;
 }
 

@@ -60,11 +60,10 @@
 
 #include "manconfig.h"
 
-#include "pipeline.h"
-
 #include "debug.h"
 #include "glcontainers.h"
 
+#include "decompress.h"
 #include "manconv.h"
 
 /* Encoding conversions from groff-1.20/src/preproc/preconv/preconv.cpp.
@@ -147,19 +146,19 @@ static char *convert_encoding (char *encoding)
 	return encoding;
 }
 
-/* Inspect the first line of data in a pipeline for preprocessor encoding
- * declarations.
+/* Inspect the first line of data from a decompressor for preprocessor
+ * encoding declarations.
  *
  * If to_encoding and modified_line are both non-NULL, and if the encoding
  * declaration in the input does not match to_encoding, then return an
  * encoding declaration line modified to refer to the given to_encoding in
  * *modified_line.  The caller should free *modified_line.
  */
-char *check_preprocessor_encoding (pipeline *p, const char *to_encoding,
+char *check_preprocessor_encoding (decompress *decomp, const char *to_encoding,
 				   char **modified_line)
 {
 	char *pp_encoding = NULL;
-	const char *line = pipeline_peekline (p);
+	const char *line = decompress_peekline (decomp);
 	const char *directive = NULL, *directive_end = NULL, *pp_search = NULL;
 	size_t pp_encoding_len = 0;
 
@@ -221,6 +220,29 @@ char *check_preprocessor_encoding (pipeline *p, const char *to_encoding,
 	return pp_encoding;
 }
 
+static int add_output (const char *inbuf, size_t inlen,
+		       struct manconv_outbuf *outbuf)
+{
+	int ret = 0;
+
+	if (outbuf) {
+		if (outbuf->len + inlen >= outbuf->max)
+			error (FATAL, 0, "out of space in output buffer");
+		memcpy (outbuf->buf + outbuf->len, inbuf, inlen);
+		outbuf->len += inlen;
+	} else {
+		int errno_save = errno;
+		if (fwrite (inbuf, 1, inlen, stdout) < inlen ||
+		    ferror (stdout)) {
+			error (0, 0, _("can't write to standard output"));
+			ret = -1;
+		}
+		errno = errno_save;
+	}
+
+	return ret;
+}
+
 #ifdef HAVE_ICONV
 
 /* When converting text containing an invalid multibyte sequence to
@@ -258,8 +280,15 @@ static off_t locate_error (const char *try_from_code,
 	return ret;
 }
 
-static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
-		      bool last)
+typedef enum {
+	TRIED_ICONV_OK = 0,
+	TRIED_ICONV_ERROR = -1,  /* can continue with another encoding */
+	TRIED_ICONV_FATAL = -2   /* must give up */
+} tried_iconv;
+
+static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
+			      const char *to, bool last,
+			      struct manconv_outbuf *outbuf)
 {
 	char *try_to_code = xstrdup (to);
 	static const size_t buf_size = 65536;
@@ -273,7 +302,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		       STRNEQ (try_to_code, "UTF-8//", 7);
 	const char *utf8_target = last ? "UTF-8//IGNORE" : "UTF-8";
 	bool ignore_errors = (strstr (try_to_code, "//IGNORE") != NULL);
-	int ret = 0;
+	tried_iconv ret = TRIED_ICONV_OK;
 
 	debug ("trying encoding %s -> %s\n", try_from_code, try_to_code);
 
@@ -282,7 +311,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		error (0, errno, "iconv_open (\"%s\", \"%s\")",
 		       utf8_target, try_from_code);
 		free (try_to_code);
-		return -1;
+		return TRIED_ICONV_ERROR;
 	}
 
 	if (!to_utf8) {
@@ -291,11 +320,11 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 			error (0, errno, "iconv_open (\"%s\", \"UTF-8\")",
 			       try_to_code);
 			free (try_to_code);
-			return -1;
+			return TRIED_ICONV_ERROR;
 		}
 	}
 
-	input = pipeline_peek (p, &input_size);
+	input = decompress_peek (decomp, &input_size);
 	if (input_size < buf_size) {
 		/* End of file, error, or just a short read? Repeat until we
 		 * have either a full buffer or EOF/error.
@@ -303,7 +332,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		while (input_size < buf_size) {
 			size_t old_input_size = input_size;
 			input_size = buf_size;
-			input = pipeline_peek (p, &input_size);
+			input = decompress_peek (decomp, &input_size);
 			if (input_size == old_input_size)
 				break;
 		}
@@ -340,7 +369,7 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 			if (!last && n == (size_t) -1 &&
 			    (errno == EILSEQ ||
 			     (errno == EINVAL && input_size < buf_size))) {
-				ret = -1;
+				ret = TRIED_ICONV_ERROR;
 				break;
 			} else if (n == (size_t) -1)
 				handle_iconv_errors = errno;
@@ -388,13 +417,10 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 
 		if (outptr != output) {
 			/* We have something to write out. */
-			int errno_save = errno;
-			size_t w;
-			w = fwrite (output, 1, outleft, stdout);
-			if (w < (size_t) outleft || ferror (stdout))
-				error (FATAL, 0, _("can't write to "
-						   "standard output"));
-			errno = errno_save;
+			if (add_output (output, outleft, outbuf) != 0) {
+				ret = TRIED_ICONV_FATAL;
+				goto out;
+			}
 		}
 
 		if (!to_utf8 && n2 != (size_t) -1) {
@@ -409,13 +435,11 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 
 			if (outptr != output) {
 				/* We have something to write out. */
-				int errno_save = errno;
-				size_t w;
-				w = fwrite (output, 1, outleft, stdout);
-				if (w < (size_t) outleft || ferror (stdout))
-					error (FATAL, 0, _("can't write to "
-							   "standard output"));
-				errno = errno_save;
+				if (add_output (output, outleft,
+						outbuf) != 0) {
+					ret = TRIED_ICONV_FATAL;
+					goto out;
+				}
 			}
 		} else if (handle_iconv_errors) {
 			intmax_t error_pos;
@@ -429,7 +453,8 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 					error (0, handle_iconv_errors,
 					       "byte %jd: iconv", error_pos);
 				}
-				exit (FATAL);
+				ret = TRIED_ICONV_FATAL;
+				goto out;
 			} else if (handle_iconv_errors == EINVAL &&
 				   input_size < buf_size) {
 				if (!quiet) {
@@ -437,17 +462,17 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 						try_from_code,
 						input, input_size,
 						utf8, buf_size);
-					error (FATAL, 0, "byte %jd: %s",
-					       error_pos,
+					error (0, 0, "byte %jd: %s", error_pos,
 					       _("iconv: incomplete character "
 						 "at end of buffer"));
 				}
-				exit (FATAL);
+				ret = TRIED_ICONV_FATAL;
+				goto out;
 			}
 		}
 
 		if (inptr != input) {
-			pipeline_peek_skip (p, input_size - inleft);
+			decompress_peek_skip (decomp, input_size - inleft);
 			input_pos += input_size - inleft;
 		}
 
@@ -458,17 +483,18 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 		 */
 		if (!utf8left) {
 			input_size = buf_size;
-			input = pipeline_peek (p, &input_size);
+			input = decompress_peek (decomp, &input_size);
 			while (input_size < buf_size) {
 				size_t old_input_size = input_size;
 				input_size = buf_size;
-				input = pipeline_peek (p, &input_size);
+				input = decompress_peek (decomp, &input_size);
 				if (input_size == old_input_size)
 					break;
 			}
 		}
 	}
 
+out:
 	if (!to_utf8)
 		iconv_close (cd);
 	iconv_close (cd_utf8);
@@ -477,36 +503,49 @@ static int try_iconv (pipeline *p, const char *try_from_code, const char *to,
 	return ret;
 }
 
-void manconv (pipeline *p, gl_list_t from, const char *to)
+int manconv (decompress *decomp, gl_list_t from, const char *to,
+	     struct manconv_outbuf *outbuf)
 {
 	char *pp_encoding;
 	const char *try_from_code;
 	char *plain_to, *modified_pp_line = NULL;
+	tried_iconv tried;
+	int ret = 0;
 
 	plain_to = xstrndup (to, strcspn (to, "/"));
 	pp_encoding = check_preprocessor_encoding
-		(p, plain_to, &modified_pp_line);
+		(decomp, plain_to, &modified_pp_line);
 	if (pp_encoding) {
 		if (modified_pp_line) {
 			size_t len = strlen (modified_pp_line);
-			pipeline_readline (p);
-			if (fwrite (modified_pp_line, 1, len, stdout) < len ||
-			    ferror (stdout))
-				error (FATAL, 0,
-				       _("can't write to standard output"));
-			free (modified_pp_line);
+			decompress_readline (decomp);
+			if (add_output (modified_pp_line, len, outbuf) != 0) {
+				ret = -1;
+				goto out;
+			}
 		}
-		try_iconv (p, pp_encoding, to, 1);
-		free (pp_encoding);
+		tried = try_iconv (decomp, pp_encoding, to, 1, outbuf);
+		if (tried == TRIED_ICONV_FATAL)
+			ret = -1;
 	} else {
 		GL_LIST_FOREACH (from, try_from_code) {
 			bool last = !gl_list_next_node (from, from_node);
-			if (try_iconv (p, try_from_code, to, last) == 0)
+			tried = try_iconv (decomp, try_from_code, to, last,
+					   outbuf);
+			if (tried == TRIED_ICONV_OK)
 				break;
+			else if (tried == TRIED_ICONV_FATAL) {
+				ret = -1;
+				goto out;
+			}
 		}
 	}
 
+out:
+	free (modified_pp_line);
+	free (pp_encoding);
 	free (plain_to);
+	return ret;
 }
 
 #else /* !HAVE_ICONV */
@@ -514,17 +553,18 @@ void manconv (pipeline *p, gl_list_t from, const char *to)
 /* If we don't have iconv, there isn't much we can do; just pass everything
  * through unchanged.
  */
-void manconv (pipeline *p, gl_list_t from MAYBE_UNUSED,
-	      const char *to MAYBE_UNUSED)
+int manconv (decompress *decomp, gl_list_t from MAYBE_UNUSED,
+	     const char *to MAYBE_UNUSED, struct manconv_outbuf *outbuf)
 {
 	for (;;) {
 		size_t len = 4096;
-		const char *buffer = pipeline_read (p, &len);
+		const char *buffer = decompress_read (decomp, &len);
 		if (len == 0)
 			break;
-		if (fwrite (buffer, 1, len, stdout) < len || ferror (stdout))
-			error (FATAL, 0, _("can't write to standard output"));
+		if (add_output (buffer, len, outbuf) != 0)
+			return -1;
 	}
+	return 0;
 }
 
 #endif /* HAVE_ICONV */

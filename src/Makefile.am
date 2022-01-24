@@ -105,7 +105,9 @@ lexgrog_SOURCES = \
 	manconv_client.c \
 	manconv_client.h \
 	ult_src.c \
-	ult_src.h
+	ult_src.h \
+	utf8.c \
+	utf8.h
 man_SOURCES = \
 	compression.c \
 	compression.h \
@@ -124,6 +126,8 @@ man_SOURCES = \
 	manp.h \
 	ult_src.c \
 	ult_src.h \
+	utf8.c \
+	utf8.h \
 	zsoelim.h \
 	zsoelim.l
 man_recode_SOURCES = \
@@ -135,7 +139,9 @@ man_recode_SOURCES = \
 	manconv.c \
 	manconv.h \
 	manconv_client.c \
-	manconv_client.h
+	manconv_client.h \
+	utf8.c \
+	utf8.h
 manconv_SOURCES = \
 	decompress.c \
 	decompress.h \
@@ -168,7 +174,9 @@ mandb_SOURCES = \
 	straycats.c \
 	straycats.h \
 	ult_src.c \
-	ult_src.h
+	ult_src.h \
+	utf8.c \
+	utf8.h
 manpath_SOURCES = \
 	globbing.c \
 	globbing.h \

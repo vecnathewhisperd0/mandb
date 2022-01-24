@@ -170,14 +170,15 @@ static struct argp argp = { options, parse_opt, args_doc };
 
 static void recode (const char *filename)
 {
-	pipeline *decomp, *convert;
+	decompress *decomp;
+	pipeline *convert, *decomp_p;
 	struct compression *comp;
 	int dir_fd = -1;
 	char *dirname, *basename, *stem, *outfilename;
 	char *page_encoding;
 	int status;
 
-	decomp = decompress_open (filename);
+	decomp = decompress_open (filename, 0);
 	if (!decomp)
 		error (FAIL, 0, _("can't open %s"), filename);
 
@@ -219,7 +220,7 @@ static void recode (const char *filename)
 		pipeline_want_out (convert, outfd);
 	}
 
-	pipeline_start (decomp);
+	decompress_start (decomp);
 	page_encoding = check_preprocessor_encoding (decomp, NULL, NULL);
 	if (!page_encoding) {
 		char *lang = lang_dir (filename);
@@ -232,9 +233,10 @@ static void recode (const char *filename)
 	if (!pipeline_get_ncommands (convert))
 		pipeline_command (convert, pipecmd_new_passthrough ());
 
-	pipeline_connect (decomp, convert, (void *) 0);
-	pipeline_pump (decomp, convert, (void *) 0);
-	pipeline_wait (decomp);
+	decomp_p = decompress_get_pipeline (decomp);
+	pipeline_connect (decomp_p, convert, (void *) 0);
+	pipeline_pump (decomp_p, convert, (void *) 0);
+	pipeline_wait (decomp_p);
 	status = pipeline_wait (convert);
 	if (status != 0)
 		error (CHILD_FAIL, 0, _("command exited with status %d: %s"),
@@ -265,7 +267,7 @@ static void recode (const char *filename)
 	if (dir_fd)
 		close (dir_fd);
 	pipeline_free (convert);
-	pipeline_free (decomp);
+	decompress_free (decomp);
 }
 
 int main (int argc, char *argv[])

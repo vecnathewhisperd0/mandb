@@ -145,7 +145,7 @@ static struct argp argp = { options, parse_opt, args_doc };
 
 int main (int argc, char *argv[])
 {
-	pipeline *p;
+	decompress *decomp;
 
 	set_program_name (argv[0]);
 
@@ -159,12 +159,12 @@ int main (int argc, char *argv[])
 	assert (from_code);
 
 	if (filename) {
-		p = decompress_open (filename);
-		if (!p)
+		decomp = decompress_open (filename, 0);
+		if (!decomp)
 			error (FAIL, 0, _("can't open %s"), filename);
 	} else
-		p = decompress_fdopen (dup (STDIN_FILENO));
-	pipeline_start (p);
+		decomp = decompress_fdopen (dup (STDIN_FILENO));
+	decompress_start (decomp);
 
 	if (!gl_list_size (from_code)) {
 		char *lang, *page_encoding;
@@ -192,12 +192,16 @@ int main (int argc, char *argv[])
 		free (lang);
 	}
 
-	manconv (p, from_code, to_code);
+	if (manconv (decomp, from_code, to_code, NULL) != 0)
+		/* manconv already wrote an error message to stderr.  Just
+		 * exit non-zero.
+		 */
+		exit (FATAL);
 
 	free (to_code);
 	gl_list_free (from_code);
 
-	pipeline_wait (p);
+	decompress_wait (decomp);
 
 	sandbox_free (sandbox);
 
