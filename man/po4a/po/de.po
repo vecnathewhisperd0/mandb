@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db-manpages 2.9.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2022-01-03 23:47+0000\n"
+"POT-Creation-Date: 2022-01-24 11:17+0000\n"
 "PO-Revision-Date: 2021-09-18 21:58+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -299,8 +299,13 @@ msgstr "B<-m> I<system>\\|[\\|,.\\|.\\|.\\|]\\|, B<--systems=>I<System>\\|[\\|,.
 # descriptions -> könnten die descriptions nicht wegfallen?
 #. type: Plain text
 #: ../../man/man1/apropos.man1:126
+#, fuzzy
+#| msgid ""
+#| "If this system has access to other operating system's manual page "
+#| "descriptions, they can be searched using this option.  To search NewOS's "
+#| "manual page descriptions, use the option B<-m> B<NewOS>."
 msgid ""
-"If this system has access to other operating system's manual page "
+"If this system has access to other operating systems' manual page "
 "descriptions, they can be searched using this option.  To search NewOS's "
 "manual page descriptions, use the option B<-m> B<NewOS>."
 msgstr ""
@@ -481,8 +486,8 @@ msgstr "UMGEBUNGSVARIABLEN"
 # #-#-#-#-#  apropos.1.po (man-db 2.5.7)  #-#-#-#-#
 # Was ist gemeint, was ist eine gute Übersetzung?
 #. type: Plain text
-#: ../../man/man1/apropos.man1:204 ../../man/man1/man.man1:1168
-#: ../../man/man1/manpath.man1:113 ../../man/man1/whatis.man1:208
+#: ../../man/man1/apropos.man1:204 ../../man/man1/man.man1:1175
+#: ../../man/man1/manpath.man1:110 ../../man/man1/whatis.man1:208
 msgid ""
 "If $B<SYSTEM> is set, it will have the same effect as if it had been "
 "specified as the argument to the B<-m> option."
@@ -505,7 +510,16 @@ msgstr ""
 "anzuwendende Hierarchie-Suchpfad für Handbuchseiten interpretiert."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:222 ../../man/man1/whatis.man1:226
+#: ../../man/man1/apropos.man1:217 ../../man/man1/man.man1:1078
+#: ../../man/man1/manpath.man1:102 ../../man/man1/whatis.man1:221
+#: ../../man/man8/catman.man8:101
+msgid ""
+"See the B<SEARCH PATH> section of B<manpath>(5)  for the default behaviour "
+"and details of how this environment variable is handled."
+msgstr ""
+
+#. type: Plain text
+#: ../../man/man1/apropos.man1:229 ../../man/man1/whatis.man1:233
 msgid ""
 "If $B<MANWIDTH> is set, its value is used as the terminal width (see the B<--"
 "long> option).  If it is not set, the terminal width will be calculated "
@@ -519,7 +533,7 @@ msgstr ""
 "80 Zeichen verwendet."
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:231
+#: ../../man/man1/apropos.man1:238
 msgid ""
 "If $B<POSIXLY_CORRECT> is set, even to a null value, the default B<%apropos"
 "%> search will be as an extended regex (B<-r>).  Nowadays, this is the "
@@ -530,9 +544,9 @@ msgstr ""
 "ausgeführt. Heutzutage ist dies sowieso das Standardverhalten."
 
 #. type: SH
-#: ../../man/man1/apropos.man1:231 ../../man/man1/man.man1:1253
-#: ../../man/man1/manpath.man1:113 ../../man/man1/whatis.man1:226
-#: ../../man/man8/catman.man8:94 ../../man/man8/mandb.man8:185
+#: ../../man/man1/apropos.man1:238 ../../man/man1/man.man1:1260
+#: ../../man/man1/manpath.man1:110 ../../man/man1/whatis.man1:233
+#: ../../man/man8/catman.man8:101 ../../man/man8/mandb.man8:185
 #, no-wrap
 msgid "FILES"
 msgstr "DATEIEN"
@@ -542,8 +556,8 @@ msgstr "DATEIEN"
 # Für mich schon. Mehr als eine Eigenschaft für den Cache.
 # Vielleicht doch Cache statt Zwischenpeicher?
 #. type: Plain text
-#: ../../man/man1/apropos.man1:237 ../../man/man1/whatis.man1:232
-#: ../../man/man8/catman.man8:103 ../../man/man8/mandb.man8:201
+#: ../../man/man1/apropos.man1:244 ../../man/man1/whatis.man1:239
+#: ../../man/man8/catman.man8:110 ../../man/man8/mandb.man8:201
 msgid "A traditional global I<index> database cache."
 msgstr ""
 "ein traditioneller, globaler Zwischenspeicher für die I<Index>-Datenbank"
@@ -551,44 +565,44 @@ msgstr ""
 # #-#-#-#-#  apropos.1.po (man-db 2.5.7)  #-#-#-#-#
 # Komma s.o.
 #. type: Plain text
-#: ../../man/man1/apropos.man1:243 ../../man/man1/whatis.man1:238
+#: ../../man/man1/apropos.man1:250 ../../man/man1/whatis.man1:245
 #: ../../man/man8/mandb.man8:194
 msgid "An FHS compliant global I<index> database cache."
 msgstr ""
 "ein FHS-konformer, globaler Zwischenspeicher für die I<Index>-Datenbank"
 
 #. type: Plain text
-#: ../../man/man1/apropos.man1:248 ../../man/man1/whatis.man1:243
+#: ../../man/man1/apropos.man1:255 ../../man/man1/whatis.man1:250
 msgid "A traditional B<whatis> text database."
 msgstr "eine traditionelle B<whatis>-Textdatenbank"
 
 #. type: SH
-#: ../../man/man1/apropos.man1:248 ../../man/man1/lexgrog.man1:197
-#: ../../man/man1/man.man1:1260 ../../man/man1/man-recode.man1:78
-#: ../../man/man1/manconv.man1:73 ../../man/man1/manpath.man1:117
-#: ../../man/man1/whatis.man1:243 ../../man/man1/zsoelim.man1:70
-#: ../../man/man8/catman.man8:109 ../../man/man8/mandb.man8:207
+#: ../../man/man1/apropos.man1:255 ../../man/man1/lexgrog.man1:197
+#: ../../man/man1/man.man1:1267 ../../man/man1/man-recode.man1:78
+#: ../../man/man1/manconv.man1:73 ../../man/man1/manpath.man1:114
+#: ../../man/man1/whatis.man1:250 ../../man/man1/zsoelim.man1:70
+#: ../../man/man8/catman.man8:116 ../../man/man8/mandb.man8:207
 #, no-wrap
 msgid "SEE ALSO"
 msgstr "SIEHE AUCH"
 
 #. type: SH
-#: ../../man/man1/apropos.man1:252 ../../man/man1/lexgrog.man1:207
+#: ../../man/man1/apropos.man1:259 ../../man/man1/lexgrog.man1:207
 #: ../../man/man1/man-recode.man1:86 ../../man/man1/manconv.man1:77
-#: ../../man/man1/manpath.man1:121 ../../man/man1/whatis.man1:247
+#: ../../man/man1/manpath.man1:118 ../../man/man1/whatis.man1:254
 #: ../../man/man1/zsoelim.man1:75 ../../man/man8/accessdb.man8:42
-#: ../../man/man8/catman.man8:113 ../../man/man8/mandb.man8:217
+#: ../../man/man8/catman.man8:120 ../../man/man8/mandb.man8:217
 #, no-wrap
 msgid "AUTHOR"
 msgstr "AUTOR"
 
 #. type: SH
-#: ../../man/man1/apropos.man1:258 ../../man/man1/lexgrog.man1:220
-#: ../../man/man1/man.man1:1293 ../../man/man1/man-recode.man1:82
-#: ../../man/man1/manconv.man1:81 ../../man/man1/manpath.man1:127
-#: ../../man/man1/whatis.man1:253 ../../man/man1/zsoelim.man1:81
-#: ../../man/man5/manpath.man5:170 ../../man/man8/accessdb.man8:48
-#: ../../man/man8/catman.man8:119 ../../man/man8/mandb.man8:223
+#: ../../man/man1/apropos.man1:265 ../../man/man1/lexgrog.man1:220
+#: ../../man/man1/man.man1:1300 ../../man/man1/man-recode.man1:82
+#: ../../man/man1/manconv.man1:81 ../../man/man1/manpath.man1:124
+#: ../../man/man1/whatis.man1:260 ../../man/man1/zsoelim.man1:81
+#: ../../man/man5/manpath.man5:240 ../../man/man8/accessdb.man8:48
+#: ../../man/man8/catman.man8:126 ../../man/man8/mandb.man8:223
 #, no-wrap
 msgid "BUGS"
 msgstr "FEHLER"
@@ -1761,8 +1775,13 @@ msgstr "Handbuchseiten finden"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:571
+#, fuzzy
+#| msgid ""
+#| "If this system has access to other operating system's manual pages, they "
+#| "can be accessed using this option.  To search for a manual page from "
+#| "NewOS's manual page collection, use the option B<-m> B<NewOS>."
 msgid ""
-"If this system has access to other operating system's manual pages, they can "
+"If this system has access to other operating systems' manual pages, they can "
 "be accessed using this option.  To search for a manual page from NewOS's "
 "manual page collection, use the option B<-m> B<NewOS>."
 msgstr ""
@@ -1996,7 +2015,7 @@ msgstr ""
 "B<-f> oder B<-k> verwendet."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:763 ../../man/man1/man.man1:1125
+#: ../../man/man1/man.man1:763 ../../man/man1/man.man1:1132
 msgid ""
 "The value may be a simple command name or a command with arguments, and may "
 "use shell quoting (backslashes, single quotes, or double quotes).  It may "
@@ -2416,7 +2435,7 @@ msgstr ""
 "Handbuchseiten benutzt."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1083
+#: ../../man/man1/man.man1:1090
 msgid ""
 "Every time B<man> invokes the formatter (B<nroff>, B<troff>, or B<groff>), "
 "it adds the contents of $B<MANROFFOPT> to the formatter's command line."
@@ -2426,7 +2445,7 @@ msgstr ""
 "Formatierungsprogramms hinzugefügt."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1090
+#: ../../man/man1/man.man1:1097
 msgid ""
 "If $B<MANROFFSEQ> is set, its value is used to determine the set of "
 "preprocessors to pass each manual page through.  The default preprocessor "
@@ -2438,7 +2457,7 @@ msgstr ""
 "B<tbl> (B<t>)."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1102 ../../man/man8/catman.man8:88
+#: ../../man/man1/man.man1:1109 ../../man/man8/catman.man8:88
 msgid ""
 "If $B<MANSECT> is set, its value is a colon-delimited list of sections and "
 "it is used to determine which manual sections to search and in what order.  "
@@ -2452,7 +2471,7 @@ msgstr ""
 "%manpath_config_file%> außer Kraft gesetzt."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1119
+#: ../../man/man1/man.man1:1126
 msgid ""
 "If $B<MANPAGER> or $B<PAGER> is set ($B<MANPAGER> is used in preference), "
 "its value is used as the name of the program used to display the manual "
@@ -2465,7 +2484,7 @@ msgstr ""
 "wird, falls B<%pager%> nicht gefunden wurde oder nicht ausführbar ist."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1144
+#: ../../man/man1/man.man1:1151
 msgid ""
 "If $B<MANLESS> is set, its value will be used as the default prompt string "
 "for the B<less> pager, as if it had been passed using the B<-r> option (so "
@@ -2484,7 +2503,7 @@ msgstr ""
 "diese Umgebungsvariable außer Kraft gesetzt."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1160
+#: ../../man/man1/man.man1:1167
 msgid ""
 "If $B<BROWSER> is set, its value is a colon-delimited list of commands, each "
 "of which in turn is used to try to start a web browser for B<man> B<--"
@@ -2499,7 +2518,7 @@ msgstr ""
 "Prozentzeichen und I<%c> durch einen Doppelpunkt (:) ersetzt."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1183
+#: ../../man/man1/man.man1:1190
 msgid ""
 "If $B<MANOPT> is set, it will be parsed prior to B<%man%'s> command line and "
 "is expected to be in a similar format.  As all of the other B<%man%> "
@@ -2517,7 +2536,7 @@ msgstr ""
 "Arguments interpretiert werden sollen, geschützt werden."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1197
+#: ../../man/man1/man.man1:1204
 msgid ""
 "If $B<MANWIDTH> is set, its value is used as the line length for which "
 "manual pages should be formatted.  If it is not set, manual pages will be "
@@ -2537,7 +2556,7 @@ msgstr ""
 "Zeilenlänge zwischen zwischen 66 und 80 Zeichen liegt."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1208
+#: ../../man/man1/man.man1:1215
 msgid ""
 "Normally, when output is not being directed to a terminal (such as to a file "
 "or a pipe), formatting characters are discarded to make it easier to read "
@@ -2554,7 +2573,7 @@ msgstr ""
 "%man%> interpretieren und Formatierungszeichen verarbeiten können."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1221
+#: ../../man/man1/man.man1:1228
 msgid ""
 "Normally, when output is being directed to a terminal (usually to a pager), "
 "any error output from the command used to produce formatted versions of "
@@ -2576,7 +2595,7 @@ msgstr ""
 "gewohnt angezeigt werden."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1233
+#: ../../man/man1/man.man1:1240
 msgid ""
 "On Linux, B<%man%> normally confines subprocesses that handle untrusted data "
 "using a B<seccomp>(2)  sandbox.  This makes it safer to run complex parsing "
@@ -2586,7 +2605,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1241
+#: ../../man/man1/man.man1:1248
 msgid ""
 "If the $B<PIPELINE_DEBUG> environment variable is set to \"1\", then B<%man"
 "%> will print debugging messages to standard error describing each "
@@ -2594,7 +2613,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1253
+#: ../../man/man1/man.man1:1260
 msgid ""
 "Depending on system and implementation, either or both of $B<LANG> and "
 "$B<LC_MESSAGES> will be interrogated for the current message locale.  B<%man"
@@ -2607,18 +2626,18 @@ msgstr ""
 "I<Locale> anzeigen. Für genaue Details siehe B<setlocale>(3)."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1257 ../../man/man1/manpath.man1:117
-#: ../../man/man8/catman.man8:98 ../../man/man8/mandb.man8:189
+#: ../../man/man1/man.man1:1264 ../../man/man1/manpath.man1:114
+#: ../../man/man8/catman.man8:105 ../../man/man8/mandb.man8:189
 msgid "man-db configuration file."
 msgstr "Konfigurationsdatei für Man-db"
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1260
+#: ../../man/man1/man.man1:1267
 msgid "A global manual page hierarchy."
 msgstr "globale Handbuchhierarchie."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1277
+#: ../../man/man1/man.man1:1284
 msgid ""
 "Documentation for some packages may be available in other formats, such as "
 "B<info>(1)  or HTML."
@@ -2627,13 +2646,13 @@ msgstr ""
 "zum Beispiel B<info>(1) oder HTML."
 
 #. type: SH
-#: ../../man/man1/man.man1:1277
+#: ../../man/man1/man.man1:1284
 #, no-wrap
 msgid "HISTORY"
 msgstr "GESCHICHTE"
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1279
+#: ../../man/man1/man.man1:1286
 msgid ""
 "1990, 1991 \\(en Originally written by John W.\\& Eaton (jwe@che.utexas.edu)."
 msgstr ""
@@ -2641,7 +2660,7 @@ msgstr ""
 "Version."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1282
+#: ../../man/man1/man.man1:1289
 msgid ""
 "Dec 23 1992: Rik Faith (faith@cs.unc.edu) applied bug fixes supplied by "
 "Willem Kasdorp (wkasdo@nikhefk.nikef.nl)."
@@ -2650,7 +2669,7 @@ msgstr ""
 "unterstützt durch Willem Kasdorp (wkasdo@nikhefk.nikef.nl)."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1286
+#: ../../man/man1/man.man1:1293
 msgid ""
 "30th April 1994 \\(en 23rd February 2000: Wilf.\\& (G.Wilford@ee.surrey.ac."
 "uk)  has been developing and maintaining this package with the help of a few "
@@ -2661,7 +2680,7 @@ msgstr ""
 "weiterentwickelt und gewartet."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1290
+#: ../../man/man1/man.man1:1297
 msgid ""
 "30th October 1996 \\(en 30th March 2001: Fabrizio Polacco "
 "E<lt>fpolacco@debian.orgE<gt> maintained and enhanced this package for the "
@@ -2672,7 +2691,7 @@ msgstr ""
 "Paket für das Debian-Projekt."
 
 #. type: Plain text
-#: ../../man/man1/man.man1:1293
+#: ../../man/man1/man.man1:1300
 msgid ""
 "31st March 2001 \\(en present day: Colin Watson E<lt>cjwatson@debian."
 "orgE<gt> is now developing and maintaining man-db."
@@ -2912,8 +2931,13 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/manpath.man1:63
+#, fuzzy
+#| msgid ""
+#| "If this system has access to other operating system's manual hierarchies, "
+#| "this option can be used to include them in the output of B<%manpath%>.  "
+#| "To include NewOS's manual page hierarchies use the option B<-m> B<NewOS>."
 msgid ""
-"If this system has access to other operating system's manual hierarchies, "
+"If this system has access to other operating systems' manual hierarchies, "
 "this option can be used to include them in the output of B<%manpath%>.  To "
 "include NewOS's manual page hierarchies use the option B<-m> B<NewOS>."
 msgstr ""
@@ -2935,27 +2959,12 @@ msgstr ""
 "Betriebssystemnamen B<man> angesprochen. Diese Option überschreibt die "
 "Umgebungsvariable $B<SYSTEM.>"
 
-# FIXME: configuration file or files?
 #. type: Plain text
-#: ../../man/man1/manpath.man1:105
+#: ../../man/man1/manpath.man1:95
 msgid ""
 "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
-"determining it on the fly.  If $B<MANPATH> is prefixed by a colon, then the "
-"value of the variable is appended to the list determined from the content of "
-"the configuration files.  If the colon comes at the end of the value in the "
-"variable, then the determined list is appended to the content of the "
-"variable.  If the value of the variable contains a double colon (B<::>), "
-"then the determined list is inserted in the middle of the value, between the "
-"two colons."
+"determining it on the fly."
 msgstr ""
-"Wenn $B<MANPATH> gesetzt ist, zeigt B<% manpath%> den Wert an, statt selbst "
-"einen Wert zu bestimmen.. Wenn $B<MANPATH> ein Doppelpunkt vorangestellt "
-"ist, wird der Wert der Variablen an die Liste angefügt, welche mit dem "
-"Inhalt der Konfigurationsdateien bestimmt wurde. Steht der Doppelpunkt am "
-"Ende des Wertes der Variablen, wird die ermittelte Liste an den Wert der "
-"Variablen angehängt. Wenn der Wert der Variablen einen doppelten Doppelpunkt "
-"(B<::>) enthält, dann wird die Liste  zwischen den beiden Doppelpunkten "
-"eingefügt."
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:15
@@ -3051,8 +3060,13 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:131
+#, fuzzy
+#| msgid ""
+#| "If this system has access to other operating system's manual page names, "
+#| "they can be accessed using this option.  To search NewOS's manual page "
+#| "names, use the option B<-m> B<NewOS>."
 msgid ""
-"If this system has access to other operating system's manual page names, "
+"If this system has access to other operating systems' manual page names, "
 "they can be accessed using this option.  To search NewOS's manual page "
 "names, use the option B<-m> B<NewOS>."
 msgstr ""
@@ -3173,22 +3187,106 @@ msgstr ""
 #. type: SH
 #: ../../man/man5/manpath.man5:26
 #, no-wrap
+msgid "SEARCH PATH"
+msgstr ""
+
+#. type: Plain text
+#: ../../man/man5/manpath.man5:35
+msgid ""
+"By default, man-db examines the user's $B<PATH>.  For each I<path_element> "
+"found there, it adds I<manpath_element> to the search path."
+msgstr ""
+
+#. type: Plain text
+#: ../../man/man5/manpath.man5:47
+msgid ""
+"If there is no B<MANPATH_MAP> line in the configuration file for a given "
+"I<path_element>, then it adds all of I<path_element/../man>, I<path_element/"
+"man>, I<path_element/../share/man>, and I<path_element/share/man> that exist "
+"as directories to the search path."
+msgstr ""
+
+#. type: Plain text
+#: ../../man/man5/manpath.man5:51
+msgid ""
+"It then adds any B<MANDATORY_MANPATH> entries from the configuration file to "
+"the search path."
+msgstr ""
+
+#. type: Plain text
+#: ../../man/man5/manpath.man5:73
+msgid ""
+"Finally, if the B<--systems> option is used or the $B<SYSTEM> environment "
+"variable is set, then that should consist of a sequence of operating system "
+"names separated by commas or colons.  This acts as a template, expanding the "
+"search path once more to allow access to other operating systems' manual "
+"pages: for each system name, man-db looks for that name as a subdirectory of "
+"each entry in the search path, and adds it to the final search path if it "
+"exists.  A system name of B<man> inserts the normal search path without "
+"subdirectories.  For example, if the search path would otherwise have been "
+"I</usr/share/man:/usr/local/man>, and $B<SYSTEM> is set to I<newOS:man>, "
+"then the final search path will be I</usr/share/man/newOS:/usr/share/man:/"
+"usr/local/man/newOS:/usr/local/man>."
+msgstr ""
+
+#. type: Plain text
+#: ../../man/man5/manpath.man5:83
+msgid ""
+"The $B<MANPATH> environment variable overrides man-db's default manual page "
+"search paths.  Most users should not need to set it.  Its syntax is similar "
+"to the $B<PATH> environment variable: it consists of a sequence of directory "
+"names separated by colons.  It overrides the default search path described "
+"above."
+msgstr ""
+
+# FIXME: configuration file or files?
+#. type: Plain text
+#: ../../man/man5/manpath.man5:96
+#, fuzzy
+#| msgid ""
+#| "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
+#| "determining it on the fly.  If $B<MANPATH> is prefixed by a colon, then "
+#| "the value of the variable is appended to the list determined from the "
+#| "content of the configuration files.  If the colon comes at the end of the "
+#| "value in the variable, then the determined list is appended to the "
+#| "content of the variable.  If the value of the variable contains a double "
+#| "colon (B<::>), then the determined list is inserted in the middle of the "
+#| "value, between the two colons."
+msgid ""
+"If the value of $B<MANPATH> starts with a colon, then the default search "
+"path is added at its start.  If the value of $B<MANPATH> ends with a colon, "
+"then the default search path is added at its end.  If the value of "
+"$B<MANPATH> contains a double colon (B<::>), then the default search path is "
+"inserted in the middle of the value, between the two colons."
+msgstr ""
+"Wenn $B<MANPATH> gesetzt ist, zeigt B<% manpath%> den Wert an, statt selbst "
+"einen Wert zu bestimmen.. Wenn $B<MANPATH> ein Doppelpunkt vorangestellt "
+"ist, wird der Wert der Variablen an die Liste angefügt, welche mit dem "
+"Inhalt der Konfigurationsdateien bestimmt wurde. Steht der Doppelpunkt am "
+"Ende des Wertes der Variablen, wird die ermittelte Liste an den Wert der "
+"Variablen angehängt. Wenn der Wert der Variablen einen doppelten Doppelpunkt "
+"(B<::>) enthält, dann wird die Liste  zwischen den beiden Doppelpunkten "
+"eingefügt."
+
+#. type: SH
+#: ../../man/man5/manpath.man5:96
+#, no-wrap
 msgid "FORMAT"
 msgstr "FORMAT"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:28
+#: ../../man/man5/manpath.man5:98
 msgid "The following field types are currently recognised:"
 msgstr "Derzeit werden die folgenden Feldtypen erkannt:"
 
 #. type: TP
-#: ../../man/man5/manpath.man5:28
+#: ../../man/man5/manpath.man5:98
 #, no-wrap
 msgid "B<#>I<\\ comment>"
 msgstr "B<#>I<\\ Kommentar>"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:33
+#: ../../man/man5/manpath.man5:103
 msgid ""
 "Blank lines or those beginning with a B<#> will be treated as comments and "
 "ignored."
@@ -3197,13 +3295,13 @@ msgstr ""
 "behandelt und ignoriert."
 
 #. type: TP
-#: ../../man/man5/manpath.man5:33
+#: ../../man/man5/manpath.man5:103
 #, no-wrap
 msgid "B<MANDATORY_MANPATH>I<\\ manpath_element>"
 msgstr "B<MANDATORY_MANPATH>I<\\ geforderter Hierarchie-Bestandteil>"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:40
+#: ../../man/man5/manpath.man5:110
 msgid ""
 "Lines of this form indicate manpaths that every automatically generated "
 "$B<MANPATH> should contain.  This will typically include I</usr/man>."
@@ -3212,13 +3310,13 @@ msgstr ""
 "$B<MANPATH>-Variable beinhalten sollte. Normalerweise gehört dazu /usr/man."
 
 #. type: TP
-#: ../../man/man5/manpath.man5:40
+#: ../../man/man5/manpath.man5:110
 #, no-wrap
 msgid "B<MANPATH_MAP>I<\\ path_element\\ manpath_element>"
 msgstr "B<MANPATH_MAP>I<\\ Pfad-Bestandteil\\ Hierarchie-Bestandteil>"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:54
+#: ../../man/man5/manpath.man5:124
 msgid ""
 "Lines of this form set up $B<PATH> to $B<MANPATH> mappings.  For each "
 "I<path_element> found in the user's $B<PATH>, I<manpath_element> will be "
@@ -3229,14 +3327,14 @@ msgstr ""
 "I<Hierarchie-Bestandteil> zu $B<MANPATH> hinzugefügt."
 
 #. type: TP
-#: ../../man/man5/manpath.man5:54
+#: ../../man/man5/manpath.man5:124
 #, no-wrap
 msgid "B<MANDB_MAP >I<manpath_element >\\|[\\| I<catpath_element> \\|]"
 msgstr "B<MANDB_MAP >I<Hierarchie-Bestandteil >\\|[\\| I<Cat-Hierarchie-Bestandteil> \\|]"
 
 # Im letzten Satz wäre es wohl besser, von Benutzer-IDs zu sprechen.
 #. type: Plain text
-#: ../../man/man5/manpath.man5:64
+#: ../../man/man5/manpath.man5:134
 msgid ""
 "Lines of this form indicate which manpaths are to be treated as system "
 "manpaths, and optionally where their cat files should be stored.  This field "
@@ -3253,7 +3351,7 @@ msgstr ""
 "auf welche als der aufrufende Benutzer zugegriffen wird."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:72
+#: ../../man/man5/manpath.man5:142
 msgid ""
 "The system manual page hierarchies are usually those stored under I</usr> "
 "such as I</usr/man>, I</usr/local/man> and I</usr/X11R6/man>."
@@ -3262,7 +3360,7 @@ msgstr ""
 "gespeicherten wie I</usr/man>, I</usr/local/man> und I</usr/X11R6/man>."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:78
+#: ../../man/man5/manpath.man5:148
 msgid ""
 "If cat pages from a particular I<manpath_element> are not to be stored or "
 "are to be stored in the traditional location, I<catpath_element> may be "
@@ -3273,7 +3371,7 @@ msgstr ""
 "Hierarchie-Bestandteil> weggelassen werden."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:87
+#: ../../man/man5/manpath.man5:157
 msgid ""
 "Traditional cat placement would be impossible for read only mounted manual "
 "page hierarchies and because of this it is possible to specify any valid "
@@ -3287,7 +3385,7 @@ msgstr ""
 "anstelle eines vorhandenen Verzeichnisses verwendet werden."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:96
+#: ../../man/man5/manpath.man5:166
 msgid ""
 "Unfortunately, it is necessary to specify B<all> system man tree paths, "
 "including alternate operating system paths such as I</usr/man/sun> and any "
@@ -3298,7 +3396,7 @@ msgstr ""
 "für B<NLS Locales> wie beispielsweise I</usr/man/de_DE.88591>."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:104
+#: ../../man/man5/manpath.man5:174
 msgid ""
 "As the information is parsed line by line in the order written, it is "
 "necessary for any manpath that is a sub-hierarchy of another hierarchy to be "
@@ -3312,13 +3410,13 @@ msgstr ""
 "werden."
 
 #. type: TP
-#: ../../man/man5/manpath.man5:104
+#: ../../man/man5/manpath.man5:174
 #, no-wrap
 msgid "B<DEFINE>I<\\ key\\ value>"
 msgstr "B<DEFINE>I<\\ Schlüssel\\ Wert>"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:114
+#: ../../man/man5/manpath.man5:184
 msgid ""
 "Lines of this form define miscellaneous configuration variables; see the "
 "default configuration file for those variables used by the manual pager "
@@ -3332,13 +3430,13 @@ msgstr ""
 "Argumenten für diese Programme."
 
 #. type: TP
-#: ../../man/man5/manpath.man5:114
+#: ../../man/man5/manpath.man5:184
 #, no-wrap
 msgid "B<SECTION> I<section> .\\|.\\|."
 msgstr "B<SECTION> I<Abschnitt> .\\|.\\|."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:122
+#: ../../man/man5/manpath.man5:192
 msgid ""
 "Lines of this form define the order in which manual sections should be "
 "searched.  If there are no B<SECTION> directives in the configuration file, "
@@ -3349,7 +3447,7 @@ msgstr ""
 "Eintrag, ist der Standardwert:"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:132
+#: ../../man/man5/manpath.man5:202
 msgid ""
 "If multiple B<SECTION> directives are given, their section lists will be "
 "concatenated."
@@ -3358,7 +3456,7 @@ msgstr ""
 "gehängt."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:139
+#: ../../man/man5/manpath.man5:209
 msgid ""
 "If a particular extension is not in this list (say, 1mh) it will be "
 "displayed with the rest of the section it belongs to.  The effect of this is "
@@ -3374,18 +3472,18 @@ msgstr ""
 "Hauptabschnitten benachbart sein (z.B. »1 1mh 8 ... «)."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:142
+#: ../../man/man5/manpath.man5:212
 msgid "B<SECTIONS> is accepted as an alternative name for this directive."
 msgstr "Als alternativer Name für diese Direktive wird B<SECTIONS> akzeptiert."
 
 #. type: TP
-#: ../../man/man5/manpath.man5:143
+#: ../../man/man5/manpath.man5:213
 #, no-wrap
 msgid "B<MINCATWIDTH>I<\\ width>"
 msgstr "B<MINCATWIDTH>I<\\ Breite>"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:149
+#: ../../man/man5/manpath.man5:219
 msgid ""
 "If the terminal width is less than I<width>, cat pages will not be created "
 "(if missing) or displayed.  The default is 80."
@@ -3394,13 +3492,13 @@ msgstr ""
 "Seiten nicht erzeugt und vorhandene nicht angezeigt. Der Standardwert ist 80."
 
 #. type: TP
-#: ../../man/man5/manpath.man5:149
+#: ../../man/man5/manpath.man5:219
 #, no-wrap
 msgid "B<MAXCATWIDTH>I<\\ width>"
 msgstr "B<MAXCATWIDTH>I<\\ Breite>"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:155
+#: ../../man/man5/manpath.man5:225
 msgid ""
 "If the terminal width is greater than I<width>, cat pages will not be "
 "created (if missing) or displayed.  The default is 80."
@@ -3409,13 +3507,13 @@ msgstr ""
 "nicht erzeugt und vorhandene nicht angezeigt. Der Standardwert ist 80."
 
 #. type: TP
-#: ../../man/man5/manpath.man5:155
+#: ../../man/man5/manpath.man5:225
 #, no-wrap
 msgid "B<CATWIDTH>I<\\ width>"
 msgstr "B<CATWIDTH>I<\\ Breite>"
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:165
+#: ../../man/man5/manpath.man5:235
 msgid ""
 "If I<width> is non-zero, cat pages will always be formatted for a terminal "
 "of the given width, regardless of the width of the terminal actually being "
@@ -3428,14 +3526,14 @@ msgstr ""
 "I<MINCATWIDTH> und I<MAXCATWIDTH> festgelegten Bereich gewählt werden."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:170
+#: ../../man/man5/manpath.man5:240
 msgid "This flag prevents B<%man%>(1)  from creating cat pages automatically."
 msgstr ""
 "Dieses Option hält B<%man%> von der automatischen Erzeugung von Cat-Seiten "
 "ab."
 
 #. type: Plain text
-#: ../../man/man5/manpath.man5:174
+#: ../../man/man5/manpath.man5:244
 msgid ""
 "Unless the rules above are followed and observed precisely, the manual pager "
 "utilities will not function as desired.  The rules are overly complicated."
@@ -3555,7 +3653,7 @@ msgstr ""
 # #-#-#-#-#  catman.8.po (man-db 2.5.7)  #-#-#-#-#
 # Fehler im Original: alternate?
 #. type: Plain text
-#: ../../man/man8/catman.man8:109 ../../man/man8/mandb.man8:207
+#: ../../man/man8/catman.man8:116 ../../man/man8/mandb.man8:207
 msgid "An alternate or FSSTND compliant global I<index> database cache."
 msgstr ""
 "ein alternativer oder FSSTND-konformer, globaler I<Index>-"
