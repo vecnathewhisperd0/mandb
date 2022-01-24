@@ -71,7 +71,7 @@ upload:
     - if: $CI_COMMIT_TAG
   script:
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file "bootstrapped/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.gz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_TAG}/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.gz"
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file "bootstrapped/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_TAG}/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz"
 
 release:
   stage: release
@@ -91,8 +91,8 @@ release:
        echo "Download (GPG key 0x393587D97D86500B)"
        echo "-------------------------------------"
        echo
-       echo " * https://download.savannah.nongnu.org/releases/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.gz"
-       printf %s " * https://download.savannah.nongnu.org/releases/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.gz.asc"
+       echo " * https://download.savannah.nongnu.org/releases/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz"
+       printf %s " * https://download.savannah.nongnu.org/releases/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz.asc"
        ) >description.md
   release:
     tag_name: $CI_COMMIT_TAG
