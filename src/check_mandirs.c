@@ -503,12 +503,12 @@ static void fix_permissions_tree (const char *catdir)
  */
 static int testmandirs (const char *database,
 			const char *path, const char *catpath,
-			struct timespec last, int create)
+			struct timespec last, bool create)
 {
 	DIR *dir;
 	struct dirent *mandir;
 	int amount = 0;
-	int created = 0;
+	bool created = false;
 
 	debug ("Testing %s for new files\n", path);
 
@@ -581,7 +581,7 @@ static int testmandirs (const char *database,
 
 			dbver_wr (dbf);
 
-			created = 1;
+			created = true;
 		} else
 			dbf = MYDBM_RWOPEN(database);
 
@@ -654,7 +654,7 @@ int create_db (const char *database, const char *manpath, const char *catpath)
 
 	time_zero.tv_sec = 0;
 	time_zero.tv_nsec = 0;
-	amount = testmandirs (database, manpath, catpath, time_zero, 1);
+	amount = testmandirs (database, manpath, catpath, time_zero, true);
 
 	if (amount) {
 		update_db_time (database);
@@ -720,7 +720,7 @@ int update_db (const char *database, const char *manpath, const char *catpath)
 
 	debug ("update_db(): %ld.%09ld\n",
 	       (long) mtime.tv_sec, (long) mtime.tv_nsec);
-	new = testmandirs (database, manpath, catpath, mtime, 0);
+	new = testmandirs (database, manpath, catpath, mtime, false);
 
 	if (new) {
 		update_db_time (database);
@@ -942,15 +942,15 @@ static int check_multi_key (const char *name, const char *content)
 		/* The name in the multi key should only differ from the
 		 * name of the key itself in its case, if at all.
 		 */
-		int valid = 1;
+		bool valid = true;
 		++walk; /* skip over initial tab */
 		next = strchr (walk, '\t');
 		if (next) {
 			if (strncasecmp (name, walk, next - walk))
-				valid = 0;
+				valid = false;
 		} else {
 			if (strcasecmp (name, walk))
-				valid = 0;
+				valid = false;
 		}
 		if (!valid) {
 			debug ("%s: broken multi key \"%s\", "
@@ -974,13 +974,13 @@ static int check_multi_key (const char *name, const char *content)
  */
 int purge_missing (const char *database,
 		   const char *manpath, const char *catpath,
-		   int will_run_mandb)
+		   bool will_run_mandb)
 {
 #ifdef NDBM
 	char *dirfile;
 #endif
 	struct stat st;
-	int db_exists;
+	bool db_exists;
 	MYDBM_FILE dbf;
 	datum key;
 	int count = 0;

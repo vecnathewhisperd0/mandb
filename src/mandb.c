@@ -105,7 +105,7 @@ static const char *arg_manp;
 
 struct tried_catdirs_entry {
 	char *manpath;
-	int seen;
+	bool seen;
 };
 
 const char *argp_program_version = "mandb " PACKAGE_VERSION;
@@ -452,7 +452,7 @@ static int mandb (struct dbpaths *dbpaths,
 	char *database;
 	int amount;
 	char *dbname;
-	int should_create;
+	bool should_create;
 
 	dbname = mkdbname (catpath);
 	database = xasprintf ("%s/%d", catpath, getpid ());
@@ -463,7 +463,7 @@ static int mandb (struct dbpaths *dbpaths,
 	if (!STREQ (catpath, manpath)) {
 		char *cachedir_tag;
 		int fd;
-		int cachedir_tag_exists = 0;
+		bool cachedir_tag_exists = false;
 
 		cachedir_tag = xasprintf ("%s/CACHEDIR.TAG", catpath);
 		assert (cachedir_tag);
@@ -475,12 +475,12 @@ static int mandb (struct dbpaths *dbpaths,
 				check_remove (cachedir_tag);
 			cachedir_tag_file = fopen (cachedir_tag, "w");
 			if (cachedir_tag_file) {
-				cachedir_tag_exists = 1;
+				cachedir_tag_exists = true;
 				fputs (CACHEDIR_TAG, cachedir_tag_file);
 				fclose (cachedir_tag_file);
 			}
 		} else {
-			cachedir_tag_exists = 1;
+			cachedir_tag_exists = true;
 			close (fd);
 		}
 		if (cachedir_tag_exists) {
@@ -500,7 +500,7 @@ static int mandb (struct dbpaths *dbpaths,
 	dbpaths->tmpdbfile = xasprintf ("%s.db", database);
 	if (!should_create) {
 		if (xcopy (dbpaths->dbfile, dbpaths->tmpdbfile) < 0)
-			should_create = 1;
+			should_create = true;
 	}
 	if (should_create) {
 		check_remove (dbpaths->tmpdbfile);
@@ -521,7 +521,7 @@ static int mandb (struct dbpaths *dbpaths,
 	if (!should_create) {
 		if (xcopy (dbpaths->dirfile, dbpaths->tmpdirfile) < 0 ||
 		    xcopy (dbpaths->pagfile, dbpaths->tmppagfile) < 0)
-			should_create = 1;
+			should_create = true;
 	}
 	if (should_create) {
 		check_remove (dbpaths->tmpdirfile);
@@ -540,7 +540,7 @@ static int mandb (struct dbpaths *dbpaths,
 	dbpaths->xtmpfile = xstrdup (database);
 	if (!should_create) {
 		if (xcopy (dbpaths->xfile, dbpaths->xtmpfile) < 0)
-			should_create = 1;
+			should_create = true;
 	}
 	if (should_create) {
 		check_remove (dbpaths->xtmpfile);
@@ -565,7 +565,7 @@ static int process_manpath (const char *manpath, bool global_manpath,
 	char *catpath;
 	struct tried_catdirs_entry *tried;
 	struct stat st;
-	int run_mandb = 0;
+	bool run_mandb = false;
 	struct dbpaths *dbpaths = NULL;
 	int amount = 0;
 
@@ -579,12 +579,12 @@ static int process_manpath (const char *manpath, bool global_manpath,
 	}
 	tried = XMALLOC (struct tried_catdirs_entry);
 	tried->manpath = xstrdup (manpath);
-	tried->seen = 0;
+	tried->seen = false;
 	gl_map_put (tried_catdirs, xstrdup (catpath), tried);
 
 	if (stat (manpath, &st) < 0 || !S_ISDIR (st.st_mode))
 		goto out;
-	tried->seen = 1;
+	tried->seen = true;
 
 	if (single_filename) {
 		/* The file might be in a per-locale subdirectory that we
@@ -593,10 +593,10 @@ static int process_manpath (const char *manpath, bool global_manpath,
 		char *manpath_prefix = xasprintf ("%s/man", manpath);
 		if (STRNEQ (manpath_prefix, single_filename,
 		    strlen (manpath_prefix)))
-			run_mandb = 1;
+			run_mandb = true;
 		free (manpath_prefix);
 	} else
-		run_mandb = 1;
+		run_mandb = true;
 
 	force_rescan = false;
 	if (purge) {
@@ -644,7 +644,7 @@ out:
 	return amount;
 }
 
-static int is_lang_dir (const char *base)
+static bool is_lang_dir (const char *base)
 {
 	return strlen (base) >= 2 &&
 	       base[0] >= 'a' && base[0] <= 'z' &&

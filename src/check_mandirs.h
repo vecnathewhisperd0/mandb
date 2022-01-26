@@ -20,6 +20,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <stdbool.h>
+
 #include "db_storage.h"
 
 /* check_mandirs.c */
@@ -32,4 +34,4 @@ extern int update_db (const char *database,
 extern void purge_pointers (MYDBM_FILE dbf, const char *name);
 extern int purge_missing (const char *database,
 			  const char *manpath, const char *catpath,
-			  int will_run_mandb);
+			  bool will_run_mandb);
