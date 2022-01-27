@@ -575,7 +575,7 @@ static int testmandirs (const char *database,
 					       _("can't create index cache %s"),
 					       database);
 					closedir (dir);
-					return -errno;
+					return -1;
 				}
 			}
 
@@ -656,7 +656,7 @@ int create_db (const char *database, const char *manpath, const char *catpath)
 	time_zero.tv_nsec = 0;
 	amount = testmandirs (database, manpath, catpath, time_zero, true);
 
-	if (amount) {
+	if (amount > 0) {
 		update_db_time (database);
 		if (!quiet)
 			fputs (_("done.\n"), stderr);
@@ -713,7 +713,7 @@ int update_db (const char *database, const char *manpath, const char *catpath)
 	}
 	if (!dbf) {
 		debug ("failed to open %s O_RDONLY\n", database);
-		return EOF;
+		return -1;
 	}
 	mtime = MYDBM_GET_TIME (dbf);
 	MYDBM_CLOSE (dbf);
@@ -722,7 +722,7 @@ int update_db (const char *database, const char *manpath, const char *catpath)
 	       (long) mtime.tv_sec, (long) mtime.tv_nsec);
 	new = testmandirs (database, manpath, catpath, mtime, false);
 
-	if (new) {
+	if (new > 0) {
 		update_db_time (database);
 		if (!quiet)
 			fputs (_("done.\n"), stderr);

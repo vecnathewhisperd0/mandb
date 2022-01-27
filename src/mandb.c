@@ -385,7 +385,7 @@ static int update_db_wrapper (const char *database,
 		return update_one_file (database, manpath, single_filename);
 
 	amount = update_db (database, manpath, catpath);
-	if (amount != EOF)
+	if (amount >= 0)
 		return amount;
 
 	return create_db (database, manpath, catpath);
