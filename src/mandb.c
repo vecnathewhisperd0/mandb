@@ -496,26 +496,16 @@ static int mandb (struct dbpaths *dbpaths,
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	dbpaths->dbfile = xasprintf ("%s.db", dbname);
-	free (dbname);
 	dbpaths->tmpdbfile = xasprintf ("%s.db", database);
 	if (!should_create) {
 		if (xcopy (dbpaths->dbfile, dbpaths->tmpdbfile) < 0)
 			should_create = true;
 	}
-	if (should_create) {
+	if (should_create)
 		check_remove (dbpaths->tmpdbfile);
-		amount = create_db (database, manpath, catpath);
-		if (amount < 0)
-			goto out;
-	} else {
-		amount = update_db_wrapper (database, manpath, catpath);
-		if (amount < 0)
-			goto out;
-	}
 #  else /* !BERKELEY_DB NDBM */
 	dbpaths->dirfile = xasprintf ("%s.dir", dbname);
 	dbpaths->pagfile = xasprintf ("%s.pag", dbname);
-	free (dbname);
 	dbpaths->tmpdirfile = xasprintf ("%s.dir", database);
 	dbpaths->tmppagfile = xasprintf ("%s.pag", database);
 	if (!should_create) {
@@ -526,36 +516,26 @@ static int mandb (struct dbpaths *dbpaths,
 	if (should_create) {
 		check_remove (dbpaths->tmpdirfile);
 		check_remove (dbpaths->tmppagfile);
-		amount = create_db (database, manpath, catpath);
-		if (amount < 0)
-			goto out;
-	} else {
-		amount = update_db_wrapper (database, manpath, catpath);
-		if (amount < 0)
-			goto out;
 	}
 #  endif /* BERKELEY_DB NDBM */
 #else /* !NDBM */
-	dbpaths->xfile = dbname; /* steal memory */
+	dbpaths->xfile = xstrdup (dbname);
 	dbpaths->xtmpfile = xstrdup (database);
 	if (!should_create) {
 		if (xcopy (dbpaths->xfile, dbpaths->xtmpfile) < 0)
 			should_create = true;
 	}
-	if (should_create) {
+	if (should_create)
 		check_remove (dbpaths->xtmpfile);
-		amount = create_db (database, manpath, catpath);
-		if (amount < 0)
-			goto out;
-	} else {
-		amount = update_db_wrapper (database, manpath, catpath);
-		if (amount < 0)
-			goto out;
-	}
 #endif /* NDBM */
 
-out:
+	if (should_create)
+		amount = create_db (database, manpath, catpath);
+	else
+		amount = update_db_wrapper (database, manpath, catpath);
+
 	free (database);
+	free (dbname);
 	return amount;
 }
 
