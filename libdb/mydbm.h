@@ -71,8 +71,6 @@ void man_gdbm_close (man_gdbm_wrapper wrap);
 #  define MYDBM_DSIZE(d)		((d).dsize)
 #  define MYDBM_CTRWOPEN(file)		\
 	man_gdbm_open_wrapper(file, GDBM_NEWDB|GDBM_FAST)
-#  define MYDBM_CRWOPEN(file)		\
-	man_gdbm_open_wrapper(file, GDBM_WRCREAT|GDBM_FAST)
 #  define MYDBM_RWOPEN(file)		\
 	man_gdbm_open_wrapper(file, GDBM_WRITER|GDBM_FAST)
 #  define MYDBM_RDOPEN(file)		\
@@ -117,7 +115,6 @@ extern void man_ndbm_close (man_ndbm_wrapper wrap);
 #  define MYDBM_SET_DPTR(d, value)	((d).dptr = (value))
 #  define MYDBM_DSIZE(d)		((d).dsize)
 #  define MYDBM_CTRWOPEN(file)		man_ndbm_open(file, O_TRUNC|O_CREAT|O_RDWR, DBMODE)
-#  define MYDBM_CRWOPEN(file)		man_ndbm_open(file, O_CREAT|O_RDWR, DBMODE)
 #  define MYDBM_RWOPEN(file)		man_ndbm_open(file, O_RDWR, DBMODE)
 #  define MYDBM_RDOPEN(file)		man_ndbm_open(file, O_RDONLY, DBMODE)
 #  define MYDBM_INSERT(db, key, cont)	dbm_store((db)->file, key, cont, DBM_INSERT)
@@ -168,7 +165,6 @@ extern void man_btree_set_time (man_btree_wrapper wrap,
 #  define MYDBM_SET_DPTR(d, value)	((d).data = (char *) (value))
 #  define MYDBM_DSIZE(d)		((d).size)
 #  define MYDBM_CTRWOPEN(file)		man_btree_open(file, O_TRUNC|O_CREAT|O_RDWR, DBMODE)
-#  define MYDBM_CRWOPEN(file)		man_btree_open(file, O_CREAT|O_RDWR, DBMODE)
 #  define MYDBM_RWOPEN(file)		man_btree_open(file, O_RDWR, DBMODE)
 #  define MYDBM_RDOPEN(file)		man_btree_open(file, O_RDONLY, DBMODE)
 #  define MYDBM_INSERT(db, key, cont)	man_btree_insert(db, key, cont)
