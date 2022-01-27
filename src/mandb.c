@@ -457,6 +457,10 @@ static int mandb (struct dbpaths *dbpaths,
 	dbname = mkdbname (catpath);
 	database = xasprintf ("%s/%d", catpath, getpid ());
 
+	force_rescan = false;
+	if (purge)
+		purged += purge_missing (dbname, manpath, catpath);
+
 	if (!quiet)
 		printf (_("Processing manual pages under %s...\n"), manpath);
 
@@ -534,6 +538,9 @@ static int mandb (struct dbpaths *dbpaths,
 	else
 		amount = update_db_wrapper (database, manpath, catpath);
 
+	if (check_for_strays && amount > 0)
+		strays += straycats (database, manpath);
+
 	free (database);
 	free (dbname);
 	return amount;
@@ -578,14 +585,6 @@ static int process_manpath (const char *manpath, bool global_manpath,
 	} else
 		run_mandb = true;
 
-	force_rescan = false;
-	if (purge) {
-		char *database = mkdbname (catpath);
-		purged += purge_missing (database,
-					 manpath, catpath, run_mandb);
-		free (database);
-	}
-
 	dbpaths = XZALLOC (struct dbpaths);
 	push_cleanup (cleanup, dbpaths, 0);
 	push_cleanup (cleanup_sigsafe, dbpaths, 1);
@@ -611,12 +610,6 @@ out:
 		pop_cleanup (cleanup_sigsafe, dbpaths);
 		cleanup (dbpaths);
 		pop_cleanup (cleanup, dbpaths);
-	}
-
-	if (check_for_strays && amount > 0) {
-		char *database = mkdbname (catpath);
-		strays += straycats (database, manpath);
-		free (database);
 	}
 
 	free (catpath);

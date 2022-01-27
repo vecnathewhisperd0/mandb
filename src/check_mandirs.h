@@ -33,5 +33,4 @@ extern int update_db (const char *database,
 		      const char *manpath, const char *catpath);
 extern void purge_pointers (MYDBM_FILE dbf, const char *name);
 extern int purge_missing (const char *database,
-			  const char *manpath, const char *catpath,
-			  bool will_run_mandb);
+			  const char *manpath, const char *catpath);

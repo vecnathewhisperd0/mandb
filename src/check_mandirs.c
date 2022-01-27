@@ -973,8 +973,7 @@ static int check_multi_key (const char *name, const char *content)
  * exist.
  */
 int purge_missing (const char *database,
-		   const char *manpath, const char *catpath,
-		   bool will_run_mandb)
+		   const char *manpath, const char *catpath)
 {
 #ifdef NDBM
 	char *dirfile;
@@ -1104,12 +1103,11 @@ int purge_missing (const char *database,
 	}
 
 	MYDBM_REORG (dbf);
-	if (will_run_mandb)
-		/* Reset mtime to avoid confusing mandb into not running.
-		 * TODO: It would be better to avoid this by only opening
-		 * the database once between here and mandb.
-		 */
-		MYDBM_SET_TIME (dbf, db_mtime);
+	/* Reset mtime to avoid confusing mandb into not running.
+	 * TODO: It would be better to avoid this by only opening the
+	 * database once between here and mandb.
+	 */
+	MYDBM_SET_TIME (dbf, db_mtime);
 	MYDBM_CLOSE (dbf);
 	return count;
 }
