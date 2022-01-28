@@ -185,7 +185,6 @@ static gl_list_t manpathlist;
 
 /* globals */
 int quiet = 1;
-char *database = NULL;
 extern const char *extension; /* for globbing.c */
 extern char *user_config_file;	/* defined in manp.c */
 extern bool disable_cache;
@@ -3204,17 +3203,25 @@ out:
 
 #ifdef MAN_DB_UPDATES
 /* wrapper to dbdelete which deals with opening/closing the db */
-static void dbdelete_wrapper (const char *page, struct mandata *info)
+static void dbdelete_wrapper (const char *page, struct mandata *info,
+			      const char *manpath)
 {
 	if (!catman) {
+		char *catpath, *database;
 		MYDBM_FILE dbf;
 
+		catpath = get_catpath (manpath,
+				       global_manpath ? SYSTEM_CAT : USER_CAT);
+		database = mkdbname (catpath ? catpath : manpath);
 		dbf = MYDBM_RWOPEN (database);
 		if (dbf) {
 			if (dbdelete (dbf, page, info) == 1)
 				debug ("%s(%s) not in db!\n", page, info->ext);
 			MYDBM_CLOSE (dbf);
 		}
+
+		free (database);
+		free (catpath);
 	}
 }
 #endif /* MAN_DB_UPDATES */
@@ -3338,9 +3345,9 @@ static int display_database_check (struct candidate *candp)
 
 #ifdef MAN_DB_UPDATES
 	if (!exists && !skip) {
-		debug ("dbdelete_wrapper (%s, %p)\n",
-		       candp->req_name, candp->source);
-		dbdelete_wrapper (candp->req_name, candp->source);
+		debug ("dbdelete_wrapper (%s, %p, %s)\n",
+		       candp->req_name, candp->source, candp->path);
+		dbdelete_wrapper (candp->req_name, candp->source, candp->path);
 	}
 #endif /* MAN_DB_UPDATES */
 
@@ -3421,7 +3428,8 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 {
 	gl_list_t matches;
 	struct mandata *loc;
-	char *catpath;
+	char *catpath, *database;
+	MYDBM_FILE dbf = NULL;
 	int found = 0;
 #ifdef MAN_DB_UPDATES
 	bool found_stale = false;
@@ -3430,26 +3438,15 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 	/* find out where our db for this manpath should be */
 
 	catpath = get_catpath (manpath, global_manpath ? SYSTEM_CAT : USER_CAT);
-	free (database);
-	if (catpath) {
-		database = mkdbname (catpath);
-		free (catpath);
-	} else
-		database = mkdbname (manpath);
+	database = mkdbname (catpath ? catpath : manpath);
 
 	if (!db_map)
 		db_map = new_string_map (GL_HASH_MAP, db_map_value_free);
 
 	/* If we haven't looked here already, do so now. */
 	if (!gl_map_search (db_map, manpath, (const void **) &matches)) {
-		MYDBM_FILE dbf;
-
 		dbf = MYDBM_RDOPEN (database);
-		if (dbf && dbver_rd (dbf)) {
-			MYDBM_CLOSE (dbf);
-			dbf = NULL;
-		}
-		if (dbf) {
+		if (dbf && !dbver_rd (dbf)) {
 			debug ("Succeeded in opening %s O_RDONLY\n", database);
 
 			/* if section is set, only return those that match,
@@ -3462,29 +3459,32 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 				matches = dblookup_all (dbf, name, section,
 							match_case);
 			gl_map_put (db_map, xstrdup (manpath), matches);
-			MYDBM_CLOSE (dbf);
-			dbf = NULL;
 #ifdef MAN_DB_CREATES
 		} else if (!global_manpath) {
 			/* create one */
 			debug ("Failed to open %s O_RDONLY\n", database);
 			if (run_mandb (1, manpath, NULL)) {
 				gl_map_put (db_map, xstrdup (manpath), NULL);
-				return TRY_DATABASE_OPEN_FAILED;
+				found = TRY_DATABASE_OPEN_FAILED;
+				goto out;
 			}
-			return TRY_DATABASE_CREATED;
+			found = TRY_DATABASE_CREATED;
+			goto out;
 #endif /* MAN_DB_CREATES */
 		} else {
 			debug ("Failed to open %s O_RDONLY\n", database);
 			gl_map_put (db_map, xstrdup (manpath), NULL);
-			return TRY_DATABASE_OPEN_FAILED;
+			found = TRY_DATABASE_OPEN_FAILED;
+			goto out;
 		}
 		assert (matches != NULL);
 	}
 
 	/* We already tried (and failed) to open this db before. */
-	if (!matches)
-		return TRY_DATABASE_OPEN_FAILED;
+	if (!matches) {
+		found = TRY_DATABASE_OPEN_FAILED;
+		goto out;
+	}
 
 #ifdef MAN_DB_UPDATES
 	/* Check that all the entries found are up to date. If not, the
@@ -3499,7 +3499,8 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 
 	if (found_stale) {
 		gl_map_remove (db_map, manpath);
-		return TRY_DATABASE_UPDATED;
+		found = TRY_DATABASE_UPDATED;
+		goto out;
 	}
 #endif /* MAN_DB_UPDATES */
 
@@ -3512,6 +3513,11 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 			found += add_candidate (cand_head, CANDIDATE_DATABASE,
 						0, name, manpath, NULL, loc);
 
+out:
+	if (dbf)
+		MYDBM_CLOSE (dbf);
+	free (database);
+	free (catpath);
 	return found;
 }
 
@@ -4387,7 +4393,6 @@ int main (int argc, char *argv[])
 
 	drop_effective_privs ();
 
-	free (database);
 	gl_list_free (section_list);
 	free_pathlist (manpathlist);
 	free (internal_locale);
