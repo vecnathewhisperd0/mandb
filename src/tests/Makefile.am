@@ -63,7 +63,8 @@ endif
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_builddir)/gl/lib \
-	-I$(top_srcdir)/gl/lib
+	-I$(top_srcdir)/gl/lib \
+	-I$(top_srcdir)/lib
 AM_CFLAGS = $(WARN_CFLAGS)
 check_PROGRAMS = fspause get-mtime
 
@@ -72,6 +73,8 @@ fspause_LDADD = \
 	$(top_builddir)/gl/lib/libgnu.la \
 	$(LIB_NANOSLEEP)
 get_mtime_SOURCES = get-mtime.c
-get_mtime_LDADD = $(top_builddir)/gl/lib/libgnu.la
+get_mtime_LDADD = \
+	$(top_builddir)/lib/libman.la \
+	$(top_builddir)/gl/lib/libgnu.la
 
 dist_check_SCRIPTS = testlib.sh $(ALL_TESTS)

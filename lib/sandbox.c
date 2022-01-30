@@ -64,13 +64,13 @@
 #endif /* HAVE_LIBSECCOMP */
 
 #include "attribute.h"
-#include "error.h"
 #include "xalloc.h"
 #include "xstrndup.h"
 
 #include "manconfig.h"
 
 #include "debug.h"
+#include "fatal.h"
 #include "sandbox.h"
 
 struct man_sandbox {
@@ -194,7 +194,7 @@ static bool can_load_seccomp (void)
 		if (nr == __NR_SCMP_ERROR) \
 			break; \
 		if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, 0) < 0) \
-			error (FATAL, errno, "can't add seccomp rule"); \
+			fatal (errno, "can't add seccomp rule"); \
 	} while (0)
 
 #define SC_ALLOW_PERMISSIVE(name) \
@@ -209,7 +209,7 @@ static bool can_load_seccomp (void)
 		if (nr == __NR_SCMP_ERROR) \
 			break; \
 		if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, 1, cmp1) < 0) \
-			error (FATAL, errno, "can't add seccomp rule"); \
+			fatal (errno, "can't add seccomp rule"); \
 	} while (0)
 
 #define SC_ALLOW_ARG_2(name, cmp1, cmp2) \
@@ -219,7 +219,7 @@ static bool can_load_seccomp (void)
 			break; \
 		if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, \
 				      2, cmp1, cmp2) < 0) \
-			error (FATAL, errno, "can't add seccomp rule"); \
+			fatal (errno, "can't add seccomp rule"); \
 	} while (0)
 
 /* Create a seccomp filter.
@@ -247,7 +247,7 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	debug ("initialising seccomp filter (permissive: %d)\n", permissive);
 	ctx = seccomp_init (SCMP_ACT_ERRNO (ENOSYS));
 	if (!ctx)
-		error (FATAL, errno, "can't initialise seccomp filter");
+		fatal (errno, "can't initialise seccomp filter");
 
 	/* Allow sibling architectures for x86, since people sometimes mix
 	 * and match architectures there for performance reasons.
@@ -621,8 +621,7 @@ static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 				/* Don't try this again. */
 				seccomp_filter_unavailable = 1;
 			} else
-				error (FATAL, errno,
-				       "can't load seccomp filter");
+				fatal (errno, "can't load seccomp filter");
 		}
 	}
 }

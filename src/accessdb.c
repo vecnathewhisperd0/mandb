@@ -32,11 +32,9 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include "argp.h"
 #include "attribute.h"
-#include "error.h"
 #include "progname.h"
 #include "xalloc.h"
 #include "xvasprintf.h"
@@ -48,6 +46,7 @@
 #include "manconfig.h"
 
 #include "debug.h"
+#include "fatal.h"
 #include "util.h"
 
 #include "mydbm.h"
@@ -138,8 +137,7 @@ int main (int argc, char *argv[])
 		dbf = NULL;
 	}
 	if (!dbf)
-		error (FATAL, errno, _("can't open %s for reading"), database);
-	assert (dbf);  /* help the compiler prove that later accesses are OK */
+		fatal (errno, _("can't open %s for reading"), database);
 
 	key = MYDBM_FIRSTKEY (dbf);
 

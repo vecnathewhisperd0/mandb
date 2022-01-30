@@ -50,6 +50,7 @@
 #include "manconfig.h"
 
 #include "debug.h"
+#include "fatal.h"
 #include "glcontainers.h"
 #include "wordfnmatch.h"
 #include "xregcomp.h"
@@ -81,13 +82,13 @@ void gripe_lock (const char *filename)
 #endif /* NDBM || BTREE */
 
 /* issue fatal message, then exit */
-void gripe_corrupt_data (MYDBM_FILE dbf)
+_Noreturn void gripe_corrupt_data (MYDBM_FILE dbf)
 {
-	error (FATAL, 0, _("index cache %s corrupt"), dbf->name);
+	fatal (0, _("index cache %s corrupt"), dbf->name);
 }
 
 /* deal with situation where we cannot replace a key */
-void gripe_replace_key (MYDBM_FILE dbf, const char *data)
+_Noreturn void gripe_replace_key (MYDBM_FILE dbf, const char *data)
 {
 	error (0, 0, _("cannot replace key %s"), data);
 	gripe_corrupt_data (dbf);
@@ -446,7 +447,7 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 		if (!MYDBM_DPTR (cont))
 		{
 			debug ("key was %s\n", MYDBM_DPTR (key));
-			error (FATAL, 0,
+			fatal (0,
 			       _("Database %s corrupted; rebuild with "
 				 "mandb --create"),
 			       dbf->name);

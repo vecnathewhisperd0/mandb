@@ -1,5 +1,5 @@
 /*
- * get-mtime.c: get a file's modification time
+ * fatal.c: fatal error helper
  *
  * Copyright (C) 2022 Colin Watson.
  *
@@ -24,52 +24,25 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <errno.h>
+#include <stdarg.h>
 #include <stdlib.h>
 
-#include "argp.h"
-#include "progname.h"
-#include "stat-time.h"
+#include "verror.h"
 
 #include "manconfig.h"
 
 #include "fatal.h"
 
-char *path;
-
-static const char args_doc[] = "PATH";
-
-static error_t parse_opt (int key, char *arg, struct argp_state *state)
+void fatal (int errnum, const char *format, ...)
 {
-	switch (key) {
-		case ARGP_KEY_ARG:
-			if (path)
-				argp_usage (state);
-			path = arg;
-			return 0;
-		case ARGP_KEY_NO_ARGS:
-			argp_usage (state);
-			break;
-	}
-	return ARGP_ERR_UNKNOWN;
-}
+	va_list ap;
 
-static struct argp argp = { NULL, parse_opt, args_doc };
+	va_start (ap, format);
+	verror (FATAL, errnum, format, ap);
+	va_end (ap);
 
-int main (int argc, char **argv)
-{
-	struct stat st;
-	struct timespec ts;
-
-	set_program_name (argv[0]);
-
-	if (argp_parse (&argp, argc, argv, 0, 0, 0))
-		exit (FAIL);
-
-	if (stat (path, &st) < 0)
-		fatal (errno, "can't stat %s", path);
-	ts = get_stat_mtime (&st);
-	printf ("%ld.%09ld\n", (long) ts.tv_sec, ts.tv_nsec);
-
-	exit (OK);
+	/* Never reached, because verror exits if given a non-zero status,
+	 * but the compiler may not be able to prove that.
+	 */
+	abort ();
 }

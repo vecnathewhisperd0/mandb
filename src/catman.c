@@ -77,6 +77,7 @@
 #include "appendstr.h"
 #include "cleanup.h"
 #include "debug.h"
+#include "fatal.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "util.h"
@@ -270,7 +271,7 @@ static int parse_for_sec (MYDBM_FILE dbf,
 			content = MYDBM_FETCH (dbf, key);
 
 			if (!MYDBM_DPTR (content))
-				error (FATAL, 0,
+				fatal (0,
 				       _( "NULL content for key: %s"),
 				       MYDBM_DPTR (key));
 

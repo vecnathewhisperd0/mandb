@@ -87,6 +87,7 @@
 #include "appendstr.h"
 #include "cleanup.h"
 #include "debug.h"
+#include "fatal.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "pathsearch.h"
@@ -1834,7 +1835,7 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 			       cat_file);
 			return NULL;
 		} else
-			error (FATAL, errno,
+			fatal (errno,
 			       _("can't create temporary cat for %s"),
 			       cat_file);
 	}
@@ -1947,8 +1948,7 @@ static void format_display (decompress *d,
 
 		htmldir = create_tempdir ("hman");
 		if (!htmldir)
-			error (FATAL, errno,
-			       _("can't create temporary directory"));
+			fatal (errno, _("can't create temporary directory"));
 		chdir_commands (format_cmd, htmldir);
 		chdir_commands (disp_cmd, htmldir);
 		man_base = base_name (man_file);
@@ -1959,7 +1959,7 @@ static void format_display (decompress *d,
 		free (man_base);
 		htmlfd = open (htmlfile, O_CREAT | O_EXCL | O_WRONLY, 0644);
 		if (htmlfd == -1)
-			error (FATAL, errno, _("can't open temporary file %s"),
+			fatal (errno, _("can't open temporary file %s"),
 			       htmlfile);
 		pipeline_want_out (format_cmd, htmlfd);
 		pipeline_connect (decomp, format_cmd, (void *) 0);
@@ -2516,8 +2516,7 @@ static int display (const char *dir, const char *man_file,
 
 static _Noreturn void gripe_converting_name (const char *name)
 {
-	error (FATAL, 0, _("Can't convert %s to cat name"), name);
-	abort (); /* error should have exited; help compilers prove noreturn */
+	fatal (0, _("Can't convert %s to cat name"), name);
 }
 
 /* Convert the trailing part of 'name' to be a cat page path by altering its

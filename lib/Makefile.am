@@ -40,6 +40,8 @@ libman_la_SOURCES = \
 	debug.h \
 	encodings.c \
 	encodings.h \
+	fatal.c \
+	fatal.h \
 	glcontainers.c \
 	glcontainers.h \
 	linelength.c \

@@ -36,16 +36,17 @@
 #include <sys/types.h>
 
 #include "attribute.h"
+#include "error.h"
 #include "gettext.h"
 #define _(String) gettext (String)
 
 #include "manconfig.h"
 
-#include "error.h"
-#include "cleanup.h"
 #include "pipeline.h"
 
+#include "cleanup.h"
 #include "debug.h"
+#include "fatal.h"
 #include "security.h"
 
 #ifdef MAN_OWNER
@@ -78,7 +79,7 @@ static int priv_drop_count = 0;
 
 static void gripe_set_euid (void)
 {
-	error (FATAL, errno, _("can't set effective uid"));
+	fatal (errno, _("can't set effective uid"));
 }
 
 #endif /* MAN_OWNER */

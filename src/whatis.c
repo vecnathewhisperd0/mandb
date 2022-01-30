@@ -69,6 +69,7 @@
 #include "appendstr.h"
 #include "cleanup.h"
 #include "debug.h"
+#include "fatal.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "pathsearch.h"
@@ -700,7 +701,7 @@ static void do_apropos (MYDBM_FILE dbf,
 		if (!MYDBM_DPTR (cont))
 		{
 			debug ("key was %s\n", MYDBM_DPTR (key));
-			error (FATAL, 0,
+			fatal (0,
 			       _("Database %s corrupted; rebuild with "
 				 "mandb --create"),
 			       dbf->name);

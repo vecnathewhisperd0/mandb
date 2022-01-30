@@ -31,12 +31,12 @@
 #include "gettext.h"
 #define _(String) gettext (String)
 
-#include "error.h"
 #include "xalloc.h"
 
 #include "manconfig.h"
 
 #include "debug.h"
+#include "fatal.h"
 
 #include "mydbm.h"
 
@@ -78,7 +78,7 @@ void dbver_wr (MYDBM_FILE dbfile)
 	MYDBM_SET (content, xstrdup (VER_ID));
 
 	if (MYDBM_INSERT (dbfile, key, content) != 0)
-		error (FATAL, 0,
+		fatal (0,
 		       _("fatal: unable to insert version identifier into %s"),
 		       dbfile->name);
 

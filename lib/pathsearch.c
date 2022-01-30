@@ -37,12 +37,13 @@
 #include "gettext.h"
 #define _(String) gettext (String)
 
-#include "error.h"
 #include "xalloc.h"
 #include "xgetcwd.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
+
+#include "fatal.h"
 #include "pathsearch.h"
 
 static bool pathsearch (const char *name, const mode_t bits)
@@ -78,7 +79,7 @@ static bool pathsearch (const char *name, const mode_t bits)
 			if (!cwd)
 				cwd = xgetcwd ();
 			if (!cwd)
-				error (FATAL, errno,
+				fatal (errno,
 				       _("can't determine current directory"));
 			element = cwd;
 		}
@@ -128,7 +129,7 @@ bool directory_on_path (const char *dir)
 			if (!cwd)
 				cwd = xgetcwd ();
 			if (!cwd)
-				error (FATAL, errno,
+				fatal (errno,
 				       _("can't determine current directory"));
 			element = cwd;
 		}

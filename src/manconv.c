@@ -61,6 +61,7 @@
 #include "manconfig.h"
 
 #include "debug.h"
+#include "fatal.h"
 #include "glcontainers.h"
 
 #include "decompress.h"
@@ -227,7 +228,7 @@ static int add_output (const char *inbuf, size_t inlen,
 
 	if (outbuf) {
 		if (outbuf->len + inlen >= outbuf->max)
-			error (FATAL, 0, "out of space in output buffer");
+			fatal (0, "out of space in output buffer");
 		memcpy (outbuf->buf + outbuf->len, inbuf, inlen);
 		outbuf->len += inlen;
 	} else {

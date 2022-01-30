@@ -79,6 +79,7 @@
 #include "appendstr.h"
 #include "cleanup.h"
 #include "debug.h"
+#include "fatal.h"
 #include "glcontainers.h"
 #include "security.h"
 #include "util.h"
@@ -1178,8 +1179,8 @@ static void add_dir_to_path_list (gl_list_t list, const char *p)
 			if (*expanded_dir != '/') {
 				char *cwd = xgetcwd ();
 				if (!cwd)
-					error (FATAL, errno,
-							_("can't determine current directory"));
+					fatal (errno,
+					       _("can't determine current directory"));
 				path = appendstr (cwd, "/", expanded_dir,
 						  (void *) 0);
 			} else

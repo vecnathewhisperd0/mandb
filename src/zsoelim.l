@@ -84,9 +84,9 @@
 
 #include "appendstr.h"
 #include "debug.h"
-#include "glcontainers.h"
 #include "decompress.h"
-
+#include "fatal.h"
+#include "glcontainers.h"
 #include "globbing.h"
 #include "zsoelim.h"
 
@@ -179,7 +179,7 @@ W	[ \t]
 
 <so>\"?[^ \t\n\"]+\"?	{ 	/* file names including whitespace ?  */
 			if (so_stack_ptr == MAX_SO_DEPTH - 1)
-				error (FATAL, 0,
+				fatal (0,
 				       _("%s:%d: .so requests nested too "
 				         "deeply or are recursive"),
 				       NAME, LINE);

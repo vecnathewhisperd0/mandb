@@ -63,6 +63,7 @@
 
 #include "appendstr.h"
 #include "debug.h"
+#include "fatal.h"
 #include "glcontainers.h"
 #include "orderfiles.h"
 #include "security.h"
@@ -406,7 +407,7 @@ void chown_if_possible (const char *path)
 	     st.st_gid != man_owner->pw_gid)) {
 		debug ("fixing ownership of %s\n", path);
 		if (lchown (path, man_owner->pw_uid, man_owner->pw_gid) < 0)
-			error (FATAL, 0, _("can't chown %s"), path);
+			fatal (0, _("can't chown %s"), path);
 	}
 }
 #else /* !MAN_OWNER */

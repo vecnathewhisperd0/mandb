@@ -54,6 +54,7 @@
 #include "cleanup.h"
 #include "debug.h"
 #include "encodings.h"
+#include "fatal.h"
 #include "glcontainers.h"
 #include "sandbox.h"
 #include "util.h"
@@ -205,17 +206,16 @@ static void recode (const char *filename)
 #endif
 		dir_fd = open (dirname, dir_fd_open_flags);
 		if (dir_fd < 0)
-			error (FATAL, errno, _("can't open %s"), dirname);
+			fatal (errno, _("can't open %s"), dirname);
 
 		outfilename = xasprintf ("%s.XXXXXX", stem);
 		/* For error messages. */
 		template_path = xasprintf ("%s/%s", dirname, outfilename);
 		outfd = mkstempat (dir_fd, outfilename);
-		if (outfd == -1) {
-			error (FATAL, errno,
+		if (outfd == -1)
+			fatal (errno,
 			       _("can't open temporary file %s"),
 			       template_path);
-		}
 		free (template_path);
 		pipeline_want_out (convert, outfd);
 	}
@@ -248,14 +248,13 @@ static void recode (const char *filename)
 			char *outfilepath = xasprintf
 				("%s/%s", dirname, outfilename);
 			unlink (outfilename);
-			error (FATAL, errno, _("can't rename %s to %s"),
+			fatal (errno, _("can't rename %s to %s"),
 			       outfilepath, filename);
 		}
 		debug ("stem: %s, basename: %s\n", stem, basename);
 		if (!STREQ (stem, basename)) {
 			if (unlinkat (dir_fd, basename, 0) == -1)
-				error (FATAL, errno, _("can't remove %s"),
-				       filename);
+				fatal (errno, _("can't remove %s"), filename);
 		}
 	}
 

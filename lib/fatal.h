@@ -1,7 +1,7 @@
 /*
- * xregcomp.c: regcomp with error checking
+ * fatal.h: interface to fatal error helper
  *
- * Copyright (C) 2008 Colin Watson.
+ * Copyright (C) 2022 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -20,33 +20,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifdef HAVE_CONFIG_H
-#  include "config.h"
-#endif /* HAVE_CONFIG_H */
+#include "attribute.h"
 
-#include <stddef.h>
-
-#include "regex.h"
-
-#include "gettext.h"
-#include <locale.h>
-#define _(String) gettext (String)
-
-#include "manconfig.h"
-
-#include "fatal.h"
-#include "xalloc.h"
-#include "xregcomp.h"
-
-void xregcomp (regex_t *preg, const char *regex, int cflags)
-{
-	int err = regcomp (preg, regex, cflags);
-	if (err) {
-		size_t errstrsize;
-		char *errstr;
-		errstrsize = regerror (err, preg, NULL, 0);
-		errstr = xmalloc (errstrsize);
-		regerror (err, preg, errstr, errstrsize);
-		fatal (0, _("fatal: regex `%s': %s"), regex, errstr);
-	}
-}
+_Noreturn void fatal (int errnum, const char *format, ...)
+	ATTRIBUTE_FORMAT ((__printf__, 2, 3));
