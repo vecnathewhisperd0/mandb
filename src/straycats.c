@@ -28,6 +28,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
@@ -328,22 +329,12 @@ static int open_catdir (MYDBM_FILE dbf)
 	return strays;
 }
 
-int straycats (const char *database, const char *manpath)
+int straycats (MYDBM_FILE dbf, const char *manpath)
 {
-	MYDBM_FILE dbf;
 	char *catpath;
 	int strays;
 
-	dbf = MYDBM_RWOPEN (database);
-	if (dbf && dbver_rd (dbf)) {
-		MYDBM_CLOSE (dbf);
-		dbf = NULL;
-	}
-	if (!dbf) {
-		error (0, errno, _("warning: can't update index cache %s"),
-		       database);
-		return 0;
-	}
+	assert (dbf->file);
 
 	catpath = get_catpath (manpath, SYSTEM_CAT | USER_CAT);
 
@@ -370,6 +361,5 @@ int straycats (const char *database, const char *manpath)
 
 	free (catpath);
 
-	MYDBM_CLOSE (dbf);
 	return strays;
 }

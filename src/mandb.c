@@ -349,13 +349,10 @@ static void do_chown (struct dbpaths *dbpaths)
 #endif /* MAN_OWNER */
 
 /* Update a single file in an existing database. */
-static int update_one_file (const char *database,
+static int update_one_file (MYDBM_FILE dbf,
 			    const char *manpath, const char *filename)
 {
-	MYDBM_FILE dbf;
-
-	dbf = MYDBM_RWOPEN (database);
-	if (dbf) {
+	if (dbf->file || MYDBM_RWOPEN (dbf)) {
 		struct mandata info;
 		char *manpage;
 
@@ -370,25 +367,24 @@ static int update_one_file (const char *database,
 
 		test_manfile (dbf, filename, manpath);
 	}
-	MYDBM_CLOSE (dbf);
 
 	return 1;
 }
 
 /* dont actually create any dbs, just do an update */
-static int update_db_wrapper (const char *database,
+static int update_db_wrapper (MYDBM_FILE dbf,
 			      const char *manpath, const char *catpath)
 {
 	int amount;
 
 	if (single_filename)
-		return update_one_file (database, manpath, single_filename);
+		return update_one_file (dbf, manpath, single_filename);
 
-	amount = update_db (database, manpath, catpath);
+	amount = update_db (dbf, manpath, catpath);
 	if (amount >= 0)
 		return amount;
 
-	return create_db (database, manpath, catpath);
+	return create_db (dbf, manpath, catpath);
 }
 
 /* remove incomplete databases */
@@ -452,17 +448,13 @@ static int mandb (struct dbpaths *dbpaths,
 	char *database;
 	int amount;
 	char *dbname;
+	MYDBM_FILE dbf;
 	bool should_create;
+	int purged_here = 0;
 
 	dbname = mkdbname (catpath);
 	database = xasprintf ("%s/%d", catpath, getpid ());
-
-	force_rescan = false;
-	if (purge)
-		purged += purge_missing (dbname, manpath, catpath);
-
-	if (!quiet)
-		printf (_("Processing manual pages under %s...\n"), manpath);
+	dbf = MYDBM_NEW (database);
 
 	if (!STREQ (catpath, manpath)) {
 		char *cachedir_tag;
@@ -495,7 +487,7 @@ static int mandb (struct dbpaths *dbpaths,
 		free (cachedir_tag);
 	}
 
-	should_create = (create || force_rescan || opt_test);
+	should_create = (create || opt_test);
 
 #ifdef NDBM
 #  ifdef BERKELEY_DB
@@ -533,14 +525,52 @@ static int mandb (struct dbpaths *dbpaths,
 		check_remove (dbpaths->xtmpfile);
 #endif /* NDBM */
 
+	if (!should_create) {
+		force_rescan = false;
+		if (purge) {
+			purged_here = purge_missing (dbf, manpath, catpath);
+			purged += purged_here;
+		}
+
+		if (force_rescan) {
+			/* We have an existing database and hadn't been
+			 * going to recreate it, but purge_missing has
+			 * discovered some kind of consistency problem and
+			 * requested that we do so anyway.  Close the
+			 * database and remove temporary copies so that we
+			 * start from scratch.
+			 */
+			MYDBM_FREE (dbf);
+#ifdef NDBM
+#  ifdef BERKELEY_DB
+			check_remove (dbpaths->tmpdbfile);
+#  else /* !BERKELEY_DB NDBM */
+			check_remove (dbpaths->tmpdirfile);
+			check_remove (dbpaths->tmppagfile);
+#  endif /* BERKELEY_DB NDBM */
+#else /* !NDBM */
+			check_remove (dbpaths->xtmpfile);
+#endif /* NDBM */
+			dbf = MYDBM_NEW (database);
+			should_create = true;
+		}
+	}
+
+	if (!quiet)
+		printf (_("Processing manual pages under %s...\n"), manpath);
+
 	if (should_create)
-		amount = create_db (database, manpath, catpath);
+		amount = create_db (dbf, manpath, catpath);
 	else
-		amount = update_db_wrapper (database, manpath, catpath);
+		amount = update_db_wrapper (dbf, manpath, catpath);
 
 	if (check_for_strays && amount > 0)
-		strays += straycats (database, manpath);
+		strays += straycats (dbf, manpath);
 
+	if (purged_here)
+		MYDBM_REORG (dbf);
+
+	MYDBM_FREE (dbf);
 	free (database);
 	free (dbname);
 	return amount;
@@ -555,6 +585,8 @@ static int process_manpath (const char *manpath, bool global_manpath,
 	bool run_mandb = false;
 	struct dbpaths *dbpaths = NULL;
 	int amount = 0;
+	bool new_purged = false;
+	bool new_strays = false;
 
 	if (global_manpath) { 	/* system db */
 		catpath = get_catpath (manpath, SYSTEM_CAT);
@@ -589,15 +621,19 @@ static int process_manpath (const char *manpath, bool global_manpath,
 	push_cleanup (cleanup, dbpaths, 0);
 	push_cleanup (cleanup_sigsafe, dbpaths, 1);
 	if (run_mandb) {
+		int purged_before = purged;
+		int strays_before = strays;
 		int ret = mandb (dbpaths, catpath, manpath, global_manpath);
 		if (ret < 0) {
 			amount = ret;
 			goto out;
 		}
 		amount += ret;
+		new_purged = purged != purged_before;
+		new_strays = strays != strays_before;
 	}
 
-	if (!opt_test && amount)
+	if (!opt_test && (amount || new_purged || new_strays))
 		finish_up (dbpaths);
 #ifdef MAN_OWNER
 	if (global_manpath)

@@ -50,6 +50,7 @@ ALL_TESTS = \
 	mandb-bogus-symlink \
 	mandb-cachedir-tag \
 	mandb-empty-page \
+	mandb-purge-updates-timestamp \
 	mandb-regular-file-symlink-changes \
 	mandb-symlink-beats-whatis-ref \
 	mandb-whatis-broken-link-changes \
@@ -64,10 +65,13 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/gl/lib \
 	-I$(top_srcdir)/gl/lib
 AM_CFLAGS = $(WARN_CFLAGS)
-check_PROGRAMS = fspause
+check_PROGRAMS = fspause get-mtime
+
 fspause_SOURCES = fspause.c
 fspause_LDADD = \
 	$(top_builddir)/gl/lib/libgnu.la \
 	$(LIB_NANOSLEEP)
+get_mtime_SOURCES = get-mtime.c
+get_mtime_LDADD = $(top_builddir)/gl/lib/libgnu.la
 
 dist_check_SCRIPTS = testlib.sh $(ALL_TESTS)

@@ -33,7 +33,7 @@ datum man_xdbm_firstkey (MYDBM_FILE dbf,
 			 man_xdbm_unsorted_firstkey firstkey,
 			 man_xdbm_unsorted_nextkey nextkey);
 datum man_xdbm_nextkey (MYDBM_FILE dbf, datum key);
-void man_xdbm_close (MYDBM_FILE dbf, man_xdbm_raw_close raw_close);
+void man_xdbm_free (MYDBM_FILE dbf, man_xdbm_raw_close raw_close);
 
 #endif /* GDBM || NDBM */
 

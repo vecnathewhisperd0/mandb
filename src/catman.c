@@ -173,8 +173,7 @@ static gl_list_t manpathlist;
 static void post_fork (void)
 {
 	pop_all_cleanups ();
-	if (dbf_close_post_fork)
-		MYDBM_CLOSE (dbf_close_post_fork);
+	MYDBM_FREE (dbf_close_post_fork);
 }
 
 /* Execute man with the appropriate catman args.  Always frees cmd. */
@@ -225,25 +224,13 @@ static size_t add_arg (pipecmd *cmd, datum key)
 
 /* find all pages that are in the supplied manpath and section and that are
    ultimate source files. */
-static int parse_for_sec (const char *database,
+static int parse_for_sec (MYDBM_FILE dbf,
 			  const char *manpath, const char *section)
 {
-	MYDBM_FILE dbf;
 	pipecmd *basecmd, *cmd;
 	datum key;
 	size_t arg_size, initial_bit;
 	int message = 1, first_arg;
-
-	dbf = MYDBM_RDOPEN (database);
-	if (!dbf) {
-		error (0, errno, _("cannot read database %s"), database);
-		return 1;
-	}
-	if (dbver_rd (dbf)) {
-		MYDBM_CLOSE (dbf);
-		return 1;
-	}
-	dbf_close_post_fork = dbf;
 
 	basecmd = pipecmd_new (MAN);
 	pipecmd_clearenv (basecmd);
@@ -344,8 +331,6 @@ static int parse_for_sec (const char *database,
 		key = nextkey;
 	}
 
-	dbf_close_post_fork = NULL;
-	MYDBM_CLOSE (dbf);
 	if (pipecmd_get_nargs (cmd) > first_arg)
 		catman (cmd);
 	else
@@ -407,6 +392,7 @@ int main (int argc, char *argv[])
 
 	GL_LIST_FOREACH (manpathlist, mp) {
 		char *catpath, *database;
+		MYDBM_FILE dbf;
 		size_t len;
 
 		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
@@ -423,6 +409,13 @@ int main (int argc, char *argv[])
 			database = mkdbname (mp);
 			catpath = xstrdup (mp);
 		}
+		dbf = MYDBM_NEW (database);
+		if (!MYDBM_RDOPEN (dbf) || dbver_rd (dbf)) {
+			error (0, errno, _("cannot read database %s"),
+			       database);
+			goto next;
+		}
+		dbf_close_post_fork = dbf;
 
 		len = strlen (catpath);
 
@@ -433,12 +426,15 @@ int main (int argc, char *argv[])
 				continue;
 			if (check_access (catpath))
 				continue;
-			if (parse_for_sec (database, mp, *sp)) {
+			if (parse_for_sec (dbf, mp, *sp)) {
 				error (0, 0, _("unable to update %s"), mp);
 				break;
 			}
 		}
 
+next:
+		dbf_close_post_fork = NULL;
+		MYDBM_FREE (dbf);
 		free (database);
 		free (catpath);
 	}

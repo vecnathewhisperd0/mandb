@@ -154,7 +154,7 @@ datum man_xdbm_nextkey (MYDBM_FILE dbf, datum key)
 	return copy_datum (*(datum *) gl_list_node_value (keys, next_node));
 }
 
-void man_xdbm_close (MYDBM_FILE dbf, man_xdbm_raw_close raw_close)
+void man_xdbm_free (MYDBM_FILE dbf, man_xdbm_raw_close raw_close)
 {
 	if (!dbf)
 		return;
@@ -164,6 +164,7 @@ void man_xdbm_close (MYDBM_FILE dbf, man_xdbm_raw_close raw_close)
 
 	free (dbf->name);
 	raw_close (dbf);
+	free (dbf->mtime);
 	free (dbf);
 }
 

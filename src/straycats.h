@@ -21,4 +21,6 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-extern int straycats (const char *database, const char *manpath);
+#include "mydbm.h"
+
+extern int straycats (MYDBM_FILE dbf, const char *manpath);

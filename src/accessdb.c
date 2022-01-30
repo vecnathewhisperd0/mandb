@@ -132,9 +132,9 @@ int main (int argc, char *argv[])
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
 
-	dbf = MYDBM_RDOPEN (database);
-	if (dbf && dbver_rd (dbf)) {
-		MYDBM_CLOSE (dbf);
+	dbf = MYDBM_NEW (database);
+	if (!MYDBM_RDOPEN (dbf) || dbver_rd (dbf)) {
+		MYDBM_FREE (dbf);
 		dbf = NULL;
 	}
 	if (!dbf)
@@ -172,6 +172,6 @@ next:
 		key = nextkey;
 	}
 
-	MYDBM_CLOSE (dbf);
+	MYDBM_FREE (dbf);
 	exit (ret);
 }

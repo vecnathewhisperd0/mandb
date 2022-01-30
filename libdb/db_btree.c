@@ -28,6 +28,7 @@
 /* below this line are routines only useful for the BTREE interface */
 #ifdef BTREE
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
@@ -64,22 +65,35 @@ gl_set_t loop_check;
    blocking method is used ": Try again". This adopts GNU dbm's approach. */
 
 /* release the lock and close the database */
-void man_btree_close (man_btree_wrapper wrap)
+void man_btree_free (man_btree_wrapper wrap)
 {
 	if (!wrap)
 		return;
 
 	free (wrap->name);
-	(void) flock ((wrap->file->fd) (wrap->file), LOCK_UN);
-	(wrap->file->close) (wrap->file);
+	if (wrap->file) {
+		(void) flock ((wrap->file->fd) (wrap->file), LOCK_UN);
+		(wrap->file->close) (wrap->file);
+	}
+	free (wrap->mtime);
 	free (wrap);
 }
 
-/* open a btree type database, with file locking. */
-man_btree_wrapper man_btree_open (const char *name, int flags, int mode)
+man_btree_wrapper man_btree_new (const char *name)
 {
 	man_btree_wrapper wrap;
-	DB *file;
+
+	wrap = xmalloc (sizeof *wrap);
+	wrap->name = xstrdup (name);
+	wrap->file = NULL;
+	wrap->mtime = NULL;
+
+	return wrap;
+}
+
+/* open a btree type database, with file locking. */
+bool man_btree_open (man_btree_wrapper wrap, int flags, int mode)
+{
 	BTREEINFO b;
 	int lock_op;
 	int lock_failed;
@@ -111,11 +125,11 @@ man_btree_wrapper man_btree_open (const char *name, int flags, int mode)
 		 * and ignore the database if it's zero-length.
 		 */
 		struct stat iszero;
-		if (stat (name, &iszero) < 0)
-			return NULL;
+		if (stat (wrap->name, &iszero) < 0)
+			return false;
 		if (iszero.st_size == 0) {
 			errno = EINVAL;
-			return NULL;
+			return false;
 		}
 	}
 
@@ -123,35 +137,32 @@ man_btree_wrapper man_btree_open (const char *name, int flags, int mode)
 		/* opening the db is destructive, need to lock first */
 		int fd;
 
-		file = NULL;
+		wrap->file = NULL;
 		lock_failed = 1;
-		fd = open (name, flags & ~O_TRUNC, mode);
+		fd = open (wrap->name, flags & ~O_TRUNC, mode);
 		if (fd != -1) {
 			if (!(lock_failed = flock (fd, lock_op)))
-				file = dbopen (name, flags, mode,
-					       DB_BTREE, &b);
+				wrap->file = dbopen (wrap->name, flags, mode,
+						     DB_BTREE, &b);
 			close (fd);
 		}
 	} else {
-		file = dbopen (name, flags, mode, DB_BTREE, &b);
-		if (file)
-			lock_failed = flock ((file->fd) (file), lock_op);
+		wrap->file = dbopen (wrap->name, flags, mode, DB_BTREE, &b);
+		if (wrap->file)
+			lock_failed = flock ((wrap->file->fd) (wrap->file),
+					     lock_op);
 	}
 
-	if (!file)
-		return NULL;
+	if (!wrap->file)
+		return false;
 
 	if (lock_failed) {
-		gripe_lock (name);
-		(file->close) (file);
-		return NULL;
+		gripe_lock (wrap->name);
+		(wrap->file->close) (wrap->file);
+		return false;
 	}
 
-	wrap = xmalloc (sizeof *wrap);
-	wrap->name = xstrdup (name);
-	wrap->file = file;
-
-	return wrap;
+	return true;
 }
 
 /* do a replace when we have the duplicate flag set on the database -
@@ -267,22 +278,16 @@ struct timespec man_btree_get_time (man_btree_wrapper wrap)
 {
 	struct stat st;
 
-	if (fstat ((wrap->file->fd) (wrap->file), &st) < 0) {
-		struct timespec t;
-		t.tv_sec = -1;
-		t.tv_nsec = -1;
-		return t;
+	if (!wrap->mtime) {
+		wrap->mtime = XMALLOC (struct timespec);
+		if (fstat ((wrap->file->fd) (wrap->file), &st) < 0) {
+			wrap->mtime->tv_sec = -1;
+			wrap->mtime->tv_nsec = -1;
+		} else
+			*wrap->mtime = get_stat_mtime (&st);
 	}
-	return get_stat_mtime (&st);
-}
 
-void man_btree_set_time (man_btree_wrapper wrap, const struct timespec time)
-{
-	struct timespec times[2];
-
-	times[0] = time;
-	times[1] = time;
-	futimens ((wrap->file->fd) (wrap->file), times);
+	return *wrap->mtime;
 }
 
 #endif /* BTREE */

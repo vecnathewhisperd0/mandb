@@ -788,32 +788,23 @@ nextpage:
 static bool search (const char * const *pages, int num_pages)
 {
 	bool *found = XCALLOC (num_pages, bool);
-	char *catpath, *mp;
+	char *mp;
 	bool any_found;
 	int i;
 
 	GL_LIST_FOREACH (manpathlist, mp) {
-		char *database;
+		char *catpath, *database;
 		MYDBM_FILE dbf;
 
 		catpath = get_catpath (mp, SYSTEM_CAT | USER_CAT);
-
-		if (catpath) {
-			database = mkdbname (catpath);
-			free (catpath);
-		} else
-			database = mkdbname (mp);
+		database = mkdbname (catpath ? catpath : mp);
 
 		debug ("path=%s\n", mp);
 
-		dbf = MYDBM_RDOPEN (database);
-		if (dbf && dbver_rd (dbf)) {
-			MYDBM_CLOSE (dbf);
-			dbf = NULL;
-		}
-		if (!dbf) {
+		dbf = MYDBM_NEW (database);
+		if (!MYDBM_RDOPEN (dbf) || dbver_rd (dbf)) {
 			use_grep (pages, num_pages, mp, found);
-			continue;
+			goto next;
 		}
 
 		if (am_apropos)
@@ -824,8 +815,11 @@ static bool search (const char * const *pages, int num_pages)
 			else
 				do_whatis (dbf, pages, num_pages, mp, found);
 		}
-		MYDBM_CLOSE (dbf);
+
+next:
+		MYDBM_FREE (dbf);
 		free (database);
+		free (catpath);
 	}
 
 	any_found = false;

@@ -120,19 +120,30 @@ static inline bool is_eagain (int err)
 }
 #pragma GCC diagnostic pop
 
-static void gripe_rwopen_failed (const char *database)
+static void gripe_rwopen_failed (MYDBM_FILE dbf)
 {
 	if (errno == EACCES || errno == EROFS)
-		debug ("database %s is read-only\n", database);
+		debug ("database %s is read-only\n", dbf->name);
 	else if (is_eagain (errno))
-		debug ("database %s is locked by another process\n", database);
+		debug ("database %s is locked by another process\n", dbf->name);
 	else {
 #ifdef MAN_DB_UPDATES
 		if (!quiet)
 #endif /* MAN_DB_UPDATES */
 			error (0, errno, _("can't update index cache %s"),
-			       database);
+			       dbf->name);
 	}
+}
+
+static bool ensure_db_open (MYDBM_FILE dbf)
+{
+	if (dbf->file)
+		return true;
+	if (!MYDBM_RWOPEN (dbf)) {
+		gripe_rwopen_failed (dbf);
+		return false;
+	}
+	return true;
 }
 
 /* Take absolute filename and path (for ult_src) and do sanity checks on
@@ -501,8 +512,7 @@ static void fix_permissions_tree (const char *catdir)
  * any dirs of the tree that have been modified (ie added to) will then be
  * scanned for new files, which are then added to the db.
  */
-static int testmandirs (const char *database,
-			const char *path, const char *catpath,
+static int testmandirs (MYDBM_FILE dbf, const char *path, const char *catpath,
 			struct timespec last, bool create)
 {
 	DIR *dir;
@@ -530,7 +540,6 @@ static int testmandirs (const char *database,
 	while( (mandir = readdir (dir)) ) {
 		struct stat stbuf;
 		struct timespec mtime;
-		MYDBM_FILE dbf;
 
 		if (strncmp (mandir->d_name, "man", 3) != 0)
 			continue;
@@ -563,17 +572,16 @@ static int testmandirs (const char *database,
 
 			/* Open the db in CTRW mode to store the $ver$ ID */
 
-			dbf = MYDBM_CTRWOPEN (database);
-			if (dbf == NULL) {
+			if (!MYDBM_CTRWOPEN (dbf)) {
 				if (errno == EACCES || errno == EROFS) {
 					debug ("database %s is read-only\n",
-					       database);
+					       dbf->name);
 					closedir (dir);
 					return 0;
 				} else {
 					error (0, errno,
 					       _("can't create index cache %s"),
-					       database);
+					       dbf->name);
 					closedir (dir);
 					return -1;
 				}
@@ -582,11 +590,7 @@ static int testmandirs (const char *database,
 			dbver_wr (dbf);
 
 			created = true;
-		} else
-			dbf = MYDBM_RWOPEN(database);
-
-		if (!dbf) {
-			gripe_rwopen_failed (database);
+		} else if (!ensure_db_open (dbf)) {
 			closedir (dir);
 			return 0;
 		}
@@ -603,7 +607,6 @@ static int testmandirs (const char *database,
 				fprintf (stderr, "\n");
 		}
 		add_dir_entries (dbf, path, mandir->d_name);
-		MYDBM_CLOSE (dbf);
 		amount++;
 	}
 	closedir (dir);
@@ -611,56 +614,20 @@ static int testmandirs (const char *database,
 	return amount;
 }
 
-/* update the modification timestamp of `database' */
-static void update_db_time (const char *database)
-{
-	MYDBM_FILE dbf;
-	struct timespec now;
-
-	/* Open the db in RW to update its mtime */
-	/* we know that this should succeed because we just updated the db! */
-	dbf = MYDBM_RWOPEN (database);
-	if (dbf == NULL) {
-		if (is_eagain (errno))
-			/* Another mandb process is probably running.  With
-			 * any luck it will update the mtime ...
-			 */
-			debug ("database %s is locked by another process\n",
-			       database);
-		else {
-#ifdef MAN_DB_UPDATES
-			if (!quiet)
-#endif /* MAN_DB_UPDATES */
-				error (0, errno,
-				       _("can't update index cache %s"),
-				       database);
-		}
-		return;
-	}
-	now.tv_sec = 0;
-	now.tv_nsec = UTIME_NOW;
-	MYDBM_SET_TIME (dbf, now);
-
-	MYDBM_CLOSE (dbf);
-}
-
 /* routine to prepare/create the db prior to calling testmandirs() */
-int create_db (const char *database, const char *manpath, const char *catpath)
+int create_db (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 {
 	struct timespec time_zero;
 	int amount;
 
-	debug ("create_db(%s): %s\n", manpath, database);
+	debug ("create_db(%s): %s\n", manpath, dbf->name);
 
 	time_zero.tv_sec = 0;
 	time_zero.tv_nsec = 0;
-	amount = testmandirs (database, manpath, catpath, time_zero, true);
+	amount = testmandirs (dbf, manpath, catpath, time_zero, true);
 
-	if (amount > 0) {
-		update_db_time (database);
-		if (!quiet)
-			fputs (_("done.\n"), stderr);
-	}
+	if (amount > 0 && !quiet)
+		fputs (_("done.\n"), stderr);
 
 	return amount;
 }
@@ -700,33 +667,23 @@ static bool sanity_check_db (MYDBM_FILE dbf)
 
 /* routine to update the db, ensure that it is consistent with the
    filesystem */
-int update_db (const char *database, const char *manpath, const char *catpath)
+int update_db (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 {
-	MYDBM_FILE dbf;
 	struct timespec mtime;
 	int new;
 
-	dbf = MYDBM_RDOPEN (database);
-	if (dbf && !sanity_check_db (dbf)) {
-		MYDBM_CLOSE (dbf);
-		dbf = NULL;
-	}
-	if (!dbf) {
-		debug ("failed to open %s O_RDONLY\n", database);
+	if (!ensure_db_open (dbf) || !sanity_check_db (dbf)) {
+		debug ("failed to open %s O_RDONLY\n", dbf->name);
 		return -1;
 	}
 	mtime = MYDBM_GET_TIME (dbf);
-	MYDBM_CLOSE (dbf);
 
 	debug ("update_db(): %ld.%09ld\n",
 	       (long) mtime.tv_sec, (long) mtime.tv_nsec);
-	new = testmandirs (database, manpath, catpath, mtime, false);
+	new = testmandirs (dbf, manpath, catpath, mtime, false);
 
-	if (new > 0) {
-		update_db_time (database);
-		if (!quiet)
-			fputs (_("done.\n"), stderr);
-	}
+	if (new > 0 && !quiet)
+		fputs (_("done.\n"), stderr);
 
 	return new;
 }
@@ -972,25 +929,23 @@ static int check_multi_key (const char *name, const char *content)
 /* Go through the database and purge references to man pages that no longer
  * exist.
  */
-int purge_missing (const char *database,
-		   const char *manpath, const char *catpath)
+int purge_missing (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 {
 #ifdef NDBM
 	char *dirfile;
 #endif
 	struct stat st;
 	bool db_exists;
-	MYDBM_FILE dbf;
 	datum key;
 	int count = 0;
 	struct timespec db_mtime;
 
 #ifdef NDBM
-	dirfile = xasprintf ("%s.dir", database);
+	dirfile = xasprintf ("%s.dir", dbf->name);
 	db_exists = stat (dirfile, &st) == 0;
 	free (dirfile);
 #else
-	db_exists = stat (database, &st) == 0;
+	db_exists = stat (dbf->name, &st) == 0;
 #endif
 	if (!db_exists)
 		/* nothing to purge */
@@ -999,14 +954,8 @@ int purge_missing (const char *database,
 	if (!quiet)
 		printf (_("Purging old database entries in %s...\n"), manpath);
 
-	dbf = MYDBM_RWOPEN (database);
-	if (!dbf) {
-		gripe_rwopen_failed (database);
-		return 0;
-	}
-	if (!sanity_check_db (dbf)) {
-		MYDBM_CLOSE (dbf);
-		dbf = NULL;
+	if (!ensure_db_open (dbf) || !sanity_check_db (dbf)) {
+		gripe_rwopen_failed (dbf);
 		return 0;
 	}
 	db_mtime = MYDBM_GET_TIME (dbf);
@@ -1102,12 +1051,5 @@ int purge_missing (const char *database,
 		key = nextkey;
 	}
 
-	MYDBM_REORG (dbf);
-	/* Reset mtime to avoid confusing mandb into not running.
-	 * TODO: It would be better to avoid this by only opening the
-	 * database once between here and mandb.
-	 */
-	MYDBM_SET_TIME (dbf, db_mtime);
-	MYDBM_CLOSE (dbf);
 	return count;
 }

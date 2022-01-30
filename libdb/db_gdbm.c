@@ -26,6 +26,7 @@
 
 #ifdef GDBM
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -65,22 +66,29 @@ static void trap_error (const char *val)
 		fprintf (stderr, "gdbm fatal: %s\n", val);
 }
 
-man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, int flags)
+man_gdbm_wrapper man_gdbm_new (const char *name)
 {
 	man_gdbm_wrapper wrap;
-	GDBM_FILE file;
+
+	wrap = xmalloc (sizeof *wrap);
+	wrap->name = xstrdup (name);
+	wrap->file = NULL;
+	wrap->mtime = NULL;
+
+	return wrap;
+}
+
+bool man_gdbm_open_wrapper (man_gdbm_wrapper wrap, int flags)
+{
 	datum key, content;
 
 	opening = 1;
 	if (setjmp (open_env))
-		return NULL;
-	file = gdbm_open ((char *) name, BLK_SIZE, flags, DBMODE, trap_error);
-	if (!file)
-		return NULL;
-
-	wrap = xmalloc (sizeof *wrap);
-	wrap->name = xstrdup (name);
-	wrap->file = file;
+		return false;
+	wrap->file = gdbm_open (wrap->name, BLK_SIZE, flags, DBMODE,
+				trap_error);
+	if (!wrap->file)
+		return false;
 
 	if ((flags & ~GDBM_FAST) != GDBM_NEWDB) {
 		/* While the setjmp/longjmp guard is in effect, make sure we
@@ -95,7 +103,7 @@ man_gdbm_wrapper man_gdbm_open_wrapper (const char *name, int flags)
 
 	opening = 0;
 
-	return wrap;
+	return true;
 }
 
 static datum unsorted_firstkey (man_gdbm_wrapper wrap)
@@ -122,32 +130,27 @@ struct timespec man_gdbm_get_time (man_gdbm_wrapper wrap)
 {
 	struct stat st;
 
-	if (fstat (gdbm_fdesc (wrap->file), &st) < 0) {
-		struct timespec t;
-		t.tv_sec = -1;
-		t.tv_nsec = -1;
-		return t;
+	if (!wrap->mtime) {
+		wrap->mtime = XMALLOC (struct timespec);
+		if (fstat (gdbm_fdesc (wrap->file), &st) < 0) {
+			wrap->mtime->tv_sec = -1;
+			wrap->mtime->tv_nsec = -1;
+		} else
+			*wrap->mtime = get_stat_mtime (&st);
 	}
-	return get_stat_mtime (&st);
-}
 
-void man_gdbm_set_time (man_gdbm_wrapper wrap, const struct timespec time)
-{
-	struct timespec times[2];
-
-	times[0] = time;
-	times[1] = time;
-	futimens (gdbm_fdesc (wrap->file), times);
+	return *wrap->mtime;
 }
 
 static void raw_close (man_gdbm_wrapper wrap)
 {
-	gdbm_close (wrap->file);
+	if (wrap->file)
+		gdbm_close (wrap->file);
 }
 
-void man_gdbm_close (man_gdbm_wrapper wrap)
+void man_gdbm_free (man_gdbm_wrapper wrap)
 {
-	man_xdbm_close (wrap, raw_close);
+	man_xdbm_free (wrap, raw_close);
 }
 
 #ifndef HAVE_GDBM_EXISTS

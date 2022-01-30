@@ -26,6 +26,7 @@
 
 #ifdef NDBM
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -50,21 +51,32 @@
 /* release the lock and close the database */
 static void raw_close (man_ndbm_wrapper wrap)
 {
-	flock (dbm_dirfno (wrap->file), LOCK_UN);
-	dbm_close (wrap->file);
+	if (wrap->file) {
+		flock (dbm_dirfno (wrap->file), LOCK_UN);
+		dbm_close (wrap->file);
+	}
 }
 
-void man_ndbm_close (man_ndbm_wrapper wrap)
+void man_ndbm_free (man_ndbm_wrapper wrap)
 {
-	man_xdbm_close (wrap, raw_close);
+	man_xdbm_free (wrap, raw_close);
+}
+
+man_ndbm_wrapper man_ndbm_new (const char *name)
+{
+	man_ndbm_wrapper wrap;
+
+	wrap = xmalloc (sizeof *wrap);
+	wrap->name = xstrdup (name);
+	wrap->file = NULL;
+	wrap->mtime = NULL;
+
+	return wrap;
 }
 
 /* open a ndbm type database, with file locking. */
-man_ndbm_wrapper man_ndbm_open (const char *name, int flags, int mode)
+bool man_ndbm_open (man_ndbm_wrapper wrap, int flags, int mode)
 {
-	man_ndbm_wrapper wrap;
-	char *name_copy;
-	DBM *file;
 	int lock_op;
 	int lock_failed;
 
@@ -75,49 +87,38 @@ man_ndbm_wrapper man_ndbm_open (const char *name, int flags, int mode)
 		lock_op = LOCK_SH | LOCK_NB;
 	}
 
-	/* At least GDBM's version of dbm_open declares the file name
-	 * parameter as non-const.  This is probably incorrect, but take a
-	 * copy just in case.
-	 */
-	name_copy = xstrdup (name);
-
 	if (flags & O_TRUNC) {
 		/* opening the db is destructive, need to lock first */
 		char *dir_fname;
 		int dir_fd;
 
-		file = NULL;
+		wrap->file = NULL;
 		lock_failed = 1;
-		dir_fname = xasprintf ("%s.dir", name);
+		dir_fname = xasprintf ("%s.dir", wrap->name);
 		dir_fd = open (dir_fname, flags & ~O_TRUNC, mode);
 		free (dir_fname);
 		if (dir_fd != -1) {
 			if (!(lock_failed = flock (dir_fd, lock_op)))
-				file = dbm_open (name_copy, flags, mode);
+				wrap->file = dbm_open (wrap->name, flags,
+						       mode);
 			close (dir_fd);
 		}
 	} else {
-		file = dbm_open (name_copy, flags, mode);
-		if (file)
-			lock_failed = flock (dbm_dirfno (file), lock_op);
+		wrap->file = dbm_open (wrap->name, flags, mode);
+		if (wrap->file)
+			lock_failed = flock (dbm_dirfno (wrap->file), lock_op);
 	}
 
-	free (name_copy);
-
-	if (!file)
-		return NULL;
+	if (!wrap->file)
+		return false;
 
 	if (lock_failed) {
-		gripe_lock (name);
-		dbm_close (file);
-		return NULL;
+		gripe_lock (wrap->name);
+		dbm_close (wrap->file);
+		return false;
 	}
 
-	wrap = xmalloc (sizeof *wrap);
-	wrap->name = xstrdup (name);
-	wrap->file = file;
-
-	return wrap;
+	return true;
 }
 
 static datum unsorted_firstkey (man_ndbm_wrapper wrap)
@@ -144,22 +145,16 @@ struct timespec man_ndbm_get_time (man_ndbm_wrapper wrap)
 {
 	struct stat st;
 
-	if (fstat (dbm_dirfno (wrap->file), &st) < 0) {
-		struct timespec t;
-		t.tv_sec = -1;
-		t.tv_nsec = -1;
-		return t;
+	if (!wrap->mtime) {
+		wrap->mtime = XMALLOC (struct timespec);
+		if (fstat (dbm_dirfno (wrap->file), &st) < 0) {
+			wrap->mtime->tv_sec = -1;
+			wrap->mtime->tv_nsec = -1;
+		} else
+			*wrap->mtime = get_stat_mtime (&st);
 	}
-	return get_stat_mtime (&st);
-}
 
-void man_ndbm_set_time (man_ndbm_wrapper wrap, const struct timespec time)
-{
-	struct timespec times[2];
-
-	times[0] = time;
-	times[1] = time;
-	futimens (dbm_dirfno (wrap->file), times);
+	return *wrap->mtime;
 }
 
 #endif /* NDBM */

@@ -3213,13 +3213,13 @@ static void dbdelete_wrapper (const char *page, struct mandata *info,
 		catpath = get_catpath (manpath,
 				       global_manpath ? SYSTEM_CAT : USER_CAT);
 		database = mkdbname (catpath ? catpath : manpath);
-		dbf = MYDBM_RWOPEN (database);
-		if (dbf) {
+		dbf = MYDBM_NEW (database);
+		if (MYDBM_RWOPEN (dbf)) {
 			if (dbdelete (dbf, page, info) == 1)
 				debug ("%s(%s) not in db!\n", page, info->ext);
-			MYDBM_CLOSE (dbf);
 		}
 
+		MYDBM_FREE (dbf);
 		free (database);
 		free (catpath);
 	}
@@ -3445,8 +3445,8 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 
 	/* If we haven't looked here already, do so now. */
 	if (!gl_map_search (db_map, manpath, (const void **) &matches)) {
-		dbf = MYDBM_RDOPEN (database);
-		if (dbf && !dbver_rd (dbf)) {
+		dbf = MYDBM_NEW (database);
+		if (MYDBM_RDOPEN (dbf) && !dbver_rd (dbf)) {
 			debug ("Succeeded in opening %s O_RDONLY\n", database);
 
 			/* if section is set, only return those that match,
@@ -3514,8 +3514,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 						0, name, manpath, NULL, loc);
 
 out:
-	if (dbf)
-		MYDBM_CLOSE (dbf);
+	MYDBM_FREE (dbf);
 	free (database);
 	free (catpath);
 	return found;

@@ -18,6 +18,10 @@ Fixes:
  * Downgrade "malformed .lf request" warning to a debug message and rephrase
    it somewhat, since `.lf` requests can use `*roff` arithmetic expressions
    and we can't reasonably parse those.
+ * Avoid modifying the database without changing its mtime, which had been
+   possible since 2.7.0 if `mandb`'s purge phase found work to do but the
+   main phase didn't, and which confused some backup systems into reporting
+   possible filesystem corruption.
 
 Improvements:
 
