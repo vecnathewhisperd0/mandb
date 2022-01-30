@@ -3970,6 +3970,7 @@ static int man (const char *name, int *found)
 static gl_list_t get_section_list (void)
 {
 	gl_list_t config_sections, sections;
+	char *section_list_copy;
 	const char *sec;
 
 	/* Section list from configuration file, or STD_SECTIONS if it's
@@ -3993,9 +3994,11 @@ static gl_list_t get_section_list (void)
 	 * too for compatibility.
 	 */
 	sections = new_string_list (GL_ARRAY_LIST, true);
-	for (sec = strtok (colon_sep_section_list, ":,"); sec;
+	section_list_copy = xstrdup (colon_sep_section_list);
+	for (sec = strtok (section_list_copy, ":,"); sec;
 	     sec = strtok (NULL, ":,"))
 		gl_list_add_last (sections, xstrdup (sec));
+	free (section_list_copy);
 
 	if (gl_list_size (sections)) {
 		gl_list_free (config_sections);

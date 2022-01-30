@@ -22,6 +22,8 @@ Fixes:
    possible since 2.7.0 if `mandb`'s purge phase found work to do but the
    main phase didn't, and which confused some backup systems into reporting
    possible filesystem corruption.
+ * `man` no longer inadvertently modifies the `MANSECT` environment variable
+   before passing it on to its subprocesses.
 
 Improvements:
 
