@@ -24,6 +24,9 @@ Fixes:
    possible filesystem corruption.
  * `man` no longer inadvertently modifies the `MANSECT` environment variable
    before passing it on to its subprocesses.
+ * `mandb` now stores the mtime of link targets as the mtime of their
+   corresponding database entries, rather than sometimes storing the mtime
+   of the link instead.
 
 Improvements:
 

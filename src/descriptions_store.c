@@ -28,12 +28,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)
 
 #include "error.h"
 #include "gl_list.h"
+#include "stat-time.h"
 #include "xalloc.h"
 
 #include "manconfig.h"
@@ -71,6 +76,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 {
 	const struct page_description *desc;
 	char save_id = info->id;
+	struct timespec save_mtime = info->mtime;
 	const char *trace_name;
 
 	if (gl_list_size (descs) && trace) {
@@ -89,6 +95,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			info->id = save_id;
 			info->pointer = NULL;
 			info->whatis = desc->whatis;
+			info->mtime = save_mtime;
 			found_real_page = true;
 		} else if (trace) {
 			GL_LIST_FOREACH (trace, trace_name) {
@@ -99,6 +106,8 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 						     &trace_info, "");
 				if (trace_info.name &&
 				    STREQ (trace_info.name, desc->name)) {
+					struct stat st;
+
 					if (path && !is_prefix (path, buf)) {
 						/* Link outside this manual
 						 * hierarchy; skip this
@@ -117,6 +126,11 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 						info->id = save_id;
 					info->pointer = NULL;
 					info->whatis = desc->whatis;
+					if (lstat (trace_name, &st) == 0)
+						info->mtime = get_stat_mtime
+							(&st);
+					else
+						info->mtime = save_mtime;
 					found_real_page = true;
 				}
 
@@ -141,6 +155,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			 * more than once.
 			 */
 			info->whatis = NULL;
+			info->mtime = save_mtime;
 		}
 
 		debug ("name = '%s', id = %c\n", desc->name, info->id);

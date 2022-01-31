@@ -66,8 +66,8 @@ int main (int argc, char **argv)
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
 
-	if (stat (path, &st) < 0)
-		fatal (errno, "can't stat %s", path);
+	if (lstat (path, &st) < 0)
+		fatal (errno, "can't lstat %s", path);
 	ts = get_stat_mtime (&st);
 	printf ("%ld.%09ld\n", (long) ts.tv_sec, ts.tv_nsec);
 

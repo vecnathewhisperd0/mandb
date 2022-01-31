@@ -53,6 +53,7 @@ ALL_TESTS = \
 	mandb-purge-updates-timestamp \
 	mandb-regular-file-symlink-changes \
 	mandb-symlink-beats-whatis-ref \
+	mandb-symlink-target-timestamp \
 	mandb-whatis-broken-link-changes \
 	whatis-path-to-executable \
 	zsoelim-so-includes
