@@ -3750,7 +3750,6 @@ static int do_global_apropos (const char *name, int *found)
 	return *found ? OK : NOT_FOUND;
 }
 
-/* Each of local_man_loop and man sometimes calls the other. */
 static int man (const char *name, int *found);
 
 /* man issued with `-l' option */
@@ -3927,13 +3926,6 @@ static int man (const char *name, int *found)
 	*found = 0;
 	fflush (stdout);
 
-	if (strchr (name, '/')) {
-		int status = local_man_loop (name);
-		if (status == OK)
-			*found = 1;
-		return status;
-	}
-
 	if (section)
 		locate_page_in_manpath (section, name, &candidates, found);
 	else {
@@ -3963,6 +3955,18 @@ static int man (const char *name, int *found)
 	}
 
 	return *found ? OK : NOT_FOUND;
+}
+
+static int man_maybe_local (const char *name, int *found)
+{
+	*found = 0;
+	if (strchr (name, '/')) {
+		int status = local_man_loop (name);
+		if (status == OK)
+			*found = 1;
+		return status;
+	}
+	return man (name, found);
 }
 
 
@@ -4310,7 +4314,7 @@ int main (int argc, char *argv[])
 				}
 			}
 			if (!found_subpage)
-				status = man (nextarg, &found);
+				status = man_maybe_local (nextarg, &found);
 		}
 
 		/* clean out the cache of database lookups for each man page */
@@ -4340,7 +4344,7 @@ int main (int argc, char *argv[])
 					}
 				}
 				if (!found_subpage)
-					status = man (tmp, &found);
+					status = man_maybe_local (tmp, &found);
 				if (db_map) {
 					gl_map_free (db_map);
 					db_map = NULL;

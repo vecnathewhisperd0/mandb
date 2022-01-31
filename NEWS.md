@@ -27,6 +27,12 @@ Fixes:
  * `mandb` now stores the mtime of link targets as the mtime of their
    corresponding database entries, rather than sometimes storing the mtime
    of the link instead.
+ * Since man-db 2.4.2, `man` has behaved as if the `-l` option was given if
+   a manual page argument contains a slash.  Since man-db 2.5.6, this has
+   interacted slightly poorly with the subpage feature, emitting spurious
+   error messages if given multiple manual page arguments some of which
+   include a slash.  `man` no longer emits spurious error messages in this
+   case.
 
 Improvements:
 
