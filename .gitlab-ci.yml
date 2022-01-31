@@ -49,7 +49,7 @@ build-distcheck:
     - apt -y -qq install build-essential bsdextrautils flex git groff libgdbm-dev libpipeline-dev pkg-config po4a zlib1g-dev
   script:
     - (cd bootstrapped && ./configure --enable-maintainer-mode)
-    - make -C bootstrapped distcheck V=1
+    - make -C bootstrapped distcheck V=1 VERBOSE=1
   artifacts:
     paths:
       - "bootstrapped/*.tar.xz"
@@ -62,7 +62,7 @@ build-out-of-tree:
   script:
     - mkdir -p bootstrapped/obj
     - (cd bootstrapped/obj && ../configure)
-    - make -C bootstrapped/obj check V=1
+    - make -C bootstrapped/obj check V=1 VERBOSE=1
 
 upload:
   stage: upload
