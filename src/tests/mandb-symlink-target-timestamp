@@ -21,8 +21,8 @@ write_page test 1 "$tmpdir/usr/share/man/man1/test.1.gz" \
 ln -s test.1.gz "$tmpdir/usr/share/man/man1/test-link.1.gz"
 run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
 cat >"$tmpdir/1.exp" <<EOF
-test -> "- 1 1 $(./get-mtime "$tmpdir/usr/share/man/man1/test.1.gz" | tr . ' ') A - - gz test(1)"
-test-link -> "- 1 1 $(./get-mtime "$tmpdir/usr/share/man/man1/test-link.1.gz" | tr . ' ') B - - gz test(1)"
+test -> "- 1 1 $(./get-mtime "$tmpdir/usr/share/man/man1/test.1.gz" | sed 's/\.0*/ /') A - - gz test(1)"
+test-link -> "- 1 1 $(./get-mtime "$tmpdir/usr/share/man/man1/test-link.1.gz" | sed 's/\.0*/ /') B - - gz test(1)"
 EOF
 run $ACCESSDB "$tmpdir/usr/share/man/index$db_ext" | \
 	grep -v '^\$' >"$tmpdir/1.out"

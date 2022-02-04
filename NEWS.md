@@ -1,3 +1,10 @@
+man-db 2.10.1
+=============
+
+Fixes:
+
+ * Fix occasional `mandb-symlink-target-timestamp` test failure.
+
 man-db 2.10.0 (4 February 2022)
 ===============================
 
