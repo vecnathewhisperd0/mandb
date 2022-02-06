@@ -1407,7 +1407,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				break;
 		} while (*pp_string++);
 
-		if (!troff && *PROG_COL) {
+		if (!troff && *PROG_COL != '\0') {
 			const char *man_keep_formatting =
 				getenv ("MAN_KEEP_FORMATTING");
 			if ((!man_keep_formatting || !*man_keep_formatting) &&
@@ -1416,7 +1416,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 				setenv ("GROFF_NO_SGR", "1", 1);
 #ifndef GNU_NROFF
 			/* tbl needs col */
-			else if (using_tbl && !troff && *PROG_COL)
+			else if (using_tbl && !troff && *PROG_COL != '\0')
 				add_col (p, locale_charset, (void *) 0);
 #endif /* GNU_NROFF */
 		}
@@ -1615,7 +1615,7 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 	if (!troff && (!want_encoding || !is_roff_device (want_encoding)))
 		add_output_iconv (p, encoding, locale_charset);
 
-	if (!troff && *PROG_COL) {
+	if (!troff && *PROG_COL != '\0') {
 		/* get rid of special characters if not writing to a
 		 * terminal
 		 */

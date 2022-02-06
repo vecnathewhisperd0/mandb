@@ -855,7 +855,7 @@ int find_name (const char *file, const char *filename, lexgrog *p_lg,
 	int ret = 0;
 	decompress *d;
 	char *page_encoding = NULL;
-	bool run_col = p_lg->type == CATPAGE && *PROG_COL;
+	bool run_col = p_lg->type == CATPAGE && *PROG_COL != '\0';
 
 	if (strcmp (file, "-") == 0) {
 		d = decompress_fdopen (dup (STDIN_FILENO));
