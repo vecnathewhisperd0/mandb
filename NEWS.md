@@ -4,6 +4,8 @@ man-db 2.10.1
 Fixes:
 
  * Fix occasional `mandb-symlink-target-timestamp` test failure.
+ * Fix inadvertent reliance on a GCC extension that caused build failures
+   with Clang.
 
 man-db 2.10.0 (4 February 2022)
 ===============================

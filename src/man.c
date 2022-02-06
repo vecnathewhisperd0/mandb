@@ -383,15 +383,18 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
 		case OPT_WARNINGS:
 #ifdef NROFF_WARNINGS
-			char *s = xstrdup (arg ? arg : default_roff_warnings);
-			const char *warning;
+			{
+				char *s = xstrdup
+					(arg ? arg : default_roff_warnings);
+				const char *warning;
 
-			for (warning = strtok (s, ","); warning;
-			     warning = strtok (NULL, ","))
-				gl_list_add_last (roff_warnings,
-						  xstrdup (warning));
+				for (warning = strtok (s, ","); warning;
+				     warning = strtok (NULL, ","))
+					gl_list_add_last (roff_warnings,
+							  xstrdup (warning));
 
-			free (s);
+				free (s);
+			}
 #endif /* NROFF_WARNINGS */
 			return 0;
 
