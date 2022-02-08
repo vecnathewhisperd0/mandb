@@ -52,7 +52,7 @@ static void close_conv_to_locale (void *ignored MAYBE_UNUSED)
 	iconv_close (conv_to_locale);
 }
 
-char *convert_to_locale (char *string)
+char * ATTRIBUTE_MALLOC convert_to_locale (char *string)
 {
 	if (!conv_to_locale_initialized) {
 		char *locale_charset = xasprintf
@@ -92,5 +92,8 @@ char *convert_to_locale (char *string)
 		return xstrdup (string);
 }
 #else /* !HAVE_ICONV */
-#  define convert_to_locale(string) xstrdup (string)
+char * ATTRIBUTE_MALLOC convert_to_locale (char *string)
+{
+	return xstrdup (string);
+}
 #endif /* HAVE_ICONV */
