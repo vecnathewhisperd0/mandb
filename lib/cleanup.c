@@ -75,7 +75,7 @@ sighandler (int signo)
 
   /* signal has now default action and is unmasked,
      reraise it to terminate program abnormally */
-  kill (getpid(), signo);
+  raise (signo);
   abort();
 }
 
