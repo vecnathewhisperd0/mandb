@@ -42,8 +42,6 @@
 
 #include "manconfig.h"
 
-#include "pipeline.h"
-
 #include "cleanup.h"
 #include "debug.h"
 #include "fatal.h"

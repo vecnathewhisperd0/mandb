@@ -58,7 +58,6 @@
 
 #include "debug.h"
 #include "error.h"
-#include "pipeline.h"
 #include "util.h"
 
 /*

@@ -26,6 +26,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -39,8 +40,6 @@
 #include "xstrndup.h"
 
 #include "manconfig.h"
-
-#include "pipeline.h"
 
 #include "debug.h"
 #include "encodings.h"
