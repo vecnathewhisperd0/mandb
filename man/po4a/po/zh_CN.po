@@ -2,13 +2,13 @@
 # Copyright (C) 2013 Free Software Foundation, Inc.
 # This file is distributed under the same license as the man-db package.
 # Wylmer Wang <wantinghard@gmail.com>, 2013.
-# Boyuan Yang <073plan@gmail.com>, 2017, 2020.
+# Boyuan Yang <073plan@gmail.com>, 2017, 2020, 2022.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages-2.9.0-pre1\n"
+"Project-Id-Version: man-db-manpages-2.10.0-pre1\n"
 "POT-Creation-Date: 2022-01-24 11:17+0000\n"
-"PO-Revision-Date: 2020-04-03 12:11-0400\n"
+"PO-Revision-Date: 2022-02-07 14:38-0500\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-Poedit-Bookmarks: -1,102,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #. type: TH
@@ -221,11 +221,6 @@ msgstr "B<-m> I<系统>\\|[\\|,.\\|.\\|.\\|]\\|, B<--systems=>I<系统>\\|[\\|,.
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:126
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual page "
-#| "descriptions, they can be searched using this option.  To search NewOS's "
-#| "manual page descriptions, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual page "
 "descriptions, they can be searched using this option.  To search NewOS's "
@@ -399,6 +394,8 @@ msgid ""
 "See the B<SEARCH PATH> section of B<manpath>(5)  for the default behaviour "
 "and details of how this environment variable is handled."
 msgstr ""
+"请参考 B<manpath>(5) 中的B<搜索路径>一节以了解默认行为以及处理该环境变量的细"
+"节。"
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:229 ../../man/man1/whatis.man1:233
@@ -859,14 +856,13 @@ msgstr "游戏"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:117
-#, fuzzy, no-wrap
-#| msgid ""
-#| "Miscellaneous (including macro packages and conventions),\n"
-#| "e.g.\\& B<man>(7), B<groff>(7)"
+#, no-wrap
 msgid ""
 "Miscellaneous (including macro packages and conventions),\n"
 "e.g.\\& B<man>(7), B<groff>(7), B<man-pages>(7)"
-msgstr "杂项(包括宏包和规范，如 B<man>(7)，B<groff>(7))"
+msgstr ""
+"杂项（包括宏包和规范），\n"
+"如 B<man>(7)，B<groff>(7), B<man-pages>(7)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:120
@@ -952,7 +948,7 @@ msgstr "B<-a\\|>|\\|B<-b>"
 #: ../../man/man1/man.man1:168
 #, no-wrap
 msgid "options delimited by | cannot be used together."
-msgstr "以“|”分隔的选项可以一起使用。"
+msgstr "以“|”分隔的选项不可以一起使用。"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:169
@@ -1565,18 +1561,13 @@ msgstr "查找手册页"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:571
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual pages, they "
-#| "can be accessed using this option.  To search for a manual page from "
-#| "NewOS's manual page collection, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual pages, they can "
 "be accessed using this option.  To search for a manual page from NewOS's "
 "manual page collection, use the option B<-m> B<NewOS>."
 msgstr ""
 "如果此系统可以访问其他操作系统的手册页，可以使用此选项访问它们。如要在 NewOS "
-"的手册页集中搜索某个手册页，使用 B<-m> B<NewOS> 选项。"
+"的手册页集合中搜索某个手册页，使用 B<-m> B<NewOS> 选项。"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:582
@@ -1642,21 +1633,6 @@ msgstr "B<-e\\ >I<sub-extension>,\\ B<--extension=>I<sub-extension>"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:650
-#, fuzzy
-#| msgid ""
-#| "Some systems incorporate large packages of manual pages, such as those "
-#| "that accompany the B<Tcl> package, into the main manual page hierarchy.  "
-#| "To get around the problem of having two manual pages with the same name "
-#| "such as B<exit>(3), the B<Tcl> pages were usually all assigned to section "
-#| "B<l>.  As this is unfortunate, it is now possible to put the pages in the "
-#| "correct section, and to assign a specific `extension' to them, in this "
-#| "case, B<exit>(3tcl).  Under normal operation, B<%man%> will display "
-#| "B<exit>(3)  in preference to B<exit>(3tcl).  To negotiate this situation "
-#| "and to avoid having to know which section the page you require resides "
-#| "in, it is now possible to give B<%man%> a I<sub-extension> string "
-#| "indicating which package the page must belong to.  Using the above "
-#| "example, supplying the option B<-e\\ tcl> to B<%man%> will restrict the "
-#| "search to pages having an extension of B<*tcl>."
 msgid ""
 "Some systems incorporate large packages of manual pages, such as those that "
 "accompany the B<Tcl> package, into the main manual page hierarchy.  To get "
@@ -1675,7 +1651,7 @@ msgstr ""
 "某些系统包含大量的手册页包，例如某些系统将 B<Tcl> (手册)包并入主手册页层次目"
 "录。为避免两个手册页重名，如 B<exit>(3)，B<Tcl> 手册页通常都归于 B<l> 章节。"
 "为解决这一不便，现在可以将页面放在正确的节，分配给它们一个特定的“扩展"
-"(extension”即可；这个例子中，就是 B<exit>(3tcl)。正常操作时，B<%man%> 会优先"
+"（extension）”即可；这个例子中则是 B<exit>(3tcl)。正常操作时，B<%man%> 会优先"
 "显示 B<exit>(3) 而不是 B<exit>(3tcl)。为协调这一状况并避免要记住所需手册页属"
 "于哪个章节，现在可以给 B<%man%> 指定一个 I<sub-extension>字符串，指示该手册页"
 "必须属于哪个包。对于上面的例子，给 B<%man%> 加上 B<-e\\ tcl> 选项，就能限制只"
@@ -1937,7 +1913,7 @@ msgstr "连字符"
 #: ../../man/man1/man.man1:869
 #, no-wrap
 msgid "bullet (middle dot)"
-msgstr "点(中间点)"
+msgstr "点（中间点）"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:872
@@ -2318,6 +2294,10 @@ msgid ""
 "unrelated to the content of the page being displayed, you can set "
 "$B<MAN_DISABLE_SECCOMP> to any non-empty value to disable the sandbox."
 msgstr ""
+"在 Linux 系统中，B<%man%> 通常将处理不受信任数据的子进程使用 B<seccomp>(2) 沙"
+"盒进行限制。这能够使得运行复杂的手册页解析代码变得更加安全。如果这种限制使得"
+"一些与页面显示内容无关的原因影响了程序正常行为，您可以设置 "
+"$B<MAN_DISABLE_SECCOMP> 为任意非空值来禁用该沙盒。"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1248
@@ -2326,6 +2306,8 @@ msgid ""
 "%> will print debugging messages to standard error describing each "
 "subprocess it runs."
 msgstr ""
+"如果 $B<PIPELINE_DEBUG> 环境变量置为“1”，则 B<%man%> 会向标准错误打印描述每个"
+"所运行子进程的调试信息。"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1260
@@ -2852,7 +2834,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:26
 #, no-wrap
 msgid "SEARCH PATH"
-msgstr ""
+msgstr "搜索路径"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:35
@@ -3615,15 +3597,12 @@ msgid ""
 "B<lexgrog>(1)."
 msgstr "此手册页中的 B<WHATIS PARSING> 小节现在是 B<lexgrog>(1) 的一部分。"
 
-#, no-wrap
 #~ msgid "Type"
 #~ msgstr "类型"
 
-#, no-wrap
 #~ msgid "Binary tree"
 #~ msgstr "二叉树"
 
-#, no-wrap
 #~ msgid "Hashed"
 #~ msgstr "已散列"
 
