@@ -43,7 +43,7 @@ libmandb_la_SOURCES = \
 	db_xdbm.h \
 	mydbm.h
 
-libmandb_la_LIBADD = ../lib/libman.la $(DBLIBS) $(LIBINTL)
+libmandb_la_LIBADD = ../lib/libman.la $(DBLIBS) @LTLIBINTL@
 
 libmandb_la_LDFLAGS = \
 	-avoid-version -release $(VERSION) -rpath $(pkglibdir) -no-undefined
