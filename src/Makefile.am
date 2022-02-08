@@ -56,8 +56,7 @@ AM_CFLAGS = \
 	$(WARN_CFLAGS) \
 	$(libpipeline_CFLAGS)
 
-LIBMAN = $(top_builddir)/lib/libman.la $(top_builddir)/gl/lib/libgnu.la \
-	 @LTLIBINTL@
+LIBMAN = $(top_builddir)/lib/libman.la @LTLIBINTL@
 LIBMANDB = $(top_builddir)/libdb/libmandb.la $(LIBMAN) $(DBLIBS)
 
 accessdb_LDADD = $(LIBMANDB)

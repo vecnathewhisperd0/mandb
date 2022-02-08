@@ -70,4 +70,5 @@ libman_la_LIBADD = ../gl/lib/libgnu.la $(LTLIBOBJS) \
 libman_la_LDFLAGS = \
 	-avoid-version -release $(VERSION) -rpath $(pkglibdir) \
 	-no-undefined \
+	$(LIBMAN_EXPORT_LDFLAGS) \
 	$(libseccomp_LIBS)

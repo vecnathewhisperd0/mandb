@@ -97,6 +97,17 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AM_PROG_AR
 LT_INIT([disable-static])
+
+libman_export_ldflags=
+if test "$with_gnu_ld" = yes; then
+	case $host_os in
+		cygwin*|mingw*|pw32*|cegcc*)
+			libman_export_ldflags='-Wl,--export-all-symbols'
+			;;
+	esac
+fi
+AC_SUBST([LIBMAN_EXPORT_LDFLAGS], [$libman_export_ldflags])
+
 AC_CHECK_PROGS([cat], [cat])
 AC_DEFINE_UNQUOTED([PROG_CAT], ["$cat"], [Program to use as cat.])
 MAN_CHECK_PROGS([browser], [BROWSER], [use BROWSER as default web browser], [www-browser lynx elinks w3m])

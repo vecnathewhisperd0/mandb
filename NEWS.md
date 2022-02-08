@@ -7,6 +7,7 @@ Fixes:
  * Fix inadvertent reliance on a GCC extension that caused build failures
    with Clang.
  * Fix building without `iconv`.
+ * Fix building on Cygwin.
 
 man-db 2.10.0 (4 February 2022)
 ===============================
