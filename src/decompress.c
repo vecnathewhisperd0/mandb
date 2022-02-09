@@ -81,6 +81,8 @@ static decompress *decompress_new_pipeline (pipeline *p)
 	return d;
 }
 
+#ifdef HAVE_LIBZ
+
 /* Create a new in-process decompressor.  Takes ownership of buf. */
 static decompress *decompress_new_inprocess (char *buf, size_t len)
 {
@@ -94,8 +96,6 @@ static decompress *decompress_new_inprocess (char *buf, size_t len)
 
 	return d;
 }
-
-#ifdef HAVE_LIBZ
 
 static void decompress_zlib (void *data MAYBE_UNUSED)
 {
@@ -181,11 +181,14 @@ static decompress *decompress_try_zlib (const char *filename)
 					 (size_t) len);
 }
 
+#define OPEN_FLAGS_UNUSED
+#else /* !HAVE_LIBZ */
+#define OPEN_FLAGS_UNUSED MAYBE_UNUSED
 #endif /* HAVE_LIBZ */
 
 extern man_sandbox *sandbox;
 
-decompress *decompress_open (const char *filename, int flags)
+decompress *decompress_open (const char *filename, int flags OPEN_FLAGS_UNUSED)
 {
 	pipecmd *cmd;
 	pipeline *p;
