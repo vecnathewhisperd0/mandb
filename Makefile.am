@@ -86,3 +86,7 @@ gen-ChangeLog:
 		rm -f $(distdir)/ChangeLog; \
 		mv $(distdir)/cl-t $(distdir)/ChangeLog; \
 	fi
+
+update-po:
+	$(MAKE) -C po update-po
+	$(MAKE) -C man/po4a update-po
