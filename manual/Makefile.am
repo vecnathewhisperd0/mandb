@@ -57,7 +57,7 @@ CLEANFILES = \
 SOELIM = soelim
 
 version: $(top_srcdir)/configure.ac
-	echo '.ds V $(roff_version)' > $@
+	(echo '.ds V $(roff_version)'; echo '.ds td $(date)') > $@
 
 $(MANUAL).pp: $(ME_FILES) version
 	$(SOELIM) -I$(srcdir) man_db.me | tbl > $@.new && mv -f $@.new $@
