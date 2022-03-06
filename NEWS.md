@@ -6,6 +6,7 @@ Improvements:
  * Make `man -H` sleep for a few seconds after starting the browser, since
    it may background itself before loading files (Dr. Werner Fink).
  * Make the man-db manual build reproducible.
+ * Add some hardening options to the `systemd` service.
 
 man-db 2.10.1 (10 February 2022)
 ================================
