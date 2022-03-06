@@ -1,6 +1,12 @@
 man-db 2.10.2
 =============
 
+Build:
+
+ * Regenerating man-db's build system now explicitly requires Automake >=
+   1.14.  (This was already the case since at least man-db 2.10.0, but was
+   previously undocumented.)
+
 Improvements:
 
  * Make `man -H` sleep for a few seconds after starting the browser, since
