@@ -3,10 +3,10 @@
 # Test handling of empty files.
 #   https://bugs.debian.org/622104
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MANDB=mandb}
+: "${MANDB=mandb}"
 
 init
 fake_config /usr/share/man /usr/X11R6/man

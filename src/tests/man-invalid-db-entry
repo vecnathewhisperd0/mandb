@@ -3,11 +3,11 @@
 # Test for invalid DB entry.
 #   https://bugzilla.redhat.com/show_bug.cgi?id=841431
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MAN=man}
-: ${MANDB=mandb}
+: "${MAN=man}"
+: "${MANDB=mandb}"
 
 init
 fake_config /usr/share/man

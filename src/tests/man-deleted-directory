@@ -3,10 +3,10 @@
 # Test that man can run from a deleted directory.
 #   https://bugs.debian.org/764384
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MAN=man}
+: "${MAN=man}"
 
 init
 echo "MANDATORY_MANPATH $abstmpdir/usr/share/man" >"$tmpdir/manpath.config"

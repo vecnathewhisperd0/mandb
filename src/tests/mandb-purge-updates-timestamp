@@ -3,11 +3,11 @@
 # If mandb purges missing pages, it updates the database's timestamp,
 # without confusing itself into not scanning for newer pages.
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MANDB=mandb}
-: ${ACCESSDB=accessdb}
+: "${MANDB=mandb}"
+: "${ACCESSDB=accessdb}"
 
 init
 fake_config /usr/share/man

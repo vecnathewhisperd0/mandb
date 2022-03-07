@@ -2,10 +2,10 @@
 
 # Don't create CACHEDIR.TAG in manpath
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MANDB=mandb}
+: "${MANDB=mandb}"
 
 init
 fake_config /usr/share/man

@@ -3,10 +3,10 @@
 # Test for wildcards in MANDATORY_MANPATH in config file and in MANPATH.
 #   https://bugzilla.redhat.com/show_bug.cgi?id=677669
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MAN=man}
+: "${MAN=man}"
 
 init
 > "$tmpdir/manpath.config"

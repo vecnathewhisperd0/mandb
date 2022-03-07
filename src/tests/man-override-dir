@@ -4,10 +4,10 @@
 # enabled and when it's not.
 #
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MAN=man}
+: "${MAN=man}"
 
 if [ -n "$OVERRIDE_DIR" ]; then
 	OVERRIDE=$OVERRIDE_DIR

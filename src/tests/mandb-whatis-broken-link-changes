@@ -3,11 +3,11 @@
 # Ensure that we don't repeatedly rescan when a whatis entry turns into a
 # broken link.
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MANDB=mandb}
-: ${ACCESSDB=accessdb}
+: "${MANDB=mandb}"
+: "${ACCESSDB=accessdb}"
 
 init
 fake_config /usr/share/man

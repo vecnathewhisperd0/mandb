@@ -3,10 +3,10 @@
 # Test for double free or corruption crash with bogus filename and symlink of man page.
 #   https://bugzilla.redhat.com/show_bug.cgi?id=702904
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MANDB=mandb}
+: "${MANDB=mandb}"
 
 init
 fake_config /usr/share/man

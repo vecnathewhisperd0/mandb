@@ -2,11 +2,11 @@
 
 # Test that whatis behaves appropriately when given a path to an executable.
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
-: ${MANDB=mandb}
-: ${WHATIS=whatis}
+: "${MANDB=mandb}"
+: "${WHATIS=whatis}"
 
 init
 fake_config /usr/share/man /usr/local/man

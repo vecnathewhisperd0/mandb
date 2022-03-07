@@ -3,7 +3,7 @@
 # Test for:
 #   https://bugzilla.redhat.com/show_bug.cgi?id=684977
 
-: ${srcdir=.}
+: "${srcdir=.}"
 . "$srcdir/testlib.sh"
 
 case $MANDIR_LAYOUT in
@@ -14,7 +14,7 @@ case $MANDIR_LAYOUT in
 		;;
 esac
 
-: ${MAN=man}
+: "${MAN=man}"
 
 init
 fake_config /usr/share/man
