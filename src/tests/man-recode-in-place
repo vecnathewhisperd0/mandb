@@ -40,7 +40,7 @@ expect_files_equal '--in-place with gzip and coding tag matching target encoding
 expect_files_equal \
 	'--in-place with gzip and coding tag not matching target encoding' \
 	"$tmpdir/c.1.exp" "$tmpdir/c.1"
-expect_pass '--in-place removes compressed input files' \
-	'test ! -f "$tmpdir/b.1.gz" && test ! -f "$tmpdir/c.1.gz"'
+test ! -f "$tmpdir/b.1.gz" && test ! -f "$tmpdir/c.1.gz"
+report '--in-place removes compressed input files' "$?"
 
 finish

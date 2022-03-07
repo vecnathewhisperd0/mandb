@@ -20,7 +20,6 @@ cd "$tmpdir/zombie"
 rmdir "$abstmpdir/zombie" || \
 	skip "can't remove current working directory on this system"
 run $MAN -C "$abstmpdir/manpath.config" test >/dev/null
-code=$?
-expect_pass 'run from deleted directory' 'test "$code" = 0'
+report 'run from deleted directory' "$?"
 
 finish

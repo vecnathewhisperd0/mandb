@@ -21,8 +21,11 @@ write_page test 1 "$tmpdir/usr/share/man/man1/test.1" UTF-8 '' '' \
 write_page test2 1 "$tmpdir/usr/dir/man/man1/test2.1" UTF-8 '' '' \
 	'test2 \- simple mandb test'
 run $MANDB -C "$tmpdir/manpath.config" -q "$tmpdir/usr/share/man:$tmpdir/usr/dir/man"
-expect_pass "CACHEDIR.TAG exists" "[ -e $tmpdir/var/cache/man/CACHEDIR.TAG ]"
-expect_pass "CACHEDIR.TAG doesn't exist 01" "[ ! -e $tmpdir/usr/share/man/CACHEDIR.TAG ]"
-expect_pass "CACHEDIR.TAG doesn't exist 02" "[ ! -e $tmpdir/usr/dir/man/CACHEDIR.TAG ]"
+test -e "$tmpdir/var/cache/man/CACHEDIR.TAG"
+report "CACHEDIR.TAG exists" "$?"
+test ! -e "$tmpdir/usr/share/man/CACHEDIR.TAG"
+report "CACHEDIR.TAG doesn't exist 01" "$?"
+test ! -e "$tmpdir/usr/dir/man/CACHEDIR.TAG"
+report "CACHEDIR.TAG doesn't exist 02" "$?"
 
 finish

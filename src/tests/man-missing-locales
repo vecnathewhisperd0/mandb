@@ -21,7 +21,6 @@ LANG=
 LC_CTYPE=
 LC_ALL=
 run $MAN -C "$tmpdir/manpath.config" -E UTF-8 test > /dev/null
-# $? is deliberately expanded here.
-expect_pass 'missing locales' "test $? -eq 0"
+report 'missing locales' "$?"
 
 finish

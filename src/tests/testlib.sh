@@ -75,10 +75,8 @@ accessdb_filter () {
 		sed 's/\(-> "[^ ][^ ]* [^ ][^ ]* [^ ][^ ]* \)[^ ][^ ]* [^ ][^ ]* /\1MTIME /'
 }
 
-expect_pass () {
-	ret=0
-	eval "$2" || ret=$?
-	if [ "$ret" = 0 ]; then
+report () {
+	if [ "$2" = 0 ]; then
 		echo "  PASS: $1"
 	else
 		failures="$(($failures + 1))"
@@ -89,12 +87,7 @@ expect_pass () {
 expect_files_equal () {
 	ret=0
 	diff -u "$2" "$3" || ret=$?
-	if [ "$ret" = 0 ]; then
-		echo "  PASS: $1"
-	else
-		failures="$(($failures + 1))"
-		echo "  FAIL: $1"
-	fi
+	report "$1" "$ret"
 }
 
 skip () {

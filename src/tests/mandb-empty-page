@@ -18,13 +18,11 @@ mkdir -p "$tmpdir/usr/share/man/man1"
 touch "$tmpdir/usr/share/man/man1/empty.1"
 gzip -9 "$tmpdir/usr/share/man/man1/empty.1"
 run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
-# $? is deliberately expanded here.
-expect_pass 'empty page' "test $? -eq 0"
+report 'empty page' "$?"
 
 ./fspause
 ln -s empty.1.gz "$tmpdir/usr/share/man/man1/empty2.1.gz"
 run $MANDB -C "$tmpdir/manpath.config" -u -q "$tmpdir/usr/share/man"
-# $? is deliberately expanded here.
-expect_pass 'symlink to empty page' "test $? -eq 0"
+report 'symlink to empty page' "$?"
 
 finish
