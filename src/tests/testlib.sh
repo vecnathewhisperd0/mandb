@@ -47,7 +47,7 @@ db_ext () {
 # Arguments: name section path encoding compression_extension preprocessor_line name_line
 write_page () {
 	mkdir -p "${3%/*}"
-	>"$3.tmp1"
+	: >"$3.tmp1"
 	if [ "$6" ]; then
 		echo "'\\\" $6" >>"$3.tmp1"
 	fi
