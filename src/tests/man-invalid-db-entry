@@ -25,7 +25,6 @@ rm -f "$tmpdir/usr/share/man/man1/test.1"
 
 echo "No manual entry for test" > "$tmpdir/1.exp"
 LC_ALL=C run $MAN -C "$tmpdir/manpath.config" test 2> "$tmpdir/1.out"
-expect_pass 'invalid DB entry' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'invalid DB entry' "$tmpdir/1.exp" "$tmpdir/1.out"
 
 finish

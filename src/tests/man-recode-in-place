@@ -33,13 +33,13 @@ gzip "$tmpdir/c.1"
 
 run $MAN_RECODE -t UTF-8 --in-place \
 	"$tmpdir/a.1" "$tmpdir/b.1.gz" "$tmpdir/c.1.gz"
-expect_pass '--in-place with no coding tag' \
-	'diff -u "$tmpdir/a.1.exp" "$tmpdir/a.1"'
-expect_pass '--in-place with gzip and coding tag matching target encoding' \
-	'diff -u "$tmpdir/b.1.exp" "$tmpdir/b.1"'
-expect_pass \
+expect_files_equal '--in-place with no coding tag' \
+	"$tmpdir/a.1.exp" "$tmpdir/a.1"
+expect_files_equal '--in-place with gzip and coding tag matching target encoding' \
+	"$tmpdir/b.1.exp" "$tmpdir/b.1"
+expect_files_equal \
 	'--in-place with gzip and coding tag not matching target encoding' \
-	'diff -u "$tmpdir/c.1.exp" "$tmpdir/c.1"'
+	"$tmpdir/c.1.exp" "$tmpdir/c.1"
 expect_pass '--in-place removes compressed input files' \
 	'test ! -f "$tmpdir/b.1.gz" && test ! -f "$tmpdir/c.1.gz"'
 

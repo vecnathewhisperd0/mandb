@@ -40,7 +40,6 @@ fi
 
 
 run $MAN -C "$tmpdir/manpath.config" -aw abc >"$tmpdir/1.out"
-expect_pass 'testing override dir' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'testing override dir' "$tmpdir/1.exp" "$tmpdir/1.out"
 
 finish

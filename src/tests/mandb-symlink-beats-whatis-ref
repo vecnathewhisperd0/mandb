@@ -30,10 +30,10 @@ xterm -> "- 1x 1 MTIME A - - gz terminal emulator for X"
 EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/1-share.out"
 accessdb_filter "$tmpdir/usr/X11R6/man/index$db_ext" >"$tmpdir/1-X11R6.out"
-expect_pass '/usr/share/man x-terminal-emulator -> xterm' \
-	    'diff -u "$tmpdir/1-share.exp" "$tmpdir/1-share.out"'
-expect_pass '/usr/X11R6/man x-terminal-emulator -> xterm' \
-	    'diff -u "$tmpdir/1-X11R6.exp" "$tmpdir/1-X11R6.out"'
+expect_files_equal '/usr/share/man x-terminal-emulator -> xterm' \
+	    "$tmpdir/1-share.exp" "$tmpdir/1-share.out"
+expect_files_equal '/usr/X11R6/man x-terminal-emulator -> xterm' \
+	    "$tmpdir/1-X11R6.exp" "$tmpdir/1-X11R6.out"
 
 ./fspause
 write_page uxterm 1x "$tmpdir/usr/X11R6/man/man1/uxterm.1x.gz" \
@@ -52,9 +52,9 @@ xterm -> "- 1x 1 MTIME A - - gz terminal emulator for X"
 EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/2-share.out"
 accessdb_filter "$tmpdir/usr/X11R6/man/index$db_ext" >"$tmpdir/2-X11R6.out"
-expect_pass '/usr/share/man x-terminal-emulator -> uxterm' \
-	    'diff -u "$tmpdir/2-share.exp" "$tmpdir/2-share.out"'
-expect_pass '/usr/X11R6/man x-terminal-emulator -> uxterm' \
-	    'diff -u "$tmpdir/2-X11R6.exp" "$tmpdir/2-X11R6.out"'
+expect_files_equal '/usr/share/man x-terminal-emulator -> uxterm' \
+	    "$tmpdir/2-share.exp" "$tmpdir/2-share.out"
+expect_files_equal '/usr/X11R6/man x-terminal-emulator -> uxterm' \
+	    "$tmpdir/2-X11R6.exp" "$tmpdir/2-X11R6.out"
 
 finish

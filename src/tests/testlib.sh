@@ -86,6 +86,17 @@ expect_pass () {
 	fi
 }
 
+expect_files_equal () {
+	ret=0
+	diff -u "$2" "$3" || ret=$?
+	if [ "$ret" = 0 ]; then
+		echo "  PASS: $1"
+	else
+		failures="$(($failures + 1))"
+		echo "  FAIL: $1"
+	fi
+}
+
 skip () {
 	echo "  SKIP: $1"
 	rm -rf "$abstmpdir"

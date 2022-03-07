@@ -32,7 +32,7 @@ test2 -> "- 1 1 MTIME A - - gz test2(1)"
 test3 -> "- 1 1 MTIME A - - gz test3(1)"
 EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/1.out"
-expect_pass 'setup' 'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'setup' "$tmpdir/1.exp" "$tmpdir/1.out"
 mtime1="$(./get-mtime "$tmpdir/usr/share/man/index$full_db_ext")"
 
 ./fspause
@@ -46,7 +46,7 @@ test1 -> "- 1 1 MTIME A - - gz test1(1)"
 test2 -> "- 1 1 MTIME A - - gz test2(1)"
 EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/2.out"
-expect_pass 'remove test3' 'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
+expect_files_equal 'remove test3' "$tmpdir/2.exp" "$tmpdir/2.out"
 mtime2="$(./get-mtime "$tmpdir/usr/share/man/index$full_db_ext")"
 expect_pass 'mtime changed (1)' 'test "$mtime1" != "$mtime2"'
 
@@ -60,7 +60,7 @@ test1 -> "- 1 1 MTIME A - - gz test1(1)"
 test4 -> "- 1 1 MTIME A - - gz test4(1)"
 EOF
 accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/3.out"
-expect_pass 'remove test2, add test4' 'diff -u "$tmpdir/3.exp" "$tmpdir/3.out"'
+expect_files_equal 'remove test2, add test4' "$tmpdir/3.exp" "$tmpdir/3.out"
 mtime3="$(./get-mtime "$tmpdir/usr/share/man/index$full_db_ext")"
 expect_pass 'mtime changed (2)' 'test "$mtime2" != "$mtime3"'
 

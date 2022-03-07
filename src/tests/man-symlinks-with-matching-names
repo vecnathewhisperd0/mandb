@@ -25,7 +25,7 @@ $abstmpdir/usr/share/man/man1/md5sum.textutils.1.gz
 $abstmpdir/usr/share/man/man1/md5sum.1.gz
 EOF
 run $MAN -C "$tmpdir/manpath.config" -aw md5sum >"$tmpdir/1.out"
-expect_pass 'symlinks with matching names win' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'symlinks with matching names win' \
+	"$tmpdir/1.exp" "$tmpdir/1.out"
 
 finish

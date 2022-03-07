@@ -35,7 +35,6 @@ $abstmpdir/usr/share/man/man3p/open.3p.gz
 $abstmpdir/usr/share/man/man3/open.3pm.gz
 EOF
 run $MAN -C "$tmpdir/manpath.config" -aw 3p open >"$tmpdir/1.out"
-expect_pass 'exact section matches win' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'exact section matches win' "$tmpdir/1.exp" "$tmpdir/1.out"
 
 finish

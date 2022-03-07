@@ -33,16 +33,16 @@ test (8)             - /usr/local/bin/test
 EOF
 PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" run $WHATIS \
 	-C "$tmpdir/manpath.config" test >"$tmpdir/1.out"
-expect_pass 'simple name returns all matches' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'simple name returns all matches' \
+	"$tmpdir/1.exp" "$tmpdir/1.out"
 
 cat >"$tmpdir/2.exp" <<EOF
 test (1)             - /usr/bin/test
 EOF
 PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" run $WHATIS \
 	-C "$tmpdir/manpath.config" "$tmpdir/usr/bin/test" >"$tmpdir/2.out"
-expect_pass '/usr/bin/test only returns appropriate match' \
-	'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
+expect_files_equal '/usr/bin/test only returns appropriate match' \
+	"$tmpdir/2.exp" "$tmpdir/2.out"
 
 cat >"$tmpdir/3.exp" <<EOF
 test (8)             - /usr/local/bin/test
@@ -50,7 +50,7 @@ EOF
 PATH="$PATH:$tmpdir/usr/bin:$tmpdir/usr/local/bin" run $WHATIS \
 	-C "$tmpdir/manpath.config" "$tmpdir/usr/local/bin/test" \
 	>"$tmpdir/3.out"
-expect_pass '/usr/local/bin/test only returns appropriate match' \
-	'diff -u "$tmpdir/3.exp" "$tmpdir/3.out"'
+expect_files_equal '/usr/local/bin/test only returns appropriate match' \
+	"$tmpdir/3.exp" "$tmpdir/3.out"
 
 finish

@@ -26,6 +26,6 @@ test-link -> "- 1 1 $(./get-mtime "$tmpdir/usr/share/man/man1/test-link.1.gz" | 
 EOF
 run $ACCESSDB "$tmpdir/usr/share/man/index$db_ext" | \
 	grep -v '^\$' >"$tmpdir/1.out"
-expect_pass 'correct mtimes' 'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'correct mtimes' "$tmpdir/1.exp" "$tmpdir/1.out"
 
 finish

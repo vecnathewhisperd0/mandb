@@ -47,12 +47,12 @@ EOF
 
 run $MAN -L xyzzy_foo.bar -C "$tmpdir/manpath.config" test |\
 	grep 'xyzzy' >"$tmpdir/1.out"
-expect_pass 'language-specific requests for localized man page' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'language-specific requests for localized man page' \
+	"$tmpdir/1.exp" "$tmpdir/1.out"
 
 run $MAN -L xyzzy_foo.bar -C "$tmpdir/manpath.config" xyz |\
 	grep 'xyz' >"$tmpdir/2.out"
-expect_pass 'no language-specific requests for top-level man page' \
-	'diff -u "$tmpdir/2.exp" "$tmpdir/2.out"'
+expect_files_equal 'no language-specific requests for top-level man page' \
+	"$tmpdir/2.exp" "$tmpdir/2.out"
 
 finish

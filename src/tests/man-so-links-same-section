@@ -58,33 +58,33 @@ EOF
 
 run $MAN -C "$tmpdir/manpath.config" test | \
 	grep -v '^\.l[flt] ' >"$tmpdir/1.out"
-expect_pass 'test(1) without .so link' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'test(1) without .so link' \
+	"$tmpdir/1.exp" "$tmpdir/1.out"
 
 run $MAN -C "$tmpdir/manpath.config" test-fullso | \
 	grep -v '^\.l[flt] ' >"$tmpdir/2.out"
-expect_pass 'test-fullso(1) .so link with section' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/2.out"'
+expect_files_equal 'test-fullso(1) .so link with section' \
+	"$tmpdir/1.exp" "$tmpdir/2.out"
 
 run $MAN -C "$tmpdir/manpath.config" test-relso | \
 	grep -v '^\.l[flt] ' >"$tmpdir/3.out"
-expect_pass 'test-relso(1) .so link without section' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/3.out"'
+expect_files_equal 'test-relso(1) .so link without section' \
+	"$tmpdir/1.exp" "$tmpdir/3.out"
 
 
 run $MAN -C "$tmpdir/manpath.config" testb | \
 	grep -v '^\.l[flt] ' >"$tmpdir/4.out"
-expect_pass 'testb(1) without .so link; gzipped' \
-	'diff -u "$tmpdir/2.exp" "$tmpdir/4.out"'
+expect_files_equal 'testb(1) without .so link; gzipped' \
+	"$tmpdir/2.exp" "$tmpdir/4.out"
 
 run $MAN -C "$tmpdir/manpath.config" test-fullsob | \
 	grep -v '^\.l[flt] ' >"$tmpdir/5.out"
-expect_pass 'test-fullsob(1) .so link with section; gzipped' \
-	'diff -u "$tmpdir/2.exp" "$tmpdir/5.out"'
+expect_files_equal 'test-fullsob(1) .so link with section; gzipped' \
+	"$tmpdir/2.exp" "$tmpdir/5.out"
 
 run $MAN -C "$tmpdir/manpath.config" test-relsob | \
 	grep -v '^\.l[flt] ' >"$tmpdir/6.out"
-expect_pass 'test-relsob(1) .so link without section; gzipped' \
-	'diff -u "$tmpdir/2.exp" "$tmpdir/6.out"'
+expect_files_equal 'test-relsob(1) .so link without section; gzipped' \
+	"$tmpdir/2.exp" "$tmpdir/6.out"
 
 finish

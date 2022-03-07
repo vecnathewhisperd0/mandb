@@ -55,7 +55,6 @@ test
 EOF
 run $MAN -C "$tmpdir/manpath.config" test | \
 	grep -v '^\.l[flt] ' >"$tmpdir/1.out"
-expect_pass 'test(1) expanded correctly' \
-	'diff -u "$tmpdir/1.exp" "$tmpdir/1.out"'
+expect_files_equal 'test(1) expanded correctly' "$tmpdir/1.exp" "$tmpdir/1.out"
 
 finish
