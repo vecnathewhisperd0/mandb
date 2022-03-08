@@ -64,6 +64,7 @@ fi
 
 for manpath in $(manpath -qg | tr ':' ' ')
 do
+	[ -d "$manpath" ] || continue
 	echo "Manual page hierarchy:	$manpath"
 	catdir=$(MANPATH=$manpath manpath -qc 2>/dev/null)
 	cd "$manpath"
