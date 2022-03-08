@@ -22,8 +22,8 @@
 
 #PATH=.:/usr/local/bin:/usr/bin:/bin
 
-progname=`basename $0`
-here=`pwd`
+progname=$(basename "$0")
+here=$(pwd)
 test_only=
 
 # sort out the command line options
@@ -41,7 +41,7 @@ else
 	fi
 fi
 
-( test "$1" = "-h" || test "$1" = "--help" ) && help=yes || help=
+{ test "$1" = "-h" || test "$1" = "--help"; } && help=yes || help=
 
 if test "$help" || test -z "$test_only"
 then
@@ -62,17 +62,17 @@ EOF
 	exit 0
 fi
 
-for manpath in `manpath -qg | tr ':' ' '`
+for manpath in $(manpath -qg | tr ':' ' ')
 do
 	echo "Manual page hierarchy:	$manpath"
-	catdir=`MANPATH=$manpath manpath -qc 2>/dev/null`
-	cd $manpath
+	catdir=$(MANPATH=$manpath manpath -qc 2>/dev/null)
+	cd "$manpath"
 
 	subdirs=
-	for subdir in `echo man?*`
+	for subdir in $(echo man?*)
 	do
 		test -d "$subdir" &&
-		subdirs="$subdirs `echo ${subdir} | sed -e 's,man,cat,'`"
+		subdirs="$subdirs $(echo "$subdir" | sed -e 's,man,cat,')"
 	done
 
 	echo "Cat page hierarchy:	$catdir"
@@ -84,7 +84,7 @@ do
 	  subs_ok=
 	  for subdir in $subdirs
 	  do
-		cd $catdir
+		cd "$catdir"
 	 	test -d "$subdir" &&
 		subs_ok="$subs_ok $subdir" ||
 		subs_needed="$subs_needed $subdir"
@@ -103,18 +103,19 @@ do
 	  catdirs=
 	fi
 
-	cd $here
+	cd "$here"
 	if test "$test_only" = "no" && test "$catdirs"
 	then
 		echo " "
+		# shellcheck disable=SC2086
 		echo "mkinstalldirs $catdirs" &&
 		mkinstalldirs $catdirs &&
 		echo "chown $owner $catdirs" &&
-		chown $owner $catdirs &&
+		chown "$owner" $catdirs &&
 		echo "chgrp $group $catdirs" &&
-		chgrp $group $catdirs &&
+		chgrp "$group" $catdirs &&
 		echo "chmod $mode $catdirs" &&
-		chmod $mode $catdirs ||
+		chmod "$mode" $catdirs ||
 		exit $?
 	fi
 

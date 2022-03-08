@@ -1,3 +1,5 @@
+# shellcheck shell=sh
+
 failures=0
 
 # Save tests the trouble of exporting variables they set when executing 'run'.
@@ -25,6 +27,7 @@ init () {
 }
 
 run () {
+	# shellcheck disable=SC2154
 	"$abs_top_builddir/libtool" --mode=execute \
 		-dlopen "$abs_top_builddir/lib/.libs/libman.la" \
 		-dlopen "$abs_top_builddir/libdb/.libs/libmandb.la" \
@@ -79,7 +82,7 @@ report () {
 	if [ "$2" = 0 ]; then
 		echo "  PASS: $1"
 	else
-		failures="$(($failures + 1))"
+		failures="$((failures + 1))"
 		echo "  FAIL: $1"
 	fi
 }

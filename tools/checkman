@@ -29,21 +29,22 @@ if test $# -ne 0
 then
 	manpath=$1
 else
-	manpath=`manpath -q`
+	manpath=$(manpath -q)
 fi
 
 echo "Search for duplicates under:" >&2
-echo $manpath >&2
+echo "$manpath" >&2
 
-dups=`whatis -w -M $manpath "*" | sed -e 's/\([^(]*\) (\([^)]*\)).*/\2#\1/' | \
-      sort | uniq -d`
+dups=$(whatis -w -M "$manpath" "*" |
+       sed -e 's/\([^(]*\) (\([^)]*\)).*/\2#\1/' | \
+       sort | uniq -d)
 
 for i in $dups
 do
 
 # split up the dup into the section/name components
 
-	args=`echo $i |tr '#' ' '`
+	args=$(echo "$i" | tr '#' ' ')
 
 # We only cater for two dups. Others will have to be fixed on a later run.
 # Find the locations of the dup'd files
@@ -51,7 +52,8 @@ do
 	file1=
 	file2=
 
-	for file in `man -aw -M $manpath $args |sed -e 's/\([^ ]*\).*/\1/'`
+	# shellcheck disable=SC2086
+	for file in $(man -aw -M "$manpath" $args |sed -e 's/\([^ ]*\).*/\1/')
 	do
 		if test "$file1"
 		then

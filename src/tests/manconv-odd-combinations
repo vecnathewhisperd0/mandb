@@ -10,7 +10,7 @@
 init
 
 (for x in $(seq 160 255); do
-	printf "\\$(printf %03o "$x")"
+	printf %b "\\$(printf %03o "$x")"
 done
 echo) >"$tmpdir/1.inp"
 
@@ -37,7 +37,7 @@ expect_files_equal \
 	"$tmpdir/2.exp" "$tmpdir/2.out"
 
 (for x in $(seq 160 255); do
-	printf "\\$(printf %03o "$x")"
+	printf %b "\\$(printf %03o "$x")"
 done
 echo) | iconv -f ISO-8859-1 -t UTF-8 >"$tmpdir/3.inp"
 run $MANCONV -f UTF-8:ISO-8859-1 -t UTF-8 <"$tmpdir/3.inp" >"$tmpdir/3.out"
