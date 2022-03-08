@@ -23,7 +23,6 @@
 #PATH=.:/usr/local/bin:/usr/bin:/bin
 
 progname=$(basename "$0")
-here=$(pwd)
 test_only=
 
 # sort out the command line options
@@ -67,12 +66,11 @@ do
 	[ -d "$manpath" ] || continue
 	echo "Manual page hierarchy:	$manpath"
 	catdir=$(MANPATH=$manpath manpath -qc 2>/dev/null)
-	cd "$manpath"
 
 	subdirs=
-	for subdir in $(echo man?*)
+	for subdir in $(cd "$manpath" && echo man?*)
 	do
-		test -d "$subdir" &&
+		test -d "$manpath/$subdir" &&
 		subdirs="$subdirs $(echo "$subdir" | sed -e 's,man,cat,')"
 	done
 
@@ -85,8 +83,7 @@ do
 	  subs_ok=
 	  for subdir in $subdirs
 	  do
-		cd "$catdir"
-	 	test -d "$subdir" &&
+	 	test -d "$catdir/$subdir" &&
 		subs_ok="$subs_ok $subdir" ||
 		subs_needed="$subs_needed $subdir"
 	  done
@@ -104,7 +101,6 @@ do
 	  catdirs=
 	fi
 
-	cd "$here"
 	if test "$test_only" = "no" && test "$catdirs"
 	then
 		echo " "

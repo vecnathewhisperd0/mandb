@@ -34,10 +34,8 @@ run $MAN -C "$tmpdir/manpath.config" -aw "$page_name(2)" >"$tmpdir/2.out"
 expect_files_equal '"man '\''name(2)'\''" is the same as "man 2 name"' \
         "$tmpdir/2.exp" "$tmpdir/2.out"
 
-(
-        cd "$tmpdir/usr/share/man/man2/"
-        mv "${page_name}.2.gz" "${page_name}.2p.gz"
-)
+mv "$tmpdir/usr/share/man/man2/$page_name.2.gz" \
+   "$tmpdir/usr/share/man/man2/$page_name.2p.gz"
 
 cat >"$tmpdir/2p.exp" <<EOF
 $abstmpdir/usr/share/man/man2/${page_name}.2p.gz
