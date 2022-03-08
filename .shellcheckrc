@@ -1,1 +1,5 @@
 enable=deprecate-which
+# Needed so that shellcheck can follow sourcing of src/tests/testlib.sh from
+# files under src/tests/ even in pre-commit runs where src/tests/testlib.sh
+# was not changed.
+external-sources=true

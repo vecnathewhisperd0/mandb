@@ -14,10 +14,4 @@ repos:
     rev: v0.8.0.4
     hooks:
     -   id: shellcheck
-        alias: shellcheck-tools
-        exclude: ^(bootstrap|src/tests/.*)$
-    -   id: shellcheck
-        alias: shellcheck-tests
-        name: shellcheck (src/tests/)
-        files: ^src/tests/.*$
-        args: ["-P", "src/tests"]
+        exclude: ^bootstrap$
