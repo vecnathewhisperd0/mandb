@@ -10,3 +10,14 @@ repos:
     -   id: trailing-whitespace
         exclude: ^(ChangeLog-2013|patches/.*)$
         args: [--chars, " \t\n\r\v"]
+-   repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.8.0.4
+    hooks:
+    -   id: shellcheck
+        alias: shellcheck-tools
+        exclude: ^(bootstrap|src/tests/.*)$
+    -   id: shellcheck
+        alias: shellcheck-tests
+        name: shellcheck (src/tests/)
+        files: ^src/tests/.*$
+        args: ["-P", "src/tests"]
