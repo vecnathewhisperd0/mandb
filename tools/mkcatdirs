@@ -108,14 +108,8 @@ do
 	then
 		echo " "
 		# shellcheck disable=SC2086
-		echo "mkinstalldirs $catdirs" &&
-		mkinstalldirs $catdirs &&
-		echo "chown $owner $catdirs" &&
-		chown "$owner" $catdirs &&
-		echo "chgrp $group $catdirs" &&
-		chgrp "$group" $catdirs &&
-		echo "chmod $mode $catdirs" &&
-		chmod "$mode" $catdirs ||
+		echo "install -d -o $owner -g $group -m $mode $catdirs" &&
+		install -d -o "$owner" -g "$group" -m "$mode" $catdirs ||
 		exit $?
 	fi
 
