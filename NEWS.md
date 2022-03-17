@@ -391,7 +391,7 @@ Fixes:
    be the `man` user's primary group and nothing in cache directories is
    group-writeable.
 
-   Maintainers of distribution packagers should take care to review their
+   Maintainers of distribution packages should take care to review their
    installation rules in light of this change.
 
    As far as I know this has no CVE ID, but it is described
