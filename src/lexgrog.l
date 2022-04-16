@@ -338,7 +338,7 @@ sr_name		(ИМЕ|НАЗИВ)
 srlatin_name	(IME|NAZIV)
 sv_name		N[Aa][Mm][Nn]
 ta_name		பெய
-tr_name		(İ|i)S(İ|i)M
+tr_name		(AD|(İ|i)S(İ|i)M)
 uk_name		НАЗВА
 vi_name		TÊN
 zh_CN_name	名{blank}?(称|字){blank}?.*
