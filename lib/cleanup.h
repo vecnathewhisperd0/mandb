@@ -14,7 +14,7 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; see the file COPYING.LIB.  If not,
+ * License along with this library; see the file docs/COPYING.LIB.  If not,
  * write to the Free Software Foundation, Inc., 51 Franklin St, Fifth
  * Floor, Boston, MA  02110-1301  USA.
  */

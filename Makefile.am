@@ -26,7 +26,7 @@ endif
 
 SUBDIRS = docs gl/lib $(GNULIB_PO) init lib libdb src man manual po tools
 
-dist_noinst_DATA = COPYING.GPLv2 FAQ README.md
+dist_noinst_DATA = FAQ README.md
 noinst_HEADERS = include/comp_src.h include/manconfig.h
 
 EXTRA_DIST = \

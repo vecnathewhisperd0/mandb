@@ -1,4 +1,6 @@
 dist_noinst_DATA = \
+	COPYING.GPLv2 \
+	COPYING.LIB \
 	HACKING.md \
 	TODO \
 	man-db.lsm \
