@@ -88,6 +88,7 @@ gl_map_t whatis_map = NULL;
 
 struct whatis {
 	char *whatis;
+	char *filters;
 	gl_list_t trace;
 };
 
@@ -96,6 +97,7 @@ static void whatis_free (const void *value)
 	struct whatis *whatis = (struct whatis *) value;
 
 	free (whatis->whatis);
+	free (whatis->filters);
 	gl_list_free (whatis->trace);
 	free (whatis);
 }
@@ -291,9 +293,11 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	 * clear the hash between calls.
 	 */
 
-	if (whatis)
+	if (whatis) {
 		lg.whatis = whatis->whatis ? xstrdup (whatis->whatis) : NULL;
-	else {
+		lg.filters =
+			whatis->filters ? xstrdup (whatis->filters) : NULL;
+	} else {
 		/* Cache miss; go and get the whatis info in its raw state. */
 		char *file_base = base_name (file);
 		struct whatis *new_whatis;
@@ -306,6 +310,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 
 		new_whatis = XMALLOC (struct whatis);
 		new_whatis->whatis = lg.whatis ? xstrdup (lg.whatis) : NULL;
+		new_whatis->filters = lg.filters ? xstrdup (lg.filters) : NULL;
 		/* We filled out ult_trace above. */
 		new_whatis->trace = ult_trace;
 		gl_map_put (whatis_map, xstrdup (ult), new_whatis);

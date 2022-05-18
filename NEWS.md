@@ -1,3 +1,11 @@
+man-db 2.10.3
+=============
+
+Fixes:
+
+ * `mandb` now correctly records filters in the database if it uses cached
+   whatis information.
+
 man-db 2.10.2 (17 March 2022)
 =============================
 
