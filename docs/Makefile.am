@@ -3,7 +3,6 @@ dist_noinst_DATA = \
 	COPYING.LIB \
 	HACKING.md \
 	TODO \
-	man-db.lsm \
 	manpage.example \
 	manpage.example.mdoc \
 	manpage.example.pod \
