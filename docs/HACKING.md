@@ -167,7 +167,7 @@ Release process
    arrive. During this time, test until your eyeballs fall out, but try to
    avoid changing any translated messages.
 
-4. Once you're ready to release, update `NEWS.md`, `docs/man-db.lsm`, and
+4. Once you're ready to release, update `NEWS.md`, and
    the `AC_INIT` version number and `date` in `configure.ac`. Commit and
    tag.
 
