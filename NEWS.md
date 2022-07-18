@@ -5,6 +5,7 @@ Fixes:
 
  * `mandb` now correctly records filters in the database if it uses cached
    whatis information.
+ * Upgrade Gnulib, fixing syntax error on glibc systems with GCC 11.
 
 man-db 2.10.2 (17 March 2022)
 =============================
