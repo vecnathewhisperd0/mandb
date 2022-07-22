@@ -7,6 +7,11 @@ Fixes:
    whatis information.
  * Upgrade Gnulib, fixing syntax error on glibc systems with GCC 11.
 
+Improvements:
+
+ * Add more recognized case variants for localized versions of the `NAME`
+   section.
+
 man-db 2.10.2 (17 March 2022)
 =============================
 

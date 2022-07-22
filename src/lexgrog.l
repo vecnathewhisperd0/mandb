@@ -311,7 +311,7 @@ comment		['.]\\{dbl_quote}
   */
 ar_name		(اﻹسم|الإسم)
  /* ИМЕ also works for mk */
-bg_name		ИМЕ
+bg_name		И(М|м)(Е|е)
 cs_name		(J[Mm](É|é|\\\('[Ee]|E|e)[Nn][Oo]|N(Á|á)[Zz][Ee][Vv])
 da_name		N[Aa][Vv][Nn]
 de_name		B[Ee][Zz][Ee][Ii][Cc][Hh][Nn][Uu][Nn][Gg]
@@ -328,19 +328,19 @@ it_name		N[Oo][Mm][Ee]
 ja_name		(名|̾)(前|称)
 ko_name		(이름|명칭)
 latin_name	N[Oo][Mm][Ee][Nn]
-lt_name		PAVADINIMAS
+lt_name		P[Aa][Vv][Aa][Dd][Ii][Nn][Ii][Mm][Aa][Ss]
 nl_name		N[Aa][Aa][Mm]
 pl_name		N[Aa][Zz][Ww][Aa]
 ro_name		N[Uu][Mm][Ee]
-ru_name         (ИМЯ|НАЗВАНИЕ|НАИМЕНОВАНИЕ)
+ru_name         (И(М|м)(Я|я)|Н(А|а)(З|з)(В|в)(А|а)(Н|н)(И|и)(Е|е)|Н(А|а)(И|и)(М|м)(Е|е)(Н|н)(О|о)(В|в)(А|а)(Н|н)(И|и)(Е|е))
 sk_name		M[Ee][Nn][Oo]
-sr_name		(ИМЕ|НАЗИВ)
-srlatin_name	(IME|NAZIV)
+sr_name		(И(М|м)(Е|е)|Н(А|а)(З|з)(И|и)(В|в))
+srlatin_name	(I[Mm][Ee]|N[Aa][Zz][Ii][Vv])
 sv_name		N[Aa][Mm][Nn]
 ta_name		பெய
-tr_name		(AD|(İ|i)S(İ|i)M)
-uk_name		НАЗВА
-vi_name		TÊN
+tr_name		(A[Dd]|(İ|i)S(İ|i)M)
+uk_name		Н(А|а)(З|з)(В|в)(А|а)
+vi_name		T(Ê|ê)[Nn]
 zh_CN_name	名{blank}?(称|字){blank}?.*
 zh_TW_name	(名{blank}?(稱|字)|命令名){blank}?.*
 name		({ar_name}|{bg_name}|{cs_name}|{da_name}|{de_name}|{en_name}|{eo_name}|{es_name}|{fa_name}|{fi_name}|{fr_name}|{hu_name}|{id_name}|{it_name}|{ja_name}|{ko_name}|{latin_name}|{lt_name}|{nl_name}|{pl_name}|{ro_name}|{ru_name}|{sk_name}|{sr_name}|{srlatin_name}|{sv_name}|{ta_name}|{tr_name}|{uk_name}|{vi_name}|{zh_CN_name}|{zh_TW_name})
