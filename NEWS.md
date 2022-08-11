@@ -6,6 +6,8 @@ Fixes:
  * `mandb` now correctly records filters in the database if it uses cached
    whatis information.
  * Upgrade Gnulib, fixing syntax error on glibc systems with GCC 11.
+ * The `CATWIDTH` configuration file directive now overrides `MINCATWIDTH`
+   and `MAXCATWIDTH`.
 
 Improvements:
 

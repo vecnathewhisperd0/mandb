@@ -678,7 +678,9 @@ static pipecmd *add_roff_line_length (pipecmd *cmd, bool *save_cat_p)
 	int length;
 	pipecmd *ret = NULL;
 
-	if (!catman) {
+	if (!catman && cat_width)
+		debug ("Cat pages forced to terminal width %d\n", cat_width);
+	else if (!catman) {
 		int line_length = get_line_length ();
 		debug ("Terminal width %d\n", line_length);
 		if (line_length >= min_cat_width &&
