@@ -431,7 +431,6 @@ static void cleanup (void *arg)
 	free (dbpaths->xtmpfile);
 	dbpaths->xfile = dbpaths->xtmpfile = NULL;
 #endif /* NDBM */
-	free (dbpaths);
 }
 
 #define CACHEDIR_TAG \
@@ -646,6 +645,7 @@ out:
 		pop_cleanup (cleanup_sigsafe, dbpaths);
 		cleanup (dbpaths);
 		pop_cleanup (cleanup, dbpaths);
+		free (dbpaths);
 	}
 
 	free (catpath);
