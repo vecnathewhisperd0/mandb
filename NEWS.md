@@ -13,6 +13,7 @@ Improvements:
 
  * Add more recognized case variants for localized versions of the `NAME`
    section.
+ * Maintain multi keys in sorted order, improving database reproducibility.
 
 man-db 2.10.2 (17 March 2022)
 =============================

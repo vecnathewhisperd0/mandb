@@ -230,10 +230,19 @@ void split_content (MYDBM_FILE dbf, char *cont_ptr, struct mandata *pinfo)
 	pinfo->addr = cont_ptr;
 }
 
-static bool name_ext_equals (const void *elt1, const void *elt2)
+bool ATTRIBUTE_PURE name_ext_equals (const void *elt1, const void *elt2)
 {
 	const struct name_ext *ref1 = elt1, *ref2 = elt2;
 	return STREQ (ref1->name, ref2->name) && STREQ (ref1->ext, ref2->ext);
+}
+
+int ATTRIBUTE_PURE name_ext_compare (const void *elt1, const void *elt2)
+{
+	const struct name_ext *ref1 = elt1, *ref2 = elt2;
+	int name_cmp = strcmp (ref1->name, ref2->name);
+	if (name_cmp)
+		return name_cmp;
+	return strcmp (ref1->ext, ref2->ext);
 }
 
 /* Extract all of the names/extensions associated with this key. Each case
@@ -260,7 +269,7 @@ gl_list_t list_extensions (char *data)
 		/* Don't copy these; they will point into the given string. */
 		name_ext->name = name;
 		name_ext->ext = ext;
-		gl_list_add_last (list, name_ext);
+		gl_sortedlist_add (list, name_ext_compare, name_ext);
 	}
 
 	debug ("found %zu names/extensions\n", gl_list_size (list));

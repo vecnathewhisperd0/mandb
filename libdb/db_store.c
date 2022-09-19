@@ -33,6 +33,8 @@
 
 #include "attribute.h"
 #include "error.h"
+#include "gl_array_list.h"
+#include "gl_xlist.h"
 #include "timespec.h"
 #include "xalloc.h"
 #include "xvasprintf.h"
@@ -40,6 +42,7 @@
 #include "manconfig.h"
 
 #include "debug.h"
+#include "glcontainers.h"
 
 #include "mydbm.h"
 #include "db_storage.h"
@@ -164,6 +167,27 @@ static datum make_content (struct mandata *in)
 	return cont;
 }
 
+/* The complement of list_extensions. */
+static char *make_extensions_reference (gl_list_t refs)
+{
+	struct name_ext *ref;
+	size_t len = 0;
+	char *data, *cur;
+
+	GL_LIST_FOREACH (refs, ref)
+		len += strlen (ref->name) + strlen (ref->ext) + 2;
+
+	cur = data = xmalloc (len + 1);
+	GL_LIST_FOREACH (refs, ref) {
+		*cur++ = '\t';
+		cur = stpcpy (cur, ref->name);
+		*cur++ = '\t';
+		cur = stpcpy (cur, ref->ext);
+	}
+
+	return data;
+}
+
 /*
  Any one of three situations can occur when storing some data.
 
@@ -197,6 +221,8 @@ static datum make_content (struct mandata *in)
 int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 {
 	datum oldkey, oldcont;
+	gl_list_t refs;
+	struct name_ext *ref;
 	char *value;
 
 	memset (&oldkey, 0, sizeof oldkey);
@@ -268,9 +294,15 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		MYDBM_FREE_DPTR (newkey);
 		MYDBM_FREE_DPTR (newcont);
 
-		value = xasprintf (
-			"%s\t%s\t%s", MYDBM_DPTR (oldcont), base, in->ext);
-		assert (value);
+		refs = list_extensions (MYDBM_DPTR (oldcont) + 1);
+		ref = XMALLOC (struct name_ext);
+		/* Not copied. */
+		ref->name = base;
+		ref->ext = in->ext;
+		gl_sortedlist_add (refs, name_ext_compare, ref);
+		value = make_extensions_reference (refs);
+		gl_list_free (refs);
+
 		MYDBM_SET (newcont, value);
 		MYDBM_FREE_DPTR (oldcont);
 
@@ -359,9 +391,21 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 
 		/* Now build a simple reference to the above two items */
 
-		value = xasprintf (
-			"\t%s\t%s\t%s\t%s", old_name, old.ext, base, in->ext);
-		assert (value);
+		refs = gl_list_create_empty (GL_ARRAY_LIST, name_ext_equals,
+					     NULL, plain_free, true);
+		ref = XMALLOC (struct name_ext);
+		/* Not copied. */
+		ref->name = old_name;
+		ref->ext = old.ext;
+		gl_sortedlist_add (refs, name_ext_compare, ref);
+		ref = XMALLOC (struct name_ext);
+		/* Not copied. */
+		ref->name = base;
+		ref->ext = in->ext;
+		gl_sortedlist_add (refs, name_ext_compare, ref);
+		value = make_extensions_reference (refs);
+		gl_list_free (refs);
+
 		MYDBM_SET (newcont, value);
 
 		if (MYDBM_REPLACE (dbf, oldkey, newcont))

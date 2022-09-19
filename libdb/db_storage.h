@@ -103,6 +103,8 @@ extern datum make_multi_key (const char *page, const char *ext);
 #define infoalloc() XZALLOC (struct mandata)
 
 extern char *name_to_key (const char *name);
+bool name_ext_equals (const void *elt1, const void *elt2);
+int name_ext_compare (const void *elt1, const void *elt2);
 /* Returns a list of struct name_ext. */
 extern gl_list_t list_extensions (char *data);
 extern void gripe_replace_key (MYDBM_FILE dbf, const char *data);
