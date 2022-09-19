@@ -140,7 +140,6 @@ void drop_effective_privs (void)
 	}
 
 	priv_drop_count++;
-	debug ("++priv_drop_count = %d\n", priv_drop_count);
 #endif /* MAN_OWNER */
 }
 
@@ -153,7 +152,6 @@ void regain_effective_privs (void)
 #ifdef MAN_OWNER
 	if (priv_drop_count) {
 		priv_drop_count--;
-		debug ("--priv_drop_count = %d\n", priv_drop_count);
 		if (priv_drop_count)
 			return;
 	}
