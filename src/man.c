@@ -89,6 +89,7 @@
 #include "compression.h"
 #include "debug.h"
 #include "fatal.h"
+#include "filenames.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "pathsearch.h"
@@ -105,7 +106,6 @@
 #include "mydbm.h"
 #include "db_storage.h"
 
-#include "filenames.h"
 #include "globbing.h"
 #include "ult_src.h"
 #include "manp.h"
@@ -3160,7 +3160,8 @@ static int try_section (const char *path, const char *sec, const char *name,
 
 	GL_LIST_FOREACH (names, found_name) {
 		struct mandata *info = XZALLOC (struct mandata);
-		char *info_buffer = filename_info (found_name, info, name);
+		char *info_buffer = filename_info (found_name, info, name,
+						   quiet < 2);
 		const char *ult;
 		int f;
 
@@ -3738,7 +3739,8 @@ static int do_global_apropos_section (const char *path, const char *sec,
 			continue;
 
 		info = XZALLOC (struct mandata);
-		info_buffer = filename_info (found_name, info, NULL);
+		info_buffer = filename_info (found_name, info, NULL,
+					     quiet < 2);
 		if (!info_buffer)
 			goto next;
 		info->addr = info_buffer;

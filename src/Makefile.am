@@ -64,7 +64,7 @@ catman_LDADD = $(LIBMANDB) $(libpipeline_LIBS)
 globbing_LDADD = $(LIBMAN)
 lexgrog_LDADD = $(LIBMAN) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 man_LDADD = $(LIBMANDB) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
-man_recode_LDADD = $(LIBMANDB) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
+man_recode_LDADD = $(LIBMAN) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 manconv_LDADD = $(LIBMAN) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 mandb_LDADD = $(LIBMANDB) $(LIBCOMPRESS) $(libpipeline_LIBS) $(LTLIBICONV)
 manpath_LDADD = $(LIBMAN)
@@ -90,8 +90,6 @@ lexgrog_SOURCES = \
 	decompress.h \
 	descriptions.c \
 	descriptions.h \
-	filenames.c \
-	filenames.h \
 	globbing.c \
 	globbing.h \
 	lexgrog.h \
@@ -108,8 +106,6 @@ lexgrog_SOURCES = \
 man_SOURCES = \
 	decompress.c \
 	decompress.h \
-	filenames.c \
-	filenames.h \
 	globbing.c \
 	globbing.h \
 	man.c \
@@ -149,8 +145,6 @@ mandb_SOURCES = \
 	descriptions.c \
 	descriptions.h \
 	descriptions_store.c \
-	filenames.c \
-	filenames.h \
 	globbing.c \
 	globbing.h \
 	lexgrog.h \

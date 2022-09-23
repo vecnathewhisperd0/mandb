@@ -47,28 +47,9 @@
 
 #define FIELDS  10      /* No of fields in each database page `content' */
 
-#include "timespec.h"
+#include "filenames.h"
 
 #include "mydbm.h"
-
-struct mandata {
-	char *addr;			/* ptr to memory containing the fields */
-
-	char *name;			/* Name of page, if != key */
-
-	/* The following are all const because they should be pointers to
-	 * parts of strings allocated elsewhere (often the addr field above)
-	 * and should not be written through or freed themselves.
-	 */
-	const char *ext;		/* Filename ext w/o comp ext */
-	const char *sec;		/* Section name/number */
-	char id;			/* id for this entry */
-	const char *pointer;		/* id related file pointer */
-	const char *comp;		/* Compression extension */
-	const char *filter;		/* filters needed for the page */
-	const char *whatis;		/* whatis description for page */
-	struct timespec mtime;		/* mod time for file */
-};
 
 struct name_ext {
 	const char *name;

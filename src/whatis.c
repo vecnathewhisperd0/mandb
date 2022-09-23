@@ -70,6 +70,7 @@
 #include "cleanup.h"
 #include "debug.h"
 #include "fatal.h"
+#include "filenames.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "pathsearch.h"

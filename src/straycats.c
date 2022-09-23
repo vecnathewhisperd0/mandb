@@ -55,6 +55,7 @@
 #include "appendstr.h"
 #include "compression.h"
 #include "debug.h"
+#include "filenames.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "decompress.h"

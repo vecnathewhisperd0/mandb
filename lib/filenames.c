@@ -25,8 +25,9 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "error.h"
@@ -41,16 +42,11 @@
 #include "appendstr.h"
 #include "compression.h"
 #include "debug.h"
-
-#include "db_storage.h"
-
 #include "filenames.h"
 
 static void gripe_bogus_manpage (const char *manpage)
 {
-	if (quiet < 2)
-		error (0, 0, _("warning: %s: ignoring bogus filename"),
-		       manpage);
+	error (0, 0, _("warning: %s: ignoring bogus filename"), manpage);
 }
 
 char *make_filename (const char *path, const char *name,
@@ -90,7 +86,7 @@ char *make_filename (const char *path, const char *name,
  * NULL.
  */
 char *filename_info (const char *file, struct mandata *info,
-		     const char *req_name)
+		     const char *req_name, bool warn_if_bogus)
 {
 	char *manpage = xstrdup (file);
 	char *slash = strrchr (manpage, '/');
@@ -122,7 +118,8 @@ char *filename_info (const char *file, struct mandata *info,
 		char *ext = strrchr (base_name, '.');
 		if (!ext) {
 			/* no section extension */
-			gripe_bogus_manpage (file);
+			if (warn_if_bogus)
+				gripe_bogus_manpage (file);
 			free (manpage);
 			return NULL;
 		}
@@ -130,7 +127,8 @@ char *filename_info (const char *file, struct mandata *info,
 		info->ext = ext;
 		if (!*info->ext) {
 			/* zero-length section extension */
-			gripe_bogus_manpage (file);
+			if (warn_if_bogus)
+				gripe_bogus_manpage (file);
 			free (manpage);
 			return NULL;
 		}
@@ -141,7 +139,8 @@ char *filename_info (const char *file, struct mandata *info,
 	if (strlen (info->sec) >= 1 && strlen (info->ext) >= 1 &&
 	    info->sec[0] != info->ext[0]) {
 		/* mismatch in section */
-		gripe_bogus_manpage (file);
+		if (warn_if_bogus)
+			gripe_bogus_manpage (file);
 		free (manpage);
 		return NULL;
 	}

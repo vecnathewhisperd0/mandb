@@ -1,7 +1,7 @@
 /*
  * filenames.h: Interface to composing and dissecting man page file names
  *
- * Copyright (C) 2001, 2002 Colin Watson.
+ * Copyright (C) 2001-2022 Colin Watson.
  *
  * This file is part of man-db.
  *
@@ -20,9 +20,35 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "db_storage.h"
+#ifndef MAN_FILENAMES_H
+#define MAN_FILENAMES_H
+
+#include <stdbool.h>
+
+#include "timespec.h"
+
+struct mandata {
+	char *addr;			/* ptr to memory containing the fields */
+
+	char *name;			/* Name of page, if != key */
+
+	/* The following are all const because they should be pointers to
+	 * parts of strings allocated elsewhere (often the addr field above)
+	 * and should not be written through or freed themselves.
+	 */
+	const char *ext;		/* Filename ext w/o comp ext */
+	const char *sec;		/* Section name/number */
+	char id;			/* id for this entry */
+	const char *pointer;		/* id related file pointer */
+	const char *comp;		/* Compression extension */
+	const char *filter;		/* filters needed for the page */
+	const char *whatis;		/* whatis description for page */
+	struct timespec mtime;		/* mod time for file */
+};
 
 extern char *make_filename (const char *path, const char *name,
 			    struct mandata *in, const char *type);
 extern char *filename_info (const char *file, struct mandata *info,
-			    const char *req_name);
+			    const char *req_name, bool warn_if_bogus);
+
+#endif /* MAN_FILENAMES_H */

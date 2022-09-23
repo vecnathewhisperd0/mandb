@@ -64,6 +64,7 @@
 #include "appendstr.h"
 #include "debug.h"
 #include "fatal.h"
+#include "filenames.h"
 #include "glcontainers.h"
 #include "orderfiles.h"
 #include "security.h"
@@ -73,7 +74,6 @@
 #include "db_storage.h"
 
 #include "descriptions.h"
-#include "filenames.h"
 #include "globbing.h"
 #include "lexgrog.h"
 #include "manp.h"
@@ -170,7 +170,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	memset (&lg, 0, sizeof (struct lexgrog));
 	memset (&info, 0, sizeof (struct mandata));
 
-	manpage = filename_info (file, &info, NULL);
+	manpage = filename_info (file, &info, NULL, quiet < 2);
 	if (!manpage)
 		return;
 	manpage_base = manpage + strlen (manpage) + 1;
@@ -787,7 +787,7 @@ static int count_glob_matches (const char *name, const char *ext,
 			continue;
 		}
 
-		buf = filename_info (walk, &info, name);
+		buf = filename_info (walk, &info, name, quiet < 2);
 		if (buf) {
 			if (STREQ (ext, info.ext))
 				++count;

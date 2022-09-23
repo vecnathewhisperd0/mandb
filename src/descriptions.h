@@ -22,7 +22,9 @@
 
 #include "gl_list.h"
 
-#include "db_storage.h"
+#include "filenames.h"
+
+#include "mydbm.h"
 
 struct page_description {
 	char *name;

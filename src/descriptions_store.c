@@ -44,11 +44,11 @@
 #include "manconfig.h"
 
 #include "debug.h"
+#include "filenames.h"
 #include "glcontainers.h"
 
 #include "db_storage.h"
 
-#include "filenames.h"
 #include "ult_src.h"
 #include "descriptions.h"
 
@@ -102,8 +102,8 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 				struct mandata trace_info;
 				char *buf;
 
-				buf = filename_info (trace_name,
-						     &trace_info, "");
+				buf = filename_info (trace_name, &trace_info,
+						     "", quiet < 2);
 				if (trace_info.name &&
 				    STREQ (trace_info.name, desc->name)) {
 					struct stat st;

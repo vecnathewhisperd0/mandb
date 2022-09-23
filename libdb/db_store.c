@@ -42,6 +42,7 @@
 #include "manconfig.h"
 
 #include "debug.h"
+#include "filenames.h"
 #include "glcontainers.h"
 
 #include "mydbm.h"

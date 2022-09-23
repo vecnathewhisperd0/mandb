@@ -44,6 +44,8 @@ libman_la_SOURCES = \
 	encodings.h \
 	fatal.c \
 	fatal.h \
+	filenames.c \
+	filenames.h \
 	glcontainers.c \
 	glcontainers.h \
 	linelength.c \

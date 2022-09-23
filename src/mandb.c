@@ -69,16 +69,17 @@
 
 #include "cleanup.h"
 #include "debug.h"
+#include "filenames.h"
 #include "glcontainers.h"
 #include "pipeline.h"
 #include "sandbox.h"
 #include "security.h"
 #include "util.h"
 
+#include "db_storage.h"
 #include "mydbm.h"
 
 #include "check_mandirs.h"
-#include "filenames.h"
 #include "manp.h"
 #include "straycats.h"
 
@@ -357,7 +358,7 @@ static int update_one_file (MYDBM_FILE dbf,
 		char *manpage;
 
 		memset (&info, 0, sizeof (struct mandata));
-		manpage = filename_info (filename, &info, "");
+		manpage = filename_info (filename, &info, "", quiet < 2);
 		if (info.name) {
 			dbdelete (dbf, info.name, &info);
 			purge_pointers (dbf, info.name);

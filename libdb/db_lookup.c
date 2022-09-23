@@ -51,6 +51,7 @@
 
 #include "debug.h"
 #include "fatal.h"
+#include "filenames.h"
 #include "glcontainers.h"
 #include "wordfnmatch.h"
 #include "xregcomp.h"
