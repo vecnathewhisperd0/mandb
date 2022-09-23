@@ -100,41 +100,37 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 		} else if (trace) {
 			GL_LIST_FOREACH (trace, trace_name) {
 				struct mandata *trace_info;
+				struct stat st;
 
 				trace_info = filename_info (trace_name, "",
 							    quiet < 2);
-				if (trace_info && trace_info->name &&
-				    STREQ (trace_info->name, desc->name)) {
-					struct stat st;
+				if (!trace_info || !trace_info->name ||
+				    !STREQ (trace_info->name, desc->name))
+					goto next_trace;
 
-					if (path &&
-					    !is_prefix (path,
-							trace_info->addr)) {
-						/* Link outside this manual
-						 * hierarchy; skip this
-						 * description.
-						 */
-						found_external = true;
-						free_mandata_struct
-							(trace_info);
-						break;
-					}
-					if (!gl_list_next_node (trace,
-								trace_node) &&
-					    save_id == SO_MAN)
-						info->id = ULT_MAN;
-					else
-						info->id = save_id;
-					info->pointer = NULL;
-					info->whatis = desc->whatis;
-					if (lstat (trace_name, &st) == 0)
-						info->mtime = get_stat_mtime
-							(&st);
-					else
-						info->mtime = save_mtime;
-					found_real_page = true;
+				if (path &&
+				    !is_prefix (path, trace_info->addr)) {
+					/* Link outside this manual
+					 * hierarchy; skip this description.
+					 */
+					found_external = true;
+					free_mandata_struct (trace_info);
+					break;
 				}
+				if (!gl_list_next_node (trace, trace_node) &&
+				    save_id == SO_MAN)
+					info->id = ULT_MAN;
+				else
+					info->id = save_id;
+				info->pointer = NULL;
+				info->whatis = desc->whatis;
+				if (lstat (trace_name, &st) == 0)
+					info->mtime = get_stat_mtime (&st);
+				else
+					info->mtime = save_mtime;
+				found_real_page = true;
 
+next_trace:
 				free_mandata_struct (trace_info);
 			}
 		}
