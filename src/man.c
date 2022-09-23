@@ -3159,7 +3159,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 	order_files (path, &names);
 
 	GL_LIST_FOREACH (names, found_name) {
-		struct mandata *info = infoalloc ();
+		struct mandata *info = XZALLOC (struct mandata);
 		char *info_buffer = filename_info (found_name, info, name);
 		const char *ult;
 		int f;
@@ -3737,7 +3737,7 @@ static int do_global_apropos_section (const char *path, const char *sec,
 		if (!grep (found_name, name, &search))
 			continue;
 
-		info = infoalloc ();
+		info = XZALLOC (struct mandata);
 		info_buffer = filename_info (found_name, info, NULL);
 		if (!info_buffer)
 			goto next;

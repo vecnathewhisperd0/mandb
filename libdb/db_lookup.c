@@ -312,7 +312,7 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 	else if (*MYDBM_DPTR (cont) != '\t') {	/* Just one entry */
 		bool matches = false;
 
-		info = infoalloc ();
+		info = XZALLOC (struct mandata);
 		split_content (dbf, MYDBM_DPTR (cont), info);
 		if (!info->name)
 			info->name = xstrdup (page);
@@ -379,7 +379,7 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 			MYDBM_FREE_DPTR (key);
 
 			/* Allocate info struct and add it to the list. */
-			info = infoalloc ();
+			info = XZALLOC (struct mandata);
 			split_content (dbf, MYDBM_DPTR (multi_cont), info);
 			if (!info->name)
 				info->name = xstrdup (ref->name);
@@ -509,7 +509,7 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 		if (!got_match)
 			goto nextpage_tab;
 
-		tail = infoalloc ();
+		tail = XZALLOC (struct mandata);
 		memcpy (tail, &info, sizeof (info));
 		info.name = NULL; /* steal memory */
 		MYDBM_SET_DPTR (cont, NULL); /* == info.addr */

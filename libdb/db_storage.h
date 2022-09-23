@@ -49,8 +49,6 @@
 
 #include "timespec.h"
 
-#include "xalloc.h"
-
 #include "mydbm.h"
 
 struct mandata {
@@ -98,9 +96,6 @@ extern int compare_ids (char a, char b, int promote_links);
 extern void gripe_lock (const char *filename);
 extern void gripe_corrupt_data (MYDBM_FILE dbf);
 extern datum make_multi_key (const char *page, const char *ext);
-
-/* allocate a mandata structure */
-#define infoalloc() XZALLOC (struct mandata)
 
 extern char *name_to_key (const char *name);
 bool name_ext_equals (const void *elt1, const void *elt2);
