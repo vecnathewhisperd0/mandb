@@ -52,6 +52,7 @@
 #include "pipeline.h"
 
 #include "cleanup.h"
+#include "compression.h"
 #include "debug.h"
 #include "encodings.h"
 #include "fatal.h"
@@ -59,7 +60,6 @@
 #include "sandbox.h"
 #include "util.h"
 
-#include "compression.h"
 #include "decompress.h"
 #include "manconv.h"
 #include "manconv_client.h"

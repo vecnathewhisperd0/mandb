@@ -83,10 +83,12 @@
 #define _(String) gettext (String)
 
 #include "appendstr.h"
+#include "compression.h"
 #include "debug.h"
-#include "decompress.h"
 #include "fatal.h"
 #include "glcontainers.h"
+
+#include "decompress.h"
 #include "globbing.h"
 #include "zsoelim.h"
 

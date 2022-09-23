@@ -56,9 +56,9 @@
 
 #include "manconfig.h"
 
+#include "compression.h"
 #include "debug.h"
 
-#include "compression.h"
 #include "decompress.h"
 #include "globbing.h"
 #include "ult_src.h"

@@ -86,6 +86,7 @@
 
 #include "appendstr.h"
 #include "cleanup.h"
+#include "compression.h"
 #include "debug.h"
 #include "fatal.h"
 #include "glcontainers.h"
@@ -104,7 +105,6 @@
 #include "mydbm.h"
 #include "db_storage.h"
 
-#include "compression.h"
 #include "filenames.h"
 #include "globbing.h"
 #include "ult_src.h"

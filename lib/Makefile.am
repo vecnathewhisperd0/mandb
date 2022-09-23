@@ -36,6 +36,8 @@ libman_la_SOURCES = \
 	appendstr.h \
 	cleanup.c \
 	cleanup.h \
+	compression.c \
+	compression.h \
 	debug.c \
 	debug.h \
 	encodings.c \

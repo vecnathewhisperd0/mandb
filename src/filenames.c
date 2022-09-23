@@ -39,11 +39,11 @@
 #include "manconfig.h"
 
 #include "appendstr.h"
+#include "compression.h"
 #include "debug.h"
 
 #include "db_storage.h"
 
-#include "compression.h"
 #include "filenames.h"
 
 static void gripe_bogus_manpage (const char *manpage)

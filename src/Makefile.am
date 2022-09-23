@@ -84,8 +84,6 @@ globbing_SOURCES = \
 	globbing.h \
 	globbing_test.c
 lexgrog_SOURCES = \
-	compression.c \
-	compression.h \
 	convert.c \
 	convert.h \
 	decompress.c \
@@ -108,8 +106,6 @@ lexgrog_SOURCES = \
 	utf8.c \
 	utf8.h
 man_SOURCES = \
-	compression.c \
-	compression.h \
 	decompress.c \
 	decompress.h \
 	filenames.c \
@@ -130,8 +126,6 @@ man_SOURCES = \
 	zsoelim.h \
 	zsoelim.l
 man_recode_SOURCES = \
-	compression.c \
-	compression.h \
 	decompress.c \
 	decompress.h \
 	man-recode.c \
@@ -150,8 +144,6 @@ manconv_SOURCES = \
 mandb_SOURCES = \
 	check_mandirs.c \
 	check_mandirs.h \
-	compression.c \
-	compression.h \
 	decompress.c \
 	decompress.h \
 	descriptions.c \

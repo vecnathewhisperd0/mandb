@@ -27,7 +27,7 @@ endif
 SUBDIRS = docs gl/lib $(GNULIB_PO) init lib libdb src man manual po tools
 
 dist_noinst_DATA = FAQ README.md
-noinst_HEADERS = include/comp_src.h include/manconfig.h
+noinst_HEADERS = include/manconfig.h
 
 EXTRA_DIST = \
 	.gitignore \

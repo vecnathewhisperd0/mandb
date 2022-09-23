@@ -175,7 +175,7 @@ configuration process:
 * `include/manconfig.h` regarding the default section list and other
   specific definitions.
 
-* `include/comp_src.h` if the default compressor support is
+* `lib/compression.c` if the default compressor support is
   inadequate for your requirements.  (Usually `.Z` [compress],
   `.z`, `.gz` [gzip].)
 

@@ -21,5 +21,20 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+struct compression {
+	/* The following are const because they should be pointers to parts
+	 * of strings allocated elsewhere and should not be written through
+	 * or freed themselves.
+	 */
+	const char *prog;
+	const char *ext;
+	/* The following should be freed when discarding an instance of this
+	 * structure.
+	 */
+	char *stem;
+};
+
+extern struct compression comp_list[];
+
 extern struct compression *comp_info (const char *filename, int want_stem);
 extern struct compression *comp_file (const char *filename);

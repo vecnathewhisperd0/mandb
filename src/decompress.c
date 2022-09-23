@@ -38,6 +38,8 @@
 #  include "zlib.h"
 #endif /* HAVE_LIBZ */
 
+#include "pipeline.h"
+
 #include "attribute.h"
 #include "minmax.h"
 #include "xalloc.h"
@@ -45,10 +47,11 @@
 #include "xvasprintf.h"
 
 #include "manconfig.h"
-#include "comp_src.h"
-#include "pipeline.h"
-#include "decompress.h"
+
+#include "compression.h"
 #include "sandbox.h"
+
+#include "decompress.h"
 
 enum decompress_tag {
 	DECOMPRESS_PIPELINE,

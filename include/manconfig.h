@@ -148,21 +148,6 @@ extern int _nl_msg_cat_cntr;
 #  define locale_changed()
 #endif /* ENABLE_NLS */
 
-struct compression {
-	/* The following are const because they should be pointers to parts
-	 * of strings allocated elsewhere and should not be written through
-	 * or freed themselves.
-	 */
-	const char *prog;
-	const char *ext;
-	/* The following should be freed when discarding an instance of this
-	 * structure.
-	 */
-	char *stem;
-};
-
-extern struct compression comp_list[];
-
 extern int quiet;		/* be quiet(er) if 1 */
 
 /*--------------------------*/

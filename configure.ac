@@ -390,7 +390,7 @@ AC_DEFINE_UNQUOTED(
 	[Default compression extension, used for compressing cat pages.])
 dnl Decompressors are used for decompressing cat pages and nroff source.
 dnl To add further decompressors, you will also need to edit
-dnl include/comp_src.h.
+dnl lib/compression.c.
 AC_DEFINE_UNQUOTED([PROG_GUNZIP], ["$gunzip"], [Program to use as gunzip.])
 AC_DEFINE_UNQUOTED(
 	[PROG_UNCOMPRESS], ["$uncompress"], [Program to use as uncompress.])
