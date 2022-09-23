@@ -160,33 +160,31 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	char *manpage_base;
 	const char *ult;
 	struct lexgrog lg;
-	char *manpage;
-	struct mandata info, *exists;
+	struct mandata *info, *exists;
 	struct stat buf;
 	size_t len;
 	gl_list_t ult_trace = NULL;
 	const struct whatis *whatis;
 
 	memset (&lg, 0, sizeof (struct lexgrog));
-	memset (&info, 0, sizeof (struct mandata));
 
-	manpage = filename_info (file, &info, NULL, quiet < 2);
-	if (!manpage)
+	info = filename_info (file, NULL, quiet < 2);
+	if (!info)
 		return;
-	manpage_base = manpage + strlen (manpage) + 1;
+	manpage_base = info->addr + strlen (info->addr) + 1;
 
-	len  = strlen (manpage) + 1;		/* skip over directory name */
-	len += strlen (manpage + len) + 1;	/* skip over base name */
-	len += strlen (manpage + len);		/* skip over section ext */
+	len  = strlen (info->addr) + 1;		/* skip over directory name */
+	len += strlen (info->addr + len) + 1;	/* skip over base name */
+	len += strlen (info->addr + len);	/* skip over section ext */
 
 	/* to get mtime info */
 	(void) lstat (file, &buf);
-	info.mtime = get_stat_mtime (&buf);
+	info->mtime = get_stat_mtime (&buf);
 
 	/* check that our file actually contains some data */
 	if (buf.st_size == 0) {
 		/* man-db pre 2.3 place holder ? */
-		free (manpage);
+		free_mandata_struct (info);
 		return;
 	}
 
@@ -194,18 +192,19 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	 * save both an ult_src() and a find_name(), amongst other wastes of
 	 * time.
 	 */
-	exists = dblookup_exact (dbf, manpage_base, info.ext, true);
+	exists = dblookup_exact (dbf, manpage_base, info->ext, true);
 
 	/* Ensure we really have the actual page. Gzip keeps the mtime the
 	 * same when it compresses, so we have to compare compression
 	 * extensions as well.
 	 */
 	if (exists) {
-		if (strcmp (exists->comp, info.comp ? info.comp : "-") == 0) {
-			if (timespec_cmp (exists->mtime, info.mtime) == 0 &&
+		if (strcmp (exists->comp,
+			    info->comp ? info->comp : "-") == 0) {
+			if (timespec_cmp (exists->mtime, info->mtime) == 0 &&
 			    exists->id < WHATIS_MAN) {
 				free_mandata_struct (exists);
-				free (manpage);
+				free_mandata_struct (info);
 				return;
 			}
 		} else {
@@ -225,7 +224,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 							exists->ext);
 				free (abs_filename);
 				free_mandata_struct (exists);
-				free (manpage);
+				free_mandata_struct (info);
 				return;
 			}
 		}
@@ -247,7 +246,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	if (!ult) {
 		/* already warned about this, don't do so again */
 		debug ("test_manfile(): bad link %s\n", file);
-		free (manpage);
+		free_mandata_struct (info);
 		return;
 	}
 
@@ -274,16 +273,16 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 			error (0, 0,
 			       _("warning: %s: bad symlink or ROFF `.so' request"),
 			       file);
-		free (manpage);
+		free_mandata_struct (info);
 		return;
 	}
 
 	pages++;			/* pages seen so far */
 
 	if (strncmp (ult, file, len) == 0)
-		info.id = ULT_MAN;	/* ultimate source file */
+		info->id = ULT_MAN;	/* ultimate source file */
 	else
-		info.id = SO_MAN;	/* .so, sym or hard linked file */
+		info->id = SO_MAN;	/* .so, sym or hard linked file */
 
 	/* Ok, here goes: Use a hash tree to store the ult_srcs with
 	 * their whatis. Anytime after, check the hash tree, if it's there,
@@ -320,12 +319,12 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	debug ("\"%s\"\n", lg.whatis);
 
 	/* split up the raw whatis data and store references */
-	info.pointer = NULL;	/* direct page, so far */
-	info.filter = lg.filters;
+	info->pointer = NULL;	/* direct page, so far */
+	info->filter = lg.filters;
 	if (lg.whatis) {
 		gl_list_t descs = parse_descriptions (manpage_base, lg.whatis);
 		if (!opt_test)
-			store_descriptions (dbf, descs, &info, path,
+			store_descriptions (dbf, descs, info, path,
 					    manpage_base, whatis->trace);
 		gl_list_free (descs);
 	} else if (quiet < 2) {
@@ -336,10 +335,10 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		else
 			error (0, 0,
 			       _("warning: %s: whatis parse for %s(%s) failed"),
-			       ult, manpage_base, info.ext);
+			       ult, manpage_base, info->ext);
 	}
 
-	free (manpage);
+	free_mandata_struct (info);
 	free (lg.whatis);
 }
 
@@ -769,11 +768,8 @@ static int count_glob_matches (const char *name, const char *ext,
 	int count = 0;
 
 	GL_LIST_FOREACH (source, walk) {
-		struct mandata info;
+		struct mandata *info;
 		struct stat statbuf;
-		char *buf;
-
-		memset (&info, 0, sizeof (struct mandata));
 
 		if (stat (walk, &statbuf) == -1) {
 			debug ("count_glob_matches: excluding %s "
@@ -787,12 +783,11 @@ static int count_glob_matches (const char *name, const char *ext,
 			continue;
 		}
 
-		buf = filename_info (walk, &info, name, quiet < 2);
-		if (buf) {
-			if (STREQ (ext, info.ext))
+		info = filename_info (walk, name, quiet < 2);
+		if (info) {
+			if (STREQ (ext, info->ext))
 				++count;
-			free (info.name);
-			free (buf);
+			free_mandata_struct (info);
 		}
 	}
 

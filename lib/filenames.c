@@ -85,21 +85,22 @@ char *make_filename (const char *path, const char *name,
  * name is only set if it differs from req_name; otherwise it remains at
  * NULL.
  */
-char *filename_info (const char *file, struct mandata *info,
-		     const char *req_name, bool warn_if_bogus)
+struct mandata *filename_info (const char *file, const char *req_name,
+			       bool warn_if_bogus)
 {
-	char *manpage = xstrdup (file);
-	char *slash = strrchr (manpage, '/');
-	char *base_name;
+	struct mandata *info;
+	char *slash, *base_name;
 	struct compression *comp;
 
-	memset (info, 0, sizeof (struct mandata));
+	info = XZALLOC (struct mandata);
+	info->addr = xstrdup (file);
+	slash = strrchr (info->addr, '/');
 
 	if (slash) {
 		*slash = '\0';			/* strip '/base_name' */
 		base_name = slash + 1;
 	} else
-		base_name = manpage;
+		base_name = info->addr;
 
 	/* Bogus files either have (i) no period, ie no extension, (ii)
 	   a compression extension, but no sectional extension, (iii)
@@ -120,7 +121,7 @@ char *filename_info (const char *file, struct mandata *info,
 			/* no section extension */
 			if (warn_if_bogus)
 				gripe_bogus_manpage (file);
-			free (manpage);
+			free_mandata_struct (info);
 			return NULL;
 		}
 		*ext++ = '\0';			/* set section ext */
@@ -129,19 +130,19 @@ char *filename_info (const char *file, struct mandata *info,
 			/* zero-length section extension */
 			if (warn_if_bogus)
 				gripe_bogus_manpage (file);
-			free (manpage);
+			free_mandata_struct (info);
 			return NULL;
 		}
 	}
 
-	info->sec = strrchr (manpage, '/') + 4;	/* set section name */
+	info->sec = strrchr (info->addr, '/') + 4;	/* set section name */
 
 	if (strlen (info->sec) >= 1 && strlen (info->ext) >= 1 &&
 	    info->sec[0] != info->ext[0]) {
 		/* mismatch in section */
 		if (warn_if_bogus)
 			gripe_bogus_manpage (file);
-		free (manpage);
+		free_mandata_struct (info);
 		return NULL;
 	}
 
@@ -150,5 +151,26 @@ char *filename_info (const char *file, struct mandata *info,
 	else
 		info->name = NULL;
 
-	return manpage;
+	return info;
+}
+
+/* Free allocated elements of a mandata structure, but not the structure
+ * itself.
+ */
+void free_mandata_elements (struct mandata *pinfo)
+{
+	if (pinfo->addr)
+		/* TODO: this memory appears to be properly owned by the
+		 * caller; why do we free it here?
+		 */
+		free (pinfo->addr);		/* free the 'content' */
+	free (pinfo->name);			/* free the real name */
+}
+
+/* Free a mandata structure and its elements. */
+void free_mandata_struct (struct mandata *pinfo)
+{
+	if (pinfo)
+		free_mandata_elements (pinfo);
+	free (pinfo);
 }

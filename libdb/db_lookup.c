@@ -144,27 +144,6 @@ datum make_multi_key (const char *page, const char *ext)
 	return key;
 }
 
-/* Free allocated elements of a mandata structure, but not the structure
- * itself.
- */
-void free_mandata_elements (struct mandata *pinfo)
-{
-	if (pinfo->addr)
-		/* TODO: this memory appears to be properly owned by the
-		 * caller; why do we free it here?
-		 */
-		free (pinfo->addr);		/* free the 'content' */
-	free (pinfo->name);			/* free the real name */
-}
-
-/* Free a mandata structure and its elements. */
-void free_mandata_struct (struct mandata *pinfo)
-{
-	if (pinfo)
-		free_mandata_elements (pinfo);
-	free (pinfo);
-}
-
 /* Get the key that should be used for a given name. The caller is
  * responsible for freeing the return value.
  */

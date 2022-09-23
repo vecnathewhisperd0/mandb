@@ -99,23 +99,24 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			found_real_page = true;
 		} else if (trace) {
 			GL_LIST_FOREACH (trace, trace_name) {
-				struct mandata trace_info;
-				char *buf;
+				struct mandata *trace_info;
 
-				buf = filename_info (trace_name, &trace_info,
-						     "", quiet < 2);
-				if (trace_info.name &&
-				    STREQ (trace_info.name, desc->name)) {
+				trace_info = filename_info (trace_name, "",
+							    quiet < 2);
+				if (trace_info && trace_info->name &&
+				    STREQ (trace_info->name, desc->name)) {
 					struct stat st;
 
-					if (path && !is_prefix (path, buf)) {
+					if (path &&
+					    !is_prefix (path,
+							trace_info->addr)) {
 						/* Link outside this manual
 						 * hierarchy; skip this
 						 * description.
 						 */
 						found_external = true;
-						free (trace_info.name);
-						free (buf);
+						free_mandata_struct
+							(trace_info);
 						break;
 					}
 					if (!gl_list_next_node (trace,
@@ -134,8 +135,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 					found_real_page = true;
 				}
 
-				free (trace_info.name);
-				free (buf);
+				free_mandata_struct (trace_info);
 			}
 		}
 

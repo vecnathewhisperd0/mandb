@@ -67,8 +67,6 @@ extern gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *page,
 extern int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base);
 extern int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);
-extern void free_mandata_elements (struct mandata *pinfo);
-extern void free_mandata_struct (struct mandata *pinfo);
 extern void split_content (MYDBM_FILE dbf, char *cont_ptr,
 			   struct mandata *pinfo);
 extern int compare_ids (char a, char b, int promote_links);

@@ -354,17 +354,14 @@ static int update_one_file (MYDBM_FILE dbf,
 			    const char *manpath, const char *filename)
 {
 	if (dbf->file || MYDBM_RWOPEN (dbf)) {
-		struct mandata info;
-		char *manpage;
+		struct mandata *info;
 
-		memset (&info, 0, sizeof (struct mandata));
-		manpage = filename_info (filename, &info, "", quiet < 2);
-		if (info.name) {
-			dbdelete (dbf, info.name, &info);
-			purge_pointers (dbf, info.name);
-			free (info.name);
+		info = filename_info (filename, "", quiet < 2);
+		if (info && info->name) {
+			dbdelete (dbf, info->name, info);
+			purge_pointers (dbf, info->name);
 		}
-		free (manpage);
+		free_mandata_struct (info);
 
 		test_manfile (dbf, filename, manpath);
 	}

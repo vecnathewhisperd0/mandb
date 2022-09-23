@@ -3159,17 +3159,13 @@ static int try_section (const char *path, const char *sec, const char *name,
 	order_files (path, &names);
 
 	GL_LIST_FOREACH (names, found_name) {
-		struct mandata *info = XZALLOC (struct mandata);
-		char *info_buffer = filename_info (found_name, info, name,
-						   quiet < 2);
+		struct mandata *info = filename_info (found_name, name,
+						      quiet < 2);
 		const char *ult;
 		int f;
 
-		if (!info_buffer) {
-			free_mandata_struct (info);
+		if (!info)
 			continue;
-		}
-		info->addr = info_buffer;
 
 		/* What kind of page is this? Since it's a real file, it
 		 * must be either ULT_MAN or SO_MAN. ult_src() can tell us
@@ -3179,8 +3175,6 @@ static int try_section (const char *path, const char *sec, const char *name,
 		if (!ult) {
 			/* already warned */
 			debug ("try_section(): bad link %s\n", found_name);
-			free (info_buffer);
-			info->addr = NULL;
 			free_mandata_struct (info);
 			continue;
 		}
@@ -3192,15 +3186,10 @@ static int try_section (const char *path, const char *sec, const char *name,
 		f = add_candidate (cand_head, CANDIDATE_FILESYSTEM,
 				   cat, name, path, ult, info);
 		found += f;
-		/* Free info and info_buffer if they weren't added to the
-		 * candidates.
-		 */
-		if (f == 0) {
-			free (info_buffer);
-			info->addr = NULL;
+		/* Free info if it wasn't added to the candidates. */
+		if (f == 0)
 			free_mandata_struct (info);
-		}
-		/* Don't free info and info_buffer here. */
+		/* Don't free info here. */
 	}
 
 	gl_list_free (names);
@@ -3730,7 +3719,6 @@ static int do_global_apropos_section (const char *path, const char *sec,
 
 	GL_LIST_FOREACH (names, found_name) {
 		struct mandata *info;
-		char *info_buffer;
 		char *title = NULL;
 		const char *man_file;
 		char *cat_file = NULL;
@@ -3738,14 +3726,11 @@ static int do_global_apropos_section (const char *path, const char *sec,
 		if (!grep (found_name, name, &search))
 			continue;
 
-		info = XZALLOC (struct mandata);
-		info_buffer = filename_info (found_name, info, NULL,
-					     quiet < 2);
-		if (!info_buffer)
+		info = filename_info (found_name, NULL, quiet < 2);
+		if (!info)
 			goto next;
-		info->addr = info_buffer;
 
-		title = xasprintf ("%s(%s)", strchr (info_buffer, '\0') + 1,
+		title = xasprintf ("%s(%s)", strchr (info->addr, '\0') + 1,
 				   info->ext);
 		man_file = ult_src (found_name, path, NULL, ult_flags, NULL);
 		if (!man_file)
