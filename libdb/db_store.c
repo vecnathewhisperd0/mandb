@@ -80,6 +80,12 @@ int ATTRIBUTE_CONST compare_ids (char a, char b, int promote_links)
 		return 0;
 }
 
+enum replace_action {
+	REPLACE_YES = 0,
+	REPLACE_NO,
+	REPLACE_FAIL
+};
+
 /* The do_we_replace logic. Decide, for some existing key, whether it should
  * be replaced with some new contents. Check that names and section
  * extensions match before calling this.
@@ -89,40 +95,67 @@ static int replace_if_necessary (MYDBM_FILE dbf,
 				 struct mandata *olddata,
 				 datum newkey, datum newcont)
 {
+	enum replace_action action;
+
 	/* It's OK to replace ULT_MAN with SO_MAN if the mtime is newer. It
 	 * isn't OK to replace a real page (either ULT_MAN or SO_MAN) with a
 	 * whatis reference; if the real page really went away then
 	 * purge_missing will catch that in time, but a real page that still
 	 * exists should always take precedence.
+	 *
+	 * Tie-break whatis references by lexicographical sort of
+	 * the pointed-to page names, which isn't great but at least
+	 * gives us something reproducible.
+	 *
+	 * TODO: name fields should be collated with the requested name
 	 */
-	if (compare_ids (newdata->id, olddata->id, 1) <= 0 &&
-	    timespec_cmp (newdata->mtime, olddata->mtime) > 0) {
-		debug ("replace_if_necessary(): newer mtime; replacing\n");
-		if (MYDBM_REPLACE (dbf, newkey, newcont))
-			gripe_replace_key (dbf, MYDBM_DPTR (newkey));
-		return 0;
-	}
-
 	if (compare_ids (newdata->id, olddata->id, 0) < 0) {
-		if (MYDBM_REPLACE (dbf, newkey, newcont))
-			gripe_replace_key (dbf, MYDBM_DPTR (newkey));
-		return 0;
+		debug ("replace_if_necessary: stronger ID; replacing\n");
+		action = REPLACE_YES;
+	} else if (compare_ids (newdata->id, olddata->id, 1) <= 0 &&
+		   timespec_cmp (newdata->mtime, olddata->mtime) > 0) {
+		debug ("replace_if_necessary: newer mtime; replacing\n");
+		action = REPLACE_YES;
+	} else if (compare_ids (newdata->id, olddata->id, 1) <= 0 &&
+		   timespec_cmp (newdata->mtime, olddata->mtime) < 0) {
+		debug ("replace_if_necessary: older mtime; not replacing\n");
+		action = REPLACE_NO;
+	} else if (compare_ids (newdata->id, olddata->id, 0) > 0) {
+		debug ("replace_if_necessary: weaker ID; not replacing\n");
+		action = REPLACE_NO;
+	} else if (newdata->pointer && olddata->pointer &&
+		   strcmp (newdata->pointer, olddata->pointer) < 0) {
+		debug ("replace_if_necessary: pointer '%s' < '%s'; "
+		       "replacing\n", newdata->pointer, olddata->pointer);
+		action = REPLACE_YES;
+	} else if (newdata->pointer && olddata->pointer &&
+		   strcmp (newdata->pointer, olddata->pointer) > 0) {
+		debug ("replace_if_necessary: pointer '%s' > '%s'; "
+		       "not replacing\n", newdata->pointer, olddata->pointer);
+		action = REPLACE_NO;
+	} else if (!STREQ (dash_if_unset (newdata->comp),
+			  olddata->comp)) {
+		debug ("replace_if_necessary: differing compression "
+		       "extensions (%s != %s); failing\n",
+		       dash_if_unset (newdata->comp), olddata->comp);
+		action = REPLACE_FAIL;
+	} else {
+		debug ("replace_if_necessary: match; not replacing\n");
+		action = REPLACE_NO;
 	}
 
-	/* TODO: name fields should be collated with the requested name */
-
-	if (newdata->id == olddata->id) {
-		if (STREQ (dash_if_unset (newdata->comp), olddata->comp))
-			return 0; /* same file */
-		else {
-			debug ("ignoring differing compression "
-			       "extensions: %s\n", MYDBM_DPTR (newkey));
-			return 1; /* differing exts */
-		}
+	switch (action) {
+		case REPLACE_YES:
+			if (MYDBM_REPLACE (dbf, newkey, newcont))
+				gripe_replace_key (dbf, MYDBM_DPTR (newkey));
+			return 0;
+		case REPLACE_NO:
+			/* Insert if missing, but ignore failures. */
+			MYDBM_INSERT (dbf, newkey, newcont);
+			return 0;
+		default:
+			return 1;
 	}
-
-	debug ("ignoring differing ids: %s\n", MYDBM_DPTR (newkey));
-	return 0;
 }
 
 /* The complement of split_content */
@@ -225,6 +258,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 	gl_list_t refs;
 	struct name_ext *ref;
 	char *value;
+	int ret = 0;
 
 	memset (&oldkey, 0, sizeof oldkey);
 	memset (&oldcont, 0, sizeof oldcont);
@@ -271,7 +305,6 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		if (MYDBM_INSERT (dbf, newkey, newcont)) {
 			datum cont;
 			struct mandata *info;
-			int ret;
 
 			MYDBM_FREE_DPTR (oldcont);
 			cont = MYDBM_FETCH (dbf, newkey);
@@ -341,8 +374,6 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		   into db */
 
 		if (STREQ (old_name, base) && STREQ (old->ext, in->ext)) {
-			int ret;
-
 			if (!STREQ (base, MYDBM_DPTR (oldkey)))
 				in->name = xstrdup (base);
 			newcont = make_content (in);
@@ -384,8 +415,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		newkey = make_multi_key (base, in->ext);
 		newcont = make_content (in);
 
-		if (MYDBM_REPLACE (dbf, newkey, newcont))
-			gripe_replace_key (dbf, MYDBM_DPTR (newkey));
+		ret = replace_if_necessary (dbf, in, old, newkey, newcont);
 
 		MYDBM_FREE_DPTR (newkey);
 		MYDBM_FREE_DPTR (newcont);
@@ -419,5 +449,5 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 	}
 
 	MYDBM_FREE_DPTR (oldkey);
-	return 0;
+	return ret;
 }

@@ -21,6 +21,8 @@ Improvements:
  * Maintain multi keys in sorted order, improving database reproducibility.
  * Pick a more consistent name for the target of a whatis entry in the
    database.
+ * Extend rules for when to replace one database entry with another,
+   producing more stable behaviour.
 
 man-db 2.10.2 (17 March 2022)
 =============================
