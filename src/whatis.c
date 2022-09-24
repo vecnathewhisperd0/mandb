@@ -719,8 +719,7 @@ static void do_apropos (MYDBM_FILE dbf,
 
 		/* a real page */
 
-		info = XZALLOC (struct mandata);
-		split_content (dbf, MYDBM_DPTR (cont), info);
+		info = split_content (dbf, MYDBM_DPTR (cont));
 
 		/* If there are sections given, does any of them match
 		 * either the section or extension of this page?

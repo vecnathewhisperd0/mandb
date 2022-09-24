@@ -285,9 +285,8 @@ static int parse_for_sec (MYDBM_FILE dbf,
 #pragma GCC diagnostic pop
 				struct mandata *entry;
 
-				entry = XZALLOC (struct mandata);
-				split_content (dbf, MYDBM_DPTR (content),
-					       entry);
+				entry = split_content (dbf,
+						       MYDBM_DPTR (content));
 
 				/* Accept if the entry is an ultimate manual
 				   page and the section matches the one we're

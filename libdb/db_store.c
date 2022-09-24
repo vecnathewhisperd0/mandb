@@ -275,8 +275,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 
 			MYDBM_FREE_DPTR (oldcont);
 			cont = MYDBM_FETCH (dbf, newkey);
-			info = XZALLOC (struct mandata);
-			split_content (dbf, MYDBM_DPTR (cont), info);
+			info = split_content (dbf, MYDBM_DPTR (cont));
 			ret = replace_if_necessary (dbf, in, info,
 						    newkey, newcont);
 			/* MYDBM_FREE_DPTR (cont); */
@@ -326,8 +325,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 
 		/* Extract the old singular reference */
 
-		old = XZALLOC (struct mandata);
-		split_content (dbf, MYDBM_DPTR (oldcont), old);
+		old = split_content (dbf, MYDBM_DPTR (oldcont));
 
 		/* Create multi keys for both old
 		   and new items, create new content */

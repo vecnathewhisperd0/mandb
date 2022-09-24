@@ -189,25 +189,28 @@ static char **split_data (MYDBM_FILE dbf, char *content, char *start[])
 }
 
 /* Parse the db-returned data and put it into a mandata format */
-void split_content (MYDBM_FILE dbf, char *cont_ptr, struct mandata *pinfo)
+struct mandata *split_content (MYDBM_FILE dbf, char *cont_ptr)
 {
+	struct mandata *info;
 	char *start[FIELDS];
 	char **data;
 
 	data = split_data (dbf, cont_ptr, start);
 
-	pinfo->name = copy_if_set (*(data++));
-	pinfo->ext = *(data++);
-	pinfo->sec = *(data++);
-	pinfo->mtime.tv_sec = (time_t) atol (*(data++));
-	pinfo->mtime.tv_nsec = atol (*(data++));
-	pinfo->id = **(data++);				/* single char id */
-	pinfo->pointer = *(data++);
-	pinfo->filter = *(data++);
-	pinfo->comp = *(data++);
-	pinfo->whatis = *(data);
+	info = XZALLOC (struct mandata);
+	info->name = copy_if_set (*(data++));
+	info->ext = *(data++);
+	info->sec = *(data++);
+	info->mtime.tv_sec = (time_t) atol (*(data++));
+	info->mtime.tv_nsec = atol (*(data++));
+	info->id = **(data++);				/* single char id */
+	info->pointer = *(data++);
+	info->filter = *(data++);
+	info->comp = *(data++);
+	info->whatis = *(data);
 
-	pinfo->addr = cont_ptr;
+	info->addr = cont_ptr;
+	return info;
 }
 
 bool ATTRIBUTE_PURE name_ext_equals (const void *elt1, const void *elt2)
@@ -292,8 +295,7 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 	else if (*MYDBM_DPTR (cont) != '\t') {	/* Just one entry */
 		bool matches = false;
 
-		info = XZALLOC (struct mandata);
-		split_content (dbf, MYDBM_DPTR (cont), info);
+		info = split_content (dbf, MYDBM_DPTR (cont));
 		if (!info->name)
 			info->name = xstrdup (page);
 		if (!(flags & MATCH_CASE) || STREQ (info->name, page)) {
@@ -359,8 +361,7 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 			MYDBM_FREE_DPTR (key);
 
 			/* Allocate info struct and add it to the list. */
-			info = XZALLOC (struct mandata);
-			split_content (dbf, MYDBM_DPTR (multi_cont), info);
+			info = split_content (dbf, MYDBM_DPTR (multi_cont));
 			if (!info->name)
 				info->name = xstrdup (ref->name);
 			gl_list_add_last (infos, info);
@@ -430,8 +431,6 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 		char *tab;
 		bool got_match;
 
-		info = XZALLOC (struct mandata);
-
 		if (!MYDBM_DPTR (cont))
 		{
 			debug ("key was %s\n", MYDBM_DPTR (key));
@@ -454,7 +453,7 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 
 		/* a real page */
 
-		split_content (dbf, MYDBM_DPTR (cont), info);
+		info = split_content (dbf, MYDBM_DPTR (cont));
 
 		/* If there's a section given, does it match either the
 		 * section or extension of this page?

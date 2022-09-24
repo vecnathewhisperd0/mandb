@@ -736,8 +736,7 @@ void purge_pointers (MYDBM_FILE dbf, const char *name)
 			goto pointers_contentnext;
 #pragma GCC diagnostic pop
 
-		entry = XZALLOC (struct mandata);
-		split_content (dbf, MYDBM_DPTR (content), entry);
+		entry = split_content (dbf, MYDBM_DPTR (content));
 		if (entry->id != SO_MAN && entry->id != WHATIS_MAN)
 			goto pointers_contentnext;
 
@@ -1016,8 +1015,7 @@ int purge_missing (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 		}
 #pragma GCC diagnostic pop
 
-		entry = XZALLOC (struct mandata);
-		split_content (dbf, MYDBM_DPTR (content), entry);
+		entry = split_content (dbf, MYDBM_DPTR (content));
 
 		save_debug = debug_level;
 		debug_level = false;	/* look_for_file() is quite noisy */
