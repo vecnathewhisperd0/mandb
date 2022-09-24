@@ -122,11 +122,14 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 					free_mandata_struct (trace_info);
 					break;
 				}
-				if (!gl_list_next_node (trace, trace_node) &&
-				    save_id == SO_MAN)
-					info->id = ULT_MAN;
-				else
-					info->id = save_id;
+				info->id = save_id;
+				if (!gl_list_next_node (trace, trace_node)) {
+					if (save_id == SO_MAN)
+						info->id = ULT_MAN;
+				} else {
+					if (save_id == ULT_MAN)
+						info->id = SO_MAN;
+				}
 				free (info->pointer);
 				info->pointer = NULL;
 				free (info->whatis);

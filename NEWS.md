@@ -8,6 +8,9 @@ Fixes:
  * Upgrade Gnulib, fixing syntax error on glibc systems with GCC 11.
  * The `CATWIDTH` configuration file directive now overrides `MINCATWIDTH`
    and `MAXCATWIDTH`.
+ * Database entries for links were often incorrectly stored as if they were
+   entries for the ultimate source of the page.  They are now stored with
+   the correct type.
 
 Improvements:
 
