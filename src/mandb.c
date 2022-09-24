@@ -356,8 +356,8 @@ static int update_one_file (MYDBM_FILE dbf,
 	if (dbf->file || MYDBM_RWOPEN (dbf)) {
 		struct mandata *info;
 
-		info = filename_info (filename, "", quiet < 2);
-		if (info && info->name) {
+		info = filename_info (filename, quiet < 2);
+		if (info) {
 			dbdelete (dbf, info->name, info);
 			purge_pointers (dbf, info->name);
 		}

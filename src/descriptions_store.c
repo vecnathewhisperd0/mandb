@@ -102,9 +102,9 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 				struct mandata *trace_info;
 				struct stat st;
 
-				trace_info = filename_info (trace_name, "",
+				trace_info = filename_info (trace_name,
 							    quiet < 2);
-				if (!trace_info || !trace_info->name ||
+				if (!trace_info ||
 				    !STREQ (trace_info->name, desc->name))
 					goto next_trace;
 

@@ -73,7 +73,7 @@ char *make_filename (const char *path, const char *name,
 
 /* Fill in a mandata structure with information about a file name.
  * file is the name to examine. info points to the structure to be filled
- * in. req_name is the page name that was requested.
+ * in.
  *
  * Returns either a pointer to the buffer which the fields in info point
  * into, to be freed by the caller, or NULL on error. The buffer will
@@ -82,11 +82,8 @@ char *make_filename (const char *path, const char *name,
  * optionally the compression extension.
  *
  * Only the fields name, ext, sec, and comp are filled in by this function.
- * name is only set if it differs from req_name; otherwise it remains at
- * NULL.
  */
-struct mandata *filename_info (const char *file, const char *req_name,
-			       bool warn_if_bogus)
+struct mandata *filename_info (const char *file, bool warn_if_bogus)
 {
 	struct mandata *info;
 	char *slash, *base_name;
@@ -146,10 +143,7 @@ struct mandata *filename_info (const char *file, const char *req_name,
 		return NULL;
 	}
 
-	if (req_name && !STREQ (base_name, req_name))
-		info->name = xstrdup (base_name);
-	else
-		info->name = NULL;
+	info->name = xstrdup (base_name);
 
 	return info;
 }

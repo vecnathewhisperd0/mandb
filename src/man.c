@@ -3159,8 +3159,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 	order_files (path, &names);
 
 	GL_LIST_FOREACH (names, found_name) {
-		struct mandata *info = filename_info (found_name, name,
-						      quiet < 2);
+		struct mandata *info = filename_info (found_name, quiet < 2);
 		const char *ult;
 		int f;
 
@@ -3726,12 +3725,11 @@ static int do_global_apropos_section (const char *path, const char *sec,
 		if (!grep (found_name, name, &search))
 			continue;
 
-		info = filename_info (found_name, NULL, quiet < 2);
+		info = filename_info (found_name, quiet < 2);
 		if (!info)
 			goto next;
 
-		title = xasprintf ("%s(%s)", strchr (info->addr, '\0') + 1,
-				   info->ext);
+		title = xasprintf ("%s(%s)", info->name, info->ext);
 		man_file = ult_src (found_name, path, NULL, ult_flags, NULL);
 		if (!man_file)
 			goto next;

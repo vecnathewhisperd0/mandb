@@ -168,10 +168,11 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 
 	memset (&lg, 0, sizeof (struct lexgrog));
 
-	info = filename_info (file, NULL, quiet < 2);
+	info = filename_info (file, quiet < 2);
 	if (!info)
 		return;
-	manpage_base = info->addr + strlen (info->addr) + 1;
+	manpage_base = info->name; /* steal memory */
+	info->name = NULL;
 
 	len  = strlen (info->addr) + 1;		/* skip over directory name */
 	len += strlen (info->addr + len) + 1;	/* skip over base name */
@@ -761,8 +762,8 @@ pointers_next:
  * (which may return inexact extension matches in some cases). It may turn
  * out that this is better handled in look_for_file() itself.
  */
-static int count_glob_matches (const char *name, const char *ext,
-			       gl_list_t source, struct timespec db_mtime)
+static int count_glob_matches (const char *ext, gl_list_t source,
+			       struct timespec db_mtime)
 {
 	const char *walk;
 	int count = 0;
@@ -783,7 +784,7 @@ static int count_glob_matches (const char *name, const char *ext,
 			continue;
 		}
 
-		info = filename_info (walk, name, quiet < 2);
+		info = filename_info (walk, quiet < 2);
 		if (info) {
 			if (STREQ (ext, info->ext))
 				++count;
@@ -807,7 +808,7 @@ static int purge_normal (MYDBM_FILE dbf, const char *name,
 	 */
 	t.tv_sec = -1;
 	t.tv_nsec = -1;
-	if (count_glob_matches (name, info->ext, found, t))
+	if (count_glob_matches (info->ext, found, t))
 		return 0;
 
 	if (!opt_test)
@@ -827,7 +828,7 @@ static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
 	/* TODO: On some systems, the cat page extension differs from the
 	 * man page extension, so this may be too strict.
 	 */
-	if (count_glob_matches (name, info->ext, found, db_mtime)) {
+	if (count_glob_matches (info->ext, found, db_mtime)) {
 		/* If the page exists and didn't beforehand, then presumably
 		 * we're about to rescan, which will replace the WHATIS_MAN
 		 * entry with something better. However, there have been
@@ -873,8 +874,7 @@ static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
 
 		t.tv_sec = -1;
 		t.tv_nsec = -1;
-		count = count_glob_matches (info->pointer, info->ext,
-					    real_found, t);
+		count = count_glob_matches (info->ext, real_found, t);
 		gl_list_free (real_found);
 		if (count)
 			return 0;
