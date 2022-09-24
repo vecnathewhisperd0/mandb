@@ -82,6 +82,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 	struct mandata *whatis_info;
 	char best_id = WHATIS_CAT + 1;
 	const char *best_name = base;
+	char *best_sec = NULL, *best_ext = NULL;
 
 	if (gl_list_size (descs) && trace) {
 		GL_LIST_FOREACH (trace, trace_name)
@@ -187,6 +188,10 @@ next_trace:
 		if (whatis_info->id < best_id) {
 			best_id = whatis_info->id;
 			best_name = desc->name;
+			free (best_sec);
+			best_sec = xstrdup (whatis_info->sec);
+			free (best_ext);
+			best_ext = xstrdup (whatis_info->ext);
 		}
 
 		debug ("name = '%s', ext = '%s', id = %c\n",
@@ -206,6 +211,11 @@ next_trace:
 		name = whatis_info->name;
 		whatis_info->name = NULL;
 
+		free (whatis_info->sec);
+		whatis_info->sec = xstrdup (best_sec);
+		free (whatis_info->ext);
+		whatis_info->ext = xstrdup (best_ext);
+
 		whatis_info->pointer = xstrdup (best_name);
 
 		debug ("name = '%s', ext = '%s', id = %c, pointer = '%s'\n",
@@ -221,5 +231,7 @@ next_trace:
 	}
 
 out:
+	free (best_ext);
+	free (best_sec);
 	gl_list_free (whatis_infos);
 }
