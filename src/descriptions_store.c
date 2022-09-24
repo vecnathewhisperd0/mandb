@@ -189,7 +189,8 @@ next_trace:
 			best_name = desc->name;
 		}
 
-		debug ("name = '%s', id = %c\n", desc->name, whatis_info->id);
+		debug ("name = '%s', ext = '%s', id = %c\n",
+		       desc->name, whatis_info->ext, whatis_info->id);
 		if (dbstore (dbf, whatis_info, desc->name) > 0) {
 			gripe_bad_store (base, whatis_info->ext);
 			free_mandata_struct (whatis_info);
@@ -207,8 +208,9 @@ next_trace:
 
 		whatis_info->pointer = xstrdup (best_name);
 
-		debug ("name = '%s', id = %c, pointer = '%s'\n",
-		       name, whatis_info->id, whatis_info->pointer);
+		debug ("name = '%s', ext = '%s', id = %c, pointer = '%s'\n",
+		       name, whatis_info->ext, whatis_info->id,
+		       whatis_info->pointer);
 		if (dbstore (dbf, whatis_info, name) > 0) {
 			gripe_bad_store (base, whatis_info->ext);
 			free (name);
