@@ -94,8 +94,13 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 
 		if (STREQ (base, desc->name)) {
 			info->id = save_id;
+			free (info->pointer);
 			info->pointer = NULL;
-			info->whatis = desc->whatis;
+			free (info->whatis);
+			if (desc->whatis)
+				info->whatis = xstrdup (desc->whatis);
+			else
+				info->whatis = NULL;
 			info->mtime = save_mtime;
 			found_real_page = true;
 		} else if (trace) {
@@ -122,8 +127,13 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 					info->id = ULT_MAN;
 				else
 					info->id = save_id;
+				free (info->pointer);
 				info->pointer = NULL;
-				info->whatis = desc->whatis;
+				free (info->whatis);
+				if (desc->whatis)
+					info->whatis = xstrdup (desc->whatis);
+				else
+					info->whatis = NULL;
 				if (lstat (trace_name, &st) == 0)
 					info->mtime = get_stat_mtime (&st);
 				else
@@ -146,10 +156,12 @@ next_trace:
 				info->id = WHATIS_MAN;
 			else
 				info->id = WHATIS_CAT;
+			free (info->pointer);
 			info->pointer = xstrdup (base);
 			/* Don't waste space storing the whatis in the db
 			 * more than once.
 			 */
+			free (info->whatis);
 			info->whatis = NULL;
 			info->mtime = save_mtime;
 		}

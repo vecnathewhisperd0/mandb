@@ -30,6 +30,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "dirname.h"
 #include "error.h"
 #include "xalloc.h"
 #include "xvasprintf.h"
@@ -86,64 +87,64 @@ char *make_filename (const char *path, const char *name,
 struct mandata *filename_info (const char *file, bool warn_if_bogus)
 {
 	struct mandata *info;
-	char *slash, *base_name;
+	char *basename, *dirname;
 	struct compression *comp;
 
 	info = XZALLOC (struct mandata);
-	info->addr = xstrdup (file);
-	slash = strrchr (info->addr, '/');
 
-	if (slash) {
-		*slash = '\0';			/* strip '/base_name' */
-		base_name = slash + 1;
-	} else
-		base_name = info->addr;
+	basename = base_name (file);
 
 	/* Bogus files either have (i) no period, ie no extension, (ii)
 	   a compression extension, but no sectional extension, (iii)
 	   a missmatch between the section they are under and the
 	   sectional part of their extension. */
 
-	comp = comp_info (base_name, 1);
+	comp = comp_info (basename, 1);
 	if (comp) {
-		info->comp = comp->ext;
-		*(base_name + strlen (comp->stem)) = '\0';
+		info->comp = xstrdup (comp->ext);
+		*(basename + strlen (comp->stem)) = '\0';
 		free (comp->stem);
 	} else
 		info->comp = NULL;
 
 	{
-		char *ext = strrchr (base_name, '.');
+		char *ext = strrchr (basename, '.');
 		if (!ext) {
 			/* no section extension */
 			if (warn_if_bogus)
 				gripe_bogus_manpage (file);
+			free (basename);
 			free_mandata_struct (info);
 			return NULL;
 		}
 		*ext++ = '\0';			/* set section ext */
-		info->ext = ext;
+		info->ext = xstrdup (ext);
 		if (!*info->ext) {
 			/* zero-length section extension */
 			if (warn_if_bogus)
 				gripe_bogus_manpage (file);
+			free (basename);
 			free_mandata_struct (info);
 			return NULL;
 		}
 	}
 
-	info->sec = strrchr (info->addr, '/') + 4;	/* set section name */
+	/* Set section name. */
+	dirname = dir_name (file);
+	info->sec = xstrdup (strrchr (dirname, '/') + 4);
+	free (dirname);
 
 	if (strlen (info->sec) >= 1 && strlen (info->ext) >= 1 &&
 	    info->sec[0] != info->ext[0]) {
 		/* mismatch in section */
 		if (warn_if_bogus)
 			gripe_bogus_manpage (file);
+		free (basename);
 		free_mandata_struct (info);
 		return NULL;
 	}
 
-	info->name = xstrdup (base_name);
+	info->name = xstrdup (basename);
 
 	return info;
 }
@@ -152,12 +153,13 @@ struct mandata *filename_info (const char *file, bool warn_if_bogus)
 void free_mandata_struct (struct mandata *pinfo)
 {
 	if (pinfo) {
-		if (pinfo->addr)
-			/* TODO: this memory appears to be properly owned by
-			 * the caller; why do we free it here?
-			 */
-			free (pinfo->addr);	/* free the 'content' */
-		free (pinfo->name);		/* free the real name */
+		free (pinfo->name);
+		free (pinfo->ext);
+		free (pinfo->sec);
+		free (pinfo->pointer);
+		free (pinfo->comp);
+		free (pinfo->filter);
+		free (pinfo->whatis);
 	}
 	free (pinfo);
 }

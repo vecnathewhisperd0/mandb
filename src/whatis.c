@@ -777,9 +777,6 @@ nextpage:
 		end = man_btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
 #pragma GCC diagnostic pop
-		if (info)
-			/* == MYDBM_DPTR (cont), freed above */
-			info->addr = NULL;
 		free_mandata_struct (info);
 	}
 

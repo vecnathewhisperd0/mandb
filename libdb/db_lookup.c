@@ -199,17 +199,15 @@ struct mandata *split_content (MYDBM_FILE dbf, char *cont_ptr)
 
 	info = XZALLOC (struct mandata);
 	info->name = copy_if_set (*(data++));
-	info->ext = *(data++);
-	info->sec = *(data++);
+	info->ext = xstrdup (*(data++));
+	info->sec = xstrdup (*(data++));
 	info->mtime.tv_sec = (time_t) atol (*(data++));
 	info->mtime.tv_nsec = atol (*(data++));
 	info->id = **(data++);				/* single char id */
-	info->pointer = *(data++);
-	info->filter = *(data++);
-	info->comp = *(data++);
-	info->whatis = *(data);
-
-	info->addr = cont_ptr;
+	info->pointer = xstrdup (*(data++));
+	info->filter = xstrdup (*(data++));
+	info->comp = xstrdup (*(data++));
+	info->whatis = xstrdup (*(data));
 	return info;
 }
 
@@ -368,8 +366,8 @@ static gl_list_t dblookup (MYDBM_FILE dbf, const char *page,
 		}
 
 		gl_list_free (refs);
-		MYDBM_FREE_DPTR (cont);
 	}
+	MYDBM_FREE_DPTR (cont);
 
 	return infos;
 }
@@ -505,8 +503,6 @@ nextpage:
 		MYDBM_FREE_DPTR (key);
 		end = man_btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
-		if (info)
-			info->addr = NULL;
 		free_mandata_struct (info);
 	}
 

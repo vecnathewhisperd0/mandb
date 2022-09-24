@@ -135,13 +135,13 @@ static datum make_content (struct mandata *in)
 	memset (&cont, 0, sizeof cont);
 
 	if (!in->pointer)
-		in->pointer = dash;
-	if (!in->filter)
-		in->filter = dash;
+		in->pointer = xstrdup (dash);
 	if (!in->comp)
-		in->comp = dash;
+		in->comp = xstrdup (dash);
+	if (!in->filter)
+		in->filter = xstrdup (dash);
 	if (!in->whatis)
-		in->whatis = dash + 1;
+		in->whatis = xstrdup (dash + 1);
 
 	value = xasprintf (
 		"%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s",
@@ -278,7 +278,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 			info = split_content (dbf, MYDBM_DPTR (cont));
 			ret = replace_if_necessary (dbf, in, info,
 						    newkey, newcont);
-			/* MYDBM_FREE_DPTR (cont); */
+			MYDBM_FREE_DPTR (cont);
 			free_mandata_struct (info);
 			MYDBM_FREE_DPTR (newkey);
 			MYDBM_FREE_DPTR (newcont);
@@ -348,7 +348,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 			newcont = make_content (in);
 			ret = replace_if_necessary (dbf, in, old,
 						    oldkey, newcont);
-			/* MYDBM_FREE_DPTR (oldcont); */
+			MYDBM_FREE_DPTR (oldcont);
 			free_mandata_struct (old);
 			MYDBM_FREE_DPTR (newcont);
 			MYDBM_FREE_DPTR (lastkey);
@@ -412,7 +412,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		if (MYDBM_REPLACE (dbf, oldkey, newcont))
 			gripe_replace_key (dbf, MYDBM_DPTR (oldkey));
 
-		/* MYDBM_FREE_DPTR (oldcont); */
+		MYDBM_FREE_DPTR (oldcont);
 		free_mandata_struct (old);
 		MYDBM_FREE_DPTR (newcont);
 		free (old_name);

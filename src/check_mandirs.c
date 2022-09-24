@@ -1053,6 +1053,7 @@ int purge_missing (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 		free (nicekey);
 
 		free_mandata_struct (entry);
+		MYDBM_FREE_DPTR (content);
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE_DPTR (key);
 		key = nextkey;

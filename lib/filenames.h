@@ -28,22 +28,24 @@
 #include "timespec.h"
 
 struct mandata {
-	char *addr;			/* ptr to memory containing the fields */
-
-	char *name;			/* Name of page, if != key */
-
-	/* The following are all const because they should be pointers to
-	 * parts of strings allocated elsewhere (often the addr field above)
-	 * and should not be written through or freed themselves.
-	 */
-	const char *ext;		/* Filename ext w/o comp ext */
-	const char *sec;		/* Section name/number */
-	char id;			/* id for this entry */
-	const char *pointer;		/* id related file pointer */
-	const char *comp;		/* Compression extension */
-	const char *filter;		/* filters needed for the page */
-	const char *whatis;		/* whatis description for page */
-	struct timespec mtime;		/* mod time for file */
+	/* Name of page, if not equal to the key. */
+	char *name;
+	/* Filename extension without compression extension. */
+	char *ext;
+	/* Section name/number. */
+	char *sec;
+	/* ID (i.e. type) of this entry. */
+	char id;
+	/* ID-related file pointer. */
+	char *pointer;
+	/* Compression extension. */
+	char *comp;
+	/* Filters needed for the page. */
+	char *filter;
+	/* Whatis description for the page. */
+	char *whatis;
+	/* Modification time for file. */
+	struct timespec mtime;
 };
 
 extern char *make_filename (const char *path, const char *name,

@@ -318,8 +318,6 @@ static int parse_for_sec (MYDBM_FILE dbf,
 				    	}
 				}
 
-				/* == MYDBM_DPTR (content), freed below */
-				entry->addr = NULL;
 				free_mandata_struct (entry);
 			}
 

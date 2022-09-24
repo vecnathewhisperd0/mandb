@@ -134,9 +134,8 @@ static int check_for_stray (MYDBM_FILE dbf)
 			goto next;
 		} else if (comp_info (ext, 0)) {
 			*ext = '\0';
-			info->comp = ext + 1;
-		} else
-			info->comp = NULL;
+			info->comp = xstrdup (ext + 1);
+		}
 
 		ext = strrchr (mandir, '.');
 		*(mandir + lenman - 1) = '\0';
@@ -184,7 +183,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 			lg.whatis = 0;
 			*(ext++) = '\0';
-			info->ext = ext;
+			info->ext = xstrdup (ext);
 
 			/* see if we already have it, before going any
 			   further */
@@ -198,9 +197,9 @@ static int check_for_stray (MYDBM_FILE dbf)
 			       mandir_base, info->ext);
 
 			/* fill in the missing parts of the structure */
-			info->sec = section;
+			info->sec = xstrdup (section);
 			info->id = STRAY_CAT;
-			info->filter = "-";
+			info->filter = xstrdup ("-");
 			info->mtime.tv_sec = 0;
 			info->mtime.tv_nsec = 0;
 
