@@ -283,16 +283,17 @@ static int parse_for_sec (MYDBM_FILE dbf,
 #endif
 			if (*MYDBM_DPTR (content) != '\t') {
 #pragma GCC diagnostic pop
-				struct mandata entry;
+				struct mandata *entry;
 
+				entry = XZALLOC (struct mandata);
 				split_content (dbf, MYDBM_DPTR (content),
-					       &entry);
+					       entry);
 
 				/* Accept if the entry is an ultimate manual
 				   page and the section matches the one we're
 				   currently dealing with */
-				if (entry.id == ULT_MAN &&
-				    strcmp (entry.sec, section) == 0) {
+				if (entry->id == ULT_MAN &&
+				    strcmp (entry->sec, section) == 0) {
 					if (message) {
 						printf (_("\nUpdating cat files for section %s of man hierarchy %s\n"),
 							section, manpath);
@@ -319,8 +320,8 @@ static int parse_for_sec (MYDBM_FILE dbf,
 				}
 
 				/* == MYDBM_DPTR (content), freed below */
-				entry.addr = NULL;
-				free_mandata_elements (&entry);
+				entry->addr = NULL;
+				free_mandata_struct (entry);
 			}
 
 			/* we don't need the content ever again */

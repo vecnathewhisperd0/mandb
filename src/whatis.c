@@ -690,9 +690,7 @@ static void do_apropos (MYDBM_FILE dbf,
 	while (!end) {
 #endif /* !BTREE */
 		char *tab;
-		struct mandata info;
-
-		memset (&info, 0, sizeof (info));
+		struct mandata *info = NULL;
 
 		/* bug#4372, NULL pointer dereference in MYDBM_DPTR (cont),
 		 * fix by dassen@wi.leidenuniv.nl (J.H.M.Dassen), thanx Ray.
@@ -721,7 +719,8 @@ static void do_apropos (MYDBM_FILE dbf,
 
 		/* a real page */
 
-		split_content (dbf, MYDBM_DPTR (cont), &info);
+		info = XZALLOC (struct mandata);
+		split_content (dbf, MYDBM_DPTR (cont), info);
 
 		/* If there are sections given, does any of them match
 		 * either the section or extension of this page?
@@ -731,8 +730,8 @@ static void do_apropos (MYDBM_FILE dbf,
 			int matched = 0;
 
 			for (section = sections; *section; ++section) {
-				if (STREQ (*section, info.sec) ||
-				    STREQ (*section, info.ext)) {
+				if (STREQ (*section, info->sec) ||
+				    STREQ (*section, info->ext)) {
 					matched = 1;
 					break;
 				}
@@ -752,14 +751,14 @@ static void do_apropos (MYDBM_FILE dbf,
 		if (am_apropos) {
 			char *whatis;
 
-			whatis = info.whatis ? xstrdup (info.whatis) : NULL;
+			whatis = info->whatis ? xstrdup (info->whatis) : NULL;
 			if (!combine (num_pages, found_here) && whatis)
 				parse_whatis (pages, num_pages,
 					      whatis, found, found_here);
 			free (whatis);
 		}
 		if (combine (num_pages, found_here))
-			display (dbf, &info, MYDBM_DPTR (key));
+			display (dbf, info, MYDBM_DPTR (key));
 
 		if (tab)
 			*tab = '\t';
@@ -779,8 +778,10 @@ nextpage:
 		end = man_btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
 #pragma GCC diagnostic pop
-		info.addr = NULL; /* == MYDBM_DPTR (cont), freed above */
-		free_mandata_elements (&info);
+		if (info)
+			/* == MYDBM_DPTR (cont), freed above */
+			info->addr = NULL;
+		free_mandata_struct (info);
 	}
 
 	free (found_here);

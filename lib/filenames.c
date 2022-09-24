@@ -148,23 +148,16 @@ struct mandata *filename_info (const char *file, bool warn_if_bogus)
 	return info;
 }
 
-/* Free allocated elements of a mandata structure, but not the structure
- * itself.
- */
-void free_mandata_elements (struct mandata *pinfo)
-{
-	if (pinfo->addr)
-		/* TODO: this memory appears to be properly owned by the
-		 * caller; why do we free it here?
-		 */
-		free (pinfo->addr);		/* free the 'content' */
-	free (pinfo->name);			/* free the real name */
-}
-
 /* Free a mandata structure and its elements. */
 void free_mandata_struct (struct mandata *pinfo)
 {
-	if (pinfo)
-		free_mandata_elements (pinfo);
+	if (pinfo) {
+		if (pinfo->addr)
+			/* TODO: this memory appears to be properly owned by
+			 * the caller; why do we free it here?
+			 */
+			free (pinfo->addr);	/* free the 'content' */
+		free (pinfo->name);		/* free the real name */
+	}
 	free (pinfo);
 }

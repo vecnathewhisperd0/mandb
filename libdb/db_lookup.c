@@ -401,7 +401,6 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 			    bool pattern_regex, bool try_descriptions)
 {
 	gl_list_t infos;
-	struct mandata *tail = NULL;
 	datum key, cont;
 	regex_t preg;
 
@@ -427,11 +426,11 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 	end = man_btree_nextkeydata (dbf, &key, &cont);
 	while (!end) {
 #endif /* !BTREE */
-		struct mandata info;
+		struct mandata *info = NULL;
 		char *tab;
 		bool got_match;
 
-		memset (&info, 0, sizeof (info));
+		info = XZALLOC (struct mandata);
 
 		if (!MYDBM_DPTR (cont))
 		{
@@ -455,45 +454,43 @@ gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *pattern,
 
 		/* a real page */
 
-		split_content (dbf, MYDBM_DPTR (cont), &info);
+		split_content (dbf, MYDBM_DPTR (cont), info);
 
 		/* If there's a section given, does it match either the
 		 * section or extension of this page?
 		 */
 		if (section &&
-		    (!STREQ (section, info.sec) && !STREQ (section, info.ext)))
+		    (!STREQ (section, info->sec) &&
+		     !STREQ (section, info->ext)))
 			goto nextpage;
 
 		tab = strrchr (MYDBM_DPTR (key), '\t');
 		if (tab)
 			 *tab = '\0';
 
-		if (!info.name)
-			info.name = xstrdup (MYDBM_DPTR (key));
+		if (!info->name)
+			info->name = xstrdup (MYDBM_DPTR (key));
 
 		if (pattern_regex)
-			got_match = (regexec (&preg, info.name,
+			got_match = (regexec (&preg, info->name,
 					      0, NULL, 0) == 0);
 		else
-			got_match = fnmatch (pattern, info.name,
+			got_match = fnmatch (pattern, info->name,
 					     match_case ? 0
 							: FNM_CASEFOLD) == 0;
-		if (try_descriptions && !got_match && info.whatis) {
+		if (try_descriptions && !got_match && info->whatis) {
 			if (pattern_regex)
-				got_match = (regexec (&preg, info.whatis,
+				got_match = (regexec (&preg, info->whatis,
 						      0, NULL, 0) == 0);
 			else
 				got_match = word_fnmatch (pattern,
-							  info.whatis);
+							  info->whatis);
 		}
 		if (!got_match)
 			goto nextpage_tab;
 
-		tail = XZALLOC (struct mandata);
-		memcpy (tail, &info, sizeof (info));
-		info.name = NULL; /* steal memory */
-		MYDBM_SET_DPTR (cont, NULL); /* == info.addr */
-		gl_list_add_last (infos, tail);
+		gl_list_add_last (infos, info);
+		info = NULL; /* avoid freeing later */
 
 nextpage_tab:
 		if (tab)
@@ -509,8 +506,9 @@ nextpage:
 		MYDBM_FREE_DPTR (key);
 		end = man_btree_nextkeydata (dbf, &key, &cont);
 #endif /* !BTREE */
-		info.addr = NULL;
-		free_mandata_elements (&info);
+		if (info)
+			info->addr = NULL;
+		free_mandata_struct (info);
 	}
 
 	if (pattern_regex)

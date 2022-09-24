@@ -706,7 +706,7 @@ void purge_pointers (MYDBM_FILE dbf, const char *name)
 
 	while (MYDBM_DPTR (key) != NULL) {
 		datum content, nextkey;
-		struct mandata entry;
+		struct mandata *entry = NULL;
 		char *nicekey, *tab;
 
 #pragma GCC diagnostic push
@@ -736,19 +736,21 @@ void purge_pointers (MYDBM_FILE dbf, const char *name)
 			goto pointers_contentnext;
 #pragma GCC diagnostic pop
 
-		split_content (dbf, MYDBM_DPTR (content), &entry);
-		if (entry.id != SO_MAN && entry.id != WHATIS_MAN)
+		entry = XZALLOC (struct mandata);
+		split_content (dbf, MYDBM_DPTR (content), entry);
+		if (entry->id != SO_MAN && entry->id != WHATIS_MAN)
 			goto pointers_contentnext;
 
-		if (STREQ (entry.pointer, name)) {
+		if (STREQ (entry->pointer, name)) {
 			if (!opt_test)
-				dbdelete (dbf, nicekey, &entry);
+				dbdelete (dbf, nicekey, entry);
 			else
 				debug ("%s(%s): pointer vanished, "
-				       "would delete\n", nicekey, entry.ext);
+				       "would delete\n", nicekey, entry->ext);
 		}
 
 pointers_contentnext:
+		free_mandata_struct (entry);
 		free (nicekey);
 		MYDBM_FREE_DPTR (content);
 pointers_next:
@@ -965,7 +967,7 @@ int purge_missing (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 
 	while (MYDBM_DPTR (key) != NULL) {
 		datum content, nextkey;
-		struct mandata entry;
+		struct mandata *entry;
 		char *nicekey, *tab;
 		bool save_debug;
 		gl_list_t found;
@@ -1014,39 +1016,40 @@ int purge_missing (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 		}
 #pragma GCC diagnostic pop
 
-		split_content (dbf, MYDBM_DPTR (content), &entry);
+		entry = XZALLOC (struct mandata);
+		split_content (dbf, MYDBM_DPTR (content), entry);
 
 		save_debug = debug_level;
 		debug_level = false;	/* look_for_file() is quite noisy */
-		if (entry.id <= WHATIS_MAN)
-			found = look_for_file (manpath, entry.ext,
-					       entry.name ? entry.name
-							  : nicekey,
+		if (entry->id <= WHATIS_MAN)
+			found = look_for_file (manpath, entry->ext,
+					       entry->name ? entry->name
+							   : nicekey,
 					       0, LFF_MATCHCASE);
 		else
-			found = look_for_file (catpath, entry.ext,
-					       entry.name ? entry.name
-							  : nicekey,
+			found = look_for_file (catpath, entry->ext,
+					       entry->name ? entry->name
+							   : nicekey,
 					       1, LFF_MATCHCASE);
 		debug_level = save_debug;
 
 		/* Now actually decide whether to purge, depending on the
 		 * type of entry.
 		 */
-		if (entry.id == ULT_MAN || entry.id == SO_MAN ||
-		    entry.id == STRAY_CAT)
-			count += purge_normal (dbf, nicekey, &entry, found);
-		else if (entry.id == WHATIS_MAN)
+		if (entry->id == ULT_MAN || entry->id == SO_MAN ||
+		    entry->id == STRAY_CAT)
+			count += purge_normal (dbf, nicekey, entry, found);
+		else if (entry->id == WHATIS_MAN)
 			count += purge_whatis (dbf, manpath, 0, nicekey,
-					       &entry, found, db_mtime);
-		else	/* entry.id == WHATIS_CAT */
+					       entry, found, db_mtime);
+		else	/* entry->id == WHATIS_CAT */
 			count += purge_whatis (dbf, catpath, 1, nicekey,
-					       &entry, found, db_mtime);
+					       entry, found, db_mtime);
 
 		gl_list_free (found);
 		free (nicekey);
 
-		free_mandata_elements (&entry);
+		free_mandata_struct (entry);
 		nextkey = MYDBM_NEXTKEY (dbf, key);
 		MYDBM_FREE_DPTR (key);
 		key = nextkey;

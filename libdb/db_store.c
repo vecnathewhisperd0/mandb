@@ -270,16 +270,17 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 
 		if (MYDBM_INSERT (dbf, newkey, newcont)) {
 			datum cont;
-			struct mandata info;
+			struct mandata *info;
 			int ret;
 
 			MYDBM_FREE_DPTR (oldcont);
 			cont = MYDBM_FETCH (dbf, newkey);
-			split_content (dbf, MYDBM_DPTR (cont), &info);
-			ret = replace_if_necessary (dbf, in, &info,
+			info = XZALLOC (struct mandata);
+			split_content (dbf, MYDBM_DPTR (cont), info);
+			ret = replace_if_necessary (dbf, in, info,
 						    newkey, newcont);
 			/* MYDBM_FREE_DPTR (cont); */
-			free_mandata_elements (&info);
+			free_mandata_struct (info);
 			MYDBM_FREE_DPTR (newkey);
 			MYDBM_FREE_DPTR (newcont);
 			MYDBM_FREE_DPTR (oldkey);
@@ -315,7 +316,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		MYDBM_FREE_DPTR (newcont);
 	} else { 				/* situation (3) */
 		datum newkey, newcont, lastkey, lastcont;
-		struct mandata old;
+		struct mandata *old;
 		char *old_name;
 
 		memset (&newkey, 0, sizeof newkey);
@@ -325,31 +326,32 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 
 		/* Extract the old singular reference */
 
-		split_content (dbf, MYDBM_DPTR (oldcont), &old);
+		old = XZALLOC (struct mandata);
+		split_content (dbf, MYDBM_DPTR (oldcont), old);
 
 		/* Create multi keys for both old
 		   and new items, create new content */
 
-		if (old.name)
-			old_name = xstrdup (old.name);
+		if (old->name)
+			old_name = xstrdup (old->name);
 		else
 			old_name = xstrdup (MYDBM_DPTR (oldkey));
 
-		lastkey = make_multi_key (old_name, old.ext);
+		lastkey = make_multi_key (old_name, old->ext);
 
 		/* Check against identical multi keys before inserting
 		   into db */
 
-		if (STREQ (old_name, base) && STREQ (old.ext, in->ext)) {
+		if (STREQ (old_name, base) && STREQ (old->ext, in->ext)) {
 			int ret;
 
 			if (!STREQ (base, MYDBM_DPTR (oldkey)))
 				in->name = xstrdup (base);
 			newcont = make_content (in);
-			ret = replace_if_necessary (dbf, in, &old,
+			ret = replace_if_necessary (dbf, in, old,
 						    oldkey, newcont);
 			/* MYDBM_FREE_DPTR (oldcont); */
-			free_mandata_elements (&old);
+			free_mandata_struct (old);
 			MYDBM_FREE_DPTR (newcont);
 			MYDBM_FREE_DPTR (lastkey);
 			MYDBM_FREE_DPTR (oldkey);
@@ -363,12 +365,12 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		/* Multi keys use the proper case, and so don't need a name
 		 * field.
 		 */
-		if (old.name) {
-			free (old.name);
-			old.name = NULL;
+		if (old->name) {
+			free (old->name);
+			old->name = NULL;
 		}
 
-		lastcont = make_content (&old);
+		lastcont = make_content (old);
 
 		/* We always replace here; if the multi key already exists
 		 * in the database, then that indicates some kind of
@@ -397,7 +399,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		ref = XMALLOC (struct name_ext);
 		/* Not copied. */
 		ref->name = old_name;
-		ref->ext = old.ext;
+		ref->ext = old->ext;
 		gl_sortedlist_add (refs, name_ext_compare, ref);
 		ref = XMALLOC (struct name_ext);
 		/* Not copied. */
@@ -413,7 +415,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 			gripe_replace_key (dbf, MYDBM_DPTR (oldkey));
 
 		/* MYDBM_FREE_DPTR (oldcont); */
-		free_mandata_elements (&old);
+		free_mandata_struct (old);
 		MYDBM_FREE_DPTR (newcont);
 		free (old_name);
 	}

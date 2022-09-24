@@ -112,13 +112,13 @@ static int check_for_stray (MYDBM_FILE dbf)
 	lencat = strlen (catdir);
 
 	GL_LIST_FOREACH (names, name) {
-		struct mandata info;
-		char *ext, *section;
+		struct mandata *info;
+		char *ext, *section = NULL;
 		short found;
 		struct stat buf;
 		struct compression *comp;
 
-		memset (&info, 0, sizeof (struct mandata));
+		info = XZALLOC (struct mandata);
 
 		*(mandir + lenman) = *(catdir + lencat) = '\0';
 		mandir = appendstr (mandir, name, (void *) 0);
@@ -131,12 +131,12 @@ static int check_for_stray (MYDBM_FILE dbf)
 				       _("warning: %s: "
 					 "ignoring bogus filename"),
 				       catdir);
-			continue;
+			goto next;
 		} else if (comp_info (ext, 0)) {
 			*ext = '\0';
-			info.comp = ext + 1;
+			info->comp = ext + 1;
 		} else
-			info.comp = NULL;
+			info->comp = NULL;
 
 		ext = strrchr (mandir, '.');
 		*(mandir + lenman - 1) = '\0';
@@ -151,7 +151,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 				       _("warning: %s: "
 					 "ignoring bogus filename"),
 				       catdir);
-			goto next_section;
+			goto next;
 		}
 
 		/*
@@ -184,27 +184,25 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 			lg.whatis = 0;
 			*(ext++) = '\0';
-			info.ext = ext;
+			info->ext = ext;
 
 			/* see if we already have it, before going any
 			   further */
 			mandir_base = base_name (mandir);
-			exists = dblookup_exact (dbf, mandir_base, info.ext,
+			exists = dblookup_exact (dbf, mandir_base, info->ext,
 						 true);
 			if (exists &&
 			    compare_ids (STRAY_CAT, exists->id, 0) >= 0)
 				goto next_exists;
 			debug ("%s(%s) is not in the db.\n",
-			       mandir_base, info.ext);
+			       mandir_base, info->ext);
 
 			/* fill in the missing parts of the structure */
-			info.name = NULL;
-			info.sec = section;
-			info.id = STRAY_CAT;
-			info.pointer = NULL;
-			info.filter = "-";
-			info.mtime.tv_sec = 0;
-			info.mtime.tv_nsec = 0;
+			info->sec = section;
+			info->id = STRAY_CAT;
+			info->filter = "-";
+			info->mtime.tv_sec = 0;
+			info->mtime.tv_nsec = 0;
 
 			drop_effective_privs ();
 			decomp = decompress_open (catdir, 0);
@@ -265,13 +263,13 @@ static int check_for_stray (MYDBM_FILE dbf)
 					strays++;
 					descs = parse_descriptions
 						(mandir_base, lg.whatis);
-					store_descriptions (dbf, descs, &info,
+					store_descriptions (dbf, descs, info,
 							    NULL, mandir_base,
 							    NULL);
 					gl_list_free (descs);
 				} else if (quiet < 2)
 					error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
-					       catdir, mandir_base, info.sec);
+					       catdir, mandir_base, info->sec);
 				free (catdir_base);
 			}
 
@@ -281,8 +279,9 @@ next_exists:
 			free_mandata_struct (exists);
 			free (mandir_base);
 		}
-next_section:
+next:
 		free (section);
+		free_mandata_struct (info);
 	}
 	gl_list_free (names);
 	return strays;

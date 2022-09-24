@@ -49,7 +49,6 @@ struct mandata {
 extern char *make_filename (const char *path, const char *name,
 			    struct mandata *in, const char *type);
 extern struct mandata *filename_info (const char *file, bool warn_if_bogus);
-extern void free_mandata_elements (struct mandata *pinfo);
 extern void free_mandata_struct (struct mandata *pinfo);
 
 #endif /* MAN_FILENAMES_H */
