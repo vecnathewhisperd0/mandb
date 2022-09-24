@@ -59,13 +59,14 @@ static void gripe_bad_store (const char *name, const char *ext)
 		       name, ext);
 }
 
-/* Is PATH a prefix of DIR, such that DIR is in the manual hierarchy PATH?
- * This requires that the part of DIR following PATH start with "/man".
+/* Is PARENT a prefix of CHILD, such that CHILD is in the manual hierarchy
+ * PARENT?  This requires that the part of CHILD following PARENT start with
+ * "/man".
  */
-static int is_prefix (const char *path, const char *dir)
+static int is_prefix (const char *parent, const char *child)
 {
-	return (STRNEQ (dir, path, strlen (path)) &&
-		STRNEQ (dir + strlen (path), "/man", 4));
+	return (STRNEQ (child, parent, strlen (parent)) &&
+		STRNEQ (child + strlen (parent), "/man", 4));
 }
 
 /* Take a list of descriptions returned by parse_descriptions() and store
