@@ -109,8 +109,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 				    !STREQ (trace_info->name, desc->name))
 					goto next_trace;
 
-				if (path &&
-				    !is_prefix (path, trace_info->addr)) {
+				if (path && !is_prefix (path, trace_name)) {
 					/* Link outside this manual
 					 * hierarchy; skip this description.
 					 */

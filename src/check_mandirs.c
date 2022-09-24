@@ -62,6 +62,7 @@
 #include "manconfig.h"
 
 #include "appendstr.h"
+#include "compression.h"
 #include "debug.h"
 #include "fatal.h"
 #include "filenames.h"
@@ -161,6 +162,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	const char *ult;
 	struct lexgrog lg;
 	struct mandata *info, *exists;
+	struct compression *comp;
 	struct stat buf;
 	size_t len;
 	gl_list_t ult_trace = NULL;
@@ -174,9 +176,12 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	manpage_base = info->name; /* steal memory */
 	info->name = NULL;
 
-	len  = strlen (info->addr) + 1;		/* skip over directory name */
-	len += strlen (info->addr + len) + 1;	/* skip over base name */
-	len += strlen (info->addr + len);	/* skip over section ext */
+	comp = comp_info (file, 1);
+	if (comp) {
+		len = strlen (comp->stem);
+		free (comp->stem);
+	} else
+		len = strlen (file);
 
 	/* to get mtime info */
 	(void) lstat (file, &buf);
