@@ -11,6 +11,8 @@ Fixes:
  * Database entries for links were often incorrectly stored as if they were
    entries for the ultimate source of the page.  They are now stored with
    the correct type.
+ * Store links in the database using the section and extension of the link
+   rather than of the ultimate source file.
 
 Improvements:
 

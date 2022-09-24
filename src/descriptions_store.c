@@ -133,6 +133,10 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 					free_mandata_struct (trace_info);
 					break;
 				}
+				free (whatis_info->ext);
+				whatis_info->ext = xstrdup (trace_info->ext);
+				free (whatis_info->sec);
+				whatis_info->sec = xstrdup (trace_info->sec);
 				if (!gl_list_next_node (trace, trace_node)) {
 					if (info->id == SO_MAN)
 						whatis_info->id = ULT_MAN;
