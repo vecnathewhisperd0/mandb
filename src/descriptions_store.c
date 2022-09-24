@@ -37,7 +37,8 @@
 #define _(String) gettext (String)
 
 #include "error.h"
-#include "gl_list.h"
+#include "gl_array_list.h"
+#include "gl_xlist.h"
 #include "stat-time.h"
 #include "xalloc.h"
 
@@ -76,14 +77,21 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			 const char *path, const char *base, gl_list_t trace)
 {
 	const struct page_description *desc;
-	char save_id = info->id;
-	struct timespec save_mtime = info->mtime;
 	const char *trace_name;
+	gl_list_t whatis_infos;
+	struct mandata *whatis_info;
+	char best_id = WHATIS_CAT + 1;
+	const char *best_name = base;
 
 	if (gl_list_size (descs) && trace) {
 		GL_LIST_FOREACH (trace, trace_name)
 			debug ("trace: '%s'\n", trace_name);
 	}
+
+	whatis_infos = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
+					     (gl_listelement_dispose_fn)
+					     free_mandata_struct,
+					     true);
 
 	GL_LIST_FOREACH (descs, desc) {
 		/* Either it's the real thing or merely a reference. Get the
@@ -92,18 +100,21 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 		bool found_real_page = false;
 		bool found_external = false;
 
-		if (STREQ (base, desc->name)) {
-			info->id = save_id;
-			free (info->pointer);
-			info->pointer = NULL;
-			free (info->whatis);
-			if (desc->whatis)
-				info->whatis = xstrdup (desc->whatis);
-			else
-				info->whatis = NULL;
-			info->mtime = save_mtime;
+		whatis_info = XZALLOC (struct mandata);
+		whatis_info->ext = xstrdup (info->ext);
+		whatis_info->sec = xstrdup (info->sec);
+		whatis_info->id = info->id;
+		if (info->comp)
+			whatis_info->comp = xstrdup (info->comp);
+		if (info->filter)
+			whatis_info->filter = xstrdup (info->filter);
+		if (desc->whatis)
+			whatis_info->whatis = xstrdup (desc->whatis);
+		whatis_info->mtime = info->mtime;
+
+		if (STREQ (base, desc->name))
 			found_real_page = true;
-		} else if (trace) {
+		else if (trace) {
 			GL_LIST_FOREACH (trace, trace_name) {
 				struct mandata *trace_info;
 				struct stat st;
@@ -122,25 +133,24 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 					free_mandata_struct (trace_info);
 					break;
 				}
-				info->id = save_id;
 				if (!gl_list_next_node (trace, trace_node)) {
-					if (save_id == SO_MAN)
-						info->id = ULT_MAN;
+					if (info->id == SO_MAN)
+						whatis_info->id = ULT_MAN;
 				} else {
-					if (save_id == ULT_MAN)
-						info->id = SO_MAN;
+					if (info->id == ULT_MAN)
+						whatis_info->id = SO_MAN;
 				}
-				free (info->pointer);
-				info->pointer = NULL;
-				free (info->whatis);
-				if (desc->whatis)
-					info->whatis = xstrdup (desc->whatis);
+				free (whatis_info->comp);
+				if (trace_info->comp)
+					whatis_info->comp = xstrdup
+						(trace_info->comp);
 				else
-					info->whatis = NULL;
+					whatis_info->comp = NULL;
 				if (lstat (trace_name, &st) == 0)
-					info->mtime = get_stat_mtime (&st);
+					whatis_info->mtime = get_stat_mtime
+						(&st);
 				else
-					info->mtime = save_mtime;
+					whatis_info->mtime = info->mtime;
 				found_real_page = true;
 
 next_trace:
@@ -151,28 +161,59 @@ next_trace:
 		if (found_external) {
 			debug ("skipping '%s'; link outside manual "
 			       "hierarchy\n", desc->name);
+			free_mandata_struct (whatis_info);
 			continue;
 		}
 
 		if (!found_real_page) {
-			if (save_id < STRAY_CAT)
-				info->id = WHATIS_MAN;
+			whatis_info->name = xstrdup (desc->name);
+			if (info->id < STRAY_CAT)
+				whatis_info->id = WHATIS_MAN;
 			else
-				info->id = WHATIS_CAT;
-			free (info->pointer);
-			info->pointer = xstrdup (base);
+				whatis_info->id = WHATIS_CAT;
 			/* Don't waste space storing the whatis in the db
 			 * more than once.
 			 */
-			free (info->whatis);
-			info->whatis = NULL;
-			info->mtime = save_mtime;
+			free (whatis_info->whatis);
+			whatis_info->whatis = NULL;
+			gl_list_add_last (whatis_infos, whatis_info);
+			continue;
 		}
 
-		debug ("name = '%s', id = %c\n", desc->name, info->id);
-		if (dbstore (dbf, info, desc->name) > 0) {
-			gripe_bad_store (base, info->ext);
-			break;
+		if (whatis_info->id < best_id) {
+			best_id = whatis_info->id;
+			best_name = desc->name;
 		}
+
+		debug ("name = '%s', id = %c\n", desc->name, whatis_info->id);
+		if (dbstore (dbf, whatis_info, desc->name) > 0) {
+			gripe_bad_store (base, whatis_info->ext);
+			free_mandata_struct (whatis_info);
+			goto out;
+		}
+
+		free_mandata_struct (whatis_info);
 	}
+
+	GL_LIST_FOREACH (whatis_infos, whatis_info) {
+		char *name;
+
+		name = whatis_info->name;
+		whatis_info->name = NULL;
+
+		whatis_info->pointer = xstrdup (best_name);
+
+		debug ("name = '%s', id = %c, pointer = '%s'\n",
+		       name, whatis_info->id, whatis_info->pointer);
+		if (dbstore (dbf, whatis_info, name) > 0) {
+			gripe_bad_store (base, whatis_info->ext);
+			free (name);
+			goto out;
+		}
+
+		free (name);
+	}
+
+out:
+	gl_list_free (whatis_infos);
 }
