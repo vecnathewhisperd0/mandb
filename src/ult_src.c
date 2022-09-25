@@ -139,6 +139,33 @@ static char *ult_softlink (const char *fullpath)
 	return resolved_path;
 }
 
+static char *find_include_directive (char *path)
+{
+	decompress *decomp;
+	const char *buffer;
+	char *directive;
+
+	decomp = decompress_open (path, DECOMPRESS_ALLOW_INPROCESS);
+	if (!decomp) {
+		if (quiet < 2)
+			error (0, errno, _("can't open %s"), path);
+		return NULL;
+	}
+	decompress_start (decomp);
+
+	/* make sure that we skip over any comments */
+	do {
+		buffer = decompress_readline (decomp);
+	} while (buffer && STRNEQ (buffer, ".\\\"", 3));
+
+	directive = xstrdup (buffer ? buffer : "");
+
+	decompress_wait (decomp);
+	decompress_free (decomp);
+
+	return directive;
+}
+
 /* Test 'buffer' to see if it contains a .so include. If so and it's not an
  * absolute filename, return newly allocated string whose contents are the
  * include.
@@ -230,9 +257,9 @@ static char *find_include (const char *name, const char *path,
 }
 
 /*
- * recursive function which finds the ultimate source file by following
- * any ".so filename" directives in the first line of the man pages.
- * Also (optionally) traces symlinks and hard links(!).
+ * Find the ultimate source file by following any ".so filename" directives
+ * in the first line of the man pages.  Also (optionally) trace symlinks and
+ * hard links(!).
  *
  * name is full pathname, path is the MANPATH directory (/usr/man)
  * flags is a combination of SO_LINK | SOFT_LINK | HARD_LINK
@@ -240,10 +267,10 @@ static char *find_include (const char *name, const char *path,
 const char *ult_src (const char *name, const char *path,
 		     struct stat *buf, int flags, gl_list_t trace)
 {
-	static char *base;		/* must be static */
-	static short recurse; 		/* must be static */
+	char *base = xstrdup (name);
+	struct stat new_buf;
 
-	/* initialise the function */
+	debug ("ult_src: File %s in mantree %s\n", name, path);
 
 	if (trace)
 		gl_list_add_last (trace, xstrdup (name));
@@ -252,130 +279,94 @@ const char *ult_src (const char *name, const char *path,
 	 * resolving in one call, only need to sort them out once
 	 */
 
-	if (recurse == 0) {
-		struct stat new_buf;
-		free (base);
-		base = xstrdup (name);
-
-		debug ("ult_src: File %s in mantree %s\n", name, path);
-
-		/* If we don't have a buf, allocate and assign one */
-		if (!buf && ((flags & SOFT_LINK) || (flags & HARD_LINK))) {
-			buf = &new_buf;
-			if (lstat (base, buf) == -1) {
-				if (quiet < 2)
-					error (0, errno, _("can't resolve %s"),
-					       base);
-				return NULL;
-			}
-		}
-
-		/* Permit semi local (inter-tree) soft links */
-		if (flags & SOFT_LINK) {
-			assert (buf); /* initialised above */
-			if (S_ISLNK (buf->st_mode)) {
-				/* Is a symlink, resolve it. */
-				char *softlink = ult_softlink (base);
-				if (softlink) {
-					free (base);
-					base = softlink;
-				} else
-					return NULL;
-			}
-		}
-
-		/* Only deal with local (inter-dir) HARD links */
-		if (flags & HARD_LINK) {
-			assert (buf); /* initialised above */
-			if (buf->st_nlink > 1) {
-				/* Has HARD links, find least value */
-				char *hardlink = ult_hardlink (base,
-							       buf->st_ino);
-				if (hardlink) {
-					free (base);
-					base = hardlink;
-				}
-			}
+	/* If we don't have a buf, allocate and assign one */
+	if (!buf && ((flags & SOFT_LINK) || (flags & HARD_LINK))) {
+		buf = &new_buf;
+		if (lstat (base, buf) == -1) {
+			if (quiet < 2)
+				error (0, errno, _("can't resolve %s"), base);
+			return NULL;
 		}
 	}
 
-	/* keep a check on recursion level */
-	else if (recurse == 10) {
-		if (quiet < 2)
-			error (0, 0, _("%s is self referencing"), name);
-		return NULL;
+	/* Permit semi local (inter-tree) soft links */
+	if (flags & SOFT_LINK) {
+		assert (buf); /* initialised above */
+		if (S_ISLNK (buf->st_mode)) {
+			/* Is a symlink, resolve it. */
+			char *softlink = ult_softlink (base);
+			if (softlink) {
+				free (base);
+				base = softlink;
+			} else
+				return NULL;
+		}
+	}
+
+	/* Only deal with local (inter-dir) HARD links */
+	if (flags & HARD_LINK) {
+		assert (buf); /* initialised above */
+		if (buf->st_nlink > 1) {
+			/* Has HARD links, find least value */
+			char *hardlink = ult_hardlink (base,
+						       buf->st_ino);
+			if (hardlink) {
+				free (base);
+				base = hardlink;
+			}
+		}
 	}
 
 	if (flags & SO_LINK) {
-		const char *buffer;
-		char *decomp_base;
-		decompress *decomp;
-		char *include;
-		struct stat st;
+		int i;
+		for (i = 0; i < 10; ++i) {
+			struct stat st;
+			char *directive, *include;
 
-		if (stat (base, &st) < 0) {
-			struct compression *comp = comp_file (base);
-
-			if (comp) {
+			directive = find_include_directive (base);
+			if (!directive) {
 				free (base);
-				base = comp->stem;
-				comp->stem = NULL; /* steal memory */
-			} else {
-				if (quiet < 2)
-					error (0, errno, _("can't open %s"),
-					       base);
 				return NULL;
 			}
-		}
 
-		/* base may change for recursive calls to ult_src, but
-		 * decompress_open doesn't keep its own copy.
-		 */
-		decomp_base = xstrdup (base);
-		decomp = decompress_open (decomp_base,
-					  DECOMPRESS_ALLOW_INPROCESS);
-		if (!decomp) {
-			if (quiet < 2)
-				error (0, errno, _("can't open %s"), base);
-			free (decomp_base);
-			return NULL;
-		}
-		decompress_start (decomp);
-
-		/* make sure that we skip over any comments */
-		do {
-			buffer = decompress_readline (decomp);
-		} while (buffer && STRNEQ (buffer, ".\\\"", 3));
-
-		include = test_for_include (buffer);
-		if (include) {
-			char *new_name;
-			const char *ult;
+			include = test_for_include (directive);
+			free (directive);
+			if (!include)
+				break;
 
 			free (base);
 			base = find_include (name, path, include);
 			free (include);
 
+			if (stat (base, &st) < 0) {
+				struct compression *comp = comp_file (base);
+
+				if (comp) {
+					free (base);
+					base = comp->stem;
+					comp->stem = NULL; /* steal memory */
+				} else {
+					if (quiet < 2)
+						error (0, errno,
+						       _("can't open %s"),
+						       base);
+					free (base);
+					return NULL;
+				}
+			}
+
 			debug ("ult_src: points to %s\n", base);
 
-			recurse++;
-			/* Take a copy; it's unwise to pass base directly to
-			 * a recursive call, as it may be freed.
-			 */
-			new_name = xstrdup (base);
-			ult = ult_src (new_name, path, NULL, flags, trace);
-			free (new_name);
-			recurse--;
-
-			decompress_wait (decomp);
-			decompress_free (decomp);
-			free (decomp_base);
-			return ult;
+			if (trace)
+				gl_list_add_last (trace, xstrdup (base));
 		}
-
-		decompress_wait (decomp);
-		decompress_free (decomp);
-		free (decomp_base);
+		if (i == 10) {
+			if (quiet < 2)
+				error (0, 0, _("%s is self referencing"),
+				       name);
+			free (base);
+			return NULL;
+		}
 	}
 
 	/* We have the ultimate source */
