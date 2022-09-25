@@ -13,6 +13,8 @@ Fixes:
    the correct type.
  * Store links in the database using the section and extension of the link
    rather than of the ultimate source file.
+ * Only skip adding a page to the database due to an existing entry if the
+   entry represents an ultimate source.
 
 Improvements:
 

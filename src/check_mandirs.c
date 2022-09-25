@@ -208,7 +208,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		if (strcmp (exists->comp,
 			    info->comp ? info->comp : "-") == 0) {
 			if (timespec_cmp (exists->mtime, info->mtime) == 0 &&
-			    exists->id < WHATIS_MAN) {
+			    exists->id == ULT_MAN) {
 				free_mandata_struct (exists);
 				free_mandata_struct (info);
 				return;
