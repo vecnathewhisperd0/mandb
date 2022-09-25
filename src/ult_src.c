@@ -257,7 +257,7 @@ const char *ult_src (const char *name, const char *path,
 		free (base);
 		base = xstrdup (name);
 
-		debug ("\nult_src: File %s in mantree %s\n", name, path);
+		debug ("ult_src: File %s in mantree %s\n", name, path);
 
 		/* If we don't have a buf, allocate and assign one */
 		if (!buf && ((flags & SOFT_LINK) || (flags & HARD_LINK))) {

@@ -168,6 +168,8 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	gl_list_t ult_trace = NULL;
 	const struct whatis *whatis;
 
+	debug ("\ntest_manfile: considering %s\n", file);
+
 	memset (&lg, 0, sizeof (struct lexgrog));
 
 	info = filename_info (file, quiet < 2);
@@ -209,6 +211,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 			    info->comp ? info->comp : "-") == 0) {
 			if (timespec_cmp (exists->mtime, info->mtime) == 0 &&
 			    exists->id == ULT_MAN) {
+				debug ("test_manfile: already exists\n");
 				free_mandata_struct (exists);
 				free_mandata_struct (info);
 				return;
@@ -251,7 +254,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 
 	if (!ult) {
 		/* already warned about this, don't do so again */
-		debug ("test_manfile(): bad link %s\n", file);
+		debug ("test_manfile: bad link %s\n", file);
 		free_mandata_struct (info);
 		return;
 	}
@@ -262,7 +265,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	whatis = gl_map_get (whatis_map, ult);
 	if (!whatis) {
 		if (!STRNEQ (ult, file, len))
-			debug ("\ntest_manfile(): link not in cache:\n"
+			debug ("test_manfile: link not in cache:\n"
 			       " source = %s\n"
 			       " target = %s\n", file, ult);
 		/* Trace the file to its ultimate source, otherwise we'll be
