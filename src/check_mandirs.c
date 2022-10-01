@@ -193,49 +193,30 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		return;
 	}
 
-	/* See if we already have it, before going any further. This will
-	 * save both an ult_src() and a find_name(), amongst other wastes of
-	 * time.
+	/* Check for multiple pages whose details match except for having
+	 * different compression extensions.
 	 */
 	exists = dblookup_exact (dbf, manpage_base, info->ext, true);
+	if (exists && !STREQ (exists->comp, info->comp ? info->comp : "-")) {
+		char *abs_filename;
 
-	/* Ensure we really have the actual page. Gzip keeps the mtime the
-	 * same when it compresses, so we have to compare compression
-	 * extensions as well.
-	 */
-	if (exists) {
-		if (strcmp (exists->comp,
-			    info->comp ? info->comp : "-") == 0) {
-			if (timespec_cmp (exists->mtime, info->mtime) == 0 &&
-			    exists->id == ULT_MAN) {
-				debug ("test_manfile: already exists\n");
-				free_mandata_struct (exists);
-				free_mandata_struct (info);
-				return;
-			}
+		/* If the cached file still exists, then we have a collision:
+		 * two pages that only differ by compression extension.
+		 */
+		abs_filename = make_filename (path, NULL, exists, "man");
+		if (!abs_filename) {
+			if (!opt_test)
+				dbdelete (dbf, manpage_base, exists);
 		} else {
-			char *abs_filename;
-
-			/* see if the cached file actually exists. It's
-			   evident at this point that we have multiple
-			   comp extensions */
-			abs_filename = make_filename (path, NULL,
-						      exists, "man");
-			if (!abs_filename) {
-				if (!opt_test)
-					dbdelete (dbf, manpage_base, exists);
-			} else {
-				gripe_multi_extensions (path, exists->sec,
-							manpage_base,
-							exists->ext);
-				free (abs_filename);
-				free_mandata_struct (exists);
-				free_mandata_struct (info);
-				return;
-			}
+			gripe_multi_extensions (path, exists->sec,
+						manpage_base, exists->ext);
+			free (abs_filename);
+			free_mandata_struct (exists);
+			free_mandata_struct (info);
+			return;
 		}
-		free_mandata_struct (exists);
 	}
+	free_mandata_struct (exists);
 
 	/* Trace the file to its ultimate source, otherwise we'll be
 	 * looking for whatis info in files containing only '.so
