@@ -2977,6 +2977,7 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	if (!ult) {
 		const char *name;
 		char *filename;
+		const struct ult_value *ult_value;
 
 		if (*source->pointer != '-')
 			name = source->pointer;
@@ -2988,8 +2989,10 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 		filename = make_filename (path, name, source, cat ? "cat" : "man");
 		if (!filename)
 			return 0;
-		ult = ult_src (filename, path, NULL,
-			       get_ult_flags (from_db, source->id), NULL);
+		ult_value = ult_src (filename, path, NULL,
+				     get_ult_flags (from_db, source->id));
+		if (ult_value)
+			ult = ult_value->path;
 		free (filename);
 	}
 
@@ -3160,7 +3163,7 @@ static int try_section (const char *path, const char *sec, const char *name,
 
 	GL_LIST_FOREACH (names, found_name) {
 		struct mandata *info = filename_info (found_name, quiet < 2);
-		const char *ult;
+		const struct ult_value *ult;
 		int f;
 
 		if (!info)
@@ -3170,20 +3173,20 @@ static int try_section (const char *path, const char *sec, const char *name,
 		 * must be either ULT_MAN or SO_MAN. ult_src() can tell us
 		 * which.
 		 */
-		ult = ult_src (found_name, path, NULL, ult_flags, NULL);
+		ult = ult_src (found_name, path, NULL, ult_flags);
 		if (!ult) {
 			/* already warned */
 			debug ("try_section(): bad link %s\n", found_name);
 			free_mandata_struct (info);
 			continue;
 		}
-		if (STREQ (ult, found_name))
+		if (STREQ (ult->path, found_name))
 			info->id = ULT_MAN;
 		else
 			info->id = SO_MAN;
 
 		f = add_candidate (cand_head, CANDIDATE_FILESYSTEM,
-				   cat, name, path, ult, info);
+				   cat, name, path, ult->path, info);
 		found += f;
 		/* Free info if it wasn't added to the candidates. */
 		if (f == 0)
@@ -3212,19 +3215,20 @@ static int display_filesystem (struct candidate *candp)
 			goto out;
 		found = display (candp->path, NULL, filename, title, NULL);
 	} else {
-		const char *man_file;
+		const struct ult_value *man_ult;
 		char *cat_file;
 
-		man_file = ult_src (filename, candp->path, NULL, ult_flags,
-				    NULL);
-		if (man_file == NULL)
+		man_ult = ult_src (filename, candp->path, NULL, ult_flags);
+		if (!man_ult)
 			goto out;
 
-		debug ("found ultimate source file %s\n", man_file);
-		lang = lang_dir (man_file);
+		debug ("found ultimate source file %s\n", man_ult->path);
+		lang = lang_dir (man_ult->path);
 
-		cat_file = find_cat_file (candp->path, filename, man_file);
-		found = display (candp->path, man_file, cat_file, title, NULL);
+		cat_file = find_cat_file (candp->path, filename,
+					  man_ult->path);
+		found = display (candp->path, man_ult->path, cat_file, title,
+				 NULL);
 		free (cat_file);
 		free (lang);
 		lang = NULL;
@@ -3297,21 +3301,23 @@ static int display_database (struct candidate *candp)
 	if (in->id < STRAY_CAT) {	/* There should be a src page */
 		file = make_filename (candp->path, name, in, "man");
 		if (file) {
-			const char *man_file;
+			const struct ult_value *man_ult;
 			char *cat_file;
 
-			man_file = ult_src (file, candp->path, NULL,
-					    get_ult_flags (1, in->id), NULL);
-			if (man_file == NULL) {
+			man_ult = ult_src (file, candp->path, NULL,
+					   get_ult_flags (1, in->id));
+			if (!man_ult) {
 				free (title);
 				return found; /* zero */
 			}
 
-			debug ("found ultimate source file %s\n", man_file);
-			lang = lang_dir (man_file);
+			debug ("found ultimate source file %s\n",
+			       man_ult->path);
+			lang = lang_dir (man_ult->path);
 
-			cat_file = find_cat_file (candp->path, file, man_file);
-			found += display (candp->path, man_file, cat_file,
+			cat_file = find_cat_file (candp->path, file,
+						  man_ult->path);
+			found += display (candp->path, man_ult->path, cat_file,
 					  title, in->filter);
 			free (cat_file);
 			free (lang);
@@ -3719,7 +3725,7 @@ static int do_global_apropos_section (const char *path, const char *sec,
 	GL_LIST_FOREACH (names, found_name) {
 		struct mandata *info;
 		char *title = NULL;
-		const char *man_file;
+		const struct ult_value *man_ult;
 		char *cat_file = NULL;
 
 		if (!grep (found_name, name, &search))
@@ -3730,12 +3736,12 @@ static int do_global_apropos_section (const char *path, const char *sec,
 			goto next;
 
 		title = xasprintf ("%s(%s)", info->name, info->ext);
-		man_file = ult_src (found_name, path, NULL, ult_flags, NULL);
-		if (!man_file)
+		man_ult = ult_src (found_name, path, NULL, ult_flags);
+		if (!man_ult)
 			goto next;
-		lang = lang_dir (man_file);
-		cat_file = find_cat_file (path, found_name, man_file);
-		if (display (path, man_file, cat_file, title, NULL))
+		lang = lang_dir (man_ult->path);
+		cat_file = find_cat_file (path, found_name, man_ult->path);
+		if (display (path, man_ult->path, cat_file, title, NULL))
 			found = 1;
 		free (lang);
 		lang = NULL;

@@ -181,7 +181,7 @@ int main (int argc, char **argv)
 
 	for (i = 0; i < num_files; ++i) {
 		lexgrog lg;
-		const char *file;
+		const char *file = NULL;
 		bool found = false;
 
 		lg.type = type;
@@ -191,6 +191,7 @@ int main (int argc, char **argv)
 		else {
 			char *path, *pathend;
 			struct stat statbuf;
+			const struct ult_value *ult;
 
 			path = xstrdup (files[i]);
 			pathend = strrchr (path, '/');
@@ -208,8 +209,10 @@ int main (int argc, char **argv)
 				path = NULL;
 			}
 
-			file = ult_src (files[i], path ? path : ".",
-					&statbuf, SO_LINK, NULL);
+			ult = ult_src (files[i], path ? path : ".",
+				       &statbuf, SO_LINK);
+			if (ult)
+				file = ult->path;
 			free (path);
 		}
 

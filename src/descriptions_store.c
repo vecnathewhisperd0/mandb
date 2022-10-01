@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -84,7 +85,9 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 	const char *best_name = base;
 	char *best_sec = NULL, *best_ext = NULL;
 
-	if (gl_list_size (descs) && trace) {
+	assert (trace);
+
+	if (gl_list_size (descs)) {
 		GL_LIST_FOREACH (trace, trace_name)
 			debug ("trace: '%s'\n", trace_name);
 	}
@@ -115,7 +118,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 
 		if (STREQ (base, desc->name))
 			found_real_page = true;
-		else if (trace) {
+		else {
 			GL_LIST_FOREACH (trace, trace_name) {
 				struct mandata *trace_info;
 				struct stat st;

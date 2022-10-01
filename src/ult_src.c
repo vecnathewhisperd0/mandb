@@ -33,6 +33,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -46,7 +47,10 @@
 #include "canonicalize.h"
 #include "dirname.h"
 #include "error.h"
+#include "gl_array_list.h"
+#include "gl_hash_map.h"
 #include "gl_xlist.h"
+#include "gl_xmap.h"
 #include "xalloc.h"
 #include "xstrndup.h"
 #include "xvasprintf.h"
@@ -58,6 +62,7 @@
 
 #include "compression.h"
 #include "debug.h"
+#include "glcontainers.h"
 
 #include "decompress.h"
 #include "globbing.h"
@@ -256,6 +261,60 @@ static char *find_include (const char *name, const char *path,
 	return ret;
 }
 
+struct ult_key {
+	char *name;
+	int flags;
+};
+
+static struct ult_key *ult_key_new (const char *name, int flags)
+{
+	struct ult_key *ukey = XMALLOC (struct ult_key);
+	ukey->name = xstrdup (name);
+	ukey->flags = flags;
+	return ukey;
+}
+
+static bool ATTRIBUTE_PURE ult_key_equals (const void *key1, const void *key2)
+{
+	struct ult_key *ukey1 = (struct ult_key *) key1;
+	struct ult_key *ukey2 = (struct ult_key *) key2;
+	return ukey1->flags == ukey2->flags &&
+	       STREQ (ukey1->name, ukey2->name);
+}
+
+static size_t ATTRIBUTE_PURE ult_key_hash (const void *key)
+{
+	struct ult_key *ukey = (struct ult_key *) key;
+	return string_hash (ukey->name) ^ (size_t) ukey->flags;
+}
+
+static void ult_key_free (const void *key)
+{
+	struct ult_key *ukey = (struct ult_key *) key;
+	free (ukey->name);
+	free (ukey);
+}
+
+static struct ult_value *ult_value_new (void)
+{
+	struct ult_value *uvalue = XMALLOC (struct ult_value);
+	uvalue->path = NULL;
+	uvalue->trace = new_string_list (GL_ARRAY_LIST, true);
+	return uvalue;
+}
+
+static void ult_value_free (const void *value)
+{
+	struct ult_value *uvalue = (struct ult_value *) value;
+	if (uvalue) {
+		free (uvalue->path);
+		gl_list_free (uvalue->trace);
+		free (uvalue);
+	}
+}
+
+gl_map_t ult_cache = NULL;
+
 /*
  * Find the ultimate source file by following any ".so filename" directives
  * in the first line of the man pages.  Also (optionally) trace symlinks and
@@ -264,16 +323,29 @@ static char *find_include (const char *name, const char *path,
  * name is full pathname, path is the MANPATH directory (/usr/man)
  * flags is a combination of SO_LINK | SOFT_LINK | HARD_LINK
  */
-const char *ult_src (const char *name, const char *path,
-		     struct stat *buf, int flags, gl_list_t trace)
+const struct ult_value *ult_src (const char *name, const char *path,
+				 struct stat *buf, int flags)
 {
 	char *base = xstrdup (name);
+	struct ult_key *key;
+	const struct ult_value *existing;
+	struct ult_value *value;
 	struct stat new_buf;
+
+	if (!ult_cache)
+		ult_cache = gl_map_create_empty (GL_HASH_MAP,
+						 ult_key_equals, ult_key_hash,
+						 ult_key_free, ult_value_free);
+	key = ult_key_new (name, flags);
+	if (gl_map_search (ult_cache, key, (const void **) &existing)) {
+		ult_key_free (key);
+		return existing;
+	}
+	value = ult_value_new ();
 
 	debug ("ult_src: File %s in mantree %s\n", name, path);
 
-	if (trace)
-		gl_list_add_last (trace, xstrdup (name));
+	gl_list_add_last (value->trace, xstrdup (name));
 
 	/* as ult_softlink() & ult_hardlink() do all of their respective
 	 * resolving in one call, only need to sort them out once
@@ -285,7 +357,7 @@ const char *ult_src (const char *name, const char *path,
 		if (lstat (base, buf) == -1) {
 			if (quiet < 2)
 				error (0, errno, _("can't resolve %s"), base);
-			return NULL;
+			goto err;
 		}
 	}
 
@@ -299,7 +371,7 @@ const char *ult_src (const char *name, const char *path,
 				free (base);
 				base = softlink;
 			} else
-				return NULL;
+				goto err;
 		}
 	}
 
@@ -324,10 +396,8 @@ const char *ult_src (const char *name, const char *path,
 			char *directive, *include;
 
 			directive = find_include_directive (base);
-			if (!directive) {
-				free (base);
-				return NULL;
-			}
+			if (!directive)
+				goto err;
 
 			include = test_for_include (directive);
 			free (directive);
@@ -350,27 +420,35 @@ const char *ult_src (const char *name, const char *path,
 						error (0, errno,
 						       _("can't open %s"),
 						       base);
-					free (base);
-					return NULL;
+					goto err;
 				}
 			}
 
 			debug ("ult_src: points to %s\n", base);
 
-			if (trace)
-				gl_list_add_last (trace, xstrdup (base));
+			gl_list_add_last (value->trace, xstrdup (base));
 		}
 		if (i == 10) {
 			if (quiet < 2)
 				error (0, 0, _("%s is self referencing"),
 				       name);
-			free (base);
-			return NULL;
+			goto err;
 		}
 	}
 
 	/* We have the ultimate source */
-	if (trace)
-		gl_list_add_last (trace, xstrdup (base));
-	return base;
+	value->path = xstrdup (base);
+	gl_list_add_last (value->trace, xstrdup (base));
+	gl_map_put (ult_cache, key, value);
+	free (base);
+	return value;
+
+err:
+	/* The cache is short-lived and only within a single process, so
+	 * negative caching is fine.
+	 */
+	ult_value_free (value);
+	gl_map_put (ult_cache, key, NULL);
+	free (base);
+	return NULL;
 }

@@ -159,13 +159,12 @@ static bool ensure_db_open (MYDBM_FILE dbf)
 void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 {
 	char *manpage_base;
-	const char *ult;
+	const struct ult_value *ult;
 	struct lexgrog lg;
 	struct mandata *info, *exists;
 	struct compression *comp;
 	struct stat buf;
 	size_t len;
-	gl_list_t ult_trace = NULL;
 	const struct whatis *whatis;
 
 	debug ("\ntest_manfile: considering %s\n", file);
@@ -240,42 +239,11 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		free_mandata_struct (exists);
 	}
 
-	/* Check if it happens to be a symlink/hardlink to something already
-	 * in our cache. This just does some extra checks to avoid scanning
-	 * links quite so many times.
-	 */
-	{
-		/* Avoid too much noise in debug output */
-		bool save_debug = debug_level;
-		debug_level = false;
-		ult = ult_src (file, path, &buf, SOFT_LINK | HARD_LINK, NULL);
-		debug_level = save_debug;
-	}
-
-	if (!ult) {
-		/* already warned about this, don't do so again */
-		debug ("test_manfile: bad link %s\n", file);
-		free_mandata_struct (info);
-		return;
-	}
-
-	if (!whatis_map)
-		whatis_map = new_string_map (GL_HASH_MAP, whatis_free);
-
-	whatis = gl_map_get (whatis_map, ult);
-	if (!whatis) {
-		if (!STRNEQ (ult, file, len))
-			debug ("test_manfile: link not in cache:\n"
-			       " source = %s\n"
-			       " target = %s\n", file, ult);
-		/* Trace the file to its ultimate source, otherwise we'll be
-		 * looking for whatis info in files containing only '.so
-		 * manx/foo.x', which will give us an unobtainable whatis
-		 * for the entry. */
-		ult_trace = new_string_list (GL_ARRAY_LIST, true);
-		ult = ult_src (file, path, &buf,
-			       SO_LINK | SOFT_LINK | HARD_LINK, ult_trace);
-	}
+	/* Trace the file to its ultimate source, otherwise we'll be
+	 * looking for whatis info in files containing only '.so
+	 * manx/foo.x', which will give us an unobtainable whatis
+	 * for the entry. */
+	ult = ult_src (file, path, &buf, SO_LINK | SOFT_LINK | HARD_LINK);
 
 	if (!ult) {
 		if (quiet < 2)
@@ -288,7 +256,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 
 	pages++;			/* pages seen so far */
 
-	if (strncmp (ult, file, len) == 0)
+	if (strncmp (ult->path, file, len) == 0)
 		info->id = ULT_MAN;	/* ultimate source file */
 	else
 		info->id = SO_MAN;	/* .so, sym or hard linked file */
@@ -297,10 +265,14 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	 * their whatis. Anytime after, check the hash tree, if it's there,
 	 * use it. This saves us a find_name() which is a real hog.
 	 *
-	 * Use the full path in ult as the hash key so we don't have to
-	 * clear the hash between calls.
+	 * Use the full path in ult->path as the hash key so we don't have
+	 * to clear the hash between calls.
 	 */
 
+	if (!whatis_map)
+		whatis_map = new_string_map (GL_HASH_MAP, whatis_free);
+
+	whatis = gl_map_get (whatis_map, ult->path);
 	if (whatis) {
 		lg.whatis = whatis->whatis ? xstrdup (whatis->whatis) : NULL;
 		lg.filters =
@@ -310,18 +282,22 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		char *file_base = base_name (file);
 		struct whatis *new_whatis;
 
+		if (!STRNEQ (ult->path, file, len))
+			debug ("test_manfile: link not in cache:\n"
+			       " source = %s\n"
+			       " target = %s\n", file, ult->path);
+
 		lg.type = MANPAGE;
 		drop_effective_privs ();
-		find_name (ult, file_base, &lg, NULL);
+		find_name (ult->path, file_base, &lg, NULL);
 		free (file_base);
 		regain_effective_privs ();
 
 		new_whatis = XMALLOC (struct whatis);
 		new_whatis->whatis = lg.whatis ? xstrdup (lg.whatis) : NULL;
 		new_whatis->filters = lg.filters ? xstrdup (lg.filters) : NULL;
-		/* We filled out ult_trace above. */
-		new_whatis->trace = ult_trace;
-		gl_map_put (whatis_map, xstrdup (ult), new_whatis);
+		new_whatis->trace = ult->trace;
+		gl_map_put (whatis_map, xstrdup (ult->path), new_whatis);
 		whatis = new_whatis;
 	}
 
@@ -337,14 +313,14 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 					    manpage_base, whatis->trace);
 		gl_list_free (descs);
 	} else if (quiet < 2) {
-		(void) stat (ult, &buf);
+		(void) stat (ult->path, &buf);
 		if (buf.st_size == 0)
 			error (0, 0, _("warning: %s: ignoring empty file"),
-			       ult);
+			       ult->path);
 		else
 			error (0, 0,
 			       _("warning: %s: whatis parse for %s(%s) failed"),
-			       ult, manpage_base, info->ext);
+			       ult->path, manpage_base, info->ext);
 	}
 
 	free_mandata_struct (info);

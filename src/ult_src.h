@@ -30,10 +30,15 @@
 
 struct stat;
 
-/* If ult_trace is non-NULL, it should be a gl_list_t of const char * which
- * ult_src populates with the trace of the link chain from a given file.
- * Any names listed here should not have WHATIS_MAN entries created for
- * them.
- */
-extern const char *ult_src (const char *name, const char *path,
-			    struct stat *buf, int flags, gl_list_t trace);
+struct ult_value {
+	/* Path to the ultimate source file. */
+	char *path;
+	/* A list of `const char *`, containing a trace of the link chain
+	 * from a given file.  Any names listed here should not have
+	 * `WHATIS_MAN` entries created for them.
+	 */
+	gl_list_t trace;
+};
+
+extern const struct ult_value *ult_src (const char *name, const char *path,
+					struct stat *buf, int flags);
