@@ -90,7 +90,6 @@ gl_map_t whatis_map = NULL;
 struct whatis {
 	char *whatis;
 	char *filters;
-	gl_list_t trace;
 };
 
 static void whatis_free (const void *value)
@@ -99,7 +98,6 @@ static void whatis_free (const void *value)
 
 	free (whatis->whatis);
 	free (whatis->filters);
-	gl_list_free (whatis->trace);
 	free (whatis);
 }
 
@@ -296,9 +294,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		new_whatis = XMALLOC (struct whatis);
 		new_whatis->whatis = lg.whatis ? xstrdup (lg.whatis) : NULL;
 		new_whatis->filters = lg.filters ? xstrdup (lg.filters) : NULL;
-		new_whatis->trace = ult->trace;
 		gl_map_put (whatis_map, xstrdup (ult->path), new_whatis);
-		whatis = new_whatis;
 	}
 
 	debug ("\"%s\"\n", lg.whatis);
@@ -310,7 +306,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		gl_list_t descs = parse_descriptions (manpage_base, lg.whatis);
 		if (!opt_test)
 			store_descriptions (dbf, descs, info, path,
-					    manpage_base, whatis->trace);
+					    manpage_base, ult->trace);
 		gl_list_free (descs);
 	} else if (quiet < 2) {
 		(void) stat (ult->path, &buf);
