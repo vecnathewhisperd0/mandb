@@ -39,7 +39,9 @@
 
 #include "error.h"
 #include "gl_array_list.h"
+#include "gl_hash_map.h"
 #include "gl_xlist.h"
+#include "gl_xmap.h"
 #include "stat-time.h"
 #include "xalloc.h"
 
@@ -79,23 +81,30 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 {
 	const struct page_description *desc;
 	const char *trace_name;
+	gl_map_t trace_infos;
 	gl_list_t whatis_infos;
 	struct mandata *whatis_info;
-	char best_id = WHATIS_CAT + 1;
-	const char *best_name = base;
-	char *best_sec = NULL, *best_ext = NULL;
+	const struct mandata *pointer_info;
 
 	assert (trace);
+	assert (gl_list_size (trace) > 0);
 
 	if (gl_list_size (descs)) {
 		GL_LIST_FOREACH (trace, trace_name)
 			debug ("trace: '%s'\n", trace_name);
 	}
 
+	trace_infos = new_string_map (GL_HASH_MAP,
+				      (gl_mapvalue_dispose_fn)
+				      free_mandata_struct);
 	whatis_infos = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
 					     (gl_listelement_dispose_fn)
 					     free_mandata_struct,
 					     true);
+
+	GL_LIST_FOREACH (trace, trace_name)
+		gl_map_put (trace_infos, xstrdup (trace_name),
+			    filename_info (trace_name, quiet < 2));
 
 	GL_LIST_FOREACH (descs, desc) {
 		/* Either it's the real thing or merely a reference. Get the
@@ -120,21 +129,20 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			found_real_page = true;
 		else {
 			GL_LIST_FOREACH (trace, trace_name) {
-				struct mandata *trace_info;
+				const struct mandata *trace_info;
 				struct stat st;
 
-				trace_info = filename_info (trace_name,
-							    quiet < 2);
+				trace_info = gl_map_get (trace_infos,
+							 trace_name);
 				if (!trace_info ||
 				    !STREQ (trace_info->name, desc->name))
-					goto next_trace;
+					continue;
 
 				if (path && !is_prefix (path, trace_name)) {
 					/* Link outside this manual
 					 * hierarchy; skip this description.
 					 */
 					found_external = true;
-					free_mandata_struct (trace_info);
 					break;
 				}
 				free (whatis_info->ext);
@@ -160,9 +168,6 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 				else
 					whatis_info->mtime = info->mtime;
 				found_real_page = true;
-
-next_trace:
-				free_mandata_struct (trace_info);
 			}
 		}
 
@@ -188,15 +193,6 @@ next_trace:
 			continue;
 		}
 
-		if (whatis_info->id < best_id) {
-			best_id = whatis_info->id;
-			best_name = desc->name;
-			free (best_sec);
-			best_sec = xstrdup (whatis_info->sec);
-			free (best_ext);
-			best_ext = xstrdup (whatis_info->ext);
-		}
-
 		debug ("name = '%s', ext = '%s', id = %c\n",
 		       desc->name, whatis_info->ext, whatis_info->id);
 		if (dbstore (dbf, whatis_info, desc->name) > 0) {
@@ -208,18 +204,33 @@ next_trace:
 		free_mandata_struct (whatis_info);
 	}
 
+	/* The pointer for a WHATIS_MAN or WHATIS_CAT entry should be the
+	 * last entry in the trace that has the same section and extension
+	 * as the starting page (which is always the first entry in the
+	 * trace).  If we were to add WHATIS_* entries for different
+	 * extensions, then try_db -> add_candidate -> make_filename in
+	 * man(1) would end up constructing a path that doesn't exist and is
+	 * thus unusable.
+	 */
+	pointer_info = NULL;
+	GL_LIST_FOREACH (trace, trace_name) {
+		const struct mandata *trace_info;
+
+		trace_info = gl_map_get (trace_infos, trace_name);
+		if (trace_info &&
+		    STREQ (trace_info->sec, info->sec) &&
+		    STREQ (trace_info->ext, info->ext))
+			pointer_info = trace_info;
+	}
+	assert (pointer_info);
+
 	GL_LIST_FOREACH (whatis_infos, whatis_info) {
 		char *name;
 
 		name = whatis_info->name;
 		whatis_info->name = NULL;
 
-		free (whatis_info->sec);
-		whatis_info->sec = xstrdup (best_sec);
-		free (whatis_info->ext);
-		whatis_info->ext = xstrdup (best_ext);
-
-		whatis_info->pointer = xstrdup (best_name);
+		whatis_info->pointer = xstrdup (pointer_info->name);
 
 		debug ("name = '%s', ext = '%s', id = %c, pointer = '%s'\n",
 		       name, whatis_info->ext, whatis_info->id,
@@ -234,7 +245,6 @@ next_trace:
 	}
 
 out:
-	free (best_ext);
-	free (best_sec);
 	gl_list_free (whatis_infos);
+	gl_map_free (trace_infos);
 }
