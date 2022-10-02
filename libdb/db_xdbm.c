@@ -119,7 +119,7 @@ datum man_xdbm_firstkey (MYDBM_FILE dbf,
 
 	if (!parent_keys) {
 		parent_keys = new_string_map (GL_HASH_MAP,
-					      (gl_listelement_dispose_fn)
+					      (gl_mapvalue_dispose_fn)
 					      gl_list_free);
 		push_cleanup ((cleanup_fun) gl_map_free, parent_keys, 0);
 	}
