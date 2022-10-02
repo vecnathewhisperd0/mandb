@@ -306,8 +306,56 @@ static int xcopy (const char *from, const char *to)
 	return ret;
 }
 
-/* rename and chmod the database */
-static void finish_up (struct dbpaths *dbpaths)
+static void dbpaths_init (struct dbpaths *dbpaths,
+			  const char *base, const char *tmpbase)
+{
+#ifdef NDBM
+#  ifdef BERKELEY_DB
+	dbpaths->dbfile = xasprintf ("%s.db", base);
+	dbpaths->tmpdbfile = xasprintf ("%s.db", tmpbase);
+#  else /* !BERKELEY_DB NDBM */
+	dbpaths->dirfile = xasprintf ("%s.dir", base);
+	dbpaths->pagfile = xasprintf ("%s.pag", base);
+	dbpaths->tmpdirfile = xasprintf ("%s.dir", tmpbase);
+	dbpaths->tmppagfile = xasprintf ("%s.pag", tmpbase);
+#  endif /* BERKELEY_DB NDBM */
+#else /* !NDBM */
+	dbpaths->xfile = xstrdup (base);
+	dbpaths->xtmpfile = xstrdup (tmpbase);
+#endif /* NDBM */
+}
+
+static int dbpaths_copy_to_tmp (struct dbpaths *dbpaths)
+{
+#ifdef NDBM
+#  ifdef BERKELEY_DB
+	return xcopy (dbpaths->dbfile, dbpaths->tmpdbfile);
+#  else /* !BERKELEY_DB NDBM */
+	int ret = xcopy (dbpaths->dirfile, dbpaths->tmpdirfile);
+	if (ret < 0)
+		return ret;
+	return xcopy (dbpaths->pagfile, dbpaths->tmppagfile);
+#  endif /* BERKELEY_DB NDBM */
+#else /* !NDBM */
+	return xcopy (dbpaths->xfile, dbpaths->xtmpfile);
+#endif /* NDBM */
+}
+
+static void dbpaths_remove_tmp (struct dbpaths *dbpaths)
+{
+#ifdef NDBM
+#  ifdef BERKELEY_DB
+	check_remove (dbpaths->tmpdbfile);
+#  else /* !BERKELEY_DB NDBM */
+	check_remove (dbpaths->tmpdirfile);
+	check_remove (dbpaths->tmppagfile);
+#  endif /* BERKELEY_DB NDBM */
+#else /* !NDBM */
+	check_remove (dbpaths->xtmpfile);
+#endif /* NDBM */
+}
+
+static void dbpaths_rename_from_tmp (struct dbpaths *dbpaths)
 {
 #ifdef NDBM
 #  ifdef BERKELEY_DB
@@ -333,8 +381,8 @@ static void finish_up (struct dbpaths *dbpaths)
 }
 
 #ifdef MAN_OWNER
-/* change the owner of global man databases */
-static void do_chown (struct dbpaths *dbpaths)
+/* Change the owner of global man databases. */
+static void dbpaths_chown_if_possible (struct dbpaths *dbpaths)
 {
 #  ifdef NDBM
 #    ifdef BERKELEY_DB
@@ -348,6 +396,47 @@ static void do_chown (struct dbpaths *dbpaths)
 #  endif /* NDBM */
 }
 #endif /* MAN_OWNER */
+
+/* Remove incomplete databases.  This is async-signal-safe. */
+static void dbpaths_unlink_tmp (struct dbpaths *dbpaths)
+{
+#ifdef NDBM
+#  ifdef BERKELEY_DB
+	if (dbpaths->tmpdbfile)
+		unlink (dbpaths->tmpdbfile);
+#  else /* !BERKELEY_DB NDBM */
+	if (dbpaths->tmpdirfile)
+		unlink (dbpaths->tmpdirfile);
+	if (dbpaths->tmppagfile)
+		unlink (dbpaths->tmppagfile);
+#  endif /* BERKELEY_DB NDBM */
+#else /* !NDBM */
+	if (dbpaths->xtmpfile)
+		unlink (dbpaths->xtmpfile);
+#endif /* NDBM */
+}
+
+static void dbpaths_free_elements (struct dbpaths *dbpaths)
+{
+#ifdef NDBM
+#  ifdef BERKELEY_DB
+	free (dbpaths->dbfile);
+	free (dbpaths->tmpdbfile);
+	dbpaths->dbfile = dbpaths->tmpdbfile = NULL;
+#  else /* !BERKELEY_DB NDBM */
+	free (dbpaths->dirfile);
+	free (dbpaths->pagfile);
+	free (dbpaths->tmpdirfile);
+	free (dbpaths->tmppagfile);
+	dbpaths->dirfile = dbpaths->pagfile = NULL;
+	dbpaths->tmpdirfile = dbpaths->tmppagfile = NULL;
+#  endif /* BERKELEY_DB NDBM */
+#else /* !NDBM */
+	free (dbpaths->xfile);
+	free (dbpaths->xtmpfile);
+	dbpaths->xfile = dbpaths->xtmpfile = NULL;
+#endif /* NDBM */
+}
 
 /* Update a single file in an existing database. */
 static int update_one_file (MYDBM_FILE dbf,
@@ -383,52 +472,6 @@ static int update_db_wrapper (MYDBM_FILE dbf,
 		return amount;
 
 	return create_db (dbf, manpath, catpath);
-}
-
-/* remove incomplete databases */
-static void cleanup_sigsafe (void *arg)
-{
-	struct dbpaths *dbpaths = arg;
-
-#ifdef NDBM
-#  ifdef BERKELEY_DB
-	if (dbpaths->tmpdbfile)
-		unlink (dbpaths->tmpdbfile);
-#  else /* !BERKELEY_DB NDBM */
-	if (dbpaths->tmpdirfile)
-		unlink (dbpaths->tmpdirfile);
-	if (dbpaths->tmppagfile)
-		unlink (dbpaths->tmppagfile);
-#  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
-	if (dbpaths->xtmpfile)
-		unlink (dbpaths->xtmpfile);
-#endif /* NDBM */
-}
-
-/* free database names */
-static void cleanup (void *arg)
-{
-	struct dbpaths *dbpaths = arg;
-
-#ifdef NDBM
-#  ifdef BERKELEY_DB
-	free (dbpaths->dbfile);
-	free (dbpaths->tmpdbfile);
-	dbpaths->dbfile = dbpaths->tmpdbfile = NULL;
-#  else /* !BERKELEY_DB NDBM */
-	free (dbpaths->dirfile);
-	free (dbpaths->pagfile);
-	free (dbpaths->tmpdirfile);
-	free (dbpaths->tmppagfile);
-	dbpaths->dirfile = dbpaths->pagfile = NULL;
-	dbpaths->tmpdirfile = dbpaths->tmppagfile = NULL;
-#  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
-	free (dbpaths->xfile);
-	free (dbpaths->xtmpfile);
-	dbpaths->xfile = dbpaths->xtmpfile = NULL;
-#endif /* NDBM */
 }
 
 #define CACHEDIR_TAG \
@@ -486,41 +529,11 @@ static int mandb (struct dbpaths *dbpaths,
 
 	should_create = (create || opt_test);
 
-#ifdef NDBM
-#  ifdef BERKELEY_DB
-	dbpaths->dbfile = xasprintf ("%s.db", dbname);
-	dbpaths->tmpdbfile = xasprintf ("%s.db", database);
-	if (!should_create) {
-		if (xcopy (dbpaths->dbfile, dbpaths->tmpdbfile) < 0)
-			should_create = true;
-	}
+	dbpaths_init (dbpaths, dbname, database);
+	if (!should_create && dbpaths_copy_to_tmp (dbpaths) < 0)
+		should_create = true;
 	if (should_create)
-		check_remove (dbpaths->tmpdbfile);
-#  else /* !BERKELEY_DB NDBM */
-	dbpaths->dirfile = xasprintf ("%s.dir", dbname);
-	dbpaths->pagfile = xasprintf ("%s.pag", dbname);
-	dbpaths->tmpdirfile = xasprintf ("%s.dir", database);
-	dbpaths->tmppagfile = xasprintf ("%s.pag", database);
-	if (!should_create) {
-		if (xcopy (dbpaths->dirfile, dbpaths->tmpdirfile) < 0 ||
-		    xcopy (dbpaths->pagfile, dbpaths->tmppagfile) < 0)
-			should_create = true;
-	}
-	if (should_create) {
-		check_remove (dbpaths->tmpdirfile);
-		check_remove (dbpaths->tmppagfile);
-	}
-#  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
-	dbpaths->xfile = xstrdup (dbname);
-	dbpaths->xtmpfile = xstrdup (database);
-	if (!should_create) {
-		if (xcopy (dbpaths->xfile, dbpaths->xtmpfile) < 0)
-			should_create = true;
-	}
-	if (should_create)
-		check_remove (dbpaths->xtmpfile);
-#endif /* NDBM */
+		dbpaths_remove_tmp (dbpaths);
 
 	if (!should_create) {
 		force_rescan = false;
@@ -538,16 +551,7 @@ static int mandb (struct dbpaths *dbpaths,
 			 * start from scratch.
 			 */
 			MYDBM_FREE (dbf);
-#ifdef NDBM
-#  ifdef BERKELEY_DB
-			check_remove (dbpaths->tmpdbfile);
-#  else /* !BERKELEY_DB NDBM */
-			check_remove (dbpaths->tmpdirfile);
-			check_remove (dbpaths->tmppagfile);
-#  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
-			check_remove (dbpaths->xtmpfile);
-#endif /* NDBM */
+			dbpaths_remove_tmp (dbpaths);
 			dbf = MYDBM_NEW (database);
 			should_create = true;
 		}
@@ -615,8 +619,8 @@ static int process_manpath (const char *manpath, bool global_manpath,
 		run_mandb = true;
 
 	dbpaths = XZALLOC (struct dbpaths);
-	push_cleanup (cleanup, dbpaths, 0);
-	push_cleanup (cleanup_sigsafe, dbpaths, 1);
+	push_cleanup ((cleanup_fun) dbpaths_free_elements, dbpaths, 0);
+	push_cleanup ((cleanup_fun) dbpaths_unlink_tmp, dbpaths, 1);
 	if (run_mandb) {
 		int purged_before = purged;
 		int strays_before = strays;
@@ -628,21 +632,22 @@ static int process_manpath (const char *manpath, bool global_manpath,
 		amount += ret;
 		new_purged = purged != purged_before;
 		new_strays = strays != strays_before;
-	}
 
-	if (!opt_test && (amount || new_purged || new_strays))
-		finish_up (dbpaths);
+		if (!opt_test && (amount || new_purged || new_strays)) {
+			dbpaths_rename_from_tmp (dbpaths);
 #ifdef MAN_OWNER
-	if (global_manpath)
-		do_chown (dbpaths);
+			if (global_manpath)
+				dbpaths_chown_if_possible (dbpaths);
 #endif /* MAN_OWNER */
+		}
+	}
 
 out:
 	if (dbpaths) {
-		cleanup_sigsafe (dbpaths);
-		pop_cleanup (cleanup_sigsafe, dbpaths);
-		cleanup (dbpaths);
-		pop_cleanup (cleanup, dbpaths);
+		dbpaths_unlink_tmp (dbpaths);
+		pop_cleanup ((cleanup_fun) dbpaths_unlink_tmp, dbpaths);
+		dbpaths_free_elements (dbpaths);
+		pop_cleanup ((cleanup_fun) dbpaths_free_elements, dbpaths);
 		free (dbpaths);
 	}
 
