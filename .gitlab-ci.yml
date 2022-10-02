@@ -64,6 +64,25 @@ build-out-of-tree:
     - (cd bootstrapped/obj && ../configure)
     - make -C bootstrapped/obj check V=1 VERBOSE=1
 
+build-berkeley-db:
+  stage: build
+  before_script:
+    - apt -qq update
+    - apt -y -qq install build-essential bsdextrautils flex git groff libdb-dev libpipeline-dev pkg-config po4a zlib1g-dev
+  script:
+    - (cd bootstrapped && ./configure --with-db=db)
+    - make -C bootstrapped check V=1 VERBOSE=1
+
+build-ndbm:
+  stage: build
+  before_script:
+    - apt -qq update
+    # libgdbm-dev is needed here due to https://bugs.debian.org/1021123.
+    - apt -y -qq install build-essential bsdextrautils flex git groff libgdbm-compat-dev libgdbm-dev libpipeline-dev pkg-config po4a zlib1g-dev
+  script:
+    - (cd bootstrapped && ./configure --with-db=ndbm)
+    - make -C bootstrapped check V=1 VERBOSE=1
+
 upload:
   stage: upload
   image: curlimages/curl:latest
