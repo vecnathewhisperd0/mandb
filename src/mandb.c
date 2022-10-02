@@ -438,6 +438,68 @@ static void dbpaths_free_elements (struct dbpaths *dbpaths)
 #endif /* NDBM */
 }
 
+/* Reorganize a database by reading in all the items (assuming that the
+ * database layer provides them in sorted order) and writing them back out.
+ * This has the effect of giving the underlying database the best chance to
+ * produce deterministic output files based only on the set of items and not
+ * on their insertion order, although we may not be able to guarantee that
+ * for all database types.
+ */
+static void reorganize (const char *catpath, bool global_manpath MAYBE_UNUSED)
+{
+	char *dbname, *tmpdbname;
+	struct dbpaths *dbpaths;
+	MYDBM_FILE dbf, tmpdbf;
+	datum key;
+
+	dbname = mkdbname (catpath);
+	tmpdbname = xasprintf ("%s/%d", catpath, getpid ());
+	dbpaths = XZALLOC (struct dbpaths);
+	dbpaths_init (dbpaths, dbname, tmpdbname);
+	dbf = MYDBM_NEW (dbname);
+	tmpdbf = MYDBM_NEW (tmpdbname);
+	if (!MYDBM_RDOPEN (dbf) || dbver_rd (dbf)) {
+		debug ("Failed to open %s read-only\n", dbname);
+		goto out;
+	}
+	if (!MYDBM_CTRWOPEN (tmpdbf)) {
+		debug ("Failed to create %s\n", tmpdbname);
+		goto out;
+	}
+
+	key = MYDBM_FIRSTKEY (dbf);
+	while (MYDBM_DPTR (key)) {
+		datum content, nextkey;
+		int insert_status;
+
+		content = MYDBM_FETCH (dbf, key);
+		insert_status = MYDBM_INSERT (tmpdbf, key, content);
+		MYDBM_FREE_DPTR (content);
+		if (insert_status != 0) {
+			MYDBM_FREE_DPTR (key);
+			goto out;
+		}
+		nextkey = MYDBM_NEXTKEY (dbf, key);
+		MYDBM_FREE_DPTR (key);
+		key = nextkey;
+	}
+
+	dbpaths_rename_from_tmp (dbpaths);
+#ifdef MAN_OWNER
+	if (global_manpath)
+		dbpaths_chown_if_possible (dbpaths);
+#endif /* MAN_OWNER */
+
+out:
+	MYDBM_FREE (tmpdbf);
+	MYDBM_FREE (dbf);
+	dbpaths_unlink_tmp (dbpaths);
+	dbpaths_free_elements (dbpaths);
+	free (dbpaths);
+	free (tmpdbname);
+	free (dbname);
+}
+
 /* Update a single file in an existing database. */
 static int update_one_file (MYDBM_FILE dbf,
 			    const char *manpath, const char *filename)
@@ -490,7 +552,6 @@ static int mandb (struct dbpaths *dbpaths,
 	char *dbname;
 	MYDBM_FILE dbf;
 	bool should_create;
-	int purged_here = 0;
 
 	dbname = mkdbname (catpath);
 	database = xasprintf ("%s/%d", catpath, getpid ());
@@ -537,10 +598,8 @@ static int mandb (struct dbpaths *dbpaths,
 
 	if (!should_create) {
 		force_rescan = false;
-		if (purge) {
-			purged_here = purge_missing (dbf, manpath, catpath);
-			purged += purged_here;
-		}
+		if (purge)
+			purged += purge_missing (dbf, manpath, catpath);
 
 		if (force_rescan) {
 			/* We have an existing database and hadn't been
@@ -567,9 +626,6 @@ static int mandb (struct dbpaths *dbpaths,
 
 	if (check_for_strays && amount > 0)
 		strays += straycats (dbf, manpath);
-
-	if (purged_here)
-		MYDBM_REORG (dbf);
 
 	MYDBM_FREE (dbf);
 	free (database);
@@ -639,6 +695,7 @@ static int process_manpath (const char *manpath, bool global_manpath,
 			if (global_manpath)
 				dbpaths_chown_if_possible (dbpaths);
 #endif /* MAN_OWNER */
+			reorganize (catpath, global_manpath);
 		}
 	}
 

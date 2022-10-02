@@ -88,7 +88,6 @@ void man_gdbm_free (man_gdbm_wrapper wrap);
 #  define MYDBM_FIRSTKEY(db)		man_gdbm_firstkey(db)
 #  define MYDBM_NEXTKEY(db, key)		man_gdbm_nextkey(db, key)
 #  define MYDBM_GET_TIME(db)		man_gdbm_get_time(db)
-#  define MYDBM_REORG(db)		gdbm_reorganize((db)->file)
 
 # elif defined(NDBM) && !defined(GDBM) && !defined(BTREE)
 
@@ -131,7 +130,6 @@ extern void man_ndbm_free (man_ndbm_wrapper wrap);
 #  define MYDBM_FIRSTKEY(db)		man_ndbm_firstkey(db)
 #  define MYDBM_NEXTKEY(db, key)	man_ndbm_nextkey(db, key)
 #  define MYDBM_GET_TIME(db)		man_ndbm_get_time(db)
-#  define MYDBM_REORG(db)		do {} while (0) /* not implemented */
 
 # elif defined(BTREE) && !defined(NDBM) && !defined(GDBM)
 
@@ -180,7 +178,6 @@ extern struct timespec man_btree_get_time (man_btree_wrapper wrap);
 #  define MYDBM_FIRSTKEY(db)		man_btree_firstkey(db)
 #  define MYDBM_NEXTKEY(db, key)	man_btree_nextkey(db)
 #  define MYDBM_GET_TIME(db)		man_btree_get_time(db)
-#  define MYDBM_REORG(db)		do {} while (0) /* not implemented */
 
 # else /* not GDBM or NDBM or BTREE */
 #  error Define either GDBM, NDBM or BTREE before including mydbm.h

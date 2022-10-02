@@ -26,6 +26,9 @@ Improvements:
    database.
  * Extend rules for when to replace one database entry with another,
    producing more stable behaviour.
+ * Fully reorganize databases after writing them, allowing the reproduction
+   of bitwise-identical databases regardless of scan order (at least with
+   GDBM).
 
 man-db 2.10.2 (17 March 2022)
 =============================
