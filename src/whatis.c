@@ -124,22 +124,29 @@ static const char args_doc[] = N_("KEYWORD...");
 static const char apropos_doc[] = "\v" N_("The --regex option is enabled by default.");
 
 static struct argp_option options[] = {
-	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
-	{ "verbose",		'v',	0,		0,	N_("print verbose warning messages") },
-	{ "regex",		'r',	0,		0,	N_("interpret each keyword as a regex"),	10 },
-	{ "exact",		'e',	0,		0,	N_("search each keyword for exact match") }, /* apropos only */
-	{ "wildcard",		'w',	0,		0,	N_("the keyword(s) contain wildcards") },
-	{ "and",		'a',	0,		0,	N_("require all keywords to match"),			20 }, /* apropos only */
-	{ "long",		'l',	0,		0,	N_("do not trim output to terminal width"),		30 },
-	{ "sections",		's',	N_("LIST"),	0,	N_("search only these sections (colon-separated)"),	40 },
-	{ "section",		0,	0,		OPTION_ALIAS },
-	{ "systems",		'm',	N_("SYSTEM"),	0,	N_("use manual pages from other systems") },
-	{ "manpath",		'M',	N_("PATH"),	0,	N_("set search path for manual pages to PATH") },
-	{ "locale",		'L',	N_("LOCALE"),	0,	N_("define the locale for this search") },
-	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },
-	{ "whatis",		'f',	0,		OPTION_HIDDEN,	0 },
-	{ "apropos",		'k',	0,		OPTION_HIDDEN,	0 },
-	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	OPT ("debug", 'd', 0, N_("emit debugging messages")),
+	OPT ("verbose", 'v', 0, N_("print verbose warning messages")),
+	OPT ("regex", 'r', 0, N_("interpret each keyword as a regex"), 10),
+	/* apropos only */
+	OPT ("exact", 'e', 0, N_("search each keyword for exact match")),
+	OPT ("wildcard", 'w', 0, N_("the keyword(s) contain wildcards")),
+	/* apropos only */
+	OPT ("and", 'a', 0, N_("require all keywords to match"), 20),
+	OPT ("long", 'l', 0, N_("do not trim output to terminal width"), 30),
+	OPT ("sections", 's', N_("LIST"),
+	     N_("search only these sections (colon-separated)"), 40),
+	OPT_ALIAS ("section", 0),
+	OPT ("systems", 'm', N_("SYSTEM"),
+	     N_("use manual pages from other systems")),
+	OPT ("manpath", 'M', N_("PATH"),
+	     N_("set search path for manual pages to PATH")),
+	OPT ("locale", 'L', N_("LOCALE"),
+	     N_("define the locale for this search")),
+	OPT ("config-file", 'C', N_("FILE"),
+	     N_("use this user configuration file")),
+	OPT_HIDDEN ("whatis", 'f'),
+	OPT_HIDDEN ("apropos", 'k'),
+	OPT_HELP_COMPAT,
 	{ 0 }
 };
 

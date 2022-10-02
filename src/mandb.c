@@ -116,16 +116,21 @@ error_t argp_err_exit_status = FAIL;
 static const char args_doc[] = N_("[MANPATH]");
 
 static struct argp_option options[] = {
-	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
-	{ "quiet",		'q',	0,		0,	N_("work quietly, except for 'bogus' warning") },
-	{ "no-straycats",	's',	0,		0,	N_("don't look for or add stray cats to the dbs") },
-	{ "no-purge",		'p',	0,		0,	N_("don't purge obsolete entries from the dbs") },
-	{ "user-db",		'u',	0,		0,	N_("produce user databases only") },
-	{ "create",		'c',	0,		0,	N_("create dbs from scratch, rather than updating") },
-	{ "test",		't',	0,		0,	N_("check manual pages for correctness") },
-	{ "filename",		'f',	N_("FILENAME"),	0,	N_("update just the entry for this filename") },
-	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },
-	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	OPT ("debug", 'd', 0, N_("emit debugging messages")),
+	OPT ("quiet", 'q', 0, N_("work quietly, except for 'bogus' warning")),
+	OPT ("no-straycats", 's', 0,
+	     N_("don't look for or add stray cats to the dbs")),
+	OPT ("no-purge", 'p', 0,
+	     N_("don't purge obsolete entries from the dbs")),
+	OPT ("user-db", 'u', 0, N_("produce user databases only")),
+	OPT ("create", 'c', 0,
+	     N_("create dbs from scratch, rather than updating")),
+	OPT ("test", 't', 0, N_("check manual pages for correctness")),
+	OPT ("filename", 'f', N_("FILENAME"),
+	     N_("update just the entry for this filename")),
+	OPT ("config-file", 'C', N_("FILE"),
+	     N_("use this user configuration file")),
+	OPT_HELP_COMPAT,
 	{ 0 }
 };
 

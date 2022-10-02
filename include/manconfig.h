@@ -188,4 +188,14 @@ extern int quiet;		/* be quiet(er) if 1 */
 #define VER_KEY         "$version$"	/* version key */
 #define VER_ID          "2.5.0"		/* version content */
 
+/* Macros for argp option handling. */
+
+#define OPT(name, key, arg, ...) {name, key, arg, 0, __VA_ARGS__}
+#define OPT_FULL(name, key, arg, flags, ...) {name, key, arg, flags, __VA_ARGS__}
+#define OPT_ALIAS(name, key) {name, key, 0, OPTION_ALIAS}
+#define OPT_HIDDEN(name, key) {name, key, 0, OPTION_HIDDEN}
+#define OPT_GROUP_HEADER(doc, group) {0, 0, 0, 0, doc, group}
+/* compatibility for --help */
+#define OPT_HELP_COMPAT OPT_HIDDEN(0, 'h')
+
 #endif /* MANCONFIG_H */

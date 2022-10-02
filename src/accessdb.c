@@ -63,9 +63,9 @@ static const char args_doc[] = N_("[MAN DATABASE]");
 static const char doc[] = "\v" N_("The man database defaults to %s%s.");
 
 static struct argp_option options[] = {
-	{ "debug",	'd',	0,	0,	N_("emit debugging messages") },
-	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
-	{ 0 }
+	OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+	OPT_HELP_COMPAT,
+	{0}
 };
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)

@@ -110,14 +110,14 @@ static const char args_doc[] =
 	N_("-t CODE {--suffix SUFFIX | --in-place} FILENAME...");
 
 static struct argp_option options[] = {
-	{ "to-code",	't',	N_("CODE"),	0,	N_("encoding for output") },
-	{ "suffix",	OPT_SUFFIX,
-				N_("SUFFIX"),	0,	N_("suffix to append to output file name") },
-	{ "in-place",	OPT_IN_PLACE,
-				0,		0,	N_("overwrite input files in place") },
-	{ "debug",	'd',	0,		0,	N_("emit debugging messages") },
-	{ "quiet",	'q',	0,		0,	N_("produce fewer warnings") },
-	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	OPT ("to-code", 't', N_("CODE"), N_("encoding for output")),
+	OPT ("suffix", OPT_SUFFIX, N_("SUFFIX"),
+	     N_("suffix to append to output file name")),
+	OPT ("in-place", OPT_IN_PLACE, 0,
+	     N_("overwrite input files in place")),
+	OPT ("debug", 'd', 0, N_("emit debugging messages")),
+	OPT ("quiet", 'q', 0, N_("produce fewer warnings")),
+	OPT_HELP_COMPAT,
 	{ 0 }
 };
 

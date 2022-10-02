@@ -59,13 +59,15 @@ error_t argp_err_exit_status = FAIL;
 static const char args_doc[] = N_("PATH SECTION NAME");
 
 static struct argp_option options[] = {
-	{ "debug",		'd',	0,			0,	N_("emit debugging messages") },
-	{ "extension",		'e',	N_("EXTENSION"),	0,	N_("limit search to extension type EXTENSION") },
-	{ "ignore-case",	'i',	0,			0,	N_("look for pages case-insensitively (default)") },
-	{ "match-case",		'I',	0,			0,	N_("look for pages case-sensitively") },
-	{ "regex",		'r',	0,			0,	N_("interpret page name as a regex") },
-	{ "wildcard",		'w',	0,			0,	N_("the page name contains wildcards") },
-	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	OPT ("debug", 'd', 0, N_("emit debugging messages")),
+	OPT ("extension", 'e', N_("EXTENSION"),
+	     N_("limit search to extension type EXTENSION")),
+	OPT ("ignore-case", 'i', 0,
+	     N_("look for pages case-insensitively (default)")),
+	OPT ("match-case", 'I', 0, N_("look for pages case-sensitively")),
+	OPT ("regex", 'r', 0, N_("interpret page name as a regex")),
+	OPT ("wildcard", 'w', 0, N_("the page name contains wildcards")),
+	OPT_HELP_COMPAT,
 	{ 0 }
 };
 

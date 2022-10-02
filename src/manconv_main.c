@@ -94,12 +94,12 @@ error_t argp_err_exit_status = FAIL;
 static const char args_doc[] = N_("[-f CODE[:...]] -t CODE [FILENAME]");
 
 static struct argp_option options[] = {
-	{ "from-code",	'f',	N_("CODE[:...]"),
-						0,	N_("possible encodings of original text") },
-	{ "to-code",	't',	N_("CODE"),	0,	N_("encoding for output") },
-	{ "debug",	'd',	0,		0,	N_("emit debugging messages") },
-	{ "quiet",	'q',	0,		0,	N_("produce fewer warnings") },
-	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	OPT ("from-code", 'f', N_("CODE[:...]"),
+	     N_("possible encodings of original text")),
+	OPT ("to-code", 't', N_("CODE"), N_("encoding for output")),
+	OPT ("debug", 'd', 0, N_("emit debugging messages")),
+	OPT ("quiet", 'q', 0, N_("produce fewer warnings")),
+	OPT_HELP_COMPAT,
 	{ 0 }
 };
 

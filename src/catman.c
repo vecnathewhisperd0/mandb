@@ -103,10 +103,12 @@ error_t argp_err_exit_status = FAIL;
 static const char args_doc[] = N_("[SECTION...]");
 
 static struct argp_option options[] = {
-	{ "debug",		'd',	0,		0,	N_("emit debugging messages") },
-	{ "manpath",		'M',	N_("PATH"),	0,	N_("set search path for manual pages to PATH") },
-	{ "config-file",	'C',	N_("FILE"),	0,	N_("use this user configuration file") },
-	{ 0, 'h', 0, OPTION_HIDDEN, 0 }, /* compatibility for --help */
+	OPT ("debug", 'd', 0, N_("emit debugging messages")),
+	OPT ("manpath", 'M', N_("PATH"),
+	     N_("set search path for manual pages to PATH")),
+	OPT ("config-file", 'C', N_("FILE"),
+	     N_("use this user configuration file")),
+	OPT_HELP_COMPAT,
 	{ 0 }
 };
 
