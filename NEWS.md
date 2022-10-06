@@ -16,6 +16,9 @@ Fixes:
  * Consider pages for adding to the database even if they seem to already
    exist; this performance optimization is no longer needed due to caching,
    and it produced inconsistent results in some unusual cases.
+ * `man` now runs any required preprocessors in the same order that `groff`
+   does, rather than trusting the order of filters in a page's preprocessor
+   string.
 
 Improvements:
 

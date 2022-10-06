@@ -1104,6 +1104,44 @@ static void add_col (pipeline *p, const char *locale_charset, ...)
 	pipeline_command (p, cmd);
 }
 
+static void add_filter (pipeline *p, pipecmd *cmd,
+			bool wants_dev, bool wants_post)
+{
+	if (wants_dev) {
+		if (roff_device)
+			pipecmd_argf (cmd, "-T%s", roff_device);
+#ifdef TROFF_IS_GROFF
+		else if (gxditview) {
+			pipecmd_argf (cmd, "-TX%s", gxditview);
+			if (strstr (gxditview, "-12"))
+				pipecmd_argf (cmd, "-rS12");
+		}
+#endif /* TROFF_IS_GROFF */
+	}
+
+	if (wants_post) {
+#ifdef TROFF_IS_GROFF
+		if (gxditview)
+			/* -X arranges for the correct options to be passed
+			 * to troff.  Normally it would run gxditview as
+			 * well, but we suppress that with -Z so that we can
+			 * do it ourselves; this lets us set a better window
+			 * title, and means that we don't have to worry
+			 * about sandboxing text processing and an X program
+			 * in the same way.
+			 */
+			pipecmd_args (cmd, "-X", "-Z", (void *) 0);
+#endif /* TROFF_IS_GROFF */
+
+		if (roff_device && STREQ (roff_device, "ps"))
+			/* Tell grops to guess the page size. */
+			pipecmd_arg (cmd, "-P-g");
+	}
+
+	pipecmd_pre_exec (cmd, sandbox_load_permissive, sandbox_free, sandbox);
+	pipeline_command (p, cmd);
+}
+
 /* Return pipeline to format file to stdout. */
 static pipeline *make_roff_command (const char *dir, const char *file,
 				    decompress *decomp, const char *pp_string,
@@ -1286,151 +1324,95 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	if (recode)
 		;
 	else if (!fmt_prog) {
+		const char *pp;
 #ifndef GNU_NROFF
-		int using_tbl = 0;
+		bool using_tbl = false;
 #endif /* GNU_NROFF */
-
-		do {
 #ifdef NROFF_WARNINGS
-			const char *warning;
+		const char *warning;
 #endif /* NROFF_WARNINGS */
-			int wants_dev = 0; /* filter wants a dev argument */
-			int wants_post = 0; /* postprocessor arguments */
 
-			cmd = NULL;
-			/* set cmd according to *pp_string, on
-                           errors leave cmd as NULL */
-			switch (*pp_string) {
-			case 'e':
-				if (troff)
-					cmd = pipecmd_new_argstr
-						(get_def ("eqn", PROG_EQN));
-				else
-					cmd = pipecmd_new_argstr
-						(get_def ("neqn", PROG_NEQN));
-				wants_dev = 1;
-				break;
-			case 'g':
-				cmd = pipecmd_new_argstr
-					(get_def ("grap", PROG_GRAP));
-				break;
-			case 'p':
-				cmd = pipecmd_new_argstr
-					(get_def ("pic", PROG_PIC));
-				break;
-			case 't':
-				cmd = pipecmd_new_argstr
-					(get_def ("tbl", PROG_TBL));
+		/* Add preprocessors.  Per groff(1), grap, chem, and ideal must
+		 * come before pic, and tbl must come before eqn.
+		 */
+		if (strchr (pp_string, 'r')) {
+			cmd = pipecmd_new_argstr
+				(get_def ("refer", PROG_REFER));
+			add_filter (p, cmd, false, false);
+		}
+		if (strchr (pp_string, 'g')) {
+			cmd = pipecmd_new_argstr (get_def ("grap", PROG_GRAP));
+			add_filter (p, cmd, false, false);
+		}
+		if (strchr (pp_string, 'p')) {
+			cmd = pipecmd_new_argstr (get_def ("pic", PROG_PIC));
+			add_filter (p, cmd, false, false);
+		}
+		if (strchr (pp_string, 't')) {
+			cmd = pipecmd_new_argstr (get_def ("tbl", PROG_TBL));
+			add_filter (p, cmd, false, false);
 #ifndef GNU_NROFF
-				using_tbl = 1;
+			using_tbl = true;
 #endif /* GNU_NROFF */
-				break;
-			case 'v':
-				cmd = pipecmd_new_argstr
-					(get_def ("vgrind", PROG_VGRIND));
-				break;
-			case 'r':
-				cmd = pipecmd_new_argstr
-					(get_def ("refer", PROG_REFER));
-				break;
-			case ' ':
-			case '-':
-			case 0:
-				/* done with preprocessors, now add roff */
-				if (troff) {
-					cmd = pipecmd_new_argstr
-						(get_def ("troff",
-							  PROG_TROFF));
-					save_cat = false;
-				} else
-					cmd = pipecmd_new_argstr
-						(get_def ("nroff",
-							  PROG_NROFF));
+		}
+		if (strchr (pp_string, 'e')) {
+			const char *eqn;
+			if (troff)
+				eqn = get_def ("eqn", PROG_EQN);
+			else
+				eqn = get_def ("neqn", PROG_NEQN);
+			cmd = pipecmd_new_argstr (eqn);
+			/* eqn wants device options. */
+			add_filter (p, cmd, true, false);
+		}
+		if (strchr (pp_string, 'v')) {
+			cmd = pipecmd_new_argstr
+				(get_def ("vgrind", PROG_VGRIND));
+			add_filter (p, cmd, false, false);
+		}
+		for (pp = pp_string; *pp; ++pp) {
+			if (!strchr ("rgptev -", *pp))
+				error (0, 0,
+				       _("ignoring unknown preprocessor `%c'"),
+				       *pp);
+		}
+
+		/* Add *roff itself. */
+		if (troff) {
+			cmd = pipecmd_new_argstr
+				(get_def ("troff", PROG_TROFF));
+			save_cat = false;
+		} else
+			cmd = pipecmd_new_argstr
+				(get_def ("nroff", PROG_NROFF));
 
 #ifdef TROFF_IS_GROFF
-				if (troff && ditroff)
-					pipecmd_arg (cmd, "-Z");
+		if (troff && ditroff)
+			pipecmd_arg (cmd, "-Z");
 #endif /* TROFF_IS_GROFF */
 
 #if defined(TROFF_IS_GROFF) || defined(HEIRLOOM_NROFF)
-				{
-					pipecmd *seq = add_roff_line_length
-						(cmd, &save_cat);
-					if (seq)
-						pipeline_command (p, seq);
-				}
+		{
+			pipecmd *seq = add_roff_line_length (cmd, &save_cat);
+			if (seq)
+				pipeline_command (p, seq);
+		}
 #endif /* TROFF_IS_GROFF || HEIRLOOM_NROFF */
 
 #ifdef NROFF_WARNINGS
-				GL_LIST_FOREACH (roff_warnings, warning)
-					pipecmd_argf (cmd, "-w%s", warning);
+		GL_LIST_FOREACH (roff_warnings, warning)
+			pipecmd_argf (cmd, "-w%s", warning);
 #endif /* NROFF_WARNINGS */
 
 #ifdef HEIRLOOM_NROFF
-				if (running_setuid ())
-					pipecmd_unsetenv (cmd, "TROFFMACS");
+		if (running_setuid ())
+			pipecmd_unsetenv (cmd, "TROFFMACS");
 #endif /* HEIRLOOM_NROFF */
 
-				pipecmd_argstr (cmd, roff_opt);
+		pipecmd_argstr (cmd, roff_opt);
 
-				wants_dev = 1;
-				wants_post = 1;
-				break;
-			}
-
-			if (!cmd) {
-				assert (*pp_string); /* didn't fail on roff */
-				error (0, 0,
-				       _("ignoring unknown preprocessor `%c'"),
-				       *pp_string);
-				continue;
-			}
-
-			if (wants_dev) {
-				if (roff_device)
-					pipecmd_argf (cmd,
-						      "-T%s", roff_device);
-#ifdef TROFF_IS_GROFF
-				else if (gxditview) {
-					pipecmd_argf (cmd, "-TX%s", gxditview);
-					if (strstr (gxditview, "-12"))
-						pipecmd_argf (cmd, "-rS12");
-				}
-#endif /* TROFF_IS_GROFF */
-			}
-
-			if (wants_post) {
-#ifdef TROFF_IS_GROFF
-				if (gxditview)
-					/* -X arranges for the correct
-					 * options to be passed to troff.
-					 * Normally it would run gxditview
-					 * as well, but we suppress that
-					 * with -Z so that we can do it
-					 * ourselves; this lets us set a
-					 * better window title, and means
-					 * that we don't have to worry about
-					 * sandboxing text processing and an
-					 * X program in the same way.
-					 */
-					pipecmd_args (cmd, "-X", "-Z",
-						      (void *) 0);
-#endif /* TROFF_IS_GROFF */
-
-				if (roff_device && STREQ (roff_device, "ps"))
-					/* Tell grops to guess the page
-					 * size.
-					 */
-					pipecmd_arg (cmd, "-P-g");
-			}
-
-			pipecmd_pre_exec (cmd, sandbox_load_permissive,
-					  sandbox_free, sandbox);
-			pipeline_command (p, cmd);
-
-			if (*pp_string == ' ' || *pp_string == '-')
-				break;
-		} while (*pp_string++);
+		/* *roff wants both device and postprocessor arguments. */
+		add_filter (p, cmd, true, true);
 
 		if (!troff && *PROG_COL != '\0') {
 			const char *man_keep_formatting =
