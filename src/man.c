@@ -236,8 +236,6 @@ static bool save_cat; 		/* security breach? Can we save the cat? */
 
 static int first_arg;
 
-static int found_a_stray;		/* found a straycat */
-
 #ifdef MAN_CATS
 static char *tmp_cat_file;	/* for open_cat_stream(), close_cat_stream() */
 static int created_tmp_cat;			/* dto. */
@@ -3346,10 +3344,6 @@ static int display_database (struct candidate *candp)
 			free (title);
 			return ++found;
 		}
-
-		/* show this page but force an update later to make sure
-		   we haven't just added the new page */
-		found_a_stray = 1;
 
 		/* If explicitly asked for troff or a different encoding,
 		 * don't show a stray cat.
