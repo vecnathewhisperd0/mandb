@@ -25,21 +25,32 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "attribute.h"
 #include "xvasprintf.h"
 
 #include "manconfig.h"
 
 #include "tempfile.h"
 
+static bool ATTRIBUTE_PURE running_setid (void)
+{
+#ifdef HAVE_GETUID
+	return getuid () != geteuid () || getgid () != getegid ();
+#else /* !HAVE_GETUID */
+	return false;
+#endif /* HAVE_GETUID */
+}
+
 static const char *path_search (void)
 {
 	const char *dir = NULL;
 
-	if (getuid () == geteuid () && getgid () == getegid ()) {
+	if (running_setid ()) {
 		dir = getenv ("TMPDIR");
 		if (!dir || !CAN_ACCESS (dir, W_OK))
 			dir = NULL;
