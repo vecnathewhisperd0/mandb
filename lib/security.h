@@ -23,7 +23,9 @@
  */
 
 #include <stdbool.h>
-#include <pwd.h>
+#ifdef MAN_OWNER
+#  include <pwd.h>
+#endif /* MAN_OWNER */
 
 /* security.c */
 extern void drop_effective_privs (void);
