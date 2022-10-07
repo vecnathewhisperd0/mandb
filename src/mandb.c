@@ -856,9 +856,7 @@ int main (int argc, char *argv[])
 	int amount = 0;
 	char *mp;
 	gl_map_t tried_catdirs;
-#ifdef SIGPIPE
 	struct sigaction sa;
-#endif /* SIGPIPE */
 
 #ifdef __profile__
 	char *cwd;
@@ -871,7 +869,6 @@ int main (int argc, char *argv[])
 	sandbox = sandbox_init ();
 	init_locale ();
 
-#ifdef SIGPIPE
 	/* Reset SIGPIPE to its default disposition.  Too many broken pieces
 	 * of software (Python << 3.2, gnome-session, etc.) spawn child
 	 * processes with SIGPIPE ignored, and this produces noise in cron
@@ -882,7 +879,6 @@ int main (int argc, char *argv[])
 	sigemptyset (&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction (SIGPIPE, &sa, NULL);
-#endif /* SIGPIPE */
 
 	if (argp_parse (&argp, argc, argv, 0, 0, 0))
 		exit (FAIL);
