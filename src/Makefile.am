@@ -198,12 +198,12 @@ all-am: apropos$(EXEEXT)
 install-exec-hook:
 	if [ "$(man_owner)" ] && [ "$(man_mode)" = 6755 ]; then \
 		chown $(man_owner):$(man_owner) \
-			$(DESTDIR)$(bindir)/$(TRANS_MAN) \
-			$(DESTDIR)$(bindir)/$(TRANS_MANDB); \
+			$(DESTDIR)$(bindir)/$(TRANS_MAN)$(EXEEXT) \
+			$(DESTDIR)$(bindir)/$(TRANS_MANDB)$(EXEEXT); \
 	fi
 	chmod $(man_mode) \
-		$(DESTDIR)$(bindir)/$(TRANS_MAN) \
-		$(DESTDIR)$(bindir)/$(TRANS_MANDB)
+		$(DESTDIR)$(bindir)/$(TRANS_MAN)$(EXEEXT) \
+		$(DESTDIR)$(bindir)/$(TRANS_MANDB)$(EXEEXT)
 	cd $(DESTDIR)$(bindir) && rm -f $(TRANS_APROPOS)$(EXEEXT) && \
 		$(LN_S) $(TRANS_WHATIS)$(EXEEXT) $(TRANS_APROPOS)$(EXEEXT)
 

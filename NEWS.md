@@ -19,6 +19,8 @@ Fixes:
  * `man` now runs any required preprocessors in the same order that `groff`
    does, rather than trusting the order of filters in a page's preprocessor
    string.
+ * Fix building on MinGW.  (I haven't been able to test this; help from
+   MinGW experts would be welcome.)
 
 Improvements:
 
