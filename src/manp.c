@@ -138,7 +138,8 @@ static void add_config (const char *key, const char *cont,
 	gl_list_add_last (config, item);
 }
 
-static const char *get_config (const char *key, enum config_flag flag)
+static const char * ATTRIBUTE_PURE get_config (const char *key,
+					       enum config_flag flag)
 {
 	const struct config_item *item;
 	char *cont = NULL;
@@ -157,7 +158,7 @@ static const char *get_config (const char *key, enum config_flag flag)
  *
  * If not setuid, this is identical to get_def_user.
  */
-const char *get_def (const char *thing, const char *def)
+const char * ATTRIBUTE_PURE get_def (const char *thing, const char *def)
 {
 	const char *config_def;
 
@@ -168,7 +169,7 @@ const char *get_def (const char *thing, const char *def)
 	return config_def ? config_def : def;
 }
 
-const char *get_def_user (const char *thing, const char *def)
+const char * ATTRIBUTE_PURE get_def_user (const char *thing, const char *def)
 {
 	const char *config_def = get_config (thing, DEFINE_USER);
 	if (!config_def)
@@ -1313,7 +1314,7 @@ char *get_catpath (const char *name, int cattype)
 /* Check to see if the supplied man directory is a system-wide mandir.
  * Obviously, user directories must not be included here.
  */
-bool is_global_mandir (const char *dir)
+bool ATTRIBUTE_PURE is_global_mandir (const char *dir)
 {
 	const struct config_item *item;
 	bool ret = false;

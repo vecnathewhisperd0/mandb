@@ -590,7 +590,8 @@ out:
 
 /* Can we take this input encoding and produce this output encoding, perhaps
  * with the help of some iconv pipes? */
-static bool compatible_encodings (const char *input, const char *output)
+static bool ATTRIBUTE_PURE compatible_encodings (const char *input,
+						 const char *output)
 {
 	if (STREQ (input, output))
 		return true;

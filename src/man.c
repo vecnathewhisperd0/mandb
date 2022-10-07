@@ -962,7 +962,7 @@ static char *locale_manpath (const char *manpath)
  * The list of sections in config.h simply allows us to specify oddly
  * named directories like .../man3f.  Yuk.
  */
-static const char *is_section (const char *name)
+static const char * ATTRIBUTE_PURE is_section (const char *name)
 {
 	const char *vs;
 
