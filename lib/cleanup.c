@@ -41,7 +41,9 @@
 
 
 /* saved signal actions */
+#ifdef SIGHUP
 static struct sigaction saved_hup_action;
+#endif /* SIGHUP */
 static struct sigaction saved_int_action;
 static struct sigaction saved_term_action;
 
@@ -107,9 +109,13 @@ trap_signal (int signo, struct sigaction *oldact)
 static int
 trap_abnormal_exits (void)
 {
-  if (   trap_signal (SIGHUP, &saved_hup_action)
-      || trap_signal (SIGINT, &saved_int_action)
-      || trap_signal (SIGTERM, &saved_term_action))
+#ifdef SIGHUP
+  if (trap_signal (SIGHUP, &saved_hup_action))
+    return -1;
+#endif /* SIGHUP */
+  if (trap_signal (SIGINT, &saved_int_action))
+    return -1;
+  if (trap_signal (SIGTERM, &saved_term_action))
     return -1;
   return 0;
 }
@@ -137,9 +143,13 @@ untrap_signal (int signo, struct sigaction *oldact)
 static int
 untrap_abnormal_exits (void)
 {
-  if (  untrap_signal (SIGHUP, &saved_hup_action)
-      | untrap_signal (SIGINT, &saved_int_action)
-      | untrap_signal (SIGTERM, &saved_term_action))
+#ifdef SIGHUP
+  if (untrap_signal (SIGHUP, &saved_hup_action))
+    return -1;
+#endif /* SIGHUP */
+  if (untrap_signal (SIGINT, &saved_int_action))
+    return -1;
+  if (untrap_signal (SIGTERM, &saved_term_action))
     return -1;
   return 0;
 }
