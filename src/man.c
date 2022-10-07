@@ -640,6 +640,7 @@ static void gripe_no_name (const char *sect)
 	exit (FAIL);
 }
 
+#ifdef HAVE_TERMIOS_H
 static struct termios tms;
 static int tms_set = 0;
 static pid_t tms_pid = 0;
@@ -669,6 +670,11 @@ static void get_term (void)
 		}
 	}
 }
+#else /* !HAVE_TERMIOS_H */
+static void get_term (void)
+{
+}
+#endif /* HAVE_TERMIOS_H */
 
 #if defined(TROFF_IS_GROFF) || defined(HEIRLOOM_NROFF)
 static int get_roff_line_length (void)
