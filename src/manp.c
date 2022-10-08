@@ -177,7 +177,7 @@ const char * ATTRIBUTE_PURE get_def_user (const char *thing, const char *def)
 	return config_def ? config_def : def;
 }
 
-static void add_sections (char *sections, int user)
+static void add_sections (char *sections, bool user)
 {
 	char *section_list = xstrdup (sections);
 	char *sect;
@@ -220,7 +220,7 @@ gl_list_t get_sections (void)
 	return sections;
 }
 
-static void add_def (const char *thing, const char *config_def, int user)
+static void add_def (const char *thing, const char *config_def, bool user)
 {
 	add_config (thing, config_def, user ? DEFINE_USER : DEFINE);
 
@@ -237,7 +237,7 @@ static void add_manpath_map (const char *path, const char *mandir)
 	debug ("  Path `%s' mapped to mandir `%s'.\n", path, mandir);
 }
 
-static void add_mandb_map (const char *mandir, const char *catdir, int user)
+static void add_mandb_map (const char *mandir, const char *catdir, bool user)
 {
 	char *tmpcatdir;
 
@@ -682,7 +682,7 @@ static char *guess_manpath (const char *systems)
 						   def_path (MANDATORY));
 		}
 
-		manpathlist = get_manpath_from_path (path, 1);
+		manpathlist = get_manpath_from_path (path, true);
 	}
 	manpath = add_system_manpath (systems, manpathlist);
 	free (manpathlist);
@@ -753,7 +753,7 @@ char *get_manpath (const char *systems)
 }
 
 /* Parse the manpath.config file, extracting appropriate information. */
-static void add_to_dirlist (FILE *config_file, int user)
+static void add_to_dirlist (FILE *config_file, bool user)
 {
 	char *bp;
 	char *buf = NULL;
@@ -822,7 +822,7 @@ static void free_config_file (void *unused MAYBE_UNUSED)
 
 void read_config_file (bool optional)
 {
-	static int done = 0;
+	static bool done = false;
 	char *dotmanpath = NULL;
 	FILE *config_file;
 
@@ -844,7 +844,7 @@ void read_config_file (bool optional)
 		config_file = fopen (dotmanpath, "r");
 		if (config_file != NULL) {
 			debug ("From the config file %s:\n", dotmanpath);
-			add_to_dirlist (config_file, 1);
+			add_to_dirlist (config_file, true);
 			fclose (config_file);
 		}
 		free (dotmanpath);
@@ -864,12 +864,12 @@ void read_config_file (bool optional)
 		} else {
 			debug ("From the config file %s:\n", CONFIG_FILE);
 
-			add_to_dirlist (config_file, 0);
+			add_to_dirlist (config_file, false);
 			fclose (config_file);
 		}
 	}
 
-	done = 1;
+	done = true;
 }
 
 
@@ -923,7 +923,7 @@ static char *def_path (enum config_flag flag)
  * $HOME/man exists -- the directory $HOME/man will be added
  * to the manpath.
  */
-char *get_manpath_from_path (const char *path, int mandatory)
+char *get_manpath_from_path (const char *path, bool mandatory)
 {
 	gl_list_t tmplist;
 	const struct config_item *config_item;

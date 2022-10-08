@@ -24,6 +24,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -56,7 +57,7 @@ gl_list_t parse_descriptions (const char *base, const char *whatis)
 {
 	const char *sep, *nextsep;
 	gl_list_t descs;
-	int seen_base = 0;
+	bool seen_base = false;
 
 	descs = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
 				      page_description_free, true);
@@ -131,7 +132,7 @@ gl_list_t parse_descriptions (const char *base, const char *whatis)
 			gl_list_add_last (descs, desc);
 
 			if (base && STREQ (base, desc->name))
-				seen_base = 1;
+				seen_base = true;
 		}
 
 		free (names);

@@ -83,7 +83,7 @@ struct man_sandbox {
 };
 
 #ifdef HAVE_LIBSECCOMP
-static int seccomp_filter_unavailable = 0;
+static bool seccomp_filter_unavailable = false;
 
 static void gripe_seccomp_filter_unavailable (void)
 {
@@ -231,7 +231,7 @@ static bool can_load_seccomp (void)
  * files.  Confining these further requires additional tools that can do
  * path-based filtering or similar, such as AppArmor.
  */
-static scmp_filter_ctx make_seccomp_filter (int permissive)
+static scmp_filter_ctx make_seccomp_filter (bool permissive)
 {
 	scmp_filter_ctx ctx;
 	mode_t mode_mask = S_ISUID | S_ISGID | S_IXUSR | S_IXGRP | S_IXOTH;
@@ -244,7 +244,8 @@ static scmp_filter_ctx make_seccomp_filter (int permissive)
 	if (!can_load_seccomp ())
 		return NULL;
 
-	debug ("initialising seccomp filter (permissive: %d)\n", permissive);
+	debug ("initialising seccomp filter (permissive: %d)\n",
+	       (int) permissive);
 	ctx = seccomp_init (SCMP_ACT_ERRNO (ENOSYS));
 	if (!ctx)
 		fatal (errno, "can't initialise seccomp filter");
@@ -583,8 +584,8 @@ man_sandbox *sandbox_init (void)
 	man_sandbox *sandbox = XZALLOC (man_sandbox);
 
 #ifdef HAVE_LIBSECCOMP
-	sandbox->ctx = make_seccomp_filter (0);
-	sandbox->permissive_ctx = make_seccomp_filter (1);
+	sandbox->ctx = make_seccomp_filter (false);
+	sandbox->permissive_ctx = make_seccomp_filter (true);
 #else /* !HAVE_LIBSECCOMP */
 	sandbox->dummy = 0;
 #endif /* HAVE_LIBSECCOMP */
@@ -593,7 +594,7 @@ man_sandbox *sandbox_init (void)
 }
 
 #ifdef HAVE_LIBSECCOMP
-static void _sandbox_load (man_sandbox *sandbox, int permissive) {
+static void _sandbox_load (man_sandbox *sandbox, bool permissive) {
 	if (can_load_seccomp ()) {
 		scmp_filter_ctx ctx;
 
@@ -604,7 +605,7 @@ static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 		if (!ctx)
 			return;
 		debug ("loading seccomp filter (permissive: %d)\n",
-		       permissive);
+		       (int) permissive);
 		if (seccomp_load (ctx) < 0) {
 			if (errno == EINVAL || errno == EFAULT) {
 				/* The kernel doesn't give us particularly
@@ -619,7 +620,7 @@ static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 				 */
 				gripe_seccomp_filter_unavailable ();
 				/* Don't try this again. */
-				seccomp_filter_unavailable = 1;
+				seccomp_filter_unavailable = true;
 			} else
 				fatal (errno, "can't load seccomp filter");
 		}
@@ -627,7 +628,7 @@ static void _sandbox_load (man_sandbox *sandbox, int permissive) {
 }
 #else /* !HAVE_LIBSECCOMP */
 static void _sandbox_load (man_sandbox *sandbox MAYBE_UNUSED,
-			   int permissive MAYBE_UNUSED)
+			   bool permissive MAYBE_UNUSED)
 {
 }
 #endif /* HAVE_LIBSECCOMP */
@@ -637,7 +638,7 @@ void sandbox_load (void *data)
 {
 	man_sandbox *sandbox = data;
 
-	_sandbox_load (sandbox, 0);
+	_sandbox_load (sandbox, false);
 }
 
 /* Enter a sandbox for processing untrusted data, allowing limited file
@@ -647,7 +648,7 @@ void sandbox_load_permissive (void *data)
 {
 	man_sandbox *sandbox = data;
 
-	_sandbox_load (sandbox, 1);
+	_sandbox_load (sandbox, true);
 }
 
 /* Free a sandbox for processing untrusted data. */

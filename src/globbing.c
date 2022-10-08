@@ -278,7 +278,7 @@ static void match_in_directory (const char *path, const char *pattern,
 }
 
 gl_list_t look_for_file (const char *hier, const char *sec,
-			 const char *unesc_name, int cat, int opts)
+			 const char *unesc_name, bool cat, int opts)
 {
 	gl_list_t matched;
 	char *pattern, *path = NULL;

@@ -52,7 +52,7 @@
  * threads.
  */
 static jmp_buf open_env;
-static int opening;
+static bool opening;
 
 /* Mimic _gdbm_fatal's error output, but handle errors during open more
  * gracefully than exiting.
@@ -82,7 +82,7 @@ bool man_gdbm_open_wrapper (man_gdbm_wrapper wrap, int flags)
 {
 	datum key, content;
 
-	opening = 1;
+	opening = true;
 	if (setjmp (open_env))
 		return false;
 	wrap->file = gdbm_open (wrap->name, BLK_SIZE, flags, DBMODE,
@@ -101,7 +101,7 @@ bool man_gdbm_open_wrapper (man_gdbm_wrapper wrap, int flags)
 		MYDBM_FREE_DPTR (content);
 	}
 
-	opening = 0;
+	opening = false;
 
 	return true;
 }

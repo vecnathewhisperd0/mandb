@@ -744,7 +744,7 @@ static void purge_catdir (gl_map_t tried_catdirs, const char *path)
 		if (!quiet)
 			printf (_("Removing obsolete cat directory %s...\n"),
 				path);
-		remove_directory (path, 1);
+		remove_directory (path, true);
 	}
 }
 
@@ -772,7 +772,7 @@ static void purge_catsubdirs (const char *manpath, const char *catpath)
 			if (!quiet)
 				printf (_("Removing obsolete cat directory "
 					  "%s...\n"), catdir);
-			remove_directory (catdir, 1);
+			remove_directory (catdir, true);
 		}
 
 		free (catdir);

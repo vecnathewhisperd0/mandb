@@ -28,6 +28,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
 #include <signal.h>
@@ -128,7 +129,7 @@ struct compression comp_list[] = {
    	comp->ext = "gz";
    	comp->stem = "/usr/man/man1/foo.1";
  */
-struct compression *comp_info (const char *filename, int want_stem)
+struct compression *comp_info (const char *filename, bool want_stem)
 {
 	const char *ext;
 	static struct compression hpux_comp =

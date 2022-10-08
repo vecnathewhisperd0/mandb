@@ -22,10 +22,12 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <stdbool.h>
+
 extern int is_changed (const char *fa, const char *fb);
 extern int is_directory (const char *path);
 extern char *escape_shell (const char *unesc);
-extern int remove_directory (const char *directory, int recurse);
+extern int remove_directory (const char *directory, bool recurse);
 extern char *trim_spaces (const char *s);
 extern char *lang_dir (const char *filename);
 extern void init_locale (void);

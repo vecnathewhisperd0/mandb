@@ -36,6 +36,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -154,7 +155,7 @@ char *escape_shell (const char *unesc)
 /* Remove a directory and all files in it.  Only recurse beyond that if
  * RECURSE is set.
  */
-int remove_directory (const char *directory, int recurse)
+int remove_directory (const char *directory, bool recurse)
 {
 	DIR *handle = opendir (directory);
 	struct dirent *entry;

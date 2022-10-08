@@ -23,6 +23,7 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>		/* SunOS's loosing assert.h needs it */
 #include <assert.h>
@@ -55,7 +56,7 @@ sighandler (int signo)
   struct sigaction act;
   sigset_t set;
 
-  do_cleanups_sigsafe (1);
+  do_cleanups_sigsafe (true);
 
   /* set default signal action */
   memset (&act, 0, sizeof act);
@@ -174,7 +175,7 @@ static unsigned tos = 0;	/* top of stack, 0 <= tos <= nslots */
  * called.
  */
 void
-do_cleanups_sigsafe (int in_sighandler)
+do_cleanups_sigsafe (bool in_sighandler)
 {
   unsigned i;
 
@@ -190,7 +191,7 @@ do_cleanups_sigsafe (int in_sighandler)
 void
 do_cleanups (void)
 {
-  do_cleanups_sigsafe (0);
+  do_cleanups_sigsafe (false);
   tos = 0;
   nslots = 0;
   free (stack);
@@ -207,14 +208,14 @@ do_cleanups (void)
 int
 push_cleanup (cleanup_fun fun, void *arg, int sigsafe)
 {
-  static int handler_installed = 0;
+  static bool handler_installed = false;
 
   assert (tos <= nslots);
 
   if (!handler_installed) {
     if (atexit (do_cleanups))
       return -1;
-    handler_installed = 1;
+    handler_installed = true;
   }
 
   if (tos == nslots) {

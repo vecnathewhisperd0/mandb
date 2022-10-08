@@ -21,6 +21,8 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <stdbool.h>
+
 struct compression {
 	/* The following are const because they should be pointers to parts
 	 * of strings allocated elsewhere and should not be written through
@@ -36,5 +38,5 @@ struct compression {
 
 extern struct compression comp_list[];
 
-extern struct compression *comp_info (const char *filename, int want_stem);
+extern struct compression *comp_info (const char *filename, bool want_stem);
 extern struct compression *comp_file (const char *filename);

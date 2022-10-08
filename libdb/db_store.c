@@ -26,6 +26,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -57,7 +58,7 @@
  * If promote_links is true, consider SO_MAN equivalent to ULT_MAN. This is
  * appropriate when sorting candidate pages for display.
  */
-int ATTRIBUTE_CONST compare_ids (char a, char b, int promote_links)
+int ATTRIBUTE_CONST compare_ids (char a, char b, bool promote_links)
 {
 #ifdef FAVOUR_STRAYCATS
 	if (a == WHATIS_MAN && b == STRAY_CAT)
@@ -109,18 +110,18 @@ static int replace_if_necessary (MYDBM_FILE dbf,
 	 *
 	 * TODO: name fields should be collated with the requested name
 	 */
-	if (compare_ids (newdata->id, olddata->id, 0) < 0) {
+	if (compare_ids (newdata->id, olddata->id, false) < 0) {
 		debug ("replace_if_necessary: stronger ID; replacing\n");
 		action = REPLACE_YES;
-	} else if (compare_ids (newdata->id, olddata->id, 1) <= 0 &&
+	} else if (compare_ids (newdata->id, olddata->id, true) <= 0 &&
 		   timespec_cmp (newdata->mtime, olddata->mtime) > 0) {
 		debug ("replace_if_necessary: newer mtime; replacing\n");
 		action = REPLACE_YES;
-	} else if (compare_ids (newdata->id, olddata->id, 1) <= 0 &&
+	} else if (compare_ids (newdata->id, olddata->id, true) <= 0 &&
 		   timespec_cmp (newdata->mtime, olddata->mtime) < 0) {
 		debug ("replace_if_necessary: older mtime; not replacing\n");
 		action = REPLACE_NO;
-	} else if (compare_ids (newdata->id, olddata->id, 0) > 0) {
+	} else if (compare_ids (newdata->id, olddata->id, false) > 0) {
 		debug ("replace_if_necessary: weaker ID; not replacing\n");
 		action = REPLACE_NO;
 	} else if (newdata->pointer && olddata->pointer &&

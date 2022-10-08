@@ -145,7 +145,7 @@ char *lang;
 #undef ALT_EXT_FORMAT	/* allow external formatters located in cat hierarchy */
 
 static bool global_manpath;	/* global or user manual page hierarchy? */
-static int skip;		/* page exists but has been skipped */
+static bool skip;		/* page exists but has been skipped */
 
 #if defined _AIX || defined __sgi
 char **global_argv;
@@ -238,7 +238,7 @@ static int first_arg;
 
 #ifdef MAN_CATS
 static char *tmp_cat_file;	/* for open_cat_stream(), close_cat_stream() */
-static int created_tmp_cat;			/* dto. */
+static bool created_tmp_cat;	/* dto. */
 #endif
 static int tmp_cat_fd;
 static struct timespec man_modtime;	/* modtime of man page, for
@@ -893,7 +893,7 @@ static const char *escape_less (const char *string)
  *
  * If filename is non-NULL, uses mandb's -f option to update a single file.
  */
-static int run_mandb (int create, const char *manpath, const char *filename)
+static int run_mandb (bool create, const char *manpath, const char *filename)
 {
 	pipeline *mandb_pl = pipeline_new ();
 	pipecmd *mandb_cmd = pipecmd_new ("mandb");
@@ -1573,20 +1573,20 @@ static void squeeze_blank_lines (void *data MAYBE_UNUSED)
 	size_t len = 0;
 
 	while (getline (&line, &len, stdin) != -1) {
-		int in_blank_line  = 1;
-		int got_blank_line = 0;
+		bool in_blank_line  = true;
+		bool got_blank_line = false;
 
 		while (in_blank_line) {
 			char *p;
 			for (p = line; *p; ++p) {
 				if (!CTYPE (isspace, *p)) {
-					in_blank_line = 0;
+					in_blank_line = false;
 					break;
 				}
 			}
 
 			if (in_blank_line) {
-				got_blank_line = 1;
+				got_blank_line = true;
 				free (line);
 				line = NULL;
 				len  = 0;
@@ -1833,13 +1833,13 @@ static pipeline *open_cat_stream (const char *cat_file, const char *encoding)
 	pipecmd *comp_cmd;
 #  endif
 
-	created_tmp_cat = 0;
+	created_tmp_cat = false;
 
 	debug ("creating temporary cat for %s\n", cat_file);
 
 	tmp_cat_file = tmp_cat_filename (cat_file);
 	if (tmp_cat_file)
-		created_tmp_cat = 1;
+		created_tmp_cat = true;
 	else {
 		if (!debug_level && (errno == EACCES || errno == EROFS)) {
 			/* No permission to write to the cat file. Oh well,
@@ -2001,7 +2001,7 @@ static void format_display (decompress *d,
 		char *browser_list, *candidate;
 
 		if (format_status) {
-			if (remove_directory (htmldir, 0) == -1)
+			if (remove_directory (htmldir, false) == -1)
 				error (0, errno,
 				       _("can't remove directory %s"),
 				       htmldir);
@@ -2033,7 +2033,7 @@ static void format_display (decompress *d,
 			sleep (5);  /* firefox runs into background too fast */
 
 		free (browser_list);
-		if (remove_directory (htmldir, 0) == -1)
+		if (remove_directory (htmldir, false) == -1)
 			error (0, errno, _("can't remove directory %s"),
 			       htmldir);
 		free (htmlfile);
@@ -2157,7 +2157,7 @@ static int do_prompt (const char *name)
 	int ch;
 	FILE *tty = NULL;
 
-	skip = 0;
+	skip = false;
 	if (!isatty (STDOUT_FILENO) || !isatty (STDIN_FILENO))
 		return 0; /* noninteractive */
 	tty = fopen ("/dev/tty", "r+");
@@ -2177,7 +2177,7 @@ static int do_prompt (const char *name)
 				fclose (tty);
 				return 0;
 			case EOF:
-				skip = 1;
+				skip = true;
 				fclose (tty);
 				return 1;
 			default:
@@ -2349,7 +2349,7 @@ static int display (const char *dir, const char *man_file,
 				gripe_system (format_cmd, status);
 		}
 	} else {
-		int format = 1;
+		bool format = true;
 		int status;
 
 		/* The caller should already have checked for any
@@ -2379,11 +2379,11 @@ static int display (const char *dir, const char *man_file,
 		if (!man_file) {
 			/* Stray cat. */
 			assert (cat_file);
-			format = 0;
+			format = false;
 		} else if (!cat_file) {
 			assert (man_file);
 			save_cat = false;
-			format = 1;
+			format = true;
 		} else if (format && save_cat) {
 			char *cat_dir;
 			char *tmp;
@@ -2419,14 +2419,14 @@ static int display (const char *dir, const char *man_file,
 		 * expect input via stdin. So we special-case this to avoid
 		 * the bogus access() check.
 		*/
-		if (format == 1 && *man_file == '\0')
+		if (format && *man_file == '\0')
 			found = 1;
 		else
 			found = CAN_ACCESS
 				(format ? man_file : cat_file, R_OK);
 
 		debug ("format: %d, save_cat: %d, found: %d\n",
-		       format, (int) save_cat, found);
+		       (int) format, (int) save_cat, found);
 
 		if (!found) {
 			pipeline_free (format_cmd);
@@ -2435,16 +2435,16 @@ static int display (const char *dir, const char *man_file,
 		}
 
 		if (print_where || print_where_cat) {
-			int printed = 0;
+			bool printed = false;
 			if (print_where && man_file) {
 				printf ("%s", man_file);
-				printed = 1;
+				printed = true;
 			}
 			if (print_where_cat && cat_file && !format) {
 				if (printed)
 					putchar (' ');
 				printf ("%s", cat_file);
-				printed = 1;
+				printed = true;
 			}
 			if (printed)
 				putchar ('\n');
@@ -2545,14 +2545,14 @@ static _Noreturn void gripe_converting_name (const char *name)
  * named with 'man -l'. Otherwise, a symlink to "/home/manuel/foo.1.gz"
  * would be converted to "/home/catuel/foo.1.gz", which would be bad.
  */
-static char *convert_name (const char *name, int fsstnd)
+static char *convert_name (const char *name, bool fsstnd)
 {
 	char *to_name, *t1 = NULL;
 	char *t2 = NULL;
 	struct compression *comp;
 	char *namestem;
 
-	comp = comp_info (name, 1);
+	comp = comp_info (name, true);
 	if (comp)
 		namestem = comp->stem;
 	else
@@ -2612,7 +2612,7 @@ static char *find_cat_file (const char *path, const char *original,
 	 * means we'll hardly ever use them at all except for user
 	 * hierarchies; but compatibility, eh?)
 	 */
-	cat_file = convert_name (original, 1);
+	cat_file = convert_name (original, true);
 	if (cat_file) {
 		status = is_changed (original, cat_file);
 		if (status != -2 && (!(status & 1)) == 1) {
@@ -2633,11 +2633,11 @@ static char *find_cat_file (const char *path, const char *original,
 			(man_file, global_manpath ? SYSTEM_CAT : USER_CAT);
 
 		if (cat_path) {
-			cat_file = convert_name (cat_path, 0);
+			cat_file = convert_name (cat_path, false);
 			free (cat_path);
 		} else if (STRNEQ (man_file, path, path_len) &&
 			   man_file[path_len] == '/')
-			cat_file = convert_name (man_file, 1);
+			cat_file = convert_name (man_file, true);
 		else
 			cat_file = NULL;
 
@@ -2662,10 +2662,10 @@ static char *find_cat_file (const char *path, const char *original,
 		(original, global_manpath ? SYSTEM_CAT : USER_CAT);
 
 	if (cat_path) {
-		cat_file = convert_name (cat_path, 0);
+		cat_file = convert_name (cat_path, false);
 		free (cat_path);
 	} else
-		cat_file = convert_name (original, 1);
+		cat_file = convert_name (original, true);
 
 	if (cat_file)
 		debug ("will try cat file %s\n", cat_file);
@@ -2850,7 +2850,7 @@ static int compare_candidates (const struct candidate *left,
 	}
 
 	/* ULT_MAN comes first, etc. Consider SO_MAN equivalent to ULT_MAN. */
-	cmp = compare_ids (lsource->id, rsource->id, 1);
+	cmp = compare_ids (lsource->id, rsource->id, true);
 	if (cmp)
 		return cmp;
 
@@ -3040,14 +3040,15 @@ static int add_candidate (struct candidate **head, char from_db, char cat,
 	 * then be quickly checked by brute force.
 	 */
 	while (search) {
-		int dupcand = duplicate_candidates (candp, search);
+		bool dupcand = duplicate_candidates (candp, search);
 
 		debug ("search: %d %d %s %s %s %c %s %s %s "
 		       "(dup: %d)\n",
 		       search->from_db, search->cat, search->req_name,
 		       search->path, search->ult, search->source->id,
 		       search->source->name ? search->source->name : "-",
-		       search->source->sec, search->source->ext, dupcand);
+		       search->source->sec, search->source->ext,
+		       (int) dupcand);
 
 		/* Check for duplicates. */
 		if (dupcand) {
@@ -3149,7 +3150,7 @@ static int try_section (const char *path, const char *sec, const char *name,
   	 * Look for man page source files.
   	 */
 
-	names = look_for_file (path, sec, name, 0, lff_opts);
+	names = look_for_file (path, sec, name, false, lff_opts);
 	if (!gl_list_size (names))
 		/*
     		 * No files match.
@@ -3163,7 +3164,8 @@ static int try_section (const char *path, const char *sec, const char *name,
 
 		if (!troff && !want_encoding && !recode) {
 			gl_list_free (names);
-			names = look_for_file (path, sec, name, 1, lff_opts);
+			names = look_for_file (path, sec, name, true,
+					       lff_opts);
 			cat = 1;
 		}
 	}
@@ -3436,7 +3438,7 @@ static int maybe_update_file (const char *manpath, const char *name,
 	       file,
 	       (long) info->mtime.tv_sec, (long) info->mtime.tv_nsec,
 	       (long) file_mtime.tv_sec, (long) file_mtime.tv_nsec);
-	status = run_mandb (0, manpath, file);
+	status = run_mandb (false, manpath, file);
 	if (status)
 		error (0, 0, _("mandb command failed with exit status %d"),
 		       status);
@@ -3509,7 +3511,7 @@ static int try_db (const char *manpath, const char *sec, const char *name,
 		} else if (!global_manpath) {
 			/* create one */
 			debug ("Failed to open %s O_RDONLY\n", database);
-			if (run_mandb (1, manpath, NULL)) {
+			if (run_mandb (true, manpath, NULL)) {
 				gl_map_put (db_map, xstrdup (manpath), NULL);
 				found = TRY_DATABASE_OPEN_FAILED;
 				goto out;
@@ -3716,7 +3718,7 @@ static int do_global_apropos_section (const char *path, const char *sec,
 
 	debug ("searching in %s, section %s\n", path, sec);
 
-	names = look_for_file (path, sec, "*", 0, LFF_WILDCARD);
+	names = look_for_file (path, sec, "*", false, LFF_WILDCARD);
 
 	if (regex_opt)
 		xregcomp (&search, name,
@@ -3842,7 +3844,8 @@ static int local_man_loop (const char *argv)
 				debug ("recalculating manpath for executable "
 				       "in %s\n", argv_dir);
 
-				new_manp = get_manpath_from_path (argv_dir, 0);
+				new_manp = get_manpath_from_path (argv_dir,
+								  false);
 				if (!new_manp || !*new_manp) {
 					debug ("no useful manpath for "
 					       "executable\n");
@@ -4289,7 +4292,7 @@ int main (int argc, char *argv[])
 #ifdef MAN_DB_UPDATES
 	/* If `-u', do it now. */
 	if (update) {
-		int status = run_mandb (0, NULL, NULL);
+		int status = run_mandb (false, NULL, NULL);
 		if (status)
 			error (0, 0,
 			       _("mandb command failed with exit status %d"),
@@ -4300,7 +4303,7 @@ int main (int argc, char *argv[])
 	while (first_arg < argc) {
 		int status = OK;
 		int found = 0;
-		static int maybe_section = 0;
+		static bool maybe_section = false;
 		const char *nextarg = argv[first_arg++];
 
 		/*
@@ -4312,7 +4315,7 @@ int main (int argc, char *argv[])
 			if (tmp) {
 				section = tmp;
 				debug ("\nsection: %s\n", section);
-				maybe_section = 1;
+				maybe_section = true;
 			}
 		}
 
@@ -4329,7 +4332,7 @@ int main (int argc, char *argv[])
 		}
 
 		/* this is where we actually start looking for the man page */
-		skip = 0;
+		skip = false;
 		if (global_apropos)
 			status = do_global_apropos (nextarg, &found);
 		else {
@@ -4432,7 +4435,7 @@ int main (int argc, char *argv[])
 			}
 		}
 
-		maybe_section = 0;
+		maybe_section = false;
 	}
 	if (db_map) {
 		gl_map_free (db_map);

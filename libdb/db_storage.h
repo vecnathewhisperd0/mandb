@@ -26,6 +26,8 @@
 #ifndef DB_STORAGE_H
 #define DB_STORAGE_H
 
+#include <stdbool.h>
+
 #include "gl_list.h"
 
 /* These definitions give an inherent precedence to each particular type
@@ -68,7 +70,7 @@ extern int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base);
 extern int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);
 extern struct mandata *split_content (MYDBM_FILE dbf, char *cont_ptr);
-extern int compare_ids (char a, char b, int promote_links);
+extern int compare_ids (char a, char b, bool promote_links);
 
 /* local to db routines */
 extern void gripe_lock (const char *filename);

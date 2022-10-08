@@ -99,7 +99,7 @@ struct mandata *filename_info (const char *file, bool warn_if_bogus)
 	   a missmatch between the section they are under and the
 	   sectional part of their extension. */
 
-	comp = comp_info (basename, 1);
+	comp = comp_info (basename, true);
 	if (comp) {
 		info->comp = xstrdup (comp->ext);
 		*(basename + strlen (comp->stem)) = '\0';

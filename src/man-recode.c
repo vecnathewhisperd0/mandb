@@ -185,7 +185,7 @@ static void recode (const char *filename)
 
 	dirname = dir_name (filename);
 	basename = base_name (filename);
-	comp = comp_info (basename, 1);
+	comp = comp_info (basename, true);
 	if (comp)
 		stem = comp->stem;	/* steal memory */
 	else

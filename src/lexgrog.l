@@ -48,6 +48,7 @@
 
 #include <sys/stat.h>
 #include <errno.h>
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -243,8 +244,8 @@ static char *p_name;
 static const char *fname;
 static char filters[MAX_FILTERS];
 
-static int fill_mode;
-static int waiting_for_quote;
+static bool fill_mode;
+static bool waiting_for_quote;
 
 static decompress *decomp;
 
@@ -457,7 +458,7 @@ vgrind_request	\.vS
  /* some include quoting; dealing with this is unpleasant */
 	{bol}{typeface}{blank}+\"	{
 		newline_found ();
-		waiting_for_quote = 1;
+		waiting_for_quote = true;
 	}
 
 	{bol}{typeface}{blank}+		|	/* type face commands */
@@ -481,8 +482,8 @@ vgrind_request	\.vS
 
  /* Toggle fill mode */
 <MAN_NAME,MAN_DESC>{
-	{bol}\.nf.*			fill_mode = 0;
-	{bol}\.fi.*			fill_mode = 1;
+	{bol}\.nf.*			fill_mode = false;
+	{bol}\.fi.*			fill_mode = true;
 }
 
 <CAT_NAME>-{eol}{blank_eol}*		/* strip continuations */
@@ -748,7 +749,7 @@ static void add_char_to_whatis (unsigned char c)
 	if (p_name - newname + 1 >= MAX_NAME)
 		too_big ();
 	else if (waiting_for_quote && c == '"')
-		waiting_for_quote = 0;
+		waiting_for_quote = false;
 	else
 		*p_name++ = c;
 }
@@ -846,7 +847,7 @@ static void newline_found (void)
 			BEGIN (MAN_NAME);
 		}
 	}
-	waiting_for_quote = 0;
+	waiting_for_quote = false;
 }
 
 int find_name (const char *file, const char *filename, lexgrog *p_lg,
@@ -936,8 +937,8 @@ int find_name_decompressed (decompress *d, const char *filename, lexgrog *p_lg)
 	*(p_name = newname) = '\0';
 	memset (filters, '_', sizeof (filters));
 
-	fill_mode = 1;
-	waiting_for_quote = 0;
+	fill_mode = true;
+	waiting_for_quote = false;
 
 	if (p_lg->type == CATPAGE)
 		BEGIN (CAT_FILE);

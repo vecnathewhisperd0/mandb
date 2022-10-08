@@ -58,6 +58,7 @@
 #undef ACCEPT_QUOTES			/* accept quoted roff requests */
 
 #include <assert.h>
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -104,7 +105,7 @@ static char *so_name[MAX_SO_DEPTH];
 static int so_line[MAX_SO_DEPTH];
 static decompress *so_pipe[MAX_SO_DEPTH];
 static int so_stack_ptr;
-static int no_newline;
+static bool no_newline;
 static gl_list_t so_manpathlist;
 static const char *so_parent_path;
 
@@ -145,18 +146,18 @@ W	[ \t]
 %%
 
 ^\.de{W}*.+	{
-			no_newline = 1;
+			no_newline = true;
 			ECHO;
 			BEGIN (de);	/* Now we're inside of a macro definition: ends with a comment */
 		}
 
 ^\.so{W}*	{
-			no_newline = 1;
+			no_newline = true;
 			BEGIN (so);	/* Now we're in the .so environment */
 		}
 
 ^\.lf{W}*	{
-			no_newline = 1;
+			no_newline = true;
 			ECHO;		/* Now we're in the .lf environment */
 			BEGIN (lfnumber);
 		}
@@ -168,12 +169,12 @@ W	[ \t]
 ^\.s			|
 ^\.l			|
 .			{
-				no_newline = 1;
+				no_newline = true;
 				ECHO;
 			}
 
 \n		{
-			no_newline = 0;
+			no_newline = false;
 			putchar ('\n');
 			LINE++;
 		}
@@ -190,7 +191,7 @@ W	[ \t]
 			so_stack[so_stack_ptr++] = YY_CURRENT_BUFFER;
 			LINE = 1;
 
-			no_newline = 0;
+			no_newline = false;
 
 			if (zsoelim_open_file (yytext, so_manpathlist,
 					       so_parent_path)) {
@@ -212,12 +213,12 @@ W	[ \t]
 		}
 
 <end_request>{W}*\n	{
-			no_newline = 0;
+			no_newline = false;
 			BEGIN (INITIAL);
 		}
 
 <so>\n		{
-			no_newline = 0;
+			no_newline = false;
 			error (OK, 0,
 			       _("%s:%d: warning: newline in .so request, "
 			         "ignoring"),
@@ -228,25 +229,25 @@ W	[ \t]
 		}
 
 <de>^\.\..*	{
-			no_newline = 1;
+			no_newline = true;
 			ECHO;
 			BEGIN (INITIAL);
 		}
 
 <de>.*		{
-			no_newline = 1;
+			no_newline = true;
 			ECHO;
 		}
 
 <de>\n		{
-			no_newline = 0;
+			no_newline = false;
 			putchar ('\n');
 			LINE++;
 		}
 
 
 <lfnumber>\"?[0-9]+\"?	{
-			no_newline = 1;
+			no_newline = true;
 			ECHO;
 			ZAP_QUOTES;
 			LINE = atoi (yytext);
@@ -254,7 +255,7 @@ W	[ \t]
 		}
 
 <lfname>\"?[^ \t\n\"]+\"?	{	/* file names including whitespace ?? */
-			no_newline = 1;
+			no_newline = true;
 			ECHO;
 			putchar ('\n');
 			ZAP_QUOTES;
@@ -265,19 +266,19 @@ W	[ \t]
 		}
 
 <lfname>{W}+	{
-			no_newline = 1;
+			no_newline = true;
 			ECHO;
 		}
 
 <lfname>\n	{
-			no_newline = 0;
+			no_newline = false;
 			putchar ('\n');
 			LINE++;
 			BEGIN (INITIAL);
 		}
 
 <lfnumber,lfname>.	{
-			no_newline = 1;
+			no_newline = true;
 			debug (
 			       "%s:%d: warning: unhandled .lf request; "
 			       "line numbers may be wrong\n",
@@ -287,7 +288,7 @@ W	[ \t]
 		}
 
 <lfnumber>\n	{
-			no_newline = 0;
+			no_newline = false;
 			error (OK, 0,
 			       _("%s:%d: warning: newline in .lf request, "
 			         "ignoring"),
@@ -314,7 +315,7 @@ W	[ \t]
 			yy_switch_to_buffer (so_stack[so_stack_ptr]);
 			printf (".lf %d %s\n", LINE += 1, NAME);
 		}
-		no_newline = 0;
+		no_newline = false;
 		BEGIN (end_request);
 	}
 %%
@@ -390,8 +391,8 @@ static decompress *try_compressed (char **filename)
 
 /* This routine is used to open the specified file or uncompress a compressed
    version and open that instead */
-int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
-		       const char *parent_path)
+bool zsoelim_open_file (const char *filename, gl_list_t manpathlist,
+			const char *parent_path)
 {
 	decompress *decomp;
 
@@ -476,7 +477,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 
 			if (parent_path) {
 				names = look_for_file (parent_path, sec, name,
-						       0, LFF_MATCHCASE);
+						       false, LFF_MATCHCASE);
 				GL_LIST_FOREACH (names, found_name) {
 					decomp = decompress_open
 						(found_name,
@@ -495,7 +496,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 					continue;
 
 				names = look_for_file (mp, sec, name,
-						       0, LFF_MATCHCASE);
+						       false, LFF_MATCHCASE);
 				GL_LIST_FOREACH (names, found_name) {
 					decomp = decompress_open
 						(found_name,
@@ -529,7 +530,7 @@ int zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 out:
 		if (!decomp) {
 			error (0, errno, _("can't open %s"), filename);
-			return 1;
+			return true;
 		}
 	}
 
@@ -540,7 +541,7 @@ out:
 	/* only used by YY_INPUT, which casts it back to 'decompress *' */
 	yyin = (FILE *) decomp;
 
-	return 0;
+	return false;
 }
 
 void zsoelim_stdin (void *data)

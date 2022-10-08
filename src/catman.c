@@ -234,7 +234,8 @@ static int parse_for_sec (MYDBM_FILE dbf,
 	pipecmd *basecmd, *cmd;
 	datum key;
 	size_t arg_size, initial_bit;
-	int message = 1, first_arg;
+	bool message = true;
+	int first_arg;
 
 	basecmd = pipecmd_new (MAN);
 	pipecmd_clearenv (basecmd);
@@ -298,7 +299,7 @@ static int parse_for_sec (MYDBM_FILE dbf,
 					if (message) {
 						printf (_("\nUpdating cat files for section %s of man hierarchy %s\n"),
 							section, manpath);
-						message = 0;
+						message = false;
 					}
 
 					arg_size += add_arg (cmd, key) + 1;
@@ -343,14 +344,14 @@ static int parse_for_sec (MYDBM_FILE dbf,
 	return 0;
 }
 
-static int check_access (const char *directory)
+static bool check_access (const char *directory)
 {
 	if (!CAN_ACCESS (directory, W_OK)) {
 		error (0, errno, _("cannot write within %s"), directory);
-		return 1;
+		return true;
 	}
 
-	return 0;
+	return false;
 }
 
 int main (int argc, char *argv[])

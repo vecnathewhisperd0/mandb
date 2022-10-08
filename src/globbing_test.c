@@ -128,7 +128,7 @@ int main (int argc, char **argv)
 		const char *file;
 
 		files = look_for_file (remaining_args[0], remaining_args[1],
-				       remaining_args[2], i,
+				       remaining_args[2], (bool) i,
 				       (match_case ? LFF_MATCHCASE : 0) |
 				       (regex_opt ? LFF_REGEX : 0) |
 				       (wildcard ? LFF_WILDCARD : 0));

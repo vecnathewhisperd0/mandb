@@ -39,7 +39,7 @@ extern void unpack_locale_bits (const char *locale, struct locale_bits *bits);
 extern void free_locale_bits (struct locale_bits *bits);
 extern char *add_nls_manpaths (const char *manpathlist, const char *locales);
 extern char *get_manpath (const char *systems);
-extern char *get_manpath_from_path (const char *path, int mandatory);
+extern char *get_manpath_from_path (const char *path, bool mandatory);
 extern gl_list_t create_pathlist (const char *manp);
 extern void free_pathlist (gl_list_t list);
 extern char *get_mandb_manpath (void);

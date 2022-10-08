@@ -495,7 +495,7 @@ static bool suitable_manpath (const char *manpath, const char *page_dir)
 	gl_list_t page_manpathlist;
 	bool ret;
 
-	page_manp = get_manpath_from_path (page_dir, 0);
+	page_manp = get_manpath_from_path (page_dir, false);
 	if (!page_manp || !*page_manp) {
 		free (page_manp);
 		return false;
@@ -733,12 +733,12 @@ static void do_apropos (MYDBM_FILE dbf,
 		 */
 		if (sections) {
 			char * const *section;
-			int matched = 0;
+			bool matched = false;
 
 			for (section = sections; *section; ++section) {
 				if (STREQ (*section, info->sec) ||
 				    STREQ (*section, info->ext)) {
-					matched = 1;
+					matched = true;
 					break;
 				}
 			}

@@ -132,7 +132,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 					 "ignoring bogus filename"),
 				       catdir);
 			goto next;
-		} else if (comp_info (ext, 0)) {
+		} else if (comp_info (ext, false)) {
 			*ext = '\0';
 			info->comp = xstrdup (ext + 1);
 		}
@@ -191,7 +191,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			exists = dblookup_exact (dbf, mandir_base, info->ext,
 						 true);
 			if (exists &&
-			    compare_ids (STRAY_CAT, exists->id, 0) >= 0)
+			    compare_ids (STRAY_CAT, exists->id, false) >= 0)
 				goto next_exists;
 			debug ("%s(%s) is not in the db.\n",
 			       mandir_base, info->ext);

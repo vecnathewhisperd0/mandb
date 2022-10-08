@@ -175,7 +175,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 	manpage_base = info->name; /* steal memory */
 	info->name = NULL;
 
-	comp = comp_info (file, 1);
+	comp = comp_info (file, true);
 	if (comp) {
 		len = strlen (comp->stem);
 		free (comp->stem);
@@ -783,7 +783,7 @@ static int purge_normal (MYDBM_FILE dbf, const char *name,
 }
 
 /* Decide whether to purge a reference to a WHATIS_MAN or WHATIS_CAT page. */
-static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
+static int purge_whatis (MYDBM_FILE dbf, const char *path, bool cat,
 			 const char *name, struct mandata *info,
 			 gl_list_t found, struct timespec db_mtime)
 {
@@ -851,12 +851,12 @@ static int purge_whatis (MYDBM_FILE dbf, const char *path, int cat,
 }
 
 /* Check that multi keys are correctly constructed. */
-static int check_multi_key (const char *name, const char *content)
+static bool check_multi_key (const char *name, const char *content)
 {
 	const char *walk, *next;
 
 	if (!*content)
-		return 0;
+		return false;
 
 	for (walk = content; walk && *walk; walk = next) {
 		/* The name in the multi key should only differ from the
@@ -876,7 +876,7 @@ static int check_multi_key (const char *name, const char *content)
 			debug ("%s: broken multi key \"%s\", "
 			       "forcing a rescan\n", name, content);
 			force_rescan = true;
-			return 1;
+			return true;
 		}
 
 		/* If the name was valid, skip over the extension and
@@ -886,7 +886,7 @@ static int check_multi_key (const char *name, const char *content)
 		next = walk ? strchr (walk + 1, '\t') : NULL;
 	}
 
-	return 0;
+	return false;
 }
 
 /* Go through the database and purge references to man pages that no longer
@@ -984,12 +984,12 @@ int purge_missing (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 			found = look_for_file (manpath, entry->ext,
 					       entry->name ? entry->name
 							   : nicekey,
-					       0, LFF_MATCHCASE);
+					       false, LFF_MATCHCASE);
 		else
 			found = look_for_file (catpath, entry->ext,
 					       entry->name ? entry->name
 							   : nicekey,
-					       1, LFF_MATCHCASE);
+					       true, LFF_MATCHCASE);
 		debug_level = save_debug;
 
 		/* Now actually decide whether to purge, depending on the
@@ -999,10 +999,10 @@ int purge_missing (MYDBM_FILE dbf, const char *manpath, const char *catpath)
 		    entry->id == STRAY_CAT)
 			count += purge_normal (dbf, nicekey, entry, found);
 		else if (entry->id == WHATIS_MAN)
-			count += purge_whatis (dbf, manpath, 0, nicekey,
+			count += purge_whatis (dbf, manpath, false, nicekey,
 					       entry, found, db_mtime);
 		else	/* entry->id == WHATIS_CAT */
-			count += purge_whatis (dbf, catpath, 1, nicekey,
+			count += purge_whatis (dbf, catpath, true, nicekey,
 					       entry, found, db_mtime);
 
 		gl_list_free (found);
