@@ -237,7 +237,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			if (!fullpath) {
 				if (quiet < 2) {
 					if (errno == ENOENT)
-						error (0, 0, _("warning: %s is a dangling symlink"), fullpath);
+						error (0, 0, _("warning: %s is a dangling symlink"), catdir);
 					else
 						error (0, errno,
 						       _("can't resolve %s"),
