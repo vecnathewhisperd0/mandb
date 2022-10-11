@@ -965,6 +965,7 @@ int main (int argc, char *argv[])
 
 			subdirpath = xasprintf ("%s/%s", mp,
 						subdirent->d_name);
+			assert (subdirpath);
 			ret = process_manpath (subdirpath, global_manpath,
 					       tried_catdirs);
 			if (ret < 0)
