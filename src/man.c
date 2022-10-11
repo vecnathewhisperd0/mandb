@@ -1328,6 +1328,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 	if (recode)
 		;
 	else if (!fmt_prog) {
+		char *pp_string_initial;
 		const char *pp;
 #ifndef GNU_NROFF
 		bool using_tbl = false;
@@ -1339,27 +1340,29 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		/* Add preprocessors.  Per groff(1), grap, chem, and ideal must
 		 * come before pic, and tbl must come before eqn.
 		 */
-		if (strchr (pp_string, 'r')) {
+		pp_string_initial = xstrndup (pp_string,
+					      strcspn (pp_string, " -"));
+		if (strchr (pp_string_initial, 'r')) {
 			cmd = pipecmd_new_argstr
 				(get_def ("refer", PROG_REFER));
 			add_filter (p, cmd, false, false);
 		}
-		if (strchr (pp_string, 'g')) {
+		if (strchr (pp_string_initial, 'g')) {
 			cmd = pipecmd_new_argstr (get_def ("grap", PROG_GRAP));
 			add_filter (p, cmd, false, false);
 		}
-		if (strchr (pp_string, 'p')) {
+		if (strchr (pp_string_initial, 'p')) {
 			cmd = pipecmd_new_argstr (get_def ("pic", PROG_PIC));
 			add_filter (p, cmd, false, false);
 		}
-		if (strchr (pp_string, 't')) {
+		if (strchr (pp_string_initial, 't')) {
 			cmd = pipecmd_new_argstr (get_def ("tbl", PROG_TBL));
 			add_filter (p, cmd, false, false);
 #ifndef GNU_NROFF
 			using_tbl = true;
 #endif /* GNU_NROFF */
 		}
-		if (strchr (pp_string, 'e')) {
+		if (strchr (pp_string_initial, 'e')) {
 			const char *eqn;
 			if (troff)
 				eqn = get_def ("eqn", PROG_EQN);
@@ -1369,17 +1372,18 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			/* eqn wants device options. */
 			add_filter (p, cmd, true, false);
 		}
-		if (strchr (pp_string, 'v')) {
+		if (strchr (pp_string_initial, 'v')) {
 			cmd = pipecmd_new_argstr
 				(get_def ("vgrind", PROG_VGRIND));
 			add_filter (p, cmd, false, false);
 		}
-		for (pp = pp_string; *pp; ++pp) {
-			if (!strchr ("rgptev -", *pp))
+		for (pp = pp_string_initial; *pp; ++pp) {
+			if (!strchr ("rgptev", *pp))
 				error (0, 0,
 				       _("ignoring unknown preprocessor `%c'"),
 				       *pp);
 		}
+		free (pp_string_initial);
 
 		/* Add *roff itself. */
 		if (troff) {
