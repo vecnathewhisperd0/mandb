@@ -208,62 +208,24 @@ static int pattern_compare (const void *a, const void *b)
 	return strncasecmp (key->pattern, memb, key->len);
 }
 
-static void match_in_directory (const char *path, const char *pattern,
-				int opts, gl_list_t matched)
+static void match_regex_in_directory (const char *path, const char *pattern,
+				      int opts, gl_list_t matched,
+				      struct dirent_names *cache)
 {
-	struct dirent_names *cache;
 	int flags;
 	regex_t preg;
-	struct pattern_bsearch pattern_start = { NULL, -1 };
-	char **bsearched;
 	size_t i;
 
-	cache = update_directory_cache (path);
-	if (!cache) {
-		debug ("directory cache update failed\n");
-		return;
-	}
+	debug ("matching regex in %s: %s\n", path, pattern);
 
-	debug ("globbing pattern in %s: %s\n", path, pattern);
+	flags = REG_EXTENDED | REG_NOSUB |
+		((opts & LFF_MATCHCASE) ? 0 : REG_ICASE);
 
-	if (opts & LFF_REGEX)
-		flags = REG_EXTENDED | REG_NOSUB |
-			((opts & LFF_MATCHCASE) ? 0 : REG_ICASE);
-	else
-		flags = (opts & LFF_MATCHCASE) ? 0 : FNM_CASEFOLD;
+	xregcomp (&preg, pattern, flags);
 
-	if (opts & LFF_REGEX) {
-		xregcomp (&preg, pattern, flags);
-		bsearched = cache->names;
-	} else {
-		pattern_start.pattern = xstrndup (pattern,
-						  strcspn (pattern, "?*{}\\"));
-		pattern_start.len = strlen (pattern_start.pattern);
-		bsearched = bsearch (&pattern_start, cache->names,
-				     cache->names_len, sizeof *cache->names,
-				     &pattern_compare);
-		if (!bsearched) {
-			free (pattern_start.pattern);
-			return;
-		}
-		while (bsearched > cache->names &&
-		       !strncasecmp (pattern_start.pattern, *(bsearched - 1),
-				     pattern_start.len))
-			--bsearched;
-	}
-
-	for (i = bsearched - cache->names; i < cache->names_len; ++i) {
-		if (opts & LFF_REGEX) {
-			if (regexec (&preg, cache->names[i], 0, NULL, 0) != 0)
-				continue;
-		} else {
-			if (strncasecmp (pattern_start.pattern,
-					 cache->names[i], pattern_start.len))
-				break;
-
-			if (fnmatch (pattern, cache->names[i], flags) != 0)
-				continue;
-		}
+	for (i = 0; i < cache->names_len; ++i) {
+		if (regexec (&preg, cache->names[i], 0, NULL, 0) != 0)
+			continue;
 
 		debug ("matched: %s/%s\n", path, cache->names[i]);
 
@@ -271,10 +233,71 @@ static void match_in_directory (const char *path, const char *pattern,
 				  xasprintf ("%s/%s", path, cache->names[i]));
 	}
 
-	if (opts & LFF_REGEX)
-		regfree (&preg);
-	else
+	regfree (&preg);
+}
+
+static void match_wildcard_in_directory (const char *path, const char *pattern,
+					 int opts, gl_list_t matched,
+					 struct dirent_names *cache)
+{
+	int flags;
+	struct pattern_bsearch pattern_start = { NULL, -1 };
+	char **bsearched;
+	size_t i;
+
+	debug ("matching wildcard in %s: %s\n", path, pattern);
+
+	flags = (opts & LFF_MATCHCASE) ? 0 : FNM_CASEFOLD;
+
+	pattern_start.pattern = xstrndup (pattern,
+					  strcspn (pattern, "?*{}\\"));
+	pattern_start.len = strlen (pattern_start.pattern);
+	bsearched = bsearch (&pattern_start, cache->names,
+			     cache->names_len, sizeof *cache->names,
+			     &pattern_compare);
+	if (!bsearched) {
 		free (pattern_start.pattern);
+		return;
+	}
+	while (bsearched > cache->names &&
+	       !strncasecmp (pattern_start.pattern, *(bsearched - 1),
+			     pattern_start.len))
+		--bsearched;
+
+	for (i = bsearched - cache->names; i < cache->names_len; ++i) {
+		assert (pattern_start.pattern);
+		if (strncasecmp (pattern_start.pattern,
+				 cache->names[i], pattern_start.len))
+			break;
+
+		if (fnmatch (pattern, cache->names[i], flags) != 0)
+			continue;
+
+		debug ("matched: %s/%s\n", path, cache->names[i]);
+
+		gl_list_add_last (matched,
+				  xasprintf ("%s/%s", path, cache->names[i]));
+	}
+
+	free (pattern_start.pattern);
+}
+
+static void match_in_directory (const char *path, const char *pattern,
+				int opts, gl_list_t matched)
+{
+	struct dirent_names *cache;
+
+	cache = update_directory_cache (path);
+	if (!cache) {
+		debug ("directory cache update failed\n");
+		return;
+	}
+
+	if (opts & LFF_REGEX)
+		match_regex_in_directory (path, pattern, opts, matched, cache);
+	else
+		match_wildcard_in_directory (path, pattern, opts, matched,
+					     cache);
 }
 
 gl_list_t look_for_file (const char *hier, const char *sec,
