@@ -234,16 +234,9 @@ static int check_for_stray (MYDBM_FILE dbf)
 					  col_cmd);
 
 			fullpath = canonicalize_file_name (catdir);
-			if (!fullpath) {
-				if (quiet < 2) {
-					if (errno == ENOENT)
-						error (0, 0, _("warning: %s is a dangling symlink"), catdir);
-					else
-						error (0, errno,
-						       _("can't resolve %s"),
-						       catdir);
-				}
-			} else {
+			if (!fullpath)
+				gripe_canonicalize_failed (catdir);
+			else {
 				char *catdir_base;
 
 				free (fullpath);

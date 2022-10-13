@@ -40,5 +40,6 @@ struct ult_value {
 	gl_list_t trace;
 };
 
+extern void gripe_canonicalize_failed (const char *path);
 extern const struct ult_value *ult_src (const char *name, const char *path,
 					struct stat *buf, int flags);

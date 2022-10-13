@@ -65,8 +65,18 @@
 #include "glcontainers.h"
 
 #include "decompress.h"
-#include "globbing.h"
 #include "ult_src.h"
+
+void gripe_canonicalize_failed (const char *path)
+{
+	if (quiet < 2) {
+		if (errno == ENOENT)
+			error (0, 0, _("warning: %s is a dangling symlink"),
+			       path);
+		else
+			error (0, errno, _("can't resolve %s"), path);
+	}
+}
 
 /* Find minimum value hard link filename for given file and inode.
  * Returns a newly allocated string.
@@ -127,15 +137,7 @@ static char *ult_softlink (const char *fullpath)
 	resolved_path = canonicalize_file_name (fullpath);
 	if (!resolved_path) {
 		/* discard the unresolved path */
-		if (quiet < 2) {
-			if (errno == ENOENT)
-				error (0, 0,
-				       _("warning: %s is a dangling symlink"),
-				       fullpath);
-			else
-				error (0, errno, _("can't resolve %s"),
-				       fullpath);
-		}
+		gripe_canonicalize_failed (fullpath);
 		return NULL;
 	}
 
@@ -215,50 +217,61 @@ static char *test_for_include (const char *buffer)
 static char *find_include (const char *name, const char *path,
 			   const char *include)
 {
-	char *ret;
-	char *dirname;
-	char *temp_file;
+	char *target;
+	struct compression *comp;
 
 	/* Restore the original path from before ult_softlink() etc., in
 	 * case it went outside the mantree.
 	 */
-	ret = xasprintf ("%s/%s", path, include);
-	assert (ret);
+	target = xasprintf ("%s/%s", path, include);
+	assert (target);
 
 	/* If the original path from above doesn't exist, try to create new
 	 * path as if the "include" was relative to the current man page.
 	 */
-	if (CAN_ACCESS (ret, F_OK))
-		return ret;
+	if (!CAN_ACCESS (target, F_OK)) {
+		comp = comp_file (target);
+		free (target);
+		if (comp) {
+			target = comp->stem;
+			comp->stem = NULL; /* steal memory */
+		} else
+			target = NULL;
+	}
 
-	dirname = dir_name (name);
-	temp_file = xasprintf ("%s/%s", dirname, include);
-	assert (temp_file);
-	free (dirname);
+	if (!target) {
+		char *dirname = dir_name (name);
+		char *temp_file = xasprintf ("%s/%s", dirname, include);
+		assert (temp_file);
+		free (dirname);
 
-	if (CAN_ACCESS (temp_file, F_OK)) {
-		/* Just plain include. */
-		free (ret);
-		ret = canonicalize_file_name (temp_file);
-	} else {
-		/* Try globbing - the file suffix might be missing. */
-		char *temp_file_asterisk = xasprintf ("%s*", temp_file);
-		gl_list_t candidate_files = expand_path (temp_file_asterisk);
-
-		free (temp_file_asterisk);
-		if (gl_list_size (candidate_files)) {
-			const char *candidate_file = gl_list_get_at
-				(candidate_files, 0);
-			if (CAN_ACCESS (candidate_file, F_OK)) {
-				free (ret);
-				ret = canonicalize_file_name (candidate_file);
+		if (CAN_ACCESS (temp_file, F_OK))
+			/* Just plain include. */
+			target = xstrdup (temp_file);
+		else {
+			comp = comp_file (temp_file);
+			if (comp) {
+				target = comp->stem;
+				comp->stem = NULL; /* steal memory */
 			}
 		}
-		gl_list_free (candidate_files);
+		free (temp_file);
 	}
-	free (temp_file);
 
-	return ret;
+	if (target) {
+		char *canonicalized = canonicalize_file_name (target);
+		if (canonicalized)
+			return canonicalized;
+		else {
+			gripe_canonicalize_failed (target);
+			free (target);
+			return NULL;
+		}
+	} else {
+		if (quiet < 2)
+			error (0, 0, _("can't resolve %s"), include);
+		return NULL;
+	}
 }
 
 struct ult_key {
@@ -392,7 +405,6 @@ const struct ult_value *ult_src (const char *name, const char *path,
 	if (flags & SO_LINK) {
 		int i;
 		for (i = 0; i < 10; ++i) {
-			struct stat st;
 			char *directive, *include;
 
 			directive = find_include_directive (base);
@@ -407,22 +419,8 @@ const struct ult_value *ult_src (const char *name, const char *path,
 			free (base);
 			base = find_include (name, path, include);
 			free (include);
-
-			if (stat (base, &st) < 0) {
-				struct compression *comp = comp_file (base);
-
-				if (comp) {
-					free (base);
-					base = comp->stem;
-					comp->stem = NULL; /* steal memory */
-				} else {
-					if (quiet < 2)
-						error (0, errno,
-						       _("can't open %s"),
-						       base);
-					goto err;
-				}
-			}
+			if (!base)
+				goto err;
 
 			debug ("ult_src: points to %s\n", base);
 
