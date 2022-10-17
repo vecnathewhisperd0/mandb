@@ -6,6 +6,11 @@ Fixes:
  * SECURITY: Escape `$` characters in page names when constructing `less`
    prompts.  Note that this requires `less` >= 457 (released in 2012).
 
+Improvements:
+
+ * Add section `3type` to the default section list just after `2`.  This is
+   used by the Linux man-pages package.
+
 man-db 2.11.0 (15 October 2022)
 ===============================
 

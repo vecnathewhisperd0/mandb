@@ -32,7 +32,8 @@
    avoided. */
 
 #define STD_SECTIONS { \
-	"1", "n", "l", "8", "3", "0", "2", "5", "4", "9", "6", "7", NULL \
+	"1", "n", "l", "8", "3", "0", "2", "3type", "5", "4", "9", "6", "7", \
+	NULL \
 }
 
 /* Some system's man pages require default pre-processing with perhaps tbl
