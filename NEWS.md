@@ -5,6 +5,8 @@ Fixes:
 
  * SECURITY: Escape `$` characters in page names when constructing `less`
    prompts.  Note that this requires `less` >= 457 (released in 2012).
+ * Silence error message when processing an empty manual page hierarchy with
+   a nonexistent cache directory.
 
 Improvements:
 

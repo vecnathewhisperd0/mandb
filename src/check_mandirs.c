@@ -141,10 +141,8 @@ static bool ensure_db_open (MYDBM_FILE dbf)
 {
 	if (dbf->file)
 		return true;
-	if (!MYDBM_RWOPEN (dbf)) {
-		gripe_rwopen_failed (dbf);
+	if (!MYDBM_RWOPEN (dbf))
 		return false;
-	}
 	return true;
 }
 
@@ -558,6 +556,7 @@ static int testmandirs (MYDBM_FILE dbf, const char *path, const char *catpath,
 
 			created = true;
 		} else if (!ensure_db_open (dbf)) {
+			gripe_rwopen_failed (dbf);
 			closedir (dir);
 			return 0;
 		}
