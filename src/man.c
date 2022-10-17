@@ -873,11 +873,7 @@ static const char *escape_less (const char *string)
 					 2 * strlen (string) + 1);
 
 	while (*string) {
-		if (*string == '?' ||
-		    *string == ':' ||
-		    *string == '.' ||
-		    *string == '%' ||
-		    *string == '\\')
+		if (strchr ("?:.%\\$", *string))
 			*ptr++ = '\\';
 
 		*ptr++ = *string++;

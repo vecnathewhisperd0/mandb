@@ -1,3 +1,11 @@
+man-db 2.11.1
+=============
+
+Fixes:
+
+ * SECURITY: Escape `$` characters in page names when constructing `less`
+   prompts.  Note that this requires `less` >= 457 (released in 2012).
+
 man-db 2.11.0 (15 October 2022)
 ===============================
 

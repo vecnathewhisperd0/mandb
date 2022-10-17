@@ -105,11 +105,14 @@
  *                (R)aw control chars (but keep track of screen appearance)
  *                (m)ore display style
  *
+ * The --use-backslash option allows escaping dollar signs safely in
+ * prompts, though requires less >= 457 (released in 2012).
+ *
  * If you change this, be sure to match the format with
  * man.c:make_display_command().
  */
 
-#define LESS_OPTS	"-ix8RmPm%s$PM%s$"
+#define LESS_OPTS	"--use-backslash -ix8RmPm%s$PM%s$"
 
 /* This is a minimal latin1 special characters to ascii translation table */
 #if !defined(TR_SET1) || !defined(TR_SET2)
