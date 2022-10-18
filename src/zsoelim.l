@@ -394,7 +394,7 @@ static decompress *try_compressed (char **filename)
 bool zsoelim_open_file (const char *filename, gl_list_t manpathlist,
 			const char *parent_path)
 {
-	decompress *decomp;
+	decompress *decomp = NULL;
 
 	if (parent_path)
 		debug ("opening %s (parent path: %s)\n",
