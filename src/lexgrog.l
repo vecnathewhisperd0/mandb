@@ -322,7 +322,7 @@ es_name		N[Oo][Mm][Bb][Rr][Ee]
 fa_name		نام
 fi_name		N[Ii][Mm][Ii]
 fr_name		N[Oo][Mm]
-hu_name		N(É|é|E|e)[Vv]
+hu_name		N(É|é|\\\('[Ee]|E|e)[Vv]
 id_name		N[Aa][Mm][Aa]
  /* NOME also works for gl, pt */
 it_name		N[Oo][Mm][Ee]

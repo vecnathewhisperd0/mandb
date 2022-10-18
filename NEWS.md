@@ -14,6 +14,7 @@ Improvements:
 
  * Add section `3type` to the default section list just after `2`.  This is
    used by the Linux man-pages package.
+ * Recognize more Hungarian translations of the `NAME` section.
 
 man-db 2.11.0 (15 October 2022)
 ===============================
