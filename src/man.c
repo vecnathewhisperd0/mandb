@@ -2792,11 +2792,15 @@ static int compare_candidates (const struct candidate *left,
 			return 1;
 	}
 
-	/* Compare pure sections first, then ids, then extensions.
-	 * Rationale: whatis refs get the same section and extension as
-	 * their source, but may be supplanted by a real page with a
-	 * slightly different extension, possibly in another hierarchy (!);
-	 * see Debian bug #204249 for the gory details.
+	/* ULT_MAN comes first, etc.  Consider SO_MAN equivalent to ULT_MAN.
+	 * This has the effect of sorting mere whatis references below real
+	 * pages.
+	 */
+	cmp = compare_ids (lsource->id, rsource->id, true);
+	if (cmp)
+		return cmp;
+
+	/* Compare pure sections first, then extensions.
 	 *
 	 * Any extension spelt out in full in section_list effectively
 	 * becomes a pure section; this allows extensions to be selectively
@@ -2848,11 +2852,6 @@ static int compare_candidates (const struct candidate *left,
 		if (cmp)
 			return cmp;
 	}
-
-	/* ULT_MAN comes first, etc. Consider SO_MAN equivalent to ULT_MAN. */
-	cmp = compare_ids (lsource->id, rsource->id, true);
-	if (cmp)
-		return cmp;
 
 	/* The order in section_list has already been compared above. For
 	 * everything not mentioned explicitly there, we just compare

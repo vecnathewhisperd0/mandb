@@ -7,6 +7,8 @@ Fixes:
    prompts.  Note that this requires `less` >= 457 (released in 2012).
  * Silence error message when processing an empty manual page hierarchy with
    a nonexistent cache directory.
+ * `man(1)` now sorts whatis references below real pages, even if the whatis
+   references are from a section with higher priority.
 
 Improvements:
 
