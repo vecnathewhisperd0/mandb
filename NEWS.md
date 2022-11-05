@@ -3,8 +3,8 @@ man-db 2.11.1
 
 Fixes:
 
- * SECURITY: Escape `$` characters in page names when constructing `less`
-   prompts.  Note that this requires `less` >= 457 (released in 2012).
+ * SECURITY: Replace `$` characters in page names with `?` when constructing
+   `less` prompts.
  * Silence error message when processing an empty manual page hierarchy with
    a nonexistent cache directory.
  * `man(1)` now sorts whatis references below real pages, even if the whatis

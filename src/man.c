@@ -873,10 +873,20 @@ static const char *escape_less (const char *string)
 					 2 * strlen (string) + 1);
 
 	while (*string) {
-		if (strchr ("?:.%\\$", *string))
+		char c = *string++;
+
+		if (c == '$')
+			/* Dollar signs are difficult to handle properly, and
+			 * not really worth the trouble, so just replace them
+			 * with question marks.  See
+			 * https://bugs.debian.org/1021951.
+			 */
+			c = '?';
+
+		if (strchr ("?:.%\\", c))
 			*ptr++ = '\\';
 
-		*ptr++ = *string++;
+		*ptr++ = c;
 	}
 
 	*ptr = *string;
