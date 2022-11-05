@@ -29,6 +29,7 @@ DIST_SUBDIRS = \
 	id \
 	it \
 	ja \
+	ko \
 	nl \
 	pl \
 	pt \
