@@ -555,6 +555,7 @@ AC_CONFIG_FILES([Makefile
 	man/id/Makefile
 	man/it/Makefile
 	man/ja/Makefile
+	man/ko/Makefile
 	man/nl/Makefile
 	man/pl/Makefile
 	man/pt/Makefile

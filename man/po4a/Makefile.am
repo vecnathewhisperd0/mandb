@@ -26,6 +26,7 @@ POFILES = \
 	po/fr.po \
 	po/id.po \
 	po/ja.po \
+	po/ko.po \
 	po/nl.po \
 	po/pl.po \
 	po/pt.po \
