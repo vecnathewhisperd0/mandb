@@ -30,7 +30,6 @@
 
 #include "gl_array_list.h"
 #include "gl_xlist.h"
-#include "idpriv.h"
 #include "xalloc.h"
 #include "xvasprintf.h"
 
