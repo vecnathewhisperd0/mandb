@@ -1,6 +1,10 @@
 man-db 2.11.1
 =============
 
+Build:
+
+ * Transfer Git repository to https://gitlab.com/man-db/man-db.
+
 Fixes:
 
  * SECURITY: Replace `$` characters in page names with `?` when constructing

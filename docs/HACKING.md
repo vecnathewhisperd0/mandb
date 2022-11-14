@@ -130,8 +130,8 @@ Sending patches
 ---------------
 
 GitLab merge requests are preferred. Create an account on gitlab.com,
-[fork](https://gitlab.com/cjwatson/man-db/-/forks/new) the repository to
-your own account, push your branch, and create a merge request.
+[fork](https://gitlab.com/man-db/man-db/-/forks/new) the repository to your
+own account, push your branch, and create a merge request.
 
 If you can't or don't want to use GitLab merge requests, then you can fall
 back to sending patches in unified diff format (use `git diff`, or GNU diff
@@ -146,7 +146,7 @@ man-db is revision-controlled using [git](https://git-scm.com/). The archive
 may be fetched from here using `git clone`, and merge requests are accepted
 in the usual way:
 
-  https://gitlab.com/cjwatson/man-db
+  https://gitlab.com/man-db/man-db
 
 Generated files should be added to `.gitignore` and should not be committed
 to revision control.
@@ -160,8 +160,8 @@ Release process
 
 2. Pushing the tag should cause the GitLab CI machinery to upload a
    preliminary tarball for translators to the [package
-   registry](https://gitlab.com/cjwatson/man-db/-/packages). Send this to
-   the Translation Project robot, to provide context for `po/man-db.pot`.
+   registry](https://gitlab.com/man-db/man-db/-/packages). Send this to the
+   Translation Project robot, to provide context for `po/man-db.pot`.
 
 3. Wait a couple of weeks for a reasonable number of translation updates to
    arrive. During this time, test until your eyeballs fall out, but try to
@@ -173,9 +173,9 @@ Release process
 
 5. Pushing the tag should cause the GitLab CI machinery to upload the
    release tarball to the [package
-   registry](https://gitlab.com/cjwatson/man-db/-/packages). GPG-sign that
+   registry](https://gitlab.com/man-db/man-db/-/packages). GPG-sign that
    tarball, and upload the tarball and its signature to Savannah so that the
    URLs in the newly-created [GitLab release
-   notes](https://gitlab.com/cjwatson/man-db/-/releases) are valid.
+   notes](https://gitlab.com/man-db/man-db/-/releases) are valid.
 
 6. Announce to wherever seems appropriate.
