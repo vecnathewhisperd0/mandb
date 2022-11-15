@@ -1,6 +1,7 @@
 # The man-db manual pager suite
 
   https://gitlab.com/man-db/man-db
+
   https://man-db.gitlab.io/man-db/
 
 Please read the man-db manual, included in the manual subdirectory of this
