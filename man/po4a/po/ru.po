@@ -4,12 +4,12 @@
 # This file is distributed under the same license as the man-db package.
 #
 # Yuri Kozlov <yuray@komyakino.ru>, 2008, 2009, 2010, 2011, 2012.
-# Yuri Kozlov <yuray@komyakino.ru>, 2008, 2013, 2014, 2018, 2019.
+# Yuri Kozlov <yuray@komyakino.ru>, 2008, 2013, 2014, 2018, 2019, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.9.0-pre1\n"
+"Project-Id-Version: man-db-manpages 2.11.0-pre1\n"
 "POT-Creation-Date: 2022-10-02 18:03+0100\n"
-"PO-Revision-Date: 2019-10-04 19:39+0300\n"
+"PO-Revision-Date: 2022-11-26 07:11+0300\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@d07.ru>\n"
 "Language: ru\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -241,11 +241,6 @@ msgstr "B<-m> I<система>\\|[\\|,.\\|.\\|.\\|]\\|, B<--systems=>I<сист
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:126
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual page "
-#| "descriptions, they can be searched using this option.  To search NewOS's "
-#| "manual page descriptions, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual page "
 "descriptions, they can be searched using this option.  To search NewOS's "
@@ -433,6 +428,8 @@ msgid ""
 "See the B<SEARCH PATH> section of B<manpath>(5)  for the default behaviour "
 "and details of how this environment variable is handled."
 msgstr ""
+"О том, как используется эта переменная окружения и поведение по умолчанию, "
+"смотрите раздел B<ПУТЬ ПОИСКА> в B<manpath>(5)."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:229 ../../man/man1/whatis.man1:233
@@ -939,16 +936,13 @@ msgstr "Игры"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:117
-#, fuzzy, no-wrap
-#| msgid ""
-#| "Miscellaneous (including macro packages and conventions),\n"
-#| "e.g.\\& B<man>(7), B<groff>(7)"
+#, no-wrap
 msgid ""
 "Miscellaneous (including macro packages and conventions),\n"
 "e.g.\\& B<man>(7), B<groff>(7), B<man-pages>(7)"
 msgstr ""
 "Разное (включает пакеты макросов и соглашения),\n"
-"например\\& B<man>(7), B<groff>(7)"
+"например\\& B<man>(7), B<groff>(7), B<man-pages>(7)"
 
 #. type: tbl table
 #: ../../man/man1/man.man1:120
@@ -1651,11 +1645,6 @@ msgstr "Поиск справочных страниц"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:571
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual pages, they "
-#| "can be accessed using this option.  To search for a manual page from "
-#| "NewOS's manual page collection, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual pages, they can "
 "be accessed using this option.  To search for a manual page from NewOS's "
@@ -2461,6 +2450,12 @@ msgid ""
 "unrelated to the content of the page being displayed, you can set "
 "$B<MAN_DISABLE_SECCOMP> to any non-empty value to disable the sandbox."
 msgstr ""
+"В Linux, B<%man%>, обычно, ограничивает подпроцессы, работающие с "
+"ненадёжными данными, с помощью изолированной среды B<seccomp>(2). Это "
+"позволяет безопасно запускать сложный код разбора произвольных справочных "
+"страниц. Если это приводит к ошибке по причине не связанной с содержимым "
+"отображаемой справочной страницы, то изолированную среду можно отключить, "
+"указав непустое значение в переменной $B<MAN_DISABLE_SECCOMP>."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1248
@@ -2469,6 +2464,9 @@ msgid ""
 "B<%man%> will print debugging messages to standard error describing each "
 "subprocess it runs."
 msgstr ""
+"Если переменная окружения $B<PIPELINE_DEBUG> равна «1», то B<%man%> выведет "
+"отладочные сообщения в стандартный поток ошибок из каждого запускаемого "
+"подпроцесса."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1260
@@ -2782,11 +2780,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/manpath.man1:63
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual hierarchies, "
-#| "this option can be used to include them in the output of B<%manpath%>.  "
-#| "To include NewOS's manual page hierarchies use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual hierarchies, "
 "this option can be used to include them in the output of B<%manpath%>.  To "
@@ -2816,6 +2809,8 @@ msgid ""
 "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
 "determining it on the fly."
 msgstr ""
+"Если задана переменная $B<MANPATH>, то B<%manpath%> выведет её значение, а "
+"не будет определять её в процессе работы."
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:15
@@ -2912,11 +2907,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:131
-#, fuzzy
-#| msgid ""
-#| "If this system has access to other operating system's manual page names, "
-#| "they can be accessed using this option.  To search NewOS's manual page "
-#| "names, use the option B<-m> B<NewOS>."
 msgid ""
 "If this system has access to other operating systems' manual page names, "
 "they can be accessed using this option.  To search NewOS's manual page "
@@ -3037,7 +3027,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:26
 #, no-wrap
 msgid "SEARCH PATH"
-msgstr ""
+msgstr "ПУТЬ ПОИСКА"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:35
@@ -3045,6 +3035,8 @@ msgid ""
 "By default, man-db examines the user's $B<PATH>.  For each I<path_element> "
 "found there, it adds I<manpath_element> to the search path."
 msgstr ""
+"ПО умолчанию, man-db проверяет $B<PATH> пользователя. Для каждого найденного "
+"там I<элемента_пути>, она добавляет I<элемент_manpath> в путь поиска."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:47
@@ -3054,6 +3046,10 @@ msgid ""
 "man>, I<path_element/../share/man>, and I<path_element/share/man> that exist "
 "as directories to the search path."
 msgstr ""
+"Если в файле настроек нет строки B<MANPATH_MAP> для данного "
+"I<элемента_пути>, то в путь поиска добавляются I<элемент_пути/../man>, "
+"I<элемент_пути/man>, I<элемент_пути/../share/man> и I<элемент_пути/share/"
+"man>, если они существуют в виде каталогов."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:51
@@ -3061,6 +3057,8 @@ msgid ""
 "It then adds any B<MANDATORY_MANPATH> entries from the configuration file to "
 "the search path."
 msgstr ""
+"После этого в путь поиска добавляются все элементы B<MANDATORY_MANPATH> из "
+"файла настроек."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:73
@@ -3077,6 +3075,17 @@ msgid ""
 "then the final search path will be I</usr/share/man/newOS:/usr/share/man:/"
 "usr/local/man/newOS:/usr/local/man>."
 msgstr ""
+"И, наконец, если указан параметр B<--systems> или задана переменная "
+"окружения $B<SYSTEM>, то они должны состоять из последовательности имён "
+"операционных систем, разделённых запятыми или двоеточиями. Их значения "
+"служат шаблонами, расширяющими путь поиска ещё больше, предоставляя доступ к "
+"справочным страницам других операционных систем: для каждого имени системы, "
+"man-db ищет подкаталог с таким именем в каждом элементе пути поиска, и если "
+"он существует, то добавляет его в окончательный путь поиска. Системное имя "
+"B<man> вставляется в обычный путь поиска без подкаталогов. Например. если "
+"имеется путь поиска I</usr/share/man:/usr/local/man>, и $B<SYSTEM> равна "
+"I<newOS:man>, то окончательный путь поиска будет I</usr/share/man/newOS:/usr/"
+"share/man:/usr/local/man/newOS:/usr/local/man>."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:83
@@ -3087,19 +3096,14 @@ msgid ""
 "names separated by colons.  It overrides the default search path described "
 "above."
 msgstr ""
+"Переменная окружения $B<MANPATH> заменяет в man-db пути поиска страниц по "
+"умолчанию. Большинству пользователей не требуется её задавать. Её синтаксис "
+"похож на переменную окружения $B<PATH>: значение состоит из "
+"последовательности имён каталогов, разделённых двоеточиями. Оно заменяет "
+"путь поиска по умолчанию, описанное выше."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:96
-#, fuzzy
-#| msgid ""
-#| "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
-#| "determining it on the fly.  If $B<MANPATH> is prefixed by a colon, then "
-#| "the value of the variable is appended to the list determined from the "
-#| "content of the configuration files.  If the colon comes at the end of the "
-#| "value in the variable, then the determined list is appended to the "
-#| "content of the variable.  If the value of the variable contains a double "
-#| "colon (B<::>), then the determined list is inserted in the middle of the "
-#| "value, between the two colons."
 msgid ""
 "If the value of $B<MANPATH> starts with a colon, then the default search "
 "path is added at its start.  If the value of $B<MANPATH> ends with a colon, "
@@ -3107,14 +3111,11 @@ msgid ""
 "$B<MANPATH> contains a double colon (B<::>), then the default search path is "
 "inserted in the middle of the value, between the two colons."
 msgstr ""
-"Если переменная окружения $B<MANPATH> установлена, то B<%manpath%> "
-"отображает её значение, а не определяет из файла настройки. Если $B<MANPATH> "
-"начинается с двоеточия, то значение переменной добавляется к списку, "
-"определённому по содержимому файлов настройки. Если двоеточие указано в "
-"конце значения этой переменной, то вычисленный список добавляется к "
-"содержимому переменной. Если значение переменной содержит два двоеточия "
-"подряд (B<::>), то вычисленный список вставляется в середину значения между "
-"этими двумя двоеточиями."
+"Если значение $B<MANPATH> начинается с двоеточия, то оно добавляется в конец "
+"пути поиска по умолчанию. Если значение $B<MANPATH> оканчивается двоеточием, "
+"то оно добавляется в начало пути поиска по умолчанию. Если значение "
+"$B<MANPATH> содержит два двоеточия подряд (B<::>), то путь поиска по "
+"умолчанию вставляется в середину значения между этими двоеточиями."
 
 #. type: SH
 #: ../../man/man5/manpath.man5:96
@@ -3363,12 +3364,6 @@ msgstr "B<CATWIDTH>I<\\ ширина>"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:235
-#, fuzzy
-#| msgid ""
-#| "If I<width> is non-zero, cat pages will always be formatted for a "
-#| "terminal of the given width, regardless of the width of the terminal "
-#| "actually being used.  This should generally be within the range set by "
-#| "B<MINCATWIDTH> and B<MAXCATWIDTH>."
 msgid ""
 "If I<width> is non-zero, cat pages will always be formatted for a terminal "
 "of the given width, regardless of the width of the terminal actually being "
@@ -3376,8 +3371,8 @@ msgid ""
 msgstr ""
 "Если значение I<ширина> не равно 0, то cat страницы будут всегда "
 "форматироваться для терминала данной ширины, независимо от ширины терминала, "
-"который используется на самом деле. Обычно, это значение находится в рамках "
-"между B<MINCATWIDTH> и B<MAXCATWIDTH>."
+"который используется на самом деле. Это значение заменяет B<MINCATWIDTH> и "
+"B<MAXCATWIDTH>."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:240
@@ -3861,15 +3856,12 @@ msgstr ""
 "Прежде в этой странице был раздел B<ЧТО АНАЛИЗИРУЕТСЯ>, но теперь он "
 "перенесён в B<lexgrog>(1)."
 
-#, no-wrap
 #~ msgid "Type"
 #~ msgstr "Тип"
 
-#, no-wrap
 #~ msgid "Binary tree"
 #~ msgstr "двоичное дерево"
 
-#, no-wrap
 #~ msgid "Hashed"
 #~ msgstr "Хэш"
 
