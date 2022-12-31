@@ -3182,12 +3182,15 @@ static int try_section (const char *path, const char *sec, const char *name,
 			return 1;
 
 		if (!troff && !want_encoding && !recode) {
-			gl_list_free (names);
+			if (names)
+				gl_list_free (names);
 			names = look_for_file (path, sec, name, true,
 					       lff_opts);
 			cat = 1;
 		}
 	}
+	if (!names)
+		return 0;
 
 	order_files (path, &names);
 
