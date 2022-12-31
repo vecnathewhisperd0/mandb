@@ -346,8 +346,7 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 
 	while (input_size || utf8left) {
 		int handle_iconv_errors = 0;
-		char *inptr = (char *) input, *utf8ptr = utf8;
-		char *outptr = output;
+		char *inptr = (char *) input, *utf8ptr = utf8, *outptr;
 		size_t inleft = input_size, outleft;
 		size_t n, n2 = -1;
 
@@ -387,10 +386,10 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 			 * anything to write out, we'll do it next time
 			 * round the loop.
 			 */
-			;
+			outptr = output;
 		else if (to_utf8) {
 			memcpy (output, utf8, utf8left);
-			outptr += utf8left;
+			outptr = output + utf8left;
 			outleft = utf8left;
 			utf8left = 0;
 		} else if (utf8left) {
