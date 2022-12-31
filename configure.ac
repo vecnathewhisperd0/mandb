@@ -196,6 +196,7 @@ else
 	AC_CHECK_PROGS([troff], [troff gtroff])
 	TROFF=troff
 fi
+AC_SUBST([troff_is_groff])
 AC_SUBST([TROFF])
 if test -n "$troff"
 then

@@ -263,11 +263,13 @@ static const char args_doc[] = N_("[SECTION] PAGE...");
 #  define ONLY_NROFF_WARNINGS OPTION_HIDDEN
 # endif
 
-# ifdef TROFF_IS_GROFF
-#  define ONLY_TROFF_IS_GROFF 0
-# else
-#  define ONLY_TROFF_IS_GROFF OPTION_HIDDEN
-# endif
+# ifdef HAS_TROFF
+#  ifdef TROFF_IS_GROFF
+#   define ONLY_TROFF_IS_GROFF 0
+#  else
+#   define ONLY_TROFF_IS_GROFF OPTION_HIDDEN
+#  endif
+# endif /* HAS_TROFF */
 
 /* Please keep these options in the same order as in parse_opt below. */
 static struct argp_option options[] = {
@@ -363,12 +365,14 @@ static struct argp_option options[] = {
 	{ 0 }
 };
 
+#ifdef TROFF_IS_GROFF
 static void init_html_pager (void)
 {
 	html_pager = getenv ("BROWSER");
 	if (!html_pager)
 		html_pager = PROG_BROWSER;
 }
+#endif /* TROFF_IS_GROFF */
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
@@ -1946,13 +1950,19 @@ static int format_display_and_save (decompress *d,
 }
 #endif /* MAN_CATS */
 
+#ifdef TROFF_IS_GROFF
+# define MAN_FILE_UNUSED
+#else /* !TROFF_IS_GROFF */
+# define MAN_FILE_UNUSED MAYBE_UNUSED
+#endif /* TROFF_IS_GROFF */
+
 /* Format a manual page with format_cmd and display it with disp_cmd.
  * Handle temporary file creation if necessary.
  * TODO: merge with format_display_and_save
  */
 static void format_display (decompress *d,
 			    pipeline *format_cmd, pipeline *disp_cmd,
-			    const char *man_file)
+			    const char *man_file MAN_FILE_UNUSED)
 {
 	pipeline *decomp = decompress_get_pipeline (d);
 	int format_status = 0, disp_status = 0;
