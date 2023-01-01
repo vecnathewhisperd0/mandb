@@ -629,7 +629,7 @@ static int mandb (struct dbpaths *dbpaths,
 	else
 		amount = update_db_wrapper (dbf, manpath, catpath);
 
-	if (check_for_strays && amount > 0)
+	if (check_for_strays && dbf->file)
 		strays += straycats (dbf, manpath);
 
 	MYDBM_FREE (dbf);

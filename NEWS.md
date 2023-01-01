@@ -7,6 +7,11 @@ Fixes:
  * Fix segfault in typical uses of `man` when `nroff` is not installed.
  * Fix crash in `mandb` when processing stray cats.
 
+Improvements:
+
+ * Check for stray cats even if no manual pages in a given manpath were
+   changed.
+
 man-db 2.11.1 (15 November 2022)
 ================================
 
