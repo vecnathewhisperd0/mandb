@@ -5,6 +5,7 @@ Fixes:
 
  * Fix compile and test failures when `troff` is not `groff`.
  * Fix segfault in typical uses of `man` when `nroff` is not installed.
+ * Fix crash in `mandb` when processing stray cats.
 
 man-db 2.11.1 (15 November 2022)
 ================================
