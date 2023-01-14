@@ -1,3 +1,10 @@
+man-db 2.11.3
+=============
+
+Improvements:
+
+ * Update system call lists in `seccomp` sandbox from `systemd`.
+
 man-db 2.11.2 (8 January 2023)
 ==============================
 

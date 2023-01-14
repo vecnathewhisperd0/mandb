@@ -279,18 +279,24 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	 * Since I currently know of no library with suitable syscall lists,
 	 * the syscall lists here are taken from
 	 * systemd:src/shared/seccomp-util.c, last updated from commit
-	 * bca5a0eaccc849a669b4279e4bfcc6507083a07b (2019-08-01).
+	 * fc2a0bc05e0429e468c7eaad52998292105fe7fb (2023-01-13).
 	 */
 
 	/* systemd: SystemCallFilter=@default */
+	SC_ALLOW ("arch_prctl");
+	SC_ALLOW ("brk");
+	SC_ALLOW ("cacheflush");
 	SC_ALLOW ("clock_getres");
+	SC_ALLOW ("clock_getres_time64");
 	SC_ALLOW ("clock_gettime");
 	SC_ALLOW ("clock_gettime64");
 	SC_ALLOW ("clock_nanosleep");
+	SC_ALLOW ("clock_nanosleep_time64");
 	SC_ALLOW ("execve");
 	SC_ALLOW ("exit");
 	SC_ALLOW ("exit_group");
 	SC_ALLOW ("futex");
+	SC_ALLOW ("futex_time64");
 	SC_ALLOW ("get_robust_list");
 	SC_ALLOW ("get_thread_area");
 	SC_ALLOW ("getegid");
@@ -305,6 +311,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("getpgrp");
 	SC_ALLOW ("getpid");
 	SC_ALLOW ("getppid");
+	SC_ALLOW ("getrandom");
 	SC_ALLOW ("getresgid");
 	SC_ALLOW ("getresgid32");
 	SC_ALLOW ("getresuid");
@@ -316,12 +323,18 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("getuid");
 	SC_ALLOW ("getuid32");
 	SC_ALLOW ("membarrier");
+	SC_ALLOW ("mmap");
+	SC_ALLOW ("mmap2");
+	SC_ALLOW ("mprotect");
+	SC_ALLOW ("munmap");
 	SC_ALLOW ("nanosleep");
 	SC_ALLOW ("pause");
 	SC_ALLOW ("prlimit64");
 	SC_ALLOW ("restart_syscall");
+	SC_ALLOW ("riscv_flush_icache");
 	SC_ALLOW ("rseq");
 	SC_ALLOW ("rt_sigreturn");
+	SC_ALLOW ("sched_getaffinity");
 	SC_ALLOW ("sched_yield");
 	SC_ALLOW ("set_robust_list");
 	SC_ALLOW ("set_thread_area");
@@ -334,6 +347,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	/* systemd: SystemCallFilter=@basic-io */
 	SC_ALLOW ("_llseek");
 	SC_ALLOW ("close");
+	SC_ALLOW ("close_range");
 	SC_ALLOW ("dup");
 	SC_ALLOW ("dup2");
 	SC_ALLOW ("dup3");
@@ -359,6 +373,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 				SCMP_A1 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 	}
 	SC_ALLOW ("faccessat");
+	SC_ALLOW ("faccessat2");
 	SC_ALLOW ("fallocate");
 	SC_ALLOW ("fchdir");
 	if (permissive) {
@@ -386,9 +401,6 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("lstat64");
 	SC_ALLOW_PERMISSIVE ("mkdir");
 	SC_ALLOW_PERMISSIVE ("mkdirat");
-	SC_ALLOW ("mmap");
-	SC_ALLOW ("mmap2");
-	SC_ALLOW ("munmap");
 	SC_ALLOW ("newfstatat");
 	SC_ALLOW ("oldfstat");
 	SC_ALLOW ("oldlstat");
@@ -441,6 +453,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW_PERMISSIVE ("unlinkat");
 	SC_ALLOW_PERMISSIVE ("utime");
 	SC_ALLOW_PERMISSIVE ("utimensat");
+	SC_ALLOW_PERMISSIVE ("utimensat_time64");
 	SC_ALLOW_PERMISSIVE ("utimes");
 
 	/* systemd: SystemCallFilter=@io-event */
@@ -450,13 +463,16 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("epoll_ctl");
 	SC_ALLOW ("epoll_ctl_old");
 	SC_ALLOW ("epoll_pwait");
+	SC_ALLOW ("epoll_pwait2");
 	SC_ALLOW ("epoll_wait");
 	SC_ALLOW ("epoll_wait_old");
 	SC_ALLOW ("eventfd");
 	SC_ALLOW ("eventfd2");
 	SC_ALLOW ("poll");
 	SC_ALLOW ("ppoll");
+	SC_ALLOW ("ppoll_time64");
 	SC_ALLOW ("pselect6");
+	SC_ALLOW ("pselect6_time64");
 	SC_ALLOW ("select");
 
 	/* systemd: SystemCallFilter=@ipc (subset) */
@@ -464,12 +480,14 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("pipe2");
 
 	/* systemd: SystemCallFilter=@process (subset) */
-	SC_ALLOW ("arch_prctl");
 	SC_ALLOW ("capget");
 	SC_ALLOW ("clone");
+	SC_ALLOW ("clone3");
 	SC_ALLOW ("execveat");
 	SC_ALLOW ("fork");
 	SC_ALLOW ("getrusage");
+	SC_ALLOW ("pidfd_open");
+	SC_ALLOW ("pidfd_send_signal");
 	SC_ALLOW ("prctl");
 	SC_ALLOW ("vfork");
 	SC_ALLOW ("wait4");
@@ -482,6 +500,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("rt_sigprocmask");
 	SC_ALLOW ("rt_sigsuspend");
 	SC_ALLOW ("rt_sigtimedwait");
+	SC_ALLOW ("rt_sigtimedwait_time64");
 	SC_ALLOW ("sigaction");
 	SC_ALLOW ("sigaltstack");
 	SC_ALLOW ("signal");
@@ -497,13 +516,12 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("msync");
 	SC_ALLOW ("sync");
 	SC_ALLOW ("sync_file_range");
+	SC_ALLOW ("sync_file_range2");
 	SC_ALLOW ("syncfs");
 
 	/* systemd: SystemCallFilter=@system-service (subset) */
-	SC_ALLOW ("brk");
 	SC_ALLOW ("fadvise64");
 	SC_ALLOW ("fadvise64_64");
-	SC_ALLOW ("getrandom");
 	if (permissive)
 		SC_ALLOW ("ioctl");
 	else {
@@ -511,16 +529,13 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 		SC_ALLOW_ARG_1 ("ioctl", SCMP_A1 (SCMP_CMP_EQ, TIOCGWINSZ));
 	}
 	SC_ALLOW ("madvise");
-	SC_ALLOW ("mprotect");
 	SC_ALLOW ("mremap");
-	SC_ALLOW ("sched_getaffinity");
 	SC_ALLOW ("sysinfo");
 	SC_ALLOW ("uname");
 
 	/* Extra syscalls not in any of systemd's sets. */
 	SC_ALLOW ("arm_fadvise64_64");
 	SC_ALLOW ("arm_sync_file_range");
-	SC_ALLOW ("sync_file_range2");
 
 	/* Allow killing processes and threads.  This is unfortunate but
 	 * unavoidable: groff uses kill to explicitly pass on SIGPIPE to its
