@@ -191,7 +191,7 @@ static char *test_for_include (const char *buffer)
 		buffer += 3;
 
 		/* strip out any whitespace between the command and
-		   it's argumant */
+		   its argument */
 		while (CTYPE (isspace, *buffer))
 			buffer++;
 

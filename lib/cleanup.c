@@ -25,7 +25,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include <stdio.h>		/* SunOS's loosing assert.h needs it */
+#include <stdio.h>		/* SunOS's losing assert.h needs it */
 #include <assert.h>
 #include <signal.h>
 #include <unistd.h>

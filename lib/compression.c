@@ -54,7 +54,7 @@
 /* available) or compress. This is not the place to define _the_ cat page   */
 /* decompressor - see ./manconfig.h for that.                               */
 /*                                                                          */
-/* To add a decompressor all you need to know is its name (preferrably its  */
+/* To add a decompressor all you need to know is its name (preferably its   */
 /* location), and the unique extension that it gives to files compressed    */
 /* with it. Here is an example. You have a compressor named foobar and      */
 /* compressed files have an extension of .fb . It is located in /usr/bin    */

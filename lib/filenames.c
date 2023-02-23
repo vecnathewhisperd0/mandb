@@ -96,7 +96,7 @@ struct mandata *filename_info (const char *file, bool warn_if_bogus)
 
 	/* Bogus files either have (i) no period, ie no extension, (ii)
 	   a compression extension, but no sectional extension, (iii)
-	   a missmatch between the section they are under and the
+	   a mismatch between the section they are under and the
 	   sectional part of their extension. */
 
 	comp = comp_info (basename, true);
