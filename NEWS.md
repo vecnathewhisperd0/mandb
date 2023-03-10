@@ -5,6 +5,8 @@ Improvements:
 
  * Update system call lists in `seccomp` sandbox from `systemd`.
  * Upgrade to Gnulib `stable-202301`.
+ * Work around the Firebuild accelerator in `seccomp` sandbox: if this is in
+   use then we need to allow some socket-related system calls.
 
 man-db 2.11.2 (8 January 2023)
 ==============================

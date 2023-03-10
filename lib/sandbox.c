@@ -560,10 +560,14 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	 * don't want to allow these syscalls in general, but if such a
 	 * thing is in use we probably have no choice.
 	 *
+	 * Firebuild is a build accelerator that connects to its supervisor
+	 * using a Unix-domain socket.
+	 *
 	 * snoopy is an execve monitoring tool that may log messages to
 	 * /dev/log.
 	 */
 	if (search_ld_preload ("libesets_pac.so") ||
+	    search_ld_preload ("libfirebuild.so") ||
 	    search_ld_preload ("libscep_pac.so") ||
 	    search_ld_preload ("libsnoopy.so")) {
 		SC_ALLOW ("connect");
