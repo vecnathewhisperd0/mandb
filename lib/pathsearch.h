@@ -30,6 +30,12 @@
  */
 bool pathsearch_executable (const char *name);
 
+/* Return true if NAME is found as an executable regular file on the $PATH,
+ * otherwise false. If found and OUT is not NULL, set OUT to the path found.
+ * The caller must free *OUT when done with it.
+ */
+bool pathsearch_executable_get (const char *name, char **out);
+
 /* Return true if DIR matches an entry on the $PATH, otherwise false. */
 bool directory_on_path (const char *dir);
 

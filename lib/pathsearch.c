@@ -46,7 +46,7 @@
 #include "fatal.h"
 #include "pathsearch.h"
 
-static bool pathsearch (const char *name, const mode_t bits)
+static bool pathsearch (const char *name, const mode_t bits, char **out)
 {
 	char *cwd = NULL;
 	char *path = getenv ("PATH");
@@ -63,8 +63,11 @@ static bool pathsearch (const char *name, const mode_t bits)
 		/* Qualified name; look directly. */
 		if (stat (name, &st) == -1)
 			return false;
-		if (S_ISREG (st.st_mode) && (st.st_mode & bits))
+		if (S_ISREG (st.st_mode) && (st.st_mode & bits)) {
+			if (out)
+				*out = xstrdup (name);
 			return true;
+		}
 		return false;
 	}
 
@@ -91,12 +94,16 @@ static bool pathsearch (const char *name, const mode_t bits)
 			continue;
 		}
 
-		free (filename);
-
 		if (S_ISREG (st.st_mode) && (st.st_mode & bits)) {
 			ret = true;
+			if (out)
+				*out = filename;
+			else
+				free (filename);
 			break;
 		}
+
+		free (filename);
 	}
 
 	free (path);
@@ -106,7 +113,12 @@ static bool pathsearch (const char *name, const mode_t bits)
 
 bool pathsearch_executable (const char *name)
 {
-	return pathsearch (name, 0111);
+	return pathsearch (name, 0111, NULL);
+}
+
+bool pathsearch_executable_get (const char *name, char **out)
+{
+	return pathsearch (name, 0111, out);
 }
 
 bool directory_on_path (const char *dir)
