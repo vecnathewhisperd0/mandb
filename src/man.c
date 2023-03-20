@@ -54,6 +54,7 @@
 #include <ctype.h>
 #include <signal.h>
 #include <time.h>
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -164,6 +165,7 @@ struct candidate {
 
 #define CANDIDATE_FILESYSTEM 0
 #define CANDIDATE_DATABASE   1
+#define CANDIDATE_PROGRAM    2
 
 static void gripe_system (pipeline *p, int status)
 {
@@ -1449,6 +1451,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
 		   output device */
+		assert (file);
 		cmd = pipecmd_new_args (fmt_prog, file, pp_string, (void *) 0);
 		if (roff_device)
 			pipecmd_arg (cmd, roff_device);
@@ -2214,7 +2217,8 @@ static int do_prompt (const char *name)
  * and display it.  if man_file is NULL cat_file is a stray cat.  If
  * !save_cat or cat_file is NULL we must not save the formatted cat.
  * If man_file is "" this is a special case -- we expect the man page
- * on standard input.
+ * on standard input. If both man_file and cat_file are NULL, dir is
+ * the path to a program to execute with --_man.
  */
 static int display (const char *dir, const char *man_file,
 		    const char *cat_file, const char *title,
@@ -2223,18 +2227,26 @@ static int display (const char *dir, const char *man_file,
 	int found;
 	static int prompt;
 	int prefixes = 0;
+	const char *program_path = NULL;
 	pipeline *format_cmd;	/* command to format man_file to stdout */
 	char *formatted_encoding = NULL;
 	bool display_to_stdout;
 	decompress *decomp = NULL;
 	int decomp_errno = 0;
 
+	if (!man_file && !cat_file) {
+		program_path = dir;
+		dir = NULL;
+	}
+
 	/* define format_cmd */
-	if (man_file) {
+	if (man_file || program_path) {
 		pipecmd *seq = pipecmd_new_sequence ("decompressor",
 						     (void *) 0);
 
-		if (*man_file)
+		if (program_path)
+			decomp = decompress_open ("/dev/null", 0);
+		else if (man_file && *man_file)
 			decomp = decompress_open (man_file, 0);
 		else
 			decomp = decompress_fdopen (dup (STDIN_FILENO));
@@ -2259,7 +2271,7 @@ static int display (const char *dir, const char *man_file,
 		/* This only works with preconv, since the per-locale macros
 		 * may change the assumed input encoding.
 		 */
-		if (!recode && *man_file && get_groff_preconv ()) {
+		if (!recode && man_file && *man_file && get_groff_preconv ()) {
 			char *page_lang = lang_dir (man_file);
 
 			if (page_lang && *page_lang &&
@@ -2283,7 +2295,16 @@ static int display (const char *dir, const char *man_file,
 		}
 #endif /* TROFF_IS_GROFF */
 
-		if (prefixes) {
+		/* Insert the program into the pipeline after any prefixes.
+		 * Don't count it as a prefix, as get_preprocessors shouldn't
+		 * skip it. */
+		if (program_path) {
+			pipecmd *cmd = pipecmd_new_args (
+				program_path, "--_man", NULL);
+			pipecmd_sequence_command (seq, cmd);
+		}
+
+		if (prefixes || program_path) {
 			pipeline *decomp_p = decompress_get_pipeline (decomp);
 
 			assert (pipeline_get_ncommands (decomp_p) <= 1);
@@ -2340,13 +2361,13 @@ static int display (const char *dir, const char *man_file,
 		/* If we're reading stdin via '-l -', man_file is "". See
 		 * below.
 		 */
-		assert (man_file);
+		assert (man_file || (program_path && decomp));
 		if (!decomp) {
 			assert (!format_cmd); /* no need to free it */
 			error (0, decomp_errno, _("can't open %s"), man_file);
 			return 0;
 		}
-		if (*man_file == '\0')
+		if (program_path || *man_file == '\0')
 			found = 1;
 		else
 			found = CAN_ACCESS (man_file, R_OK);
@@ -2396,7 +2417,10 @@ static int display (const char *dir, const char *man_file,
 		    || no_justification)
 			save_cat = false;
 
-		if (!man_file) {
+		if (program_path) {
+			save_cat = false;
+			format = true;
+		} else if (!man_file) {
 			/* Stray cat. */
 			assert (cat_file);
 			format = false;
@@ -2439,7 +2463,7 @@ static int display (const char *dir, const char *man_file,
 		 * expect input via stdin. So we special-case this to avoid
 		 * the bogus access() check.
 		*/
-		if (format && *man_file == '\0')
+		if (format && (program_path || *man_file == '\0'))
 			found = 1;
 		else
 			found = CAN_ACCESS
@@ -2470,7 +2494,12 @@ static int display (const char *dir, const char *man_file,
 				putchar ('\n');
 		} else if (catman) {
 			if (format) {
-				if (!save_cat)
+				if (program_path)
+					error (0, 0,
+					       _("\ncannot run program "
+						 "%s in catman mode"),
+					       program_path);
+				else if (!save_cat)
 					error (0, 0,
 					       _("\ncannot write to "
 						 "%s in catman mode"),
@@ -2509,8 +2538,11 @@ static int display (const char *dir, const char *man_file,
 			} else
 #endif /* MAN_CATS */
 				/* don't save cat */
+				/* format_display only uses man_file to get a
+				 * basename for HTML, so pass it the program
+				 * path. */
 				format_display (decomp, format_cmd, disp_cmd,
-						man_file);
+						program_path ? program_path : man_file);
 
 			pipeline_free (disp_cmd);
 
@@ -2811,6 +2843,11 @@ static int compare_candidates (const struct candidate *left,
 		if (STREQ (rsource->name, right->req_name))
 			return 1;
 	}
+
+	/* Prefer non-program sources to programs. */
+	cmp = (right->from_db == CANDIDATE_PROGRAM) - (left->from_db == CANDIDATE_PROGRAM);
+	if (cmp)
+		return cmp;
 
 	/* ULT_MAN comes first, etc.  Consider SO_MAN equivalent to ULT_MAN.
 	 * This has the effect of sorting mere whatis references below real
@@ -3273,6 +3310,11 @@ out:
 	return found;
 }
 
+static int display_program (struct candidate *candp)
+{
+	return display (candp->path, NULL, NULL, candp->path, NULL);
+}
+
 #ifdef MAN_DB_UPDATES
 /* wrapper to dbdelete which deals with opening/closing the db */
 static void dbdelete_wrapper (const char *page, struct mandata *info,
@@ -3658,6 +3700,9 @@ static int display_pages (struct candidate *candidates)
 			case CANDIDATE_DATABASE:
 				found += display_database_check (candp);
 				break;
+			case CANDIDATE_PROGRAM:
+				found += display_program (candp);
+				break;
 			default:
 				error (0, 0,
 				       _("internal error: candidate type %d "
@@ -3972,6 +4017,63 @@ static void locate_page_in_manpath (const char *page_section,
 				       candidates);
 }
 
+/* Make sure this doesn't mark man itself. */
+#define MAGIC1 "--_manSupported"
+#define MAGIC2 "fe60a6ff532d8142616103943a005b4d4c125156e833d46fc875a0b854c32faf"
+const size_t MAGIC_LEN = sizeof (MAGIC1) + sizeof (MAGIC2) - 2 + 1;
+
+static void locate_page_in_program (const char *name,
+				    struct candidate **candidates,
+				    int *found)
+{
+	char *program_path;
+	char *magic_str;
+	int fd;
+	struct stat st;
+	void *mmap_addr;
+
+	if (!pathsearch_executable_get (name, &program_path))
+		return;
+
+	fd = open (program_path, O_RDONLY);
+	if (fd < 0)
+		goto err_free_program_path;
+	if (fstat (fd, &st) < 0 || st.st_size == 0)
+		goto err_close;
+	mmap_addr = mmap (NULL, st.st_size, PROT_READ,
+			  MAP_PRIVATE | MAP_FILE, fd, 0);
+	if (!mmap_addr)
+		goto err_close;
+
+	magic_str = xasprintf ("%s-%s", MAGIC1, MAGIC2);
+
+	if (memmem (mmap_addr, st.st_size, magic_str, MAGIC_LEN)) {
+		int f;
+		struct mandata *info = XZALLOC (struct mandata);
+
+		info->name = xstrdup (name);
+		info->ext = xstrdup ("");
+		info->sec = xstrdup ("");
+		info->id = ULT_MAN;
+		f = add_candidate (candidates, CANDIDATE_PROGRAM, 0,
+				   name, program_path, program_path, info);
+		*found += f;
+		/* Free info if it wasn't added to the candidates. */
+		if (f == 0) {
+			free_mandata_struct (info);
+			free (program_path);
+		} else
+			program_path = NULL;
+	}
+
+	free (magic_str);
+	munmap (mmap_addr, st.st_size);
+err_close:
+	close (fd);
+err_free_program_path:
+	free (program_path);
+}
+
 /*
  * Search for manual pages.
  *
@@ -4011,6 +4113,9 @@ static int man (const char *name, int *found)
 
 	free (page_name);
 	free (page_section);
+
+	if (!*found)
+		locate_page_in_program (name, &candidates, found);
 
 	sort_candidates (&candidates);
 
