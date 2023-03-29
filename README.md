@@ -9,7 +9,8 @@ distribution.  It contains configuration details and other aspects of this
 manual pager suite that are not duplicated or relevant in this README.
 Check manual/README for details of the formatters required.
 
- * Read docs/INSTALL.autoconf for generic options to configure.
+ * Read docs/INSTALL.autoconf for generic options to configure.  (If you
+   cloned man-db from git, then run `./bootstrap` to create this file.)
  * Read docs/INSTALL.quick if you know all about man-db.
  * Read NEWS.md for visible changes since the last public release.
  * Read ChangeLog for details of recent source code changes.
