@@ -63,9 +63,11 @@
 #include "error.h"
 #include "gl_array_list.h"
 #include "gl_hash_map.h"
+#include "gl_hash_set.h"
 #include "gl_list.h"
 #include "gl_xlist.h"
 #include "gl_xmap.h"
+#include "gl_xset.h"
 #include "minmax.h"
 #include "progname.h"
 #include "regex.h"
@@ -3727,7 +3729,7 @@ static int grep (const char *file, const char *string, const regex_t *search)
 }
 
 static int do_global_apropos_section (const char *path, const char *sec,
-				      const char *name)
+				      const char *name, gl_set_t seen)
 {
 	int found = 0;
 	gl_list_t names;
@@ -3768,6 +3770,9 @@ static int do_global_apropos_section (const char *path, const char *sec,
 		man_ult = ult_src (found_name, path, NULL, ult_flags);
 		if (!man_ult)
 			goto next;
+		if (gl_set_search (seen, man_ult->path))
+			goto next;
+		gl_set_add (seen, xstrdup (man_ult->path));
 		lang = lang_dir (man_ult->path);
 		cat_file = find_cat_file (path, found_name, man_ult->path);
 		if (display (path, man_ult->path, cat_file, title, NULL))
@@ -3796,6 +3801,7 @@ static int do_global_apropos (const char *name, int *found)
 {
 	gl_list_t my_section_list;
 	const char *sec;
+	gl_set_t seen;
 
 	if (section) {
 		my_section_list = gl_list_create_empty (GL_ARRAY_LIST, NULL,
@@ -3803,14 +3809,17 @@ static int do_global_apropos (const char *name, int *found)
 		gl_list_add_last (my_section_list, section);
 	} else
 		my_section_list = section_list;
+	seen = new_string_set (GL_HASH_SET);
 
 	GL_LIST_FOREACH (my_section_list, sec) {
 		char *mp;
 
 		GL_LIST_FOREACH (manpathlist, mp)
-			*found += do_global_apropos_section (mp, sec, name);
+			*found += do_global_apropos_section (mp, sec, name,
+							     seen);
 	}
 
+	gl_set_free (seen);
 	if (section)
 		gl_list_free (my_section_list);
 
