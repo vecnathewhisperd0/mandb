@@ -8,6 +8,8 @@ Improvements:
  * Work around the Firebuild accelerator in `seccomp` sandbox: if this is in
    use then we need to allow some socket-related system calls.
  * `man -K` now deduplicates search results that point to the same page.
+ * Warn if `mandb` drops to `--user-db` mode due to running as the wrong
+   user.
 
 man-db 2.11.2 (8 January 2023)
 ==============================

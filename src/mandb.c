@@ -896,8 +896,15 @@ int main (int argc, char *argv[])
 
 #ifdef MAN_OWNER
 	man_owner = get_man_owner ();
-	if (!user && euid != 0 && euid != man_owner->pw_uid)
+	if (!user && euid != 0 && euid != man_owner->pw_uid) {
 		user = true;
+		if (!quiet)
+			fprintf (stderr,
+				 _("Only the '%s' user can create or update "
+				   "system-wide databases; acting as if the "
+				   "--user-db option was used.\n"),
+				 man_owner->pw_name);
+	}
 #endif /* MAN_OWNER */
 
 	read_config_file (user);
