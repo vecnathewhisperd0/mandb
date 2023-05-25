@@ -286,6 +286,7 @@ void test_manfile (MYDBM_FILE dbf, const char *file, const char *path)
 		if (!opt_test)
 			store_descriptions (dbf, descs, info, path,
 					    manpage_base, ult->trace);
+		gl_list_free (ult->trace);
 		gl_list_free (descs);
 	} else if (quiet < 2) {
 		(void) stat (ult->path, &buf);
