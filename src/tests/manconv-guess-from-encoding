@@ -11,6 +11,10 @@
 
 init
 
+if [ "$HAVE_ICONV" != yes ]; then
+	skip 'encoding conversion requires a working iconv'
+fi
+
 write_page coding-tag 7 \
 	"$tmpdir/usr/share/man/man7/coding-tag.7" \
 	ISO-8859-1 '' '' 'coding-tag \- é'

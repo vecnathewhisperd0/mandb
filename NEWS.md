@@ -4,6 +4,7 @@ man-db 2.11.3
 Fixes:
 
  * Fix some manual page portability issues with groff 1.23.0.
+ * Fix test failures when a working `iconv` is not available.
 
 Improvements:
 

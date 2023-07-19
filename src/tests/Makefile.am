@@ -23,7 +23,8 @@ TESTS_ENVIRONMENT = PATH=$(abs_builddir)/..:$$PATH; export PATH; \
 		    MANDIR_LAYOUT=$(MANDIR_LAYOUT); export MANDIR_LAYOUT; \
 		    abs_top_builddir=$(abs_top_builddir); export abs_top_builddir; \
 		    OVERRIDE_DIR="$(override_dir)"; export OVERRIDE_DIR; \
-		    troff_is_groff=$(troff_is_groff); export troff_is_groff;
+		    troff_is_groff=$(troff_is_groff); export troff_is_groff; \
+		    HAVE_ICONV=$(HAVE_ICONV); export HAVE_ICONV;
 # Each test must use the configure-detected shell, not necessarily /bin/sh.
 AM_LOG_FLAGS = $(SHELL)
 ALL_TESTS = \

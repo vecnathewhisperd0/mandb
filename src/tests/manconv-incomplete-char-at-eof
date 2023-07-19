@@ -10,6 +10,10 @@
 
 init
 
+if [ "$HAVE_ICONV" != yes ]; then
+	skip 'encoding conversion requires a working iconv'
+fi
+
 printf '\314' >"$tmpdir/1.inp"  # 0xCC
 ! run $MANCONV -f EUC-JP -t UTF-8//IGNORE <"$tmpdir/1.inp" >/dev/null
 report 'incomplete character at EOF' "$?"

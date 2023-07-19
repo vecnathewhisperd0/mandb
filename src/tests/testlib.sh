@@ -93,8 +93,12 @@ expect_files_equal () {
 	report "$1" "$ret"
 }
 
-skip () {
+report_skip () {
 	echo "  SKIP: $1"
+}
+
+skip () {
+	report_skip "$1"
 	rm -rf "$abstmpdir"
 	exit 77
 }

@@ -39,8 +39,12 @@ expect_files_equal '--suffix with no coding tag' \
 expect_files_equal \
 	'--suffix with gzip and coding tag matching target encoding' \
 	"$tmpdir/b.1.exp" "$tmpdir/b.1.out"
-expect_files_equal \
-	'--suffix with gzip and coding tag not matching target encoding' \
-	"$tmpdir/c.1.exp" "$tmpdir/c.1.out"
+if [ "$HAVE_ICONV" = yes ]; then
+	expect_files_equal \
+		'--suffix with gzip and coding tag not matching target encoding' \
+		"$tmpdir/c.1.exp" "$tmpdir/c.1.out"
+else
+	report_skip '--suffix with gzip and coding tag not matching target encoding'
+fi
 
 finish
