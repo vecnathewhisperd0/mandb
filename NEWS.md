@@ -1,6 +1,10 @@
 man-db 2.11.3
 =============
 
+Fixes:
+
+ * Fix some manual page portability issues with groff 1.23.0.
+
 Improvements:
 
  * Update system call lists in `seccomp` sandbox from `systemd`.
