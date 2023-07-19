@@ -15,6 +15,8 @@ Improvements:
  * `man -K` now deduplicates search results that point to the same page.
  * Warn if `mandb` drops to `--user-db` mode due to running as the wrong
    user.
+ * Change section title recommendations in `man(1)` to mention `STANDARDS`
+   rather than `CONFORMING TO`, in line with `man-pages(7)`.
 
 man-db 2.11.2 (8 January 2023)
 ==============================
