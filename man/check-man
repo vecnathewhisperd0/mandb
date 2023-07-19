@@ -31,7 +31,7 @@ errors="$(LC_ALL=C MANWIDTH=80 MAN_KEEP_FORMATTING=1 "$top_builddir/libtool" \
 # Indeed, even for other languages we're going to get "cannot adjust line"
 # if %manpath_config_file% expands to something long. Hmm. We'll just ignore
 # this across the board for now.
-errors="$(echo "$errors" | $EGREP -v "(cannot adjust line|can't break line)")" || true
+errors="$(echo "$errors" | $EGREP -v "(cannot adjust line|(can't|cannot) break line)")" || true
 
 if [ "$code" != 0 ]; then
 	echo "man -E UTF-8 -l $1 failed with exit status $code and error output:"
