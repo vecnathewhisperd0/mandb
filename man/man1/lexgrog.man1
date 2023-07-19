@@ -5,6 +5,41 @@
 .\" You may distribute under the terms of the GNU General Public
 .\" License as specified in the file docs/COPYING.GPLv2 that comes with the
 .\" man-db distribution.
+.\"
+.ds mC CW
+.if t .if \n(.g .ds mC CR
+.if n .ds mC R
+.
+.nr mE 0 \" in an example (EX/EE)?
+.
+.if \n(.g \{\
+.de EX
+.  br
+.  if !\\n(mE \{\
+.    nr mF \\n(.f
+.    nr mP \\n(PD
+.    nr PD 1v
+.    nf
+.    ft \\*(mC
+.    nr mE 1
+.  \}
+..
+.\}
+.
+.
+.\" End example.
+.if \n(.g \{\
+.de EE
+.  br
+.  if \\n(mE \{\
+.    ft \\n(mF
+.    nr PD \\n(mP
+.    fi
+.    nr mE 0
+.  \}
+..
+.\}
+.
 .pc
 .TH LEXGROG 1 "%date%" "%version%" "Manual pager utils"
 .SH NAME
@@ -133,12 +168,10 @@ macro set, a correct
 section looks something like this:
 .PP
 .RS
-.ft CW
-.nf
+.EX
 \&.SH NAME
 foo \e\- program to do something
-.fi
-.ft P
+.EE
 .RE
 .PP
 Some manual pagers require the \(oq\e\-\(cq to be exactly as shown;
@@ -157,18 +190,16 @@ If several features with different descriptions are being documented in the
 same manual page, the following form is therefore used:
 .PP
 .RS
-.ft CW
-.nf
+.EX
 \&.SH NAME
 foo, bar \e\- programs to do something
 \&.br
 baz \e\- program to do nothing
-.fi
-.ft P
+.EE
 .RE
 .PP
-(A macro which starts a new paragraph, like \f(CW.PP\fP, may be used instead
-of the break macro \f(CW.br\fP.)
+(A macro which starts a new paragraph, like \fB.PP\fP, may be used instead
+of the break macro \fB.br\fP.)
 .PP
 When using the BSD-derived
 .I mdoc
@@ -177,13 +208,11 @@ macro set, a correct
 section looks something like this:
 .PP
 .RS
-.ft CW
-.nf
+.EX
 \&.Sh NAME
 \&.Nm foo
 \&.Nd program to do something
-.fi
-.ft P
+.EE
 .RE
 
 There are several common reasons why whatis parsing fails.
