@@ -18,6 +18,8 @@ Improvements:
  * Change section title recommendations in `man(1)` to mention `STANDARDS`
    rather than `CONFORMING TO`, in line with `man-pages(7)`.
  * Add a `STANDARDS` section to `man(1)` itself.
+ * Document that `man -K` may suffer from false negatives as well as false
+   positives.
 
 man-db 2.11.2 (8 January 2023)
 ==============================
