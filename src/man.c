@@ -1419,6 +1419,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		}
 #endif /* TROFF_IS_GROFF || HEIRLOOM_NROFF */
 
+#ifdef TROFF_IS_GROFF
+		/* See also display () for the more complex non-groff case. */
+		if (!recode && no_hyphenation)
+			pipecmd_argf (cmd, "-rHY=0");
+#endif /* !TROFF_IS_GROFF */
+
 #ifdef NROFF_WARNINGS
 		GL_LIST_FOREACH (roff_warnings, warning)
 			pipecmd_argf (cmd, "-w%s", warning);
@@ -2118,6 +2124,7 @@ static void display_catman (const char *cat_file, decompress *d,
 	free (tmpcat);
 }
 
+#ifndef TROFF_IS_GROFF
 static void disable_hyphenation (void *data MAYBE_UNUSED)
 {
 	fputs (".nh\n"
@@ -2125,12 +2132,17 @@ static void disable_hyphenation (void *data MAYBE_UNUSED)
 	       "..\n"
 	       ".lf 1\n", stdout);
 }
+#endif /* TROFF_IS_GROFF */
 
 static void disable_justification (void *data MAYBE_UNUSED)
 {
-	fputs (".na\n"
-	       ".de ad\n"
-	       "..\n"
+	fputs (".ie (\\n(.g&((\\n(.x>1):((\\n(.x==1)&(\\n(.y>=23))))"
+	       " .ds AD l\n"
+	       ".el \\{\\\n"
+	       ".  na\n"
+	       ".  de ad\n"
+	       ".  .\n"
+	       ".\\}\n"
 	       ".lf 1\n", stdout);
 }
 
@@ -2241,6 +2253,8 @@ static int display (const char *dir, const char *man_file,
 		else
 			decomp = decompress_fdopen (dup (STDIN_FILENO));
 
+#ifndef TROFF_IS_GROFF
+		/* See also make_roff_command () for the simpler groff case. */
 		if (!recode && no_hyphenation) {
 			pipecmd *hcmd = pipecmd_new_function (
 				"echo .nh && echo .de hy && echo ..",
@@ -2248,10 +2262,16 @@ static int display (const char *dir, const char *man_file,
 			pipecmd_sequence_command (seq, hcmd);
 			++prefixes;
 		}
+#endif /* TROFF_IS_GROFF */
 
 		if (!recode && no_justification) {
 			pipecmd *jcmd = pipecmd_new_function (
+#ifdef TROFF_IS_GROFF
+				/* Technically only for groff >= 1.23.0. */
+				"echo .ds AD l",
+#else /* !TROFF_IS_GROFF */
 				"echo .na && echo .de ad && echo ..",
+#endif /* TROFF_IS_GROFF */
 				disable_justification, NULL, NULL);
 			pipecmd_sequence_command (seq, jcmd);
 			++prefixes;

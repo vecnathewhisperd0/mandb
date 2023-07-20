@@ -20,6 +20,8 @@ Improvements:
  * Add a `STANDARDS` section to `man(1)` itself.
  * Document that `man -K` may suffer from false negatives as well as false
    positives.
+ * Take advantage of newer `groff` facilities to implement `man
+   --no-hyphenation` and `man --no-justification`, if available.
 
 man-db 2.11.2 (8 January 2023)
 ==============================
