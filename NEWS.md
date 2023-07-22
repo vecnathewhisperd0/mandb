@@ -5,6 +5,8 @@ Fixes:
 
  * Fix some manual page portability issues with groff 1.23.0.
  * Fix test failures when a working `iconv` is not available.
+ * Ensure that timestamps read from the database can go past the year 2038,
+   even on systems where this is not the default.
 
 Improvements:
 
