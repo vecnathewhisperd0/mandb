@@ -798,6 +798,10 @@ static void do_extern (int argc, char *argv[])
 	/* Please keep these in the same order as they are in whatis.c. */
 	if (debug_level)
 		pipecmd_arg (cmd, "-d");
+	if (regex_opt)
+		pipecmd_arg (cmd, "-r");
+	if (wildcard)
+		pipecmd_arg (cmd, "-w");
 	if (local_man_file)  /* actually apropos/whatis --long */
 		pipecmd_arg (cmd, "-l");
 	if (colon_sep_section_list)

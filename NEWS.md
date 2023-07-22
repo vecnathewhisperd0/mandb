@@ -22,6 +22,8 @@ Improvements:
    positives.
  * Take advantage of newer `groff` facilities to implement `man
    --no-hyphenation` and `man --no-justification`, if available.
+ * `man -f` and `man -k` now pass any `-r`/`--regex` or `-w`/`--wildcard`
+   options on to `whatis` and `apropos` respectively.
 
 man-db 2.11.2 (8 January 2023)
 ==============================
