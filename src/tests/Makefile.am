@@ -74,7 +74,7 @@ check_PROGRAMS = fspause get-mtime
 fspause_SOURCES = fspause.c
 fspause_LDADD = \
 	$(top_builddir)/gl/lib/libgnu.la \
-	$(LIB_NANOSLEEP)
+	$(NANOSLEEP_LIB)
 get_mtime_SOURCES = get-mtime.c
 get_mtime_LDADD = $(top_builddir)/lib/libman.la
 

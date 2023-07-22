@@ -9,7 +9,7 @@ Fixes:
 Improvements:
 
  * Update system call lists in `seccomp` sandbox from `systemd`.
- * Upgrade to Gnulib `stable-202301`.
+ * Upgrade to Gnulib `stable-202307`.
  * Work around the Firebuild accelerator in `seccomp` sandbox: if this is in
    use then we need to allow some socket-related system calls.
  * `man -K` now deduplicates search results that point to the same page.
