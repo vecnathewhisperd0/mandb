@@ -150,6 +150,21 @@ These may add to or modify the separate path
 elements giving priority to
 .b NLS
 manual pages or add OS-relative manpaths.
+.BS 2 "Programs that print their own manpage"
+Some program installation methods install only a program, and no supporting
+files such as manpages. For such programs, man supports asking the program
+itself to supply a manpage, by running it with the
+.b \-\-_man
+option. (The
+.b _
+indicates an internal-use option, rather than one intended for direct use by
+end users.) Man will only do this if it detects that the program supports this
+option, by looking for the string
+.b --_manSupported-
+in the program binary, immediately followed by
+.b fe60a6ff532d8142616103943a005b4d4c125156e833d46fc875a0b854c32faf ,
+the ASCII hex representation of the BLAKE3 checksum of
+.b --_man .
 .BS 2 "Other OS's manual pages"
 .lp
 It is common to have collections of heterogeneous computer systems linked

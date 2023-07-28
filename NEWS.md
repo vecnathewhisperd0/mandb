@@ -1,3 +1,17 @@
+man-db 2.12.0
+=============
+
+Improvements:
+
+ * Add support for running a program with `--_man` to output its own manpage.
+   This makes it easier for standalone programs installed without any
+   supporting files (e.g. simple scripts, or programs compiled and installed
+   via some package managers) to provide manpages. Man looks for a magic string
+   in the program (`--_manSupported-` immediately followed by
+   `fe60a6ff532d8142616103943a005b4d4c125156e833d46fc875a0b854c32faf`, the hex
+   representation of the BLAKE3 checksum of `--_man`) to determine if it
+   supports the `--_man` option.
+
 man-db 2.11.3
 =============
 
