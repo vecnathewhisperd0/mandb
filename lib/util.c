@@ -258,7 +258,7 @@ char *lang_dir (const char *filename)
 
 void init_locale (void)
 {
-	char *locale = setlocale (LC_ALL, "");
+	const char *locale = setlocale (LC_ALL, "");
 	if (!locale &&
 	    !getenv ("MAN_NO_LOCALE_WARNING") &&
 	    !getenv ("DPKG_RUNNING_VERSION"))
