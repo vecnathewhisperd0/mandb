@@ -492,10 +492,12 @@ correct format.
 .\" usual filters.
 No cat file is produced.
 If '\-' is listed as one of the arguments, input will be taken from stdin.
-When this option is not used, and man fails to find the page required,
-before displaying the error message, it attempts to act as if this
-option was supplied, using the name as a filename and looking for an
-exact match.
+.IP
+If this option is not used, then
+.B %man%
+will also fall back to interpreting manual page arguments as local file
+names if the argument contains a "/" character, since that is a good
+indication that the argument refers to a path on the file system.
 .TP
 .if !'po4a'hide' .BR \-w ", " \-\-where ", " \-\-path ", " \-\-location
 Don't actually display the manual page, but do print the location of the

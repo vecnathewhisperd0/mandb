@@ -9,6 +9,8 @@ Fixes:
    even on systems where this is not the default.
  * Fix `manpath` not parsing `PATH` entries with trailing slash correctly
    for guessing `MANPATH` entries.
+ * More accurately document the behaviour of passing file names as arguments
+   to `man` without the `-l`/`--local-file` option.
 
 Improvements:
 
