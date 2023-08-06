@@ -1429,8 +1429,12 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #endif /* !TROFF_IS_GROFF */
 
 #ifdef NROFF_WARNINGS
-		GL_LIST_FOREACH (roff_warnings, warning)
-			pipecmd_argf (cmd, "-w%s", warning);
+		GL_LIST_FOREACH (roff_warnings, warning) {
+			if (warning[0] == '!')
+				pipecmd_argf (cmd, "-W%s", warning + 1);
+			else
+				pipecmd_argf (cmd, "-w%s", warning);
+		}
 #endif /* NROFF_WARNINGS */
 
 #ifdef HEIRLOOM_NROFF

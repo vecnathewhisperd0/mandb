@@ -30,6 +30,8 @@ Improvements:
    options on to `whatis` and `apropos` respectively.
  * Always pass a line length to `nroff`, even if we believe that it matches
    the default.
+ * Allow disabling `groff` warnings via `man --warnings`, by prefixing a
+   warning name with `!`.
 
 man-db 2.11.2 (8 January 2023)
 ==============================
