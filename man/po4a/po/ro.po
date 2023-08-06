@@ -1,27 +1,29 @@
 # Mesajele în limba română pentru pachetul man-db
-# Copyright (C) 2003 Colin Watson (msgids)
-# Copyright (C) 2022 Free Software Foundation, Inc
+# Copyright © 2003 Colin Watson (msgids)
+# Copyright © 2022, 2023 Free Software Foundation, Inc
 # This file is distributed under the same license as the man-db package.
 #
 # Florentina Mușat <florentina.musat.28@gmail.com>, 2020.
-# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2022.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2022 - 2023.
 #
 # Cronologia traducerii fișierului „man-db”:
-# Traducerea inițială, făcută de FM, pentru versiunea man-db-manpages 2.9.0-pre1.
+# Traducerea inițială, făcută de FM, pentru versiunea man-db-manpages 2.9.0-pre1, iul-2020.
 # Actualizare a mesajelor, de la fișierul „man-db-manpages-2.9.0-pre1.pot”.
 # Actualizare a algoritmului formelor de plural (de la „trei-vechi” la „trei-actual”).
 # NU și a mesajelor traduse (acestea au rămas neschimbate).
 # Eliminare a mesajelor ce-au dispărut în ultima versiune.
 # Actualizări realizate de Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 15.01.2022.
-# Actualizare a traducerii pentru versiunea 2.10.0-pre1, făcută de R-GC.
-# Actualizare a traducerii pentru versiunea 2.11.0-pre1, făcută de R-GC.
+# Actualizare a traducerii pentru versiunea 2.10.0-pre1, făcută de R-GC, feb-2022.
+# Actualizare a traducerii pentru versiunea 2.11.0-pre1, făcută de R-GC, oct-2022.
+# Actualizare a traducerii pentru versiunea 2.11.0-pre1, făcută de R-GC, aug-2023.
+# Actualizare a traducerii pentru versiunea Y, făcută de X, Z(luna-anul).
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages-2.11.0-pre1\n"
+"Project-Id-Version: man-db-manpages-2.12.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2023-08-06 20:53+0100\n"
-"PO-Revision-Date: 2022-10-03 18:54+0200\n"
+"POT-Creation-Date: 2023-08-06 13:49+0100\n"
+"PO-Revision-Date: 2023-08-06 21:56+0200\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -31,7 +33,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # R-GC, scrie:
@@ -100,7 +102,7 @@ msgid ""
 msgstr ""
 "B<%apropos%> [\\|B<-dalv?V>\\|] [\\|B<-e>\\||\\|B<-w>\\||\\|B<-r>\\|] [\\|B<-"
 "s> I<listă>\\|] [\\|B<-m> I<sistem>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
-"I<cale>\\|] [\\|B<-L> I<identificator_localizare>\\|] [\\|B<-C> "
+"I<ruta>\\|] [\\|B<-L> I<identificator_localizare>\\|] [\\|B<-C> "
 "I<fișier>\\|] I<cuvânt_cheie> \\&.\\|.\\|."
 
 #. type: SH
@@ -335,7 +337,7 @@ msgid ""
 "B<whatis> descriptions, include the system name B<man> in the argument "
 "string.  This option will override the $B<SYSTEM> environment variable."
 msgstr ""
-"I<sistem(ul)> specificat poate fi o combinație de nume de sisteme de operare "
+"I<Sistemul> specificat poate fi o combinație de nume de sisteme de operare "
 "delimitate de virgule.  Pentru a include o căutare a descrierilor B<whatis> "
 "ale sistemului de operare nativ, includeți numele sistemului B<man> în șirul "
 "de argumente.  Această opțiune va suprascrie variabila de mediu $B<SYSTEM>."
@@ -345,7 +347,7 @@ msgstr ""
 #: ../../man/man1/whatis.man1:142 ../../man/man8/catman.man8:59
 #, no-wrap
 msgid "B<-M\\ >I<path>,\\ B<--manpath=>I<path>"
-msgstr "B<-M\\ >I<calea>,\\ B<--manpath=>I<calea>"
+msgstr "B<-M\\ >I<ruta>,\\ B<--manpath=>I<ruta>"
 
 # R-GC, scrie:
 # am modificat, de la:
@@ -364,7 +366,7 @@ msgstr ""
 "Specificați un set alternativ de ierarhii de pagini de manual, delimitate de "
 "două puncte, pentru căutare.  În mod implicit, B<%program%> utilizează "
 "variabila de mediu $B<MANPATH>, cu excepția cazului în care aceasta este "
-"goală sau nestabilită, caz în care va determina o cale adecvată către "
+"goală sau nestabilită, caz în care va determina o rută adecvată către "
 "paginile de manual, pe baza variabilei de mediu $B<PATH>.  Această opțiune "
 "suprascrie conținutul lui $B<MANPATH>."
 
@@ -414,19 +416,19 @@ msgstr "B<-C\\ >I<fișier>,\\ B<--config-file=>I<fișier>"
 # „Utilizați acest fișier de configurare de utilizator decât implicitul I<~/.manpath>.”
 # la:
 # „Utilizează acest fișier de configurare al utilizatorului, mai degrabă decât cel implicit din I<~/.manpath>.
+# *******
+# La o actualizare,
+# I<~/.manpath> a devenit I<\(ti/.manpath>
 #. type: Plain text
 #: ../../man/man1/apropos.man1:173 ../../man/man1/man.man1:417
 #: ../../man/man1/manpath.man1:78 ../../man/man1/whatis.man1:177
 #: ../../man/man8/catman.man8:68 ../../man/man8/mandb.man8:129
-#, fuzzy
-#| msgid ""
-#| "Use this user configuration file rather than the default of I<~/.manpath>."
 msgid ""
 "Use this user configuration file rather than the default of I<\\(ti/."
 "manpath>."
 msgstr ""
 "Utilizează acest fișier de configurare al utilizatorului, mai degrabă decât "
-"cel implicit din I<~/.manpath>."
+"cel implicit din I<\\(ti/.manpath>."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:176 ../../man/man1/lexgrog.man1:124
@@ -516,9 +518,9 @@ msgid ""
 "If $B<MANPATH> is set, its value is interpreted as the colon-delimited "
 "manual page hierarchy search path to use."
 msgstr ""
-"Dacă $B<MANPATH> este stabilită, valoarea acesteia va fi interpretată ca, "
-"calea delimitată de două puncte pentru ierarhiile de pagini de manual care "
-"urmează să fie utilizate."
+"Dacă $B<MANPATH> este stabilită, valoarea acesteia va fi interpretată ca "
+"fiind ruta de căutare a ierarhiei paginilor de manual delimitată prin două "
+"puncte care trebuie utilizată."
 
 #. type: Plain text
 #: ../../man/man1/apropos.man1:217 ../../man/man1/man.man1:1079
@@ -528,7 +530,7 @@ msgid ""
 "See the B<SEARCH PATH> section of B<manpath>(5)  for the default behaviour "
 "and details of how this environment variable is handled."
 msgstr ""
-"Consultați secțiunea B<CALEA DE CĂUTARE> din B<manpath>(5) pentru "
+"Consultați secțiunea B<RUTA DE CĂUTARE> din B<manpath>(5) pentru "
 "comportamentul implicit și detalii despre modul în care este gestionată "
 "această variabilă de mediu."
 
@@ -821,16 +823,13 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:174
-#, fuzzy, no-wrap
-#| msgid ""
-#| "CW<\\&.SH NAME\n"
-#| "foo \\e- program to do something>\n"
+#, no-wrap
 msgid ""
 "\\&.SH NAME\n"
 "foo \\e- program to do something\n"
 msgstr ""
-"CW<\\&.SH NUME\n"
-"foo \\e- program ce face ceva>\n"
+"\\&.SH NUME\n"
+"foo \\e- program ce face ceva\n"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:181
@@ -862,35 +861,26 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:198
-#, fuzzy, no-wrap
-#| msgid ""
-#| "CW<\\&.SH NAME\n"
-#| "foo, bar \\e- programs to do something\n"
-#| "\\&.br\n"
-#| "baz \\e- program to do nothing>\n"
+#, no-wrap
 msgid ""
 "\\&.SH NAME\n"
 "foo, bar \\e- programs to do something\n"
 "\\&.br\n"
 "baz \\e- program to do nothing\n"
 msgstr ""
-"CW<\\&.SH NUME\n"
+"\\&.SH NUME\n"
 "foo, bar \\e- programe ce fac ceva\n"
 "\\&.br\n"
-"baz \\e- program ce nu face nimic>\n"
+"baz \\e- program ce nu face nimic\n"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:203
-#, fuzzy
-#| msgid ""
-#| "(A macro which starts a new paragraph, like CW<.PP>, may be used instead "
-#| "of the break macro CW<.br>.)"
 msgid ""
 "(A macro which starts a new paragraph, like B<.PP>, may be used instead of "
 "the break macro B<.br>.)"
 msgstr ""
-"(O macrocomandă care începe un nou paragraf, cum ar fi CW<.PP>, poate fi "
-"utilizată în locul macrocomenzii de întrerupere de linie CW<.br>.)"
+"(O macrocomandă care începe un nou paragraf, cum ar fi B<.PP>, poate fi "
+"utilizată în locul macrocomenzii de întrerupere de linie B<.br>.)"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:209
@@ -903,19 +893,15 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:215
-#, fuzzy, no-wrap
-#| msgid ""
-#| "CW<\\&.Sh NAME\n"
-#| "\\&.Nm foo\n"
-#| "\\&.Nd program to do something>\n"
+#, no-wrap
 msgid ""
 "\\&.Sh NAME\n"
 "\\&.Nm foo\n"
 "\\&.Nd program to do something\n"
 msgstr ""
-"CW<\\&.Sh NUME\n"
+"\\&.Sh NUME\n"
 "\\&.Nm foo\n"
-"\\&.Nd program ce face ceva>\n"
+"\\&.Nd program ce face ceva\n"
 
 #. type: Plain text
 #: ../../man/man1/lexgrog.man1:226
@@ -1122,13 +1108,6 @@ msgstr "O I<pagină> de manual consistă în mai multe secțiuni."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:149
-#, fuzzy
-#| msgid ""
-#| "Conventional section names include B<NAME>, B<SYNOPSIS>, "
-#| "B<CONFIGURATION>, B<DESCRIPTION>, B<OPTIONS>, B<EXIT\\ STATUS>, "
-#| "B<RETURN\\ VALUE>, B<ERRORS>, B<ENVIRONMENT>, B<FILES>, B<VERSIONS>, "
-#| "B<CONFORMING\\ TO>, B<NOTES>, B<BUGS>, B<EXAMPLE>, B<AUTHORS>, and "
-#| "B<SEE\\ ALSO>."
 msgid ""
 "Conventional section names include B<NAME>, B<SYNOPSIS>, B<CONFIGURATION>, "
 "B<DESCRIPTION>, B<OPTIONS>, B<EXIT\\ STATUS>, B<RETURN\\ VALUE>, B<ERRORS>, "
@@ -1137,7 +1116,7 @@ msgid ""
 msgstr ""
 "Numele convenționale includ B<NUME>, B<REZUMAT>, B<CONFIGURARE>, "
 "B<DESCRIERE>, B<OPȚIUNI>, B<STARE\\ IEȘIRE>, B<VALOARE\\ REVENIRE>, "
-"B<ERORI>, B<MEDIU\\ DE\\ LUCRU>, B<FIȘIERE>, B<VERSIUNI>, B<CONFORM\\ LA>, "
+"B<ERORI>, B<MEDIU\\ DE\\ LUCRU>, B<FIȘIERE>, B<VERSIUNI>, B<STANDARDE>, "
 "B<NOTE>, B<DEFECTE>, B<EXEMPLE>, B<AUTORI>, și B<CONSULTAȚI\\ DEASEMENEA>."
 
 #. type: Plain text
@@ -1396,7 +1375,7 @@ msgid ""
 "order, output processor, and other behaviours and operations detailed below."
 msgstr ""
 "B<%man%> dispune de mai multe opțiuni, pentru a oferi o flexibilitate cât "
-"mai mare utilizatorului. Se pot face modificări în calea de căutare, ordinea "
+"mai mare utilizatorului. Se pot face modificări în ruta de căutare, ordinea "
 "secțiunilor, procesorul de ieșire și alte comportamente și operațiuni "
 "detaliate mai jos."
 
@@ -1657,32 +1636,24 @@ msgstr "Principalele moduri de operare"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:451
-#, fuzzy
-#| msgid ""
-#| "Equivalent to B<%whatis%>.  Display a short description from the manual "
-#| "page, if available.  See B<%whatis%>(1)  for details."
 msgid ""
 "Approximately equivalent to B<%whatis%>.  Display a short description from "
 "the manual page, if available.  See B<%whatis%>(1)  for details."
 msgstr ""
-"Echivalent cu B<%whatis%>.  Dacă pagina de manual este disponibilă, este "
-"afișată o scurtă descriere a paginii de manual dorite.  Consultați "
-"B<%whatis%>(1), pentru a obține mai multe detalii."
+"Aproximativ echivalent cu B<%whatis%>.  Dacă pagina de manual este "
+"disponibilă, este afișată o scurtă descriere a paginii de manual dorite.  "
+"Consultați B<%whatis%>(1), pentru a obține mai multe detalii."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:460
-#, fuzzy
-#| msgid ""
-#| "Equivalent to B<%apropos%>.  Search the short manual page descriptions "
-#| "for keywords and display any matches.  See B<%apropos%>(1)  for details."
 msgid ""
 "Approximately equivalent to B<%apropos%>.  Search the short manual page "
 "descriptions for keywords and display any matches.  See B<%apropos%>(1)  for "
 "details."
 msgstr ""
-"Echivalent cu B<%apropos%>.  Caută în descrierile scurte ale paginilor de "
-"manual pentru cuvintele cheie date, și afișează orice potrivire.  Consultați "
-"B<%apropos%>(1), pentru a obține mai multe detalii."
+"Aproximativ echivalent cu B<%apropos%>.  Caută în descrierile scurte ale "
+"paginilor de manual pentru cuvintele cheie date, și afișează orice "
+"potrivire.  Consultați B<%apropos%>(1), pentru a obține mai multe detalii."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:470
@@ -1701,12 +1672,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../../man/man1/man.man1:477
-#, fuzzy
-#| msgid ""
-#| "Note that this searches the I<sources> of the manual pages, not the "
-#| "rendered text, and so may include false positives due to things like "
-#| "comments in source files.  Searching the rendered text would be much "
-#| "slower."
 msgid ""
 "Note that this searches the I<sources> of the manual pages, not the rendered "
 "text, and so may include false positives due to things like comments in "
@@ -1714,8 +1679,10 @@ msgid ""
 "\"\\e-\" in source files.  Searching the rendered text would be much slower."
 msgstr ""
 "Rețineți că aceasta caută în I<sursele> paginilor de manual(neformatate), nu "
-"în textul ce este afișat, așa că poate include false pozitive din cauza "
-"comentariilor din surse.  Căutarea textului formatat ar fi mult mai lentă."
+"în textul ce este afișat, așa că poate include falsuri pozitive din cauza "
+"comentariilor din fișierele sursă, sau falsuri negative din cauza unor "
+"lucruri precum cratimele care sunt scrise ca „\\e-” în fișierele sursă.  "
+"Căutarea textului formatat ar fi mult mai lentă."
 
 #.  Compressed nroff source files with a supported compression
 #.  extension will be decompressed by man prior to being displaying via the
@@ -1734,13 +1701,13 @@ msgid ""
 msgstr ""
 "Activează modul „local”.  Formatează și afișează fișierele de manual locale "
 "în loc să caute prin colecția de manuale a sistemului.  Fiecare argument de "
-"pagină de manual va fi interpretat ca un fișier sursă »nroff» în formatul "
+"pagină de manual va fi interpretat ca un fișier sursă «nroff» în formatul "
 "corect.  Nu este produs niciun fișier «cat».  Dacă „-” este listat ca unul "
-"dintre argumente, intrarea va fi preluată de la stdin.  Când această opțiune "
-"nu este utilizată și «man» nu reușește să găsească pagina necesară, înainte "
-"de a afișa mesajul de eroare, încearcă să acționeze ca și cum această "
-"opțiune ar fi fost furnizată, folosind numele ca nume de fișier și căutând o "
-"potrivire exactă."
+"dintre argumente, intrarea va fi preluată de la intrarea standard.  Când "
+"această opțiune nu este utilizată și «man» nu reușește să găsească pagina "
+"necesară, înainte de a afișa mesajul de eroare, încearcă să acționeze ca și "
+"cum această opțiune ar fi fost furnizată, folosind numele ca nume de fișier "
+"și căutând o potrivire exactă."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:501
@@ -1862,8 +1829,8 @@ msgid ""
 "derived code to determine the path to search.  This option overrides the "
 "$B<MANPATH> environment variable and causes option B<-m> to be ignored."
 msgstr ""
-"Specifică o cale de manual alternativă de utilizat.  În mod implicit, "
-"B<%man%> utilizează cod derivat B<%manpath%> pentru a determina calea de "
+"Specifică o rută de manual alternativă de utilizat.  În mod implicit, "
+"B<%man%> utilizează cod derivat B<%manpath%> pentru a determina ruta de "
 "căutat.  Această opțiune suprascrie variabila de mediu $B<MANPATH> și face "
 "ca opțiunea B<-m> să fie ignorată."
 
@@ -1875,7 +1842,7 @@ msgid ""
 "manual page system\").  To view manual pages outside such hierarchies, see "
 "the B<-l> option."
 msgstr ""
-"O cale specificată drept o cale de manual trebuie să fie rădăcina unei "
+"O rută specificată drept o rută de manual trebuie să fie rădăcina unei "
 "ierarhii a paginilor de manual, structurată în secțiuni, așa cum este "
 "descris în manualul man-db (sub „Sistemul paginilor de manual”).  Pentru a "
 "vizualiza paginile de manual în afara acestor ierarhii, consultați opțiunea "
@@ -2478,8 +2445,8 @@ msgid ""
 "If $B<MANPATH> is set, its value is used as the path to search for manual "
 "pages."
 msgstr ""
-"Dacă $B<MANPATH> este stabilită, valoarea acesteia este utilizată drept "
-"calea de căutare pentru paginile de manual."
+"Dacă $B<MANPATH> este stabilită, valoarea acesteia este utilizată drept ruta "
+"de căutare pentru paginile de manual."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1091
@@ -2698,12 +2665,12 @@ msgstr "O ierarhie globală a paginilor de manual."
 #: ../../man/man1/man.man1:1268
 #, no-wrap
 msgid "STANDARDS"
-msgstr ""
+msgstr "STANDARDE"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1270
-msgid "POSIX.1-2001, POSIX.1-2008, POSIX.1-2017."
-msgstr ""
+msgid "POSIX.1â2001, POSIX.1â2008, POSIX.1-2017."
+msgstr "POSIX.1â2001, POSIX.1â2008, POSIX.1-2017."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1287
@@ -2966,7 +2933,7 @@ msgstr "Convertește pagina de manual la I<codificarea>."
 #. type: Plain text
 #: ../../man/man1/manpath.man1:16
 msgid "%manpath% - determine search path for manual pages"
-msgstr "%manpath% - determină calea de căutare pentru paginile de manual"
+msgstr "%manpath% - determină ruta de căutare pentru paginile de manual"
 
 #. type: Plain text
 #: ../../man/man1/manpath.man1:23
@@ -2986,7 +2953,7 @@ msgid ""
 msgstr ""
 "Dacă $B<MANPATH> este stabilită, B<%manpath%> va afișa pur și simplu "
 "conținutul și va emite un avertisment.  Dacă nu, B<%manpath%> va determina o "
-"cale de căutare potrivită pentru ierarhia paginilor de manual, și va afișa "
+"rută de căutare potrivită pentru ierarhia paginilor de manual, și va afișa "
 "rezultatele."
 
 #. type: Plain text
@@ -2996,7 +2963,7 @@ msgid ""
 "db configuration file \\(en (I<%manpath_config_file%>)  and the user's "
 "environment."
 msgstr ""
-"Calea delimitată de două puncte este determinată utilizând informații "
+"Ruta delimitată de două puncte este determinată utilizând informații "
 "obținute din fișierul de configurare man-db  \\(en "
 "(I<%manpath_config_file%>)  și din mediul utilizatorului."
 
@@ -3011,8 +2978,8 @@ msgid ""
 "Produce a catpath as opposed to a manpath.  Once the manpath is determined, "
 "each path element is converted to its relative catpath."
 msgstr ""
-"Produce o cale «cat» spre deosebire de o cale «man».  Odată ce calea «man» "
-"este determinată, fiecare element al căii este convertit în cale «cat» "
+"Produce o rută «cat» spre deosebire de o rută «man».  Odată ce ruta «man» "
+"este determinată, fiecare element al rutei este convertit în rută «cat» "
 "relativă."
 
 #. type: Plain text
@@ -3021,7 +2988,7 @@ msgid ""
 "Produce a manpath consisting of all paths named as \"global\" within the man-"
 "db configuration file."
 msgstr ""
-"Produce o cale «man» care consistă din toate căile numite ca „globale” "
+"Produce o rută «man» care consistă din toate rutele numite ca „globale” "
 "înăuntrul fișierului de configurare «man-db»."
 
 #. type: Plain text
@@ -3056,8 +3023,8 @@ msgid ""
 "If $B<MANPATH> is set, B<%manpath%> displays its value rather than "
 "determining it on the fly."
 msgstr ""
-"Dacă $B<MANPATH> este stabilită, B<%manpath%> își afișează valoarea în loc "
-"să o determine din mers."
+"Dacă $B<MANPATH> este stabilită, B<%manpath%> îi afișează valoarea în loc să "
+"o determine din mers."
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # R-GC, scrie:
@@ -3083,7 +3050,7 @@ msgid ""
 msgstr ""
 "B<%whatis%> [\\|B<-dlv?V>\\|] [\\|B<-r>\\||\\|B<-w>\\|] [\\|B<-s> "
 "I<listă>\\|] [\\|B<-m> I<sistem>\\|[\\|,.\\|.\\|.\\|]\\|] [\\|B<-M> "
-"I<calea>\\|] [\\|B<-L> I<identificator_localizare>\\|] [\\|B<-C> "
+"I<ruta>\\|] [\\|B<-L> I<identificator_localizare>\\|] [\\|B<-C> "
 "I<fișier>\\|] I<nume> \\&.\\|.\\|."
 
 #. type: Plain text
@@ -3129,13 +3096,13 @@ msgstr ""
 #: ../../man/man1/whatis.man1:66
 msgid "B<%whatis% -M> I<manpath> B<-w '*' | sort E<gt>> I<manpath/whatis>"
 msgstr ""
-"B<%whatis% -M> I<cale-manual> B<-w '*' | sort E<gt>> I<cale-manual/whatis>"
+"B<%whatis% -M> I<rută-manual> B<-w '*' | sort E<gt>> I<rută-manual/whatis>"
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:71
 msgid "where I<manpath> is a manual page hierarchy such as I</usr/man>."
 msgstr ""
-"unde I<cale-manual> este o ierarhie de pagini de manual precum I</usr/man>."
+"unde I<rută-manual> este o ierarhie de pagini de manual precum I</usr/man>."
 
 #. type: Plain text
 #: ../../man/man1/whatis.man1:89
@@ -3288,8 +3255,8 @@ msgid ""
 "hierarchies (manpaths) are to be treated as system hierarchies and to assign "
 "them directories to be used for storing cat files."
 msgstr ""
-"Fișierul de configurare al căii de manual(manpath) este utilizat de "
-"utilitarele paginilor de manual pentru a evalua căile de manual ale "
+"Fișierul de configurare al rutei de manual(manpath) este utilizat de "
+"utilitarele paginilor de manual pentru a evalua rutele de manual ale "
 "utilizatorilor în timpul executării, pentru a indica ce ierarhii a paginilor "
 "de manual(manpaths) vor fi tratate ca ierarhii de sistem și pentru a le "
 "atribui directoare pentru a fi utilizate pentru stocarea fișierelor «cat»."
@@ -3307,7 +3274,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:26
 #, no-wrap
 msgid "SEARCH PATH"
-msgstr "CALEA DE CĂUTARE"
+msgstr "RUTA DE CĂUTARE"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:35
@@ -3316,8 +3283,8 @@ msgid ""
 "found there, it adds I<manpath_element> to the search path."
 msgstr ""
 "În mod implicit, man-db examinează variabila de mediu $B<PATH> a "
-"utilizatorului.  Pentru fiecare I<element_cale(path_element)> găsit acolo, "
-"acesta adaugă I<element_cale_manual(manpath_element)> la calea de căutare."
+"utilizatorului.  Pentru fiecare I<element_rută(path_element)> găsit acolo, "
+"acesta adaugă I<element_rută_manual(manpath_element)> la ruta de căutare."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:47
@@ -3328,9 +3295,9 @@ msgid ""
 "as directories to the search path."
 msgstr ""
 "Dacă nu există o linie B<MANPATH_MAP> în fișierul de configurare pentru un "
-"anumit I<element_cale>, atunci se adaugă toate I<element_cale/../man>, "
-"I<element_cale/man>, I<element_cale/../ share/man> și I<element_cale/share/"
-"man> care există ca directoare la calea de căutare."
+"anumit I<element_rută>, atunci se adaugă toate I<element_rută/../man>, "
+"I<element_rută/man>, I<element_rută/../ share/man> și I<element_rută/share/"
+"man> care există ca directoare la ruta de căutare."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:51
@@ -3339,7 +3306,7 @@ msgid ""
 "the search path."
 msgstr ""
 "Apoi adaugă orice intrări B<MANDATORY_MANPATH> din fișierul de configurare "
-"la calea de căutare."
+"la ruta de căutare."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:73
@@ -3359,15 +3326,15 @@ msgstr ""
 "În cele din urmă, dacă este utilizată opțiunea B<--systems> sau este "
 "stabilită variabila de mediu $B<SYSTEM>, atunci aceasta ar trebui să conțină "
 "o secvență de nume de sisteme de operare separate prin virgule sau două "
-"puncte.  Aceasta acționează ca un șablon, extinzând calea de căutare încă o "
+"puncte.  Aceasta acționează ca un șablon, extinzând ruta de căutare încă o "
 "dată pentru a permite accesul la paginile de manual ale altor sisteme de "
 "operare: pentru fiecare nume de sistem, man-db caută acel nume ca "
-"subdirector al fiecărei intrări din calea de căutare și îl adaugă la calea "
-"finală de căutare, dacă există.  Un nume de sistem B<man> inserează calea "
-"normală de căutare fără subdirectoare.  De exemplu, dacă calea de căutare ar "
+"subdirector al fiecărei intrări din ruta de căutare și îl adaugă la ruta "
+"finală de căutare, dacă există.  Un nume de sistem B<man> inserează ruta "
+"normală de căutare fără subdirectoare.  De exemplu, dacă ruta de căutare ar "
 "fi fost astfel: I</usr/share/man:/usr/local/man>, iar $B<SYSTEM> este "
-"stabilită la I<nouSO:man>, atunci calea finală de căutare va fi: I</usr/"
-"share/man/nouSO:/usr/share/man:/usr/local/man/nouSO:/usr/local/man>."
+"stabilită la I<nouSO:man>, atunci ruta finală de căutare va fi: I</usr/share/"
+"man/nouSO:/usr/share/man:/usr/local/man/nouSO:/usr/local/man>."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:83
@@ -3378,11 +3345,11 @@ msgid ""
 "names separated by colons.  It overrides the default search path described "
 "above."
 msgstr ""
-"Variabila de mediu $B<MANPATH> suprascrie căile implicite de căutare a "
+"Variabila de mediu $B<MANPATH> suprascrie rutele implicite de căutare a "
 "paginilor de manual ale man-db.  Majoritatea utilizatorilor nu ar trebui să "
 "aibă nevoie să o stabilească.  Sintaxa sa este similară cu variabila de "
 "mediu $B<PATH>: constă dintr-o secvență de nume de directoare separate prin "
-"două puncte.  Acesta suprascrie calea de căutare implicită descrisă mai sus."
+"două puncte.  Acesta suprascrie ruta de căutare implicită descrisă mai sus."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:96
@@ -3393,12 +3360,12 @@ msgid ""
 "$B<MANPATH> contains a double colon (B<::>), then the default search path is "
 "inserted in the middle of the value, between the two colons."
 msgstr ""
-"Dacă valoarea lui $B<MANPATH> începe cu două puncte, atunci calea implicită "
+"Dacă valoarea lui $B<MANPATH> începe cu două puncte, atunci ruta implicită "
 "de căutare este adăugată la început.  Dacă valoarea lui $B<MANPATH> se "
-"termină cu două puncte, atunci calea implicită de căutare este adăugată la "
+"termină cu două puncte, atunci ruta implicită de căutare este adăugată la "
 "sfârșitul acesteia.  Dacă valoarea lui $B<MANPATH> conține două puncte duble "
-"(B<::>), atunci calea implicită de căutare este inserată în mijlocul "
-"valorii, între cele două două puncte."
+"(B<::>), atunci ruta implicită de căutare este inserată în mijlocul valorii, "
+"între cele două două puncte."
 
 #. type: SH
 #: ../../man/man5/manpath.man5:96
@@ -3430,7 +3397,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:103
 #, no-wrap
 msgid "B<MANDATORY_MANPATH>I<\\ manpath_element>"
-msgstr "B<MANDATORY_MANPATH>I<\\ element_cale_manual(manpath_element)>"
+msgstr "B<MANDATORY_MANPATH>I<\\ element_rută_manual(manpath_element)>"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:110
@@ -3438,7 +3405,7 @@ msgid ""
 "Lines of this form indicate manpaths that every automatically generated "
 "$B<MANPATH> should contain.  This will typically include I</usr/man>."
 msgstr ""
-"Liniile de această formă indică căile ierarhice de manual pe care ar trebui "
+"Liniile de această formă indică rutele ierarhice de manual pe care ar trebui "
 "să le conțină fiecare $B<MANPATH> generat automat.  Aceasta va include de "
 "obicei I</usr/man>."
 
@@ -3446,7 +3413,7 @@ msgstr ""
 #: ../../man/man5/manpath.man5:110
 #, no-wrap
 msgid "B<MANPATH_MAP>I<\\ path_element\\ manpath_element>"
-msgstr "B<MANPATH_MAP>I<\\ element_cale(path_element)\\ element_cale_manual(manpath_element)>"
+msgstr "B<MANPATH_MAP>I<\\ element_rută(path_element)\\ element_rută_manual(manpath_element)>"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:124
@@ -3456,14 +3423,14 @@ msgid ""
 "added to the $B<MANPATH>."
 msgstr ""
 "Liniile de această formă stabilesc asocieri între $B<PATH> și $B<MANPATH>.  "
-"Pentru fiecare I<element_cale> găsit în variabila $B<PATH> a utilizatorului, "
-"va fi adăugat un I<element_cale_manual(manpath_element)> la $B<MANPATH>."
+"Pentru fiecare I<element_rută> găsit în variabila $B<PATH> a utilizatorului, "
+"va fi adăugat un I<element_rută_manual(manpath_element)> la $B<MANPATH>."
 
 #. type: TP
 #: ../../man/man5/manpath.man5:124
 #, no-wrap
 msgid "B<MANDB_MAP >I<manpath_element >\\|[\\| I<catpath_element> \\|]"
-msgstr "B<MANDB_MAP >I<element_cale_manual(manpath_element) >\\|[\\| I<element_cale_cat(catpath_element)> \\|]"
+msgstr "B<MANDB_MAP >I<element_rută_manual(manpath_element) >\\|[\\| I<element_rută_cat(catpath_element)> \\|]"
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:134
@@ -3475,13 +3442,14 @@ msgid ""
 "configuration file .manpath)  it indicates which manual page hierarchies to "
 "access as the setuid user and which as the invoking user."
 msgstr ""
-"Liniile de această formă indică care căi de manual trebuie tratate precum "
-"căi de manual de sistem, și opțional unde ar trebui să fie stocate fișierele "
-"lor «cat».  Acest tip de câmp este deosebit de important dacă B<man> este un "
-"program setuid, deoarece (când se află în fișierul de configurare a "
-"sistemului %manpath_config_file%, mai degrabă decât în fișierul de "
-"configurare per utilizator .manpath), indică ce ierarhii de pagini de manual "
-"să acceseze ca utilizator setuid și care ca utilizator invocator."
+"Liniile de această formă indică care rute de manual trebuie tratate precum "
+"rute de manual de sistem, și opțional unde ar trebui să fie stocate "
+"fișierele lor «cat».  Acest tip de câmp este deosebit de important dacă "
+"B<man> este un program setuid, deoarece (când se află în fișierul de "
+"configurare a sistemului %manpath_config_file%, mai degrabă decât în "
+"fișierul de configurare per utilizator .manpath), indică ce ierarhii de "
+"pagini de manual să acceseze ca utilizator setuid și care ca utilizator "
+"invocator."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:142
@@ -3499,9 +3467,9 @@ msgid ""
 "are to be stored in the traditional location, I<catpath_element> may be "
 "omitted."
 msgstr ""
-"Dacă paginile «cat» dintr-un anumit I<element_cale_manual> nu trebuie să fie "
+"Dacă paginile «cat» dintr-un anumit I<element_rută_manual> nu trebuie să fie "
 "stocate sau trebuie să fie stocate în locația tradițională, "
-"I<element(ul)_cale_cat> poate fi omis."
+"I<element(ul)_rută_cat> poate fi omis."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:157
@@ -3524,10 +3492,10 @@ msgid ""
 "including alternate operating system paths such as I</usr/man/sun> and any "
 "B<NLS locale> paths such as I</usr/man/de_DE.88591>."
 msgstr ""
-"Din păcate, este necesar să specificați B<toate> căile de arbori de manual "
-"ale sistemului, inclusiv căile de sisteme de operare alternative precum I</"
-"usr/man/sun> și orice căi B<NLS> locale, precum I</usr/man/ro_RO.88592>. NT: "
-"NLS = „Native Language Support” ⇛ Suport pentru limba nativă,maternă."
+"Din păcate, este necesar să specificați B<toate> rutele de arbori de manual "
+"ale sistemului, inclusiv rutele de sisteme de operare alternative precum I</"
+"usr/man/sun> și orice rute B<NLS> locale, precum I</usr/man/ro_RO.88592>. "
+"NT: NLS = „Native Language Support” ⇛ Suport pentru limba nativă,maternă."
 
 #. type: Plain text
 #: ../../man/man5/manpath.man5:174
@@ -3538,7 +3506,7 @@ msgid ""
 "I</usr/man/de_DE.88591> must come before I</usr/man>."
 msgstr ""
 "Deoarece informațiile sunt analizate linie cu linie în ordinea scrisă, este "
-"necesar pentru orice cale de manual care este o sub-ierarhie a altei "
+"necesar pentru orice rută de manual care este o sub-ierarhie a altei "
 "ierarhii să fie prima listată, în caz contrar va fi făcută o potrivire "
 "incorectă.  Un exemplu este că I</usr/man/ro_RO.88592> trebuie să apară "
 "înaintea lui I</usr/man>."
@@ -3559,7 +3527,7 @@ msgid ""
 msgstr ""
 "Liniile de această formă definesc variabilele de configurație diversă; "
 "vedeți fișierul de configurare implicit pentru acele variabile utilizate de "
-"utilitarele paginatorului de manual.  Acestea includ căile implicite către "
+"utilitarele paginatorului de manual.  Acestea includ rutele implicite către "
 "diferite programe (precum I<grep> și I<tbl>), și seturile de argumente "
 "implicite pentru acele programe."
 
@@ -3736,7 +3704,7 @@ msgid ""
 "B<%catman%> [\\|B<-d?V>\\|] [\\|B<-M> I<path>\\|] [\\|B<-C> I<file>\\|] [\\|"
 "I<section>\\|] \\&.\\|.\\|."
 msgstr ""
-"B<%catman%> [\\|B<-d?V>\\|] [\\|B<-M> I<cale>\\|] [\\|B<-C> I<fișier>\\|] "
+"B<%catman%> [\\|B<-d?V>\\|] [\\|B<-M> I<ruta>\\|] [\\|B<-C> I<fișier>\\|] "
 "[\\|I<secțiune>\\|] \\&.\\|.\\|."
 
 #. type: Plain text
@@ -3790,8 +3758,8 @@ msgid ""
 "default, this is all paths indicated as system hierarchies in the man-db "
 "configuration file."
 msgstr ""
-"Specificați o cale alternativă de căutare în ierarhia paginilor de manual, "
-"delimitată de două puncte.  În mod implicit, acestea sunt toate căile "
+"Specificați o rută alternativă de căutare în ierarhia paginilor de manual, "
+"delimitată de două puncte.  În mod implicit, acestea sunt toate rutele "
 "indicate ca ierarhii de sistem în fișierul de configurare «man-db»."
 
 #. type: Plain text
@@ -3820,7 +3788,7 @@ msgstr ""
 msgid ""
 "B<%mandb%> [\\|B<-dqsucpt?V>\\|] [\\|B<-C> I<file>\\|] [\\|I<manpath>\\|]"
 msgstr ""
-"B<%mandb%> [\\|B<-dqsucpt?V>\\|] [\\|B<-C> I<fișier>\\|] [\\|I<cale-"
+"B<%mandb%> [\\|B<-dqsucpt?V>\\|] [\\|B<-C> I<fișier>\\|] [\\|I<rută-"
 "manual>\\|]"
 
 #. type: Plain text
@@ -3864,8 +3832,8 @@ msgid ""
 "internal system manual page hierarchy search path, determined from "
 "information found within the man-db configuration file."
 msgstr ""
-"Furnizarea lui B<%mandb%> cu o cale opțională delimitată de două puncte va "
-"suprascrie calea de căutare a ierarhiei paginilor de manual a sistemului "
+"Furnizarea lui B<%mandb%> cu o rută opțională delimitată de două puncte va "
+"suprascrie ruta de căutare a ierarhiei paginilor de manual a sistemului "
 "internă, determinată din informațiile găsite în fișierul de configurare «man-"
 "db»."
 
@@ -4019,7 +3987,7 @@ msgid ""
 "Perform correctness checks on manual pages in the hierarchy search path.  "
 "With this option, B<%mandb%> will not alter existing databases."
 msgstr ""
-"Efectuează verificările de corectare a paginilor de manual din calea de "
+"Efectuează verificările de corectare a paginilor de manual din ruta de "
 "căutare ierarhică.  Cu această opțiune, B<%mandb%> nu va modifica bazele de "
 "date existente."
 
