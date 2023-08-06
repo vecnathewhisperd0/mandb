@@ -57,6 +57,7 @@ ALL_TESTS = \
 	mandb-symlink-beats-whatis-ref \
 	mandb-symlink-target-timestamp \
 	mandb-whatis-broken-link-changes \
+	manpath-slash \
 	whatis-path-to-executable \
 	zsoelim-so-includes
 if !CROSS_COMPILING

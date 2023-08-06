@@ -1056,35 +1056,50 @@ static void add_dir_to_list (gl_list_t list, const char *dir)
 static void add_man_subdirs (gl_list_t list, const char *path)
 {
 	char *newpath;
+        char *trimmed_path = xstrdup (path);
 
 	/* don't assume anything about path, especially that it ends in
 	   "bin" or even has a '/' in it! */
 
-	char *subdir = strrchr (path, '/');
+	char *subdir = strrchr (trimmed_path, '/');
+
+	/* Trailing slash or root directory. Remove the trailing slash and
+	   try again. If root directory, subdir will be null, so we don't
+	   cause a segfault. If a path element is '/', we will correctly add
+	   /man and /share/man manpaths. */
+	if (subdir && strncmp (subdir, "/", 2) == 0) {
+		subdir[0] = '\0';
+		subdir = strrchr (trimmed_path, '/');
+	}
 	if (subdir) {
-		newpath = xasprintf ("%.*s/man", (int) (subdir - path), path);
+		newpath = xasprintf ("%.*s/man",
+				     (int) (subdir - trimmed_path),
+				     trimmed_path);
 		if (is_directory (newpath) == 1)
 			add_dir_to_list (list, newpath);
 		free (newpath);
 	}
 
-	newpath = xasprintf ("%s/man", path);
+	newpath = xasprintf ("%s/man", trimmed_path);
 	if (is_directory (newpath) == 1)
 		add_dir_to_list (list, newpath);
 	free (newpath);
 
 	if (subdir) {
 		newpath = xasprintf ("%.*s/share/man",
-				     (int) (subdir - path), path);
+				     (int) (subdir - trimmed_path),
+				     trimmed_path);
 		if (is_directory (newpath) == 1)
 			add_dir_to_list (list, newpath);
 		free (newpath);
 	}
 
-	newpath = xasprintf ("%s/share/man", path);
+	newpath = xasprintf ("%s/share/man", trimmed_path);
 	if (is_directory (newpath) == 1)
 		add_dir_to_list (list, newpath);
 	free (newpath);
+
+        free (trimmed_path);
 }
 
 struct canonicalized_path {
