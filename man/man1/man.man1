@@ -436,6 +436,12 @@ pages.
 .I warnings
 is a comma-separated list of warning names; if it is not supplied, the
 default is "mac".
+To disable a
+.I groff
+warning, prefix it with "!": for example,
+.B \-\-warnings=mac,!break
+enables warnings in the "mac" category and disables warnings in the "break"
+category.
 See the \(lqWarnings\(rq node in
 .B info groff
 for a list of available warning names.
