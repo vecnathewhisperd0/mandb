@@ -26,6 +26,8 @@ Improvements:
    --no-hyphenation` and `man --no-justification`, if available.
  * `man -f` and `man -k` now pass any `-r`/`--regex` or `-w`/`--wildcard`
    options on to `whatis` and `apropos` respectively.
+ * Always pass a line length to `nroff`, even if we believe that it matches
+   the default.
 
 man-db 2.11.2 (8 January 2023)
 ==============================
