@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.11.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2023-01-08 21:12+0000\n"
+"POT-Creation-Date: 2023-08-06 13:49+0100\n"
 "PO-Revision-Date: 2022-10-26 20:55+0900\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean <translation-team-ko@googlegroups.com>\n"
@@ -106,7 +106,7 @@ msgid "The man database defaults to %s%s."
 msgstr "man 기본 데이터베이스를 %s%s(으)로 지정했습니다."
 
 #: src/accessdb.c:66 src/catman.c:106 src/globbing_test.c:62
-#: src/lexgrog_test.c:79 src/man.c:278 src/man-recode.c:118
+#: src/lexgrog_test.c:79 src/man.c:280 src/man-recode.c:118
 #: src/manconv_main.c:100 src/mandb.c:119 src/manpath.c:67 src/whatis.c:127
 #: src/zsoelim_main.c:72
 msgid "emit debugging messages"
@@ -121,20 +121,20 @@ msgstr "읽을 %s을(를) 열 수 없습니다"
 msgid "[SECTION...]"
 msgstr "[<섹션>...]"
 
-#: src/catman.c:107 src/man.c:307 src/whatis.c:141
+#: src/catman.c:107 src/man.c:309 src/whatis.c:141
 msgid "PATH"
 msgstr "<경로>"
 
-#: src/catman.c:108 src/man.c:308 src/whatis.c:142
+#: src/catman.c:108 src/man.c:310 src/whatis.c:142
 msgid "set search path for manual pages to PATH"
 msgstr "설명서 페이지 검색 경로를 <경로> 값으로 지정합니다"
 
-#: src/catman.c:109 src/man.c:276 src/mandb.c:131 src/manpath.c:69
+#: src/catman.c:109 src/man.c:278 src/mandb.c:131 src/manpath.c:69
 #: src/whatis.c:145
 msgid "FILE"
 msgstr "<파일>"
 
-#: src/catman.c:110 src/man.c:277 src/mandb.c:132 src/manpath.c:70
+#: src/catman.c:110 src/man.c:279 src/mandb.c:132 src/manpath.c:70
 #: src/whatis.c:146
 msgid "use this user configuration file"
 msgstr "이 파일을 사용자 설정 파일로 지정합니다"
@@ -198,13 +198,13 @@ msgstr "경고: %s: 빈 파일 무시"
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "경고: %s: %s(%s)의 whatis 해석에 실패했습니다"
 
-#: src/check_mandirs.c:325 src/check_mandirs.c:495 src/mandb.c:952
+#: src/check_mandirs.c:325 src/check_mandirs.c:495 src/mandb.c:959
 #: src/straycats.c:93 src/straycats.c:296 src/ult_src.c:99
 #, c-format
 msgid "can't search directory %s"
 msgstr "%s 디렉터리를 검색할 수 없습니다"
 
-#: src/check_mandirs.c:374 src/man.c:1751
+#: src/check_mandirs.c:374 src/man.c:1762
 #, c-format
 msgid "can't chown %s"
 msgstr "%s의 소유권을 바꿀 수 없습니다"
@@ -214,7 +214,7 @@ msgstr "%s의 소유권을 바꿀 수 없습니다"
 msgid "warning: cannot create catdir %s"
 msgstr "경고: %s 캣 페이지 디렉터리를 만들 수 없습니다"
 
-#: src/check_mandirs.c:451 src/man.c:1763 src/mandb.c:242
+#: src/check_mandirs.c:451 src/man.c:1774 src/mandb.c:242
 #, c-format
 msgid "can't chmod %s"
 msgstr "%s의 권한을 바꿀 수 없습니다"
@@ -254,19 +254,19 @@ msgstr "경고: %s(%s) 의 항목 저장 실패"
 msgid "PATH SECTION NAME"
 msgstr "<경로> <섹션> <이름>"
 
-#: src/globbing_test.c:63 src/man.c:312
+#: src/globbing_test.c:63 src/man.c:314
 msgid "EXTENSION"
 msgstr "<확장자>"
 
-#: src/globbing_test.c:64 src/man.c:313
+#: src/globbing_test.c:64 src/man.c:315
 msgid "limit search to extension type EXTENSION"
 msgstr "<확장자> 확장자 형식으로 검색을 제한합니다"
 
-#: src/globbing_test.c:66 src/man.c:315
+#: src/globbing_test.c:66 src/man.c:317
 msgid "look for pages case-insensitively (default)"
 msgstr "대소문자 무관 페이지 탐색 (기본동작)"
 
-#: src/globbing_test.c:67 src/man.c:316
+#: src/globbing_test.c:67 src/man.c:318
 msgid "look for pages case-sensitively"
 msgstr "대소문자 구별 페이지 탐색"
 
@@ -284,7 +284,7 @@ msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
 msgstr[0] "경고: %s의 whatis 값이 %d 바이트를 초과했습니다. 잘라냅니다."
 
-#: src/lexgrog.l:888 src/man.c:2346 src/man.c:2432 src/man.c:2530
+#: src/lexgrog.l:888 src/man.c:2374 src/man.c:2460 src/man.c:2558
 #: src/man-recode.c:184 src/man-recode.c:209 src/manconv_main.c:164
 #: src/straycats.c:210 src/ult_src.c:158 src/zsoelim.l:532
 #, c-format
@@ -315,162 +315,162 @@ msgstr "whatis 정보 표시"
 msgid "show guessed series of preprocessing filters"
 msgstr "추측한 전처리 필터 모음 표시"
 
-#: src/lexgrog_test.c:85 src/man.c:299 src/man.c:337
+#: src/lexgrog_test.c:85 src/man.c:301 src/man.c:339
 msgid "ENCODING"
 msgstr "<인코딩>"
 
-#: src/lexgrog_test.c:86 src/man.c:338
+#: src/lexgrog_test.c:86 src/man.c:340
 msgid "use selected output encoding"
 msgstr "선택한 출력 인코딩 활용"
 
-#: src/lexgrog_test.c:130 src/man.c:574 src/man.c:583
+#: src/lexgrog_test.c:130 src/man.c:576 src/man.c:585
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s: 비호환 옵션"
 
-#: src/man.c:170 src/man-recode.c:242
+#: src/man.c:172 src/man-recode.c:242
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "명령이 %d 상태 코드를 반환하며 나왔습니다: %s"
 
-#: src/man.c:258
+#: src/man.c:260
 msgid "[SECTION] PAGE..."
 msgstr "[<섹션>] <페이지>..."
 
-#: src/man.c:280
+#: src/man.c:282
 msgid "reset all options to their default values"
 msgstr "모든 옵션을 기본값으로 초기화합니다"
 
-#: src/man.c:281
+#: src/man.c:283
 msgid "WARNINGS"
 msgstr "<경고>"
 
-#: src/man.c:283
+#: src/man.c:285
 msgid "enable warnings from groff"
 msgstr "groff 경고 활성"
 
-#: src/man.c:285
+#: src/man.c:287
 msgid "Main modes of operation:"
 msgstr "동작 주요 모드:"
 
-#: src/man.c:286
+#: src/man.c:288
 msgid "equivalent to whatis"
 msgstr "whatis와 동일"
 
-#: src/man.c:287
+#: src/man.c:289
 msgid "equivalent to apropos"
 msgstr "apropos와 동일"
 
-#: src/man.c:288
+#: src/man.c:290
 msgid "search for text in all pages"
 msgstr "모든 페이지의 텍스트 검색"
 
-#: src/man.c:289
+#: src/man.c:291
 msgid "print physical location of man page(s)"
 msgstr "맨 페이지의 물리 경로 표시"
 
-#: src/man.c:293
+#: src/man.c:295
 msgid "print physical location of cat file(s)"
 msgstr "캣 페이지의 물리 경로 표시"
 
-#: src/man.c:296
+#: src/man.c:298
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr "<페이지> 인자 값을 로컬 파일 이름으로 해석"
 
-#: src/man.c:298
+#: src/man.c:300
 msgid "used by catman to reformat out of date cat pages"
 msgstr "오래된 캣 페이지를 재구성하는 catman이 활용함"
 
-#: src/man.c:300
+#: src/man.c:302
 msgid "output source page encoded in ENCODING"
 msgstr "<인코딩>으로 원본 페이지를 인코딩하여 출력"
 
-#: src/man.c:302
+#: src/man.c:304
 msgid "Finding manual pages:"
 msgstr "설명서 페이지 찾기:"
 
-#: src/man.c:303 src/whatis.c:143
+#: src/man.c:305 src/whatis.c:143
 msgid "LOCALE"
 msgstr "<로캘>"
 
-#: src/man.c:304
+#: src/man.c:306
 msgid "define the locale for this particular man search"
 msgstr "맨 페이지 일부 검색용 로캘을 지정합니다"
 
-#: src/man.c:305 src/manpath.c:71 src/whatis.c:139
+#: src/man.c:307 src/manpath.c:71 src/whatis.c:139
 msgid "SYSTEM"
 msgstr "<시스템>"
 
-#: src/man.c:306 src/manpath.c:72 src/whatis.c:140
+#: src/man.c:308 src/manpath.c:72 src/whatis.c:140
 msgid "use manual pages from other systems"
 msgstr "다른 시스템에서 설명서 페이지를 활용합니다"
 
-#: src/man.c:309 src/whatis.c:136
+#: src/man.c:311 src/whatis.c:136
 msgid "LIST"
 msgstr "<목록>"
 
-#: src/man.c:310
+#: src/man.c:312
 msgid "use colon separated section list"
 msgstr "콜론으로 구분한 섹션 항목을 활용합니다"
 
-#: src/man.c:317
+#: src/man.c:319
 msgid "show all pages matching regex"
 msgstr "정규 표현식에 일치하는 모든 페이지 표시"
 
-#: src/man.c:319
+#: src/man.c:321
 msgid "show all pages matching wildcard"
 msgstr "와일드카드 문자에 일치하는 모든 페이지 표시"
 
-#: src/man.c:321
+#: src/man.c:323
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
 "--regex 옵션과 --wildcard 옵션은 페이지 설명이 아닌 페이지 이름이 대상입니다"
 
-#: src/man.c:324
+#: src/man.c:326
 msgid "find all matching manual pages"
 msgstr "설명서 페이지에 일치하는 모든 항목 찾기"
 
-#: src/man.c:325
+#: src/man.c:327
 msgid "force a cache consistency check"
 msgstr "캐시 무결성 검사 강제"
 
-#: src/man.c:327
+#: src/man.c:329
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
 msgstr "하위 페이지에 대해 시도하지 않음. 예: 'man foo bar' => 'man foo-bar'"
 
-#: src/man.c:330
+#: src/man.c:332
 msgid "Controlling formatted output:"
 msgstr "서식 출력 제어:"
 
-#: src/man.c:331
+#: src/man.c:333
 msgid "PAGER"
 msgstr "<페이저>"
 
-#: src/man.c:332
+#: src/man.c:334
 msgid "use program PAGER to display output"
 msgstr "화면 출력 프로그램을 <페이저>로 사용합니다"
 
-#: src/man.c:333 src/man.c:345
+#: src/man.c:335 src/man.c:347
 msgid "STRING"
 msgstr "<문자열>"
 
-#: src/man.c:334
+#: src/man.c:336
 msgid "provide the `less' pager with a prompt"
 msgstr "프롬프트가 딸린 `less' 페이저를 제공합니다"
 
-#: src/man.c:336
+#: src/man.c:338
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "일부 LATIN1 문자의 ASCII 변환 문자를 표시합니다"
 
-#: src/man.c:340
+#: src/man.c:342
 msgid "turn off hyphenation"
 msgstr "하이픈 연속 표시 안함"
 
-#: src/man.c:343
+#: src/man.c:345
 msgid "turn off justification"
 msgstr "균등 배분 안함"
 
-#: src/man.c:346
+#: src/man.c:348
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
@@ -480,34 +480,34 @@ msgstr ""
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 
-#: src/man.c:350
+#: src/man.c:352
 #, c-format
 msgid "use %s to format pages"
 msgstr "페이지 구성에 %s을(를) 활용합니다"
 
-#: src/man.c:351
+#: src/man.c:353
 msgid "DEVICE"
 msgstr "<장치>"
 
-#: src/man.c:352
+#: src/man.c:354
 #, c-format
 msgid "use %s with selected device"
 msgstr "%s을(를) 선택한 장치로 활용합니다"
 
-#: src/man.c:353
+#: src/man.c:355
 msgid "BROWSER"
 msgstr "<브라우저>"
 
-#: src/man.c:355
+#: src/man.c:357
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr "%s 또는 <브라우저>로 HTML 출력을 표시합니다"
 
-#: src/man.c:356
+#: src/man.c:358
 msgid "RESOLUTION"
 msgstr "<해상도>"
 
-#: src/man.c:358
+#: src/man.c:360
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
@@ -515,84 +515,84 @@ msgstr ""
 "groff를 활용하며 gxdirview로 표시 (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:361
+#: src/man.c:363
 msgid "use groff and force it to produce ditroff"
 msgstr "groff를 활용하며 ditroff 생성 강제"
 
-#: src/man.c:633 src/man.c:778
+#: src/man.c:635 src/man.c:779
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "%s의 설명서 항목이 없습니다\n"
 
-#: src/man.c:635
+#: src/man.c:637
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "(대신, %s 섹션에서 어떤 설명서 페이지를 볼까요?)\n"
 
-#: src/man.c:639
+#: src/man.c:641
 msgid "What manual page do you want?\n"
 msgstr "어떤 설명서 페이지를 볼까요?\n"
 
-#: src/man.c:640
+#: src/man.c:642
 msgid "For example, try 'man man'.\n"
 msgstr "예를 들어, 'man man'을 입력해보십시오.\n"
 
-#: src/man.c:775
+#: src/man.c:776
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "%s의 %s 섹션에서 설명서 항목이 없습니다\n"
 
-#: src/man.c:784
+#: src/man.c:785
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "설명서 페이지가 없다면 '%s'을(를) 입력하여 도움말을 살펴보십시오.\n"
 
-#: src/man.c:1393
+#: src/man.c:1398
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "알 수 없는 `%c' 전처리 프로그램 무시"
 
-#: src/man.c:1774 src/man-recode.c:251 src/mandb.c:233
+#: src/man.c:1785 src/man-recode.c:251 src/mandb.c:233
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "%s 이름을 %s(으)로 바꿀 수 없습니다"
 
-#: src/man.c:1791
+#: src/man.c:1802
 #, c-format
 msgid "can't set times on %s"
 msgstr "%s의 시간을 설정할 수 없습니다"
 
-#: src/man.c:1800 src/man.c:1837
+#: src/man.c:1811 src/man.c:1848
 #, c-format
 msgid "can't unlink %s"
 msgstr "%s 링크를 해제할 수 없습니다"
 
-#: src/man.c:1867
+#: src/man.c:1878
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "%s의 임시 cat 페이지를 만들 수 없습니다"
 
-#: src/man.c:1985
+#: src/man.c:1996
 #, c-format
 msgid "can't create temporary directory"
 msgstr "임시 디렉터리를 만들 수 없습니다"
 
-#: src/man.c:1996 src/man-recode.c:217
+#: src/man.c:2007 src/man-recode.c:217
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "%s 임시 파일을 열 수 없습니다"
 
-#: src/man.c:2026 src/man.c:2057
+#: src/man.c:2037 src/man.c:2068
 #, c-format
 msgid "can't remove directory %s"
 msgstr "%s 디렉터리를 제거할 수 없습니다"
 
-#: src/man.c:2188
+#: src/man.c:2205
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr "--Man-- 다음: %s [ 보기 (return) | 건너뜀 (Ctrl-D) | 나감 (Ctrl-C) ]\n"
 
-#: src/man.c:2475
+#: src/man.c:2503
 #, c-format
 msgid ""
 "\n"
@@ -601,27 +601,27 @@ msgstr ""
 "\n"
 "catman 모드에서 %s에 기록할 수 없습니다"
 
-#: src/man.c:2555
+#: src/man.c:2583
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "%s을(를) cat 이름으로 변환할 수 없습니다"
 
-#: src/man.c:3324
+#: src/man.c:3352
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: whatis 참조 의존이 오래됐습니다\n"
 
-#: src/man.c:3465 src/man.c:4320
+#: src/man.c:3493 src/man.c:4355
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "mandb 명령이 종료 상태 %d번을 반환하며 실패했습니다"
 
-#: src/man.c:3663
+#: src/man.c:3691
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "내부 오류: %d 후보 형식 값이 범위를 벗어납니다"
 
-#: src/man.c:4263
+#: src/man.c:4298
 msgid " Manual page "
 msgstr " 설명서 페이지 "
 
@@ -750,36 +750,43 @@ msgstr "%s의 설명서 페이지 처리 중...\n"
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "오래된 %s 캣 페이지 디렉터리 제거중...\n"
 
-#: src/mandb.c:919
+#: src/mandb.c:903
+#, c-format
+msgid ""
+"Only the '%s' user can create or update system-wide databases; acting as if "
+"the --user-db option was used.\n"
+msgstr ""
+
+#: src/mandb.c:926
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "경고: %s에 MANDB_MAP 지시자가 없어, 맨 페이지 경로를 활용합니다"
 
-#: src/mandb.c:988
+#: src/mandb.c:995
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
 msgstr[0] "설명서 디렉터리 %d개에 새 설명서 페이지가 있습니다.\n"
 
-#: src/mandb.c:993
+#: src/mandb.c:1000
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
 msgstr[0] "설명서 페이지 %d건을 추가했습니다.\n"
 
-#: src/mandb.c:997
+#: src/mandb.c:1004
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
 msgstr[0] "위치가 잘못된 캣 페이지 %d건을 추가했습니다.\n"
 
-#: src/mandb.c:1002
+#: src/mandb.c:1009
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
 msgstr[0] "오래된 데이터베이스 항목 %d개를 소거했습니다.\n"
 
-#: src/mandb.c:1020
+#: src/mandb.c:1027
 #, c-format
 msgid "No databases created."
 msgstr "만든 데이터베이스가 없습니다."

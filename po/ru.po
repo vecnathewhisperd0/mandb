@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: man-db 2.9.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
-"POT-Creation-Date: 2023-01-08 21:12+0000\n"
+"POT-Creation-Date: 2023-08-06 13:49+0100\n"
 "PO-Revision-Date: 2019-10-01 18:48+0300\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <gnu@d07.ru>\n"
@@ -108,7 +108,7 @@ msgid "The man database defaults to %s%s."
 msgstr "По умолчанию база данных man расположена в %s%s."
 
 #: src/accessdb.c:66 src/catman.c:106 src/globbing_test.c:62
-#: src/lexgrog_test.c:79 src/man.c:278 src/man-recode.c:118
+#: src/lexgrog_test.c:79 src/man.c:280 src/man-recode.c:118
 #: src/manconv_main.c:100 src/mandb.c:119 src/manpath.c:67 src/whatis.c:127
 #: src/zsoelim_main.c:72
 msgid "emit debugging messages"
@@ -123,20 +123,20 @@ msgstr "не удалось открыть %s на чтение"
 msgid "[SECTION...]"
 msgstr "[СЕКЦИЯ...]"
 
-#: src/catman.c:107 src/man.c:307 src/whatis.c:141
+#: src/catman.c:107 src/man.c:309 src/whatis.c:141
 msgid "PATH"
 msgstr "ПУТЬ"
 
-#: src/catman.c:108 src/man.c:308 src/whatis.c:142
+#: src/catman.c:108 src/man.c:310 src/whatis.c:142
 msgid "set search path for manual pages to PATH"
 msgstr "установить путь поиска справочных страниц в значение ПУТЬ"
 
-#: src/catman.c:109 src/man.c:276 src/mandb.c:131 src/manpath.c:69
+#: src/catman.c:109 src/man.c:278 src/mandb.c:131 src/manpath.c:69
 #: src/whatis.c:145
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: src/catman.c:110 src/man.c:277 src/mandb.c:132 src/manpath.c:70
+#: src/catman.c:110 src/man.c:279 src/mandb.c:132 src/manpath.c:70
 #: src/whatis.c:146
 msgid "use this user configuration file"
 msgstr "использовать указанный пользовательских файл настроек"
@@ -201,13 +201,13 @@ msgstr "предупреждение: %s: игнорируется пустой 
 msgid "warning: %s: whatis parse for %s(%s) failed"
 msgstr "предупреждение: %s: whatis анализ %s(%s) не удался"
 
-#: src/check_mandirs.c:325 src/check_mandirs.c:495 src/mandb.c:952
+#: src/check_mandirs.c:325 src/check_mandirs.c:495 src/mandb.c:959
 #: src/straycats.c:93 src/straycats.c:296 src/ult_src.c:99
 #, c-format
 msgid "can't search directory %s"
 msgstr "не удалось найти каталог %s"
 
-#: src/check_mandirs.c:374 src/man.c:1751
+#: src/check_mandirs.c:374 src/man.c:1762
 #, c-format
 msgid "can't chown %s"
 msgstr "не удалось выполнить функцию chown %s"
@@ -217,7 +217,7 @@ msgstr "не удалось выполнить функцию chown %s"
 msgid "warning: cannot create catdir %s"
 msgstr "предупреждение: не удалось создать cat каталог %s"
 
-#: src/check_mandirs.c:451 src/man.c:1763 src/mandb.c:242
+#: src/check_mandirs.c:451 src/man.c:1774 src/mandb.c:242
 #, c-format
 msgid "can't chmod %s"
 msgstr "не удалось выполнить функцию chmod %s"
@@ -255,19 +255,19 @@ msgstr "предупреждение: не удалось сохранить з�
 msgid "PATH SECTION NAME"
 msgstr "ПУТЬ СЕКЦИЯ ИМЯ"
 
-#: src/globbing_test.c:63 src/man.c:312
+#: src/globbing_test.c:63 src/man.c:314
 msgid "EXTENSION"
 msgstr "РАСШИРЕНИЕ"
 
-#: src/globbing_test.c:64 src/man.c:313
+#: src/globbing_test.c:64 src/man.c:315
 msgid "limit search to extension type EXTENSION"
 msgstr "искать только с заданным РАСШИРЕНИЕМ"
 
-#: src/globbing_test.c:66 src/man.c:315
+#: src/globbing_test.c:66 src/man.c:317
 msgid "look for pages case-insensitively (default)"
 msgstr "не учитывать регистр при поиске (по умолчанию)"
 
-#: src/globbing_test.c:67 src/man.c:316
+#: src/globbing_test.c:67 src/man.c:318
 msgid "look for pages case-sensitively"
 msgstr "учитывать регистр при поиске"
 
@@ -290,7 +290,7 @@ msgstr[1] ""
 msgstr[2] ""
 "предупреждение: результат whatis для %s превысил %d байт, обрезается."
 
-#: src/lexgrog.l:888 src/man.c:2346 src/man.c:2432 src/man.c:2530
+#: src/lexgrog.l:888 src/man.c:2374 src/man.c:2460 src/man.c:2558
 #: src/man-recode.c:184 src/man-recode.c:209 src/manconv_main.c:164
 #: src/straycats.c:210 src/ult_src.c:158 src/zsoelim.l:532
 #, c-format
@@ -321,162 +321,162 @@ msgstr "показать информацию whatis"
 msgid "show guessed series of preprocessing filters"
 msgstr "показать серию предположений фильтров предварительной обработки"
 
-#: src/lexgrog_test.c:85 src/man.c:299 src/man.c:337
+#: src/lexgrog_test.c:85 src/man.c:301 src/man.c:339
 msgid "ENCODING"
 msgstr "КОДИРОВКА"
 
-#: src/lexgrog_test.c:86 src/man.c:338
+#: src/lexgrog_test.c:86 src/man.c:340
 msgid "use selected output encoding"
 msgstr "использовать выбранную кодировку выходных данных"
 
-#: src/lexgrog_test.c:130 src/man.c:574 src/man.c:583
+#: src/lexgrog_test.c:130 src/man.c:576 src/man.c:585
 #, c-format
 msgid "%s: incompatible options"
 msgstr "%s: несовместимые параметры"
 
-#: src/man.c:170 src/man-recode.c:242
+#: src/man.c:172 src/man-recode.c:242
 #, c-format
 msgid "command exited with status %d: %s"
 msgstr "команда завершилась с кодом %d: %s"
 
-#: src/man.c:258
+#: src/man.c:260
 msgid "[SECTION] PAGE..."
 msgstr "[СЕКЦИЯ] СТРАНИЦА..."
 
-#: src/man.c:280
+#: src/man.c:282
 msgid "reset all options to their default values"
 msgstr "сбросить все параметры в значения по умолчанию"
 
-#: src/man.c:281
+#: src/man.c:283
 msgid "WARNINGS"
 msgstr "ПРЕДУПРЕЖДЕНИЯ"
 
-#: src/man.c:283
+#: src/man.c:285
 msgid "enable warnings from groff"
 msgstr "включить предупреждения от groff"
 
-#: src/man.c:285
+#: src/man.c:287
 msgid "Main modes of operation:"
 msgstr "Основные режимы работы:"
 
-#: src/man.c:286
+#: src/man.c:288
 msgid "equivalent to whatis"
 msgstr "эквивалентно whatis"
 
-#: src/man.c:287
+#: src/man.c:289
 msgid "equivalent to apropos"
 msgstr "эквивалентно apropos"
 
-#: src/man.c:288
+#: src/man.c:290
 msgid "search for text in all pages"
 msgstr "искать текст по всем справочным страницам"
 
-#: src/man.c:289
+#: src/man.c:291
 msgid "print physical location of man page(s)"
 msgstr "показывать физическое расположение man страницы"
 
-#: src/man.c:293
+#: src/man.c:295
 msgid "print physical location of cat file(s)"
 msgstr "показывать физическое расположение cat файла(ов)"
 
-#: src/man.c:296
+#: src/man.c:298
 msgid "interpret PAGE argument(s) as local filename(s)"
 msgstr "воспринимать аргумент(ы) СТРАНИЦА как имя файл(ов)"
 
-#: src/man.c:298
+#: src/man.c:300
 msgid "used by catman to reformat out of date cat pages"
 msgstr "используется catman для переформатирования устаревших cat страниц"
 
-#: src/man.c:300
+#: src/man.c:302
 msgid "output source page encoded in ENCODING"
 msgstr "вывести исходную страницу в КОДИРОВКЕ"
 
-#: src/man.c:302
+#: src/man.c:304
 msgid "Finding manual pages:"
 msgstr "Поиск справочных страниц:"
 
-#: src/man.c:303 src/whatis.c:143
+#: src/man.c:305 src/whatis.c:143
 msgid "LOCALE"
 msgstr "ЛОКАЛЬ"
 
-#: src/man.c:304
+#: src/man.c:306
 msgid "define the locale for this particular man search"
 msgstr "задать локаль для поиска"
 
-#: src/man.c:305 src/manpath.c:71 src/whatis.c:139
+#: src/man.c:307 src/manpath.c:71 src/whatis.c:139
 msgid "SYSTEM"
 msgstr "СИСТЕМА"
 
-#: src/man.c:306 src/manpath.c:72 src/whatis.c:140
+#: src/man.c:308 src/manpath.c:72 src/whatis.c:140
 msgid "use manual pages from other systems"
 msgstr "использовать справочные страницы от других систем"
 
-#: src/man.c:309 src/whatis.c:136
+#: src/man.c:311 src/whatis.c:136
 msgid "LIST"
 msgstr "СПИСОК"
 
-#: src/man.c:310
+#: src/man.c:312
 msgid "use colon separated section list"
 msgstr "использовать список секций, указанных через двоеточие"
 
-#: src/man.c:317
+#: src/man.c:319
 msgid "show all pages matching regex"
 msgstr "показать все страницы, удовлетворяющие регулярному выражению"
 
-#: src/man.c:319
+#: src/man.c:321
 msgid "show all pages matching wildcard"
 msgstr "показать все страницы, удовлетворяющие групповым символам"
 
-#: src/man.c:321
+#: src/man.c:323
 msgid "make --regex and --wildcard match page names only, not descriptions"
 msgstr ""
 "искать совпадение --regex и --wildcard только в именах страниц, без описаний"
 
-#: src/man.c:324
+#: src/man.c:326
 msgid "find all matching manual pages"
 msgstr "поиск всех подходящих справочных страниц"
 
-#: src/man.c:325
+#: src/man.c:327
 msgid "force a cache consistency check"
 msgstr "выполнить проверку целостности кэша"
 
-#: src/man.c:327
+#: src/man.c:329
 msgid "don't try subpages, e.g. 'man foo bar' => 'man foo-bar'"
 msgstr "не затрагивать подстраницы, например, 'man foo bar' => 'man foo-bar'"
 
-#: src/man.c:330
+#: src/man.c:332
 msgid "Controlling formatted output:"
 msgstr "Управление форматированием вывода:"
 
-#: src/man.c:331
+#: src/man.c:333
 msgid "PAGER"
 msgstr "ПЕЙДЖЕР"
 
-#: src/man.c:332
+#: src/man.c:334
 msgid "use program PAGER to display output"
 msgstr "использовать программу ПЕЙДЖЕР для вывода на экран"
 
-#: src/man.c:333 src/man.c:345
+#: src/man.c:335 src/man.c:347
 msgid "STRING"
 msgstr "СТРОКА"
 
-#: src/man.c:334
+#: src/man.c:336
 msgid "provide the `less' pager with a prompt"
 msgstr "использовать пейджер `less' с подсказкой"
 
-#: src/man.c:336
+#: src/man.c:338
 msgid "display ASCII translation of certain latin1 chars"
 msgstr "показать трансляцию ASCII определённых символов latin1"
 
-#: src/man.c:340
+#: src/man.c:342
 msgid "turn off hyphenation"
 msgstr "выключить перенос слов"
 
-#: src/man.c:343
+#: src/man.c:345
 msgid "turn off justification"
 msgstr "выключить выравнивание"
 
-#: src/man.c:346
+#: src/man.c:348
 msgid ""
 "STRING indicates which preprocessors to run:\n"
 "e - [n]eqn, p - pic, t - tbl,\n"
@@ -486,34 +486,34 @@ msgstr ""
 "e - [n]eqn, p - pic, t - tbl,\n"
 "g - grap, r - refer, v - vgrind"
 
-#: src/man.c:350
+#: src/man.c:352
 #, c-format
 msgid "use %s to format pages"
 msgstr "использовать %s для форматирования страниц"
 
-#: src/man.c:351
+#: src/man.c:353
 msgid "DEVICE"
 msgstr "УСТРОЙСТВО"
 
-#: src/man.c:352
+#: src/man.c:354
 #, c-format
 msgid "use %s with selected device"
 msgstr "использовать %s на выбранном устройстве"
 
-#: src/man.c:353
+#: src/man.c:355
 msgid "BROWSER"
 msgstr "БРАУЗЕР"
 
-#: src/man.c:355
+#: src/man.c:357
 #, c-format
 msgid "use %s or BROWSER to display HTML output"
 msgstr "использовать %s или БРАУЗЕР для показа HTML"
 
-#: src/man.c:356
+#: src/man.c:358
 msgid "RESOLUTION"
 msgstr "РАЗРЕШЕНИЕ"
 
-#: src/man.c:358
+#: src/man.c:360
 msgid ""
 "use groff and display through gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
@@ -521,85 +521,85 @@ msgstr ""
 "использовать groff и показывать с помощью gxditview (X11):\n"
 "-X = -TX75, -X100 = -TX100, -X100-12 = -TX100-12"
 
-#: src/man.c:361
+#: src/man.c:363
 msgid "use groff and force it to produce ditroff"
 msgstr "использовать groff и заставить его генерировать ditroff"
 
-#: src/man.c:633 src/man.c:778
+#: src/man.c:635 src/man.c:779
 #, c-format
 msgid "No manual entry for %s\n"
 msgstr "Нет справочной страницы для %s\n"
 
-#: src/man.c:635
+#: src/man.c:637
 #, c-format
 msgid "(Alternatively, what manual page do you want from section %s?)\n"
 msgstr "(Или же, какая именно из справочных страниц раздела %s вам нужна?)\n"
 
-#: src/man.c:639
+#: src/man.c:641
 msgid "What manual page do you want?\n"
 msgstr "Какая справочная страница вам нужна?\n"
 
-#: src/man.c:640
+#: src/man.c:642
 msgid "For example, try 'man man'.\n"
 msgstr "Например, попробуйте ввести «man man».\n"
 
-#: src/man.c:775
+#: src/man.c:776
 #, c-format
 msgid "No manual entry for %s in section %s\n"
 msgstr "Нет справочной страницы для %s в разделе %s\n"
 
-#: src/man.c:784
+#: src/man.c:785
 #, c-format
 msgid "See '%s' for help when manual pages are not available.\n"
 msgstr "Смотрите «%s» в справке, если недоступны справочные страницы.\n"
 
-#: src/man.c:1393
+#: src/man.c:1398
 #, c-format
 msgid "ignoring unknown preprocessor `%c'"
 msgstr "игнорирование неизвестного препроцессора «%c»"
 
-#: src/man.c:1774 src/man-recode.c:251 src/mandb.c:233
+#: src/man.c:1785 src/man-recode.c:251 src/mandb.c:233
 #, c-format
 msgid "can't rename %s to %s"
 msgstr "не удалось переименовать %s в %s"
 
-#: src/man.c:1791
+#: src/man.c:1802
 #, c-format
 msgid "can't set times on %s"
 msgstr "не удалось установить время доступа для %s"
 
-#: src/man.c:1800 src/man.c:1837
+#: src/man.c:1811 src/man.c:1848
 #, c-format
 msgid "can't unlink %s"
 msgstr "не удалось выполнить функцию unlink %s"
 
-#: src/man.c:1867
+#: src/man.c:1878
 #, c-format
 msgid "can't create temporary cat for %s"
 msgstr "не удалось создать временный cat файл %s"
 
-#: src/man.c:1985
+#: src/man.c:1996
 #, c-format
 msgid "can't create temporary directory"
 msgstr "не удалось создать временный каталог"
 
-#: src/man.c:1996 src/man-recode.c:217
+#: src/man.c:2007 src/man-recode.c:217
 #, c-format
 msgid "can't open temporary file %s"
 msgstr "не удалось открыть временный файл %s"
 
-#: src/man.c:2026 src/man.c:2057
+#: src/man.c:2037 src/man.c:2068
 #, c-format
 msgid "can't remove directory %s"
 msgstr "не удалось удалить каталог %s"
 
-#: src/man.c:2188
+#: src/man.c:2205
 #, c-format
 msgid "--Man-- next: %s [ view (return) | skip (Ctrl-D) | quit (Ctrl-C) ]\n"
 msgstr ""
 "--Man-- след: %s [ просм (ввод) | пропуск (Ctrl-D) | выход (Ctrl-C) ]\n"
 
-#: src/man.c:2475
+#: src/man.c:2503
 #, c-format
 msgid ""
 "\n"
@@ -608,27 +608,27 @@ msgstr ""
 "\n"
 "не удалось записать в %s в режиме catman"
 
-#: src/man.c:2555
+#: src/man.c:2583
 #, c-format
 msgid "Can't convert %s to cat name"
 msgstr "Не удалось преобразовать %s в cat имя"
 
-#: src/man.c:3324
+#: src/man.c:3352
 #, c-format
 msgid "%s: relying on whatis refs is deprecated\n"
 msgstr "%s: полагаться на ссылки whatis настоятельно не рекомендуется\n"
 
-#: src/man.c:3465 src/man.c:4320
+#: src/man.c:3493 src/man.c:4355
 #, c-format
 msgid "mandb command failed with exit status %d"
 msgstr "команда mandb завершилась неудачно (код выхода %d)"
 
-#: src/man.c:3663
+#: src/man.c:3691
 #, c-format
 msgid "internal error: candidate type %d out of range"
 msgstr "внутренняя ошибка: тип кандидата %d вне диапазона"
 
-#: src/man.c:4263
+#: src/man.c:4298
 msgid " Manual page "
 msgstr " Справочная страница "
 
@@ -757,12 +757,19 @@ msgstr "Обработка справочных страниц в %s...\n"
 msgid "Removing obsolete cat directory %s...\n"
 msgstr "Удаляется устаревший каталог cat %s...\n"
 
-#: src/mandb.c:919
+#: src/mandb.c:903
+#, c-format
+msgid ""
+"Only the '%s' user can create or update system-wide databases; acting as if "
+"the --user-db option was used.\n"
+msgstr ""
+
+#: src/mandb.c:926
 #, c-format
 msgid "warning: no MANDB_MAP directives in %s, using your manpath"
 msgstr "предупреждение: нет директивы MANDB_MAP в %s, используется ваш manpath"
 
-#: src/mandb.c:988
+#: src/mandb.c:995
 #, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
@@ -770,7 +777,7 @@ msgstr[0] "В %d man-подкаталоге содержатся более но
 msgstr[1] "В %d man-подкаталогах содержатся более новые справочные страницы.\n"
 msgstr[2] "В %d man-подкаталогах содержатся более новые справочные страницы.\n"
 
-#: src/mandb.c:993
+#: src/mandb.c:1000
 #, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
@@ -778,7 +785,7 @@ msgstr[0] "Добавлена %d справочная страница.\n"
 msgstr[1] "Добавлено %d справочные страницы.\n"
 msgstr[2] "Добавлено %d справочных страниц.\n"
 
-#: src/mandb.c:997
+#: src/mandb.c:1004
 #, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
@@ -786,7 +793,7 @@ msgstr[0] "Добавлена %d побочная cat-страница.\n"
 msgstr[1] "Добавлено %d побочные cat-страницы.\n"
 msgstr[2] "Добавлено %d побочных cat-страниц.\n"
 
-#: src/mandb.c:1002
+#: src/mandb.c:1009
 #, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
@@ -794,7 +801,7 @@ msgstr[0] "Вычищена %d старая запись базы данных.\
 msgstr[1] "Вычищено %d старые записи базы данных.\n"
 msgstr[2] "Вычищено %d старых записей базы данных.\n"
 
-#: src/mandb.c:1020
+#: src/mandb.c:1027
 #, c-format
 msgid "No databases created."
 msgstr "Базы данных не созданы."
