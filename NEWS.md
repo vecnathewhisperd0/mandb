@@ -802,7 +802,8 @@ Fixes:
 Improvements:
 
  * As promised in the release notes for man-db 2.5.8, man-db no longer ships
-   its own copy of [libpipeline](https://nongnu.org/libpipeline/).  You must
+   its own copy of
+   [libpipeline](https://libpipeline.gitlab.io/libpipeline/).  You must
    build and install that library separately.
  * Search the full manpath when expanding `.so` directives in manual pages.
    As part of this, `.so name.1` should now work as well as `.so
@@ -865,9 +866,9 @@ Improvements:
    locales are often out of sync with the C library in that context.  Thanks
    to the Debian Perl maintainers for the idea.
  * Allow building with an external
-   [libpipeline](https://nongnu.org/libpipeline/), which has been split out
-   from man-db.  This is a transitional measure: a future version of man-db
-   will stop shipping its own copy of `libpipeline`.
+   [libpipeline](https://libpipeline.gitlab.io/libpipeline/), which has been
+   split out from man-db.  This is a transitional measure: a future version
+   of man-db will stop shipping its own copy of `libpipeline`.
  * `mandb` should no longer repeatedly rescan manual page hierarchies when a
    `whatis` entry turns into a broken link.
 
