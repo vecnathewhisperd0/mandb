@@ -15,15 +15,16 @@
 # Actualizări realizate de Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 15.01.2022.
 # Actualizare a traducerii pentru versiunea 2.10.0-pre1, făcută de R-GC, feb-2022.
 # Actualizare a traducerii pentru versiunea 2.11.0-pre1, făcută de R-GC, oct-2022.
-# Actualizare a traducerii pentru versiunea 2.11.0-pre1, făcută de R-GC, aug-2023.
+# Actualizare a traducerii pentru versiunea 2.12.0-pre1, făcută de R-GC, aug-2023.
+# Actualizare a traducerii pentru versiunea 2.12.0-pre2, făcută de R-GC, aug-2023.
 # Actualizare a traducerii pentru versiunea Y, făcută de X, Z(luna-anul).
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages-2.12.0-pre1\n"
+"Project-Id-Version: man-db-manpages-2.12.0-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2023-08-06 21:18+0100\n"
-"PO-Revision-Date: 2023-08-06 21:56+0200\n"
+"PO-Revision-Date: 2023-08-07 13:48+0200\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -1614,13 +1615,6 @@ msgstr "B<--warnings>[=I<avertismente\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:448
-#, fuzzy
-#| msgid ""
-#| "Enable warnings from I<groff>.  This may be used to perform sanity checks "
-#| "on the source text of manual pages.  I<warnings> is a comma-separated "
-#| "list of warning names; if it is not supplied, the default is \"mac\".  "
-#| "See the \\(lqWarnings\\(rq node in B<info groff> for a list of available "
-#| "warning names."
 msgid ""
 "Enable warnings from I<groff>.  This may be used to perform sanity checks on "
 "the source text of manual pages.  I<warnings> is a comma-separated list of "
@@ -1634,8 +1628,11 @@ msgstr ""
 "efectua verificări de corectitudine asupra textului sursă al paginilor de "
 "manual. I<warnings> este o listă de nume de avertismente separate prin "
 "virgulă; dacă niciunul nu este furnizat, se folosește valoarea implicită "
-"„mac”.  Consultați nodul \\(lqAvertismente\\(rq din B<info groff>) pentru o "
-"listă a numelor de avertismente disponibile."
+"„mac”.  Pentru a dezactiva un avertisment I<groff>, prefixați-l cu „!”; de "
+"exemplu: B<--warnings=mac,!break> activează avertismentele din categoria "
+"„mac” și dezactivează avertismentele din categoria „break”.  Consultați "
+"nodul \\(lqAvertismente\\(rq din B<info groff>) pentru o listă a numelor de "
+"avertismente disponibile."
 
 #. type: SS
 #: ../../man/man1/man.man1:448
@@ -1698,16 +1695,6 @@ msgstr ""
 #.  usual filters.
 #. type: Plain text
 #: ../../man/man1/man.man1:495
-#, fuzzy
-#| msgid ""
-#| "Activate \"local\" mode.  Format and display local manual files instead "
-#| "of searching through the system's manual collection.  Each manual page "
-#| "argument will be interpreted as an nroff source file in the correct "
-#| "format.  No cat file is produced.  If '-' is listed as one of the "
-#| "arguments, input will be taken from stdin.  When this option is not used, "
-#| "and man fails to find the page required, before displaying the error "
-#| "message, it attempts to act as if this option was supplied, using the "
-#| "name as a filename and looking for an exact match."
 msgid ""
 "Activate \"local\" mode.  Format and display local manual files instead of "
 "searching through the system's manual collection.  Each manual page argument "
@@ -1719,11 +1706,7 @@ msgstr ""
 "în loc să caute prin colecția de manuale a sistemului.  Fiecare argument de "
 "pagină de manual va fi interpretat ca un fișier sursă «nroff» în formatul "
 "corect.  Nu este produs niciun fișier «cat».  Dacă „-” este listat ca unul "
-"dintre argumente, intrarea va fi preluată de la intrarea standard.  Când "
-"această opțiune nu este utilizată și «man» nu reușește să găsească pagina "
-"necesară, înainte de a afișa mesajul de eroare, încearcă să acționeze ca și "
-"cum această opțiune ar fi fost furnizată, folosind numele ca nume de fișier "
-"și căutând o potrivire exactă."
+"dintre argumente, intrarea va fi preluată de la intrarea standard."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:501
@@ -1733,6 +1716,10 @@ msgid ""
 "contains a \"/\" character, since that is a good indication that the "
 "argument refers to a path on the file system."
 msgstr ""
+"Dacă această opțiune nu este utilizată, atunci B<%man%> va interpreta "
+"argumentele paginii de manual ca nume de fișiere locale dacă argumentul "
+"conține un caracter „/”, deoarece acesta este un bun indiciu că argumentul "
+"se referă la o rută din sistemul de fișiere."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:509
@@ -2694,10 +2681,8 @@ msgstr "STANDARDE"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1278
-#, fuzzy
-#| msgid "POSIX.1â2001, POSIX.1â2008, POSIX.1-2017."
 msgid "POSIX.1-2001, POSIX.1-2008, POSIX.1-2017."
-msgstr "POSIX.1â2001, POSIX.1â2008, POSIX.1-2017."
+msgstr "POSIX.1-2001, POSIX.1-2008, POSIX.1-2017."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1295
