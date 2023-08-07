@@ -279,7 +279,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	 * Since I currently know of no library with suitable syscall lists,
 	 * the syscall lists here are taken from
 	 * systemd:src/shared/seccomp-util.c, last updated from commit
-	 * fc2a0bc05e0429e468c7eaad52998292105fe7fb (2023-01-13).
+	 * ab9617a76624c43a26de7e94424088ae171ebfef (2023-08-07).
 	 */
 
 	/* systemd: SystemCallFilter=@default */
@@ -297,6 +297,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("exit_group");
 	SC_ALLOW ("futex");
 	SC_ALLOW ("futex_time64");
+	SC_ALLOW ("futex_waitv");
 	SC_ALLOW ("get_robust_list");
 	SC_ALLOW ("get_thread_area");
 	SC_ALLOW ("getegid");
@@ -332,6 +333,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("prlimit64");
 	SC_ALLOW ("restart_syscall");
 	SC_ALLOW ("riscv_flush_icache");
+	SC_ALLOW ("riscv_hwprobe");
 	SC_ALLOW ("rseq");
 	SC_ALLOW ("rt_sigreturn");
 	SC_ALLOW ("sched_getaffinity");
@@ -520,6 +522,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("syncfs");
 
 	/* systemd: SystemCallFilter=@system-service (subset) */
+	SC_ALLOW ("arm_fadvise64_64");
 	SC_ALLOW ("fadvise64");
 	SC_ALLOW ("fadvise64_64");
 	if (permissive)
