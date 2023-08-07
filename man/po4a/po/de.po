@@ -13,10 +13,10 @@
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2014, 2016, 2018-2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-manpages 2.12.0-pre1\n"
+"Project-Id-Version: man-db-manpages 2.12.0-pre2\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2023-08-06 21:18+0100\n"
-"PO-Revision-Date: 2023-08-06 18:00+0200\n"
+"PO-Revision-Date: 2023-08-07 17:25+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
 "Language: de\n"
@@ -1588,13 +1588,6 @@ msgstr "B<--warnings>[=I<Warnmeldungen\\/>]"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:448
-#, fuzzy
-#| msgid ""
-#| "Enable warnings from I<groff>.  This may be used to perform sanity checks "
-#| "on the source text of manual pages.  I<warnings> is a comma-separated "
-#| "list of warning names; if it is not supplied, the default is \"mac\".  "
-#| "See the \\(lqWarnings\\(rq node in B<info groff> for a list of available "
-#| "warning names."
 msgid ""
 "Enable warnings from I<groff>.  This may be used to perform sanity checks on "
 "the source text of manual pages.  I<warnings> is a comma-separated list of "
@@ -1607,8 +1600,11 @@ msgstr ""
 "Aktiviert I<Groff>-Warnmeldungen. Damit kann der Zustand der Handbuch-"
 "Quelltexte geprüft werden. I<Warnmeldungen> ist eine kommagetrennte Liste "
 "von Warnungen. Wird kein Wert vorgegeben, wird die Voreinstellung »mac« "
-"angewendet (siehe den Punkt »warnings« in B<info Groff> für eine Liste "
-"verfügbarer Warnungen)."
+"angewendet. Um eine I<groff>-Warnung zu deaktivieren, stellen Sie ihr ein "
+"Ausrufezeichen (!) voran: Beispielsweise aktiviert B<--warnings=mac,!break> "
+"Warnungen in der Kategorie »mac« und deaktiviert sie in der Kategorie "
+"»break«. Siehe den Punkt »warnings« in B<info groff> für eine Liste "
+"verfügbarer Warnungen."
 
 #. type: SS
 #: ../../man/man1/man.man1:448
@@ -1667,22 +1663,11 @@ msgstr ""
 "geschrieben sind und ähnlichem falsche Treffer enthalten kann. Durchsuchen "
 "des dargestellten Textes wäre viel langsamer."
 
-# FIXME: B<man>
 #.  Compressed nroff source files with a supported compression
 #.  extension will be decompressed by man prior to being displaying via the
 #.  usual filters.
 #. type: Plain text
 #: ../../man/man1/man.man1:495
-#, fuzzy
-#| msgid ""
-#| "Activate \"local\" mode.  Format and display local manual files instead "
-#| "of searching through the system's manual collection.  Each manual page "
-#| "argument will be interpreted as an nroff source file in the correct "
-#| "format.  No cat file is produced.  If '-' is listed as one of the "
-#| "arguments, input will be taken from stdin.  When this option is not used, "
-#| "and man fails to find the page required, before displaying the error "
-#| "message, it attempts to act as if this option was supplied, using the "
-#| "name as a filename and looking for an exact match."
 msgid ""
 "Activate \"local\" mode.  Format and display local manual files instead of "
 "searching through the system's manual collection.  Each manual page argument "
@@ -1694,10 +1679,7 @@ msgstr ""
 "an, anstatt die System-Handbuchsammlung zu durchsuchen. Jedes Handbuchseiten-"
 "Argument wird als gültig formatierte Nroff-Quelle interpretiert. Es werden "
 "keine Cat-Dateien erstellt. Wenn eines der Argumente »-« ist, wird die "
-"Eingabe von der Standardeingabe übernommen. Wenn diese Option nicht "
-"verwendet wird und B<man> die gewünschte Seite nicht findet, nimmt B<man> "
-"diese Option als angegeben an, betrachtet den Namen als Dateinamen und sucht "
-"nach einer exakten Übereinstimmung, bevor es eine Fehlermeldung anzeigt."
+"Eingabe von der Standardeingabe übernommen."
 
 #. type: Plain text
 #: ../../man/man1/man.man1:501
@@ -1707,6 +1689,11 @@ msgid ""
 "contains a \"/\" character, since that is a good indication that the "
 "argument refers to a path on the file system."
 msgstr ""
+"Wenn diese Option nicht verwendet wird, dann wird B<%man%> auch darauf "
+"ausweichen, als Argumente angegebene Handbuchseiten als lokale Dateinamen zu "
+"interpretieren, wenn das Argument einen Schrägstrich (/) enthält, da dies "
+"darauf hindeutet, dass sich das Argument auf einen Pfad im Dateisystem "
+"bezieht."
 
 # FIXME: Bold forgotten in English text?
 #. type: Plain text
@@ -2151,7 +2138,6 @@ msgstr ""
 "werden, sofern in der Befehlszeile keine angegeben wird."
 
 # FIXME: ascii bold, sense: when do I know the display is right
-# FIXME: l<latin1>(7)
 #. type: Plain text
 #: ../../man/man1/man.man1:862
 msgid ""
@@ -2674,8 +2660,6 @@ msgstr "STANDARDS"
 
 #. type: Plain text
 #: ../../man/man1/man.man1:1278
-#, fuzzy
-#| msgid "POSIX.1â2001, POSIX.1â2008, POSIX.1-2017."
 msgid "POSIX.1-2001, POSIX.1-2008, POSIX.1-2017."
 msgstr "POSIX.1-2001, POSIX.1-2008, POSIX.1-2017."
 
@@ -3613,7 +3597,7 @@ msgid ""
 "man/index.E<lt>db-typeE<gt>,> where E<lt>db-typeE<gt> is dependent on the "
 "database library in use."
 msgstr ""
-"B<Accessdb> gibt den Inhalt einer Man-db-Datenbank in einer für Menschen "
+"B<accessdb> gibt den Inhalt einer Man-db-Datenbank in einer für Menschen "
 "lesbaren Form aus. Standardmäßig gibt das Programm die Daten aus B</var/"
 "cache/man/index.E<lt>Db-TypE<gt>> aus. E<lt>Db-TypE<gt> hängt von der "
 "verwendeten Datenbank ab."
