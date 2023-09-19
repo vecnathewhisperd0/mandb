@@ -11,6 +11,8 @@ Fixes:
    for guessing `MANPATH` entries.
  * More accurately document the behaviour of passing file names as arguments
    to `man` without the `-l`/`--local-file` option.
+ * Avoid duplicate cleanup of old cat pages by both `man-db.service` and
+   `systemd-tmpfiles-clean.service`.
 
 Improvements:
 
