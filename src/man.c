@@ -686,11 +686,10 @@ static int get_roff_line_length (void)
 	int line_length = cat_width ? cat_width : get_line_length ();
 
 	if (!troff || ditroff) {
-		int length = line_length * 39 / 40;
-		if (length > line_length - 2)
+		if (line_length <= 40)
 			return line_length - 2;
 		else
-			return length;
+			return line_length * 39 / 40;
 	} else
 		return 0;
 }
