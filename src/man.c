@@ -686,7 +686,9 @@ static int get_roff_line_length (void)
 	int line_length = cat_width ? cat_width : get_line_length ();
 
 	if (!troff || ditroff)
-		return line_length;
+		/* groff ≤1.23 tbl often overflows the page width by 1 column:
+		 * let it do so without mangling the output completely. */
+		return line_length - 1;
 	else
 		return 0;
 }
