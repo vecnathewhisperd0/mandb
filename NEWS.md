@@ -4,6 +4,7 @@ man-db 2.12.1
 Improvements:
 
  * `man` matches the display width more accurately to the configured width.
+ * Upgrade to Gnulib `stable-202401`.
 
 man-db 2.12.0 (23 September 2023)
 =================================
