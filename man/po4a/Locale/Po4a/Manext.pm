@@ -62,6 +62,7 @@ sub initialize {
     $self->{manext_shift_tbl_lines} = [];
     $self->{manext_push_tbl_state} = 0;
     $self->{manext_push_tbl_line} = '';
+    return;
 }
 
 sub _parse_version {
@@ -156,11 +157,11 @@ sub pushline {
     }
 
     $self->SUPER::pushline($line);
+    return;
 }
 
 sub translate {
-    my ($self, $str, $ref, $type) = (shift, shift, shift, shift);
-    my %options = @_;
+    my ($self, $str, $ref, $type, %options) = @_;
 
     if (defined $type and $type eq 'tbl table') {
         if (_parse_version($Locale::Po4a::TransTractor::VERSION) < 'v0.47') {

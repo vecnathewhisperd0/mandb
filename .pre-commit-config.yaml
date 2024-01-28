@@ -17,3 +17,8 @@ repos:
     hooks:
     -   id: shellcheck
         exclude: ^bootstrap$
+-   repo: https://github.com/scop/pre-commit-perlcritic
+    rev: v1.152-1
+    hooks:
+    -   id: perlcritic
+        args: [--stern]
