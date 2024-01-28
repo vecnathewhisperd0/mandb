@@ -1,5 +1,4 @@
 dist_noinst_SCRIPTS = \
-	chconfig \
 	checkman \
 	mandb_fmt-script \
 	mkcatdirs

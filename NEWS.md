@@ -6,6 +6,12 @@ Improvements:
  * `man` matches the display width more accurately to the configured width.
  * Upgrade to Gnulib `stable-202401`.
 
+Compatibility notes:
+
+ * Remove the obsolete `chconfig` tool for converting man-db configuration
+   files to the FHS.  This transition took place almost 25 years ago (at
+   least in Debian), so it's not worth keeping it around now.
+
 man-db 2.12.0 (23 September 2023)
 =================================
 
