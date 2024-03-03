@@ -5,6 +5,7 @@ Improvements:
 
  * `man` matches the display width more accurately to the configured width.
  * Upgrade to Gnulib `stable-202401`.
+ * Mention `groff`'s `pdf` device in `man(1)`.
 
 Compatibility notes:
 
