@@ -279,7 +279,7 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	 * Since I currently know of no library with suitable syscall lists,
 	 * the syscall lists here are taken from
 	 * systemd:src/shared/seccomp-util.c, last updated from commit
-	 * ab9617a76624c43a26de7e94424088ae171ebfef (2023-08-07).
+	 * 85b774de49caff8be819f021740dd680ba76ab77 (2024-03-03).
 	 */
 
 	/* systemd: SystemCallFilter=@default */
@@ -382,6 +382,8 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 		SC_ALLOW_ARG_1 ("fchmod",
 				SCMP_A1 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 		SC_ALLOW_ARG_1 ("fchmodat",
+				SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+		SC_ALLOW_ARG_1 ("fchmodat2",
 				SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 	}
 	SC_ALLOW ("fcntl");
