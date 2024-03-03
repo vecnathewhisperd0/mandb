@@ -628,6 +628,10 @@ static void _sandbox_load (man_sandbox *sandbox, bool permissive) {
 			ctx = sandbox->ctx;
 		if (!ctx)
 			return;
+#if (SCMP_VER_MAJOR == 2 && SCMP_VER_MINOR >= 5) || SCMP_VER_MAJOR > 2
+		if (seccomp_attr_set (ctx, SCMP_FLTATR_CTL_OPTIMIZE, 2) < 0)
+			debug ("failed to set SCMP_FLTATR_CTL_OPTIMIZE\n");
+#endif /* libseccomp >= 2.5 */
 		debug ("loading seccomp filter (permissive: %d)\n",
 		       (int) permissive);
 		if (seccomp_load (ctx) < 0) {
