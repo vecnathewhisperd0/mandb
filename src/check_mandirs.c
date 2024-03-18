@@ -383,9 +383,9 @@ void chown_if_possible (const char *path MAYBE_UNUSED)
 /* create the catman hierarchy if it doesn't exist */
 static void mkcatdirs (const char *mandir, const char *catdir)
 {
-	char *manname, *catname;
-
 	if (catdir) {
+		char *manname, *catname;
+
 		int oldmask = umask (022);
 		/* first the base catdir */
 		if (is_directory (catdir) != 1) {

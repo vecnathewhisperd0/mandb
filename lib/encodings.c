@@ -748,9 +748,9 @@ const char * ATTRIBUTE_PURE get_output_encoding (const char *device)
 /* Return the value of LESSCHARSET appropriate for this locale. */
 const char * ATTRIBUTE_PURE get_less_charset (const char *charset_from_locale)
 {
-	const struct less_charset_entry *entry;
-
 	if (charset_from_locale) {
+		const struct less_charset_entry *entry;
+
 		for (entry = less_charset_table; entry->charset_from_locale;
 		     ++entry)
 			if (STREQ (entry->charset_from_locale,
@@ -766,9 +766,9 @@ const char * ATTRIBUTE_PURE get_less_charset (const char *charset_from_locale)
  */
 const char * ATTRIBUTE_PURE get_jless_charset (const char *charset_from_locale)
 {
-	const struct less_charset_entry *entry;
-
 	if (charset_from_locale) {
+		const struct less_charset_entry *entry;
+
 		for (entry = less_charset_table; entry->charset_from_locale;
 		     ++entry)
 			if (STREQ (entry->charset_from_locale,

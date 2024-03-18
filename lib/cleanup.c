@@ -125,7 +125,7 @@ trap_abnormal_exits (void)
 /* Restore signo's action from oldact if its current handler is
    sighandler, return 0 on success, -1 on failure. */
 static int
-untrap_signal (int signo, struct sigaction *oldact)
+untrap_signal (int signo, const struct sigaction *oldact)
 {
   struct sigaction act;
   if (sigaction (signo, NULL, &act)) {
@@ -251,7 +251,7 @@ push_cleanup (cleanup_fun fun, void *arg, int sigsafe)
  * given values.
  */
 void
-pop_cleanup (cleanup_fun fun, void *arg)
+pop_cleanup (cleanup_fun fun, const void *arg)
 {
   unsigned i, j;
 

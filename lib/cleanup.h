@@ -29,7 +29,7 @@ typedef void (*cleanup_fun) (void *);
 extern void do_cleanups_sigsafe (bool);
 extern void do_cleanups (void);
 extern int push_cleanup (cleanup_fun, void *, int);
-extern void pop_cleanup (cleanup_fun, void *);
+extern void pop_cleanup (cleanup_fun, const void *);
 extern void pop_all_cleanups (void);
 
 #endif /* _CLEANUP_H */

@@ -330,7 +330,7 @@ static void dbpaths_init (struct dbpaths *dbpaths,
 #endif /* NDBM */
 }
 
-static int dbpaths_copy_to_tmp (struct dbpaths *dbpaths)
+static int dbpaths_copy_to_tmp (const struct dbpaths *dbpaths)
 {
 #ifdef NDBM
 #  ifdef BERKELEY_DB
@@ -346,7 +346,7 @@ static int dbpaths_copy_to_tmp (struct dbpaths *dbpaths)
 #endif /* NDBM */
 }
 
-static void dbpaths_remove_tmp (struct dbpaths *dbpaths)
+static void dbpaths_remove_tmp (const struct dbpaths *dbpaths)
 {
 #ifdef NDBM
 #  ifdef BERKELEY_DB
@@ -403,7 +403,7 @@ static void dbpaths_chown_if_possible (struct dbpaths *dbpaths)
 #endif /* MAN_OWNER */
 
 /* Remove incomplete databases.  This is async-signal-safe. */
-static void dbpaths_unlink_tmp (struct dbpaths *dbpaths)
+static void dbpaths_unlink_tmp (const struct dbpaths *dbpaths)
 {
 #ifdef NDBM
 #  ifdef BERKELEY_DB

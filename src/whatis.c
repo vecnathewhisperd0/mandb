@@ -563,7 +563,7 @@ static void do_whatis (MYDBM_FILE dbf,
 	}
 }
 
-static bool any_set (int num_pages, bool *found_here)
+static bool any_set (int num_pages, const bool *found_here)
 {
 	int i;
 
@@ -573,7 +573,7 @@ static bool any_set (int num_pages, bool *found_here)
 	return false;
 }
 
-static bool all_set (int num_pages, bool *found_here)
+static bool all_set (int num_pages, const bool *found_here)
 {
 	int i;
 
@@ -622,8 +622,8 @@ static bool ATTRIBUTE_PURE match (const char *page, const char *whatis)
 
 	/* check for string match, then see if it is a _word_ */
 	while (whatis && (p = strcasestr (whatis, page))) {
-		char *left = p - 1;
-		char *right = p + len;
+		const char *left = p - 1;
+		const char *right = p + len;
 
 		if ((p == begin || (!CTYPE (isalpha, *left) && *left != '_')) &&
 		    (!*right || (!CTYPE (isalpha, *right) && *right != '_')))
@@ -678,7 +678,7 @@ static void do_apropos (MYDBM_FILE dbf,
 {
 	datum key, cont;
 	bool *found_here;
-	bool (*combine) (int, bool *);
+	bool (*combine) (int, const bool *);
 #ifndef BTREE
 	datum nextkey;
 #else /* BTREE */

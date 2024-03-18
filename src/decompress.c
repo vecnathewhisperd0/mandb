@@ -277,7 +277,7 @@ decompress *decompress_fdopen (int fd)
 	return decompress_new_pipeline (p);
 }
 
-bool ATTRIBUTE_PURE decompress_is_pipeline (decompress *d)
+bool ATTRIBUTE_PURE decompress_is_pipeline (const decompress *d)
 {
 	return d->tag == DECOMPRESS_PIPELINE;
 }

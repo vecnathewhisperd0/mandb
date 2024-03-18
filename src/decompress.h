@@ -58,7 +58,7 @@ decompress *decompress_open (const char *filename, int flags);
 decompress *decompress_fdopen (int fd);
 
 /* Return true if and only if this is a pipeline-based decompressor. */
-bool decompress_is_pipeline (decompress *d);
+bool decompress_is_pipeline (const decompress *d);
 
 /* Get the pipeline corresponding to a decompressor.  Raises an assertion
  * failure if this is not a pipeline-based decompressor.

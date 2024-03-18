@@ -289,8 +289,8 @@ static struct ult_key *ult_key_new (const char *name, int flags)
 
 static bool ATTRIBUTE_PURE ult_key_equals (const void *key1, const void *key2)
 {
-	struct ult_key *ukey1 = (struct ult_key *) key1;
-	struct ult_key *ukey2 = (struct ult_key *) key2;
+	const struct ult_key *ukey1 = (const struct ult_key *) key1;
+	const struct ult_key *ukey2 = (const struct ult_key *) key2;
 	return ukey1->flags == ukey2->flags &&
 	       STREQ (ukey1->name, ukey2->name);
 }
