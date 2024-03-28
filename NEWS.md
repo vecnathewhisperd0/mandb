@@ -7,6 +7,7 @@ Improvements:
  * Upgrade to Gnulib `stable-202401`.
  * Mention `groff`'s `pdf` device in `man(1)`.
  * Speed up `seccomp` filter slightly.
+ * Document how to format pages using italic rather than underlined text.
 
 Compatibility notes:
 
