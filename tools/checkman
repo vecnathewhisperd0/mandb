@@ -66,11 +66,11 @@ do
 
 # See which is newer and echo
 
-	if test "$file1" -nt "$file2"
+	if test "$(find "$file1" -newer "$file2")"
 	then
 		echo "$file1 is newer than $file2" >&2
 		echo "$file2"
-	elif test "$file2" -nt "$file1"
+	elif test "$(find "$file2" -newer "$file1")"
 	then
 		echo "$file2 is newer than $file1" >&2
 		echo "$file1"

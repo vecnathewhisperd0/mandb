@@ -50,6 +50,7 @@ accessdb_filter "$tmpdir/usr/share/man/index$db_ext" >"$tmpdir/2.out"
 expect_files_equal 'remove test3' "$tmpdir/2.exp" "$tmpdir/2.out"
 mtime2="$(./get-mtime "$tmpdir/usr/share/man/index$full_db_ext")"
 test "$mtime1" != "$mtime2"
+# shellcheck disable=SC2319
 report 'mtime changed (1)' "$?"
 
 ./fspause
