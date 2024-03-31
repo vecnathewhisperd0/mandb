@@ -1,6 +1,10 @@
 man-db 2.12.1
 =============
 
+Fixes:
+
+ * Fix excessive cleanup of `/var/cache/man` by `systemd-tmpfiles`.
+
 Improvements:
 
  * `man` matches the display width more accurately to the configured width.
