@@ -1,4 +1,4 @@
-commit a304ab22b12f41712dbcd41b6ff001feb062b03f
+commit cc9028a3c3fa4dea795d475808c6c758c9b21be2
 Author: Colin Watson <cjwatson@debian.org>
 Date:   Mon May 28 17:41:05 2018 +0100
 
@@ -46,10 +46,10 @@ Date:   Mon May 28 17:41:05 2018 +0100
     https://lists.gnu.org/r/bug-gnulib/2008-03/msg00144.html
 
 diff --git a/gl/lib/argp-help.c b/gl/lib/argp-help.c
-index 80cdb44937..4e600f269d 100644
+index 9c7456642c..aa8cc701d2 100644
 --- a/gl/lib/argp-help.c
 +++ b/gl/lib/argp-help.c
-@@ -49,6 +49,16 @@
+@@ -48,6 +48,16 @@
  # include "gettext.h"
  #endif
  
@@ -66,7 +66,7 @@ index 80cdb44937..4e600f269d 100644
  #include "argp.h"
  #include "argp-fmtstream.h"
  #include "argp-namefrob.h"
-@@ -148,7 +158,7 @@ validate_uparams (const struct argp_state *state, struct uparams *upptr)
+@@ -147,7 +157,7 @@ validate_uparams (const struct argp_state *state, struct uparams *upptr)
          {
            __argp_failure (state, 0, 0,
                            dgettext (state == NULL ? NULL
@@ -75,7 +75,7 @@ index 80cdb44937..4e600f269d 100644
                                      "\
  ARGP_HELP_FMT: %s value is less than or equal to %s"),
                            "rmargin", up->name);
-@@ -224,7 +234,7 @@ fill_in_uparams (const struct argp_state *state)
+@@ -223,7 +233,7 @@ fill_in_uparams (const struct argp_state *state)
                      if (unspec && !un->is_bool)
                        __argp_failure (state, 0, 0,
                                        dgettext (state == NULL ? NULL
@@ -84,7 +84,7 @@ index 80cdb44937..4e600f269d 100644
                                                  "\
  %.*s: ARGP_HELP_FMT parameter requires a value"),
                                        (int) var_len, var);
-@@ -235,7 +245,7 @@ fill_in_uparams (const struct argp_state *state)
+@@ -234,7 +244,7 @@ fill_in_uparams (const struct argp_state *state)
                if (un == uparam_names + nuparam_names)
                  __argp_failure (state, 0, 0,
                                  dgettext (state == NULL ? NULL
@@ -93,7 +93,7 @@ index 80cdb44937..4e600f269d 100644
  %.*s: Unknown ARGP_HELP_FMT parameter"),
                                  (int) var_len, var);
  
-@@ -247,7 +257,7 @@ fill_in_uparams (const struct argp_state *state)
+@@ -246,7 +256,7 @@ fill_in_uparams (const struct argp_state *state)
              {
                __argp_failure (state, 0, 0,
                                dgettext (state == NULL ? NULL
@@ -102,7 +102,7 @@ index 80cdb44937..4e600f269d 100644
                                          "Garbage in ARGP_HELP_FMT: %s"), var);
                break;
              }
-@@ -1256,7 +1266,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
+@@ -1260,7 +1270,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
              __argp_fmtstream_putc (stream, *so);
              if (!have_long_opt || uparams.dup_args)
                arg (real, " %s", "[%s]",
@@ -111,7 +111,7 @@ index 80cdb44937..4e600f269d 100644
                     stream);
              else if (real->arg)
                hhstate->suppressed_dup_arg = 1;
-@@ -1278,7 +1288,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
+@@ -1282,7 +1292,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
                 should be pretty rare anyway...  */
              __argp_fmtstream_puts (stream,
                                     dgettext (state == NULL ? NULL
@@ -120,7 +120,7 @@ index 80cdb44937..4e600f269d 100644
                                               opt->name));
            }
      }
-@@ -1292,7 +1302,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
+@@ -1296,7 +1306,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
              comma (uparams.long_opt_col, &pest);
              __argp_fmtstream_printf (stream, "--%s", opt->name);
              arg (real, "=%s", "[=%s]",
@@ -129,16 +129,16 @@ index 80cdb44937..4e600f269d 100644
            }
      }
  
-@@ -1312,7 +1322,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
+@@ -1316,7 +1326,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
    else
      {
        const char *tstr = real->doc ? dgettext (state == NULL ? NULL
 -                                               : state->root_argp->argp_domain,
 +                                               : entry->argp->argp_domain,
-                                                real->doc) : 0;
+                                                real->doc) : NULL;
        const char *fstr = filter_doc (tstr, real->key, entry->argp, state);
        if (fstr && *fstr)
-@@ -1361,7 +1371,7 @@ hol_help (struct hol *hol, const struct argp_state *state,
+@@ -1365,7 +1375,7 @@ hol_help (struct hol *hol, const struct argp_state *state,
    if (hhstate.suppressed_dup_arg && uparams.dup_args_note)
      {
        const char *tstr = dgettext (state == NULL ? NULL
@@ -147,7 +147,7 @@ index 80cdb44937..4e600f269d 100644
  Mandatory or optional arguments to long options are also mandatory or \
  optional for any corresponding short options.");
        const char *fstr = filter_doc (tstr, ARGP_KEY_HELP_DUP_ARGS_NOTE,
-@@ -1727,11 +1737,11 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
+@@ -1731,11 +1741,11 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
  
            if (first_pattern)
              __argp_fmtstream_printf (fs, "%s %s",
@@ -161,7 +161,7 @@ index 80cdb44937..4e600f269d 100644
                                       name);
  
            /* We set the lmargin as well as the wmargin, because hol_usage
-@@ -1742,7 +1752,7 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
+@@ -1746,7 +1756,7 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
              /* Just show where the options go.  */
              {
                if (hol->num_entries > 0)
@@ -170,7 +170,7 @@ index 80cdb44937..4e600f269d 100644
                                                       " [OPTION...]"));
              }
            else
-@@ -1770,7 +1780,7 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
+@@ -1774,7 +1784,7 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
  
    if (flags & ARGP_HELP_SEE)
      {
@@ -179,7 +179,7 @@ index 80cdb44937..4e600f269d 100644
  Try '%s --help' or '%s --usage' for more information.\n"),
                                 name, name);
        anything = 1;
-@@ -1797,7 +1807,7 @@ Try '%s --help' or '%s --usage' for more information.\n"),
+@@ -1801,7 +1811,7 @@ Try '%s --help' or '%s --usage' for more information.\n"),
      {
        if (anything)
          __argp_fmtstream_putc (fs, '\n');
@@ -188,7 +188,7 @@ index 80cdb44937..4e600f269d 100644
                                               "Report bugs to %s.\n"),
                                 argp_program_bug_address);
        anything = 1;
-@@ -1998,8 +2008,7 @@ __argp_failure (const struct argp_state *state, int status, int errnum,
+@@ -2002,8 +2012,7 @@ __argp_failure (const struct argp_state *state, int status, int errnum,
  #  endif
  # endif
                if (! s && ! (s = strerror (errnum)))
@@ -199,10 +199,10 @@ index 80cdb44937..4e600f269d 100644
  #endif
              }
 diff --git a/gl/lib/argp-parse.c b/gl/lib/argp-parse.c
-index 053495ec03..23f54f3aa7 100644
+index 6293169da4..0d00e89814 100644
 --- a/gl/lib/argp-parse.c
 +++ b/gl/lib/argp-parse.c
-@@ -40,6 +40,16 @@
+@@ -39,6 +39,16 @@
  #endif
  #define N_(msgid) msgid
  
@@ -219,7 +219,7 @@ index 053495ec03..23f54f3aa7 100644
  #include "argp.h"
  #include "argp-namefrob.h"
  
-@@ -135,7 +145,8 @@ argp_default_parser (int key, char *arg, struct argp_state *state)
+@@ -134,7 +144,8 @@ argp_default_parser (int key, char *arg, struct argp_state *state)
  }
  
  static const struct argp argp_default_argp =
@@ -229,7 +229,7 @@ index 053495ec03..23f54f3aa7 100644
  
  
  static const struct argp_option argp_version_options[] =
-@@ -156,7 +167,7 @@ argp_version_parser (int key, char *arg, struct argp_state *state)
+@@ -155,7 +166,7 @@ argp_version_parser (int key, char *arg, struct argp_state *state)
          fprintf (state->out_stream, "%s\n", argp_program_version);
        else
          __argp_error (state, "%s",
@@ -238,7 +238,7 @@ index 053495ec03..23f54f3aa7 100644
                                  "(PROGRAM ERROR) No version known!?"));
        if (! (state->flags & ARGP_NO_EXIT))
          exit (0);
-@@ -168,7 +179,8 @@ argp_version_parser (int key, char *arg, struct argp_state *state)
+@@ -167,7 +178,8 @@ argp_version_parser (int key, char *arg, struct argp_state *state)
  }
  
  static const struct argp argp_version_argp =
@@ -248,7 +248,7 @@ index 053495ec03..23f54f3aa7 100644
  
  /* Returns the offset into the getopt long options array LONG_OPTIONS of a
     long option with called NAME, or -1 if none is found.  Passing NULL as
-@@ -609,8 +621,7 @@ parser_finalize (struct parser *parser,
+@@ -608,8 +620,7 @@ parser_finalize (struct parser *parser,
            if (!(parser->state.flags & ARGP_NO_ERRS)
                && parser->state.err_stream)
              fprintf (parser->state.err_stream,
@@ -258,7 +258,7 @@ index 053495ec03..23f54f3aa7 100644
                       parser->state.name);
            err = EBADKEY;
          }
-@@ -759,7 +770,7 @@ parser_parse_opt (struct parser *parser, int opt, char *val)
+@@ -758,7 +769,7 @@ parser_parse_opt (struct parser *parser, int opt, char *val)
          N_("(PROGRAM ERROR) Option should have been recognized!?");
        if (group_key == 0)
          __argp_error (&parser->state, "-%c: %s", opt,
@@ -267,7 +267,7 @@ index 053495ec03..23f54f3aa7 100644
        else
          {
            struct option *long_opt = parser->long_opts;
-@@ -767,7 +778,7 @@ parser_parse_opt (struct parser *parser, int opt, char *val)
+@@ -766,7 +777,7 @@ parser_parse_opt (struct parser *parser, int opt, char *val)
              long_opt++;
            __argp_error (&parser->state, "--%s: %s",
                          long_opt->name ? long_opt->name : "???",
