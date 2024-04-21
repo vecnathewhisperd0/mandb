@@ -1,23 +1,23 @@
 # Dutch translations for man-db.
-# Copyright (C) 2009 Colin Watson (msgids)
+# Copyright (C) 2024 Colin Watson (msgids)
 # This file is distributed under the same license as the man-db package.
 #
-# Benno Schulenberg <benno@vertaalt.nl>, 2007, 2008.
 # Erwin Poeze <erwin.poeze@gmail.com>, 2009
+# Benno Schulenberg <benno@vertaalt.nl>, 2007, 2008, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db-2.5.7-pre1\n"
+"Project-Id-Version: man-db-2.12.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2024-04-05 08:51+0100\n"
-"PO-Revision-Date: 2009-11-16 08:36+0100\n"
-"Last-Translator: Erwin Poeze <erwin.poeze@gmail.com>\n"
+"PO-Revision-Date: 2024-04-21 14:15+0200\n"
+"Last-Translator: Benno Schulenberg <vertaling@coevern.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
 
 #: lib/filenames.c:50 src/straycats.c:131 src/straycats.c:150
 #, c-format
@@ -65,10 +65,10 @@ msgid "cannot replace key %s"
 msgstr "kan sleutel %s niet vervangen"
 
 #: libdb/db_lookup.c:171 libdb/db_lookup.c:182
-#, fuzzy, c-format
+#, c-format
 msgid "only %d field in content"
 msgid_plural "only %d fields in content"
-msgstr[0] "slechts %d velden in de inhoud"
+msgstr[0] "slechts %d veld in de inhoud"
 msgstr[1] "slechts %d velden in de inhoud"
 
 #: libdb/db_lookup.c:355
@@ -279,10 +279,10 @@ msgid "the page name contains wildcards"
 msgstr "de paginanaam bevat jokertekens"
 
 #: src/lexgrog.l:726
-#, fuzzy, c-format
+#, c-format
 msgid "warning: whatis for %s exceeds %d byte, truncating."
 msgid_plural "warning: whatis for %s exceeds %d bytes, truncating."
-msgstr[0] "waarschuwing: de 'whatis' voor %s is meer dan %d bytes -- afgekapt"
+msgstr[0] "waarschuwing: de 'whatis' voor %s is meer dan %d byte -- afgekapt"
 msgstr[1] "waarschuwing: de 'whatis' voor %s is meer dan %d bytes -- afgekapt"
 
 #: src/lexgrog.l:888 src/man.c:2376 src/man.c:2462 src/man.c:2560
@@ -412,7 +412,7 @@ msgstr "SECTIES"
 
 #: src/man.c:312
 msgid "use colon separated section list"
-msgstr "te doorzoeken secties (scheiden met dubbele punten)"
+msgstr "te doorzoeken secties (gescheiden door dubbele punten)"
 
 #: src/man.c:319
 msgid "show all pages matching regex"
@@ -536,7 +536,7 @@ msgstr "Welke man-pagina wilt u zien?\n"
 
 #: src/man.c:642
 msgid "For example, try 'man man'.\n"
-msgstr ""
+msgstr "Probeer bijvoorbeeld 'man man'.\n"
 
 #: src/man.c:774
 #, c-format
@@ -629,7 +629,7 @@ msgstr " Handleidingspagina "
 
 #: src/man-recode.c:110
 msgid "-t CODE {--suffix SUFFIX | --in-place} FILENAME..."
-msgstr ""
+msgstr "-t CODERING {--suffix ACHTERVOEGSEL | --in-place} BESTANDSNAAM..."
 
 #: src/man-recode.c:113 src/manconv_main.c:99
 msgid "CODE"
@@ -641,15 +641,15 @@ msgstr "codering van de uitvoer"
 
 #: src/man-recode.c:114
 msgid "SUFFIX"
-msgstr ""
+msgstr "ACHTERVOEGSEL"
 
 #: src/man-recode.c:115
 msgid "suffix to append to output file name"
-msgstr ""
+msgstr "achtervoegsel om aan de uitvoerbestandsnaam toe te voegen"
 
 #: src/man-recode.c:117
 msgid "overwrite input files in place"
-msgstr ""
+msgstr "invoerbestanden overschrijven"
 
 #: src/man-recode.c:119 src/manconv_main.c:101 src/manpath.c:68
 msgid "produce fewer warnings"
@@ -663,12 +663,12 @@ msgstr "specificatie van een uitvoercodering ontbreekt"
 #: src/man-recode.c:159
 #, c-format
 msgid "must use either --suffix or --in-place"
-msgstr ""
+msgstr "of '--suffix' of '--in-place' is nodig"
 
 #: src/man-recode.c:163
 #, c-format
 msgid "--suffix and --in-place are mutually exclusive"
-msgstr ""
+msgstr "de opties '--suffix' en '--in-place' gaan niet samen"
 
 #: src/man-recode.c:257 src/mandb.c:226
 #, c-format
@@ -685,9 +685,8 @@ msgid "iconv: incomplete character at end of buffer"
 msgstr "iconv: onvolledig teken aan eind van buffer"
 
 #: src/manconv_main.c:94
-#, fuzzy
 msgid "[-f CODE[:...]] -t CODE [FILENAME]"
-msgstr "-f CODERING[:...] -t CODERING [BESTANDSNAAM]"
+msgstr "[-f CODERING[:...]] -t CODERING [BESTANDSNAAM]"
 
 #: src/manconv_main.c:97
 msgid "CODE[:...]"
@@ -749,9 +748,9 @@ msgid "Processing manual pages under %s...\n"
 msgstr "Verwerken van pagina's onder %s...\n"
 
 #: src/mandb.c:745 src/mandb.c:773
-#, fuzzy, c-format
+#, c-format
 msgid "Removing obsolete cat directory %s...\n"
-msgstr "Zoeken naar losse cat-bestanden onder %s...\n"
+msgstr "Verwijderen van verouderde cat-map %s...\n"
 
 #: src/mandb.c:903
 #, c-format
@@ -759,6 +758,8 @@ msgid ""
 "Only the '%s' user can create or update system-wide databases; acting as if "
 "the --user-db option was used.\n"
 msgstr ""
+"Alleen gebruiker '%s' kan databases systeemwijd aanmaken of bijwerken; "
+"gebruik van optie '--user-db' wordt verondersteld.\n"
 
 #: src/mandb.c:926
 #, c-format
@@ -767,36 +768,32 @@ msgstr ""
 "waarschuwing: geen 'MANDB_MAP'-opdrachten in %s; uw man-pad wordt gebruikt"
 
 #: src/mandb.c:995
-#, fuzzy, c-format
+#, c-format
 msgid "%d man subdirectory contained newer manual pages.\n"
 msgid_plural "%d man subdirectories contained newer manual pages.\n"
-msgstr[0] ""
-"%d man-mappen bevatten nieuwere pagina's,\n"
-"%d man-pagina's werden toegevoegd.\n"
-msgstr[1] ""
-"%d man-mappen bevatten nieuwere pagina's,\n"
-"%d man-pagina's werden toegevoegd.\n"
+msgstr[0] "%d man-submap bevatte nieuwere pagina's.\n"
+msgstr[1] "%d man-submappen bevatten nieuwere pagina's.\n"
 
 #: src/mandb.c:1000
-#, fuzzy, c-format
+#, c-format
 msgid "%d manual page was added.\n"
 msgid_plural "%d manual pages were added.\n"
-msgstr[0] " Handleidingspagina "
-msgstr[1] " Handleidingspagina "
+msgstr[0] "%d handleidingspagina werd toegevoegd.\n"
+msgstr[1] "%d handleidingspagina's werden toegevoegd.\n"
 
 #: src/mandb.c:1004
-#, fuzzy, c-format
+#, c-format
 msgid "%d stray cat was added.\n"
 msgid_plural "%d stray cats were added.\n"
-msgstr[0] "%d losse cat-bestanden werden toegevoegd.\n"
+msgstr[0] "%d los cat-bestand werd toegevoegd.\n"
 msgstr[1] "%d losse cat-bestanden werden toegevoegd.\n"
 
 #: src/mandb.c:1009
-#, fuzzy, c-format
+#, c-format
 msgid "%d old database entry was purged.\n"
 msgid_plural "%d old database entries were purged.\n"
-msgstr[0] "%d verouderde databaseitems werden verwijderd.\n"
-msgstr[1] "%d verouderde databaseitems werden verwijderd.\n"
+msgstr[0] "%d verouderd database-item werd verwijderd.\n"
+msgstr[1] "%d verouderde database-items werden verwijderd.\n"
 
 #: src/mandb.c:1027
 #, c-format
@@ -885,7 +882,7 @@ msgstr ""
 #: src/straycats.c:301
 #, c-format
 msgid "Checking for stray cats under %s...\n"
-msgstr "Zoeken naar losse cat-bestanden onder %s...\n"
+msgstr "Controle op losse cat-bestanden onder %s...\n"
 
 #: src/ult_src.c:74
 #, c-format
@@ -935,9 +932,8 @@ msgid "do not trim output to terminal width"
 msgstr "de uitvoer niet aan de terminalbreedte aanpassen"
 
 #: src/whatis.c:137
-#, fuzzy
 msgid "search only these sections (colon-separated)"
-msgstr "alleen in deze sectie zoeken"
+msgstr "alleen zoeken in deze secties (gescheiden door dubbele punten)"
 
 #: src/whatis.c:144
 msgid "define the locale for this search"
@@ -991,44 +987,14 @@ msgstr "%s:%d: onafgesloten aanhaling in 'roff'-verzoek"
 msgid "compatibility switch (ignored)"
 msgstr "compatibiliteitsoptie (genegeerd)"
 
-#, c-format
-#~ msgid "warning: can't update index cache %s"
-#~ msgstr "waarschuwing: kan index-cache %s niet bijwerken"
-
-#, c-format
-#~ msgid "%s:%d: warning: malformed .lf request, ignoring"
-#~ msgstr "%s:%d: waarschuwing: onjuist '.lf'-verzoek -- genegeerd"
-
-#~ msgid "must specify an input encoding"
-#~ msgstr "specificatie van een invoercodering ontbreekt"
-
-#~ msgid "manpath list too long"
-#~ msgstr "man-pad-lijst is te lang"
-
-#, fuzzy
-#~ msgid "can't restore previous working directory"
-#~ msgstr "kan geen tijdelijk map aanmaken"
-
-#~ msgid "can't chdir to %s"
-#~ msgstr "kan niet naar map %s gaan"
-
-#~ msgid "can't fork"
-#~ msgstr "kan geen nieuw proces starten"
-
-#~ msgid "fork failed"
-#~ msgstr "starten van nieuw proces is mislukt"
-
-#~ msgid "can't get man command's exit status"
-#~ msgstr "kan afsluitwaarde van 'man' niet bepalen"
-
-#~ msgid "unable to reset cursor position in %s"
-#~ msgstr "kan cursorpositie niet herstellen in %s"
-
 #~ msgid "badly formed configuration directive: '%s'"
 #~ msgstr "syntaxfout in configuratieopdracht: '%s'"
 
 #~ msgid "can't install SIGCHLD handler"
 #~ msgstr "kan geen SIGCHLD-verwerker instellen"
+
+#~ msgid "fork failed"
+#~ msgstr "starten van nieuw proces is mislukt"
 
 #~ msgid "waitpid failed"
 #~ msgstr "waitpid() is mislukt"
@@ -1069,11 +1035,35 @@ msgstr "compatibiliteitsoptie (genegeerd)"
 #~ msgid "closing pipeline output failed"
 #~ msgstr "sluiten van pijpuitvoer is mislukt"
 
-#~ msgid "SECTION"
-#~ msgstr "SECTIE"
+#~ msgid "can't get man command's exit status"
+#~ msgstr "kan afsluitwaarde van 'man' niet bepalen"
+
+#~ msgid "unable to reset cursor position in %s"
+#~ msgstr "kan cursorpositie niet herstellen in %s"
 
 #~ msgid "can't get passwd structure for uid 0"
 #~ msgstr "Kan geen gegevens verkrijgen over UID 0 -- getpwuid() is mislukt"
+
+#~ msgid "can't chdir to %s"
+#~ msgstr "kan niet naar map %s gaan"
+
+#~ msgid "must specify an input encoding"
+#~ msgstr "specificatie van een invoercodering ontbreekt"
+
+#~ msgid "manpath list too long"
+#~ msgstr "man-pad-lijst is te lang"
+
+#~ msgid "can't fork"
+#~ msgstr "kan geen nieuw proces starten"
+
+#~ msgid "warning: can't update index cache %s"
+#~ msgstr "waarschuwing: kan index-cache %s niet bijwerken"
+
+#~ msgid "SECTION"
+#~ msgstr "SECTIE"
+
+#~ msgid "%s:%d: warning: malformed .lf request, ignoring"
+#~ msgstr "%s:%d: waarschuwing: onjuist '.lf'-verzoek -- genegeerd"
 
 #~ msgid "cannot insert unused key %s"
 #~ msgstr "kan ongebruikte sleutel %s niet invoegen"
