@@ -2161,23 +2161,12 @@ static void locale_macros (void *data)
 	       macro_lang, hyphen_lang);
 
 	printf (
-		/* If we're using groff >= 1.20.2 (for the 'file' warning
-		 * category):
-		 */
+		/* If we're using groff: */
 		".if \\n[.g] \\{\\\n"
-		".  ds Ystring \\n[.Y]\n"
-		".  while (\\B'\\*[Ystring]' = 0) .chop Ystring\n"
-		".  if ((\\n[.x] > 1) :"
-		" ((\\n[.x] == 1) & (\\n[.y] > 20)) :"
-		" ((\\n[.x] == 1) & (\\n[.y] == 20) & (\\*[Ystring] >= 2))) "
-		"\\{\\\n"
 		/*   disable warnings of category 'file' */
-		".    warn (\\n[.warn] -"
-		" (\\n[.warn] / 1048576 %% 2 * 1048576))\n"
-		/*   and load the appropriate per-locale macros */
-		".    mso %s.tmac\n"
-		".  \\}\n"
-		".  rm Ystring\n"
+		".  warn (\\n[.warn] - (\\n[.warn] / 1048576 %% 2 * 1048576))\n"
+		/*   load the appropriate per-locale macros */
+		".  mso %s.tmac\n"
 		".\\}\n"
 		/* set the hyphenation language anyway, to make sure groff
 		 * only hyphenates languages it knows about

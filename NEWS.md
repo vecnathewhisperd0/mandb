@@ -1,3 +1,10 @@
+man-db 2.13.0
+=============
+
+Compatibility notes:
+
+ * Drop support for versions of groff before 1.21 (released on 2010-12-31).
+
 man-db 2.12.1 (5 April 2024)
 ============================
 

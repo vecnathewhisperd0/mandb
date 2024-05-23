@@ -261,33 +261,6 @@ then
 	fi
 fi
 
-AC_CHECK_PROGS([preconv], [gpreconv preconv])
-
-AC_MSG_CHECKING([for groff with Debian multibyte patch or real Unicode support])
-man_mb_groff=no
-AC_ARG_ENABLE([mb-groff],
-[AS_HELP_STRING([--enable-mb-groff], [expect groff with Debian multibyte patch or real Unicode support])],
-	[if test "$enableval" = "yes"
-	 then
-		man_mb_groff=yes
-	 fi],
-	[if test -n "$preconv"
-	 then
-		man_mb_groff=yes
-	 elif test -n "$troff" && test "$troff_is_groff" = "yes"
-	 then
-		if $troff -Tnippon </dev/null >/dev/null 2>&1
-		then
-			man_mb_groff=yes
-		fi
-	 fi])
-AC_MSG_RESULT([$man_mb_groff])
-if test "$man_mb_groff" = "yes"
-then
-	AC_DEFINE([MULTIBYTE_GROFF], 1,
-		  [Define if your groff installation has the Debian multibyte patch.])
-fi
-
 MAN_CHECK_PROGS([eqn], [EQN], [use EQN to preprocess equations], [eqn geqn])
 AC_DEFINE_UNQUOTED([PROG_EQN], ["$eqn"], [Program to use as eqn.])
 MAN_CHECK_PROGS([neqn], [NEQN], [use NEQN to preprocess equations for character devices], [neqn gneqn])

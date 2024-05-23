@@ -85,8 +85,12 @@ struct directory_entry {
 static struct directory_entry directory_table[] = {
 	{ "C",		"ISO-8859-1"	}, /* English */
 	{ "POSIX",	"ISO-8859-1"	}, /* English */
+	{ "be",		"CP1251"	}, /* Belarusian */
+	{ "bg",		"CP1251"	}, /* Bulgarian */
+	{ "cs",		"ISO-8859-2"	}, /* Czech */
 	{ "da",		"ISO-8859-1"	}, /* Danish */
 	{ "de",		"ISO-8859-1"	}, /* German */
+	{ "el",		"ISO-8859-7"	}, /* Greek */
 	{ "en",		"ISO-8859-1"	}, /* English */
 	{ "es",		"ISO-8859-1"	}, /* Spanish */
 	{ "et",		"ISO-8859-1"	}, /* Estonian */
@@ -94,32 +98,22 @@ static struct directory_entry directory_table[] = {
 	{ "fr",		"ISO-8859-1"	}, /* French */
 	{ "ga",		"ISO-8859-1"	}, /* Irish */
 	{ "gl",		"ISO-8859-1"	}, /* Galician */
+	{ "hr",		"ISO-8859-2"	}, /* Croatian */
+	{ "hu",		"ISO-8859-2"	}, /* Hungarian */
 	{ "id",		"ISO-8859-1"	}, /* Indonesian */
 	{ "is",		"ISO-8859-1"	}, /* Icelandic */
 	{ "it",		"ISO-8859-1"	}, /* Italian */
-	{ "nb",		"ISO-8859-1"	}, /* Norwegian Bokmål */
-	{ "nl",		"ISO-8859-1"	}, /* Dutch */
-	{ "nn",		"ISO-8859-1"	}, /* Norwegian Nynorsk */
-	{ "no",		"ISO-8859-1"	}, /* Norwegian */
-	{ "pt",		"ISO-8859-1"	}, /* Portuguese */
-	{ "sv",		"ISO-8859-1"	}, /* Swedish */
-
-#ifdef MULTIBYTE_GROFF
-	/* These languages require a patched version of groff with the
-	 * ascii8 and nippon devices.
-	 */
-	{ "be",		"CP1251"	}, /* Belarusian */
-	{ "bg",		"CP1251"	}, /* Bulgarian */
-	{ "cs",		"ISO-8859-2"	}, /* Czech */
-	{ "el",		"ISO-8859-7"	}, /* Greek */
-	{ "hr",		"ISO-8859-2"	}, /* Croatian */
-	{ "hu",		"ISO-8859-2"	}, /* Hungarian */
 	{ "ja",		"EUC-JP"	}, /* Japanese */
 	{ "ko",		"EUC-KR"	}, /* Korean */
 	{ "lt",		"ISO-8859-13"	}, /* Lithuanian */
 	{ "lv",		"ISO-8859-13"	}, /* Latvian */
 	{ "mk",		"ISO-8859-5"	}, /* Macedonian */
+	{ "nb",		"ISO-8859-1"	}, /* Norwegian Bokmål */
+	{ "nl",		"ISO-8859-1"	}, /* Dutch */
+	{ "nn",		"ISO-8859-1"	}, /* Norwegian Nynorsk */
+	{ "no",		"ISO-8859-1"	}, /* Norwegian */
 	{ "pl",		"ISO-8859-2"	}, /* Polish */
+	{ "pt",		"ISO-8859-1"	}, /* Portuguese */
 	{ "ro",		"ISO-8859-2"	}, /* Romanian */
 	{ "ru",		"KOI8-R"	}, /* Russian */
 	{ "sk",		"ISO-8859-2"	}, /* Slovak */
@@ -127,6 +121,7 @@ static struct directory_entry directory_table[] = {
 	/* sr@latin must precede sr, due to top-down left-substring matching later */
 	{ "sr@latin",	"ISO-8859-2"	}, /* Serbian Latin */
 	{ "sr",		"ISO-8859-5"	}, /* Serbian */
+	{ "sv",		"ISO-8859-1"	}, /* Swedish */
 	{ "tr",		"ISO-8859-9"	}, /* Turkish */
 	{ "uk",		"KOI8-U"	}, /* Ukrainian */
 	{ "vi",		"TCVN5712-1"	}, /* Vietnamese */
@@ -134,7 +129,6 @@ static struct directory_entry directory_table[] = {
 	{ "zh_SG",	"GBK"		}, /* Simplified Chinese, Singapore */
 	{ "zh_HK",	"BIG5HKSCS"	}, /* Traditional Chinese, Hong Kong */
 	{ "zh_TW",	"BIG5"		}, /* Traditional Chinese */
-#endif /* MULTIBYTE_GROFF */
 
 	{ NULL,		NULL		}
 };
@@ -220,34 +214,10 @@ static struct charset_entry charset_table[] = {
 #endif /* HEIRLOOM_NROFF */
 	{ "UTF-8",		"utf8"		},
 
-#ifndef HEIRLOOM_NROFF
-# ifdef MULTIBYTE_GROFF
-	{ "BIG5",		"nippon"	},
-	{ "BIG5HKSCS",		"nippon"	},
-	{ "EUC-CN",		"nippon"	},
-	{ "EUC-JP",		"nippon"	},
-	{ "EUC-TW",		"nippon"	},
-	{ "GBK",		"nippon"	},
-# else /* !MULTIBYTE_GROFF */
-	/* If we have a smarter version of groff, this is better dealt with
-	 * using either ascii8 (Debian multibyte patch) or preconv (as of
-	 * groff 1.20). This is a not-quite-right stopgap in case we have
-	 * neither.
-	 */
-	{ "ISO-8859-15",    	"latin1"	},
-# endif /* MULTIBYTE_GROFF */
-#endif /* HEIRLOOM_NROFF */
-
 	{ NULL,			NULL		}
 };
 
-static const char *fallback_default_device =
-#ifdef MULTIBYTE_GROFF
-	"ascii8"
-#else /* !MULTIBYTE_GROFF */
-	"ascii"
-#endif /* MULTIBYTE_GROFF */
-	;
+static const char *fallback_default_device = "ascii";
 
 /* The encoding used for the text passed to groff is a function of the
  * selected groff device. Traditional devices expect ISO-8859-1 on input
@@ -268,11 +238,6 @@ static struct device_entry device_table[] = {
 	{ "ascii",	"ANSI_X3.4-1968",	"ANSI_X3.4-1968"	},
 	{ "latin1",	"ISO-8859-1",		"ISO-8859-1"		},
 	{ "utf8",	"ISO-8859-1",		"UTF-8"			},
-
-#ifdef MULTIBYTE_GROFF
-	{ "ascii8",	NULL,			NULL			},
-	{ "nippon",	NULL,			NULL			},
-#endif /* MULTIBYTE_GROFF */
 
 #ifdef HEIRLOOM_NROFF
 	/* Not strictly accurate, but we only use this in UTF-8 locales. */
@@ -309,16 +274,13 @@ struct less_charset_entry {
 
 static struct less_charset_entry less_charset_table[] = {
 	{ "ANSI_X3.4-1968",	"ascii",	NULL		},
-	{ "ISO-8859-1",		"iso8859",	NULL		},
-	{ "UTF-8",		"utf-8",	NULL		},
-
-#ifdef MULTIBYTE_GROFF
 	{ "CP1251",		"windows",	NULL		},
 	{ "EUC-JP",		"iso8859",	"japanese-ujis"	},
+	{ "ISO-8859-1",		"iso8859",	NULL		},
 	{ "KOI8-R",		"koi8-r",	NULL		},
 	/* close enough? */
 	{ "KOI8-U",		"koi8-r",	NULL		},
-#endif /* MULTIBYTE_GROFF */
+	{ "UTF-8",		"utf-8",	NULL		},
 
 	{ NULL,			NULL,		NULL		}
 };
@@ -613,20 +575,6 @@ static bool ATTRIBUTE_PURE compatible_encodings (const char *input,
 	if (STREQ (output, "ANSI_X3.4-1968"))
 		return true;
 
-#ifdef MULTIBYTE_GROFF
-	/* Special case for some CJK UTF-8 locales, which take UTF-8 input
-	 * recoded from EUC-JP (etc.) and produce UTF-8 output. This is
-	 * rather filthy.
-	 */
-	if ((STREQ (input, "BIG5") || STREQ (input, "BIG5HKSCS") ||
-	     STREQ (input, "EUC-JP") ||
-	     STREQ (input, "EUC-CN") || STREQ (input, "GBK") ||
-	     STREQ (input, "EUC-KR") ||
-	     STREQ (input, "EUC-TW")) &&
-	    STREQ (output, "UTF-8"))
-		return true;
-#endif /* MULTIBYTE_GROFF */
-
 	return false;
 }
 
@@ -686,10 +634,9 @@ bool ATTRIBUTE_PURE is_roff_device (const char *device)
 	return false;
 }
 
-/* Find the input encoding expected by groff, and set the LESSCHARSET
- * environment variable appropriately.
- */
-const char *get_roff_encoding (const char *device, const char *source_encoding)
+/* Find the input encoding expected by groff. */
+const char * ATTRIBUTE_PURE get_roff_encoding (const char *device,
+					       const char *source_encoding)
 {
 	const struct device_entry *entry;
 	bool found = false;
@@ -707,26 +654,6 @@ const char *get_roff_encoding (const char *device, const char *source_encoding)
 
 	if (!found)
 		roff_encoding = fallback_roff_encoding;
-
-#ifdef MULTIBYTE_GROFF
-	/* An ugly special case is needed here. The utf8 device normally
-	 * takes ISO-8859-1 input. However, with the multibyte patch, when
-	 * recoding from CJK character sets it takes UTF-8 input instead.
-	 * This is evil, but there's not much that can be done about it
-	 * apart from waiting for groff 2.0.
-	 */
-	if (device && STREQ (device, "utf8") && !get_groff_preconv () &&
-	    STREQ (get_locale_charset (), "UTF-8")) {
-		const char *ctype = setlocale (LC_CTYPE, NULL);
-		if (STRNEQ (ctype, "ja_JP", 5) ||
-		    STRNEQ (ctype, "ko_KR", 5) ||
-		    STRNEQ (ctype, "zh_CN", 5) ||
-		    STRNEQ (ctype, "zh_HK", 5) ||
-		    STRNEQ (ctype, "zh_SG", 5) ||
-		    STRNEQ (ctype, "zh_TW", 5))
-			roff_encoding = "UTF-8";
-	}
-#endif /* MULTIBYTE_GROFF */
 
 	return roff_encoding ? roff_encoding : source_encoding;
 }
