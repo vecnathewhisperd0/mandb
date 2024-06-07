@@ -6,11 +6,11 @@
 # Antonio Ceballos Roa <aceballos@gmail.com>, 2019
 msgid ""
 msgstr ""
-"Project-Id-Version: man-db 2.9.0-pre1\n"
+"Project-Id-Version: man-db 2.12.0-pre1\n"
 "Report-Msgid-Bugs-To: Colin Watson <cjwatson@debian.org>\n"
 "POT-Creation-Date: 2024-04-05 08:51+0100\n"
-"PO-Revision-Date: 2019-10-01 16:50+0200\n"
-"Last-Translator: Antonio Ceballos Roa <aceballos@gmail.com>\n"
+"PO-Revision-Date: 2024-06-06 17:06-0600\n"
+"Last-Translator: Cristian Othón Martínez Vera <cfuga@cfuga.mx>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: lib/filenames.c:50 src/straycats.c:131 src/straycats.c:150
 #, c-format
 msgid "warning: %s: ignoring bogus filename"
-msgstr "aviso: %s: ignorando nombre espurio de fichero"
+msgstr "aviso: %s: se ignora el nombre espurio de fichero"
 
 #: lib/pathsearch.c:83 lib/pathsearch.c:133 src/manp.c:1170
 #, c-format
@@ -196,7 +196,7 @@ msgstr "aviso: %s: ignorando fichero vacío"
 #: src/check_mandirs.c:297 src/straycats.c:268
 #, c-format
 msgid "warning: %s: whatis parse for %s(%s) failed"
-msgstr "aviso: %s: ha fallado la exploración de whatis para %s(%s)"
+msgstr "aviso: %s: falló la exploración de whatis para %s(%s)"
 
 #: src/check_mandirs.c:325 src/check_mandirs.c:495 src/mandb.c:959
 #: src/straycats.c:93 src/straycats.c:296 src/ult_src.c:99
@@ -212,7 +212,7 @@ msgstr "no se puede cambiar propietario con chown %s"
 #: src/check_mandirs.c:396 src/check_mandirs.c:419
 #, c-format
 msgid "warning: cannot create catdir %s"
-msgstr "aviso: no se pudo crear directorio para «cat» %s"
+msgstr "aviso: no se puede crear directorio para «cat» %s"
 
 #: src/check_mandirs.c:451 src/man.c:1776 src/mandb.c:242
 #, c-format
@@ -246,7 +246,7 @@ msgstr "Purgando entradas antiguas en la base de datos en %s...\n"
 #: src/descriptions_store.c:62
 #, c-format
 msgid "warning: failed to store entry for %s(%s)"
-msgstr "aviso: ha fallado al almacenar entrada para %s(%s)"
+msgstr "aviso: falló al almacenar entrada para %s(%s)"
 
 #: src/globbing_test.c:59
 msgid "PATH SECTION NAME"
@@ -358,7 +358,7 @@ msgstr "equivalente a whatis"
 
 #: src/man.c:289
 msgid "equivalent to apropos"
-msgstr "equivalente a propósito"
+msgstr "equivalente a apropos"
 
 #: src/man.c:290
 msgid "search for text in all pages"
@@ -617,7 +617,7 @@ msgstr "%s: depender de las referencias de whatis está en desuso\n"
 #: src/man.c:3495 src/man.c:4357
 #, c-format
 msgid "mandb command failed with exit status %d"
-msgstr "orden mandb fallada con estado de salida %d"
+msgstr "falló la orden mandb con estado de salida %d"
 
 #: src/man.c:3693
 #, c-format
@@ -659,12 +659,12 @@ msgstr "produce menos advertencias"
 #: src/man-recode.c:155 src/manconv_main.c:136
 #, c-format
 msgid "must specify an output encoding"
-msgstr "debe específicamente una codificación de salida"
+msgstr "se debe específicar una codificación de salida"
 
 #: src/man-recode.c:159
 #, c-format
 msgid "must use either --suffix or --in-place"
-msgstr "debe utilizar --suffix o --in-place"
+msgstr "se debe utilizar --suffix o --in-place"
 
 #: src/man-recode.c:163
 #, c-format
@@ -679,7 +679,7 @@ msgstr "no se puede quitar %s"
 #: src/manconv.c:238
 #, c-format
 msgid "can't write to standard output"
-msgstr "no puede escribir por salida común"
+msgstr "no se puede escribir por salida estándard"
 
 #: src/manconv.c:466
 msgid "iconv: incomplete character at end of buffer"
@@ -703,7 +703,7 @@ msgstr "[MANPATH]"
 
 #: src/mandb.c:120
 msgid "work quietly, except for 'bogus' warning"
-msgstr "funciona silenciosamente, excepto para avisos 'espúreos'"
+msgstr "funciona silenciosamente, excepto para avisos 'espurios'"
 
 #: src/mandb.c:122
 msgid "don't look for or add stray cats to the dbs"
@@ -711,7 +711,7 @@ msgstr "no busca ni añade cats extraviados a las bbdd"
 
 #: src/mandb.c:124
 msgid "don't purge obsolete entries from the dbs"
-msgstr "no purgar entradas obsoletas desde las bbdd"
+msgstr "no purgar entradas obsoletas de las bbdd"
 
 #: src/mandb.c:125
 msgid "produce user databases only"
@@ -736,12 +736,12 @@ msgstr "actualiza tan solo la entrada para este nombre de fichero"
 #: src/mandb.c:290
 #, c-format
 msgid "can't write to %s"
-msgstr "no puede escribir a %s"
+msgstr "no se puede escribir a %s"
 
 #: src/mandb.c:295
 #, c-format
 msgid "can't read from %s"
-msgstr "no puede leer desde %s"
+msgstr "no se puede leer desde %s"
 
 #: src/mandb.c:625
 #, c-format
@@ -759,6 +759,8 @@ msgid ""
 "Only the '%s' user can create or update system-wide databases; acting as if "
 "the --user-db option was used.\n"
 msgstr ""
+"Solamente el usuario '%s' puede crear o actualizar bases de datos de todo el "
+"sistema; se actúa como si se hubiera especificado la opción --user-db.\n"
 
 # manpath es algo específico, debe estar presente. nl
 #: src/mandb.c:926
@@ -802,7 +804,7 @@ msgstr[1] "Se han eliminado %d entradas antiguas en la base de datos.\n"
 #: src/mandb.c:1027
 #, c-format
 msgid "No databases created."
-msgstr "Ninguna base de datos creada."
+msgstr "No se crearon bases de datos."
 
 #: src/manp.c:329
 #, c-format
@@ -822,7 +824,7 @@ msgstr "aviso: %s no es un directorio"
 #: src/manp.c:672
 #, c-format
 msgid "warning: $PATH not set"
-msgstr "aviso: $PATH no asignada"
+msgstr "aviso: $PATH sin definir"
 
 #: src/manp.c:679
 #, c-format
@@ -832,12 +834,12 @@ msgstr "aviso: ruta $PATH vacía"
 #: src/manp.c:707
 #, c-format
 msgid "warning: $MANPATH set, prepending %s"
-msgstr "aviso: $MANPATH establecida, se antepondrá %s"
+msgstr "aviso: $MANPATH definida, se antepondrá %s"
 
 #: src/manp.c:718
 #, c-format
 msgid "warning: $MANPATH set, appending %s"
-msgstr "aviso: $MANPATH establecida, agregando %s"
+msgstr "aviso: $MANPATH definida, agregando %s"
 
 #: src/manp.c:730
 #, c-format
@@ -881,8 +883,7 @@ msgstr "muestra la ruta manpath global completa"
 #, c-format
 msgid "warning: no global manpaths set in config file %s"
 msgstr ""
-"aviso: no se han asignado rutas man globales en el fichero de configuración "
-"%s"
+"aviso: no se asignaron rutas man globales en el fichero de configuración %s"
 
 #: src/straycats.c:301
 #, c-format
@@ -934,7 +935,7 @@ msgstr "requiere que coincidan todas las palabras clave"
 
 #: src/whatis.c:135
 msgid "do not trim output to terminal width"
-msgstr "no cortar salida para ancho del terminal"
+msgstr "no corta la salida para la anchura del terminal"
 
 #: src/whatis.c:137
 msgid "search only these sections (colon-separated)"
@@ -972,17 +973,17 @@ msgstr ""
 #: src/zsoelim.l:201
 #, c-format
 msgid "%s:%d: warning: failed .so request"
-msgstr "%s:%d: aviso: petición .so fallada"
+msgstr "%s:%d: aviso: falló la petición .so"
 
 #: src/zsoelim.l:223
 #, c-format
 msgid "%s:%d: warning: newline in .so request, ignoring"
-msgstr "%s:%d: advertencia: línea nueva dentro de petición .so, ignorando"
+msgstr "%s:%d: aviso: línea nueva dentro de petición .so, se ignora"
 
 #: src/zsoelim.l:293
 #, c-format
 msgid "%s:%d: warning: newline in .lf request, ignoring"
-msgstr "%s:%d: aviso: nueva línea en petición .lf, ignorando"
+msgstr "%s:%d: aviso: nueva línea en petición .lf, se ignora"
 
 #: src/zsoelim.l:333
 #, c-format
@@ -993,10 +994,8 @@ msgstr "%s:%d: comilla no terminada en petición roff"
 msgid "compatibility switch (ignored)"
 msgstr "opción de compatibilidad (ignorada)"
 
-#, c-format
 #~ msgid "warning: can't update index cache %s"
 #~ msgstr "aviso: no se pudo actualizar la caché de índices %s"
 
-#, c-format
 #~ msgid "%s:%d: warning: malformed .lf request, ignoring"
 #~ msgstr "%s:%d: aviso: petición .lf mal formada, ignorando"
