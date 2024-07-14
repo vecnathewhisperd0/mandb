@@ -5,6 +5,10 @@ Compatibility notes:
 
  * Drop support for versions of groff before 1.21 (released on 2010-12-31).
 
+Improvements:
+
+ * Upgrade to Gnulib `stable-202407`.
+
 man-db 2.12.1 (5 April 2024)
 ============================
 
