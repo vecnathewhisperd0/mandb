@@ -35,18 +35,26 @@ run $MAN -C "$tmpdir/manpath.config" -aw "$page_name(2)" >"$tmpdir/2.out"
 expect_files_equal '"man '\''name(2)'\''" is the same as "man 2 name"' \
         "$tmpdir/2.exp" "$tmpdir/2.out"
 
-mv "$tmpdir/usr/share/man/man2/$page_name.2.gz" \
-   "$tmpdir/usr/share/man/man2/$page_name.2p.gz"
+case $MANDIR_LAYOUT in
+	""|GNU)
+		mv "$tmpdir/usr/share/man/man2/$page_name.2.gz" \
+		   "$tmpdir/usr/share/man/man2/$page_name.2p.gz"
 
-cat >"$tmpdir/2p.exp" <<EOF
+		cat >"$tmpdir/2p.exp" <<EOF
 $abstmpdir/usr/share/man/man2/${page_name}.2p.gz
 EOF
 
-run $MAN -C "$tmpdir/manpath.config" -aw "$page_name".2p >"$tmpdir/2p.out"
-expect_files_equal '"man name.2p" is the same as "man 2p name"' \
-        "$tmpdir/2p.exp" "$tmpdir/2p.out"
-run $MAN -C "$tmpdir/manpath.config" -aw "$page_name(2p)" >"$tmpdir/2p.out"
-expect_files_equal '"man '\''name(2p)'\''" is the same as "man 2p name"' \
-        "$tmpdir/2p.exp" "$tmpdir/2p.out"
+		run $MAN -C "$tmpdir/manpath.config" -aw "$page_name".2p \
+			>"$tmpdir/2p.out"
+		expect_files_equal \
+			'"man name.2p" is the same as "man 2p name"' \
+			"$tmpdir/2p.exp" "$tmpdir/2p.out"
+		run $MAN -C "$tmpdir/manpath.config" -aw "$page_name(2p)" \
+			>"$tmpdir/2p.out"
+		expect_files_equal \
+			'"man '\''name(2p)'\''" is the same as "man 2p name"' \
+			"$tmpdir/2p.exp" "$tmpdir/2p.out"
+		;;
+esac
 
 finish

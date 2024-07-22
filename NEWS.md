@@ -5,6 +5,11 @@ Compatibility notes:
 
  * Drop support for versions of groff before 1.21 (released on 2010-12-31).
 
+Fixes:
+
+ * Fix `man-suffixed-extension` test failure when not using the GNU
+   hierarchy organization.
+
 Improvements:
 
  * Upgrade to Gnulib `stable-202407`.
