@@ -25,12 +25,12 @@
 #include "gl_list.h"
 
 bool zsoelim_open_file (const char *filename, gl_list_t manpathlist,
-			const char *parent_path);
+                        const char *parent_path);
 void zsoelim_parse_file (gl_list_t manpathlist, const char *parent_path);
 
 struct zsoelim_stdin_data;
 
 void zsoelim_stdin (void *data);
 struct zsoelim_stdin_data *zsoelim_stdin_data_new (const char *path,
-						   gl_list_t manpathlist);
+                                                   gl_list_t manpathlist);
 void zsoelim_stdin_data_free (void *data);

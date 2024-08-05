@@ -47,20 +47,20 @@
 
 static void gripe_bogus_manpage (const char *manpage)
 {
-	error (0, 0, _("warning: %s: ignoring bogus filename"), manpage);
+	error (0, 0, _ ("warning: %s: ignoring bogus filename"), manpage);
 }
 
-char *make_filename (const char *path, const char *name,
-		     struct mandata *in, const char *type)
+char *make_filename (const char *path, const char *name, struct mandata *in,
+                     const char *type)
 {
 	static char *file;
 
 	if (!name)
-		name = in->name;    /* comes from dblookup(), so non-NULL */
+		name = in->name; /* comes from dblookup(), so non-NULL */
 
 	file = xasprintf ("%s/%s%s/%s.%s", path, type, in->sec, name, in->ext);
 
-	if (in->comp && *in->comp != '-')	/* Is there an extension? */
+	if (in->comp && *in->comp != '-') /* Is there an extension? */
 		file = appendstr (file, ".", in->comp, (void *) 0);
 
 	debug ("Checking physical location: %s\n", file);
@@ -117,7 +117,7 @@ struct mandata *filename_info (const char *file, bool warn_if_bogus)
 			free_mandata_struct (info);
 			return NULL;
 		}
-		*ext++ = '\0';			/* set section ext */
+		*ext++ = '\0'; /* set section ext */
 		info->ext = xstrdup (ext);
 		if (!*info->ext) {
 			/* zero-length section extension */

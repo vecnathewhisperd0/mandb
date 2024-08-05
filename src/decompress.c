@@ -25,14 +25,14 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <fcntl.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #ifdef HAVE_LIBZ
 #  include "zlib.h"
@@ -142,7 +142,7 @@ static void decompress_zlib (void *data MAYBE_UNUSED)
  * preprocessor indications.  For the time being, one-shot buffering is
  * cheap enough and much simpler.
  */
-#define MAX_INPROCESS 1048576
+#  define MAX_INPROCESS 1048576
 
 static decompress *decompress_try_zlib (const char *filename)
 {
@@ -181,12 +181,12 @@ static decompress *decompress_try_zlib (const char *filename)
 	 * alternative might be to use a lock to prevent that situation.)
 	 */
 	return decompress_new_inprocess (xmemdup (buffer, (size_t) len),
-					 (size_t) len);
+	                                 (size_t) len);
 }
 
-#define OPEN_FLAGS_UNUSED
+#  define OPEN_FLAGS_UNUSED
 #else /* !HAVE_LIBZ */
-#define OPEN_FLAGS_UNUSED MAYBE_UNUSED
+#  define OPEN_FLAGS_UNUSED MAYBE_UNUSED
 #endif /* HAVE_LIBZ */
 
 extern man_sandbox *sandbox;
@@ -215,7 +215,7 @@ decompress *decompress_open (const char *filename, int flags OPEN_FLAGS_UNUSED)
 		}
 
 		cmd = pipecmd_new_function ("zcat", &decompress_zlib, NULL,
-					    NULL);
+		                            NULL);
 		pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 		p = pipeline_new_commands (cmd, (void *) 0);
 		goto got_pipeline;
@@ -232,7 +232,7 @@ decompress *decompress_open (const char *filename, int flags OPEN_FLAGS_UNUSED)
 
 			cmd = pipecmd_new_argstr (comp->prog);
 			pipecmd_pre_exec (cmd, sandbox_load, sandbox_free,
-					  sandbox);
+			                  sandbox);
 			p = pipeline_new_commands (cmd, (void *) 0);
 			goto got_pipeline;
 		}
@@ -268,7 +268,7 @@ decompress *decompress_fdopen (int fd)
 	cmd = pipecmd_new_function ("zcat", &decompress_zlib, NULL, NULL);
 	pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 	p = pipeline_new_commands (cmd, (void *) 0);
-#else /* HAVE_LIBZ */
+#else  /* HAVE_LIBZ */
 	p = pipeline_new ();
 #endif /* HAVE_LIBZ */
 
@@ -282,13 +282,13 @@ bool ATTRIBUTE_PURE decompress_is_pipeline (const decompress *d)
 	return d->tag == DECOMPRESS_PIPELINE;
 }
 
-pipeline * ATTRIBUTE_PURE decompress_get_pipeline (decompress *d)
+pipeline *ATTRIBUTE_PURE decompress_get_pipeline (decompress *d)
 {
 	assert (d->tag == DECOMPRESS_PIPELINE);
 	return d->u.p;
 }
 
-const char * ATTRIBUTE_PURE decompress_inprocess_buf (decompress *d)
+const char *ATTRIBUTE_PURE decompress_inprocess_buf (decompress *d)
 {
 	assert (d->tag == DECOMPRESS_INPROCESS);
 	return d->u.inprocess.buf;
@@ -372,10 +372,10 @@ const char *decompress_readline (decompress *d)
 		}
 		cur = d->u.inprocess.buf + d->u.inprocess.offset;
 		end = memchr (cur, '\n',
-			      d->u.inprocess.len - d->u.inprocess.offset);
+		              d->u.inprocess.len - d->u.inprocess.offset);
 		if (end) {
-			d->u.inprocess.line_cache = xstrndup
-				(cur, end - cur + 1);
+			d->u.inprocess.line_cache =
+			        xstrndup (cur, end - cur + 1);
 			d->u.inprocess.offset += end - cur + 1;
 			return d->u.inprocess.line_cache;
 		} else
@@ -400,10 +400,10 @@ const char *decompress_peekline (decompress *d)
 		}
 		cur = d->u.inprocess.buf + d->u.inprocess.offset;
 		end = memchr (cur, '\n',
-			      d->u.inprocess.len - d->u.inprocess.offset);
+		              d->u.inprocess.len - d->u.inprocess.offset);
 		if (end) {
-			d->u.inprocess.line_cache = xstrndup
-				(cur, end - cur + 1);
+			d->u.inprocess.line_cache =
+			        xstrndup (cur, end - cur + 1);
 			return d->u.inprocess.line_cache;
 		} else
 			return NULL;

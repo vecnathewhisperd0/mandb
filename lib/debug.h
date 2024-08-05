@@ -24,9 +24,9 @@
 
 #include "attribute.h"
 
-extern bool debug_level;	/* shows whether -d issued */
+extern bool debug_level; /* shows whether -d issued */
 extern void init_debug (void);
 extern void debug (const char *message, ...)
-	ATTRIBUTE_FORMAT ((__printf__, 1, 2));
+        ATTRIBUTE_FORMAT ((__printf__, 1, 2));
 extern void debug_error (const char *message, ...)
-	ATTRIBUTE_FORMAT ((__printf__, 1, 2));
+        ATTRIBUTE_FORMAT ((__printf__, 1, 2));

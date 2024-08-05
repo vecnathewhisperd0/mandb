@@ -29,16 +29,16 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <signal.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <dirent.h>
+#include <errno.h>
+#include <signal.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "canonicalize.h"
 #include "dirname.h"
@@ -55,23 +55,23 @@
 #include "appendstr.h"
 #include "compression.h"
 #include "debug.h"
-#include "filenames.h"
-#include "glcontainers.h"
-#include "pipeline.h"
 #include "decompress.h"
 #include "encodings.h"
+#include "filenames.h"
+#include "glcontainers.h"
 #include "orderfiles.h"
+#include "pipeline.h"
 #include "sandbox.h"
 #include "security.h"
 #include "util.h"
 
-#include "mydbm.h"
 #include "db_storage.h"
+#include "mydbm.h"
 
 #include "descriptions.h"
 #include "lexgrog.h"
-#include "manp.h"
 #include "manconv_client.h"
+#include "manp.h"
 #include "straycats.h"
 #include "ult_src.h"
 
@@ -90,7 +90,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 	cdir = opendir (catdir);
 	if (!cdir) {
-		error (0, errno, _("can't search directory %s"), catdir);
+		error (0, errno, _ ("can't search directory %s"), catdir);
 		return 0;
 	}
 
@@ -128,8 +128,8 @@ static int check_for_stray (MYDBM_FILE dbf)
 		if (!ext) {
 			if (quiet < 2)
 				error (0, 0,
-				       _("warning: %s: "
-					 "ignoring bogus filename"),
+				       _ ("warning: %s: "
+				          "ignoring bogus filename"),
 				       catdir);
 			goto next;
 		} else if (comp_info (ext, false)) {
@@ -144,11 +144,12 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 		/* check for bogosity */
 
-		if (!ext || strncmp (ext + 1, section, strlen (section)) != 0) {
+		if (!ext ||
+		    strncmp (ext + 1, section, strlen (section)) != 0) {
 			if (quiet < 2)
 				error (0, 0,
-				       _("warning: %s: "
-					 "ignoring bogus filename"),
+				       _ ("warning: %s: "
+				          "ignoring bogus filename"),
 				       catdir);
 			goto next;
 		}
@@ -189,12 +190,12 @@ static int check_for_stray (MYDBM_FILE dbf)
 			   further */
 			mandir_base = base_name (mandir);
 			exists = dblookup_exact (dbf, mandir_base, info->ext,
-						 true);
+			                         true);
 			if (exists &&
 			    compare_ids (STRAY_CAT, exists->id, false) >= 0)
 				goto next_exists;
-			debug ("%s(%s) is not in the db.\n",
-			       mandir_base, info->ext);
+			debug ("%s(%s) is not in the db.\n", mandir_base,
+			       info->ext);
 
 			/* fill in the missing parts of the structure */
 			info->sec = xstrdup (section);
@@ -207,7 +208,7 @@ static int check_for_stray (MYDBM_FILE dbf)
 			decomp = decompress_open (catdir, 0);
 			regain_effective_privs ();
 			if (!decomp) {
-				error (0, errno, _("can't open %s"), catdir);
+				error (0, errno, _ ("can't open %s"), catdir);
 				goto next_exists;
 			}
 
@@ -215,23 +216,23 @@ static int check_for_stray (MYDBM_FILE dbf)
 			page_encoding = get_page_encoding (lang);
 			if (page_encoding)
 				add_manconv (decompress_get_pipeline (decomp),
-					     page_encoding, "UTF-8");
+				             page_encoding, "UTF-8");
 			free (page_encoding);
 			free (lang);
 
-			col_cmd = pipecmd_new_argstr
-				(get_def_user ("col", PROG_COL));
+			col_cmd = pipecmd_new_argstr (
+			        get_def_user ("col", PROG_COL));
 			pipecmd_arg (col_cmd, "-bx");
 			col_locale = find_charset_locale ("UTF-8");
 			if (col_locale) {
 				pipecmd_setenv (col_cmd, "LC_CTYPE",
-						col_locale);
+				                col_locale);
 				free (col_locale);
 			}
 			pipecmd_pre_exec (col_cmd, sandbox_load, sandbox_free,
-					  sandbox);
+			                  sandbox);
 			pipeline_command (decompress_get_pipeline (decomp),
-					  col_cmd);
+			                  col_cmd);
 
 			fullpath = canonicalize_file_name (catdir);
 			if (!fullpath)
@@ -248,24 +249,25 @@ static int check_for_stray (MYDBM_FILE dbf)
 
 				lg.type = CATPAGE;
 				catdir_base = base_name (catdir);
-				if (find_name_decompressed (decomp,
-							    catdir_base,
-							    &lg)) {
+				if (find_name_decompressed (
+				            decomp, catdir_base, &lg)) {
 					gl_list_t descs, trace;
 					strays++;
-					descs = parse_descriptions
-						(mandir_base, lg.whatis);
+					descs = parse_descriptions (
+					        mandir_base, lg.whatis);
 					trace = new_string_list (GL_ARRAY_LIST,
-								 true);
+					                         true);
 					gl_list_add_last (trace,
-							  xstrdup (catdir));
+					                  xstrdup (catdir));
 					store_descriptions (dbf, descs, info,
-							    NULL, mandir_base,
-							    trace);
+					                    NULL, mandir_base,
+					                    trace);
 					gl_list_free (trace);
 					gl_list_free (descs);
 				} else if (quiet < 2)
-					error (0, 0, _("warning: %s: whatis parse for %s(%s) failed"),
+					error (0, 0,
+					       _ ("warning: %s: whatis parse "
+					          "for %s(%s) failed"),
 					       catdir, mandir_base, info->sec);
 				free (catdir_base);
 			}
@@ -293,12 +295,12 @@ static int open_catdir (MYDBM_FILE dbf)
 
 	cdir = opendir (catdir);
 	if (!cdir) {
-		error (0, errno, _("can't search directory %s"), catdir);
+		error (0, errno, _ ("can't search directory %s"), catdir);
 		return 0;
 	}
 
 	if (!quiet)
-		printf (_("Checking for stray cats under %s...\n"), catdir);
+		printf (_ ("Checking for stray cats under %s...\n"), catdir);
 
 	catdir = appendstr (catdir, "/", (void *) 0);
 	mandir = appendstr (mandir, "/", (void *) 0);

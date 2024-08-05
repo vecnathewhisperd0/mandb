@@ -23,15 +23,14 @@
 
 #if defined(GDBM) || defined(NDBM)
 
-#include "mydbm.h"
+#  include "mydbm.h"
 
 typedef datum (*man_xdbm_unsorted_firstkey) (MYDBM_FILE dbf);
 typedef datum (*man_xdbm_unsorted_nextkey) (MYDBM_FILE dbf, datum key);
 typedef void (*man_xdbm_raw_close) (MYDBM_FILE dbf);
 
-datum man_xdbm_firstkey (MYDBM_FILE dbf,
-			 man_xdbm_unsorted_firstkey firstkey,
-			 man_xdbm_unsorted_nextkey nextkey);
+datum man_xdbm_firstkey (MYDBM_FILE dbf, man_xdbm_unsorted_firstkey firstkey,
+                         man_xdbm_unsorted_nextkey nextkey);
 datum man_xdbm_nextkey (MYDBM_FILE dbf, datum key);
 void man_xdbm_free (MYDBM_FILE dbf, man_xdbm_raw_close raw_close);
 

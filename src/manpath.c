@@ -24,23 +24,23 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <errno.h>
-#include <unistd.h>
 #include <limits.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "argp.h"
 #include "error.h"
 #include "progname.h"
 
 #include "gettext.h"
-#define _(String) gettext (String)
+#define _(String)  gettext (String)
 #define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
@@ -62,17 +62,16 @@ const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
 static struct argp_option options[] = {
-	OPT ("catpath", 'c', 0, N_("show relative catpaths")),
-	OPT ("global", 'g', 0, N_("show the entire global manpath")),
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("quiet", 'q', 0, N_("produce fewer warnings")),
-	OPT ("config-file", 'C', N_("FILE"),
-	     N_("use this user configuration file")),
-	OPT ("systems", 'm', N_("SYSTEM"),
-	     N_("use manual pages from other systems")),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("catpath", 'c', 0, N_ ("show relative catpaths")),
+        OPT ("global", 'g', 0, N_ ("show the entire global manpath")),
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("quiet", 'q', 0, N_ ("produce fewer warnings")),
+        OPT ("config-file", 'C', N_ ("FILE"),
+             N_ ("use this user configuration file")),
+        OPT ("systems", 'm', N_ ("SYSTEM"),
+             N_ ("use manual pages from other systems")),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
@@ -98,13 +97,13 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
+			                 ARGP_HELP_STD_HELP);
 			break;
 	}
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp argp = { options, parse_opt };
+static struct argp argp = {options, parse_opt};
 
 /*
  * Examine user's PATH and print a reasonable MANPATH.
@@ -127,8 +126,8 @@ int main (int argc, char *argv[])
 		path_string = get_mandb_manpath ();
 		if (!path_string)
 			error (FAIL, 0,
-			       _("warning: no global manpaths set in "
-				 "config file %s"),
+			       _ ("warning: no global manpaths set in "
+			          "config file %s"),
 			       CONFIG_FILE);
 	}
 	if (cat)

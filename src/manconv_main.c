@@ -38,7 +38,7 @@
 #include "xalloc.h"
 
 #include "gettext.h"
-#define _(String) gettext (String)
+#define _(String)  gettext (String)
 #define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
@@ -47,8 +47,8 @@
 #include "cleanup.h"
 #include "debug.h"
 #include "encodings.h"
-#include "pipeline.h"
 #include "glcontainers.h"
+#include "pipeline.h"
 #include "sandbox.h"
 #include "util.h"
 
@@ -78,7 +78,7 @@ static gl_list_t split_codes (const char *codestr)
 	for (tok = strsep (&codestrtok_ptr, ":"); tok;
 	     tok = strsep (&codestrtok_ptr, ":")) {
 		if (!*tok)
-			continue;	/* ignore empty fields */
+			continue; /* ignore empty fields */
 		gl_list_add_last (codelist, xstrdup (tok));
 	}
 
@@ -91,17 +91,16 @@ const char *argp_program_version = "manconv " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("[-f CODE[:...]] -t CODE [FILENAME]");
+static const char args_doc[] = N_ ("[-f CODE[:...]] -t CODE [FILENAME]");
 
 static struct argp_option options[] = {
-	OPT ("from-code", 'f', N_("CODE[:...]"),
-	     N_("possible encodings of original text")),
-	OPT ("to-code", 't', N_("CODE"), N_("encoding for output")),
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("quiet", 'q', 0, N_("produce fewer warnings")),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("from-code", 'f', N_ ("CODE[:...]"),
+             N_ ("possible encodings of original text")),
+        OPT ("to-code", 't', N_ ("CODE"), N_ ("encoding for output")),
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("quiet", 'q', 0, N_ ("produce fewer warnings")),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
@@ -113,7 +112,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			to_code = xstrdup (arg);
 			if (!strstr (to_code, "//"))
 				to_code = appendstr (to_code, "//TRANSLIT",
-						     (void *) 0);
+				                     (void *) 0);
 			return 0;
 		case 'd':
 			debug_level = true;
@@ -123,7 +122,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
+			                 ARGP_HELP_STD_HELP);
 			break;
 		case ARGP_KEY_ARG:
 			if (filename)
@@ -132,16 +131,15 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case ARGP_KEY_SUCCESS:
 			if (!to_code)
-				argp_error (state,
-					    _("must specify an output "
-					      "encoding"));
+				argp_error (state, _ ("must specify an output "
+				                      "encoding"));
 			from_code = split_codes (from_codes);
 			return 0;
 	}
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp argp = { options, parse_opt, args_doc };
+static struct argp argp = {options, parse_opt, args_doc};
 
 int main (int argc, char *argv[])
 {
@@ -161,7 +159,7 @@ int main (int argc, char *argv[])
 	if (filename) {
 		decomp = decompress_open (filename, 0);
 		if (!decomp)
-			error (FAIL, 0, _("can't open %s"), filename);
+			error (FAIL, 0, _ ("can't open %s"), filename);
 	} else
 		decomp = decompress_fdopen (dup (STDIN_FILENO));
 	decompress_start (decomp);

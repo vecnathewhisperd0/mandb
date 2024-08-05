@@ -28,13 +28,13 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
 #include <ctype.h>
-#include <glob.h>
-#include <sys/types.h>
 #include <dirent.h>
+#include <glob.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
 
 #include "error.h"
 #include "fnmatch.h"
@@ -85,11 +85,11 @@ static char *make_pattern (const char *name, const char *sec, int opts)
 	return pattern;
 }
 
-#define LAYOUT_GNU	1
-#define LAYOUT_HPUX	2
-#define LAYOUT_IRIX	4
-#define LAYOUT_SOLARIS	8
-#define LAYOUT_BSD	16
+#define LAYOUT_GNU     1
+#define LAYOUT_HPUX    2
+#define LAYOUT_IRIX    4
+#define LAYOUT_SOLARIS 8
+#define LAYOUT_BSD     16
 
 static int parse_layout (const char *layout)
 {
@@ -181,8 +181,8 @@ static struct dirent_names *update_directory_cache (const char *path)
 		if (cache->names_len >= cache->names_max) {
 			cache->names_max *= 2;
 			cache->names =
-				xnrealloc (cache->names, cache->names_max,
-					   sizeof (char *));
+			        xnrealloc (cache->names, cache->names_max,
+			                   sizeof (char *));
 		}
 		cache->names[cache->names_len++] = xstrdup (entry->d_name);
 	}
@@ -209,8 +209,8 @@ static int pattern_compare (const void *a, const void *b)
 }
 
 static void match_regex_in_directory (const char *path, const char *pattern,
-				      int opts, gl_list_t matched,
-				      struct dirent_names *cache)
+                                      int opts, gl_list_t matched,
+                                      struct dirent_names *cache)
 {
 	int flags;
 	regex_t preg;
@@ -219,7 +219,7 @@ static void match_regex_in_directory (const char *path, const char *pattern,
 	debug ("matching regex in %s: %s\n", path, pattern);
 
 	flags = REG_EXTENDED | REG_NOSUB |
-		((opts & LFF_MATCHCASE) ? 0 : REG_ICASE);
+	        ((opts & LFF_MATCHCASE) ? 0 : REG_ICASE);
 
 	xregcomp (&preg, pattern, flags);
 
@@ -230,18 +230,18 @@ static void match_regex_in_directory (const char *path, const char *pattern,
 		debug ("matched: %s/%s\n", path, cache->names[i]);
 
 		gl_list_add_last (matched,
-				  xasprintf ("%s/%s", path, cache->names[i]));
+		                  xasprintf ("%s/%s", path, cache->names[i]));
 	}
 
 	regfree (&preg);
 }
 
 static void match_wildcard_in_directory (const char *path, const char *pattern,
-					 int opts, gl_list_t matched,
-					 struct dirent_names *cache)
+                                         int opts, gl_list_t matched,
+                                         struct dirent_names *cache)
 {
 	int flags;
-	struct pattern_bsearch pattern_start = { NULL, -1 };
+	struct pattern_bsearch pattern_start = {NULL, -1};
 	char **bsearched;
 	size_t i;
 
@@ -249,25 +249,24 @@ static void match_wildcard_in_directory (const char *path, const char *pattern,
 
 	flags = (opts & LFF_MATCHCASE) ? 0 : FNM_CASEFOLD;
 
-	pattern_start.pattern = xstrndup (pattern,
-					  strcspn (pattern, "?*{}\\"));
+	pattern_start.pattern =
+	        xstrndup (pattern, strcspn (pattern, "?*{}\\"));
 	pattern_start.len = strlen (pattern_start.pattern);
-	bsearched = bsearch (&pattern_start, cache->names,
-			     cache->names_len, sizeof *cache->names,
-			     &pattern_compare);
+	bsearched = bsearch (&pattern_start, cache->names, cache->names_len,
+	                     sizeof *cache->names, &pattern_compare);
 	if (!bsearched) {
 		free (pattern_start.pattern);
 		return;
 	}
 	while (bsearched > cache->names &&
 	       !strncasecmp (pattern_start.pattern, *(bsearched - 1),
-			     pattern_start.len))
+	                     pattern_start.len))
 		--bsearched;
 
 	for (i = bsearched - cache->names; i < cache->names_len; ++i) {
 		assert (pattern_start.pattern);
-		if (strncasecmp (pattern_start.pattern,
-				 cache->names[i], pattern_start.len))
+		if (strncasecmp (pattern_start.pattern, cache->names[i],
+		                 pattern_start.len))
 			break;
 
 		if (fnmatch (pattern, cache->names[i], flags) != 0)
@@ -276,14 +275,14 @@ static void match_wildcard_in_directory (const char *path, const char *pattern,
 		debug ("matched: %s/%s\n", path, cache->names[i]);
 
 		gl_list_add_last (matched,
-				  xasprintf ("%s/%s", path, cache->names[i]));
+		                  xasprintf ("%s/%s", path, cache->names[i]));
 	}
 
 	free (pattern_start.pattern);
 }
 
 static void match_in_directory (const char *path, const char *pattern,
-				int opts, gl_list_t matched)
+                                int opts, gl_list_t matched)
 {
 	struct dirent_names *cache;
 
@@ -297,11 +296,11 @@ static void match_in_directory (const char *path, const char *pattern,
 		match_regex_in_directory (path, pattern, opts, matched, cache);
 	else
 		match_wildcard_in_directory (path, pattern, opts, matched,
-					     cache);
+		                             cache);
 }
 
 gl_list_t look_for_file (const char *hier, const char *sec,
-			 const char *unesc_name, bool cat, int opts)
+                         const char *unesc_name, bool cat, int opts)
 {
 	gl_list_t matched;
 	char *pattern, *path = NULL;
@@ -350,8 +349,8 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 	if ((layout & LAYOUT_HPUX) && gl_list_size (matched) == 0) {
 		if (path)
 			*path = '\0';
-		path = appendstr (path, hier, cat ? "/cat" : "/man",
-				  sec, ".Z", (void *) 0);
+		path = appendstr (path, hier, cat ? "/cat" : "/man", sec, ".Z",
+		                  (void *) 0);
 		pattern = make_pattern (name, sec, opts);
 
 		match_in_directory (path, pattern, opts, matched);
@@ -363,7 +362,7 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 		if (path)
 			*path = '\0';
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
-				  (void *) 0);
+		                  (void *) 0);
 		if (opts & LFF_REGEX)
 			pattern = xasprintf ("%s\\..*", name);
 		else
@@ -379,7 +378,7 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 			*path = '\0';
 		/* TODO: This needs to be man/sec*, not just man/sec. */
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
-				  (void *) 0);
+		                  (void *) 0);
 		pattern = make_pattern (name, sec, opts);
 
 		match_in_directory (path, pattern, opts, matched);
@@ -426,7 +425,7 @@ gl_list_t expand_path (const char *path)
 		size_t i;
 		for (i = 0; i < globbuf.gl_pathc; ++i)
 			gl_list_add_last (result,
-					  xstrdup (globbuf.gl_pathv[i]));
+			                  xstrdup (globbuf.gl_pathv[i]));
 	}
 
 	globfree (&globbuf);

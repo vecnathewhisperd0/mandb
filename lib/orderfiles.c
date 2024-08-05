@@ -36,12 +36,12 @@
 #  include <sys/vfs.h>
 #endif /* HAVE_LINUX_FIEMAP_H */
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "attribute.h"
@@ -85,9 +85,9 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	const char *name;
 
 	dir_fd_open_flags = O_SEARCH | O_DIRECTORY;
-#ifdef O_PATH
+#  ifdef O_PATH
 	dir_fd_open_flags |= O_PATH;
-#endif
+#  endif
 	dir_fd = open (dir, dir_fd_open_flags);
 	if (dir_fd < 0)
 		return;
@@ -104,7 +104,7 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	 * assumption for manual pages.
 	 */
 	physical_offsets = gl_map_create_empty (GL_HASH_MAP, string_equals,
-						string_hash, NULL, plain_free);
+	                                        string_hash, NULL, plain_free);
 	sorted_basenames = new_string_list (GL_RBTREE_LIST, false);
 	GL_LIST_FOREACH (basenames, name) {
 		struct {
@@ -135,7 +135,7 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 
 		close (fd);
 		gl_sortedlist_add (sorted_basenames, compare_physical_offsets,
-				   xstrdup (name));
+		                   xstrdup (name));
 	}
 	gl_map_free (physical_offsets);
 	physical_offsets = NULL;
@@ -152,9 +152,9 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	const char *name;
 
 	dir_fd_open_flags = O_SEARCH | O_DIRECTORY;
-#ifdef O_PATH
+#  ifdef O_PATH
 	dir_fd_open_flags |= O_PATH;
-#endif
+#  endif
 	dir_fd = open (dir, dir_fd_open_flags);
 	if (dir_fd < 0)
 		return;
@@ -174,7 +174,7 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 }
 #else
 void order_files (const char *dir MAYBE_UNUSED,
-		  gl_list_t *basenamesp MAYBE_UNUSED)
+                  gl_list_t *basenamesp MAYBE_UNUSED)
 {
 }
 #endif

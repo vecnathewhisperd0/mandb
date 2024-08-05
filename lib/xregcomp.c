@@ -47,6 +47,6 @@ void xregcomp (regex_t *preg, const char *regex, int cflags)
 		errstrsize = regerror (err, preg, NULL, 0);
 		errstr = xmalloc (errstrsize);
 		regerror (err, preg, errstr, errstrsize);
-		fatal (0, _("fatal: regex `%s': %s"), regex, errstr);
+		fatal (0, _ ("fatal: regex `%s': %s"), regex, errstr);
 	}
 }

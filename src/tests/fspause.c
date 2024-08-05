@@ -27,8 +27,8 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -43,12 +43,12 @@
 static char *filename;
 static int fd = -1;
 
-#define MUST(name, cond) \
-	do { \
-		if (!(cond)) { \
-			fprintf (stderr, "fspause: " name " failed\n"); \
-			abort (); \
-		} \
+#define MUST(name, cond)                                                      \
+	do {                                                                  \
+		if (!(cond)) {                                                \
+			fprintf (stderr, "fspause: " name " failed\n");       \
+			abort ();                                             \
+		}                                                             \
 	} while (0)
 
 static void unlink_tempfile (void)
@@ -108,6 +108,6 @@ int main (int argc MAYBE_UNUSED, char **argv)
 	}
 
 	fprintf (stderr,
-		 "fspause: temporary file timestamp refuses to change!\n");
+	         "fspause: temporary file timestamp refuses to change!\n");
 	return 1;
 }

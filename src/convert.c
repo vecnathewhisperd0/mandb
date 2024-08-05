@@ -52,11 +52,11 @@ static void close_conv_to_locale (void *ignored MAYBE_UNUSED)
 	iconv_close (conv_to_locale);
 }
 
-char * ATTRIBUTE_MALLOC convert_to_locale (char *string)
+char *ATTRIBUTE_MALLOC convert_to_locale (char *string)
 {
 	if (!conv_to_locale_initialized) {
-		char *locale_charset = xasprintf
-			("%s//IGNORE", get_locale_charset ());
+		char *locale_charset =
+		        xasprintf ("%s//IGNORE", get_locale_charset ());
 		conv_to_locale = iconv_open (locale_charset, "UTF-8");
 		free (locale_charset);
 		if (conv_to_locale != (iconv_t) -1)
@@ -72,18 +72,18 @@ char * ATTRIBUTE_MALLOC convert_to_locale (char *string)
 			size_t inleft = strlen (string);
 			size_t outleft = string_conv_alloc - 1;
 			if (iconv (conv_to_locale,
-				   (ICONV_CONST char **) &inptr, &inleft,
-				   &outptr, &outleft) == (size_t) -1 &&
+			           (ICONV_CONST char **) &inptr, &inleft,
+			           &outptr, &outleft) == (size_t) -1 &&
 			    errno == E2BIG) {
 				string_conv_alloc <<= 1;
 				string_conv = xrealloc (string_conv,
-							string_conv_alloc);
+				                        string_conv_alloc);
 			} else {
 				/* Either we succeeded, or we've done our
 				 * best; go ahead and print what we've got.
 				 */
 				string_conv[string_conv_alloc - 1 - outleft] =
-					'\0';
+				        '\0';
 				break;
 			}
 		}
@@ -91,8 +91,8 @@ char * ATTRIBUTE_MALLOC convert_to_locale (char *string)
 	} else
 		return xstrdup (string);
 }
-#else /* !HAVE_ICONV */
-char * ATTRIBUTE_MALLOC convert_to_locale (char *string)
+#else  /* !HAVE_ICONV */
+char *ATTRIBUTE_MALLOC convert_to_locale (char *string)
 {
 	return xstrdup (string);
 }

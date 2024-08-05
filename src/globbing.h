@@ -32,7 +32,7 @@ enum look_for_file_opts {
 
 /* globbing.c */
 extern gl_list_t look_for_file (const char *hier, const char *sec,
-				const char *unesc_name, bool cat, int opts);
+                                const char *unesc_name, bool cat, int opts);
 
 /* Expand path with wildcards into list of all existing directories. */
 extern gl_list_t expand_path (const char *path);

@@ -27,11 +27,11 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "gettext.h"
@@ -79,8 +79,8 @@ static bool pathsearch (const char *name, const mode_t bits)
 			if (!cwd)
 				cwd = xgetcwd ();
 			if (!cwd)
-				fatal (errno,
-				       _("can't determine current directory"));
+				fatal (errno, _ ("can't determine current "
+				                 "directory"));
 			element = cwd;
 		}
 
@@ -129,8 +129,8 @@ bool directory_on_path (const char *dir)
 			if (!cwd)
 				cwd = xgetcwd ();
 			if (!cwd)
-				fatal (errno,
-				       _("can't determine current directory"));
+				fatal (errno, _ ("can't determine current "
+				                 "directory"));
 			element = cwd;
 		}
 

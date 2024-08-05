@@ -35,31 +35,31 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "gettext.h"
 #include <locale.h>
-#define _(String) gettext (String)
+#define _(String)  gettext (String)
 #define N_(String) gettext_noop (String)
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include "regex.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "argp.h"
 #include "attribute.h"
 #include "dirname.h"
 #include "error.h"
+#include "fnmatch.h"
 #include "gl_hash_set.h"
 #include "gl_list.h"
 #include "gl_xset.h"
-#include "fnmatch.h"
 #include "progname.h"
 #include "xalloc.h"
 #include "xvasprintf.h"
@@ -69,20 +69,20 @@
 #include "appendstr.h"
 #include "cleanup.h"
 #include "debug.h"
+#include "encodings.h"
 #include "fatal.h"
 #include "filenames.h"
 #include "glcontainers.h"
-#include "pipeline.h"
-#include "pathsearch.h"
 #include "linelength.h"
-#include "wordfnmatch.h"
-#include "xregcomp.h"
-#include "encodings.h"
+#include "pathsearch.h"
+#include "pipeline.h"
 #include "sandbox.h"
 #include "util.h"
+#include "wordfnmatch.h"
+#include "xregcomp.h"
 
-#include "mydbm.h"
 #include "db_storage.h"
+#include "mydbm.h"
 
 #include "convert.h"
 #include "manp.h"
@@ -120,35 +120,35 @@ const char *argp_program_version; /* initialised in main */
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("KEYWORD...");
-static const char apropos_doc[] = "\v" N_("The --regex option is enabled by default.");
+static const char args_doc[] = N_ ("KEYWORD...");
+static const char apropos_doc[] =
+        "\v" N_ ("The --regex option is enabled by default.");
 
 static struct argp_option options[] = {
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("verbose", 'v', 0, N_("print verbose warning messages")),
-	OPT ("regex", 'r', 0, N_("interpret each keyword as a regex"), 10),
-	/* apropos only */
-	OPT ("exact", 'e', 0, N_("search each keyword for exact match")),
-	OPT ("wildcard", 'w', 0, N_("the keyword(s) contain wildcards")),
-	/* apropos only */
-	OPT ("and", 'a', 0, N_("require all keywords to match"), 20),
-	OPT ("long", 'l', 0, N_("do not trim output to terminal width"), 30),
-	OPT ("sections", 's', N_("LIST"),
-	     N_("search only these sections (colon-separated)"), 40),
-	OPT_ALIAS ("section", 0),
-	OPT ("systems", 'm', N_("SYSTEM"),
-	     N_("use manual pages from other systems")),
-	OPT ("manpath", 'M', N_("PATH"),
-	     N_("set search path for manual pages to PATH")),
-	OPT ("locale", 'L', N_("LOCALE"),
-	     N_("define the locale for this search")),
-	OPT ("config-file", 'C', N_("FILE"),
-	     N_("use this user configuration file")),
-	OPT_HIDDEN ("whatis", 'f'),
-	OPT_HIDDEN ("apropos", 'k'),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("verbose", 'v', 0, N_ ("print verbose warning messages")),
+        OPT ("regex", 'r', 0, N_ ("interpret each keyword as a regex"), 10),
+        /* apropos only */
+        OPT ("exact", 'e', 0, N_ ("search each keyword for exact match")),
+        OPT ("wildcard", 'w', 0, N_ ("the keyword(s) contain wildcards")),
+        /* apropos only */
+        OPT ("and", 'a', 0, N_ ("require all keywords to match"), 20),
+        OPT ("long", 'l', 0, N_ ("do not trim output to terminal width"), 30),
+        OPT ("sections", 's', N_ ("LIST"),
+             N_ ("search only these sections (colon-separated)"), 40),
+        OPT_ALIAS ("section", 0),
+        OPT ("systems", 'm', N_ ("SYSTEM"),
+             N_ ("use manual pages from other systems")),
+        OPT ("manpath", 'M', N_ ("PATH"),
+             N_ ("set search path for manual pages to PATH")),
+        OPT ("locale", 'L', N_ ("LOCALE"),
+             N_ ("define the locale for this search")),
+        OPT ("config-file", 'C', N_ ("FILE"),
+             N_ ("use this user configuration file")),
+        OPT_HIDDEN ("whatis", 'f'),
+        OPT_HIDDEN ("apropos", 'k'),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static char **split_sections (const char *sections_str)
 {
@@ -230,8 +230,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP &
-					 ~ARGP_HELP_PRE_DOC);
+			                 ARGP_HELP_STD_HELP &
+			                         ~ARGP_HELP_PRE_DOC);
 			break;
 		case ARGP_KEY_ARGS:
 			keywords = state->argv + state->next;
@@ -239,7 +239,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case ARGP_KEY_NO_ARGS:
 			/* Make sure that we have a keyword! */
-			printf (_("%s what?\n"), program_name);
+			printf (_ ("%s what?\n"), program_name);
 			exit (FAIL);
 		case ARGP_KEY_SUCCESS:
 			if (am_apropos && !exact && !wildcard)
@@ -262,9 +262,9 @@ static char *help_filter (int key, const char *text, void *input MAYBE_UNUSED)
 	}
 }
 
-static struct argp apropos_argp = { options, parse_opt, args_doc, apropos_doc,
-				    0, help_filter };
-static struct argp whatis_argp = { options, parse_opt, args_doc };
+static struct argp apropos_argp = {options,     parse_opt, args_doc,
+                                   apropos_doc, 0,         help_filter};
+static struct argp whatis_argp = {options, parse_opt, args_doc};
 
 static char *locale_manpath (const char *manpath)
 {
@@ -274,7 +274,7 @@ static char *locale_manpath (const char *manpath)
 	if (multiple_locale && *multiple_locale) {
 		if (internal_locale && *internal_locale)
 			all_locales = xasprintf ("%s:%s", multiple_locale,
-						 internal_locale);
+			                         internal_locale);
 		else
 			all_locales = xstrdup (multiple_locale);
 	} else {
@@ -296,8 +296,8 @@ static char *locale_manpath (const char *manpath)
  * would be to implement grep internally, but it hardly seems worth it for a
  * legacy mechanism.
  */
-static void use_grep (const char * const *pages, int num_pages, char *manpath,
-		      bool *found)
+static void use_grep (const char *const *pages, int num_pages, char *manpath,
+                      bool *found)
 {
 	char *whatis_file = xasprintf ("%s/whatis", manpath);
 	assert (whatis_file);
@@ -309,14 +309,14 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 		if (am_apropos) {
 			if (regex_opt)
 				flags = get_def_user (
-					"apropos_regex_grep_flags",
-					APROPOS_REGEX_GREP_FLAGS);
+				        "apropos_regex_grep_flags",
+				        APROPOS_REGEX_GREP_FLAGS);
 			else
 				flags = get_def_user ("apropos_grep_flags",
-						      APROPOS_GREP_FLAGS);
+				                      APROPOS_GREP_FLAGS);
 		} else
 			flags = get_def_user ("whatis_grep_flags",
-					      WHATIS_GREP_FLAGS);
+			                      WHATIS_GREP_FLAGS);
 
 		for (i = 0; i < num_pages; ++i) {
 			pipeline *grep_pl;
@@ -328,13 +328,13 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 			else
 				anchored_page = xasprintf ("^%s", pages[i]);
 
-			grep_cmd = pipecmd_new_argstr
-				(get_def_user ("grep", PROG_GREP));
+			grep_cmd = pipecmd_new_argstr (
+			        get_def_user ("grep", PROG_GREP));
 			pipecmd_argstr (grep_cmd, flags);
 			pipecmd_args (grep_cmd, anchored_page, whatis_file,
-				      (void *) 0);
+			              (void *) 0);
 			pipecmd_pre_exec (grep_cmd, sandbox_load, sandbox_free,
-					  sandbox);
+			                  sandbox);
 			grep_pl = pipeline_new_commands (grep_cmd, (void *) 0);
 
 			if (pipeline_run (grep_pl) == 0)
@@ -344,13 +344,14 @@ static void use_grep (const char * const *pages, int num_pages, char *manpath,
 		}
 	} else
 		debug ("warning: can't read the fallback whatis text database "
-		       "%s/whatis\n", manpath);
+		       "%s/whatis\n",
+		       manpath);
 
 	free (whatis_file);
 }
 
 static struct mandata *resolve_pointers (MYDBM_FILE dbf, struct mandata *info,
-					 const char *page)
+                                         const char *page)
 {
 	int rounds;
 	const char *newpage;
@@ -383,7 +384,7 @@ static struct mandata *resolve_pointers (MYDBM_FILE dbf, struct mandata *info,
 	}
 
 	if (!quiet)
-		error (0, 0, _("warning: %s contains a pointer loop"), page);
+		error (0, 0, _ ("warning: %s contains a pointer loop"), page);
 	return NULL;
 }
 
@@ -395,15 +396,14 @@ static struct mandata *resolve_pointers (MYDBM_FILE dbf, struct mandata *info,
 static char *get_whatis (struct mandata *info, const char *page)
 {
 	if (!info)
-		return xstrdup (_("(unknown subject)"));
+		return xstrdup (_ ("(unknown subject)"));
 
 	/* See if we need to fill in the whatis here. */
 	if (info->whatis != NULL && *(info->whatis))
 		return xstrdup (info->whatis);
 	if (!quiet && *(info->pointer) != '-')
-		error (0, 0, _("warning: %s contains a pointer loop"),
-		       page);
-	return xstrdup (_("(unknown subject)"));
+		error (0, 0, _ ("warning: %s contains a pointer loop"), page);
+	return xstrdup (_ ("(unknown subject)"));
 }
 
 /* print out any matches found */
@@ -441,7 +441,7 @@ static void display (MYDBM_FILE dbf, struct mandata *info, const char *page)
 	string = appendstr (string, " (", newinfo->ext, ")", (void *) 0);
 	if (!STREQ (newinfo->pointer, "-") && !STREQ (newinfo->pointer, page))
 		string = appendstr (string, " [", newinfo->pointer, "]",
-				    (void *) 0);
+		                    (void *) 0);
 
 	if (strlen (string) < (size_t) 20) {
 		int i;
@@ -473,8 +473,8 @@ out:
 }
 
 /* lookup the page and display the results */
-static int do_whatis_section (MYDBM_FILE dbf,
-			      const char *page, const char *section)
+static int do_whatis_section (MYDBM_FILE dbf, const char *page,
+                              const char *section)
 {
 	gl_list_t infos;
 	struct mandata *info;
@@ -512,9 +512,8 @@ static bool suitable_manpath (const char *manpath, const char *page_dir)
 	return ret;
 }
 
-static void do_whatis (MYDBM_FILE dbf,
-		       const char * const *pages, int num_pages,
-		       const char *manpath, bool *found)
+static void do_whatis (MYDBM_FILE dbf, const char *const *pages, int num_pages,
+                       const char *manpath, bool *found)
 {
 	int i;
 
@@ -548,7 +547,7 @@ static void do_whatis (MYDBM_FILE dbf,
 		}
 
 		if (sections) {
-			char * const *section;
+			char *const *section;
 
 			for (section = sections; *section; ++section) {
 				if (do_whatis_section (dbf, page, *section))
@@ -583,15 +582,15 @@ static bool all_set (int num_pages, const bool *found_here)
 	return true;
 }
 
-static void parse_name (const char * const *pages, int num_pages,
-			const char *dbname, bool *found, bool *found_here)
+static void parse_name (const char *const *pages, int num_pages,
+                        const char *dbname, bool *found, bool *found_here)
 {
 	int i;
 
 	if (regex_opt) {
 		for (i = 0; i < num_pages; ++i) {
-			if (regexec (&preg[i], dbname, 0,
-				     (regmatch_t *) 0, 0) == 0)
+			if (regexec (&preg[i], dbname, 0, (regmatch_t *) 0,
+			             0) == 0)
 				found[i] = found_here[i] = true;
 		}
 		return;
@@ -625,24 +624,25 @@ static bool ATTRIBUTE_PURE match (const char *page, const char *whatis)
 		const char *left = p - 1;
 		const char *right = p + len;
 
-		if ((p == begin || (!CTYPE (isalpha, *left) && *left != '_')) &&
+		if ((p == begin ||
+		     (!CTYPE (isalpha, *left) && *left != '_')) &&
 		    (!*right || (!CTYPE (isalpha, *right) && *right != '_')))
-		    	return true;
+			return true;
 		whatis = p + 1;
 	}
 
 	return false;
 }
 
-static void parse_whatis (const char * const *pages, int num_pages,
-			  const char *whatis, bool *found, bool *found_here)
+static void parse_whatis (const char *const *pages, int num_pages,
+                          const char *whatis, bool *found, bool *found_here)
 {
 	int i;
 
 	if (regex_opt) {
 		for (i = 0; i < num_pages; ++i) {
-			if (regexec (&preg[i], whatis, 0,
-				     (regmatch_t *) 0, 0) == 0)
+			if (regexec (&preg[i], whatis, 0, (regmatch_t *) 0,
+			             0) == 0)
 				found[i] = found_here[i] = true;
 		}
 		return;
@@ -673,15 +673,15 @@ static void parse_whatis (const char * const *pages, int num_pages,
 #undef BTREE
 
 /* scan for the page, print any matches */
-static void do_apropos (MYDBM_FILE dbf,
-			const char * const *pages, int num_pages, bool *found)
+static void do_apropos (MYDBM_FILE dbf, const char *const *pages,
+                        int num_pages, bool *found)
 {
 	datum key, cont;
 	bool *found_here;
 	bool (*combine) (int, const bool *);
 #ifndef BTREE
 	datum nextkey;
-#else /* BTREE */
+#else  /* BTREE */
 	int end;
 #endif /* !BTREE */
 
@@ -692,7 +692,7 @@ static void do_apropos (MYDBM_FILE dbf,
 	key = MYDBM_FIRSTKEY (dbf);
 	while (MYDBM_DPTR (key)) {
 		cont = MYDBM_FETCH (dbf, key);
-#else /* BTREE */
+#else  /* BTREE */
 	end = man_btree_nextkeydata (dbf, &key, &cont);
 	while (!end) {
 #endif /* !BTREE */
@@ -704,17 +704,16 @@ static void do_apropos (MYDBM_FILE dbf,
 		 * cjwatson: In that case, complain and exit, otherwise we
 		 * might loop (bug #95052).
 		 */
-		if (!MYDBM_DPTR (cont))
-		{
+		if (!MYDBM_DPTR (cont)) {
 			debug ("key was %s\n", MYDBM_DPTR (key));
 			fatal (0,
-			       _("Database %s corrupted; rebuild with "
-				 "mandb --create"),
+			       _ ("Database %s corrupted; rebuild with "
+			          "mandb --create"),
 			       dbf->name);
 		}
 
 #pragma GCC diagnostic push
-#if GNUC_PREREQ(10,0)
+#if GNUC_PREREQ(10, 0)
 #  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
 #endif
 		if (*MYDBM_DPTR (key) == '$')
@@ -732,7 +731,7 @@ static void do_apropos (MYDBM_FILE dbf,
 		 * either the section or extension of this page?
 		 */
 		if (sections) {
-			char * const *section;
+			char *const *section;
 			bool matched = false;
 
 			for (section = sections; *section; ++section) {
@@ -749,18 +748,18 @@ static void do_apropos (MYDBM_FILE dbf,
 
 		tab = strrchr (MYDBM_DPTR (key), '\t');
 		if (tab)
-			 *tab = '\0';
+			*tab = '\0';
 
 		memset (found_here, 0, num_pages * sizeof (*found_here));
-		parse_name (pages, num_pages,
-			    MYDBM_DPTR (key), found, found_here);
+		parse_name (pages, num_pages, MYDBM_DPTR (key), found,
+		            found_here);
 		if (am_apropos) {
 			char *whatis;
 
 			whatis = info->whatis ? xstrdup (info->whatis) : NULL;
 			if (!combine (num_pages, found_here) && whatis)
-				parse_whatis (pages, num_pages,
-					      whatis, found, found_here);
+				parse_whatis (pages, num_pages, whatis, found,
+				              found_here);
 			free (whatis);
 		}
 		if (combine (num_pages, found_here))
@@ -770,7 +769,7 @@ static void do_apropos (MYDBM_FILE dbf,
 			*tab = '\t';
 nextpage:
 #pragma GCC diagnostic push
-#if GNUC_PREREQ(10,0)
+#if GNUC_PREREQ(10, 0)
 #  pragma GCC diagnostic ignored "-Wanalyzer-double-free"
 #endif
 #ifndef BTREE
@@ -778,7 +777,7 @@ nextpage:
 		MYDBM_FREE_DPTR (cont);
 		MYDBM_FREE_DPTR (key);
 		key = nextkey;
-#else /* BTREE */
+#else  /* BTREE */
 		MYDBM_FREE_DPTR (cont);
 		MYDBM_FREE_DPTR (key);
 		end = man_btree_nextkeydata (dbf, &key, &cont);
@@ -791,7 +790,7 @@ nextpage:
 }
 
 /* loop through the man paths, searching for a match */
-static bool search (const char * const *pages, int num_pages)
+static bool search (const char *const *pages, int num_pages)
 {
 	bool *found = XCALLOC (num_pages, bool);
 	char *mp;
@@ -833,8 +832,8 @@ next:
 		if (found[i])
 			any_found = true;
 		else
-			fprintf (stderr, _("%s: nothing appropriate.\n"),
-				 pages[i]);
+			fprintf (stderr, _ ("%s: nothing appropriate.\n"),
+			         pages[i]);
 	}
 
 	free (found);
@@ -882,7 +881,7 @@ int main (int argc, char *argv[])
 	internal_locale = xstrdup (internal_locale ? internal_locale : "C");
 
 	if (argp_parse (am_apropos ? &apropos_argp : &whatis_argp, argc, argv,
-			0, 0, 0))
+	                0, 0, 0))
 		exit (FAIL);
 
 	read_config_file (user_config_file != NULL);
@@ -897,8 +896,8 @@ int main (int argc, char *argv[])
 		else
 			internal_locale = xstrdup (locale);
 
-		debug ("main(): locale = %s, internal_locale = %s\n",
-		       locale, internal_locale);
+		debug ("main(): locale = %s, internal_locale = %s\n", locale,
+		       internal_locale);
 		if (internal_locale) {
 			setenv ("LANGUAGE", internal_locale, 1);
 			locale_changed ();
@@ -921,7 +920,7 @@ int main (int argc, char *argv[])
 		preg = XNMALLOC (num_keywords, regex_t);
 		for (i = 0; i < num_keywords; ++i)
 			xregcomp (&preg[i], keywords[i],
-				  REG_EXTENDED | REG_NOSUB | REG_ICASE);
+			          REG_EXTENDED | REG_NOSUB | REG_ICASE);
 	}
 
 	if (!search ((const char **) keywords, num_keywords))

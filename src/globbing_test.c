@@ -56,20 +56,19 @@ const char *argp_program_version = "globbing " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("PATH SECTION NAME");
+static const char args_doc[] = N_ ("PATH SECTION NAME");
 
 static struct argp_option options[] = {
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("extension", 'e', N_("EXTENSION"),
-	     N_("limit search to extension type EXTENSION")),
-	OPT ("ignore-case", 'i', 0,
-	     N_("look for pages case-insensitively (default)")),
-	OPT ("match-case", 'I', 0, N_("look for pages case-sensitively")),
-	OPT ("regex", 'r', 0, N_("interpret page name as a regex")),
-	OPT ("wildcard", 'w', 0, N_("the page name contains wildcards")),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("extension", 'e', N_ ("EXTENSION"),
+             N_ ("limit search to extension type EXTENSION")),
+        OPT ("ignore-case", 'i', 0,
+             N_ ("look for pages case-insensitively (default)")),
+        OPT ("match-case", 'I', 0, N_ ("look for pages case-sensitively")),
+        OPT ("regex", 'r', 0, N_ ("interpret page name as a regex")),
+        OPT ("wildcard", 'w', 0, N_ ("the page name contains wildcards")),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
@@ -94,7 +93,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
+			                 ARGP_HELP_STD_HELP);
 			break;
 		case ARGP_KEY_ARGS:
 			if (state->argc - state->next != 3)
@@ -108,7 +107,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp argp = { options, parse_opt, args_doc };
+static struct argp argp = {options, parse_opt, args_doc};
 
 int main (int argc, char **argv)
 {
@@ -128,10 +127,10 @@ int main (int argc, char **argv)
 		const char *file;
 
 		files = look_for_file (remaining_args[0], remaining_args[1],
-				       remaining_args[2], (bool) i,
-				       (match_case ? LFF_MATCHCASE : 0) |
-				       (regex_opt ? LFF_REGEX : 0) |
-				       (wildcard ? LFF_WILDCARD : 0));
+		                       remaining_args[2], (bool) i,
+		                       (match_case ? LFF_MATCHCASE : 0) |
+		                               (regex_opt ? LFF_REGEX : 0) |
+		                               (wildcard ? LFF_WILDCARD : 0));
 		GL_LIST_FOREACH (files, file)
 			printf ("%s\n", file);
 		gl_list_free (files);

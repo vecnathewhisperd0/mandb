@@ -25,8 +25,8 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <stdbool.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "gl_array_list.h"
 #include "gl_xlist.h"
@@ -60,7 +60,7 @@ gl_list_t parse_descriptions (const char *base, const char *whatis)
 	bool seen_base = false;
 
 	descs = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
-				      page_description_free, true);
+	                              page_description_free, true);
 
 	if (!whatis)
 		return descs;
@@ -127,7 +127,7 @@ gl_list_t parse_descriptions (const char *base, const char *whatis)
 
 			/* Allocate new description node. */
 			desc = xmalloc (sizeof *desc);
-			desc->name   = name; /* steal memory */
+			desc->name = name; /* steal memory */
 			desc->whatis = dash ? trim_spaces (dash + 3) : NULL;
 			gl_list_add_last (descs, desc);
 
@@ -152,7 +152,7 @@ next:
 		desc->whatis = NULL;
 		if (gl_list_size (descs)) {
 			const struct page_description *first =
-				gl_list_get_at (descs, 0);
+			        gl_list_get_at (descs, 0);
 			if (first->whatis)
 				desc->whatis = xstrdup (first->whatis);
 		}

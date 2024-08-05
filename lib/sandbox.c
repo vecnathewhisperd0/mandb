@@ -43,16 +43,17 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdbool.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #ifdef HAVE_LIBSECCOMP
+#  include <seccomp.h>
 #  include <sys/ioctl.h>
 #  include <sys/ipc.h>
 #  include <sys/mman.h>
@@ -60,7 +61,6 @@
 #  include <sys/shm.h>
 #  include <sys/socket.h>
 #  include <termios.h>
-#  include <seccomp.h>
 #endif /* HAVE_LIBSECCOMP */
 
 #include "attribute.h"
@@ -77,7 +77,7 @@ struct man_sandbox {
 #ifdef HAVE_LIBSECCOMP
 	scmp_filter_ctx ctx;
 	scmp_filter_ctx permissive_ctx;
-#else /* !HAVE_LIBSECCOMP */
+#else  /* !HAVE_LIBSECCOMP */
 	char dummy;
 #endif /* HAVE_LIBSECCOMP */
 };
@@ -108,7 +108,7 @@ static bool search_ld_preload (const char *needle)
 		fd = open ("/etc/ld.so.preload", O_RDONLY);
 		if (fd >= 0 && fstat (fd, &st) >= 0 && st.st_size)
 			mapped = mmap (NULL, st.st_size, PROT_READ,
-				       MAP_PRIVATE | MAP_FILE, fd, 0);
+			               MAP_PRIVATE | MAP_FILE, fd, 0);
 		if (mapped) {
 			ld_preload_file = xstrndup (mapped, st.st_size);
 			munmap (mapped, st.st_size);
@@ -188,39 +188,40 @@ static bool can_load_seccomp (void)
 
 #ifdef HAVE_LIBSECCOMP
 
-#define SC_ALLOW(name) \
-	do { \
-		int nr = seccomp_syscall_resolve_name (name); \
-		if (nr == __NR_SCMP_ERROR) \
-			break; \
-		if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, 0) < 0) \
-			fatal (errno, "can't add seccomp rule"); \
-	} while (0)
+#  define SC_ALLOW(name)                                                      \
+	  do {                                                                \
+		  int nr = seccomp_syscall_resolve_name (name);               \
+		  if (nr == __NR_SCMP_ERROR)                                  \
+			  break;                                              \
+		  if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, 0) < 0)      \
+			  fatal (errno, "can't add seccomp rule");            \
+	  } while (0)
 
-#define SC_ALLOW_PERMISSIVE(name) \
-	do { \
-		if (permissive) \
-			SC_ALLOW (name); \
-	} while (0)
+#  define SC_ALLOW_PERMISSIVE(name)                                           \
+	  do {                                                                \
+		  if (permissive)                                             \
+			  SC_ALLOW (name);                                    \
+	  } while (0)
 
-#define SC_ALLOW_ARG_1(name, cmp1) \
-	do { \
-		int nr = seccomp_syscall_resolve_name (name); \
-		if (nr == __NR_SCMP_ERROR) \
-			break; \
-		if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, 1, cmp1) < 0) \
-			fatal (errno, "can't add seccomp rule"); \
-	} while (0)
+#  define SC_ALLOW_ARG_1(name, cmp1)                                          \
+	  do {                                                                \
+		  int nr = seccomp_syscall_resolve_name (name);               \
+		  if (nr == __NR_SCMP_ERROR)                                  \
+			  break;                                              \
+		  if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, 1, cmp1) <   \
+		      0)                                                      \
+			  fatal (errno, "can't add seccomp rule");            \
+	  } while (0)
 
-#define SC_ALLOW_ARG_2(name, cmp1, cmp2) \
-	do { \
-		int nr = seccomp_syscall_resolve_name (name); \
-		if (nr == __NR_SCMP_ERROR) \
-			break; \
-		if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, \
-				      2, cmp1, cmp2) < 0) \
-			fatal (errno, "can't add seccomp rule"); \
-	} while (0)
+#  define SC_ALLOW_ARG_2(name, cmp1, cmp2)                                    \
+	  do {                                                                \
+		  int nr = seccomp_syscall_resolve_name (name);               \
+		  if (nr == __NR_SCMP_ERROR)                                  \
+			  break;                                              \
+		  if (seccomp_rule_add (ctx, SCMP_ACT_ALLOW, nr, 2, cmp1,     \
+			                cmp2) < 0)                            \
+			  fatal (errno, "can't add seccomp rule");            \
+	  } while (0)
 
 /* Create a seccomp filter.
  *
@@ -236,10 +237,10 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	scmp_filter_ctx ctx;
 	mode_t mode_mask = S_ISUID | S_ISGID | S_IXUSR | S_IXGRP | S_IXOTH;
 	int create_mask = O_CREAT
-#ifdef O_TMPFILE
-		| O_TMPFILE
-#endif /* O_TMPFILE */
-		;
+#  ifdef O_TMPFILE
+	                  | O_TMPFILE
+#  endif /* O_TMPFILE */
+	        ;
 
 	if (!can_load_seccomp ())
 		return NULL;
@@ -370,9 +371,9 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("chdir");
 	if (permissive) {
 		SC_ALLOW_ARG_1 ("chmod",
-				SCMP_A1 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+		                SCMP_A1 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 		SC_ALLOW_ARG_1 ("creat",
-				SCMP_A1 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+		                SCMP_A1 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 	}
 	SC_ALLOW ("faccessat");
 	SC_ALLOW ("faccessat2");
@@ -380,11 +381,11 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("fchdir");
 	if (permissive) {
 		SC_ALLOW_ARG_1 ("fchmod",
-				SCMP_A1 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+		                SCMP_A1 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 		SC_ALLOW_ARG_1 ("fchmodat",
-				SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+		                SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 		SC_ALLOW_ARG_1 ("fchmodat2",
-				SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+		                SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 	}
 	SC_ALLOW ("fcntl");
 	SC_ALLOW ("fcntl64");
@@ -411,32 +412,30 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 	SC_ALLOW ("oldstat");
 	if (permissive) {
 		SC_ALLOW_ARG_2 ("open",
-				SCMP_A1 (SCMP_CMP_MASKED_EQ, O_CREAT, O_CREAT),
-				SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+		                SCMP_A1 (SCMP_CMP_MASKED_EQ, O_CREAT, O_CREAT),
+		                SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
 		SC_ALLOW_ARG_2 ("openat",
-				SCMP_A2 (SCMP_CMP_MASKED_EQ, O_CREAT, O_CREAT),
-				SCMP_A3 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
-#ifdef O_TMPFILE
-		SC_ALLOW_ARG_2 ("open",
-				SCMP_A1 (SCMP_CMP_MASKED_EQ,
-					 O_TMPFILE, O_TMPFILE),
-				SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
-		SC_ALLOW_ARG_2 ("openat",
-				SCMP_A2 (SCMP_CMP_MASKED_EQ,
-					 O_TMPFILE, O_TMPFILE),
-				SCMP_A3 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
-#endif /* O_TMPFILE */
+		                SCMP_A2 (SCMP_CMP_MASKED_EQ, O_CREAT, O_CREAT),
+		                SCMP_A3 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+#  ifdef O_TMPFILE
+		SC_ALLOW_ARG_2 (
+		        "open",
+		        SCMP_A1 (SCMP_CMP_MASKED_EQ, O_TMPFILE, O_TMPFILE),
+		        SCMP_A2 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+		SC_ALLOW_ARG_2 (
+		        "openat",
+		        SCMP_A2 (SCMP_CMP_MASKED_EQ, O_TMPFILE, O_TMPFILE),
+		        SCMP_A3 (SCMP_CMP_MASKED_EQ, mode_mask, 0));
+#  endif /* O_TMPFILE */
 		SC_ALLOW_ARG_1 ("open",
-				SCMP_A1 (SCMP_CMP_MASKED_EQ, create_mask, 0));
+		                SCMP_A1 (SCMP_CMP_MASKED_EQ, create_mask, 0));
 		SC_ALLOW_ARG_1 ("openat",
-				SCMP_A2 (SCMP_CMP_MASKED_EQ, create_mask, 0));
+		                SCMP_A2 (SCMP_CMP_MASKED_EQ, create_mask, 0));
 	} else {
-		SC_ALLOW_ARG_1 ("open",
-				SCMP_A1 (SCMP_CMP_MASKED_EQ, O_ACCMODE,
-					 O_RDONLY));
-		SC_ALLOW_ARG_1 ("openat",
-				SCMP_A2 (SCMP_CMP_MASKED_EQ, O_ACCMODE,
-					 O_RDONLY));
+		SC_ALLOW_ARG_1 ("open", SCMP_A1 (SCMP_CMP_MASKED_EQ, O_ACCMODE,
+		                                 O_RDONLY));
+		SC_ALLOW_ARG_1 ("openat", SCMP_A2 (SCMP_CMP_MASKED_EQ,
+		                                   O_ACCMODE, O_RDONLY));
 	}
 	SC_ALLOW ("readlink");
 	SC_ALLOW ("readlinkat");
@@ -589,17 +588,17 @@ static scmp_filter_ctx make_seccomp_filter (bool permissive)
 		SC_ALLOW ("msgsnd");
 	}
 
-#if (SCMP_VER_MAJOR == 2 && SCMP_VER_MINOR >= 5) || SCMP_VER_MAJOR > 2
+#  if (SCMP_VER_MAJOR == 2 && SCMP_VER_MINOR >= 5) || SCMP_VER_MAJOR > 2
 	if (seccomp_attr_set (ctx, SCMP_FLTATR_CTL_OPTIMIZE, 2) < 0)
 		debug ("failed to set SCMP_FLTATR_CTL_OPTIMIZE\n");
-#endif /* libseccomp >= 2.5 */
+#  endif /* libseccomp >= 2.5 */
 
 	return ctx;
 }
 
-#undef SC_ALLOW_ARG_2
-#undef SC_ALLOW_ARG_1
-#undef SC_ALLOW
+#  undef SC_ALLOW_ARG_2
+#  undef SC_ALLOW_ARG_1
+#  undef SC_ALLOW
 
 #endif /* HAVE_LIBSECCOMP */
 
@@ -615,7 +614,7 @@ man_sandbox *sandbox_init (void)
 #ifdef HAVE_LIBSECCOMP
 	sandbox->ctx = make_seccomp_filter (false);
 	sandbox->permissive_ctx = make_seccomp_filter (true);
-#else /* !HAVE_LIBSECCOMP */
+#else  /* !HAVE_LIBSECCOMP */
 	sandbox->dummy = 0;
 #endif /* HAVE_LIBSECCOMP */
 
@@ -623,7 +622,8 @@ man_sandbox *sandbox_init (void)
 }
 
 #ifdef HAVE_LIBSECCOMP
-static void _sandbox_load (man_sandbox *sandbox, bool permissive) {
+static void _sandbox_load (man_sandbox *sandbox, bool permissive)
+{
 	if (can_load_seccomp ()) {
 		scmp_filter_ctx ctx;
 
@@ -655,9 +655,9 @@ static void _sandbox_load (man_sandbox *sandbox, bool permissive) {
 		}
 	}
 }
-#else /* !HAVE_LIBSECCOMP */
+#else  /* !HAVE_LIBSECCOMP */
 static void _sandbox_load (man_sandbox *sandbox MAYBE_UNUSED,
-			   bool permissive MAYBE_UNUSED)
+                           bool permissive MAYBE_UNUSED)
 {
 }
 #endif /* HAVE_LIBSECCOMP */
@@ -681,7 +681,8 @@ void sandbox_load_permissive (void *data)
 }
 
 /* Free a sandbox for processing untrusted data. */
-void sandbox_free (void *data) {
+void sandbox_free (void *data)
+{
 	man_sandbox *sandbox = data;
 
 #ifdef HAVE_LIBSECCOMP

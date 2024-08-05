@@ -54,7 +54,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp argp = { NULL, parse_opt, args_doc };
+static struct argp argp = {NULL, parse_opt, args_doc};
 
 int main (int argc, char **argv)
 {

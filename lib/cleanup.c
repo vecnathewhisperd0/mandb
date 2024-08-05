@@ -17,29 +17,26 @@
  * License along with this library; see the file docs/COPYING.LIB.  If not,
  * write to the Free Software Foundation, Inc., 51 Franklin St, Fifth
  * Floor, Boston, MA  02110-1301  USA.
-*/
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>		/* SunOS's losing assert.h needs it */
 #include <assert.h>
 #include <signal.h>
-#include <unistd.h>
+#include <stdbool.h>
+#include <stdio.h> /* SunOS's losing assert.h needs it */
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "xalloc.h"
 
-#include "manconfig.h"		/* for FATAL */
 #include "cleanup.h"
+#include "manconfig.h" /* for FATAL */
 
-
-
 /* Dealing with signals */
-
 
 /* saved signal actions */
 #ifdef SIGHUP
@@ -48,124 +45,111 @@ static struct sigaction saved_hup_action;
 static struct sigaction saved_int_action;
 static struct sigaction saved_term_action;
 
-
 /* Run cleanups, then reraise signal with default handler. */
-static _Noreturn void
-sighandler (int signo)
+static _Noreturn void sighandler (int signo)
 {
-  struct sigaction act;
-  sigset_t set;
+	struct sigaction act;
+	sigset_t set;
 
-  do_cleanups_sigsafe (true);
+	do_cleanups_sigsafe (true);
 
-  /* set default signal action */
-  memset (&act, 0, sizeof act);
-  act.sa_handler = SIG_DFL;
-  sigemptyset (&act.sa_mask);
-  act.sa_flags = 0;
-  if (sigaction (signo, &act, NULL)) {
-    /* should not happen */
-    _exit (FATAL);		/* exit() is taboo from signal handlers! */
-  }
+	/* set default signal action */
+	memset (&act, 0, sizeof act);
+	act.sa_handler = SIG_DFL;
+	sigemptyset (&act.sa_mask);
+	act.sa_flags = 0;
+	if (sigaction (signo, &act, NULL)) {
+		/* should not happen */
+		_exit (FATAL); /* exit() is taboo from signal handlers! */
+	}
 
-  /* unmask signo */
-  if (   sigemptyset (&set)
-      || sigaddset (&set, signo)
-      || sigprocmask (SIG_UNBLOCK, &set, NULL)) {
-    /* shouldn't happen */
-    _exit (FATAL);		/* exit() is taboo from signal handlers! */
-  }
+	/* unmask signo */
+	if (sigemptyset (&set) || sigaddset (&set, signo) ||
+	    sigprocmask (SIG_UNBLOCK, &set, NULL)) {
+		/* shouldn't happen */
+		_exit (FATAL); /* exit() is taboo from signal handlers! */
+	}
 
-  /* signal has now default action and is unmasked,
-     reraise it to terminate program abnormally */
-  raise (signo);
-  abort();
+	/* signal has now default action and is unmasked,
+	   reraise it to terminate program abnormally */
+	raise (signo);
+	abort ();
 }
-
 
 /* Save signo's current action to oldact, if its handler is SIG_DFL
    install sighandler, return 0 on success, -1 on failure. */
-static int
-trap_signal (int signo, struct sigaction *oldact)
+static int trap_signal (int signo, struct sigaction *oldact)
 {
-  if (sigaction (signo, NULL, oldact)) {
-    return -1;
-  }
+	if (sigaction (signo, NULL, oldact)) {
+		return -1;
+	}
 
-  if (oldact->sa_handler == SIG_DFL) {
-    struct sigaction act;
+	if (oldact->sa_handler == SIG_DFL) {
+		struct sigaction act;
 
-    memset (&act, 0, sizeof act);
-    act.sa_handler = sighandler;
-    sigemptyset (&act.sa_mask);
-    act.sa_flags = 0;
-    return sigaction (signo, &act, oldact);
-  }
+		memset (&act, 0, sizeof act);
+		act.sa_handler = sighandler;
+		sigemptyset (&act.sa_mask);
+		act.sa_flags = 0;
+		return sigaction (signo, &act, oldact);
+	}
 
-  return 0;
+	return 0;
 }
-
 
 /* Trap some abnormal exits to call do_cleanups(). */
-static int
-trap_abnormal_exits (void)
+static int trap_abnormal_exits (void)
 {
 #ifdef SIGHUP
-  if (trap_signal (SIGHUP, &saved_hup_action))
-    return -1;
+	if (trap_signal (SIGHUP, &saved_hup_action))
+		return -1;
 #endif /* SIGHUP */
-  if (trap_signal (SIGINT, &saved_int_action))
-    return -1;
-  if (trap_signal (SIGTERM, &saved_term_action))
-    return -1;
-  return 0;
+	if (trap_signal (SIGINT, &saved_int_action))
+		return -1;
+	if (trap_signal (SIGTERM, &saved_term_action))
+		return -1;
+	return 0;
 }
-
 
 /* Restore signo's action from oldact if its current handler is
    sighandler, return 0 on success, -1 on failure. */
-static int
-untrap_signal (int signo, const struct sigaction *oldact)
+static int untrap_signal (int signo, const struct sigaction *oldact)
 {
-  struct sigaction act;
-  if (sigaction (signo, NULL, &act)) {
-    return -1;
-  }
+	struct sigaction act;
+	if (sigaction (signo, NULL, &act)) {
+		return -1;
+	}
 
-  if (act.sa_handler == sighandler) {
-    return sigaction (signo, oldact, NULL);
-  }
+	if (act.sa_handler == sighandler) {
+		return sigaction (signo, oldact, NULL);
+	}
 
-  return 0;
+	return 0;
 }
-
 
 /* Undo a previous trap_abnormal_exits(). */
-static int
-untrap_abnormal_exits (void)
+static int untrap_abnormal_exits (void)
 {
 #ifdef SIGHUP
-  if (untrap_signal (SIGHUP, &saved_hup_action))
-    return -1;
+	if (untrap_signal (SIGHUP, &saved_hup_action))
+		return -1;
 #endif /* SIGHUP */
-  if (untrap_signal (SIGINT, &saved_int_action))
-    return -1;
-  if (untrap_signal (SIGTERM, &saved_term_action))
-    return -1;
-  return 0;
+	if (untrap_signal (SIGINT, &saved_int_action))
+		return -1;
+	if (untrap_signal (SIGTERM, &saved_term_action))
+		return -1;
+	return 0;
 }
 
-
-
 typedef struct {
-  cleanup_fun fun;
-  void *arg;
-  int sigsafe;
+	cleanup_fun fun;
+	void *arg;
+	int sigsafe;
 } slot;
 
-static slot *stack = NULL;	/* stack of cleanup functions */
-static unsigned nslots = 0;	/* #slots in stack */
-static unsigned tos = 0;	/* top of stack, 0 <= tos <= nslots */
+static slot *stack = NULL;  /* stack of cleanup functions */
+static unsigned nslots = 0; /* #slots in stack */
+static unsigned tos = 0;    /* top of stack, 0 <= tos <= nslots */
 
 /* Call cleanup functions in stack from from top to bottom,
  * Automatically called on program termination via exit(3) or default
@@ -174,30 +158,27 @@ static unsigned tos = 0;	/* top of stack, 0 <= tos <= nslots */
  * If in_sighandler is true, cleanup functions with sigsafe=0 will not be
  * called.
  */
-void
-do_cleanups_sigsafe (bool in_sighandler)
+void do_cleanups_sigsafe (bool in_sighandler)
 {
-  unsigned i;
+	unsigned i;
 
-  assert (tos <= nslots);
-  for (i = tos; i > 0; --i)
-    if (!in_sighandler || stack[i-1].sigsafe)
-      stack[i-1].fun (stack[i-1].arg);
+	assert (tos <= nslots);
+	for (i = tos; i > 0; --i)
+		if (!in_sighandler || stack[i - 1].sigsafe)
+			stack[i - 1].fun (stack[i - 1].arg);
 }
 
 /* Call cleanup functions in stack from from top to bottom,
  * Automatically called on program termination via exit(3).
  */
-void
-do_cleanups (void)
+void do_cleanups (void)
 {
-  do_cleanups_sigsafe (false);
-  tos = 0;
-  nslots = 0;
-  free (stack);
-  stack = NULL;
+	do_cleanups_sigsafe (false);
+	tos = 0;
+	nslots = 0;
+	free (stack);
+	stack = NULL;
 }
-
 
 /* Push a cleanup function on the cleanup stack,
  * return 0 on success, -1 on failure.
@@ -205,75 +186,73 @@ do_cleanups (void)
  * sigsafe=1. If you just want a convenient atexit() wrapper, pass
  * sigsafe=0.
  */
-int
-push_cleanup (cleanup_fun fun, void *arg, int sigsafe)
+int push_cleanup (cleanup_fun fun, void *arg, int sigsafe)
 {
-  static bool handler_installed = false;
+	static bool handler_installed = false;
 
-  assert (tos <= nslots);
+	assert (tos <= nslots);
 
-  if (!handler_installed) {
-    if (atexit (do_cleanups))
-      return -1;
-    handler_installed = true;
-  }
+	if (!handler_installed) {
+		if (atexit (do_cleanups))
+			return -1;
+		handler_installed = true;
+	}
 
-  if (tos == nslots) {
-    /* stack is full, allocate another slot */
-    /* stack is not expected to grow much, otherwise we would double it */
-    slot *new_stack;
+	if (tos == nslots) {
+		/* stack is full, allocate another slot */
+		/* stack is not expected to grow much, otherwise we would
+		 * double it */
+		slot *new_stack;
 
-    if (stack) {
-      new_stack = xnrealloc (stack, nslots+1, sizeof (slot));
-    } else {
-      new_stack = xnmalloc (nslots+1, sizeof (slot));
-    }
+		if (stack) {
+			new_stack =
+			        xnrealloc (stack, nslots + 1, sizeof (slot));
+		} else {
+			new_stack = xnmalloc (nslots + 1, sizeof (slot));
+		}
 
-    if (!new_stack) return -1;
-    stack = new_stack;
-    ++nslots;
-  }
+		if (!new_stack)
+			return -1;
+		stack = new_stack;
+		++nslots;
+	}
 
-  assert (tos < nslots);
-  stack[tos].fun = fun;
-  stack[tos].arg = arg;
-  stack[tos].sigsafe = sigsafe;
-  ++tos;
+	assert (tos < nslots);
+	stack[tos].fun = fun;
+	stack[tos].arg = arg;
+	stack[tos].sigsafe = sigsafe;
+	++tos;
 
+	trap_abnormal_exits ();
 
-  trap_abnormal_exits();
-
-  return 0;
+	return 0;
 }
-
 
 /* Remove topmost cleanup function from the cleanup stack that matches the
  * given values.
  */
-void
-pop_cleanup (cleanup_fun fun, const void *arg)
+void pop_cleanup (cleanup_fun fun, const void *arg)
 {
-  unsigned i, j;
+	unsigned i, j;
 
-  assert (tos > 0);
+	assert (tos > 0);
 
-  for (i = tos; i > 0; --i) {
-    if (stack[i-1].fun == fun && stack[i-1].arg == arg) {
-      for (j = i; j < tos; ++j)
-        stack[j-1] = stack[j];
-      --tos;
-      break;
-    }
-  }
+	for (i = tos; i > 0; --i) {
+		if (stack[i - 1].fun == fun && stack[i - 1].arg == arg) {
+			for (j = i; j < tos; ++j)
+				stack[j - 1] = stack[j];
+			--tos;
+			break;
+		}
+	}
 
-  if (tos == 0) untrap_abnormal_exits();
+	if (tos == 0)
+		untrap_abnormal_exits ();
 }
 
-
 /* Pop all cleanup functions from the cleanup stack. */
-void
-pop_all_cleanups (void)
+void pop_all_cleanups (void)
 {
-  tos = 0;
-  untrap_abnormal_exits();
+	tos = 0;
+	untrap_abnormal_exits ();
 }

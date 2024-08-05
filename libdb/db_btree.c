@@ -28,33 +28,33 @@
 /* below this line are routines only useful for the BTREE interface */
 #ifdef BTREE
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
+#  include <errno.h>
+#  include <fcntl.h>
+#  include <stdbool.h>
+#  include <stdio.h>
+#  include <stdlib.h>
+#  include <string.h>
+#  include <unistd.h>
 
-#include <sys/file.h> /* for flock() */
-#include <sys/types.h> /* for open() */
-#include <sys/stat.h>
+#  include <sys/file.h> /* for flock() */
+#  include <sys/stat.h>
+#  include <sys/types.h> /* for open() */
 
-#include "gl_hash_set.h"
-#include "gl_xset.h"
-#include "stat-time.h"
-#include "timespec.h"
-#include "xalloc.h"
-#include "xstrndup.h"
+#  include "gl_hash_set.h"
+#  include "gl_xset.h"
+#  include "stat-time.h"
+#  include "timespec.h"
+#  include "xalloc.h"
+#  include "xstrndup.h"
 
-#include "manconfig.h"
+#  include "manconfig.h"
 
-#include "debug.h"
-#include "error.h"
-#include "glcontainers.h"
+#  include "debug.h"
+#  include "error.h"
+#  include "glcontainers.h"
 
-#include "mydbm.h"
-#include "db_storage.h"
+#  include "db_storage.h"
+#  include "mydbm.h"
 
 gl_set_t loop_check;
 
@@ -98,15 +98,15 @@ bool man_btree_open (man_btree_wrapper wrap, int flags, int mode)
 	int lock_op;
 	int lock_failed;
 
-	b.flags = 0;		/* do not allow any duplicate keys */
+	b.flags = 0; /* do not allow any duplicate keys */
 
-	b.cachesize = 0;	/* default size */
-	b.maxkeypage = 0;	/* default */
-	b.minkeypage = 0;	/* default */
-	b.psize = 0;		/* default page size (2048?) */
-	b.compare = NULL;	/* builtin compare() function */
-	b.prefix = NULL;	/* builtin function */
-	b.lorder = 0;		/* byte order of host */
+	b.cachesize = 0;  /* default size */
+	b.maxkeypage = 0; /* default */
+	b.minkeypage = 0; /* default */
+	b.psize = 0;      /* default page size (2048?) */
+	b.compare = NULL; /* builtin compare() function */
+	b.prefix = NULL;  /* builtin function */
+	b.lorder = 0;     /* byte order of host */
 
 	if (flags & ~O_RDONLY) {
 		/* flags includes O_RDWR or O_WRONLY, need an exclusive lock */
@@ -143,14 +143,14 @@ bool man_btree_open (man_btree_wrapper wrap, int flags, int mode)
 		if (fd != -1) {
 			if (!(lock_failed = flock (fd, lock_op)))
 				wrap->file = dbopen (wrap->name, flags, mode,
-						     DB_BTREE, &b);
+				                     DB_BTREE, &b);
 			close (fd);
 		}
 	} else {
 		wrap->file = dbopen (wrap->name, flags, mode, DB_BTREE, &b);
 		if (wrap->file)
-			lock_failed = flock ((wrap->file->fd) (wrap->file),
-					     lock_op);
+			lock_failed =
+			        flock ((wrap->file->fd) (wrap->file), lock_op);
 	}
 
 	if (!wrap->file)
@@ -176,7 +176,7 @@ int man_btree_replace (man_btree_wrapper wrap, datum key, datum cont)
 int man_btree_insert (man_btree_wrapper wrap, datum key, datum cont)
 {
 	return (wrap->file->put) (wrap->file, (DBT *) &key, (DBT *) &cont,
-				  R_NOOVERWRITE);
+	                          R_NOOVERWRITE);
 }
 
 /* generic fetch routine for the btree database */
@@ -198,8 +198,9 @@ datum man_btree_fetch (man_btree_wrapper wrap, datum key)
 int man_btree_exists (man_btree_wrapper wrap, datum key)
 {
 	datum data;
-	return ((wrap->file->get) (wrap->file, (DBT *) &key, (DBT *) &data,
-				   0) ? 0 : 1);
+	return ((wrap->file->get) (wrap->file, (DBT *) &key, (DBT *) &data, 0)
+	                ? 0
+	                : 1);
 }
 
 /* initiate a sequential access */
@@ -221,7 +222,7 @@ static datum man_btree_findkey (man_btree_wrapper wrap, u_int flags)
 		loop_check = new_string_set (GL_HASH_SET);
 
 	if (((wrap->file->seq) (wrap->file, (DBT *) &key, (DBT *) &data,
-				flags))) {
+	                        flags))) {
 		memset (&key, 0, sizeof key);
 		return key;
 	}
@@ -265,7 +266,7 @@ int man_btree_nextkeydata (man_btree_wrapper wrap, datum *key, datum *cont)
 	int status;
 
 	if ((status = (wrap->file->seq) (wrap->file, (DBT *) key, (DBT *) cont,
-					 R_NEXT)) != 0)
+	                                 R_NEXT)) != 0)
 		return status;
 
 	*key = copy_datum (*key);

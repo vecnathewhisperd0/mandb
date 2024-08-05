@@ -25,13 +25,13 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <ctype.h>
+#include <locale.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-#include <locale.h>
-#include <ctype.h>
 
 #include "attribute.h"
 #include "gettext.h"
@@ -44,7 +44,6 @@
 #include "debug.h"
 #include "encodings.h"
 #include "pathsearch.h"
-
 
 /* Due to historical limitations in groff (which may be removed in the
  * future), there is no mechanism for a man page to specify its own
@@ -83,54 +82,55 @@ struct directory_entry {
 };
 
 static struct directory_entry directory_table[] = {
-	{ "C",		"ISO-8859-1"	}, /* English */
-	{ "POSIX",	"ISO-8859-1"	}, /* English */
-	{ "be",		"CP1251"	}, /* Belarusian */
-	{ "bg",		"CP1251"	}, /* Bulgarian */
-	{ "cs",		"ISO-8859-2"	}, /* Czech */
-	{ "da",		"ISO-8859-1"	}, /* Danish */
-	{ "de",		"ISO-8859-1"	}, /* German */
-	{ "el",		"ISO-8859-7"	}, /* Greek */
-	{ "en",		"ISO-8859-1"	}, /* English */
-	{ "es",		"ISO-8859-1"	}, /* Spanish */
-	{ "et",		"ISO-8859-1"	}, /* Estonian */
-	{ "fi",		"ISO-8859-1"	}, /* Finnish */
-	{ "fr",		"ISO-8859-1"	}, /* French */
-	{ "ga",		"ISO-8859-1"	}, /* Irish */
-	{ "gl",		"ISO-8859-1"	}, /* Galician */
-	{ "hr",		"ISO-8859-2"	}, /* Croatian */
-	{ "hu",		"ISO-8859-2"	}, /* Hungarian */
-	{ "id",		"ISO-8859-1"	}, /* Indonesian */
-	{ "is",		"ISO-8859-1"	}, /* Icelandic */
-	{ "it",		"ISO-8859-1"	}, /* Italian */
-	{ "ja",		"EUC-JP"	}, /* Japanese */
-	{ "ko",		"EUC-KR"	}, /* Korean */
-	{ "lt",		"ISO-8859-13"	}, /* Lithuanian */
-	{ "lv",		"ISO-8859-13"	}, /* Latvian */
-	{ "mk",		"ISO-8859-5"	}, /* Macedonian */
-	{ "nb",		"ISO-8859-1"	}, /* Norwegian Bokmål */
-	{ "nl",		"ISO-8859-1"	}, /* Dutch */
-	{ "nn",		"ISO-8859-1"	}, /* Norwegian Nynorsk */
-	{ "no",		"ISO-8859-1"	}, /* Norwegian */
-	{ "pl",		"ISO-8859-2"	}, /* Polish */
-	{ "pt",		"ISO-8859-1"	}, /* Portuguese */
-	{ "ro",		"ISO-8859-2"	}, /* Romanian */
-	{ "ru",		"KOI8-R"	}, /* Russian */
-	{ "sk",		"ISO-8859-2"	}, /* Slovak */
-	{ "sl",		"ISO-8859-2"	}, /* Slovenian */
-	/* sr@latin must precede sr, due to top-down left-substring matching later */
-	{ "sr@latin",	"ISO-8859-2"	}, /* Serbian Latin */
-	{ "sr",		"ISO-8859-5"	}, /* Serbian */
-	{ "sv",		"ISO-8859-1"	}, /* Swedish */
-	{ "tr",		"ISO-8859-9"	}, /* Turkish */
-	{ "uk",		"KOI8-U"	}, /* Ukrainian */
-	{ "vi",		"TCVN5712-1"	}, /* Vietnamese */
-	{ "zh_CN",	"GBK"		}, /* Simplified Chinese */
-	{ "zh_SG",	"GBK"		}, /* Simplified Chinese, Singapore */
-	{ "zh_HK",	"BIG5HKSCS"	}, /* Traditional Chinese, Hong Kong */
-	{ "zh_TW",	"BIG5"		}, /* Traditional Chinese */
+        {"C",        "ISO-8859-1" }, /* English */
+        {"POSIX",    "ISO-8859-1" }, /* English */
+        {"be",       "CP1251"     }, /* Belarusian */
+        {"bg",       "CP1251"     }, /* Bulgarian */
+        {"cs",       "ISO-8859-2" }, /* Czech */
+        {"da",       "ISO-8859-1" }, /* Danish */
+        {"de",       "ISO-8859-1" }, /* German */
+        {"el",       "ISO-8859-7" }, /* Greek */
+        {"en",       "ISO-8859-1" }, /* English */
+        {"es",       "ISO-8859-1" }, /* Spanish */
+        {"et",       "ISO-8859-1" }, /* Estonian */
+        {"fi",       "ISO-8859-1" }, /* Finnish */
+        {"fr",       "ISO-8859-1" }, /* French */
+        {"ga",       "ISO-8859-1" }, /* Irish */
+        {"gl",       "ISO-8859-1" }, /* Galician */
+        {"hr",       "ISO-8859-2" }, /* Croatian */
+        {"hu",       "ISO-8859-2" }, /* Hungarian */
+        {"id",       "ISO-8859-1" }, /* Indonesian */
+        {"is",       "ISO-8859-1" }, /* Icelandic */
+        {"it",       "ISO-8859-1" }, /* Italian */
+        {"ja",       "EUC-JP"     }, /* Japanese */
+        {"ko",       "EUC-KR"     }, /* Korean */
+        {"lt",       "ISO-8859-13"}, /* Lithuanian */
+        {"lv",       "ISO-8859-13"}, /* Latvian */
+        {"mk",       "ISO-8859-5" }, /* Macedonian */
+        {"nb",       "ISO-8859-1" }, /* Norwegian Bokmål */
+        {"nl",       "ISO-8859-1" }, /* Dutch */
+        {"nn",       "ISO-8859-1" }, /* Norwegian Nynorsk */
+        {"no",       "ISO-8859-1" }, /* Norwegian */
+        {"pl",       "ISO-8859-2" }, /* Polish */
+        {"pt",       "ISO-8859-1" }, /* Portuguese */
+        {"ro",       "ISO-8859-2" }, /* Romanian */
+        {"ru",       "KOI8-R"     }, /* Russian */
+        {"sk",       "ISO-8859-2" }, /* Slovak */
+        {"sl",       "ISO-8859-2" }, /* Slovenian */
+        /* sr@latin must precede sr, due to top-down left-substring matching
+           later */
+        {"sr@latin", "ISO-8859-2" }, /* Serbian Latin */
+        {"sr",       "ISO-8859-5" }, /* Serbian */
+        {"sv",       "ISO-8859-1" }, /* Swedish */
+        {"tr",       "ISO-8859-9" }, /* Turkish */
+        {"uk",       "KOI8-U"     }, /* Ukrainian */
+        {"vi",       "TCVN5712-1" }, /* Vietnamese */
+        {"zh_CN",    "GBK"        }, /* Simplified Chinese */
+        {"zh_SG",    "GBK"        }, /* Simplified Chinese, Singapore */
+        {"zh_HK",    "BIG5HKSCS"  }, /* Traditional Chinese, Hong Kong */
+        {"zh_TW",    "BIG5"       }, /* Traditional Chinese */
 
-	{ NULL,		NULL		}
+        {NULL,       NULL         }
 };
 
 static const char fallback_source_encoding[] = "ISO-8859-1";
@@ -147,55 +147,55 @@ struct charset_alias_entry {
 };
 
 static struct charset_alias_entry charset_alias_table[] = {
-	/* The FHS is silly and requires numeric-only aliases that iconv
-	 * does not support.
-	 */
-	{ "88591",		"ISO-8859-1"		},
-	{ "88592",		"ISO-8859-2"		},
-	{ "88593",		"ISO-8859-3"		},
-	{ "88594",		"ISO-8859-4"		},
-	{ "88595",		"ISO-8859-5"		},
-	{ "88596",		"ISO-8859-6"		},
-	{ "88597",		"ISO-8859-7"		},
-	{ "88598",		"ISO-8859-8"		},
-	{ "88599",		"ISO-8859-9"		},
-	{ "885910",		"ISO-8859-10"		},
-	{ "885911",		"ISO-8859-11"		},
-	{ "885913",		"ISO-8859-13"		},
-	{ "885914",		"ISO-8859-14"		},
-	{ "885915",		"ISO-8859-15"		},
-	{ "885916",		"ISO-8859-16"		},
+        /* The FHS is silly and requires numeric-only aliases that iconv
+         * does not support.
+         */
+        {"88591",      "ISO-8859-1"    },
+        {"88592",      "ISO-8859-2"    },
+        {"88593",      "ISO-8859-3"    },
+        {"88594",      "ISO-8859-4"    },
+        {"88595",      "ISO-8859-5"    },
+        {"88596",      "ISO-8859-6"    },
+        {"88597",      "ISO-8859-7"    },
+        {"88598",      "ISO-8859-8"    },
+        {"88599",      "ISO-8859-9"    },
+        {"885910",     "ISO-8859-10"   },
+        {"885911",     "ISO-8859-11"   },
+        {"885913",     "ISO-8859-13"   },
+        {"885914",     "ISO-8859-14"   },
+        {"885915",     "ISO-8859-15"   },
+        {"885916",     "ISO-8859-16"   },
 
-	{ "ASCII",		"ANSI_X3.4-1968"	},
-	{ "BIG-5",		"BIG5"			},
-	{ "BIG5-HKSCS",		"BIG5HKSCS"		},
-	{ "EUCCN",		"EUC-CN"		},
-	{ "EUCJP",		"EUC-JP"		},
-	{ "EUCKR",		"EUC-KR"		},
-	{ "EUCTW",		"EUC-TW"		},
-	{ "GB2312",		"EUC-CN"		},
-	{ "ISO8859-1",		"ISO-8859-1"		},
-	{ "ISO8859-2",		"ISO-8859-2"		},
-	{ "ISO8859-3",		"ISO-8859-3"		},
-	{ "ISO8859-4",		"ISO-8859-4"		},
-	{ "ISO8859-5",		"ISO-8859-5"		},
-	{ "ISO8859-6",		"ISO-8859-6"		},
-	{ "ISO8859-7",		"ISO-8859-7"		},
-	{ "ISO8859-8",		"ISO-8859-8"		},
-	{ "ISO8859-9",		"ISO-8859-9"		},
-	{ "ISO8859-10",		"ISO-8859-10"		},
-	{ "ISO8859-11",		"ISO-8859-11"		},
-	{ "ISO8859-13",		"ISO-8859-13"		},
-	{ "ISO8859-14",		"ISO-8859-14"		},
-	{ "ISO8859-15",		"ISO-8859-15"		},
-	{ "ISO8859-16",		"ISO-8859-16"		},
-	{ "KOI8R",		"KOI8-R"		},
-	{ "KOI8U",		"KOI8-U"		},
-	{ "UJIS",		"EUC-JP"		},
-	{ "US-ASCII",		"ANSI_X3.4-1968"	},
-	{ "UTF8",		"UTF-8"			},
+        {"ASCII",      "ANSI_X3.4-1968"},
+        {"BIG-5",      "BIG5"          },
+        {"BIG5-HKSCS", "BIG5HKSCS"     },
+        {"EUCCN",      "EUC-CN"        },
+        {"EUCJP",      "EUC-JP"        },
+        {"EUCKR",      "EUC-KR"        },
+        {"EUCTW",      "EUC-TW"        },
+        {"GB2312",     "EUC-CN"        },
+        {"ISO8859-1",  "ISO-8859-1"    },
+        {"ISO8859-2",  "ISO-8859-2"    },
+        {"ISO8859-3",  "ISO-8859-3"    },
+        {"ISO8859-4",  "ISO-8859-4"    },
+        {"ISO8859-5",  "ISO-8859-5"    },
+        {"ISO8859-6",  "ISO-8859-6"    },
+        {"ISO8859-7",  "ISO-8859-7"    },
+        {"ISO8859-8",  "ISO-8859-8"    },
+        {"ISO8859-9",  "ISO-8859-9"    },
+        {"ISO8859-10", "ISO-8859-10"   },
+        {"ISO8859-11", "ISO-8859-11"   },
+        {"ISO8859-13", "ISO-8859-13"   },
+        {"ISO8859-14", "ISO-8859-14"   },
+        {"ISO8859-15", "ISO-8859-15"   },
+        {"ISO8859-16", "ISO-8859-16"   },
+        {"KOI8R",      "KOI8-R"        },
+        {"KOI8U",      "KOI8-U"        },
+        {"UJIS",       "EUC-JP"        },
+        {"US-ASCII",   "ANSI_X3.4-1968"},
+        {"UTF8",       "UTF-8"         },
 
-	{ NULL,			NULL			}
+        {NULL,         NULL            }
 };
 
 /* The default groff terminal output device to be used is determined based
@@ -208,13 +208,13 @@ struct charset_entry {
 };
 
 static struct charset_entry charset_table[] = {
-	{ "ANSI_X3.4-1968",	"ascii"		},
+        {"ANSI_X3.4-1968", "ascii" },
 #ifndef HEIRLOOM_NROFF
-	{ "ISO-8859-1",		"latin1"	},
-#endif /* HEIRLOOM_NROFF */
-	{ "UTF-8",		"utf8"		},
+        {"ISO-8859-1",     "latin1"},
+#endif  /* HEIRLOOM_NROFF */
+        {"UTF-8",          "utf8"  },
 
-	{ NULL,			NULL		}
+        {NULL,             NULL    }
 };
 
 static const char *fallback_default_device = "ascii";
@@ -234,28 +234,28 @@ struct device_entry {
 };
 
 static struct device_entry device_table[] = {
-	/* nroff devices */
-	{ "ascii",	"ANSI_X3.4-1968",	"ANSI_X3.4-1968"	},
-	{ "latin1",	"ISO-8859-1",		"ISO-8859-1"		},
-	{ "utf8",	"ISO-8859-1",		"UTF-8"			},
+        /* nroff devices */
+        {"ascii",   "ANSI_X3.4-1968", "ANSI_X3.4-1968"},
+        {"latin1",  "ISO-8859-1",     "ISO-8859-1"    },
+        {"utf8",    "ISO-8859-1",     "UTF-8"         },
 
 #ifdef HEIRLOOM_NROFF
-	/* Not strictly accurate, but we only use this in UTF-8 locales. */
-	{ "locale",	"UTF-8",		"UTF-8"			},
-#endif /* HEIRLOOM_NROFF */
+        /* Not strictly accurate, but we only use this in UTF-8 locales. */
+        {"locale",  "UTF-8",          "UTF-8"         },
+#endif  /* HEIRLOOM_NROFF */
 
-	/* troff devices */
-	{ "X75",	NULL,			NULL			},
-	{ "X75-12",	NULL,			NULL			},
-	{ "X100",	NULL,			NULL			},
-	{ "X100-12",	NULL,			NULL			},
-	{ "dvi",	NULL,			NULL			},
-	{ "html",	NULL,			NULL			},
-	{ "lbp",	NULL,			NULL			},
-	{ "lj4",	NULL,			NULL			},
-	{ "ps",		NULL,			NULL			},
+        /* troff devices */
+        {"X75",     NULL,             NULL            },
+        {"X75-12",  NULL,             NULL            },
+        {"X100",    NULL,             NULL            },
+        {"X100-12", NULL,             NULL            },
+        {"dvi",     NULL,             NULL            },
+        {"html",    NULL,             NULL            },
+        {"lbp",     NULL,             NULL            },
+        {"lj4",     NULL,             NULL            },
+        {"ps",      NULL,             NULL            },
 
-	{ NULL,		NULL,			NULL			}
+        {NULL,      NULL,             NULL            }
 };
 
 static const char fallback_roff_encoding[] = "ISO-8859-1";
@@ -273,16 +273,16 @@ struct less_charset_entry {
 };
 
 static struct less_charset_entry less_charset_table[] = {
-	{ "ANSI_X3.4-1968",	"ascii",	NULL		},
-	{ "CP1251",		"windows",	NULL		},
-	{ "EUC-JP",		"iso8859",	"japanese-ujis"	},
-	{ "ISO-8859-1",		"iso8859",	NULL		},
-	{ "KOI8-R",		"koi8-r",	NULL		},
-	/* close enough? */
-	{ "KOI8-U",		"koi8-r",	NULL		},
-	{ "UTF-8",		"utf-8",	NULL		},
+        {"ANSI_X3.4-1968", "ascii",   NULL           },
+        {"CP1251",         "windows", NULL           },
+        {"EUC-JP",         "iso8859", "japanese-ujis"},
+        {"ISO-8859-1",     "iso8859", NULL           },
+        {"KOI8-R",         "koi8-r",  NULL           },
+        /* close enough? */
+        {"KOI8-U",         "koi8-r",  NULL           },
+        {"UTF-8",          "utf-8",   NULL           },
 
-	{ NULL,			NULL,		NULL		}
+        {NULL,             NULL,      NULL           }
 };
 
 static const char fallback_less_charset[] = "iso8859";
@@ -320,7 +320,7 @@ const char *get_groff_preconv (void)
  *
  * The caller should free the returned string when it is finished with it.
  */
-char * ATTRIBUTE_MALLOC get_page_encoding (const char *lang)
+char *ATTRIBUTE_MALLOC get_page_encoding (const char *lang)
 {
 	const struct directory_entry *entry;
 	const char *dot;
@@ -356,9 +356,9 @@ char * ATTRIBUTE_MALLOC get_page_encoding (const char *lang)
 		 * changed. I recommend ignoring this part of the FHS.
 		 */
 		char *dir_encoding =
-			xstrndup (dot + 1, strcspn (dot + 1, ",@"));
+		        xstrndup (dot + 1, strcspn (dot + 1, ",@"));
 		char *canonical_dir_encoding =
-			xstrdup (get_canonical_charset_name (dir_encoding));
+		        xstrdup (get_canonical_charset_name (dir_encoding));
 		free (dir_encoding);
 		return canonical_dir_encoding;
 	}
@@ -433,8 +433,8 @@ const char *get_source_encoding (const char *lang)
 	return fallback_source_encoding;
 }
 
-const char * ATTRIBUTE_NONNULL ((1)) ATTRIBUTE_RETURNS_NONNULL
-	get_canonical_charset_name (const char *charset)
+const char *ATTRIBUTE_NONNULL ((1)) ATTRIBUTE_RETURNS_NONNULL
+        get_canonical_charset_name (const char *charset)
 {
 	const struct charset_alias_entry *entry;
 	char *charset_upper = xstrdup (charset);
@@ -454,7 +454,7 @@ const char * ATTRIBUTE_NONNULL ((1)) ATTRIBUTE_RETURNS_NONNULL
 }
 
 /* Return the current locale's character set. */
-const char * ATTRIBUTE_RETURNS_NONNULL get_locale_charset (void)
+const char *ATTRIBUTE_RETURNS_NONNULL get_locale_charset (void)
 {
 	const char *charset;
 	char *saved_locale;
@@ -511,7 +511,7 @@ char *find_charset_locale (const char *charset)
 			if (newline)
 				*newline = 0;
 			if (STREQ (canonical_charset,
-				   get_canonical_charset_name (encoding))) {
+			           get_canonical_charset_name (encoding))) {
 				locale = xstrndup (line, space - line);
 				/* Is this locale actually installed? */
 				if (setlocale (LC_CTYPE, locale)) {
@@ -553,7 +553,7 @@ out:
 /* Can we take this input encoding and produce this output encoding, perhaps
  * with the help of some iconv pipes? */
 static bool ATTRIBUTE_PURE compatible_encodings (const char *input,
-						 const char *output)
+                                                 const char *output)
 {
 	if (STREQ (input, output))
 		return true;
@@ -587,7 +587,7 @@ static bool ATTRIBUTE_PURE compatible_encodings (const char *input,
  * but I haven't yet come up with a cleaner way to do it.
  */
 const char *get_default_device (const char *charset_from_locale,
-				const char *source_encoding)
+                                const char *source_encoding)
 {
 	const struct charset_entry *entry;
 
@@ -609,11 +609,10 @@ const char *get_default_device (const char *charset_from_locale,
 
 	for (entry = charset_table; entry->charset_from_locale; ++entry) {
 		if (STREQ (entry->charset_from_locale, charset_from_locale)) {
-			const char *roff_encoding =
-				get_roff_encoding (entry->default_device,
-						   source_encoding);
+			const char *roff_encoding = get_roff_encoding (
+			        entry->default_device, source_encoding);
 			if (compatible_encodings (source_encoding,
-						  roff_encoding))
+			                          roff_encoding))
 				return entry->default_device;
 		}
 	}
@@ -635,8 +634,8 @@ bool ATTRIBUTE_PURE is_roff_device (const char *device)
 }
 
 /* Find the input encoding expected by groff. */
-const char * ATTRIBUTE_PURE get_roff_encoding (const char *device,
-					       const char *source_encoding)
+const char *ATTRIBUTE_PURE get_roff_encoding (const char *device,
+                                              const char *source_encoding)
 {
 	const struct device_entry *entry;
 	bool found = false;
@@ -661,7 +660,7 @@ const char * ATTRIBUTE_PURE get_roff_encoding (const char *device,
 /* Find the output encoding that this device will produce, or NULL if it
  * will simply pass through the input encoding.
  */
-const char * ATTRIBUTE_PURE get_output_encoding (const char *device)
+const char *ATTRIBUTE_PURE get_output_encoding (const char *device)
 {
 	const struct device_entry *entry;
 
@@ -673,7 +672,7 @@ const char * ATTRIBUTE_PURE get_output_encoding (const char *device)
 }
 
 /* Return the value of LESSCHARSET appropriate for this locale. */
-const char * ATTRIBUTE_PURE get_less_charset (const char *charset_from_locale)
+const char *ATTRIBUTE_PURE get_less_charset (const char *charset_from_locale)
 {
 	if (charset_from_locale) {
 		const struct less_charset_entry *entry;
@@ -681,7 +680,7 @@ const char * ATTRIBUTE_PURE get_less_charset (const char *charset_from_locale)
 		for (entry = less_charset_table; entry->charset_from_locale;
 		     ++entry)
 			if (STREQ (entry->charset_from_locale,
-				   charset_from_locale))
+			           charset_from_locale))
 				return entry->less_charset;
 	}
 
@@ -691,7 +690,7 @@ const char * ATTRIBUTE_PURE get_less_charset (const char *charset_from_locale)
 /* Return the value of JLESSCHARSET appropriate for this locale. May return
  * NULL.
  */
-const char * ATTRIBUTE_PURE get_jless_charset (const char *charset_from_locale)
+const char *ATTRIBUTE_PURE get_jless_charset (const char *charset_from_locale)
 {
 	if (charset_from_locale) {
 		const struct less_charset_entry *entry;
@@ -699,7 +698,7 @@ const char * ATTRIBUTE_PURE get_jless_charset (const char *charset_from_locale)
 		for (entry = less_charset_table; entry->charset_from_locale;
 		     ++entry)
 			if (STREQ (entry->charset_from_locale,
-				   charset_from_locale))
+			           charset_from_locale))
 				return entry->jless_charset;
 	}
 

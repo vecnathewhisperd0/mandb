@@ -34,12 +34,12 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
-#include <stdio.h>
 #include <errno.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #ifdef HAVE_ICONV
@@ -76,48 +76,48 @@ struct conversion_entry {
 };
 
 static struct conversion_entry conversion_table[] = {
-	{ "chinese-big5",			"Big5" },
-	{ "chinese-euc",			"GB2312" },
-	{ "chinese-iso-8bit",			"GB2312" },
-	{ "cn-gb-2312",				"GB2312" },
-	{ "cp878",				"KOI8-R" },
-	{ "cyrillic-iso-8bit",			"ISO-8859-5" },
-	{ "cyrillic-koi8",			"KOI8-R" },
-	{ "euc-china",				"GB2312" },
-	{ "euc-japan",				"EUC-JP" },
-	{ "euc-japan-1990",			"EUC-JP" },
-	{ "euc-kr",				"EUC-KR" },
-	{ "greek-iso-8bit",			"ISO-8859-7" },
-	{ "iso-latin-1",			"ISO-8859-1" },
-	{ "iso-latin-2",			"ISO-8859-2" },
-	{ "iso-latin-5",			"ISO-8859-9" },
-	{ "iso-latin-7",			"ISO-8859-13" },
-	{ "iso-latin-9",			"ISO-8859-15" },
-	{ "japanese-iso-8bit",			"EUC-JP" },
-	{ "japanese-euc",			"EUC-JP" },
-	{ "jis8",				"EUC-JP" },
-	{ "korean-euc",				"EUC-KR" },
-	{ "korean-iso-8bit",			"EUC-KR" },
-	{ "latin-0",				"ISO-8859-15" },
-	{ "latin-1",				"ISO-8859-1" },
-	{ "latin-2",				"ISO-8859-2" },
-	{ "latin-5",				"ISO-8859-9" },
-	{ "latin-7",				"ISO-8859-13" },
-	{ "mule-utf-16",			"UTF-16" },
-	{ "mule-utf-16be",			"UTF-16BE" },
-	{ "mule-utf-16-be",			"UTF-16BE" },
-	{ "mule-utf-16be-with-signature",	"UTF-16" },
-	{ "mule-utf-16le",			"UTF-16LE" },
-	{ "mule-utf-16-le",			"UTF-16LE" },
-	{ "mule-utf-16le-with-signature",	"UTF-16" },
-	{ "mule-utf-8",				"UTF-8" },
-	{ "utf-16-be",				"UTF-16BE" },
-	{ "utf-16be-with-signature",		"UTF-16" },
-	{ "utf-16-be-with-signature",		"UTF-16" },
-	{ "utf-16-le",				"UTF-16LE" },
-	{ "utf-16le-with-signature",		"UTF-16" },
-	{ "utf-16-le-with-signature",		"UTF-16" },
-	{ NULL,					NULL }
+        {"chinese-big5",                 "Big5"       },
+        {"chinese-euc",                  "GB2312"     },
+        {"chinese-iso-8bit",             "GB2312"     },
+        {"cn-gb-2312",                   "GB2312"     },
+        {"cp878",                        "KOI8-R"     },
+        {"cyrillic-iso-8bit",            "ISO-8859-5" },
+        {"cyrillic-koi8",                "KOI8-R"     },
+        {"euc-china",                    "GB2312"     },
+        {"euc-japan",                    "EUC-JP"     },
+        {"euc-japan-1990",               "EUC-JP"     },
+        {"euc-kr",                       "EUC-KR"     },
+        {"greek-iso-8bit",               "ISO-8859-7" },
+        {"iso-latin-1",                  "ISO-8859-1" },
+        {"iso-latin-2",                  "ISO-8859-2" },
+        {"iso-latin-5",                  "ISO-8859-9" },
+        {"iso-latin-7",                  "ISO-8859-13"},
+        {"iso-latin-9",                  "ISO-8859-15"},
+        {"japanese-iso-8bit",            "EUC-JP"     },
+        {"japanese-euc",                 "EUC-JP"     },
+        {"jis8",                         "EUC-JP"     },
+        {"korean-euc",                   "EUC-KR"     },
+        {"korean-iso-8bit",              "EUC-KR"     },
+        {"latin-0",                      "ISO-8859-15"},
+        {"latin-1",                      "ISO-8859-1" },
+        {"latin-2",                      "ISO-8859-2" },
+        {"latin-5",                      "ISO-8859-9" },
+        {"latin-7",                      "ISO-8859-13"},
+        {"mule-utf-16",                  "UTF-16"     },
+        {"mule-utf-16be",                "UTF-16BE"   },
+        {"mule-utf-16-be",               "UTF-16BE"   },
+        {"mule-utf-16be-with-signature", "UTF-16"     },
+        {"mule-utf-16le",                "UTF-16LE"   },
+        {"mule-utf-16-le",               "UTF-16LE"   },
+        {"mule-utf-16le-with-signature", "UTF-16"     },
+        {"mule-utf-8",                   "UTF-8"      },
+        {"utf-16-be",                    "UTF-16BE"   },
+        {"utf-16be-with-signature",      "UTF-16"     },
+        {"utf-16-be-with-signature",     "UTF-16"     },
+        {"utf-16-le",                    "UTF-16LE"   },
+        {"utf-16le-with-signature",      "UTF-16"     },
+        {"utf-16-le-with-signature",     "UTF-16"     },
+        {NULL,                           NULL         }
 };
 
 /* Convert Emacs-style coding tags to ones that libiconv understands. */
@@ -126,11 +126,12 @@ static char *convert_encoding (char *encoding)
 	size_t encoding_len = strlen (encoding);
 	const struct conversion_entry *entry;
 
-#define STRIP(s, l) do { \
-	if (encoding_len > (l) && \
-	    !strcasecmp (encoding + encoding_len - (l), (s))) \
-		encoding[encoding_len - (l)] = '\0'; \
-} while (0)
+#define STRIP(s, l)                                                           \
+	do {                                                                  \
+		if (encoding_len > (l) &&                                     \
+		    !strcasecmp (encoding + encoding_len - (l), (s)))         \
+			encoding[encoding_len - (l)] = '\0';                  \
+	} while (0)
 
 	STRIP ("-dos", 4);
 	STRIP ("-mac", 4);
@@ -156,7 +157,7 @@ static char *convert_encoding (char *encoding)
  * *modified_line.  The caller should free *modified_line.
  */
 char *check_preprocessor_encoding (decompress *decomp, const char *to_encoding,
-				   char **modified_line)
+                                   char **modified_line)
 {
 	char *pp_encoding = NULL;
 	const char *line = decompress_peekline (decomp);
@@ -173,7 +174,7 @@ char *check_preprocessor_encoding (decompress *decomp, const char *to_encoding,
 		directive = line + 4;
 		directive_end = newline ? newline : strchr (directive, '\0');
 		pp_search = memmem (directive, directive_end - directive,
-				    "-*-", 3);
+		                    "-*-", 3);
 	}
 
 	if (directive && pp_search) {
@@ -186,43 +187,43 @@ char *check_preprocessor_encoding (decompress *decomp, const char *to_encoding,
 				pp_search += 7;
 				while (*pp_search == ' ')
 					++pp_search;
-				pp_encoding_allow = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-						    "abcdefghijklmnopqrstuvwxyz"
-						    "0123456789-_/:.()";
-				pp_encoding_len = strspn (pp_search,
-							  pp_encoding_allow);
-				pp_encoding = xstrndup (pp_search,
-							pp_encoding_len);
+				pp_encoding_allow =
+				        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+				        "abcdefghijklmnopqrstuvwxyz"
+				        "0123456789-_/:.()";
+				pp_encoding_len =
+				        strspn (pp_search, pp_encoding_allow);
+				pp_encoding =
+				        xstrndup (pp_search, pp_encoding_len);
 				pp_encoding = convert_encoding (pp_encoding);
 				debug ("preprocessor encoding: %s\n",
 				       pp_encoding);
 				break;
 			} else {
 				pp_search = memchr (pp_search, ';',
-						    directive_end - pp_search);
+				                    directive_end - pp_search);
 				if (pp_search)
 					++pp_search;
 			}
 		}
 	}
 
-	if (to_encoding && modified_line &&
-	    pp_encoding && strcasecmp (pp_encoding, to_encoding)) {
+	if (to_encoding && modified_line && pp_encoding &&
+	    strcasecmp (pp_encoding, to_encoding)) {
 		assert (directive_end);
 		assert (pp_search);
-		*modified_line = xasprintf
-			("%.*s%s%.*s\n",
-			 (int) (pp_search - line), line,
-			 to_encoding,
-			 (int) (directive_end - (pp_search + pp_encoding_len)),
-			 pp_search + pp_encoding_len);
+		*modified_line = xasprintf (
+		        "%.*s%s%.*s\n", (int) (pp_search - line), line,
+		        to_encoding,
+		        (int) (directive_end - (pp_search + pp_encoding_len)),
+		        pp_search + pp_encoding_len);
 	}
 
 	return pp_encoding;
 }
 
 static int add_output (const char *inbuf, size_t inlen,
-		       struct manconv_outbuf *outbuf)
+                       struct manconv_outbuf *outbuf)
 {
 	int ret = 0;
 
@@ -235,7 +236,7 @@ static int add_output (const char *inbuf, size_t inlen,
 		int errno_save = errno;
 		if (fwrite (inbuf, 1, inlen, stdout) < inlen ||
 		    ferror (stdout)) {
-			error (0, 0, _("can't write to standard output"));
+			error (0, 0, _ ("can't write to standard output"));
 			ret = -1;
 		}
 		errno = errno_save;
@@ -252,9 +253,8 @@ static int add_output (const char *inbuf, size_t inlen,
  * to contradict the documentation), but work around it anyway by recoding
  * to UTF-8 so that we can accurately position the error.
  */
-static off_t locate_error (const char *try_from_code,
-			   const char *input, size_t input_size,
-			   char *utf8, size_t utf8_size)
+static off_t locate_error (const char *try_from_code, const char *input,
+                           size_t input_size, char *utf8, size_t utf8_size)
 {
 	iconv_t cd_utf8_strict;
 	char *inptr = (char *) input, *utf8ptr = utf8;
@@ -270,7 +270,7 @@ static off_t locate_error (const char *try_from_code,
 	}
 
 	n = iconv (cd_utf8_strict, (ICONV_CONST char **) &inptr, &inleft,
-		   &utf8ptr, &utf8left);
+	           &utf8ptr, &utf8left);
 	if (n == (size_t) -1)
 		ret = inptr - input;
 	else
@@ -283,13 +283,13 @@ static off_t locate_error (const char *try_from_code,
 
 typedef enum {
 	TRIED_ICONV_OK = 0,
-	TRIED_ICONV_ERROR = -1,  /* can continue with another encoding */
-	TRIED_ICONV_FATAL = -2   /* must give up */
+	TRIED_ICONV_ERROR = -1, /* can continue with another encoding */
+	TRIED_ICONV_FATAL = -2  /* must give up */
 } tried_iconv;
 
 static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
-			      const char *to, bool last,
-			      struct manconv_outbuf *outbuf)
+                              const char *to, bool last,
+                              struct manconv_outbuf *outbuf)
 {
 	char *try_to_code = xstrdup (to);
 	static const size_t buf_size = 65536;
@@ -300,7 +300,7 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 	size_t utf8left = 0;
 	iconv_t cd_utf8, cd = NULL;
 	bool to_utf8 = STREQ (try_to_code, "UTF-8") ||
-		       STRNEQ (try_to_code, "UTF-8//", 7);
+	               STRNEQ (try_to_code, "UTF-8//", 7);
 	const char *utf8_target = last ? "UTF-8//IGNORE" : "UTF-8";
 	bool ignore_errors = (strstr (try_to_code, "//IGNORE") != NULL);
 	tried_iconv ret = TRIED_ICONV_OK;
@@ -309,8 +309,8 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 
 	cd_utf8 = iconv_open (utf8_target, try_from_code);
 	if (cd_utf8 == (iconv_t) -1) {
-		error (0, errno, "iconv_open (\"%s\", \"%s\")",
-		       utf8_target, try_from_code);
+		error (0, errno, "iconv_open (\"%s\", \"%s\")", utf8_target,
+		       try_from_code);
 		free (try_to_code);
 		return TRIED_ICONV_ERROR;
 	}
@@ -360,7 +360,7 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 			 */
 			utf8left = buf_size;
 			n = iconv (cd_utf8, (ICONV_CONST char **) &inptr,
-				   &inleft, &utf8ptr, &utf8left);
+			           &inleft, &utf8ptr, &utf8left);
 			utf8left = buf_size - utf8left;
 
 			/* If we need to try the next encoding, do that
@@ -396,15 +396,14 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 			outptr = output;
 			outleft = buf_size;
 			utf8ptr = utf8;
-			n2 = iconv (
-				cd, (ICONV_CONST char **) &utf8ptr, &utf8left,
-				&outptr, &outleft);
+			n2 = iconv (cd, (ICONV_CONST char **) &utf8ptr,
+			            &utf8left, &outptr, &outleft);
 			outleft = buf_size - outleft;
 			if (n2 == (size_t) -1)
 				handle_iconv_errors = errno;
 
-			if (n2 == (size_t) -1 &&
-			    errno == EILSEQ && ignore_errors)
+			if (n2 == (size_t) -1 && errno == EILSEQ &&
+			    ignore_errors)
 				errno = 0;
 		} else
 			/* We appear to have converted some input text, but
@@ -435,8 +434,8 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 
 			if (outptr != output) {
 				/* We have something to write out. */
-				if (add_output (output, outleft,
-						outbuf) != 0) {
+				if (add_output (output, outleft, outbuf) !=
+				    0) {
 					ret = TRIED_ICONV_FATAL;
 					goto out;
 				}
@@ -446,25 +445,28 @@ static tried_iconv try_iconv (decompress *decomp, const char *try_from_code,
 
 			if (handle_iconv_errors == EILSEQ && !ignore_errors) {
 				if (!quiet) {
-					error_pos = input_pos + locate_error (
-						try_from_code,
-						input, input_size,
-						utf8, buf_size);
+					error_pos = input_pos +
+					            locate_error (
+					                    try_from_code,
+					                    input, input_size,
+					                    utf8, buf_size);
 					error (0, handle_iconv_errors,
 					       "byte %jd: iconv", error_pos);
 				}
 				ret = TRIED_ICONV_FATAL;
 				goto out;
 			} else if (handle_iconv_errors == EINVAL &&
-				   input_size < buf_size) {
+			           input_size < buf_size) {
 				if (!quiet) {
-					error_pos = input_pos + locate_error (
-						try_from_code,
-						input, input_size,
-						utf8, buf_size);
+					error_pos = input_pos +
+					            locate_error (
+					                    try_from_code,
+					                    input, input_size,
+					                    utf8, buf_size);
 					error (0, 0, "byte %jd: %s", error_pos,
-					       _("iconv: incomplete character "
-						 "at end of buffer"));
+					       _ ("iconv: incomplete "
+					          "character "
+					          "at end of buffer"));
 				}
 				ret = TRIED_ICONV_FATAL;
 				goto out;
@@ -504,7 +506,7 @@ out:
 }
 
 int manconv (decompress *decomp, gl_list_t from, const char *to,
-	     struct manconv_outbuf *outbuf)
+             struct manconv_outbuf *outbuf)
 {
 	char *pp_encoding;
 	const char *try_from_code;
@@ -513,8 +515,8 @@ int manconv (decompress *decomp, gl_list_t from, const char *to,
 	int ret = 0;
 
 	plain_to = xstrndup (to, strcspn (to, "/"));
-	pp_encoding = check_preprocessor_encoding
-		(decomp, plain_to, &modified_pp_line);
+	pp_encoding = check_preprocessor_encoding (decomp, plain_to,
+	                                           &modified_pp_line);
 	if (pp_encoding) {
 		if (modified_pp_line) {
 			size_t len = strlen (modified_pp_line);
@@ -531,7 +533,7 @@ int manconv (decompress *decomp, gl_list_t from, const char *to,
 		GL_LIST_FOREACH (from, try_from_code) {
 			bool last = !gl_list_next_node (from, from_node);
 			tried = try_iconv (decomp, try_from_code, to, last,
-					   outbuf);
+			                   outbuf);
 			if (tried == TRIED_ICONV_OK)
 				break;
 			else if (tried == TRIED_ICONV_FATAL) {
@@ -554,7 +556,7 @@ out:
  * through unchanged.
  */
 int manconv (decompress *decomp, gl_list_t from MAYBE_UNUSED,
-	     const char *to MAYBE_UNUSED, struct manconv_outbuf *outbuf)
+             const char *to MAYBE_UNUSED, struct manconv_outbuf *outbuf)
 {
 	for (;;) {
 		size_t len = 4096;

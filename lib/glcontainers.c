@@ -57,22 +57,22 @@ void plain_free (const void *s)
 }
 
 gl_list_t new_string_list (gl_list_implementation_t implementation,
-			   bool allow_duplicates)
+                           bool allow_duplicates)
 {
 	return gl_list_create_empty (implementation, string_equals,
-				     string_hash, plain_free,
-				     allow_duplicates);
+	                             string_hash, plain_free,
+	                             allow_duplicates);
 }
 
 gl_map_t new_string_map (gl_map_implementation_t implementation,
-			 gl_mapvalue_dispose_fn vdispose_fn)
+                         gl_mapvalue_dispose_fn vdispose_fn)
 {
 	return gl_map_create_empty (implementation, string_equals, string_hash,
-				    plain_free, vdispose_fn);
+	                            plain_free, vdispose_fn);
 }
 
 gl_set_t new_string_set (gl_set_implementation_t implementation)
 {
 	return gl_set_create_empty (implementation, string_equals, string_hash,
-				    plain_free);
+	                            plain_free);
 }

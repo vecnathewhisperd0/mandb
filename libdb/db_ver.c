@@ -25,8 +25,8 @@
 #  include "config.h"
 #endif
 
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "gettext.h"
 #define _(String) gettext (String)
@@ -53,11 +53,11 @@ int dbver_rd (MYDBM_FILE dbfile)
 	MYDBM_FREE_DPTR (key);
 
 	if (MYDBM_DPTR (content) == NULL) {
-		debug (_("warning: %s has no version identifier\n"),
+		debug (_ ("warning: %s has no version identifier\n"),
 		       dbfile->name);
 		return 1;
 	} else if (!STREQ (MYDBM_DPTR (content), VER_ID)) {
-		debug (_("warning: %s is version %s, expecting %s\n"),
+		debug (_ ("warning: %s is version %s, expecting %s\n"),
 		       dbfile->name, MYDBM_DPTR (content), VER_ID);
 		MYDBM_FREE_DPTR (content);
 		return 1;
@@ -79,7 +79,8 @@ void dbver_wr (MYDBM_FILE dbfile)
 
 	if (MYDBM_INSERT (dbfile, key, content) != 0)
 		fatal (0,
-		       _("fatal: unable to insert version identifier into %s"),
+		       _ ("fatal: unable to insert version identifier into "
+		          "%s"),
 		       dbfile->name);
 
 	MYDBM_FREE_DPTR (key);

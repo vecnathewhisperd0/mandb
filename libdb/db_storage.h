@@ -41,13 +41,13 @@
 
 /* WHATIS_MAN and WHATIS_CAT are deprecated. */
 
-#define ULT_MAN		'A'
-#define SO_MAN		'B'
-#define WHATIS_MAN	'C'
-#define STRAY_CAT	'D'
-#define WHATIS_CAT	'E'
+#define ULT_MAN    'A'
+#define SO_MAN     'B'
+#define WHATIS_MAN 'C'
+#define STRAY_CAT  'D'
+#define WHATIS_CAT 'E'
 
-#define FIELDS  10      /* No of fields in each database page `content' */
+#define FIELDS 10 /* No of fields in each database page `content' */
 
 #include "filenames.h"
 
@@ -60,12 +60,12 @@ struct name_ext {
 
 /* used by the world */
 extern gl_list_t dblookup_all (MYDBM_FILE dbf, const char *page,
-			       const char *section, bool match_case);
+                               const char *section, bool match_case);
 extern struct mandata *dblookup_exact (MYDBM_FILE dbf, const char *page,
-				       const char *section, bool match_case);
+                                       const char *section, bool match_case);
 extern gl_list_t dblookup_pattern (MYDBM_FILE dbf, const char *page,
-				   const char *section, bool match_case,
-				   bool pattern_regex, bool try_descriptions);
+                                   const char *section, bool match_case,
+                                   bool pattern_regex, bool try_descriptions);
 extern int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base);
 extern int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *in);
 extern void dbprintf (const struct mandata *info);

@@ -32,16 +32,16 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <string.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
 #include <assert.h>
+#include <ctype.h>
 #include <dirent.h>
+#include <errno.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "canonicalize.h"
@@ -71,10 +71,10 @@ void gripe_canonicalize_failed (const char *path)
 {
 	if (quiet < 2) {
 		if (errno == ENOENT)
-			error (0, 0, _("warning: %s is a dangling symlink"),
+			error (0, 0, _ ("warning: %s is a dangling symlink"),
 			       path);
 		else
-			error (0, errno, _("can't resolve %s"), path);
+			error (0, errno, _ ("can't resolve %s"), path);
 	}
 }
 
@@ -96,7 +96,7 @@ static char *ult_hardlink (const char *fullpath, ino_t inode)
 	mdir = opendir (dir);
 	if (mdir == NULL) {
 		if (quiet < 2)
-			error (0, errno, _("can't search directory %s"), dir);
+			error (0, errno, _ ("can't search directory %s"), dir);
 		free (dir);
 		free (base);
 		return NULL;
@@ -155,7 +155,7 @@ static char *find_include_directive (char *path)
 	decomp = decompress_open (path, DECOMPRESS_ALLOW_INPROCESS);
 	if (!decomp) {
 		if (quiet < 2)
-			error (0, errno, _("can't open %s"), path);
+			error (0, errno, _ ("can't open %s"), path);
 		return NULL;
 	}
 	decompress_start (decomp);
@@ -215,7 +215,7 @@ static char *test_for_include (const char *buffer)
 }
 
 static char *find_include (const char *name, const char *path,
-			   const char *include)
+                           const char *include)
 {
 	char *target;
 	struct compression *comp;
@@ -269,7 +269,7 @@ static char *find_include (const char *name, const char *path,
 		}
 	} else {
 		if (quiet < 2)
-			error (0, 0, _("can't resolve %s"), include);
+			error (0, 0, _ ("can't resolve %s"), include);
 		return NULL;
 	}
 }
@@ -337,7 +337,7 @@ gl_map_t ult_cache = NULL;
  * flags is a combination of SO_LINK | SOFT_LINK | HARD_LINK
  */
 const struct ult_value *ult_src (const char *name, const char *path,
-				 struct stat *buf, int flags)
+                                 struct stat *buf, int flags)
 {
 	char *base = xstrdup (name);
 	struct ult_key *key;
@@ -346,9 +346,9 @@ const struct ult_value *ult_src (const char *name, const char *path,
 	struct stat new_buf;
 
 	if (!ult_cache)
-		ult_cache = gl_map_create_empty (GL_HASH_MAP,
-						 ult_key_equals, ult_key_hash,
-						 ult_key_free, ult_value_free);
+		ult_cache = gl_map_create_empty (GL_HASH_MAP, ult_key_equals,
+		                                 ult_key_hash, ult_key_free,
+		                                 ult_value_free);
 	key = ult_key_new (name, flags);
 	if (gl_map_search (ult_cache, key, (const void **) &existing)) {
 		ult_key_free (key);
@@ -369,7 +369,7 @@ const struct ult_value *ult_src (const char *name, const char *path,
 		buf = &new_buf;
 		if (lstat (base, buf) == -1) {
 			if (quiet < 2)
-				error (0, errno, _("can't resolve %s"), base);
+				error (0, errno, _ ("can't resolve %s"), base);
 			goto err;
 		}
 	}
@@ -393,8 +393,7 @@ const struct ult_value *ult_src (const char *name, const char *path,
 		assert (buf); /* initialised above */
 		if (buf->st_nlink > 1) {
 			/* Has HARD links, find least value */
-			char *hardlink = ult_hardlink (base,
-						       buf->st_ino);
+			char *hardlink = ult_hardlink (base, buf->st_ino);
 			if (hardlink) {
 				free (base);
 				base = hardlink;
@@ -428,7 +427,7 @@ const struct ult_value *ult_src (const char *name, const char *path,
 		}
 		if (i == 10) {
 			if (quiet < 2)
-				error (0, 0, _("%s is self referencing"),
+				error (0, 0, _ ("%s is self referencing"),
 				       name);
 			goto err;
 		}

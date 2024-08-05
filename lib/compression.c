@@ -28,16 +28,16 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <errno.h>
-#include <signal.h>
-#include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
+#include <string.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "error.h"
 #include "xstrndup.h"
@@ -68,53 +68,53 @@ struct compression comp_list[] = {
 
 /* If we have gzip, incorporate the following */
 #ifdef HAVE_GZIP
-	{PROG_GUNZIP, "gz", NULL},
-	{PROG_GUNZIP, "z", NULL},
-#endif /* HAVE_GZIP */
+        {PROG_GUNZIP,     "gz",   NULL},
+        {PROG_GUNZIP,     "z",    NULL},
+#endif  /* HAVE_GZIP */
 
 /* If we have compress, incorporate the following */
 #ifdef HAVE_COMPRESS
-	{PROG_UNCOMPRESS, "Z", NULL},
+        {PROG_UNCOMPRESS, "Z",    NULL},
 /* Else if we have gzip, incorporate the following */
-#elif defined (HAVE_GZIP)
-	{PROG_GUNZIP, "Z", NULL},
-#endif /* HAVE_COMPRESS || HAVE_GZIP */
+#elif defined(HAVE_GZIP)
+        {PROG_GUNZIP, "Z", NULL},
+#endif  /* HAVE_COMPRESS || HAVE_GZIP */
 
 /* If we have bzip2, incorporate the following */
 #ifdef HAVE_BZIP2
-	{PROG_BUNZIP2, "bz2", NULL},
-#endif /* HAVE_BZIP2 */
+        {PROG_BUNZIP2,    "bz2",  NULL},
+#endif  /* HAVE_BZIP2 */
 
 /* If we have xz, incorporate the following */
 #ifdef HAVE_XZ
-	{PROG_UNXZ, "xz", NULL},
-	{PROG_UNXZ, "lzma", NULL},
+        {PROG_UNXZ,       "xz",   NULL},
+        {PROG_UNXZ,       "lzma", NULL},
 /* Else if we have lzma, incorporate the following */
-#elif defined (HAVE_LZMA)
-	{PROG_UNLZMA, "lzma", NULL},
-#endif /* HAVE_XZ || HAVE_LZMA */
+#elif defined(HAVE_LZMA)
+        {PROG_UNLZMA, "lzma", NULL},
+#endif  /* HAVE_XZ || HAVE_LZMA */
 
 /* If we have lzip, incorporate the following */
 #ifdef HAVE_LZIP
-	{PROG_UNLZIP, "lz", NULL},
-#endif /* HAVE_LZIP */
+        {PROG_UNLZIP,     "lz",   NULL},
+#endif  /* HAVE_LZIP */
 
 /* If we have zstd, incorporate the following */
 #ifdef HAVE_ZSTD
-	{PROG_UNZSTD, "zst", NULL},
-	{PROG_UNZSTD, "zstd", NULL},
-#endif /* HAVE_ZSTD */
+        {PROG_UNZSTD,     "zst",  NULL},
+        {PROG_UNZSTD,     "zstd", NULL},
+#endif  /* HAVE_ZSTD */
 
-/*------------------------------------------------------*/
-/* Add your decompressor(s) and extension(s) below here */
-/*------------------------------------------------------*/
+        /*------------------------------------------------------*/
+        /* Add your decompressor(s) and extension(s) below here */
+        /*------------------------------------------------------*/
 
-/*----------------*/
-/* and above here */
-/*----------------*/
+        /*----------------*/
+        /* and above here */
+        /*----------------*/
 
-/* ... and the last structure is */
-	{NULL, NULL, NULL}
+        /* ... and the last structure is */
+        {NULL,            NULL,   NULL}
 };
 
 /* Take filename as arg, return structure containing decompressor
@@ -123,17 +123,17 @@ struct compression comp_list[] = {
    the caller should free.
 
    eg.
-   	filename = /usr/man/man1/foo.1.gz
+        filename = /usr/man/man1/foo.1.gz
 
-	comp->prog = "/usr/bin/gzip -dc";
-   	comp->ext = "gz";
-   	comp->stem = "/usr/man/man1/foo.1";
+        comp->prog = "/usr/bin/gzip -dc";
+        comp->ext = "gz";
+        comp->stem = "/usr/man/man1/foo.1";
  */
 struct compression *comp_info (const char *filename, bool want_stem)
 {
 	const char *ext;
-	static struct compression hpux_comp =
-		{PROG_GUNZIP " -S \"\"", "", NULL};
+	static struct compression hpux_comp = {PROG_GUNZIP " -S \"\"", "",
+	                                       NULL};
 
 	ext = strrchr (filename, '.');
 
@@ -143,7 +143,7 @@ struct compression *comp_info (const char *filename, bool want_stem)
 			if (strcmp (comp->ext, ext + 1) == 0) {
 				if (want_stem)
 					comp->stem = xstrndup (filename,
-							       ext - filename);
+					                       ext - filename);
 				else
 					comp->stem = NULL;
 				return comp;
@@ -155,8 +155,8 @@ struct compression *comp_info (const char *filename, bool want_stem)
 		ext = strstr (filename, ".Z/");
 		if (ext) {
 			if (want_stem)
-				hpux_comp.stem = xstrndup (filename,
-							   ext - filename);
+				hpux_comp.stem =
+				        xstrndup (filename, ext - filename);
 			else
 				hpux_comp.stem = NULL;
 			return &hpux_comp;

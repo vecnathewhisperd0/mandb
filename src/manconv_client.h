@@ -24,8 +24,7 @@
 
 #include "decompress.h"
 
-void add_manconv (struct pipeline *p,
-		  const char *source_encoding, const char *target_encoding);
-int manconv_inprocess (decompress *d,
-		       const char *source_encoding,
-		       const char *target_encoding);
+void add_manconv (struct pipeline *p, const char *source_encoding,
+                  const char *target_encoding);
+int manconv_inprocess (decompress *d, const char *source_encoding,
+                       const char *target_encoding);

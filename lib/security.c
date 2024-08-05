@@ -27,12 +27,12 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <assert.h>
 #include <errno.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 
 #include "attribute.h"
@@ -49,24 +49,24 @@
 
 #ifdef MAN_OWNER
 
-   /*
-    * This is the name of the user that the preformatted man pages belong to.
-    * If you are running man as a setuid program, you should make sure
-    * that all of the cat pages and the directories that
-    * they live in are writeable by this user.
-    */
+/*
+ * This is the name of the user that the preformatted man pages belong to.
+ * If you are running man as a setuid program, you should make sure
+ * that all of the cat pages and the directories that
+ * they live in are writeable by this user.
+ */
 
 #  include <pwd.h>
 #  include <unistd.h>
 
 #  include "idpriv.h"
 
-uid_t ruid;				/* initial real user id */
-uid_t euid;				/* initial effective user id */
-uid_t uid;				/* current euid */
-gid_t rgid;				/* initial real group id */
-gid_t egid;				/* initial effective group id */
-gid_t gid;				/* current egid */
+uid_t ruid; /* initial real user id */
+uid_t euid; /* initial effective user id */
+uid_t uid;  /* current euid */
+gid_t rgid; /* initial real group id */
+gid_t egid; /* initial effective group id */
+gid_t gid;  /* current egid */
 
 static struct passwd *man_owner;
 
@@ -77,7 +77,7 @@ static int priv_drop_count = 0;
 
 static void gripe_set_euid (void)
 {
-	fatal (errno, _("can't set effective uid"));
+	fatal (errno, _ ("can't set effective uid"));
 }
 
 #endif /* MAN_OWNER */
@@ -116,7 +116,8 @@ struct passwd *get_man_owner (void)
 
 	man_owner = getpwnam (MAN_OWNER);
 	if (!man_owner)
-		error (FAIL, 0, _("the setuid man user \"%s\" does not exist"),
+		error (FAIL, 0,
+		       _ ("the setuid man user \"%s\" does not exist"),
 		       MAN_OWNER);
 	assert (man_owner);
 	return man_owner;

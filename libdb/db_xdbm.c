@@ -24,24 +24,24 @@
 
 #if defined(GDBM) || defined(NDBM)
 
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
+#  include <stdbool.h>
+#  include <stdlib.h>
+#  include <string.h>
 
-#include "gl_hash_map.h"
-#include "gl_rbtree_list.h"
-#include "gl_xlist.h"
-#include "gl_xmap.h"
-#include "hash-pjw-bare.h"
-#include "xalloc.h"
+#  include "gl_hash_map.h"
+#  include "gl_rbtree_list.h"
+#  include "gl_xlist.h"
+#  include "gl_xmap.h"
+#  include "hash-pjw-bare.h"
+#  include "xalloc.h"
 
-#include "manconfig.h"
+#  include "manconfig.h"
 
-#include "cleanup.h"
-#include "glcontainers.h"
+#  include "cleanup.h"
+#  include "glcontainers.h"
 
-#include "db_xdbm.h"
-#include "mydbm.h"
+#  include "db_xdbm.h"
+#  include "mydbm.h"
 
 static gl_map_t parent_keys;
 
@@ -89,7 +89,7 @@ static void datum_free (const void *value)
 	MYDBM_FREE_DPTR (*(datum *) value);
 }
 
-static datum empty_datum = { NULL, 0 };
+static datum empty_datum = {NULL, 0};
 
 /* We keep a map of filenames to sorted lists of keys.  Each list is stored
  * using a hash-based implementation that allows lookup by name and
@@ -97,15 +97,15 @@ static datum empty_datum = { NULL, 0 };
  * reasonable ordered implementation of nextkey.
  */
 datum man_xdbm_firstkey (MYDBM_FILE dbf,
-			 man_xdbm_unsorted_firstkey unsorted_firstkey,
-			 man_xdbm_unsorted_nextkey unsorted_nextkey)
+                         man_xdbm_unsorted_firstkey unsorted_firstkey,
+                         man_xdbm_unsorted_nextkey unsorted_nextkey)
 {
 	gl_list_t keys;
 	datum *key;
 
 	/* Build the raw sorted list of keys. */
 	keys = gl_list_create_empty (GL_RBTREE_LIST, datum_equals, datum_hash,
-				     datum_free, false);
+	                             datum_free, false);
 	key = XMALLOC (datum);
 	*key = unsorted_firstkey (dbf);
 	while (MYDBM_DPTR (*key)) {
@@ -118,9 +118,8 @@ datum man_xdbm_firstkey (MYDBM_FILE dbf,
 	}
 
 	if (!parent_keys) {
-		parent_keys = new_string_map (GL_HASH_MAP,
-					      (gl_mapvalue_dispose_fn)
-					      gl_list_free);
+		parent_keys = new_string_map (
+		        GL_HASH_MAP, (gl_mapvalue_dispose_fn) gl_list_free);
 		push_cleanup ((cleanup_fun) gl_map_free, parent_keys, 0);
 	}
 

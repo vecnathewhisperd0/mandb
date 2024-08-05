@@ -29,19 +29,19 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <termios.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <termios.h>
+#include <unistd.h>
 
 #include "linelength.h"
 
 #ifndef _PATH_TTY
-# define _PATH_TTY "/dev/tty"
+#  define _PATH_TTY "/dev/tty"
 #endif /* _PATH_TTY */
 
 static int line_length = -1;

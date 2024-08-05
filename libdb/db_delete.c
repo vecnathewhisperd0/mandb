@@ -22,12 +22,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "error.h"
@@ -44,8 +44,8 @@
 #include "filenames.h"
 #include "glcontainers.h"
 
-#include "mydbm.h"
 #include "db_storage.h"
+#include "mydbm.h"
 
 /* Delete an entry for a page.
    Again, 3 possibilities:
@@ -58,7 +58,7 @@
       overwriting the old multi entry.
 */
 
-#define NO_ENTRY	1;
+#define NO_ENTRY 1;
 
 int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 {
@@ -74,13 +74,13 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 	MYDBM_SET (key, name_to_key (name));
 	cont = MYDBM_FETCH (dbf, key);
 
-	if (!MYDBM_DPTR (cont)) {			/* 0 entries */
+	if (!MYDBM_DPTR (cont)) { /* 0 entries */
 		MYDBM_FREE_DPTR (key);
 		return NO_ENTRY;
-	} else if (*MYDBM_DPTR (cont) != '\t') {	/* 1 entry */
+	} else if (*MYDBM_DPTR (cont) != '\t') { /* 1 entry */
 		MYDBM_DELETE (dbf, key);
 		MYDBM_FREE_DPTR (cont);
-	} else {					/* 2+ entries */
+	} else { /* 2+ entries */
 		gl_list_t refs;
 		struct name_ext this_ref, *ref;
 		size_t this_index;
@@ -105,8 +105,7 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 
 		multi_key = make_multi_key (name, info->ext);
 		if (!MYDBM_EXISTS (dbf, multi_key)) {
-			error (0, 0,
-			       _( "multi key %s does not exist"),
+			error (0, 0, _ ("multi key %s does not exist"),
 			       MYDBM_DPTR (multi_key));
 			gripe_corrupt_data (dbf);
 		}
@@ -128,10 +127,9 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		/* create our new multi content */
 		multi_content = xstrdup ("");
 		GL_LIST_FOREACH (refs, ref)
-			multi_content = appendstr (multi_content,
-						   "\t", ref->name,
-						   "\t", ref->ext,
-						   (void *) 0);
+			multi_content =
+			        appendstr (multi_content, "\t", ref->name,
+			                   "\t", ref->ext, (void *) 0);
 
 		MYDBM_FREE_DPTR (cont);
 		MYDBM_SET (cont, multi_content);

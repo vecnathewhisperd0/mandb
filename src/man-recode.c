@@ -24,14 +24,14 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
+#include <fcntl.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "argp.h"
 #include "dirname.h"
@@ -44,7 +44,7 @@
 #include "xvasprintf.h"
 
 #include "gettext.h"
-#define _(String) gettext (String)
+#define _(String)  gettext (String)
 #define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
@@ -77,17 +77,15 @@ struct try_file_at_args {
 	int flags;
 };
 
-static int
-try_file_at (char *tmpl, void *flags)
+static int try_file_at (char *tmpl, void *flags)
 {
 	struct try_file_at_args *args = flags;
 	return openat (args->dir_fd, tmpl,
-		       (args->flags & ~O_ACCMODE) | O_RDWR | O_CREAT | O_EXCL,
-		       S_IRUSR | S_IWUSR);
+	               (args->flags & ~O_ACCMODE) | O_RDWR | O_CREAT | O_EXCL,
+	               S_IRUSR | S_IWUSR);
 }
 
-static int
-mkstempat (int dir_fd, char *xtemplate)
+static int mkstempat (int dir_fd, char *xtemplate)
 {
 	struct try_file_at_args args;
 
@@ -107,19 +105,18 @@ const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
 static const char args_doc[] =
-	N_("-t CODE {--suffix SUFFIX | --in-place} FILENAME...");
+        N_ ("-t CODE {--suffix SUFFIX | --in-place} FILENAME...");
 
 static struct argp_option options[] = {
-	OPT ("to-code", 't', N_("CODE"), N_("encoding for output")),
-	OPT ("suffix", OPT_SUFFIX, N_("SUFFIX"),
-	     N_("suffix to append to output file name")),
-	OPT ("in-place", OPT_IN_PLACE, 0,
-	     N_("overwrite input files in place")),
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("quiet", 'q', 0, N_("produce fewer warnings")),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("to-code", 't', N_ ("CODE"), N_ ("encoding for output")),
+        OPT ("suffix", OPT_SUFFIX, N_ ("SUFFIX"),
+             N_ ("suffix to append to output file name")),
+        OPT ("in-place", OPT_IN_PLACE, 0,
+             N_ ("overwrite input files in place")),
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("quiet", 'q', 0, N_ ("produce fewer warnings")),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
@@ -141,7 +138,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
+			                 ARGP_HELP_STD_HELP);
 			break;
 		case ARGP_KEY_ARG:
 			gl_list_add_last (filenames, xstrdup (arg));
@@ -151,23 +148,22 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			break;
 		case ARGP_KEY_SUCCESS:
 			if (!to_code)
-				argp_error (state,
-					    _("must specify an output "
-					      "encoding"));
+				argp_error (state, _ ("must specify an output "
+				                      "encoding"));
 			if (!suffix && !in_place)
 				argp_error (state,
-					    _("must use either --suffix or "
-					      "--in-place"));
+				            _ ("must use either --suffix or "
+				               "--in-place"));
 			if (suffix && in_place)
 				argp_error (state,
-					    _("--suffix and --in-place are "
-					      "mutually exclusive"));
+				            _ ("--suffix and --in-place are "
+				               "mutually exclusive"));
 			return 0;
 	}
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp argp = { options, parse_opt, args_doc };
+static struct argp argp = {options, parse_opt, args_doc};
 
 static void recode (const char *filename)
 {
@@ -181,13 +177,13 @@ static void recode (const char *filename)
 
 	decomp = decompress_open (filename, 0);
 	if (!decomp)
-		error (FAIL, 0, _("can't open %s"), filename);
+		error (FAIL, 0, _ ("can't open %s"), filename);
 
 	dirname = dir_name (filename);
 	basename = base_name (filename);
 	comp = comp_info (basename, true);
 	if (comp)
-		stem = comp->stem;	/* steal memory */
+		stem = comp->stem; /* steal memory */
 	else
 		stem = xstrdup (basename);
 
@@ -206,15 +202,14 @@ static void recode (const char *filename)
 #endif
 		dir_fd = open (dirname, dir_fd_open_flags);
 		if (dir_fd < 0)
-			fatal (errno, _("can't open %s"), dirname);
+			fatal (errno, _ ("can't open %s"), dirname);
 
 		outfilename = xasprintf ("%s.XXXXXX", stem);
 		/* For error messages. */
 		template_path = xasprintf ("%s/%s", dirname, outfilename);
 		outfd = mkstempat (dir_fd, outfilename);
 		if (outfd == -1)
-			fatal (errno,
-			       _("can't open temporary file %s"),
+			fatal (errno, _ ("can't open temporary file %s"),
 			       template_path);
 		free (template_path);
 		pipeline_want_out (convert, outfd);
@@ -239,22 +234,22 @@ static void recode (const char *filename)
 	pipeline_wait (decomp_p);
 	status = pipeline_wait (convert);
 	if (status != 0)
-		error (CHILD_FAIL, 0, _("command exited with status %d: %s"),
+		error (CHILD_FAIL, 0, _ ("command exited with status %d: %s"),
 		       status, pipeline_tostring (convert));
 
 	if (in_place) {
 		assert (dir_fd != -1);
 		if (renameat (dir_fd, outfilename, dir_fd, stem) == -1) {
-			char *outfilepath = xasprintf
-				("%s/%s", dirname, outfilename);
+			char *outfilepath =
+			        xasprintf ("%s/%s", dirname, outfilename);
 			unlink (outfilename);
-			fatal (errno, _("can't rename %s to %s"),
-			       outfilepath, filename);
+			fatal (errno, _ ("can't rename %s to %s"), outfilepath,
+			       filename);
 		}
 		debug ("stem: %s, basename: %s\n", stem, basename);
 		if (!STREQ (stem, basename)) {
 			if (unlinkat (dir_fd, basename, 0) == -1)
-				fatal (errno, _("can't remove %s"), filename);
+				fatal (errno, _ ("can't remove %s"), filename);
 		}
 	}
 

@@ -21,32 +21,32 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
 #ifdef NDBM
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
+#  include <fcntl.h>
+#  include <stdbool.h>
+#  include <stdio.h>
+#  include <stdlib.h>
+#  include <unistd.h>
 
-#include <sys/file.h> /* for flock() */
-#include <sys/types.h> /* for open() */
-#include <sys/stat.h>
+#  include <sys/file.h> /* for flock() */
+#  include <sys/stat.h>
+#  include <sys/types.h> /* for open() */
 
-#include "attribute.h"
-#include "stat-time.h"
-#include "timespec.h"
-#include "xalloc.h"
-#include "xvasprintf.h"
+#  include "attribute.h"
+#  include "stat-time.h"
+#  include "timespec.h"
+#  include "xalloc.h"
+#  include "xvasprintf.h"
 
-#include "manconfig.h"
+#  include "manconfig.h"
 
-#include "db_storage.h"
-#include "db_xdbm.h"
-#include "mydbm.h"
+#  include "db_storage.h"
+#  include "db_xdbm.h"
+#  include "mydbm.h"
 
 /* release the lock and close the database */
 static void raw_close (man_ndbm_wrapper wrap)
@@ -99,8 +99,8 @@ bool man_ndbm_open (man_ndbm_wrapper wrap, int flags, int mode)
 		free (dir_fname);
 		if (dir_fd != -1) {
 			if (!(lock_failed = flock (dir_fd, lock_op)))
-				wrap->file = dbm_open (wrap->name, flags,
-						       mode);
+				wrap->file =
+				        dbm_open (wrap->name, flags, mode);
 			close (dir_fd);
 		}
 	} else {

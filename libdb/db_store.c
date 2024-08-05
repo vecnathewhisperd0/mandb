@@ -28,8 +28,8 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "attribute.h"
@@ -46,8 +46,8 @@
 #include "filenames.h"
 #include "glcontainers.h"
 
-#include "mydbm.h"
 #include "db_storage.h"
+#include "mydbm.h"
 
 /* compare_ids(a,b) is negative if id 'a' is preferred to id 'b', i.e. if
  * 'a' is a more canonical database entry than 'b'; positive if 'b' is
@@ -91,10 +91,9 @@ enum replace_action {
  * be replaced with some new contents. Check that names and section
  * extensions match before calling this.
  */
-static int replace_if_necessary (MYDBM_FILE dbf,
-				 struct mandata *newdata,
-				 struct mandata *olddata,
-				 datum newkey, datum newcont)
+static int replace_if_necessary (MYDBM_FILE dbf, struct mandata *newdata,
+                                 struct mandata *olddata, datum newkey,
+                                 datum newcont)
 {
 	enum replace_action action;
 
@@ -114,28 +113,29 @@ static int replace_if_necessary (MYDBM_FILE dbf,
 		debug ("replace_if_necessary: stronger ID; replacing\n");
 		action = REPLACE_YES;
 	} else if (compare_ids (newdata->id, olddata->id, true) <= 0 &&
-		   timespec_cmp (newdata->mtime, olddata->mtime) > 0) {
+	           timespec_cmp (newdata->mtime, olddata->mtime) > 0) {
 		debug ("replace_if_necessary: newer mtime; replacing\n");
 		action = REPLACE_YES;
 	} else if (compare_ids (newdata->id, olddata->id, true) <= 0 &&
-		   timespec_cmp (newdata->mtime, olddata->mtime) < 0) {
+	           timespec_cmp (newdata->mtime, olddata->mtime) < 0) {
 		debug ("replace_if_necessary: older mtime; not replacing\n");
 		action = REPLACE_NO;
 	} else if (compare_ids (newdata->id, olddata->id, false) > 0) {
 		debug ("replace_if_necessary: weaker ID; not replacing\n");
 		action = REPLACE_NO;
 	} else if (newdata->pointer && olddata->pointer &&
-		   strcmp (newdata->pointer, olddata->pointer) < 0) {
+	           strcmp (newdata->pointer, olddata->pointer) < 0) {
 		debug ("replace_if_necessary: pointer '%s' < '%s'; "
-		       "replacing\n", newdata->pointer, olddata->pointer);
+		       "replacing\n",
+		       newdata->pointer, olddata->pointer);
 		action = REPLACE_YES;
 	} else if (newdata->pointer && olddata->pointer &&
-		   strcmp (newdata->pointer, olddata->pointer) > 0) {
+	           strcmp (newdata->pointer, olddata->pointer) > 0) {
 		debug ("replace_if_necessary: pointer '%s' > '%s'; "
-		       "not replacing\n", newdata->pointer, olddata->pointer);
+		       "not replacing\n",
+		       newdata->pointer, olddata->pointer);
 		action = REPLACE_NO;
-	} else if (!STREQ (dash_if_unset (newdata->comp),
-			  olddata->comp)) {
+	} else if (!STREQ (dash_if_unset (newdata->comp), olddata->comp)) {
 		debug ("replace_if_necessary: differing compression "
 		       "extensions (%s != %s); failing\n",
 		       dash_if_unset (newdata->comp), olddata->comp);
@@ -177,18 +177,11 @@ static datum make_content (struct mandata *in)
 	if (!in->whatis)
 		in->whatis = xstrdup (dash + 1);
 
-	value = xasprintf (
-		"%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s",
-		dash_if_unset (in->name),
-		in->ext,
-		in->sec,
-		(long) in->mtime.tv_sec,
-		(long) in->mtime.tv_nsec,
-		in->id,
-		in->pointer,
-		in->filter,
-		in->comp,
-		in->whatis);
+	value = xasprintf ("%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s",
+	                   dash_if_unset (in->name), in->ext, in->sec,
+	                   (long) in->mtime.tv_sec, (long) in->mtime.tv_nsec,
+	                   in->id, in->pointer, in->filter, in->comp,
+	                   in->whatis);
 	assert (value);
 	MYDBM_SET (cont, value);
 
@@ -227,15 +220,15 @@ static char *make_extensions_reference (gl_list_t refs)
  Any one of three situations can occur when storing some data.
 
  1) no simple key is found.
- 	store as singular reference.
+        store as singular reference.
  2) simple key already exists, content starts with a '\t'.
- 	Already multiple reference. Add our new item in multiple format
- 	and update the simple key content, to point to our new one also.
+        Already multiple reference. Add our new item in multiple format
+        and update the simple key content, to point to our new one also.
  3) simple key already exists, content does not start with a '\t'.
- 	First we have to reformat the simple key into a multi key for the
- 	old item, and insert. Then we have to insert the new data as a
- 	multi key. Lastly we must create the simple key and do a replace
- 	on it.
+        First we have to reformat the simple key into a multi key for the
+        old item, and insert. Then we have to insert the new data as a
+        multi key. Lastly we must create the simple key and do a replace
+        on it.
 
  Use precedence algorithm on inserts. If we already have a key assigned
  to the new value, check priority of page using id. If new page is higher
@@ -266,14 +259,15 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 
 	/* create a simple key */
 	MYDBM_SET (oldkey, name_to_key (base));
- 	if (!*base) {
+	if (!*base) {
 		dbprintf (in);
- 		return 2;
- 	}
+		return 2;
+	}
 
 	if (in->name) {
-		error (0, 0, "in->name (%s) should not be set when calling "
-			     "dbstore()!\n",
+		error (0, 0,
+		       "in->name (%s) should not be set when calling "
+		       "dbstore()!\n",
 		       in->name);
 		free (in->name);
 		in->name = NULL;
@@ -283,7 +277,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 
 	oldcont = MYDBM_FETCH (dbf, oldkey);
 
-	if (MYDBM_DPTR (oldcont) == NULL) { 		/* situation (1) */
+	if (MYDBM_DPTR (oldcont) == NULL) { /* situation (1) */
 		if (!STREQ (base, MYDBM_DPTR (oldkey)))
 			in->name = xstrdup (base);
 		oldcont = make_content (in);
@@ -292,7 +286,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		MYDBM_FREE_DPTR (oldcont);
 		free (in->name);
 		in->name = NULL;
-	} else if (*MYDBM_DPTR (oldcont) == '\t') { 	/* situation (2) */
+	} else if (*MYDBM_DPTR (oldcont) == '\t') { /* situation (2) */
 		datum newkey, newcont;
 
 		memset (&newkey, 0, sizeof newkey);
@@ -310,8 +304,8 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 			MYDBM_FREE_DPTR (oldcont);
 			cont = MYDBM_FETCH (dbf, newkey);
 			info = split_content (dbf, MYDBM_DPTR (cont));
-			ret = replace_if_necessary (dbf, in, info,
-						    newkey, newcont);
+			ret = replace_if_necessary (dbf, in, info, newkey,
+			                            newcont);
 			MYDBM_FREE_DPTR (cont);
 			free_mandata_struct (info);
 			MYDBM_FREE_DPTR (newkey);
@@ -347,7 +341,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 			gripe_replace_key (dbf, MYDBM_DPTR (oldkey));
 
 		MYDBM_FREE_DPTR (newcont);
-	} else { 				/* situation (3) */
+	} else { /* situation (3) */
 		datum newkey, newcont, lastkey, lastcont;
 		struct mandata *old;
 		char *old_name;
@@ -378,8 +372,8 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 			if (!STREQ (base, MYDBM_DPTR (oldkey)))
 				in->name = xstrdup (base);
 			newcont = make_content (in);
-			ret = replace_if_necessary (dbf, in, old,
-						    oldkey, newcont);
+			ret = replace_if_necessary (dbf, in, old, oldkey,
+			                            newcont);
 			MYDBM_FREE_DPTR (oldcont);
 			free_mandata_struct (old);
 			MYDBM_FREE_DPTR (newcont);
@@ -424,7 +418,7 @@ int dbstore (MYDBM_FILE dbf, struct mandata *in, const char *base)
 		/* Now build a simple reference to the above two items */
 
 		refs = gl_list_create_empty (GL_ARRAY_LIST, name_ext_equals,
-					     NULL, plain_free, true);
+		                             NULL, plain_free, true);
 		ref = XMALLOC (struct name_ext);
 		/* Not copied. */
 		ref->name = old_name;

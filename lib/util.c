@@ -36,15 +36,15 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <assert.h>
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <dirent.h>
-#include <unistd.h>
 #include <locale.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "attribute.h"
 #include "stat-time.h"
@@ -106,7 +106,7 @@ int is_changed (const char *fa, const char *fb)
 		status |= 4;
 
 	status |= (timespec_cmp (get_stat_mtime (&fa_sb),
-				 get_stat_mtime (&fb_sb)) != 0);
+	                         get_stat_mtime (&fb_sb)) != 0);
 
 	debug (" (%d)\n", status);
 	return status;
@@ -200,7 +200,7 @@ int remove_directory (const char *directory, bool recurse)
 /* Returns an allocated copy of s, with leading and trailing spaces
  * removed.
  */
-char * ATTRIBUTE_MALLOC trim_spaces (const char *s)
+char *ATTRIBUTE_MALLOC trim_spaces (const char *s)
 {
 	int length;
 	while (*s == ' ')
@@ -213,9 +213,9 @@ char * ATTRIBUTE_MALLOC trim_spaces (const char *s)
 
 char *lang_dir (const char *filename)
 {
-	char *ld;	/* the lang dir: point to static data */
-	const char *fm;	/* the first "/man/" dir */
-	const char *sm;	/* the second "/man?/" dir */
+	char *ld;       /* the lang dir: point to static data */
+	const char *fm; /* the first "/man/" dir */
+	const char *sm; /* the second "/man?/" dir */
 
 	ld = xstrdup ("");
 	if (!filename)
@@ -259,12 +259,12 @@ char *lang_dir (const char *filename)
 void init_locale (void)
 {
 	const char *locale = setlocale (LC_ALL, "");
-	if (!locale &&
-	    !getenv ("MAN_NO_LOCALE_WARNING") &&
+	if (!locale && !getenv ("MAN_NO_LOCALE_WARNING") &&
 	    !getenv ("DPKG_RUNNING_VERSION"))
 		/* Obviously can't translate this. */
-		error (0, 0, "can't set the locale; make sure $LC_* and $LANG "
-			     "are correct");
+		error (0, 0,
+		       "can't set the locale; make sure $LC_* and $LANG "
+		       "are correct");
 	setenv ("MAN_NO_LOCALE_WARNING", "1", 1);
 #ifdef ENABLE_NLS
 	bindtextdomain (PACKAGE, LOCALEDIR);

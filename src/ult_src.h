@@ -24,9 +24,9 @@
 
 #include "gl_list.h"
 
-#define SO_LINK		0001
-#define SOFT_LINK	0002
-#define HARD_LINK	0004
+#define SO_LINK   0001
+#define SOFT_LINK 0002
+#define HARD_LINK 0004
 
 struct stat;
 
@@ -42,4 +42,4 @@ struct ult_value {
 
 extern void gripe_canonicalize_failed (const char *path);
 extern const struct ult_value *ult_src (const char *name, const char *path,
-					struct stat *buf, int flags);
+                                        struct stat *buf, int flags);

@@ -27,8 +27,8 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
@@ -53,13 +53,13 @@
 
 #include "db_storage.h"
 
-#include "ult_src.h"
 #include "descriptions.h"
+#include "ult_src.h"
 
 static void gripe_bad_store (const char *name, const char *ext)
 {
 	if (quiet < 2)
-		error (0, 0, _("warning: failed to store entry for %s(%s)"),
+		error (0, 0, _ ("warning: failed to store entry for %s(%s)"),
 		       name, ext);
 }
 
@@ -70,14 +70,14 @@ static void gripe_bad_store (const char *name, const char *ext)
 static int is_prefix (const char *parent, const char *child)
 {
 	return (STRNEQ (child, parent, strlen (parent)) &&
-		STRNEQ (child + strlen (parent), "/man", 4));
+	        STRNEQ (child + strlen (parent), "/man", 4));
 }
 
 /* Take a list of descriptions returned by parse_descriptions() and store
  * it into the database.
  */
 void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
-			 const char *path, const char *base, gl_list_t trace)
+                         const char *path, const char *base, gl_list_t trace)
 {
 	const struct page_description *desc;
 	const char *trace_name;
@@ -94,17 +94,15 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			debug ("trace: '%s'\n", trace_name);
 	}
 
-	trace_infos = new_string_map (GL_HASH_MAP,
-				      (gl_mapvalue_dispose_fn)
-				      free_mandata_struct);
-	whatis_infos = gl_list_create_empty (GL_ARRAY_LIST, NULL, NULL,
-					     (gl_listelement_dispose_fn)
-					     free_mandata_struct,
-					     true);
+	trace_infos = new_string_map (
+	        GL_HASH_MAP, (gl_mapvalue_dispose_fn) free_mandata_struct);
+	whatis_infos = gl_list_create_empty (
+	        GL_ARRAY_LIST, NULL, NULL,
+	        (gl_listelement_dispose_fn) free_mandata_struct, true);
 
 	GL_LIST_FOREACH (trace, trace_name)
 		gl_map_put (trace_infos, xstrdup (trace_name),
-			    filename_info (trace_name, quiet < 2));
+		            filename_info (trace_name, quiet < 2));
 
 	GL_LIST_FOREACH (descs, desc) {
 		/* Either it's the real thing or merely a reference. Get the
@@ -132,8 +130,8 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 				const struct mandata *trace_info;
 				struct stat st;
 
-				trace_info = gl_map_get (trace_infos,
-							 trace_name);
+				trace_info =
+				        gl_map_get (trace_infos, trace_name);
 				if (!trace_info ||
 				    !STREQ (trace_info->name, desc->name))
 					continue;
@@ -158,13 +156,13 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 				}
 				free (whatis_info->comp);
 				if (trace_info->comp)
-					whatis_info->comp = xstrdup
-						(trace_info->comp);
+					whatis_info->comp =
+					        xstrdup (trace_info->comp);
 				else
 					whatis_info->comp = NULL;
 				if (lstat (trace_name, &st) == 0)
-					whatis_info->mtime = get_stat_mtime
-						(&st);
+					whatis_info->mtime =
+					        get_stat_mtime (&st);
 				else
 					whatis_info->mtime = info->mtime;
 				found_real_page = true;
@@ -173,7 +171,8 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 
 		if (found_external) {
 			debug ("skipping '%s'; link outside manual "
-			       "hierarchy\n", desc->name);
+			       "hierarchy\n",
+			       desc->name);
 			free_mandata_struct (whatis_info);
 			continue;
 		}
@@ -193,8 +192,8 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 			continue;
 		}
 
-		debug ("name = '%s', ext = '%s', id = %c\n",
-		       desc->name, whatis_info->ext, whatis_info->id);
+		debug ("name = '%s', ext = '%s', id = %c\n", desc->name,
+		       whatis_info->ext, whatis_info->id);
 		if (dbstore (dbf, whatis_info, desc->name) > 0) {
 			gripe_bad_store (base, whatis_info->ext);
 			free_mandata_struct (whatis_info);
@@ -217,8 +216,7 @@ void store_descriptions (MYDBM_FILE dbf, gl_list_t descs, struct mandata *info,
 		const struct mandata *trace_info;
 
 		trace_info = gl_map_get (trace_infos, trace_name);
-		if (trace_info &&
-		    STREQ (trace_info->sec, info->sec) &&
+		if (trace_info && STREQ (trace_info->sec, info->sec) &&
 		    STREQ (trace_info->ext, info->ext))
 			pointer_info = trace_info;
 	}

@@ -30,18 +30,18 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <assert.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <sys/stat.h>	/* for chmod() */
 #include <dirent.h>
+#include <errno.h>
 #include <fcntl.h>
-#include <unistd.h>
 #include <signal.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h> /* for chmod() */
+#include <sys/types.h>
+#include <unistd.h>
 
 #ifdef MAN_OWNER
 #  include <pwd.h>
@@ -62,7 +62,7 @@
 #include "xvasprintf.h"
 
 #include "gettext.h"
-#define _(String) gettext (String)
+#define _(String)  gettext (String)
 #define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
@@ -84,12 +84,12 @@
 #include "straycats.h"
 
 int quiet = 1;
-extern bool opt_test;		/* don't update db */
+extern bool opt_test; /* don't update db */
 char *manp;
-extern char *extension;		/* for globbing.c */
-extern bool force_rescan;	/* for check_mandirs.c */
+extern char *extension;   /* for globbing.c */
+extern bool force_rescan; /* for check_mandirs.c */
 static char *single_filename = NULL;
-extern char *user_config_file;	/* for manp.c */
+extern char *user_config_file; /* for manp.c */
 #ifdef MAN_OWNER
 struct passwd *man_owner;
 #endif
@@ -113,26 +113,25 @@ const char *argp_program_version = "mandb " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("[MANPATH]");
+static const char args_doc[] = N_ ("[MANPATH]");
 
 static struct argp_option options[] = {
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("quiet", 'q', 0, N_("work quietly, except for 'bogus' warning")),
-	OPT ("no-straycats", 's', 0,
-	     N_("don't look for or add stray cats to the dbs")),
-	OPT ("no-purge", 'p', 0,
-	     N_("don't purge obsolete entries from the dbs")),
-	OPT ("user-db", 'u', 0, N_("produce user databases only")),
-	OPT ("create", 'c', 0,
-	     N_("create dbs from scratch, rather than updating")),
-	OPT ("test", 't', 0, N_("check manual pages for correctness")),
-	OPT ("filename", 'f', N_("FILENAME"),
-	     N_("update just the entry for this filename")),
-	OPT ("config-file", 'C', N_("FILE"),
-	     N_("use this user configuration file")),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("quiet", 'q', 0, N_ ("work quietly, except for 'bogus' warning")),
+        OPT ("no-straycats", 's', 0,
+             N_ ("don't look for or add stray cats to the dbs")),
+        OPT ("no-purge", 'p', 0,
+             N_ ("don't purge obsolete entries from the dbs")),
+        OPT ("user-db", 'u', 0, N_ ("produce user databases only")),
+        OPT ("create", 'c', 0,
+             N_ ("create dbs from scratch, rather than updating")),
+        OPT ("test", 't', 0, N_ ("check manual pages for correctness")),
+        OPT ("filename", 'f', N_ ("FILENAME"),
+             N_ ("update just the entry for this filename")),
+        OPT ("config-file", 'C', N_ ("FILE"),
+             N_ ("use this user configuration file")),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
@@ -172,7 +171,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
+			                 ARGP_HELP_STD_HELP);
 			break;
 		case ARGP_KEY_ARG:
 			if (arg_manp)
@@ -191,23 +190,23 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp argp = { options, parse_opt, args_doc };
+static struct argp argp = {options, parse_opt, args_doc};
 
 struct dbpaths {
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	char *dbfile;
 	char *tmpdbfile;
-#  else /* !BERKELEY_DB NDBM */
+#  else  /* !BERKELEY_DB NDBM */
 	char *dirfile;
 	char *pagfile;
 	char *tmpdirfile;
 	char *tmppagfile;
 #  endif /* BERKELEY_DB */
-#else /* !NDBM */
+#else    /* !NDBM */
 	char *xfile;
 	char *xtmpfile;
-#endif /* NDBM */
+#endif   /* NDBM */
 };
 
 #ifdef MAN_OWNER
@@ -223,14 +222,14 @@ extern int pages;
 static void check_remove (const char *path)
 {
 	if (remove (path) == -1 && errno != ENOENT)
-		error (0, errno, _("can't remove %s"), path);
+		error (0, errno, _ ("can't remove %s"), path);
 }
 
 /* rename() with error checking */
 static void check_rename (const char *from, const char *to)
 {
 	if (rename (from, to) == -1 && errno != ENOENT) {
-		error (0, errno, _("can't rename %s to %s"), from, to);
+		error (0, errno, _ ("can't rename %s to %s"), from, to);
 		check_remove (from);
 	}
 }
@@ -239,7 +238,7 @@ static void check_rename (const char *from, const char *to)
 static void check_chmod (const char *path, mode_t mode)
 {
 	if (chmod (path, mode) == -1) {
-		error (0, errno, _("can't chmod %s"), path);
+		error (0, errno, _ ("can't chmod %s"), path);
 		check_remove (path);
 	}
 }
@@ -287,12 +286,12 @@ static int xcopy (const char *from, const char *to)
 		if (in > 0) {
 			if (fwrite (buf, 1, in, ofp) == 0 && ferror (ofp)) {
 				ret = -errno;
-				error (0, errno, _("can't write to %s"), to);
+				error (0, errno, _ ("can't write to %s"), to);
 				break;
 			}
 		} else if (ferror (ifp)) {
 			ret = -errno;
-			error (0, errno, _("can't read from %s"), from);
+			error (0, errno, _ ("can't read from %s"), from);
 			break;
 		}
 	}
@@ -311,23 +310,23 @@ static int xcopy (const char *from, const char *to)
 	return ret;
 }
 
-static void dbpaths_init (struct dbpaths *dbpaths,
-			  const char *base, const char *tmpbase)
+static void dbpaths_init (struct dbpaths *dbpaths, const char *base,
+                          const char *tmpbase)
 {
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	dbpaths->dbfile = xasprintf ("%s.db", base);
 	dbpaths->tmpdbfile = xasprintf ("%s.db", tmpbase);
-#  else /* !BERKELEY_DB NDBM */
+#  else  /* !BERKELEY_DB NDBM */
 	dbpaths->dirfile = xasprintf ("%s.dir", base);
 	dbpaths->pagfile = xasprintf ("%s.pag", base);
 	dbpaths->tmpdirfile = xasprintf ("%s.dir", tmpbase);
 	dbpaths->tmppagfile = xasprintf ("%s.pag", tmpbase);
 #  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
+#else    /* !NDBM */
 	dbpaths->xfile = xstrdup (base);
 	dbpaths->xtmpfile = xstrdup (tmpbase);
-#endif /* NDBM */
+#endif   /* NDBM */
 }
 
 static int dbpaths_copy_to_tmp (const struct dbpaths *dbpaths)
@@ -335,15 +334,15 @@ static int dbpaths_copy_to_tmp (const struct dbpaths *dbpaths)
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	return xcopy (dbpaths->dbfile, dbpaths->tmpdbfile);
-#  else /* !BERKELEY_DB NDBM */
+#  else  /* !BERKELEY_DB NDBM */
 	int ret = xcopy (dbpaths->dirfile, dbpaths->tmpdirfile);
 	if (ret < 0)
 		return ret;
 	return xcopy (dbpaths->pagfile, dbpaths->tmppagfile);
 #  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
+#else    /* !NDBM */
 	return xcopy (dbpaths->xfile, dbpaths->xtmpfile);
-#endif /* NDBM */
+#endif   /* NDBM */
 }
 
 static void dbpaths_remove_tmp (const struct dbpaths *dbpaths)
@@ -351,13 +350,13 @@ static void dbpaths_remove_tmp (const struct dbpaths *dbpaths)
 #ifdef NDBM
 #  ifdef BERKELEY_DB
 	check_remove (dbpaths->tmpdbfile);
-#  else /* !BERKELEY_DB NDBM */
+#  else  /* !BERKELEY_DB NDBM */
 	check_remove (dbpaths->tmpdirfile);
 	check_remove (dbpaths->tmppagfile);
 #  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
+#else    /* !NDBM */
 	check_remove (dbpaths->xtmpfile);
-#endif /* NDBM */
+#endif   /* NDBM */
 }
 
 static void dbpaths_rename_from_tmp (struct dbpaths *dbpaths)
@@ -368,7 +367,7 @@ static void dbpaths_rename_from_tmp (struct dbpaths *dbpaths)
 	check_chmod (dbpaths->dbfile, DBMODE);
 	free (dbpaths->tmpdbfile);
 	dbpaths->tmpdbfile = NULL;
-#  else /* not BERKELEY_DB */
+#  else  /* not BERKELEY_DB */
 	check_rename (dbpaths->tmpdirfile, dbpaths->dirfile);
 	check_chmod (dbpaths->dirfile, DBMODE);
 	check_rename (dbpaths->tmppagfile, dbpaths->pagfile);
@@ -377,12 +376,12 @@ static void dbpaths_rename_from_tmp (struct dbpaths *dbpaths)
 	free (dbpaths->tmppagfile);
 	dbpaths->tmpdirfile = dbpaths->tmppagfile = NULL;
 #  endif /* BERKELEY_DB */
-#else /* not NDBM */
+#else    /* not NDBM */
 	check_rename (dbpaths->xtmpfile, dbpaths->xfile);
 	check_chmod (dbpaths->xfile, DBMODE);
 	free (dbpaths->xtmpfile);
 	dbpaths->xtmpfile = NULL;
-#endif /* NDBM */
+#endif   /* NDBM */
 }
 
 #ifdef MAN_OWNER
@@ -392,13 +391,13 @@ static void dbpaths_chown_if_possible (struct dbpaths *dbpaths)
 #  ifdef NDBM
 #    ifdef BERKELEY_DB
 	chown_if_possible (dbpaths->dbfile);
-#    else /* not BERKELEY_DB */
+#    else  /* not BERKELEY_DB */
 	chown_if_possible (dbpaths->dirfile);
 	chown_if_possible (dbpaths->pagfile);
 #    endif /* BERKELEY_DB */
-#  else /* not NDBM */
+#  else    /* not NDBM */
 	chown_if_possible (dbpaths->xfile);
-#  endif /* NDBM */
+#  endif   /* NDBM */
 }
 #endif /* MAN_OWNER */
 
@@ -409,16 +408,16 @@ static void dbpaths_unlink_tmp (const struct dbpaths *dbpaths)
 #  ifdef BERKELEY_DB
 	if (dbpaths->tmpdbfile)
 		unlink (dbpaths->tmpdbfile);
-#  else /* !BERKELEY_DB NDBM */
+#  else  /* !BERKELEY_DB NDBM */
 	if (dbpaths->tmpdirfile)
 		unlink (dbpaths->tmpdirfile);
 	if (dbpaths->tmppagfile)
 		unlink (dbpaths->tmppagfile);
 #  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
+#else    /* !NDBM */
 	if (dbpaths->xtmpfile)
 		unlink (dbpaths->xtmpfile);
-#endif /* NDBM */
+#endif   /* NDBM */
 }
 
 static void dbpaths_free_elements (struct dbpaths *dbpaths)
@@ -428,7 +427,7 @@ static void dbpaths_free_elements (struct dbpaths *dbpaths)
 	free (dbpaths->dbfile);
 	free (dbpaths->tmpdbfile);
 	dbpaths->dbfile = dbpaths->tmpdbfile = NULL;
-#  else /* !BERKELEY_DB NDBM */
+#  else  /* !BERKELEY_DB NDBM */
 	free (dbpaths->dirfile);
 	free (dbpaths->pagfile);
 	free (dbpaths->tmpdirfile);
@@ -436,11 +435,11 @@ static void dbpaths_free_elements (struct dbpaths *dbpaths)
 	dbpaths->dirfile = dbpaths->pagfile = NULL;
 	dbpaths->tmpdirfile = dbpaths->tmppagfile = NULL;
 #  endif /* BERKELEY_DB NDBM */
-#else /* !NDBM */
+#else    /* !NDBM */
 	free (dbpaths->xfile);
 	free (dbpaths->xtmpfile);
 	dbpaths->xfile = dbpaths->xtmpfile = NULL;
-#endif /* NDBM */
+#endif   /* NDBM */
 }
 
 /* Reorganize a database by reading in all the items (assuming that the
@@ -506,8 +505,8 @@ out:
 }
 
 /* Update a single file in an existing database. */
-static int update_one_file (MYDBM_FILE dbf,
-			    const char *manpath, const char *filename)
+static int update_one_file (MYDBM_FILE dbf, const char *manpath,
+                            const char *filename)
 {
 	if (dbf->file || MYDBM_RWOPEN (dbf)) {
 		struct mandata *info;
@@ -526,8 +525,8 @@ static int update_one_file (MYDBM_FILE dbf,
 }
 
 /* dont actually create any dbs, just do an update */
-static int update_db_wrapper (MYDBM_FILE dbf,
-			      const char *manpath, const char *catpath)
+static int update_db_wrapper (MYDBM_FILE dbf, const char *manpath,
+                              const char *catpath)
 {
 	int amount;
 
@@ -541,16 +540,15 @@ static int update_db_wrapper (MYDBM_FILE dbf,
 	return create_db (dbf, manpath, catpath);
 }
 
-#define CACHEDIR_TAG \
-	"Signature: 8a477f597d28d172789f06886806bc55\n" \
-	"# This file is a cache directory tag created by man-db.\n" \
-	"# For information about cache directory tags, see:\n" \
+#define CACHEDIR_TAG                                                          \
+	"Signature: 8a477f597d28d172789f06886806bc55\n"                       \
+	"# This file is a cache directory tag created by man-db.\n"           \
+	"# For information about cache directory tags, see:\n"                \
 	"#\thttp://www.brynosaurus.com/cachedir/\n"
 
 /* sort out the database names */
-static int mandb (struct dbpaths *dbpaths,
-		  const char *catpath, const char *manpath,
-		  bool global_manpath)
+static int mandb (struct dbpaths *dbpaths, const char *catpath,
+                  const char *manpath, bool global_manpath)
 {
 	char *database;
 	int amount;
@@ -622,7 +620,7 @@ static int mandb (struct dbpaths *dbpaths,
 	}
 
 	if (!quiet)
-		printf (_("Processing manual pages under %s...\n"), manpath);
+		printf (_ ("Processing manual pages under %s...\n"), manpath);
 
 	if (should_create)
 		amount = create_db (dbf, manpath, catpath);
@@ -639,7 +637,7 @@ static int mandb (struct dbpaths *dbpaths,
 }
 
 static int process_manpath (const char *manpath, bool global_manpath,
-			    gl_map_t tried_catdirs)
+                            gl_map_t tried_catdirs)
 {
 	char *catpath;
 	struct tried_catdirs_entry *tried;
@@ -650,10 +648,10 @@ static int process_manpath (const char *manpath, bool global_manpath,
 	bool new_purged = false;
 	bool new_strays = false;
 
-	if (global_manpath) { 	/* system db */
+	if (global_manpath) { /* system db */
 		catpath = get_catpath (manpath, SYSTEM_CAT);
 		assert (catpath);
-	} else {		/* user db */
+	} else { /* user db */
 		catpath = get_catpath (manpath, USER_CAT);
 		if (!catpath)
 			catpath = xstrdup (manpath);
@@ -673,7 +671,7 @@ static int process_manpath (const char *manpath, bool global_manpath,
 		 */
 		char *manpath_prefix = xasprintf ("%s/man", manpath);
 		if (STRNEQ (manpath_prefix, single_filename,
-		    strlen (manpath_prefix)))
+		            strlen (manpath_prefix)))
 			run_mandb = true;
 		free (manpath_prefix);
 	} else
@@ -720,8 +718,7 @@ out:
 
 static bool is_lang_dir (const char *base)
 {
-	return strlen (base) >= 2 &&
-	       base[0] >= 'a' && base[0] <= 'z' &&
+	return strlen (base) >= 2 && base[0] >= 'a' && base[0] <= 'z' &&
 	       base[1] >= 'a' && base[1] <= 'z' &&
 	       (!base[2] || base[2] < 'a' || base[2] > 'z');
 }
@@ -729,7 +726,7 @@ static bool is_lang_dir (const char *base)
 static void tried_catdirs_free (const void *value)
 {
 	struct tried_catdirs_entry *tried =
-		(struct tried_catdirs_entry *) value;
+	        (struct tried_catdirs_entry *) value;
 
 	free (tried->manpath);
 	free (tried);
@@ -742,8 +739,8 @@ static void purge_catdir (gl_map_t tried_catdirs, const char *path)
 	if (stat (path, &st) == 0 && S_ISDIR (st.st_mode) &&
 	    !gl_map_get (tried_catdirs, path)) {
 		if (!quiet)
-			printf (_("Removing obsolete cat directory %s...\n"),
-				path);
+			printf (_ ("Removing obsolete cat directory %s...\n"),
+			        path);
 		remove_directory (path, true);
 	}
 }
@@ -770,8 +767,9 @@ static void purge_catsubdirs (const char *manpath, const char *catpath)
 
 		if (stat (mandir, &st) != 0 && errno == ENOENT) {
 			if (!quiet)
-				printf (_("Removing obsolete cat directory "
-					  "%s...\n"), catdir);
+				printf (_ ("Removing obsolete cat directory "
+				           "%s...\n"),
+				        catdir);
 			remove_directory (catdir, true);
 		}
 
@@ -829,8 +827,8 @@ static void purge_catdirs (gl_map_t tried_catdirs)
 			if (!is_lang_dir (subdirent->d_name))
 				continue;
 
-			subdirpath = xasprintf ("%s/%s", path,
-					        subdirent->d_name);
+			subdirpath =
+			        xasprintf ("%s/%s", path, subdirent->d_name);
 
 			subtried = gl_map_get (tried_catdirs, subdirpath);
 			if (subtried && subtried->seen) {
@@ -840,7 +838,7 @@ static void purge_catdirs (gl_map_t tried_catdirs)
 				 * subdirectories.
 				 */
 				purge_catsubdirs (subtried->manpath,
-						  subdirpath);
+				                  subdirpath);
 			} else
 				purge_catdir (tried_catdirs, subdirpath);
 
@@ -900,17 +898,17 @@ int main (int argc, char *argv[])
 		user = true;
 		if (!quiet)
 			fprintf (stderr,
-				 _("Only the '%s' user can create or update "
-				   "system-wide databases; acting as if the "
-				   "--user-db option was used.\n"),
-				 man_owner->pw_name);
+			         _ ("Only the '%s' user can create or update "
+			            "system-wide databases; acting as if the "
+			            "--user-db option was used.\n"),
+			         man_owner->pw_name);
 	}
 #endif /* MAN_OWNER */
 
 	read_config_file (user);
 
 	/* This is required for get_catpath(), regardless */
-	manp = get_manpath (NULL);	/* also calls read_config_file() */
+	manp = get_manpath (NULL); /* also calls read_config_file() */
 
 	/* pick up the system manpath or use the supplied one */
 	if (arg_manp) {
@@ -923,8 +921,8 @@ int main (int argc, char *argv[])
 			manp = sys_manp;
 		} else
 			error (0, 0,
-			       _("warning: no MANDB_MAP directives in %s, "
-				 "using your manpath"),
+			       _ ("warning: no MANDB_MAP directives in %s, "
+			          "using your manpath"),
 			       CONFIG_FILE);
 	}
 
@@ -942,10 +940,10 @@ int main (int argc, char *argv[])
 		DIR *dir;
 		struct dirent *subdirent;
 
-		if (global_manpath) {	/* system db */
+		if (global_manpath) { /* system db */
 			if (user)
 				continue;
-		} else {		/* user db */
+		} else { /* user db */
 			drop_effective_privs ();
 		}
 
@@ -956,7 +954,7 @@ int main (int argc, char *argv[])
 
 		dir = opendir (mp);
 		if (!dir) {
-			error (0, errno, _("can't search directory %s"), mp);
+			error (0, errno, _ ("can't search directory %s"), mp);
 			goto next_manpath;
 		}
 
@@ -970,11 +968,11 @@ int main (int argc, char *argv[])
 			if (STRNEQ (subdirent->d_name, "man", 3))
 				continue;
 
-			subdirpath = xasprintf ("%s/%s", mp,
-						subdirent->d_name);
+			subdirpath =
+			        xasprintf ("%s/%s", mp, subdirent->d_name);
 			assert (subdirpath);
 			ret = process_manpath (subdirpath, global_manpath,
-					       tried_catdirs);
+			                       tried_catdirs);
 			if (ret < 0)
 				exit (FATAL);
 			amount += ret;
@@ -993,24 +991,26 @@ next_manpath:
 
 	if (!quiet) {
 		printf (ngettext ("%d man subdirectory contained newer "
-				  "manual pages.\n",
-				  "%d man subdirectories contained newer "
-				  "manual pages.\n", amount),
-			amount);
+		                  "manual pages.\n",
+		                  "%d man subdirectories contained newer "
+		                  "manual pages.\n",
+		                  amount),
+		        amount);
 		printf (ngettext ("%d manual page was added.\n",
-				  "%d manual pages were added.\n", pages),
-			pages);
+		                  "%d manual pages were added.\n", pages),
+		        pages);
 		if (check_for_strays)
 			printf (ngettext ("%d stray cat was added.\n",
-					  "%d stray cats were added.\n",
-					  strays),
+			                  "%d stray cats were added.\n",
+			                  strays),
 			        strays);
 		if (purge)
 			printf (ngettext ("%d old database entry was "
-					  "purged.\n",
-					  "%d old database entries were "
-					  "purged.\n", purged),
-				purged);
+			                  "purged.\n",
+			                  "%d old database entries were "
+			                  "purged.\n",
+			                  purged),
+			        purged);
 	}
 
 #ifdef __profile__
@@ -1024,7 +1024,7 @@ next_manpath:
 	if (create && !amount) {
 		const char *must_create;
 		if (!quiet)
-			fprintf (stderr, _("No databases created."));
+			fprintf (stderr, _ ("No databases created."));
 		must_create = getenv ("MAN_MUST_CREATE");
 		if (must_create && STREQ (must_create, "1"))
 			exit (FAIL);

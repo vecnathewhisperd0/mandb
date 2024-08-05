@@ -23,4 +23,4 @@
 #include "attribute.h"
 
 _Noreturn void fatal (int errnum, const char *format, ...)
-	ATTRIBUTE_FORMAT ((__printf__, 2, 3));
+        ATTRIBUTE_FORMAT ((__printf__, 2, 3));

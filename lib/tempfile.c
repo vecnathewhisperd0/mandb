@@ -41,7 +41,7 @@ static bool ATTRIBUTE_PURE running_setid (void)
 {
 #ifdef HAVE_GETUID
 	return getuid () != geteuid () || getgid () != getegid ();
-#else /* !HAVE_GETUID */
+#else  /* !HAVE_GETUID */
 	return false;
 #endif /* HAVE_GETUID */
 }

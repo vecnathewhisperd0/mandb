@@ -34,6 +34,5 @@ struct page_description {
 /* Returns a list of struct page_description. */
 extern gl_list_t parse_descriptions (const char *base, const char *whatis);
 extern void store_descriptions (MYDBM_FILE dbf, gl_list_t descs,
-				struct mandata *info,
-				const char *path, const char *base,
-				gl_list_t trace);
+                                struct mandata *info, const char *path,
+                                const char *base, gl_list_t trace);

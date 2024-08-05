@@ -24,12 +24,12 @@
 #  include "config.h"
 #endif
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
 #include <errno.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "attribute.h"
 
@@ -46,8 +46,8 @@ void init_debug (void)
 		debug_level = true;
 }
 
-static void ATTRIBUTE_FORMAT ((__printf__, 1, 0)) vdebug (const char *message,
-							  va_list args)
+static void ATTRIBUTE_FORMAT ((__printf__, 1, 0))
+        vdebug (const char *message, va_list args)
 {
 	if (debug_level)
 		vfprintf (stderr, message, args);

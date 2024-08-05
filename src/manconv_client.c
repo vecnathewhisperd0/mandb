@@ -24,8 +24,8 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "gl_array_list.h"
@@ -88,8 +88,8 @@ static void free_manconv_codes (void *data)
 	free (codes);
 }
 
-void add_manconv (pipeline *p,
-		  const char *source_encoding, const char *target_encoding)
+void add_manconv (pipeline *p, const char *source_encoding,
+                  const char *target_encoding)
 {
 	struct manconv_codes *codes;
 	char *name;
@@ -141,11 +141,11 @@ void add_manconv (pipeline *p,
 		if (quiet >= 2)
 			pipecmd_arg (cmd, "-q");
 		pipecmd_pre_exec (cmd, manconv_pre_exec, sandbox_free,
-				  sandbox);
+		                  sandbox);
 		free_manconv_codes (codes);
 	} else {
 		cmd = pipecmd_new_function (name, &manconv_stdin,
-					    &free_manconv_codes, codes);
+		                            &free_manconv_codes, codes);
 		pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
 	}
 	free (name);
@@ -160,9 +160,8 @@ void add_manconv (pipeline *p,
  *
  * Returns zero on success or non-zero on failure.
  */
-int manconv_inprocess (decompress *d,
-		       const char *source_encoding,
-		       const char *target_encoding)
+int manconv_inprocess (decompress *d, const char *source_encoding,
+                       const char *target_encoding)
 {
 	gl_list_t from;
 	char *to;
@@ -186,7 +185,7 @@ int manconv_inprocess (decompress *d,
 			 * encodings are different.)
 			 */
 			if (utf8_validate_len (decompress_inprocess_buf (d),
-					       decompress_inprocess_len (d)))
+			                       decompress_inprocess_len (d)))
 				goto out;
 		} else
 			gl_list_add_last (from, xstrdup ("UTF-8"));

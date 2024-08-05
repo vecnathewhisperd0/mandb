@@ -66,17 +66,16 @@ const char *argp_program_version = "zsoelim " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("FILE...");
+static const char args_doc[] = N_ ("FILE...");
 
 static struct argp_option options[] = {
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("compatible", 'C', 0, N_("compatibility switch (ignored)"), 1),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("compatible", 'C', 0, N_ ("compatibility switch (ignored)"), 1),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static error_t parse_opt (int key, char *arg MAYBE_UNUSED,
-			  struct argp_state *state)
+                          struct argp_state *state)
 {
 	switch (key) {
 		case 'd':
@@ -86,7 +85,7 @@ static error_t parse_opt (int key, char *arg MAYBE_UNUSED,
 			return 0; /* compatibility with GNU soelim */
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
+			                 ARGP_HELP_STD_HELP);
 			break;
 		case ARGP_KEY_NO_ARGS:
 			/* open stdin */
@@ -102,7 +101,7 @@ static error_t parse_opt (int key, char *arg MAYBE_UNUSED,
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp argp = { options, parse_opt, args_doc };
+static struct argp argp = {options, parse_opt, args_doc};
 
 int main (int argc, char *argv[])
 {
@@ -130,9 +129,8 @@ int main (int argc, char *argv[])
 
 	if (multiple_locale && *multiple_locale) {
 		if (internal_locale && *internal_locale)
-			all_locales = xasprintf ("%s:%s",
-						 multiple_locale,
-						 internal_locale);
+			all_locales = xasprintf ("%s:%s", multiple_locale,
+			                         internal_locale);
 		else
 			all_locales = xstrdup (multiple_locale);
 	} else {

@@ -24,9 +24,9 @@
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <ctype.h>
 
 #include "fnmatch.h"
 #include "xalloc.h"

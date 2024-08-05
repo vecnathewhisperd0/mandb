@@ -25,21 +25,21 @@
  */
 
 /* MAX_ARGS must be >= 7, 5 for options, 1 for page and 1 for NULL */
-#define MAX_ARGS	1024
+#define MAX_ARGS 1024
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#include <assert.h>
+#include <errno.h>
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <assert.h>
-#include <sys/types.h>
-#include <errno.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <limits.h>
 
 #ifndef NAME_MAX
 #  if defined(_POSIX_VERSION) && defined(_POSIX_NAME_MAX)
@@ -47,19 +47,19 @@
 #  else /* !_POSIX_VERSION */
 #    ifdef MAXNAMLEN
 #      define NAME_MAX MAXNAMLEN
-#    else /* !MAXNAMLEN */
-#      define NAME_MAX 255 		/* default to max */
-#    endif /* MAXNAMLEN */
-#  endif /* _POSIX_VERSION */
-#endif /* !NAME_MAX */
+#    else                  /* !MAXNAMLEN */
+#      define NAME_MAX 255 /* default to max */
+#    endif                 /* MAXNAMLEN */
+#  endif                   /* _POSIX_VERSION */
+#endif                     /* !NAME_MAX */
 
 #ifndef ARG_MAX
 #  if defined(_POSIX_VERSION) && defined(_POSIX_ARG_MAX)
 #    define ARG_MAX _POSIX_ARG_MAX
-#  else /* !_POSIX_VERSION */
-#    define ARG_MAX 4096 		/* default to min */
-#  endif /* _POSIX_VERSION */
-#endif /* !ARG_MAX */
+#  else                  /* !_POSIX_VERSION */
+#    define ARG_MAX 4096 /* default to min */
+#  endif                 /* _POSIX_VERSION */
+#endif                   /* !ARG_MAX */
 
 #include "argp.h"
 #include "error.h"
@@ -69,7 +69,7 @@
 
 #include "gettext.h"
 #include <locale.h>
-#define _(String) gettext (String)
+#define _(String)  gettext (String)
 #define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
@@ -83,8 +83,8 @@
 #include "pipeline.h"
 #include "util.h"
 
-#include "mydbm.h"
 #include "db_storage.h"
+#include "mydbm.h"
 
 #include "manp.h"
 
@@ -100,17 +100,16 @@ const char *argp_program_version = "catman " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("[SECTION...]");
+static const char args_doc[] = N_ ("[SECTION...]");
 
 static struct argp_option options[] = {
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("manpath", 'M', N_("PATH"),
-	     N_("set search path for manual pages to PATH")),
-	OPT ("config-file", 'C', N_("FILE"),
-	     N_("use this user configuration file")),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("manpath", 'M', N_ ("PATH"),
+             N_ ("set search path for manual pages to PATH")),
+        OPT ("config-file", 'C', N_ ("FILE"),
+             N_ ("use this user configuration file")),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
@@ -128,14 +127,14 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP);
+			                 ARGP_HELP_STD_HELP);
 			break;
 		case ARGP_KEY_ARGS:
 			sections = xmalloc ((state->argc - state->next + 1) *
-					    sizeof *sections);
+			                    sizeof *sections);
 			memcpy (sections, state->argv + state->next,
-				(state->argc - state->next) *
-				sizeof *sections);
+			        (state->argc - state->next) *
+			                sizeof *sections);
 			sections[state->argc - state->next] = NULL;
 			return 0;
 		case ARGP_KEY_NO_ARGS:
@@ -149,9 +148,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				sections = NULL;
 				for (sec = strtok (mansect, ":"); sec;
 				     sec = strtok (NULL, ":")) {
-					sections = xnrealloc
-						(sections, i + 2,
-						 sizeof *sections);
+					sections =
+					        xnrealloc (sections, i + 2,
+					                   sizeof *sections);
 					sections[i++] = sec;
 				}
 				if (sections)
@@ -160,7 +159,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			} else {
 				/* use default sections */
 				static const char *std_sections[] =
-					STD_SECTIONS;
+				        STD_SECTIONS;
 				sections = std_sections;
 			}
 			return 0;
@@ -168,7 +167,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	return ARGP_ERR_UNKNOWN;
 }
 
-static struct argp argp = { options, parse_opt, args_doc };
+static struct argp argp = {options, parse_opt, args_doc};
 
 static char *locale;
 
@@ -199,7 +198,7 @@ static void catman (pipecmd *cmd)
 	status = pipeline_run (p);
 	if (status)
 		error (CHILD_FAIL, 0,
-		       _("man command failed with exit status %d"), status);
+		       _ ("man command failed with exit status %d"), status);
 }
 
 /* Add key to this command, stripping off tab-and-following if necessary.
@@ -218,8 +217,8 @@ static size_t add_arg (pipecmd *cmd, datum key)
 		*tab = '\0';
 	pipecmd_arg (cmd, MYDBM_DPTR (key));
 	len = strlen (MYDBM_DPTR (key));
-	debug ("key: '%s' (%zu), len: %zu\n",
-	       MYDBM_DPTR (key), (size_t) MYDBM_DSIZE (key), len);
+	debug ("key: '%s' (%zu), len: %zu\n", MYDBM_DPTR (key),
+	       (size_t) MYDBM_DSIZE (key), len);
 	if (tab)
 		*tab = '\t';
 
@@ -228,8 +227,8 @@ static size_t add_arg (pipecmd *cmd, datum key)
 
 /* find all pages that are in the supplied manpath and section and that are
    ultimate source files. */
-static int parse_for_sec (MYDBM_FILE dbf,
-			  const char *manpath, const char *section)
+static int parse_for_sec (MYDBM_FILE dbf, const char *manpath,
+                          const char *section)
 {
 	pipecmd *basecmd, *cmd;
 	datum key;
@@ -248,11 +247,11 @@ static int parse_for_sec (MYDBM_FILE dbf,
 	} else
 		initial_bit = 0;
 
-	pipecmd_args (basecmd, "-caM", manpath, (void *) 0);	/* manpath */
-	pipecmd_args (basecmd, "-S", section, (void *) 0);	/* section */
+	pipecmd_args (basecmd, "-caM", manpath, (void *) 0); /* manpath */
+	pipecmd_args (basecmd, "-S", section, (void *) 0);   /* section */
 
-	initial_bit += sizeof MAN + sizeof "-caM" +
-		       strlen (manpath) + strlen (section) + 2;
+	initial_bit += sizeof MAN + sizeof "-caM" + strlen (manpath) +
+	               strlen (section) + 2;
 
 	cmd = pipecmd_dup (basecmd);
 	first_arg = pipecmd_get_nargs (cmd);
@@ -265,7 +264,7 @@ static int parse_for_sec (MYDBM_FILE dbf,
 
 		/* ignore db identifier keys */
 #pragma GCC diagnostic push
-#if GNUC_PREREQ(10,0)
+#if GNUC_PREREQ(10, 0)
 #  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
 #endif
 		if (*MYDBM_DPTR (key) != '$') {
@@ -275,13 +274,12 @@ static int parse_for_sec (MYDBM_FILE dbf,
 			content = MYDBM_FETCH (dbf, key);
 
 			if (!MYDBM_DPTR (content))
-				fatal (0,
-				       _( "NULL content for key: %s"),
+				fatal (0, _ ("NULL content for key: %s"),
 				       MYDBM_DPTR (key));
 
-			/* ignore overflow entries */
+				/* ignore overflow entries */
 #pragma GCC diagnostic push
-#if GNUC_PREREQ(10,0)
+#if GNUC_PREREQ(10, 0)
 #  pragma GCC diagnostic ignored "-Wanalyzer-use-after-free"
 #endif
 			if (*MYDBM_DPTR (content) != '\t') {
@@ -289,7 +287,7 @@ static int parse_for_sec (MYDBM_FILE dbf,
 				struct mandata *entry;
 
 				entry = split_content (dbf,
-						       MYDBM_DPTR (content));
+				                       MYDBM_DPTR (content));
 
 				/* Accept if the entry is an ultimate manual
 				   page and the section matches the one we're
@@ -297,8 +295,11 @@ static int parse_for_sec (MYDBM_FILE dbf,
 				if (entry->id == ULT_MAN &&
 				    strcmp (entry->sec, section) == 0) {
 					if (message) {
-						printf (_("\nUpdating cat files for section %s of man hierarchy %s\n"),
-							section, manpath);
+						printf (_ ("\nUpdating cat "
+						           "files for section "
+						           "%s of man "
+						           "hierarchy %s\n"),
+						        section, manpath);
 						message = false;
 					}
 
@@ -311,14 +312,14 @@ static int parse_for_sec (MYDBM_FILE dbf,
 					   to add another max sized filename
 					   and that we haven't run out of array
 					   space too */
-				    	if (arg_size >= ARG_MAX - NAME_MAX ||
-				    	    pipecmd_get_nargs (cmd) ==
-						    MAX_ARGS) {
+					if (arg_size >= ARG_MAX - NAME_MAX ||
+					    pipecmd_get_nargs (cmd) ==
+					            MAX_ARGS) {
 						catman (cmd);
 
 						cmd = pipecmd_dup (basecmd);
-				    		arg_size = initial_bit;
-				    	}
+						arg_size = initial_bit;
+					}
 				}
 
 				free_mandata_struct (entry);
@@ -347,7 +348,7 @@ static int parse_for_sec (MYDBM_FILE dbf,
 static bool check_access (const char *directory)
 {
 	if (!CAN_ACCESS (directory, W_OK)) {
-		error (0, errno, _("cannot write within %s"), directory);
+		error (0, errno, _ ("cannot write within %s"), directory);
 		return true;
 	}
 
@@ -414,7 +415,7 @@ int main (int argc, char *argv[])
 		}
 		dbf = MYDBM_NEW (database);
 		if (!MYDBM_RDOPEN (dbf) || dbver_rd (dbf)) {
-			error (0, errno, _("cannot read database %s"),
+			error (0, errno, _ ("cannot read database %s"),
 			       database);
 			goto next;
 		}
@@ -430,7 +431,7 @@ int main (int argc, char *argv[])
 			if (check_access (catpath))
 				continue;
 			if (parse_for_sec (dbf, mp, *sp)) {
-				error (0, 0, _("unable to update %s"), mp);
+				error (0, 0, _ ("unable to update %s"), mp);
 				break;
 			}
 		}

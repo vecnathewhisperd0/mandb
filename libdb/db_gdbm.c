@@ -26,26 +26,26 @@
 
 #ifdef GDBM
 
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <setjmp.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+#  include <setjmp.h>
+#  include <stdbool.h>
+#  include <stdio.h>
+#  include <stdlib.h>
+#  include <string.h>
+#  include <sys/stat.h>
+#  include <sys/types.h>
+#  include <unistd.h>
 
-#include "stat-time.h"
-#include "timespec.h"
-#include "xalloc.h"
+#  include "stat-time.h"
+#  include "timespec.h"
+#  include "xalloc.h"
 
-#include "manconfig.h"
+#  include "manconfig.h"
 
-#include "cleanup.h"
-#include "debug.h"
+#  include "cleanup.h"
+#  include "debug.h"
 
-#include "db_xdbm.h"
-#include "mydbm.h"
+#  include "db_xdbm.h"
+#  include "mydbm.h"
 
 /* setjmp/longjmp handling to defend against _gdbm_fatal exiting under our
  * feet.  Not thread-safe, but there is no plan for man-db to ever use
@@ -85,8 +85,8 @@ bool man_gdbm_open_wrapper (man_gdbm_wrapper wrap, int flags)
 	opening = true;
 	if (setjmp (open_env))
 		return false;
-	wrap->file = gdbm_open (wrap->name, BLK_SIZE, flags, DBMODE,
-				trap_error);
+	wrap->file =
+	        gdbm_open (wrap->name, BLK_SIZE, flags, DBMODE, trap_error);
 	if (!wrap->file)
 		return false;
 
@@ -153,7 +153,7 @@ void man_gdbm_free (man_gdbm_wrapper wrap)
 	man_xdbm_free (wrap, raw_close);
 }
 
-#ifndef HAVE_GDBM_EXISTS
+#  ifndef HAVE_GDBM_EXISTS
 
 int gdbm_exists (GDBM_FILE file, datum key)
 {
@@ -168,6 +168,6 @@ int gdbm_exists (GDBM_FILE file, datum key)
 	return 0;
 }
 
-#endif /* !HAVE_GDBM_EXISTS */
+#  endif /* !HAVE_GDBM_EXISTS */
 
 #endif /* GDBM */

@@ -28,8 +28,8 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <sys/stat.h>
 
@@ -41,7 +41,7 @@
 #include "xalloc.h"
 
 #include "gettext.h"
-#define _(String) gettext (String)
+#define _(String)  gettext (String)
 #define N_(String) gettext_noop (String)
 
 #include "manconfig.h"
@@ -72,21 +72,20 @@ const char *argp_program_version = "lexgrog " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 error_t argp_err_exit_status = FAIL;
 
-static const char args_doc[] = N_("FILE...");
-static const char doc[] = "\v" N_("The defaults are --man and --whatis.");
+static const char args_doc[] = N_ ("FILE...");
+static const char doc[] = "\v" N_ ("The defaults are --man and --whatis.");
 
 static struct argp_option options[] = {
-	OPT ("debug", 'd', 0, N_("emit debugging messages")),
-	OPT ("man", 'm', 0, N_("parse as man page"), 1),
-	OPT ("cat", 'c', 0, N_("parse as cat page")),
-	OPT ("whatis", 'w', 0, N_("show whatis information"), 2),
-	OPT ("filters", 'f', 0,
-	     N_("show guessed series of preprocessing filters")),
-	OPT ("encoding", 'E', N_("ENCODING"),
-	     N_("use selected output encoding"), 3),
-	OPT_HELP_COMPAT,
-	{ 0 }
-};
+        OPT ("debug", 'd', 0, N_ ("emit debugging messages")),
+        OPT ("man", 'm', 0, N_ ("parse as man page"), 1),
+        OPT ("cat", 'c', 0, N_ ("parse as cat page")),
+        OPT ("whatis", 'w', 0, N_ ("show whatis information"), 2),
+        OPT ("filters", 'f', 0,
+             N_ ("show guessed series of preprocessing filters")),
+        OPT ("encoding", 'E', N_ ("ENCODING"),
+             N_ ("use selected output encoding"), 3),
+        OPT_HELP_COMPAT,
+        {0}};
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
@@ -111,8 +110,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			return 0;
 		case 'h':
 			argp_state_help (state, state->out_stream,
-					 ARGP_HELP_STD_HELP &
-					 ~ARGP_HELP_PRE_DOC);
+			                 ARGP_HELP_STD_HELP &
+			                         ~ARGP_HELP_PRE_DOC);
 			break;
 		case ARGP_KEY_ARGS:
 			files = state->argv + state->next;
@@ -127,8 +126,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 				 * to reuse a translation.
 				 */
 				argp_error (state,
-					    _("%s: incompatible options"),
-					    "-m -c");
+				            _ ("%s: incompatible options"),
+				            "-m -c");
 			/* defaults: --man, --whatis */
 			if (!parse_man && !parse_cat)
 				parse_man = true;
@@ -152,8 +151,7 @@ static char *help_filter (int key, const char *text, void *input MAYBE_UNUSED)
 	}
 }
 
-static struct argp argp = { options, parse_opt, args_doc, doc, 0,
-			    help_filter };
+static struct argp argp = {options, parse_opt, args_doc, doc, 0, help_filter};
 
 int main (int argc, char **argv)
 {
@@ -211,8 +209,8 @@ int main (int argc, char **argv)
 				path = NULL;
 			}
 
-			ult = ult_src (files[i], path ? path : ".",
-				       &statbuf, SO_LINK);
+			ult = ult_src (files[i], path ? path : ".", &statbuf,
+			               SO_LINK);
 			if (ult)
 				file = ult->path;
 			free (path);
@@ -229,12 +227,12 @@ int main (int argc, char **argv)
 				if (show_filters)
 					printf (" (%s)", lg.filters);
 				if (show_whatis) {
-					char *name_conv = convert_to_locale
-						(desc->name);
-					char *whatis_conv = convert_to_locale
-						(desc->whatis);
-					printf (": \"%s - %s\"",
-						name_conv, whatis_conv);
+					char *name_conv =
+					        convert_to_locale (desc->name);
+					char *whatis_conv = convert_to_locale (
+					        desc->whatis);
+					printf (": \"%s - %s\"", name_conv,
+					        whatis_conv);
 					free (whatis_conv);
 					free (name_conv);
 				}

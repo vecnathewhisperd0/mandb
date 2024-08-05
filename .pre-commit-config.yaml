@@ -12,6 +12,11 @@ repos:
     -   id: trailing-whitespace
         exclude: ^(ChangeLog-2013|patches/.*)$
         args: [--chars, " \t\n\r\v"]
+-   repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v18.1.8
+    hooks:
+    -   id: clang-format
+        exclude: ^lib/mp\.h$
 -   repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
     hooks:

@@ -30,6 +30,6 @@ struct manconv_outbuf {
 };
 
 char *check_preprocessor_encoding (decompress *decomp, const char *to_code,
-				   char **modified_line);
+                                   char **modified_line);
 int manconv (decompress *decomp, gl_list_t from, const char *to,
-	     struct manconv_outbuf *outbuf);
+             struct manconv_outbuf *outbuf);

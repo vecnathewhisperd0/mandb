@@ -34,16 +34,16 @@
 
 #include "utf8.h"
 
-#define VALIDATE_BYTE(mask, expect)                             \
-  do {                                                          \
-    if (UNLIKELY ((*(unsigned char *) p & (mask)) != (expect))) \
-      goto error;                                               \
-  } while (0)
+#define VALIDATE_BYTE(mask, expect)                                           \
+	do {                                                                  \
+		if (UNLIKELY ((*(unsigned char *) p & (mask)) != (expect)))   \
+			goto error;                                           \
+	} while (0)
 
 /* see IETF RFC 3629 Section 4 */
 
-static const char * ATTRIBUTE_PURE fast_validate_len (const char *str,
-						      size_t max_len)
+static const char *ATTRIBUTE_PURE fast_validate_len (const char *str,
+                                                     size_t max_len)
 {
 	const char *p;
 	const char *end = str + max_len;
@@ -62,7 +62,7 @@ static const char * ATTRIBUTE_PURE fast_validate_len (const char *str,
 
 			if (UNLIKELY (*(unsigned char *) p < 0xc2))
 				goto error;
-		} else if (*(unsigned char *)p < 0xf0) {
+		} else if (*(unsigned char *) p < 0xf0) {
 			/* 1110xxxx */
 			if (UNLIKELY (end - p < 3))
 				goto error;
@@ -90,26 +90,26 @@ static const char * ATTRIBUTE_PURE fast_validate_len (const char *str,
 					/* 0x90 ... 0xbf */
 					VALIDATE_BYTE (0xc0, 0x80);
 					if (UNLIKELY ((*(unsigned char *) p &
-						      0x30) == 0))
+					               0x30) == 0))
 						goto error;
 					break;
 				case 4:
 					/* 0x80 ... 0x8f */
-					VALIDATE_BYTE(0xf0, 0x80);
+					VALIDATE_BYTE (0xf0, 0x80);
 					break;
 				default:
 					/* 10xxxxxx */
-					VALIDATE_BYTE(0xc0, 0x80);
+					VALIDATE_BYTE (0xc0, 0x80);
 			}
 			p++;
 			/* 10xxxxxx */
-			VALIDATE_BYTE(0xc0, 0x80);
+			VALIDATE_BYTE (0xc0, 0x80);
 		} else
 			goto error;
 
 		p++;
 		/* 10xxxxxx */
-		VALIDATE_BYTE(0xc0, 0x80);
+		VALIDATE_BYTE (0xc0, 0x80);
 
 		continue;
 
