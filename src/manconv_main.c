@@ -112,7 +112,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			to_code = xstrdup (arg);
 			if (!strstr (to_code, "//"))
 				to_code = appendstr (to_code, "//TRANSLIT",
-				                     (void *) 0);
+				                     nullptr);
 			return 0;
 		case 'd':
 			debug_level = true;

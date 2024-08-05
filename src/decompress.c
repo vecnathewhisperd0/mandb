@@ -217,7 +217,7 @@ decompress *decompress_open (const char *filename, int flags OPEN_FLAGS_UNUSED)
 		cmd = pipecmd_new_function ("zcat", &decompress_zlib, NULL,
 		                            NULL);
 		pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
-		p = pipeline_new_commands (cmd, (void *) 0);
+		p = pipeline_new_commands (cmd, nullptr);
 		goto got_pipeline;
 	}
 #endif /* HAVE_LIBZ */
@@ -233,7 +233,7 @@ decompress *decompress_open (const char *filename, int flags OPEN_FLAGS_UNUSED)
 			cmd = pipecmd_new_argstr (comp->prog);
 			pipecmd_pre_exec (cmd, sandbox_load, sandbox_free,
 			                  sandbox);
-			p = pipeline_new_commands (cmd, (void *) 0);
+			p = pipeline_new_commands (cmd, nullptr);
 			goto got_pipeline;
 		}
 	}
@@ -244,7 +244,7 @@ decompress *decompress_open (const char *filename, int flags OPEN_FLAGS_UNUSED)
 	if (ext) {
 		cmd = pipecmd_new_argstr (PROG_GUNZIP);
 		pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
-		p = pipeline_new_commands (cmd, (void *) 0);
+		p = pipeline_new_commands (cmd, nullptr);
 		goto got_pipeline;
 	}
 #endif
@@ -267,7 +267,7 @@ decompress *decompress_fdopen (int fd)
 #ifdef HAVE_LIBZ
 	cmd = pipecmd_new_function ("zcat", &decompress_zlib, NULL, NULL);
 	pipecmd_pre_exec (cmd, sandbox_load, sandbox_free, sandbox);
-	p = pipeline_new_commands (cmd, (void *) 0);
+	p = pipeline_new_commands (cmd, nullptr);
 #else  /* HAVE_LIBZ */
 	p = pipeline_new ();
 #endif /* HAVE_LIBZ */

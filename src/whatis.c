@@ -332,10 +332,10 @@ static void use_grep (const char *const *pages, int num_pages, char *manpath,
 			        get_def_user ("grep", PROG_GREP));
 			pipecmd_argstr (grep_cmd, flags);
 			pipecmd_args (grep_cmd, anchored_page, whatis_file,
-			              (void *) 0);
+			              nullptr);
 			pipecmd_pre_exec (grep_cmd, sandbox_load, sandbox_free,
 			                  sandbox);
-			grep_pl = pipeline_new_commands (grep_cmd, (void *) 0);
+			grep_pl = pipeline_new_commands (grep_cmd, nullptr);
 
 			if (pipeline_run (grep_pl) == 0)
 				found[i] = true;
@@ -438,10 +438,10 @@ static void display (MYDBM_FILE dbf, struct mandata *info, const char *page)
 		string = xasprintf ("%.*s...", line_len / 2 - 3, page_name);
 	else
 		string = xstrdup (page_name);
-	string = appendstr (string, " (", newinfo->ext, ")", (void *) 0);
+	string = appendstr (string, " (", newinfo->ext, ")", nullptr);
 	if (!STREQ (newinfo->pointer, "-") && !STREQ (newinfo->pointer, page))
 		string = appendstr (string, " [", newinfo->pointer, "]",
-		                    (void *) 0);
+		                    nullptr);
 
 	if (strlen (string) < (size_t) 20) {
 		int i;
@@ -450,14 +450,14 @@ static void display (MYDBM_FILE dbf, struct mandata *info, const char *page)
 			string[i] = ' ';
 		string[i] = '\0';
 	}
-	string = appendstr (string, " - ", (void *) 0);
+	string = appendstr (string, " - ", nullptr);
 
 	rest = line_len - strlen (string);
 	if (!long_output && strlen (whatis) > (size_t) rest) {
 		whatis[rest - 3] = '\0';
-		string = appendstr (string, whatis, "...\n", (void *) 0);
+		string = appendstr (string, whatis, "...\n", nullptr);
 	} else
-		string = appendstr (string, whatis, "\n", (void *) 0);
+		string = appendstr (string, whatis, "\n", nullptr);
 
 	string_conv = convert_to_locale (string);
 	fputs (string_conv, stdout);

@@ -802,18 +802,18 @@ static void do_extern (int argc, char *argv[])
 	if (local_man_file) /* actually apropos/whatis --long */
 		pipecmd_arg (cmd, "-l");
 	if (colon_sep_section_list)
-		pipecmd_args (cmd, "-s", colon_sep_section_list, (void *) 0);
+		pipecmd_args (cmd, "-s", colon_sep_section_list, nullptr);
 	if (alt_system_name)
-		pipecmd_args (cmd, "-m", alt_system_name, (void *) 0);
+		pipecmd_args (cmd, "-m", alt_system_name, nullptr);
 	if (manp)
-		pipecmd_args (cmd, "-M", manp, (void *) 0);
+		pipecmd_args (cmd, "-M", manp, nullptr);
 	if (locale)
-		pipecmd_args (cmd, "-L", locale, (void *) 0);
+		pipecmd_args (cmd, "-L", locale, nullptr);
 	if (user_config_file)
-		pipecmd_args (cmd, "-C", user_config_file, (void *) 0);
+		pipecmd_args (cmd, "-C", user_config_file, nullptr);
 	while (first_arg < argc)
 		pipecmd_arg (cmd, argv[first_arg++]);
-	p = pipeline_new_commands (cmd, (void *) 0);
+	p = pipeline_new_commands (cmd, nullptr);
 
 	/* privs are already dropped */
 	exit (pipeline_run (p));
@@ -917,10 +917,10 @@ static int run_mandb (bool create, const char *manpath, const char *filename)
 		pipecmd_arg (mandb_cmd, "-q");
 
 	if (user_config_file)
-		pipecmd_args (mandb_cmd, "-C", user_config_file, (void *) 0);
+		pipecmd_args (mandb_cmd, "-C", user_config_file, nullptr);
 
 	if (filename)
-		pipecmd_args (mandb_cmd, "-f", filename, (void *) 0);
+		pipecmd_args (mandb_cmd, "-f", filename, nullptr);
 	else if (create) {
 		pipecmd_arg (mandb_cmd, "-c");
 		pipecmd_setenv (mandb_cmd, "MAN_MUST_CREATE", "1");
@@ -1146,7 +1146,7 @@ static void add_filter (pipeline *p, pipecmd *cmd, bool wants_dev,
 			 * about sandboxing text processing and an X program
 			 * in the same way.
 			 */
-			pipecmd_args (cmd, "-X", "-Z", (void *) 0);
+			pipecmd_args (cmd, "-X", "-Z", nullptr);
 #endif /* TROFF_IS_GROFF */
 
 		if (roff_device && STREQ (roff_device, "ps"))
@@ -1188,7 +1188,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		if (catpath) {
 			fmt_prog = appendstr (catpath, "/",
 			                      troff ? TFMT_PROG : NFMT_PROG,
-			                      (void *) 0);
+			                      nullptr);
 			if (!CAN_ACCESS (fmt_prog, X_OK)) {
 				free (fmt_prog);
 				fmt_prog = NULL;
@@ -1203,7 +1203,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 		if (!fmt_prog) {
 			fmt_prog = appendstr (NULL, dir, "/",
 			                      troff ? TFMT_PROG : NFMT_PROG,
-			                      (void *) 0);
+			                      nullptr);
 			if (!CAN_ACCESS (fmt_prog, X_OK)) {
 				free (fmt_prog);
 				fmt_prog = NULL;
@@ -1299,7 +1299,7 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 			pipecmd *preconv_cmd;
 			add_manconv (p, page_encoding, "UTF-8");
 			preconv_cmd = pipecmd_new_args (groff_preconv, "-e",
-			                                "UTF-8", (void *) 0);
+			                                "UTF-8", nullptr);
 			pipecmd_pre_exec (preconv_cmd, sandbox_load,
 			                  sandbox_free, sandbox);
 			pipeline_command (p, preconv_cmd);
@@ -1454,14 +1454,14 @@ static pipeline *make_roff_command (const char *dir, const char *file,
 #ifndef GNU_NROFF
 			/* tbl needs col */
 			else if (using_tbl && !troff && *PROG_COL != '\0')
-				add_col (p, locale_charset, (void *) 0);
+				add_col (p, locale_charset, nullptr);
 #endif /* GNU_NROFF */
 		}
 	} else {
 		/* use external formatter script, it takes arguments
 		   input file, preprocessor string, and (optional)
 		   output device */
-		cmd = pipecmd_new_args (fmt_prog, file, pp_string, (void *) 0);
+		cmd = pipecmd_new_args (fmt_prog, file, pp_string, nullptr);
 		if (roff_device)
 			pipecmd_arg (cmd, roff_device);
 		pipeline_command (p, cmd);
@@ -1501,15 +1501,15 @@ static pipeline *make_browser (const char *pattern, const char *file)
 		switch (*(percent + 1)) {
 			case '\0':
 			case '%':
-				browser = appendstr (browser, "%", (void *) 0);
+				browser = appendstr (browser, "%", nullptr);
 				break;
 			case 'c':
-				browser = appendstr (browser, ":", (void *) 0);
+				browser = appendstr (browser, ":", nullptr);
 				break;
 			case 's':
 				esc_file = escape_shell (file);
-				browser = appendstr (browser, esc_file,
-				                     (void *) 0);
+				browser =
+				        appendstr (browser, esc_file, nullptr);
 				free (esc_file);
 				found_percent_s = true;
 				break;
@@ -1525,16 +1525,16 @@ static pipeline *make_browser (const char *pattern, const char *file)
 			pattern = percent + 1;
 		percent = strchr (pattern, '%');
 	}
-	browser = appendstr (browser, pattern, (void *) 0);
+	browser = appendstr (browser, pattern, nullptr);
 	if (!found_percent_s) {
 		esc_file = escape_shell (file);
-		browser = appendstr (browser, " ", esc_file, (void *) 0);
+		browser = appendstr (browser, " ", esc_file, nullptr);
 		free (esc_file);
 	}
 
-	cmd = pipecmd_new_args ("/bin/sh", "-c", browser, (void *) 0);
+	cmd = pipecmd_new_args ("/bin/sh", "-c", browser, nullptr);
 	pipecmd_pre_exec (cmd, drop_privs, NULL, NULL);
-	p = pipeline_new_commands (cmd, (void *) 0);
+	p = pipeline_new_commands (cmd, nullptr);
 	pipeline_ignore_signals (p, 1);
 	free (browser);
 
@@ -1549,7 +1549,7 @@ static void setenv_less (pipecmd *cmd, const char *title)
 
 	esc_title = escape_less (title);
 	less_opts = xasprintf (LESS_OPTS, prompt_string, prompt_string);
-	less_opts = appendstr (less_opts, less, (void *) 0);
+	less_opts = appendstr (less_opts, less, nullptr);
 	man_pn = strstr (less_opts, MAN_PN);
 	while (man_pn) {
 		char *subst_opts =
@@ -1580,9 +1580,8 @@ static void add_output_iconv (pipeline *p, const char *source,
 	if (source && target && !STREQ (source, target)) {
 		char *target_translit = xasprintf ("%s//TRANSLIT", target);
 		pipecmd *iconv_cmd;
-		iconv_cmd =
-		        pipecmd_new_args ("iconv", "-c", "-f", source, "-t",
-		                          target_translit, (void *) 0);
+		iconv_cmd = pipecmd_new_args ("iconv", "-c", "-f", source,
+		                              "-t", target_translit, nullptr);
 		pipecmd_pre_exec (iconv_cmd, sandbox_load, sandbox_free,
 		                  sandbox);
 		pipeline_command (p, iconv_cmd);
@@ -1660,15 +1659,14 @@ static pipeline *make_display_command (const char *encoding, const char *title)
 		        getenv ("MAN_KEEP_FORMATTING");
 		if ((!man_keep_formatting || !*man_keep_formatting) &&
 		    !isatty (STDOUT_FILENO))
-			add_col (p, locale_charset, "-b", "-p", "-x",
-			         (void *) 0);
+			add_col (p, locale_charset, "-b", "-p", "-x", nullptr);
 	}
 
 #ifdef TROFF_IS_GROFF
 	if (gxditview) {
 		char *x_resource = xasprintf ("*iconName:%s", title);
 		pipeline_command_args (p, "gxditview", "-title", title, "-xrm",
-		                       x_resource, "-", (void *) 0);
+		                       x_resource, "-", nullptr);
 		free (x_resource);
 		return p;
 	}
@@ -1729,7 +1727,7 @@ static char *tmp_cat_filename (const char *cat_file)
 			*(slash + 1) = '\0';
 		else
 			*name = '\0';
-		name = appendstr (name, "catXXXXXX", (void *) 0);
+		name = appendstr (name, "catXXXXXX", nullptr);
 		tmp_cat_fd = mkstemp (name);
 	}
 
@@ -1937,14 +1935,13 @@ static int format_display_and_save (decompress *d, pipeline *format_cmd,
 
 	maybe_discard_stderr (format_cmd);
 
-	pipeline_connect (decomp, format_cmd, (void *) 0);
+	pipeline_connect (decomp, format_cmd, nullptr);
 	if (sav_p) {
-		pipeline_connect (format_cmd, disp_cmd, sav_p, (void *) 0);
-		pipeline_pump (decomp, format_cmd, disp_cmd, sav_p,
-		               (void *) 0);
+		pipeline_connect (format_cmd, disp_cmd, sav_p, nullptr);
+		pipeline_pump (decomp, format_cmd, disp_cmd, sav_p, nullptr);
 	} else {
-		pipeline_connect (format_cmd, disp_cmd, (void *) 0);
-		pipeline_pump (decomp, format_cmd, disp_cmd, (void *) 0);
+		pipeline_connect (format_cmd, disp_cmd, nullptr);
+		pipeline_pump (decomp, format_cmd, disp_cmd, nullptr);
 	}
 
 	if (global_manpath)
@@ -2005,23 +2002,22 @@ static void format_display (decompress *d, pipeline *format_cmd,
 			fatal (errno, _ ("can't open temporary file %s"),
 			       htmlfile);
 		pipeline_want_out (format_cmd, htmlfd);
-		pipeline_connect (decomp, format_cmd, (void *) 0);
-		pipeline_pump (decomp, format_cmd, (void *) 0);
+		pipeline_connect (decomp, format_cmd, nullptr);
+		pipeline_pump (decomp, format_cmd, nullptr);
 		pipeline_wait (decomp);
 		format_status = pipeline_wait (format_cmd);
 	} else
 #endif /* TROFF_IS_GROFF */
 		if (format_cmd) {
-			pipeline_connect (decomp, format_cmd, (void *) 0);
-			pipeline_connect (format_cmd, disp_cmd, (void *) 0);
-			pipeline_pump (decomp, format_cmd, disp_cmd,
-			               (void *) 0);
+			pipeline_connect (decomp, format_cmd, nullptr);
+			pipeline_connect (format_cmd, disp_cmd, nullptr);
+			pipeline_pump (decomp, format_cmd, disp_cmd, nullptr);
 			pipeline_wait (decomp);
 			format_status = pipeline_wait (format_cmd);
 			disp_status = pipeline_wait (disp_cmd);
 		} else {
-			pipeline_connect (decomp, disp_cmd, (void *) 0);
-			pipeline_pump (decomp, disp_cmd, (void *) 0);
+			pipeline_connect (decomp, disp_cmd, nullptr);
+			pipeline_pump (decomp, disp_cmd, nullptr);
 			pipeline_wait (decomp);
 			disp_status = pipeline_wait (disp_cmd);
 		}
@@ -2112,8 +2108,8 @@ static void display_catman (const char *cat_file, decompress *d,
 	 *     catman for non-root.
 	 */
 	drop_effective_privs ();
-	pipeline_connect (decomp, format_cmd, (void *) 0);
-	pipeline_pump (decomp, format_cmd, (void *) 0);
+	pipeline_connect (decomp, format_cmd, nullptr);
+	pipeline_pump (decomp, format_cmd, nullptr);
 	pipeline_wait (decomp);
 	status = pipeline_wait (format_cmd);
 	regain_effective_privs ();
@@ -2240,8 +2236,7 @@ static int display (const char *dir, const char *man_file,
 
 	/* define format_cmd */
 	if (man_file) {
-		pipecmd *seq =
-		        pipecmd_new_sequence ("decompressor", (void *) 0);
+		pipecmd *seq = pipecmd_new_sequence ("decompressor", nullptr);
 
 		if (*man_file)
 			decomp = decompress_open (man_file, 0);
@@ -2379,8 +2374,8 @@ static int display (const char *dir, const char *man_file,
 				return 0;
 			}
 			drop_effective_privs ();
-			pipeline_connect (decomp_p, format_cmd, (void *) 0);
-			pipeline_pump (decomp_p, format_cmd, (void *) 0);
+			pipeline_connect (decomp_p, format_cmd, nullptr);
+			pipeline_pump (decomp_p, format_cmd, nullptr);
 			pipeline_wait (decomp_p);
 			status = pipeline_wait (format_cmd);
 			regain_effective_privs ();
@@ -3929,9 +3924,8 @@ executable_out:
 			else {
 				argv_abs = xgetcwd ();
 				if (argv_abs)
-					argv_abs =
-					        appendstr (argv_abs, "/", argv,
-					                   (void *) 0);
+					argv_abs = appendstr (argv_abs, "/",
+					                      argv, nullptr);
 				else
 					argv_abs = xstrdup (argv);
 			}

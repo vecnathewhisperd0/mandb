@@ -346,7 +346,7 @@ static void add_dir_entries (MYDBM_FILE dbf, const char *path, char *infile)
 	order_files (infile, &names);
 
 	GL_LIST_FOREACH (names, name) {
-		manpage = appendstr (manpage, name, (void *) 0);
+		manpage = appendstr (manpage, name, nullptr);
 		test_manfile (dbf, manpage, path);
 		*(manpage + len) = '\0';
 	}

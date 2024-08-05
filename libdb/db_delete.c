@@ -129,7 +129,7 @@ int dbdelete (MYDBM_FILE dbf, const char *name, struct mandata *info)
 		GL_LIST_FOREACH (refs, ref)
 			multi_content =
 			        appendstr (multi_content, "\t", ref->name,
-			                   "\t", ref->ext, (void *) 0);
+			                   "\t", ref->ext, nullptr);
 
 		MYDBM_FREE_DPTR (cont);
 		MYDBM_SET (cont, multi_content);

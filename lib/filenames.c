@@ -61,7 +61,7 @@ char *make_filename (const char *path, const char *name, struct mandata *in,
 	file = xasprintf ("%s/%s%s/%s.%s", path, type, in->sec, name, in->ext);
 
 	if (in->comp && *in->comp != '-') /* Is there an extension? */
-		file = appendstr (file, ".", in->comp, (void *) 0);
+		file = appendstr (file, ".", in->comp, nullptr);
 
 	debug ("Checking physical location: %s\n", file);
 	if (!CAN_ACCESS (file, R_OK)) {

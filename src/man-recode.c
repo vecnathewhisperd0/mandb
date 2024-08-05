@@ -229,8 +229,8 @@ static void recode (const char *filename)
 		pipeline_command (convert, pipecmd_new_passthrough ());
 
 	decomp_p = decompress_get_pipeline (decomp);
-	pipeline_connect (decomp_p, convert, (void *) 0);
-	pipeline_pump (decomp_p, convert, (void *) 0);
+	pipeline_connect (decomp_p, convert, nullptr);
+	pipeline_pump (decomp_p, convert, nullptr);
 	pipeline_wait (decomp_p);
 	status = pipeline_wait (convert);
 	if (status != 0)

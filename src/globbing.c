@@ -350,7 +350,7 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 		if (path)
 			*path = '\0';
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec, ".Z",
-		                  (void *) 0);
+		                  nullptr);
 		pattern = make_pattern (name, sec, opts);
 
 		match_in_directory (path, pattern, opts, matched);
@@ -362,7 +362,7 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 		if (path)
 			*path = '\0';
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
-		                  (void *) 0);
+		                  nullptr);
 		if (opts & LFF_REGEX)
 			pattern = xasprintf ("%s\\..*", name);
 		else
@@ -378,7 +378,7 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 			*path = '\0';
 		/* TODO: This needs to be man/sec*, not just man/sec. */
 		path = appendstr (path, hier, cat ? "/cat" : "/man", sec,
-		                  (void *) 0);
+		                  nullptr);
 		pattern = make_pattern (name, sec, opts);
 
 		match_in_directory (path, pattern, opts, matched);
@@ -390,13 +390,13 @@ gl_list_t look_for_file (const char *hier, const char *sec,
 		if (path)
 			*path = '\0';
 		if (cat) {
-			path = appendstr (path, hier, "/cat", sec, (void *) 0);
+			path = appendstr (path, hier, "/cat", sec, nullptr);
 			if (opts & LFF_REGEX)
 				pattern = xasprintf ("%s\\.0.*", name);
 			else
 				pattern = xasprintf ("%s.0*", name);
 		} else {
-			path = appendstr (path, hier, "/man", sec, (void *) 0);
+			path = appendstr (path, hier, "/man", sec, nullptr);
 			pattern = make_pattern (name, sec, opts);
 		}
 		match_in_directory (path, pattern, opts, matched);
