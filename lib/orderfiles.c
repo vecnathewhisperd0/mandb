@@ -76,6 +76,9 @@ static int compare_physical_offsets (const void *a, const void *b)
 		return 0;
 }
 
+#  define MAN_FIEMAP_SIZE                                                     \
+	  (sizeof (struct fiemap) + sizeof (struct fiemap_extent))
+
 void order_files (const char *dir, gl_list_t *basenamesp)
 {
 	gl_list_t basenames = *basenamesp, sorted_basenames;
@@ -83,6 +86,7 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	int dir_fd;
 	struct statfs fs;
 	const char *name;
+	struct fiemap *fm = xmalloc (MAN_FIEMAP_SIZE);
 
 	dir_fd_open_flags = O_SEARCH | O_DIRECTORY;
 #  ifdef O_PATH
@@ -107,25 +111,21 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	                                        string_hash, NULL, plain_free);
 	sorted_basenames = new_string_list (GL_RBTREE_LIST, false);
 	GL_LIST_FOREACH (basenames, name) {
-		struct {
-			struct fiemap fiemap;
-			struct fiemap_extent extent;
-		} fm;
 		int fd;
 
 		fd = openat (dir_fd, name, O_RDONLY);
 		if (fd < 0)
 			continue;
 
-		memset (&fm, 0, sizeof (fm));
-		fm.fiemap.fm_start = 0;
-		fm.fiemap.fm_length = fs.f_bsize;
-		fm.fiemap.fm_flags = 0;
-		fm.fiemap.fm_extent_count = 1;
+		memset (fm, 0, MAN_FIEMAP_SIZE);
+		fm->fm_start = 0;
+		fm->fm_length = fs.f_bsize;
+		fm->fm_flags = 0;
+		fm->fm_extent_count = 1;
 
-		if (ioctl (fd, FS_IOC_FIEMAP, (unsigned long) &fm) == 0) {
+		if (ioctl (fd, FS_IOC_FIEMAP, (unsigned long) fm) == 0) {
 			uint64_t *offset = XMALLOC (uint64_t);
-			*offset = fm.extent.fe_physical;
+			*offset = fm->fm_extents[0].fe_physical;
 			/* Borrow the key from basenames; since
 			 * physical_offsets has a shorter lifetime, we don't
 			 * need to duplicate it.
@@ -139,6 +139,7 @@ void order_files (const char *dir, gl_list_t *basenamesp)
 	}
 	gl_map_free (physical_offsets);
 	physical_offsets = NULL;
+	free (fm);
 	close (dir_fd);
 	gl_list_free (basenames);
 	*basenamesp = sorted_basenames;

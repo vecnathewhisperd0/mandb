@@ -10,6 +10,7 @@ Fixes:
  * Fix `man-suffixed-extension` test failure when not using the GNU
    hierarchy organization.
  * Fix `-Wmissing-variable-declarations` warnings with GCC 14.
+ * Fix `-Wflex-array-member-not-at-end` warning with GCC 14.
 
 Improvements:
 
