@@ -377,7 +377,7 @@ static decompress *try_compressed (char **filename)
 	(*filename)[len - 1] = '.';
 
 	for (comp = comp_list; comp->ext; ++comp) {
-		*filename = appendstr (*filename, comp->ext, NULL);
+		*filename = appendstr (*filename, comp->ext, nullptr);
 		debug ("trying %s\n", *filename);
 		decomp = decompress_open (*filename,
 					  DECOMPRESS_ALLOW_INPROCESS);

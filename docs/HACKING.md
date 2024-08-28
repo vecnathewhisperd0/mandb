@@ -83,7 +83,7 @@ from the system's memory allocation calls, which you should use instead of
 their non-'x' siblings.
 
 `appendstr()` provides manageable string concatenation. Use it where
-appropriate. Remember to terminate its argument list with a NULL. In many
+appropriate. Remember to terminate its argument list with `nullptr`. In many
 cases, `xasprintf()` from Gnulib may be more readable.
 
 If you're calling any of the `is*()` or `to*()` functions in `<ctype.h>`,
