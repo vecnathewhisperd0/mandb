@@ -31,7 +31,7 @@ Copyright (C) 1995 Carl Edman.
 
 Copyright (C) 1996, 1997, 1998, 2000 Fabrizio Polacco.
 
-Copyright (C) 2001-2023 Colin Watson.
+Copyright (C) 2001-2024 Colin Watson.
 
 Copyright (C) 1984, 1989, 1990, 1991, 1992, 1995, 1996, 1997, 1998, 1999,
               2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
