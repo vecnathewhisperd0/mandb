@@ -57,7 +57,7 @@
 #include "orderfiles.h"
 
 #if defined(HAVE_LINUX_FIEMAP_H)
-gl_map_t physical_offsets = NULL;
+static gl_map_t physical_offsets = NULL;
 
 static int compare_physical_offsets (const void *a, const void *b)
 {

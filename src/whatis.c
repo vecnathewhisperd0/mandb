@@ -89,14 +89,13 @@
 
 static gl_list_t manpathlist;
 
-extern char *user_config_file;
 static char **keywords;
 static int num_keywords;
 
-bool am_apropos;
 int quiet = 1;
-man_sandbox *sandbox;
 
+static bool am_apropos;
+static man_sandbox *sandbox;
 static regex_t *preg;
 static bool regex_opt;
 static bool exact;

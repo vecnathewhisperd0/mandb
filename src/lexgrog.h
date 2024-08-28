@@ -26,11 +26,15 @@
 
 #include "decompress.h"
 
+#include "sandbox.h"
+
 typedef struct lexgrog {
 	int type;
 	char *whatis;
 	char *filters;
 } lexgrog;
+
+extern man_sandbox *sandbox;
 
 extern int find_name (const char *file, const char *filename, lexgrog *p_lg,
                       const char *encoding);

@@ -287,7 +287,7 @@ static struct less_charset_entry less_charset_table[] = {
 
 static const char fallback_less_charset[] = "iso8859";
 
-const char *groff_preconv = NULL;
+static const char *groff_preconv = NULL;
 
 /* Is the groff "preconv" helper available? If so, return its name.
  * Otherwise, return NULL.

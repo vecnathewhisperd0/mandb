@@ -35,7 +35,7 @@
 
 #include "fatal.h"
 
-char *path;
+static char *path;
 
 static const char args_doc[] = "PATH";
 

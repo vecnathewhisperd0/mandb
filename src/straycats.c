@@ -75,8 +75,6 @@
 #include "straycats.h"
 #include "ult_src.h"
 
-extern man_sandbox *sandbox;
-
 static char *catdir, *mandir;
 
 static int check_for_stray (MYDBM_FILE dbf)

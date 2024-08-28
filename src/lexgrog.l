@@ -86,8 +86,6 @@ enum {
 
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof ((array)[0]))
 
-extern man_sandbox *sandbox;
-
 struct macro {
 	const char *name;
 	const char *value;

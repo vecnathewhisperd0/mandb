@@ -47,8 +47,6 @@
 #include "manconv_client.h"
 #include "utf8.h"
 
-extern man_sandbox *sandbox;
-
 struct manconv_codes {
 	gl_list_t from;
 	char *to;

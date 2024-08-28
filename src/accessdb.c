@@ -51,9 +51,9 @@
 
 #include "mydbm.h"
 
-const char *cat_root;
+static const char *cat_root;
 
-char *database;
+static char *database;
 
 const char *argp_program_version = "accessdb " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;

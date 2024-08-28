@@ -55,7 +55,6 @@ int quiet = 0;
 static bool cat = false;
 static bool global = false;
 static const char *alt_system = "";
-extern char *user_config_file;
 
 const char *argp_program_version = "manpath " PACKAGE_VERSION;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;

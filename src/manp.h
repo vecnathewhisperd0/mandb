@@ -34,6 +34,10 @@ struct locale_bits {
 };
 
 /* manp.c */
+extern char *user_config_file;
+extern bool disable_cache;
+extern int min_cat_width, max_cat_width, cat_width;
+
 extern char *cat_manpath (char *manp);
 extern void unpack_locale_bits (const char *locale, struct locale_bits *bits);
 extern void free_locale_bits (struct locale_bits *bits);

@@ -139,7 +139,7 @@ extern uid_t euid;
 #  define STDERR_FILENO 2
 #endif
 
-char *lang;
+static char *lang;
 
 /* external formatter programs, one for use without -t, and one with -t */
 #define NFMT_PROG "mandb_nfmt"
@@ -189,10 +189,6 @@ static gl_list_t manpathlist;
 
 /* globals */
 int quiet = 1;
-extern const char *extension;  /* for globbing.c */
-extern char *user_config_file; /* defined in manp.c */
-extern bool disable_cache;
-extern int min_cat_width, max_cat_width, cat_width;
 man_sandbox *sandbox;
 
 /* locals */

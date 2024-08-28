@@ -27,6 +27,8 @@
 
 #include "pipeline.h"
 
+#include "sandbox.h"
+
 struct decompress;
 typedef struct decompress decompress;
 
@@ -42,6 +44,8 @@ enum {
 	 */
 	DECOMPRESS_ALLOW_INPROCESS = 1
 };
+
+extern man_sandbox *sandbox;
 
 /* Open a decompressor reading from FILENAME.  The caller must start the
  * resulting decompressor.  If the DECOMPRESS_ALLOW_INPROCESS flag is given,

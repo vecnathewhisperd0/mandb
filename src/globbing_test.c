@@ -46,7 +46,6 @@
 
 #include "globbing.h"
 
-extern const char *extension;
 static bool match_case = false;
 static bool regex_opt = false;
 static bool wildcard = false;

@@ -326,7 +326,7 @@ static void ult_value_free (const void *value)
 	}
 }
 
-gl_map_t ult_cache = NULL;
+static gl_map_t ult_cache = NULL;
 
 /*
  * Find the ultimate source file by following any ".so filename" directives

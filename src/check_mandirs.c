@@ -85,7 +85,7 @@ bool opt_test; /* don't update db */
 int pages;
 bool force_rescan = false;
 
-gl_map_t whatis_map = NULL;
+static gl_map_t whatis_map = NULL;
 
 struct whatis {
 	char *whatis;

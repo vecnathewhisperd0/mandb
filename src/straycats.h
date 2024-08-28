@@ -23,4 +23,8 @@
 
 #include "mydbm.h"
 
+#include "sandbox.h"
+
+extern man_sandbox *sandbox;
+
 extern int straycats (MYDBM_FILE dbf, const char *manpath);

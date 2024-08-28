@@ -90,10 +90,9 @@
 
 /* globals */
 int quiet = 1;
-MYDBM_FILE dbf_close_post_fork;
-char *manp;
-extern char *user_config_file;
 
+static MYDBM_FILE dbf_close_post_fork;
+static char *manp;
 static const char **sections;
 
 const char *argp_program_version = "catman " PACKAGE_VERSION;

@@ -25,6 +25,7 @@
 #include <stdbool.h>
 #ifdef MAN_OWNER
 #  include <pwd.h>
+#  include <sys/types.h>
 #endif /* MAN_OWNER */
 
 /* security.c */
@@ -33,6 +34,10 @@ extern void regain_effective_privs (void);
 extern void drop_privs (void *data);
 extern void init_security (void);
 extern bool running_setuid (void);
+
 #ifdef MAN_OWNER
+extern uid_t ruid, euid, uid;
+extern gid_t rgid, egid, gid;
+
 extern struct passwd *get_man_owner (void);
 #endif /* MAN_OWNER */

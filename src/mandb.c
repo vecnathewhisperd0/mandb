@@ -84,15 +84,8 @@
 #include "straycats.h"
 
 int quiet = 1;
-extern bool opt_test; /* don't update db */
-char *manp;
-extern char *extension;   /* for globbing.c */
-extern bool force_rescan; /* for check_mandirs.c */
+static char *manp;
 static char *single_filename = NULL;
-extern char *user_config_file; /* for manp.c */
-#ifdef MAN_OWNER
-struct passwd *man_owner;
-#endif
 man_sandbox *sandbox;
 
 static int purged = 0;
@@ -215,8 +208,6 @@ extern uid_t euid;
 #endif /* MAN_OWNER */
 
 static gl_list_t manpathlist;
-
-extern int pages;
 
 /* remove() with error checking */
 static void check_remove (const char *path)
@@ -859,6 +850,10 @@ int main (int argc, char *argv[])
 #ifdef __profile__
 	char *cwd;
 #endif /* __profile__ */
+
+#ifdef MAN_OWNER
+	struct passwd *man_owner;
+#endif
 
 	set_program_name (argv[0]);
 

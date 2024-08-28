@@ -31,6 +31,8 @@ enum look_for_file_opts {
 };
 
 /* globbing.c */
+extern const char *extension;
+
 extern gl_list_t look_for_file (const char *hier, const char *sec,
                                 const char *unesc_name, bool cat, int opts);
 

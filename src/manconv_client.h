@@ -24,6 +24,10 @@
 
 #include "decompress.h"
 
+#include "sandbox.h"
+
+extern man_sandbox *sandbox;
+
 void add_manconv (struct pipeline *p, const char *source_encoding,
                   const char *target_encoding);
 int manconv_inprocess (decompress *d, const char *source_encoding,

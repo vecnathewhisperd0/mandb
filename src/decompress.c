@@ -189,8 +189,6 @@ static decompress *decompress_try_zlib (const char *filename)
 #  define OPEN_FLAGS_UNUSED MAYBE_UNUSED
 #endif /* HAVE_LIBZ */
 
-extern man_sandbox *sandbox;
-
 decompress *decompress_open (const char *filename, int flags OPEN_FLAGS_UNUSED)
 {
 	pipecmd *cmd;

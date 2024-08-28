@@ -25,6 +25,10 @@
 #include "mydbm.h"
 
 /* check_mandirs.c */
+extern bool opt_test;
+extern int pages;
+extern bool force_rescan;
+
 extern void test_manfile (MYDBM_FILE dbf, const char *file, const char *path);
 extern void chown_if_possible (const char *path);
 extern int create_db (MYDBM_FILE dbf, const char *manpath,
