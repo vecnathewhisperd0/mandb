@@ -15,6 +15,8 @@ Fixes:
 Improvements:
 
  * Upgrade to Gnulib `stable-202407`.
+ * Support running the test suite against an installed package; this is
+   useful for systems such as Debian's autopkgtest framework.
 
 man-db 2.12.1 (5 April 2024)
 ============================

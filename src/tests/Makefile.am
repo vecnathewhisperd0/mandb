@@ -18,13 +18,13 @@
 ## along with man-db; if not, write to the Free Software Foundation,
 ## Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-TESTS_ENVIRONMENT = PATH=$(abs_builddir)/..:$$PATH; export PATH; \
-		    DBTYPE=$(DBTYPE); export DBTYPE; \
+TESTS_ENVIRONMENT = DBTYPE=$(DBTYPE); export DBTYPE; \
+		    HAVE_ICONV=$(HAVE_ICONV); export HAVE_ICONV; \
 		    MANDIR_LAYOUT=$(MANDIR_LAYOUT); export MANDIR_LAYOUT; \
-		    abs_top_builddir=$(abs_top_builddir); export abs_top_builddir; \
 		    OVERRIDE_DIR="$(override_dir)"; export OVERRIDE_DIR; \
-		    troff_is_groff=$(troff_is_groff); export troff_is_groff; \
-		    HAVE_ICONV=$(HAVE_ICONV); export HAVE_ICONV;
+		    abs_top_builddir=$(abs_top_builddir); export abs_top_builddir; \
+		    pkglibexecdir=$(pkglibexecdir); export pkglibexecdir; \
+		    troff_is_groff=$(troff_is_groff); export troff_is_groff;
 # Each test must use the configure-detected shell, not necessarily /bin/sh.
 AM_LOG_FLAGS = $(SHELL)
 ALL_TESTS = \

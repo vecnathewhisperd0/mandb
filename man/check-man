@@ -15,6 +15,25 @@ fi
 
 [ -x "$top_builddir/src/man" ] || exit 77
 
+if [ -z "$MAN_TEST_INSTALLED" ]; then
+	PATH="$top_builddir/src:$PATH"
+fi
+
+run () {
+	if [ "$MAN_TEST_INSTALLED" ]; then
+		"$@"
+	else
+		# Ideally we'd test the installed manual pages too, but
+		# repeating the install transformation is fiddly, and we get
+		# most of the testing value by running man(1) from the
+		# installed system over the pages from the build tree.
+		"$top_builddir/libtool" --mode=execute \
+			-dlopen "$top_builddir/lib/.libs/libman.la" \
+			-dlopen "$top_builddir/libdb/.libs/libmandb.la" \
+			"$@"
+	fi
+}
+
 warnings=mac
 # Ignore wrapping failures for CJK manual pages; this should go away once
 # groff supports these natively.
@@ -24,11 +43,8 @@ warnings=mac
 warnings="$warnings,!break"
 
 code=0
-errors="$(LC_ALL=C MANWIDTH=80 MAN_KEEP_FORMATTING=1 "$top_builddir/libtool" \
-		--mode=execute \
-		-dlopen "$top_builddir/lib/.libs/libman.la" \
-		-dlopen "$top_builddir/libdb/.libs/libmandb.la" \
-		"$top_builddir/src/man" --warnings="$warnings" -E UTF-8 \
+errors="$(LC_ALL=C MANWIDTH=80 MAN_KEEP_FORMATTING=1 run man \
+		--warnings="$warnings" -E UTF-8 \
 		-l "$1" \
 		2>&1 >/dev/null)" || code=$?
 

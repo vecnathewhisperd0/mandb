@@ -9,6 +9,14 @@ export LC_ALL
 MAN_TEST_DISABLE_SYSTEM_CONFIG=1
 export MAN_TEST_DISABLE_SYSTEM_CONFIG
 
+if [ "$MAN_TEST_INSTALLED" ]; then
+	# shellcheck disable=SC2154
+	PATH="$pkglibexecdir:$PATH"
+else
+	# shellcheck disable=SC2154
+	PATH="$abs_top_builddir/src:$PATH"
+fi
+
 init () {
 	# Create a temporary directory in /tmp or ./ ,
 	# put path to it into $tmpdir and $abstmpdir,
@@ -27,11 +35,15 @@ init () {
 }
 
 run () {
-	# shellcheck disable=SC2154
-	"$abs_top_builddir/libtool" --mode=execute \
-		-dlopen "$abs_top_builddir/lib/.libs/libman.la" \
-		-dlopen "$abs_top_builddir/libdb/.libs/libmandb.la" \
+	if [ "$MAN_TEST_INSTALLED" ]; then
 		"$@"
+	else
+		# shellcheck disable=SC2154
+		"$abs_top_builddir/libtool" --mode=execute \
+			-dlopen "$abs_top_builddir/lib/.libs/libman.la" \
+			-dlopen "$abs_top_builddir/libdb/.libs/libmandb.la" \
+			"$@"
+	fi
 }
 
 fake_config () {
