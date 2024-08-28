@@ -52,23 +52,11 @@ by autoconf, automake, gettext, and gnulib:
 Coding style
 ------------
 
-Each indent is a single tab. Brace style is K&R. Each function name is
-separated from the following opening parenthesis by a single space. (All
-this is almost certainly controversial somewhere, but it's as close as
-you'll get to a prevailing style here.)
-
-Keep all code within 80 columns (counting tabs as 8). This can sometimes be
-a little tight with the deep indent; think of it as a useful discipline to
-stop indentation levels getting out of hand. :-) (This rule is currently
-broken for argp option declarations, for the sake of other kinds of
-readability. This may change.)
-
-If you're editing existing code and it differs from any of the above, stick
-with whatever the existing code does. Likewise, if in doubt, find similar
-code and use its style. Maintaining a consistent style is important for
-general readability, and is more important than any individual point. It's
-also the easiest way to avoid long and tedious debates about "correct"
-style.
+`clang-format` enforces a consistent style, configured in `.clang-format`.
+You can ensure that this and other checks are applied to your git commits
+locally by installing the [`pre-commit`](https://pre-commit.com/) package
+and running `pre-commit install`. Whether you do this or not, if you push
+your changes to a fork on GitLab, then GitLab CI will run them for you.
 
 
 Facilities and portability
