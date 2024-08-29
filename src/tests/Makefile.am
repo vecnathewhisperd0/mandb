@@ -24,6 +24,7 @@ TESTS_ENVIRONMENT = DBTYPE=$(DBTYPE); export DBTYPE; \
 		    OVERRIDE_DIR="$(override_dir)"; export OVERRIDE_DIR; \
 		    abs_top_builddir=$(abs_top_builddir); export abs_top_builddir; \
 		    pkglibexecdir=$(pkglibexecdir); export pkglibexecdir; \
+		    sbindir=$(sbindir); export sbindir; \
 		    troff_is_groff=$(troff_is_groff); export troff_is_groff;
 # Each test must use the configure-detected shell, not necessarily /bin/sh.
 AM_LOG_FLAGS = $(SHELL)

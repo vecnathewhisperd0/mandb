@@ -11,7 +11,7 @@ export MAN_TEST_DISABLE_SYSTEM_CONFIG
 
 if [ "$MAN_TEST_INSTALLED" ]; then
 	# shellcheck disable=SC2154
-	PATH="$pkglibexecdir:$PATH"
+	PATH="$pkglibexecdir:$sbindir:$PATH"
 else
 	# shellcheck disable=SC2154
 	PATH="$abs_top_builddir/src:$PATH"
